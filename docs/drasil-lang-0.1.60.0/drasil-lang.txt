@@ -1871,9 +1871,9 @@ apply :: (ExprC r, HasUID f, HasSymbol f) => f -> [r] -> r
 -- | Create an <a>Expr</a> from a <a>Symbol</a>ic Chunk.
 sy :: (ExprC r, HasUID c, HasSymbol c) => c -> r
 infixr 4 $=
-infixr 9 $&&
 infixl 7 $/
 infixr 8 $^
+infixr 9 $&&
 infixr 9 $||
 class LiteralC r
 int :: LiteralC r => Integer -> r
@@ -2034,9 +2034,9 @@ apply :: (ExprC r, HasUID f, HasSymbol f) => f -> [r] -> r
 -- | Create an <a>Expr</a> from a <a>Symbol</a>ic Chunk.
 sy :: (ExprC r, HasUID c, HasSymbol c) => c -> r
 infixr 4 $=
-infixr 9 $&&
 infixl 7 $/
 infixr 8 $^
+infixr 9 $&&
 infixr 9 $||
 
 -- | Smart constructor for fractions.
@@ -3988,7 +3988,7 @@ Flat :: Sentence -> ItemType
 
 -- | Nest a list (<a>ListType</a>) as an item.
 Nested :: Header -> ListType -> ItemType
-type ListTuple = (Title, ItemType, Maybe String) " Formats as Title: Item. For use in lists."
+type ListTuple = -- | Formats as Title: Item. For use in lists. (Title, ItemType, Maybe String)
 
 -- | Contains a <a>Reference</a> and <a>RawContent</a>.
 data LabelledContent

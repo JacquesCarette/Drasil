@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Defines types needed for HTML printers.</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | Defines types needed for HTML printers.</span></span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Language.Drasil.HTML.Monad</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
@@ -10,10 +10,10 @@
 </span><span id="line-10"></span><span class="hs-keyword">newtype</span><span> </span><span id="PrintHTML"><span class="annot"><a href="Language.Drasil.HTML.Monad.html#PrintHTML"><span class="hs-identifier hs-var">PrintHTML</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="PH"><span class="annot"><a href="Language.Drasil.HTML.Monad.html#PH"><span class="hs-identifier hs-var">PH</span></a></span></span><span> </span><span class="hs-special">{</span><span id="unPH"><span class="annot"><span class="annottext">PrintHTML -&gt; String
 </span><a href="Language.Drasil.HTML.Monad.html#unPH"><span class="hs-identifier hs-var hs-var">unPH</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">}</span><span>
 </span><span id="line-11"></span><span>
-</span><span id="line-12"></span><span class="hs-comment">-- | Special HTML symbols (degree and Greek partial derivative symbol).</span><span>
+</span><span id="line-12"></span><span class="annot"><span class="hs-comment">-- | Special HTML symbols (degree and Greek partial derivative symbol).</span></span><span>
 </span><span id="line-13"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">RenderSpecial</span></span><span> </span><span class="annot"><a href="Language.Drasil.HTML.Monad.html#PrintHTML"><span class="hs-identifier hs-type">PrintHTML</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-14"></span><span>  </span><span id="local-6989586621679120318"><span class="annot"><span class="annottext">special :: Special -&gt; PrintHTML
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">special</span></span></span><span> </span><span class="annot"><span class="annottext">Special
+</span><span id="line-14"></span><span>  </span><span id="local-6989586621679119802"><span class="annot"><span class="annottext">special :: Special -&gt; PrintHTML
+</span><a href="#local-6989586621679119802"><span class="hs-identifier hs-var hs-var hs-var hs-var">special</span></a></span></span><span> </span><span class="annot"><span class="annottext">Special
 </span><span class="hs-identifier hs-var">Circle</span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; PrintHTML
 </span><a href="Language.Drasil.HTML.Monad.html#PH"><span class="hs-identifier hs-var">PH</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&amp;deg;&quot;</span></span><span>

@@ -15,14 +15,18 @@
 </span><a href="Drasil.SglPend.Figures.html#figMotion"><span class="hs-identifier hs-var hs-var">figMotion</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
 </span><span class="hs-identifier hs-var">makeFigRef</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;sglpend&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-string">&quot;sglpend&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; String -&gt; MaxWidthPercent -&gt; RawContent
-</span><span class="hs-identifier hs-var">figWithWidth</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Lbl
-</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">figWithWidth</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Lbl
+forall n. NounPhrase n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">physicalSystem</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-13"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><a href="Drasil.SglPend.Figures.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="Drasil.SglPend.Figures.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;sglpend.jpg&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">MaxWidthPercent
 </span><span class="hs-number">70</span></span><span>
@@ -32,13 +36,16 @@
 </span><a href="Drasil.SglPend.Figures.html#sysCtxFig1"><span class="hs-identifier hs-var hs-var">sysCtxFig1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
 </span><span class="hs-identifier hs-var">makeFigRef</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;sysCtxDiag&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-string">&quot;sysCtxDiag&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; String -&gt; RawContent
-</span><span class="hs-identifier hs-var">fig</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">fig</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">sysCont</span></span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-17"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><a href="Drasil.SglPend.Figures.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="Drasil.SglPend.Figures.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;SystemContextFigure.png&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-18"></span></pre></body></html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Assigns symbols and units (quantities) to mechanics-related concepts.</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | Assigns symbols and units (quantities) to mechanics-related concepts.</span></span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Drasil.Quantities.SolidMechanics</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
@@ -9,12 +9,13 @@
 </span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html"><span class="hs-identifier">Data.Drasil.SI_Units</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.SI_Units.html#newton"><span class="hs-identifier">newton</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#pascal"><span class="hs-identifier">pascal</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.Units.SolidMechanics.html"><span class="hs-identifier">Data.Drasil.Units.SolidMechanics</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Units.SolidMechanics.html#stiffnessU"><span class="hs-identifier">stiffnessU</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-11"></span><span>
-</span><span id="line-12"></span><span class="hs-comment">-- * With Units</span><span>
+</span><span id="line-12"></span><span class="annot"><span class="hs-comment">-- * With Units</span></span><span>
 </span><span id="line-13"></span><span>
 </span><span id="line-14"></span><span class="annot"><a href="Data.Drasil.Quantities.SolidMechanics.html#elastMod"><span class="hs-identifier hs-type">elastMod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.SolidMechanics.html#mobShear"><span class="hs-identifier hs-type">mobShear</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.SolidMechanics.html#nrmStrss"><span class="hs-identifier hs-type">nrmStrss</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.SolidMechanics.html#shearRes"><span class="hs-identifier hs-type">shearRes</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.SolidMechanics.html#stffness"><span class="hs-identifier hs-type">stffness</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span>
 </span><span id="line-15"></span><span>
 </span><span id="line-16"></span><span id="elastMod"><span class="annot"><span class="annottext">elastMod :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.SolidMechanics.html#elastMod"><span class="hs-identifier hs-var hs-var">elastMod</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.SolidMechanics.html#elastMod"><span class="hs-identifier hs-var hs-var">elastMod</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -23,7 +24,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#pascal"><span class="hs-identifier hs-var">pascal</span></a></span><span> </span><span>
 </span><span id="line-17"></span><span id="mobShear"><span class="annot"><span class="annottext">mobShear :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.SolidMechanics.html#mobShear"><span class="hs-identifier hs-var hs-var">mobShear</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.SolidMechanics.html#mobShear"><span class="hs-identifier hs-var hs-var">mobShear</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -32,7 +34,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#newton"><span class="hs-identifier hs-var">newton</span></a></span><span> </span><span>
 </span><span id="line-18"></span><span id="shearRes"><span class="annot"><span class="annottext">shearRes :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.SolidMechanics.html#shearRes"><span class="hs-identifier hs-var hs-var">shearRes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.SolidMechanics.html#shearRes"><span class="hs-identifier hs-var hs-var">shearRes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -41,7 +44,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#newton"><span class="hs-identifier hs-var">newton</span></a></span><span> </span><span>
 </span><span id="line-19"></span><span id="stffness"><span class="annot"><span class="annottext">stffness :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.SolidMechanics.html#stffness"><span class="hs-identifier hs-var hs-var">stffness</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.SolidMechanics.html#stffness"><span class="hs-identifier hs-var hs-var">stffness</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -50,7 +54,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.SolidMechanics.html#stiffnessU"><span class="hs-identifier hs-var">stiffnessU</span></a></span><span> </span><span>
 </span><span id="line-20"></span><span id="nrmStrss"><span class="annot"><span class="annottext">nrmStrss :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.SolidMechanics.html#nrmStrss"><span class="hs-identifier hs-var hs-var">nrmStrss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.SolidMechanics.html#nrmStrss"><span class="hs-identifier hs-var hs-var">nrmStrss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -59,7 +64,7 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#pascal"><span class="hs-identifier hs-var">pascal</span></a></span><span>
 </span><span id="line-21"></span><span>
-</span><span id="line-22"></span><span class="hs-comment">-- * Without Units</span><span>
+</span><span id="line-22"></span><span class="annot"><span class="hs-comment">-- * Without Units</span></span><span>
 </span><span id="line-23"></span><span>
 </span><span id="line-24"></span><span class="annot"><a href="Data.Drasil.Quantities.SolidMechanics.html#poissnsR"><span class="hs-identifier hs-type">poissnsR</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span>
 </span><span id="line-25"></span><span id="poissnsR"><span class="annot"><span class="annottext">poissnsR :: DefinedQuantityDict

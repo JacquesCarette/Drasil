@@ -34,7 +34,7 @@ funcResolve :: ChunkDB -> UID -> CodeFuncChunk
 module Language.Drasil.Chunk.Code
 
 -- | A <a>CodeIdea</a> must include some code and its name.
-class CodeIdea c
+class () => CodeIdea c
 
 -- | Name of the idea.
 codeName :: CodeIdea c => c -> String
@@ -44,25 +44,25 @@ codeChunk :: CodeIdea c => c -> CodeChunk
 
 -- | Basic chunk representation in the code generation context. Contains a
 --   QuantityDict and the kind of code (variable or function).
-data CodeChunk
+data () => CodeChunk
 CodeC :: QuantityDict -> VarOrFunc -> CodeChunk
 [_qc] :: CodeChunk -> QuantityDict
 [kind] :: CodeChunk -> VarOrFunc
 
 -- | Chunk representing a variable. The <tt>obv</tt> field represents the
 --   object containing this variable, if it is an object field.
-data CodeVarChunk
+data () => CodeVarChunk
 CodeVC :: CodeChunk -> Maybe CodeChunk -> CodeVarChunk
 [_ccv] :: CodeVarChunk -> CodeChunk
 [_obv] :: CodeVarChunk -> Maybe CodeChunk
 
 -- | Chunk representing a function.
-newtype CodeFuncChunk
+newtype () => CodeFuncChunk
 CodeFC :: CodeChunk -> CodeFuncChunk
 [_ccf] :: CodeFuncChunk -> CodeChunk
 
 -- | Details if a piece of code is meant to be a variable or a function.
-data VarOrFunc
+data () => VarOrFunc
 Var :: VarOrFunc
 Func :: VarOrFunc
 obv :: Lens' CodeVarChunk (Maybe CodeChunk)
@@ -3181,14 +3181,14 @@ data PackData
 
 -- | Basic chunk representation in the code generation context. Contains a
 --   QuantityDict and the kind of code (variable or function).
-data CodeChunk
+data () => CodeChunk
 
 -- | Chunk representing a variable. The <tt>obv</tt> field represents the
 --   object containing this variable, if it is an object field.
-data CodeVarChunk
+data () => CodeVarChunk
 
 -- | Chunk representing a function.
-data CodeFuncChunk
+data () => CodeFuncChunk
 
 -- | Construct a <a>CodeVarChunk</a> from a <a>Quantity</a>.
 quantvar :: (Quantity c, MayHaveUnit c) => c -> CodeVarChunk

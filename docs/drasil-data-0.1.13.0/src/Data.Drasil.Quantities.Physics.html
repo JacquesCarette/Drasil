@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Assigns symbols and units (quantities) to physical concepts.</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | Assigns symbols and units (quantities) to physical concepts.</span></span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Drasil.Quantities.Physics</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
@@ -28,7 +28,7 @@
 </span><span class="hs-string">&quot;R&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span>
 </span><span id="line-22"></span><span>
-</span><span id="line-23"></span><span class="hs-comment">-- | Collects all physical quantities defined in this file for easy use in Drasil.</span><span>
+</span><span id="line-23"></span><span class="annot"><span class="hs-comment">-- | Collects all physical quantities defined in this file for easy use in Drasil.</span></span><span>
 </span><span id="line-24"></span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#physicscon"><span class="hs-identifier hs-type">physicscon</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span class="hs-special">]</span><span>
 </span><span id="line-25"></span><span id="physicscon"><span class="annot"><span class="annottext">physicscon :: [UnitalChunk]
 </span><a href="Data.Drasil.Quantities.Physics.html#physicscon"><span class="hs-identifier hs-var hs-var">physicscon</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk
@@ -105,7 +105,7 @@
 </span><a href="Data.Drasil.Quantities.Physics.html#frequency"><span class="hs-identifier hs-var">frequency</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Data.Drasil.Quantities.Physics.html#chgMomentum"><span class="hs-identifier hs-var">chgMomentum</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-34"></span><span>
-</span><span id="line-35"></span><span class="hs-comment">-- * Physical Quantities (With Units)</span><span>
+</span><span id="line-35"></span><span class="annot"><span class="hs-comment">-- * Physical Quantities (With Units)</span></span><span>
 </span><span id="line-36"></span><span>
 </span><span id="line-37"></span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#acceleration"><span class="hs-identifier hs-type">acceleration</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#angularAccel"><span class="hs-identifier hs-type">angularAccel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#angularDisplacement"><span class="hs-identifier hs-type">angularDisplacement</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#angularVelocity"><span class="hs-identifier hs-type">angularVelocity</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#chgInVelocity"><span class="hs-identifier hs-type">chgInVelocity</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-38"></span><span>  </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#constAccel"><span class="hs-identifier hs-type">constAccel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#constAccelV"><span class="hs-identifier hs-type">constAccelV</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#displacement"><span class="hs-identifier hs-type">displacement</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#distance"><span class="hs-identifier hs-type">distance</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#energy"><span class="hs-identifier hs-type">energy</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#fSpeed"><span class="hs-identifier hs-type">fSpeed</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#fVel"><span class="hs-identifier hs-type">fVel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#force"><span class="hs-identifier hs-type">force</span></a></span><span class="hs-special">,</span><span>
@@ -118,7 +118,8 @@
 </span><span id="line-45"></span><span>  </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#period"><span class="hs-identifier hs-type">period</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#frequency"><span class="hs-identifier hs-type">frequency</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#chgMomentum"><span class="hs-identifier hs-type">chgMomentum</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span>
 </span><span id="line-46"></span><span>
 </span><span id="line-47"></span><span id="acceleration"><span class="annot"><span class="annottext">acceleration :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#acceleration"><span class="hs-identifier hs-var hs-var">acceleration</span></a></span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#acceleration"><span class="hs-identifier hs-var hs-var">acceleration</span></a></span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -135,7 +136,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#accelU"><span class="hs-identifier hs-var">accelU</span></a></span><span>
 </span><span id="line-48"></span><span id="angularAccel"><span class="annot"><span class="annottext">angularAccel :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#angularAccel"><span class="hs-identifier hs-var hs-var">angularAccel</span></a></span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#angularAccel"><span class="hs-identifier hs-var hs-var">angularAccel</span></a></span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -144,7 +146,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#angAccelU"><span class="hs-identifier hs-var">angAccelU</span></a></span><span>
 </span><span id="line-49"></span><span id="angularDisplacement"><span class="annot"><span class="annottext">angularDisplacement :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#angularDisplacement"><span class="hs-identifier hs-var hs-var">angularDisplacement</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#angularDisplacement"><span class="hs-identifier hs-var hs-var">angularDisplacement</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -153,7 +156,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#radian"><span class="hs-identifier hs-var">radian</span></a></span><span>
 </span><span id="line-50"></span><span id="angularFrequency"><span class="annot"><span class="annottext">angularFrequency :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#angularFrequency"><span class="hs-identifier hs-var hs-var">angularFrequency</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#angularFrequency"><span class="hs-identifier hs-var hs-var">angularFrequency</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -162,7 +166,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#second"><span class="hs-identifier hs-var">second</span></a></span><span>
 </span><span id="line-51"></span><span id="angularVelocity"><span class="annot"><span class="annottext">angularVelocity :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#angularVelocity"><span class="hs-identifier hs-var hs-var">angularVelocity</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#angularVelocity"><span class="hs-identifier hs-var hs-var">angularVelocity</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -171,20 +176,23 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#angVelU"><span class="hs-identifier hs-var">angVelU</span></a></span><span>
 </span><span id="line-52"></span><span id="chgInVelocity"><span class="annot"><span class="annottext">chgInVelocity :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#chgInVelocity"><span class="hs-identifier hs-var hs-var">chgInVelocity</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#chgInVelocity"><span class="hs-identifier hs-var hs-var">chgInVelocity</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#chgInVelocity"><span class="hs-identifier hs-var">CP.chgInVelocity</span></a></span><span>          </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Decoration -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">Atop</span></span><span> </span><span class="annot"><span class="annottext">Decoration
-</span><span class="hs-identifier hs-var">Delta</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-identifier hs-var">Delta</span></span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">vec</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lV</span></span><span class="hs-special">)</span><span>                       </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#velU"><span class="hs-identifier hs-var">velU</span></a></span><span>
 </span><span id="line-53"></span><span id="constAccel"><span class="annot"><span class="annottext">constAccel :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#constAccel"><span class="hs-identifier hs-var hs-var">constAccel</span></a></span></span><span>             </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#constAccel"><span class="hs-identifier hs-var hs-var">constAccel</span></a></span></span><span>             </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -195,7 +203,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#accelU"><span class="hs-identifier hs-var">accelU</span></a></span><span>
 </span><span id="line-54"></span><span id="displacement"><span class="annot"><span class="annottext">displacement :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#displacement"><span class="hs-identifier hs-var hs-var">displacement</span></a></span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#displacement"><span class="hs-identifier hs-var hs-var">displacement</span></a></span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -205,7 +214,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span>
 </span><span id="line-55"></span><span id="distance"><span class="annot"><span class="annottext">distance :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#distance"><span class="hs-identifier hs-var hs-var">distance</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#distance"><span class="hs-identifier hs-var hs-var">distance</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -214,7 +224,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span>
 </span><span id="line-56"></span><span id="energy"><span class="annot"><span class="annottext">energy :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#energy"><span class="hs-identifier hs-var hs-var">energy</span></a></span></span><span>                 </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#energy"><span class="hs-identifier hs-var hs-var">energy</span></a></span></span><span>                 </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -223,7 +234,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#joule"><span class="hs-identifier hs-var">joule</span></a></span><span>
 </span><span id="line-57"></span><span id="force"><span class="annot"><span class="annottext">force :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#force"><span class="hs-identifier hs-var hs-var">force</span></a></span></span><span>                  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#force"><span class="hs-identifier hs-var hs-var">force</span></a></span></span><span>                  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -233,7 +245,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#newton"><span class="hs-identifier hs-var">newton</span></a></span><span>
 </span><span id="line-58"></span><span id="frequency"><span class="annot"><span class="annottext">frequency :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#frequency"><span class="hs-identifier hs-var hs-var">frequency</span></a></span></span><span>              </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#frequency"><span class="hs-identifier hs-var hs-var">frequency</span></a></span></span><span>              </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -242,7 +255,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#hertz"><span class="hs-identifier hs-var">hertz</span></a></span><span>
 </span><span id="line-59"></span><span id="gravitationalAccel"><span class="annot"><span class="annottext">gravitationalAccel :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccel"><span class="hs-identifier hs-var hs-var">gravitationalAccel</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccel"><span class="hs-identifier hs-var hs-var">gravitationalAccel</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -252,7 +266,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#accelU"><span class="hs-identifier hs-var">accelU</span></a></span><span>
 </span><span id="line-60"></span><span id="gravitationalConst"><span class="annot"><span class="annottext">gravitationalConst :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalConst"><span class="hs-identifier hs-var hs-var">gravitationalConst</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalConst"><span class="hs-identifier hs-var hs-var">gravitationalConst</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -261,7 +276,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#gravConstU"><span class="hs-identifier hs-var">gravConstU</span></a></span><span>
 </span><span id="line-61"></span><span id="gravitationalMagnitude"><span class="annot"><span class="annottext">gravitationalMagnitude :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalMagnitude"><span class="hs-identifier hs-var hs-var">gravitationalMagnitude</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalMagnitude"><span class="hs-identifier hs-var hs-var">gravitationalMagnitude</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -270,7 +286,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#accelU"><span class="hs-identifier hs-var">accelU</span></a></span><span>
 </span><span id="line-62"></span><span id="height"><span class="annot"><span class="annottext">height :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#height"><span class="hs-identifier hs-var hs-var">height</span></a></span></span><span>                 </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#height"><span class="hs-identifier hs-var hs-var">height</span></a></span></span><span>                 </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -279,7 +296,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span>
 </span><span id="line-63"></span><span id="impulseS"><span class="annot"><span class="annottext">impulseS :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#impulseS"><span class="hs-identifier hs-var hs-var">impulseS</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#impulseS"><span class="hs-identifier hs-var hs-var">impulseS</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -288,7 +306,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#impulseU"><span class="hs-identifier hs-var">impulseU</span></a></span><span>
 </span><span id="line-64"></span><span id="impulseV"><span class="annot"><span class="annottext">impulseV :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#impulseV"><span class="hs-identifier hs-var hs-var">impulseV</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#impulseV"><span class="hs-identifier hs-var hs-var">impulseV</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -298,7 +317,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#impulseU"><span class="hs-identifier hs-var">impulseU</span></a></span><span>
 </span><span id="line-65"></span><span id="kEnergy"><span class="annot"><span class="annottext">kEnergy :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#kEnergy"><span class="hs-identifier hs-var hs-var">kEnergy</span></a></span></span><span>                </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#kEnergy"><span class="hs-identifier hs-var hs-var">kEnergy</span></a></span></span><span>                </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -309,7 +329,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#joule"><span class="hs-identifier hs-var">joule</span></a></span><span>
 </span><span id="line-66"></span><span id="linearAccel"><span class="annot"><span class="annottext">linearAccel :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#linearAccel"><span class="hs-identifier hs-var hs-var">linearAccel</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#linearAccel"><span class="hs-identifier hs-var hs-var">linearAccel</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -324,7 +345,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#accelU"><span class="hs-identifier hs-var">accelU</span></a></span><span>
 </span><span id="line-67"></span><span id="linearDisplacement"><span class="annot"><span class="annottext">linearDisplacement :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#linearDisplacement"><span class="hs-identifier hs-var hs-var">linearDisplacement</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#linearDisplacement"><span class="hs-identifier hs-var hs-var">linearDisplacement</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -339,7 +361,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span>
 </span><span id="line-68"></span><span id="linearVelocity"><span class="annot"><span class="annottext">linearVelocity :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#linearVelocity"><span class="hs-identifier hs-var hs-var">linearVelocity</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#linearVelocity"><span class="hs-identifier hs-var hs-var">linearVelocity</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -354,7 +377,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#velU"><span class="hs-identifier hs-var">velU</span></a></span><span>
 </span><span id="line-69"></span><span id="momentOfInertia"><span class="annot"><span class="annottext">momentOfInertia :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#momentOfInertia"><span class="hs-identifier hs-var hs-var">momentOfInertia</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#momentOfInertia"><span class="hs-identifier hs-var hs-var">momentOfInertia</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -364,7 +388,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#momtInertU"><span class="hs-identifier hs-var">momtInertU</span></a></span><span>
 </span><span id="line-70"></span><span id="chgMomentum"><span class="annot"><span class="annottext">chgMomentum :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#chgMomentum"><span class="hs-identifier hs-var hs-var">chgMomentum</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#chgMomentum"><span class="hs-identifier hs-var hs-var">chgMomentum</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -376,7 +401,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#impulseU"><span class="hs-identifier hs-var">impulseU</span></a></span><span>
 </span><span id="line-71"></span><span id="momentum"><span class="annot"><span class="annottext">momentum :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#momentum"><span class="hs-identifier hs-var hs-var">momentum</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#momentum"><span class="hs-identifier hs-var hs-var">momentum</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -386,7 +412,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#impulseU"><span class="hs-identifier hs-var">impulseU</span></a></span><span>
 </span><span id="line-72"></span><span id="moment"><span class="annot"><span class="annottext">moment :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#moment"><span class="hs-identifier hs-var hs-var">moment</span></a></span></span><span>                 </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#moment"><span class="hs-identifier hs-var hs-var">moment</span></a></span></span><span>                 </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -396,7 +423,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#torqueU"><span class="hs-identifier hs-var">torqueU</span></a></span><span>
 </span><span id="line-73"></span><span id="moment2D"><span class="annot"><span class="annottext">moment2D :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#moment2D"><span class="hs-identifier hs-var hs-var">moment2D</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#moment2D"><span class="hs-identifier hs-var hs-var">moment2D</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -406,7 +434,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><a href="Data.Drasil.Units.Physics.html#torqueU"><span class="hs-identifier hs-var">torqueU</span></a></span><span>
 </span><span id="line-74"></span><span class="hs-comment">-- FIXME: moment2D should eventually be a specialization of moment, not separately defined</span><span>
 </span><span id="line-75"></span><span id="period"><span class="annot"><span class="annottext">period :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#period"><span class="hs-identifier hs-var hs-var">period</span></a></span></span><span>                 </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#period"><span class="hs-identifier hs-var hs-var">period</span></a></span></span><span>                 </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -415,7 +444,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#second"><span class="hs-identifier hs-var">second</span></a></span><span>
 </span><span id="line-76"></span><span id="position"><span class="annot"><span class="annottext">position :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#position"><span class="hs-identifier hs-var hs-var">position</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#position"><span class="hs-identifier hs-var hs-var">position</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -431,7 +461,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span>
 </span><span id="line-77"></span><span id="positionVec"><span class="annot"><span class="annottext">positionVec :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#positionVec"><span class="hs-identifier hs-var hs-var">positionVec</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#positionVec"><span class="hs-identifier hs-var hs-var">positionVec</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -441,7 +472,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span>
 </span><span id="line-78"></span><span id="potEnergy"><span class="annot"><span class="annottext">potEnergy :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#potEnergy"><span class="hs-identifier hs-var hs-var">potEnergy</span></a></span></span><span>              </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#potEnergy"><span class="hs-identifier hs-var hs-var">potEnergy</span></a></span></span><span>              </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -452,7 +484,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#joule"><span class="hs-identifier hs-var">joule</span></a></span><span>
 </span><span id="line-79"></span><span id="pressure"><span class="annot"><span class="annottext">pressure :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#pressure"><span class="hs-identifier hs-var hs-var">pressure</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#pressure"><span class="hs-identifier hs-var hs-var">pressure</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -461,7 +494,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#pascal"><span class="hs-identifier hs-var">pascal</span></a></span><span>
 </span><span id="line-80"></span><span id="speed"><span class="annot"><span class="annottext">speed :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#speed"><span class="hs-identifier hs-var hs-var">speed</span></a></span></span><span>                  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#speed"><span class="hs-identifier hs-var hs-var">speed</span></a></span></span><span>                  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -470,7 +504,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#velU"><span class="hs-identifier hs-var">velU</span></a></span><span>
 </span><span id="line-81"></span><span id="scalarAccel"><span class="annot"><span class="annottext">scalarAccel :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#scalarAccel"><span class="hs-identifier hs-var hs-var">scalarAccel</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#scalarAccel"><span class="hs-identifier hs-var hs-var">scalarAccel</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -479,7 +514,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#accelU"><span class="hs-identifier hs-var">accelU</span></a></span><span>
 </span><span id="line-82"></span><span id="scalarPos"><span class="annot"><span class="annottext">scalarPos :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#scalarPos"><span class="hs-identifier hs-var hs-var">scalarPos</span></a></span></span><span>              </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#scalarPos"><span class="hs-identifier hs-var hs-var">scalarPos</span></a></span></span><span>              </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -488,7 +524,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span>
 </span><span id="line-83"></span><span id="tension"><span class="annot"><span class="annottext">tension :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#tension"><span class="hs-identifier hs-var hs-var">tension</span></a></span></span><span>                </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#tension"><span class="hs-identifier hs-var hs-var">tension</span></a></span></span><span>                </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -498,7 +535,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#newton"><span class="hs-identifier hs-var">newton</span></a></span><span>
 </span><span id="line-84"></span><span id="time"><span class="annot"><span class="annottext">time :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#time"><span class="hs-identifier hs-var hs-var">time</span></a></span></span><span>                   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#time"><span class="hs-identifier hs-var hs-var">time</span></a></span></span><span>                   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -507,7 +545,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#second"><span class="hs-identifier hs-var">second</span></a></span><span>
 </span><span id="line-85"></span><span id="torque"><span class="annot"><span class="annottext">torque :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#torque"><span class="hs-identifier hs-var hs-var">torque</span></a></span></span><span>                 </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#torque"><span class="hs-identifier hs-var hs-var">torque</span></a></span></span><span>                 </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -517,7 +556,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#torqueU"><span class="hs-identifier hs-var">torqueU</span></a></span><span>
 </span><span id="line-86"></span><span id="velocity"><span class="annot"><span class="annottext">velocity :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#velocity"><span class="hs-identifier hs-var hs-var">velocity</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#velocity"><span class="hs-identifier hs-var hs-var">velocity</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -533,7 +573,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#velU"><span class="hs-identifier hs-var">velU</span></a></span><span>
 </span><span id="line-87"></span><span id="weight"><span class="annot"><span class="annottext">weight :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#weight"><span class="hs-identifier hs-var hs-var">weight</span></a></span></span><span>                 </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#weight"><span class="hs-identifier hs-var hs-var">weight</span></a></span></span><span>                 </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -542,7 +583,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span>        </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#newton"><span class="hs-identifier hs-var">newton</span></a></span><span>
 </span><span id="line-88"></span><span id="fOfGravity"><span class="annot"><span class="annottext">fOfGravity :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#fOfGravity"><span class="hs-identifier hs-var hs-var">fOfGravity</span></a></span></span><span>             </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#fOfGravity"><span class="hs-identifier hs-var hs-var">fOfGravity</span></a></span></span><span>             </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -560,7 +602,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span id="line-92"></span><span class="hs-comment">-- FIXME: Pull out commonalities?</span><span>
 </span><span id="line-93"></span><span>
 </span><span id="line-94"></span><span id="xDist"><span class="annot"><span class="annottext">xDist :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#xDist"><span class="hs-identifier hs-var hs-var">xDist</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#xDist"><span class="hs-identifier hs-var hs-var">xDist</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -570,7 +613,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span>
 </span><span id="line-95"></span><span id="yDist"><span class="annot"><span class="annottext">yDist :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#yDist"><span class="hs-identifier hs-var hs-var">yDist</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#yDist"><span class="hs-identifier hs-var hs-var">yDist</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -581,7 +625,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span>
 </span><span id="line-96"></span><span>
 </span><span id="line-97"></span><span id="iPos"><span class="annot"><span class="annottext">iPos :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#iPos"><span class="hs-identifier hs-var hs-var">iPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#iPos"><span class="hs-identifier hs-var hs-var">iPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -592,7 +637,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span>
 </span><span id="line-98"></span><span id="xPos"><span class="annot"><span class="annottext">xPos :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#xPos"><span class="hs-identifier hs-var hs-var">xPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#xPos"><span class="hs-identifier hs-var hs-var">xPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -602,7 +648,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span>
 </span><span id="line-99"></span><span id="yPos"><span class="annot"><span class="annottext">yPos :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#yPos"><span class="hs-identifier hs-var hs-var">yPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#yPos"><span class="hs-identifier hs-var hs-var">yPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -613,7 +660,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span>
 </span><span id="line-100"></span><span>
 </span><span id="line-101"></span><span id="ixPos"><span class="annot"><span class="annottext">ixPos :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#ixPos"><span class="hs-identifier hs-var hs-var">ixPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#ixPos"><span class="hs-identifier hs-var hs-var">ixPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -625,7 +673,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span>
 </span><span id="line-102"></span><span id="iyPos"><span class="annot"><span class="annottext">iyPos :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#iyPos"><span class="hs-identifier hs-var hs-var">iyPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#iyPos"><span class="hs-identifier hs-var hs-var">iyPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -638,7 +687,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span>
 </span><span id="line-103"></span><span>
 </span><span id="line-104"></span><span id="fSpeed"><span class="annot"><span class="annottext">fSpeed :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#fSpeed"><span class="hs-identifier hs-var hs-var">fSpeed</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#fSpeed"><span class="hs-identifier hs-var hs-var">fSpeed</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -649,7 +699,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#velU"><span class="hs-identifier hs-var">velU</span></a></span><span>
 </span><span id="line-105"></span><span id="iSpeed"><span class="annot"><span class="annottext">iSpeed :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#iSpeed"><span class="hs-identifier hs-var hs-var">iSpeed</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#iSpeed"><span class="hs-identifier hs-var hs-var">iSpeed</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -661,7 +712,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><a href="Data.Drasil.Units.Physics.html#velU"><span class="hs-identifier hs-var">velU</span></a></span><span>
 </span><span id="line-106"></span><span>
 </span><span id="line-107"></span><span id="ixSpeed"><span class="annot"><span class="annottext">ixSpeed :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#ixSpeed"><span class="hs-identifier hs-var hs-var">ixSpeed</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#ixSpeed"><span class="hs-identifier hs-var hs-var">ixSpeed</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -672,7 +724,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#velU"><span class="hs-identifier hs-var">velU</span></a></span><span> </span><span class="hs-comment">-- temporary use for avoiding having too many superscripts</span><span>
 </span><span id="line-108"></span><span id="iySpeed"><span class="annot"><span class="annottext">iySpeed :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#iySpeed"><span class="hs-identifier hs-var hs-var">iySpeed</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#iySpeed"><span class="hs-identifier hs-var hs-var">iySpeed</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -684,7 +737,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><a href="Data.Drasil.Units.Physics.html#velU"><span class="hs-identifier hs-var">velU</span></a></span><span> </span><span class="hs-comment">-- temporary use for avoiding having too many superscripts</span><span>
 </span><span id="line-109"></span><span>
 </span><span id="line-110"></span><span id="fVel"><span class="annot"><span class="annottext">fVel :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#fVel"><span class="hs-identifier hs-var hs-var">fVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#fVel"><span class="hs-identifier hs-var hs-var">fVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -696,7 +750,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#velU"><span class="hs-identifier hs-var">velU</span></a></span><span>
 </span><span id="line-111"></span><span id="iVel"><span class="annot"><span class="annottext">iVel :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#iVel"><span class="hs-identifier hs-var hs-var">iVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#iVel"><span class="hs-identifier hs-var hs-var">iVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -708,7 +763,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#velU"><span class="hs-identifier hs-var">velU</span></a></span><span>
 </span><span id="line-112"></span><span id="xVel"><span class="annot"><span class="annottext">xVel :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#xVel"><span class="hs-identifier hs-var hs-var">xVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#xVel"><span class="hs-identifier hs-var hs-var">xVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -718,7 +774,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#velU"><span class="hs-identifier hs-var">velU</span></a></span><span>
 </span><span id="line-113"></span><span id="yVel"><span class="annot"><span class="annottext">yVel :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#yVel"><span class="hs-identifier hs-var hs-var">yVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#yVel"><span class="hs-identifier hs-var hs-var">yVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -729,7 +786,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><a href="Data.Drasil.Units.Physics.html#velU"><span class="hs-identifier hs-var">velU</span></a></span><span>
 </span><span id="line-114"></span><span>
 </span><span id="line-115"></span><span id="ixVel"><span class="annot"><span class="annottext">ixVel :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#ixVel"><span class="hs-identifier hs-var hs-var">ixVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#ixVel"><span class="hs-identifier hs-var hs-var">ixVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -741,7 +799,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#velU"><span class="hs-identifier hs-var">velU</span></a></span><span>
 </span><span id="line-116"></span><span id="iyVel"><span class="annot"><span class="annottext">iyVel :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#iyVel"><span class="hs-identifier hs-var hs-var">iyVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#iyVel"><span class="hs-identifier hs-var hs-var">iyVel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -754,7 +813,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><a href="Data.Drasil.Units.Physics.html#velU"><span class="hs-identifier hs-var">velU</span></a></span><span>
 </span><span id="line-117"></span><span>
 </span><span id="line-118"></span><span id="xAccel"><span class="annot"><span class="annottext">xAccel :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#xAccel"><span class="hs-identifier hs-var hs-var">xAccel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#xAccel"><span class="hs-identifier hs-var hs-var">xAccel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -764,7 +824,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#accelU"><span class="hs-identifier hs-var">accelU</span></a></span><span>
 </span><span id="line-119"></span><span id="yAccel"><span class="annot"><span class="annottext">yAccel :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#yAccel"><span class="hs-identifier hs-var hs-var">yAccel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#yAccel"><span class="hs-identifier hs-var hs-var">yAccel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -775,7 +836,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><a href="Data.Drasil.Units.Physics.html#accelU"><span class="hs-identifier hs-var">accelU</span></a></span><span>
 </span><span id="line-120"></span><span>
 </span><span id="line-121"></span><span id="constAccelV"><span class="annot"><span class="annottext">constAccelV :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#constAccelV"><span class="hs-identifier hs-var hs-var">constAccelV</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#constAccelV"><span class="hs-identifier hs-var hs-var">constAccelV</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -787,7 +849,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#accelU"><span class="hs-identifier hs-var">accelU</span></a></span><span>
 </span><span id="line-122"></span><span id="xConstAccel"><span class="annot"><span class="annottext">xConstAccel :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#xConstAccel"><span class="hs-identifier hs-var hs-var">xConstAccel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#xConstAccel"><span class="hs-identifier hs-var hs-var">xConstAccel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -799,7 +862,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#accelU"><span class="hs-identifier hs-var">accelU</span></a></span><span>
 </span><span id="line-123"></span><span id="yConstAccel"><span class="annot"><span class="annottext">yConstAccel :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#yConstAccel"><span class="hs-identifier hs-var hs-var">yConstAccel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Physics.html#yConstAccel"><span class="hs-identifier hs-var hs-var">yConstAccel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -825,76 +889,80 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;i&quot;</span></span><span>
 </span><span id="line-129"></span><span>
-</span><span id="line-130"></span><span class="hs-comment">-- * Helpers</span><span>
+</span><span id="line-130"></span><span class="annot"><span class="hs-comment">-- * Helpers</span></span><span>
 </span><span id="line-131"></span><span>
 </span><span id="line-132"></span><span class="hs-comment">-- Helpers for common modifiers</span><span>
 </span><span id="line-133"></span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#subMax"><span class="hs-identifier hs-type">subMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#subMin"><span class="hs-identifier hs-type">subMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#subX"><span class="hs-identifier hs-type">subX</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#subY"><span class="hs-identifier hs-type">subY</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#subZ"><span class="hs-identifier hs-type">subZ</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#supMax"><span class="hs-identifier hs-type">supMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#supMin"><span class="hs-identifier hs-type">supMin</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Symbol</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Symbol</span></span><span>
 </span><span id="line-134"></span><span id="subMax"><span class="annot"><span class="annottext">subMax :: Symbol -&gt; Symbol
-</span><a href="Data.Drasil.Quantities.Physics.html#subMax"><span class="hs-identifier hs-var hs-var">subMax</span></a></span></span><span> </span><span id="local-6989586621679054479"><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679054479"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><a href="Data.Drasil.Quantities.Physics.html#subMax"><span class="hs-identifier hs-var hs-var">subMax</span></a></span></span><span> </span><span id="local-6989586621679055681"><span class="annot"><span class="annottext">Symbol
+</span><a href="#local-6989586621679055681"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679054479"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><a href="#local-6989586621679055681"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;max&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-135"></span><span id="subMin"><span class="annot"><span class="annottext">subMin :: Symbol -&gt; Symbol
-</span><a href="Data.Drasil.Quantities.Physics.html#subMin"><span class="hs-identifier hs-var hs-var">subMin</span></a></span></span><span> </span><span id="local-6989586621679054478"><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679054478"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><a href="Data.Drasil.Quantities.Physics.html#subMin"><span class="hs-identifier hs-var hs-var">subMin</span></a></span></span><span> </span><span id="local-6989586621679055682"><span class="annot"><span class="annottext">Symbol
+</span><a href="#local-6989586621679055682"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679054478"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><a href="#local-6989586621679055682"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;min&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-136"></span><span id="subX"><span class="annot"><span class="annottext">subX :: Symbol -&gt; Symbol
-</span><a href="Data.Drasil.Quantities.Physics.html#subX"><span class="hs-identifier hs-var hs-var">subX</span></a></span></span><span>   </span><span id="local-6989586621679054477"><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679054477"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><a href="Data.Drasil.Quantities.Physics.html#subX"><span class="hs-identifier hs-var hs-var">subX</span></a></span></span><span>   </span><span id="local-6989586621679055683"><span class="annot"><span class="annottext">Symbol
+</span><a href="#local-6989586621679055683"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679054477"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><a href="#local-6989586621679055683"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;x&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-137"></span><span id="subY"><span class="annot"><span class="annottext">subY :: Symbol -&gt; Symbol
-</span><a href="Data.Drasil.Quantities.Physics.html#subY"><span class="hs-identifier hs-var hs-var">subY</span></a></span></span><span>   </span><span id="local-6989586621679054476"><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679054476"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><a href="Data.Drasil.Quantities.Physics.html#subY"><span class="hs-identifier hs-var hs-var">subY</span></a></span></span><span>   </span><span id="local-6989586621679055684"><span class="annot"><span class="annottext">Symbol
+</span><a href="#local-6989586621679055684"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679054476"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><a href="#local-6989586621679055684"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;y&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-138"></span><span id="subZ"><span class="annot"><span class="annottext">subZ :: Symbol -&gt; Symbol
-</span><a href="Data.Drasil.Quantities.Physics.html#subZ"><span class="hs-identifier hs-var hs-var">subZ</span></a></span></span><span>   </span><span id="local-6989586621679054475"><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679054475"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><a href="Data.Drasil.Quantities.Physics.html#subZ"><span class="hs-identifier hs-var hs-var">subZ</span></a></span></span><span>   </span><span id="local-6989586621679055685"><span class="annot"><span class="annottext">Symbol
+</span><a href="#local-6989586621679055685"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679054475"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><a href="#local-6989586621679055685"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;z&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-139"></span><span id="supMax"><span class="annot"><span class="annottext">supMax :: Symbol -&gt; Symbol
-</span><a href="Data.Drasil.Quantities.Physics.html#supMax"><span class="hs-identifier hs-var hs-var">supMax</span></a></span></span><span> </span><span id="local-6989586621679054474"><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679054474"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><a href="Data.Drasil.Quantities.Physics.html#supMax"><span class="hs-identifier hs-var hs-var">supMax</span></a></span></span><span> </span><span id="local-6989586621679055686"><span class="annot"><span class="annottext">Symbol
+</span><a href="#local-6989586621679055686"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sup</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679054474"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><a href="#local-6989586621679055686"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;max&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-140"></span><span id="supMin"><span class="annot"><span class="annottext">supMin :: Symbol -&gt; Symbol
-</span><a href="Data.Drasil.Quantities.Physics.html#supMin"><span class="hs-identifier hs-var hs-var">supMin</span></a></span></span><span> </span><span id="local-6989586621679054473"><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679054473"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><a href="Data.Drasil.Quantities.Physics.html#supMin"><span class="hs-identifier hs-var hs-var">supMin</span></a></span></span><span> </span><span id="local-6989586621679055687"><span class="annot"><span class="annottext">Symbol
+</span><a href="#local-6989586621679055687"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sup</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679054473"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><a href="#local-6989586621679055687"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;min&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-141"></span><span>
-</span><span id="line-142"></span><span class="hs-comment">-- * Constants</span><span>
+</span><span id="line-142"></span><span class="annot"><span class="hs-comment">-- * Constants</span></span><span>
 </span><span id="line-143"></span><span>
 </span><span id="line-144"></span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#gravitationalConstValue"><span class="hs-identifier hs-type">gravitationalConstValue</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstQDef</span></span><span>
 </span><span id="line-145"></span><span id="gravitationalConstValue"><span class="annot"><span class="annottext">gravitationalConstValue :: ConstQDef
-</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalConstValue"><span class="hs-identifier hs-var hs-var">gravitationalConstValue</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalConstValue"><span class="hs-identifier hs-var hs-var">gravitationalConstValue</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalConst"><span class="hs-identifier hs-var">gravitationalConst</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Double -&gt; r
+</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalConst"><span class="hs-identifier hs-var">gravitationalConst</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Literal
+forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">6.6743E-11</span></span><span class="hs-special">)</span><span>
 </span><span id="line-146"></span><span class="hs-comment">--(dbl 6.673 * 10E-11)</span><span>
 </span><span id="line-147"></span><span class="hs-comment">--(dbl 0.00000000006673)</span><span>
 </span><span id="line-148"></span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccelConst"><span class="hs-identifier hs-type">gravitationalAccelConst</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstQDef</span></span><span>
 </span><span id="line-149"></span><span id="gravitationalAccelConst"><span class="annot"><span class="annottext">gravitationalAccelConst :: ConstQDef
-</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccelConst"><span class="hs-identifier hs-var hs-var">gravitationalAccelConst</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccelConst"><span class="hs-identifier hs-var hs-var">gravitationalAccelConst</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalMagnitude"><span class="hs-identifier hs-var">gravitationalMagnitude</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Double -&gt; r
+</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalMagnitude"><span class="hs-identifier hs-var">gravitationalMagnitude</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Literal
+forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">9.8</span></span><span class="hs-special">)</span><span>
 </span><span id="line-150"></span></pre></body></html>

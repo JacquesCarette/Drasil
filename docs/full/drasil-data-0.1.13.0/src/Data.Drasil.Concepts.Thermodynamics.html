@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Defines concepts used in the field of thermodynamics.</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | Defines concepts used in the field of thermodynamics.</span></span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Drasil.Concepts.Thermodynamics</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
@@ -8,7 +8,7 @@
 </span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#source"><span class="hs-identifier">source</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#theory"><span class="hs-identifier">theory</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Physics.html"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Concepts.Physics.html#energy"><span class="hs-identifier">energy</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-10"></span><span>
-</span><span id="line-11"></span><span class="hs-comment">-- | Collects all thermodynamics-related concepts.</span><span>
+</span><span id="line-11"></span><span class="annot"><span class="hs-comment">-- | Collects all thermodynamics-related concepts.</span></span><span>
 </span><span id="line-12"></span><span class="annot"><a href="Data.Drasil.Concepts.Thermodynamics.html#thermocon"><span class="hs-identifier hs-type">thermocon</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span>
 </span><span id="line-13"></span><span id="thermocon"><span class="annot"><span class="annottext">thermocon :: [ConceptChunk]
 </span><a href="Data.Drasil.Concepts.Thermodynamics.html#thermocon"><span class="hs-identifier hs-var hs-var">thermocon</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk
@@ -75,7 +75,8 @@
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;heat&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-32"></span><span>                      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Noun: The amount of heat energy inside a body. &quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-string">&quot;Noun: The amount of heat energy inside a body. &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-33"></span><span>                      </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Verb: To transfer thermal energy to a body&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- FIXME: there shouldn't be two definitions in one</span><span>
@@ -86,7 +87,8 @@
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;heat transfer&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-35"></span><span>                      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;the generation, use, conversion, and exchange of thermal &quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-string">&quot;the generation, use, conversion, and exchange of thermal &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-36"></span><span>                      </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;energy and heat between physical systems&quot;</span></span><span class="hs-special">)</span><span>
@@ -97,7 +99,8 @@
 </span><span class="hs-identifier hs-var">cnIES</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;specific heat capacity&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-38"></span><span>                      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;the amount of energy required to raise the temperature &quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-string">&quot;the amount of energy required to raise the temperature &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-39"></span><span>                      </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;of the unit mass of a given substance by a given amount&quot;</span></span><span class="hs-special">)</span><span>
@@ -108,7 +111,8 @@
 </span><span class="hs-identifier hs-var">cn''</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;heat flux&quot;</span></span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-41"></span><span>                      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;the rate of thermal energy transfer through a given &quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-string">&quot;the rate of thermal energy transfer through a given &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-42"></span><span>                      </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;surface per unit time&quot;</span></span><span class="hs-special">)</span><span>
@@ -119,7 +123,8 @@
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;latent heat&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-44"></span><span>                      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;the heat required to convert a solid into a liquid or &quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-string">&quot;the heat required to convert a solid into a liquid or &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-45"></span><span>                      </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;vapor, or a liquid into a vapor, without change of temperature&quot;</span></span><span class="hs-special">)</span><span>
@@ -170,10 +175,12 @@
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;sensible heat&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-57"></span><span>                      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;heat exchanged by a body in which the exchange of heat &quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-string">&quot;heat exchanged by a body in which the exchange of heat &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-58"></span><span>                      </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;changes the temperature and some macroscopic variables of &quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-string">&quot;changes the temperature and some macroscopic variables of &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-59"></span><span>                      </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the body or system, but leaves others unchanged&quot;</span></span><span class="hs-special">)</span><span>
@@ -192,11 +199,14 @@
 </span><span id="line-63"></span><span>                      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; PluralRule -&gt; NP
 </span><span class="hs-identifier hs-var">cnIP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;thermal analysis&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(String -&gt; String) -&gt; PluralRule
-</span><span class="hs-identifier hs-var">IrregPlur</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679054358"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679054358"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a]
-</span><span class="hs-identifier hs-var">init</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a]
+</span><span class="hs-identifier hs-var">IrregPlur</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679054955"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679054955"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">String -&gt; String
+forall a. HasCallStack =&gt; [a] -&gt; [a]
+</span><span class="hs-identifier hs-var">init</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; String
+forall a. HasCallStack =&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">init</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679054358"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679054955"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;es&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-64"></span><span>                      </span><span class="annot"><span class="annottext">String
@@ -229,7 +239,8 @@
 </span><span id="line-72"></span><span id="enerSrc"><span class="annot"><span class="annottext">enerSrc :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Thermodynamics.html#enerSrc"><span class="hs-identifier hs-var hs-var">enerSrc</span></a></span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;enerSrc&quot;</span></span><span>     </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-string">&quot;enerSrc&quot;</span></span><span>     </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; IdeaDict -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-identifier hs-var">combineNINI</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#energy"><span class="hs-identifier hs-var">energy</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#source"><span class="hs-identifier hs-var">source</span></a></span><span class="hs-special">)</span><span>
@@ -238,12 +249,14 @@
 </span><span id="line-74"></span><span id="htTransTheo"><span class="annot"><span class="annottext">htTransTheo :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Thermodynamics.html#htTransTheo"><span class="hs-identifier hs-var hs-var">htTransTheo</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;htTransTheo&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-string">&quot;htTransTheo&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; IdeaDict -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-identifier hs-var">combineNINI</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Thermodynamics.html#heatTrans"><span class="hs-identifier hs-var">heatTrans</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#theory"><span class="hs-identifier hs-var">theory</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-75"></span><span>                      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;the theory predicting the energy transfer that may take &quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-string">&quot;the theory predicting the energy transfer that may take &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-76"></span><span>                      </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;place between material bodies as a result of temperature difference&quot;</span></span><span class="hs-special">)</span><span>

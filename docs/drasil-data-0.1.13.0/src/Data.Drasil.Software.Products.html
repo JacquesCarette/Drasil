@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Defines common software products.</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | Defines common software products.</span></span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Drasil.Software.Products</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
@@ -38,17 +38,20 @@
 </span><span id="line-21"></span><span>
 </span><span id="line-22"></span><span class="annot"><a href="Data.Drasil.Software.Products.html#videoGame"><span class="hs-identifier hs-type">videoGame</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Software.Products.html#openSource"><span class="hs-identifier hs-type">openSource</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Software.Products.html#compPro"><span class="hs-identifier hs-type">compPro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span>
 </span><span id="line-23"></span><span id="videoGame"><span class="annot"><span class="annottext">videoGame :: IdeaDict
-</span><a href="Data.Drasil.Software.Products.html#videoGame"><span class="hs-identifier hs-var hs-var">videoGame</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Data.Drasil.Software.Products.html#videoGame"><span class="hs-identifier hs-var hs-var">videoGame</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#video"><span class="hs-identifier hs-var">video</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#game"><span class="hs-identifier hs-var">game</span></a></span><span>
 </span><span id="line-24"></span><span id="openSource"><span class="annot"><span class="annottext">openSource :: IdeaDict
-</span><a href="Data.Drasil.Software.Products.html#openSource"><span class="hs-identifier hs-var hs-var">openSource</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Data.Drasil.Software.Products.html#openSource"><span class="hs-identifier hs-var hs-var">openSource</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#open"><span class="hs-identifier hs-var">open</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#source"><span class="hs-identifier hs-var">source</span></a></span><span>
 </span><span id="line-25"></span><span id="compPro"><span class="annot"><span class="annottext">compPro :: IdeaDict
-</span><a href="Data.Drasil.Software.Products.html#compPro"><span class="hs-identifier hs-var hs-var">compPro</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Data.Drasil.Software.Products.html#compPro"><span class="hs-identifier hs-var hs-var">compPro</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; ConceptChunk -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Computation.html#computer"><span class="hs-identifier hs-var">computer</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Software.html#program"><span class="hs-identifier hs-var">program</span></a></span><span>

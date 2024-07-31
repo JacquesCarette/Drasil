@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | General helper functions for printing Drasil documents.</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | General helper functions for printing Drasil documents.</span></span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Language.Drasil.Printing.Helpers</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Prelude</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(&lt;&gt;)</span></span><span class="hs-special">)</span><span>
@@ -11,242 +11,264 @@
 </span><span id="line-11"></span><span class="hs-keyword">infixl</span><span> </span><span class="hs-number">5</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#%24%5E%24"><span class="hs-operator hs-type">$^$</span></a></span><span>
 </span><span id="line-12"></span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#%24%5E%24"><span class="hs-operator hs-type">($^$)</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-13"></span><span id="%24%5E%24"><span class="annot"><span class="annottext">$^$ :: Doc -&gt; Doc -&gt; Doc
-</span><a href="Language.Drasil.Printing.Helpers.html#%24%5E%24"><span class="hs-operator hs-var hs-var">($^$)</span></a></span></span><span> </span><span id="local-6989586621679120725"><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679120725"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679120724"><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679120724"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679120725"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
+</span><a href="Language.Drasil.Printing.Helpers.html#%24%5E%24"><span class="hs-operator hs-var hs-var">($^$)</span></a></span></span><span> </span><span id="local-6989586621679120172"><span class="annot"><span class="annottext">Doc
+</span><a href="#local-6989586621679120172"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679120173"><span class="annot"><span class="annottext">Doc
+</span><a href="#local-6989586621679120173"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc
+</span><a href="#local-6989586621679120172"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">$$</span></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#emptyline"><span class="hs-identifier hs-var">emptyline</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">$$</span></span><span> </span><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679120724"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><a href="#local-6989586621679120173"><span class="hs-identifier hs-var">b</span></a></span><span>
 </span><span id="line-14"></span><span>
 </span><span id="line-15"></span><span class="hs-comment">-- | Concatenate a list of 'Doc's vertically </span><span>
 </span><span id="line-16"></span><span class="hs-comment">-- with an empty line in between.</span><span>
 </span><span id="line-17"></span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#vsep"><span class="hs-identifier hs-type">vsep</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-18"></span><span id="vsep"><span class="annot"><span class="annottext">vsep :: [Doc] -&gt; Doc
-</span><a href="Language.Drasil.Printing.Helpers.html#vsep"><span class="hs-identifier hs-var hs-var">vsep</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; a -&gt; a) -&gt; t a -&gt; a
+</span><a href="Language.Drasil.Printing.Helpers.html#vsep"><span class="hs-identifier hs-var hs-var">vsep</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc -&gt; Doc) -&gt; [Doc] -&gt; Doc
+forall a. (a -&gt; a -&gt; a) -&gt; [a] -&gt; a
+forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; a -&gt; a) -&gt; t a -&gt; a
 </span><span class="hs-identifier hs-var">foldr1</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#%24%5E%24"><span class="hs-operator hs-var">($^$)</span></a></span><span>
 </span><span id="line-19"></span><span>
-</span><span id="line-20"></span><span class="hs-comment">-- | Basic text-rendering helper function.</span><span>
+</span><span id="line-20"></span><span class="annot"><span class="hs-comment">-- | Basic text-rendering helper function.</span></span><span>
 </span><span id="line-21"></span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#bslash"><span class="hs-identifier hs-type">bslash</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#dbs"><span class="hs-identifier hs-type">dbs</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#assign"><span class="hs-identifier hs-type">assign</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#eq"><span class="hs-identifier hs-type">eq</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#lt"><span class="hs-identifier hs-type">lt</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#gt"><span class="hs-identifier hs-type">gt</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#leq"><span class="hs-identifier hs-type">leq</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#geq"><span class="hs-identifier hs-type">geq</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#dlr"><span class="hs-identifier hs-type">dlr</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#ast"><span class="hs-identifier hs-type">ast</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#pls"><span class="hs-identifier hs-type">pls</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#hat"><span class="hs-identifier hs-type">hat</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#slash"><span class="hs-identifier hs-type">slash</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#hyph"><span class="hs-identifier hs-type">hyph</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#unders"><span class="hs-identifier hs-type">unders</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#pipe"><span class="hs-identifier hs-type">pipe</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#emptyline"><span class="hs-identifier hs-type">emptyline</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
-</span><span id="line-22"></span><span class="hs-comment">-- | Single backslash.</span><span>
+</span><span id="line-22"></span><span class="annot"><span class="hs-comment">-- | Single backslash.</span></span><span>
 </span><span id="line-23"></span><span id="bslash"><span class="annot"><span class="annottext">bslash :: Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#bslash"><span class="hs-identifier hs-var hs-var">bslash</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;\\&quot;</span></span><span>
-</span><span id="line-24"></span><span class="hs-comment">-- | Double backslash.</span><span>
+</span><span id="line-24"></span><span class="annot"><span class="hs-comment">-- | Double backslash.</span></span><span>
 </span><span id="line-25"></span><span id="dbs"><span class="annot"><span class="annottext">dbs :: Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#dbs"><span class="hs-identifier hs-var hs-var">dbs</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;\\\\&quot;</span></span><span>
-</span><span id="line-26"></span><span class="hs-comment">-- | Variable assignment character (&quot;=&quot;).</span><span>
+</span><span id="line-26"></span><span class="annot"><span class="hs-comment">-- | Variable assignment character (&quot;=&quot;).</span></span><span>
 </span><span id="line-27"></span><span id="assign"><span class="annot"><span class="annottext">assign :: Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#assign"><span class="hs-identifier hs-var hs-var">assign</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;=&quot;</span></span><span>
-</span><span id="line-28"></span><span class="hs-comment">-- | Equality character (&quot;==&quot;).</span><span>
+</span><span id="line-28"></span><span class="annot"><span class="hs-comment">-- | Equality character (&quot;==&quot;).</span></span><span>
 </span><span id="line-29"></span><span id="eq"><span class="annot"><span class="annottext">eq :: Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#eq"><span class="hs-identifier hs-var hs-var">eq</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;==&quot;</span></span><span>
-</span><span id="line-30"></span><span class="hs-comment">-- | Less than.</span><span>
+</span><span id="line-30"></span><span class="annot"><span class="hs-comment">-- | Less than.</span></span><span>
 </span><span id="line-31"></span><span id="lt"><span class="annot"><span class="annottext">lt :: Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#lt"><span class="hs-identifier hs-var hs-var">lt</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&lt;&quot;</span></span><span>
-</span><span id="line-32"></span><span class="hs-comment">-- | Greater than.</span><span>
+</span><span id="line-32"></span><span class="annot"><span class="hs-comment">-- | Greater than.</span></span><span>
 </span><span id="line-33"></span><span id="gt"><span class="annot"><span class="annottext">gt :: Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#gt"><span class="hs-identifier hs-var hs-var">gt</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&gt;&quot;</span></span><span>
-</span><span id="line-34"></span><span class="hs-comment">-- | Less than or equal to.</span><span>
+</span><span id="line-34"></span><span class="annot"><span class="hs-comment">-- | Less than or equal to.</span></span><span>
 </span><span id="line-35"></span><span id="leq"><span class="annot"><span class="annottext">leq :: Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#leq"><span class="hs-identifier hs-var hs-var">leq</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&lt;=&quot;</span></span><span>
-</span><span id="line-36"></span><span class="hs-comment">-- | Greater than or equal to.</span><span>
+</span><span id="line-36"></span><span class="annot"><span class="hs-comment">-- | Greater than or equal to.</span></span><span>
 </span><span id="line-37"></span><span id="geq"><span class="annot"><span class="annottext">geq :: Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#geq"><span class="hs-identifier hs-var hs-var">geq</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&gt;=&quot;</span></span><span>
-</span><span id="line-38"></span><span class="hs-comment">-- | Dollar sign.</span><span>
+</span><span id="line-38"></span><span class="annot"><span class="hs-comment">-- | Dollar sign.</span></span><span>
 </span><span id="line-39"></span><span id="dlr"><span class="annot"><span class="annottext">dlr :: Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#dlr"><span class="hs-identifier hs-var hs-var">dlr</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;$&quot;</span></span><span>
-</span><span id="line-40"></span><span class="hs-comment">-- | Asterisk.</span><span>
+</span><span id="line-40"></span><span class="annot"><span class="hs-comment">-- | Asterisk.</span></span><span>
 </span><span id="line-41"></span><span id="ast"><span class="annot"><span class="annottext">ast :: Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#ast"><span class="hs-identifier hs-var hs-var">ast</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;*&quot;</span></span><span>
-</span><span id="line-42"></span><span class="hs-comment">-- | Plus.</span><span>
+</span><span id="line-42"></span><span class="annot"><span class="hs-comment">-- | Plus.</span></span><span>
 </span><span id="line-43"></span><span id="pls"><span class="annot"><span class="annottext">pls :: Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#pls"><span class="hs-identifier hs-var hs-var">pls</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;+&quot;</span></span><span>
-</span><span id="line-44"></span><span class="hs-comment">-- | Hat symbol (&quot;^&quot;).</span><span>
+</span><span id="line-44"></span><span class="annot"><span class="hs-comment">-- | Hat symbol (&quot;^&quot;).</span></span><span>
 </span><span id="line-45"></span><span id="hat"><span class="annot"><span class="annottext">hat :: Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#hat"><span class="hs-identifier hs-var hs-var">hat</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;^&quot;</span></span><span>
-</span><span id="line-46"></span><span class="hs-comment">-- | Forward slash.</span><span>
+</span><span id="line-46"></span><span class="annot"><span class="hs-comment">-- | Forward slash.</span></span><span>
 </span><span id="line-47"></span><span id="slash"><span class="annot"><span class="annottext">slash :: Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#slash"><span class="hs-identifier hs-var hs-var">slash</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;/&quot;</span></span><span>
-</span><span id="line-48"></span><span class="hs-comment">-- | Hyphen.</span><span>
+</span><span id="line-48"></span><span class="annot"><span class="hs-comment">-- | Hyphen.</span></span><span>
 </span><span id="line-49"></span><span id="hyph"><span class="annot"><span class="annottext">hyph :: Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#hyph"><span class="hs-identifier hs-var hs-var">hyph</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;-&quot;</span></span><span>
-</span><span id="line-50"></span><span class="hs-comment">-- | Underscore.</span><span>
+</span><span id="line-50"></span><span class="annot"><span class="hs-comment">-- | Underscore.</span></span><span>
 </span><span id="line-51"></span><span id="unders"><span class="annot"><span class="annottext">unders :: Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#unders"><span class="hs-identifier hs-var hs-var">unders</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;_&quot;</span></span><span>
-</span><span id="line-52"></span><span class="hs-comment">-- | Pipe.</span><span>
+</span><span id="line-52"></span><span class="annot"><span class="hs-comment">-- | Pipe.</span></span><span>
 </span><span id="line-53"></span><span id="pipe"><span class="annot"><span class="annottext">pipe :: Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#pipe"><span class="hs-identifier hs-var hs-var">pipe</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;|&quot;</span></span><span>
-</span><span id="line-54"></span><span class="hs-comment">-- | Empty line.</span><span>
+</span><span id="line-54"></span><span class="annot"><span class="hs-comment">-- | Empty line.</span></span><span>
 </span><span id="line-55"></span><span id="emptyline"><span class="annot"><span class="annottext">emptyline :: Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#emptyline"><span class="hs-identifier hs-var hs-var">emptyline</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&quot;</span></span><span>
 </span><span id="line-56"></span><span>
-</span><span id="line-57"></span><span class="hs-comment">-- | Text-rendering helper for wrapping strings with brackets/braces.</span><span>
+</span><span id="line-57"></span><span class="annot"><span class="hs-comment">-- | Text-rendering helper for wrapping strings with brackets/braces.</span></span><span>
 </span><span id="line-58"></span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#sq"><span class="hs-identifier hs-type">sq</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#br"><span class="hs-identifier hs-type">br</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
-</span><span id="line-59"></span><span class="hs-comment">-- | Square brackets.</span><span>
+</span><span id="line-59"></span><span class="annot"><span class="hs-comment">-- | Square brackets.</span></span><span>
 </span><span id="line-60"></span><span id="sq"><span class="annot"><span class="annottext">sq :: String -&gt; Doc
-</span><a href="Language.Drasil.Printing.Helpers.html#sq"><span class="hs-identifier hs-var hs-var">sq</span></a></span></span><span> </span><span id="local-6989586621679120702"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679120702"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
-</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="Language.Drasil.Printing.Helpers.html#sq"><span class="hs-identifier hs-var hs-var">sq</span></a></span></span><span> </span><span id="local-6989586621679120195"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679120195"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Doc) -&gt; String -&gt; Doc
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;[&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-string">&quot;[&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679120702"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679120195"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;]&quot;</span></span><span>
-</span><span id="line-61"></span><span class="hs-comment">-- | Curly braces.</span><span>
+</span><span id="line-61"></span><span class="annot"><span class="hs-comment">-- | Curly braces.</span></span><span>
 </span><span id="line-62"></span><span id="br"><span class="annot"><span class="annottext">br :: String -&gt; Doc
-</span><a href="Language.Drasil.Printing.Helpers.html#br"><span class="hs-identifier hs-var hs-var">br</span></a></span></span><span> </span><span id="local-6989586621679120701"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679120701"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
-</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="Language.Drasil.Printing.Helpers.html#br"><span class="hs-identifier hs-var hs-var">br</span></a></span></span><span> </span><span id="local-6989586621679120196"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679120196"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Doc) -&gt; String -&gt; Doc
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;{&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-string">&quot;{&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679120701"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679120196"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;}&quot;</span></span><span>
 </span><span id="line-63"></span><span>
-</span><span id="line-64"></span><span class="hs-comment">-- | Text-rendering helper for appending a period/decimal point (dot symbol) or a comma.</span><span>
+</span><span id="line-64"></span><span class="annot"><span class="hs-comment">-- | Text-rendering helper for appending a period/decimal point (dot symbol) or a comma.</span></span><span>
 </span><span id="line-65"></span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#dot"><span class="hs-identifier hs-type">dot</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#comm"><span class="hs-identifier hs-type">comm</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
-</span><span id="line-66"></span><span class="hs-comment">-- | Dot symbol (&quot;.&quot;)</span><span>
+</span><span id="line-66"></span><span class="annot"><span class="hs-comment">-- | Dot symbol (&quot;.&quot;)</span></span><span>
 </span><span id="line-67"></span><span id="dot"><span class="annot"><span class="annottext">dot :: Doc -&gt; Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#dot"><span class="hs-identifier hs-var hs-var">dot</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;.&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-68"></span><span class="hs-comment">-- | Comma (&quot;,&quot;)</span><span>
+</span><span id="line-68"></span><span class="annot"><span class="hs-comment">-- | Comma (&quot;,&quot;)</span></span><span>
 </span><span id="line-69"></span><span id="comm"><span class="annot"><span class="annottext">comm :: Doc -&gt; Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#comm"><span class="hs-identifier hs-var hs-var">comm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;,&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-70"></span><span>
-</span><span id="line-71"></span><span class="hs-comment">-- | For wrapping $ on both sides of a 'Doc'.</span><span>
+</span><span id="line-71"></span><span class="annot"><span class="hs-comment">-- | For wrapping $ on both sides of a 'Doc'.</span></span><span>
 </span><span id="line-72"></span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#dollarDoc"><span class="hs-identifier hs-type">dollarDoc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-73"></span><span id="dollarDoc"><span class="annot"><span class="annottext">dollarDoc :: Doc -&gt; Doc
-</span><a href="Language.Drasil.Printing.Helpers.html#dollarDoc"><span class="hs-identifier hs-var hs-var">dollarDoc</span></a></span></span><span> </span><span id="local-6989586621679120697"><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679120697"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc
+</span><a href="Language.Drasil.Printing.Helpers.html#dollarDoc"><span class="hs-identifier hs-var hs-var">dollarDoc</span></a></span></span><span> </span><span id="local-6989586621679120200"><span class="annot"><span class="annottext">Doc
+</span><a href="#local-6989586621679120200"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#dlr"><span class="hs-identifier hs-var">dlr</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679120697"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
+</span><a href="#local-6989586621679120200"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#dlr"><span class="hs-identifier hs-var">dlr</span></a></span><span>
 </span><span id="line-74"></span><span>
-</span><span id="line-75"></span><span class="hs-comment">-- | Basic plaintext (String) wrapping.</span><span>
+</span><span id="line-75"></span><span class="annot"><span class="hs-comment">-- | Basic plaintext (String) wrapping.</span></span><span>
 </span><span id="line-76"></span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#paren"><span class="hs-identifier hs-type">paren</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#brace"><span class="hs-identifier hs-type">brace</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#dollar"><span class="hs-identifier hs-type">dollar</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#sqbrac"><span class="hs-identifier hs-type">sqbrac</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#angbrac"><span class="hs-identifier hs-type">angbrac</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-77"></span><span class="hs-comment">-- | Wraps in parenthesis.</span><span>
+</span><span id="line-77"></span><span class="annot"><span class="hs-comment">-- | Wraps in parenthesis.</span></span><span>
 </span><span id="line-78"></span><span id="paren"><span class="annot"><span class="annottext">paren :: String -&gt; String
-</span><a href="Language.Drasil.Printing.Helpers.html#paren"><span class="hs-identifier hs-var hs-var">paren</span></a></span></span><span>   </span><span id="local-6989586621679120691"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679120691"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;(&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="Language.Drasil.Printing.Helpers.html#paren"><span class="hs-identifier hs-var hs-var">paren</span></a></span></span><span>   </span><span id="local-6989586621679120206"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679120206"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;(&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679120691"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679120206"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;)&quot;</span></span><span>
-</span><span id="line-79"></span><span class="hs-comment">-- | Wraps in curly braces.</span><span>
+</span><span id="line-79"></span><span class="annot"><span class="hs-comment">-- | Wraps in curly braces.</span></span><span>
 </span><span id="line-80"></span><span id="brace"><span class="annot"><span class="annottext">brace :: String -&gt; String
-</span><a href="Language.Drasil.Printing.Helpers.html#brace"><span class="hs-identifier hs-var hs-var">brace</span></a></span></span><span>   </span><span id="local-6989586621679120690"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679120690"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;{&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="Language.Drasil.Printing.Helpers.html#brace"><span class="hs-identifier hs-var hs-var">brace</span></a></span></span><span>   </span><span id="local-6989586621679120207"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679120207"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;{&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679120690"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679120207"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;}&quot;</span></span><span>
-</span><span id="line-81"></span><span class="hs-comment">-- | Wraps in dollar signs.</span><span>
+</span><span id="line-81"></span><span class="annot"><span class="hs-comment">-- | Wraps in dollar signs.</span></span><span>
 </span><span id="line-82"></span><span id="dollar"><span class="annot"><span class="annottext">dollar :: String -&gt; String
-</span><a href="Language.Drasil.Printing.Helpers.html#dollar"><span class="hs-identifier hs-var hs-var">dollar</span></a></span></span><span>  </span><span id="local-6989586621679120689"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679120689"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;$&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="Language.Drasil.Printing.Helpers.html#dollar"><span class="hs-identifier hs-var hs-var">dollar</span></a></span></span><span>  </span><span id="local-6989586621679120208"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679120208"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;$&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679120689"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679120208"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;$&quot;</span></span><span>
-</span><span id="line-83"></span><span class="hs-comment">-- | Wraps in square brackets.</span><span>
+</span><span id="line-83"></span><span class="annot"><span class="hs-comment">-- | Wraps in square brackets.</span></span><span>
 </span><span id="line-84"></span><span id="sqbrac"><span class="annot"><span class="annottext">sqbrac :: String -&gt; String
-</span><a href="Language.Drasil.Printing.Helpers.html#sqbrac"><span class="hs-identifier hs-var hs-var">sqbrac</span></a></span></span><span>  </span><span id="local-6989586621679120688"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679120688"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;[&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="Language.Drasil.Printing.Helpers.html#sqbrac"><span class="hs-identifier hs-var hs-var">sqbrac</span></a></span></span><span>  </span><span id="local-6989586621679120209"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679120209"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;[&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679120688"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679120209"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;]&quot;</span></span><span>
-</span><span id="line-85"></span><span class="hs-comment">-- | Wraps in angular brackets (&quot;&lt;&gt;&quot;).</span><span>
+</span><span id="line-85"></span><span class="annot"><span class="hs-comment">-- | Wraps in angular brackets (&quot;&lt;&gt;&quot;).</span></span><span>
 </span><span id="line-86"></span><span id="angbrac"><span class="annot"><span class="annottext">angbrac :: String -&gt; String
-</span><a href="Language.Drasil.Printing.Helpers.html#angbrac"><span class="hs-identifier hs-var hs-var">angbrac</span></a></span></span><span> </span><span id="local-6989586621679120687"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679120687"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;&lt;&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="Language.Drasil.Printing.Helpers.html#angbrac"><span class="hs-identifier hs-var hs-var">angbrac</span></a></span></span><span> </span><span id="local-6989586621679120210"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679120210"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;&lt;&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679120687"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679120210"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&gt;&quot;</span></span><span>
 </span><span id="line-87"></span><span>
-</span><span id="line-88"></span><span class="hs-comment">-- | Format strings and convert to Doc.</span><span>
+</span><span id="line-88"></span><span class="annot"><span class="hs-comment">-- | Format strings and convert to Doc.</span></span><span>
 </span><span id="line-89"></span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#upcase"><span class="hs-identifier hs-type">upcase</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#lowcase"><span class="hs-identifier hs-type">lowcase</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
-</span><span id="line-90"></span><span class="hs-comment">-- | Capitalize first letter of string.</span><span>
+</span><span id="line-90"></span><span class="annot"><span class="hs-comment">-- | Capitalize first letter of string.</span></span><span>
 </span><span id="line-91"></span><span id="upcase"><span class="annot"><span class="annottext">upcase :: String -&gt; Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#upcase"><span class="hs-identifier hs-var hs-var">upcase</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-92"></span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#upcase"><span class="hs-identifier hs-var">upcase</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679120684"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679120684"><span class="hs-identifier hs-var">c</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679120683"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679120683"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
-</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span id="line-92"></span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#upcase"><span class="hs-identifier hs-var">upcase</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679120213"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679120213"><span class="hs-identifier hs-var">c</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679120214"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679120214"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Doc) -&gt; String -&gt; Doc
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Char
 </span><span class="hs-identifier hs-var">toUpper</span></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679120684"><span class="hs-identifier hs-var">c</span></a></span><span class="annot"><span class="annottext">forall a. a -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679120213"><span class="hs-identifier hs-var">c</span></a></span><span class="annot"><span class="annottext">Char -&gt; String -&gt; String
+forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679120683"><span class="hs-identifier hs-var">cs</span></a></span><span>
-</span><span id="line-93"></span><span class="hs-comment">-- | Make first letter lowercase.</span><span>
+</span><a href="#local-6989586621679120214"><span class="hs-identifier hs-var">cs</span></a></span><span>
+</span><span id="line-93"></span><span class="annot"><span class="hs-comment">-- | Make first letter lowercase.</span></span><span>
 </span><span id="line-94"></span><span id="lowcase"><span class="annot"><span class="annottext">lowcase :: String -&gt; Doc
 </span><a href="Language.Drasil.Printing.Helpers.html#lowcase"><span class="hs-identifier hs-var hs-var">lowcase</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-95"></span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#lowcase"><span class="hs-identifier hs-var">lowcase</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679120682"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679120682"><span class="hs-identifier hs-var">c</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679120681"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679120681"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
-</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span id="line-95"></span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#lowcase"><span class="hs-identifier hs-var">lowcase</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679120215"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679120215"><span class="hs-identifier hs-var">c</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679120216"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679120216"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Doc) -&gt; String -&gt; Doc
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Char
 </span><span class="hs-identifier hs-var">toLower</span></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679120682"><span class="hs-identifier hs-var">c</span></a></span><span class="annot"><span class="annottext">forall a. a -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679120215"><span class="hs-identifier hs-var">c</span></a></span><span class="annot"><span class="annottext">Char -&gt; String -&gt; String
+forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679120681"><span class="hs-identifier hs-var">cs</span></a></span><span>
+</span><a href="#local-6989586621679120216"><span class="hs-identifier hs-var">cs</span></a></span><span>
 </span><span id="line-96"></span><span>
 </span><span id="line-97"></span><span class="hs-comment">--FIXME: move this. It is here for not since TeX and HTML</span><span>
 </span><span id="line-98"></span><span class="hs-comment">--       use this for bibliography rendering</span><span>
-</span><span id="line-99"></span><span class="hs-comment">-- | Appends a suffix for a number. Used only on single digit 'Int's.</span><span>
+</span><span id="line-99"></span><span class="annot"><span class="hs-comment">-- | Appends a suffix for a number. Used only on single digit 'Int's.</span></span><span>
 </span><span id="line-100"></span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#sufx"><span class="hs-identifier hs-type">sufx</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-101"></span><span id="sufx"><span class="annot"><span class="annottext">sufx :: Int -&gt; String
 </span><a href="Language.Drasil.Printing.Helpers.html#sufx"><span class="hs-identifier hs-var hs-var">sufx</span></a></span></span><span> </span><span class="annot"><span class="annottext">Int
@@ -262,45 +284,51 @@
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;th&quot;</span></span><span>
 </span><span id="line-105"></span><span>
-</span><span id="line-106"></span><span class="hs-comment">-- | Similar to 'sufx' but used on any sized 'Int'.</span><span>
+</span><span id="line-106"></span><span class="annot"><span class="hs-comment">-- | Similar to 'sufx' but used on any sized 'Int'.</span></span><span>
 </span><span id="line-107"></span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#sufxer"><span class="hs-identifier hs-type">sufxer</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-108"></span><span id="sufxer"><span class="annot"><span class="annottext">sufxer :: Int -&gt; String
-</span><a href="Language.Drasil.Printing.Helpers.html#sufxer"><span class="hs-identifier hs-var hs-var">sufxer</span></a></span></span><span> </span><span id="local-6989586621679120678"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679120678"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; String
+</span><a href="Language.Drasil.Printing.Helpers.html#sufxer"><span class="hs-identifier hs-var hs-var">sufxer</span></a></span></span><span> </span><span id="local-6989586621679120219"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679120219"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; String
 </span><a href="Language.Drasil.Printing.Helpers.html#sufx"><span class="hs-identifier hs-var">sufx</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679120677"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679120220"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;.&quot;</span></span><span>
 </span><span id="line-109"></span><span>    </span><span class="hs-keyword">where</span><span>
-</span><span id="line-110"></span><span>        </span><span id="local-6989586621679120677"><span class="annot"><span class="annottext">r :: Int
-</span><a href="#local-6989586621679120677"><span class="hs-identifier hs-var hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">forall a. Integral a =&gt; a -&gt; a -&gt; a
+</span><span id="line-110"></span><span>        </span><span id="local-6989586621679120220"><span class="annot"><span class="annottext">r :: Int
+</span><a href="#local-6989586621679120220"><span class="hs-identifier hs-var hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+forall a. Integral a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-identifier hs-var">mod</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679120678"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><span class="hs-number">100</span></span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
+</span><a href="#local-6989586621679120219"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">100</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; [Int] -&gt; Bool
+forall a. Eq a =&gt; a -&gt; [a] -&gt; Bool
+forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">11</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">12</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">13</span></span><span class="hs-special">]</span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">Int
-</span><span class="hs-number">0</span></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">forall a. Integral a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+forall a. Integral a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-identifier hs-var">mod</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679120678"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679120219"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">10</span></span><span>
 </span><span id="line-111"></span><span>
 </span><span id="line-112"></span><span class="annot"><a href="Language.Drasil.Printing.Helpers.html#sufxPrint"><span class="hs-identifier hs-type">sufxPrint</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Printing.Citation.html#CiteField"><span class="hs-identifier hs-type">CiteField</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-113"></span><span id="sufxPrint"><span class="annot"><span class="annottext">sufxPrint :: [CiteField] -&gt; String
-</span><a href="Language.Drasil.Printing.Helpers.html#sufxPrint"><span class="hs-identifier hs-var hs-var">sufxPrint</span></a></span></span><span> </span><span id="local-6989586621679120662"><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679120662"><span class="hs-identifier hs-var">fields</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; Bool) -&gt; t a -&gt; Bool
+</span><a href="Language.Drasil.Printing.Helpers.html#sufxPrint"><span class="hs-identifier hs-var hs-var">sufxPrint</span></a></span></span><span> </span><span id="local-6989586621679120235"><span class="annot"><span class="annottext">[CiteField]
+</span><a href="#local-6989586621679120235"><span class="hs-identifier hs-var">fields</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">(CiteField -&gt; Bool) -&gt; [CiteField] -&gt; Bool
+forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; Bool) -&gt; t a -&gt; Bool
 </span><span class="hs-identifier hs-var">any</span></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; Bool
-</span><a href="#local-6989586621679120660"><span class="hs-identifier hs-var">isUrl</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679120662"><span class="hs-identifier hs-var">fields</span></a></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679120237"><span class="hs-identifier hs-var">isUrl</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
+</span><a href="#local-6989586621679120235"><span class="hs-identifier hs-var">fields</span></a></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&quot;</span></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot; Print.&quot;</span></span><span>
 </span><span id="line-114"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-115"></span><span>    </span><span id="local-6989586621679120660"><span class="annot"><span class="annottext">isUrl :: CiteField -&gt; Bool
-</span><a href="#local-6989586621679120660"><span class="hs-identifier hs-var hs-var">isUrl</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Printing.Citation.html#HowPublished"><span class="hs-identifier hs-type">HowPublished</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Printing.Citation.html#URL"><span class="hs-identifier hs-type">URL</span></a></span><span> </span><span class="annot"><span class="annottext">Spec
+</span><span id="line-115"></span><span>    </span><span id="local-6989586621679120237"><span class="annot"><span class="annottext">isUrl :: CiteField -&gt; Bool
+</span><a href="#local-6989586621679120237"><span class="hs-identifier hs-var hs-var">isUrl</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Printing.Citation.html#HowPublished"><span class="hs-identifier hs-type">HowPublished</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Printing.Citation.html#URL"><span class="hs-identifier hs-type">URL</span></a></span><span> </span><span class="annot"><span class="annottext">Spec
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span>
-</span><span id="line-116"></span><span>    </span><span class="annot"><a href="#local-6989586621679120660"><span class="hs-identifier hs-var">isUrl</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField
+</span><span id="line-116"></span><span>    </span><span class="annot"><a href="#local-6989586621679120237"><span class="hs-identifier hs-var">isUrl</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span>
 </span><span id="line-117"></span></pre></body></html>

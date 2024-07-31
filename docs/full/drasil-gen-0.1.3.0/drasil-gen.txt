@@ -81,7 +81,7 @@ genCode :: Choices -> CodeSpec -> IO ()
 --   Website. Choosing SRS will generate both TeX and HTML files, while
 --   Website generates only as HTML. This also determines what folders the
 --   generated files will be placed into.
-data DocType
+data () => DocType
 SRS :: DocType
 Website :: DocType
 Lesson :: DocType
@@ -97,7 +97,7 @@ data DocChoices
 DC :: DocType -> [Format] -> DocChoices
 
 -- | Possible formats for printer output.
-data Format
+data () => Format
 TeX :: Format
 HTML :: Format
 Jupyter :: Format

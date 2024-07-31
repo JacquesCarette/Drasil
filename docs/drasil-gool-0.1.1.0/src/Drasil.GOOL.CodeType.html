@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Defines the 'CodeType' data type</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | Defines the 'CodeType' data type</span></span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.GOOL.CodeType</span><span> </span><span class="hs-special">(</span><span>
 </span><span id="line-3"></span><span>    </span><span class="annot"><a href="Drasil.GOOL.CodeType.html#ClassName"><span class="hs-identifier">ClassName</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GOOL.CodeType.html#CodeType"><span class="hs-identifier">CodeType</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
 </span><span id="line-4"></span><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
@@ -18,22 +18,28 @@
 </span><span id="line-18"></span><span>              </span><span class="hs-glyph">|</span><span> </span><span id="Array"><span class="annot"><a href="Drasil.GOOL.CodeType.html#Array"><span class="hs-identifier hs-var">Array</span></a></span></span><span> </span><span class="annot"><a href="Drasil.GOOL.CodeType.html#CodeType"><span class="hs-identifier hs-type">CodeType</span></a></span><span>
 </span><span id="line-19"></span><span>              </span><span class="hs-glyph">|</span><span> </span><span id="Object"><span class="annot"><a href="Drasil.GOOL.CodeType.html#Object"><span class="hs-identifier hs-var">Object</span></a></span></span><span> </span><span class="annot"><a href="Drasil.GOOL.CodeType.html#ClassName"><span class="hs-identifier hs-type">ClassName</span></a></span><span>
 </span><span id="line-20"></span><span>              </span><span class="hs-glyph">|</span><span> </span><span id="Func"><span class="annot"><a href="Drasil.GOOL.CodeType.html#Func"><span class="hs-identifier hs-var">Func</span></a></span></span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Drasil.GOOL.CodeType.html#CodeType"><span class="hs-identifier hs-type">CodeType</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><a href="Drasil.GOOL.CodeType.html#CodeType"><span class="hs-identifier hs-type">CodeType</span></a></span><span>
-</span><span id="line-21"></span><span>              </span><span class="hs-glyph">|</span><span> </span><span id="Void"><span class="annot"><a href="Drasil.GOOL.CodeType.html#Void"><span class="hs-identifier hs-var">Void</span></a></span></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679372700"><span id="local-6989586621679372709"><span class="annot"><span class="annottext">CodeType -&gt; CodeType -&gt; Bool
+</span><span id="line-21"></span><span>              </span><span class="hs-glyph">|</span><span> </span><span id="Void"><span class="annot"><a href="Drasil.GOOL.CodeType.html#Void"><span class="hs-identifier hs-var">Void</span></a></span></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679367246"><span id="local-6989586621679367256"><span class="annot"><span class="annottext">CodeType -&gt; CodeType -&gt; Bool
+(CodeType -&gt; CodeType -&gt; Bool)
+-&gt; (CodeType -&gt; CodeType -&gt; Bool) -&gt; Eq CodeType
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
-/= :: CodeType -&gt; CodeType -&gt; Bool
-$c/= :: CodeType -&gt; CodeType -&gt; Bool
-== :: CodeType -&gt; CodeType -&gt; Bool
 $c== :: CodeType -&gt; CodeType -&gt; Bool
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679372680"><span id="local-6989586621679372682"><span id="local-6989586621679372696"><span class="annot"><span class="annottext">Int -&gt; CodeType -&gt; ShowS
+== :: CodeType -&gt; CodeType -&gt; Bool
+$c/= :: CodeType -&gt; CodeType -&gt; Bool
+/= :: CodeType -&gt; CodeType -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679367261"><span id="local-6989586621679367276"><span id="local-6989586621679367279"><span class="annot"><span class="annottext">Int -&gt; CodeType -&gt; ShowS
 [CodeType] -&gt; ShowS
 CodeType -&gt; ClassName
+(Int -&gt; CodeType -&gt; ShowS)
+-&gt; (CodeType -&gt; ClassName)
+-&gt; ([CodeType] -&gt; ShowS)
+-&gt; Show CodeType
 forall a.
 (Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; ClassName) -&gt; ([a] -&gt; ShowS) -&gt; Show a
-showList :: [CodeType] -&gt; ShowS
-$cshowList :: [CodeType] -&gt; ShowS
-show :: CodeType -&gt; ClassName
-$cshow :: CodeType -&gt; ClassName
-showsPrec :: Int -&gt; CodeType -&gt; ShowS
 $cshowsPrec :: Int -&gt; CodeType -&gt; ShowS
+showsPrec :: Int -&gt; CodeType -&gt; ShowS
+$cshow :: CodeType -&gt; ClassName
+show :: CodeType -&gt; ClassName
+$cshowList :: [CodeType] -&gt; ShowS
+showList :: [CodeType] -&gt; ShowS
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">)</span><span>
 </span><span id="line-22"></span></pre></body></html>

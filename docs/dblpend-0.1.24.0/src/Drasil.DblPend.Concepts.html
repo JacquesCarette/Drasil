@@ -10,11 +10,15 @@
 </span><span id="line-10"></span><span>
 </span><span id="line-11"></span><span class="annot"><a href="Drasil.DblPend.Concepts.html#concepts"><span class="hs-identifier hs-type">concepts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span>
 </span><span id="line-12"></span><span id="concepts"><span class="annot"><span class="annottext">concepts :: [IdeaDict]
-</span><a href="Drasil.DblPend.Concepts.html#concepts"><span class="hs-identifier hs-var hs-var">concepts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c. Idea c =&gt; c -&gt; IdeaDict
+</span><a href="Drasil.DblPend.Concepts.html#concepts"><span class="hs-identifier hs-var hs-var">concepts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelQDef -&gt; IdeaDict
+forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">ModelQDef
-</span><span class="hs-identifier hs-var">newtonSLRQD</span></span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">forall c. Idea c =&gt; c -&gt; IdeaDict
+</span><span class="hs-identifier hs-var">newtonSLRQD</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; [IdeaDict] -&gt; [IdeaDict]
+forall a. a -&gt; [a] -&gt; [a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(IdeaDict -&gt; IdeaDict) -&gt; [IdeaDict] -&gt; [IdeaDict]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict
+forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#rod"><span class="hs-identifier hs-var">rod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#horizontal"><span class="hs-identifier hs-var">horizontal</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
@@ -34,9 +38,12 @@
 </span><a href="Drasil.DblPend.Concepts.html#secondRod"><span class="hs-identifier hs-var">secondRod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#firstObject"><span class="hs-identifier hs-var">firstObject</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#secondObject"><span class="hs-identifier hs-var">secondObject</span></a></span><span class="hs-special">]</span><span> </span><span>
-</span><span id="line-15"></span><span>  </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">forall c. Idea c =&gt; c -&gt; IdeaDict
+</span><span id="line-15"></span><span>  </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; IdeaDict) -&gt; [ConceptChunk] -&gt; [IdeaDict]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; IdeaDict
+forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
 </span><a href="Drasil.DblPend.Concepts.html#defs"><span class="hs-identifier hs-var">defs</span></a></span><span>
 </span><span id="line-16"></span><span>
@@ -63,67 +70,80 @@
 </span><span id="line-22"></span><span class="annot"><a href="Drasil.DblPend.Concepts.html#pendMotion"><span class="hs-identifier hs-type">pendMotion</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPend.Concepts.html#horizontalPos"><span class="hs-identifier hs-type">horizontalPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPend.Concepts.html#verticalPos"><span class="hs-identifier hs-type">verticalPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPend.Concepts.html#horizontalVel"><span class="hs-identifier hs-type">horizontalVel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPend.Concepts.html#verticalVel"><span class="hs-identifier hs-type">verticalVel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPend.Concepts.html#horizontalForce"><span class="hs-identifier hs-type">horizontalForce</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPend.Concepts.html#verticalForce"><span class="hs-identifier hs-type">verticalForce</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-23"></span><span>  </span><span class="annot"><a href="Drasil.DblPend.Concepts.html#horizontalAccel"><span class="hs-identifier hs-type">horizontalAccel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPend.Concepts.html#verticalAccel"><span class="hs-identifier hs-type">verticalAccel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPend.Concepts.html#firstRod"><span class="hs-identifier hs-type">firstRod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPend.Concepts.html#secondRod"><span class="hs-identifier hs-type">secondRod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPend.Concepts.html#firstObject"><span class="hs-identifier hs-type">firstObject</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPend.Concepts.html#secondObject"><span class="hs-identifier hs-type">secondObject</span></a></span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span>
 </span><span id="line-24"></span><span id="pendMotion"><span class="annot"><span class="annottext">pendMotion :: IdeaDict
-</span><a href="Drasil.DblPend.Concepts.html#pendMotion"><span class="hs-identifier hs-var hs-var">pendMotion</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Drasil.DblPend.Concepts.html#pendMotion"><span class="hs-identifier hs-var hs-var">pendMotion</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">pendulum</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">motion</span></span><span>
 </span><span id="line-25"></span><span id="horizontalPos"><span class="annot"><span class="annottext">horizontalPos :: IdeaDict
-</span><a href="Drasil.DblPend.Concepts.html#horizontalPos"><span class="hs-identifier hs-var hs-var">horizontalPos</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Drasil.DblPend.Concepts.html#horizontalPos"><span class="hs-identifier hs-var hs-var">horizontalPos</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; ConceptChunk -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#horizontal"><span class="hs-identifier hs-var">horizontal</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">position</span></span><span>
 </span><span id="line-26"></span><span id="verticalPos"><span class="annot"><span class="annottext">verticalPos :: IdeaDict
-</span><a href="Drasil.DblPend.Concepts.html#verticalPos"><span class="hs-identifier hs-var hs-var">verticalPos</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Drasil.DblPend.Concepts.html#verticalPos"><span class="hs-identifier hs-var hs-var">verticalPos</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; ConceptChunk -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#vertical"><span class="hs-identifier hs-var">vertical</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">position</span></span><span>
 </span><span id="line-27"></span><span id="horizontalVel"><span class="annot"><span class="annottext">horizontalVel :: IdeaDict
-</span><a href="Drasil.DblPend.Concepts.html#horizontalVel"><span class="hs-identifier hs-var hs-var">horizontalVel</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Drasil.DblPend.Concepts.html#horizontalVel"><span class="hs-identifier hs-var hs-var">horizontalVel</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; ConceptChunk -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#horizontal"><span class="hs-identifier hs-var">horizontal</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">velocity</span></span><span>
 </span><span id="line-28"></span><span id="verticalVel"><span class="annot"><span class="annottext">verticalVel :: IdeaDict
-</span><a href="Drasil.DblPend.Concepts.html#verticalVel"><span class="hs-identifier hs-var hs-var">verticalVel</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Drasil.DblPend.Concepts.html#verticalVel"><span class="hs-identifier hs-var hs-var">verticalVel</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; ConceptChunk -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#vertical"><span class="hs-identifier hs-var">vertical</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">velocity</span></span><span>
 </span><span id="line-29"></span><span id="horizontalAccel"><span class="annot"><span class="annottext">horizontalAccel :: IdeaDict
-</span><a href="Drasil.DblPend.Concepts.html#horizontalAccel"><span class="hs-identifier hs-var hs-var">horizontalAccel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Drasil.DblPend.Concepts.html#horizontalAccel"><span class="hs-identifier hs-var hs-var">horizontalAccel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; ConceptChunk -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#horizontal"><span class="hs-identifier hs-var">horizontal</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">acceleration</span></span><span>
 </span><span id="line-30"></span><span id="verticalAccel"><span class="annot"><span class="annottext">verticalAccel :: IdeaDict
-</span><a href="Drasil.DblPend.Concepts.html#verticalAccel"><span class="hs-identifier hs-var hs-var">verticalAccel</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Drasil.DblPend.Concepts.html#verticalAccel"><span class="hs-identifier hs-var hs-var">verticalAccel</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; ConceptChunk -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#vertical"><span class="hs-identifier hs-var">vertical</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">acceleration</span></span><span>
 </span><span id="line-31"></span><span id="horizontalForce"><span class="annot"><span class="annottext">horizontalForce :: IdeaDict
-</span><a href="Drasil.DblPend.Concepts.html#horizontalForce"><span class="hs-identifier hs-var hs-var">horizontalForce</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Drasil.DblPend.Concepts.html#horizontalForce"><span class="hs-identifier hs-var hs-var">horizontalForce</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; ConceptChunk -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#horizontal"><span class="hs-identifier hs-var">horizontal</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">force</span></span><span>
 </span><span id="line-32"></span><span id="verticalForce"><span class="annot"><span class="annottext">verticalForce :: IdeaDict
-</span><a href="Drasil.DblPend.Concepts.html#verticalForce"><span class="hs-identifier hs-var hs-var">verticalForce</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Drasil.DblPend.Concepts.html#verticalForce"><span class="hs-identifier hs-var hs-var">verticalForce</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; ConceptChunk -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#vertical"><span class="hs-identifier hs-var">vertical</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">force</span></span><span>
 </span><span id="line-33"></span><span id="firstRod"><span class="annot"><span class="annottext">firstRod :: IdeaDict
-</span><a href="Drasil.DblPend.Concepts.html#firstRod"><span class="hs-identifier hs-var hs-var">firstRod</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Drasil.DblPend.Concepts.html#firstRod"><span class="hs-identifier hs-var hs-var">firstRod</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">first</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#rod"><span class="hs-identifier hs-var">rod</span></a></span><span>
 </span><span id="line-34"></span><span id="secondRod"><span class="annot"><span class="annottext">secondRod :: IdeaDict
-</span><a href="Drasil.DblPend.Concepts.html#secondRod"><span class="hs-identifier hs-var hs-var">secondRod</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Drasil.DblPend.Concepts.html#secondRod"><span class="hs-identifier hs-var hs-var">secondRod</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">second_</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#rod"><span class="hs-identifier hs-var">rod</span></a></span><span>
 </span><span id="line-35"></span><span id="firstObject"><span class="annot"><span class="annottext">firstObject :: IdeaDict
-</span><a href="Drasil.DblPend.Concepts.html#firstObject"><span class="hs-identifier hs-var hs-var">firstObject</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Drasil.DblPend.Concepts.html#firstObject"><span class="hs-identifier hs-var hs-var">firstObject</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">first</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">object</span></span><span>
 </span><span id="line-36"></span><span id="secondObject"><span class="annot"><span class="annottext">secondObject :: IdeaDict
-</span><a href="Drasil.DblPend.Concepts.html#secondObject"><span class="hs-identifier hs-var hs-var">secondObject</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Drasil.DblPend.Concepts.html#secondObject"><span class="hs-identifier hs-var hs-var">secondObject</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">second_</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">object</span></span><span>

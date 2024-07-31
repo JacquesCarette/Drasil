@@ -15,7 +15,8 @@
 </span><span class="hs-identifier hs-var">mkIdea</span></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;glass&quot;</span></span><span>          </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Glass&quot;</span></span><span class="hs-special">)</span><span>                 </span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><span class="hs-string">&quot;Glass&quot;</span></span><span class="hs-special">)</span><span>                 </span><span class="annot"><span class="annottext">Maybe String
+forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
 </span><span id="line-14"></span><span>
 </span><span id="line-15"></span><span class="hs-comment">{--}</span><span>
@@ -252,12 +253,14 @@
 </span><span class="hs-string">&quot;point of explosion&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-64"></span><span>
 </span><span id="line-65"></span><span id="glaPlane"><span class="annot"><span class="annottext">glaPlane :: IdeaDict
-</span><a href="Drasil.GlassBR.Concepts.html#glaPlane"><span class="hs-identifier hs-var hs-var">glaPlane</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Drasil.GlassBR.Concepts.html#glaPlane"><span class="hs-identifier hs-var hs-var">glaPlane</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.GlassBR.Concepts.html#glass"><span class="hs-identifier hs-var">glass</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.GlassBR.Concepts.html#plane"><span class="hs-identifier hs-var">plane</span></a></span><span>
 </span><span id="line-66"></span><span id="responseTy"><span class="annot"><span class="annottext">responseTy :: IdeaDict
-</span><a href="Drasil.GlassBR.Concepts.html#responseTy"><span class="hs-identifier hs-var hs-var">responseTy</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Drasil.GlassBR.Concepts.html#responseTy"><span class="hs-identifier hs-var hs-var">responseTy</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">response</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">type_</span></span><span>

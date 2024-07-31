@@ -17,16 +17,26 @@
 </span><span id="line-14"></span><span>
 </span><span id="line-15"></span><span class="annot"><a href="Drasil.SWHSNoPCM.GenDefs.html#rocTempSimp"><span class="hs-identifier hs-type">rocTempSimp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
 </span><span id="line-16"></span><span id="rocTempSimp"><span class="annot"><span class="annottext">rocTempSimp :: GenDefn
-</span><a href="Drasil.SWHSNoPCM.GenDefs.html#rocTempSimp"><span class="hs-identifier hs-var hs-var">rocTempSimp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall u.
+</span><a href="Drasil.SWHSNoPCM.GenDefs.html#rocTempSimp"><span class="hs-identifier hs-var hs-var">rocTempSimp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr
+-&gt; Maybe UnitDefn
+-&gt; Maybe Derivation
+-&gt; String
+-&gt; [Sentence]
+-&gt; GenDefn
+forall u.
 IsUnit u =&gt;
 ModelKind ModelExpr
 -&gt; Maybe u -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; GenDefn
-</span><span class="hs-identifier hs-var">gdNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall e. RelationConcept -&gt; ModelKind e
+</span><span class="hs-identifier hs-var">gdNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RelationConcept -&gt; ModelKind ModelExpr
+forall e. RelationConcept -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">othModel'</span></span><span> </span><span class="annot"><span class="annottext">RelationConcept
-</span><span class="hs-identifier hs-var">rocTempSimpRC</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><span class="hs-identifier hs-var">rocTempSimpRC</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Maybe UnitDefn
+forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">)</span><span>
-</span><span id="line-17"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
-</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span id="line-17"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(Derivation -&gt; Maybe Derivation) -&gt; Derivation -&gt; Maybe Derivation
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [ConceptInstance] -&gt; Derivation
 </span><span class="hs-identifier hs-var">rocTempSimpDeriv</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance

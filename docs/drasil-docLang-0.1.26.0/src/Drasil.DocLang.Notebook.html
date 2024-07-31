@@ -10,7 +10,7 @@
 </span><span id="line-10"></span><span class="hs-comment">--doc :: NamedIdea c =&gt; c -&gt; Sentence -&gt; [Section] -&gt; Document</span><span>
 </span><span id="line-11"></span><span class="hs-comment">--doc  sys = Document (Doc.notebook `S.forTPS` sys)</span><span>
 </span><span id="line-12"></span><span>
-</span><span id="line-13"></span><span class="hs-comment">-- * Section Constructors</span><span>
+</span><span id="line-13"></span><span class="annot"><span class="hs-comment">-- * Section Constructors</span></span><span>
 </span><span id="line-14"></span><span>
 </span><span id="line-15"></span><span class="hs-comment">-- | Section constructors for the lesson plan documents/jupyter notebooks.</span><span>
 </span><span id="line-16"></span><span class="hs-comment">-- should be fixed once we have a more concrete idea of the notebook structure</span><span>
@@ -18,84 +18,92 @@
 </span><span id="line-18"></span><span class="hs-comment">-- maybe add a new type Chapter for lesson plans?</span><span>
 </span><span id="line-19"></span><span class="annot"><a href="Drasil.DocLang.Notebook.html#intro"><span class="hs-identifier hs-type">intro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.Notebook.html#learnObj"><span class="hs-identifier hs-type">learnObj</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.Notebook.html#review"><span class="hs-identifier hs-type">review</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.Notebook.html#caseProb"><span class="hs-identifier hs-type">caseProb</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.Notebook.html#summary"><span class="hs-identifier hs-type">summary</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.Notebook.html#appendix"><span class="hs-identifier hs-type">appendix</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.Notebook.html#reference"><span class="hs-identifier hs-type">reference</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.Notebook.html#example"><span class="hs-identifier hs-type">example</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
 </span><span id="line-20"></span><span id="intro"><span class="annot"><span class="annottext">intro :: [Contents] -&gt; [Section] -&gt; Section
-</span><a href="Drasil.DocLang.Notebook.html#intro"><span class="hs-identifier hs-var hs-var">intro</span></a></span></span><span>     </span><span id="local-6989586621679091225"><span class="annot"><span class="annottext">[Contents]
-</span><a href="#local-6989586621679091225"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679091224"><span class="annot"><span class="annottext">[Section]
-</span><a href="#local-6989586621679091224"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
-</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><a href="Drasil.DocLang.Notebook.html#intro"><span class="hs-identifier hs-var hs-var">intro</span></a></span></span><span>     </span><span id="local-6989586621679094049"><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679094049"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679094050"><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679094050"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">Doc.introduction</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Contents]
-</span><a href="#local-6989586621679091225"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
-</span><a href="#local-6989586621679091224"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679094049"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679094050"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.DocLang.Notebook.html#introLabel"><span class="hs-identifier hs-var">introLabel</span></a></span><span>
 </span><span id="line-21"></span><span id="learnObj"><span class="annot"><span class="annottext">learnObj :: [Contents] -&gt; [Section] -&gt; Section
-</span><a href="Drasil.DocLang.Notebook.html#learnObj"><span class="hs-identifier hs-var hs-var">learnObj</span></a></span></span><span>  </span><span id="local-6989586621679091220"><span class="annot"><span class="annottext">[Contents]
-</span><a href="#local-6989586621679091220"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679091219"><span class="annot"><span class="annottext">[Section]
-</span><a href="#local-6989586621679091219"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
-</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><a href="Drasil.DocLang.Notebook.html#learnObj"><span class="hs-identifier hs-var hs-var">learnObj</span></a></span></span><span>  </span><span id="local-6989586621679094054"><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679094054"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679094055"><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679094055"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">Doc.learnObj</span></span><span class="hs-special">)</span><span>    </span><span class="annot"><span class="annottext">[Contents]
-</span><a href="#local-6989586621679091220"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
-</span><a href="#local-6989586621679091219"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679094054"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679094055"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.DocLang.Notebook.html#learnObjLabel"><span class="hs-identifier hs-var">learnObjLabel</span></a></span><span>
 </span><span id="line-22"></span><span id="review"><span class="annot"><span class="annottext">review :: [Contents] -&gt; [Section] -&gt; Section
-</span><a href="Drasil.DocLang.Notebook.html#review"><span class="hs-identifier hs-var hs-var">review</span></a></span></span><span>    </span><span id="local-6989586621679091216"><span class="annot"><span class="annottext">[Contents]
-</span><a href="#local-6989586621679091216"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679091215"><span class="annot"><span class="annottext">[Section]
-</span><a href="#local-6989586621679091215"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
-</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><a href="Drasil.DocLang.Notebook.html#review"><span class="hs-identifier hs-var hs-var">review</span></a></span></span><span>    </span><span id="local-6989586621679094058"><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679094058"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679094059"><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679094059"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">Doc.review</span></span><span class="hs-special">)</span><span>       </span><span class="annot"><span class="annottext">[Contents]
-</span><a href="#local-6989586621679091216"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
-</span><a href="#local-6989586621679091215"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679094058"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679094059"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.DocLang.Notebook.html#reviewLabel"><span class="hs-identifier hs-var">reviewLabel</span></a></span><span>
 </span><span id="line-23"></span><span id="caseProb"><span class="annot"><span class="annottext">caseProb :: [Contents] -&gt; [Section] -&gt; Section
-</span><a href="Drasil.DocLang.Notebook.html#caseProb"><span class="hs-identifier hs-var hs-var">caseProb</span></a></span></span><span>  </span><span id="local-6989586621679091213"><span class="annot"><span class="annottext">[Contents]
-</span><a href="#local-6989586621679091213"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679091212"><span class="annot"><span class="annottext">[Section]
-</span><a href="#local-6989586621679091212"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
-</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><a href="Drasil.DocLang.Notebook.html#caseProb"><span class="hs-identifier hs-var hs-var">caseProb</span></a></span></span><span>  </span><span id="local-6989586621679094061"><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679094061"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679094062"><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679094062"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">Doc.caseProb</span></span><span class="hs-special">)</span><span>     </span><span class="annot"><span class="annottext">[Contents]
-</span><a href="#local-6989586621679091213"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
-</span><a href="#local-6989586621679091212"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679094061"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679094062"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.DocLang.Notebook.html#caseProbLabel"><span class="hs-identifier hs-var">caseProbLabel</span></a></span><span>
 </span><span id="line-24"></span><span id="example"><span class="annot"><span class="annottext">example :: [Contents] -&gt; [Section] -&gt; Section
-</span><a href="Drasil.DocLang.Notebook.html#example"><span class="hs-identifier hs-var hs-var">example</span></a></span></span><span>   </span><span id="local-6989586621679091210"><span class="annot"><span class="annottext">[Contents]
-</span><a href="#local-6989586621679091210"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679091209"><span class="annot"><span class="annottext">[Section]
-</span><a href="#local-6989586621679091209"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
-</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><a href="Drasil.DocLang.Notebook.html#example"><span class="hs-identifier hs-var hs-var">example</span></a></span></span><span>   </span><span id="local-6989586621679094064"><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679094064"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679094065"><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679094065"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">Doc.example</span></span><span class="hs-special">)</span><span>      </span><span class="annot"><span class="annottext">[Contents]
-</span><a href="#local-6989586621679091210"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
-</span><a href="#local-6989586621679091209"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679094064"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679094065"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.DocLang.Notebook.html#exampleLabel"><span class="hs-identifier hs-var">exampleLabel</span></a></span><span>
 </span><span id="line-25"></span><span id="summary"><span class="annot"><span class="annottext">summary :: [Contents] -&gt; [Section] -&gt; Section
-</span><a href="Drasil.DocLang.Notebook.html#summary"><span class="hs-identifier hs-var hs-var">summary</span></a></span></span><span>   </span><span id="local-6989586621679091207"><span class="annot"><span class="annottext">[Contents]
-</span><a href="#local-6989586621679091207"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679091206"><span class="annot"><span class="annottext">[Section]
-</span><a href="#local-6989586621679091206"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
-</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><a href="Drasil.DocLang.Notebook.html#summary"><span class="hs-identifier hs-var hs-var">summary</span></a></span></span><span>   </span><span id="local-6989586621679094067"><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679094067"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679094068"><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679094068"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">Doc.summary</span></span><span class="hs-special">)</span><span>      </span><span class="annot"><span class="annottext">[Contents]
-</span><a href="#local-6989586621679091207"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
-</span><a href="#local-6989586621679091206"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679094067"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679094068"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.DocLang.Notebook.html#summaryLabel"><span class="hs-identifier hs-var">summaryLabel</span></a></span><span>
 </span><span id="line-26"></span><span id="appendix"><span class="annot"><span class="annottext">appendix :: [Contents] -&gt; [Section] -&gt; Section
-</span><a href="Drasil.DocLang.Notebook.html#appendix"><span class="hs-identifier hs-var hs-var">appendix</span></a></span></span><span>  </span><span id="local-6989586621679091204"><span class="annot"><span class="annottext">[Contents]
-</span><a href="#local-6989586621679091204"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679091203"><span class="annot"><span class="annottext">[Section]
-</span><a href="#local-6989586621679091203"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
-</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><a href="Drasil.DocLang.Notebook.html#appendix"><span class="hs-identifier hs-var hs-var">appendix</span></a></span></span><span>  </span><span id="local-6989586621679094070"><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679094070"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679094071"><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679094071"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">Doc.appendix</span></span><span class="hs-special">)</span><span>     </span><span class="annot"><span class="annottext">[Contents]
-</span><a href="#local-6989586621679091204"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
-</span><a href="#local-6989586621679091203"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679094070"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679094071"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.DocLang.Notebook.html#appendixLabel"><span class="hs-identifier hs-var">appendixLabel</span></a></span><span>
 </span><span id="line-27"></span><span id="reference"><span class="annot"><span class="annottext">reference :: [Contents] -&gt; [Section] -&gt; Section
-</span><a href="Drasil.DocLang.Notebook.html#reference"><span class="hs-identifier hs-var hs-var">reference</span></a></span></span><span> </span><span id="local-6989586621679091201"><span class="annot"><span class="annottext">[Contents]
-</span><a href="#local-6989586621679091201"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679091200"><span class="annot"><span class="annottext">[Section]
-</span><a href="#local-6989586621679091200"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
-</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><a href="Drasil.DocLang.Notebook.html#reference"><span class="hs-identifier hs-var hs-var">reference</span></a></span></span><span> </span><span id="local-6989586621679094073"><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679094073"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679094074"><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679094074"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">Doc.reference</span></span><span class="hs-special">)</span><span>   </span><span class="annot"><span class="annottext">[Contents]
-</span><a href="#local-6989586621679091201"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
-</span><a href="#local-6989586621679091200"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679094073"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Section]
+</span><a href="#local-6989586621679094074"><span class="hs-identifier hs-var">ss</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.DocLang.Notebook.html#referenceLabel"><span class="hs-identifier hs-var">referenceLabel</span></a></span><span>
 </span><span id="line-28"></span><span>
 </span><span id="line-29"></span><span class="hs-comment">--Labels--</span><span>
@@ -112,71 +120,89 @@
 </span><a href="Drasil.DocLang.Notebook.html#summaryLabel"><span class="hs-identifier hs-var">summaryLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.DocLang.Notebook.html#exampleLabel"><span class="hs-identifier hs-var">exampleLabel</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-33"></span><span>
-</span><span id="line-34"></span><span class="hs-comment">-- * Section References</span><span>
+</span><span id="line-34"></span><span class="annot"><span class="hs-comment">-- * Section References</span></span><span>
 </span><span id="line-35"></span><span>
-</span><span id="line-36"></span><span class="hs-comment">-- | Individual section reference labels. Used in creating example sections for the notebook.</span><span>
+</span><span id="line-36"></span><span class="annot"><span class="hs-comment">-- | Individual section reference labels. Used in creating example sections for the notebook.</span></span><span>
 </span><span id="line-37"></span><span class="annot"><a href="Drasil.DocLang.Notebook.html#introLabel"><span class="hs-identifier hs-type">introLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.Notebook.html#learnObjLabel"><span class="hs-identifier hs-type">learnObjLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.Notebook.html#docPurposeLabel"><span class="hs-identifier hs-type">docPurposeLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.Notebook.html#referenceLabel"><span class="hs-identifier hs-type">referenceLabel</span></a></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-38"></span><span>  </span><span class="annot"><a href="Drasil.DocLang.Notebook.html#reviewLabel"><span class="hs-identifier hs-type">reviewLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.Notebook.html#caseProbLabel"><span class="hs-identifier hs-type">caseProbLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.Notebook.html#appendixLabel"><span class="hs-identifier hs-type">appendixLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.Notebook.html#summaryLabel"><span class="hs-identifier hs-type">summaryLabel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocLang.Notebook.html#exampleLabel"><span class="hs-identifier hs-type">exampleLabel</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
 </span><span id="line-39"></span><span id="introLabel"><span class="annot"><span class="annottext">introLabel :: Reference
 </span><a href="Drasil.DocLang.Notebook.html#introLabel"><span class="hs-identifier hs-var hs-var">introLabel</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
 </span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Intro&quot;</span></span><span>            </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;Intro&quot;</span></span><span>            </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">Doc.introduction</span></span><span>
 </span><span id="line-40"></span><span id="learnObjLabel"><span class="annot"><span class="annottext">learnObjLabel :: Reference
 </span><a href="Drasil.DocLang.Notebook.html#learnObjLabel"><span class="hs-identifier hs-var hs-var">learnObjLabel</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
 </span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;LearnObj&quot;</span></span><span>         </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;LearnObj&quot;</span></span><span>         </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">Doc.learnObj</span></span><span>
 </span><span id="line-41"></span><span id="docPurposeLabel"><span class="annot"><span class="annottext">docPurposeLabel :: Reference
 </span><a href="Drasil.DocLang.Notebook.html#docPurposeLabel"><span class="hs-identifier hs-var hs-var">docPurposeLabel</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
 </span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;DocPurpose&quot;</span></span><span>       </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;DocPurpose&quot;</span></span><span>       </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">Doc.prpsOfDoc</span></span><span>
 </span><span id="line-42"></span><span id="referenceLabel"><span class="annot"><span class="annottext">referenceLabel :: Reference
 </span><a href="Drasil.DocLang.Notebook.html#referenceLabel"><span class="hs-identifier hs-var hs-var">referenceLabel</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
 </span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;References&quot;</span></span><span>       </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;References&quot;</span></span><span>       </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">Doc.reference</span></span><span>
 </span><span id="line-43"></span><span id="reviewLabel"><span class="annot"><span class="annottext">reviewLabel :: Reference
 </span><a href="Drasil.DocLang.Notebook.html#reviewLabel"><span class="hs-identifier hs-var hs-var">reviewLabel</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
 </span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Review&quot;</span></span><span>           </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;Review&quot;</span></span><span>           </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">Doc.review</span></span><span>
 </span><span id="line-44"></span><span id="caseProbLabel"><span class="annot"><span class="annottext">caseProbLabel :: Reference
 </span><a href="Drasil.DocLang.Notebook.html#caseProbLabel"><span class="hs-identifier hs-var hs-var">caseProbLabel</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
 </span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;CaseProb&quot;</span></span><span>         </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;CaseProb&quot;</span></span><span>         </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">Doc.caseProb</span></span><span>
 </span><span id="line-45"></span><span id="appendixLabel"><span class="annot"><span class="annottext">appendixLabel :: Reference
 </span><a href="Drasil.DocLang.Notebook.html#appendixLabel"><span class="hs-identifier hs-var hs-var">appendixLabel</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
 </span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Appendix&quot;</span></span><span>         </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;Appendix&quot;</span></span><span>         </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">Doc.appendix</span></span><span>
 </span><span id="line-46"></span><span id="summaryLabel"><span class="annot"><span class="annottext">summaryLabel :: Reference
 </span><a href="Drasil.DocLang.Notebook.html#summaryLabel"><span class="hs-identifier hs-var hs-var">summaryLabel</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
 </span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Summary&quot;</span></span><span>          </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;Summary&quot;</span></span><span>          </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">Doc.summary</span></span><span>
 </span><span id="line-47"></span><span id="exampleLabel"><span class="annot"><span class="annottext">exampleLabel :: Reference
 </span><a href="Drasil.DocLang.Notebook.html#exampleLabel"><span class="hs-identifier hs-var hs-var">exampleLabel</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; Reference
 </span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Example&quot;</span></span><span>          </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;Example&quot;</span></span><span>          </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">Doc.example</span></span></pre></body></html>

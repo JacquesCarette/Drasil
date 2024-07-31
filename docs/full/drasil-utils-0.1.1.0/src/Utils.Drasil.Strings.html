@@ -12,7 +12,8 @@
 </span><span id="line-12"></span><span class="hs-comment">--   than a-z, A-Z, or 0-9 could probably be replaced.</span><span>
 </span><span id="line-13"></span><span class="annot"><a href="Utils.Drasil.Strings.html#toPlainName"><span class="hs-identifier hs-type">toPlainName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-14"></span><span id="toPlainName"><span class="annot"><span class="annottext">toPlainName :: String -&gt; String
-</span><a href="Utils.Drasil.Strings.html#toPlainName"><span class="hs-identifier hs-var hs-var">toPlainName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; [a] -&gt; a -&gt; [a] -&gt; [a]
+</span><a href="Utils.Drasil.Strings.html#toPlainName"><span class="hs-identifier hs-var hs-var">toPlainName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Char -&gt; String -&gt; String
+forall a. Eq a =&gt; [a] -&gt; a -&gt; [a] -&gt; [a]
 </span><a href="Utils.Drasil.Lists.html#replaceAll"><span class="hs-identifier hs-var">replaceAll</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;,~`-=!@#$%^&amp;*+[]\\;'/|\&quot;&lt;&gt;? &quot;</span></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'_'</span></span><span>

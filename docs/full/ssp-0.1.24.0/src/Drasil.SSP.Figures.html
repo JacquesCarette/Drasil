@@ -10,20 +10,24 @@
 </span><a href="Drasil.SSP.Figures.html#figForceActing"><span class="hs-identifier hs-var hs-var">figForceActing</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
 </span><span class="hs-identifier hs-var">makeFigRef</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;ForceDiagram&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-string">&quot;ForceDiagram&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
 </span><span id="line-10"></span><span>  </span><span class="annot"><span class="annottext">Lbl -&gt; String -&gt; RawContent
-</span><span class="hs-identifier hs-var">fig</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">fig</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
 </span><span class="hs-identifier hs-var">atStart'</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">force</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;acting on a&quot;</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-11"></span><span>  </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span id="line-11"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.SSP.Defs.html#slice"><span class="hs-identifier hs-var">slice</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><a href="Drasil.SSP.Figures.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="Drasil.SSP.Figures.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;ForceDiagram.png&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-12"></span><span>

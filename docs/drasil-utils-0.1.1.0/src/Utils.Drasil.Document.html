@@ -1,10 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Common 'Doc'-related functions for writting printers with a little more clarity.</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | Common 'Doc'-related functions for writting printers with a little more clarity.</span></span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Utils.Drasil.Document</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Utils.Drasil.Document.html#blank"><span class="hs-identifier">blank</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.Document.html#indent"><span class="hs-identifier">indent</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.Document.html#indentList"><span class="hs-identifier">indentList</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.Document.html#contSep"><span class="hs-identifier">contSep</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.Document.html#filterEmpty"><span class="hs-identifier">filterEmpty</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-3"></span><span>  </span><span class="annot"><a href="Utils.Drasil.Document.html#listToDoc"><span class="hs-identifier">listToDoc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Utils.Drasil.Document.html#Separator"><span class="hs-identifier">Separator</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-4"></span><span>
 </span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.PrettyPrint.HughesPJ</span></span><span>
 </span><span id="line-6"></span><span>
-</span><span id="line-7"></span><span class="hs-comment">-- | Separates document sections.</span><span>
+</span><span id="line-7"></span><span class="annot"><span class="hs-comment">-- | Separates document sections.</span></span><span>
 </span><span id="line-8"></span><span class="hs-keyword">type</span><span> </span><span id="Separator"><span class="annot"><a href="Utils.Drasil.Document.html#Separator"><span class="hs-identifier hs-var">Separator</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-9"></span><span>
 </span><span id="line-10"></span><span class="annot"><a href="Utils.Drasil.Document.html#contSep"><span class="hs-identifier hs-type">contSep</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Utils.Drasil.Document.html#Separator"><span class="hs-identifier hs-type">Separator</span></a></span><span>
@@ -13,34 +13,38 @@
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;\n&quot;</span></span><span>
 </span><span id="line-12"></span><span>
-</span><span id="line-13"></span><span class="hs-comment">-- | Creates a blank document with no text.</span><span>
+</span><span id="line-13"></span><span class="annot"><span class="hs-comment">-- | Creates a blank document with no text.</span></span><span>
 </span><span id="line-14"></span><span class="annot"><a href="Utils.Drasil.Document.html#blank"><span class="hs-identifier hs-type">blank</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-15"></span><span id="blank"><span class="annot"><span class="annottext">blank :: Separator
 </span><a href="Utils.Drasil.Document.html#blank"><span class="hs-identifier hs-var hs-var">blank</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Separator
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&quot;</span></span><span>
 </span><span id="line-16"></span><span>
-</span><span id="line-17"></span><span class="hs-comment">-- | Indents a document (by 4 spaces).</span><span>
+</span><span id="line-17"></span><span class="annot"><span class="hs-comment">-- | Indents a document (by 4 spaces).</span></span><span>
 </span><span id="line-18"></span><span class="annot"><a href="Utils.Drasil.Document.html#indent"><span class="hs-identifier hs-type">indent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-19"></span><span id="indent"><span class="annot"><span class="annottext">indent :: Separator -&gt; Separator
 </span><a href="Utils.Drasil.Document.html#indent"><span class="hs-identifier hs-var hs-var">indent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Separator -&gt; Separator
 </span><span class="hs-identifier hs-var">nest</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">4</span></span><span>
 </span><span id="line-20"></span><span>
-</span><span id="line-21"></span><span class="hs-comment">-- | Indents a list of Docs and combines into one Doc.</span><span>
+</span><span id="line-21"></span><span class="annot"><span class="hs-comment">-- | Indents a list of Docs and combines into one Doc.</span></span><span>
 </span><span id="line-22"></span><span class="annot"><a href="Utils.Drasil.Document.html#indentList"><span class="hs-identifier hs-type">indentList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-23"></span><span id="indentList"><span class="annot"><span class="annottext">indentList :: [Separator] -&gt; Separator
 </span><a href="Utils.Drasil.Document.html#indentList"><span class="hs-identifier hs-var hs-var">indentList</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Separator -&gt; Separator
-</span><a href="Utils.Drasil.Document.html#indent"><span class="hs-identifier hs-var">indent</span></a></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><a href="Utils.Drasil.Document.html#indent"><span class="hs-identifier hs-var">indent</span></a></span><span> </span><span class="annot"><span class="annottext">(Separator -&gt; Separator)
+-&gt; ([Separator] -&gt; Separator) -&gt; [Separator] -&gt; Separator
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">[Separator] -&gt; Separator
 </span><span class="hs-identifier hs-var">vcat</span></span><span>
 </span><span id="line-24"></span><span>
-</span><span id="line-25"></span><span class="hs-comment">-- | Filter blank `Doc`s from a list.</span><span>
+</span><span id="line-25"></span><span class="annot"><span class="hs-comment">-- | Filter blank `Doc`s from a list.</span></span><span>
 </span><span id="line-26"></span><span class="annot"><a href="Utils.Drasil.Document.html#filterEmpty"><span class="hs-identifier hs-type">filterEmpty</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span class="hs-special">]</span><span>
 </span><span id="line-27"></span><span id="filterEmpty"><span class="annot"><span class="annottext">filterEmpty :: [Separator] -&gt; [Separator]
-</span><a href="Utils.Drasil.Document.html#filterEmpty"><span class="hs-identifier hs-var hs-var">filterEmpty</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
+</span><a href="Utils.Drasil.Document.html#filterEmpty"><span class="hs-identifier hs-var hs-var">filterEmpty</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Separator -&gt; Bool) -&gt; [Separator] -&gt; [Separator]
+forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Bool -&gt; Bool
-</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Bool) -&gt; (Separator -&gt; Bool) -&gt; Separator -&gt; Bool
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Separator -&gt; Bool
 </span><span class="hs-identifier hs-var">isEmpty</span></span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-28"></span><span>
@@ -50,11 +54,16 @@
 </span><span id="line-32"></span><span class="annot"><a href="Utils.Drasil.Document.html#listToDoc"><span class="hs-identifier hs-type">listToDoc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-33"></span><span id="listToDoc"><span class="annot"><span class="annottext">listToDoc :: [String] -&gt; Separator
 </span><a href="Utils.Drasil.Document.html#listToDoc"><span class="hs-identifier hs-var hs-var">listToDoc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Separator] -&gt; Separator
-</span><span class="hs-identifier hs-var">hsep</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-identifier hs-var">hsep</span></span><span> </span><span class="annot"><span class="annottext">([Separator] -&gt; Separator)
+-&gt; ([String] -&gt; [Separator]) -&gt; [String] -&gt; Separator
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Separator -&gt; [Separator] -&gt; [Separator]
 </span><span class="hs-identifier hs-var">punctuate</span></span><span> </span><span class="annot"><span class="annottext">Separator
-</span><span class="hs-identifier hs-var">comma</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">comma</span></span><span> </span><span class="annot"><span class="annottext">([Separator] -&gt; [Separator])
+-&gt; ([String] -&gt; [Separator]) -&gt; [String] -&gt; [Separator]
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Separator) -&gt; [String] -&gt; [Separator]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Separator
 </span><span class="hs-identifier hs-var">text</span></span><span>
 </span><span id="line-34"></span></pre></body></html>

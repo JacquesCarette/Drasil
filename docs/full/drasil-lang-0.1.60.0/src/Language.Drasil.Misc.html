@@ -1,7 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | A collection of 'String'-handling routines as well as one for making tables.</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | A collection of 'String'-handling routines as well as one for making tables.</span></span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Language.Drasil.Misc</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Misc.html#mkTable"><span class="hs-identifier">mkTable</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Misc.html#repUnd"><span class="hs-identifier">repUnd</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
-</span><span id="line-4"></span><span class="hs-comment">{- |
+</span><span id="line-4"></span><span class="annot"><span class="hs-comment">{- |
   Create a table body (not including header row) by applying the given
   functions to the column elements of the table rows (in order).
   The first argument is a list of functions to be applied (one per column).
@@ -14,31 +14,35 @@
   &gt; | 2 | 10 |
   &gt; | 3 | 15 |
   
--}</span><span>
-</span><span id="line-18"></span><span id="local-6989586621679407245"><span id="local-6989586621679407246"><span class="annot"><a href="Language.Drasil.Misc.html#mkTable"><span class="hs-identifier hs-type">mkTable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679407246"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679407245"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679407246"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679407245"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span></span></span><span>
+-}</span></span><span>
+</span><span id="line-18"></span><span id="local-6989586621679379180"><span id="local-6989586621679379181"><span class="annot"><a href="Language.Drasil.Misc.html#mkTable"><span class="hs-identifier hs-type">mkTable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679379180"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679379181"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679379180"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679379181"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span></span></span><span>
 </span><span id="line-19"></span><span id="mkTable"><span class="annot"><span class="annottext">mkTable :: forall a b. [a -&gt; b] -&gt; [a] -&gt; [[b]]
-</span><a href="Language.Drasil.Misc.html#mkTable"><span class="hs-identifier hs-var hs-var">mkTable</span></a></span></span><span> </span><span id="local-6989586621679407235"><span class="annot"><span class="annottext">[a -&gt; b]
-</span><a href="#local-6989586621679407235"><span class="hs-identifier hs-var">fs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679407234"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679407234"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="Language.Drasil.Misc.html#mkTable"><span class="hs-identifier hs-var hs-var">mkTable</span></a></span></span><span> </span><span id="local-6989586621679379191"><span class="annot"><span class="annottext">[a -&gt; b]
+</span><a href="#local-6989586621679379191"><span class="hs-identifier hs-var">fs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(a -&gt; [b]) -&gt; [a] -&gt; [[b]]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679379192"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679379192"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">((a -&gt; b) -&gt; b) -&gt; [a -&gt; b] -&gt; [b]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(a -&gt; b) -&gt; a -&gt; b
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679407234"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[a -&gt; b]
-</span><a href="#local-6989586621679407235"><span class="hs-identifier hs-var">fs</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679379192"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[a -&gt; b]
+</span><a href="#local-6989586621679379191"><span class="hs-identifier hs-var">fs</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-20"></span><span>
-</span><span id="line-21"></span><span class="hs-comment">-- | Replace underscores in a string with periods (@.@).</span><span>
+</span><span id="line-21"></span><span class="annot"><span class="hs-comment">-- | Replace underscores in a string with periods (@.@).</span></span><span>
 </span><span id="line-22"></span><span class="annot"><a href="Language.Drasil.Misc.html#repUnd"><span class="hs-identifier hs-type">repUnd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-23"></span><span id="repUnd"><span class="annot"><span class="annottext">repUnd :: String -&gt; String
-</span><a href="Language.Drasil.Misc.html#repUnd"><span class="hs-identifier hs-var hs-var">repUnd</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><a href="Language.Drasil.Misc.html#repUnd"><span class="hs-identifier hs-var hs-var">repUnd</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Char -&gt; Char) -&gt; String -&gt; String
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Char
-</span><a href="#local-6989586621679407233"><span class="hs-identifier hs-var">rep</span></a></span><span>
+</span><a href="#local-6989586621679379193"><span class="hs-identifier hs-var">rep</span></a></span><span>
 </span><span id="line-24"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-25"></span><span>    </span><span class="annot"><a href="#local-6989586621679407233"><span class="hs-identifier hs-type">rep</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Char</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Char</span></span><span>
-</span><span id="line-26"></span><span>    </span><span id="local-6989586621679407233"><span class="annot"><span class="annottext">rep :: Char -&gt; Char
-</span><a href="#local-6989586621679407233"><span class="hs-identifier hs-var hs-var">rep</span></a></span></span><span> </span><span class="annot"><span class="annottext">Char
+</span><span id="line-25"></span><span>    </span><span class="annot"><a href="#local-6989586621679379193"><span class="hs-identifier hs-type">rep</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Char</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Char</span></span><span>
+</span><span id="line-26"></span><span>    </span><span id="local-6989586621679379193"><span class="annot"><span class="annottext">rep :: Char -&gt; Char
+</span><a href="#local-6989586621679379193"><span class="hs-identifier hs-var hs-var">rep</span></a></span></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'_'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'.'</span></span><span>
-</span><span id="line-27"></span><span>    </span><span class="annot"><a href="#local-6989586621679407233"><span class="hs-identifier hs-var">rep</span></a></span><span> </span><span id="local-6989586621679407232"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679407232"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679407232"><span class="hs-identifier hs-var">c</span></a></span><span>
+</span><span id="line-27"></span><span>    </span><span class="annot"><a href="#local-6989586621679379193"><span class="hs-identifier hs-var">rep</span></a></span><span> </span><span id="local-6989586621679379194"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679379194"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679379194"><span class="hs-identifier hs-var">c</span></a></span><span>
 </span><span id="line-28"></span></pre></body></html>

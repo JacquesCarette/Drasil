@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Assigns symbols and units (quantities) to thermodynamics-related concepts.</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | Assigns symbols and units (quantities) to thermodynamics-related concepts.</span></span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Drasil.Quantities.Thermodynamics</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
@@ -9,12 +9,13 @@
 </span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html"><span class="hs-identifier">Data.Drasil.SI_Units</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.SI_Units.html#centigrade"><span class="hs-identifier">centigrade</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#joule"><span class="hs-identifier">joule</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.Units.Thermodynamics.html"><span class="hs-identifier">Data.Drasil.Units.Thermodynamics</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">UT</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Units.Thermodynamics.html#heatCapSpec"><span class="hs-identifier">heatCapSpec</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Units.Thermodynamics.html#thermalFlux"><span class="hs-identifier">thermalFlux</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-11"></span><span>
-</span><span id="line-12"></span><span class="hs-comment">-- * With Units</span><span>
+</span><span id="line-12"></span><span class="annot"><span class="hs-comment">-- * With Units</span></span><span>
 </span><span id="line-13"></span><span>
 </span><span id="line-14"></span><span class="annot"><a href="Data.Drasil.Quantities.Thermodynamics.html#boilPt"><span class="hs-identifier hs-type">boilPt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Thermodynamics.html#temp"><span class="hs-identifier hs-type">temp</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Thermodynamics.html#heatCapSpec"><span class="hs-identifier hs-type">heatCapSpec</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Thermodynamics.html#htFlux"><span class="hs-identifier hs-type">htFlux</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Thermodynamics.html#latentHeat"><span class="hs-identifier hs-type">latentHeat</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Thermodynamics.html#meltPt"><span class="hs-identifier hs-type">meltPt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Thermodynamics.html#sensHeat"><span class="hs-identifier hs-type">sensHeat</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span>
 </span><span id="line-15"></span><span>
 </span><span id="line-16"></span><span id="boilPt"><span class="annot"><span class="annottext">boilPt :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Thermodynamics.html#boilPt"><span class="hs-identifier hs-var hs-var">boilPt</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Thermodynamics.html#boilPt"><span class="hs-identifier hs-var hs-var">boilPt</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -26,7 +27,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#centigrade"><span class="hs-identifier hs-var">centigrade</span></a></span><span>
 </span><span id="line-17"></span><span id="temp"><span class="annot"><span class="annottext">temp :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Thermodynamics.html#temp"><span class="hs-identifier hs-var hs-var">temp</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Thermodynamics.html#temp"><span class="hs-identifier hs-var hs-var">temp</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -35,7 +37,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#centigrade"><span class="hs-identifier hs-var">centigrade</span></a></span><span>
 </span><span id="line-18"></span><span id="heatCapSpec"><span class="annot"><span class="annottext">heatCapSpec :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Thermodynamics.html#heatCapSpec"><span class="hs-identifier hs-var hs-var">heatCapSpec</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Thermodynamics.html#heatCapSpec"><span class="hs-identifier hs-var hs-var">heatCapSpec</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -44,7 +47,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Thermodynamics.html#heatCapSpec"><span class="hs-identifier hs-var">UT.heatCapSpec</span></a></span><span>
 </span><span id="line-19"></span><span id="htFlux"><span class="annot"><span class="annottext">htFlux :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Thermodynamics.html#htFlux"><span class="hs-identifier hs-var hs-var">htFlux</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Thermodynamics.html#htFlux"><span class="hs-identifier hs-var hs-var">htFlux</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -53,7 +57,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.Units.Thermodynamics.html#thermalFlux"><span class="hs-identifier hs-var">UT.thermalFlux</span></a></span><span>
 </span><span id="line-20"></span><span id="latentHeat"><span class="annot"><span class="annottext">latentHeat :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Thermodynamics.html#latentHeat"><span class="hs-identifier hs-var hs-var">latentHeat</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Thermodynamics.html#latentHeat"><span class="hs-identifier hs-var hs-var">latentHeat</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -62,7 +67,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#joule"><span class="hs-identifier hs-var">joule</span></a></span><span>
 </span><span id="line-21"></span><span id="meltPt"><span class="annot"><span class="annottext">meltPt :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Thermodynamics.html#meltPt"><span class="hs-identifier hs-var hs-var">meltPt</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Thermodynamics.html#meltPt"><span class="hs-identifier hs-var hs-var">meltPt</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -74,7 +80,8 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#centigrade"><span class="hs-identifier hs-var">centigrade</span></a></span><span>
 </span><span id="line-22"></span><span id="sensHeat"><span class="annot"><span class="annottext">sensHeat :: UnitalChunk
-</span><a href="Data.Drasil.Quantities.Thermodynamics.html#sensHeat"><span class="hs-identifier hs-var hs-var">sensHeat</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c u.
+</span><a href="Data.Drasil.Quantities.Thermodynamics.html#sensHeat"><span class="hs-identifier hs-var hs-var">sensHeat</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk

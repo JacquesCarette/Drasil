@@ -40,8 +40,11 @@
 </span><a href="Drasil.GamePhysics.Concepts.html#centreMass"><span class="hs-identifier hs-var hs-var">centreMass</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [IdeaDict] -&gt; CI
 </span><span class="hs-identifier hs-var">commonIdeaWithDict</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;centreMass&quot;</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">ctrOfMass</span></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">forall c. NamedIdea c =&gt; Lens' c NP
+</span><span class="hs-identifier hs-var">ctrOfMass</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Getting NP ConceptChunk NP -&gt; NP
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting NP ConceptChunk NP
+forall c. NamedIdea c =&gt; Lens' c NP
+Lens' ConceptChunk NP
 </span><span class="hs-identifier hs-var">term</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;CM&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">physics</span></span><span class="hs-special">]</span><span>

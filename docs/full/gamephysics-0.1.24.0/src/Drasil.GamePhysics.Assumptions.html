@@ -24,7 +24,8 @@
 </span><span id="line-16"></span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#assumpOT"><span class="hs-identifier hs-type">assumpOT</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#assumpOD"><span class="hs-identifier hs-type">assumpOD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#assumpCST"><span class="hs-identifier hs-type">assumpCST</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#assumpAD"><span class="hs-identifier hs-type">assumpAD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#assumpCT"><span class="hs-identifier hs-type">assumpCT</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#assumpDI"><span class="hs-identifier hs-type">assumpDI</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-17"></span><span>  </span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#assumpCAJI"><span class="hs-identifier hs-type">assumpCAJI</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
 </span><span id="line-18"></span><span id="assumpOT"><span class="annot"><span class="annottext">assumpOT :: ConceptInstance
-</span><a href="Drasil.GamePhysics.Assumptions.html#assumpOT"><span class="hs-identifier hs-var hs-var">assumpOT</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c.
+</span><a href="Drasil.GamePhysics.Assumptions.html#assumpOT"><span class="hs-identifier hs-var hs-var">assumpOT</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
 Concept c =&gt;
 String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -34,7 +35,8 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-string">&quot;objectTy&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">assumpDom</span></span><span>
 </span><span id="line-19"></span><span id="assumpOD"><span class="annot"><span class="annottext">assumpOD :: ConceptInstance
-</span><a href="Drasil.GamePhysics.Assumptions.html#assumpOD"><span class="hs-identifier hs-var hs-var">assumpOD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c.
+</span><a href="Drasil.GamePhysics.Assumptions.html#assumpOD"><span class="hs-identifier hs-var hs-var">assumpOD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
 Concept c =&gt;
 String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -44,7 +46,8 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-string">&quot;objectDimension&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">assumpDom</span></span><span>
 </span><span id="line-20"></span><span id="assumpCST"><span class="annot"><span class="annottext">assumpCST :: ConceptInstance
-</span><a href="Drasil.GamePhysics.Assumptions.html#assumpCST"><span class="hs-identifier hs-var hs-var">assumpCST</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c.
+</span><a href="Drasil.GamePhysics.Assumptions.html#assumpCST"><span class="hs-identifier hs-var hs-var">assumpCST</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
 Concept c =&gt;
 String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -54,7 +57,8 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-string">&quot;coordinateSystemTy&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">assumpDom</span></span><span>
 </span><span id="line-21"></span><span id="assumpAD"><span class="annot"><span class="annottext">assumpAD :: ConceptInstance
-</span><a href="Drasil.GamePhysics.Assumptions.html#assumpAD"><span class="hs-identifier hs-var hs-var">assumpAD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c.
+</span><a href="Drasil.GamePhysics.Assumptions.html#assumpAD"><span class="hs-identifier hs-var hs-var">assumpAD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
 Concept c =&gt;
 String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -64,7 +68,8 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-string">&quot;axesDefined&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">assumpDom</span></span><span>
 </span><span id="line-22"></span><span id="assumpCT"><span class="annot"><span class="annottext">assumpCT :: ConceptInstance
-</span><a href="Drasil.GamePhysics.Assumptions.html#assumpCT"><span class="hs-identifier hs-var hs-var">assumpCT</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c.
+</span><a href="Drasil.GamePhysics.Assumptions.html#assumpCT"><span class="hs-identifier hs-var hs-var">assumpCT</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
 Concept c =&gt;
 String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -74,7 +79,8 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-string">&quot;collisionType&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">assumpDom</span></span><span>
 </span><span id="line-23"></span><span id="assumpDI"><span class="annot"><span class="annottext">assumpDI :: ConceptInstance
-</span><a href="Drasil.GamePhysics.Assumptions.html#assumpDI"><span class="hs-identifier hs-var hs-var">assumpDI</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c.
+</span><a href="Drasil.GamePhysics.Assumptions.html#assumpDI"><span class="hs-identifier hs-var hs-var">assumpDI</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
 Concept c =&gt;
 String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -84,7 +90,8 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-string">&quot;dampingInvolvement&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">assumpDom</span></span><span>
 </span><span id="line-24"></span><span id="assumpCAJI"><span class="annot"><span class="annottext">assumpCAJI :: ConceptInstance
-</span><a href="Drasil.GamePhysics.Assumptions.html#assumpCAJI"><span class="hs-identifier hs-var hs-var">assumpCAJI</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c.
+</span><a href="Drasil.GamePhysics.Assumptions.html#assumpCAJI"><span class="hs-identifier hs-var hs-var">assumpCAJI</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
 Concept c =&gt;
 String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -99,52 +106,55 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span id="line-28"></span><span>
 </span><span id="line-29"></span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#allObject"><span class="hs-identifier hs-type">allObject</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-30"></span><span id="allObject"><span class="annot"><span class="annottext">allObject :: Sentence -&gt; [Sentence]
-</span><a href="Drasil.GamePhysics.Assumptions.html#allObject"><span class="hs-identifier hs-var hs-var">allObject</span></a></span></span><span> </span><span id="local-6989586621679065989"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679065989"><span class="hs-identifier hs-var">thing</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="Drasil.GamePhysics.Assumptions.html#allObject"><span class="hs-identifier hs-var hs-var">allObject</span></a></span></span><span> </span><span id="local-6989586621679065091"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679065091"><span class="hs-identifier hs-var">thing</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;All objects are&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679065989"><span class="hs-identifier hs-var">thing</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679065091"><span class="hs-identifier hs-var">thing</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-31"></span><span>
 </span><span id="line-32"></span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#thereNo"><span class="hs-identifier hs-type">thereNo</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-33"></span><span id="thereNo"><span class="annot"><span class="annottext">thereNo :: [Sentence] -&gt; [Sentence]
-</span><a href="Drasil.GamePhysics.Assumptions.html#thereNo"><span class="hs-identifier hs-var hs-var">thereNo</span></a></span></span><span> </span><span class="hs-special">[</span><span id="local-6989586621679065986"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679065986"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">]</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="Drasil.GamePhysics.Assumptions.html#thereNo"><span class="hs-identifier hs-var hs-var">thereNo</span></a></span></span><span> </span><span class="hs-special">[</span><span id="local-6989586621679065094"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679065094"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">]</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;There is no&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679065986"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679065094"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;involved throughout the&quot;</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-34"></span><span>  </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span id="line-34"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">simulation</span></span><span class="hs-special">]</span><span>
-</span><span id="line-35"></span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#thereNo"><span class="hs-identifier hs-var">thereNo</span></a></span><span> </span><span id="local-6989586621679065984"><span class="annot"><span class="annottext">[Sentence]
-</span><a href="#local-6989586621679065984"><span class="hs-identifier hs-var">l</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-35"></span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#thereNo"><span class="hs-identifier hs-var">thereNo</span></a></span><span> </span><span id="local-6989586621679065096"><span class="annot"><span class="annottext">[Sentence]
+</span><a href="#local-6989586621679065096"><span class="hs-identifier hs-var">l</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;There are no&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlList</span></span><span> </span><span class="annot"><span class="annottext">SepType
 </span><span class="hs-identifier hs-var">Comma</span></span><span> </span><span class="annot"><span class="annottext">FoldType
 </span><span class="hs-identifier hs-var">List</span></span><span> </span><span class="annot"><span class="annottext">[Sentence]
-</span><a href="#local-6989586621679065984"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679065096"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;involved throughout the&quot;</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-36"></span><span>  </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span id="line-36"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">simulation</span></span><span class="hs-special">]</span><span>
 </span><span id="line-37"></span><span>
 </span><span id="line-38"></span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#implies"><span class="hs-identifier hs-type">implies</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-39"></span><span id="implies"><span class="annot"><span class="annottext">implies :: Sentence -&gt; [Sentence]
-</span><a href="Drasil.GamePhysics.Assumptions.html#implies"><span class="hs-identifier hs-var hs-var">implies</span></a></span></span><span> </span><span id="local-6989586621679065979"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679065979"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="Drasil.GamePhysics.Assumptions.html#implies"><span class="hs-identifier hs-var hs-var">implies</span></a></span></span><span> </span><span id="local-6989586621679065101"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679065101"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;and this implies that there are no&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679065979"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">]</span><span> </span><span>
+</span><a href="#local-6989586621679065101"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">]</span><span> </span><span>
 </span><span id="line-40"></span><span class="hs-comment">--not sure if defining a new function is the best way to do this,</span><span>
 </span><span id="line-41"></span><span class="hs-comment">-- as was done in the original file,but it displays correctly</span><span>
 </span><span id="line-42"></span><span class="hs-comment">--(line 52 was added for assumption6)</span><span>
 </span><span id="line-43"></span><span>
 </span><span id="line-44"></span><span id="assumpOTDesc"><span class="annot"><span class="annottext">assumpOTDesc :: [Sentence]
 </span><a href="Drasil.GamePhysics.Assumptions.html#assumpOTDesc"><span class="hs-identifier hs-var hs-var">assumpOTDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence]
-</span><a href="Drasil.GamePhysics.Assumptions.html#allObject"><span class="hs-identifier hs-var">allObject</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><a href="Drasil.GamePhysics.Assumptions.html#allObject"><span class="hs-identifier hs-var">allObject</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">CP.rigidBody</span></span><span class="hs-special">)</span><span>
 </span><span id="line-45"></span><span id="assumpODDesc"><span class="annot"><span class="annottext">assumpODDesc :: [Sentence]
@@ -155,46 +165,57 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span id="line-46"></span><span id="assumpCSTDesc"><span class="annot"><span class="annottext">assumpCSTDesc :: [Sentence]
 </span><a href="Drasil.GamePhysics.Assumptions.html#assumpCSTDesc"><span class="hs-identifier hs-var hs-var">assumpCSTDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;The library uses a&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;The library uses a&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">CM.cartesian</span></span><span class="hs-special">]</span><span>
 </span><span id="line-47"></span><span id="assumpADDesc"><span class="annot"><span class="annottext">assumpADDesc :: [Sentence]
 </span><a href="Drasil.GamePhysics.Assumptions.html#assumpADDesc"><span class="hs-identifier hs-var hs-var">assumpADDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;The axes are defined using&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;The axes are defined using&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">CM.rightHand</span></span><span class="hs-special">]</span><span>
 </span><span id="line-48"></span><span id="assumpCTDesc"><span class="annot"><span class="annottext">assumpCTDesc :: [Sentence]
 </span><a href="Drasil.GamePhysics.Assumptions.html#assumpCTDesc"><span class="hs-identifier hs-var hs-var">assumpCTDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;All&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;All&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">CP.rigidBody</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">CP.rigidBody</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">CP.collision</span></span><span class="hs-special">,</span><span>
 </span><span id="line-49"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;are vertex-to-edge&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;are vertex-to-edge&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">CP.collision</span></span><span class="hs-special">]</span><span>
 </span><span id="line-50"></span><span>
 </span><span id="line-51"></span><span id="assumpDIDesc"><span class="annot"><span class="annottext">assumpDIDesc :: [Sentence]
 </span><a href="Drasil.GamePhysics.Assumptions.html#assumpDIDesc"><span class="hs-identifier hs-var hs-var">assumpDIDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence]
-</span><a href="Drasil.GamePhysics.Assumptions.html#thereNo"><span class="hs-identifier hs-var">thereNo</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><a href="Drasil.GamePhysics.Assumptions.html#thereNo"><span class="hs-identifier hs-var">thereNo</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">CP.damping</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-identifier hs-var">CP.damping</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence]
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence]
-</span><a href="Drasil.GamePhysics.Assumptions.html#implies"><span class="hs-identifier hs-var">implies</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><a href="Drasil.GamePhysics.Assumptions.html#implies"><span class="hs-identifier hs-var">implies</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">CP.friction</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">CP.force</span></span><span class="hs-special">)</span><span>
 </span><span id="line-52"></span><span id="assumpCAJIDesc"><span class="annot"><span class="annottext">assumpCAJIDesc :: [Sentence]
 </span><a href="Drasil.GamePhysics.Assumptions.html#assumpCAJIDesc"><span class="hs-identifier hs-var hs-var">assumpCAJIDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence]
-</span><a href="Drasil.GamePhysics.Assumptions.html#thereNo"><span class="hs-identifier hs-var">thereNo</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><a href="Drasil.GamePhysics.Assumptions.html#thereNo"><span class="hs-identifier hs-var">thereNo</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">CM.constraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">CM.constraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">CP.joint</span></span><span class="hs-special">]</span><span>
 </span><span id="line-53"></span><span>

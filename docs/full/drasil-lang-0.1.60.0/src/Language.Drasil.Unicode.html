@@ -1,21 +1,32 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Special type for unicode characters.</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | Special type for unicode characters.</span></span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Language.Drasil.Unicode</span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Unicode.html#Special"><span class="hs-identifier">Special</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Unicode.html#Circle"><span class="hs-identifier">Circle</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Unicode.html#RenderSpecial"><span class="hs-identifier">RenderSpecial</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Unicode.html#special"><span class="hs-identifier">special</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
-</span><span id="line-4"></span><span class="hs-comment">-- | Special characters include partial derivatives and the degree circle.</span><span>
+</span><span id="line-4"></span><span class="annot"><span class="hs-comment">-- | Special characters include partial derivatives and the degree circle.</span></span><span>
 </span><span id="line-5"></span><span class="hs-keyword">data</span><span> </span><span id="Special"><span class="annot"><a href="Language.Drasil.Unicode.html#Special"><span class="hs-identifier hs-var">Special</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Circle"><span class="annot"><a href="Language.Drasil.Unicode.html#Circle"><span class="hs-identifier hs-var">Circle</span></a></span></span><span>  </span><span class="hs-comment">-- remove by refactoring how units are done </span><span>
-</span><span id="line-6"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679407889"><span id="local-6989586621679407891"><span class="annot"><span class="annottext">Special -&gt; Special -&gt; Bool
+</span><span id="line-6"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679379823"><span id="local-6989586621679379825"><span class="annot"><span class="annottext">Special -&gt; Special -&gt; Bool
+(Special -&gt; Special -&gt; Bool)
+-&gt; (Special -&gt; Special -&gt; Bool) -&gt; Eq Special
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
-/= :: Special -&gt; Special -&gt; Bool
-$c/= :: Special -&gt; Special -&gt; Bool
-== :: Special -&gt; Special -&gt; Bool
 $c== :: Special -&gt; Special -&gt; Bool
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679407869"><span id="local-6989586621679407871"><span id="local-6989586621679407874"><span id="local-6989586621679407877"><span id="local-6989586621679407880"><span id="local-6989586621679407882"><span id="local-6989586621679407884"><span class="annot"><span class="annottext">Eq Special
+== :: Special -&gt; Special -&gt; Bool
+$c/= :: Special -&gt; Special -&gt; Bool
+/= :: Special -&gt; Special -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679379832"><span id="local-6989586621679379834"><span id="local-6989586621679379836"><span id="local-6989586621679379840"><span id="local-6989586621679379843"><span id="local-6989586621679379846"><span id="local-6989586621679379849"><span class="annot"><span class="annottext">Eq Special
+Eq Special =&gt;
+(Special -&gt; Special -&gt; Ordering)
+-&gt; (Special -&gt; Special -&gt; Bool)
+-&gt; (Special -&gt; Special -&gt; Bool)
+-&gt; (Special -&gt; Special -&gt; Bool)
+-&gt; (Special -&gt; Special -&gt; Bool)
+-&gt; (Special -&gt; Special -&gt; Special)
+-&gt; (Special -&gt; Special -&gt; Special)
+-&gt; Ord Special
 Special -&gt; Special -&gt; Bool
 Special -&gt; Special -&gt; Ordering
 Special -&gt; Special -&gt; Special
 forall a.
-Eq a
--&gt; (a -&gt; a -&gt; Ordering)
+Eq a =&gt;
+(a -&gt; a -&gt; Ordering)
 -&gt; (a -&gt; a -&gt; Bool)
 -&gt; (a -&gt; a -&gt; Bool)
 -&gt; (a -&gt; a -&gt; Bool)
@@ -23,23 +34,23 @@ Eq a
 -&gt; (a -&gt; a -&gt; a)
 -&gt; (a -&gt; a -&gt; a)
 -&gt; Ord a
-min :: Special -&gt; Special -&gt; Special
-$cmin :: Special -&gt; Special -&gt; Special
-max :: Special -&gt; Special -&gt; Special
-$cmax :: Special -&gt; Special -&gt; Special
-&gt;= :: Special -&gt; Special -&gt; Bool
-$c&gt;= :: Special -&gt; Special -&gt; Bool
-&gt; :: Special -&gt; Special -&gt; Bool
-$c&gt; :: Special -&gt; Special -&gt; Bool
-&lt;= :: Special -&gt; Special -&gt; Bool
-$c&lt;= :: Special -&gt; Special -&gt; Bool
-&lt; :: Special -&gt; Special -&gt; Bool
-$c&lt; :: Special -&gt; Special -&gt; Bool
-compare :: Special -&gt; Special -&gt; Ordering
 $ccompare :: Special -&gt; Special -&gt; Ordering
+compare :: Special -&gt; Special -&gt; Ordering
+$c&lt; :: Special -&gt; Special -&gt; Bool
+&lt; :: Special -&gt; Special -&gt; Bool
+$c&lt;= :: Special -&gt; Special -&gt; Bool
+&lt;= :: Special -&gt; Special -&gt; Bool
+$c&gt; :: Special -&gt; Special -&gt; Bool
+&gt; :: Special -&gt; Special -&gt; Bool
+$c&gt;= :: Special -&gt; Special -&gt; Bool
+&gt;= :: Special -&gt; Special -&gt; Bool
+$cmax :: Special -&gt; Special -&gt; Special
+max :: Special -&gt; Special -&gt; Special
+$cmin :: Special -&gt; Special -&gt; Special
+min :: Special -&gt; Special -&gt; Special
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">)</span><span>
 </span><span id="line-7"></span><span>
-</span><span id="line-8"></span><span class="hs-comment">-- | Class for rendering special characters.</span><span>
-</span><span id="line-9"></span><span class="hs-keyword">class</span><span> </span><span id="RenderSpecial"><span class="annot"><a href="Language.Drasil.Unicode.html#RenderSpecial"><span class="hs-identifier hs-var">RenderSpecial</span></a></span></span><span> </span><span id="local-6989586621679407867"><span class="annot"><a href="#local-6989586621679407867"><span class="hs-identifier hs-type">r</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-10"></span><span>  </span><span id="special"><span class="annot"><a href="Language.Drasil.Unicode.html#special"><span class="hs-identifier hs-type">special</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Unicode.html#Special"><span class="hs-identifier hs-type">Special</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679407867"><span class="hs-identifier hs-type">r</span></a></span><span>
+</span><span id="line-8"></span><span class="annot"><span class="hs-comment">-- | Class for rendering special characters.</span></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">class</span><span> </span><span id="RenderSpecial"><span class="annot"><a href="Language.Drasil.Unicode.html#RenderSpecial"><span class="hs-identifier hs-var">RenderSpecial</span></a></span></span><span> </span><span id="local-6989586621679379852"><span class="annot"><a href="#local-6989586621679379852"><span class="hs-identifier hs-type">r</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-10"></span><span>  </span><span id="special"><span class="annot"><a href="Language.Drasil.Unicode.html#special"><span class="hs-identifier hs-type">special</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Unicode.html#Special"><span class="hs-identifier hs-type">Special</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679379852"><span class="hs-identifier hs-type">r</span></a></span><span>
 </span><span id="line-11"></span></pre></body></html>

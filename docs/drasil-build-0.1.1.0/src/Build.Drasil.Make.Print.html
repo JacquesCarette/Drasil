@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Defines printers for generating Makefiles.</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | Defines printers for generating Makefiles.</span></span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Build.Drasil.Make.Print</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Prelude</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(&lt;&gt;)</span></span><span class="hs-special">)</span><span>
@@ -15,71 +15,78 @@
 </span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Build.Drasil.Make.MakeString.html"><span class="hs-identifier">Build.Drasil.Make.MakeString</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Build.Drasil.Make.MakeString.html#renderMS"><span class="hs-identifier">renderMS</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">CodeLang.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Comment</span></span><span class="hs-special">)</span><span>
 </span><span id="line-17"></span><span>
-</span><span id="line-18"></span><span class="hs-comment">-- | Generates the makefile by calling 'build' after 'toMake'.</span><span>
-</span><span id="line-19"></span><span id="local-6989586621679046276"><span class="annot"><a href="Build.Drasil.Make.Print.html#genMake"><span class="hs-identifier hs-type">genMake</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Build.Drasil.Make.Import.html#RuleTransformer"><span class="hs-identifier hs-type">RuleTransformer</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679046276"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679046276"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span></span><span>
+</span><span id="line-18"></span><span class="annot"><span class="hs-comment">-- | Generates the makefile by calling 'build' after 'toMake'.</span></span><span>
+</span><span id="line-19"></span><span id="local-6989586621679034937"><span class="annot"><a href="Build.Drasil.Make.Print.html#genMake"><span class="hs-identifier hs-type">genMake</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Build.Drasil.Make.Import.html#RuleTransformer"><span class="hs-identifier hs-type">RuleTransformer</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679034937"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679034937"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span></span><span>
 </span><span id="line-20"></span><span id="genMake"><span class="annot"><span class="annottext">genMake :: forall c. RuleTransformer c =&gt; [c] -&gt; Doc
 </span><a href="Build.Drasil.Make.Print.html#genMake"><span class="hs-identifier hs-var hs-var">genMake</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Makefile -&gt; Doc
-</span><a href="Build.Drasil.Make.Print.html#build"><span class="hs-identifier hs-var">build</span></a></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">forall c. RuleTransformer c =&gt; [c] -&gt; Makefile
+</span><a href="Build.Drasil.Make.Print.html#build"><span class="hs-identifier hs-var">build</span></a></span><span> </span><span class="annot"><span class="annottext">(Makefile -&gt; Doc) -&gt; ([c] -&gt; Makefile) -&gt; [c] -&gt; Doc
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">[c] -&gt; Makefile
+forall c. RuleTransformer c =&gt; [c] -&gt; Makefile
 </span><a href="Build.Drasil.Make.Import.html#toMake"><span class="hs-identifier hs-var">toMake</span></a></span><span>
 </span><span id="line-21"></span><span>
-</span><span id="line-22"></span><span class="hs-comment">-- | Renders the makefile rules.</span><span>
+</span><span id="line-22"></span><span class="annot"><span class="hs-comment">-- | Renders the makefile rules.</span></span><span>
 </span><span id="line-23"></span><span class="annot"><a href="Build.Drasil.Make.Print.html#build"><span class="hs-identifier hs-type">build</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Build.Drasil.Make.AST.html#Makefile"><span class="hs-identifier hs-type">Makefile</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-24"></span><span id="build"><span class="annot"><span class="annottext">build :: Makefile -&gt; Doc
-</span><a href="Build.Drasil.Make.Print.html#build"><span class="hs-identifier hs-var hs-var">build</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Build.Drasil.Make.AST.html#M"><span class="hs-identifier hs-type">M</span></a></span><span> </span><span id="local-6989586621679046215"><span class="annot"><span class="annottext">[Rule]
-</span><a href="#local-6989586621679046215"><span class="hs-identifier hs-var">rules</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Rule] -&gt; Doc -&gt; Doc
+</span><a href="Build.Drasil.Make.Print.html#build"><span class="hs-identifier hs-var hs-var">build</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Build.Drasil.Make.AST.html#M"><span class="hs-identifier hs-type">M</span></a></span><span> </span><span id="local-6989586621679034998"><span class="annot"><span class="annottext">[Rule]
+</span><a href="#local-6989586621679034998"><span class="hs-identifier hs-var">rules</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Rule] -&gt; Doc -&gt; Doc
 </span><a href="Build.Drasil.Make.Helpers.html#addCommonFeatures"><span class="hs-identifier hs-var">addCommonFeatures</span></a></span><span> </span><span class="annot"><span class="annottext">[Rule]
-</span><a href="#local-6989586621679046215"><span class="hs-identifier hs-var">rules</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679034998"><span class="hs-identifier hs-var">rules</span></a></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; Doc -&gt; Doc
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
 </span><span id="line-25"></span><span>  </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
-</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679046214"><span class="annot"><span class="annottext">Rule
-</span><a href="#local-6989586621679046214"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Doc
+</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Rule -&gt; Doc) -&gt; [Rule] -&gt; [Doc]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679034999"><span class="annot"><span class="annottext">Rule
+</span><a href="#local-6989586621679034999"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Doc
 </span><a href="Build.Drasil.Make.Print.html#printRule"><span class="hs-identifier hs-var">printRule</span></a></span><span> </span><span class="annot"><span class="annottext">Rule
-</span><a href="#local-6989586621679046214"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
+</span><a href="#local-6989586621679034999"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">$+$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Rule]
-</span><a href="#local-6989586621679046215"><span class="hs-identifier hs-var">rules</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
+</span><a href="#local-6989586621679034998"><span class="hs-identifier hs-var">rules</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">$$</span></span><span> </span><span class="annot"><span class="annottext">[Rule] -&gt; Doc
 </span><a href="Build.Drasil.Make.Print.html#printPhony"><span class="hs-identifier hs-var">printPhony</span></a></span><span> </span><span class="annot"><span class="annottext">[Rule]
-</span><a href="#local-6989586621679046215"><span class="hs-identifier hs-var">rules</span></a></span><span>
+</span><a href="#local-6989586621679034998"><span class="hs-identifier hs-var">rules</span></a></span><span>
 </span><span id="line-26"></span><span>
-</span><span id="line-27"></span><span class="hs-comment">-- | Renders specific makefile rules. Called by 'build'.</span><span>
+</span><span id="line-27"></span><span class="annot"><span class="hs-comment">-- | Renders specific makefile rules. Called by 'build'.</span></span><span>
 </span><span id="line-28"></span><span class="annot"><a href="Build.Drasil.Make.Print.html#printRule"><span class="hs-identifier hs-type">printRule</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Build.Drasil.Make.AST.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-29"></span><span id="printRule"><span class="annot"><span class="annottext">printRule :: Rule -&gt; Doc
-</span><a href="Build.Drasil.Make.Print.html#printRule"><span class="hs-identifier hs-var hs-var">printRule</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Build.Drasil.Make.AST.html#R"><span class="hs-identifier hs-type">R</span></a></span><span> </span><span id="local-6989586621679046211"><span class="annot"><span class="annottext">Annotation
-</span><a href="#local-6989586621679046211"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679046210"><span class="annot"><span class="annottext">Target
-</span><a href="#local-6989586621679046210"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679046209"><span class="annot"><span class="annottext">Dependencies
-</span><a href="#local-6989586621679046209"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="annot"><span class="annottext">Type
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679046208"><span class="annot"><span class="annottext">[Command]
-</span><a href="#local-6989586621679046208"><span class="hs-identifier hs-var">cmd</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Annotation -&gt; Doc
+</span><a href="Build.Drasil.Make.Print.html#printRule"><span class="hs-identifier hs-var hs-var">printRule</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Build.Drasil.Make.AST.html#R"><span class="hs-identifier hs-type">R</span></a></span><span> </span><span id="local-6989586621679035002"><span class="annot"><span class="annottext">Annotation
+</span><a href="#local-6989586621679035002"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679035003"><span class="annot"><span class="annottext">Target
+</span><a href="#local-6989586621679035003"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679035004"><span class="annot"><span class="annottext">Dependencies
+</span><a href="#local-6989586621679035004"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="annot"><span class="annottext">Type
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679035005"><span class="annot"><span class="annottext">[Command]
+</span><a href="#local-6989586621679035005"><span class="hs-identifier hs-var">cmd</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Annotation -&gt; Doc
 </span><a href="Build.Drasil.Make.Print.html#printComments"><span class="hs-identifier hs-var">printComments</span></a></span><span> </span><span class="annot"><span class="annottext">Annotation
-</span><a href="#local-6989586621679046211"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
+</span><a href="#local-6989586621679035002"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">$+$</span></span><span> </span><span class="annot"><span class="annottext">Target -&gt; Dependencies -&gt; Doc
 </span><a href="Build.Drasil.Make.Print.html#printTarget"><span class="hs-identifier hs-var">printTarget</span></a></span><span> </span><span class="annot"><span class="annottext">Target
-</span><a href="#local-6989586621679046210"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Dependencies
-</span><a href="#local-6989586621679046209"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
+</span><a href="#local-6989586621679035003"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Dependencies
+</span><a href="#local-6989586621679035004"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">$+$</span></span><span> </span><span class="annot"><span class="annottext">[Command] -&gt; Doc
 </span><a href="Build.Drasil.Make.Print.html#printCmds"><span class="hs-identifier hs-var">printCmds</span></a></span><span> </span><span class="annot"><span class="annottext">[Command]
-</span><a href="#local-6989586621679046208"><span class="hs-identifier hs-var">cmd</span></a></span><span>
+</span><a href="#local-6989586621679035005"><span class="hs-identifier hs-var">cmd</span></a></span><span>
 </span><span id="line-30"></span><span>
-</span><span id="line-31"></span><span class="hs-comment">-- | Renders a makefile comment</span><span>
+</span><span id="line-31"></span><span class="annot"><span class="hs-comment">-- | Renders a makefile comment</span></span><span>
 </span><span id="line-32"></span><span class="annot"><a href="Build.Drasil.Make.Print.html#printComment"><span class="hs-identifier hs-type">printComment</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Comment</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-33"></span><span id="printComment"><span class="annot"><span class="annottext">printComment :: String -&gt; Doc
 </span><a href="Build.Drasil.Make.Print.html#printComment"><span class="hs-identifier hs-var hs-var">printComment</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc
 </span><span class="hs-identifier hs-var">empty</span></span><span>
-</span><span id="line-34"></span><span class="annot"><a href="Build.Drasil.Make.Print.html#printComment"><span class="hs-identifier hs-var">printComment</span></a></span><span> </span><span id="local-6989586621679046203"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679046203"><span class="hs-identifier hs-var">c</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
-</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span id="line-34"></span><span class="annot"><a href="Build.Drasil.Make.Print.html#printComment"><span class="hs-identifier hs-var">printComment</span></a></span><span> </span><span id="local-6989586621679035010"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679035010"><span class="hs-identifier hs-var">c</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Doc) -&gt; String -&gt; Doc
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; String
 </span><span class="hs-identifier hs-var">T.unpack</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">WrapSettings -&gt; Int -&gt; Text -&gt; Text
 </span><span class="hs-identifier hs-var">wrapText</span></span><span> </span><span class="annot"><span class="annottext">WrapSettings
 </span><a href="Build.Drasil.Make.Print.html#wrapSettings"><span class="hs-identifier hs-var">wrapSettings</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><span class="hs-number">80</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-number">80</span></span><span> </span><span class="annot"><span class="annottext">(Text -&gt; Text) -&gt; Text -&gt; Text
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Text
 </span><span class="hs-identifier hs-var">T.pack</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679046203"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679035010"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;\n&quot;</span></span><span>
 </span><span id="line-35"></span><span>
@@ -101,97 +108,118 @@
 </span><span class="hs-identifier hs-var">FillAll</span></span><span>
 </span><span id="line-41"></span><span>                 </span><span class="hs-special">}</span><span>
 </span><span id="line-42"></span><span>
-</span><span id="line-43"></span><span class="hs-comment">-- | Renders multiple comments</span><span>
+</span><span id="line-43"></span><span class="annot"><span class="hs-comment">-- | Renders multiple comments</span></span><span>
 </span><span id="line-44"></span><span class="annot"><a href="Build.Drasil.Make.Print.html#printComments"><span class="hs-identifier hs-type">printComments</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Build.Drasil.Make.AST.html#Annotation"><span class="hs-identifier hs-type">Annotation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-45"></span><span id="printComments"><span class="annot"><span class="annottext">printComments :: Annotation -&gt; Doc
-</span><a href="Build.Drasil.Make.Print.html#printComments"><span class="hs-identifier hs-var hs-var">printComments</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) a b.
+</span><a href="Build.Drasil.Make.Print.html#printComments"><span class="hs-identifier hs-var hs-var">printComments</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; Doc -&gt; Doc) -&gt; Doc -&gt; Annotation -&gt; Doc
+forall a b. (a -&gt; b -&gt; b) -&gt; b -&gt; [a] -&gt; b
+forall (t :: * -&gt; *) a b.
 Foldable t =&gt;
 (a -&gt; b -&gt; b) -&gt; b -&gt; t a -&gt; b
 </span><span class="hs-identifier hs-var">foldr</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
-</span><span class="hs-operator hs-var">($+$)</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">($+$)</span></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc -&gt; Doc) -&gt; (String -&gt; Doc) -&gt; String -&gt; Doc -&gt; Doc
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><a href="Build.Drasil.Make.Print.html#printComment"><span class="hs-identifier hs-var">printComment</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Doc
 </span><span class="hs-identifier hs-var">empty</span></span><span>
 </span><span id="line-46"></span><span>
-</span><span id="line-47"></span><span class="hs-comment">-- | Gathers all rules to abstract targets and tags them as phony.</span><span>
+</span><span id="line-47"></span><span class="annot"><span class="hs-comment">-- | Gathers all rules to abstract targets and tags them as phony.</span></span><span>
 </span><span id="line-48"></span><span class="annot"><a href="Build.Drasil.Make.Print.html#printPhony"><span class="hs-identifier hs-type">printPhony</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Build.Drasil.Make.AST.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-49"></span><span id="printPhony"><span class="annot"><span class="annottext">printPhony :: [Rule] -&gt; Doc
 </span><a href="Build.Drasil.Make.Print.html#printPhony"><span class="hs-identifier hs-var hs-var">printPhony</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">(&lt;+&gt;)</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;.PHONY:&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-string">&quot;.PHONY:&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; ([Rule] -&gt; Doc) -&gt; [Rule] -&gt; Doc
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
-</span><span class="hs-identifier hs-var">hsep</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">hsep</span></span><span> </span><span class="annot"><span class="annottext">([Doc] -&gt; Doc) -&gt; ([Rule] -&gt; [Doc]) -&gt; [Rule] -&gt; Doc
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Rule -&gt; Doc) -&gt; [Rule] -&gt; [Doc]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><a href="Build.Drasil.Make.AST.html#R"><span class="hs-identifier hs-type">R</span></a></span><span> </span><span class="annot"><span class="annottext">Annotation
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679046190"><span class="annot"><span class="annottext">Target
-</span><a href="#local-6989586621679046190"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="annot"><span class="annottext">Dependencies
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679035023"><span class="annot"><span class="annottext">Target
+</span><a href="#local-6989586621679035023"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="annot"><span class="annottext">Dependencies
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Type
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[Command]
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
-</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Doc) -&gt; String -&gt; Doc
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Target -&gt; String
 </span><a href="Build.Drasil.Make.MakeString.html#renderMS"><span class="hs-identifier hs-var">renderMS</span></a></span><span> </span><span class="annot"><span class="annottext">Target
-</span><a href="#local-6989586621679046190"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><a href="#local-6989586621679035023"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([Rule] -&gt; [Doc]) -&gt; ([Rule] -&gt; [Rule]) -&gt; [Rule] -&gt; [Doc]
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span>
-</span><span id="line-50"></span><span>  </span><span class="annot"><span class="annottext">forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
+</span><span id="line-50"></span><span>  </span><span class="annot"><span class="annottext">(Rule -&gt; Bool) -&gt; [Rule] -&gt; [Rule]
+forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><a href="Build.Drasil.Make.AST.html#R"><span class="hs-identifier hs-type">R</span></a></span><span> </span><span class="annot"><span class="annottext">Annotation
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Target
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Dependencies
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679046189"><span class="annot"><span class="annottext">Type
-</span><a href="#local-6989586621679046189"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="annot"><span class="annottext">[Command]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679035024"><span class="annot"><span class="annottext">Type
+</span><a href="#local-6989586621679035024"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="annot"><span class="annottext">[Command]
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Type
-</span><a href="#local-6989586621679046189"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><a href="#local-6989586621679035024"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Type -&gt; Type -&gt; Bool
+forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Type
 </span><a href="Build.Drasil.Make.AST.html#Abstract"><span class="hs-identifier hs-var">Abstract</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-51"></span><span>
-</span><span id="line-52"></span><span class="hs-comment">-- | Renders targets with their dependencies.</span><span>
+</span><span id="line-52"></span><span class="annot"><span class="hs-comment">-- | Renders targets with their dependencies.</span></span><span>
 </span><span id="line-53"></span><span class="annot"><a href="Build.Drasil.Make.Print.html#printTarget"><span class="hs-identifier hs-type">printTarget</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Build.Drasil.Make.AST.html#Target"><span class="hs-identifier hs-type">Target</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Build.Drasil.Make.AST.html#Dependencies"><span class="hs-identifier hs-type">Dependencies</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-54"></span><span id="printTarget"><span class="annot"><span class="annottext">printTarget :: Target -&gt; Dependencies -&gt; Doc
-</span><a href="Build.Drasil.Make.Print.html#printTarget"><span class="hs-identifier hs-var hs-var">printTarget</span></a></span></span><span> </span><span id="local-6989586621679046188"><span class="annot"><span class="annottext">Target
-</span><a href="#local-6989586621679046188"><span class="hs-identifier hs-var">nameLb</span></a></span></span><span> </span><span id="local-6989586621679046187"><span class="annot"><span class="annottext">Dependencies
-</span><a href="#local-6989586621679046187"><span class="hs-identifier hs-var">deps</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><a href="Build.Drasil.Make.Print.html#printTarget"><span class="hs-identifier hs-var hs-var">printTarget</span></a></span></span><span> </span><span id="local-6989586621679035025"><span class="annot"><span class="annottext">Target
+</span><a href="#local-6989586621679035025"><span class="hs-identifier hs-var">nameLb</span></a></span></span><span> </span><span id="local-6989586621679035026"><span class="annot"><span class="annottext">Dependencies
+</span><a href="#local-6989586621679035026"><span class="hs-identifier hs-var">deps</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Target -&gt; String
 </span><a href="Build.Drasil.Make.MakeString.html#renderMS"><span class="hs-identifier hs-var">renderMS</span></a></span><span> </span><span class="annot"><span class="annottext">Target
-</span><a href="#local-6989586621679046188"><span class="hs-identifier hs-var">nameLb</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679035025"><span class="hs-identifier hs-var">nameLb</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;:&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;+&gt;</span></span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
-</span><span class="hs-identifier hs-var">hsep</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">hsep</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Target -&gt; Doc) -&gt; Dependencies -&gt; [Doc]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Doc
-</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Doc) -&gt; (Target -&gt; String) -&gt; Target -&gt; Doc
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Target -&gt; String
 </span><a href="Build.Drasil.Make.MakeString.html#renderMS"><span class="hs-identifier hs-var">renderMS</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Dependencies
-</span><a href="#local-6989586621679046187"><span class="hs-identifier hs-var">deps</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679035026"><span class="hs-identifier hs-var">deps</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-55"></span><span>
-</span><span id="line-56"></span><span class="hs-comment">-- | Renders a makefile command.</span><span>
+</span><span id="line-56"></span><span class="annot"><span class="hs-comment">-- | Renders a makefile command.</span></span><span>
 </span><span id="line-57"></span><span class="annot"><a href="Build.Drasil.Make.Print.html#printCmd"><span class="hs-identifier hs-type">printCmd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Build.Drasil.Make.AST.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-58"></span><span id="printCmd"><span class="annot"><span class="annottext">printCmd :: Command -&gt; Doc
-</span><a href="Build.Drasil.Make.Print.html#printCmd"><span class="hs-identifier hs-var hs-var">printCmd</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Build.Drasil.Make.AST.html#C"><span class="hs-identifier hs-type">C</span></a></span><span> </span><span id="local-6989586621679046185"><span class="annot"><span class="annottext">Target
-</span><a href="#local-6989586621679046185"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679046184"><span class="annot"><span class="annottext">[CommandOpts]
-</span><a href="#local-6989586621679046184"><span class="hs-identifier hs-var">opts</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
-</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="Build.Drasil.Make.Print.html#printCmd"><span class="hs-identifier hs-var hs-var">printCmd</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Build.Drasil.Make.AST.html#C"><span class="hs-identifier hs-type">C</span></a></span><span> </span><span id="local-6989586621679035028"><span class="annot"><span class="annottext">Target
+</span><a href="#local-6989586621679035028"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679035029"><span class="annot"><span class="annottext">[CommandOpts]
+</span><a href="#local-6989586621679035029"><span class="hs-identifier hs-var">opts</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Doc) -&gt; String -&gt; Doc
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-special">(</span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">CommandOpts
-</span><a href="Build.Drasil.Make.AST.html#IgnoreReturnCode"><span class="hs-identifier hs-var">IgnoreReturnCode</span></a></span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
+</span><a href="Build.Drasil.Make.AST.html#IgnoreReturnCode"><span class="hs-identifier hs-var">IgnoreReturnCode</span></a></span><span> </span><span class="annot"><span class="annottext">CommandOpts -&gt; [CommandOpts] -&gt; Bool
+forall a. Eq a =&gt; a -&gt; [a] -&gt; Bool
+forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">[CommandOpts]
-</span><a href="#local-6989586621679046184"><span class="hs-identifier hs-var">opts</span></a></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679035029"><span class="hs-identifier hs-var">opts</span></a></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;-&quot;</span></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-string">&quot;&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Target -&gt; String
 </span><a href="Build.Drasil.Make.MakeString.html#renderMS"><span class="hs-identifier hs-var">renderMS</span></a></span><span> </span><span class="annot"><span class="annottext">Target
-</span><a href="#local-6989586621679046185"><span class="hs-identifier hs-var">c</span></a></span><span>
+</span><a href="#local-6989586621679035028"><span class="hs-identifier hs-var">c</span></a></span><span>
 </span><span id="line-59"></span><span>
-</span><span id="line-60"></span><span class="hs-comment">-- | Renders multiple commands.</span><span>
+</span><span id="line-60"></span><span class="annot"><span class="hs-comment">-- | Renders multiple commands.</span></span><span>
 </span><span id="line-61"></span><span class="annot"><a href="Build.Drasil.Make.Print.html#printCmds"><span class="hs-identifier hs-type">printCmds</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Build.Drasil.Make.AST.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-62"></span><span id="printCmds"><span class="annot"><span class="annottext">printCmds :: [Command] -&gt; Doc
-</span><a href="Build.Drasil.Make.Print.html#printCmds"><span class="hs-identifier hs-var hs-var">printCmds</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) a b.
+</span><a href="Build.Drasil.Make.Print.html#printCmds"><span class="hs-identifier hs-var hs-var">printCmds</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Command -&gt; Doc -&gt; Doc) -&gt; Doc -&gt; [Command] -&gt; Doc
+forall a b. (a -&gt; b -&gt; b) -&gt; b -&gt; [a] -&gt; b
+forall (t :: * -&gt; *) a b.
 Foldable t =&gt;
 (a -&gt; b -&gt; b) -&gt; b -&gt; t a -&gt; b
 </span><span class="hs-identifier hs-var">foldr</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
-</span><span class="hs-operator hs-var">($+$)</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">($+$)</span></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc -&gt; Doc) -&gt; (Command -&gt; Doc) -&gt; Command -&gt; Doc -&gt; Doc
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">(&lt;&gt;)</span></span><span> </span><span class="annot"><span class="annottext">Doc
-</span><a href="Build.Drasil.Make.Helpers.html#tab"><span class="hs-identifier hs-var">tab</span></a></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><a href="Build.Drasil.Make.Helpers.html#tab"><span class="hs-identifier hs-var">tab</span></a></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; (Command -&gt; Doc) -&gt; Command -&gt; Doc
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Command -&gt; Doc
 </span><a href="Build.Drasil.Make.Print.html#printCmd"><span class="hs-identifier hs-var">printCmd</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Doc
 </span><span class="hs-identifier hs-var">empty</span></span><span>

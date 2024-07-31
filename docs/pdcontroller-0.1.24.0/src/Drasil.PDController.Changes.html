@@ -15,7 +15,8 @@
 </span><span id="line-13"></span><span>
 </span><span id="line-14"></span><span class="annot"><a href="Drasil.PDController.Changes.html#likeChgPP"><span class="hs-identifier hs-type">likeChgPP</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
 </span><span id="line-15"></span><span id="likeChgPP"><span class="annot"><span class="annottext">likeChgPP :: ConceptInstance
-</span><a href="Drasil.PDController.Changes.html#likeChgPP"><span class="hs-identifier hs-var hs-var">likeChgPP</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c.
+</span><a href="Drasil.PDController.Changes.html#likeChgPP"><span class="hs-identifier hs-var hs-var">likeChgPP</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
 Concept c =&gt;
 String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -29,19 +30,24 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><a href="Drasil.PDController.Changes.html#likeChgPPDesc"><span class="hs-identifier hs-var hs-var">likeChgPPDesc</span></a></span></span><span>
 </span><span id="line-19"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span>
-</span><span id="line-20"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span id="line-20"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">mass</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="Drasil.PDController.Concepts.html#ccDampingCoeff"><span class="hs-identifier hs-var">ccDampingCoeff</span></a></span><span> </span><span class="annot"><span class="annottext">forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><a href="Drasil.PDController.Concepts.html#ccDampingCoeff"><span class="hs-identifier hs-var">ccDampingCoeff</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`andThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#ccStiffCoeff"><span class="hs-identifier hs-var">ccStiffCoeff</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-21"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;may be changed to be supplied by the user&quot;</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-22"></span><span>       </span><span class="annot"><span class="annottext">forall r. (Referable r, HasShortName r) =&gt; [r] -&gt; Sentence
+</span><span id="line-22"></span><span>       </span><span class="annot"><span class="annottext">[ConceptInstance] -&gt; Sentence
+forall r. (Referable r, HasShortName r) =&gt; [r] -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSources</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.PDController.Assumptions.html#aMass"><span class="hs-identifier hs-var">aMass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.PDController.Assumptions.html#aDampingCoeff"><span class="hs-identifier hs-var">aDampingCoeff</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance

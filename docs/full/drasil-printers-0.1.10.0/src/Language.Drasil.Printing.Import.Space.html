@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Defines functions to render 'Space's into printable 'P.Expr's.</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | Defines functions to render 'Space's into printable 'P.Expr's.</span></span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Language.Drasil.Printing.Import.Space</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">dbl</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Space</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
@@ -11,7 +11,7 @@
 </span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">intersperse</span></span><span class="hs-special">)</span><span>
 </span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.List.NonEmpty</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">toList</span></span><span class="hs-special">)</span><span>
 </span><span id="line-13"></span><span>
-</span><span id="line-14"></span><span class="hs-comment">-- | Render a 'Space'.</span><span>
+</span><span id="line-14"></span><span class="annot"><span class="hs-comment">-- | Render a 'Space'.</span></span><span>
 </span><span id="line-15"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Space.html#space"><span class="hs-identifier hs-type">space</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.PrintingInformation.html#PrintingInformation"><span class="hs-identifier hs-type">PrintingInformation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Space</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.AST.html#Expr"><span class="hs-identifier hs-type">P.Expr</span></a></span><span>
 </span><span id="line-16"></span><span id="space"><span class="annot"><span class="annottext">space :: PrintingInformation -&gt; Space -&gt; Expr
 </span><a href="Language.Drasil.Printing.Import.Space.html#space"><span class="hs-identifier hs-var hs-var">space</span></a></span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
@@ -51,85 +51,109 @@
 </span><span class="hs-string">&quot;String&quot;</span></span><span>
 </span><span id="line-23"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Space.html#space"><span class="hs-identifier hs-var">space</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
 </span><span class="hs-identifier">_</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Vect</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. HasCallStack =&gt; String -&gt; a
+</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Expr
+forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Vector space not translated&quot;</span></span><span>
 </span><span id="line-24"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Space.html#space"><span class="hs-identifier hs-var">space</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><span class="hs-identifier">_</span></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Matrix</span></span><span> </span><span class="hs-special">{</span><span class="hs-special">}</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. HasCallStack =&gt; String -&gt; a
+</span><span class="hs-identifier">_</span></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Matrix</span></span><span> </span><span class="hs-special">{</span><span class="hs-special">}</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Expr
+forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Matrix space not translated&quot;</span></span><span>
 </span><span id="line-25"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Space.html#space"><span class="hs-identifier hs-var">space</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
 </span><span class="hs-identifier">_</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Array</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. HasCallStack =&gt; String -&gt; a
+</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Expr
+forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Array space not translated&quot;</span></span><span>
 </span><span id="line-26"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Space.html#space"><span class="hs-identifier hs-var">space</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><span class="hs-identifier">_</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Actor</span></span><span> </span><span id="local-6989586621679122307"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679122307"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Expr
+</span><span class="hs-identifier">_</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Actor</span></span><span> </span><span id="local-6989586621679121307"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679121307"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#Ident"><span class="hs-identifier hs-var">P.Ident</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679122307"><span class="hs-identifier hs-var">s</span></a></span><span>
-</span><span id="line-27"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Space.html#space"><span class="hs-identifier hs-var">space</span></a></span><span> </span><span id="local-6989586621679122306"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679122306"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">DiscreteD</span></span><span> </span><span id="local-6989586621679122304"><span class="annot"><span class="annottext">[Double]
-</span><a href="#local-6989586621679122304"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Fence -&gt; Fence -&gt; Expr -&gt; Expr
+</span><a href="#local-6989586621679121307"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><span id="line-27"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Space.html#space"><span class="hs-identifier hs-var">space</span></a></span><span> </span><span id="local-6989586621679121308"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679121308"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">DiscreteD</span></span><span> </span><span id="local-6989586621679121310"><span class="annot"><span class="annottext">[Double]
+</span><a href="#local-6989586621679121310"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Fence -&gt; Fence -&gt; Expr -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#Fenced"><span class="hs-identifier hs-var">P.Fenced</span></a></span><span> </span><span class="annot"><span class="annottext">Fence
 </span><a href="Language.Drasil.Printing.AST.html#Curly"><span class="hs-identifier hs-var">P.Curly</span></a></span><span> </span><span class="annot"><span class="annottext">Fence
-</span><a href="Language.Drasil.Printing.AST.html#Curly"><span class="hs-identifier hs-var">P.Curly</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="Language.Drasil.Printing.AST.html#Curly"><span class="hs-identifier hs-var">P.Curly</span></a></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Expr) -&gt; Expr -&gt; Expr
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; Expr
-</span><a href="Language.Drasil.Printing.AST.html#Row"><span class="hs-identifier hs-var">P.Row</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; [a] -&gt; [a]
+</span><a href="Language.Drasil.Printing.AST.html#Row"><span class="hs-identifier hs-var">P.Row</span></a></span><span> </span><span class="annot"><span class="annottext">([Expr] -&gt; Expr) -&gt; [Expr] -&gt; Expr
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; [Expr] -&gt; [Expr]
+forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">intersperse</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Ops -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#MO"><span class="hs-identifier hs-var">P.MO</span></a></span><span> </span><span class="annot"><span class="annottext">Ops
-</span><a href="Language.Drasil.Printing.AST.html#Comma"><span class="hs-identifier hs-var">P.Comma</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b c. (a -&gt; b -&gt; c) -&gt; b -&gt; a -&gt; c
+</span><a href="Language.Drasil.Printing.AST.html#Comma"><span class="hs-identifier hs-var">P.Comma</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([Expr] -&gt; [Expr]) -&gt; [Expr] -&gt; [Expr]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Double -&gt; Expr) -&gt; [Double] -&gt; [Expr]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Expr -&gt; PrintingInformation -&gt; Expr)
+-&gt; PrintingInformation -&gt; Expr -&gt; Expr
+forall a b c. (a -&gt; b -&gt; c) -&gt; b -&gt; a -&gt; c
 </span><span class="hs-identifier hs-var">flip</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; PrintingInformation -&gt; Expr
 </span><a href="Language.Drasil.Printing.Import.Expr.html#expr"><span class="hs-identifier hs-var">expr</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679122306"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Double -&gt; r
+</span><a href="#local-6989586621679121308"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Expr) -&gt; (Double -&gt; Expr) -&gt; Double -&gt; Expr
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Double -&gt; Expr
+forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Double]
-</span><a href="#local-6989586621679122304"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="hs-comment">-- [Double]</span><span>
+</span><a href="#local-6989586621679121310"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="hs-comment">-- [Double]</span><span>
 </span><span id="line-28"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Space.html#space"><span class="hs-identifier hs-var">space</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><span class="hs-identifier">_</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">DiscreteS</span></span><span> </span><span id="local-6989586621679122296"><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679122296"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Fence -&gt; Fence -&gt; Expr -&gt; Expr
+</span><span class="hs-identifier">_</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">DiscreteS</span></span><span> </span><span id="local-6989586621679121318"><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679121318"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Fence -&gt; Fence -&gt; Expr -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#Fenced"><span class="hs-identifier hs-var">P.Fenced</span></a></span><span> </span><span class="annot"><span class="annottext">Fence
 </span><a href="Language.Drasil.Printing.AST.html#Curly"><span class="hs-identifier hs-var">P.Curly</span></a></span><span> </span><span class="annot"><span class="annottext">Fence
-</span><a href="Language.Drasil.Printing.AST.html#Curly"><span class="hs-identifier hs-var">P.Curly</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="Language.Drasil.Printing.AST.html#Curly"><span class="hs-identifier hs-var">P.Curly</span></a></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Expr) -&gt; Expr -&gt; Expr
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; Expr
-</span><a href="Language.Drasil.Printing.AST.html#Row"><span class="hs-identifier hs-var">P.Row</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; [a] -&gt; [a]
+</span><a href="Language.Drasil.Printing.AST.html#Row"><span class="hs-identifier hs-var">P.Row</span></a></span><span> </span><span class="annot"><span class="annottext">([Expr] -&gt; Expr) -&gt; [Expr] -&gt; Expr
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; [Expr] -&gt; [Expr]
+forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">intersperse</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Ops -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#MO"><span class="hs-identifier hs-var">P.MO</span></a></span><span> </span><span class="annot"><span class="annottext">Ops
-</span><a href="Language.Drasil.Printing.AST.html#Comma"><span class="hs-identifier hs-var">P.Comma</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><a href="Language.Drasil.Printing.AST.html#Comma"><span class="hs-identifier hs-var">P.Comma</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([Expr] -&gt; [Expr]) -&gt; [Expr] -&gt; [Expr]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Expr) -&gt; [String] -&gt; [Expr]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#Str"><span class="hs-identifier hs-var">P.Str</span></a></span><span> </span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679122296"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="hs-comment">--ex. let Meal = {&quot;breakfast&quot;, &quot;lunch&quot;, &quot;dinner&quot;}</span><span>
+</span><a href="#local-6989586621679121318"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="hs-comment">--ex. let Meal = {&quot;breakfast&quot;, &quot;lunch&quot;, &quot;dinner&quot;}</span><span>
 </span><span id="line-29"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Space.html#space"><span class="hs-identifier hs-var">space</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
 </span><span class="hs-identifier">_</span></span><span>  </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Void</span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. HasCallStack =&gt; String -&gt; a
+</span><span class="hs-identifier hs-var">Void</span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Expr
+forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Void not translated&quot;</span></span><span>
-</span><span id="line-30"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Space.html#space"><span class="hs-identifier hs-var">space</span></a></span><span> </span><span id="local-6989586621679122293"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679122293"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Function</span></span><span> </span><span id="local-6989586621679122291"><span class="annot"><span class="annottext">NonEmpty Space
-</span><a href="#local-6989586621679122291"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679122290"><span class="annot"><span class="annottext">Space
-</span><a href="#local-6989586621679122290"><span class="hs-identifier hs-var">t</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; Expr
-</span><a href="Language.Drasil.Printing.AST.html#Row"><span class="hs-identifier hs-var">P.Row</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span id="line-30"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Space.html#space"><span class="hs-identifier hs-var">space</span></a></span><span> </span><span id="local-6989586621679121321"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679121321"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Function</span></span><span> </span><span id="local-6989586621679121323"><span class="annot"><span class="annottext">NonEmpty Space
+</span><a href="#local-6989586621679121323"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679121324"><span class="annot"><span class="annottext">Space
+</span><a href="#local-6989586621679121324"><span class="hs-identifier hs-var">t</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; Expr
+</span><a href="Language.Drasil.Printing.AST.html#Row"><span class="hs-identifier hs-var">P.Row</span></a></span><span> </span><span class="annot"><span class="annottext">([Expr] -&gt; Expr) -&gt; [Expr] -&gt; Expr
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">forall a. a -&gt; [a] -&gt; [a]
+</span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">Expr -&gt; [Expr] -&gt; [Expr]
+forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">intersperse</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Ops -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#MO"><span class="hs-identifier hs-var">P.MO</span></a></span><span> </span><span class="annot"><span class="annottext">Ops
-</span><a href="Language.Drasil.Printing.AST.html#Cross"><span class="hs-identifier hs-var">P.Cross</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><a href="Language.Drasil.Printing.AST.html#Cross"><span class="hs-identifier hs-var">P.Cross</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Space -&gt; Expr) -&gt; [Space] -&gt; [Expr]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Space -&gt; Expr
 </span><a href="Language.Drasil.Printing.Import.Space.html#space"><span class="hs-identifier hs-var">space</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679122293"><span class="hs-identifier hs-var">sm</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall a. NonEmpty a -&gt; [a]
+</span><a href="#local-6989586621679121321"><span class="hs-identifier hs-var">sm</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([Space] -&gt; [Expr]) -&gt; [Space] -&gt; [Expr]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty Space -&gt; [Space]
+forall a. NonEmpty a -&gt; [a]
 </span><span class="hs-identifier hs-var">toList</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty Space
-</span><a href="#local-6989586621679122291"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679121323"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; [Expr] -&gt; [Expr]
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>  </span><span class="hs-comment">-- AxBxC...xY</span><span>
 </span><span id="line-32"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Ops -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#MO"><span class="hs-identifier hs-var">P.MO</span></a></span><span> </span><span class="annot"><span class="annottext">Ops
 </span><a href="Language.Drasil.Printing.AST.html#RArrow"><span class="hs-identifier hs-var">P.RArrow</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Space -&gt; Expr
 </span><a href="Language.Drasil.Printing.Import.Space.html#space"><span class="hs-identifier hs-var">space</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679122293"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Space
-</span><a href="#local-6989586621679122290"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">]</span><span>                                </span><span class="hs-comment">-- -&gt; Z</span><span>
+</span><a href="#local-6989586621679121321"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Space
+</span><a href="#local-6989586621679121324"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">]</span><span>                                </span><span class="hs-comment">-- -&gt; Z</span><span>
 </span><span id="line-33"></span></pre></body></html>

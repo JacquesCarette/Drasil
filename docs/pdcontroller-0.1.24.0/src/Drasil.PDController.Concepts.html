@@ -87,7 +87,8 @@
 </span><span class="hs-string">&quot;pdCtrlLoop&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;PD Control Loop&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Closed-Loop control &quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-string">&quot;Closed-Loop control &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-31"></span><span>        </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;system with PD Controller, Summing Point and Power Plant&quot;</span></span><span class="hs-special">)</span><span>
@@ -109,10 +110,12 @@
 </span><span class="hs-string">&quot;summingPoint&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Summing Point&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Control block where &quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-string">&quot;Control block where &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-39"></span><span>        </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;the difference between the Set-Point and the Process Variable &quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-string">&quot;the difference between the Set-Point and the Process Variable &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-40"></span><span>        </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is computed&quot;</span></span><span class="hs-special">)</span><span>
@@ -136,7 +139,8 @@
 </span><span class="hs-string">&quot;Second Order System&quot;</span></span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-48"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;A system whose input-output relationship is denoted by a second-order &quot;</span></span><span>
-</span><span id="line-49"></span><span>         </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span id="line-49"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;differential equation&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-50"></span><span>
@@ -149,7 +153,8 @@
 </span><span class="hs-string">&quot;Process Error&quot;</span></span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-53"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Input to the PID controller. Process Error is the difference between the &quot;</span></span><span>
-</span><span id="line-54"></span><span>         </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span id="line-54"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Set-Point and the Process Variable&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-55"></span><span>
@@ -200,7 +205,8 @@
 </span><span class="hs-string">&quot;Set-Point&quot;</span></span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-72"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The desired value that the control system must reach. This also knows &quot;</span></span><span>
-</span><span id="line-73"></span><span>         </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span id="line-73"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;as the reference variable&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-74"></span><span>
@@ -232,7 +238,8 @@
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Proportional control&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-85"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;A linear feedback control system where correction is applied to the controlled &quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-string">&quot;A linear feedback control system where correction is applied to the controlled &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-86"></span><span>      </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;variable which is proportional to the difference between desired and measured values&quot;</span></span><span class="hs-special">)</span><span>
@@ -245,7 +252,8 @@
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Derivative control&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-90"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Monitors the rate of change of the error signal and contributes a component &quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-string">&quot;Monitors the rate of change of the error signal and contributes a component &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span>
 </span><span id="line-91"></span><span>      </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;of the output signal (proportional to a derivative of the error signal)&quot;</span></span><span class="hs-special">)</span><span>
@@ -269,7 +277,8 @@
 </span><span class="hs-string">&quot;frequency domain&quot;</span></span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-99"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The analysis of mathematical functions in terms of frequency, instead &quot;</span></span><span>
-</span><span id="line-100"></span><span>         </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span id="line-100"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;of time&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-101"></span><span>
@@ -291,7 +300,8 @@
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Laplace transform&quot;</span></span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-108"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;An integral transform that converts a function of a real variable t &quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-string">&quot;An integral transform that converts a function of a real variable t &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-109"></span><span>         </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;(often time) to a function of a complex variable s (complex frequency)&quot;</span></span><span class="hs-special">)</span><span>
@@ -325,7 +335,8 @@
 </span><span class="hs-string">&quot;Transfer Function&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-121"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The Transfer Function of a system is the ratio of the output to the input&quot;</span></span><span>
-</span><span id="line-122"></span><span>         </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><span id="line-122"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot; functions in the frequency domain&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-123"></span><span>
@@ -351,8 +362,10 @@
 </span><span id="line-131"></span><span>
 </span><span id="line-132"></span><span class="annot"><a href="Drasil.PDController.Concepts.html#concepts"><span class="hs-identifier hs-type">concepts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span>
 </span><span id="line-133"></span><span id="concepts"><span class="annot"><span class="annottext">concepts :: [IdeaDict]
-</span><a href="Drasil.PDController.Concepts.html#concepts"><span class="hs-identifier hs-var hs-var">concepts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">forall c. Idea c =&gt; c -&gt; IdeaDict
+</span><a href="Drasil.PDController.Concepts.html#concepts"><span class="hs-identifier hs-var hs-var">concepts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; IdeaDict) -&gt; [ConceptChunk] -&gt; [IdeaDict]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; IdeaDict
+forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
 </span><a href="Drasil.PDController.Concepts.html#defs"><span class="hs-identifier hs-var">defs</span></a></span><span>
 </span><span id="line-134"></span><span>

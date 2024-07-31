@@ -23,101 +23,115 @@
 </span><span id="line-23"></span><span>
 </span><span id="line-24"></span><span class="annot"><a href="Drasil.Projectile.Choices.html#genCodeWithChoices"><span class="hs-identifier hs-type">genCodeWithChoices</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Choices</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-25"></span><span id="genCodeWithChoices"><span class="annot"><span class="annottext">genCodeWithChoices :: [Choices] -&gt; IO ()
-</span><a href="Drasil.Projectile.Choices.html#genCodeWithChoices"><span class="hs-identifier hs-var hs-var">genCodeWithChoices</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
+</span><a href="Drasil.Projectile.Choices.html#genCodeWithChoices"><span class="hs-identifier hs-var hs-var">genCodeWithChoices</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">() -&gt; IO ()
+forall a. a -&gt; IO a
+forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
-</span><span id="line-26"></span><span class="annot"><a href="Drasil.Projectile.Choices.html#genCodeWithChoices"><span class="hs-identifier hs-var">genCodeWithChoices</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679072614"><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679072614"><span class="hs-identifier hs-var">c</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679072613"><span class="annot"><span class="annottext">[Choices]
-</span><a href="#local-6989586621679072613"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679072612"><span class="annot"><span class="annottext">dir :: [Char]
-</span><a href="#local-6989586621679072612"><span class="hs-identifier hs-var hs-var">dir</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span id="line-26"></span><span class="annot"><a href="Drasil.Projectile.Choices.html#genCodeWithChoices"><span class="hs-identifier hs-var">genCodeWithChoices</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679071447"><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679071447"><span class="hs-identifier hs-var">c</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679071448"><span class="annot"><span class="annottext">[Choices]
+</span><a href="#local-6989586621679071448"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679071449"><span class="annot"><span class="annottext">dir :: [Char]
+</span><a href="#local-6989586621679071449"><span class="hs-identifier hs-var hs-var">dir</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Char -&gt; Char) -&gt; [Char] -&gt; [Char]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Char
-</span><span class="hs-identifier hs-var">toLower</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-identifier hs-var">toLower</span></span><span> </span><span class="annot"><span class="annottext">([Char] -&gt; [Char]) -&gt; [Char] -&gt; [Char]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Choices -&gt; [Char]
 </span><a href="Drasil.Projectile.Choices.html#codedDirName"><span class="hs-identifier hs-var">codedDirName</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SystemInformation -&gt; [Char]
-</span><a href="#local-6989586621679072610"><span class="hs-identifier hs-var">getSysName</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679071451"><span class="hs-identifier hs-var">getSysName</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
 </span><a href="Drasil.Projectile.Body.html#fullSI"><span class="hs-identifier hs-var">fullSI</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679072614"><span class="hs-identifier hs-var">c</span></a></span><span>
-</span><span id="line-27"></span><span>                                </span><span id="local-6989586621679072610"><span class="annot"><span class="annottext">getSysName :: SystemInformation -&gt; [Char]
-</span><a href="#local-6989586621679072610"><span class="hs-identifier hs-var hs-var">getSysName</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">SI</span></span><span class="hs-special">{</span><span class="annot"><span class="annottext">_sys :: ()
-</span><span class="hs-identifier hs-var">_sys</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679072591"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679072591"><span class="hs-identifier hs-var">sysName</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c. CommonIdea c =&gt; c -&gt; [Char]
+</span><a href="#local-6989586621679071447"><span class="hs-identifier hs-var">c</span></a></span><span>
+</span><span id="line-27"></span><span>                                </span><span id="local-6989586621679071451"><span class="annot"><span class="annottext">getSysName :: SystemInformation -&gt; [Char]
+</span><a href="#local-6989586621679071451"><span class="hs-identifier hs-var hs-var">getSysName</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">SI</span></span><span class="hs-special">{</span><span class="annot"><span class="annottext">_sys :: ()
+</span><span class="hs-identifier hs-var">_sys</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679071470"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679071470"><span class="hs-identifier hs-var">sysName</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; [Char]
+forall c. CommonIdea c =&gt; c -&gt; [Char]
 </span><span class="hs-identifier hs-var">programName</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679072591"><span class="hs-identifier hs-var">sysName</span></a></span><span>
+</span><a href="#local-6989586621679071470"><span class="hs-identifier hs-var">sysName</span></a></span><span>
 </span><span id="line-28"></span><span>  </span><span class="hs-keyword">in</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-29"></span><span>    </span><span id="local-6989586621679072590"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679072590"><span class="hs-identifier hs-var">workingDir</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO [Char]
+</span><span id="line-29"></span><span>    </span><span id="local-6989586621679071471"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679071471"><span class="hs-identifier hs-var">workingDir</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO [Char]
 </span><span class="hs-identifier hs-var">getCurrentDirectory</span></span><span>
 </span><span id="line-30"></span><span>    </span><span class="annot"><span class="annottext">Bool -&gt; [Char] -&gt; IO ()
 </span><span class="hs-identifier hs-var">createDirectoryIfMissing</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679072612"><span class="hs-identifier hs-var">dir</span></a></span><span>
+</span><a href="#local-6989586621679071449"><span class="hs-identifier hs-var">dir</span></a></span><span>
 </span><span id="line-31"></span><span>    </span><span class="annot"><span class="annottext">[Char] -&gt; IO ()
 </span><span class="hs-identifier hs-var">setCurrentDirectory</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679072612"><span class="hs-identifier hs-var">dir</span></a></span><span>
+</span><a href="#local-6989586621679071449"><span class="hs-identifier hs-var">dir</span></a></span><span>
 </span><span id="line-32"></span><span>    </span><span class="annot"><span class="annottext">Choices -&gt; CodeSpec -&gt; IO ()
 </span><span class="hs-identifier hs-var">genCode</span></span><span> </span><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679072614"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SystemInformation -&gt; Choices -&gt; [Mod] -&gt; CodeSpec
+</span><a href="#local-6989586621679071447"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SystemInformation -&gt; Choices -&gt; [Mod] -&gt; CodeSpec
 </span><span class="hs-identifier hs-var">codeSpec</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
 </span><a href="Drasil.Projectile.Body.html#fullSI"><span class="hs-identifier hs-var">fullSI</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679072614"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679071447"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-33"></span><span>    </span><span class="annot"><span class="annottext">[Char] -&gt; IO ()
 </span><span class="hs-identifier hs-var">setCurrentDirectory</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679072590"><span class="hs-identifier hs-var">workingDir</span></a></span><span>
+</span><a href="#local-6989586621679071471"><span class="hs-identifier hs-var">workingDir</span></a></span><span>
 </span><span id="line-34"></span><span>    </span><span class="annot"><span class="annottext">[Choices] -&gt; IO ()
 </span><a href="Drasil.Projectile.Choices.html#genCodeWithChoices"><span class="hs-identifier hs-var">genCodeWithChoices</span></a></span><span> </span><span class="annot"><span class="annottext">[Choices]
-</span><a href="#local-6989586621679072613"><span class="hs-identifier hs-var">cs</span></a></span><span>
+</span><a href="#local-6989586621679071448"><span class="hs-identifier hs-var">cs</span></a></span><span>
 </span><span id="line-35"></span><span>
 </span><span id="line-36"></span><span class="annot"><a href="Drasil.Projectile.Choices.html#codedDirName"><span class="hs-identifier hs-type">codedDirName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Choices</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-37"></span><span id="codedDirName"><span class="annot"><span class="annottext">codedDirName :: [Char] -&gt; Choices -&gt; [Char]
-</span><a href="Drasil.Projectile.Choices.html#codedDirName"><span class="hs-identifier hs-var hs-var">codedDirName</span></a></span></span><span> </span><span id="local-6989586621679072589"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679072589"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Choices</span></span><span> </span><span class="hs-special">{</span><span>
+</span><a href="Drasil.Projectile.Choices.html#codedDirName"><span class="hs-identifier hs-var hs-var">codedDirName</span></a></span></span><span> </span><span id="local-6989586621679071472"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679071472"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Choices</span></span><span> </span><span class="hs-special">{</span><span>
 </span><span id="line-38"></span><span>  </span><span class="annot"><span class="annottext">architecture :: Choices -&gt; Architecture
-</span><span class="hs-identifier hs-var">architecture</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679072586"><span class="annot"><span class="annottext">Architecture
-</span><a href="#local-6989586621679072586"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">,</span><span>
+</span><span class="hs-identifier hs-var">architecture</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679071475"><span class="annot"><span class="annottext">Architecture
+</span><a href="#local-6989586621679071475"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-39"></span><span>  </span><span class="annot"><span class="annottext">optFeats :: Choices -&gt; OptionalFeatures
-</span><span class="hs-identifier hs-var">optFeats</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679072584"><span class="annot"><span class="annottext">OptionalFeatures
-</span><a href="#local-6989586621679072584"><span class="hs-identifier hs-var">o</span></a></span></span><span class="hs-special">,</span><span>
+</span><span class="hs-identifier hs-var">optFeats</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679071477"><span class="annot"><span class="annottext">OptionalFeatures
+</span><a href="#local-6989586621679071477"><span class="hs-identifier hs-var">o</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-40"></span><span>  </span><span class="annot"><span class="annottext">dataInfo :: Choices -&gt; DataInfo
-</span><span class="hs-identifier hs-var">dataInfo</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679072582"><span class="annot"><span class="annottext">DataInfo
-</span><a href="#local-6989586621679072582"><span class="hs-identifier hs-var">d</span></a></span></span><span class="hs-special">,</span><span>
+</span><span class="hs-identifier hs-var">dataInfo</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679071479"><span class="annot"><span class="annottext">DataInfo
+</span><a href="#local-6989586621679071479"><span class="hs-identifier hs-var">d</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-41"></span><span>  </span><span class="annot"><span class="annottext">maps :: Choices -&gt; Maps
-</span><span class="hs-identifier hs-var">maps</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679072580"><span class="annot"><span class="annottext">Maps
-</span><a href="#local-6989586621679072580"><span class="hs-identifier hs-var">m</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><span>
-</span><span id="line-42"></span><span>  </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [[a]] -&gt; [a]
+</span><span class="hs-identifier hs-var">maps</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679071481"><span class="annot"><span class="annottext">Maps
+</span><a href="#local-6989586621679071481"><span class="hs-identifier hs-var">m</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-42"></span><span>  </span><span class="annot"><span class="annottext">[Char] -&gt; [[Char]] -&gt; [Char]
+forall a. [a] -&gt; [[a]] -&gt; [a]
 </span><span class="hs-identifier hs-var">intercalate</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;_&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679072589"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Modularity -&gt; [Char]
-</span><a href="Drasil.Projectile.Choices.html#codedMod"><span class="hs-identifier hs-var">codedMod</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679071472"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Modularity -&gt; [Char]
+</span><a href="Drasil.Projectile.Choices.html#codedMod"><span class="hs-identifier hs-var">codedMod</span></a></span><span> </span><span class="annot"><span class="annottext">(Modularity -&gt; [Char]) -&gt; Modularity -&gt; [Char]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Architecture -&gt; Modularity
 </span><span class="hs-identifier hs-var">modularity</span></span><span> </span><span class="annot"><span class="annottext">Architecture
-</span><a href="#local-6989586621679072586"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ImplementationType -&gt; [Char]
-</span><a href="Drasil.Projectile.Choices.html#codedImpTp"><span class="hs-identifier hs-var">codedImpTp</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679071475"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ImplementationType -&gt; [Char]
+</span><a href="Drasil.Projectile.Choices.html#codedImpTp"><span class="hs-identifier hs-var">codedImpTp</span></a></span><span> </span><span class="annot"><span class="annottext">(ImplementationType -&gt; [Char]) -&gt; ImplementationType -&gt; [Char]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Architecture -&gt; ImplementationType
 </span><span class="hs-identifier hs-var">impType</span></span><span> </span><span class="annot"><span class="annottext">Architecture
-</span><a href="#local-6989586621679072586"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Logging] -&gt; [Char]
-</span><a href="Drasil.Projectile.Choices.html#codedLog"><span class="hs-identifier hs-var">codedLog</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679071475"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Logging] -&gt; [Char]
+</span><a href="Drasil.Projectile.Choices.html#codedLog"><span class="hs-identifier hs-var">codedLog</span></a></span><span> </span><span class="annot"><span class="annottext">([Logging] -&gt; [Char]) -&gt; [Logging] -&gt; [Char]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">LogConfig -&gt; [Logging]
-</span><span class="hs-identifier hs-var">logging</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-identifier hs-var">logging</span></span><span> </span><span class="annot"><span class="annottext">(LogConfig -&gt; [Logging]) -&gt; LogConfig -&gt; [Logging]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">OptionalFeatures -&gt; LogConfig
 </span><span class="hs-identifier hs-var">logConfig</span></span><span> </span><span class="annot"><span class="annottext">OptionalFeatures
-</span><a href="#local-6989586621679072584"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><a href="#local-6989586621679071477"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-43"></span><span>    </span><span class="annot"><span class="annottext">Structure -&gt; [Char]
-</span><a href="Drasil.Projectile.Choices.html#codedStruct"><span class="hs-identifier hs-var">codedStruct</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="Drasil.Projectile.Choices.html#codedStruct"><span class="hs-identifier hs-var">codedStruct</span></a></span><span> </span><span class="annot"><span class="annottext">(Structure -&gt; [Char]) -&gt; Structure -&gt; [Char]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DataInfo -&gt; Structure
 </span><span class="hs-identifier hs-var">inputStructure</span></span><span> </span><span class="annot"><span class="annottext">DataInfo
-</span><a href="#local-6989586621679072582"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstantStructure -&gt; [Char]
-</span><a href="Drasil.Projectile.Choices.html#codedConStruct"><span class="hs-identifier hs-var">codedConStruct</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679071479"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstantStructure -&gt; [Char]
+</span><a href="Drasil.Projectile.Choices.html#codedConStruct"><span class="hs-identifier hs-var">codedConStruct</span></a></span><span> </span><span class="annot"><span class="annottext">(ConstantStructure -&gt; [Char]) -&gt; ConstantStructure -&gt; [Char]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DataInfo -&gt; ConstantStructure
 </span><span class="hs-identifier hs-var">constStructure</span></span><span> </span><span class="annot"><span class="annottext">DataInfo
-</span><a href="#local-6989586621679072582"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><a href="#local-6989586621679071479"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-44"></span><span>    </span><span class="annot"><span class="annottext">ConstantRepr -&gt; [Char]
-</span><a href="Drasil.Projectile.Choices.html#codedConRepr"><span class="hs-identifier hs-var">codedConRepr</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="Drasil.Projectile.Choices.html#codedConRepr"><span class="hs-identifier hs-var">codedConRepr</span></a></span><span> </span><span class="annot"><span class="annottext">(ConstantRepr -&gt; [Char]) -&gt; ConstantRepr -&gt; [Char]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DataInfo -&gt; ConstantRepr
 </span><span class="hs-identifier hs-var">constRepr</span></span><span> </span><span class="annot"><span class="annottext">DataInfo
-</span><a href="#local-6989586621679072582"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SpaceMatch -&gt; [Char]
-</span><a href="Drasil.Projectile.Choices.html#codedSpaceMatch"><span class="hs-identifier hs-var">codedSpaceMatch</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679071479"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SpaceMatch -&gt; [Char]
+</span><a href="Drasil.Projectile.Choices.html#codedSpaceMatch"><span class="hs-identifier hs-var">codedSpaceMatch</span></a></span><span> </span><span class="annot"><span class="annottext">(SpaceMatch -&gt; [Char]) -&gt; SpaceMatch -&gt; [Char]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Maps -&gt; SpaceMatch
 </span><span class="hs-identifier hs-var">spaceMatch</span></span><span> </span><span class="annot"><span class="annottext">Maps
-</span><a href="#local-6989586621679072580"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679071481"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-45"></span><span>
 </span><span id="line-46"></span><span class="annot"><a href="Drasil.Projectile.Choices.html#codedMod"><span class="hs-identifier hs-type">codedMod</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Modularity</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-47"></span><span id="codedMod"><span class="annot"><span class="annottext">codedMod :: Modularity -&gt; [Char]
@@ -162,10 +176,10 @@
 </span><span id="line-64"></span><span class="annot"><a href="Drasil.Projectile.Choices.html#codedConStruct"><span class="hs-identifier hs-var">codedConStruct</span></a></span><span> </span><span class="annot"><span class="annottext">ConstantStructure
 </span><span class="hs-identifier hs-var">WithInputs</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;WI&quot;</span></span><span>
-</span><span id="line-65"></span><span class="annot"><a href="Drasil.Projectile.Choices.html#codedConStruct"><span class="hs-identifier hs-var">codedConStruct</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Store</span></span><span> </span><span id="local-6989586621679072555"><span class="annot"><span class="annottext">Structure
-</span><a href="#local-6989586621679072555"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Structure -&gt; [Char]
+</span><span id="line-65"></span><span class="annot"><a href="Drasil.Projectile.Choices.html#codedConStruct"><span class="hs-identifier hs-var">codedConStruct</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Store</span></span><span> </span><span id="local-6989586621679071506"><span class="annot"><span class="annottext">Structure
+</span><a href="#local-6989586621679071506"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Structure -&gt; [Char]
 </span><a href="Drasil.Projectile.Choices.html#codedStruct"><span class="hs-identifier hs-var">codedStruct</span></a></span><span> </span><span class="annot"><span class="annottext">Structure
-</span><a href="#local-6989586621679072555"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><a href="#local-6989586621679071506"><span class="hs-identifier hs-var">s</span></a></span><span>
 </span><span id="line-66"></span><span>
 </span><span id="line-67"></span><span class="annot"><a href="Drasil.Projectile.Choices.html#codedConRepr"><span class="hs-identifier hs-type">codedConRepr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstantRepr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-68"></span><span id="codedConRepr"><span class="annot"><span class="annottext">codedConRepr :: ConstantRepr -&gt; [Char]
@@ -178,9 +192,9 @@
 </span><span id="line-70"></span><span>
 </span><span id="line-71"></span><span class="annot"><a href="Drasil.Projectile.Choices.html#codedSpaceMatch"><span class="hs-identifier hs-type">codedSpaceMatch</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SpaceMatch</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-72"></span><span id="codedSpaceMatch"><span class="annot"><span class="annottext">codedSpaceMatch :: SpaceMatch -&gt; [Char]
-</span><a href="Drasil.Projectile.Choices.html#codedSpaceMatch"><span class="hs-identifier hs-var hs-var">codedSpaceMatch</span></a></span></span><span> </span><span id="local-6989586621679072552"><span class="annot"><span class="annottext">SpaceMatch
-</span><a href="#local-6989586621679072552"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">SpaceMatch
-</span><a href="#local-6989586621679072552"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Space
+</span><a href="Drasil.Projectile.Choices.html#codedSpaceMatch"><span class="hs-identifier hs-var hs-var">codedSpaceMatch</span></a></span></span><span> </span><span id="local-6989586621679071509"><span class="annot"><span class="annottext">SpaceMatch
+</span><a href="#local-6989586621679071509"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">SpaceMatch
+</span><a href="#local-6989586621679071509"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="hs-keyword">of</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CodeType
 </span><span class="hs-identifier hs-var">Double</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CodeType
 </span><span class="hs-identifier hs-var">Float</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Char]
@@ -190,7 +204,8 @@
 </span><span class="hs-identifier hs-var">Double</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;F&quot;</span></span><span> </span><span>
 </span><span id="line-74"></span><span>                                     </span><span class="annot"><span class="annottext">[CodeType]
-</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">forall a. HasCallStack =&gt; [Char] -&gt; a
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char]
+forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span>
 </span><span id="line-75"></span><span>                                       </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;Unexpected SpaceMatch for Projectile&quot;</span></span><span>
@@ -200,135 +215,45 @@
 </span><a href="Drasil.Projectile.Choices.html#choiceCombos"><span class="hs-identifier hs-var hs-var">choiceCombos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-79"></span><span>  </span><span class="annot"><span class="annottext">Choices
 </span><a href="Drasil.Projectile.Choices.html#baseChoices"><span class="hs-identifier hs-var">baseChoices</span></a></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-80"></span><span>    </span><span class="annot"><span class="annottext">lang :: [Lang]
-</span><span class="hs-identifier hs-var">lang</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Lang
-</span><span class="hs-identifier hs-var">Python</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Lang
-</span><span class="hs-identifier hs-var">Cpp</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Lang
-</span><span class="hs-identifier hs-var">CSharp</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Lang
-</span><span class="hs-identifier hs-var">Java</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Lang
-</span><span class="hs-identifier hs-var">Swift</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Lang
-</span><span class="hs-identifier hs-var">Julia</span></span><span class="hs-special">]</span><span>
+</span><span id="line-80"></span><span>    </span><span class="annot"><span class="hs-identifier hs-var">lang</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Python</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Cpp</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CSharp</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Java</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Swift</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Julia</span></span><span class="hs-special">]</span><span>
 </span><span id="line-81"></span><span>  </span><span class="hs-special">}</span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-82"></span><span>  </span><span class="annot"><span class="annottext">Choices
 </span><a href="Drasil.Projectile.Choices.html#baseChoices"><span class="hs-identifier hs-var">baseChoices</span></a></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-83"></span><span>    </span><span class="annot"><span class="annottext">architecture :: Architecture
-</span><span class="hs-identifier hs-var">architecture</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Modularity -&gt; ImplementationType -&gt; Architecture
-</span><span class="hs-identifier hs-var">makeArchit</span></span><span> </span><span class="annot"><span class="annottext">Modularity
-</span><span class="hs-identifier hs-var">Modular</span></span><span> </span><span class="annot"><span class="annottext">ImplementationType
-</span><span class="hs-identifier hs-var">Program</span></span><span class="hs-special">,</span><span>
-</span><span id="line-84"></span><span>    </span><span class="annot"><span class="annottext">dataInfo :: DataInfo
-</span><span class="hs-identifier hs-var">dataInfo</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Structure -&gt; ConstantStructure -&gt; ConstantRepr -&gt; DataInfo
-</span><span class="hs-identifier hs-var">makeData</span></span><span> </span><span class="annot"><span class="annottext">Structure
-</span><span class="hs-identifier hs-var">Bundled</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Structure -&gt; ConstantStructure
-</span><span class="hs-identifier hs-var">Store</span></span><span> </span><span class="annot"><span class="annottext">Structure
-</span><span class="hs-identifier hs-var">Unbundled</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ConstantRepr
-</span><span class="hs-identifier hs-var">Var</span></span><span>
+</span><span id="line-83"></span><span>    </span><span class="annot"><span class="hs-identifier hs-var">architecture</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">makeArchit</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Modular</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Program</span></span><span class="hs-special">,</span><span>
+</span><span id="line-84"></span><span>    </span><span class="annot"><span class="hs-identifier hs-var">dataInfo</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">makeData</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bundled</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Store</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Unbundled</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Var</span></span><span>
 </span><span id="line-85"></span><span>  </span><span class="hs-special">}</span><span class="hs-special">,</span><span>
 </span><span id="line-86"></span><span>  </span><span class="annot"><span class="annottext">Choices
 </span><a href="Drasil.Projectile.Choices.html#baseChoices"><span class="hs-identifier hs-var">baseChoices</span></a></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-87"></span><span>    </span><span class="annot"><span class="annottext">lang :: [Lang]
-</span><span class="hs-identifier hs-var">lang</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Lang
-</span><span class="hs-identifier hs-var">Python</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Lang
-</span><span class="hs-identifier hs-var">Cpp</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Lang
-</span><span class="hs-identifier hs-var">CSharp</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Lang
-</span><span class="hs-identifier hs-var">Java</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Lang
-</span><span class="hs-identifier hs-var">Swift</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Lang
-</span><span class="hs-identifier hs-var">Julia</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-88"></span><span>    </span><span class="annot"><span class="annottext">architecture :: Architecture
-</span><span class="hs-identifier hs-var">architecture</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Modularity -&gt; ImplementationType -&gt; Architecture
-</span><span class="hs-identifier hs-var">makeArchit</span></span><span> </span><span class="annot"><span class="annottext">Modularity
-</span><span class="hs-identifier hs-var">Modular</span></span><span> </span><span class="annot"><span class="annottext">ImplementationType
-</span><span class="hs-identifier hs-var">Library</span></span><span class="hs-special">,</span><span>
-</span><span id="line-89"></span><span>    </span><span class="annot"><span class="annottext">dataInfo :: DataInfo
-</span><span class="hs-identifier hs-var">dataInfo</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Structure -&gt; ConstantStructure -&gt; ConstantRepr -&gt; DataInfo
-</span><span class="hs-identifier hs-var">makeData</span></span><span> </span><span class="annot"><span class="annottext">Structure
-</span><span class="hs-identifier hs-var">Unbundled</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Structure -&gt; ConstantStructure
-</span><span class="hs-identifier hs-var">Store</span></span><span> </span><span class="annot"><span class="annottext">Structure
-</span><span class="hs-identifier hs-var">Unbundled</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ConstantRepr
-</span><span class="hs-identifier hs-var">Var</span></span><span class="hs-special">,</span><span>
-</span><span id="line-90"></span><span>    </span><span class="annot"><span class="annottext">maps :: Maps
-</span><span class="hs-identifier hs-var">maps</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptMatchMap -&gt; SpaceMatch -&gt; Maps
-</span><span class="hs-identifier hs-var">makeMaps</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall c. HasUID c =&gt; [(c, [CodeConcept])] -&gt; ConceptMatchMap
-</span><span class="hs-identifier hs-var">matchConcepts</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstQDef
-</span><span class="hs-identifier hs-var">piConst</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CodeConcept
-</span><span class="hs-identifier hs-var">Pi</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SpaceMatch
-</span><a href="Drasil.Projectile.Choices.html#matchToFloats"><span class="hs-identifier hs-var">matchToFloats</span></a></span><span>
+</span><span id="line-87"></span><span>    </span><span class="annot"><span class="hs-identifier hs-var">lang</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Python</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Cpp</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CSharp</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Java</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Swift</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Julia</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-88"></span><span>    </span><span class="annot"><span class="hs-identifier hs-var">architecture</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">makeArchit</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Modular</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Library</span></span><span class="hs-special">,</span><span>
+</span><span id="line-89"></span><span>    </span><span class="annot"><span class="hs-identifier hs-var">dataInfo</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">makeData</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Unbundled</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Store</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Unbundled</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Var</span></span><span class="hs-special">,</span><span>
+</span><span id="line-90"></span><span>    </span><span class="annot"><span class="hs-identifier hs-var">maps</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">makeMaps</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">matchConcepts</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">piConst</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Pi</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Drasil.Projectile.Choices.html#matchToFloats"><span class="hs-identifier hs-type">matchToFloats</span></a></span><span>
 </span><span id="line-91"></span><span>  </span><span class="hs-special">}</span><span class="hs-special">,</span><span>
 </span><span id="line-92"></span><span>  </span><span class="annot"><span class="annottext">Choices
 </span><a href="Drasil.Projectile.Choices.html#baseChoices"><span class="hs-identifier hs-var">baseChoices</span></a></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-93"></span><span>    </span><span class="annot"><span class="annottext">dataInfo :: DataInfo
-</span><span class="hs-identifier hs-var">dataInfo</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Structure -&gt; ConstantStructure -&gt; ConstantRepr -&gt; DataInfo
-</span><span class="hs-identifier hs-var">makeData</span></span><span> </span><span class="annot"><span class="annottext">Structure
-</span><span class="hs-identifier hs-var">Bundled</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Structure -&gt; ConstantStructure
-</span><span class="hs-identifier hs-var">Store</span></span><span> </span><span class="annot"><span class="annottext">Structure
-</span><span class="hs-identifier hs-var">Bundled</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ConstantRepr
-</span><span class="hs-identifier hs-var">Const</span></span><span class="hs-special">,</span><span>
-</span><span id="line-94"></span><span>    </span><span class="annot"><span class="annottext">optFeats :: OptionalFeatures
-</span><span class="hs-identifier hs-var">optFeats</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DocConfig -&gt; LogConfig -&gt; [AuxFile] -&gt; OptionalFeatures
-</span><span class="hs-identifier hs-var">makeOptFeats</span></span><span>
-</span><span id="line-95"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Comments] -&gt; Verbosity -&gt; Visibility -&gt; DocConfig
-</span><span class="hs-identifier hs-var">makeDocConfig</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Comments
-</span><span class="hs-identifier hs-var">CommentFunc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Comments
-</span><span class="hs-identifier hs-var">CommentClass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Comments
-</span><span class="hs-identifier hs-var">CommentMod</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Verbosity
-</span><span class="hs-identifier hs-var">Quiet</span></span><span> </span><span class="annot"><span class="annottext">Visibility
-</span><span class="hs-identifier hs-var">Hide</span></span><span class="hs-special">)</span><span>
-</span><span id="line-96"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Logging] -&gt; [Char] -&gt; LogConfig
-</span><span class="hs-identifier hs-var">makeLogConfig</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Logging
-</span><span class="hs-identifier hs-var">LogVar</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Logging
-</span><span class="hs-identifier hs-var">LogFunc</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><span class="hs-string">&quot;log.txt&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-97"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Char] -&gt; AuxFile
-</span><span class="hs-identifier hs-var">SampleInput</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><span class="hs-string">&quot;../../../datafiles/projectile/sampleInput.txt&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">AuxFile
-</span><span class="hs-identifier hs-var">ReadME</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-98"></span><span>    </span><span class="annot"><span class="annottext">folderVal :: Int
-</span><span class="hs-identifier hs-var">folderVal</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
-</span><span class="hs-number">5</span></span><span>
+</span><span id="line-93"></span><span>    </span><span class="annot"><span class="hs-identifier hs-var">dataInfo</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">makeData</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bundled</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Store</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bundled</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Const</span></span><span class="hs-special">,</span><span>
+</span><span id="line-94"></span><span>    </span><span class="annot"><span class="hs-identifier hs-var">optFeats</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">makeOptFeats</span></span><span>
+</span><span id="line-95"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">makeDocConfig</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CommentFunc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CommentClass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CommentMod</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quiet</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Hide</span></span><span class="hs-special">)</span><span>
+</span><span id="line-96"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">makeLogConfig</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">LogVar</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LogFunc</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;log.txt&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-97"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">SampleInput</span></span><span> </span><span class="annot"><span class="hs-string">&quot;../../../datafiles/projectile/sampleInput.txt&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ReadME</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-98"></span><span>    </span><span class="annot"><span class="hs-identifier hs-var">folderVal</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-number">5</span></span><span>
 </span><span id="line-99"></span><span>  </span><span class="hs-special">}</span><span class="hs-special">,</span><span>
 </span><span id="line-100"></span><span>  </span><span class="annot"><span class="annottext">Choices
 </span><a href="Drasil.Projectile.Choices.html#baseChoices"><span class="hs-identifier hs-var">baseChoices</span></a></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-101"></span><span>    </span><span class="annot"><span class="annottext">dataInfo :: DataInfo
-</span><span class="hs-identifier hs-var">dataInfo</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Structure -&gt; ConstantStructure -&gt; ConstantRepr -&gt; DataInfo
-</span><span class="hs-identifier hs-var">makeData</span></span><span> </span><span class="annot"><span class="annottext">Structure
-</span><span class="hs-identifier hs-var">Bundled</span></span><span> </span><span class="annot"><span class="annottext">ConstantStructure
-</span><span class="hs-identifier hs-var">WithInputs</span></span><span> </span><span class="annot"><span class="annottext">ConstantRepr
-</span><span class="hs-identifier hs-var">Var</span></span><span class="hs-special">,</span><span>
-</span><span id="line-102"></span><span>    </span><span class="annot"><span class="annottext">maps :: Maps
-</span><span class="hs-identifier hs-var">maps</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptMatchMap -&gt; SpaceMatch -&gt; Maps
-</span><span class="hs-identifier hs-var">makeMaps</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall c. HasUID c =&gt; [(c, [CodeConcept])] -&gt; ConceptMatchMap
-</span><span class="hs-identifier hs-var">matchConcepts</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstQDef
-</span><span class="hs-identifier hs-var">piConst</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CodeConcept
-</span><span class="hs-identifier hs-var">Pi</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SpaceMatch
-</span><a href="Drasil.Projectile.Choices.html#matchToFloats"><span class="hs-identifier hs-var">matchToFloats</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-103"></span><span>    </span><span class="annot"><span class="annottext">optFeats :: OptionalFeatures
-</span><span class="hs-identifier hs-var">optFeats</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DocConfig -&gt; LogConfig -&gt; [AuxFile] -&gt; OptionalFeatures
-</span><span class="hs-identifier hs-var">makeOptFeats</span></span><span>
-</span><span id="line-104"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Comments] -&gt; Verbosity -&gt; Visibility -&gt; DocConfig
-</span><span class="hs-identifier hs-var">makeDocConfig</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Comments
-</span><span class="hs-identifier hs-var">CommentFunc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Comments
-</span><span class="hs-identifier hs-var">CommentClass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Comments
-</span><span class="hs-identifier hs-var">CommentMod</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Verbosity
-</span><span class="hs-identifier hs-var">Quiet</span></span><span> </span><span class="annot"><span class="annottext">Visibility
-</span><span class="hs-identifier hs-var">Hide</span></span><span class="hs-special">)</span><span>
-</span><span id="line-105"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Logging] -&gt; [Char] -&gt; LogConfig
-</span><span class="hs-identifier hs-var">makeLogConfig</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Logging
-</span><span class="hs-identifier hs-var">LogVar</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Logging
-</span><span class="hs-identifier hs-var">LogFunc</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><span class="hs-string">&quot;log.txt&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-106"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Char] -&gt; AuxFile
-</span><span class="hs-identifier hs-var">SampleInput</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><span class="hs-string">&quot;../../../datafiles/projectile/sampleInput.txt&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">AuxFile
-</span><span class="hs-identifier hs-var">ReadME</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-107"></span><span>    </span><span class="annot"><span class="annottext">folderVal :: Int
-</span><span class="hs-identifier hs-var">folderVal</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
-</span><span class="hs-number">5</span></span><span>
+</span><span id="line-101"></span><span>    </span><span class="annot"><span class="hs-identifier hs-var">dataInfo</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">makeData</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bundled</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">WithInputs</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Var</span></span><span class="hs-special">,</span><span>
+</span><span id="line-102"></span><span>    </span><span class="annot"><span class="hs-identifier hs-var">maps</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">makeMaps</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">matchConcepts</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">piConst</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Pi</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Drasil.Projectile.Choices.html#matchToFloats"><span class="hs-identifier hs-type">matchToFloats</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-103"></span><span>    </span><span class="annot"><span class="hs-identifier hs-var">optFeats</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">makeOptFeats</span></span><span>
+</span><span id="line-104"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">makeDocConfig</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CommentFunc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CommentClass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CommentMod</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quiet</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Hide</span></span><span class="hs-special">)</span><span>
+</span><span id="line-105"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">makeLogConfig</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">LogVar</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LogFunc</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;log.txt&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-106"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">SampleInput</span></span><span> </span><span class="annot"><span class="hs-string">&quot;../../../datafiles/projectile/sampleInput.txt&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ReadME</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-107"></span><span>    </span><span class="annot"><span class="hs-identifier hs-var">folderVal</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-number">5</span></span><span>
 </span><span id="line-108"></span><span>  </span><span class="hs-special">}</span><span class="hs-special">]</span><span>
 </span><span id="line-109"></span><span>
 </span><span id="line-110"></span><span class="annot"><a href="Drasil.Projectile.Choices.html#matchToFloats"><span class="hs-identifier hs-type">matchToFloats</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SpaceMatch</span></span><span>
 </span><span id="line-111"></span><span id="matchToFloats"><span class="annot"><span class="annottext">matchToFloats :: SpaceMatch
 </span><a href="Drasil.Projectile.Choices.html#matchToFloats"><span class="hs-identifier hs-var hs-var">matchToFloats</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(Space, [CodeType])] -&gt; SpaceMatch
-</span><span class="hs-identifier hs-var">matchSpaces</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">matchSpaces</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Space -&gt; (Space, [CodeType])) -&gt; [Space] -&gt; [(Space, [CodeType])]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">,</span><span class="hs-special">[</span><span class="annot"><span class="annottext">CodeType
 </span><span class="hs-identifier hs-var">Float</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CodeType
 </span><span class="hs-identifier hs-var">Double</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Space
@@ -339,55 +264,15 @@
 </span><span id="line-114"></span><span id="baseChoices"><span class="annot"><span class="annottext">baseChoices :: Choices
 </span><a href="Drasil.Projectile.Choices.html#baseChoices"><span class="hs-identifier hs-var hs-var">baseChoices</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Choices
 </span><span class="hs-identifier hs-var">defaultChoices</span></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-115"></span><span>  </span><span class="annot"><span class="annottext">lang :: [Lang]
-</span><span class="hs-identifier hs-var">lang</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Lang
-</span><span class="hs-identifier hs-var">Python</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Lang
-</span><span class="hs-identifier hs-var">Cpp</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Lang
-</span><span class="hs-identifier hs-var">CSharp</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Lang
-</span><span class="hs-identifier hs-var">Java</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Lang
-</span><span class="hs-identifier hs-var">Swift</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-116"></span><span>  </span><span class="annot"><span class="annottext">architecture :: Architecture
-</span><span class="hs-identifier hs-var">architecture</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Modularity -&gt; ImplementationType -&gt; Architecture
-</span><span class="hs-identifier hs-var">makeArchit</span></span><span> </span><span class="annot"><span class="annottext">Modularity
-</span><span class="hs-identifier hs-var">Unmodular</span></span><span> </span><span class="annot"><span class="annottext">ImplementationType
-</span><span class="hs-identifier hs-var">Program</span></span><span class="hs-special">,</span><span>
-</span><span id="line-117"></span><span>  </span><span class="annot"><span class="annottext">dataInfo :: DataInfo
-</span><span class="hs-identifier hs-var">dataInfo</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Structure -&gt; ConstantStructure -&gt; ConstantRepr -&gt; DataInfo
-</span><span class="hs-identifier hs-var">makeData</span></span><span> </span><span class="annot"><span class="annottext">Structure
-</span><span class="hs-identifier hs-var">Unbundled</span></span><span> </span><span class="annot"><span class="annottext">ConstantStructure
-</span><span class="hs-identifier hs-var">WithInputs</span></span><span> </span><span class="annot"><span class="annottext">ConstantRepr
-</span><span class="hs-identifier hs-var">Var</span></span><span class="hs-special">,</span><span>
-</span><span id="line-118"></span><span>  </span><span class="annot"><span class="annottext">maps :: Maps
-</span><span class="hs-identifier hs-var">maps</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptMatchMap -&gt; SpaceMatch -&gt; Maps
-</span><span class="hs-identifier hs-var">makeMaps</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall c. HasUID c =&gt; [(c, [CodeConcept])] -&gt; ConceptMatchMap
-</span><span class="hs-identifier hs-var">matchConcepts</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstQDef
-</span><span class="hs-identifier hs-var">piConst</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CodeConcept
-</span><span class="hs-identifier hs-var">Pi</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SpaceMatch
-</span><span class="hs-identifier hs-var">spaceToCodeType</span></span><span class="hs-special">,</span><span>
-</span><span id="line-119"></span><span>  </span><span class="annot"><span class="annottext">optFeats :: OptionalFeatures
-</span><span class="hs-identifier hs-var">optFeats</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DocConfig -&gt; LogConfig -&gt; [AuxFile] -&gt; OptionalFeatures
-</span><span class="hs-identifier hs-var">makeOptFeats</span></span><span>
-</span><span id="line-120"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Comments] -&gt; Verbosity -&gt; Visibility -&gt; DocConfig
-</span><span class="hs-identifier hs-var">makeDocConfig</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Comments
-</span><span class="hs-identifier hs-var">CommentFunc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Comments
-</span><span class="hs-identifier hs-var">CommentClass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Comments
-</span><span class="hs-identifier hs-var">CommentMod</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Verbosity
-</span><span class="hs-identifier hs-var">Quiet</span></span><span> </span><span class="annot"><span class="annottext">Visibility
-</span><span class="hs-identifier hs-var">Hide</span></span><span class="hs-special">)</span><span>
-</span><span id="line-121"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Logging] -&gt; [Char] -&gt; LogConfig
-</span><span class="hs-identifier hs-var">makeLogConfig</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><span class="hs-string">&quot;log.txt&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-122"></span><span>    </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Char] -&gt; AuxFile
-</span><span class="hs-identifier hs-var">SampleInput</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><span class="hs-string">&quot;../../../datafiles/projectile/sampleInput.txt&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">AuxFile
-</span><span class="hs-identifier hs-var">ReadME</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-123"></span><span>  </span><span class="annot"><span class="annottext">srsConstraints :: Constraints
-</span><span class="hs-identifier hs-var">srsConstraints</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstraintBehaviour -&gt; ConstraintBehaviour -&gt; Constraints
-</span><span class="hs-identifier hs-var">makeConstraints</span></span><span> </span><span class="annot"><span class="annottext">ConstraintBehaviour
-</span><span class="hs-identifier hs-var">Warning</span></span><span> </span><span class="annot"><span class="annottext">ConstraintBehaviour
-</span><span class="hs-identifier hs-var">Warning</span></span><span class="hs-special">,</span><span>
-</span><span id="line-124"></span><span>  </span><span class="annot"><span class="annottext">folderVal :: Int
-</span><span class="hs-identifier hs-var">folderVal</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
-</span><span class="hs-number">5</span></span><span>
+</span><span id="line-115"></span><span>  </span><span class="annot"><span class="hs-identifier hs-var">lang</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Python</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Cpp</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CSharp</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Java</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Swift</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-116"></span><span>  </span><span class="annot"><span class="hs-identifier hs-var">architecture</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">makeArchit</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Unmodular</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Program</span></span><span class="hs-special">,</span><span>
+</span><span id="line-117"></span><span>  </span><span class="annot"><span class="hs-identifier hs-var">dataInfo</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">makeData</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Unbundled</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">WithInputs</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Var</span></span><span class="hs-special">,</span><span>
+</span><span id="line-118"></span><span>  </span><span class="annot"><span class="hs-identifier hs-var">maps</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">makeMaps</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">matchConcepts</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">piConst</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Pi</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-identifier hs-type">spaceToCodeType</span></span><span class="hs-special">,</span><span>
+</span><span id="line-119"></span><span>  </span><span class="annot"><span class="hs-identifier hs-var">optFeats</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">makeOptFeats</span></span><span>
+</span><span id="line-120"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">makeDocConfig</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CommentFunc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CommentClass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CommentMod</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quiet</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Hide</span></span><span class="hs-special">)</span><span>
+</span><span id="line-121"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">makeLogConfig</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;log.txt&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-122"></span><span>    </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">SampleInput</span></span><span> </span><span class="annot"><span class="hs-string">&quot;../../../datafiles/projectile/sampleInput.txt&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ReadME</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-123"></span><span>  </span><span class="annot"><span class="hs-identifier hs-var">srsConstraints</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">makeConstraints</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Warning</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Warning</span></span><span class="hs-special">,</span><span>
+</span><span id="line-124"></span><span>  </span><span class="annot"><span class="hs-identifier hs-var">folderVal</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-number">5</span></span><span>
 </span><span id="line-125"></span><span class="hs-special">}</span><span>
 </span><span id="line-126"></span></pre></body></html>

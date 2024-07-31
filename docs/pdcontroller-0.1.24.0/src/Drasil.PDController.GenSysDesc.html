@@ -13,10 +13,12 @@
 </span><span id="line-12"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
 </span><span class="hs-identifier hs-var">makeFigRef</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;systemContextDiag&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-string">&quot;systemContextDiag&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
 </span><span id="line-13"></span><span>      </span><span class="annot"><span class="annottext">Lbl -&gt; String -&gt; RawContent
-</span><span class="hs-identifier hs-var">fig</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">fig</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">sysCont</span></span><span class="hs-special">)</span><span>
 </span><span id="line-14"></span><span>        </span><span class="annot"><span class="annottext">String
@@ -27,22 +29,27 @@
 </span><a href="Drasil.PDController.GenSysDesc.html#gsdSysContextP1"><span class="hs-identifier hs-var hs-var">gsdSysContextP1</span></a></span></span><span>
 </span><span id="line-18"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Lbl] -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP</span></span><span>
-</span><span id="line-19"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall r. (HasUID r, HasRefAddress r, HasShortName r) =&gt; r -&gt; Lbl
+</span><span id="line-19"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">LabelledContent -&gt; Lbl
+forall r. (HasUID r, HasRefAddress r, HasShortName r) =&gt; r -&gt; Lbl
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent
 </span><a href="Drasil.PDController.GenSysDesc.html#gsdSysContextFig"><span class="hs-identifier hs-var">gsdSysContextFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;shows the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
-</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">sysCont</span></span><span class="hs-special">,</span><span>
 </span><span id="line-20"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Lbl
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The circle represents an external entity outside the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-21"></span><span>         </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span id="line-21"></span><span>         </span><span class="annot"><span class="annottext">IdeaDict -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">software</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
-</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Lbl
-</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Lbl
+forall n. NounPhrase n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">user</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
@@ -51,12 +58,14 @@
 </span><span id="line-22"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Lbl
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The rectangle represents the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-23"></span><span>        </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span id="line-23"></span><span>        </span><span class="annot"><span class="annottext">IdeaDict -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">softwareSys</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;itself&quot;</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
-</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#pidC"><span class="hs-identifier hs-var">pidC</span></a></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
@@ -65,9 +74,11 @@
 </span><span id="line-24"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Lbl
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Arrows are used to show the data flow between the&quot;</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-25"></span><span>        </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Lbl
+</span><span id="line-25"></span><span>        </span><span class="annot"><span class="annottext">NP -&gt; Lbl
+forall n. NounPhrase n =&gt; n -&gt; Lbl
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict
-</span><span class="hs-identifier hs-var">system</span></span><span> </span><span class="annot"><span class="annottext">forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-identifier hs-var">system</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`andIts`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">environment</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-26"></span><span>
@@ -75,7 +86,8 @@
 </span><a href="Drasil.PDController.GenSysDesc.html#gsdSysContextP2"><span class="hs-identifier hs-var hs-var">gsdSysContextP2</span></a></span></span><span>
 </span><span id="line-28"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Lbl] -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSPCol</span></span><span>
-</span><span id="line-29"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span id="line-29"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#pidC"><span class="hs-identifier hs-var">pidC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -86,9 +98,11 @@
 </span><span class="hs-string">&quot;with the user&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-31"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Lbl
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;The responsibilities of the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Lbl
+</span><span class="hs-string">&quot;The responsibilities of the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Lbl
+forall n. NounPhrase n =&gt; n -&gt; Lbl
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict
-</span><span class="hs-identifier hs-var">user</span></span><span> </span><span class="annot"><span class="annottext">forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-identifier hs-var">user</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`andThe`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">system</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-32"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Lbl
@@ -98,13 +112,15 @@
 </span><span id="line-34"></span><span class="annot"><a href="Drasil.PDController.GenSysDesc.html#gsdTitle"><span class="hs-identifier hs-type">gsdTitle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-35"></span><span id="gsdTitle"><span class="annot"><span class="annottext">gsdTitle :: [Lbl]
 </span><a href="Drasil.PDController.GenSysDesc.html#gsdTitle"><span class="hs-identifier hs-var hs-var">gsdTitle</span></a></span></span><span>
-</span><span id="line-36"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span id="line-36"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">user</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Responsibilities&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-37"></span><span>     </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span id="line-37"></span><span>     </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#pidC"><span class="hs-identifier hs-var">pidC</span></a></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
@@ -120,7 +136,8 @@
 </span><span id="line-42"></span><span>     </span><span class="annot"><span class="annottext">String -&gt; Lbl
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Review the response of the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#powerPlant"><span class="hs-identifier hs-var">powerPlant</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-43"></span><span>     </span><span class="annot"><span class="annottext">String -&gt; Lbl
@@ -136,9 +153,11 @@
 </span><span id="line-48"></span><span>     </span><span class="annot"><span class="annottext">String -&gt; Lbl
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Calculate the outputs of the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">forall n. NounPhrase n =&gt; n -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Lbl
+forall n. NounPhrase n =&gt; n -&gt; Lbl
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="Drasil.PDController.Concepts.html#pidC"><span class="hs-identifier hs-var">pidC</span></a></span><span> </span><span class="annot"><span class="annottext">forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><a href="Drasil.PDController.Concepts.html#pidC"><span class="hs-identifier hs-var">pidC</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`and_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#powerPlant"><span class="hs-identifier hs-var">powerPlant</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-49"></span><span>
@@ -146,18 +165,24 @@
 </span><span id="line-51"></span><span id="gsdSysContextList"><span class="annot"><span class="annottext">gsdSysContextList :: Contents
 </span><a href="Drasil.PDController.GenSysDesc.html#gsdSysContextList"><span class="hs-identifier hs-var hs-var">gsdSysContextList</span></a></span></span><span>
 </span><span id="line-52"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnlabelledContent -&gt; Contents
-</span><span class="hs-identifier hs-var">UlC</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-identifier hs-var">UlC</span></span><span> </span><span class="annot"><span class="annottext">(UnlabelledContent -&gt; Contents) -&gt; UnlabelledContent -&gt; Contents
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
 </span><span id="line-53"></span><span>      </span><span class="annot"><span class="annottext">RawContent -&gt; UnlabelledContent
-</span><span class="hs-identifier hs-var">ulcc</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-identifier hs-var">ulcc</span></span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; UnlabelledContent)
+-&gt; RawContent -&gt; UnlabelledContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
 </span><span id="line-54"></span><span>        </span><span class="annot"><span class="annottext">ListType -&gt; RawContent
-</span><span class="hs-identifier hs-var">Enumeration</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-identifier hs-var">Enumeration</span></span><span> </span><span class="annot"><span class="annottext">(ListType -&gt; RawContent) -&gt; ListType -&gt; RawContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
 </span><span id="line-55"></span><span>          </span><span class="annot"><span class="annottext">[Lbl] -&gt; [ListType] -&gt; ListType
 </span><span class="hs-identifier hs-var">bulletNested</span></span><span> </span><span class="annot"><span class="annottext">[Lbl]
-</span><a href="Drasil.PDController.GenSysDesc.html#gsdTitle"><span class="hs-identifier hs-var">gsdTitle</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><a href="Drasil.PDController.GenSysDesc.html#gsdTitle"><span class="hs-identifier hs-var">gsdTitle</span></a></span><span> </span><span class="annot"><span class="annottext">([ListType] -&gt; ListType) -&gt; [ListType] -&gt; ListType
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">([Lbl] -&gt; ListType) -&gt; [[Lbl]] -&gt; [ListType]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">[Lbl] -&gt; ListType
 </span><span class="hs-identifier hs-var">bulletFlat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Lbl]
 </span><a href="Drasil.PDController.GenSysDesc.html#gsdUsrResp"><span class="hs-identifier hs-var">gsdUsrResp</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Lbl]
@@ -170,7 +195,8 @@
 </span><span class="hs-identifier hs-var">foldlSP</span></span><span>
 </span><span id="line-60"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Lbl
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;The end-user of&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-string">&quot;The end-user of&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#pidC"><span class="hs-identifier hs-var">pidC</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-61"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Lbl

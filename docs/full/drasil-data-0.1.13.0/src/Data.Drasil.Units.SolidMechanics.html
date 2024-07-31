@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Units related to the field of solid mechanics.</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | Units related to the field of solid mechanics.</span></span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Drasil.Units.SolidMechanics</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html"><span class="hs-identifier">Data.Drasil.SI_Units</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier">metre</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#newton"><span class="hs-identifier">newton</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#pascal"><span class="hs-identifier">pascal</span></a></span><span class="hs-special">)</span><span> </span><span>
@@ -8,7 +8,8 @@
 </span><span id="line-8"></span><span id="stiffnessU"><span class="annot"><span class="annottext">stiffnessU :: UnitDefn
 </span><a href="Data.Drasil.Units.SolidMechanics.html#stiffnessU"><span class="hs-identifier hs-var hs-var">stiffnessU</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">newUnit</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;stiffness&quot;</span></span><span>    </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-string">&quot;stiffness&quot;</span></span><span>    </span><span class="annot"><span class="annottext">(UnitEquation -&gt; UnitDefn) -&gt; UnitEquation -&gt; UnitDefn
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#newton"><span class="hs-identifier hs-var">newton</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
@@ -16,7 +17,8 @@
 </span><span id="line-9"></span><span id="stiffness3D"><span class="annot"><span class="annottext">stiffness3D :: UnitDefn
 </span><a href="Data.Drasil.Units.SolidMechanics.html#stiffness3D"><span class="hs-identifier hs-var hs-var">stiffness3D</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">newUnit</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;3D stiffness&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-string">&quot;3D stiffness&quot;</span></span><span> </span><span class="annot"><span class="annottext">(UnitEquation -&gt; UnitDefn) -&gt; UnitEquation -&gt; UnitDefn
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#pascal"><span class="hs-identifier hs-var">pascal</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn

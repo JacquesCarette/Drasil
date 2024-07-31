@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Defines concepts used in computing.</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | Defines concepts used in computing.</span></span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Drasil.Concepts.Computation</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">dcc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">nc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">cn'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">commonIdeaWithDict</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Sentence</span></span><span class="hs-special">,</span><span>
@@ -42,7 +42,7 @@
 </span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;calculation&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-21"></span><span>
-</span><span id="line-22"></span><span class="hs-comment">-- | Collects all computing-related named chunks (not concept-level yet).</span><span>
+</span><span id="line-22"></span><span class="annot"><span class="hs-comment">-- | Collects all computing-related named chunks (not concept-level yet).</span></span><span>
 </span><span id="line-23"></span><span class="annot"><a href="Data.Drasil.Concepts.Computation.html#compcon"><span class="hs-identifier hs-type">compcon</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span>
 </span><span id="line-24"></span><span id="compcon"><span class="annot"><span class="annottext">compcon :: [IdeaDict]
 </span><a href="Data.Drasil.Concepts.Computation.html#compcon"><span class="hs-identifier hs-var hs-var">compcon</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
@@ -121,42 +121,50 @@
 </span><a href="Data.Drasil.Concepts.Documentation.html#datum"><span class="hs-identifier hs-var">datum</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#type_"><span class="hs-identifier hs-var">type_</span></a></span><span>
 </span><span id="line-46"></span><span id="inDatum"><span class="annot"><span class="annottext">inDatum :: IdeaDict
-</span><a href="Data.Drasil.Concepts.Computation.html#inDatum"><span class="hs-identifier hs-var hs-var">inDatum</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Data.Drasil.Concepts.Computation.html#inDatum"><span class="hs-identifier hs-var hs-var">inDatum</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#input_"><span class="hs-identifier hs-var">input_</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#datum"><span class="hs-identifier hs-var">datum</span></a></span><span>
 </span><span id="line-47"></span><span id="outDatum"><span class="annot"><span class="annottext">outDatum :: IdeaDict
-</span><a href="Data.Drasil.Concepts.Computation.html#outDatum"><span class="hs-identifier hs-var hs-var">outDatum</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Data.Drasil.Concepts.Computation.html#outDatum"><span class="hs-identifier hs-var hs-var">outDatum</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#output_"><span class="hs-identifier hs-var">output_</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#datum"><span class="hs-identifier hs-var">datum</span></a></span><span>
 </span><span id="line-48"></span><span id="inParam"><span class="annot"><span class="annottext">inParam :: IdeaDict
-</span><a href="Data.Drasil.Concepts.Computation.html#inParam"><span class="hs-identifier hs-var hs-var">inParam</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Data.Drasil.Concepts.Computation.html#inParam"><span class="hs-identifier hs-var hs-var">inParam</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; ConceptChunk -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#input_"><span class="hs-identifier hs-var">input_</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#parameter"><span class="hs-identifier hs-var">parameter</span></a></span><span>
 </span><span id="line-49"></span><span id="inVar"><span class="annot"><span class="annottext">inVar :: IdeaDict
-</span><a href="Data.Drasil.Concepts.Computation.html#inVar"><span class="hs-identifier hs-var hs-var">inVar</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Data.Drasil.Concepts.Computation.html#inVar"><span class="hs-identifier hs-var hs-var">inVar</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#input_"><span class="hs-identifier hs-var">input_</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#variable"><span class="hs-identifier hs-var">variable</span></a></span><span>
 </span><span id="line-50"></span><span id="inValue"><span class="annot"><span class="annottext">inValue :: IdeaDict
-</span><a href="Data.Drasil.Concepts.Computation.html#inValue"><span class="hs-identifier hs-var hs-var">inValue</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Data.Drasil.Concepts.Computation.html#inValue"><span class="hs-identifier hs-var hs-var">inValue</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#input_"><span class="hs-identifier hs-var">input_</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#value"><span class="hs-identifier hs-var">value</span></a></span><span>
 </span><span id="line-51"></span><span id="inQty"><span class="annot"><span class="annottext">inQty :: IdeaDict
-</span><a href="Data.Drasil.Concepts.Computation.html#inQty"><span class="hs-identifier hs-var hs-var">inQty</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Data.Drasil.Concepts.Computation.html#inQty"><span class="hs-identifier hs-var hs-var">inQty</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#input_"><span class="hs-identifier hs-var">input_</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#quantity"><span class="hs-identifier hs-var">quantity</span></a></span><span>
 </span><span id="line-52"></span><span id="computerLiteracy"><span class="annot"><span class="annottext">computerLiteracy :: IdeaDict
-</span><a href="Data.Drasil.Concepts.Computation.html#computerLiteracy"><span class="hs-identifier hs-var hs-var">computerLiteracy</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Data.Drasil.Concepts.Computation.html#computerLiteracy"><span class="hs-identifier hs-var hs-var">computerLiteracy</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Computation.html#computer"><span class="hs-identifier hs-var">computer</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Documentation.html#literacy"><span class="hs-identifier hs-var">literacy</span></a></span><span>
 </span><span id="line-53"></span><span id="computerApp"><span class="annot"><span class="annottext">computerApp :: IdeaDict
-</span><a href="Data.Drasil.Concepts.Computation.html#computerApp"><span class="hs-identifier hs-var hs-var">computerApp</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
+</span><a href="Data.Drasil.Concepts.Computation.html#computerApp"><span class="hs-identifier hs-var hs-var">computerApp</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; IdeaDict
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Computation.html#computer"><span class="hs-identifier hs-var">computer</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Data.Drasil.Concepts.Computation.html#application"><span class="hs-identifier hs-var">application</span></a></span><span>

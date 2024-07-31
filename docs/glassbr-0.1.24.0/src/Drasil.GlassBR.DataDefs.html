@@ -36,12 +36,17 @@
 </span><span id="line-28"></span><span>
 </span><span id="line-29"></span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#hFromtEq"><span class="hs-identifier hs-type">hFromtEq</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Relation</span></span><span>
 </span><span id="line-30"></span><span id="hFromtEq"><span class="annot"><span class="annottext">hFromtEq :: Expr
-</span><a href="Drasil.GlassBR.DataDefs.html#hFromtEq"><span class="hs-identifier hs-var hs-var">hFromtEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; Integer -&gt; Integer -&gt; r
+</span><a href="Drasil.GlassBR.DataDefs.html#hFromtEq"><span class="hs-identifier hs-var hs-var">hFromtEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Expr
+forall r. (ExprC r, LiteralC r) =&gt; Integer -&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">frac</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><span class="hs-number">1000</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; [(r, r)] -&gt; r
-</span><span class="hs-identifier hs-var">incompleteCase</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
+</span><span class="hs-number">1000</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">[(Expr, Expr)] -&gt; Expr
+forall r. ExprC r =&gt; [(r, r)] -&gt; r
+</span><span class="hs-identifier hs-var">incompleteCase</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Double -&gt; Double -&gt; (Expr, Expr))
+-&gt; [Double] -&gt; [Double] -&gt; [(Expr, Expr)]
+forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
 </span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="annot"><span class="annottext">Double -&gt; Double -&gt; (Expr, Expr)
 </span><a href="Drasil.GlassBR.DataDefs.html#hFromtHelper"><span class="hs-identifier hs-var">hFromtHelper</span></a></span><span>
 </span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">[Double]
@@ -50,20 +55,26 @@
 </span><span id="line-32"></span><span>
 </span><span id="line-33"></span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#hFromtHelper"><span class="hs-identifier hs-type">hFromtHelper</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Relation</span></span><span class="hs-special">)</span><span>
 </span><span id="line-34"></span><span id="hFromtHelper"><span class="annot"><span class="annottext">hFromtHelper :: Double -&gt; Double -&gt; (Expr, Expr)
-</span><a href="Drasil.GlassBR.DataDefs.html#hFromtHelper"><span class="hs-identifier hs-var hs-var">hFromtHelper</span></a></span></span><span> </span><span id="local-6989586621679083479"><span class="annot"><span class="annottext">Double
-</span><a href="#local-6989586621679083479"><span class="hs-identifier hs-var">result</span></a></span></span><span> </span><span id="local-6989586621679083478"><span class="annot"><span class="annottext">Double
-</span><a href="#local-6989586621679083478"><span class="hs-identifier hs-var">condition</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Double -&gt; r
+</span><a href="Drasil.GlassBR.DataDefs.html#hFromtHelper"><span class="hs-identifier hs-var hs-var">hFromtHelper</span></a></span></span><span> </span><span id="local-6989586621679081941"><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679081941"><span class="hs-identifier hs-var">result</span></a></span></span><span> </span><span id="local-6989586621679081942"><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679081942"><span class="hs-identifier hs-var">condition</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Expr
+forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="annottext">Double
-</span><a href="#local-6989586621679083479"><span class="hs-identifier hs-var">result</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="#local-6989586621679081941"><span class="hs-identifier hs-var">result</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrainedChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrainedChunk
-</span><a href="Drasil.GlassBR.Unitals.html#nomThick"><span class="hs-identifier hs-var">nomThick</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Double -&gt; r
+</span><a href="Drasil.GlassBR.Unitals.html#nomThick"><span class="hs-identifier hs-var">nomThick</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Double -&gt; Expr
+forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="annottext">Double
-</span><a href="#local-6989586621679083478"><span class="hs-identifier hs-var">condition</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679081942"><span class="hs-identifier hs-var">condition</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-35"></span><span>
 </span><span id="line-36"></span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#hFromtQD"><span class="hs-identifier hs-type">hFromtQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-37"></span><span id="hFromtQD"><span class="annot"><span class="annottext">hFromtQD :: SimpleQDef
-</span><a href="Drasil.GlassBR.DataDefs.html#hFromtQD"><span class="hs-identifier hs-var hs-var">hFromtQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+</span><a href="Drasil.GlassBR.DataDefs.html#hFromtQD"><span class="hs-identifier hs-var hs-var">hFromtQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr -&gt; SimpleQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitaryChunk
 </span><a href="Drasil.GlassBR.Unitals.html#minThick"><span class="hs-identifier hs-var">minThick</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.GlassBR.DataDefs.html#hFromtEq"><span class="hs-identifier hs-var">hFromtEq</span></a></span><span>
@@ -77,11 +88,13 @@
 -&gt; [Sentence]
 -&gt; DataDefinition
 </span><span class="hs-identifier hs-var">ddE</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.GlassBR.DataDefs.html#hFromtQD"><span class="hs-identifier hs-var">hFromtQD</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall r.
+</span><a href="Drasil.GlassBR.DataDefs.html#hFromtQD"><span class="hs-identifier hs-var">hFromtQD</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
+forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; DecRef
 </span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Citation
-</span><a href="Drasil.GlassBR.References.html#astm2009"><span class="hs-identifier hs-var">astm2009</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><a href="Drasil.GlassBR.References.html#astm2009"><span class="hs-identifier hs-var">astm2009</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
+forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;minThick&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GlassBR.DataDefs.html#hMin"><span class="hs-identifier hs-var">hMin</span></a></span><span class="hs-special">]</span><span>
@@ -90,22 +103,32 @@ r -&gt; DecRef
 </span><span id="line-43"></span><span>
 </span><span id="line-44"></span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#loadDFEq"><span class="hs-identifier hs-type">loadDFEq</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
 </span><span id="line-45"></span><span id="loadDFEq"><span class="annot"><span class="annottext">loadDFEq :: Expr
-</span><a href="Drasil.GlassBR.DataDefs.html#loadDFEq"><span class="hs-identifier hs-var hs-var">loadDFEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.GlassBR.DataDefs.html#loadDFEq"><span class="hs-identifier hs-var hs-var">loadDFEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitaryChunk
-</span><a href="Drasil.GlassBR.Unitals.html#loadDur"><span class="hs-identifier hs-var">loadDur</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
+</span><a href="Drasil.GlassBR.Unitals.html#loadDur"><span class="hs-identifier hs-var">loadDur</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><span class="hs-number">60</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$^</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-number">60</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$^</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitaryChunk
-</span><a href="Drasil.GlassBR.Unitals.html#sflawParamM"><span class="hs-identifier hs-var">sflawParamM</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
+</span><a href="Drasil.GlassBR.Unitals.html#sflawParamM"><span class="hs-identifier hs-var">sflawParamM</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">16</span></span><span class="hs-special">)</span><span>
 </span><span id="line-46"></span><span>
 </span><span id="line-47"></span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#loadDFQD"><span class="hs-identifier hs-type">loadDFQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-48"></span><span id="loadDFQD"><span class="annot"><span class="annottext">loadDFQD :: SimpleQDef
-</span><a href="Drasil.GlassBR.DataDefs.html#loadDFQD"><span class="hs-identifier hs-var hs-var">loadDFQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+</span><a href="Drasil.GlassBR.DataDefs.html#loadDFQD"><span class="hs-identifier hs-var hs-var">loadDFQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr -&gt; SimpleQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#lDurFac"><span class="hs-identifier hs-var">lDurFac</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.GlassBR.DataDefs.html#loadDFEq"><span class="hs-identifier hs-var">loadDFEq</span></a></span><span>
@@ -119,14 +142,17 @@ r -&gt; DecRef
 -&gt; [Sentence]
 -&gt; DataDefinition
 </span><span class="hs-identifier hs-var">ddE</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.GlassBR.DataDefs.html#loadDFQD"><span class="hs-identifier hs-var">loadDFQD</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall r.
+</span><a href="Drasil.GlassBR.DataDefs.html#loadDFQD"><span class="hs-identifier hs-var">loadDFQD</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
+forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; DecRef
 </span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Citation
-</span><a href="Drasil.GlassBR.References.html#astm2009"><span class="hs-identifier hs-var">astm2009</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><a href="Drasil.GlassBR.References.html#astm2009"><span class="hs-identifier hs-var">astm2009</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
+forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;loadDurFactor&quot;</span></span><span>
-</span><span id="line-52"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall s. (HasSymbol s, HasUID s) =&gt; [s] -&gt; Sentence
+</span><span id="line-52"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[UnitaryChunk] -&gt; Sentence
+forall s. (HasSymbol s, HasUID s) =&gt; [s] -&gt; Sentence
 </span><a href="Drasil.GlassBR.DataDefs.html#stdVals"><span class="hs-identifier hs-var">stdVals</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitaryChunk
 </span><a href="Drasil.GlassBR.Unitals.html#loadDur"><span class="hs-identifier hs-var">loadDur</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk
 </span><a href="Drasil.GlassBR.Unitals.html#sflawParamM"><span class="hs-identifier hs-var">sflawParamM</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
@@ -136,34 +162,48 @@ r -&gt; DecRef
 </span><span id="line-55"></span><span>
 </span><span id="line-56"></span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#glaTyFacEq"><span class="hs-identifier hs-type">glaTyFacEq</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
 </span><span id="line-57"></span><span id="glaTyFacEq"><span class="annot"><span class="annottext">glaTyFacEq :: Expr
-</span><a href="Drasil.GlassBR.DataDefs.html#glaTyFacEq"><span class="hs-identifier hs-var hs-var">glaTyFacEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; [(r, r)] -&gt; r
-</span><span class="hs-identifier hs-var">incompleteCase</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
+</span><a href="Drasil.GlassBR.DataDefs.html#glaTyFacEq"><span class="hs-identifier hs-var hs-var">glaTyFacEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(Expr, Expr)] -&gt; Expr
+forall r. ExprC r =&gt; [(r, r)] -&gt; r
+</span><span class="hs-identifier hs-var">incompleteCase</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Integer -&gt; String -&gt; (Expr, Expr))
+-&gt; [Integer] -&gt; [String] -&gt; [(Expr, Expr)]
+forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
 </span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; String -&gt; (Expr, Expr)
 </span><a href="Drasil.GlassBR.DataDefs.html#glaTyFacHelper"><span class="hs-identifier hs-var">glaTyFacHelper</span></a></span><span> </span><span class="annot"><span class="annottext">[Integer]
-</span><a href="Drasil.GlassBR.Unitals.html#glassTypeFactors"><span class="hs-identifier hs-var">glassTypeFactors</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall c. CommonIdea c =&gt; c -&gt; String
-</span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a, b) -&gt; b
-</span><span class="hs-identifier hs-var">snd</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">GlassType
+</span><a href="Drasil.GlassBR.Unitals.html#glassTypeFactors"><span class="hs-identifier hs-var">glassTypeFactors</span></a></span><span> </span><span class="annot"><span class="annottext">([String] -&gt; [(Expr, Expr)]) -&gt; [String] -&gt; [(Expr, Expr)]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">((Integer, CI) -&gt; String) -&gt; [(Integer, CI)] -&gt; [String]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; String
+forall c. CommonIdea c =&gt; c -&gt; String
+</span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">(CI -&gt; String) -&gt; ((Integer, CI) -&gt; CI) -&gt; (Integer, CI) -&gt; String
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Integer, CI) -&gt; CI
+forall a b. (a, b) -&gt; b
+</span><span class="hs-identifier hs-var">snd</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(Integer, CI)]
 </span><a href="Drasil.GlassBR.Unitals.html#glassType"><span class="hs-identifier hs-var">glassType</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-58"></span><span>
 </span><span id="line-59"></span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#glaTyFacHelper"><span class="hs-identifier hs-type">glaTyFacHelper</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Integer</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Relation</span></span><span class="hs-special">)</span><span>
 </span><span id="line-60"></span><span id="glaTyFacHelper"><span class="annot"><span class="annottext">glaTyFacHelper :: Integer -&gt; String -&gt; (Expr, Expr)
-</span><a href="Drasil.GlassBR.DataDefs.html#glaTyFacHelper"><span class="hs-identifier hs-var hs-var">glaTyFacHelper</span></a></span></span><span> </span><span id="local-6989586621679083454"><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679083454"><span class="hs-identifier hs-var">result</span></a></span></span><span> </span><span id="local-6989586621679083453"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679083453"><span class="hs-identifier hs-var">condition</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; Integer -&gt; r
+</span><a href="Drasil.GlassBR.DataDefs.html#glaTyFacHelper"><span class="hs-identifier hs-var hs-var">glaTyFacHelper</span></a></span></span><span> </span><span id="local-6989586621679081967"><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679081967"><span class="hs-identifier hs-var">result</span></a></span></span><span> </span><span id="local-6989586621679081968"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679081968"><span class="hs-identifier hs-var">condition</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679083454"><span class="hs-identifier hs-var">result</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="#local-6989586621679081967"><span class="hs-identifier hs-var">result</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="Drasil.GlassBR.Unitals.html#glassTypeCon"><span class="hs-identifier hs-var">glassTypeCon</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; String -&gt; r
+</span><a href="Drasil.GlassBR.Unitals.html#glassTypeCon"><span class="hs-identifier hs-var">glassTypeCon</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Expr
+forall r. LiteralC r =&gt; String -&gt; r
 </span><span class="hs-identifier hs-var">str</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679083453"><span class="hs-identifier hs-var">condition</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679081968"><span class="hs-identifier hs-var">condition</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-61"></span><span>
 </span><span id="line-62"></span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#glaTyFacQD"><span class="hs-identifier hs-type">glaTyFacQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-63"></span><span id="glaTyFacQD"><span class="annot"><span class="annottext">glaTyFacQD :: SimpleQDef
-</span><a href="Drasil.GlassBR.DataDefs.html#glaTyFacQD"><span class="hs-identifier hs-var hs-var">glaTyFacQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+</span><a href="Drasil.GlassBR.DataDefs.html#glaTyFacQD"><span class="hs-identifier hs-var hs-var">glaTyFacQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr -&gt; SimpleQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#gTF"><span class="hs-identifier hs-var">gTF</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.GlassBR.DataDefs.html#glaTyFacEq"><span class="hs-identifier hs-var">glaTyFacEq</span></a></span><span>
@@ -177,11 +217,13 @@ r -&gt; DecRef
 -&gt; [Sentence]
 -&gt; DataDefinition
 </span><span class="hs-identifier hs-var">ddE</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.GlassBR.DataDefs.html#glaTyFacQD"><span class="hs-identifier hs-var">glaTyFacQD</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall r.
+</span><a href="Drasil.GlassBR.DataDefs.html#glaTyFacQD"><span class="hs-identifier hs-var">glaTyFacQD</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
+forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; DecRef
 </span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Citation
-</span><a href="Drasil.GlassBR.References.html#astm2009"><span class="hs-identifier hs-var">astm2009</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><a href="Drasil.GlassBR.References.html#astm2009"><span class="hs-identifier hs-var">astm2009</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
+forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;gTF&quot;</span></span><span>
 </span><span id="line-67"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
@@ -193,23 +235,36 @@ r -&gt; DecRef
 </span><span id="line-70"></span><span>
 </span><span id="line-71"></span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#standOffDisEq"><span class="hs-identifier hs-type">standOffDisEq</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
 </span><span id="line-72"></span><span id="standOffDisEq"><span class="annot"><span class="annottext">standOffDisEq :: Expr
-</span><a href="Drasil.GlassBR.DataDefs.html#standOffDisEq"><span class="hs-identifier hs-var hs-var">standOffDisEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">sqrt</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.GlassBR.DataDefs.html#standOffDisEq"><span class="hs-identifier hs-var hs-var">standOffDisEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
+forall r. ExprC r =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">sqrt</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitaryChunk
-</span><a href="Drasil.GlassBR.Unitals.html#sdx"><span class="hs-identifier hs-var">sdx</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.GlassBR.Unitals.html#sdx"><span class="hs-identifier hs-var">sdx</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitaryChunk
-</span><a href="Drasil.GlassBR.Unitals.html#sdy"><span class="hs-identifier hs-var">sdy</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.GlassBR.Unitals.html#sdy"><span class="hs-identifier hs-var">sdy</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
+forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitaryChunk
 </span><a href="Drasil.GlassBR.Unitals.html#sdz"><span class="hs-identifier hs-var">sdz</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-73"></span><span>
 </span><span id="line-74"></span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#standOffDisQD"><span class="hs-identifier hs-type">standOffDisQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-75"></span><span id="standOffDisQD"><span class="annot"><span class="annottext">standOffDisQD :: SimpleQDef
-</span><a href="Drasil.GlassBR.DataDefs.html#standOffDisQD"><span class="hs-identifier hs-var hs-var">standOffDisQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+</span><a href="Drasil.GlassBR.DataDefs.html#standOffDisQD"><span class="hs-identifier hs-var hs-var">standOffDisQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Expr -&gt; SimpleQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#standOffDist"><span class="hs-identifier hs-var">standOffDist</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.GlassBR.DataDefs.html#standOffDisEq"><span class="hs-identifier hs-var">standOffDisEq</span></a></span><span>
@@ -223,11 +278,13 @@ r -&gt; DecRef
 -&gt; [Sentence]
 -&gt; DataDefinition
 </span><span class="hs-identifier hs-var">ddE</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.GlassBR.DataDefs.html#standOffDisQD"><span class="hs-identifier hs-var">standOffDisQD</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall r.
+</span><a href="Drasil.GlassBR.DataDefs.html#standOffDisQD"><span class="hs-identifier hs-var">standOffDisQD</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
+forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; DecRef
 </span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Citation
-</span><a href="Drasil.GlassBR.References.html#astm2009"><span class="hs-identifier hs-var">astm2009</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><a href="Drasil.GlassBR.References.html#astm2009"><span class="hs-identifier hs-var">astm2009</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
+forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;standOffDist&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-79"></span><span>
@@ -235,16 +292,22 @@ r -&gt; DecRef
 </span><span id="line-81"></span><span>
 </span><span id="line-82"></span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#aspRatEq"><span class="hs-identifier hs-type">aspRatEq</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
 </span><span id="line-83"></span><span id="aspRatEq"><span class="annot"><span class="annottext">aspRatEq :: Expr
-</span><a href="Drasil.GlassBR.DataDefs.html#aspRatEq"><span class="hs-identifier hs-var hs-var">aspRatEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.GlassBR.DataDefs.html#aspRatEq"><span class="hs-identifier hs-var hs-var">aspRatEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
-</span><a href="Drasil.GlassBR.Unitals.html#plateLen"><span class="hs-identifier hs-var">plateLen</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.GlassBR.Unitals.html#plateLen"><span class="hs-identifier hs-var">plateLen</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#plateWidth"><span class="hs-identifier hs-var">plateWidth</span></a></span><span>
 </span><span id="line-84"></span><span>
 </span><span id="line-85"></span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#aspRatQD"><span class="hs-identifier hs-type">aspRatQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-86"></span><span id="aspRatQD"><span class="annot"><span class="annottext">aspRatQD :: SimpleQDef
-</span><a href="Drasil.GlassBR.DataDefs.html#aspRatQD"><span class="hs-identifier hs-var hs-var">aspRatQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+</span><a href="Drasil.GlassBR.DataDefs.html#aspRatQD"><span class="hs-identifier hs-var hs-var">aspRatQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Expr -&gt; SimpleQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#aspectRatio"><span class="hs-identifier hs-var">aspectRatio</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.GlassBR.DataDefs.html#aspRatEq"><span class="hs-identifier hs-var">aspRatEq</span></a></span><span>
@@ -258,11 +321,13 @@ r -&gt; DecRef
 -&gt; [Sentence]
 -&gt; DataDefinition
 </span><span class="hs-identifier hs-var">ddE</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.GlassBR.DataDefs.html#aspRatQD"><span class="hs-identifier hs-var">aspRatQD</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall r.
+</span><a href="Drasil.GlassBR.DataDefs.html#aspRatQD"><span class="hs-identifier hs-var">aspRatQD</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
+forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; DecRef
 </span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Citation
-</span><a href="Drasil.GlassBR.References.html#astm2009"><span class="hs-identifier hs-var">astm2009</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><a href="Drasil.GlassBR.References.html#astm2009"><span class="hs-identifier hs-var">astm2009</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
+forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;aspectRatio&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GlassBR.DataDefs.html#aGrtrThanB"><span class="hs-identifier hs-var">aGrtrThanB</span></a></span><span class="hs-special">]</span><span>
@@ -271,16 +336,22 @@ r -&gt; DecRef
 </span><span id="line-92"></span><span>
 </span><span id="line-93"></span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#eqTNTWEq"><span class="hs-identifier hs-type">eqTNTWEq</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
 </span><span id="line-94"></span><span id="eqTNTWEq"><span class="annot"><span class="annottext">eqTNTWEq :: Expr
-</span><a href="Drasil.GlassBR.DataDefs.html#eqTNTWEq"><span class="hs-identifier hs-var hs-var">eqTNTWEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.GlassBR.DataDefs.html#eqTNTWEq"><span class="hs-identifier hs-var hs-var">eqTNTWEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
-</span><a href="Drasil.GlassBR.Unitals.html#charWeight"><span class="hs-identifier hs-var">charWeight</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.GlassBR.Unitals.html#charWeight"><span class="hs-identifier hs-var">charWeight</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">UncertainChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertainChunk
 </span><a href="Drasil.GlassBR.Unitals.html#tNT"><span class="hs-identifier hs-var">tNT</span></a></span><span>
 </span><span id="line-95"></span><span>
 </span><span id="line-96"></span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#eqTNTWQD"><span class="hs-identifier hs-type">eqTNTWQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-97"></span><span id="eqTNTWQD"><span class="annot"><span class="annottext">eqTNTWQD :: SimpleQDef
-</span><a href="Drasil.GlassBR.DataDefs.html#eqTNTWQD"><span class="hs-identifier hs-var hs-var">eqTNTWQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+</span><a href="Drasil.GlassBR.DataDefs.html#eqTNTWQD"><span class="hs-identifier hs-var hs-var">eqTNTWQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GlassBR.Unitals.html#eqTNTWeight"><span class="hs-identifier hs-var">eqTNTWeight</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.GlassBR.DataDefs.html#eqTNTWEq"><span class="hs-identifier hs-var">eqTNTWEq</span></a></span><span>
@@ -294,11 +365,13 @@ r -&gt; DecRef
 -&gt; [Sentence]
 -&gt; DataDefinition
 </span><span class="hs-identifier hs-var">ddE</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.GlassBR.DataDefs.html#eqTNTWQD"><span class="hs-identifier hs-var">eqTNTWQD</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall r.
+</span><a href="Drasil.GlassBR.DataDefs.html#eqTNTWQD"><span class="hs-identifier hs-var">eqTNTWQD</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
+forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; DecRef
 </span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Citation
-</span><a href="Drasil.GlassBR.References.html#astm2009"><span class="hs-identifier hs-var">astm2009</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><a href="Drasil.GlassBR.References.html#astm2009"><span class="hs-identifier hs-var">astm2009</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
+forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;eqTNTW&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-101"></span><span>
@@ -306,19 +379,27 @@ r -&gt; DecRef
 </span><span id="line-103"></span><span>
 </span><span id="line-104"></span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#calofDemandEq"><span class="hs-identifier hs-type">calofDemandEq</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
 </span><span id="line-105"></span><span id="calofDemandEq"><span class="annot"><span class="annottext">calofDemandEq :: Expr
-</span><a href="Drasil.GlassBR.DataDefs.html#calofDemandEq"><span class="hs-identifier hs-var hs-var">calofDemandEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r f. (ExprC r, HasUID f, HasSymbol f) =&gt; f -&gt; [r] -&gt; r
+</span><a href="Drasil.GlassBR.DataDefs.html#calofDemandEq"><span class="hs-identifier hs-var hs-var">calofDemandEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; [Expr] -&gt; Expr
+forall f. (HasUID f, HasSymbol f) =&gt; f -&gt; [Expr] -&gt; Expr
+forall r f. (ExprC r, HasUID f, HasSymbol f) =&gt; f -&gt; [r] -&gt; r
 </span><span class="hs-identifier hs-var">apply</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.GlassBR.Unitals.html#interpY"><span class="hs-identifier hs-var">interpY</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall r. LiteralC r =&gt; String -&gt; r
+</span><a href="Drasil.GlassBR.Unitals.html#interpY"><span class="hs-identifier hs-var">interpY</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Expr
+forall r. LiteralC r =&gt; String -&gt; r
 </span><span class="hs-identifier hs-var">str</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;TSD.txt&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-string">&quot;TSD.txt&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
-</span><a href="Drasil.GlassBR.Unitals.html#standOffDist"><span class="hs-identifier hs-var">standOffDist</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.GlassBR.Unitals.html#standOffDist"><span class="hs-identifier hs-var">standOffDist</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GlassBR.Unitals.html#eqTNTWeight"><span class="hs-identifier hs-var">eqTNTWeight</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-106"></span><span>
 </span><span id="line-107"></span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#calofDemandQD"><span class="hs-identifier hs-type">calofDemandQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-108"></span><span id="calofDemandQD"><span class="annot"><span class="annottext">calofDemandQD :: SimpleQDef
-</span><a href="Drasil.GlassBR.DataDefs.html#calofDemandQD"><span class="hs-identifier hs-var hs-var">calofDemandQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+</span><a href="Drasil.GlassBR.DataDefs.html#calofDemandQD"><span class="hs-identifier hs-var hs-var">calofDemandQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
+forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GlassBR.Unitals.html#demand"><span class="hs-identifier hs-var">demand</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.GlassBR.DataDefs.html#calofDemandEq"><span class="hs-identifier hs-var">calofDemandEq</span></a></span><span>
@@ -332,11 +413,13 @@ r -&gt; DecRef
 -&gt; [Sentence]
 -&gt; DataDefinition
 </span><span class="hs-identifier hs-var">ddE</span></span><span> </span><span class="annot"><span class="annottext">SimpleQDef
-</span><a href="Drasil.GlassBR.DataDefs.html#calofDemandQD"><span class="hs-identifier hs-var">calofDemandQD</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall r.
+</span><a href="Drasil.GlassBR.DataDefs.html#calofDemandQD"><span class="hs-identifier hs-var">calofDemandQD</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
+forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; DecRef
 </span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Citation
-</span><a href="Drasil.GlassBR.References.html#astm2009"><span class="hs-identifier hs-var">astm2009</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><a href="Drasil.GlassBR.References.html#astm2009"><span class="hs-identifier hs-var">astm2009</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
+forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;calofDemand&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.GlassBR.DataDefs.html#calofDemandDesc"><span class="hs-identifier hs-var">calofDemandDesc</span></a></span><span class="hs-special">]</span><span>
@@ -344,14 +427,17 @@ r -&gt; DecRef
 </span><span id="line-113"></span><span class="hs-comment">-- Additional Notes --</span><span>
 </span><span id="line-114"></span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#aGrtrThanB"><span class="hs-identifier hs-type">aGrtrThanB</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-115"></span><span id="aGrtrThanB"><span class="annot"><span class="annottext">aGrtrThanB :: Sentence
-</span><a href="Drasil.GlassBR.DataDefs.html#aGrtrThanB"><span class="hs-identifier hs-var hs-var">aGrtrThanB</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><a href="Drasil.GlassBR.DataDefs.html#aGrtrThanB"><span class="hs-identifier hs-var hs-var">aGrtrThanB</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#plateLen"><span class="hs-identifier hs-var">plateLen</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#plateWidth"><span class="hs-identifier hs-var">plateWidth</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.are`</span></span><span>
-</span><span id="line-116"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span id="line-116"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">dimension</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -363,11 +449,17 @@ r -&gt; DecRef
 </span><span class="hs-operator hs-var">+:+.</span></span><span>
 </span><span id="line-117"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
-</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; Sentence) -&gt; ModelExpr -&gt; Sentence
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; ModelExpr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
-</span><a href="Drasil.GlassBR.Unitals.html#plateLen"><span class="hs-identifier hs-var">plateLen</span></a></span><span> </span><span class="annot"><span class="annottext">forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$&gt;=</span></span><span> </span><span class="annot"><span class="annottext">forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
+</span><a href="Drasil.GlassBR.Unitals.html#plateLen"><span class="hs-identifier hs-var">plateLen</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+forall r. ExprC r =&gt; r -&gt; r -&gt; r
+</span><span class="hs-operator hs-var">$&gt;=</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; ModelExpr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
+forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#plateWidth"><span class="hs-identifier hs-var">plateWidth</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-118"></span><span>
@@ -387,14 +479,16 @@ r -&gt; DecRef
 </span><span id="line-123"></span><span>
 </span><span id="line-124"></span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#glassTypeHelper"><span class="hs-identifier hs-type">glassTypeHelper</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-125"></span><span id="glassTypeHelper"><span class="annot"><span class="annottext">glassTypeHelper :: CI -&gt; Sentence
-</span><a href="Drasil.GlassBR.DataDefs.html#glassTypeHelper"><span class="hs-identifier hs-var hs-var">glassTypeHelper</span></a></span></span><span> </span><span id="local-6989586621679083408"><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679083408"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+</span><a href="Drasil.GlassBR.DataDefs.html#glassTypeHelper"><span class="hs-identifier hs-var hs-var">glassTypeHelper</span></a></span></span><span> </span><span id="local-6989586621679082013"><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679082013"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 </span><span class="hs-identifier hs-var">getAcc</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679083408"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><a href="#local-6989586621679082013"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679083408"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><a href="#local-6989586621679082013"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.GlassBR.Concepts.html#glass"><span class="hs-identifier hs-var">glass</span></a></span><span>
 </span><span id="line-126"></span><span>
@@ -402,62 +496,77 @@ r -&gt; DecRef
 </span><span id="line-128"></span><span id="calofDemandDesc"><span class="annot"><span class="annottext">calofDemandDesc :: Sentence
 </span><a href="Drasil.GlassBR.DataDefs.html#calofDemandDesc"><span class="hs-identifier hs-var hs-var">calofDemandDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-129"></span><span>  </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
-</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GlassBR.Unitals.html#demand"><span class="hs-identifier hs-var">demand</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">`S.or_`</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.or_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#demandq"><span class="hs-identifier hs-var">demandq</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.isThe`</span></span><span>
 </span><span id="line-130"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="Drasil.GlassBR.Unitals.html#demandq"><span class="hs-identifier hs-var">demandq</span></a></span><span> </span><span class="annot"><span class="annottext">forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">forall c. Definition c =&gt; Lens' c Sentence
+</span><a href="Drasil.GlassBR.Unitals.html#demandq"><span class="hs-identifier hs-var">demandq</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Getting Sentence ConceptChunk Sentence -&gt; Sentence
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Sentence ConceptChunk Sentence
+forall c. Definition c =&gt; Lens' c Sentence
+Lens' ConceptChunk Sentence
 </span><span class="hs-identifier hs-var">defn</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;obtained from&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall r.
+</span><span class="hs-string">&quot;obtained from&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">LabelledContent -&gt; Sentence
+forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent
 </span><a href="Drasil.GlassBR.Figures.html#demandVsSDFig"><span class="hs-identifier hs-var">demandVsSDFig</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-131"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;by interpolation using&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-string">&quot;by interpolation using&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#standOffDist"><span class="hs-identifier hs-var">standOffDist</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
-</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#standOffDist"><span class="hs-identifier hs-var">standOffDist</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-132"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GlassBR.Unitals.html#eqTNTWeight"><span class="hs-identifier hs-var">eqTNTWeight</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;as&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">parameter</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">parameter</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GlassBR.Unitals.html#eqTNTWeight"><span class="hs-identifier hs-var">eqTNTWeight</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-133"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is defined in&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">forall r.
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
+forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
-</span><a href="Drasil.GlassBR.DataDefs.html#eqTNTWDD"><span class="hs-identifier hs-var">eqTNTWDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><a href="Drasil.GlassBR.DataDefs.html#eqTNTWDD"><span class="hs-identifier hs-var">eqTNTWDD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#standOffDist"><span class="hs-identifier hs-var">standOffDist</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.isThe`</span></span><span>
-</span><span id="line-134"></span><span>  </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span id="line-134"></span><span>  </span><span class="annot"><span class="annottext">UncertQ -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#standOffDist"><span class="hs-identifier hs-var">standOffDist</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;as defined in&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall r.
+</span><span class="hs-string">&quot;as defined in&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
+forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
@@ -465,7 +574,8 @@ r -&gt; Sentence
 </span><span id="line-135"></span><span>
 </span><span id="line-136"></span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#hMin"><span class="hs-identifier hs-type">hMin</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-137"></span><span id="hMin"><span class="annot"><span class="annottext">hMin :: Sentence
-</span><a href="Drasil.GlassBR.DataDefs.html#hMin"><span class="hs-identifier hs-var hs-var">hMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><a href="Drasil.GlassBR.DataDefs.html#hMin"><span class="hs-identifier hs-var hs-var">hMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrainedChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">ConstrainedChunk
 </span><a href="Drasil.GlassBR.Unitals.html#nomThick"><span class="hs-identifier hs-var">nomThick</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -473,40 +583,47 @@ r -&gt; Sentence
 </span><span class="hs-string">&quot;a function that maps from the nominal thickness&quot;</span></span><span>
 </span><span id="line-138"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
-</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitaryChunk
 </span><a href="Drasil.GlassBR.Unitals.html#minThick"><span class="hs-identifier hs-var">minThick</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">`S.toThe`</span></span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.toThe`</span></span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Sentence
+forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitaryChunk
 </span><a href="Drasil.GlassBR.Unitals.html#minThick"><span class="hs-identifier hs-var">minThick</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-139"></span><span>
 </span><span id="line-140"></span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#ldfConst"><span class="hs-identifier hs-type">ldfConst</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-141"></span><span id="ldfConst"><span class="annot"><span class="annottext">ldfConst :: Sentence
-</span><a href="Drasil.GlassBR.DataDefs.html#ldfConst"><span class="hs-identifier hs-var hs-var">ldfConst</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><a href="Drasil.GlassBR.DataDefs.html#ldfConst"><span class="hs-identifier hs-var hs-var">ldfConst</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#lDurFac"><span class="hs-identifier hs-var">lDurFac</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;assumed to be constant&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
+forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.GlassBR.Assumptions.html#assumpLDFC"><span class="hs-identifier hs-var">assumpLDFC</span></a></span><span>
 </span><span id="line-142"></span><span>
 </span><span id="line-143"></span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#arRef"><span class="hs-identifier hs-type">arRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#gtfRef"><span class="hs-identifier hs-type">gtfRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#hRef"><span class="hs-identifier hs-type">hRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-144"></span><span id="arRef"><span class="annot"><span class="annottext">arRef :: Sentence
-</span><a href="Drasil.GlassBR.DataDefs.html#arRef"><span class="hs-identifier hs-var hs-var">arRef</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r.
+</span><a href="Drasil.GlassBR.DataDefs.html#arRef"><span class="hs-identifier hs-var hs-var">arRef</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
+forall r.
 (Referable r, HasShortName r, DefinesQuantity r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">definedIn</span></span><span>  </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.GlassBR.DataDefs.html#aspRat"><span class="hs-identifier hs-var">aspRat</span></a></span><span>
 </span><span id="line-145"></span><span id="gtfRef"><span class="annot"><span class="annottext">gtfRef :: Sentence
-</span><a href="Drasil.GlassBR.DataDefs.html#gtfRef"><span class="hs-identifier hs-var hs-var">gtfRef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r.
+</span><a href="Drasil.GlassBR.DataDefs.html#gtfRef"><span class="hs-identifier hs-var hs-var">gtfRef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
+forall r.
 (Referable r, HasShortName r, DefinesQuantity r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">definedIn</span></span><span>  </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.GlassBR.DataDefs.html#glaTyFac"><span class="hs-identifier hs-var">glaTyFac</span></a></span><span>
 </span><span id="line-146"></span><span id="hRef"><span class="annot"><span class="annottext">hRef :: Sentence
-</span><a href="Drasil.GlassBR.DataDefs.html#hRef"><span class="hs-identifier hs-var hs-var">hRef</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall r.
+</span><a href="Drasil.GlassBR.DataDefs.html#hRef"><span class="hs-identifier hs-var hs-var">hRef</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence -&gt; Sentence
+forall r.
 (Referable r, HasShortName r, DefinesQuantity r) =&gt;
 r -&gt; Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">definedIn'</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
@@ -522,26 +639,30 @@ r -&gt; Sentence -&gt; Sentence
 </span><span class="hs-string">&quot;TSD.txt&quot;</span></span><span class="hs-special">]</span><span>
 </span><span id="line-151"></span><span>
 </span><span id="line-152"></span><span class="hs-comment">--- Helper</span><span>
-</span><span id="line-153"></span><span id="local-6989586621679083764"><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#stdVals"><span class="hs-identifier hs-type">stdVals</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">HasSymbol</span></span><span> </span><span class="annot"><a href="#local-6989586621679083764"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span> </span><span class="annot"><a href="#local-6989586621679083764"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679083764"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span><span>
+</span><span id="line-153"></span><span id="local-6989586621679081657"><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#stdVals"><span class="hs-identifier hs-type">stdVals</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">HasSymbol</span></span><span> </span><span class="annot"><a href="#local-6989586621679081657"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span> </span><span class="annot"><a href="#local-6989586621679081657"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679081657"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span><span>
 </span><span id="line-154"></span><span id="stdVals"><span class="annot"><span class="annottext">stdVals :: forall s. (HasSymbol s, HasUID s) =&gt; [s] -&gt; Sentence
-</span><a href="Drasil.GlassBR.DataDefs.html#stdVals"><span class="hs-identifier hs-var hs-var">stdVals</span></a></span></span><span> </span><span id="local-6989586621679083384"><span class="annot"><span class="annottext">[s]
-</span><a href="#local-6989586621679083384"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
+</span><a href="Drasil.GlassBR.DataDefs.html#stdVals"><span class="hs-identifier hs-var hs-var">stdVals</span></a></span></span><span> </span><span id="local-6989586621679082037"><span class="annot"><span class="annottext">[s]
+</span><a href="#local-6989586621679082037"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlList</span></span><span> </span><span class="annot"><span class="annottext">SepType
 </span><span class="hs-identifier hs-var">Comma</span></span><span> </span><span class="annot"><span class="annottext">FoldType
-</span><span class="hs-identifier hs-var">List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(s -&gt; Sentence) -&gt; [s] -&gt; [Sentence]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">s -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">[s]
-</span><a href="#local-6989586621679083384"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679082037"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679083379"><span class="hs-identifier hs-var">sent</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">forall r.
+</span><a href="#local-6989586621679082042"><span class="hs-identifier hs-var">sent</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
+forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.GlassBR.Assumptions.html#assumpSV"><span class="hs-identifier hs-var">assumpSV</span></a></span><span>
-</span><span id="line-155"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679083379"><span class="annot"><span class="annottext">sent :: Sentence
-</span><a href="#local-6989586621679083379"><span class="hs-identifier hs-var hs-var">sent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">[s]
-</span><a href="#local-6989586621679083384"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-keyword">of</span><span> </span><span class="hs-special">[</span><span> </span><span class="hs-special">]</span><span>   </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">forall a. HasCallStack =&gt; String -&gt; a
+</span><span id="line-155"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679082042"><span class="annot"><span class="annottext">sent :: Sentence
+</span><a href="#local-6989586621679082042"><span class="hs-identifier hs-var hs-var">sent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">[s]
+</span><a href="#local-6989586621679082037"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-keyword">of</span><span> </span><span class="hs-special">[</span><span> </span><span class="hs-special">]</span><span>   </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;stdVals needs quantities&quot;</span></span><span>
 </span><span id="line-156"></span><span>                         </span><span class="hs-special">[</span><span class="annot"><span class="annottext">s

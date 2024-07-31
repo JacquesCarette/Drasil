@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Collects references common to all SRS documents in one list for easy use.</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | Collects references common to all SRS documents in one list for easy use.</span></span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.DocLang.References</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocLang.References.html#secRefs"><span class="hs-identifier">secRefs</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
@@ -14,11 +14,12 @@
 </span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html"><span class="hs-identifier">Drasil.Sections.SpecificSystemDescription</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#tInDataCstRef"><span class="hs-identifier">tInDataCstRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.SpecificSystemDescription.html#tOutDataCstRef"><span class="hs-identifier">tOutDataCstRef</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-15"></span><span>
 </span><span id="line-16"></span><span>
-</span><span id="line-17"></span><span class="hs-comment">-- | All section references used in creating a Software Requirements Specification (SRS).</span><span>
+</span><span id="line-17"></span><span class="annot"><span class="hs-comment">-- | All section references used in creating a Software Requirements Specification (SRS).</span></span><span>
 </span><span id="line-18"></span><span class="annot"><a href="Drasil.DocLang.References.html#secRefs"><span class="hs-identifier hs-type">secRefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span>
 </span><span id="line-19"></span><span id="secRefs"><span class="annot"><span class="annottext">secRefs :: [Reference]
 </span><a href="Drasil.DocLang.References.html#secRefs"><span class="hs-identifier hs-var hs-var">secRefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Reference]
-</span><a href="Drasil.DocLang.SRS.html#sectionReferences"><span class="hs-identifier hs-var">sectionReferences</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
+</span><a href="Drasil.DocLang.SRS.html#sectionReferences"><span class="hs-identifier hs-var">sectionReferences</span></a></span><span> </span><span class="annot"><span class="annottext">[Reference] -&gt; [Reference] -&gt; [Reference]
+forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#tableAbbAccRef"><span class="hs-identifier hs-var">tableAbbAccRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.Sections.Requirements.html#reqInputsRef"><span class="hs-identifier hs-var">reqInputsRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
@@ -28,14 +29,21 @@
 </span><a href="Drasil.Sections.AuxiliaryConstants.html#tableOfConstantsRef"><span class="hs-identifier hs-var">tableOfConstantsRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#tInDataCstRef"><span class="hs-identifier hs-var">tInDataCstRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.Sections.SpecificSystemDescription.html#tOutDataCstRef"><span class="hs-identifier hs-var">tOutDataCstRef</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-21"></span><span>  </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall r.
+</span><span id="line-21"></span><span>  </span><span class="annot"><span class="annottext">[Reference] -&gt; [Reference] -&gt; [Reference]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(TraceConfig -&gt; Reference) -&gt; [TraceConfig] -&gt; [Reference]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Reference -&gt; Reference
+forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Reference
-</span><span class="hs-identifier hs-var">ref</span></span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-identifier hs-var">ref</span></span><span class="annot"><span class="annottext">(Reference -&gt; Reference)
+-&gt; (TraceConfig -&gt; Reference) -&gt; TraceConfig -&gt; Reference
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span class="annot"><span class="annottext">UID -&gt; Reference
-</span><span class="hs-identifier hs-var">makeTabRef'</span></span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-identifier hs-var">makeTabRef'</span></span><span class="annot"><span class="annottext">(UID -&gt; Reference)
+-&gt; (TraceConfig -&gt; UID) -&gt; TraceConfig -&gt; Reference
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span class="annot"><span class="annottext">TraceConfig -&gt; UID
 </span><a href="Drasil.DocumentLanguage.Core.html#getTraceConfigUID"><span class="hs-identifier hs-var">getTraceConfigUID</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceConfig
 </span><a href="Drasil.Sections.TraceabilityMandGs.html#traceMatAssumpAssump"><span class="hs-identifier hs-var">traceMatAssumpAssump</span></a></span><span class="hs-special">,</span><span> </span><span class="hs-comment">-- can this be deleted?</span><span>

@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Defines units to describe physical properties.</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | Defines units to describe physical properties.</span></span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Drasil.Units.PhysicalProperties</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html"><span class="hs-identifier">Data.Drasil.SI_Units</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.SI_Units.html#kilogram"><span class="hs-identifier">kilogram</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#m_3"><span class="hs-identifier">m_3</span></a></span><span class="hs-special">)</span><span>
@@ -8,7 +8,8 @@
 </span><span id="line-8"></span><span id="densityU"><span class="annot"><span class="annottext">densityU :: UnitDefn
 </span><a href="Data.Drasil.Units.PhysicalProperties.html#densityU"><span class="hs-identifier hs-var hs-var">densityU</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">newUnit</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;density&quot;</span></span><span>              </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-string">&quot;density&quot;</span></span><span>              </span><span class="annot"><span class="annottext">(UnitEquation -&gt; UnitDefn) -&gt; UnitEquation -&gt; UnitDefn
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#kilogram"><span class="hs-identifier hs-var">kilogram</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn

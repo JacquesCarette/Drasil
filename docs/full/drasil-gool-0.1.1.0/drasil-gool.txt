@@ -395,22 +395,22 @@ arccos :: NumericExpression r => SValue r -> SValue r
 arctan :: NumericExpression r => SValue r -> SValue r
 floor :: NumericExpression r => SValue r -> SValue r
 ceil :: NumericExpression r => SValue r -> SValue r
-infixl 5 #+
-infixl 5 #-
-infixl 6 #/
-infixl 6 #*
 infixl 8 #~
 infixl 7 #/^
 infixl 7 #|
+infixl 5 #+
+infixl 5 #-
+infixl 6 #*
+infixl 6 #/
 infixl 6 #%
 infixl 7 #^
 class (ValueSym r) => BooleanExpression r
 (?!) :: BooleanExpression r => SValue r -> SValue r
 (?&&) :: BooleanExpression r => SValue r -> SValue r -> SValue r
 (?||) :: BooleanExpression r => SValue r -> SValue r -> SValue r
+infixr 6 ?!
 infixl 2 ?&&
 infixl 1 ?||
-infixr 6 ?!
 class (ValueSym r) => Comparison r
 (?<) :: Comparison r => SValue r -> SValue r -> SValue r
 (?<=) :: Comparison r => SValue r -> SValue r -> SValue r
@@ -504,9 +504,9 @@ class (VariableSym r, StatementSym r) => AssignStatement r
 (&++) :: AssignStatement r => SVariable r -> MSStatement r
 (&--) :: AssignStatement r => SVariable r -> MSStatement r
 assign :: AssignStatement r => SVariable r -> SValue r -> MSStatement r
-infixl 8 &++
-infixl 1 &+=
 infixl 1 &-=
+infixl 1 &+=
+infixl 8 &++
 infixl 8 &--
 (&=) :: AssignStatement r => SVariable r -> SValue r -> MSStatement r
 infixr 1 &=
@@ -2567,9 +2567,9 @@ class (VariableSym r, StatementSym r) => AssignStatement r
 (&++) :: AssignStatement r => SVariable r -> MSStatement r
 (&--) :: AssignStatement r => SVariable r -> MSStatement r
 assign :: AssignStatement r => SVariable r -> SValue r -> MSStatement r
-infixl 8 &++
-infixl 1 &+=
 infixl 1 &-=
+infixl 1 &+=
+infixl 8 &++
 infixl 8 &--
 (&=) :: AssignStatement r => SVariable r -> SValue r -> MSStatement r
 infixr 1 &=
@@ -2730,22 +2730,22 @@ arccos :: NumericExpression r => SValue r -> SValue r
 arctan :: NumericExpression r => SValue r -> SValue r
 floor :: NumericExpression r => SValue r -> SValue r
 ceil :: NumericExpression r => SValue r -> SValue r
-infixl 5 #+
-infixl 5 #-
-infixl 6 #/
-infixl 6 #*
 infixl 8 #~
 infixl 7 #/^
 infixl 7 #|
+infixl 5 #+
+infixl 5 #-
+infixl 6 #*
+infixl 6 #/
 infixl 6 #%
 infixl 7 #^
 class (ValueSym r) => BooleanExpression r
 (?!) :: BooleanExpression r => SValue r -> SValue r
 (?&&) :: BooleanExpression r => SValue r -> SValue r -> SValue r
 (?||) :: BooleanExpression r => SValue r -> SValue r -> SValue r
+infixr 6 ?!
 infixl 2 ?&&
 infixl 1 ?||
-infixr 6 ?!
 class (ValueSym r) => Comparison r
 (?<) :: Comparison r => SValue r -> SValue r -> SValue r
 (?<=) :: Comparison r => SValue r -> SValue r -> SValue r
@@ -3048,9 +3048,9 @@ class (VariableSym r, StatementSym r) => AssignStatement r
 (&++) :: AssignStatement r => SVariable r -> MSStatement r
 (&--) :: AssignStatement r => SVariable r -> MSStatement r
 assign :: AssignStatement r => SVariable r -> SValue r -> MSStatement r
-infixl 8 &++
-infixl 1 &+=
 infixl 1 &-=
+infixl 1 &+=
+infixl 8 &++
 infixl 8 &--
 (&=) :: AssignStatement r => SVariable r -> SValue r -> MSStatement r
 infixr 1 &=
@@ -3189,22 +3189,22 @@ arccos :: NumericExpression r => SValue r -> SValue r
 arctan :: NumericExpression r => SValue r -> SValue r
 floor :: NumericExpression r => SValue r -> SValue r
 ceil :: NumericExpression r => SValue r -> SValue r
-infixl 5 #+
-infixl 5 #-
-infixl 6 #/
-infixl 6 #*
 infixl 8 #~
 infixl 7 #/^
 infixl 7 #|
+infixl 5 #+
+infixl 5 #-
+infixl 6 #*
+infixl 6 #/
 infixl 6 #%
 infixl 7 #^
 class (ValueSym r) => BooleanExpression r
 (?!) :: BooleanExpression r => SValue r -> SValue r
 (?&&) :: BooleanExpression r => SValue r -> SValue r -> SValue r
 (?||) :: BooleanExpression r => SValue r -> SValue r -> SValue r
+infixr 6 ?!
 infixl 2 ?&&
 infixl 1 ?||
-infixr 6 ?!
 class (ValueSym r) => Comparison r
 (?<) :: Comparison r => SValue r -> SValue r -> SValue r
 (?<=) :: Comparison r => SValue r -> SValue r -> SValue r

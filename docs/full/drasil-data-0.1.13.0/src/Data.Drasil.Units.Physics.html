@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Units related to the field of (classical) physics. Includes kinematics, forces, etc.</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | Units related to the field of (classical) physics. Includes kinematics, forces, etc.</span></span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Drasil.Units.Physics</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html"><span class="hs-identifier">Data.Drasil.SI_Units</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier">metre</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#radian"><span class="hs-identifier">radian</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#s_2"><span class="hs-identifier">s_2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#second"><span class="hs-identifier">second</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#newton"><span class="hs-identifier">newton</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.SI_Units.html#kilogram"><span class="hs-identifier">kilogram</span></a></span><span class="hs-special">,</span><span>
@@ -11,7 +11,8 @@
 </span><span id="line-11"></span><span id="accelU"><span class="annot"><span class="annottext">accelU :: UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#accelU"><span class="hs-identifier hs-var hs-var">accelU</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">newUnit</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;acceleration&quot;</span></span><span>         </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-string">&quot;acceleration&quot;</span></span><span>         </span><span class="annot"><span class="annottext">(UnitEquation -&gt; UnitDefn) -&gt; UnitEquation -&gt; UnitDefn
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
@@ -19,7 +20,8 @@
 </span><span id="line-12"></span><span id="angVelU"><span class="annot"><span class="annottext">angVelU :: UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#angVelU"><span class="hs-identifier hs-var hs-var">angVelU</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">newUnit</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;angular velocity&quot;</span></span><span>     </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-string">&quot;angular velocity&quot;</span></span><span>     </span><span class="annot"><span class="annottext">(UnitEquation -&gt; UnitDefn) -&gt; UnitEquation -&gt; UnitDefn
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#radian"><span class="hs-identifier hs-var">radian</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
@@ -27,7 +29,8 @@
 </span><span id="line-13"></span><span id="angAccelU"><span class="annot"><span class="annottext">angAccelU :: UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#angAccelU"><span class="hs-identifier hs-var hs-var">angAccelU</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">newUnit</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;angular acceleration&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-string">&quot;angular acceleration&quot;</span></span><span> </span><span class="annot"><span class="annottext">(UnitEquation -&gt; UnitDefn) -&gt; UnitEquation -&gt; UnitDefn
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#radian"><span class="hs-identifier hs-var">radian</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
@@ -35,7 +38,8 @@
 </span><span id="line-14"></span><span id="forcePerMeterU"><span class="annot"><span class="annottext">forcePerMeterU :: UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#forcePerMeterU"><span class="hs-identifier hs-var hs-var">forcePerMeterU</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">newUnit</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;force per meter&quot;</span></span><span>      </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-string">&quot;force per meter&quot;</span></span><span>      </span><span class="annot"><span class="annottext">(UnitEquation -&gt; UnitDefn) -&gt; UnitEquation -&gt; UnitDefn
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#newton"><span class="hs-identifier hs-var">newton</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
@@ -43,7 +47,8 @@
 </span><span id="line-15"></span><span id="impulseU"><span class="annot"><span class="annottext">impulseU :: UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#impulseU"><span class="hs-identifier hs-var hs-var">impulseU</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">newUnit</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;impulse&quot;</span></span><span>              </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-string">&quot;impulse&quot;</span></span><span>              </span><span class="annot"><span class="annottext">(UnitEquation -&gt; UnitDefn) -&gt; UnitEquation -&gt; UnitDefn
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#newton"><span class="hs-identifier hs-var">newton</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">*:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
@@ -51,7 +56,8 @@
 </span><span id="line-16"></span><span id="momtInertU"><span class="annot"><span class="annottext">momtInertU :: UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#momtInertU"><span class="hs-identifier hs-var hs-var">momtInertU</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">newUnit</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;moment of inertia&quot;</span></span><span>    </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-string">&quot;moment of inertia&quot;</span></span><span>    </span><span class="annot"><span class="annottext">(UnitEquation -&gt; UnitDefn) -&gt; UnitEquation -&gt; UnitDefn
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#kilogram"><span class="hs-identifier hs-var">kilogram</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">*:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
@@ -59,7 +65,8 @@
 </span><span id="line-17"></span><span id="momentOfForceU"><span class="annot"><span class="annottext">momentOfForceU :: UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#momentOfForceU"><span class="hs-identifier hs-var hs-var">momentOfForceU</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">newUnit</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;moment of force&quot;</span></span><span>      </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-string">&quot;moment of force&quot;</span></span><span>      </span><span class="annot"><span class="annottext">(UnitEquation -&gt; UnitDefn) -&gt; UnitEquation -&gt; UnitDefn
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#newton"><span class="hs-identifier hs-var">newton</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">*:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
@@ -67,7 +74,8 @@
 </span><span id="line-18"></span><span id="springConstU"><span class="annot"><span class="annottext">springConstU :: UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#springConstU"><span class="hs-identifier hs-var hs-var">springConstU</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">newUnit</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;spring constant&quot;</span></span><span>      </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-string">&quot;spring constant&quot;</span></span><span>      </span><span class="annot"><span class="annottext">(UnitEquation -&gt; UnitDefn) -&gt; UnitEquation -&gt; UnitDefn
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#newton"><span class="hs-identifier hs-var">newton</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
@@ -75,7 +83,8 @@
 </span><span id="line-19"></span><span id="torqueU"><span class="annot"><span class="annottext">torqueU :: UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#torqueU"><span class="hs-identifier hs-var hs-var">torqueU</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">newUnit</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;torque&quot;</span></span><span>               </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-string">&quot;torque&quot;</span></span><span>               </span><span class="annot"><span class="annottext">(UnitEquation -&gt; UnitDefn) -&gt; UnitEquation -&gt; UnitDefn
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#newton"><span class="hs-identifier hs-var">newton</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">*:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
@@ -83,7 +92,8 @@
 </span><span id="line-20"></span><span id="velU"><span class="annot"><span class="annottext">velU :: UnitDefn
 </span><a href="Data.Drasil.Units.Physics.html#velU"><span class="hs-identifier hs-var hs-var">velU</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; UnitEquation -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">newUnit</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;velocity&quot;</span></span><span>             </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-string">&quot;velocity&quot;</span></span><span>             </span><span class="annot"><span class="annottext">(UnitEquation -&gt; UnitDefn) -&gt; UnitEquation -&gt; UnitDefn
+forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><a href="Data.Drasil.SI_Units.html#metre"><span class="hs-identifier hs-var">metre</span></a></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; UnitDefn -&gt; UnitEquation
 </span><span class="hs-operator hs-var">/:</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn

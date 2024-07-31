@@ -2,11 +2,13 @@
 
 [Fig:SysCon](./SecSysContext.md#Figure:SysCon) shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system and its environment.
 
-<div id="Figure:SysCon"></div>
+<div id="Figure:SysCon" align="center" >
 
 ![[Fig:SysCon](./SecSysContext.md#Figure:SysCon): System Context](./assets/SystemContextFigure.png)
 
-**<p align="center">[Fig:SysCon](./SecSysContext.md#Figure:SysCon): System Context</p>**
+**[Fig:SysCon](./SecSysContext.md#Figure:SysCon): System Context**
+
+</div>
 
 SWHS is mostly self-contained. The only external interaction is through the user interface. The responsibilities of the user and the system are as follows:
 

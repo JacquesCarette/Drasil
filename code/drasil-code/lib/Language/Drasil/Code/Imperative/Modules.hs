@@ -33,7 +33,7 @@ import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
   getDerivedIns, getDerivedOuts, getInConstructorParams, getInputFormatIns,
   getInputFormatOuts, getCalcParams, getOutputParams)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  genICName)
+  ScopeType(..), genICName)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar,
   DefiningCodeExpr(..))
@@ -70,7 +70,7 @@ import Data.Map ((!), elems, member)
 import qualified Data.Map as Map (lookup, filter)
 import Data.Maybe (maybeToList, catMaybes)
 import Control.Monad (liftM2, zipWithM)
-import Control.Monad.State (get, gets)
+import Control.Monad.State (get, gets, modify)
 import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (render)
 
@@ -93,6 +93,7 @@ genMainFunc = do
     g <- get
     let mainFunc Library = return Nothing
         mainFunc Program = do
+          modify (\st -> st {currentScope = Local})
           v_filename <- mkVar (quantvar inFileName) mainFn
           logInFile <- maybeLog v_filename mainFn
           co <- initConsts
@@ -216,6 +217,7 @@ genInputClass :: (OOProg r) => ClassType ->
   GenState (Maybe (SClass r))
 genInputClass scp = do
   g <- get
+  modify (\st -> st {currentScope = Local})
   cname <- genICName InputParameters
   let ins = inputs $ codeSpec g
       cs = constants $ codeSpec g
@@ -275,6 +277,7 @@ genInputDerived :: (OOProg r) => VisibilityTag ->
   GenState (Maybe (SMethod r))
 genInputDerived s = do
   g <- get
+  modify (\st -> st {currentScope = Local})
   dvName <- genICName DerivedValuesFn
   let dvals = derivedInputs $ codeSpec g
       getFunc Pub = publicInOutFunc
@@ -296,6 +299,7 @@ genInputConstraints :: (OOProg r) => VisibilityTag ->
   GenState (Maybe (SMethod r))
 genInputConstraints s = do
   g <- get
+  modify (\st -> st {currentScope = Local})
   icName <- genICName InputConstraintsFn
   let cm = cMap $ codeSpec g
       getFunc Pub = publicFunc
@@ -414,6 +418,7 @@ genInputFormat :: (OOProg r) => VisibilityTag ->
   GenState (Maybe (SMethod r))
 genInputFormat s = do
   g <- get
+  modify (\st -> st {currentScope = Local})
   dd <- genDataDesc
   giName <- genICName GetInput
   let getFunc Pub = publicInOutFunc
@@ -463,6 +468,7 @@ genConstClass :: (OOProg r) => ClassType ->
   GenState (Maybe (SClass r))
 genConstClass scp = do
   g <- get
+  modify (\st -> st {currentScope = Local})
   cname <- genICName Constants
   let cs = constants $ codeSpec g
       genClass :: (OOProg r) => [CodeDefinition] -> GenState
@@ -500,6 +506,7 @@ genCalcFunc :: (OOProg r) => CodeDefinition ->
   GenState (SMethod r)
 genCalcFunc cdef = do
   g <- get
+  modify (\st -> st {currentScope = Local})
   parms <- getCalcParams cdef
   let nm = codeName cdef
   tp <- codeType cdef
@@ -570,6 +577,7 @@ genOutputMod = do
 genOutputFormat :: (OOProg r) => GenState (Maybe (SMethod r))
 genOutputFormat = do
   g <- get
+  modify (\st -> st {currentScope = Local})
   woName <- genICName WriteOutput
   let genOutput :: (OOProg r) => Maybe String -> GenState (Maybe (SMethod r))
       genOutput Nothing = return Nothing
@@ -609,6 +617,7 @@ genMainFuncProc = do
     g <- get
     let mainFunc Library = return Nothing
         mainFunc Program = do
+          modify (\st -> st {currentScope = Local})
           v_filename <- mkVarProc (quantvar inFileName) mainFn
           logInFile <- maybeLog v_filename mainFn
           co <- initConstsProc
@@ -729,6 +738,7 @@ genCalcFuncProc :: (SharedProg r) => CodeDefinition ->
   GenState (SMethod r)
 genCalcFuncProc cdef = do
   g <- get
+  modify (\st -> st {currentScope = Local})
   parms <- getCalcParams cdef
   let nm = codeName cdef
   tp <- codeType cdef
@@ -788,6 +798,7 @@ genInputFormatProc :: (SharedProg r) => VisibilityTag ->
   GenState (Maybe (SMethod r))
 genInputFormatProc s = do
   g <- get
+  modify (\st -> st {currentScope = Local})
   dd <- genDataDesc
   giName <- genICName GetInput
   let getFunc Pub = publicInOutFuncProc
@@ -809,6 +820,7 @@ genInputDerivedProc :: (SharedProg r) => VisibilityTag ->
   GenState (Maybe (SMethod r))
 genInputDerivedProc s = do
   g <- get
+  modify (\st -> st {currentScope = Local})
   dvName <- genICName DerivedValuesFn
   let dvals = derivedInputs $ codeSpec g
       getFunc Pub = publicInOutFuncProc
@@ -830,6 +842,7 @@ genInputConstraintsProc :: (SharedProg r) => VisibilityTag ->
   GenState (Maybe (SMethod r))
 genInputConstraintsProc s = do
   g <- get
+  modify (\st -> st {currentScope = Local})
   icName <- genICName InputConstraintsFn
   let cm = cMap $ codeSpec g
       getFunc Pub = publicFuncProc
@@ -947,6 +960,7 @@ genOutputModProc = do
 genOutputFormatProc :: (SharedProg r) => GenState (Maybe (SMethod r))
 genOutputFormatProc = do
   g <- get
+  modify (\st -> st {currentScope = Local})
   woName <- genICName WriteOutput
   let genOutput :: (SharedProg r) => Maybe String -> GenState (Maybe (SMethod r))
       genOutput Nothing = return Nothing

@@ -23,7 +23,7 @@ import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, fAppProc,
 import Language.Drasil.Code.Imperative.Helpers (lookupC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  genICName)
+  ScopeType(..), genICName)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, obv,
   quantvar, quantfunc, ccObjVar, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.Parameter (ParameterChunk(..), PassBy(..), pcAuto)
@@ -60,7 +60,7 @@ import Prelude hiding (sin, cos, tan, log, exp)
 import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)
 import Control.Monad (liftM2,liftM3)
-import Control.Monad.State (get)
+import Control.Monad.State (get, modify)
 import Control.Lens ((^.))
 
 -- | Gets a chunk's 'CodeType', by checking which 'CodeType' the user has chosen to
@@ -206,19 +206,23 @@ mkParam p = do
 publicFunc :: (OOProg r) => Label -> VSType r -> Description ->
   [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
-publicFunc n t = genMethod (function n public t) n
+publicFunc n t desc ps r b = do
+  modify (\st -> st {currentScope = Local})
+  genMethod (function n public t) n desc ps r b
 
 -- | Generates a public method.
 publicMethod :: (OOProg r) => Label -> VSType r -> Description ->
   [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
-publicMethod n t = genMethod (method n public dynamic t) n
+publicMethod n t = do
+  genMethod (method n public dynamic t) n
 
 -- | Generates a private method.
 privateMethod :: (OOProg r) => Label -> VSType r -> Description ->
   [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
-privateMethod n t = genMethod (method n private dynamic t) n
+privateMethod n t = do
+  genMethod (method n private dynamic t) n
 
 -- | Generates a public function, defined by its inputs and outputs.
 publicInOutFunc :: (OOProg r) => Label -> Description -> [CodeVarChunk] ->
@@ -233,7 +237,8 @@ privateInOutMethod n = genInOutFunc (inOutMethod n private dynamic) (docInOutMet
 -- | Generates a constructor.
 genConstructor :: (OOProg r) => Label -> Description -> [ParameterChunk] ->
   [MSBlock r] -> GenState (SMethod r)
-genConstructor n desc p = genMethod nonInitConstructor n desc p Nothing
+genConstructor n desc p = do
+  genMethod nonInitConstructor n desc p Nothing
 
 -- | Generates a constructor that includes initialization of variables.
 genInitConstructor :: (OOProg r) => Label -> Description -> [ParameterChunk]
@@ -269,6 +274,7 @@ genInOutFunc :: (OOProg r) => ([SVariable r] -> [SVariable r] ->
   [MSBlock r] -> GenState (SMethod r)
 genInOutFunc f docf n desc ins' outs' b = do
   g <- get
+  modify (\st -> st {currentScope = Local})
   let ins = ins' \\ outs'
       outs = outs' \\ ins'
       both = ins' `intersect` outs'
@@ -497,6 +503,7 @@ genClass :: (OOProg r) => (Name -> Maybe Name -> Description -> [CSStateVar r]
 genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
                                                  svar Priv = privDVar
   in do
+  modify (\st -> st {currentScope = Local})
   svrs <- mapM (\(SV s v) -> fmap (svar s . var' (codeName v) local .
                 convTypeOO) (codeType v)) svs
   f n i desc svrs (mapM (genFunc publicMethod svs) cs) 
@@ -512,6 +519,7 @@ genFunc :: (OOProg r) => (Name -> VSType r -> Description -> [ParameterChunk]
   [StateVariable] -> Func -> GenState (SMethod r)
 genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
   g <- get
+  modify (\st -> st {currentScope = Local})
   stmts <- mapM convStmt s
   vars <- mapM (`mkVar` local) (fstdecl (sysinfodb $ codeSpec g) s -- TODO: get scope from state
     \\ (map quantvar parms ++ map stVar svs))
@@ -519,6 +527,7 @@ genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
   f n (convTypeOO t) desc parms rd [block $ map varDec vars, block stmts]
 genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
   g <- get
+  modify (\st -> st {currentScope = Local})
   inits <- mapM (convExpr . snd) i
   initvars <- mapM ((\iv -> fmap (var' (codeName iv) local . convTypeOO)
     (codeType iv)) . fst) i
@@ -527,7 +536,9 @@ genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
     \\ (map quantvar parms ++ map stVar svs))
   genInitConstructor n desc parms (zip initvars inits)
     [block $ map varDec vars, block stmts]
-genFunc _ _ (FData (FuncData n desc ddef)) = genDataFunc n desc ddef
+genFunc _ _ (FData (FuncData n desc ddef)) = do
+  modify (\st -> st {currentScope = Local})
+  genDataFunc n desc ddef
 
 -- | Converts a 'FuncStmt' to a GOOL Statement.
 convStmt :: (OOProg r) => FuncStmt -> GenState (MSStatement r)
@@ -823,13 +834,17 @@ mkParamProc p = do
 publicFuncProc :: (SharedProg r) => Label -> VSType r -> Description ->
   [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
-publicFuncProc n t = genMethodProc (function n public t) n
+publicFuncProc n t desc ps r b = do
+  modify (\st -> st {currentScope = Local})
+  genMethodProc (function n public t) n desc ps r b
 
 -- | Generates a private function.
 privateFuncProc :: (SharedProg r) => Label -> VSType r -> Description ->
   [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
-privateFuncProc n t = genMethodProc (function n private t) n
+privateFuncProc n t desc ps r b = do
+  modify (\st -> st {currentScope = Local})
+  genMethodProc (function n private t) n desc ps r b
 
 -- | Generates a function or method using the passed GOOL constructor. Other
 -- parameters are the method's name, description, list of parameters,
@@ -857,6 +872,7 @@ genFuncProc :: (SharedProg r) => (Name -> VSType r -> Description -> [ParameterC
   [StateVariable] -> Func -> GenState (SMethod r)
 genFuncProc f svs (FDef (FuncDef n desc parms o rd s)) = do
   g <- get
+  modify (\st -> st {currentScope = Local})
   stmts <- mapM convStmtProc s
   vars <- mapM (`mkVarProc` local) (fstdecl (sysinfodb $ codeSpec g) s -- TODO: get scope from state
     \\ (map quantvar parms ++ map stVar svs))
@@ -1171,6 +1187,7 @@ genInOutFuncProc :: (SharedProg r) => ([SVariable r] -> [SVariable r] ->
   [MSBlock r] -> GenState (SMethod r)
 genInOutFuncProc f docf n desc ins' outs' b = do
   g <- get
+  modify (\st -> st {currentScope = Local})
   let ins = ins' \\ outs'
       outs = outs' \\ ins'
       both = ins' `intersect` outs'

@@ -9,22 +9,24 @@ import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, MSStatement,
   SharedProg, BodySym(..), BlockSym(..), TypeSym(..), var, VariableElim(..),
   Literal(..), VariableValue(..), StatementSym(..), DeclStatement(..),
   IOStatement(..), lensMStoVS, ScopeSym(..))
+import Language.Drasil.Code.Imperative.Helpers (convScope)
 
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (get)
 
 -- | Generates a statement that logs the given variable's value, if the user
 -- chose to turn on logging of variable assignments.
-maybeLog :: (SharedProg r) => SVariable r -> r (Scope r) -> GenState [MSStatement r]
-maybeLog v scp = do
+maybeLog :: (SharedProg r) => SVariable r -> GenState [MSStatement r]
+maybeLog v = do
   g <- get
-  sequence [loggedVar v scp | LogVar `elem` logKind g]
+  sequence [loggedVar v | LogVar `elem` logKind g]
 
 -- | Generates a statement that logs the name of the given variable, its current
 -- value, and the current module name.
-loggedVar :: (SharedProg r) => SVariable r -> r (Scope r) -> GenState (MSStatement r)
-loggedVar v scp = do
+loggedVar :: (SharedProg r) => SVariable r -> GenState (MSStatement r)
+loggedVar v = do
   g <- get
+  let scp = convScope $ currentScope g
   return $ multi [
     openFileA (varLogFile scp) (litString $ logName g),
     zoom lensMStoVS v >>= (\v' -> printFileStr (valLogFile scp) ("var '" ++

@@ -74,7 +74,7 @@ extra-deps:
 - unicode-properties-3.2.0.0@sha256:239766a6ac4322329353f6b9cd546024fd8c5f0235c8e32b3cba2d6bd245a699,1000
 - transformers-0.6.1.1@sha256:80d128763c6965dfcddca2155b3dec3bb1970d476f0c8cceb4bb28608ab75e7c,3243
 
-# The following packages are dependencies needed for 'stan', specifically tested against GHC 9.4.8.
+# The following packages are dependencies needed for 'stan' and 'weeder', 'stan' specifically tested against GHC 9.4.8.
 - clay-0.14.0@sha256:a50ba73137a39c55e89f24a7792107ec40ba07320b2c5ff7932049845c50ffc9,2204
 - dir-traverse-0.2.3.0@sha256:adcc128f201ff95131b15ffe41365dc99c50dc3fa3a910f021521dc734013bfa,2137
 - extensions-0.1.0.0@sha256:b8105dc43a57b0b3b54879e8dbb905676dfee3e8b59301fefbf2409a0fe95710,4447
@@ -94,6 +94,7 @@ extra-deps:
 - unix-2.8.5.1@sha256:3f702a252a313a7bcb56e3908a14e7f9f1b40e41b7bdc8ae8a9605a1a8686f06,9808
 - Cabal-3.12.1.0@sha256:08be296ddd941b3f9be4bd125fbb3e6857f5c707b8d10464f6f1d30c91ca3e5f,13551
 - Cabal-syntax-3.12.1.0@sha256:6dbb06fb08ff77520947fb4c1ef281c9cea5b8dc7fd9a41ad62273fa916cf4b2,7407
+
 # This configuration option allows the use of newer versions of dependencies than what is specified
 allow-newer: true
 

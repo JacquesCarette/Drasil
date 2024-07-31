@@ -1077,8 +1077,11 @@ ul :: Doc -> Doc
 -- | Helper for setting up section div
 divTag :: Doc -> Doc
 
--- | Helper for setting up div for defn heading
-defnHTag :: Doc -> Doc
+-- | Helper for setting up centered div tags
+centeredDiv :: Doc -> Doc
+
+-- | Helper for setting up centered div tags with an Id
+centeredDivId :: Doc -> Doc -> Doc
 
 -- | Helper for setting up links to references
 reflink :: RefMap -> String -> Doc -> Doc

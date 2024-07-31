@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE PostfixOperators #-}</span><span>
-</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.GamePhysics.Requirements</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GamePhysics.Requirements.html#funcReqs"><span class="hs-identifier">funcReqs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Requirements.html#nonfuncReqs"><span class="hs-identifier">nonfuncReqs</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.GamePhysics.Requirements</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GamePhysics.Requirements.html#funcReqs"><span class="hs-identifier">funcReqs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Requirements.html#nonfuncReqs"><span class="hs-identifier">nonfuncReqs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Requirements.html#pymunk"><span class="hs-identifier">pymunk</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">organization</span></span><span class="hs-special">)</span><span>
 </span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span>
@@ -51,17 +51,17 @@
 </span><span id="line-42"></span><span class="hs-comment">-- | template for requirements</span><span>
 </span><span id="line-43"></span><span class="annot"><a href="Drasil.GamePhysics.Requirements.html#requirementTemplate"><span class="hs-identifier hs-type">requirementTemplate</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-44"></span><span id="requirementTemplate"><span class="annot"><span class="annottext">requirementTemplate :: Sentence -&gt; Sentence -&gt; Sentence -&gt; Sentence -&gt; Sentence
-</span><a href="Drasil.GamePhysics.Requirements.html#requirementTemplate"><span class="hs-identifier hs-var hs-var">requirementTemplate</span></a></span></span><span> </span><span id="local-6989586621679066115"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679066115"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679066114"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679066114"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span id="local-6989586621679066113"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679066113"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679066112"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679066112"><span class="hs-identifier hs-var">z</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><a href="Drasil.GamePhysics.Requirements.html#requirementTemplate"><span class="hs-identifier hs-var hs-var">requirementTemplate</span></a></span></span><span> </span><span id="local-6989586621679066254"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679066254"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679066253"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679066253"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span id="local-6989586621679066252"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679066252"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679066251"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679066251"><span class="hs-identifier hs-var">z</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Determine the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679066115"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679066254"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679066114"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><a href="#local-6989586621679066253"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-45"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;over a period of&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -69,22 +69,22 @@
 </span><span class="hs-identifier hs-var">QP.time</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;of the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679066113"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679066112"><span class="hs-identifier hs-var">z</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679066252"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679066251"><span class="hs-identifier hs-var">z</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-46"></span><span>
 </span><span id="line-47"></span><span class="hs-comment">-- | with added constraint</span><span>
-</span><span id="line-48"></span><span id="local-6989586621679066239"><span id="local-6989586621679066240"><span class="annot"><a href="Drasil.GamePhysics.Requirements.html#requirementS"><span class="hs-identifier hs-type">requirementS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679066240"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679066239"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679066240"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679066239"><span class="hs-identifier hs-type">b</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span></span><span>
+</span><span id="line-48"></span><span id="local-6989586621679066389"><span id="local-6989586621679066390"><span class="annot"><a href="Drasil.GamePhysics.Requirements.html#requirementS"><span class="hs-identifier hs-type">requirementS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679066390"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679066389"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679066390"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679066389"><span class="hs-identifier hs-type">b</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span></span><span>
 </span><span id="line-49"></span><span id="requirementS"><span class="annot"><span class="annottext">requirementS :: forall a b.
 (NamedIdea a, NamedIdea b) =&gt;
 a -&gt; b -&gt; Sentence -&gt; Sentence
-</span><a href="Drasil.GamePhysics.Requirements.html#requirementS"><span class="hs-identifier hs-var hs-var">requirementS</span></a></span></span><span> </span><span id="local-6989586621679066101"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679066101"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679066100"><span class="annot"><span class="annottext">b
-</span><a href="#local-6989586621679066100"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="Drasil.GamePhysics.Requirements.html#requirementS"><span class="hs-identifier hs-var hs-var">requirementS</span></a></span></span><span> </span><span id="local-6989586621679066240"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679066240"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679066239"><span class="annot"><span class="annottext">b
+</span><a href="#local-6989586621679066239"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Drasil.GamePhysics.Requirements.html#requirementTemplate"><span class="hs-identifier hs-var">requirementTemplate</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679066101"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
+</span><a href="#local-6989586621679066240"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">b
-</span><a href="#local-6989586621679066100"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
+</span><a href="#local-6989586621679066239"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
 </span><span class="hs-identifier hs-var">getAcc</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">twoD</span></span><span>
 </span><span id="line-50"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -93,16 +93,16 @@ a -&gt; b -&gt; Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">CP.rigidBody</span></span><span class="hs-special">)</span><span>
 </span><span id="line-51"></span><span>
 </span><span id="line-52"></span><span class="hs-comment">-- | without added constraint</span><span>
-</span><span id="line-53"></span><span id="local-6989586621679066234"><span id="local-6989586621679066235"><span class="annot"><a href="Drasil.GamePhysics.Requirements.html#requirementS%27"><span class="hs-identifier hs-type">requirementS'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679066235"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679066234"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679066235"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679066234"><span class="hs-identifier hs-type">b</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span></span><span>
+</span><span id="line-53"></span><span id="local-6989586621679066384"><span id="local-6989586621679066385"><span class="annot"><a href="Drasil.GamePhysics.Requirements.html#requirementS%27"><span class="hs-identifier hs-type">requirementS'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679066385"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679066384"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679066385"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679066384"><span class="hs-identifier hs-type">b</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span></span><span>
 </span><span id="line-54"></span><span id="requirementS%27"><span class="annot"><span class="annottext">requirementS' :: forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; Sentence
-</span><a href="Drasil.GamePhysics.Requirements.html#requirementS%27"><span class="hs-identifier hs-var hs-var">requirementS'</span></a></span></span><span> </span><span id="local-6989586621679066091"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679066091"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679066090"><span class="annot"><span class="annottext">b
-</span><a href="#local-6989586621679066090"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b.
+</span><a href="Drasil.GamePhysics.Requirements.html#requirementS%27"><span class="hs-identifier hs-var hs-var">requirementS'</span></a></span></span><span> </span><span id="local-6989586621679066230"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679066230"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679066229"><span class="annot"><span class="annottext">b
+</span><a href="#local-6989586621679066229"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b.
 (NamedIdea a, NamedIdea b) =&gt;
 a -&gt; b -&gt; Sentence -&gt; Sentence
 </span><a href="Drasil.GamePhysics.Requirements.html#requirementS"><span class="hs-identifier hs-var">requirementS</span></a></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679066091"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">b
-</span><a href="#local-6989586621679066090"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679066230"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">b
+</span><a href="#local-6989586621679066229"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span>
 </span><span id="line-55"></span><span>
 </span><span id="line-56"></span><span class="hs-comment">-- some requirements look like they could be parametrized</span><span>
@@ -369,77 +369,93 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-string">&quot;simulation results shall be compared to&quot;</span></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-114"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;an existing implementation like Pymunk (please refer to:&quot;</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-115"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-string">&quot;an existing implementation like&quot;</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-115"></span><span>  </span><span class="annot"><span class="annottext">forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.GamePhysics.Requirements.html#pymunk"><span class="hs-identifier hs-var">pymunk</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;http://www.pymunk.org/en/latest/)&quot;</span></span><span>
+</span><span class="hs-string">&quot;Pymunk&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-116"></span><span>  </span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Correctness&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">nonFuncReqDom</span></span><span>
-</span><span id="line-117"></span><span> </span><span>
-</span><span id="line-118"></span><span class="annot"><a href="Drasil.GamePhysics.Requirements.html#usability"><span class="hs-identifier hs-type">usability</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-119"></span><span id="usability"><span class="annot"><span class="annottext">usability :: ConceptInstance
+</span><span id="line-117"></span><span>
+</span><span id="line-118"></span><span class="annot"><a href="Drasil.GamePhysics.Requirements.html#pymunk"><span class="hs-identifier hs-type">pymunk</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
+</span><span id="line-119"></span><span id="pymunk"><span class="annot"><span class="annottext">pymunk :: Reference
+</span><a href="Drasil.GamePhysics.Requirements.html#pymunk"><span class="hs-identifier hs-var hs-var">pymunk</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; ShortName -&gt; Reference
+</span><span class="hs-identifier hs-var">makeURI</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;pymunk&quot;</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;http://www.pymunk.org/en/latest/&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>
+</span><span id="line-120"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
+</span><span class="hs-identifier hs-var">shortname'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Pymunk&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-121"></span><span> </span><span>
+</span><span id="line-122"></span><span class="annot"><a href="Drasil.GamePhysics.Requirements.html#usability"><span class="hs-identifier hs-type">usability</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-123"></span><span id="usability"><span class="annot"><span class="annottext">usability :: ConceptInstance
 </span><a href="Drasil.GamePhysics.Requirements.html#usability"><span class="hs-identifier hs-var hs-var">usability</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c.
 Concept c =&gt;
 String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;usability&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-120"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-124"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Software shall be easy to learn&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;use. Usability shall be measured by&quot;</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-121"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-125"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;how long it takes a user to learn how to use the library to create a small program&quot;</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-122"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-126"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;to simulate the movement&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;2 bodies over time in space. Creating a program&quot;</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-123"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-127"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;should take no less than 30 to 60 minutes for an intermediate to experienced programmer&quot;</span></span><span>
-</span><span id="line-124"></span><span>  </span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-128"></span><span>  </span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Usability&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">nonFuncReqDom</span></span><span>
-</span><span id="line-125"></span><span>
-</span><span id="line-126"></span><span class="annot"><a href="Drasil.GamePhysics.Requirements.html#understandability"><span class="hs-identifier hs-type">understandability</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-127"></span><span id="understandability"><span class="annot"><span class="annottext">understandability :: ConceptInstance
+</span><span id="line-129"></span><span>
+</span><span id="line-130"></span><span class="annot"><a href="Drasil.GamePhysics.Requirements.html#understandability"><span class="hs-identifier hs-type">understandability</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-131"></span><span id="understandability"><span class="annot"><span class="annottext">understandability :: ConceptInstance
 </span><a href="Drasil.GamePhysics.Requirements.html#understandability"><span class="hs-identifier hs-var hs-var">understandability</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall c.
 Concept c =&gt;
 String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;understandability&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-128"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-132"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Users&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Tamias2D shall be able to learn the software with ease&quot;</span></span><span> </span><span class="hs-operator">!.</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-129"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-133"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Users shall be able to easily create a small program using the library&quot;</span></span><span> </span><span class="hs-operator">!.</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-130"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-134"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Creating a small program to simulate the movement of 2 bodies&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.in_`</span></span><span> </span><span>
-</span><span id="line-131"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-135"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;space should take no less that 60 minutes&quot;</span></span><span>
-</span><span id="line-132"></span><span>  </span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-136"></span><span>  </span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Understandability&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">nonFuncReqDom</span></span><span>
-</span><span id="line-133"></span><span>
-</span><span id="line-134"></span><span class="annot"><a href="Drasil.GamePhysics.Requirements.html#maintainability"><span class="hs-identifier hs-type">maintainability</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-135"></span><span id="maintainability"><span class="annot"><span class="annottext">maintainability :: ConceptInstance
+</span><span id="line-137"></span><span>
+</span><span id="line-138"></span><span class="annot"><a href="Drasil.GamePhysics.Requirements.html#maintainability"><span class="hs-identifier hs-type">maintainability</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-139"></span><span id="maintainability"><span class="annot"><span class="annottext">maintainability :: ConceptInstance
 </span><a href="Drasil.GamePhysics.Requirements.html#maintainability"><span class="hs-identifier hs-var hs-var">maintainability</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Integer -&gt; String -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">mkMaintainableNFR</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;maintainability&quot;</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">10</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Maintainability&quot;</span></span><span>
-</span><span id="line-136"></span></pre></body></html>
+</span><span id="line-140"></span></pre></body></html>

@@ -54,6 +54,7 @@ smithKoothoor2016 :: Citation
 module Drasil.GamePhysics.Requirements
 funcReqs :: [ConceptInstance]
 nonfuncReqs :: [ConceptInstance]
+pymunk :: Reference
 
 module Drasil.GamePhysics.Unitals
 defSymbols :: [DefinedQuantityDict]
@@ -238,7 +239,13 @@ terms :: [ConceptChunk]
 generalDefinitionsIntro :: Contents
 dataDefinitionsIntro :: Sentence
 offShelfSols :: [Contents]
+offShelfSolRefs :: [Reference]
 offShelfSolsIntro :: Contents
 offShelfSols2DList :: Contents
 offShelfSolsMid :: Contents
 offShelfSols3DList :: Contents
+box2D :: Reference
+napePhysicsEngine :: Reference
+bullet :: Reference
+openDynamicsEngine :: Reference
+newtonGameDynamics :: Reference

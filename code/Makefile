@@ -539,6 +539,9 @@ stan: ##@Stan Run Stan static analysis tool on the Drasil packages.
 	cat drasil-*/stan.log
 #use to display stan logs, cat drasil-*/stan.log
 
+weeder:
+	weeder
+
 # Credits to "nowox" from StackOverflow: https://stackoverflow.com/a/30796664/16760741
 HELP_FUN = \
 	%help; while(<>){push@{$$help{$$2//'options'}},[$$1,$$3] \

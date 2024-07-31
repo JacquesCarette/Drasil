@@ -110,7 +110,6 @@ import Drasil.GOOL.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   addIter, getIter, resetIter, useVarName, genLoopIndex)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,log,exp,mod,max)
-import Control.Applicative (liftA2)
 import Control.Lens.Zoom (zoom)
 import Control.Monad (join)
 import Control.Monad.State (State, modify)

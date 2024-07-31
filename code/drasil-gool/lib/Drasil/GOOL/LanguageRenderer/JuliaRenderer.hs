@@ -84,7 +84,6 @@ import Drasil.GOOL.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
   getModuleImports, addModuleImportVS, getUsing, getLangImports, getLibImports,
   addLibImportVS, useVarName, getMainDoc, genLoopIndex, genVarNameIf)
 
-import Control.Applicative (liftA2)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe, isNothing)
 import Data.Functor ((<&>))

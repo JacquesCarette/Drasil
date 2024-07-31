@@ -65,8 +65,8 @@ m2x2 :: ExprC r => r -> r -> r -> r -> r
 m2x2 a b c d = matrix [[a,b],[c,d]]
 
 mkSet :: ExprC r => [r] -> r
-mkSet [r] = sSet [r]
-mkSet r = sSet r
+mkSet [r] = set' [r]
+mkSet r = set' r
 -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
 vec2D :: ExprC r => r -> r -> r
 vec2D a b = matrix [[a],[b]]
@@ -117,7 +117,9 @@ class ExprC r where
   
   ($&&), ($||) :: r -> r -> r
 
+  -- | Smart constructor for set-theoretic membership relation. Added ' to avoid conflict.
   in' :: r -> r -> r
+
   -- | Smart constructor for taking the absolute value of an expression.
   abs_ :: r -> r
   
@@ -178,6 +180,7 @@ class ExprC r where
   -- | Smart constructor for indexing.
   idx :: r -> r -> r
 
+  -- | Smart constructor for indexOf. Finds the index of the first occurrence of a value in a list.
   idxOf :: r -> r -> r
 
   -- | Smart constructor for the summation, product, and integral functions over an interval.
@@ -210,7 +213,9 @@ class ExprC r where
   -- | Create a matrix.
   matrix :: [[r]] -> r
 
-  sSet :: [r] -> r
+  -- | Create a Set.
+  set' :: [r] -> r
+
   -- | Applies a given function with a list of parameters.
   apply :: (HasUID f, HasSymbol f) => f -> [r] -> r
    
@@ -376,7 +381,7 @@ instance ExprC Expr where
   
   matrix = Matrix
 
-  sSet = Set
+  set' = Set
   -- | Applies a given function with a list of parameters.
   apply f [] = sy f
   apply f ps = FCall (f ^. uid) ps
@@ -543,7 +548,7 @@ instance ExprC M.ModelExpr where
 
   matrix = M.Matrix
 
-  sSet = M.Set
+  set' = M.Set
   -- | Applies a given function with a list of parameters.
   apply f [] = sy f
   apply f ps = M.FCall (f ^. uid) ps
@@ -710,7 +715,7 @@ instance ExprC C.CodeExpr where
   
   matrix = C.Matrix
 
-  sSet = C.Set
+  set' = C.Set
   -- | Applies a given function with a list of parameters.
   apply f [] = sy f
   apply f ps = C.FCall (f ^. uid) ps []

@@ -177,6 +177,7 @@ class InputParameters:
         print("  }", file=outfile)
         outfile.close()
         
+        set = {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}
         if not(0.1 <= self.a and self.a <= 5.0):
             print("a has value ", end="")
             print(self.a, end="")
@@ -213,12 +214,16 @@ class InputParameters:
             print(" (w_max)", end="")
             print(".")
             raise Exception("InputError")
-        if not(self.t in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}):
+        if not(self.t in set):
             print("t has value ", end="")
             print(self.t, end="")
             print(", but is expected to be ", end="")
             print("an element of the set ", end="")
-            print({2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}, end="")
+            print("{ ", end="")
+            for set_i1 in set:
+                print(set_i1, end="")
+                print(" ", end="")
+            print("}", end="")
             print(".")
             raise Exception("InputError")
         if not(6.0 <= self.SD and self.SD <= 130.0):

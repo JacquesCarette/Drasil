@@ -214,6 +214,7 @@ public class InputParameters {
         outfile.WriteLine("  }");
         outfile.Close();
         
+        HashSet<double> set = new HashSet<double> {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0};
         if (!(0.1 <= this.a && this.a <= 5.0)) {
             Console.Write("a has value ");
             Console.Write(this.a);
@@ -253,13 +254,13 @@ public class InputParameters {
             Console.WriteLine(".");
             throw new Exception("InputError");
         }
-        if (!(new HashSet<double> {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}.Contains(this.t))) {
+        if (!(set.Contains(this.t))) {
             Console.Write("t has value ");
             Console.Write(this.t);
             Console.Write(", but is expected to be ");
             Console.Write("an element of the set ");
             Console.Write("{ ");
-            foreach (double set_i1 in new HashSet<double> {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}) {
+            foreach (double set_i1 in set) {
                 Console.Write(set_i1);
                 Console.Write(" ");
             }

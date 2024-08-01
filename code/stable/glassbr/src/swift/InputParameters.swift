@@ -697,6 +697,7 @@ class InputParameters {
             throw "Error closing file."
         }
         
+        var set: [Double] = Set([2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0])
         if !(0.1 <= self.a && self.a <= 5.0) {
             print("a has value ", terminator: "")
             print(self.a, terminator: "")
@@ -736,12 +737,12 @@ class InputParameters {
             print(".")
             throw "InputError"
         }
-        if !(Set([2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0]).contains(self.t)) {
+        if !(set.contains(self.t)) {
             print("t has value ", terminator: "")
             print(self.t, terminator: "")
             print(", but is expected to be ", terminator: "")
             print("an element of the set ", terminator: "")
-            print(Set([2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0]), terminator: "")
+            print(set, terminator: "")
             print(".")
             throw "InputError"
         }

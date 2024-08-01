@@ -3,7 +3,7 @@
 module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
   publicFunc, publicFuncProc, privateMethod, privateFuncProc, publicInOutFunc,
   publicInOutFuncProc, privateInOutMethod, privateInOutFuncProc, genConstructor,
-  mkVar, mkVarProc, mkVal, mkValProc, convExpr, convExprProc, convStmt,
+  mkVar, mkVarProc, mkVal, mkValProc, convExpr, convExprSet, convExprProc, convStmt,
   convStmtProc, genModDef, genModDefProc, genModFuncs, genModFuncsProc,
   genModClasses, readData, readDataProc, renderC
 ) where
@@ -287,6 +287,13 @@ genInOutFunc f docf n desc ins' outs' b = do
     bComms bothVs) bod else f inVs outVs bothVs bod
 
 -- | Converts an 'Expr' to a GOOL Value.
+convExprSet :: (OOProg r) => CodeExpr -> GenState (SValue r)
+convExprSet (Set l) = do
+  ar <- mapM convExpr l
+                                    -- hd will never fail here
+  return $ litSet (fmap valueType (head ar)) ar
+convExprSet _ = error "not a Set"
+
 convExpr :: (OOProg r) => CodeExpr -> GenState (SValue r)
 convExpr (Lit (Dbl d)) = do
   sm <- spaceCodeType Real
@@ -360,10 +367,9 @@ convExpr (Matrix [l]) = do
                                     -- hd will never fail here
   return $ litArray (fmap valueType (head ar)) ar
 convExpr Matrix{} = error "convExpr: Matrix"
-convExpr (Set l) = do
-  ar <- mapM convExpr l
-                                    -- hd will never fail here
-  return $ litSet (fmap valueType (head ar)) ar
+convExpr (Set _) = do
+  let v = var "set" (setType double) local
+  return $ valueOf v
 convExpr Operator{} = error "convExpr: Operator"
 convExpr (RealI c ri)  = do
   g <- get

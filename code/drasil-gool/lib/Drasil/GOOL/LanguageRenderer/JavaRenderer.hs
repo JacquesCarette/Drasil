@@ -558,6 +558,7 @@ instance StatementSym JavaCode where
   -- Terminator determines how statements end
   type Statement JavaCode = (Doc, Terminator)
   valStmt = G.valStmt Semi
+  emptyValStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement JavaCode where

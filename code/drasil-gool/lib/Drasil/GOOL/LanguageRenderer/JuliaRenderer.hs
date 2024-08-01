@@ -475,6 +475,7 @@ instance StatementElim JuliaCode where
 instance StatementSym JuliaCode where
   type Statement JuliaCode = (Doc, Terminator)
   valStmt = G.valStmt Empty
+  emptyValStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement JuliaCode where

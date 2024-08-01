@@ -67,7 +67,6 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
   lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
   increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
   buildClass, implementingClass, commentedClass, modFromData, fileDoc,
@@ -539,6 +538,7 @@ instance StatementSym PythonCode where
   -- Terminator determines how statements end
   type Statement PythonCode = (Doc, Terminator)
   valStmt = G.valStmt Empty
+  emptyValStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement PythonCode where

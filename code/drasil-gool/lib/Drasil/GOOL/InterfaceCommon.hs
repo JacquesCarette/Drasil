@@ -357,6 +357,7 @@ type MSStatement a = MS (a (Statement a))
 class (ValueSym r) => StatementSym r where
   type Statement r
   valStmt :: SValue r -> MSStatement r -- converts value to statement
+  emptyValStmt :: MSStatement r
   multi     :: [MSStatement r] -> MSStatement r
 
 class (VariableSym r, StatementSym r) => AssignStatement r where

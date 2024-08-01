@@ -541,6 +541,7 @@ instance StatementElim SwiftCode where
 instance StatementSym SwiftCode where
   type Statement SwiftCode = (Doc, Terminator)
   valStmt = G.valStmt Empty
+  emptyValStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement SwiftCode where

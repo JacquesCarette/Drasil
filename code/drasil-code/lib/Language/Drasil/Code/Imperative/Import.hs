@@ -12,7 +12,8 @@ import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
   Space (Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..))
 import Database.Drasil (symbResolve)
 import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&), in')
-import Language.Drasil.CodeExpr.Development
+import Language.Drasil.CodeExpr.Development hiding (Set)
+import qualified Language.Drasil.CodeExpr.Development as S (CodeExpr(Set))
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, fAppProc,
@@ -36,7 +37,19 @@ import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
   Mod(..), Name, Description, StateVariable(..), fstdecl)
 import qualified Language.Drasil.Mod as M (Class(..))
 
-import Drasil.GOOL hiding (Set, get)
+import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
+  MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
+  Initializers, SharedProg, OOProg, PermanenceSym(..), bodyStatements,
+  BlockSym(..), TypeSym(..), VariableSym(..), var, constant, ScopeSym(..),
+  OOVariableSym(..), staticConst, VariableElim(..), ($->), ValueSym(..),
+  Literal(..), VariableValue(..), NumericExpression(..), BooleanExpression(..),
+  Comparison(..), ValueExpression(..), OOValueExpression(..),
+  objMethodCallMixedArgs, List(..), StatementSym(..), AssignStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), ControlStatement(..),
+  ifNoElse, VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
+  pubDVar, privDVar, nonInitConstructor, convType, convTypeOO, Set(..),
+  VisibilityTag(..), CodeType(..), onStateValue, SFile)
+
 import qualified Drasil.GOOL as C (CodeType(List, Array))
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (SFile)
@@ -270,7 +283,7 @@ genInOutFunc f docf n desc ins' outs' b = do
 
 -- | Converts an 'Expr' to a GOOL Value.
 convExprSet :: (OOProg r) => CodeExpr -> GenState (SValue r)
-convExprSet (Set l) = do
+convExprSet (S.Set l) = do
   ar <- mapM convExpr l
                                     -- hd will never fail here
   return $ litSet (fmap valueType (head ar)) ar
@@ -349,7 +362,7 @@ convExpr (Matrix [l]) = do
                                     -- hd will never fail here
   return $ litArray (fmap valueType (head ar)) ar
 convExpr Matrix{} = error "convExpr: Matrix"
-convExpr (Set _) = do
+convExpr (S.Set _) = do
   let v = var "set" (setType double) local
   return $ valueOf v
 convExpr Operator{} = error "convExpr: Operator"
@@ -1026,7 +1039,7 @@ convExprProc (Matrix [l]) = do
                                     -- hd will never fail here
   return $ litArray (fmap valueType (head ar)) ar
 convExprProc Matrix{} = error "convExprProc: Matrix"
-convExprProc (Set l) = do
+convExprProc (S.Set l) = do
   ar <- mapM convExprProc l
                                     -- hd will never fail here
   return $ litSet (fmap valueType (head ar)) ar

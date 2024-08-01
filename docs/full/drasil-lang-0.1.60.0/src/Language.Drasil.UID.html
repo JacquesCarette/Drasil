@@ -19,9 +19,9 @@
 </span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Lens'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">makeLenses</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-operator">(^.)</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">view</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">over</span></span><span class="hs-special">)</span><span>
 </span><span id="line-20"></span><span>
 </span><span id="line-21"></span><span class="annot"><span class="hs-comment">-- | The most basic item: having a unique identifier key, here a UID.</span></span><span>
-</span><span id="line-22"></span><span class="hs-keyword">class</span><span> </span><span id="HasUID"><span class="annot"><a href="Language.Drasil.UID.html#HasUID"><span class="hs-identifier hs-var">HasUID</span></a></span></span><span> </span><span id="local-6989586621679379469"><span class="annot"><a href="#local-6989586621679379469"><span class="hs-identifier hs-type">c</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-22"></span><span class="hs-keyword">class</span><span> </span><span id="HasUID"><span class="annot"><a href="Language.Drasil.UID.html#HasUID"><span class="hs-identifier hs-var">HasUID</span></a></span></span><span> </span><span id="local-6989586621679379765"><span class="annot"><a href="#local-6989586621679379765"><span class="hs-identifier hs-type">c</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-23"></span><span>  </span><span class="hs-comment">-- | Provides a /unique/ id for internal Drasil use.</span><span>
-</span><span id="line-24"></span><span>  </span><span id="uid"><span class="annot"><a href="Language.Drasil.UID.html#uid"><span class="hs-identifier hs-type">uid</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Lens'</span></span><span> </span><span class="annot"><a href="#local-6989586621679379469"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span><span>
+</span><span id="line-24"></span><span>  </span><span id="uid"><span class="annot"><a href="Language.Drasil.UID.html#uid"><span class="hs-identifier hs-type">uid</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Lens'</span></span><span> </span><span class="annot"><a href="#local-6989586621679379765"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span><span>
 </span><span id="line-25"></span><span>
 </span><span id="line-26"></span><span class="hs-comment">-- | A @UID@ is a 'unique identifier' for things that we will put into our database</span><span>
 </span><span id="line-27"></span><span class="hs-comment">-- of information. We use a newtype wrapper to make sure we are only using</span><span>
@@ -29,14 +29,14 @@
 </span><span id="line-29"></span><span class="hs-keyword">data</span><span> </span><span id="UID"><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-var">UID</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="UID"><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-var">UID</span></a></span></span><span> </span><span class="hs-special">{</span><span> </span><span id="_namespace"><span class="annot"><span class="annottext">UID -&gt; [String]
 </span><a href="Language.Drasil.UID.html#_namespace"><span class="hs-identifier hs-var hs-var">_namespace</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span id="_baseName"><span class="annot"><span class="annottext">UID -&gt; String
 </span><a href="Language.Drasil.UID.html#_baseName"><span class="hs-identifier hs-var hs-var">_baseName</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-special">}</span><span>
-</span><span id="line-30"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679379513"><span id="local-6989586621679379519"><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Bool
+</span><span id="line-30"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679379809"><span id="local-6989586621679379815"><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Bool
 (UID -&gt; UID -&gt; Bool) -&gt; (UID -&gt; UID -&gt; Bool) -&gt; Eq UID
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
 $c== :: UID -&gt; UID -&gt; Bool
 == :: UID -&gt; UID -&gt; Bool
 $c/= :: UID -&gt; UID -&gt; Bool
 /= :: UID -&gt; UID -&gt; Bool
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679379528"><span id="local-6989586621679379534"><span id="local-6989586621679379539"><span id="local-6989586621679379543"><span id="local-6989586621679379546"><span id="local-6989586621679379549"><span id="local-6989586621679379552"><span class="annot"><span class="annottext">Eq UID
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679379824"><span id="local-6989586621679379830"><span id="local-6989586621679379835"><span id="local-6989586621679379839"><span id="local-6989586621679379842"><span id="local-6989586621679379845"><span id="local-6989586621679379848"><span class="annot"><span class="annottext">Eq UID
 Eq UID =&gt;
 (UID -&gt; UID -&gt; Ordering)
 -&gt; (UID -&gt; UID -&gt; Bool)
@@ -73,7 +73,7 @@ $cmax :: UID -&gt; UID -&gt; UID
 max :: UID -&gt; UID -&gt; UID
 $cmin :: UID -&gt; UID -&gt; UID
 min :: UID -&gt; UID -&gt; UID
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679379559"><span id="local-6989586621679379561"><span class="annot"><span class="annottext">(forall x. UID -&gt; Rep UID x)
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679379855"><span id="local-6989586621679379857"><span class="annot"><span class="annottext">(forall x. UID -&gt; Rep UID x)
 -&gt; (forall x. Rep UID x -&gt; UID) -&gt; Generic UID
 forall x. Rep UID x -&gt; UID
 forall x. UID -&gt; Rep UID x
@@ -89,33 +89,33 @@ to :: forall x. Rep UID x -&gt; UID
 </span><span id="line-33"></span><span>
 </span><span id="line-34"></span><span class="annot"><a href="Language.Drasil.UID.html#fullName"><span class="hs-identifier hs-type">fullName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
 </span><span id="line-35"></span><span id="fullName"><span class="annot"><span class="annottext">fullName :: UID -&gt; [String]
-</span><a href="Language.Drasil.UID.html#fullName"><span class="hs-identifier hs-var hs-var">fullName</span></a></span></span><span> </span><span id="local-6989586621679379579"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679379579"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679379579"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; Getting [String] UID [String] -&gt; [String]
+</span><a href="Language.Drasil.UID.html#fullName"><span class="hs-identifier hs-var hs-var">fullName</span></a></span></span><span> </span><span id="local-6989586621679379875"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679379875"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679379875"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; Getting [String] UID [String] -&gt; [String]
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting [String] UID [String]
 Lens' UID [String]
 </span><a href="Language.Drasil.UID.html#namespace"><span class="hs-identifier hs-var">namespace</span></a></span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [String] -&gt; [String]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679379579"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; Getting String UID String -&gt; String
+</span><a href="#local-6989586621679379875"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; Getting String UID String -&gt; String
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String UID String
 Lens' UID String
 </span><a href="Language.Drasil.UID.html#baseName"><span class="hs-identifier hs-var">baseName</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-36"></span><span>
-</span><span id="line-37"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679379582"><span id="local-6989586621679379586"><span id="local-6989586621679379589"><span class="annot"><span class="hs-identifier hs-type">ToJSON</span></span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span></span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-38"></span><span>  </span><span id="local-6989586621679379597"><span class="annot"><span class="annottext">toJSON :: UID -&gt; Value
-</span><a href="#local-6989586621679379597"><span class="hs-identifier hs-var hs-var hs-var hs-var">toJSON</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[String] -&gt; Value
+</span><span id="line-37"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679379878"><span id="local-6989586621679379882"><span id="local-6989586621679379885"><span class="annot"><span class="hs-identifier hs-type">ToJSON</span></span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-38"></span><span>  </span><span id="local-6989586621679379893"><span class="annot"><span class="annottext">toJSON :: UID -&gt; Value
+</span><a href="#local-6989586621679379893"><span class="hs-identifier hs-var hs-var hs-var hs-var">toJSON</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[String] -&gt; Value
 forall a. ToJSON a =&gt; a -&gt; Value
 </span><span class="hs-identifier hs-var">toJSON</span></span><span> </span><span class="annot"><span class="annottext">([String] -&gt; Value) -&gt; (UID -&gt; [String]) -&gt; UID -&gt; Value
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; [String]
 </span><a href="Language.Drasil.UID.html#fullName"><span class="hs-identifier hs-var">fullName</span></a></span><span>
 </span><span id="line-39"></span><span>
-</span><span id="line-40"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679379602"><span class="annot"><span class="hs-identifier hs-type">ToJSONKey</span></span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-41"></span><span>  </span><span id="local-6989586621679379608"><span class="annot"><span class="annottext">toJSONKey :: ToJSONKeyFunction UID
-</span><a href="#local-6989586621679379608"><span class="hs-identifier hs-var hs-var hs-var hs-var">toJSONKey</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UID -&gt; Text) -&gt; ToJSONKeyFunction UID
+</span><span id="line-40"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679379898"><span class="annot"><span class="hs-identifier hs-type">ToJSONKey</span></span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-41"></span><span>  </span><span id="local-6989586621679379904"><span class="annot"><span class="annottext">toJSONKey :: ToJSONKeyFunction UID
+</span><a href="#local-6989586621679379904"><span class="hs-identifier hs-var hs-var hs-var hs-var">toJSONKey</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UID -&gt; Text) -&gt; ToJSONKeyFunction UID
 forall a. (a -&gt; Text) -&gt; ToJSONKeyFunction a
 </span><span class="hs-identifier hs-var">toJSONKeyText</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Text
 </span><span class="hs-identifier hs-var">pack</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Text) -&gt; (UID -&gt; String) -&gt; UID -&gt; Text
@@ -124,8 +124,8 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span class="hs-special">)</span><span>
 </span><span id="line-42"></span><span>
-</span><span id="line-43"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679379613"><span id="local-6989586621679379617"><span class="annot"><span class="hs-identifier hs-type">Show</span></span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-44"></span><span>  </span><span id="local-6989586621679379620"><span class="annot"><span class="annottext">show :: UID -&gt; String
+</span><span id="line-43"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679379909"><span id="local-6989586621679379913"><span class="annot"><span class="hs-identifier hs-type">Show</span></span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-44"></span><span>  </span><span id="local-6989586621679379916"><span class="annot"><span class="annottext">show :: UID -&gt; String
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">show</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; String
 forall a. [a] -&gt; [[a]] -&gt; [a]
 </span><span class="hs-identifier hs-var">intercalate</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -137,11 +137,11 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span id="line-46"></span><span class="annot"><span class="hs-comment">-- | Smart constructor for making a 'UID' from a 'String'.</span></span><span>
 </span><span id="line-47"></span><span class="annot"><a href="Language.Drasil.UID.html#mkUid"><span class="hs-identifier hs-type">mkUid</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span><span>
 </span><span id="line-48"></span><span id="mkUid"><span class="annot"><span class="annottext">mkUid :: String -&gt; UID
-</span><a href="Language.Drasil.UID.html#mkUid"><span class="hs-identifier hs-var hs-var">mkUid</span></a></span></span><span> </span><span id="local-6989586621679379622"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679379622"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span><span> </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_namespace :: [String]
+</span><a href="Language.Drasil.UID.html#mkUid"><span class="hs-identifier hs-var hs-var">mkUid</span></a></span></span><span> </span><span id="local-6989586621679379918"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679379918"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span><span> </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_namespace :: [String]
 </span><a href="Language.Drasil.UID.html#_namespace"><span class="hs-identifier hs-var">_namespace</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_baseName :: String
 </span><a href="Language.Drasil.UID.html#_baseName"><span class="hs-identifier hs-var">_baseName</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679379622"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">}</span><span>
+</span><a href="#local-6989586621679379918"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">}</span><span>
 </span><span id="line-49"></span><span>  </span><span class="hs-comment">-- '&#9658;' `elem` s = error $ &quot;&#9658; not allowed in UID &quot; ++ show s -- FIXME: Need to implement other constructors before we can use this.</span><span>
 </span><span id="line-50"></span><span>  </span><span class="hs-comment">-- null s       = error &quot;UID must be non-zero length&quot; -- FIXME: See Drasil.DocumentLanguage.TraceabilityGraph (uses an empty UID)</span><span>
 </span><span id="line-51"></span><span>  </span><span class="hs-comment">-- otherwise    = UID s</span><span>
@@ -149,55 +149,55 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span id="line-53"></span><span class="annot"><span class="hs-comment">-- | Nest UID under a namespace</span></span><span>
 </span><span id="line-54"></span><span class="annot"><a href="Language.Drasil.UID.html#nsUid"><span class="hs-identifier hs-type">nsUid</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span><span>
 </span><span id="line-55"></span><span id="nsUid"><span class="annot"><span class="annottext">nsUid :: String -&gt; UID -&gt; UID
-</span><a href="Language.Drasil.UID.html#nsUid"><span class="hs-identifier hs-var hs-var">nsUid</span></a></span></span><span> </span><span id="local-6989586621679379623"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679379623"><span class="hs-identifier hs-var">ns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ASetter UID UID [String] [String]
+</span><a href="Language.Drasil.UID.html#nsUid"><span class="hs-identifier hs-var hs-var">nsUid</span></a></span></span><span> </span><span id="local-6989586621679379919"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679379919"><span class="hs-identifier hs-var">ns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ASetter UID UID [String] [String]
 -&gt; ([String] -&gt; [String]) -&gt; UID -&gt; UID
 forall s t a b. ASetter s t a b -&gt; (a -&gt; b) -&gt; s -&gt; t
 </span><span class="hs-identifier hs-var">over</span></span><span> </span><span class="annot"><span class="annottext">ASetter UID UID [String] [String]
 Lens' UID [String]
 </span><a href="Language.Drasil.UID.html#namespace"><span class="hs-identifier hs-var">namespace</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679379623"><span class="hs-identifier hs-var">ns</span></a></span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; [String]
+</span><a href="#local-6989586621679379919"><span class="hs-identifier hs-var">ns</span></a></span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; [String]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span class="hs-special">)</span><span>
 </span><span id="line-56"></span><span>
 </span><span id="line-57"></span><span class="annot"><span class="hs-comment">-- | For when we need to modify a UID. We first take the base chunk's UID and then append a suffix to it.</span></span><span>
-</span><span id="line-58"></span><span id="local-6989586621679379462"><span class="annot"><a href="Language.Drasil.UID.html#%2B%2B%2B"><span class="hs-operator hs-type">(+++)</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#HasUID"><span class="hs-identifier hs-type">HasUID</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679379462"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679379462"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span></span><span>
-</span><span id="line-59"></span><span id="local-6989586621679379630"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679379630"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="%2B%2B%2B"><span class="annot"><span class="annottext">+++ :: forall a. HasUID a =&gt; a -&gt; String -&gt; UID
-</span><a href="Language.Drasil.UID.html#%2B%2B%2B"><span class="hs-operator hs-var hs-var">+++</span></a></span></span><span> </span><span id="local-6989586621679379631"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679379631"><span class="hs-identifier hs-var">suff</span></a></span></span><span>
+</span><span id="line-58"></span><span id="local-6989586621679379758"><span class="annot"><a href="Language.Drasil.UID.html#%2B%2B%2B"><span class="hs-operator hs-type">(+++)</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#HasUID"><span class="hs-identifier hs-type">HasUID</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679379758"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679379758"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span></span><span>
+</span><span id="line-59"></span><span id="local-6989586621679379926"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679379926"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="%2B%2B%2B"><span class="annot"><span class="annottext">+++ :: forall a. HasUID a =&gt; a -&gt; String -&gt; UID
+</span><a href="Language.Drasil.UID.html#%2B%2B%2B"><span class="hs-operator hs-var hs-var">+++</span></a></span></span><span> </span><span id="local-6989586621679379927"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679379927"><span class="hs-identifier hs-var">suff</span></a></span></span><span>
 </span><span id="line-60"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">String -&gt; Bool
 forall a. [a] -&gt; Bool
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
 </span><span class="hs-identifier hs-var">null</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679379631"><span class="hs-identifier hs-var">suff</span></a></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; UID
+</span><a href="#local-6989586621679379927"><span class="hs-identifier hs-var">suff</span></a></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; UID
 forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Suffix must be non-zero length&quot;</span></span><span>
 </span><span id="line-61"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679379630"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; Getting UID a UID -&gt; UID
+</span><a href="#local-6989586621679379926"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; Getting UID a UID -&gt; UID
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID a UID
 forall c. HasUID c =&gt; Lens' c UID
 Lens' a UID
 </span><a href="Language.Drasil.UID.html#uid"><span class="hs-identifier hs-var">uid</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UID -&gt; String -&gt; UID
 </span><a href="Language.Drasil.UID.html#%2B%2B%2B."><span class="hs-operator hs-var">+++.</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679379631"><span class="hs-identifier hs-var">suff</span></a></span><span>
+</span><a href="#local-6989586621679379927"><span class="hs-identifier hs-var">suff</span></a></span><span>
 </span><span id="line-62"></span><span>  </span><span class="hs-comment">-- otherwise       = UID $ s ++ '&#9658;':suff --FIXME: Implement this properly.</span><span>
 </span><span id="line-63"></span><span>  </span><span class="hs-comment">--   where UID s = a ^. uid</span><span>
 </span><span id="line-64"></span><span>
 </span><span id="line-65"></span><span class="annot"><span class="hs-comment">-- | For when we need to append something to a UID.</span></span><span>
 </span><span id="line-66"></span><span class="annot"><a href="Language.Drasil.UID.html#%2B%2B%2B."><span class="hs-operator hs-type">(+++.)</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span><span>
-</span><span id="line-67"></span><span id="local-6989586621679379634"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679379634"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="%2B%2B%2B."><span class="annot"><span class="annottext">+++. :: UID -&gt; String -&gt; UID
-</span><a href="Language.Drasil.UID.html#%2B%2B%2B."><span class="hs-operator hs-var hs-var">+++.</span></a></span></span><span> </span><span id="local-6989586621679379635"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679379635"><span class="hs-identifier hs-var">suff</span></a></span></span><span>
+</span><span id="line-67"></span><span id="local-6989586621679379930"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679379930"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="%2B%2B%2B."><span class="annot"><span class="annottext">+++. :: UID -&gt; String -&gt; UID
+</span><a href="Language.Drasil.UID.html#%2B%2B%2B."><span class="hs-operator hs-var hs-var">+++.</span></a></span></span><span> </span><span id="local-6989586621679379931"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679379931"><span class="hs-identifier hs-var">suff</span></a></span></span><span>
 </span><span id="line-68"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">String -&gt; Bool
 forall a. [a] -&gt; Bool
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
 </span><span class="hs-identifier hs-var">null</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679379635"><span class="hs-identifier hs-var">suff</span></a></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; UID
+</span><a href="#local-6989586621679379931"><span class="hs-identifier hs-var">suff</span></a></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; UID
 forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; UID) -&gt; String -&gt; UID
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -207,7 +207,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; String
 forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679379634"><span class="hs-identifier hs-var">a</span></a></span><span>
+</span><a href="#local-6989586621679379930"><span class="hs-identifier hs-var">a</span></a></span><span>
 </span><span id="line-69"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ASetter UID UID String String -&gt; ShowS -&gt; UID -&gt; UID
 forall s t a b. ASetter s t a b -&gt; (a -&gt; b) -&gt; s -&gt; t
@@ -216,23 +216,23 @@ Lens' UID String
 </span><a href="Language.Drasil.UID.html#baseName"><span class="hs-identifier hs-var">baseName</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; ShowS
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679379635"><span class="hs-identifier hs-var">suff</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679379634"><span class="hs-identifier hs-var">a</span></a></span><span>
+</span><a href="#local-6989586621679379931"><span class="hs-identifier hs-var">suff</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679379930"><span class="hs-identifier hs-var">a</span></a></span><span>
 </span><span id="line-70"></span><span>
-</span><span id="line-71"></span><span id="local-6989586621679379473"><span id="local-6989586621679379474"><span class="annot"><a href="Language.Drasil.UID.html#%2B%2B%2B%21"><span class="hs-operator hs-type">(+++!)</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.UID.html#HasUID"><span class="hs-identifier hs-type">HasUID</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679379473"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#HasUID"><span class="hs-identifier hs-type">HasUID</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679379474"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679379473"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679379474"><span class="hs-identifier hs-type">b</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span></span></span><span>
-</span><span id="line-72"></span><span id="local-6989586621679379656"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679379656"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="%2B%2B%2B%21"><span class="annot"><span class="annottext">+++! :: forall a b. (HasUID a, HasUID b) =&gt; a -&gt; b -&gt; UID
-</span><a href="Language.Drasil.UID.html#%2B%2B%2B%21"><span class="hs-operator hs-var hs-var">+++!</span></a></span></span><span> </span><span id="local-6989586621679379657"><span class="annot"><span class="annottext">b
-</span><a href="#local-6989586621679379657"><span class="hs-identifier hs-var">b</span></a></span></span><span>
+</span><span id="line-71"></span><span id="local-6989586621679379769"><span id="local-6989586621679379770"><span class="annot"><a href="Language.Drasil.UID.html#%2B%2B%2B%21"><span class="hs-operator hs-type">(+++!)</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.UID.html#HasUID"><span class="hs-identifier hs-type">HasUID</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679379769"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#HasUID"><span class="hs-identifier hs-type">HasUID</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679379770"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679379769"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679379770"><span class="hs-identifier hs-type">b</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span></span></span><span>
+</span><span id="line-72"></span><span id="local-6989586621679379952"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679379952"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="%2B%2B%2B%21"><span class="annot"><span class="annottext">+++! :: forall a b. (HasUID a, HasUID b) =&gt; a -&gt; b -&gt; UID
+</span><a href="Language.Drasil.UID.html#%2B%2B%2B%21"><span class="hs-operator hs-var hs-var">+++!</span></a></span></span><span> </span><span id="local-6989586621679379953"><span class="annot"><span class="annottext">b
+</span><a href="#local-6989586621679379953"><span class="hs-identifier hs-var">b</span></a></span></span><span>
 </span><span id="line-73"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679379658"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; Getting [String] UID [String] -&gt; [String]
+</span><a href="#local-6989586621679379954"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; Getting [String] UID [String] -&gt; [String]
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting [String] UID [String]
 Lens' UID [String]
 </span><a href="Language.Drasil.UID.html#namespace"><span class="hs-identifier hs-var">namespace</span></a></span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [String] -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">/=</span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679379660"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; Getting [String] UID [String] -&gt; [String]
+</span><a href="#local-6989586621679379956"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; Getting [String] UID [String] -&gt; [String]
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting [String] UID [String]
 Lens' UID [String]
@@ -243,7 +243,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; String
 forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679379658"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; ShowS
+</span><a href="#local-6989586621679379954"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; ShowS
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot; and &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; ShowS
@@ -251,7 +251,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; String
 forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679379660"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; ShowS
+</span><a href="#local-6989586621679379956"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; ShowS
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot; are not in the same namespace&quot;</span></span><span>
@@ -259,7 +259,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall a. [a] -&gt; Bool
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
 </span><span class="hs-identifier hs-var">null</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679379658"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; Getting String UID String -&gt; String
+</span><a href="#local-6989586621679379954"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; Getting String UID String -&gt; String
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String UID String
 Lens' UID String
@@ -268,7 +268,7 @@ Lens' UID String
 forall a. [a] -&gt; Bool
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
 </span><span class="hs-identifier hs-var">null</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679379660"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; Getting String UID String -&gt; String
+</span><a href="#local-6989586621679379956"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; Getting String UID String -&gt; String
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String UID String
 Lens' UID String
@@ -279,7 +279,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; String
 forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679379658"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; ShowS
+</span><a href="#local-6989586621679379954"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; ShowS
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot; and &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; ShowS
@@ -287,31 +287,31 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; String
 forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679379660"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; ShowS
+</span><a href="#local-6989586621679379956"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; ShowS
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot; UIDs must be non-zero length&quot;</span></span><span>
 </span><span id="line-75"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679379658"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; String -&gt; UID
+</span><a href="#local-6989586621679379954"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; String -&gt; UID
 </span><a href="Language.Drasil.UID.html#%2B%2B%2B."><span class="hs-operator hs-var">+++.</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679379660"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; Getting String UID String -&gt; String
+</span><a href="#local-6989586621679379956"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; Getting String UID String -&gt; String
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String UID String
 Lens' UID String
 </span><a href="Language.Drasil.UID.html#baseName"><span class="hs-identifier hs-var">baseName</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-76"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-77"></span><span>    </span><span id="local-6989586621679379658"><span class="annot"><span class="annottext">s :: UID
-</span><a href="#local-6989586621679379658"><span class="hs-identifier hs-var hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679379656"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; Getting UID a UID -&gt; UID
+</span><span id="line-77"></span><span>    </span><span id="local-6989586621679379954"><span class="annot"><span class="annottext">s :: UID
+</span><a href="#local-6989586621679379954"><span class="hs-identifier hs-var hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679379952"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; Getting UID a UID -&gt; UID
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID a UID
 forall c. HasUID c =&gt; Lens' c UID
 Lens' a UID
 </span><a href="Language.Drasil.UID.html#uid"><span class="hs-identifier hs-var">uid</span></a></span><span>
-</span><span id="line-78"></span><span>    </span><span id="local-6989586621679379660"><span class="annot"><span class="annottext">t :: UID
-</span><a href="#local-6989586621679379660"><span class="hs-identifier hs-var hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">b
-</span><a href="#local-6989586621679379657"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">b -&gt; Getting UID b UID -&gt; UID
+</span><span id="line-78"></span><span>    </span><span id="local-6989586621679379956"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679379956"><span class="hs-identifier hs-var hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">b
+</span><a href="#local-6989586621679379953"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">b -&gt; Getting UID b UID -&gt; UID
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID b UID
 forall c. HasUID c =&gt; Lens' c UID
@@ -319,7 +319,7 @@ Lens' b UID
 </span><a href="Language.Drasil.UID.html#uid"><span class="hs-identifier hs-var">uid</span></a></span><span>
 </span><span id="line-79"></span><span>
 </span><span id="line-80"></span><span class="annot"><span class="hs-comment">-- | Grabs the UID from something that has a UID and displays it as a String.</span></span><span>
-</span><span id="line-81"></span><span id="local-6989586621679379477"><span class="annot"><a href="Language.Drasil.UID.html#showUID"><span class="hs-identifier hs-type">showUID</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#HasUID"><span class="hs-identifier hs-type">HasUID</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679379477"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679379477"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span></span><span>
+</span><span id="line-81"></span><span id="local-6989586621679379773"><span class="annot"><a href="Language.Drasil.UID.html#showUID"><span class="hs-identifier hs-type">showUID</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#HasUID"><span class="hs-identifier hs-type">HasUID</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679379773"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679379773"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span></span><span>
 </span><span id="line-82"></span><span id="showUID"><span class="annot"><span class="annottext">showUID :: forall a. HasUID a =&gt; a -&gt; String
 </span><a href="Language.Drasil.UID.html#showUID"><span class="hs-identifier hs-var hs-var">showUID</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; String
 forall a. Show a =&gt; a -&gt; String

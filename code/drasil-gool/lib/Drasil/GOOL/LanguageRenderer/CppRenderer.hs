@@ -546,6 +546,7 @@ instance (Pair p) => StatementElim (p CppSrcCode CppHdrCode) where
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
   valStmt = pair1 valStmt valStmt . zoom lensMStoVS
+  emptyValStmt = on2StateValues pair emptyValStmt emptyValStmt
   multi = pair1List multi multi
 
 instance (Pair p) => AssignStatement (p CppSrcCode CppHdrCode) where
@@ -1472,6 +1473,7 @@ instance StatementElim CppSrcCode where
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
   valStmt = G.valStmt Semi
+  emptyValStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement CppSrcCode where
@@ -2167,6 +2169,7 @@ instance StatementElim CppHdrCode where
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)
   valStmt _ = emptyStmt
+  emptyValStmt = emptyStmt
   multi _ = emptyStmt
 
 instance AssignStatement CppHdrCode where

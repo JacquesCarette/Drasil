@@ -346,9 +346,8 @@ physCBody cs = do
 chooseConstr :: (OOProg r) => ConstraintBehaviour ->
   [(CodeVarChunk, [ConstraintCE])] -> GenState [MSStatement r]
 chooseConstr cb cs = do
-  --let q = map fst cs
-  let c = concat (map snd cs)
-  varDecs <- mapM printConstraintx c
+  let c = concatMap snd cs
+  varDecs <- mapM exc cs
   conds <- mapM (\(q,cns) -> mapM (convExpr . renderC q) cns) cs
   bods <- mapM (chooseCB cb) cs
   let bodies = concat $ zipWith (zipWith (\cond bod -> ifNoElse [((?!) cond, bod)])) conds bods
@@ -380,6 +379,13 @@ constrExc c = do
       cs = snd c
   msgs <- mapM (constraintViolatedMsg q "expected") cs
   return $ map (bodyStatements . (++ [throw "InputError"])) msgs
+  
+exc :: (OOProg r) => (CodeVarChunk, [ConstraintCE]) ->
+  GenState [MSStatement r]
+exc c = do
+  let q = fst c
+      cs = snd c
+  return $ mapM (printConstraintx q) cs
 
 -- | Generates statements that print a message for when a constraint is violated.
 -- Message includes the name of the cosntraint quantity, its value, and a
@@ -397,14 +403,13 @@ constraintViolatedMsg q s c = do
 -- | Generates statements to print descriptions of constraints, using words and
 -- the constrained values. Constrained values are followed by printing the
 -- expression they originated from, using printExpr.
-printConstraintx :: (OOProg r) => ConstraintCE ->
-  GenState [MSStatement r]
-printConstraintx (Elem _ e) = do
+printConstraintx :: (OOProg r) => CodeVarChunk -> ConstraintCE -> GenState [MSStatement r]
+printConstraintx q (Elem _ e) = do
   lb <- convExpr e
-  let value = var ("set") (setType double) local
+  let value = var ("set_" ++ codeName q)  (setType double) local
   return [varDecDef value lb]
-printConstraintx (Range _ _) =
-  return [printStr " "]
+printConstraintx q (Range _ _) =
+  return [emptyValStmt]
 
 
 

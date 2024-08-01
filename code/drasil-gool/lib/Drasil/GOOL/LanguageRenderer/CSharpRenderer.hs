@@ -527,6 +527,7 @@ instance StatementElim CSharpCode where
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
   valStmt = G.valStmt Semi
+  emptyValStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement CSharpCode where

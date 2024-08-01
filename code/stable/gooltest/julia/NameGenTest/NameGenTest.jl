@@ -6,9 +6,9 @@ function helper(temp::Array{Int64})
     result = temp[2:3]
 end
 
-temp = [1, 2, 3]
-result = []
+global temp = [1, 2, 3]
+global result = []
 
-result = temp[2:3]
+global result = temp[2:3]
 
 end

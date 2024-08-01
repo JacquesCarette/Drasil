@@ -46,7 +46,8 @@ import Drasil.GOOL.LanguageRenderer (printLabel, listSep, listSep',
   variableList, parameterList, forLabel, inLabel, tryLabel, catchLabel)
 import qualified Drasil.GOOL.LanguageRenderer as R (sqrt, abs, log10, log, exp,
   sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, addComments,
-  blockCmt, docCmt, commentedMod, listSetFunc, commentedItem, break, continue)
+  blockCmt, docCmt, commentedMod, listSetFunc, commentedItem, break, continue,
+  constDec', assign, subAssign, addAssign)
 import Drasil.GOOL.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
   unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
   typeBinExpr, mkStmt, mkStmtNoEnd)
@@ -56,8 +57,8 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, call, funcAppMixedArgs, lambda,
   listAccess, listSet, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
-  emptyStmt, assign, increment, subAssign, print, comment, valStmt, returnStmt,
-  param, docFunc, throw, arg, argsList, ifCond, smartAdd, var, local)
+  emptyStmt, print, comment, valStmt, returnStmt, param, docFunc, throw, arg,
+  argsList, ifCond, smartAdd, var, local)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (bool,
   boolRender, extVar, funcType, litArray, listDec, listDecDef, listAccessFunc,
   listSetFunc, notNull, extFuncAppMixedArgs, functionDoc, listSize, listAdd,
@@ -76,7 +77,7 @@ import Drasil.GOOL.AST (Terminator(..), FileType(..), FileData(..), fileD,
   ParamData(..), ProgData(..), TypeData(..), td, ValData(..), vd, VarData(..),
   vard, CommonThunk, progD, fd, pd, updateMthd, commonThunkDim, commonThunkElim,
   vectorize, vectorize2, commonVecIndex, sumComponents, pureValue, ScopeTag(..),
-  ScopeData, sd)
+  ScopeData(..), sd, onScope)
 import Drasil.GOOL.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on3CodeValues, on2StateValues, onCodeList, onStateList,
   emptyIfEmpty)
@@ -473,9 +474,21 @@ instance StatementSym JuliaCode where
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement JuliaCode where
-  assign = G.assign Empty
-  (&-=) = G.subAssign Empty
-  (&+=) = G.increment
+  assign vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    let globalDec = jlGlobalDec vr
+    mkStmtNoEnd (globalDec <+> R.assign vr v)
+  (&-=) vr' v' = do 
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    let globalDec = jlGlobalDec vr
+    mkStmtNoEnd (globalDec <+> R.subAssign vr v)
+  (&+=) vr' v'= do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    let globalDec = jlGlobalDec vr
+    mkStmtNoEnd $ globalDec <+> R.addAssign vr v
   (&++) = M.increment1
   (&--) = M.decrement1
 
@@ -676,12 +689,17 @@ jlCast t' v' = do
       jlCast' _      _    vDoc' tDoc' = tDoc' <> parens vDoc'
   mkVal t (jlCast' vTp tTp vDoc tDoc)
 
-jlConstDecDef :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
+jlGlobalDec :: JuliaCode VarData -> Doc
+jlGlobalDec v = onScope ((scopeTag . unJLC) (variableScope v))
+                          (text "global") empty
+
+jlConstDecDef :: SVariable JuliaCode -> SValue JuliaCode -> MSStatement JuliaCode
 jlConstDecDef v' def' = do
   v <- zoom lensMStoVS v'
   def <- zoom lensMStoVS def'
   modify $ useVarName $ variableName v
-  mkStmt $ RC.variable v <+> equals <+> RC.value def --TODO: prepend `R.constDec' ` when in global scope
+  let constDec = onScope ((scopeTag . unJLC) (variableScope v)) R.constDec' empty
+  mkStmt $ constDec <+> RC.variable v <+> equals <+> RC.value def
 
 -- List API
 jlListSize, jlListAdd, jlListAppend, jlListAbsdex :: Label

@@ -1,5 +1,5 @@
 module Drasil.GOOL.AST (Terminator(..), VisibilityTag(..), ScopeTag(..),
-  ScopeData(..), sd, QualifiedName, qualName, FileType(..), isSource,
+  ScopeData(..), sd, onScope, QualifiedName, qualName, FileType(..), isSource,
   Binding(..), onBinding, BindData(bind, bindDoc), bd, FileData(filePath,
   fileMod), fileD, updateFileMod, FuncData(fType, funcDoc), fd, ModData(name,
   modDoc), md, updateMod, MethodData(mthdDoc), mthd, updateMthd, OpData(opPrec,
@@ -124,12 +124,16 @@ svd :: VisibilityTag -> Doc -> (Doc, Terminator) -> StateVarData
 svd = SVD
 
 -- Used as the underlying data type for Scopes in the Julia renderer
-data ScopeTag = Local | Global
+data ScopeTag = Local | Global deriving Eq
 
 newtype ScopeData = SD {scopeTag :: ScopeTag}
 
 sd :: ScopeTag -> ScopeData
 sd = SD
+
+onScope :: ScopeTag -> a -> a -> a
+onScope Global a _ = a
+onScope Local _ b = b
 
 -- Used as the underlying data type for Types in all renderers
 data TypeData = TD {cType :: CodeType, typeString :: String, typeDoc :: Doc}

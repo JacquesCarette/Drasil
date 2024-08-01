@@ -1,7 +1,7 @@
 module Drasil.GOOL.Helpers (angles, doubleQuotedText, hicat, vicat, vibcat, 
   vmap, vimap, emptyIfEmpty, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
-  onCodeList, onStateList, on2StateLists, getInnerType, on2StateWrapped, 
+  onCodeList, onStateList, on2StateLists, getInnerType, on2StateWrapped,
   getNestDegree
 ) where
 
@@ -10,7 +10,7 @@ import Utils.Drasil (blank)
 import qualified Drasil.GOOL.CodeType as C (CodeType(..))
 
 import Prelude hiding ((<>))
-import Control.Applicative (liftA2, liftA3)
+import Control.Applicative (liftA3)
 import Control.Monad (liftM2, liftM3)
 import Control.Monad.State (State)
 import Data.List (intersperse)

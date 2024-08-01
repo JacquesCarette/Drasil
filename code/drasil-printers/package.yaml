@@ -14,6 +14,8 @@ dependencies:
 - lens
 - pretty
 - containers
+- MissingH
+- filepath
 - directory
 - drasil-data
 - drasil-database

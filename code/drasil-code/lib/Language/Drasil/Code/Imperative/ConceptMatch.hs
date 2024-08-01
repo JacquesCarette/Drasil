@@ -8,7 +8,7 @@ import Language.Drasil (UID, Sentence(S), (+:+), (+:+.))
 import Language.Drasil.Choices (Choices(..), CodeConcept(..),
     MatchedConceptMap, showChs, Maps(..))
 
-import Drasil.GOOL (SValue, OOProg, MathConstant(..))
+import Drasil.GOOL (SValue, SharedProg, MathConstant(..))
 
 import Prelude hiding (pi)
 import qualified Data.Map as Map (mapWithKey)
@@ -29,5 +29,5 @@ chooseConcept chs = sequence $ Map.mapWithKey chooseConcept' (conceptMatch $ map
             return c
 
 -- | Translates a 'CodeConcept' into GOOL.
-conceptToGOOL :: (OOProg r) => CodeConcept -> SValue r
+conceptToGOOL :: (SharedProg r) => CodeConcept -> SValue r
 conceptToGOOL Pi = pi

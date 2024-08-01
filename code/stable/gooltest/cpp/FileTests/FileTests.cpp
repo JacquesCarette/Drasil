@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <limits>
@@ -21,7 +22,8 @@ int main(int argc, const char *argv[]) {
     ifstream fileToRead;
     fileToRead.open("testText.txt", std::fstream::in);
     string fileLine;
-    std::getline(fileToRead, fileLine);
+    fileToRead >> fileLine;
+    fileToRead.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     fileToRead.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     vector<string> fileContents(0);
     

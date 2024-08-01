@@ -1,13 +1,14 @@
-module Drasil.GOOL.AST (Terminator(..), ScopeTag(..), QualifiedName, qualName, 
-  FileType(..), isSource, Binding(..), onBinding, BindData(bind, bindDoc), bd, 
-  FileData(filePath, fileMod), fileD, updateFileMod, FuncData(fType, funcDoc), 
-  fd, ModData(name, modDoc), md, updateMod, MethodData(mthdDoc), mthd, 
-  updateMthd, OpData(opPrec, opDoc), od, ParamData(paramVar, paramDoc), pd, 
-  paramName, updateParam, ProgData(progName, progPurp, progMods), progD, emptyProg, 
-  StateVarData(getStVarScp, stVar, destructSts), svd, 
-  TypeData(cType, typeString, typeDoc), td, ValData(valPrec, valInt, valType, val), 
-  vd, updateValDoc, VarData(varBind, varName, varType, varDoc), vard,
-  CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
+module Drasil.GOOL.AST (Terminator(..), VisibilityTag(..), ScopeTag(..),
+  ScopeData(..), sd, QualifiedName, qualName, FileType(..), isSource,
+  Binding(..), onBinding, BindData(bind, bindDoc), bd, FileData(filePath,
+  fileMod), fileD, updateFileMod, FuncData(fType, funcDoc), fd, ModData(name,
+  modDoc), md, updateMod, MethodData(mthdDoc), mthd, updateMthd, OpData(opPrec,
+  opDoc), od, ParamData(paramVar, paramDoc), pd, paramName, updateParam,
+  ProgData(progName, progPurp, progMods), progD, emptyProg,
+  StateVarData(getStVarScp, stVar, destructSts), svd, TypeData(cType,
+  typeString, typeDoc), td, ValData(valPrec, valInt, valType, val), vd,
+  updateValDoc, VarData(varBind, varName, varType, varDoc), vard, CommonThunk,
+  pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
   commonThunkElim, commonThunkDim
 ) where
 
@@ -22,7 +23,7 @@ data Terminator = Semi | Empty
 -- Used for state variables and methods
 -- Eq is needed for organizing methods and state variables into public and 
 -- private groups for C++ class rendering
-data ScopeTag = Pub | Priv deriving Eq
+data VisibilityTag = Pub | Priv deriving Eq
 
 -- Used in method exception map and call map. 
 -- Qualification first, name second
@@ -116,11 +117,19 @@ emptyProg :: ProgData
 emptyProg = progD "" "" []
 
 -- Used as the underlying data type for StateVars in the C++ renderer
-data StateVarData = SVD {getStVarScp :: ScopeTag, stVar :: Doc, 
+data StateVarData = SVD {getStVarScp :: VisibilityTag, stVar :: Doc, 
   destructSts :: (Doc, Terminator)}
 
-svd :: ScopeTag -> Doc -> (Doc, Terminator) -> StateVarData
+svd :: VisibilityTag -> Doc -> (Doc, Terminator) -> StateVarData
 svd = SVD
+
+-- Used as the underlying data type for Scopes in the Julia renderer
+data ScopeTag = Local | Global
+
+newtype ScopeData = SD {scopeTag :: ScopeTag}
+
+sd :: ScopeTag -> ScopeData
+sd = SD
 
 -- Used as the underlying data type for Types in all renderers
 data TypeData = TD {cType :: CodeType, typeString :: String, typeDoc :: Doc}

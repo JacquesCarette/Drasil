@@ -29,7 +29,7 @@ def get_input(filename):
 # \param m_1 mass of the first object (kg)
 # \param m_2 mass of the second object (kg)
 def input_constraints(L_1, L_2, m_1, m_2):
-    if (not(L_1 > 0.0)):
+    if not(L_1 > 0.0):
         print("Warning: ", end="")
         print("L_1 has value ", end="")
         print(L_1, end="")
@@ -37,7 +37,7 @@ def input_constraints(L_1, L_2, m_1, m_2):
         print("above ", end="")
         print(0.0, end="")
         print(".")
-    if (not(L_2 > 0.0)):
+    if not(L_2 > 0.0):
         print("Warning: ", end="")
         print("L_2 has value ", end="")
         print(L_2, end="")
@@ -45,7 +45,7 @@ def input_constraints(L_1, L_2, m_1, m_2):
         print("above ", end="")
         print(0.0, end="")
         print(".")
-    if (not(m_1 > 0.0)):
+    if not(m_1 > 0.0):
         print("Warning: ", end="")
         print("m_1 has value ", end="")
         print(m_1, end="")
@@ -53,7 +53,7 @@ def input_constraints(L_1, L_2, m_1, m_2):
         print("above ", end="")
         print(0.0, end="")
         print(".")
-    if (not(m_2 > 0.0)):
+    if not(m_2 > 0.0):
         print("Warning: ", end="")
         print("m_2 has value ", end="")
         print(m_2, end="")

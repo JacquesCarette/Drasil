@@ -7,8 +7,6 @@ import qualified Text.PrettyPrint as TP
 
 import Language.Drasil
 
-import Control.Applicative hiding (empty)
-
 import qualified Language.Drasil.Printing.Helpers as H
 
 -----------------------------------------------------------------------------

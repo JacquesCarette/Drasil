@@ -50,7 +50,7 @@ def find(arr, v):
     outfile.close()
     
     for i in range(0, len(arr) - 1, 1):
-        if (arr[i] <= v and v <= arr[i + 1]):
+        if arr[i] <= v and v <= arr[i + 1]:
             return i
     raise Exception("Bound error")
 
@@ -231,6 +231,6 @@ def interpZ(filename, x, y):
         print(y_2, end="", file=outfile)
         print(" in module Interpolation", file=outfile)
         outfile.close()
-        if (y_1 <= y and y <= y_2):
+        if y_1 <= y and y <= y_2:
             return lin_interp(y_1, z_vector[i], y_2, z_vector[i + 1], y)
     raise Exception("Interpolation of z failed")

@@ -9,7 +9,7 @@ module Language.Drasil.Mod (Class(..), StateVariable(..), Func(..),
 
 import Language.Drasil (Space, MayHaveUnit, Quantity, CodeExpr, LiteralC(..))
 import Database.Drasil (ChunkDB)
-import Drasil.GOOL (ScopeTag(..))
+import Drasil.GOOL (VisibilityTag(..))
 
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codevars,
   codevars', quantvar)
@@ -50,9 +50,9 @@ data Class = ClassDef {
   constructors :: [Func],
   methods :: [Func]}
 
--- | State variables hold attach a 'ScopeTag' to a 'CodeVarChunk'.
+-- | State variables hold attach a 'VisibilityTag' to a 'CodeVarChunk'.
 data StateVariable = SV {
-  svScope :: ScopeTag,
+  svVisibility :: VisibilityTag,
   stVar :: CodeVarChunk}
 
 -- | Define a public state variable based on the given 'CodeVarChunk'.

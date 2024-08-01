@@ -1,29 +1,26 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: August 1, 2019
+Last updated: July 17, 2024
 --------------------------------------------------
 
-Contents.hs
-  - Contains functions for building `Contents` (can be labelled)
-
 Document.hs
-  - Contains functions for working with `Doc`s
+  - Contains functions for working with `Doc`s.
 
 English.hs
-  - Contains functions for working on `Strings` with English ideas
+  - Contains functions for working on `Strings` with English ideas.
 
-Fold.hs
-  - Contains functions for folding
+Lists.hs
+  - Contains functions for working on lists.
 
-Misc.hs
-  - Contains miscellaneous utility functions
+Maps.hs
+  - Contains functions for working on `Map`s.
 
-Phrase.hs
-  - Contains functions for building `Noun Phrase`s
+Strings.hs
+  - Contains functions for working on `String`s with special characters.
+
+CSV.hs
+  - Contains functions for constructing CSV documents.
 
 README.md
   - This file
-
-Sentence.hs
-  - Contains functions for building `Sentence`s
   

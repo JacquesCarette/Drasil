@@ -70,7 +70,7 @@ angularAccelExpr_1 = neg(sy gravitationalMagnitude) $*
                    (
                        exactDbl 2 $* sy massObj_1 $+ sy massObj_2 $- 
                        (sy massObj_2 $* 
-                       cos (exactDbl 2 $* sy pendDisAngle_1  $- (exactDbl 2 $* sy pendDisAngle_2)))
+                       cos (exactDbl 2 $* sy pendDisAngle_1 $- (exactDbl 2 $* sy pendDisAngle_2)))
                    )
 
 -- Angular acceleration acting on the first object
@@ -87,7 +87,7 @@ angularAccelExpr_2 = exactDbl 2 $* sin (sy pendDisAngle_1 $- sy pendDisAngle_2) 
                    (
                        exactDbl 2 $* sy massObj_1 $+ sy massObj_2 $- 
                        (sy massObj_2 $* 
-                       cos (exactDbl 2 $* sy pendDisAngle_1  $- (exactDbl 2 $* sy pendDisAngle_2)))
+                       cos (exactDbl 2 $* sy pendDisAngle_1 $- (exactDbl 2 $* sy pendDisAngle_2)))
                    )
 
 -- Angular acceleration support equations in IM

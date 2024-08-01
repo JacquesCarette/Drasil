@@ -199,6 +199,7 @@ void InputParameters::input_constraints() {
     outfile << "  }" << std::endl;
     outfile.close();
     
+    set<double> set = {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0};
     if (!(0.1 <= this->a && this->a <= 5.0)) {
         std::cout << "a has value ";
         std::cout << this->a;
@@ -238,13 +239,13 @@ void InputParameters::input_constraints() {
         std::cout << "." << std::endl;
         throw("InputError");
     }
-    if (!(set<double>{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}.find(this->t) != set<double>{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}.end())) {
+    if (!(set.find(this->t) != set.end())) {
         std::cout << "t has value ";
         std::cout << this->t;
         std::cout << ", but is expected to be ";
         std::cout << "an element of the set ";
         std::cout << "{ ";
-        for (const double &set_i1 : set<double>{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}) {
+        for (const double &set_i1 : set) {
             std::cout << set_i1;
             std::cout << " ";
         }

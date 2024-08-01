@@ -2826,8 +2826,7 @@ cppLitSet :: (OORenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r]
 cppLitSet f t' es' = do 
   es <- sequence es' 
   lt <- f t'
-  mkVal lt (RC.type' lt
-    <> braces (valueList es))
+  mkVal lt ( braces (valueList es))
 
 cpphStateVarDef :: (OORenderSym r) => Doc -> r (Permanence r) -> SVariable r ->
   SValue r -> CS Doc

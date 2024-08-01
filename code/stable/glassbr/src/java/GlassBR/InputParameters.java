@@ -220,6 +220,7 @@ public class InputParameters {
         outfile.println("  }");
         outfile.close();
         
+        HashSet<Double> set = new HashSet<Double>(Set.of(2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0));
         if (!(0.1 <= this.a && this.a <= 5.0)) {
             System.out.print("a has value ");
             System.out.print(this.a);
@@ -259,12 +260,17 @@ public class InputParameters {
             System.out.println(".");
             throw new Exception("InputError");
         }
-        if (!(Set.of(2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0).contains(this.t))) {
+        if (!(set.contains(this.t))) {
             System.out.print("t has value ");
             System.out.print(this.t);
             System.out.print(", but is expected to be ");
             System.out.print("an element of the set ");
-            System.out.print(Set.of(2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0));
+            System.out.print("{ ");
+            for (double set_i1 : set) {
+                System.out.print(set_i1);
+                System.out.print(" ");
+            }
+            System.out.print("}");
             System.out.println(".");
             throw new Exception("InputError");
         }

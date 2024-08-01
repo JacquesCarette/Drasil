@@ -25,7 +25,7 @@ import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), genModule,
   genModuleProc, genModuleWithImports, genModuleWithImportsProc, primaryClass,
   auxClass)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
-import Language.Drasil.Code.Imperative.Import (codeType, convExpr, convExprProc,
+import Language.Drasil.Code.Imperative.Import (codeType, convExpr, convExprSet, convExprProc,
   convStmt, convStmtProc, genConstructor, mkVal, mkValProc, mkVar, mkVarProc,
   privateInOutMethod, privateMethod, privateFuncProc, publicFunc,
   publicFuncProc, publicInOutFunc, publicInOutFuncProc, privateInOutFuncProc,
@@ -341,7 +341,7 @@ chooseConstr :: (OOProg r) => ConstraintBehaviour ->
   [(CodeVarChunk, [ConstraintCE])] -> GenState [MSStatement r]
 chooseConstr cb cs = do
   let c = concatMap snd cs
-  varDecs <- mapM exc cs
+  varDecs <- mapM exc c
   conds <- mapM (\(q,cns) -> mapM (convExpr . renderC q) cns) cs
   bods <- mapM (chooseCB cb) cs
   let bodies = concat $ zipWith (zipWith (\cond bod -> ifNoElse [((?!) cond, bod)])) conds bods
@@ -374,12 +374,14 @@ constrExc c = do
   msgs <- mapM (constraintViolatedMsg q "expected") cs
   return $ map (bodyStatements . (++ [throw "InputError"])) msgs
   
-exc :: (OOProg r) => (CodeVarChunk, [ConstraintCE]) ->
+exc :: (OOProg r) => ConstraintCE ->
   GenState [MSStatement r]
-exc c = do
-  let q = fst c
-      cs = snd c
-  return $ mapM (printConstraintx q) cs
+exc (Elem _ e) = do
+  lb <- convExprSet e
+  let value = var "set" (setType double) local
+  return [varDecDef value lb]
+exc _ =
+  return [emptyValStmt]
 
 -- | Generates statements that print a message for when a constraint is violated.
 -- Message includes the name of the cosntraint quantity, its value, and a
@@ -393,17 +395,6 @@ constraintViolatedMsg q s c = do
     print v,
     printStr $ ", but is " ++ s ++ " to be "] ++ pc
 
-
--- | Generates statements to print descriptions of constraints, using words and
--- the constrained values. Constrained values are followed by printing the
--- expression they originated from, using printExpr.
-printConstraintx :: (OOProg r) => CodeVarChunk -> ConstraintCE -> GenState [MSStatement r]
-printConstraintx q (Elem _ e) = do
-  lb <- convExpr e
-  let value = var ("set_" ++ codeName q)  (setType double) local
-  return [varDecDef value lb]
-printConstraintx q (Range _ _) =
-  return [emptyValStmt]
 
 
 

@@ -16,12 +16,12 @@ import Data.List (intercalate)
 import Data.Text (pack)
 import GHC.Generics
 
-import Control.Lens (Lens', makeLenses, (^.), view, over)
+import Control.Lens (Getter, makeLenses, (^.), view, over)
 
 -- | The most basic item: having a unique identifier key, here a UID.
 class HasUID c where
   -- | Provides a /unique/ id for internal Drasil use.
-  uid :: Lens' c UID
+  uid :: Getter c UID
 
 -- | A @UID@ is a 'unique identifier' for things that we will put into our database
 -- of information. We use a newtype wrapper to make sure we are only using

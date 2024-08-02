@@ -505,7 +505,7 @@ elementSetBoolBfunc SContains = contains
 -- medium hacks --
 
 -- | Converts a 'Mod' to GOOL.
-genModDef :: (OOProg r) => Mod -> GenState (SFile r)
+genModDef :: (OOProg r) => Mod -> GenState (OO.SFile r)
 genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
   Just . genFunc publicFunc []) fs)
   (case cs of [] -> []

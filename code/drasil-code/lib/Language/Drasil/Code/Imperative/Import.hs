@@ -48,8 +48,8 @@ import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   DeclStatement(..), IOStatement(..), StringStatement(..), ControlStatement(..),
   ifNoElse, VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
   pubDVar, privDVar, nonInitConstructor, convType, convTypeOO, Set(..),
-  VisibilityTag(..), CodeType(..), onStateValue, SFile)
-
+  VisibilityTag(..), CodeType(..), onStateValue)
+import qualified Drasil.GOOL as OO (SFile)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (SFile)
@@ -499,7 +499,7 @@ elementSetBoolBfunc SContains = contains
 -- medium hacks --
 
 -- | Converts a 'Mod' to GOOL.
-genModDef :: (OOProg r) => Mod -> GenState (SFile r)
+genModDef :: (OOProg r) => Mod -> GenState (OO.SFile r)
 genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
   Just . genFunc publicFunc []) fs)
   (case cs of [] -> []

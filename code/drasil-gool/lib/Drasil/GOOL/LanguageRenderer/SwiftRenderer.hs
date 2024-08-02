@@ -51,7 +51,7 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   ModuleElim)
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar,
   class', module')
-import Drasil.GOOL.LanguageRenderer (valueList, dot, blockCmtStart, blockCmtEnd,
+import Drasil.GOOL.LanguageRenderer (dot, blockCmtStart, blockCmtEnd,
   docCmtStart, bodyStart, bodyEnd, commentStart, elseIfLabel, forLabel,
   inLabel, tryLabel, catchLabel, throwLabel, throwsLabel, importLabel, listSep',
   printLabel, listSep, piLabel, access, tuple, ClassDocRenderer, parameterList)
@@ -84,7 +84,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (classVar,
   indexToInt, forEach', global)
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (notOp, andOp, orOp, inOp, 
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, 
-  listSize, varDecDef, extObjDecNew, switch, while)
+  listSize, varDecDef, setDecDef, extObjDecNew, switch, while)
 import qualified Drasil.GOOL.LanguageRenderer.Macros as M (ifExists, decrement1,
   increment1, runStrategy, stringListVals, stringListLists, notifyObservers',
   makeSetterVal)
@@ -326,7 +326,7 @@ instance Literal SwiftCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray brackets
-  litSet = swiftLitSetFunc swiftSet
+  litSet = litArray
   litList = litArray
 
 instance MathConstant SwiftCode where
@@ -554,6 +554,8 @@ instance AssignStatement SwiftCode where
 instance DeclStatement SwiftCode where
   varDec = swiftVarDec swiftVar
   varDecDef = C.varDecDef Empty
+  setDecDef = C.setDecDef Empty
+  setDec = swiftSetDec swiftVar
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
   arrayDec = listDec
@@ -846,6 +848,7 @@ swiftListType t' = do
   typeFromData (List $ getType t) ("[" ++ getTypeString t ++ "]")
     (brackets $ RC.type' t)
 
+
 swiftFuncType :: (CommonRenderSym r) => [VSType r] -> VSType r -> VSType r
 swiftFuncType ps r = do
   pts <- sequence ps
@@ -967,10 +970,6 @@ swiftLambda ps ex = braces $ parens (hicat listSep'
 
 swiftReadableTypes :: [CodeType]
 swiftReadableTypes = [Integer, Double, Float, Boolean, Char]
-
-swiftLitSetFunc :: (OORenderSym r) => String -> VSType r -> [SValue r] -> SValue r
-swiftLitSetFunc s t es = sequence es >>= (\elems -> mkStateVal (arrayType t) 
-  (text s <> parens (brackets (valueList elems))))
 
 swiftCast :: (CommonRenderSym r) => VSType r -> SValue r -> SValue r
 swiftCast t' v' = do
@@ -1138,6 +1137,16 @@ swiftVarDec dec v' = do
   mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
     <+> RC.type' (variableType v))
 
+swiftSetDec :: Doc -> SVariable SwiftCode -> MSStatement SwiftCode
+swiftSetDec dec v' = do
+  v <- zoom lensMStoVS v'
+  modify $ useVarName (variableName v)
+  let bind Static = static :: SwiftCode (Permanence SwiftCode)
+      bind Dynamic = dynamic :: SwiftCode (Permanence SwiftCode)
+      p = bind $ variableBind v
+  mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
+    <+> text(swiftSet ++ "<Double>"))
+
 swiftThrowDoc :: (CommonRenderSym r) => r (Value r) -> Doc
 swiftThrowDoc errMsg = throwLabel <+> RC.value errMsg
 
@@ -1216,4 +1225,5 @@ typeDfltVal Char = litChar ' '
 typeDfltVal String = litString ""
 typeDfltVal (List t) = litList (convTypeOO t) []
 typeDfltVal (Array t) = litArray (convTypeOO t) []
+typeDfltVal (Set t) = litSet (convTypeOO t) []
 typeDfltVal _ = error "Attempt to get default value for type with none."

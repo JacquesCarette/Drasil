@@ -488,6 +488,8 @@ instance AssignStatement JuliaCode where
 instance DeclStatement JuliaCode where
   varDec v = CP.varDecDef v Nothing
   varDecDef v e = CP.varDecDef v (Just e)
+  setDec = varDec
+  setDecDef = varDecDef
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
   arrayDec = listDec

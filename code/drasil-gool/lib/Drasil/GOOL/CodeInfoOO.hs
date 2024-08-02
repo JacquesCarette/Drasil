@@ -301,6 +301,8 @@ instance AssignStatement CodeInfoOO where
 instance DeclStatement CodeInfoOO where
   varDec                 _ = noInfo
   varDecDef              _ = zoom lensMStoVS . execute1
+  setDec                 _ = noInfo
+  setDecDef              _ = zoom lensMStoVS . execute1
   listDec              _ _ = noInfo
   listDecDef             _ = zoom lensMStoVS . executeList
   arrayDec             _ _ = noInfo

@@ -4,7 +4,7 @@
 module Drasil.GOOL.LanguageRenderer.CLike (charRender, float, double, char, 
   listType, setType, void, notOp, andOp, orOp, inOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
-  decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
+  decrement1, varDec, varDecDef, setDecDef, listDec, extObjDecNew, switch, for, while, 
   intFunc, multiAssignError, multiReturnError, multiTypeError
 ) where
 
@@ -16,7 +16,7 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, VSType, SVariable,
   TypeElim(getType, getTypeString), 
   VariableElim(..), ValueSym(Value, valueType), VisibilitySym(..))
 import qualified Drasil.GOOL.InterfaceCommon as IC (TypeSym(bool, float),
-  ValueExpression(funcAppMixedArgs), DeclStatement(varDec, varDecDef))
+  ValueExpression(funcAppMixedArgs), DeclStatement(varDec, setDec, varDecDef))
 import Drasil.GOOL.InterfaceGOOL (PermanenceSym(..), extNewObj, ($.))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (OOTypeSym(obj),
   OOValueExpression(newObjMixedArgs))
@@ -165,6 +165,15 @@ varDecDef :: (CommonRenderSym r) => Terminator -> SVariable r -> SValue r ->
   MSStatement r
 varDecDef t vr vl' = do 
   vd <- IC.varDec vr
+  vl <- zoom lensMStoVS vl'
+  let stmtCtor Empty = mkStmtNoEnd
+      stmtCtor Semi = mkStmt
+  stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
+
+setDecDef :: (CommonRenderSym r) => Terminator -> SVariable r -> SValue r -> 
+  MSStatement r
+setDecDef t vr vl' = do 
+  vd <- IC.setDec vr
   vl <- zoom lensMStoVS vl'
   let stmtCtor Empty = mkStmtNoEnd
       stmtCtor Semi = mkStmt

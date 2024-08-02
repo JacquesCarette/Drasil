@@ -554,6 +554,9 @@ instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) where
   varDec vr = pair1 varDec varDec (zoom lensMStoVS vr)
   varDecDef vr vl = pair2 varDecDef varDecDef (zoom lensMStoVS vr)
     (zoom lensMStoVS vl)
+  setDec vr = pair1 varDec setDec (zoom lensMStoVS vr)
+  setDecDef vr vl = pair2 setDecDef setDecDef (zoom lensMStoVS vr)
+    (zoom lensMStoVS vl)
   listDec n vr = pair1 (listDec n) (listDec n) (zoom lensMStoVS vr)
   listDecDef vr vs = pair1Val1List listDecDef listDecDef (zoom lensMStoVS vr)
     (map (zoom lensMStoVS) vs)
@@ -1470,6 +1473,8 @@ instance AssignStatement CppSrcCode where
 instance DeclStatement CppSrcCode where
   varDec = C.varDec static dynamic empty
   varDecDef = C.varDecDef Semi
+  setDec = varDec
+  setDecDef = varDecDef
   listDec n = C.listDec cppListDecDoc (litInt n)
   listDecDef = cppListDecDef cppListDecDefDoc
   arrayDec n vr = do
@@ -2150,6 +2155,8 @@ instance AssignStatement CppHdrCode where
 instance DeclStatement CppHdrCode where
   varDec = C.varDec static dynamic empty
   varDecDef = C.varDecDef Semi
+  setDec = varDec
+  setDecDef = varDecDef
   listDec _ _ = emptyStmt
   listDecDef _ _ = emptyStmt
   arrayDec _ _ = emptyStmt

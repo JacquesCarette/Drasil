@@ -571,6 +571,8 @@ instance AssignStatement JavaCode where
 instance DeclStatement JavaCode where
   varDec = C.varDec static dynamic empty
   varDecDef = C.varDecDef Semi
+  setDec = varDec
+  setDecDef = varDecDef
   listDec n v = zoom lensMStoVS v >>= (\v' -> C.listDec (R.listDec v') 
     (litInt n) v)
   listDecDef = CP.listDecDef

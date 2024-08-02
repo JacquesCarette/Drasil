@@ -150,7 +150,8 @@ resShrDeriv = mkDerivNoHeader [foldlSent [S "Derived by substituting",
 
 --
 mobShr :: RelationConcept
-mobShr = addRelToCC mobShrI "mobShr" mobShrRel -- genDef4Label
+mobShr = makeRC "mobShr" (nounPhraseSP "mobilized shear force")
+           mobShrDesc mobShrRel
 
 mobShrRel :: Relation
 mobShrRel = inxi mobShrI $= inxi shrResI $/ sy fs $= shrResEqn $/ sy fs

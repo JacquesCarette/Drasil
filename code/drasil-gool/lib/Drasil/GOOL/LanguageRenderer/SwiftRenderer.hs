@@ -559,7 +559,7 @@ instance DeclStatement SwiftCode where
   varDec = swiftVarDec swiftVar
   varDecDef = C.varDecDef Empty
   setDecDef = C.setDecDef Empty
-  setDec = swiftSetDec swiftVar
+  setDec = swiftSetDec swiftConst
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
   arrayDec = listDec

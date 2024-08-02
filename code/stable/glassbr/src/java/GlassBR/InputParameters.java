@@ -220,7 +220,7 @@ public class InputParameters {
         outfile.println("  }");
         outfile.close();
         
-        HashSet<Double> set = new HashSet<Double>(Set.of(2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0));
+        Set<Double> set = Set.of(2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0);
         if (!(0.1 <= this.a && this.a <= 5.0)) {
             System.out.print("a has value ");
             System.out.print(this.a);

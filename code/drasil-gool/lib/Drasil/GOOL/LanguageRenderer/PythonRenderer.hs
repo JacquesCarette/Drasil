@@ -319,7 +319,7 @@ instance Literal PythonCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray brackets
-  litSet = CP.litSet braces
+  litSet = CP.litArray braces
   litList = litArray
 
 instance MathConstant PythonCode where

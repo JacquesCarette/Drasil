@@ -79,7 +79,7 @@ import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int, 
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
   extFuncAppMixedArgs, indexOf, contains, listAddFunc, discardFileLine, intClass, 
-  funcType, arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, 
+  funcType, arrayType, litSet, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, 
   docMain, mainFunction, buildModule', bindingError, listDecDef, 
   destructorError, stateVarDef, constVar, litArray, call', listSizeFunc, 
   listAccessFunc', notNull, doubleRender, double, openFileR, openFileW, 
@@ -327,10 +327,7 @@ instance Literal JavaCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray braces
-  litSet t es = do 
-    zoom lensVStoMS $ modify (if null es then id else addLangImport $ utilImport
-      jSet)
-    newObj (setType t) [jAsSetFunc t es | not (null es)]
+  litSet = CP.litSet ((text $ jSetOf) <>) (parens)
 
   litList t es = do
     zoom lensVStoMS $ modify (if null es then id else addLangImport $ utilImport
@@ -887,12 +884,12 @@ jSetType t = do
   t >>= (jSetType' . getType)
   where jSetType' Integer = typeFromData (Set Integer) 
           stInt (text stInt)
-        jSetType' Float = C.setType "HashSet" CP.float
-        jSetType' Double = C.setType "HashSet" CP.double
+        jSetType' Float = C.setType "Set" CP.float
+        jSetType' Double = C.setType "Set" CP.double
         jSetType' Boolean = typeFromData (Set Boolean) stBool (text stBool)
-        jSetType' _ = C.setType "HashSet" t
-        stInt = "HashSet" `containing` jInteger
-        stBool = "HashSet" `containing` jBool'
+        jSetType' _ = C.setType "Set" t
+        stInt = "Set" `containing` jInteger
+        stBool = "Set" `containing` jBool'
 
 jArrayType :: VSType JavaCode
 jArrayType = arrayType (obj jObject)
@@ -909,9 +906,6 @@ jFileWriterType = do
 
 jAsListFunc :: VSType JavaCode -> [SValue JavaCode] -> SValue JavaCode
 jAsListFunc t = funcApp jAsList (listType t)
-
-jAsSetFunc :: VSType JavaCode -> [SValue JavaCode] -> SValue JavaCode
-jAsSetFunc t = funcApp jSetOf (setType t)
 
 jEqualsFunc :: SValue JavaCode -> VSFunction JavaCode
 jEqualsFunc v = func jEquals bool [v]

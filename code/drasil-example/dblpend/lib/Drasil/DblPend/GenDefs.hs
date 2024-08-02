@@ -176,10 +176,10 @@ accelXGD_2 = gdNoRefs (equationalModel' accelXQD_2) (getUnit acceleration) (Just
 accelXQD_2 :: ModelQDef
 accelXQD_2 = mkQuantDef' xAccel_2 (the xComp `NP.of_` (acceleration `ofThe` secondObject)) E.accelXExpr_2
 
-accelXDeriv_2:: Derivation
+accelXDeriv_2 :: Derivation
 accelXDeriv_2 = mkDerivName (phraseNP (NP.the (xComp `of_` acceleration))) (weave [accelXDerivSents_2, accelXDerivEqns_2])
 
-accelXDerivSents_2:: [Sentence]
+accelXDerivSents_2 :: [Sentence]
 accelXDerivSents_2 = [accelDerivSent1, accelXDerivSent2_2, accelDerivSent3, accelDerivSent4]
 
 accelXDerivEqns_2 :: [Sentence]
@@ -197,10 +197,10 @@ accelYGD_2 = gdNoRefs (equationalModel' accelYQD_2) (getUnit acceleration) (Just
 accelYQD_2 :: ModelQDef
 accelYQD_2 = mkQuantDef' yAccel_2 (the yComp `NP.of_` (acceleration `ofThe` secondObject)) E.accelYExpr_2
 
-accelYDeriv_2:: Derivation
+accelYDeriv_2 :: Derivation
 accelYDeriv_2 = mkDerivName (phraseNP (NP.the (yComp `of_` acceleration))) (weave [accelYDerivSents_2, accelYDerivEqns_2])
 
-accelYDerivSents_2:: [Sentence]
+accelYDerivSents_2 :: [Sentence]
 accelYDerivSents_2 = [accelDerivSent1, accelYDerivSent2_2, accelDerivSent3, accelDerivSent4]
 
 accelYDerivEqns_2 :: [Sentence]

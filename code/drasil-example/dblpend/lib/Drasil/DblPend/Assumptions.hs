@@ -40,7 +40,7 @@ cartSysDesc = atStartNP (a_ cartesian) `S.is` (S "used" !.)
 
 cartSysRDesc :: Sentence
 cartSysRDesc = atStartNP (the cartesian) `S.is` S "right-handed where" +:+ 
-    phraseNP (combineNINP positive (xAxis `and_` yAxis)) +:+. S "point right up"
+  phraseNP (combineNINP positive (xAxis `and_` yAxis)) +:+. S "point right up"
 
 yAxisDirDesc :: Sentence
 yAxisDirDesc = atStartNP (direction `the_ofThe` yAxis) `S.is` S "directed opposite to" +:+. phrase gravity

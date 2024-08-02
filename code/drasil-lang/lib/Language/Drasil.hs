@@ -98,7 +98,7 @@ module Language.Drasil (
   -- Language.Drasil.Chunk.Concept
   , dcc, dccWDS, cc, cc', ccs, cw, cic
   -- Language.Drasil.Chunk.Relation
-  , RelationConcept, makeRC, addRelToCC
+  , RelationConcept, makeRC
   -- Language.Drasil.Chunk.DifferentialModel
   , DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..), ($^^),($**), ($++)
   , makeAODESolverFormat, makeAIVP, formEquations, makeASystemDE, makeASingleDE
@@ -359,7 +359,7 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
   mkFuncDef, mkFuncDef', mkFuncDefByQ)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, addRelToCC)
+import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)
 import Language.Drasil.Chunk.DifferentialModel(DifferentialModel(..), ODESolverFormat(..),
   InitialValueProblem(..), ($^^), ($**), ($++), makeAODESolverFormat, makeAIVP, makeASystemDE, 
   makeASingleDE, formEquations)

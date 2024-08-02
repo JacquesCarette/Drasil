@@ -389,8 +389,8 @@ int main(int argc, const char *argv[]) {
         std::cout << "Hello" << std::endl;
         a++;
     }
-    for (std::vector<double>::iterator num = myOtherList.begin(); num != myOtherList.end(); num++) {
-        std::cout << doubleAndAdd((*num), 1.0) << std::endl;
+    for (const double &num : myOtherList) {
+        std::cout << doubleAndAdd(num, 1.0) << std::endl;
     }
     try {
         throw("Good-bye!");

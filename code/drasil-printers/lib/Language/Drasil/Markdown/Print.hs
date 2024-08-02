@@ -31,8 +31,8 @@ import Language.Drasil.HTML.Helpers(BibFormatter(..))
 import Language.Drasil.TeX.Helpers(commandD, command2D, mkEnv)
 
 import Language.Drasil.Markdown.Helpers (heading, image, li, reflink,
-  reflinkURI, reflinkInfo, caption, bold, ul, docLength, divTag, defnHTag, em,
-  h, h')
+  reflinkURI, reflinkInfo, caption, bold, ul, docLength, divTag, centeredDiv, 
+  em, h, h', centeredDivId)
 
 -----------------------------------------------------------------
 ------------------------- mdBook SRS ----------------------------
@@ -233,7 +233,7 @@ mkDocDefn rm = map (\(f, d) -> [text f, makeLO rm (f,d)])
 
 -- | Renders the title/header of the definition table
 makeDHeaderText :: RefMap -> [(String, [LayoutObj])] -> Doc -> Doc
-makeDHeaderText rm ps l = defnHTag header
+makeDHeaderText rm ps l = centeredDiv header
   where
     lo = lookup "Label" ps
     c = maybe l (\lo' -> makeLO rm ("Label", lo')) lo 
@@ -307,7 +307,7 @@ item rm (Nested s l) = vcat [pSpec rm s, makeList rm l 0]
 
 -- | Renders figures in Markdown
 makeFigure :: Doc -> Doc -> Doc -> Doc
-makeFigure r c f = divTag r $^$ image f c
+makeFigure r c f = centeredDivId r (image f c)
 
 -----------------------------------------------------------------
 ------------------ Bibliography Printing ------------------------

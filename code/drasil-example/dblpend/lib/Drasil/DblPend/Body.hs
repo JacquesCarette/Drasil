@@ -60,7 +60,7 @@ printSetting = piSys fullSI Equational defaultConfiguration
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents, -- This creates the Table of Contents
   RefSec $      --This creates the Reference section of the SRS
-    RefProg intro      -- This add the introduction blob to the reference section  
+    RefProg intro      -- This add the introduction blob to the reference section
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
       -- introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
@@ -100,8 +100,8 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
     ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
-     AuxConsProg progName [],  -- Adds Auxilliary constraint section
-  Bibliography                    -- Adds reference section
+     AuxConsProg progName [], -- Adds Auxilliary constraint section
+  Bibliography                -- Adds reference section
   ]
 
 si :: SystemInformation

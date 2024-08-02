@@ -40,7 +40,7 @@ import Drasil.GamePhysics.DataDefs (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iMods, instModIntro)
 import Drasil.GamePhysics.References (citations)
-import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs)
+import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, pymunk)
 import Drasil.GamePhysics.TMods (tMods)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
@@ -155,9 +155,9 @@ symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll) (nw gamePhysics :
   ++ [nw algorithm] ++ map nw derived ++ map nw fundamentals
   ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw defSymbols ++ srsDomains ++ map cw iMods) units dataDefs
-  iMods generalDefns tMods concIns section [] allRefs
+  iMods generalDefns tMods concIns section [] (offShelfSolRefs ++ [pymunk] ++ allRefs)
 
--- | Holds all references and links used in the document.
+  -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
 
@@ -412,6 +412,10 @@ offShelfSols :: [Contents]
 offShelfSols = [offShelfSolsIntro, offShelfSols2DList,
                 offShelfSolsMid, offShelfSols3DList]
 
+offShelfSolRefs :: [Reference]
+offShelfSolRefs = [box2D, napePhysicsEngine, bullet, 
+                   openDynamicsEngine, newtonGameDynamics]
+
 offShelfSolsIntro, offShelfSols2DList, 
   offShelfSolsMid, offShelfSols3DList :: Contents
 
@@ -420,16 +424,35 @@ offShelfSolsIntro = mkParagraph $ foldlSentCol
   S "there already exist free", phrase openSource, phrase game +:+.
   plural physLib, S "Similar", getAcc twoD, plural physLib, S "are"]
 
-offShelfSols2DList = enumBulletU [S "Box2D: http://box2d.org/",
-  S "Nape Physics Engine: http://napephys.com/"]
+offShelfSols2DList = enumBulletU [
+  namedRef box2D (S "Box2D"),
+  namedRef napePhysicsEngine (S"Nape Physics Engine")]
 
 offShelfSolsMid = mkParagraph $ foldl (+:+) EmptyS [S "Free", phrase openSource,
   getAcc threeD, phrase game, plural physLib, S "include:"]
 
 offShelfSols3DList = enumBulletU [
-  S "Bullet: http://bulletphysics.org/",
-  S "Open Dynamics Engine: http://www.ode.org/",
-  S "Newton Game Dynamics: http://newtondynamics.com/"]
+  namedRef bullet (S "Bullet"),
+  namedRef openDynamicsEngine (S "Open Dynamics Engine"),
+  namedRef newtonGameDynamics (S "Newton Game Dynamics")]
+
+box2D, napePhysicsEngine, bullet, openDynamicsEngine,
+  newtonGameDynamics :: Reference
+
+box2D = makeURI "box2D" "http://box2d.org/" $ 
+  shortname' $ S "Box2D"
+
+napePhysicsEngine = makeURI "napePhysicsEngine" "http://napephys.com/" $ 
+  shortname' $ S "Nape Physics Engine"
+
+bullet = makeURI "bullet" "http://bulletphysics.org/" $ 
+  shortname' $ S "Bullet"
+
+openDynamicsEngine = makeURI "openDynamicsEngine" "http://www.ode.org/" $ 
+  shortname' $ S "Open Dynamic Engine"
+
+newtonGameDynamics = makeURI "newtonGameDynamics" "http://newtondynamics.com/" $ 
+  shortname' $ S "Newton Game Dynamics"
 
 -------------------------------------------------
 -- SECTION 8 : Traceability Matrices and Graph --

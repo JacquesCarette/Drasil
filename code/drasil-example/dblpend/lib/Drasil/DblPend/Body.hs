@@ -127,7 +127,7 @@ si = SI {
 }
 
 purp :: Sentence
-purp = foldlSent_ [S "predict", S "the", phrase motion `S.ofA` S "double", phrase pendulum]
+purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum]
 
 symbolsAll :: [QuantityDict]
 symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
@@ -162,9 +162,9 @@ concIns = assumpDouble ++ goals ++ funcReqs ++ nonFuncReqs
 ------------------------------
 justification :: CI -> Sentence
 justification prog = foldlSent [ atStartNP (a_ pendulum), S "consists" `S.of_` phrase mass, 
-                            S "attached" `S.toThe` S "end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
+                            S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
                             (S "highly sensitive to initial conditions" !.), S "Therefore" `sC`
-                            S "it" `S.is` S "useful to have a", phrase program, S "to simulate", phraseNP (motion
+                            S "it is useful to have a", phrase program, S "to simulate", phraseNP (motion
                             `the_ofThe` pendulum), (S "to exhibit its chaotic characteristics" !.),
                             atStartNP (the program), S "documented here" `S.is` S "called", phrase prog]
 
@@ -219,14 +219,14 @@ sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_
    `andThe` system), S "are as follows"]
 
 sysCtxUsrResp :: CI -> [Sentence]
-sysCtxUsrResp prog = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
-  physical) +:+ S "state" `S.ofThe` phrase motion `S.andThe` plural inDatum +:+ S "related" +:+
-  S "to the" +:+ phrase prog `sC` S "ensuring no errors" `S.inThe` plural datum +:+. S "entry",
+sysCtxUsrResp prog = [S "Provide initial" +:+ pluralNP (condition `ofThePS` physical) +:+
+  S "state of the motion" `S.andThe` plural inDatum +:+ 
+  S "related to the" +:+ phrase prog `sC` S "ensuring no errors" `S.inThe` plural datum +:+. S "entry",
   S "Ensure that consistent units" `S.are` S "used for" +:+. pluralNP (combineNINI input_ Doc.variable),
   S "Ensure required" +:+
   namedRef (SRS.assumpt ([]::[Contents]) ([]::[Section])) (phrase software +:+ plural assumption) +:+
-  S "are appropriate for any particular" +:+
-  phrase problem +:+ S "input" +:+ S "to the" +:+. phrase software]
+  S "are appropriate" `S.for` S "any particular" +:+
+  phrase problem +:+ S "input to the" +:+. phrase software]
 
 sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Detect data type mismatch, such as a string" `S.of_` S "characters" +:+

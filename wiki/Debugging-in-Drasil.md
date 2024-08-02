@@ -135,6 +135,7 @@ drasil-example/Drasil/SWHS/References.hs:citations = [bueche1986, incroperaEtAl2
 Here, we can see that `parnasClements1986` was created in `drasil-data/Data/Drasil/Citations.hs` (we also see some examples of imports of it, so that will be helpful later too).
 
 If no suitable results appeared, then it's likely that you will either need to create the desired function or that a `UID` reference was incorrect.
+
 2. *Find where we were supposed to place it in the `ChunkDB` of that system/example* - For example, with DblPendulum, we instantiate our `ChunkDB` in `Body.hs` here:  
 ```Haskell
 symbMap :: ChunkDB 
@@ -157,6 +158,7 @@ symbMap :: ChunkDB
    (idMap ci) (idMap sect) (idMap lc) (idMap r) 
 ```
 Looking at the type signature + surrounding comments are very helpful for this.
+
 4. *Add it to that chunk map* - This step heavily depends on the example, but we usually can just prepend it to the list of references. In this case, there is an `allRefs` list inside of `Body.hs`:
 ```Haskell
 allRefs :: [Reference]

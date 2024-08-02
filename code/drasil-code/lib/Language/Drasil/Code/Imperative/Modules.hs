@@ -385,7 +385,7 @@ exc :: (OOProg r) => ConstraintCE ->
 exc (Elem _ e) = do
   lb <- convExprSet e
   let value = var "set" (setType double) local
-  return [varDecDef value lb]
+  return [setDecDef value lb]
 exc _ =
   return [emptyValStmt]
 

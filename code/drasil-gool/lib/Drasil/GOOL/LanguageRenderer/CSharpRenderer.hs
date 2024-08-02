@@ -541,6 +541,8 @@ instance DeclStatement CSharpCode where
   varDec v scp = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $ 
     C.varDec static dynamic empty v scp)
   varDecDef = C.varDecDef Semi
+  setDec = varDec
+  setDecDef = varDecDef
   listDec n v scp = zoom lensMStoVS v >>= (\v' -> C.listDec (R.listDec v') 
     (litInt n) v scp)
   listDecDef = CP.listDecDef

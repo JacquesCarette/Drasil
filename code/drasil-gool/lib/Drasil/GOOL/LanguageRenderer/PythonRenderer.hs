@@ -555,6 +555,8 @@ instance AssignStatement PythonCode where
 instance DeclStatement PythonCode where
   varDec v scp = CP.varDecDef v scp Nothing
   varDecDef v scp e = CP.varDecDef v scp (Just e)
+  setDec = varDec
+  setDecDef = varDecDef
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
   arrayDec = listDec

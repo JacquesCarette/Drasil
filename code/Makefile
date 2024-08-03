@@ -308,9 +308,14 @@ $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
 
 # Compiles GOOL examples to concrete code (Java, C++, etc.)
 $(GOOLTEST)$(GEN_E_SUFFIX):
+	- rm -rf "$(BUILD_FOLDER)$(GOOLTEST_DIR)"
+	make $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME)
 	stack build $(stackArgs) "drasil-code:exe:$(GOOLTEST_EXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(GOOLTEST_DIR)"
 	cd "$(BUILD_FOLDER)$(GOOLTEST_DIR)" && $(STACK_EXEC) -- "$(GOOLTEST_EXE)"
+	@mkdir -p "$(LOG_FOLDER)"
+	- $(DIFF) "$(STABLE_FOLDER)$(GOOLTEST_DIR)/" "$(BUILD_FOLDER)$(GOOLTEST_DIR)/" > "$(LOG_FOLDER)$(GOOLTEST_DIR)$(LOG_SUFFIX)"
+	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)log_check.sh"
 
 # Install individual Drasil examples
 $(filter %$(INSTALL_E_SUFFIX), $(INSTALL_EXAMPLES)): %$(INSTALL_E_SUFFIX):

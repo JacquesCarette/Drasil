@@ -304,6 +304,9 @@ elimMk :: Getter DifferentialModel a -> Getter RelationConcept a -> Getter (Cons
 -- | Make a <tt>Lens</tt> for <a>ModelKinds</a>.
 lensMk :: forall e a. Lens' DifferentialModel a -> Lens' RelationConcept a -> Lens' (ConstraintSet e) a -> Lens' (QDefinition e) a -> Lens' (MultiDefn e) a -> Lens' (ModelKinds e) a
 
+-- | Make a <a>Getter</a> for <a>ModelKinds</a>.
+getterMk :: forall e a. Getter DifferentialModel a -> Getter RelationConcept a -> Getter (ConstraintSet e) a -> Getter (QDefinition e) a -> Getter (MultiDefn e) a -> Getter (ModelKinds e) a
+
 -- | Extract a list of <a>QDefinition</a>s from a list of
 --   <a>ModelKinds</a>.
 getEqModQds :: [ModelKind e] -> [QDefinition e]

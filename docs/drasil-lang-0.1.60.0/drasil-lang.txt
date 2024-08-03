@@ -2194,7 +2194,7 @@ special :: RenderSpecial r => Special -> r
 class HasUID c
 
 -- | Provides a <i>unique</i> id for internal Drasil use.
-uid :: HasUID c => Lens' c UID
+uid :: HasUID c => Getter c UID
 
 -- | A HasSymbol is anything which has a <a>Symbol</a>.
 class HasSymbol c
@@ -2520,10 +2520,6 @@ data RelationConcept
 -- | Create a <a>RelationConcept</a> from a given <tt>UID</tt>, term
 --   (<a>NP</a>), definition (<a>Sentence</a>), and <tt>Relation</tt>.
 makeRC :: Express e => String -> NP -> Sentence -> e -> RelationConcept
-
--- | Create a new <a>RelationConcept</a> from an old <a>Concept</a>. Takes
---   a <a>Concept</a>, new <tt>UID</tt> and relation.
-addRelToCC :: (Express e, Concept c) => c -> String -> e -> RelationConcept
 
 -- | Describe the structural content of a system of linear ODEs with six
 --   necessary fields

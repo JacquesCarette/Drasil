@@ -20,7 +20,7 @@ introPara
 
 externalLinkRef :: Reference
 externalLinkRef = makeURI "PD_Controller_SRSLink" 
-  "https://github.com/muralidn/CAS741-Fall20/blob/master/docs/SRS/SRS.pdf" 
+  "https://github.com/muralidn/CAS741-Fall20/tree/master" 
   (shortname' $ S "PD_Controller_SRSLink")
 
 introscopeOfReq

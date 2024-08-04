@@ -176,7 +176,7 @@ justification prog = foldlSent [ atStartNP (a_ pendulum), S "consists" `S.of_` p
                             
 externalLinkRef :: Reference
 externalLinkRef = makeURI "DblPendSRSLink" 
-  "https://github.com/Zhang-Zhi-ZZ/CAS741Project/blob/master/Double%20Pendulum/docs/SRS/SRS.pdf" 
+  "https://github.com/Zhang-Zhi-ZZ/CAS741Project/tree/master/Double%20Pendulum" 
   (shortname' $ S "DblPendSRSLink")                            
 -------------------------------
 -- 2.1 : Purpose of Document --

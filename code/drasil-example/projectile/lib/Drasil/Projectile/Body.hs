@@ -118,7 +118,7 @@ scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)),
 
 externalLinkRef :: Reference
 externalLinkRef = makeURI "projectileSRSLink" 
-  "https://github.com/smiths/caseStudies/tree/master/CaseStudies/projectile/projectileSRS" 
+  "https://github.com/smiths/caseStudies/tree/master/CaseStudies/projectile" 
   (shortname' $ S "projectileSRSLink")
 
 projectileExamples :: [Sentence]

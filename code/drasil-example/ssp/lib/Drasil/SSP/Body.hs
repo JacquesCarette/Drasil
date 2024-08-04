@@ -223,7 +223,7 @@ keySent probType pname = foldlSent_ [(phraseNP (NP.a_ (combineNINI probType prob
 
 externalLinkRef :: Reference
 externalLinkRef = makeURI "SSP" 
-  "https://github.com/smiths/caseStudies/blob/master/CaseStudies/ssp/docs/SRS/SRS.pdf" 
+  "https://github.com/smiths/caseStudies/blob/master/CaseStudies/ssp" 
   (shortname' $ S "SSP")
   
 -- SECTION 2.1 --

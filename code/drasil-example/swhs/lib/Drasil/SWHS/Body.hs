@@ -221,7 +221,7 @@ introEnd progSent pro = foldlSent_ [(progSent !.), S "The developed",
 
 externalLinkRef :: Reference
 externalLinkRef = makeURI "SWHS_SRSLink" 
-  "https://github.com/smiths/swhs/blob/master/docs/SRS/PCM_SRS.pdf" 
+  "https://github.com/smiths/swhs/tree/master"
   (shortname' $ S "SWHS_SRSLink")
 
 -------------------------------

@@ -94,35 +94,45 @@ The purpose of the traceability matrices is to provide easy references on what h
 
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. [Fig:TraceGraphAvsA](./SecTraceMatrices.md#Figure:TraceGraphAvsA) shows the dependencies of assumptions on each other. [Fig:TraceGraphAvsAll](./SecTraceMatrices.md#Figure:TraceGraphAvsAll) shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. [Fig:TraceGraphRefvsRef](./SecTraceMatrices.md#Figure:TraceGraphRefvsRef) shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. [Fig:TraceGraphAllvsR](./SecTraceMatrices.md#Figure:TraceGraphAllvsR) shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. [Fig:TraceGraphAllvsAll](./SecTraceMatrices.md#Figure:TraceGraphAllvsAll) shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
 
-<div id="Figure:TraceGraphAvsA"></div>
+<div id="Figure:TraceGraphAvsA" align="center" >
 
 ![TraceGraphAvsA](./assets/avsa.svg)
 
-**<p align="center">TraceGraphAvsA</p>**
+**TraceGraphAvsA**
 
-<div id="Figure:TraceGraphAvsAll"></div>
+</div>
+
+<div id="Figure:TraceGraphAvsAll" align="center" >
 
 ![TraceGraphAvsAll](./assets/avsall.svg)
 
-**<p align="center">TraceGraphAvsAll</p>**
+**TraceGraphAvsAll**
 
-<div id="Figure:TraceGraphRefvsRef"></div>
+</div>
+
+<div id="Figure:TraceGraphRefvsRef" align="center" >
 
 ![TraceGraphRefvsRef](./assets/refvsref.svg)
 
-**<p align="center">TraceGraphRefvsRef</p>**
+**TraceGraphRefvsRef**
 
-<div id="Figure:TraceGraphAllvsR"></div>
+</div>
+
+<div id="Figure:TraceGraphAllvsR" align="center" >
 
 ![TraceGraphAllvsR](./assets/allvsr.svg)
 
-**<p align="center">TraceGraphAllvsR</p>**
+**TraceGraphAllvsR**
 
-<div id="Figure:TraceGraphAllvsAll"></div>
+</div>
+
+<div id="Figure:TraceGraphAllvsAll" align="center" >
 
 ![TraceGraphAllvsAll](./assets/allvsall.svg)
 
-**<p align="center">TraceGraphAllvsAll</p>**
+**TraceGraphAllvsAll**
+
+</div>
 
 For convenience, the following graphs can be found at the links below:
 

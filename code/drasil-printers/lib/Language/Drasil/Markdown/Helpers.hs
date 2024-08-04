@@ -8,7 +8,8 @@ import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), hcat,
 import Data.Map (lookup)
 import Language.Drasil.Printing.Helpers (ast, ($^$), vsep)
 import Language.Drasil.Printing.LayoutObj (RefMap)
-import Language.Drasil.HTML.Helpers (wrap', wrapGen', Variation(Id, Align))
+import Language.Drasil.HTML.Helpers (wrap', wrapGen', Variation(Id, Align),
+  wrapInside, tagR)
 
 -- | Angled brackets
 ang :: Doc -> Doc
@@ -32,9 +33,15 @@ ul = wrap' "ul" []
 divTag :: Doc -> Doc
 divTag l = wrapGen' hcat Id "div" l [""] empty
 
--- | Helper for setting up div for defn heading
-defnHTag :: Doc -> Doc
-defnHTag = wrapGen' vsep Align "div" (text "center") [""]
+-- | Helper for setting up centered div tags
+centeredDiv :: Doc -> Doc
+centeredDiv = wrapGen' vsep Align "div" (text "center") [""]
+
+-- | Helper for setting up centered div tags with an Id
+centeredDivId :: Doc -> Doc -> Doc
+centeredDivId l con = vsep [wrapInside "div" atrs, con, tagR "div"]
+  where
+    atrs = [(show Id, l), (show Align, text "center")]
 
 -- | Helper for setting up links to references
 reflink :: RefMap -> String -> Doc -> Doc
@@ -55,7 +62,7 @@ reflinkURI ref txt = if ref == txt then ang ref
 
 -- | Helper for setting up figures
 image :: Doc -> Doc -> Doc
-image f c =  text "!" <> reflinkURI fp c $^$ bold (caption c)
+image f c =  text "!" <> reflinkURI fp c $^$ bold c
   where
     fp = text $ "./assets/" ++ takeFileName (show f)
 

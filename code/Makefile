@@ -184,7 +184,7 @@ BATCHTERM=dumb
 
 # Default `make` will just run examples and test them against stable. See `test`
 # target for more details.
-all: test test_website ##@Examples Run examples and test against stable.
+all: test test_website codegenTest_gen ##@Examples Run examples and test against stable.
 
 install: ##@Examples Install all example project binaries into your local binary path (see $(stack path) for local-bin-path).
 	stack install $(stackArgs)

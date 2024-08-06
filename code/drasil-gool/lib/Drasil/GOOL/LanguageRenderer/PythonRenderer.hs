@@ -538,7 +538,6 @@ instance StatementSym PythonCode where
   -- Terminator determines how statements end
   type Statement PythonCode = (Doc, Terminator)
   valStmt = G.valStmt Empty
-  emptyValStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement PythonCode where

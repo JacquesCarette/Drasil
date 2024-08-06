@@ -40,9 +40,7 @@ data Space =
   | Set Space
   | Matrix Int Int Space
   | Array Space
-  | Actor String
-  | DiscreteD [Double]
-  | DiscreteS [String] --ex. let Meal = {"breakfast", "lunch", "dinner"}
+  | Actor String 
   | Function (NE.NonEmpty Primitive) Primitive
   | Void
   deriving (Eq, Show)
@@ -107,7 +105,5 @@ isBasicNumSpace Vect {}      = False
 isBasicNumSpace Matrix {}    = False
 isBasicNumSpace Array {}     = False
 isBasicNumSpace Actor {}     = False
-isBasicNumSpace DiscreteD {} = False
-isBasicNumSpace DiscreteS {} = False
 isBasicNumSpace Function {}  = False
 isBasicNumSpace Void         = False

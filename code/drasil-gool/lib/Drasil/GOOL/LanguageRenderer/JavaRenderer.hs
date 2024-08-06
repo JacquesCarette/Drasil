@@ -281,7 +281,7 @@ instance ScopeSym JavaCode where
 
 instance VariableSym JavaCode where
   type Variable JavaCode = VarData
-  var' n _    = G.var n
+  var'        = G.var
   constant'   = var'
   extVar      = CP.extVar
   arrayElem i = G.arrayElem (litInt i)
@@ -297,15 +297,16 @@ instance OOVariableSym JavaCode where
 instance VariableElim JavaCode where
   variableName = varName . unJC
   variableType = onCodeValue varType
+  variableScope = onCodeValue varScope
   
 instance InternalVarElim JavaCode where
   variableBind = varBind . unJC
   variable = varDoc . unJC
 
 instance RenderVariable JavaCode where
-  varFromData b n t' d =  do 
+  varFromData b n s t' d =  do 
     t <- t'
-    toState $ on2CodeValues (vard b n) t (toCode d)
+    toState $ on3CodeValues (vard b n) s t (toCode d)
 
 instance ValueSym JavaCode where
   type Value JavaCode = ValData

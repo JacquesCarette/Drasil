@@ -95,7 +95,8 @@ import Drasil.GOOL.AST (Terminator(..), VisibilityTag(..), qualName, FileType(..
   CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
   commonThunkElim, commonThunkDim, ScopeData)
 import Drasil.GOOL.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
-  onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
+  onStateValue, on2CodeValues, on3CodeValues, on2StateValues, onCodeList,
+  onStateList)
 import Drasil.GOOL.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS, revFiles, addLangImportVS,
   getLangImports, getLibImports, setFileType, getClassName, setModuleName,
@@ -280,7 +281,7 @@ instance ScopeSym SwiftCode where
 
 instance VariableSym SwiftCode where
   type Variable SwiftCode = VarData
-  var' n _    = G.var n
+  var'        = G.var
   constant'   = var'
   extVar _ n  = var' n local
   arrayElem i = G.arrayElem (litInt i)
@@ -296,15 +297,16 @@ instance OOVariableSym SwiftCode where
 instance VariableElim SwiftCode where
   variableName = varName . unSC
   variableType = onCodeValue varType
+  variableScope = onCodeValue varScope
 
 instance InternalVarElim SwiftCode where
   variableBind = varBind . unSC
   variable = varDoc . unSC
 
 instance RenderVariable SwiftCode where
-  varFromData b n t' d = do
+  varFromData b n s t' d = do
     t <- t'
-    pure $ on2CodeValues (vard b n) t (toCode d)
+    pure $ on3CodeValues (vard b n) s t (toCode d)
 
 instance ValueSym SwiftCode where
   type Value SwiftCode = ValData
@@ -1019,14 +1021,15 @@ swiftListSlice :: (OORenderSym r) => SVariable r -> SValue r ->
   Maybe (SValue r) -> Maybe (SValue r) -> SValue r -> MSBlock r
 swiftListSlice vn vo beg end step = do
   stepV <- zoom lensMStoVS step
+  vnew <- zoom lensMStoVS vn
   let mbStepV = valueInt stepV
 
   -- Generate fresh variable names if required
   begName <- genVarNameIf (isNothing beg && isNothing mbStepV) "begIdx"
   endName <- genVarNameIf (isNothing end && isNothing mbStepV) "endIdx"
 
-  let (setBeg, begVal) = M.makeSetterVal begName step mbStepV beg (litInt 0)    (listSize vo #- litInt 1) local -- TODO: get scope from vn
-      (setEnd, endVal) = M.makeSetterVal endName step mbStepV end (listSize vo) (litInt (-1)) local -- TODO: get scope from vn
+  let (setBeg, begVal) = M.makeSetterVal begName step mbStepV beg (litInt 0)    (listSize vo #- litInt 1) (variableScope vnew)
+      (setEnd, endVal) = M.makeSetterVal endName step mbStepV end (listSize vo) (litInt (-1)) (variableScope vnew)
       
       i = locVar "i" int
       setToSlice = vn &= swiftMapFunc (swiftStrideFunc begVal endVal step) (lambda [i] (listAccess vo (valueOf i)))

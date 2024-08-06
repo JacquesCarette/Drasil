@@ -89,8 +89,8 @@ import Drasil.GOOL.AST (Terminator(..), FileType(..), FileData(..), fileD,
   vectorize2, sumComponents, commonVecIndex, commonThunkElim, commonThunkDim,
   ScopeData)
 import Drasil.GOOL.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
-  onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList,
-  on2StateWrapped)
+  onStateValue, on2CodeValues, on3CodeValues, on2StateValues, onCodeList,
+  onStateList, on2StateWrapped)
 import Drasil.GOOL.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, revFiles,
   addLangImportVS, getLangImports, addLibImportVS, getLibImports, addModuleImport,
   addModuleImportVS, getModuleImports, setFileType, getClassName, setCurrMain,
@@ -270,7 +270,7 @@ instance ScopeSym PythonCode where
 
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
-  var' n _     = G.var n
+  var'         = G.var
   constant' n  = var' $ toConstName n
   extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
   arrayElem i  = G.arrayElem (litInt i)
@@ -278,7 +278,8 @@ instance VariableSym PythonCode where
 instance OOVariableSym PythonCode where
   staticVar' c n t = if c then mkStaticVar n t (R.var (toConstName n))
                           else G.staticVar n t
-  self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar pySelf (obj l) (text pySelf))
+  self = zoom lensVStoMS getClassName >>=
+    (\l -> mkStateVar pySelf local (obj l) (text pySelf))
   classVar = CP.classVar R.classVar
   extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify . 
     addModuleImportVS) (Map.lookup (getTypeString t) cm) $ 
@@ -289,15 +290,16 @@ instance OOVariableSym PythonCode where
 instance VariableElim PythonCode where
   variableName = varName . unPC
   variableType = onCodeValue varType
+  variableScope = onCodeValue varScope
 
 instance InternalVarElim PythonCode where
   variableBind = varBind . unPC
   variable = varDoc . unPC
 
 instance RenderVariable PythonCode where
-  varFromData b n t' d = do 
+  varFromData b n s t' d = do 
     t <- t'
-    toState $ on2CodeValues (vard b n) t (toCode d)
+    toState $ on3CodeValues (vard b n) s t (toCode d)
 
 instance ValueSym PythonCode where
   type Value PythonCode = ValData
@@ -547,10 +549,10 @@ instance DeclStatement PythonCode where
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
-  constDecDef v e = do
-    v' <- zoom lensMStoVS v
-    let n = toConstName $ variableName v'
-        newConst = constant n (pure (variableType v')) local -- TODO: get scope from v
+  constDecDef v' e = do
+    v <- zoom lensMStoVS v'
+    let n = toConstName $ variableName v
+        newConst = constant n (pure (variableType v)) (variableScope v)
     available <- varNameAvailable n
     if available
       then varDecDef newConst e

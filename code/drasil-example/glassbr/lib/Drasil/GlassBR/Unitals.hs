@@ -2,6 +2,7 @@ module Drasil.GlassBR.Unitals where --whole file is used
 
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
+import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Prelude hiding (log)
@@ -13,7 +14,7 @@ import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
 import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, glassTypeFac,
   heatS, iGlass, lGlass, lResistance, lShareFac, loadDurFactor, nFL, responseTy,
-  stdOffDist)
+  stdOffDist, glass)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016)
 import Drasil.GlassBR.Units (sFlawPU)
 --FIXME: Many of the current terms can be separated into terms and defns?
@@ -31,7 +32,7 @@ modElas = uc' "modElas" (nounPhraseSP "modulus of elasticity of glass")
 
 constrained :: [ConstrainedChunk]
 constrained = map cnstrw inputDataConstraints ++
-  [cnstrw probBr, cnstrw probFail, cnstrw stressDistFac, cnstrw nomThick]
+  [cnstrw probBr, cnstrw probFail, cnstrw stressDistFac, cnstrw nomThick, cnstrw glassTypeCon]
 
 plateLen, plateWidth, aspectRatio, charWeight, standOffDist :: UncertQ
 pbTol, tNT :: UncertainChunk
@@ -108,9 +109,8 @@ nomThick = cuc "nomThick"
   [sfwrElem $ mkSet (map dbl nominalThicknesses)] $ exactDbl 8 -- for testing
 
 glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)
-  [{- TODO: add back constraint: EnumeratedStr Software $ map (abrv . snd) glassType -}]
+  [sfwrElem $ mkSet $ map (str . abrv . snd) [(1, annealed), (4, fullyT), (2, heatS)]]
 
-{--}
 
 outputs :: [QuantityDict]
 outputs = map qw [isSafePb, isSafeLR] ++ [qw probBr, qw stressDistFac]

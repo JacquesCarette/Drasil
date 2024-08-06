@@ -155,11 +155,11 @@ symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll) (nw gamePhysics :
   ++ [nw algorithm] ++ map nw derived ++ map nw fundamentals
   ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw defSymbols ++ srsDomains ++ map cw iMods) units dataDefs
-  iMods generalDefns tMods concIns section [] (offShelfSolRefs ++ [pymunk] ++ allRefs)
+  iMods generalDefns tMods concIns section [] allRefs
 
   -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef]
+allRefs = [externalLinkRef, pymunk] ++ offShelfSolRefs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)

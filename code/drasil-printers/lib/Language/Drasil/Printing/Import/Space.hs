@@ -25,8 +25,6 @@ space _  (Set _)       = error "Set space not translated"
 space _  Matrix {}      = error "Matrix space not translated"
 space _  (Array _)      = error "Array space not translated"
 space _  (Actor s)      = P.Ident s
-space sm (DiscreteD l)  = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm . dbl) l -- [Double]
-space _  (DiscreteS l)  = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map P.Str l --ex. let Meal = {"breakfast", "lunch", "dinner"}
 space _  Void           = error "Void not translated"
 space sm (Function i t) = P.Row $
   intersperse (P.MO P.Cross) (map (space sm) $ toList i) ++  -- AxBxC...xY

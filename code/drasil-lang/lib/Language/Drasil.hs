@@ -253,7 +253,7 @@ module Language.Drasil (
 
   -- ** Sentence-related functions
   -- | See Reference-related functions as well.
-  , addPercent, displayStrConstrntsAsSet, displayDblConstrntsAsSet
+  , addPercent
   , eqN, checkValidStr, getTandS, maybeChanged, maybeExpanded
   , maybeWOVerb, showingCxnBw, substitute, typUncr, underConsidertn
   , unwrap, fterms

@@ -109,8 +109,7 @@ nomThick' = cuc "nomThick"
   [] $ exactDbl 0
 
 nomThick = cuc "nomThick" 
-  (nounPhraseSent $ S "nominal thickness" +:+ displayDblConstrntsAsSet 
-    nomThick' nominalThicknesses)
+  (nounPhraseSent $ S "nominal thickness")
   lT millimetre {-Discrete nominalThicknesses, but not implemented-} Rational 
   [sfwrElem $ mkSet (map dbl nominalThicknesses)] $ exactDbl 8 -- for testing
 
@@ -215,13 +214,13 @@ loadDur     = unitary "loadDur"    (nounPhraseSP "duration of load")
 minThick    = unitary "minThick"   (nounPhraseSP "minimum thickness")
   lH metre Real
 
-sdx         = unitary "sdx" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase xComp))
+sdx         = unitary "sdx" (nounPhraseSent $ sParen (phrase xComp))
   (subX (eqSymb standOffDist)) metre Real
 
-sdy         = unitary "sdy" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase yComp))
+sdy         = unitary "sdy" (nounPhraseSent $ sParen (phrase yComp))
   (subY (eqSymb standOffDist)) metre Real
 
-sdz         = unitary "sdz" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase zComp))
+sdz         = unitary "sdz" (nounPhraseSent $ sParen (phrase zComp))
   (subZ (eqSymb standOffDist)) metre Real
 
 sflawParamK = unitary "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?

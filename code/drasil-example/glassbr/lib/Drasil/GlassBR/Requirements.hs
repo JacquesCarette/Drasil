@@ -25,7 +25,7 @@ import Drasil.GlassBR.IMods (iMods, pbIsSafe, lrIsSafe)
 import Drasil.GlassBR.Unitals (blast, isSafeLR, isSafePb, loadSF, notSafe,
   pbTolfail, safeMessage)
 
-{--Functional Requirements--}
+{-- Functional Requirements --}
 
 funcReqs :: [ConceptInstance]
 funcReqs = [sysSetValsFollowingAssumps, checkInputWithDataCons,
@@ -43,33 +43,30 @@ outputValsAndKnownValues   = cic "outputValsAndKnownValues"   outputValsAndKnown
 checkGlassSafety           = cic "checkGlassSafety"           checkGlassSafetyDesc           "Check-Glass-Safety"                      funcReqDom
 outputValues               = cic "outputValues"               outputValuesDesc               "Output-Values"                           funcReqDom
 
-inReqDesc, sysSetValsFollowingAssumpsDesc, checkInputWithDataConsDesc, outputValsAndKnownValuesDesc, checkGlassSafetyDesc :: Sentence
+inReqDesc, sysSetValsFollowingAssumpsDesc, checkInputWithDataConsDesc, outputValsAndKnownValuesDesc, checkGlassSafetyDesc, outputValuesDesc :: Sentence
 
 inReqDesc = foldlList Comma List [pluralNP (NP.the (combineNINI glass dimension)),
   phraseNP (type_ `of_` glass), phrase pbTolfail, pluralNP (characteristic `the_ofThePS` blast)]
 
 sysSetValsFollowingAssumpsDesc = foldlSent [atStartNP (the system), S "shall set the known",
-    plural value, S "as described in the table for", namedRef sysSetValsFollowingAssumpsTable (S "Required Assignments")]
+    plural value, S "as described in the table for", S "Required Assignments"]
 
 sysSetValsFollowingAssumpsTable :: LabelledContent
 sysSetValsFollowingAssumpsTable = mkValsSourceTable (mkQRTupleRef r2AQs r2ARs ++ mkQRTuple r2DDs) "ReqAssignments"
-                                  (S "Required Assignments" `follows` sysSetValsFollowingAssumps)
+                                  (S "Required Assignments")
   where
     r2AQs = qw loadSF : map qw (take 4 assumptionConstants)
     r2ARs = assumpGL : replicate 4 assumpSV
     r2DDs = [loadDF, hFromt, glaTyFac, standOffDis, aspRat]
 
---FIXME:should constants, LDF, and LSF have some sort of field that holds
--- the assumption(s) that're being followed? (Issue #349)
-
 checkInputWithDataConsDesc = foldlSent [atStartNP (the system), S "shall check the entered",
-  plural inValue, S "to ensure that they do not exceed the" +:+. namedRef (datCon [] []) (plural datumConstraint), 
+  plural inValue, S "to ensure that they do not exceed the", namedRef (datCon [] []) (plural datumConstraint), 
   S "If any" `S.ofThe` plural inValue, S "are out" `S.of_` S "bounds" `sC`
   S "an", phrase errMsg, S "is displayed" `S.andThe` plural calculation, S "stop"]
 
 outputValsAndKnownValuesDesc = foldlSent [titleize output_, pluralNP (the inValue),
   S "from", refS (inReq EmptyS) `S.andThe` S "known", plural value,
-  S "from", refS sysSetValsFollowingAssumps]
+  S "from the system set values following assumptions"]
 
 checkGlassSafetyDesc = foldlSent_ [S "If", eS $ sy isSafePb $&& sy isSafeLR,
   sParen (S "from" +:+ refS pbIsSafe `S.and_` refS lrIsSafe) `sC`
@@ -77,17 +74,16 @@ checkGlassSafetyDesc = foldlSent_ [S "If", eS $ sy isSafePb $&& sy isSafeLR,
   S "If the", phrase condition, S "is false, then", phrase output_,
   phraseNP (the message), Quote (notSafe ^. defn)]
 
-outputValuesDesc :: Sentence
-outputValuesDesc = foldlSent [titleize output_, pluralNP (the value), S "from the table for", namedRef outputValuesTable (S "Required Outputs")]
+outputValuesDesc = foldlSent [titleize output_, pluralNP (the value), S "from the table for", S "Required Outputs"]
 
 outputValuesTable :: LabelledContent
 outputValuesTable = mkValsSourceTable (mkQRTuple iMods ++ mkQRTuple r6DDs) "ReqOutputs"
-                              (S "Required" +:+ titleize' output_ `follows` outputValues)
+                              (S "Required" +:+ titleize' output_)
   where
     r6DDs :: [DataDefinition]
     r6DDs = [glaTyFac, hFromt, aspRat]
 
-{--Nonfunctional Requirements--}
+{-- Nonfunctional Requirements --}
 
 nonfuncReqs :: [ConceptInstance]
 nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, portable]

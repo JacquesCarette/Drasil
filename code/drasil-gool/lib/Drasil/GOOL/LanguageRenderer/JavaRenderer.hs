@@ -424,7 +424,7 @@ instance OOValueExpression JavaCode where
   libNewObjMixedArgs = C.libNewObjMixedArgs
 
 instance RenderValue JavaCode where
-  inputFunc = modify (addLangImportVS $ utilImport jUtil) >> mkStateVal 
+  inputFunc = modify (addLangImportVS $ utilImport jScanner) >> mkStateVal 
     (obj jScanner) (parens $ new' <+> jScanner' <> parens (jSystem jStdIn))
   printFunc = mkStateVal void (jSystem (jStdOut `access` printLabel))
   printLnFunc = mkStateVal void (jSystem (jStdOut `access` jPrintLn))
@@ -818,7 +818,7 @@ jFinal = text "final"
 jScanner' = text jScanner
 jLambdaSep = text "->"
 
-arrayList, jBool, jBool', jInteger, jObject, jScanner, jUtil, jContains,
+arrayList, jBool, jBool', jInteger, jObject, jScanner, jContains,
   jPrintWriter, jFile, jFileWriter, jIOExc, jFNFExc, jArrays, jSet, jAsList, jSetOf, jStdIn, 
   jStdOut, jPrintLn, jEquals, jParseInt, jParseDbl, jParseFloat, jIndex, 
   jListAdd, jListAccess, jListSet, jClose, jNext, jNextLine, jNextBool, 
@@ -829,7 +829,6 @@ jBool' = "Boolean"
 jInteger = "Integer"
 jObject = "Object"
 jScanner = "Scanner"
-jUtil = "*"
 jContains = "contains"
 jPrintWriter = "PrintWriter"
 jFile = "File"

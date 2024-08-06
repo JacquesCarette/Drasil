@@ -371,6 +371,10 @@ $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_EXAMPLES)): %$(STABILIZE_E_SUFFIX):
 	- rm -rf "$(STABLE_FOLDER)$*/"
 	- cp -r "$(BUILD_FOLDER)$(EDIR)" "$(STABLE_FOLDER)$*/"
 
+$(GOOLTEST)$(STABILIZE_E_SUFFIX): $(GOOLTEST)$(GEN_E_SUFFIX)
+	- rm -rf "$(STABLE_FOLDER)$(GOOLTEST_DIR)/"
+	- cp -r "$(BUILD_FOLDER)$(GOOLTEST_DIR)/" "$(STABLE_FOLDER)$(GOOLTEST_DIR)"
+
 # The website stabilization. First builds the website, and then copies the
 # contents from the website folder into stable-website.
 # Target will have the form Website_stabilize.

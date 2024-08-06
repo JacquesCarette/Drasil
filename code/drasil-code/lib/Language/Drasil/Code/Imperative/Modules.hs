@@ -351,8 +351,7 @@ chooseConstr cb cs = do
   conds <- mapM (\(q,cns) -> mapM (convExpr . renderC q) cns) cs
   bods <- mapM (chooseCB cb) cs
   let bodies = concat $ zipWith (zipWith (\cond bod -> ifNoElse [((?!) cond, bod)])) conds bods
-  let num = concat varDecs
-  return $ num ++ bodies
+  return $ concat varDecs ++ bodies
   where chooseCB Warning = constrWarn
         chooseCB Exception = constrExc
 
@@ -379,15 +378,14 @@ constrExc c = do
       cs = snd c
   msgs <- mapM (constraintViolatedMsg q "expected") cs
   return $ map (bodyStatements . (++ [throw "InputError"])) msgs
-  
+
 exc :: (OOProg r) => ConstraintCE ->
   GenState [MSStatement r]
 exc (Elem _ e) = do
   lb <- convExprSet e
   let value = var "set" (setType double) local
   return [setDecDef value lb]
-exc _ =
-  return [emptyValStmt]
+exc _ = return []
 
 -- | Generates statements that print a message for when a constraint is violated.
 -- Message includes the name of the cosntraint quantity, its value, and a

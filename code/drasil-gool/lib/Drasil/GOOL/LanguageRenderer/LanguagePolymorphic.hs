@@ -10,7 +10,7 @@ module Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (fileFromData,
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd, 
   listAppend, listAccess, listSet, getFunc, setFunc, 
   listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment,
-  objDecNew, print, closeFile, returnStmt, valStmt, emptyValStmt, comment, throw, ifCond,
+  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
   tryCatch, construct, param, method, getMethod, setMethod, initStmts,
   function, docFuncRepr, docFunc, buildClass, implementingClass, docClass,
   commentedClass, modFromData, fileDoc, docMod, OptionalSpace(..),
@@ -351,9 +351,6 @@ loopStmt = S.stmt . setEmpty
 
 emptyStmt :: (CommonRenderSym r) => MSStatement r
 emptyStmt = mkStmtNoEnd empty
-
-emptyValStmt :: (CommonRenderSym r) => MSStatement r
-emptyValStmt = mkStmtNoEnd empty
 
 assign :: (CommonRenderSym r) => Terminator -> SVariable r -> SValue r -> 
   MSStatement r

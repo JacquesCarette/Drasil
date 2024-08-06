@@ -1,8 +1,8 @@
 {-# LANGUAGE TemplateHaskell, TupleSections #-}
 module Language.Drasil.Code.Imperative.DrasilState (
   GenState, DrasilState(..), designLog, MatchedSpaces, ModExportMap,
-  ClassDefinitionMap, modExportMap, clsDefMap, addToDesignLog, addLoggedSpace,
-  genICName
+  ClassDefinitionMap, ScopeType(..), modExportMap, clsDefMap, addToDesignLog,
+  addLoggedSpace, genICName
 ) where
 
 import Language.Drasil
@@ -37,6 +37,9 @@ type ModExportMap = Map String String
 
 -- | Variable/function name maps to class name.
 type ClassDefinitionMap = Map String String
+
+-- | Variable scope
+data ScopeType = Local | Global | MainFn
 
 -- | Abbreviation used throughout generator.
 type GenState = State DrasilState
@@ -77,7 +80,8 @@ data DrasilState = DrasilState {
   currentModule :: String,
   currentClass :: String,
   _designLog :: Doc,
-  _loggedSpaces :: [(Space, CodeType)]
+  _loggedSpaces :: [(Space, CodeType)],
+  currentScope :: ScopeType
 }
 makeLenses ''DrasilState
 

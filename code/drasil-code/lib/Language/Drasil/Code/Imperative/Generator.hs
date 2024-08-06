@@ -21,7 +21,7 @@ import Language.Drasil.Code.Imperative.Modules (genInputMod, genInputModProc,
   genCalcFuncProc, genOutputFormat, genOutputFormatProc, genOutputMod,
   genOutputModProc, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
-  designLog, modExportMap, clsDefMap, genICName)
+  ScopeType(..), designLog, modExportMap, clsDefMap, genICName)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
   PackageSym(..), AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
@@ -87,7 +87,8 @@ generator l dt sd chs spec = DrasilState {
   currentModule = "",
   currentClass = "",
   _designLog = des,
-  _loggedSpaces = [] -- Used to prevent duplicate logs added to design log
+  _loggedSpaces = [], -- Used to prevent duplicate logs added to design log
+  currentScope = Global
 }
   where (mcm, concLog) = runState (chooseConcept chs) []
         showDate Show = dt

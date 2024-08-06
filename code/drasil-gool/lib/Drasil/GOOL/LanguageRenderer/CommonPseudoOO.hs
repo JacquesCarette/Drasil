@@ -598,7 +598,7 @@ listSize :: (CommonRenderSym r) => SValue r -> SValue r
 listSize l = do
   f <- S.listSizeFunc l
   mkVal (RC.functionType f) (RC.function f)
-  
+
 -- Julia and MATLAB --
 
 -- | Call to insert a value into a list in a language where this is not a method.

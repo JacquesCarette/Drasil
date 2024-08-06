@@ -395,9 +395,9 @@ constraintViolatedMsg q s c = do
     print v,
     printStr $ ", but is " ++ s ++ " to be "] ++ pc
 
-
-
-
+-- | Generates statements to print descriptions of constraints, using words and
+-- the constrained values. Constrained values are followed by printing the
+-- expression they originated from, using printExpr.
 printConstraint :: (OOProg r) => ConstraintCE ->
   GenState [MSStatement r]
 printConstraint c = do

@@ -90,7 +90,7 @@ getInnerType :: C.CodeType -> C.CodeType
 getInnerType (C.List innerT) = innerT
 getInnerType (C.Array innerT) = innerT
 getInnerType (C.Set innerT) = innerT
-getInnerType _ = error "Attempt to extract inner type of list from a non-list type" 
+getInnerType _ = error "Attempt to extract inner type from a non-nested type"
 
 getNestDegree :: Integer -> C.CodeType -> Integer
 getNestDegree n (C.List t) = getNestDegree (n+1) t

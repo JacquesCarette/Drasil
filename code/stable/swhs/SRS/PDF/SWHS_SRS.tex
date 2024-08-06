@@ -15,6 +15,8 @@
 \usepackage{svg}
 \usepackage{float}
 \usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{calc}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
@@ -23,6 +25,15 @@
 \newcommand{\lt}{\ensuremath <}
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
+\newsavebox{\mybox}
+\newcommand{\resizeExpression}[2]{
+\savebox{\mybox}{$#1$}
+\ifdim\wd\mybox>#2\linewidth
+\resizebox{#2\textwidth}{!}{\usebox{\mybox}}
+\else
+\usebox{\mybox}
+\fi
+}
 \bibliography{bibfile}
 \title{Software Requirements Specification for Solar Water Heating Systems Incorporating PCM}
 \author{Thulasi Jegatheesan, Brooks MacLachlan, and W. Spencer Smith}
@@ -447,7 +458,7 @@ Label & Conservation of thermal energy
         
 \\ \midrule
 Equation & \begin{displaymath}
-           -∇\cdot{}\symbf{q}+g=ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}
+           \resizeExpression{-∇\cdot{}\symbf{q}+g=ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -486,11 +497,11 @@ Label & Sensible heat energy
         
 \\ \midrule
 Equation & \begin{displaymath}
-           E=\begin{cases}
-             {C^{\text{S}}}\,m\,ΔT, & T\lt{}{T_{\text{melt}}}\\
-             {C^{\text{L}}}\,m\,ΔT, & {T_{\text{melt}}}\lt{}T\lt{}{T_{\text{boil}}}\\
-             {C^{\text{V}}}\,m\,ΔT, & {T_{\text{boil}}}\lt{}T
-             \end{cases}
+           \resizeExpression{E=\begin{cases}
+                               {C^{\text{S}}}\,m\,ΔT, & T\lt{}{T_{\text{melt}}}\\
+                               {C^{\text{L}}}\,m\,ΔT, & {T_{\text{melt}}}\lt{}T\lt{}{T_{\text{boil}}}\\
+                               {C^{\text{V}}}\,m\,ΔT, & {T_{\text{boil}}}\lt{}T
+                               \end{cases}}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -529,7 +540,7 @@ Label & Latent heat energy
         
 \\ \midrule
 Equation & \begin{displaymath}
-           Q\left(t\right)=\int_{0}^{t}{\frac{\,dQ\left(τ\right)}{\,dτ}}\,dτ
+           \resizeExpression{Q\left(t\right)=\int_{0}^{t}{\frac{\,dQ\left(τ\right)}{\,dτ}}\,dτ}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -570,7 +581,7 @@ Label & Newton's law of cooling
         
 \\ \midrule
 Equation & \begin{displaymath}
-           q\left(t\right)=h\,ΔT\left(t\right)
+           \resizeExpression{q\left(t\right)=h\,ΔT\left(t\right)}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -612,7 +623,7 @@ Label & Simplified rate of change of temperature
         
 \\ \midrule
 Equation & \begin{displaymath}
-           m\,C\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V
+           \resizeExpression{m\,C\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -642,27 +653,27 @@ RefBy & \hyperref[GD:rocTempSimp]{GD:rocTempSimp}, \hyperref[IM:eBalanceOnWtr]{I
 Integrating \hyperref[TM:consThermE]{TM:consThermE} over a volume ($V$), we have:
 
 \begin{displaymath}
--\int_{V}{∇\cdot{}\symbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV
+\resizeExpression{-\int_{V}{∇\cdot{}\symbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV}{1.0}
 \end{displaymath}
 Applying Gauss's Divergence Theorem to the first term over the surface $S$ of the volume, with $\symbf{q}$ as the thermal flux vector for the surface and $\symbf{\hat{n}}$ as a unit outward normal vector for a surface:
 
 \begin{displaymath}
--\int_{S}{\symbf{q}\cdot{}\symbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV
+\resizeExpression{-\int_{S}{\symbf{q}\cdot{}\symbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV}{1.0}
 \end{displaymath}
 We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then Equation (1) can be written as:
 
 \begin{displaymath}
-{q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV
+\resizeExpression{{q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V=\int_{V}{ρ\,C\,\frac{\,\partial{}T}{\,\partial{}t}}\,dV}{1.0}
 \end{displaymath}
 Where ${q_{\text{in}}}$, ${q_{\text{out}}}$, ${A_{\text{in}}}$, and ${A_{\text{out}}}$ are explained in \hyperref[GD:rocTempSimp]{GD:rocTempSimp}. The integral over the surface could be simplified because the thermal flux is assumed constant over ${A_{\text{in}}}$ and ${A_{\text{out}}}$ and $0$ on all other surfaces. Outward flux is considered positive. Assuming $ρ$, $C$, and $T$ are constant over the volume, which is true in our case by \hyperref[assumpCWTAT]{A:Constant-Water-Temp-Across-Tank}, \hyperref[assumpTPCAV]{A:Temp-PCM-Constant-Across-Volume}, \hyperref[assumpDWPCoV]{A:Density-Water-PCM-Constant-over-Volume}, and \hyperref[assumpSHECov]{A:Specific-Heat-Energy-Constant-over-Volume}, we have:
 
 \begin{displaymath}
-ρ\,C\,V\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V
+\resizeExpression{ρ\,C\,V\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V}{1.0}
 \end{displaymath}
 Using the fact that $ρ$=$m$/$V$, Equation (2) can be written as:
 
 \begin{displaymath}
-m\,C\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V
+\resizeExpression{m\,C\,\frac{\,dT}{\,dt}={q_{\text{in}}}\,{A_{\text{in}}}-{q_{\text{out}}}\,{A_{\text{out}}}+g\,V}{1.0}
 \end{displaymath}
 \medskip
 \noindent
@@ -679,7 +690,7 @@ Units & $\frac{\text{W}}{\text{m}^{2}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {q_{\text{C}}}={h_{\text{C}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)
+           \resizeExpression{{q_{\text{C}}}={h_{\text{C}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -719,7 +730,7 @@ Units & $\frac{\text{W}}{\text{m}^{2}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {q_{\text{P}}}={h_{\text{P}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)
+           \resizeExpression{{q_{\text{P}}}={h_{\text{P}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -764,7 +775,7 @@ Units & ${\text{kg}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {m_{\text{W}}}={V_{\text{W}}}\,{ρ_{\text{W}}}
+           \resizeExpression{{m_{\text{W}}}={V_{\text{W}}}\,{ρ_{\text{W}}}}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -800,7 +811,7 @@ Units & ${\text{m}^{3}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {V_{\text{W}}}={V_{\text{tank}}}-{V_{\text{P}}}
+           \resizeExpression{{V_{\text{W}}}={V_{\text{tank}}}-{V_{\text{P}}}}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -839,7 +850,7 @@ Units & ${\text{m}^{3}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {V_{\text{tank}}}=π\,\left(\frac{D}{2}\right)^{2}\,L
+           \resizeExpression{{V_{\text{tank}}}=π\,\left(\frac{D}{2}\right)^{2}\,L}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -876,7 +887,7 @@ Units & ${\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {τ_{\text{W}}}=\frac{{m_{\text{W}}}\,{C_{\text{W}}}}{{h_{\text{C}}}\,{A_{\text{C}}}}
+           \resizeExpression{{τ_{\text{W}}}=\frac{{m_{\text{W}}}\,{C_{\text{W}}}}{{h_{\text{C}}}\,{A_{\text{C}}}}}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -914,7 +925,7 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           η=\frac{{h_{\text{P}}}\,{A_{\text{P}}}}{{h_{\text{C}}}\,{A_{\text{C}}}}
+           \resizeExpression{η=\frac{{h_{\text{P}}}\,{A_{\text{P}}}}{{h_{\text{C}}}\,{A_{\text{C}}}}}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -952,7 +963,7 @@ Units & ${\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {{τ_{\text{P}}}^{\text{S}}}=\frac{{m_{\text{P}}}\,{{C_{\text{P}}}^{\text{S}}}}{{h_{\text{P}}}\,{A_{\text{P}}}}
+           \resizeExpression{{{τ_{\text{P}}}^{\text{S}}}=\frac{{m_{\text{P}}}\,{{C_{\text{P}}}^{\text{S}}}}{{h_{\text{P}}}\,{A_{\text{P}}}}}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -990,7 +1001,7 @@ Units & ${\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {{τ_{\text{P}}}^{\text{L}}}=\frac{{m_{\text{P}}}\,{{C_{\text{P}}}^{\text{L}}}}{{h_{\text{P}}}\,{A_{\text{P}}}}
+           \resizeExpression{{{τ_{\text{P}}}^{\text{L}}}=\frac{{m_{\text{P}}}\,{{C_{\text{P}}}^{\text{L}}}}{{h_{\text{P}}}\,{A_{\text{P}}}}}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1028,7 +1039,7 @@ Units & $\frac{\text{J}}{\text{kg}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {H_{\text{f}}}=\frac{Q}{m}
+           \resizeExpression{{H_{\text{f}}}=\frac{Q}{m}}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1067,7 +1078,7 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           ϕ=\frac{{Q_{\text{P}}}}{{H_{\text{f}}}\,{m_{\text{P}}}}
+           \resizeExpression{ϕ=\frac{{Q_{\text{P}}}}{{H_{\text{f}}}\,{m_{\text{P}}}}}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1109,7 +1120,7 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \mathit{AR}=\frac{D}{L}
+           \resizeExpression{\mathit{AR}=\frac{D}{L}}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1150,13 +1161,13 @@ Output & ${T_{\text{W}}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    {T_{\text{C}}}\gt{}{T_{\text{init}}}
+                    \resizeExpression{{T_{\text{C}}}\gt{}{T_{\text{init}}}}{0.8}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)+η\,\left({T_{\text{P}}}\left(t\right)-{T_{\text{W}}}\left(t\right)\right)\right)
+           \resizeExpression{\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)+η\,\left({T_{\text{P}}}\left(t\right)-{T_{\text{W}}}\left(t\right)\right)\right)}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1195,37 +1206,37 @@ RefBy & \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPC
 To find the rate of change of ${T_{\text{W}}}$, we look at the energy balance on water. The volume being considered is the volume of water in the tank ${V_{\text{W}}}$, which has mass ${m_{\text{W}}}$ and specific heat capacity, ${C_{\text{W}}}$. Heat transfer occurs in the water from the heating coil as ${q_{\text{C}}}$ (\hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil}) and from the water into the PCM as ${q_{\text{P}}}$ (\hyperref[GD:htFluxPCMFromWater]{GD:htFluxPCMFromWater}), over areas ${A_{\text{C}}}$ and ${A_{\text{P}}}$, respectively. The thermal flux is constant over ${A_{\text{C}}}$, since the temperature of the heating coil is assumed to not vary along its length (\hyperref[assumpTHCCoL]{A:Temp-Heating-Coil-Constant-over-Length}), and the thermal flux is constant over ${A_{\text{P}}}$, since the temperature of the PCM is the same throughout its volume (\hyperref[assumpTPCAV]{A:Temp-PCM-Constant-Across-Volume}) and the water is fully mixed (\hyperref[assumpCWTAT]{A:Constant-Water-Temp-Across-Tank}). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[assumpPIT]{A:Perfect-Insulation-Tank}). Since the assumption is made that no internal heat is generated (\hyperref[assumpNIHGBWP]{A:No-Internal-Heat-Generation-By-Water-PCM}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD:rocTempSimp} can be written as:
 
 \begin{displaymath}
-{m_{\text{W}}}\,{C_{\text{W}}}\,\frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}}\,{A_{\text{C}}}-{q_{\text{P}}}\,{A_{\text{P}}}
+\resizeExpression{{m_{\text{W}}}\,{C_{\text{W}}}\,\frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}}\,{A_{\text{C}}}-{q_{\text{P}}}\,{A_{\text{P}}}}{1.0}
 \end{displaymath}
 Using \hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil} for ${q_{\text{C}}}$ and \hyperref[GD:htFluxPCMFromWater]{GD:htFluxPCMFromWater} for ${q_{\text{P}}}$, this can be written as:
 
 \begin{displaymath}
-{m_{\text{W}}}\,{C_{\text{W}}}\,\frac{\,d{T_{\text{W}}}}{\,dt}={h_{\text{C}}}\,{A_{\text{C}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)-{h_{\text{P}}}\,{A_{\text{P}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)
+\resizeExpression{{m_{\text{W}}}\,{C_{\text{W}}}\,\frac{\,d{T_{\text{W}}}}{\,dt}={h_{\text{C}}}\,{A_{\text{C}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)-{h_{\text{P}}}\,{A_{\text{P}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)}{1.0}
 \end{displaymath}
 Dividing Equation (2) by ${m_{\text{W}}}\,{C_{\text{W}}}$, we obtain:
 
 \begin{displaymath}
-\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)-\frac{{h_{\text{P}}}\,{A_{\text{P}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)
+\resizeExpression{\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)-\frac{{h_{\text{P}}}\,{A_{\text{P}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)}{1.0}
 \end{displaymath}
 Factoring the negative sign out of the second term of the right-hand side (RHS) of Equation (3) and multiplying it by ${h_{\text{C}}}$ ${A_{\text{C}}}$ / ${h_{\text{C}}}$ ${A_{\text{C}}}$ yields:
 
 \begin{displaymath}
-\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{h_{\text{C}}}\,{A_{\text{C}}}}\,\frac{{h_{\text{P}}}\,{A_{\text{P}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{P}}}-{T_{\text{W}}}\right)
+\resizeExpression{\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{h_{\text{C}}}\,{A_{\text{C}}}}\,\frac{{h_{\text{P}}}\,{A_{\text{P}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{P}}}-{T_{\text{W}}}\right)}{1.0}
 \end{displaymath}
 Rearranging this equation gives us:
 
 \begin{displaymath}
-\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{{h_{\text{P}}}\,{A_{\text{P}}}}{{h_{\text{C}}}\,{A_{\text{C}}}}\,\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{P}}}-{T_{\text{W}}}\right)
+\resizeExpression{\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{{h_{\text{P}}}\,{A_{\text{P}}}}{{h_{\text{C}}}\,{A_{\text{C}}}}\,\frac{{h_{\text{C}}}\,{A_{\text{C}}}}{{m_{\text{W}}}\,{C_{\text{W}}}}\,\left({T_{\text{P}}}-{T_{\text{W}}}\right)}{1.0}
 \end{displaymath}
 By substituting ${τ_{\text{W}}}$ (from \hyperref[DD:balanceDecayRate]{DD:balanceDecayRate}) and $η$ (from \hyperref[DD:balanceDecayTime]{DD:balanceDecayTime}), this can be written as:
 
 \begin{displaymath}
-\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{η}{{τ_{\text{W}}}}\,\left({T_{\text{P}}}-{T_{\text{W}}}\right)
+\resizeExpression{\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{η}{{τ_{\text{W}}}}\,\left({T_{\text{P}}}-{T_{\text{W}}}\right)}{1.0}
 \end{displaymath}
 Finally, factoring out $\frac{1}{{τ_{\text{W}}}}$, we are left with the governing ODE for \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}:
 
 \begin{displaymath}
-\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}+η\,\left({T_{\text{P}}}-{T_{\text{W}}}\right)\right)
+\resizeExpression{\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}+η\,\left({T_{\text{P}}}-{T_{\text{W}}}\right)\right)}{1.0}
 \end{displaymath}
 \medskip
 \noindent
@@ -1245,17 +1256,17 @@ Output & ${T_{\text{P}}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    {{T_{\text{melt}}}^{\text{P}}}\gt{}{T_{\text{init}}}
+                    \resizeExpression{{{T_{\text{melt}}}^{\text{P}}}\gt{}{T_{\text{init}}}}{0.8}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \frac{\,d{T_{\text{P}}}}{\,dt}=\begin{cases}
-                                          \frac{1}{{{τ_{\text{P}}}^{\text{S}}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}\\
-                                          \frac{1}{{{τ_{\text{P}}}^{\text{L}}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\gt{}{{T_{\text{melt}}}^{\text{P}}}\\
-                                          0, & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0\lt{}ϕ\lt{}1
-                                          \end{cases}
+           \resizeExpression{\frac{\,d{T_{\text{P}}}}{\,dt}=\begin{cases}
+                                                            \frac{1}{{{τ_{\text{P}}}^{\text{S}}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                                                            \frac{1}{{{τ_{\text{P}}}^{\text{L}}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\gt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                                                            0, & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0\lt{}ϕ\lt{}1
+                                                            \end{cases}}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1295,22 +1306,22 @@ RefBy & \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[unlikeChgNIHG]{
 To find the rate of change of ${T_{\text{P}}}$, we look at the energy balance on the PCM. The volume being considered is the volume of PCM (${V_{\text{P}}}$). The derivation that follows is initially for the solid PCM. The mass of phase change material is ${m_{\text{P}}}$ and the specific heat capacity of PCM as a solid is ${{C_{\text{P}}}^{\text{S}}}$. The heat flux into the PCM from water is ${q_{\text{P}}}$ (\hyperref[GD:htFluxPCMFromWater]{GD:htFluxPCMFromWater}) over phase change material surface area ${A_{\text{P}}}$. The thermal flux is constant over ${A_{\text{P}}}$, since the temperature of the PCM is the same throughout its volume (\hyperref[assumpTPCAV]{A:Temp-PCM-Constant-Across-Volume}) and the water is fully mixed (\hyperref[assumpCWTAT]{A:Constant-Water-Temp-Across-Tank}). There is no heat flux output from the PCM. Assuming no volumetric heat generation per unit volume (\hyperref[assumpNIHGBWP]{A:No-Internal-Heat-Generation-By-Water-PCM}), $g=0$, the equation for \hyperref[GD:rocTempSimp]{GD:rocTempSimp} can be written as:
 
 \begin{displaymath}
-{m_{\text{P}}}\,{{C_{\text{P}}}^{\text{S}}}\,\frac{\,d{T_{\text{P}}}}{\,dt}={q_{\text{P}}}\,{A_{\text{P}}}
+\resizeExpression{{m_{\text{P}}}\,{{C_{\text{P}}}^{\text{S}}}\,\frac{\,d{T_{\text{P}}}}{\,dt}={q_{\text{P}}}\,{A_{\text{P}}}}{1.0}
 \end{displaymath}
 Using \hyperref[GD:htFluxPCMFromWater]{GD:htFluxPCMFromWater} for ${q_{\text{P}}}$, this equation can be written as:
 
 \begin{displaymath}
-{m_{\text{P}}}\,{{C_{\text{P}}}^{\text{S}}}\,\frac{\,d{T_{\text{P}}}}{\,dt}={h_{\text{P}}}\,{A_{\text{P}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)
+\resizeExpression{{m_{\text{P}}}\,{{C_{\text{P}}}^{\text{S}}}\,\frac{\,d{T_{\text{P}}}}{\,dt}={h_{\text{P}}}\,{A_{\text{P}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)}{1.0}
 \end{displaymath}
 Dividing by ${m_{\text{P}}}$ ${{C_{\text{P}}}^{\text{S}}}$ we obtain:
 
 \begin{displaymath}
-\frac{\,d{T_{\text{P}}}}{\,dt}=\frac{{h_{\text{P}}}\,{A_{\text{P}}}}{{m_{\text{P}}}\,{{C_{\text{P}}}^{\text{S}}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)
+\resizeExpression{\frac{\,d{T_{\text{P}}}}{\,dt}=\frac{{h_{\text{P}}}\,{A_{\text{P}}}}{{m_{\text{P}}}\,{{C_{\text{P}}}^{\text{S}}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)}{1.0}
 \end{displaymath}
 By substituting ${{τ_{\text{P}}}^{\text{S}}}$ (from \hyperref[DD:balanceSolidPCM]{DD:balanceSolidPCM}), this can be written as:
 
 \begin{displaymath}
-\frac{\,d{T_{\text{P}}}}{\,dt}=\frac{1}{{{τ_{\text{P}}}^{\text{S}}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)
+\resizeExpression{\frac{\,d{T_{\text{P}}}}{\,dt}=\frac{1}{{{τ_{\text{P}}}^{\text{S}}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)}{1.0}
 \end{displaymath}
 Equation (4) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that ${{C_{\text{P}}}^{\text{S}}}$ is replaced by ${{C_{\text{P}}}^{\text{L}}}$, and thus ${{τ_{\text{P}}}^{\text{S}}}$ is replaced by ${{τ_{\text{P}}}^{\text{L}}}$. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (\hyperref[assumpVCMPN]{A:Volume-Change-Melting-PCM-Negligible}).
 
@@ -1340,7 +1351,7 @@ Input Constraints &
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           {E_{\text{W}}}\left(t\right)={C_{\text{W}}}\,{m_{\text{W}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{init}}}\right)
+           \resizeExpression{{E_{\text{W}}}\left(t\right)={C_{\text{W}}}\,{m_{\text{W}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{init}}}\right)}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1386,17 +1397,17 @@ Output & ${E_{\text{P}}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    {{T_{\text{melt}}}^{\text{P}}}\gt{}{T_{\text{init}}}
+                    \resizeExpression{{{T_{\text{melt}}}^{\text{P}}}\gt{}{T_{\text{init}}}}{0.8}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           {E_{\text{P}}}=\begin{cases}
-                          {{C_{\text{P}}}^{\text{S}}}\,{m_{\text{P}}}\,\left({T_{\text{P}}}\left(t\right)-{T_{\text{init}}}\right), & {T_{\text{P}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}\\
-                          {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{H_{\text{f}}}\,{m_{\text{P}}}+{{C_{\text{P}}}^{\text{L}}}\,{m_{\text{P}}}\,\left({T_{\text{P}}}\left(t\right)-{{T_{\text{melt}}}^{\text{P}}}\right), & {T_{\text{P}}}\gt{}{{T_{\text{melt}}}^{\text{P}}}\\
-                          {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{Q_{\text{P}}}\left(t\right), & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0\lt{}ϕ\lt{}1
-                          \end{cases}
+           \resizeExpression{{E_{\text{P}}}=\begin{cases}
+                                            {{C_{\text{P}}}^{\text{S}}}\,{m_{\text{P}}}\,\left({T_{\text{P}}}\left(t\right)-{T_{\text{init}}}\right), & {T_{\text{P}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                                            {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{H_{\text{f}}}\,{m_{\text{P}}}+{{C_{\text{P}}}^{\text{L}}}\,{m_{\text{P}}}\,\left({T_{\text{P}}}\left(t\right)-{{T_{\text{melt}}}^{\text{P}}}\right), & {T_{\text{P}}}\gt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                                            {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{Q_{\text{P}}}\left(t\right), & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0\lt{}ϕ\lt{}1
+                                            \end{cases}}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1505,12 +1516,12 @@ ${E_{\text{P}}}$ & ${E_{\text{P}}}\geq{}0$
 A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking \hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil} and \hyperref[GD:htFluxPCMFromWater]{GD:htFluxPCMFromWater}, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
 
 \begin{displaymath}
-{E_{\text{W}}}=\int_{0}^{t}{{h_{\text{C}}}\,{A_{\text{C}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)}\,dt-\int_{0}^{t}{{h_{\text{P}}}\,{A_{\text{P}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt
+\resizeExpression{{E_{\text{W}}}=\int_{0}^{t}{{h_{\text{C}}}\,{A_{\text{C}}}\,\left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)}\,dt-\int_{0}^{t}{{h_{\text{P}}}\,{A_{\text{P}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt}{1.0}
 \end{displaymath}
 In addition, the change in heat energy in the PCM should equal the energy input to the PCM from the water. This can be expressed as
 
 \begin{displaymath}
-{E_{\text{P}}}=\int_{0}^{t}{{h_{\text{P}}}\,{A_{\text{P}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt
+\resizeExpression{{E_{\text{P}}}=\int_{0}^{t}{{h_{\text{P}}}\,{A_{\text{P}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt}{1.0}
 \end{displaymath}
 Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as ``sanity'' checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than ${C_{\text{tol}}}$ \hyperref[verifyEnergyOutput]{FR:Verify-Energy-Output-Follow-Conservation-of-Energy}.
 

@@ -1,7 +1,7 @@
 -- | Defines helper functions used in printing LaTeX documents.
 module Language.Drasil.TeX.Helpers where
 
-import Text.PrettyPrint (text)
+import Text.PrettyPrint (text, double)
 import qualified Text.PrettyPrint as TP
 
 import Language.Drasil (MaxWidthPercent)
@@ -276,8 +276,10 @@ useTikz = usepackage "luatex85" $+$ command0 "def" <>
 -- on Monad...
 
 -- | toEqn is special; it switches to 'Math', but inserts an equation environment.
-toEqn :: D -> D
-toEqn (PL g) = equation $ PL (\_ -> g Math)
+-- The 'scale' parameter determines the maximum width of the equation, 
+-- calculated as scale * page width.
+toEqn :: Double -> D -> D
+toEqn scale (PL g) = equation $ command2D "resizeExpression" (PL (\_ -> g Math)) (pure (double scale))
 
 -----------------------------------------------------------------------------
 -- | Helper(s) for String-Printing in TeX where it varies from HTML/Plaintext.

@@ -3,10 +3,12 @@ module Language.Drasil.TeX.Preamble (genPreamble) where
 
 import Data.List (nub)
 
+import Text.PrettyPrint (text)
 import Language.Drasil.Printing.LayoutObj (LayoutObj(..))
 import Language.Drasil.TeX.Monad (D, vcat, (%%))
 import Language.Drasil.TeX.Helpers (docclass, command, command1o, command2, command3,
-  usepackage)
+  usepackage, command0)
+import Language.Drasil.Printing.Helpers (sq, brace)
 
 import Language.Drasil.Config (hyperSettings, fontSize, bibFname)
 
@@ -35,6 +37,8 @@ data Package = AMSMath      -- ^ Improves information structure for mathematical
              | EnumItem     -- ^ Contol basic list environments.
              | SVG          -- ^ For rendering svg diagrams.
              | Float        -- ^ For enhanced control over placement of figures and tables.
+             | Graphicx     -- ^ Resizebox for large expressions.
+             | Calc         -- ^ Perform arithmetic operation in LaTeX commands.
              deriving Eq
 
 -- | Adds a 'Package' to the LaTeX document.
@@ -66,6 +70,8 @@ addPackage Unicode   = usepackage "unicode-math"
 addPackage EnumItem  = usepackage "enumitem"
 addPackage SVG       = usepackage "svg"
 addPackage Float     = usepackage "float"
+addPackage Graphicx  = usepackage "graphicx"
+addPackage Calc      = usepackage "calc"
 
 -- | Common LaTeX commands.
 data Def = Bibliography
@@ -74,6 +80,8 @@ data Def = Bibliography
          | SetMathFont
          | SymbDescriptionP1
          | SymbDescriptionP2
+         | SaveBox
+         | ResizeExpr
          deriving Eq
 
 -- | Define common LaTeX commands.
@@ -84,6 +92,17 @@ addDef LessThan      = command2 "newcommand" "\\lt" "\\ensuremath <"
 addDef SetMathFont   = command "setmathfont" "Latin Modern Math"
 addDef SymbDescriptionP1 = command3 "newlist" "symbDescription" "description" "1"
 addDef SymbDescriptionP2 = command1o "setlist" (Just "symbDescription") "noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt"
+addDef SaveBox       = command "newsavebox" "\\mybox"
+addDef ResizeExpr    = vcat [
+    command "newcommand" "\\resizeExpression" <> pure (sq "2") <> pure (text "{"),
+    command2 "savebox" "\\mybox" "$#1$",
+    command0 "ifdim" <> command0 "wd" <> command0 "mybox" <> pure (text ">#2") <> command0 "linewidth",
+    command3 "resizebox" "#2\\textwidth" "!" ("\\usebox" ++ brace "\\mybox"),
+    command0 "else",
+    command "usebox" "\\mybox",
+    command0 "fi",
+    pure (text "}")
+  ]
 
 -- | Generates LaTeX document preamble.
 genPreamble :: [LayoutObj] -> D
@@ -117,6 +136,6 @@ parseDoc los' =
     parseDoc' Header{}     = ([], [])
     parseDoc' Paragraph{}  = ([], [])
     parseDoc' List{}       = ([EnumItem], [])
-    parseDoc' EqnBlock{}   = ([], [])
+    parseDoc' EqnBlock{}   = ([Graphicx, Calc], [SaveBox, ResizeExpr])
     parseDoc' Cell{}       = ([], [])
     parseDoc' CodeBlock{}  = ([], [])

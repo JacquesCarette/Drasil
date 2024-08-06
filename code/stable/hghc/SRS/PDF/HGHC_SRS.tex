@@ -11,12 +11,23 @@
 \usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{caption}
+\usepackage{graphicx}
+\usepackage{calc}
 \usepackage{enumitem}
 \setmathfont{Latin Modern Math}
 \newcommand{\gt}{\ensuremath >}
 \newcommand{\lt}{\ensuremath <}
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
+\newsavebox{\mybox}
+\newcommand{\resizeExpression}[2]{
+\savebox{\mybox}{$#1$}
+\ifdim\wd\mybox>#2\linewidth
+\resizebox{#2\textwidth}{!}{\usebox{\mybox}}
+\else
+\usebox{\mybox}
+\fi
+}
 \title{Software Requirements Specification for HGHC}
 \author{W. Spencer Smith}
 \begin{document}
@@ -103,7 +114,7 @@ Units & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {h_{\text{g}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{p}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{p}}}}
+           \resizeExpression{{h_{\text{g}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{p}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{p}}}}}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -134,7 +145,7 @@ Units & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {h_{\text{c}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{b}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{b}}}}
+           \resizeExpression{{h_{\text{c}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{b}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{b}}}}}{0.8}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}

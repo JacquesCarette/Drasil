@@ -11,8 +11,8 @@ import Data.Drasil.Constraints (gtZeroConstr, probConstr)
 import Data.Drasil.Quantities.Physics (subMax, subMin, subX, subY, subZ)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
-import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, glassTypeFac, 
-  heatS, iGlass, lGlass, lResistance, lShareFac, loadDurFactor, nFL, responseTy, 
+import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, glassTypeFac,
+  heatS, iGlass, lGlass, lResistance, lShareFac, loadDurFactor, nFL, responseTy,
   stdOffDist)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016)
 import Drasil.GlassBR.Units (sFlawPU)
@@ -30,7 +30,7 @@ modElas = uc' "modElas" (nounPhraseSP "modulus of elasticity of glass")
 {--}
 
 constrained :: [ConstrainedChunk]
-constrained = map cnstrw inputDataConstraints ++ 
+constrained = map cnstrw inputDataConstraints ++
   [cnstrw probBr, cnstrw probFail, cnstrw stressDistFac, cnstrw nomThick]
 
 plateLen, plateWidth, aspectRatio, charWeight, standOffDist :: UncertQ
@@ -41,7 +41,7 @@ glassTypeCon :: ConstrConcept
 {--}
 
 inputs :: [QuantityDict]
-inputs = map qw inputsWUnitsUncrtn ++ map qw inputsWUncrtn ++ 
+inputs = map qw inputsWUnitsUncrtn ++ map qw inputsWUncrtn ++
   map qw inputsNoUncrtn ++ map qw sdVector
 
 --inputs with units and uncertainties
@@ -65,12 +65,12 @@ inputsNoUncrtn :: [ConstrainedChunk]
 inputsNoUncrtn = [cnstrw glassTypeCon, nomThick]
 
 inputDataConstraints :: [UncertainChunk]
-inputDataConstraints = map uncrtnw inputsWUnitsUncrtn ++ 
-  map uncrtnw inputsWUncrtn ++ map uncrtnw derivedInsWUnitsUncrtn ++ 
+inputDataConstraints = map uncrtnw inputsWUnitsUncrtn ++
+  map uncrtnw inputsWUncrtn ++ map uncrtnw derivedInsWUnitsUncrtn ++
   map uncrtnw derivedInsWUncrtn
 
 plateLen = uqcND "plateLen" (nounPhraseSP "plate length (long dimension)")
-  lA metre Real 
+  lA metre Real
   [ gtZeroConstr,
     physRange $ UpFrom (Inc, sy plateWidth),
     sfwrRange $ Bounded (Inc , sy dimMin) (Inc , sy dimMax)] (dbl 1.5) defaultUncrt
@@ -81,14 +81,14 @@ plateWidth = uqcND "plateWidth" (nounPhraseSP "plate width (short dimension)")
     sfwrRange $ Bounded (Inc, sy dimMin) (Inc, sy dimMax)] (dbl 1.2) defaultUncrt
 
 aspectRatio = uq (constrained' (dqdNoUnit aspectRatioCon (variable "AR") Real)
-  [ physRange $ UpFrom (Inc, exactDbl 1), 
+  [ physRange $ UpFrom (Inc, exactDbl 1),
     sfwrRange $ UpTo (Inc, sy arMax)] (dbl 1.5)) defaultUncrt
 
-pbTol = uvc "pbTol" (nounPhraseSP "tolerable probability of breakage") 
+pbTol = uvc "pbTol" (nounPhraseSP "tolerable probability of breakage")
   (sub cP (Concat [lBreak, lTol])) Real
   [probConstr] (dbl 0.008) (uncty 0.001 Nothing)
 
-charWeight = uqcND "charWeight" (nounPhraseSP "charge weight") 
+charWeight = uqcND "charWeight" (nounPhraseSP "charge weight")
   lW kilogram Real
   [ gtZeroConstr,
     sfwrRange $ Bounded (Inc, sy cWeightMin) (Inc, sy cWeightMax)]
@@ -102,12 +102,12 @@ standOffDist = uq (constrained' (uc sD (variable "SD") Real metre)
   [ gtZeroConstr,
     sfwrRange $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
 
-nomThick = cuc "nomThick" 
-  (nounPhraseSent $ S "nominal thickness t is in" +:+ eS (convExpr((mkSet (map dbl nominalThicknesses)))))
-  lT millimetre {-Discrete nominalThicknesses, but not implemented-} Rational 
+nomThick = cuc "nomThick"
+  (nounPhraseSent $ S "nominal thickness t is in" +:+ eS (mkSet (map dbl nominalThicknesses)))
+  lT millimetre {-Discrete nominalThicknesses, but not implemented-} Rational
   [sfwrElem $ mkSet (map dbl nominalThicknesses)] $ exactDbl 8 -- for testing
 
-glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String) 
+glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)
   [{- TODO: add back constraint: EnumeratedStr Software $ map (abrv . snd) glassType -}]
 
 {--}
@@ -123,17 +123,17 @@ probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
   (sub cP lBreak) Real
   [probConstr] (Just $ dbl 0.4)
 
-stressDistFac = cvc "stressDistFac" (nounPhraseSP "stress distribution factor (Function)") 
+stressDistFac = cvc "stressDistFac" (nounPhraseSP "stress distribution factor (Function)")
   cJ Real [physRange $ Bounded (Inc, sy stressDistFacMin) (Inc, sy stressDistFacMax)] (Just $ exactDbl 15)
 
 probFail = cvc "probFail" (nounPhraseSP "probability of failure")
   (sub cP lFail) Real
   [probConstr] (Just $ dbl 0.4)
 
-pbTolfail = cvc "pbTolfail" (nounPhraseSP "tolerable probability of failure") 
+pbTolfail = cvc "pbTolfail" (nounPhraseSP "tolerable probability of failure")
   (sub cP (Concat [lFail, lTol])) Real
-  [probConstr] (Just $ dbl 0.008) 
-  
+  [probConstr] (Just $ dbl 0.008)
+
 
   --FIXME: no typical value!
 
@@ -147,18 +147,18 @@ dimMax, dimMin, arMax, cWeightMax, cWeightMin, sdMax, stressDistFacMin, stressDi
   sdMin :: ConstQDef
 
 dimMax     = mkQuantDef (unitary "dimMax"
-  (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
+  (nounPhraseSP "maximum value for one of the dimensions of the glass plate")
   (subMax lD) metre Real) (exactDbl 5)
 
 dimMin     = mkQuantDef (unitary "dimMin"
-  (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
+  (nounPhraseSP "minimum value for one of the dimensions of the glass plate")
   (subMin lD) metre Real) (dbl 0.1)
 
 arMax     = mkQuantDef (vc "arMax"
   (nounPhraseSP "maximum aspect ratio")
   (subMax (variable "AR")) Real) (exactDbl 5)
 
-cWeightMax = mkQuantDef (unitary "cWeightMax" 
+cWeightMax = mkQuantDef (unitary "cWeightMax"
   (nounPhraseSP "maximum permissible input charge weight")
   (subMax (eqSymb charWeight)) kilogram Real) (exactDbl 910)
 
@@ -171,18 +171,18 @@ sdMax     = mkQuantDef (unitary "sdMax"
   (subMax (eqSymb standOffDist)) metre Real) (exactDbl 130)
 
 sdMin     = mkQuantDef (unitary "sdMin"
-  (nounPhraseSP "minimum stand off distance permissible for input") 
+  (nounPhraseSP "minimum stand off distance permissible for input")
   (subMin (eqSymb standOffDist)) metre Real) (exactDbl 6)
 
-stressDistFacMin = mkQuantDef (vc "stressDistFacMin" (nounPhraseSP "minimum value for the stress distribution factor") 
+stressDistFacMin = mkQuantDef (vc "stressDistFacMin" (nounPhraseSP "minimum value for the stress distribution factor")
   (subMin (eqSymb stressDistFac)) Real) (exactDbl 1)
 
-stressDistFacMax = mkQuantDef (vc "stressDistFacMax" (nounPhraseSP "maximum value for the stress distribution factor") 
+stressDistFacMax = mkQuantDef (vc "stressDistFacMax" (nounPhraseSP "maximum value for the stress distribution factor")
   (subMax (eqSymb stressDistFac)) Real) (exactDbl 32)
 {--}
 
 symbols :: [UnitaryChunk]
-symbols = [minThick, sflawParamK, sflawParamM, loadDur] ++ 
+symbols = [minThick, sflawParamK, sflawParamM, loadDur] ++
   map mkUnitary [demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight]
 
 minThick, sflawParamK, sflawParamM, sdx, sdy, sdz, loadDur :: UnitaryChunk
@@ -192,14 +192,14 @@ demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight :: UnitalChunk
 demand      = uc demandq lQ Real pascal --correct Space used?
 
 tmDemand    = uc load (variable "Load") Real pascal --correct Space used?
-  
+
 lRe         = uc loadResis (variable "LR") Real pascal --correct Space used?
 
 tmLRe       = uc capacity (variable "capacity") Real pascal --correct Space used?
 
 nonFactorL  = uc nonFactoredL (variable "NFL") Real pascal --correct Space used?
 
-eqTNTWeight = uc eqTNTChar (sub (eqSymb charWeight) (eqSymb tNT)) Real 
+eqTNTWeight = uc eqTNTChar (sub (eqSymb charWeight) (eqSymb tNT)) Real
   kilogram
 
 loadDur     = unitary "loadDur"    (nounPhraseSP "duration of load")
@@ -226,11 +226,11 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 {-Quantities-}
 
 unitless :: [QuantityDict]
-unitless = [riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad,  
+unitless = [riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad,
   sdfTol, dimlessLoad, tolLoad, lDurFac] ++ map qw [gTF, loadSF]
 
 interps :: [QuantityDict]
-interps = [interpY, interpZ]  
+interps = [interpY, interpZ]
 
 riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, sdfTol,
   dimlessLoad, tolLoad, lDurFac, interpY, interpZ :: QuantityDict
@@ -307,11 +307,11 @@ bomb          = dcc "bomb"        (cn' "bomb") ("a container filled " ++
   "with a destructive substance designed to exlode on impact or via detonation")
 capacity      = dcc "capacity"    (nounPhraseSP "capacity or load resistance")
   "load resistance calculated"
-demandq       = dcc "demandq"     (nounPhraseSP "applied load (demand)") 
+demandq       = dcc "demandq"     (nounPhraseSP "applied load (demand)")
   "3 second duration equivalent pressure"
 eqTNTChar     = dcc "eqTNTChar"   (nounPhraseSP "equivalent TNT charge mass")
   "mass of TNT placed on the ground in a hemisphere that represents the design explosive threat"
-explosion     = dcc "explosion"   (cn' "explosion") 
+explosion     = dcc "explosion"   (cn' "explosion")
   "a destructive shattering of something"
 fTemperedGl   = cc' fullyT
   (foldlSent_ [S "a flat, monolithic, glass lite of uniform thickness that has",
@@ -319,7 +319,7 @@ fTemperedGl   = cc' fullyT
   S "surface compression is not less than 69 MPa (10 000 psi) or the edge",
   S "compression not less than 67 MPa (9700 psi), as defined in", refS astm2012])
 glassGeo      = dccWDS "glassGeo"    (cnIES "glass geometry")
-  (S "the glass geometry based inputs include the dimensions of the" +:+ 
+  (S "the glass geometry based inputs include the dimensions of the" +:+
     foldlList Comma List [phrase glaPlane, phrase glassTy, phrase responseTy])
 glassTy       = dcc "glassTy"     (cn' "glass type") "type of glass"
 glassWL       = dcc "glassWL"     (nounPhraseSP "glass weight load")
@@ -327,7 +327,7 @@ glassWL       = dcc "glassWL"     (nounPhraseSP "glass weight load")
 glBreakage    = dcc "glBreakage"  (nounPhraseSP "glass breakage")
   "the fracture or breakage of any lite or ply in monolithic, laminated, or insulating glass"
 glTyFac       = cc' glassTypeFac
-  (foldlSent_ [S "a multiplying factor for adjusting the", getAcc lResistance, 
+  (foldlSent_ [S "a multiplying factor for adjusting the", getAcc lResistance,
   S "of different glass type, that is,", foldlList Comma Options glassTypeAbbrs
   `sC` S "in monolithic glass" `sC` getAcc lGlass, sParen (titleize lGlass) `sC`
    S "or", getAcc iGlass, sParen (titleize iGlass), S "constructions"])
@@ -336,11 +336,11 @@ hStrengthGl   = cc' heatS
   S "been subjected to a special heat treatment process where the residual",
   S "surface compression is not less than 24 MPa (3500psi) or greater than",
   S "52 MPa (7500 psi), as defined in", refS astm2012])
-lateral       = dcc "lateral"     (nounPhraseSP "lateral") 
+lateral       = dcc "lateral"     (nounPhraseSP "lateral")
   "perpendicular to the glass surface"
 lite          = dcc "lite"        (cn' "lite")
   "pieces of glass that are cut, prepared, and used to create the window or door"
-load          = dcc "load"        (nounPhraseSP "applied load (demand) or pressure") 
+load          = dcc "load"        (nounPhraseSP "applied load (demand) or pressure")
   "a uniformly distributed lateral pressure"
 loadResis     = cc' lResistance
   (foldlSent_ [S "the uniform lateral load that a glass construction can sustain",
@@ -354,7 +354,7 @@ loadShareFac  = cc' lShareFac
 longDurLoad   = dcc "longDurLoad"        (nounPhraseSP "long duration load")
   "any load lasting approximately 30 days"
 nonFactoredL  = cc' nFL
-  (foldlSent_ [S "three second duration uniform load associated with a", 
+  (foldlSent_ [S "three second duration uniform load associated with a",
   S "probability of breakage less than or equal to 8", plural lite,
   S "per 1000 for monolithic", getAcc annealed, S "glass"])
 notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
@@ -386,7 +386,7 @@ specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
 
 constants :: [ConstQDef]
 constants = [constantM, constantK, constantModElas, constantLoadDur, constantLoadSF]
-                ++ specParamVals 
+                ++ specParamVals
 
 constantM, constantK, constantModElas, constantLoadDur, constantLoadSF :: ConstQDef
 constantK       = mkQuantDef sflawParamK $ dbl 2.86e-53
@@ -410,7 +410,7 @@ termsWithDefsOnly, termsWithAccDefn, loadTypes, glassTypes :: [ConceptChunk]
 glassTypes = [annealedGl, fTemperedGl, hStrengthGl]
 termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla, eqTNTChar]
 termsWithAccDefn  = [sD, loadShareFac, glTyFac, aspectRatioCon]
-loadTypes = [loadResis, nonFactoredL, glassWL, shortDurLoad, specDeLoad, longDurLoad] 
+loadTypes = [loadResis, nonFactoredL, glassWL, shortDurLoad, specDeLoad, longDurLoad]
 
 --Defined for DataDefs.hs and this file only--
 actualThicknesses :: [Double]
@@ -432,7 +432,7 @@ glassType :: GlassType
 glassType = [(1, annealed), (4, fullyT), (2, heatS)]
 
 glassThickness :: GlassThickness
-glassThickness =   
+glassThickness =
   [(2.5, 2.16),
   (2.7, 2.59),
   (3.0, 2.92),

@@ -137,7 +137,7 @@ modelExpr (Case _ ps)                sm =
     then error "Attempting to use multi-case modelExpr incorrectly"
     else P.Case (zip (map (flip modelExpr sm . fst) ps) (map (flip modelExpr sm . snd) ps))
 modelExpr (Matrix a)                 sm = P.Mtx $ map (map (`modelExpr` sm)) a
-modelExpr (Set a)                    sm = P.Set $ map (`modelExpr` sm) a
+modelExpr (Set l)                    sm = setExpr P.And (precB And) l sm
 modelExpr (UnaryOp Log u)            sm = mkCall sm P.Log u
 modelExpr (UnaryOp Ln u)             sm = mkCall sm P.Ln u
 modelExpr (UnaryOp Sin u)            sm = mkCall sm P.Sin u
@@ -192,6 +192,9 @@ modelExpr (ForAll c s de)            sm = P.Row [
 -- | Common method of converting associative operations into printable layout AST.
 assocExpr :: P.Ops -> Int -> [ModelExpr] -> PrintingInformation -> P.Expr
 assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (modelExpr' sm prec) exprs
+
+setExpr :: P.Ops -> Int -> [ModelExpr] -> PrintingInformation -> P.Expr
+setExpr op prec exprs sm = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map (modelExpr' sm prec) exprs
 
 -- | Add add symbol only when the second Expr is not negation 
 addExpr :: [ModelExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]

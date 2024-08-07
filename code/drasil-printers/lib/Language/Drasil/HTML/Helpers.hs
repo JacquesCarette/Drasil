@@ -143,11 +143,11 @@ image :: Doc -> Doc -> MaxWidthPercent -> Doc
 image f c 100 = 
   figure $ vcat [
   img [("src", f), ("alt", c)],
-  figcaption c]
+  figcaption $ text "Figure: " <> c]
 image f c wp =
   figure $ vcat [
   img [("src", f), ("alt", c), ("width", text $ show wp ++ "%")],
-  figcaption c]
+  figcaption $ text "Figure: " <> c]
 
 em, sup, sub, bold :: Doc -> Doc
 -- | Emphasis (italics) tag.

@@ -62,7 +62,7 @@ reflinkURI ref txt = if ref == txt then ang ref
 
 -- | Helper for setting up figures
 image :: Doc -> Doc -> Doc
-image f c =  text "!" <> reflinkURI fp c $^$ bold c
+image f c =  text "!" <> reflinkURI fp (text "Figure: " <> c) $^$ bold (text "Figure: " <> c)
   where
     fp = text $ "./assets/" ++ takeFileName (show f)
 

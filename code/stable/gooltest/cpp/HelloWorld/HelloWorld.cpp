@@ -279,6 +279,7 @@ int main(int argc, const char *argv[]) {
     std::cout << "" << std::endl;
     if (b >= 6) {
         string dummy = "dummy";
+        char myObj = 'o';
     }
     else if (b == 5) {
         // If body ----------------------------------------------------------------
@@ -297,7 +298,6 @@ int main(int argc, const char *argv[]) {
         c--;
         b--;
         vector<int> myList(5);
-        char myObj = 'o';
         const string myConst = "Imconstant";
         std::cout << myConst << std::endl;
         std::cout << a << std::endl;

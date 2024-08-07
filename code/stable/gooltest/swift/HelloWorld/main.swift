@@ -102,6 +102,7 @@ print(mySlicedList11)
 print("")
 if b >= 6 {
     var dummy: String = "dummy"
+    var myObj: Character = "o"
 }
 else if b == 5 {
     // If body ----------------------------------------------------------------
@@ -120,7 +121,6 @@ else if b == 5 {
     c -= 1
     b -= 1
     var myList: [Int] = []
-    var myObj: Character = "o"
     let myConst: String = "Imconstant"
     print(myConst)
     print(a)

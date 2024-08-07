@@ -4,7 +4,7 @@ This appendix holds the graphs ([Fig:demandVSsod](./SecAppendix.md#Figure:demand
 
 <div id="Figure:demandVSsod" align="center" >
 
-![Figure: 3 second duration equivalent pressure (\\(q\\)) versus Stand off distance (SD) versus Charge weight (\\(w\\))](./assets/ASTM_F2248-09.png)
+![3 second duration equivalent pressure (\\(q\\)) versus Stand off distance (SD) versus Charge weight (\\(w\\))](./assets/ASTM_F2248-09.png)
 
 **Figure: 3 second duration equivalent pressure (\\(q\\)) versus Stand off distance (SD) versus Charge weight (\\(w\\))**
 
@@ -12,7 +12,7 @@ This appendix holds the graphs ([Fig:demandVSsod](./SecAppendix.md#Figure:demand
 
 <div id="Figure:dimlessloadVSaspect" align="center" >
 
-![Figure: Non dimensional lateral applied load (demand) or pressure (\\(\hat{q}\\)) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (\\(J\\))](./assets/ASTM_F2248-09_BeasonEtAl.png)
+![Non dimensional lateral applied load (demand) or pressure (\\(\hat{q}\\)) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (\\(J\\))](./assets/ASTM_F2248-09_BeasonEtAl.png)
 
 **Figure: Non dimensional lateral applied load (demand) or pressure (\\(\hat{q}\\)) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (\\(J\\))**
 

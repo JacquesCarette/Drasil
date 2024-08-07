@@ -10,7 +10,7 @@ PS3: The target.
 
 <div id="Figure:Launch" align="center" >
 
-![Figure: The physical system](./assets/Launch.jpg)
+![The physical system](./assets/Launch.jpg)
 
 **Figure: The physical system**
 

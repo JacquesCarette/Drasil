@@ -4,7 +4,7 @@
 
 <div id="Figure:SysCon" align="center" >
 
-![Figure: [Fig:SysCon](./SecSysContext.md#Figure:SysCon): System Context](./assets/SystemContextFigure.png)
+![[Fig:SysCon](./SecSysContext.md#Figure:SysCon): System Context](./assets/SystemContextFigure.png)
 
 **Figure: [Fig:SysCon](./SecSysContext.md#Figure:SysCon): System Context**
 

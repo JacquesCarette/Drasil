@@ -12,7 +12,7 @@ PS4: The second object.
 
 <div id="Figure:dblpend" align="center" >
 
-![Figure: The physical system](./assets/dblpend.png)
+![The physical system](./assets/dblpend.png)
 
 **Figure: The physical system**
 

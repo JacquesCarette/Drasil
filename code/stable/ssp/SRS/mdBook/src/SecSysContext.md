@@ -4,7 +4,7 @@
 
 <div id="Figure:sysCtxDiag" align="center" >
 
-![Figure: System Context](./assets/SystemContextFigure.png)
+![System Context](./assets/SystemContextFigure.png)
 
 **Figure: System Context**
 

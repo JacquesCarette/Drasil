@@ -10,8 +10,8 @@ PS3: PCM suspended in tank. (\\({q\_{\text{P}}}\\) represents the heat flux into
 
 <div id="Figure:Tank" align="center" >
 
-![Solar water heating tank, with heat flux into the water from the coil of \\({q\_{\text{C}}}\\) and heat flux into the PCM from water of \\({q\_{\text{P}}}\\)](./assets/Tank.png)
+![Figure: Solar water heating tank, with heat flux into the water from the coil of \\({q\_{\text{C}}}\\) and heat flux into the PCM from water of \\({q\_{\text{P}}}\\)](./assets/Tank.png)
 
-**Solar water heating tank, with heat flux into the water from the coil of \\({q\_{\text{C}}}\\) and heat flux into the PCM from water of \\({q\_{\text{P}}}\\)**
+**Figure: Solar water heating tank, with heat flux into the water from the coil of \\({q\_{\text{C}}}\\) and heat flux into the PCM from water of \\({q\_{\text{P}}}\\)**
 
 </div>

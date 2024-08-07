@@ -8,8 +8,8 @@ PS2: The point of explosion. Where the bomb, or any kind of man-made explosion, 
 
 <div id="Figure:physSystImage" align="center" >
 
-![The physical system](./assets/physicalsystimage.png)
+![Figure: The physical system](./assets/physicalsystimage.png)
 
-**The physical system**
+**Figure: The physical system**
 
 </div>

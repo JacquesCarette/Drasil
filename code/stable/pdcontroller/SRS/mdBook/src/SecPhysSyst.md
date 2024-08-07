@@ -10,8 +10,8 @@ PS3: The Power Plant.
 
 <div id="Figure:pidSysDiagram" align="center" >
 
-![The physical system](./assets/Fig_PDController.png)
+![Figure: The physical system](./assets/Fig_PDController.png)
 
-**The physical system**
+**Figure: The physical system**
 
 </div>

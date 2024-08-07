@@ -100,41 +100,41 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 <div id="Figure:TraceGraphAvsA" align="center" >
 
-![TraceGraphAvsA](./assets/avsa.svg)
+![Figure: TraceGraphAvsA](./assets/avsa.svg)
 
-**TraceGraphAvsA**
+**Figure: TraceGraphAvsA**
 
 </div>
 
 <div id="Figure:TraceGraphAvsAll" align="center" >
 
-![TraceGraphAvsAll](./assets/avsall.svg)
+![Figure: TraceGraphAvsAll](./assets/avsall.svg)
 
-**TraceGraphAvsAll**
+**Figure: TraceGraphAvsAll**
 
 </div>
 
 <div id="Figure:TraceGraphRefvsRef" align="center" >
 
-![TraceGraphRefvsRef](./assets/refvsref.svg)
+![Figure: TraceGraphRefvsRef](./assets/refvsref.svg)
 
-**TraceGraphRefvsRef**
+**Figure: TraceGraphRefvsRef**
 
 </div>
 
 <div id="Figure:TraceGraphAllvsR" align="center" >
 
-![TraceGraphAllvsR](./assets/allvsr.svg)
+![Figure: TraceGraphAllvsR](./assets/allvsr.svg)
 
-**TraceGraphAllvsR**
+**Figure: TraceGraphAllvsR**
 
 </div>
 
 <div id="Figure:TraceGraphAllvsAll" align="center" >
 
-![TraceGraphAllvsAll](./assets/allvsall.svg)
+![Figure: TraceGraphAllvsAll](./assets/allvsall.svg)
 
-**TraceGraphAllvsAll**
+**Figure: TraceGraphAllvsAll**
 
 </div>
 

@@ -8,9 +8,9 @@ PS2: A water table, which may or may not exist.
 
 <div id="Figure:PhysicalSystem" align="center" >
 
-![An example slope for analysis by SSP, where the dashed line represents the water table](./assets/PhysSyst.png)
+![Figure: An example slope for analysis by SSP, where the dashed line represents the water table](./assets/PhysSyst.png)
 
-**An example slope for analysis by SSP, where the dashed line represents the water table**
+**Figure: An example slope for analysis by SSP, where the dashed line represents the water table**
 
 </div>
 
@@ -18,9 +18,9 @@ Morgenstern-Price analysis [morgenstern1965](./SecReferences.md#morgenstern1965)
 
 <div id="Figure:IndexConvention" align="center" >
 
-![Index convention for slice and interslice values](./assets/IndexConvention.png)
+![Figure: Index convention for slice and interslice values](./assets/IndexConvention.png)
 
-**Index convention for slice and interslice values**
+**Figure: Index convention for slice and interslice values**
 
 </div>
 
@@ -28,8 +28,8 @@ A free body diagram of the forces acting on a slice is displayed in [Fig:ForceDi
 
 <div id="Figure:ForceDiagram" align="center" >
 
-![Free body diagram of forces acting on a slice](./assets/ForceDiagram.png)
+![Figure: Free body diagram of forces acting on a slice](./assets/ForceDiagram.png)
 
-**Free body diagram of forces acting on a slice**
+**Figure: Free body diagram of forces acting on a slice**
 
 </div>

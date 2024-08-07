@@ -79,9 +79,9 @@ lo (CodeBlock _) _          = empty
 -- | Helper for converting layout objects into a more printable form.
 -- This function is specific to definitions.
 lo' :: LayoutObj -> PrintingInformation -> D
-lo' (HDiv _ con _)      sm = print' sm con
+lo' (HDiv _ con _)      sm = printDef sm con
 lo' (EqnBlock contents) _  = makeEquation contents 0.8
-lo' obj sm                 = lo obj sm
+lo' obj                 sm = lo obj sm
 
 -- | Converts layout objects into a document form.
 print :: PrintingInformation -> [LayoutObj] -> D
@@ -89,8 +89,8 @@ print sm = foldr (($+$) . (`lo` sm)) empty
 
 -- | Converts layout objects into a document form.
 -- Specific to Definitions.
-print' :: PrintingInformation -> [LayoutObj] -> D
-print' sm = foldr (($+$) . (`lo'` sm)) empty
+printDef :: PrintingInformation -> [LayoutObj] -> D
+printDef sm = foldr (($+$) . (`lo'` sm)) empty
 
 -- | Determine wether braces and brackets are opening or closing.
 data OpenClose = Open | Close
@@ -358,8 +358,9 @@ makeDefTable sm ps l = mkEnvArgBr "tabular" (col rr colAwidth ++ col (rr ++ "\\a
 -- | Helper that makes the rows of a definition table.
 makeDRows :: PrintingInformation -> [(String,[LayoutObj])] -> D
 makeDRows _  []      = error "No fields to create Defn table"
-makeDRows sm ls      = foldl1 (%%) $ map (\(f, d) -> dBoilerplate %%  pure (text (f ++ " & ")) <> print' sm d) ls
-  where dBoilerplate = pure $ dbs <+> text "\\midrule"
+makeDRows sm ls      = foldl1 (%%) $ map (\(f, d) -> 
+  pure (dbs <+> text "\\midrule") %% 
+  pure (text (f ++ " & ")) <> printDef sm d) ls
 
 -----------------------------------------------------------------
 ------------------ EQUATION PRINTING------------------------

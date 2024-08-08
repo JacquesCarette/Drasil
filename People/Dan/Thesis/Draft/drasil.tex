@@ -83,10 +83,10 @@ to be operationalized by a multi-faceted generation framework.
 Before we can design a knowledge capture mechanism, we must first define what 
 exactly we believe we need to capture. It is nearly impossible to consider 
 every case of knowledge that could be used in the domain of SC software, not to 
-mention an extremely large undertaking to begin with ''all the things". As 
-such, we have decided to take an iterative, progressive refinement approach to 
-our knowledge capture mechanisms which should be no surprise and follows from 
-our general process for developing the Drasil framework.
+mention an extremely large undertaking to begin with ``all the things". As 
+such we have decided to take an iterative, progressive refinement approach to 
+our knowledge capture mechanisms. This should come as no surprise and follows 
+from our general process for developing the Drasil framework.
 
 \subsection{Capturing Knowledge via Chunks}
 
@@ -124,7 +124,8 @@ simplify construction.
 
 \fig{
 \lstinputlisting[language=Haskell, firstline=76, 
-lastline=82]{code/Math.hs}}{Some example instances of \codeH{ConceptChunk} 
+lastline=82, firstnumber=76]{code/Math.hs}}{Some example instances of 
+\codeH{ConceptChunk} 
 using the \codeH{dcc} smart constructor}{fig:conceptchunk}
 
 These simple chunks are fine as a starting point, however, knowing the SC 
@@ -139,7 +140,8 @@ which can be generated from the source code or found online at
 {https://jacquescarette.github.io/Drasil/docs/full/}
 
 \subsection{Chunk Combinatorics}
-\ds{Would we call out chunk hierarchy a DSL? Or would the DSL be more along the 
+\label{sec:chunky}
+\ds{Would we call our chunk hierarchy a DSL? Or would the DSL be more along the 
 lines of Expr and Sentence which make up our chunks?}
 
 Even with extremely simple chunks we have seen the need for multiple chunk 
@@ -151,6 +153,10 @@ relies on other terminology that has been captured. In our effort to reduce
 duplication and maintain a single source of information, we intend to be able 
 to create chunks with references to other chunks such that the definition can 
 use the known terminology.
+
+\ds{Should I work in something about how we use lenses in here, as all complex 
+chunks are instances of the simpler chunks they've been built from? Or is that 
+getting too into the Haskell-specific details?}
 
 To define a term with references to other terms, we need to ensure we are 
 creating our definitions by projecting relevant knowledge into the definition, 
@@ -168,7 +174,8 @@ uses a different smart constructor (for non-derived definitions) and so doesn't
 require the sentence constructor (\codeH{S}) around its definition.
 
 \fig{
-\lstinputlisting[language=Haskell, linerange={59-60,135-136,174-175}]{code/Physics.hs}
+\lstinputlisting[language=Haskell, linerange={59-60,135-136,174-175}, 
+numbers=none]{code/Physics.hs}
 }{Projecting knowledge into a chunk's definition}{fig:acceleration}
 
 Looking back at our examples of the types of knowledge we are interested in 
@@ -177,13 +184,96 @@ far do not even start to cover the full spectrum of our needs. We can see a lot
 of information missing such as a symbolic representation ($\hat{q}$) and 
 equation ($\hat{q} = \frac{q(ab)^2}{Eh^4\text{GTF}}$). As that is a relatively
 complex example, we will start by looking at something far simpler: Newton's 
-2nd Law of motion\citep{Newton1687} which, roughly translated, states "the net 
+2nd Law of motion\citep{Newton1687} which, roughly translated, states ``the net 
 force on a body at any instant of time is equal to the body's acceleration 
 multiplied by its mass or, equivalently, the rate at which the body's momentum 
 is changing with time"  or as most physics students recognize it $F=ma$ 
 provided we have definitions for $F$, $m$, and $a$.
 
+To understand what exactly is missing, let us look at how we achieve an 
+operational definition of \emph{Force} as a chunk in Drasil. To start, we can 
+see we need a symbolic representation ($F$) and some way to define an equation. 
+Also, each of force, mass, and acceleration are measured in some form of units 
+($N$, $kg$, and $m/s^2$ respectively) which we will likely care to capture and 
+keep track of. 
+
+\fig{
+\lstinputlisting[language=Haskell, linerange={91-92}, 
+firstnumber=91]{code/Physics.hs}
+}{The force \codeH{ConceptChunk}}{fig:forceCC}
+
+\fig{
+\lstinputlisting[language=Haskell, linerange={47-47,57-57}, 
+numbers=none]{code/PhysicsQuantities.hs}
+}{The force and acceleration \codeH{UnitalChunk}s}{fig:forceUC}
+
+\fig{
+\lstinputlisting[language=Haskell, linerange={21-30}, 
+firstnumber=21]{code/SI_Units.hs}
+}{The fundamental SI Units as Captured in Drasil}{fig:Data.Drasil.SI}
+
+We start by building a \codeH{ConceptChunk} for the Force concept as seen in 
+Figure~\ref{fig:forceCC}. It is built from a common noun (``force") and a 
+definition. Next we need to capture the units of measurement to the force 
+concept by defining what we call a \codeH{UnitalChunk}. This definition for 
+force can be seen in Figure~\ref{fig:forceUC}. Note that we are not re-defining 
+force in this instance. We are instead using a smart constructor to build atop 
+the existing force chunk (\codeH{CP.force}) and adding a symbolic 
+representation (\codeH{vec cF}, which is shorthand for the selected vector 
+representation\footnote{More on this in Section~\ref{sec:recipes}} of the 
+capital letter \emph{F}). We also must capture the units force is measured with 
+(\codeH{newton}) which are defined in \codeH{Data.Drasil.SI_Units} and can be 
+seen in Figure~\ref{fig:Data.Drasil.SI}. The SI Units are captured using 
+another type of chunk known as a \codeH{UnitDefn} which are built atop a 
+\codeH{ConceptChunk} and \codeH{UnitSymbol}. The \codeH{UnitSymbol} is also a 
+chunk that can be one of several other chunk types.\footnote{For brevity we are 
+glossing over many chunk definitions and the differences between them as there 
+are chunks all the way down. The full technical documentation can be found on 
+our github repository.}. Returning to the force \codeH{UnitalChunk}, the smart 
+constructor \codeH{uc} we are using will actually capture even more knowledge 
+than just what we've fed it as we want it to assume we are working in the real 
+number space. There are other smart constructors for other spaces, which are 
+also captured using other chunks elsewhere in Drasil (see: 
+\codeH{Language.Drasil.Space}).
+
+\fig{
+\lstinputlisting[language=Haskell, linerange={11-20}, 
+firstnumber=11]{code/PhysicsUnits.hs}
+}{Examples of chunks for units derived from other SI Unit chunks}{fig:accelU}
+
+Now we approach the terms mass and acceleration in a similar manner. We capture 
+each as a \codeH{ConceptChunk} (see Figure~\ref{fig:acceleration} for a 
+reminder of how we captured acceleration's definition relative to velocity and 
+thus relative to position). Then construct a \codeH{UnitalChunk} for each. 
+Acceleration can be seen in Figure~\ref{fig:forceUC} and mass has a similar 
+\codeH{UnitalChunk} that uses the \codeH{metre UnitDefn} chunk. More 
+interestingly, the units for acceleration are derived from other units, and can 
+be seen in Figure~\ref{fig:accelU} with some additional derived unit types 
+(taken from \codeH{Data.Drasil.Units.Physics}).
+
+Now we have almost everything we need to finish our definition of Newton's 
+second law. Everything thus far has been defined in natural language using our 
+\codeH{Sentence} DSL, but it is not well-suited to the one piece we are 
+currently missing: a way to define expressions relating chunks in a 
+mathematics context.
+
+\subsection{Relating Chunks via Expressions}
+\label{sec:expr}
+
+Continuing our Newton's Second Law example from Section~\ref{sec:chunky}, we 
+need a means to define how force is calculated. We know it is calculated 
+relative to mass and acceleration, so we need a way to capture that, preferably 
+in an operational manner. We also know acceleration is itself derived from 
+time and velocity, which is derived from time and position.
+
+\ds{TODO: Explain the Expr language -- it is essentially an expression language
+that captures a host of mathematical operations and allows them to be applied 
+to chunks as a whole, rather than just the symbolic representations, so we can 
+preserve that captured relationship and describe it anywhere the chunk is used 
+throughout the software we are building with Drasil.}
+
 \section{Recipes: Codifying Structure}
+\label{sec:recipes}
   - Organized knowledge is fine, but is essentially just a collection of (collections of) definitions. Pretty meaningless on its own so we need the structure (in our case from the templates / case studies) to have meaning.
   - Each \sf{} has its own recipe for combining knowledge
   - As we consider \sfs{} "views" of the knowledge, we need to 

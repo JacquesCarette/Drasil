@@ -1,5 +1,5 @@
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
-{-# HLINT ignore "Avoid lambda" #-}
+
 module Language.Drasil.Code.Imperative.Modules (
   genMain, genMainProc, genMainFunc, genMainFuncProc, genInputClass,
   genInputDerived, genInputDerivedProc, genInputMod, genInputModProc,
@@ -24,7 +24,7 @@ import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), genModule,
   genModuleProc, genModuleWithImports, genModuleWithImportsProc, primaryClass,
   auxClass)
 import Language.Drasil.Code.Imperative.Helpers (liftS, convScope)
-import Language.Drasil.Code.Imperative.Import (codeType, convExpr, convExprSet, convExprProc,
+import Language.Drasil.Code.Imperative.Import (codeType, convExpr, convExprProc,
   convStmt, convStmtProc, genConstructor, mkVal, mkValProc, mkVar, mkVarProc,
   privateInOutMethod, privateMethod, privateFuncProc, publicFunc,
   publicFuncProc, publicInOutFunc, publicInOutFuncProc, privateInOutFuncProc,
@@ -390,10 +390,10 @@ constrExc c = do
 exc :: (OOProg r) => (CodeVarChunk, ConstraintCE) ->
   GenState [MSStatement r]
 exc (v, Elem _ e) = do
-  lb <- convExprSet e
+  lb <- convExpr e
   t <- codeType v
-  let value = var "set" (setType $ convTypeOO t) local
-  return [setDecDef value lb]
+  let mkValue = var ("set_" ++ codeName v) (setType (convType t)) local
+  return [setDecDef mkValue lb]
 exc _ = return [emptyStmt]
 
 -- | Generates statements that print a message for when a constraint is violated.

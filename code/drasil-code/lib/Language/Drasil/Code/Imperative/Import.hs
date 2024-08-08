@@ -3,7 +3,7 @@
 module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
   publicFunc, publicFuncProc, privateMethod, privateFuncProc, publicInOutFunc,
   publicInOutFuncProc, privateInOutMethod, privateInOutFuncProc, genConstructor,
-  mkVar, mkVarProc, mkVal, mkValProc, convExpr, convExprSet, convExprProc, convStmt,
+  mkVar, mkVarProc, mkVal, mkValProc, convExpr, convExprProc, convStmt,
   convStmtProc, genModDef, genModDefProc, genModFuncs, genModFuncsProc,
   genModClasses, readData, readDataProc, renderC, impStr, impDbl
 ) where
@@ -41,7 +41,7 @@ import qualified Language.Drasil.Mod as M (Class(..))
 import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
   Initializers, SharedProg, OOProg, PermanenceSym(..), bodyStatements,
-  BlockSym(..), TypeSym(..), VariableSym(..), ScopeSym(..), OOVariableSym(..),
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), ScopeSym(..), OOVariableSym(..),
   staticConst, VariableElim(..), ($->), ValueSym(..), Literal(..),
   VariableValue(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), OOValueExpression(..),
@@ -289,13 +289,6 @@ genInOutFunc f docf n desc ins' outs' b = do
     bComms bothVs) bod else f inVs outVs bothVs bod
 
 -- | Converts an 'Expr' to a GOOL Value.
-convExprSet :: (OOProg r) => CodeExpr -> GenState (SValue r)
-convExprSet (S.Set l) = do
-  ar <- mapM convExpr l
-                                    -- hd will never fail here
-  return $ litSet (fmap valueType (head ar)) ar
-convExprSet _ = error "not a Set"
-
 convExpr :: (OOProg r) => CodeExpr -> GenState (SValue r)
 convExpr (Lit (Dbl d)) = do
   sm <- spaceCodeType Real
@@ -371,8 +364,8 @@ convExpr (Matrix [l]) = do
 convExpr Matrix{} = error "convExpr: Matrix"
 convExpr (S.Set l) = do
   ar <- mapM convExpr l
-  let v = var "set" (setType (fmap valueType (head ar))) local
-  return $ valueOf v
+                                    -- hd will never fail here
+  return $ litSet (fmap valueType (head ar)) ar
 convExpr Operator{} = error "convExpr: Operator"
 convExpr (RealI c ri)  = do
   g <- get
@@ -420,7 +413,7 @@ renderRealInt s (UpFrom  (Inc, a))          = sy s $>= a
 renderRealInt s (UpFrom  (Exc, a))          = sy s $>  a
 
 renderSet :: (HasUID c, HasSymbol c) => c -> CodeExpr -> CodeExpr
-renderSet e s = in' s (sy e)
+renderSet e s = in' (var e) (sy e)
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.
 unop :: (SharedProg r) => UFunc -> (SValue r -> SValue r)

@@ -1,5 +1,5 @@
 module Drasil.GOOL.AST (Terminator(..), VisibilityTag(..), ScopeTag(..),
-  ScopeData(..), sd, QualifiedName, qualName, FileType(..), isSource,
+  ScopeData(..), sd, onScope, QualifiedName, qualName, FileType(..), isSource,
   Binding(..), onBinding, BindData(bind, bindDoc), bd, FileData(filePath,
   fileMod), fileD, updateFileMod, FuncData(fType, funcDoc), fd, ModData(name,
   modDoc), md, updateMod, MethodData(mthdDoc), mthd, updateMthd, OpData(opPrec,
@@ -7,8 +7,8 @@ module Drasil.GOOL.AST (Terminator(..), VisibilityTag(..), ScopeTag(..),
   ProgData(progName, progPurp, progMods), progD, emptyProg,
   StateVarData(getStVarScp, stVar, destructSts), svd, TypeData(cType,
   typeString, typeDoc), td, ValData(valPrec, valInt, valType, val), vd,
-  updateValDoc, VarData(varBind, varName, varType, varDoc), vard, CommonThunk,
-  pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
+  updateValDoc, VarData(varBind, varName, varScope, varType, varDoc), vard,
+  CommonThunk, pureValue, vectorize, vectorize2, sumComponents, commonVecIndex,
   commonThunkElim, commonThunkDim
 ) where
 
@@ -124,12 +124,16 @@ svd :: VisibilityTag -> Doc -> (Doc, Terminator) -> StateVarData
 svd = SVD
 
 -- Used as the underlying data type for Scopes in the Julia renderer
-data ScopeTag = Local | Global
+data ScopeTag = Local | Global deriving Eq
 
 newtype ScopeData = SD {scopeTag :: ScopeTag}
 
 sd :: ScopeTag -> ScopeData
 sd = SD
+
+onScope :: ScopeTag -> a -> a -> a
+onScope Global a _ = a
+onScope Local _ b = b
 
 -- Used as the underlying data type for Types in all renderers
 data TypeData = TD {cType :: CodeType, typeString :: String, typeDoc :: Doc}
@@ -152,9 +156,9 @@ updateValDoc f v = vd (valPrec v) (valInt v) (valType v) ((f . val) v)
 
 -- Used as the underlying data type for Variables in all renderers
 data VarData = VarD {varBind :: Binding, varName :: String, 
-  varType :: TypeData, varDoc :: Doc}
+  varScope :: ScopeData, varType :: TypeData, varDoc :: Doc}
 
-vard :: Binding -> String -> TypeData -> Doc -> VarData
+vard :: Binding -> String -> ScopeData -> TypeData -> Doc -> VarData
 vard = VarD
 
 -- Used as the underlying data type for Thunks in all renderers

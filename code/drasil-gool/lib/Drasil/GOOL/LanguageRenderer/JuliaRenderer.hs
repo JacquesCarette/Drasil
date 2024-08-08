@@ -44,12 +44,12 @@ import Drasil.GOOL.RendererClassesProc (ProcRenderSym, RenderFile(..),
 import qualified Drasil.GOOL.RendererClassesProc as RC (module')
 import Drasil.GOOL.LanguageRenderer (printLabel, listSep, listSep',
   variableList, parameterList, forLabel, inLabel, tryLabel, catchLabel)
-import qualified Drasil.GOOL.LanguageRenderer as R (var, sqrt, abs, log10, log,
-  exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
-  addComments, blockCmt, docCmt, commentedMod, listSetFunc, commentedItem,
-  break, continue)
-import Drasil.GOOL.LanguageRenderer.Constructors (mkVal, mkStateVal, mkStateVar,
-  VSOp, unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
+import qualified Drasil.GOOL.LanguageRenderer as R (sqrt, abs, log10, log, exp,
+  sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, addComments,
+  blockCmt, docCmt, commentedMod, listSetFunc, commentedItem, break, continue,
+  constDec', assign, subAssign, addAssign)
+import Drasil.GOOL.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
+  unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
   typeBinExpr, mkStmt, mkStmtNoEnd)
 import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
@@ -57,8 +57,8 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, call, funcAppMixedArgs, lambda,
   listAccess, listSet, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
-  emptyStmt, assign, increment, subAssign, print, comment, valStmt, returnStmt,
-  param, docFunc, throw, arg, argsList, ifCond, smartAdd, local)
+  emptyStmt, print, comment, valStmt, returnStmt, param, docFunc, throw, arg,
+  argsList, ifCond, smartAdd, var, local)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (bool,
   boolRender, extVar, funcType, litArray, listDec, listDecDef, listAccessFunc,
   listSetFunc, notNull, extFuncAppMixedArgs, functionDoc, listSize, listAdd,
@@ -77,9 +77,10 @@ import Drasil.GOOL.AST (Terminator(..), FileType(..), FileData(..), fileD,
   ParamData(..), ProgData(..), TypeData(..), td, ValData(..), vd, VarData(..),
   vard, CommonThunk, progD, fd, pd, updateMthd, commonThunkDim, commonThunkElim,
   vectorize, vectorize2, commonVecIndex, sumComponents, pureValue, ScopeTag(..),
-  ScopeData, sd)
+  ScopeData(..), sd, onScope)
 import Drasil.GOOL.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
-  on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
+  on2CodeValues, on3CodeValues, on2StateValues, onCodeList, onStateList,
+  emptyIfEmpty)
 import Drasil.GOOL.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
   getModuleImports, addModuleImportVS, getUsing, getLangImports, getLibImports,
   addLibImportVS, useVarName, getMainDoc, genLoopIndex, genVarNameIf)
@@ -252,23 +253,24 @@ instance ScopeSym JuliaCode where
 
 instance VariableSym JuliaCode where
   type Variable JuliaCode = VarData
-  var' n _ t = mkStateVar n t (R.var n)
-  constant' = var' -- TODO: add `const` keyword in global scope, and follow Python for local
+  var'         = G.var
+  constant'    = var'
   extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
-  arrayElem i = A.arrayElem (litInt i)
+  arrayElem i  = A.arrayElem (litInt i)
 
 instance VariableElim JuliaCode where
   variableName = varName . unJLC
   variableType = onCodeValue varType
+  variableScope = onCodeValue varScope
 
 instance InternalVarElim JuliaCode where
   variableBind = varBind . unJLC
   variable = varDoc . unJLC
 
 instance RenderVariable JuliaCode where
-  varFromData b n t' d = do
+  varFromData b n s t' d = do
     t <- t'
-    toState $ on2CodeValues (vard b n) t (toCode d)
+    toState $ on3CodeValues (vard b n) s t (toCode d)
 
 instance ValueSym JuliaCode where
   type Value JuliaCode = ValData
@@ -471,9 +473,21 @@ instance StatementSym JuliaCode where
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement JuliaCode where
-  assign = G.assign Empty
-  (&-=) = G.subAssign Empty
-  (&+=) = G.increment
+  assign vr' v' = do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    let globalDec = jlGlobalDec vr
+    mkStmtNoEnd (globalDec <+> R.assign vr v)
+  (&-=) vr' v' = do 
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    let globalDec = jlGlobalDec vr
+    mkStmtNoEnd (globalDec <+> R.subAssign vr v)
+  (&+=) vr' v'= do
+    vr <- zoom lensMStoVS vr'
+    v <- zoom lensMStoVS v'
+    let globalDec = jlGlobalDec vr
+    mkStmtNoEnd $ globalDec <+> R.addAssign vr v
   (&++) = M.increment1
   (&--) = M.decrement1
 
@@ -674,12 +688,17 @@ jlCast t' v' = do
       jlCast' _      _    vDoc' tDoc' = tDoc' <> parens vDoc'
   mkVal t (jlCast' vTp tTp vDoc tDoc)
 
-jlConstDecDef :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
+jlGlobalDec :: JuliaCode VarData -> Doc
+jlGlobalDec v = onScope ((scopeTag . unJLC) (variableScope v))
+                          (text "global") empty
+
+jlConstDecDef :: SVariable JuliaCode -> SValue JuliaCode -> MSStatement JuliaCode
 jlConstDecDef v' def' = do
   v <- zoom lensMStoVS v'
   def <- zoom lensMStoVS def'
   modify $ useVarName $ variableName v
-  mkStmt $ RC.variable v <+> equals <+> RC.value def --TODO: prepend `constDec' ` when in global scope
+  let constDec = onScope ((scopeTag . unJLC) (variableScope v)) R.constDec' empty
+  mkStmt $ constDec <+> RC.variable v <+> equals <+> RC.value def
 
 -- List API
 jlListSize, jlListAdd, jlListAppend, jlListAbsdex :: Label
@@ -699,13 +718,14 @@ jlListSlice :: (CommonRenderSym r) => SVariable r -> SValue r ->
   Maybe (SValue r) -> Maybe (SValue r) -> SValue r -> MSBlock r
 jlListSlice vn vo beg end step = do
   stepV <- zoom lensMStoVS step
+  vnew <- zoom lensMStoVS vn
 
   let mbStepV = valueInt stepV
   bName <- genVarNameIf (isNothing beg && isNothing mbStepV) "begIdx"
   eName <- genVarNameIf (isNothing mbStepV) "endIdx"
 
-  let begVar = var bName int local -- TODO: get scope from vn
-      endVar = var eName int local -- TODO: get scope from vn
+  let begVar = var bName int (variableScope vnew)
+      endVar = var eName int (variableScope vnew)
 
       (setBeg, begVal) = case (beg, mbStepV) of
         -- If we have a value for beg, just use it

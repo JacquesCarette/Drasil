@@ -1,18 +1,18 @@
 module FileTests
 
-fileToWrite = open("testText.txt", "w")
+global fileToWrite = open("testText.txt", "w")
 print(fileToWrite, 0)
 println(fileToWrite, 0.89)
 print(fileToWrite, "ello")
 println(fileToWrite, "bye")
 println(fileToWrite, "!!")
 close(fileToWrite)
-fileToRead = open("testText.txt", "r")
-fileLine = readline(fileToRead)
+global fileToRead = open("testText.txt", "r")
+global fileLine = readline(fileToRead)
 readline(fileToRead)
-fileContents = []
+global fileContents = []
 
-fileContents = readlines(fileToRead)
+global fileContents = readlines(fileToRead)
 
 println(fileContents)
 close(fileToRead)

@@ -7,7 +7,7 @@ module Drasil.GOOL.LanguageRenderer.Constructors (
 ) where
 
 import Drasil.GOOL.InterfaceCommon (VSType, MSStatement, SVariable, SValue,
-  TypeSym(..), TypeElim(..), ValueSym(..))
+  TypeSym(..), TypeElim(..), ValueSym(..), ScopeSym(Scope, local))
 import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, VSUnOp, VSBinOp,
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
   RenderValue(..), ValueElim(valuePrec), RenderStatement(..))
@@ -45,16 +45,18 @@ mkVal t = valFromData Nothing Nothing (toState t)
 -- Variables --
 
 -- | Constructs a dynamic variable in a stateful context
-mkStateVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
+mkStateVar :: (CommonRenderSym r) => String -> r (Scope r) -> VSType r ->
+  Doc -> SVariable r
 mkStateVar = varFromData Dynamic
 
 -- | Constructs a dynamic variable in a non-stateful context
-mkVar :: (CommonRenderSym r) => String -> r (Type r) -> Doc -> SVariable r
-mkVar n t = varFromData Dynamic n (toState t)
+mkVar :: (CommonRenderSym r) => String -> r (Scope r) -> r (Type r) ->
+  Doc -> SVariable r
+mkVar n s t = varFromData Dynamic n s (toState t)
 
 -- | Constructs a static variable in a stateful context
 mkStaticVar :: (CommonRenderSym r) => String -> VSType r -> Doc -> SVariable r
-mkStaticVar = varFromData Static
+mkStaticVar n = varFromData Static n local
 
 -- Operators --
 

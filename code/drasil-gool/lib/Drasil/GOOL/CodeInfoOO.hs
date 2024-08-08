@@ -129,6 +129,7 @@ instance OOVariableSym CodeInfoOO where
 instance VariableElim CodeInfoOO where
   variableName _ = ""
   variableType _ = toCode ""
+  variableScope _ = toCode ()
 
 instance ValueSym CodeInfoOO where
   type Value CodeInfoOO = ()

@@ -544,9 +544,6 @@ instance InternalControlStmt JavaCode where
 instance RenderStatement JavaCode where
   stmt = G.stmt
   loopStmt = G.loopStmt
-
-  emptyStmt = G.emptyStmt
-  
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim JavaCode where
@@ -557,6 +554,7 @@ instance StatementSym JavaCode where
   -- Terminator determines how statements end
   type Statement JavaCode = (Doc, Terminator)
   valStmt = G.valStmt Semi
+  emptyStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement JavaCode where

@@ -515,9 +515,6 @@ instance InternalControlStmt CSharpCode where
 instance RenderStatement CSharpCode where
   stmt = G.stmt
   loopStmt = G.loopStmt
-
-  emptyStmt = G.emptyStmt
-  
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CSharpCode where
@@ -527,6 +524,7 @@ instance StatementElim CSharpCode where
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
   valStmt = G.valStmt Semi
+  emptyStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement CSharpCode where

@@ -241,6 +241,7 @@ instance VectorExpression CodeInfoProc where
 instance StatementSym CodeInfoProc where
   type Statement CodeInfoProc = ()
   valStmt = zoom lensMStoVS . execute1
+  emptyStmt = noInfo
   multi    = executeList
   
 instance AssignStatement CodeInfoProc where

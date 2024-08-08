@@ -26,7 +26,7 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, Body, MSBody, VSFunction,
 import qualified Drasil.GOOL.InterfaceCommon as IC (argsList,
   TypeSym(int, bool, double, string, listType, arrayType, void), VariableSym(var),
   Literal(litTrue, litFalse, litList, litSet, litInt, litString),
-  VariableValue(valueOf), StatementSym(valStmt), DeclStatement(varDec,
+  VariableValue(valueOf), StatementSym(valStmt, emptyStmt), DeclStatement(varDec,
   varDecDef, constDecDef), List(intToIndex, indexToInt), ParameterSym(param,
   pointerParam), MethodSym(mainFunction), AssignStatement(assign), ScopeSym(..))
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
@@ -39,7 +39,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   MethodTypeSym(mType), RenderMethod(commentedFunc, mthdFromData),
   BlockCommentSym(..), ScopeElim(scopeData))
 import qualified Drasil.GOOL.RendererClassesCommon as S (RenderBody(multiBody),
-  RenderValue(call), RenderStatement(stmt, emptyStmt),
+  RenderValue(call), RenderStatement(stmt),
   InternalAssignStmt(multiAssign), InternalControlStmt(multiReturn),
   InternalListFunc(listSizeFunc, listAddFunc, listAppendFunc))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (ImportElim(..),
@@ -590,7 +590,7 @@ varDecDef v scp e = do
   modify $ setVarScope (variableName v') (scopeData scp)
   def e
   where
-    def Nothing = S.emptyStmt
+    def Nothing = IC.emptyStmt
     def (Just d) = IC.assign v d
 
 fileOpen, fileR, fileW, fileA :: Label

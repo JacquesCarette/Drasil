@@ -17,19 +17,14 @@ import System.FilePath.Posix (takeDirectory)
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-import qualified GOOL.HelloWorld as OO (helloWorld)
+import HelloWorld (helloWorldOO, helloWorldProc)
 import GOOL.PatternTest (patternTest)
-import qualified GOOL.FileTests as OO (fileTests)
-import qualified GOOL.VectorTest as OO (vectorTest)
-import qualified GOOL.NameGenTest as OO (nameGenTest)
-
-import qualified GProc.HelloWorld as Proc (helloWorld)
-import qualified GProc.FileTests as Proc (fileTests)
-import qualified GProc.VectorTest as Proc (vectorTest)
-import qualified GProc.NameGenTest as Proc (nameGenTest)
+import FileTests (fileTestsOO, fileTestsProc)
+import VectorTest (vectorTestOO, vectorTestProc)
+import NameGenTest (nameGenTestOO, nameGenTestProc)
 
 -- | Renders five GOOL tests (FileTests, HelloWorld, PatternTest, VectorTest, and NameGenTest)
--- in Java, Python, C#, C++, and Swift.
+-- in Java, Python, C#, C++, Swift, and Julia.
 main :: IO()
 main = do
   workingDir <- getCurrentDirectory
@@ -74,9 +69,9 @@ classes unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
   in unRepr' $ package pd [makefile [] Program [] gs' pd])
-  [OO.helloWorld, patternTest, OO.fileTests, OO.vectorTest, OO.nameGenTest]
-  (map (OO.unCI . (`evalState` initialState)) [OO.helloWorld, patternTest,
-    OO.fileTests, OO.vectorTest, OO.nameGenTest])
+  [helloWorldOO, patternTest, fileTestsOO, vectorTestOO, nameGenTestOO]
+  (map (OO.unCI . (`evalState` initialState)) [helloWorldOO, patternTest,
+    fileTestsOO, vectorTestOO, nameGenTestOO])
 
 -- Classes that Julia is currently able to render
 jlClasses :: (ProcProg r, PackageSym r') => (r (Proc.Program r) ->
@@ -85,9 +80,9 @@ jlClasses unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
   in unRepr' $ package pd [makefile [] Program [] gs' pd])
-  [Proc.helloWorld, Proc.fileTests, Proc.vectorTest, Proc.nameGenTest]
-  (map (Proc.unCI . (`evalState` initialState)) [Proc.helloWorld,
-    Proc.fileTests, Proc.vectorTest, Proc.nameGenTest])
+  [helloWorldProc, fileTestsProc, vectorTestProc, nameGenTestProc]
+  (map (Proc.unCI . (`evalState` initialState)) [helloWorldProc,
+    fileTestsProc, vectorTestProc, nameGenTestProc])
 
 -- | Formats code to be rendered.
 makeCode :: [[FileData]] -> [[AuxData]] -> [(FilePath, Doc)]

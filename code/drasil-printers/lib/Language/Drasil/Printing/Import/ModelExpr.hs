@@ -194,7 +194,7 @@ assocExpr :: P.Ops -> Int -> [ModelExpr] -> PrintingInformation -> P.Expr
 assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (modelExpr' sm prec) exprs
 
 setExpr :: P.Ops -> Int -> [ModelExpr] -> PrintingInformation -> P.Expr
-setExpr op prec exprs sm = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map (modelExpr' sm prec) exprs
+setExpr _ prec exprs sm = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map (modelExpr' sm prec) exprs
 
 -- | Add add symbol only when the second Expr is not negation 
 addExpr :: [ModelExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]

@@ -2,7 +2,6 @@ module Drasil.GlassBR.Unitals where --whole file is used
 
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
-import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Prelude hiding (log)
@@ -14,7 +13,7 @@ import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
 import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, glassTypeFac,
   heatS, iGlass, lGlass, lResistance, lShareFac, loadDurFactor, nFL, responseTy,
-  stdOffDist, glass)
+  stdOffDist)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016)
 import Drasil.GlassBR.Units (sFlawPU)
 --FIXME: Many of the current terms can be separated into terms and defns?
@@ -109,7 +108,7 @@ nomThick = cuc "nomThick"
   [sfwrElem $ mkSet (map dbl nominalThicknesses)] $ exactDbl 8 -- for testing
 
 glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)
-  [sfwrElem $ mkSet $ map (str . abrv . snd) [(1, annealed), (4, fullyT), (2, heatS)]]
+  [sfwrElem $ mkSet $ map (str . abrv . snd) glassType]
 
 
 outputs :: [QuantityDict]

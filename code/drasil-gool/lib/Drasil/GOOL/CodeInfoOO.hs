@@ -288,6 +288,7 @@ instance VectorExpression CodeInfoOO where
 instance StatementSym CodeInfoOO where
   type Statement CodeInfoOO = ()
   valStmt = zoom lensMStoVS . execute1
+  emptyStmt = noInfo
   multi    = executeList
   
 instance AssignStatement CodeInfoOO where

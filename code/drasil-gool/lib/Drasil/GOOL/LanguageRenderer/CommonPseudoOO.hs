@@ -26,7 +26,7 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, Body, MSBody, VSFunction,
 import qualified Drasil.GOOL.InterfaceCommon as IC (argsList,
   TypeSym(int, bool, double, string, listType, arrayType, void), locVar,
   Literal(litTrue, litFalse, litList, litSet, litInt, litString),
-  VariableValue(valueOf), StatementSym(valStmt), DeclStatement(varDec,
+  VariableValue(valueOf), StatementSym(valStmt, emptyStmt), DeclStatement(varDec,
   varDecDef, constDecDef), List(intToIndex, indexToInt), ParameterSym(param,
   pointerParam), MethodSym(mainFunction), AssignStatement(assign))
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
@@ -39,7 +39,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   MethodTypeSym(mType), RenderMethod(commentedFunc, mthdFromData),
   BlockCommentSym(..))
 import qualified Drasil.GOOL.RendererClassesCommon as S (RenderBody(multiBody),
-  RenderValue(call), RenderStatement(stmt, emptyStmt),
+  RenderValue(call), RenderStatement(stmt),
   InternalAssignStmt(multiAssign), InternalControlStmt(multiReturn),
   InternalListFunc(listSizeFunc, listAddFunc, listAppendFunc))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (ImportElim(..),
@@ -574,7 +574,7 @@ varDecDef v e = do
   modify $ useVarName (variableName v')
   def e
   where
-    def Nothing = S.emptyStmt
+    def Nothing = IC.emptyStmt
     def (Just d) = IC.assign v d
 
 fileOpen, fileR, fileW, fileA :: Label

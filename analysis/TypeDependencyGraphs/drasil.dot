@@ -929,31 +929,21 @@ digraph alltypes {
 		Initializer -> CodeVarChunkCodeExpr;
 		}
 	}
-	subgraph filetetss {
-	}
-	subgraph helloworld {
-	}
-	subgraph helper {
-	}
-	subgraph namegentets {
-	}
 	subgraph obervers {
 	}
 	subgraph patterntets {
 	}
-	subgraph vectortets {
-	}
 	subgraph filetetss {
 	}
 	subgraph helloworld {
 	}
 	subgraph helper {
 	}
+	subgraph main {
+	}
 	subgraph namegentets {
 	}
 	subgraph vectortets {
-	}
-	subgraph main {
 	}
 	subgraph languagestructure {
 		subgraph comment{

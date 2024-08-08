@@ -159,6 +159,7 @@ varDec s d pdoc v' = do
   where bind Static = s
         bind Dynamic = d
         ptrdoc (List _) = pdoc
+        ptrdoc (Set _) = pdoc
         ptrdoc _ = empty
 
 varDecDef :: (CommonRenderSym r) => Terminator -> SVariable r -> SValue r -> 

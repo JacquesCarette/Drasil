@@ -1,4 +1,6 @@
 {-# LANGUAGE PostfixOperators #-}
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Redundant return" #-}
 
 -- | Implementations defined here are valid for any language renderer.
 module Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (fileFromData,
@@ -28,7 +30,7 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
   variableType), ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/),
   sin, cos, tan), Comparison(..), funcApp, StatementSym(multi),
   AssignStatement((&++)), (&=), IOStatement(printStr, printStrLn, printFile,
-  printFileStr, printFileStrLn), ifNoElse, ScopeSym(Scope))
+  printFileStr, printFileStrLn), ifNoElse, ScopeSym(Scope), convType)
 import qualified Drasil.GOOL.InterfaceCommon as IC (TypeSym(int, double, char,
   string, listType, arrayType, listInnerType, funcType, void), VariableSym(var),
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
@@ -389,14 +391,22 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
         i = IC.locVar l_i IC.int
 
 printSet :: (CommonRenderSym r) => Integer -> SValue r -> (SValue r -> MSStatement r)
+  -> (String -> MSStatement r) -> (String -> MSStatement r) -> VSType r -> MSStatement r
+printSet n v prFn prStrFn prLnFn s = multi [prStrFn "{ ", 
+  IC.forEach i v
+    (bodyStatements [prFn (IC.valueOf i),prStrFn " "]),
+  prLnFn "}"]
+  where set_i = "set_i" ++ show n
+        i = IC.locVar set_i s
+
+printSet :: (RenderSym r) => Integer -> SValue r -> (SValue r -> MSStatement r)
   -> (String -> MSStatement r) -> (String -> MSStatement r) -> MSStatement r
 printSet n v prFn prStrFn prLnFn = multi [prStrFn "{ ", 
   IC.forEach i v
     (bodyStatements [prFn (IC.valueOf i),prStrFn " "]),
---(IC.forEach i v (bodyStatements [prFn (IC.valueOf i)])),
   prLnFn "}"]
   where set_i = "set_i" ++ show n
-        i = IC.locVar set_i IC.double
+        i = IC.var set_i I
 
 printSet :: (RenderSym r) => Integer -> SValue r -> (SValue r -> MSStatement r)
   -> (String -> MSStatement r) -> (String -> MSStatement r) -> MSStatement r
@@ -406,19 +416,18 @@ printSet n v prFn prStrFn prLnFn = multi [prStrFn "{ ",
 --(IC.forEach i v (bodyStatements [prFn (IC.valueOf i)])),
   prLnFn "}"]
   where set_i = "set_i" ++ show n
-        i = IC.var set_i IC.double
+        i = IC.var set_i s
 
 printObj :: ClassName -> (String -> MSStatement r) -> MSStatement r
 printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
-print :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> 
+print :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r ->
   MSStatement r
 print newLn f printFn v = zoom lensMStoVS v >>= print' . getType . valueType
   where print' (List t) = printList (getNestDegree 1 t) v prFn prStrFn 
           prLnFn
         print' (Object n) = printObj n prLnFn
-        print' (Set t) = printSet (getNestDegree 1 t) v prFn prStrFn 
-          prLnFn
+        print' (Set t) = printSet (getNestDegree 1 t) v prFn prStrFn prLnFn (convType t)
         print' _ = S.printSt newLn f printFn v
         prFn = maybe IC.print printFile f
         prStrFn = maybe printStr printFileStr f

@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
   publicInOutFuncProc, privateInOutMethod, privateInOutFuncProc, genConstructor,
   mkVar, mkVarProc, mkVal, mkValProc, convExpr, convExprSet, convExprProc, convStmt,
   convStmtProc, genModDef, genModDefProc, genModFuncs, genModFuncsProc,
-  genModClasses, readData, readDataProc, renderC
+  genModClasses, readData, readDataProc, renderC, impStr, impDbl
 ) where
 
 import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
@@ -13,6 +13,7 @@ import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
 import Database.Drasil (symbResolve)
 import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&), in')
 import Language.Drasil.CodeExpr.Development hiding (Set)
+import qualified Language.Drasil.Literal.Development as L
 import qualified Language.Drasil.CodeExpr.Development as S (CodeExpr(Set))
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
@@ -368,8 +369,9 @@ convExpr (Matrix [l]) = do
                                     -- hd will never fail here
   return $ litArray (fmap valueType (head ar)) ar
 convExpr Matrix{} = error "convExpr: Matrix"
-convExpr (S.Set _) = do
-  let v = var "set" (setType double) local
+convExpr (S.Set l) = do
+  ar <- mapM convExpr l
+  let v = var "set" (setType (fmap valueType (head ar))) local
   return $ valueOf v
 convExpr Operator{} = error "convExpr: Operator"
 convExpr (RealI c ri)  = do
@@ -1269,3 +1271,8 @@ v_infile = valueOf var_infile
 l_i = "i"
 var_i = var l_i int
 v_i = valueOf var_i
+
+impStr :: String -> L.Literal
+impStr = Str
+impDbl :: Double -> L.Literal
+impDbl = Dbl

@@ -8,7 +8,6 @@ module Language.Drasil.Code.Imperative.Modules (
   genCalcModProc, genCalcFunc, genCalcFuncProc, genOutputMod, genOutputModProc,
   genOutputFormat, genOutputFormatProc, genSampleInput
 ) where
-
 import Language.Drasil (Constraint(..), RealInterval(..),
   HasUID(uid), Stage(..))
 import Database.Drasil (ChunkDB)
@@ -341,17 +340,27 @@ physCBody cs = do
   let cb = onPhysC g
   chooseConstr cb cs
 
+transform :: [(CodeVarChunk, [ConstraintCE])] -> [(CodeVarChunk, ConstraintCE)]
+transform xs = [(s, n) | (s, ns) <- xs, n <- ns]
+
+interleave :: [a] -> [a] -> [a]
+interleave [] ys = ys
+interleave xs [] = xs
+interleave (x:xs) (y:ys) = x : y : interleave xs ys
+
 -- | Generates conditional statements for checking constraints, where the
 -- bodies depend on user's choice of constraint violation behaviour.
 chooseConstr :: (OOProg r) => ConstraintBehaviour ->
   [(CodeVarChunk, [ConstraintCE])] -> GenState [MSStatement r]
 chooseConstr cb cs = do
-  let c = concatMap snd cs
-  varDecs <- mapM exc c
+  let ch = transform cs
+  varDecs <- mapM exc ch
+  let varDec = concat varDecs
   conds <- mapM (\(q,cns) -> mapM (convExpr . renderC q) cns) cs
   bods <- mapM (chooseCB cb) cs
   let bodies = concat $ zipWith (zipWith (\cond bod -> ifNoElse [((?!) cond, bod)])) conds bods
-  return $ concat varDecs ++ bodies
+  let combined = interleave varDec bodies
+  return $ combined
   where chooseCB Warning = constrWarn
         chooseCB Exception = constrExc
 
@@ -379,13 +388,14 @@ constrExc c = do
   msgs <- mapM (constraintViolatedMsg q "expected") cs
   return $ map (bodyStatements . (++ [throw "InputError"])) msgs
 
-exc :: (OOProg r) => ConstraintCE ->
+exc :: (OOProg r) => (CodeVarChunk, ConstraintCE) ->
   GenState [MSStatement r]
-exc (Elem _ e) = do
+exc (v, Elem _ e) = do
   lb <- convExprSet e
-  let value = var "set" (setType double) local
+  t <- codeType v
+  let value = var "set" (setType $ convTypeOO t) local
   return [setDecDef value lb]
-exc _ = return []
+exc _ = return [printStr "Empty"]
 
 -- | Generates statements that print a message for when a constraint is violated.
 -- Message includes the name of the cosntraint quantity, its value, and a

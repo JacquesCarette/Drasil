@@ -189,8 +189,6 @@ class RenderStatement r where
   stmt     :: MSStatement r -> MSStatement r
   loopStmt :: MSStatement r -> MSStatement r
 
-  emptyStmt   :: MSStatement r
-
   stmtFromData :: Doc -> Terminator -> MSStatement r
 
 class StatementElim r where

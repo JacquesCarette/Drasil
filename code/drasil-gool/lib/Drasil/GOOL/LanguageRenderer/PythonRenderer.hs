@@ -529,9 +529,6 @@ instance InternalControlStmt PythonCode where
 instance RenderStatement PythonCode where
   stmt = G.stmt
   loopStmt = G.loopStmt
-  
-  emptyStmt = G.emptyStmt
-
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim PythonCode where
@@ -542,6 +539,7 @@ instance StatementSym PythonCode where
   -- Terminator determines how statements end
   type Statement PythonCode = (Doc, Terminator)
   valStmt = G.valStmt Empty
+  emptyStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement PythonCode where

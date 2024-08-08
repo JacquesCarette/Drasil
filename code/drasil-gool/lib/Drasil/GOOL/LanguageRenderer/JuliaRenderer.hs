@@ -471,7 +471,6 @@ instance InternalControlStmt JuliaCode where
 instance RenderStatement JuliaCode where
   stmt = G.stmt
   loopStmt = G.loopStmt
-  emptyStmt = G.emptyStmt
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim JuliaCode where
@@ -481,6 +480,7 @@ instance StatementElim JuliaCode where
 instance StatementSym JuliaCode where
   type Statement JuliaCode = (Doc, Terminator)
   valStmt = G.valStmt Empty
+  emptyStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement JuliaCode where

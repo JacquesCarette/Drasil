@@ -533,9 +533,6 @@ instance InternalControlStmt SwiftCode where
 instance RenderStatement SwiftCode where
   stmt = G.stmt
   loopStmt = G.loopStmt
-
-  emptyStmt = G.emptyStmt
-
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim SwiftCode where
@@ -545,6 +542,7 @@ instance StatementElim SwiftCode where
 instance StatementSym SwiftCode where
   type Statement SwiftCode = (Doc, Terminator)
   valStmt = G.valStmt Empty
+  emptyStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement SwiftCode where

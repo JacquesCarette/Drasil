@@ -35,8 +35,6 @@ import Language.Drasil.Development.Sentence
 import Language.Drasil.Document ( Section )
 import Language.Drasil.Document.Core
     ( ItemType(..), ListType(Bullet) )
-import Language.Drasil.Expr.Class ( ExprC(sy) )
-import Language.Drasil.ModelExpr.Class ( ModelExprC(isIn) )
 import Language.Drasil.ModelExpr.Lang ( ModelExpr )
 import Language.Drasil.NounPhrase.Core ( NP )
 import Language.Drasil.Reference ( refS, namedRef )
@@ -52,7 +50,6 @@ import Language.Drasil.Sentence
       (!.),
       (+:),
       capSent )
-import Language.Drasil.Space ( Space(..) )
 import Language.Drasil.Symbol.Helpers ( eqSymb )
 import Language.Drasil.Uncertainty
 import Language.Drasil.Symbol

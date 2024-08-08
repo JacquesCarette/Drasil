@@ -17,14 +17,14 @@ import Drasil.GOOL.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
 import qualified Drasil.GOOL.InterfaceCommon as IC (BlockSym(block), 
   TypeSym(int, listInnerType), VariableSym(var), ScopeSym(..), Literal(litInt),
   VariableValue(valueOf), ValueExpression(notNull), List(listSize, listAppend,
-  listAccess, intToIndex), StatementSym(valStmt), AssignStatement(assign),
+  listAccess, intToIndex), StatementSym(valStmt, emptyStmt), AssignStatement(assign),
   DeclStatement(varDecDef, listDec),  ControlStatement(ifCond, for, forRange),
   ValueExpression(inlineIf))
 import Drasil.GOOL.InterfaceGOOL (($.), observerListName)
 import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, RenderValue(cast),
   ValueElim(valueInt))
 import qualified Drasil.GOOL.RendererClassesCommon as S (
-  RenderStatement(stmt, emptyStmt))
+  RenderStatement(stmt))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (BodyElim(..),
   StatementElim(statement))
 import Drasil.GOOL.RendererClassesOO (OORenderSym)
@@ -58,7 +58,7 @@ runStrategy :: (CommonRenderSym r, Monad r) => Label -> [(Label, MSBody r)] ->
 runStrategy l strats rv av = maybe
   (strError l "RunStrategy called on non-existent strategy") 
   (strat (S.stmt resultState)) (lookup l strats)
-  where resultState = maybe S.emptyStmt asgState av
+  where resultState = maybe IC.emptyStmt asgState av
         asgState v = maybe (strError l 
           "Attempt to assign null return to a Value") (v &=) rv
         strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
@@ -129,8 +129,8 @@ listSlice beg end step vnew vold = do
 makeSetterVal :: (CommonRenderSym r) => Label -> SValue r -> Maybe Integer ->
   Maybe (SValue r) -> SValue r -> SValue r -> r (IC.Scope r) ->
   (MSStatement r, SValue r)
-makeSetterVal _     _    _      (Just v) _  _  _   = (S.emptyStmt, v)
-makeSetterVal _     _   (Just s) _       lb rb _   = (S.emptyStmt, if s > 0 then lb else rb)
+makeSetterVal _     _    _      (Just v) _  _  _   = (IC.emptyStmt, v)
+makeSetterVal _     _   (Just s) _       lb rb _   = (IC.emptyStmt, if s > 0 then lb else rb)
 makeSetterVal vName step _       _       lb rb  scp =
   let theVar = IC.var vName IC.int
       theSetter = IC.varDecDef theVar scp $ IC.inlineIf (step ?> IC.litInt 0) lb rb

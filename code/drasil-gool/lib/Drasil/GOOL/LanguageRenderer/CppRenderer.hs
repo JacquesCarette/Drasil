@@ -534,9 +534,6 @@ instance (Pair p) => InternalControlStmt (p CppSrcCode CppHdrCode) where
 instance (Pair p) => RenderStatement (p CppSrcCode CppHdrCode) where
   stmt = pair1 stmt stmt
   loopStmt = pair1 loopStmt loopStmt
-
-  emptyStmt = on2StateValues pair emptyStmt emptyStmt
-
   stmtFromData d t = on2StateValues pair (stmtFromData d t) (stmtFromData d t)
 
 instance (Pair p) => StatementElim (p CppSrcCode CppHdrCode) where
@@ -546,6 +543,7 @@ instance (Pair p) => StatementElim (p CppSrcCode CppHdrCode) where
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
   valStmt = pair1 valStmt valStmt . zoom lensMStoVS
+  emptyStmt = on2StateValues pair emptyStmt emptyStmt
   multi = pair1List multi multi
 
 instance (Pair p) => AssignStatement (p CppSrcCode CppHdrCode) where
@@ -1460,9 +1458,6 @@ instance InternalControlStmt CppSrcCode where
 instance RenderStatement CppSrcCode where
   stmt = G.stmt
   loopStmt = G.loopStmt
-
-  emptyStmt = G.emptyStmt
-
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CppSrcCode where
@@ -1472,6 +1467,7 @@ instance StatementElim CppSrcCode where
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
   valStmt = G.valStmt Semi
+  emptyStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement CppSrcCode where
@@ -2157,9 +2153,6 @@ instance InternalControlStmt CppHdrCode where
 instance RenderStatement CppHdrCode where
   stmt = G.stmt
   loopStmt _ = emptyStmt
-
-  emptyStmt = G.emptyStmt
-
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CppHdrCode where
@@ -2169,6 +2162,7 @@ instance StatementElim CppHdrCode where
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)
   valStmt _ = emptyStmt
+  emptyStmt = G.emptyStmt
   multi _ = emptyStmt
 
 instance AssignStatement CppHdrCode where

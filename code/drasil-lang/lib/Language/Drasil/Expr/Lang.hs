@@ -123,6 +123,8 @@ data Expr where
   Matrix   :: [[Expr]] -> Expr
   -- | Represents a set of expressions
   Set :: [Expr] -> Expr
+  -- | used to refernce the (name + type = variable )
+  Variable :: UID -> Expr -> Expr
   -- | Unary operation for most functions (eg. sin, cos, log, etc.).
   UnaryOp       :: UFunc -> Expr -> Expr
   -- | Unary operation for @Bool -> Bool@ operations.

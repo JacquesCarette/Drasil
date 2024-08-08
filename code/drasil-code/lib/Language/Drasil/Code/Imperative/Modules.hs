@@ -355,12 +355,11 @@ chooseConstr :: (OOProg r) => ConstraintBehaviour ->
 chooseConstr cb cs = do
   let ch = transform cs
   varDecs <- mapM exc ch
-  let varDec = concat varDecs
+  let varDefs = concat varDecs
   conds <- mapM (\(q,cns) -> mapM (convExpr . renderC q) cns) cs
   bods <- mapM (chooseCB cb) cs
   let bodies = concat $ zipWith (zipWith (\cond bod -> ifNoElse [((?!) cond, bod)])) conds bods
-  let combined = interleave varDec bodies
-  return $ combined
+  return $ interleave varDefs bodies
   where chooseCB Warning = constrWarn
         chooseCB Exception = constrExc
 

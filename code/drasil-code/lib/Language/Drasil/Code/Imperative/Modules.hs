@@ -395,7 +395,7 @@ exc (v, Elem _ e) = do
   t <- codeType v
   let value = var "set" (setType $ convTypeOO t) local
   return [setDecDef value lb]
-exc _ = return [printStr "Empty"]
+exc _ = return [emptyStmt]
 
 -- | Generates statements that print a message for when a constraint is violated.
 -- Message includes the name of the cosntraint quantity, its value, and a

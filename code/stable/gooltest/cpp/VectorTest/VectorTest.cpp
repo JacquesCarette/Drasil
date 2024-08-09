@@ -1,5 +1,8 @@
+#include <cassert>
+#include <string>
 #include <vector>
 
+using std::string;
 using std::vector;
 
 int main(int argc, const char *argv[]) {
@@ -13,6 +16,7 @@ int main(int argc, const char *argv[]) {
     for (int j = 0; j < (int)(v1.size()); j += 1) {
         x += v1.at(j) * v2.at(j);
     }
+    assert(x == -2.0 && "Dot product of v1 and v2 should be -2.");
     
     return 0;
 }

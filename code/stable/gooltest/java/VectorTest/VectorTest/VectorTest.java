@@ -16,5 +16,6 @@ public class VectorTest {
         for (int j = 0; j < v1.size(); j += 1) {
             x += v1.get(j) * v2.get(j);
         }
+        assert x == -2.0 : "Dot product of v1 and v2 should be -2.";
     }
 }

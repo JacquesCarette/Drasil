@@ -5,3 +5,4 @@ for i in range(0, len(v1), 1):
 x = 0.0
 for j in range(0, len(v1), 1):
     x += v1[j] * v2[j];
+assert x == -2.0, "Dot product of v1 and v2 should be -2."

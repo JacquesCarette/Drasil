@@ -637,6 +637,11 @@ instance ControlStatement JavaCode where
   while = C.while parens bodyStart bodyEnd
 
   tryCatch = G.tryCatch jTryCatch
+
+  assert condition errorMessage = do
+    cond <- zoom lensMStoVS condition
+    errMsg <- zoom lensMStoVS errorMessage
+    mkStmt (jAssert cond errMsg)
   
 instance ObserverPattern JavaCode where
   notifyObservers = M.notifyObservers
@@ -960,6 +965,11 @@ jTryCatch tb cb = vcat [
     lbrace,
   indent $ RC.body cb,
   rbrace]
+
+jAssert :: (CommonRenderSym r) => r (Value r) -> r (Value r) -> Doc
+jAssert condition errorMessage = vcat [
+  text "assert" <+> RC.value condition <+> colon <+> RC.value errorMessage
+  ]
 
 jOut :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> 
   MSStatement r

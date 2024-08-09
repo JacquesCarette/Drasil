@@ -454,6 +454,8 @@ class (BodySym r, VariableSym r) => ControlStatement r where
 
   tryCatch :: MSBody r -> MSBody r -> MSStatement r
 
+  assert :: SValue r -> SValue r -> MSStatement r
+
 ifNoElse :: (ControlStatement r) => [(SValue r, MSBody r)] -> MSStatement r
 ifNoElse bs = ifCond bs $ body []
 

@@ -8,3 +8,4 @@ x = 0.0
 for j in [Int](stride(from: 0, to: v1.count, by: 1)) {
     x += v1[j] * v2[j];
 }
+assert( x == -2.0 , "Dot product of v1 and v2 should be -2.")

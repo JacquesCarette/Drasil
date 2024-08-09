@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 public class VectorTest {
     
@@ -14,5 +15,6 @@ public class VectorTest {
         for (int j = 0; j < v1.Count; j += 1) {
             x += v1[j] * v2[j];
         }
+        Debug.Assert( x == -2.0 , "Dot product of v1 and v2 should be -2.");
     }
 }

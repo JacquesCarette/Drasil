@@ -71,6 +71,7 @@ helloInitVariables = block [comment "Initializing variables",
   varDecDef (mainVar "oneIndex" int) (indexOf (valueOf myOtherList) (litDouble 1.0)),
   printLn (valueOf $ mainVar "oneIndex" int),
   mainVar "a" int &= listSize (valueOf myOtherList),
+  assert (valueOf (mainVar "a" int) ?== litInt 2) (litString "List size should be 2"),
   valStmt (listAdd (valueOf myOtherList)
     (litInt 2) (litDouble 2.0)),
   valStmt (listAppend (valueOf myOtherList)
@@ -84,7 +85,10 @@ helloInitVariables = block [comment "Initializing variables",
   printLn (valueOf $ mainVar "myName" (listType string)),
   listDecDef (mainVar "boringList" (listType bool))
     [litFalse, litFalse, litFalse, litFalse, litFalse],
-  printLn (valueOf $ mainVar "boringList" (listType bool))]
+  printLn (valueOf $ mainVar "boringList" (listType bool)),
+  assert (valueOf (mainVar "b" int) ?== litInt 5) (litString "b should be 5"),
+  assert (listSize (valueOf myOtherList) ?== litInt 4) (litString "myOtherList should have 4 elements"),
+  assert (valueOf (mainVar "oneIndex" int) ?== litInt 0) (litString "oneIndex should be 0")]
 
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9, 

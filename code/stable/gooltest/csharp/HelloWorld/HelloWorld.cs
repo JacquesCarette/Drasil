@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 public class HelloWorld {
     
@@ -17,6 +18,7 @@ public class HelloWorld {
         int oneIndex = myOtherList.IndexOf(1.0);
         Console.WriteLine(oneIndex);
         a = myOtherList.Count;
+        Debug.Assert( a == 2 , "List size should be 2");
         myOtherList.Insert(2, 2.0);
         myOtherList.Add(2.5);
         double e;
@@ -43,6 +45,9 @@ public class HelloWorld {
             Console.Write(boringList[boringList.Count - 1]);
         }
         Console.WriteLine("]");
+        Debug.Assert( b == 5 , "b should be 5");
+        Debug.Assert( myOtherList.Count == 4 , "myOtherList should have 4 elements");
+        Debug.Assert( oneIndex == 0 , "oneIndex should be 0");
         
         // List slicing tests
         // Create variables for list slices

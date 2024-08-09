@@ -117,7 +117,7 @@ import Data.Composition ((.:))
 import Data.List (sort)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), hcat, brackets,
-  braces, parens, empty, equals, vcat, lbrace, rbrace, colon, isEmpty, quotes)
+  braces, parens, empty, equals, vcat, lbrace, rbrace, colon, isEmpty, quotes, semi)
 
 cppHdrExt, cppSrcExt :: String
 cppHdrExt = "hpp"
@@ -654,6 +654,9 @@ instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) where
   while v = pair2 while while (zoom lensMStoVS v)
 
   tryCatch = pair2 tryCatch tryCatch
+
+  assert cond errMsg = pair2 assert assert (zoom lensMStoVS cond) (zoom lensMStoVS errMsg)
+
 
 instance (Pair p) => ObserverPattern (p CppSrcCode CppHdrCode) where
   notifyObservers f t s = pair2 (\fn tp -> notifyObservers fn tp (pfst s)) 
@@ -1567,6 +1570,12 @@ instance ControlStatement CppSrcCode where
 
   tryCatch = G.tryCatch cppTryCatch
 
+  assert condition errorMessage = do
+    addCAssertImport $ do
+      cond <- zoom lensMStoVS condition
+      errMsg <- zoom lensMStoVS errorMessage
+      mkStmtNoEnd (cppAssert cond errMsg)
+
 instance ObserverPattern CppSrcCode where
   notifyObservers = M.notifyObservers
 
@@ -2204,6 +2213,8 @@ instance ControlStatement CppHdrCode where
 
   tryCatch _ _ = emptyStmt
 
+  assert _ _ = emptyStmt
+
 instance ObserverPattern CppHdrCode where
   notifyObservers _ _ _ = emptyStmt
 
@@ -2410,6 +2421,12 @@ addLimitsImport v = do
   modify (addLangImport limits)
   v
 
+addCAssertImport :: MS a -> MS a
+addCAssertImport v = do
+  modify (addLangImport cassert)
+  v
+
+
 setIterVar :: CommonRenderSym r=> SVariable r -> SValue r
 setIterVar = G.valueOf
 
@@ -2451,7 +2468,7 @@ cppPi = text "M_PI"
 ptrAccess' = text ptrAccess
 
 nmSpc, ptrAccess, std, algorithm, cppString, vector, sstream, stringstream,
-  fstream, iostream, limits, mathh, cppBool, cppInfile, cppOutfile,
+  fstream, iostream, limits, mathh, cassert, cppBool, cppInfile, cppOutfile,
   cppIterator, cppOpen, stod, stof, cppIgnore, numLimits, streamsize, max,
   endl, cin, cout, cppIndex, cppListAccess, cppListAdd, cppListAppend,
   cppIterBegin, cppIterEnd, cppR, cppW, cppA, cppGetLine, cppClose, cppClear,
@@ -2468,6 +2485,7 @@ sstream = "sstream"
 stringstream = stdAccess "stringstream"
 limits = "limits"
 mathh = "math.h"
+cassert = "cassert"
 cppBool = "bool"
 cppInfile = "ifstream"
 cppOutfile = "ofstream"
@@ -2702,6 +2720,11 @@ cppTryCatch tb cb = vcat [
   rbrace <+> catchLabel <+> parens catchAll <+> lbrace,
   indent $ RC.body cb,
   rbrace]
+
+cppAssert :: (CommonRenderSym r) => r (Value r) -> r (Value r) -> Doc
+cppAssert condition errorMessage = vcat [
+  text "assert(" <> RC.value condition <+> text "&&" <+> RC.value errorMessage <> text ")" <> semi
+  ]
 
 cppDiscardInput :: Char -> SValue CppSrcCode -> MSStatement CppSrcCode
 cppDiscardInput sep inFn = valStmt $ ignoreFunc sep inFn

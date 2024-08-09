@@ -57,7 +57,7 @@ import qualified Drasil.GOOL.LanguageRenderer as R (class', multiStmt, body,
   printFile, param, method, listDec, classVar, func, cast, listSetFunc, 
   castObj, static, dynamic, break, continue, private, public, blockCmt, docCmt, 
   addComments, commentedMod, commentedItem)
-import Drasil.GOOL.LanguageRenderer.Constructors (mkStmt, 
+import Drasil.GOOL.LanguageRenderer.Constructors (mkStmt,  mkStmtNoEnd,
   mkStateVal, mkVal, VSOp, unOpPrec, powerPrec, unExpr, unExpr', 
   unExprNumDbl, typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
 import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
@@ -108,7 +108,7 @@ import Control.Monad.State (modify)
 import Data.Composition ((.:))
 import Data.List (intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
-  equals, vcat, lbrace, rbrace, braces, colon, space, quotes)
+  equals, vcat, lbrace, rbrace, braces, colon, space, quotes, semi)
 
 csExt :: String
 csExt = "cs"
@@ -606,6 +606,12 @@ instance ControlStatement CSharpCode where
 
   tryCatch = G.tryCatch csTryCatch
 
+  assert condition errorMessage = do
+    modify (addLangImport csDiagnostics)
+    cond <- zoom lensMStoVS condition
+    errMsg <- zoom lensMStoVS errorMessage
+    mkStmtNoEnd (csAssert cond errMsg)
+
 instance ObserverPattern CSharpCode where
   notifyObservers = M.notifyObservers
 
@@ -757,13 +763,14 @@ csForEach = text "foreach"
 csNamedArgSep = colon <> space
 csLambdaSep = text "=>"
 
-csSystem, csConsole, csGeneric, csIO, csList, csInt, csFloat, csBool, 
+csSystem, csConsole, csGeneric, csDiagnostics, csIO, csList, csInt, csFloat, csBool, 
   csChar, csParse, csReader, csWriter, csReadLine, csWrite, csWriteLine, 
   csIndex, csListAdd, csListAppend, csClose, csEOS, csSplit, csMain,
   csFunc :: String
 csSystem = "System"
 csConsole = "Console"
 csGeneric = csSysAccess $ "Collections" `access` "Generic"
+csDiagnostics = csSysAccess "Diagnostics"
 csIO = csSysAccess "IO"
 csList = "List"
 csInt = "Int32"
@@ -871,6 +878,11 @@ csTryCatch tb cb = vcat [
     lbrace,
   indent $ RC.body cb,
   rbrace]
+
+csAssert :: (CommonRenderSym r) => r (Value r) -> r (Value r) -> Doc
+csAssert condition errorMessage = vcat [
+  text "Debug.Assert(" <+> RC.value condition <+> text "," <+> RC.value errorMessage <> text ")" <> semi
+  ]
 
 csDiscardInput :: SValue CSharpCode -> MSStatement CSharpCode
 csDiscardInput = valStmt

@@ -20,6 +20,7 @@ public class HelloWorld {
         int oneIndex = myOtherList.indexOf(1.0);
         System.out.println(oneIndex);
         a = myOtherList.size();
+        assert a == 2 : "List size should be 2";
         myOtherList.add(2, 2.0);
         myOtherList.add(2.5);
         double e;
@@ -30,6 +31,9 @@ public class HelloWorld {
         System.out.println(myName);
         ArrayList<Boolean> boringList = new ArrayList<Boolean>(Arrays.asList(false, false, false, false, false));
         System.out.println(boringList);
+        assert b == 5 : "b should be 5";
+        assert myOtherList.size() == 4 : "myOtherList should have 4 elements";
+        assert oneIndex == 0 : "oneIndex should be 0";
         
         // List slicing tests
         // Create variables for list slices

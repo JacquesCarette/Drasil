@@ -112,7 +112,7 @@ expr (AssocB And l)           sm = assocExpr P.And (precB And) l sm
 expr (AssocB Or l)            sm = assocExpr P.Or (precB Or) l sm
 expr (AssocA Add l)           sm = P.Row $ addExpr l Add sm
 expr (AssocA Mul l)           sm = P.Row $ mulExpr l Mul sm
-expr (AssocC SUnion l)    sm = assocExpr P.SUnion (precC SUnion) l sm
+expr (AssocC SUnion l)        sm = assocExpr P.SUnion (precC SUnion) l sm
 expr (C c)                    sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
 expr (FCall f [x])            sm =
   P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ expr x sm]
@@ -123,6 +123,7 @@ expr (Case _ ps)              sm =
     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
 expr (Matrix a)               sm = P.Mtx $ map (map (`expr` sm)) a
 expr (Set a)                  sm = P.Set $ map (`expr` sm) a
+expr (Variable _ l)           sm = expr l sm
 expr (UnaryOp Log u)          sm = mkCall sm P.Log u
 expr (UnaryOp Ln u)           sm = mkCall sm P.Ln u
 expr (UnaryOp Sin u)          sm = mkCall sm P.Sin u
@@ -150,7 +151,7 @@ expr (BoolBinaryOp Iff a b)   sm = mkBOp sm P.Iff a b
 expr (EqBinaryOp Eq a b)      sm = mkBOp sm P.Eq a b
 expr (EqBinaryOp NEq a b)     sm = mkBOp sm P.NEq a b
 expr (LABinaryOp Index a b)   sm = indx sm a b
-expr (LABinaryOp IndexOf a b)   sm = indx sm a b
+expr (LABinaryOp IndexOf a b) sm = indx sm a b
 expr (OrdBinaryOp Lt a b)     sm = mkBOp sm P.Lt a b
 expr (OrdBinaryOp Gt a b)     sm = mkBOp sm P.Gt a b
 expr (OrdBinaryOp LEq a b)    sm = mkBOp sm P.LEq a b
@@ -161,8 +162,8 @@ expr (VVVBinaryOp VSub a b)   sm = mkBOp sm P.VSub a b
 expr (VVNBinaryOp Dot a b)    sm = mkBOp sm P.Dot a b
 expr (NVVBinaryOp Scale a b)  sm = mkBOp sm P.Scale a b
 expr (ESSBinaryOp SAdd a b)   sm = mkBOp sm P.SAdd a b
-expr (ESSBinaryOp SRemove a b) sm = mkBOp sm P.SRemove a b
-expr (ESBBinaryOp SContains a b)   sm = mkBOp sm P.SContains a b
+expr (ESSBinaryOp SRemove a b)    sm = mkBOp sm P.SRemove a b
+expr (ESBBinaryOp SContains a b)  sm = mkBOp sm P.SContains a b
 expr (Operator o d e)         sm = eop sm o d e
 expr (RealI c ri)             sm = renderRealInt sm (lookupC (sm ^. stg)
   (sm ^. ckdb) c) ri

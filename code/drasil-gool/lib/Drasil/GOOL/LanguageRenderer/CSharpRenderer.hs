@@ -770,7 +770,7 @@ csSystem, csConsole, csGeneric, csDiagnostics, csIO, csList, csInt, csFloat, csB
 csSystem = "System"
 csConsole = "Console"
 csGeneric = csSysAccess $ "Collections" `access` "Generic"
-csDiagnostics = csSysAccess $ "Diagnostics"
+csDiagnostics = csSysAccess "Diagnostics"
 csIO = csSysAccess "IO"
 csList = "List"
 csInt = "Int32"

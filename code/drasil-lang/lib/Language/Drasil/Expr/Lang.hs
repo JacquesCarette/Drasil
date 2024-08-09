@@ -124,7 +124,7 @@ data Expr where
   -- | Represents a set of expressions
   Set :: [Expr] -> Expr
   -- | used to refernce the (name + type = variable )
-  Variable :: UID -> Expr -> Expr
+  Variable :: String -> Expr -> Expr
   -- | Unary operation for most functions (eg. sin, cos, log, etc.).
   UnaryOp       :: UFunc -> Expr -> Expr
   -- | Unary operation for @Bool -> Bool@ operations.
@@ -285,6 +285,8 @@ instance Typed Expr Space where
   infer _ (AssocC SUnion _) = Right "Associative addition requires at least one operand."
     
   infer cxt (C uid) = inferFromContext cxt uid
+
+  infer cxt (Variable s n) = infer cxt n
 
   infer cxt (FCall uid exs) = case (inferFromContext cxt uid, map (infer cxt) exs) of
     (Left (S.Function params out), exst) -> if NE.toList params == lefts exst

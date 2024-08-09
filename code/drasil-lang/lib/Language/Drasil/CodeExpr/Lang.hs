@@ -122,6 +122,8 @@ data CodeExpr where
   Matrix   :: [[CodeExpr]] -> CodeExpr
   -- | Represents a set of expressions
   Set :: [CodeExpr] -> CodeExpr
+  -- | used to refernce the (name + type = variable )
+  Variable :: String -> CodeExpr -> CodeExpr
   -- | Unary operation for most functions (eg. sin, cos, log, etc.).
   UnaryOp       :: UFunc -> CodeExpr -> CodeExpr
   -- | Unary operation for @Bool -> Bool@ operations.

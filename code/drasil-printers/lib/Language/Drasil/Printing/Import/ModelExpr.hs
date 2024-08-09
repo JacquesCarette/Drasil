@@ -6,7 +6,7 @@ module Language.Drasil.Printing.Import.ModelExpr where -- TODO: tighten exports
 -- TODO: tighten exports
 import Language.Drasil (UID, DomainDesc(..), RealInterval(..), Inclusive(..),
   RTopology(..), LiteralC(int))
-import Language.Drasil.Display (Symbol(..))
+import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Literal.Development (Literal(..))
 import Language.Drasil.ModelExpr.Development
 
@@ -58,12 +58,12 @@ indx sm (C c) i = f s
   where
     i' = modelExpr i sm
     s = lookupC (sm ^. stg) (sm ^. ckdb) c
-    f (Corners [] [] [] [b] e) =
+    f (S.Corners [] [] [] [b] e) =
       let e' = symbol e
           b' = symbol b in
       P.Row [P.Row [e', P.Sub (P.Row [b', P.MO P.Comma, i'])]] -- FIXME, extra Row
-    f a@(Variable _) = P.Row [symbol a, P.Sub i']
-    f a@(Label _)    = P.Row [symbol a, P.Sub i']
+    f a@(S.Variable _) = P.Row [symbol a, P.Sub i']
+    f a@(S.Label _)    = P.Row [symbol a, P.Sub i']
 --    f a@(Greek _)  = P.Row [symbol a, P.Sub i']
     f   e          = let e' = symbol e in P.Row [P.Row [e'], P.Sub i']
 indx sm a i = P.Row [P.Row [modelExpr a sm], P.Sub $ modelExpr i sm]
@@ -229,7 +229,7 @@ pow prI a@(ArithBinaryOp Pow _ _)  b = withParens prI a b
 pow prI a                          b = P.Row [modelExpr a prI, P.Sup (modelExpr b prI)]
 
 -- | Print a 'RealInterval'.
-renderRealInt :: PrintingInformation -> Symbol -> RealInterval ModelExpr ModelExpr -> P.Expr
+renderRealInt :: PrintingInformation -> S.Symbol -> RealInterval ModelExpr ModelExpr -> P.Expr
 renderRealInt st s (Bounded (Inc,a) (Inc,b)) =
   P.Row [modelExpr a st, P.MO P.LEq, symbol s, P.MO P.LEq, modelExpr b st]
 renderRealInt st s (Bounded (Inc,a) (Exc,b)) =

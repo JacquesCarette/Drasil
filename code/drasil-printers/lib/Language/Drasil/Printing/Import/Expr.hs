@@ -4,7 +4,7 @@
 module Language.Drasil.Printing.Import.Expr (expr) where
 
 import Language.Drasil hiding (neg, sec, symbol, isIn, Matrix, Set)
-import Language.Drasil.Display (Symbol(..))
+import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),
   AssocBoolOper(..), BoolBinOp(..), EqBinOp(..), Expr(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVN(..), UFuncVV(..),
@@ -59,12 +59,12 @@ indx sm (C c) i = f s
   where
     i' = expr i sm
     s = lookupC (sm ^. stg) (sm ^. ckdb) c
-    f (Corners [] [] [] [b] e) =
+    f (S.Corners [] [] [] [b] e) =
       let e' = symbol e
           b' = symbol b in
       P.Row [P.Row [e', P.Sub (P.Row [b', P.MO P.Comma, i'])]] -- FIXME, extra Row
-    f a@(Variable _) = P.Row [symbol a, P.Sub i']
-    f a@(Label _)    = P.Row [symbol a, P.Sub i']
+    f a@(S.Variable _) = P.Row [symbol a, P.Sub i']
+    f a@(S.Label _)    = P.Row [symbol a, P.Sub i']
 --    f a@(Greek _)  = P.Row [symbol a, P.Sub i']
     f   e          = let e' = symbol e in P.Row [P.Row [e'], P.Sub i']
 indx sm a i = P.Row [P.Row [expr a sm], P.Sub $ expr i sm]

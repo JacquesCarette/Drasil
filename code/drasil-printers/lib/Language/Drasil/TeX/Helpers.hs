@@ -25,10 +25,7 @@ import Data.List (isSuffixOf)
 -- | Helper for adding fencing symbols.
 br, sq, parens, quote :: D -> D
 -- | Curly braces.
-br x = lb <> x <> rb
-  where
-  lb = pure $ text "{"
-  rb = pure $ text "}"
+br x = lbrace <> x <> rbrace
 -- | Square brackets.
 sq x = ls <> x <> rs
   where
@@ -44,6 +41,12 @@ quote x = lq <> x <> rq
   where
   lq = pure $ text "``"
   rq = pure $ text "''"
+
+lbrace, rbrace :: D
+-- | Helper for opening curly brace.
+lbrace = pure $ text "{"
+-- | Helper for closing curly brace.
+rbrace = pure $ text "}"
 
 -- | 0-argument command.
 command0 :: String -> D

@@ -7,7 +7,7 @@ import Text.PrettyPrint (text)
 import Language.Drasil.Printing.LayoutObj (LayoutObj(..))
 import Language.Drasil.TeX.Monad (D, vcat, (%%))
 import Language.Drasil.TeX.Helpers (docclass, command, command1o, command2, command3,
-  usepackage, command0)
+  usepackage, command0, lbrace, rbrace)
 import Language.Drasil.Printing.Helpers (sq, brace)
 
 import Language.Drasil.Config (hyperSettings, fontSize, bibFname)
@@ -94,14 +94,14 @@ addDef SymbDescriptionP1 = command3 "newlist" "symbDescription" "description" "1
 addDef SymbDescriptionP2 = command1o "setlist" (Just "symbDescription") "noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt"
 addDef SaveBox       = command "newsavebox" "\\mybox"
 addDef ResizeExpr    = vcat [
-    command "newcommand" "\\resizeExpression" <> pure (sq "2") <> pure (text "{"),
+    command "newcommand" "\\resizeExpression" <> pure (sq "2") <> lbrace,
     command2 "savebox" "\\mybox" "$#1$",
     command0 "ifdim" <> command0 "wd" <> command0 "mybox" <> pure (text ">#2") <> command0 "linewidth",
     command3 "resizebox" "#2\\textwidth" "!" ("\\usebox" ++ brace "\\mybox"),
     command0 "else",
     command "usebox" "\\mybox",
     command0 "fi",
-    pure (text "}")
+    rbrace
   ]
 
 -- | Generates LaTeX document preamble.

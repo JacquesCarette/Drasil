@@ -75,16 +75,16 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   tryCatch, construct, param, method, getMethod, setMethod, initStmts,
   function, docFunc, buildClass, implementingClass, docClass, commentedClass,
   modFromData, fileDoc, fileFromData, defaultOptSpace, local)
-import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (classVar, 
-  objVarSelf, intClass, buildModule, docMod', contains, bindingError, extFuncAppMixedArgs, 
-  notNull, listDecDef, destructorError, stateVarDef, constVar, litArray, 
-  listSetFunc, extraClass, listAccessFunc, doubleRender, double, openFileR, 
-  openFileW, self, multiAssign, multiReturn, listDec, funcDecDef, 
-  inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', bool, float, 
+import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (classVar,
+  objVarSelf, intClass, buildModule, docMod', contains, bindingError, extFuncAppMixedArgs,
+  notNull, listDecDef, destructorError, stateVarDef, constVar, litArray,
+  listSetFunc, extraClass, listAccessFunc, doubleRender, double, openFileR,
+  openFileW, self, multiAssign, multiReturn, listDec, funcDecDef,
+  inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', bool, float,
   stringRender', string', inherit, implements, functionDoc, intToIndex,
   indexToInt, forEach', global)
-import qualified Drasil.GOOL.LanguageRenderer.CLike as C (notOp, andOp, orOp, inOp, 
-  litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, 
+import qualified Drasil.GOOL.LanguageRenderer.CLike as C (notOp, andOp, orOp, inOp,
+  litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs,
   listSize, varDecDef, setDecDef, extObjDecNew, switch, while)
 import qualified Drasil.GOOL.LanguageRenderer.Macros as M (ifExists, decrement1,
   increment1, runStrategy, stringListVals, stringListLists, notifyObservers',
@@ -384,7 +384,7 @@ instance BooleanExpression SwiftCode where
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
   isin = typeBinExpr inOp bool
-  
+
 instance Comparison SwiftCode where
   (?<) = swiftNumBinExpr (typeBinExpr lessOp bool)
   (?<=) = swiftNumBinExpr (typeBinExpr lessEqualOp bool)
@@ -618,7 +618,7 @@ instance IOStatement SwiftCode where
   getFileInputAll _ v = do
     li <- getLineIndex
     let l = var "l" (listType string)
-    slc <- listSlice swiftContentsVar swiftContentsVal 
+    slc <- listSlice swiftContentsVar swiftContentsVal
       (Just $ litInt (li+1)) Nothing Nothing
     multi [mkStmtNoEnd $ RC.block slc,
       v &= swiftMapFunc swiftContentsVal
@@ -680,14 +680,14 @@ instance VisibilitySym SwiftCode where
 
 instance RenderVisibility SwiftCode where
   visibilityFromData _ = toCode
-  
+
 instance VisibilityElim SwiftCode where
   visibility = unSC
 
 instance MethodTypeSym SwiftCode where
   type MethodType SwiftCode = TypeData
   mType = zoom lensMStoVS
-  
+
 instance OOMethodTypeSym SwiftCode where
   construct = G.construct
 
@@ -783,12 +783,12 @@ instance ModuleSym SwiftCode where
     CP.buildModule modName (do
       lis <- getLangImports
       libis <- getLibImports
-      pure $ vcat $ map (RC.import' . 
-          (langImport :: Label -> SwiftCode (Import SwiftCode))) 
-          (sort $ lis ++ is ++ libis)) 
-      (zoom lensFStoMS swiftStringError) getMainDoc 
+      pure $ vcat $ map (RC.import' .
+          (langImport :: Label -> SwiftCode (Import SwiftCode)))
+          (sort $ lis ++ is ++ libis))
+      (zoom lensFStoMS swiftStringError) getMainDoc
         (map pure fns) (map pure cls)
-  
+
 instance RenderMod SwiftCode where
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
@@ -1001,11 +1001,11 @@ swiftIndexFunc l v' = do
 
 swiftStrideFunc :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r
   -> SValue r
-swiftStrideFunc beg end step = let t = listType int 
+swiftStrideFunc beg end step = let t = listType int
                                    fromArg = var swiftFrom int
                                    toArg = var swiftTo int
                                    byArg = var swiftBy int
-  in cast t (funcAppNamedArgs swiftStride t 
+  in cast t (funcAppNamedArgs swiftStride t
     [(fromArg, beg), (toArg, end), (byArg, step)])
 
 swiftMapFunc :: (OORenderSym r) => SValue r -> SValue r -> SValue r
@@ -1013,13 +1013,13 @@ swiftMapFunc lst f = objMethodCall (onStateValue valueType lst) lst swiftMap [f]
 
 swiftListAddFunc :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r
 swiftListAddFunc i v = let atArg = var swiftAt int
-  in funcAppMixedArgs swiftListAdd (listType $ onStateValue valueType v) 
+  in funcAppMixedArgs swiftListAdd (listType $ onStateValue valueType v)
     [v] [(atArg, i)]
 
 swiftWriteFunc :: (OORenderSym r) => SValue r -> SValue r -> SValue r
 swiftWriteFunc v f = let contentsArg = var swiftContentsOf (obj swiftData)
-  in swiftTryVal $ objMethodCallNamedArgs void f swiftWrite 
-    [(contentsArg, newObj (obj swiftData) [v $. funcFromData (R.func swiftUTF8) 
+  in swiftTryVal $ objMethodCallNamedArgs void f swiftWrite
+    [(contentsArg, newObj (obj swiftData) [v $. funcFromData (R.func swiftUTF8)
     (obj swiftEncoding)])]
 
 swiftReadLineFunc :: (CommonRenderSym r) => SValue r
@@ -1058,7 +1058,7 @@ swiftListSlice vn vo beg end step = do
 
   let (setBeg, begVal) = M.makeSetterVal begName step mbStepV beg (litInt 0)    (listSize vo #- litInt 1) scp
       (setEnd, endVal) = M.makeSetterVal endName step mbStepV end (listSize vo) (litInt (-1)) scp
-      
+
       i = var "i" int
       setToSlice = vn &= swiftMapFunc (swiftStrideFunc begVal endVal step) (lambda [i] (listAccess vo (valueOf i)))
   block [
@@ -1111,7 +1111,7 @@ swiftOpenFile n t = let forArg = var swiftFor (obj swiftSearchDir)
 
 swiftOpenFileHdl :: (OORenderSym r) => SValue r -> VSType r -> SValue r
 swiftOpenFileHdl n t = let forWritingArg = var swiftWriteTo swiftFileType
-  in swiftTryVal $ funcAppNamedArgs swiftFileHdl outfile 
+  in swiftTryVal $ funcAppNamedArgs swiftFileHdl outfile
     [(forWritingArg, swiftOpenFile n t)]
 
 swiftOpenFileWA :: (OORenderSym r) => Bool -> SVariable r -> SValue r ->
@@ -1140,8 +1140,8 @@ swiftCloseFile f' = do
 
 swiftReadFile :: (OORenderSym r) => SVariable r -> SValue r -> MSStatement r
 swiftReadFile v f = let l = var "l" string
-  in tryCatch 
-  (oneLiner $ v &= swiftMapFunc (swiftSplitFunc '\n' $ swiftReadFileFunc f) 
+  in tryCatch
+  (oneLiner $ v &= swiftMapFunc (swiftSplitFunc '\n' $ swiftReadFileFunc f)
     (lambda [l] (swiftSplitFunc ' ' (valueOf l))))
   (oneLiner $ throw "Error reading from file.")
 
@@ -1165,7 +1165,7 @@ swiftSetDec dec v' = do
       bind Dynamic = dynamic :: SwiftCode (Permanence SwiftCode)
       p = bind $ variableBind v
   mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
-    <+> text (swiftSet ++ (replaceBrackets $ getTypeString (variableType v))))
+    <+> text (swiftSet ++ replaceBrackets (getTypeString (variableType v))))
 
 replaceBrackets :: String -> String
 replaceBrackets str = "<" ++ (init . tail) str ++ ">"
@@ -1196,8 +1196,8 @@ swiftParam :: (CommonRenderSym r) => Doc -> r (Variable r) -> Doc
 swiftParam io v = swiftNoLabel <+> RC.variable v <> swiftTypeSpec <+> io
   <+> RC.type' (variableType v)
 
-swiftMethod :: Label -> SwiftCode (Visibility SwiftCode) -> 
-  SwiftCode (Permanence SwiftCode) -> MSMthdType SwiftCode -> 
+swiftMethod :: Label -> SwiftCode (Visibility SwiftCode) ->
+  SwiftCode (Permanence SwiftCode) -> MSMthdType SwiftCode ->
   [MSParameter SwiftCode] -> MSBody SwiftCode -> SMethod SwiftCode
 swiftMethod n s p t ps b = do
   tp <- t
@@ -1207,8 +1207,8 @@ swiftMethod n s p t ps b = do
   mn <- zoom lensMStoFS getModuleName
   let excs = findWithDefault [] (qualName mn n) mem
   mthdFromData Pub (vcat [
-    RC.visibility s <+> RC.perm p <+> swiftFunc <+> text n <> 
-      parens (parameterList pms) <+> emptyIfNull excs throwsLabel <+> 
+    RC.visibility s <+> RC.perm p <+> swiftFunc <+> text n <>
+      parens (parameterList pms) <+> emptyIfNull excs throwsLabel <+>
       swiftRetType' <+> RC.type' tp <+> bodyStart,
     indent $ RC.body bod,
     bodyEnd])

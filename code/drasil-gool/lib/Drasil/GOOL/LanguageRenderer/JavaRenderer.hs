@@ -266,7 +266,6 @@ instance BinaryOpSym JavaCode where
   moduloOp = G.moduloOp
   andOp = C.andOp
   orOp = C.orOp
-  inOp = inPrec jContains
 
 instance OpElim JavaCode where
   uOp = opDoc . unJC
@@ -379,7 +378,6 @@ instance BooleanExpression JavaCode where
   (?!) = typeUnExpr notOp bool
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
-  isin = typeBinExpr inOp bool
 
 instance Comparison JavaCode where
   (?<) = typeBinExpr lessOp bool

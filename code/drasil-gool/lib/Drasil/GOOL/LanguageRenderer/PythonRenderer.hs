@@ -257,7 +257,6 @@ instance BinaryOpSym PythonCode where
   moduloOp = G.moduloOp
   andOp = andPrec pyAnd
   orOp = orPrec pyOr
-  inOp = inPrec pyIn
 
 instance OpElim PythonCode where
   uOp = opDoc . unPC
@@ -377,7 +376,6 @@ instance BooleanExpression PythonCode where
   (?!) = typeUnExpr notOp bool
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
-  isin = typeBinExpr inOp bool
 
 instance Comparison PythonCode where
   (?<) = typeBinExpr lessOp bool
@@ -458,7 +456,7 @@ instance List PythonCode where
   indexOf = CP.indexOf pyIndex
 
 instance Set PythonCode where
-  contains a b = isin b a
+  contains a b = (typeBinExpr (inPrec pyIn) bool) b a
 
 instance InternalList PythonCode where
   listSlice' b e s vn vo = pyListSlice vn vo (getVal b) (getVal e) (getVal s)

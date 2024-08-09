@@ -83,7 +83,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (classVar,
   inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', bool, float,
   stringRender', string', inherit, implements, functionDoc, intToIndex,
   indexToInt, forEach', global)
-import qualified Drasil.GOOL.LanguageRenderer.CLike as C (notOp, andOp, orOp, inOp,
+import qualified Drasil.GOOL.LanguageRenderer.CLike as C (notOp, andOp, orOp,
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs,
   listSize, varDecDef, setDecDef, extObjDecNew, switch, while)
 import qualified Drasil.GOOL.LanguageRenderer.Macros as M (ifExists, decrement1,
@@ -267,7 +267,6 @@ instance BinaryOpSym SwiftCode where
   moduloOp = G.moduloOp
   andOp = C.andOp
   orOp = C.orOp
-  inOp = C.inOp
 
 instance OpElim SwiftCode where
   uOp = opDoc . unSC
@@ -383,7 +382,6 @@ instance BooleanExpression SwiftCode where
   (?!) = typeUnExpr notOp bool
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
-  isin = typeBinExpr inOp bool
 
 instance Comparison SwiftCode where
   (?<) = swiftNumBinExpr (typeBinExpr lessOp bool)

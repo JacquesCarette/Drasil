@@ -89,6 +89,7 @@ our knowledge capture mechanisms. This should come as no surprise and follows
 from our general process for developing the Drasil framework.
 
 \subsection{Capturing Knowledge via Chunks}
+\label{sec:kcChunk}
 
 We begin by borrowing and re-purposing the \emph{chunk} term from Literate 
 Programming (LP) and use it to create a simplified, extensible, and ever 
@@ -254,23 +255,89 @@ be seen in Figure~\ref{fig:accelU} with some additional derived unit types
 Now we have almost everything we need to finish our definition of Newton's 
 second law. Everything thus far has been defined in natural language using our 
 \codeH{Sentence} DSL, but it is not well-suited to the one piece we are 
-currently missing: a way to define expressions relating chunks in a 
-mathematics context.
+currently missing: a way to define expressions relating chunks in a universal 
+\ds{language agnostic?} (mathematics) context.
 
 \subsection{Relating Chunks via Expressions}
 \label{sec:expr}
 
 Continuing our Newton's Second Law example from Section~\ref{sec:chunky}, we 
-need a means to define how force is calculated. We know it is calculated 
-relative to mass and acceleration, so we need a way to capture that, preferably 
+need a means to capture how force is calculated. We know it is calculated 
+relative to mass and acceleration, so we need a way to encode that, preferably 
 in an operational manner. We also know acceleration is itself derived from 
 time and velocity, which is derived from time and position.
 
-\ds{TODO: Explain the Expr language -- it is essentially an expression language
-that captures a host of mathematical operations and allows them to be applied 
-to chunks as a whole, rather than just the symbolic representations, so we can 
-preserve that captured relationship and describe it anywhere the chunk is used 
-throughout the software we are building with Drasil.}
+When thinking about the types of information we would like to encode with 
+expressions, we have some obvious candidates. We should be able to encode 
+common arithmetic operations (addition, subtraction, multiplication, division, 
+exponentiation, etc.), boolean operations (and, or, not, etc.), comparisons 
+(equal, not equal, less than, greater than), trigonometric functions (sin, tan, 
+cos, arctan, etc.), calculus (derivation, integration, etc.), and vector/matrix 
+operations (dot product, cross product, etc.). For the sake of our example 
+we'll focus on only those we need to define Newton's Second Law of motion: 
+multiplication and derivatives.
+
+\fig{
+\lstinputlisting[language=Haskell, linerange={194-202}, 
+firstnumber=194]{code/Expr.hs}
+}{Defining real number multiplication in \codeH{Expr}}{fig:mulRe}
+
+As an aside, we will elide details on how we arrived at the current 
+implementation of the expression DSL known as \codeH{Expr}, but suffice to say 
+it was driven by a practical, ``lowest common denominator" approach to 
+developing the operations that could be encoded and factoring out commonalities 
+much the same way we did with the rest of the case studies. With that in mind, 
+we have encoded multiplication (for real numbers) as seen in 
+Figure~\ref{fig:mulRe}. \codeH{AssocA} refers to an associative arithmetic 
+operator which can be applied across a list of expressions (in this case, 
+\codeH{mulRe}, though addition and other associative operations look very 
+similar). Derivation is much simpler to encode, as it is simply a relationship 
+between two existing chunks, ie. \codeH{deriv a b} implies taking the 
+derivative of \codeH{a} with respect to \codeH{b}.
+
+\fig{
+\lstinputlisting[language=Haskell, linerange={16-16, 20-23}, 
+numbers=none]{code/PhysicsEquations.hs}
+}{Encoding Newton's second law of motion}{fig:newton}
+
+Continuing our example, we see (Figure~\ref{fig:newton}) it is fairly trivial 
+to encode the expression for Newton's Second Law using the \codeH{Expr} DSL. We 
+are still not done building our Newton's Second Law chunk however, as this 
+specific law should be referable by its own identifier. It is not simply 
+``force", nor the relationship between mass and acceleration, but a combination 
+of both with its own natural language semantics that allow us to refer to it 
+specifically. The full definition for this particular chunk can then be found 
+in Figure~\ref{fig:newtonChunk}. The chunk is defined relative to force and the 
+expression captured in Figure~\ref{fig:newton}, alongside a new identifier and 
+description. Notice we are building off of other chunks throughout each piece 
+of the chunk's definition, thus giving us perfect traceability from beginning 
+to end, regardless of whether we are looking at a defining expression or 
+natural language description.
+
+\fig{
+\lstinputlisting[language=Haskell, linerange={34-42}, 
+numbers=none]{code/PhysicsEquations.hs}
+}{Newton's second law of motion as a \emph{Chunk}}{fig:newtonChunk}
+
+The \codeH{Expr} DSL grants us flexibility in defining relationships without 
+imposing any particular structure on a chunk other than ``contains an 
+\codeH{Expr}", or more specifically ``is modeled using an \codeH{Expr}." Our 
+example also shows us that a few simple chunk types can be combined repeatedly 
+to build much more robust, complex, and information-dense chunks. On the other 
+hand, encoding even a relatively simple theory like Newton's Second Law of 
+motion requires us to define chunks all the way down to the fundamentals. 
+Luckily, that is another area where chunks shine as they are infinitely 
+reusable. Once a chunk has been defined and added to our knowledge-base, we 
+never need to redefine it. We simply use it wherever it is needed.
+
+On the topic of using chunks, we now need a means for taking our chunks and 
+structuring them such that we can actually do something useful with them. For 
+example, how would we go from chunks to \sfs{}? Look forward to that in 
+Section~\ref{sec:recipes}.
+
+\subsection{Chunk Summary}
+
+\ds{TODO: Repeat some stuff, and give a general overview of the hierarchy?}
 
 \section{Recipes: Codifying Structure}
 \label{sec:recipes}

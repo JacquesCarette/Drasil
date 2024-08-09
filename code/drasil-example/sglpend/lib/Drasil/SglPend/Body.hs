@@ -28,7 +28,7 @@ import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Data.Drasil.Quantities.Physics (physicscon)
 
 import Drasil.DblPend.Assumptions (assumpSingle)
-import Drasil.DblPend.Body (justification, charsOfReader,
+import Drasil.DblPend.Body (justification, externalLinkRef, charsOfReader,
   sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms,
   userCharacteristicsIntro)
 import qualified Drasil.DblPend.Body as DPD (tMods)
@@ -36,6 +36,7 @@ import Drasil.DblPend.Concepts (concepts, rod)
 import Drasil.DblPend.Requirements (nonFuncReqs)
 import Drasil.DblPend.Unitals (acronyms)
 import Drasil.DblPend.References (citations)
+
 
 import Drasil.SglPend.Figures (figMotion, sysCtxFig1)
 import Drasil.SglPend.Goals (goals, goalsInputs)
@@ -137,7 +138,11 @@ symbMap = cdb (map (^. output) iMods ++ map qw symbols)
    map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz] ++
    [nw algorithm] ++ map nw compcon ++ map nw educon ++ map nw prodtcon)
   (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs
-  iMods genDefns tMods concIns [] [] ([] :: [Reference])
+  iMods genDefns tMods concIns [] [] allRefs
+
+-- | Holds all references and links used in the document.
+allRefs :: [Reference]
+allRefs = [externalLinkRef]
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw acronyms ++ map nw symbols) ([] :: [ConceptChunk])

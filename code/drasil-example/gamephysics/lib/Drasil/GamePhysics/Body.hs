@@ -155,7 +155,11 @@ symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll) (nw gamePhysics :
   ++ [nw algorithm] ++ map nw derived ++ map nw fundamentals
   ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw defSymbols ++ srsDomains ++ map cw iMods) units dataDefs
-  iMods generalDefns tMods concIns section [] (offShelfSolRefs ++ [pymunk])
+  iMods generalDefns tMods concIns section [] allRefs
+
+  -- | Holds all references and links used in the document.
+allRefs :: [Reference]
+allRefs = [externalLinkRef, pymunk] ++ offShelfSolRefs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)
@@ -182,8 +186,15 @@ para1_introduction_intro = foldlSent
   plural project, S "Using an", phrase openSource, 
   phrase physLib,
   S "that is reliable and free will cut down development costs and lead",
-  S "to better quality", plural product_]
+  S "to better quality" +:+. plural product_ ,
+  S "The document describes the program" ,
+  S " based on the original, manually created version of" +:+
+  namedRef externalLinkRef (S "GamePhysics")]
 
+externalLinkRef :: Reference
+externalLinkRef = makeURI "GamePhysicsSRSLink" 
+  "https://github.com/smiths/caseStudies/blob/master/CaseStudies/gamephys" 
+  (shortname' $ S "GamePhysicsSRSLink")
 -------------------------------
 -- 2.1 : Purpose of Document --
 -------------------------------

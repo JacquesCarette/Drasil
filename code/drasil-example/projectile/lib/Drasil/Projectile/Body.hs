@@ -109,10 +109,17 @@ justification = foldlSent [atStart projectile, phrase motion, S "is a common" +:
   phrase program, S "to solve and model these types of" +:+. plural problem, 
   S "Common", plural example `S.of_` phraseNP (combineNINI projectile motion), 
   S "include" +:+. foldlList Comma List projectileExamples,
-  atStartNP (the program), S "documented here is called", phrase projectileTitle]
+  S "The document describes the program called", phrase projectileTitle,
+  S ", which is based on the original, manually created version of" +:+
+  namedRef externalLinkRef (S "Projectile")]
 scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)),
   sParen (getAcc twoD), phraseNP (combineNINI projectile motion), phrase problem, 
   S "with", phrase constAccel]
+
+externalLinkRef :: Reference
+externalLinkRef = makeURI "projectileSRSLink" 
+  "https://github.com/smiths/caseStudies/tree/master/CaseStudies/projectile" 
+  (shortname' $ S "projectileSRSLink")
 
 projectileExamples :: [Sentence]
 projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles" `sC` 
@@ -159,7 +166,11 @@ symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
     [nw sciCompS] ++ unitalIdeas ++ map nw acronyms ++ map nw symbols ++ 
     map nw educon ++ map nw [metre, radian, second] ++ map nw compcon) 
   (cw pi_ : map cw constrained ++ srsDomains) (map unitWrapper [metre, radian, second]) 
-  dataDefs iMods genDefns tMods concIns [] [] []
+  dataDefs iMods genDefns tMods concIns [] [] allRefs
+
+-- | Holds all references and links used in the document.
+allRefs :: [Reference]
+allRefs = [externalLinkRef]
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms ++ map nw symbols)
@@ -295,3 +306,4 @@ constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
 acronyms :: [CI]
 acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
   physSyst, requirement, Doc.srs, refBy, refName, thModel, typUnc]
+

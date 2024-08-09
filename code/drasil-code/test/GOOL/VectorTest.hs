@@ -3,7 +3,8 @@ module GOOL.VectorTest (vectorTest) where
 import Drasil.GOOL (GSProgram, SVariable, SMethod, OOProg, ProgramSym(..),
   FileSym(..), BodySym(..), BlockSym(..), TypeSym(..), mainVar, Literal(..),
   VectorType(..), VectorDecl(..), VectorThunk(..), VectorExpression(..),
-  DeclStatement(..), ThunkAssign(..), MethodSym(..), ModuleSym(..))
+  DeclStatement(..), ControlStatement(..), ThunkAssign(..), Comparison(..),
+  VariableValue(..), MethodSym(..), ModuleSym(..))
 
 vectorTest :: OOProg r => GSProgram r
 vectorTest = prog "VectorTest" "" [fileDoc $ buildModule "VectorTest" []
@@ -23,4 +24,7 @@ main = mainFunction $ body [block [vecDecDef v1 [litDouble 1, litDouble 1.5],
   vecDecDef v2 [litDouble 0, litDouble (-1)],
   thunkAssign v1 (vecAdd (vecScale (litDouble 2) (vecThunk v1)) (vecThunk v2)),
   varDec x,
-  thunkAssign x (vecDot (vecThunk v1) (vecThunk v2))]]
+  thunkAssign x (vecDot (vecThunk v1) (vecThunk v2)),
+
+  assert (valueOf (mainVar "x" double) ?== litDouble (-2)) 
+    (litString "Dot product of v1 and v2 should be -2.")]]

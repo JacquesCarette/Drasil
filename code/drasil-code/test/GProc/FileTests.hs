@@ -4,8 +4,8 @@ module GProc.FileTests (fileTests) where
 
 import Drasil.GProc (GSProgram, MSBlock, MSStatement, SMethod, ProcProg,
   ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), TypeSym(..),
-  DeclStatement(..), IOStatement(..), mainVar, Literal(..), VariableValue(..),
-  MethodSym(..), ModuleSym(..))
+  DeclStatement(..), IOStatement(..), ControlStatement(..), mainVar, Literal(..), 
+  VariableValue(..), Comparison(..), List(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return, print, log, exp, sin, cos, tan)
 
 -- | Creates a program in GOOL to test reading and writing to files.
@@ -36,6 +36,7 @@ writeStory = block [
   getFileInput (valueOf $ mainVar "fileToRead" infile)
                     (mainVar "fileLine" string),
   discardFileLine (valueOf $ mainVar "fileToRead" infile),
+  assert (valueOf (mainVar "fileLine" string) ?!= litString "") (litString "First line should not be empty."),
   listDec 0 (mainVar "fileContents" (listType string))]
 
 -- | Generates functions to read from a file.
@@ -48,4 +49,6 @@ readStory = getFileInputAll (valueOf $ mainVar "fileToRead" infile)
 goodBye :: (ProcProg r) => MSBlock r
 goodBye = block [
   printLn (valueOf $ mainVar "fileContents" (listType string)),
+  assert (listSize (valueOf (mainVar "fileContents" (listType string))) ?> litInt 0) 
+  (litString "fileContents should not be empty."),
   closeFile (valueOf $ mainVar "fileToRead" infile)]

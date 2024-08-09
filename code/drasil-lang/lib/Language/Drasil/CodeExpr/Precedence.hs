@@ -95,6 +95,7 @@ eprec Field{}                = 210
 eprec Case{}                 = 200
 eprec Matrix{}               = 220
 eprec Set{}                  = 220
+eprec (Variable _ _)         = 220
 eprec (UnaryOp fn _)         = prec1 fn
 eprec (UnaryOpB fn _)        = prec1B fn
 eprec (UnaryOpVV fn _)       = prec1VV fn

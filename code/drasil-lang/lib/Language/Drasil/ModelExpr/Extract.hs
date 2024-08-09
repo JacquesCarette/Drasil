@@ -38,6 +38,7 @@ meNames (ESBBinaryOp _ _ s)   = meNames s
 meNames (Operator _ _ e)      = meNames e
 meNames (Matrix a)            = concatMap (concatMap meNames) a
 meNames (Set a)               = concatMap meNames a
+meNames (Variable _ e)        = meNames e
 meNames (RealI c b)           = c : meNamesRI b
 meNames (ForAll _ _ de)       = meNames de
 
@@ -80,6 +81,7 @@ meNames' (ESBBinaryOp _ _ s)   = meNames' s
 meNames' (Operator _ _ e)      = meNames' e
 meNames' (Matrix a)            = concatMap (concatMap meNames') a
 meNames' (Set a)               = concatMap meNames' a
+meNames' (Variable _ e)        = meNames' e
 meNames' (RealI c b)           = c : meNamesRI' b
 meNames' (ForAll _ _ de)       = meNames' de
 

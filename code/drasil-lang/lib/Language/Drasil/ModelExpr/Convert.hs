@@ -98,6 +98,7 @@ expr (E.FCall u es)          = FCall u (map expr es)
 expr (E.Case c ces)          = Case c (map (bimap expr expr) ces)
 expr (E.Matrix es)           = Matrix $ map (map expr) es
 expr (E.Set e)               = Set $ map expr e
+expr (E.Variable s e)        = Variable s $ expr e
 expr (E.UnaryOp u e)         = UnaryOp (uFunc u) (expr e)
 expr (E.UnaryOpB u e)        = UnaryOpB (uFuncB u) (expr e)
 expr (E.UnaryOpVV u e)       = UnaryOpVV (uFuncVV u) (expr e)

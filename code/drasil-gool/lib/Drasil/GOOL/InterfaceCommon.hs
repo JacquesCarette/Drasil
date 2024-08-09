@@ -12,7 +12,7 @@ module Drasil.GOOL.InterfaceCommon (
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp,
-  exists, List(..), InternalList(..), listSlice, listIndexExists, at,
+  exists, List(..), Set(..), InternalList(..), listSlice, listIndexExists, at,
   ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
@@ -41,7 +41,7 @@ class (VectorType r, VectorDecl r, VectorThunk r,
   IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r,
   CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r,
   MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r,
-  BooleanExpression r, Comparison r, ValueExpression r, List r, TypeElim r,
+  BooleanExpression r, Comparison r, ValueExpression r, List r, Set r, TypeElim r,
   VariableElim r, MethodSym r, ScopeSym r
   ) => SharedProg r
 
@@ -81,6 +81,7 @@ class TypeSym r where
   infile        :: VSType r
   outfile       :: VSType r
   listType      :: VSType r -> VSType r
+  setType       :: VSType r -> VSType r
   arrayType     :: VSType r -> VSType r
   listInnerType :: VSType r -> VSType r
   funcType      :: [VSType r] -> VSType r -> VSType r
@@ -150,6 +151,7 @@ class (ValueSym r) => Literal r where
   litString :: String -> SValue r
   litArray  :: VSType r -> [SValue r] -> SValue r
   litList   :: VSType r -> [SValue r] -> SValue r
+  litSet    :: VSType r -> [SValue r] -> SValue r
 
 litZero :: (TypeElim r, Literal r) => VSType r -> SValue r
 litZero t = do
@@ -213,6 +215,7 @@ class (ValueSym r) => BooleanExpression r where
   infixl 2 ?&&
   (?||) :: SValue r -> SValue r -> SValue r
   infixl 1 ?||
+  isin :: SValue r -> SValue r -> SValue r
 
 class (ValueSym r) => Comparison r where
   (?<)  :: SValue r -> SValue r -> SValue r
@@ -294,6 +297,11 @@ class (ValueSym r) => List r where
   --   Arguments are: List, Value
   indexOf :: SValue r -> SValue r -> SValue r
 
+class (ValueSym r) => Set r where
+  --fromList :: SValue r -> SValue r -> SValue r
+  -- set, element
+  contains :: SValue r -> SValue r -> SValue r
+
 class (ValueSym r) => InternalList r where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) 
     -> SVariable r -> SValue r -> MSBlock r
@@ -349,6 +357,7 @@ type MSStatement a = MS (a (Statement a))
 class (ValueSym r) => StatementSym r where
   type Statement r
   valStmt :: SValue r -> MSStatement r -- converts value to statement
+  emptyStmt :: MSStatement r
   multi     :: [MSStatement r] -> MSStatement r
 
 class (VariableSym r, StatementSym r) => AssignStatement r where
@@ -376,6 +385,8 @@ class (VariableSym r, StatementSym r) => DeclStatement r where
   varDecDef    :: SVariable r -> SValue r -> MSStatement r
   listDec      :: Integer -> SVariable r -> MSStatement r
   listDecDef   :: SVariable r -> [SValue r] -> MSStatement r
+  setDec       :: SVariable r -> MSStatement r
+  setDecDef    :: SVariable r -> SValue r -> MSStatement r
   arrayDec     :: Integer -> SVariable r -> MSStatement r
   arrayDecDef  :: SVariable r -> [SValue r] -> MSStatement r
   constDecDef  :: SVariable r -> SValue r -> MSStatement r
@@ -509,6 +520,7 @@ convType Double = double
 convType Char = char
 convType String = string
 convType (List t) = listType (convType t)
+convType (Set t) = setType (convType t)
 convType (Array t) = arrayType (convType t)
 convType (Func ps r) = funcType (map convType ps) (convType r)
 convType Void = void

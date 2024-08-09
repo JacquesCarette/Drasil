@@ -1,15 +1,15 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
 module Drasil.GOOL.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   doxClass, doxMod, docMod', modDoc', functionDoc, extVar, classVar, objVarSelf,
-  indexOf, listAddFunc, discardFileLine, intClass, funcType, buildModule,
+  indexOf, contains, containsInt, listAddFunc, discardFileLine, intClass, funcType, buildModule,
   arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, forEach',
   docMain, mainFunction, buildModule', call', listSizeFunc, listAccessFunc',
   string, constDecDef, docInOutFunc, bindingError, extFuncAppMixedArgs, notNull,
-  listDecDef, destructorError, stateVarDef, constVar, litArray, listSetFunc,
+  listDecDef, destructorError, stateVarDef, constVar, litArray, litSet, listSetFunc, litSetFunc,
   extraClass, listAccessFunc, doubleRender, double, openFileR, openFileW,
   stateVar, self, multiAssign, multiReturn, listDec, funcDecDef, inOutCall,
   forLoopError, mainBody, inOutFunc, docInOutFunc', boolRender, bool,
-  floatRender, float, stringRender', string', inherit, implements, listSize,
+  floatRender, float, stringRender', string', inherit, implements, listSize, setDecDef, setDec,
   listAdd, listAppend, intToIndex, indexToInt, intToIndex', indexToInt',
   varDecDef, openFileR', openFileW', openFileA', argExists, global
 ) where
@@ -24,9 +24,9 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, Body, MSBody, VSFunction,
   ValueSym(valueType), Comparison(..), (&=), ControlStatement(returnStmt),
   VisibilitySym(..), MethodSym(function), funcApp)
 import qualified Drasil.GOOL.InterfaceCommon as IC (argsList,
-  TypeSym(int, double, string, listType, arrayType, void), locVar,
-  Literal(litTrue, litFalse, litList, litInt, litString),
-  VariableValue(valueOf), StatementSym(valStmt), DeclStatement(varDec,
+  TypeSym(int, bool, double, string, listType, arrayType, void), locVar,
+  Literal(litTrue, litFalse, litList, litSet, litInt, litString),
+  VariableValue(valueOf), StatementSym(valStmt, emptyStmt), DeclStatement(varDec,
   varDecDef, constDecDef), List(intToIndex, indexToInt), ParameterSym(param,
   pointerParam), MethodSym(mainFunction), AssignStatement(assign))
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
@@ -39,7 +39,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   MethodTypeSym(mType), RenderMethod(commentedFunc, mthdFromData),
   BlockCommentSym(..))
 import qualified Drasil.GOOL.RendererClassesCommon as S (RenderBody(multiBody),
-  RenderValue(call), RenderStatement(stmt, emptyStmt),
+  RenderValue(call), RenderStatement(stmt),
   InternalAssignStmt(multiAssign), InternalControlStmt(multiReturn),
   InternalListFunc(listSizeFunc, listAddFunc, listAppendFunc))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (ImportElim(..),
@@ -141,6 +141,12 @@ objVarSelf = IG.objVar IG.self
 
 indexOf :: (OORenderSym r) => Label -> SValue r -> SValue r -> SValue r
 indexOf f l v = IC.indexToInt $ IG.objAccess l (IG.func f IC.int [v])
+
+contains :: (OORenderSym r) => Label -> SValue r -> SValue r -> SValue r
+contains f s v = IG.objAccess s (IG.func f IC.bool [v]) 
+
+containsInt :: (OORenderSym r) => Label -> Label -> SValue r -> SValue r -> SValue r
+containsInt f fn s v = contains f s v ?!= IG.objAccess s (IG.func fn IC.bool [])
 
 listAddFunc :: (OORenderSym r) => Label -> SValue r -> SValue r -> VSFunction r
 listAddFunc f i v = IG.func f (IC.listType $ onStateValue valueType v) 
@@ -325,6 +331,18 @@ listDecDef v vals = do
   let lst = IC.litList (listInnerType $ return $ variableType vr) vals
   IC.varDecDef (return vr) lst
 
+setDecDef :: (OORenderSym r) => SVariable r -> [SValue r] -> MSStatement r
+setDecDef v vals = do
+  vr <- zoom lensMStoVS v 
+  let st = IC.litSet (listInnerType $ return $ variableType vr) vals
+  IC.varDecDef (return vr) st
+
+setDec :: (OORenderSym r) => (r (Value r) -> Doc) -> SValue r -> SVariable r -> MSStatement r
+setDec f vl v = do 
+  sz <- zoom lensMStoVS vl
+  vd <- IC.varDec v
+  mkStmt (RC.statement vd <> f sz)
+
 destructorError :: String -> String
 destructorError l = "Destructors not allowed in " ++ l
 
@@ -344,6 +362,14 @@ litArray :: (CommonRenderSym r) => (Doc -> Doc) -> VSType r -> [SValue r] -> SVa
 litArray f t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t) 
   (f $ valueList elems))
 
+litSet :: (OORenderSym r) => (Doc -> Doc) -> (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
+litSet f1 f2 t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t) 
+  (f1 $ f2 $ valueList elems))
+
+litSetFunc :: (OORenderSym r) => String -> VSType r -> [SValue r] -> SValue r
+litSetFunc s t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t) 
+  (text s <> parens (valueList elems)))
+
 -- Python, C#, C++, and Swift--
 
 extraClass :: (OORenderSym r) =>  Label -> Maybe Label -> [CSStateVar r] ->
@@ -360,6 +386,7 @@ listSetFunc :: (CommonRenderSym r) => (Doc -> Doc -> Doc) -> SValue r -> SValue 
 listSetFunc f v idx setVal = join $ on2StateValues (\i toVal -> funcFromData
   (f (RC.value i) (RC.value toVal)) (onStateValue valueType v)) (intValue idx)
   setVal
+
 
 -- Java, C#, and Swift --
 
@@ -547,7 +574,7 @@ varDecDef v e = do
   modify $ useVarName (variableName v')
   def e
   where
-    def Nothing = S.emptyStmt
+    def Nothing = IC.emptyStmt
     def (Just d) = IC.assign v d
 
 fileOpen, fileR, fileW, fileA :: Label

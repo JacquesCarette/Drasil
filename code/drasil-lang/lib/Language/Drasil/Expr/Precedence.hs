@@ -4,7 +4,7 @@ module Language.Drasil.Expr.Precedence where
 import Language.Drasil.Expr.Lang (Expr(..),
   ArithBinOp(..), BoolBinOp, EqBinOp(..), LABinOp, OrdBinOp, VVNBinOp,
   UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
-  AssocBoolOper(..), AssocArithOper(..), VVVBinOp, NVVBinOp)
+  AssocBoolOper(..), AssocArithOper(..), VVVBinOp, NVVBinOp, ESSBinOp, ESBBinOp, AssocConcatOper(..))
 
 -- These precedences are inspired from Haskell/F# 
 -- as documented at http://kevincantu.org/code/operators.html
@@ -44,6 +44,14 @@ prec2VVN _ = 190
 prec2NVV :: NVVBinOp -> Int
 prec2NVV _ = 190
 
+-- | prec2ESS - precedence for Element->Set->Set-related binary operations.
+prec2ESS :: ESSBinOp -> Int
+prec2ESS _  = 130
+
+-- | prec2ESS - precedence for Element->Set->Bool-related binary operations.
+prec2ESB :: ESBBinOp -> Int
+prec2ESB _  = 130
+
 -- | precA - precedence for arithmetic-related Binary-Associative (Commutative) operators.
 precA :: AssocArithOper -> Int
 precA Mul = 190
@@ -53,6 +61,10 @@ precA Add = 180
 precB :: AssocBoolOper -> Int
 precB And = 120
 precB Or = 110
+
+precC :: AssocConcatOper -> Int
+precC SUnion = 120
+
 
 -- | prec1 - precedence of unary operators.
 prec1 :: UFunc -> Int
@@ -77,10 +89,13 @@ eprec :: Expr -> Int
 eprec Lit{}                  = 500
 eprec (AssocA op _)          = precA op
 eprec (AssocB op _)          = precB op
+eprec (AssocC op _)          = precC op
 eprec C{}                    = 500
 eprec FCall{}                = 210
 eprec Case{}                 = 200
 eprec Matrix{}               = 220
+eprec Set{}                  = 220
+eprec (Variable _ _)         = 220
 eprec (UnaryOp fn _)         = prec1 fn
 eprec (UnaryOpB fn _)        = prec1B fn
 eprec (UnaryOpVV fn _)       = prec1VV fn
@@ -94,4 +109,6 @@ eprec (OrdBinaryOp bo _ _)   = prec2Ord bo
 eprec (VVVBinaryOp bo _ _)   = prec2VVV bo
 eprec (VVNBinaryOp bo _ _)   = prec2VVN bo
 eprec (NVVBinaryOp bo _ _)   = prec2NVV bo
+eprec (ESSBinaryOp bo _ _)   = prec2ESS bo
+eprec (ESBBinaryOp bo _ _)   = prec2ESB bo
 eprec RealI{}                = 170

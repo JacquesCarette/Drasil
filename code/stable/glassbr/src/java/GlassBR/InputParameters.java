@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
+import java.util.Set;
 
 /** \brief Structure for holding the input values and derived values
 */
@@ -255,6 +256,36 @@ public class InputParameters {
             System.out.print(" and ");
             System.out.print(910.0);
             System.out.print(" (w_max)");
+            System.out.println(".");
+            throw new Exception("InputError");
+        }
+        Set<String> set_glassTy = Set.of("AN", "FT", "HS");
+        if (!(set_glassTy.contains(this.g))) {
+            System.out.print("g has value ");
+            System.out.print(this.g);
+            System.out.print(", but is expected to be ");
+            System.out.print("an element of the set ");
+            System.out.print("{ ");
+            for (String set_i1 : set_glassTy) {
+                System.out.print(set_i1);
+                System.out.print(" ");
+            }
+            System.out.print("}");
+            System.out.println(".");
+            throw new Exception("InputError");
+        }
+        Set<Double> set_nomThick = Set.of(2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0);
+        if (!(set_nomThick.contains(this.t))) {
+            System.out.print("t has value ");
+            System.out.print(this.t);
+            System.out.print(", but is expected to be ");
+            System.out.print("an element of the set ");
+            System.out.print("{ ");
+            for (double set_i1 : set_nomThick) {
+                System.out.print(set_i1);
+                System.out.print(" ");
+            }
+            System.out.print("}");
             System.out.println(".");
             throw new Exception("InputError");
         }

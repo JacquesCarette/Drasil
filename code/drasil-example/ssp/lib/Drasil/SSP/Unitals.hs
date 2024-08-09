@@ -84,7 +84,7 @@ outputs = [fs]
 
 {-
 monotonicIn :: [Constraint]  --FIXME: Move this?
-monotonicIn = [physc $ \_ -> -- FIXME: Hack with "index" !
+monotonicIn = [physRange $ \_ -> -- FIXME: Hack with "index" !
   (idx xi (sy index) $< idx xi (sy index + 1) $=> idx yi (sy index) $< idx yi (sy index + 1))]
 -}
 
@@ -152,7 +152,7 @@ effCohesion = uqc "c'" (cn "effective cohesion")
 fricAngle = uqc "varphi'" (cn "effective angle of friction")
   ("the angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
-  (prime vPhi) degree Real [physc $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 90)]
+  (prime vPhi) degree Real [physRange $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 90)]
   (exactDbl 25) defaultUncrt
 
 dryWeight = uqc "gamma" (cn "soil dry unit weight")

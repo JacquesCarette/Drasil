@@ -16,7 +16,7 @@ import Drasil.GOOL.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
   TypeSym(..), TypeElim(..), VariableSym(..), var, locVar, VariableElim(..),
   ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..),
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..), Set(..),
   InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
@@ -66,7 +66,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (bool,
   varDecDef, openFileR', openFileW', openFileA', multiReturn, multiAssign,
   inOutCall, mainBody, argExists, forEach')
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (litTrue, litFalse,
-  notOp, andOp, orOp, inlineIf, while)
+  notOp, andOp, orOp, inOp, inlineIf, while)
 import qualified Drasil.GOOL.LanguageRenderer.AbstractProc as A (fileDoc,
   fileFromData, buildModule, docMod, modFromData, listInnerType, arrayElem,
   funcDecDef, function)
@@ -178,6 +178,7 @@ instance TypeSym JuliaCode where
   infile = jlInfileType
   outfile = jlOutfileType
   listType = jlListType
+  setType = listType
   arrayType = listType -- Treat arrays and lists the same, as in Python
   listInnerType = A.listInnerType
   funcType = CP.funcType
@@ -237,6 +238,7 @@ instance BinaryOpSym JuliaCode where
   moduloOp = G.moduloOp
   andOp = C.andOp
   orOp = C.orOp
+  inOp = C.inOp
 
 instance OpElim JuliaCode where
   uOp = opDoc . unJLC
@@ -287,6 +289,7 @@ instance Literal JuliaCode where
   litString = G.litString
   litArray = CP.litArray brackets
   litList = litArray
+  litSet = litList
 
 instance MathConstant JuliaCode where
   pi :: SValue JuliaCode
@@ -336,6 +339,7 @@ instance BooleanExpression JuliaCode where
   (?!) = typeUnExpr notOp bool
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
+  isin = typeBinExpr orOp bool
 
 instance Comparison JuliaCode where
   (?<) = typeBinExpr lessOp bool
@@ -389,6 +393,9 @@ instance List JuliaCode where
   listAccess = G.listAccess
   listSet = G.listSet
   indexOf = jlIndexOf
+
+instance Set JuliaCode where
+  contains = jlIndexOf
 
 instance InternalList JuliaCode where
   listSlice' b e s vn vo = jlListSlice vn vo b e (fromMaybe (litInt 1) s)
@@ -458,7 +465,6 @@ instance InternalControlStmt JuliaCode where
 instance RenderStatement JuliaCode where
   stmt = G.stmt
   loopStmt = G.loopStmt
-  emptyStmt = G.emptyStmt
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim JuliaCode where
@@ -468,6 +474,7 @@ instance StatementElim JuliaCode where
 instance StatementSym JuliaCode where
   type Statement JuliaCode = (Doc, Terminator)
   valStmt = G.valStmt Empty
+  emptyStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement JuliaCode where
@@ -480,6 +487,8 @@ instance AssignStatement JuliaCode where
 instance DeclStatement JuliaCode where
   varDec v = CP.varDecDef v Nothing
   varDecDef v e = CP.varDecDef v (Just e)
+  setDec = varDec
+  setDecDef = varDecDef
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
   arrayDec = listDec

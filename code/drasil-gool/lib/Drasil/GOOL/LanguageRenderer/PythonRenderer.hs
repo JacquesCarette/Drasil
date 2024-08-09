@@ -15,7 +15,7 @@ import Drasil.GOOL.InterfaceCommon (SharedProg, Label, Library, VSType,
   VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, List(..), InternalList(..),
+  ValueExpression(..), funcApp, extFuncApp, List(..), Set(..), InternalList(..),
   ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
@@ -57,7 +57,7 @@ import qualified Drasil.GOOL.LanguageRenderer as R (sqrt, fabs, log10,
   classVar, listSetFunc, castObj, dynamic, break, continue, addComments, 
   commentedMod, commentedItem, var)
 import Drasil.GOOL.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal, 
-  mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, 
+  mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, inPrec, 
   unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkStaticVar)
 import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
@@ -105,7 +105,7 @@ import Data.List (intercalate, sort)
 import Data.Char (toUpper, isUpper, isLower)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
-  vcat, colon, brackets, isEmpty, quotes)
+  vcat, colon, brackets, isEmpty, quotes, braces)
 import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 
 pyExt :: String
@@ -202,6 +202,7 @@ instance TypeSym PythonCode where
   infile = typeFromData InFile "" empty
   outfile = typeFromData OutFile "" empty
   listType t' = t' >>=(\t -> typeFromData (List (getType t)) "" empty)
+  setType t' = t' >>=(\t -> typeFromData (Set (getType t)) "" empty)
   arrayType = listType
   listInnerType = G.listInnerType
   funcType = CP.funcType
@@ -255,6 +256,7 @@ instance BinaryOpSym PythonCode where
   moduloOp = G.moduloOp
   andOp = andPrec pyAnd
   orOp = orPrec pyOr
+  inOp = inPrec pyIn
 
 instance OpElim PythonCode where
   uOp = opDoc . unPC
@@ -317,6 +319,7 @@ instance Literal PythonCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray brackets
+  litSet = CP.litArray braces
   litList = litArray
 
 instance MathConstant PythonCode where
@@ -370,6 +373,7 @@ instance BooleanExpression PythonCode where
   (?!) = typeUnExpr notOp bool
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
+  isin = typeBinExpr inOp bool
 
 instance Comparison PythonCode where
   (?<) = typeBinExpr lessOp bool
@@ -449,6 +453,9 @@ instance List PythonCode where
   listSet = G.listSet
   indexOf = CP.indexOf pyIndex
 
+instance Set PythonCode where
+  contains a b = isin b a
+
 instance InternalList PythonCode where
   listSlice' b e s vn vo = pyListSlice vn vo (getVal b) (getVal e) (getVal s)
     where getVal = fromMaybe (mkStateVal void empty)
@@ -518,9 +525,6 @@ instance InternalControlStmt PythonCode where
 instance RenderStatement PythonCode where
   stmt = G.stmt
   loopStmt = G.loopStmt
-  
-  emptyStmt = G.emptyStmt
-
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim PythonCode where
@@ -531,6 +535,7 @@ instance StatementSym PythonCode where
   -- Terminator determines how statements end
   type Statement PythonCode = (Doc, Terminator)
   valStmt = G.valStmt Empty
+  emptyStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement PythonCode where
@@ -543,6 +548,8 @@ instance AssignStatement PythonCode where
 instance DeclStatement PythonCode where
   varDec v = CP.varDecDef v Nothing
   varDecDef v e = CP.varDecDef v (Just e)
+  setDec = varDec
+  setDecDef = varDecDef
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
   arrayDec = listDec
@@ -822,7 +829,7 @@ pyInputFunc = text "input()" -- raw_input() for < Python 3.0
 pyPrintFunc = text printLabel
 
 pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyClose, 
-  pySplit, pyRange, pyRstrip, pyMath :: String
+  pySplit, pyRange, pyRstrip, pyMath, pyIn :: String
 pyListSize = "len"
 pyIndex = "index"
 pyInsert = "insert"
@@ -834,6 +841,7 @@ pySplit = "split"
 pyRange = "range"
 pyRstrip = "rstrip"
 pyMath = "math"
+pyIn = "in"
 
 pyDef, pyLambdaDec, pyElseIf, pyRaise, pyExcept :: Doc
 pyDef = text "def"

@@ -15,6 +15,7 @@ data CodeType = Boolean
               | InFile
               | OutFile
               | List CodeType
+              | Set CodeType
               | Array CodeType
               | Object ClassName
               | Func [CodeType] CodeType

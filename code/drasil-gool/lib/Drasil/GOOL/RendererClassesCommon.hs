@@ -114,6 +114,7 @@ class BinaryOpSym r where
   moduloOp       :: VSBinOp r
   andOp          :: VSBinOp r
   orOp           :: VSBinOp r
+  inOp           :: VSBinOp r
 
 class OpElim r where
   uOp :: r (UnaryOp r) -> Doc
@@ -183,8 +184,6 @@ class InternalControlStmt r where
 class RenderStatement r where
   stmt     :: MSStatement r -> MSStatement r
   loopStmt :: MSStatement r -> MSStatement r
-
-  emptyStmt   :: MSStatement r
 
   stmtFromData :: Doc -> Terminator -> MSStatement r
 

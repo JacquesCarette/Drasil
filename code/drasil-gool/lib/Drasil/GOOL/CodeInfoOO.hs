@@ -8,7 +8,7 @@ import Drasil.GOOL.InterfaceCommon (MSBody, VSType, SValue, MSStatement,
   VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
+  ValueExpression(..), List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
   VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
@@ -92,6 +92,7 @@ instance TypeSym CodeInfoOO where
   string            = noInfoType
   infile            = noInfoType
   outfile           = noInfoType
+  setType       _   = noInfoType
   listType      _   = noInfoType
   arrayType     _   = noInfoType
   listInnerType _   = noInfoType
@@ -149,6 +150,7 @@ instance Literal CodeInfoOO where
   litString _ = noInfo
   litArray  _ = executeList
   litList   _ = executeList
+  litSet   _ = executeList
 
 instance MathConstant CodeInfoOO where
   pi = noInfo
@@ -193,6 +195,7 @@ instance BooleanExpression CodeInfoOO where
   (?!)  = execute1
   (?&&) = execute2
   (?||) = execute2
+  isin = execute2
 
 instance Comparison CodeInfoOO where
   (?<)  = execute2
@@ -250,7 +253,10 @@ instance List CodeInfoOO where
   listAccess = execute2
   listSet    = execute3
   indexOf    = execute2
-  
+
+instance Set CodeInfoOO where
+  contains = execute2
+
 instance InternalList CodeInfoOO where
   listSlice' b e s _ vl = zoom lensMStoVS $ do
     mapM_ (fromMaybe noInfo) [b,e,s]
@@ -282,6 +288,7 @@ instance VectorExpression CodeInfoOO where
 instance StatementSym CodeInfoOO where
   type Statement CodeInfoOO = ()
   valStmt = zoom lensMStoVS . execute1
+  emptyStmt = noInfo
   multi    = executeList
   
 instance AssignStatement CodeInfoOO where
@@ -294,6 +301,8 @@ instance AssignStatement CodeInfoOO where
 instance DeclStatement CodeInfoOO where
   varDec                 _ = noInfo
   varDecDef              _ = zoom lensMStoVS . execute1
+  setDec                 _ = noInfo
+  setDecDef              _ = zoom lensMStoVS . execute1
   listDec              _ _ = noInfo
   listDecDef             _ = zoom lensMStoVS . executeList
   arrayDec             _ _ = noInfo

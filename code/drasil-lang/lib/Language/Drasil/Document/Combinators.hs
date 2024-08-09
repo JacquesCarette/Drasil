@@ -8,7 +8,7 @@ module Language.Drasil.Document.Combinators (
   makeListRef,
   -- * Sentence-related Functions
   -- | See Reference-related Functions as well.
-  addPercent, displayStrConstrntsAsSet, displayDblConstrntsAsSet,
+  addPercent,
   eqN, checkValidStr, getTandS, maybeChanged, maybeExpanded,
   maybeWOVerb, showingCxnBw, substitute, typUncr, underConsidertn,
   unwrap, fterms,
@@ -35,8 +35,6 @@ import Language.Drasil.Development.Sentence
 import Language.Drasil.Document ( Section )
 import Language.Drasil.Document.Core
     ( ItemType(..), ListType(Bullet) )
-import Language.Drasil.Expr.Class ( ExprC(sy) )
-import Language.Drasil.ModelExpr.Class ( ModelExprC(isIn) )
 import Language.Drasil.ModelExpr.Lang ( ModelExpr )
 import Language.Drasil.NounPhrase.Core ( NP )
 import Language.Drasil.Reference ( refS, namedRef )
@@ -52,7 +50,6 @@ import Language.Drasil.Sentence
       (!.),
       (+:),
       capSent )
-import Language.Drasil.Space ( Space(DiscreteD, DiscreteS) )
 import Language.Drasil.Symbol.Helpers ( eqSymb )
 import Language.Drasil.Uncertainty
 import Language.Drasil.Symbol
@@ -259,14 +256,6 @@ fromSources rs = sParen (S "from" +:+ foldlList Comma List (map refS rs))
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in...".
 getTandS :: (Quantity a) => a -> Sentence
 getTandS a = phrase a +:+ ch a
-
--- | Produces a 'Sentence' that displays the constraints in a set {}.
-displayStrConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
-displayStrConstrntsAsSet sym listOfVals = eS $ isIn (sy sym) (DiscreteS listOfVals)
-
--- | Produces a 'Sentence' that displays the constraints in a set {}.
-displayDblConstrntsAsSet :: Quantity a => a -> [Double] -> Sentence
-displayDblConstrntsAsSet sym listOfVals = eS $ isIn (sy sym) (DiscreteD listOfVals)
 
 -- | Output is of the form "@reference - sentence@".
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence

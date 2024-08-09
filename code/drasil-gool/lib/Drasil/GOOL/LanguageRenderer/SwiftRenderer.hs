@@ -17,7 +17,7 @@ import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, MSBlock, VSType,
   Literal(..), litZero, MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
-  List(..), listSlice, InternalList(..), ThunkSym(..), VectorType(..),
+  List(..), Set(..), listSlice, InternalList(..), ThunkSym(..), VectorType(..),
   VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..),
   IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
@@ -75,16 +75,16 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   function, docFunc, buildClass, implementingClass, docClass, commentedClass,
   modFromData, fileDoc, fileFromData, defaultOptSpace, local)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (classVar, 
-  objVarSelf, intClass, buildModule, docMod', bindingError, extFuncAppMixedArgs, 
+  objVarSelf, intClass, buildModule, docMod', contains, bindingError, extFuncAppMixedArgs, 
   notNull, listDecDef, destructorError, stateVarDef, constVar, litArray, 
   listSetFunc, extraClass, listAccessFunc, doubleRender, double, openFileR, 
   openFileW, self, multiAssign, multiReturn, listDec, funcDecDef, 
   inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', bool, float, 
   stringRender', string', inherit, implements, functionDoc, intToIndex,
   indexToInt, forEach', global)
-import qualified Drasil.GOOL.LanguageRenderer.CLike as C (notOp, andOp, orOp, 
+import qualified Drasil.GOOL.LanguageRenderer.CLike as C (notOp, andOp, orOp, inOp, 
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, 
-  listSize, varDecDef, extObjDecNew, switch, while)
+  listSize, varDecDef, setDecDef, extObjDecNew, switch, while)
 import qualified Drasil.GOOL.LanguageRenderer.Macros as M (ifExists, decrement1,
   increment1, runStrategy, stringListVals, stringListLists, notifyObservers',
   makeSetterVal)
@@ -210,6 +210,7 @@ instance TypeSym SwiftCode where
   outfile = swiftFileHdlType
   listType = swiftListType
   arrayType = listType -- For now, treating arrays and lists the same, like we do for Python
+  setType = listType
   listInnerType = G.listInnerType
   funcType = swiftFuncType
   void = swiftVoidType
@@ -265,6 +266,7 @@ instance BinaryOpSym SwiftCode where
   moduloOp = G.moduloOp
   andOp = C.andOp
   orOp = C.orOp
+  inOp = C.inOp
 
 instance OpElim SwiftCode where
   uOp = opDoc . unSC
@@ -324,6 +326,7 @@ instance Literal SwiftCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray brackets
+  litSet = litArray
   litList = litArray
 
 instance MathConstant SwiftCode where
@@ -376,7 +379,8 @@ instance BooleanExpression SwiftCode where
   (?!) = typeUnExpr notOp bool
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
-
+  isin = typeBinExpr inOp bool
+  
 instance Comparison SwiftCode where
   (?<) = swiftNumBinExpr (typeBinExpr lessOp bool)
   (?<=) = swiftNumBinExpr (typeBinExpr lessEqualOp bool)
@@ -454,6 +458,9 @@ instance List SwiftCode where
   listSet = G.listSet
   indexOf = swiftIndexOf
 
+instance Set SwiftCode where
+  contains = CP.contains swiftContains
+
 instance InternalList SwiftCode where
   listSlice' b e s vn vo = swiftListSlice vn vo b e (fromMaybe (litInt 1) s)
 
@@ -522,9 +529,6 @@ instance InternalControlStmt SwiftCode where
 instance RenderStatement SwiftCode where
   stmt = G.stmt
   loopStmt = G.loopStmt
-
-  emptyStmt = G.emptyStmt
-
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim SwiftCode where
@@ -534,6 +538,7 @@ instance StatementElim SwiftCode where
 instance StatementSym SwiftCode where
   type Statement SwiftCode = (Doc, Terminator)
   valStmt = G.valStmt Empty
+  emptyStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement SwiftCode where
@@ -546,6 +551,8 @@ instance AssignStatement SwiftCode where
 instance DeclStatement SwiftCode where
   varDec = swiftVarDec swiftVar
   varDecDef = C.varDecDef Empty
+  setDecDef = C.setDecDef Empty
+  setDec = swiftSetDec swiftConst
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
   arrayDec = listDec
@@ -838,6 +845,7 @@ swiftListType t' = do
   typeFromData (List $ getType t) ("[" ++ getTypeString t ++ "]")
     (brackets $ RC.type' t)
 
+
 swiftFuncType :: (CommonRenderSym r) => [VSType r] -> VSType r -> VSType r
 swiftFuncType ps r = do
   pts <- sequence ps
@@ -885,7 +893,7 @@ swiftMain, swiftFoundation, swiftMath, swiftNil, swiftInt, swiftChar,
   swiftSeekEnd, swiftClose, swiftJoined, swiftAppendPath, swiftUrls, swiftSplit,
   swiftData, swiftEncoding, swiftOf, swiftFrom, swiftTo, swiftBy, swiftAt,
   swiftTerm, swiftFor, swiftIn, swiftContentsOf, swiftWriteTo, swiftSep,
-  swiftSepBy, swiftUnwrap :: String
+  swiftSepBy, swiftUnwrap, swiftContains, swiftSet :: String
 swiftMain = "main"
 swiftFoundation = "Foundation"
 swiftMath = swiftFoundation
@@ -928,6 +936,8 @@ swiftWriteTo = "forWritingTo"
 swiftSep = "separator"
 swiftSepBy = "separatedBy"
 swiftUnwrap = "!"
+swiftContains = "contains"
+swiftSet = "Set"
 
 swiftUnaryMath :: (Monad r) => String -> VSOp r
 swiftUnaryMath = addMathImport . unOpPrec
@@ -1124,6 +1134,16 @@ swiftVarDec dec v' = do
   mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
     <+> RC.type' (variableType v))
 
+swiftSetDec :: Doc -> SVariable SwiftCode -> MSStatement SwiftCode
+swiftSetDec dec v' = do
+  v <- zoom lensMStoVS v'
+  modify $ useVarName (variableName v)
+  let bind Static = static :: SwiftCode (Permanence SwiftCode)
+      bind Dynamic = dynamic :: SwiftCode (Permanence SwiftCode)
+      p = bind $ variableBind v
+  mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
+    <+> text(swiftSet ++ "<Double>"))
+
 swiftThrowDoc :: (CommonRenderSym r) => r (Value r) -> Doc
 swiftThrowDoc errMsg = throwLabel <+> RC.value errMsg
 
@@ -1202,4 +1222,5 @@ typeDfltVal Char = litChar ' '
 typeDfltVal String = litString ""
 typeDfltVal (List t) = litList (convTypeOO t) []
 typeDfltVal (Array t) = litArray (convTypeOO t) []
+typeDfltVal (Set t) = litSet (convTypeOO t) []
 typeDfltVal _ = error "Attempt to get default value for type with none."

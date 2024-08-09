@@ -16,7 +16,7 @@ import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, List(..), InternalList(..),
+  ValueExpression(..), funcApp, extFuncApp, List(..), Set(..), InternalList(..),
   ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
@@ -74,14 +74,14 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   modFromData, fileDoc, fileFromData, defaultOptSpace, local)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
-  extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
+  extFuncAppMixedArgs, indexOf, contains, listAddFunc, discardFileLine, intClass, 
   arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, docMain, 
   mainFunction, buildModule', string, constDecDef, docInOutFunc, bindingError, 
   notNull, listDecDef, destructorError, stateVarDef, constVar, listSetFunc, 
   extraClass, listAccessFunc, doubleRender, openFileR, openFileW, stateVar, 
   inherit, implements, intToIndex, indexToInt, global)
-import qualified Drasil.GOOL.LanguageRenderer.CLike as C (float, double, char, 
-  listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
+import qualified Drasil.GOOL.LanguageRenderer.CLike as C (setType, float, double, char, 
+  listType, void, notOp, andOp, orOp, inOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
   decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
   intFunc, multiAssignError, multiReturnError, multiTypeError)
@@ -207,6 +207,9 @@ instance TypeSym CSharpCode where
     modify (addLangImportVS csGeneric) 
     C.listType csList t
   arrayType = CP.arrayType
+  setType t = do
+    modify (addLangImportVS csGeneric) 
+    C.setType csSet t
   listInnerType = G.listInnerType
   funcType = csFuncType
   void = C.void
@@ -259,6 +262,7 @@ instance BinaryOpSym CSharpCode where
   moduloOp = G.moduloOp
   andOp = C.andOp
   orOp = C.orOp
+  inOp = C.inOp
 
 instance OpElim CSharpCode where
   uOp = opDoc . unCSC
@@ -318,6 +322,7 @@ instance Literal CSharpCode where
   litInt = G.litInt
   litString = G.litString
   litArray = csLitList arrayType
+  litSet = csLitList setType
   litList = csLitList listType
 
 instance MathConstant CSharpCode where
@@ -363,6 +368,7 @@ instance BooleanExpression CSharpCode where
   (?!) = typeUnExpr notOp bool
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
+  isin = typeBinExpr inOp bool
 
 instance Comparison CSharpCode where
   (?<) = typeBinExpr lessOp bool
@@ -436,7 +442,10 @@ instance List CSharpCode where
   listAccess = G.listAccess
   listSet = G.listSet
   indexOf = CP.indexOf csIndex
-  
+
+instance Set CSharpCode where
+  contains = CP.contains csContains
+
 instance InternalList CSharpCode where
   listSlice' = M.listSlice
 
@@ -503,9 +512,6 @@ instance InternalControlStmt CSharpCode where
 instance RenderStatement CSharpCode where
   stmt = G.stmt
   loopStmt = G.loopStmt
-
-  emptyStmt = G.emptyStmt
-  
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CSharpCode where
@@ -515,6 +521,7 @@ instance StatementElim CSharpCode where
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
   valStmt = G.valStmt Semi
+  emptyStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement CSharpCode where
@@ -528,6 +535,8 @@ instance DeclStatement CSharpCode where
   varDec v = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $ 
     C.varDec static dynamic empty v)
   varDecDef = C.varDecDef Semi
+  setDec = varDec
+  setDecDef = varDecDef
   listDec n v = zoom lensMStoVS v >>= (\v' -> C.listDec (R.listDec v') 
     (litInt n) v)
   listDecDef = CP.listDecDef
@@ -757,15 +766,16 @@ csForEach = text "foreach"
 csNamedArgSep = colon <> space
 csLambdaSep = text "=>"
 
-csSystem, csConsole, csGeneric, csIO, csList, csInt, csFloat, csBool, 
+csSystem, csConsole, csGeneric, csIO, csList, csSet, csInt, csFloat, csBool, 
   csChar, csParse, csReader, csWriter, csReadLine, csWrite, csWriteLine, 
-  csIndex, csListAdd, csListAppend, csClose, csEOS, csSplit, csMain,
+  csIndex, csContains, csListAdd, csListAppend, csClose, csEOS, csSplit, csMain,
   csFunc :: String
 csSystem = "System"
 csConsole = "Console"
 csGeneric = csSysAccess $ "Collections" `access` "Generic"
 csIO = csSysAccess "IO"
 csList = "List"
+csSet = "HashSet"
 csInt = "Int32"
 csFloat = "Single"
 csBool = "Boolean"
@@ -777,6 +787,7 @@ csReadLine = "ReadLine"
 csWrite = "Write"
 csWriteLine = "WriteLine"
 csIndex = "IndexOf"
+csContains = "Contains"
 csListAdd = "Insert"
 csListAppend = "Add"
 csClose = "Close"

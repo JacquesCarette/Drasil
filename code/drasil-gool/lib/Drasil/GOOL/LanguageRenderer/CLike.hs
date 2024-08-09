@@ -2,9 +2,9 @@
 
 -- | Implementations for C-like renderers are defined here.
 module Drasil.GOOL.LanguageRenderer.CLike (charRender, float, double, char, 
-  listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
+  listType, setType, void, notOp, andOp, orOp, inOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
-  decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
+  decrement1, varDec, varDecDef, setDecDef, listDec, extObjDecNew, switch, for, while, 
   intFunc, multiAssignError, multiReturnError, multiTypeError
 ) where
 
@@ -16,7 +16,7 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, VSType, SVariable,
   TypeElim(getType, getTypeString), 
   VariableElim(..), ValueSym(Value, valueType), VisibilitySym(..))
 import qualified Drasil.GOOL.InterfaceCommon as IC (TypeSym(bool, float),
-  ValueExpression(funcAppMixedArgs), DeclStatement(varDec, varDecDef))
+  ValueExpression(funcAppMixedArgs), DeclStatement(varDec, setDec, varDecDef))
 import Drasil.GOOL.InterfaceGOOL (PermanenceSym(..), extNewObj, ($.))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (OOTypeSym(obj),
   OOValueExpression(newObjMixedArgs))
@@ -37,7 +37,7 @@ import Drasil.GOOL.LanguageRenderer (forLabel, whileLabel, containing)
 import qualified Drasil.GOOL.LanguageRenderer as R (switch, increment, 
   decrement, this', this)
 import Drasil.GOOL.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
-  mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
+  mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec, inPrec)
 import Drasil.GOOL.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName,
   useVarName)
 
@@ -72,6 +72,12 @@ listType lst t' = do
   typeFromData (List (getType t)) (lst 
     `containing` getTypeString t) $ text lst <> angles (RC.type' t) 
 
+setType :: (OORenderSym r) => String -> VSType r -> VSType r
+setType lst t' = do 
+  t <- t'
+  typeFromData (Set (getType t)) (lst 
+    `containing` getTypeString t) $ text lst <> angles (RC.type' t) 
+
 void :: (CommonRenderSym r) => VSType r
 void = typeFromData Void voidRender (text voidRender)
 
@@ -88,6 +94,8 @@ andOp = andPrec "&&"
 orOp :: (Monad r) => VSOp r
 orOp = orPrec "||"
 
+inOp :: (Monad r) => VSOp r
+inOp = inPrec ""
 -- Variables --
 
 self :: (OORenderSym r) => SVariable r
@@ -151,12 +159,22 @@ varDec s d pdoc v' = do
   where bind Static = s
         bind Dynamic = d
         ptrdoc (List _) = pdoc
+        ptrdoc (Set _) = pdoc
         ptrdoc _ = empty
 
 varDecDef :: (CommonRenderSym r) => Terminator -> SVariable r -> SValue r -> 
   MSStatement r
 varDecDef t vr vl' = do 
   vd <- IC.varDec vr
+  vl <- zoom lensMStoVS vl'
+  let stmtCtor Empty = mkStmtNoEnd
+      stmtCtor Semi = mkStmt
+  stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
+
+setDecDef :: (CommonRenderSym r) => Terminator -> SVariable r -> SValue r -> 
+  MSStatement r
+setDecDef t vr vl' = do 
+  vd <- IC.setDec vr
   vl <- zoom lensMStoVS vl'
   let stmtCtor Empty = mkStmtNoEnd
       stmtCtor Semi = mkStmt

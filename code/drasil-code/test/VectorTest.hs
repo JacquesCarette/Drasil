@@ -3,8 +3,7 @@ module VectorTest (vectorTestOO, vectorTestProc) where
 import Drasil.GOOL (SVariable, SMethod, SharedProg, OOProg, BodySym(..),
   BlockSym(..), TypeSym(..), mainVar, Literal(..), VectorType(..),
   VectorDecl(..), VectorThunk(..), VectorExpression(..), DeclStatement(..),
-  ControlStatement(..), BooleanExpression(..), VariableValue(..), 
-  Comparison(..), List(..), ValueExpression(..), 
+  ControlStatement(..), Comparison(..), VariableValue(..), 
   ThunkAssign(..), MethodSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))

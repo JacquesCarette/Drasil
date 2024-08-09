@@ -736,23 +736,23 @@ class InputParameters {
             print(".")
             throw "InputError"
         }
-        let set: Set<Double> = ["AN", "FT", "HS"]
-        if !(set.contains(self.g)) {
+        let set_glassTy: Set<Double> = ["AN", "FT", "HS"]
+        if !(set_glassTy.contains(self.g)) {
             print("g has value ", terminator: "")
             print(self.g, terminator: "")
             print(", but is expected to be ", terminator: "")
             print("an element of the set ", terminator: "")
-            print(set, terminator: "")
+            print(set_glassTy, terminator: "")
             print(".")
             throw "InputError"
         }
-        let set: Set<Double> = [2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0]
-        if !(set.contains(self.t)) {
+        let set_nomThick: Set<Double> = [2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0]
+        if !(set_nomThick.contains(self.t)) {
             print("t has value ", terminator: "")
             print(self.t, terminator: "")
             print(", but is expected to be ", terminator: "")
             print("an element of the set ", terminator: "")
-            print(set, terminator: "")
+            print(set_nomThick, terminator: "")
             print(".")
             throw "InputError"
         }

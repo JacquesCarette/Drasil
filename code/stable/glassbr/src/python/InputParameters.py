@@ -213,27 +213,27 @@ class InputParameters:
             print(" (w_max)", end="")
             print(".")
             raise Exception("InputError")
-        set = {"AN", "FT", "HS"}
-        if not(self.g in set):
+        set_glassTy = {"AN", "FT", "HS"}
+        if not(self.g in set_glassTy):
             print("g has value ", end="")
             print(self.g, end="")
             print(", but is expected to be ", end="")
             print("an element of the set ", end="")
             print("{ ", end="")
-            for set_i1 in set:
+            for set_i1 in set_glassTy:
                 print(set_i1, end="")
                 print(" ", end="")
             print("}", end="")
             print(".")
             raise Exception("InputError")
-        set = {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}
-        if not(self.t in set):
+        set_nomThick = {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}
+        if not(self.t in set_nomThick):
             print("t has value ", end="")
             print(self.t, end="")
             print(", but is expected to be ", end="")
             print("an element of the set ", end="")
             print("{ ", end="")
-            for set_i1 in set:
+            for set_i1 in set_nomThick:
                 print(set_i1, end="")
                 print(" ", end="")
             print("}", end="")

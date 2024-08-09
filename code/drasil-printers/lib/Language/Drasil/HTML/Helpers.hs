@@ -140,14 +140,19 @@ reflinkURI rf txt = text ("<a href=\"" ++ rf ++ "\">") <> txt <> text "</a>"
 
 -- | Helper for setting up figures.
 image :: Doc -> Doc -> MaxWidthPercent -> Doc
-image f c 100 = 
-  figure $ vcat [
-  img [("src", f), ("alt", c)],
-  figcaption $ text "Figure: " <> c]
+image f c 100 =
+  figure $ vcat $ img [("src", f), ("alt", c)] : figCap c
 image f c wp =
-  figure $ vcat [
-  img [("src", f), ("alt", c), ("width", text $ show wp ++ "%")],
-  figcaption $ text "Figure: " <> c]
+  figure $ vcat $ img [("src", f), ("alt", c), ("width", text $ show wp ++ "%")] : figCap c
+
+-- | Helper function for figcaption.
+figCap :: Doc -> [Doc]
+figCap c | not (isEmpty c) = [figcaption $ text "Figure: " <> c]
+         | otherwise       = []
+
+-- | Helper function to check if the caption is empty.
+isEmpty :: Doc -> Bool
+isEmpty c = c == mempty || c == text ""
 
 em, sup, sub, bold :: Doc -> Doc
 -- | Emphasis (italics) tag.

@@ -144,8 +144,7 @@ headerSec =
 
 -- | For the drasil tree image on the website.
 imageContent :: LabelledContent
-imageContent = llcc (makeFigRef "Drasil") $ figWithWidth (S "Drasil tree") imagePath 50
-
+imageContent = llcc (makeFigRef "Drasil") $ figWithWidth EmptyS imagePath 50
 -- | Used for the repository link.
 gitHubRef :: Reference
 gitHubRef = makeURI "gitHubRepo" gitHubInfoURL (shortname' $ S "gitHubRepo")

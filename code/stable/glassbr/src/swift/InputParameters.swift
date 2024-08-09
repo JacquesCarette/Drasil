@@ -736,7 +736,7 @@ class InputParameters {
             print(".")
             throw "InputError"
         }
-        let set_glassTy: Set<Double> = ["AN", "FT", "HS"]
+        let set_glassTy: Set<String> = ["AN", "FT", "HS"]
         if !(set_glassTy.contains(self.g)) {
             print("g has value ", terminator: "")
             print(self.g, terminator: "")

@@ -1165,7 +1165,10 @@ swiftSetDec dec v' = do
       bind Dynamic = dynamic :: SwiftCode (Permanence SwiftCode)
       p = bind $ variableBind v
   mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
-    <+> text(swiftSet ++ "<Double>"))
+    <+> text (swiftSet ++ (replaceBrackets $ getTypeString (variableType v))))
+
+replaceBrackets :: String -> String
+replaceBrackets str = "<" ++ (init . tail) str ++ ">"
 
 swiftThrowDoc :: (CommonRenderSym r) => r (Value r) -> Doc
 swiftThrowDoc errMsg = throwLabel <+> RC.value errMsg

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 public class FileTests {
@@ -18,6 +19,7 @@ public class FileTests {
         string fileLine;
         fileLine = fileToRead.ReadLine();
         fileToRead.ReadLine();
+        Debug.Assert( fileLine != "" , "First line should not be empty.");
         List<string> fileContents = new List<string>(0);
         
         while (!(fileToRead.EndOfStream)) {
@@ -33,6 +35,7 @@ public class FileTests {
             Console.Write(fileContents[fileContents.Count - 1]);
         }
         Console.WriteLine("]");
+        Debug.Assert( fileContents.Count > 0 , "fileContents should not be empty.");
         fileToRead.Close();
     }
 }

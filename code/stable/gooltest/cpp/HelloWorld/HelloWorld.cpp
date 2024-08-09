@@ -5,6 +5,7 @@
 */
 
 #include <algorithm>
+#include <cassert>
 #include <iostream>
 #include <iterator>
 #include <limits>
@@ -26,6 +27,7 @@ int main(int argc, const char *argv[]) {
     int oneIndex = find(myOtherList.begin(), myOtherList.end(), 1.0) - myOtherList.begin();
     std::cout << oneIndex << std::endl;
     a = (int)(myOtherList.size());
+    assert(a == 2 && "List size should be 2");
     myOtherList.insert(myOtherList.begin() + 2, 2.0);
     myOtherList.push_back(2.5);
     double e;
@@ -58,6 +60,9 @@ int main(int argc, const char *argv[]) {
         std::cout << boringList.at((int)(boringList.size()) - 1);
     }
     std::cout << "]" << std::endl;
+    assert(b == 5 && "b should be 5");
+    assert((int)(myOtherList.size()) == 4 && "myOtherList should have 4 elements");
+    assert(oneIndex == 0 && "oneIndex should be 0");
     
     // List slicing tests
     // Create variables for list slices

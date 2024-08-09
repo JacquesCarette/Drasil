@@ -15,6 +15,7 @@ var myOtherList: [Double] = [1.0, 1.5]
 var oneIndex: Int = myOtherList.firstIndex(of: 1.0)!
 print(oneIndex)
 a = myOtherList.count
+assert( a == 2 , "List size should be 2")
 myOtherList.insert(2.0, at: 2)
 myOtherList.append(2.5)
 var e: Double
@@ -25,6 +26,9 @@ myName = "Brooks Mac".components(separatedBy: " ")
 print(myName)
 var boringList: [Bool] = [false, false, false, false, false]
 print(boringList)
+assert( b == 5 , "b should be 5")
+assert( myOtherList.count == 4 , "myOtherList should have 4 elements")
+assert( oneIndex == 0 , "oneIndex should be 0")
 
 // List slicing tests
 // Create variables for list slices

@@ -125,6 +125,8 @@ data ModelExpr where
   Matrix    :: [[ModelExpr]] -> ModelExpr
   -- | Represents a set of expressions
   Set :: [ModelExpr] -> ModelExpr
+  -- | used to refernce the (name + type = variable )
+  Variable :: String -> ModelExpr -> ModelExpr
   -- | Unary operation for most functions (eg. sin, cos, log, etc.).
   UnaryOp       :: UFunc -> ModelExpr -> ModelExpr
   -- | Unary operation for @Bool -> Bool@ operations.

@@ -9,7 +9,7 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 ) where
 
 import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
-  Space (Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..))
+  Space (Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..), mkUid, showUID)
 import Database.Drasil (symbResolve)
 import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&), in')
 import Language.Drasil.CodeExpr.Development hiding (Set)
@@ -366,6 +366,10 @@ convExpr (S.Set l) = do
   ar <- mapM convExpr l
                                     -- hd will never fail here
   return $ litSet (fmap valueType (head ar)) ar
+convExpr(Variable s (S.Set l)) = do
+  ar <- mapM convExpr l
+  let varSet = var s (setType $ fmap valueType (head ar)) local
+  return $ valueOf varSet
 convExpr Operator{} = error "convExpr: Operator"
 convExpr (RealI c ri)  = do
   g <- get
@@ -413,7 +417,7 @@ renderRealInt s (UpFrom  (Inc, a))          = sy s $>= a
 renderRealInt s (UpFrom  (Exc, a))          = sy s $>  a
 
 renderSet :: (HasUID c, HasSymbol c) => c -> CodeExpr -> CodeExpr
-renderSet e s = in' (var e) (sy e)
+renderSet e s = in' (Variable ("set_" ++ showUID e) s) (sy e)
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.
 unop :: (SharedProg r) => UFunc -> (SValue r -> SValue r)

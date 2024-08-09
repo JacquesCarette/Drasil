@@ -82,7 +82,7 @@ module Language.Drasil (
   -- Similar types are grouped together.
 
   -- *** Basic types
-  , UID, mkUid, nsUid
+  , UID, mkUid, nsUid, showUID
   -- Language.Drasil.Chunk.NamedIdea
   , (+++), (+++.), (+++!)
   , nc, ncUID, IdeaDict , mkIdea
@@ -328,7 +328,7 @@ import Language.Drasil.Document.Contents (lbldExpr, unlbldExpr, unlbldCode
 import Language.Drasil.Document.Combinators
 import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
 import Language.Drasil.UID
-    (UID, HasUID(..), (+++), (+++.), (+++!), mkUid, nsUid)
+    (UID, HasUID(..), (+++), (+++.), (+++!), mkUid, nsUid, showUID)
 import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)
 import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints),

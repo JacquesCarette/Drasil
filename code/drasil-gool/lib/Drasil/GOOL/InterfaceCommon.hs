@@ -282,7 +282,6 @@ class (ValueSym r) => List r where
   indexOf :: SValue r -> SValue r -> SValue r
 
 class (ValueSym r) => Set r where
-  --fromList :: SValue r -> SValue r -> SValue r
   -- set, element
   contains :: SValue r -> SValue r -> SValue r
 

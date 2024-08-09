@@ -269,6 +269,7 @@ public class HelloWorld {
         Console.WriteLine("");
         if (b >= 6) {
             string dummy = "dummy";
+            char myObj = 'o';
         }
         else if (b == 5) {
             // If body ----------------------------------------------------------------
@@ -287,7 +288,6 @@ public class HelloWorld {
             c--;
             b--;
             List<int> myList = new List<int>(5);
-            char myObj = 'o';
             const string myConst = "Imconstant";
             Console.WriteLine(myConst);
             Console.WriteLine(a);

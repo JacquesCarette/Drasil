@@ -9,22 +9,13 @@ cradle:
     - path: "drasil-code/test/Main.hs"
       component: "drasil-code:exe:codegenTest"
 
-    - path: "drasil-code/test/GOOL/FileTests.hs"
+    - path: "drasil-code/test/FileTests.hs"
       component: "drasil-code:exe:codegenTest"
 
-    - path: "drasil-code/test/GProc/FileTests.hs"
+    - path: "drasil-code/test/HelloWorld.hs"
       component: "drasil-code:exe:codegenTest"
 
-    - path: "drasil-code/test/GOOL/HelloWorld.hs"
-      component: "drasil-code:exe:codegenTest"
-
-    - path: "drasil-code/test/GProc/HelloWorld.hs"
-      component: "drasil-code:exe:codegenTest"
-
-    - path: "drasil-code/test/GOOL/Helper.hs"
-      component: "drasil-code:exe:codegenTest"
-
-    - path: "drasil-code/test/Proc/Helper.hs"
+    - path: "drasil-code/test/Helper.hs"
       component: "drasil-code:exe:codegenTest"
 
     - path: "drasil-code/test/GOOL/Observer.hs"
@@ -33,16 +24,10 @@ cradle:
     - path: "drasil-code/test/GOOL/PatternTest.hs"
       component: "drasil-code:exe:codegenTest"
 
-    - path: "drasil-code/test/GOOL/VectorTest.hs"
+    - path: "drasil-code/test/VectorTest.hs"
       component: "drasil-code:exe:codegenTest"
 
-    - path: "drasil-code/test/GProc/VectorTest.hs"
-      component: "drasil-code:exe:codegenTest"
-
-    - path: "drasil-code/test/GOOL/NameGenTest.hs"
-      component: "drasil-code:exe:codegenTest"
-
-    - path: "drasil-code/test/GProc/NameGenTest.hs"
+    - path: "drasil-code/test/NameGenTest.hs"
       component: "drasil-code:exe:codegenTest"
 
     - path: "drasil-codeLang/lib"

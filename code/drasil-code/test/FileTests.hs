@@ -1,24 +1,33 @@
 -- | Simple GOOL test program for making sure generated programs can read
 -- and write to files. See stable/gooltest for more details on what is generated through this.
-module GProc.FileTests (fileTests) where
+module FileTests (fileTestsOO, fileTestsProc) where
 
-import Drasil.GProc (GSProgram, MSBlock, MSStatement, SMethod, ProcProg,
-  ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), TypeSym(..),
-  DeclStatement(..), IOStatement(..), ControlStatement(..), mainVar, Literal(..), 
-  VariableValue(..), Comparison(..), List(..), MethodSym(..), ModuleSym(..))
-import Prelude hiding (return, print, log, exp, sin, cos, tan)
+import Drasil.GOOL (MSBlock, MSStatement, SMethod, SharedProg, OOProg,
+  BodySym(..), BlockSym(..), TypeSym(..), DeclStatement(..), IOStatement(..), 
+  ControlStatement(..), mainVar, Literal(..), VariableValue(..), Comparison(..), 
+  List(..), MethodSym(..), ModuleSym(..))
+import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
+  ModuleSym(..))
+import Drasil.GProc (ProcProg)
+import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
+  ModuleSym(..))
 
 -- | Creates a program in GOOL to test reading and writing to files.
-fileTests :: (ProcProg r) => GSProgram r
-fileTests = prog "FileTests" "" [fileDoc (buildModule "FileTests" []
-  [fileTestMethod])]
+fileTestsOO :: (OOProg r) => OO.GSProgram r
+fileTestsOO = OO.prog "FileTests" "" [OO.fileDoc (OO.buildModule "FileTests" []
+  [fileTestMethod] [])]
+
+-- | Creates a program in GProc to test reading and writing to files.
+fileTestsProc :: (ProcProg r) => GProc.GSProgram r
+fileTestsProc = GProc.prog "FileTests" "" [GProc.fileDoc (GProc.buildModule
+  "FileTests" [] [fileTestMethod])]
 
 -- | File test method starts with 'writeStory' and ends with 'goodBye'.
-fileTestMethod :: (ProcProg r) => SMethod r
+fileTestMethod :: (SharedProg r) => SMethod r
 fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
 
 -- | Generates functions that write to the file.
-writeStory :: (ProcProg r) => MSBlock r
+writeStory :: (SharedProg r) => MSBlock r
 writeStory = block [
   varDec $ mainVar "fileToWrite" outfile,
 
@@ -40,13 +49,13 @@ writeStory = block [
   listDec 0 (mainVar "fileContents" (listType string))]
 
 -- | Generates functions to read from a file.
-readStory :: (ProcProg r) => MSStatement r
+readStory :: (SharedProg r) => MSStatement r
 readStory = getFileInputAll (valueOf $ mainVar "fileToRead" infile)
   (mainVar "fileContents" (listType string))
 
 -- | Prints the result of the 'readStory' function. Should be the same as
 -- what was given in 'writeStory'.
-goodBye :: (ProcProg r) => MSBlock r
+goodBye :: (SharedProg r) => MSBlock r
 goodBye = block [
   printLn (valueOf $ mainVar "fileContents" (listType string)),
   assert (listSize (valueOf (mainVar "fileContents" (listType string))) ?> litInt 0) 

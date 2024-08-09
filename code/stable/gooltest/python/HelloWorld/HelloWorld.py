@@ -102,6 +102,7 @@ print(mySlicedList11)
 print("")
 if b >= 6:
     dummy = "dummy"
+    myObj = 'o'
 elif b == 5:
     # If body -----------------------------------------------------------------
     a = 5
@@ -117,7 +118,6 @@ elif b == 5:
     c -= 1
     b -= 1
     myList = []
-    myObj = 'o'
     MY_CONST = "Imconstant"
     print(MY_CONST)
     print(a)

@@ -159,6 +159,7 @@ public class HelloWorld {
         System.out.println("");
         if (b >= 6) {
             String dummy = "dummy";
+            char myObj = 'o';
         }
         else if (b == 5) {
             // If body ----------------------------------------------------------------
@@ -177,7 +178,6 @@ public class HelloWorld {
             c--;
             b--;
             ArrayList<Integer> myList = new ArrayList<Integer>(5);
-            char myObj = 'o';
             final String myConst = "Imconstant";
             System.out.println(myConst);
             System.out.println(a);

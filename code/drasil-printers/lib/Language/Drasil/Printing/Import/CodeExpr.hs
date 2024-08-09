@@ -110,7 +110,7 @@ codeExpr (AssocB And l)           sm = assocExpr P.And (precB And) l sm
 codeExpr (AssocB Or l)            sm = assocExpr P.Or (precB Or) l sm
 codeExpr (AssocA Add l)           sm = P.Row $ addExpr l Add sm
 codeExpr (AssocA Mul l)           sm = P.Row $ mulExpr l Mul sm
-codeExpr (AssocC SUnion l)           sm = P.Row $ mulExpr l Mul sm
+codeExpr (AssocC SUnion l)        sm = P.Row $ mulExpr l Mul sm
 codeExpr (C c)                    sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
 codeExpr (FCall f [x] [])         sm =
   P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ codeExpr x sm]
@@ -126,6 +126,7 @@ codeExpr (Case _ ps)              sm =
     else P.Case (zip (map (flip codeExpr sm . fst) ps) (map (flip codeExpr sm . snd) ps))
 codeExpr (Matrix a)                  sm = P.Mtx $ map (map (`codeExpr` sm)) a
 codeExpr (Set a)                     sm = P.Row $ map (`codeExpr` sm) a
+codeExpr (Variable _ l)              sm = codeExpr l sm
 codeExpr (UnaryOp Log u)             sm = mkCall sm P.Log u
 codeExpr (UnaryOp Ln u)              sm = mkCall sm P.Ln u
 codeExpr (UnaryOp Sin u)             sm = mkCall sm P.Sin u
@@ -153,7 +154,7 @@ codeExpr (BoolBinaryOp Iff a b)      sm = mkBOp sm P.Iff a b
 codeExpr (EqBinaryOp Eq a b)         sm = mkBOp sm P.Eq a b
 codeExpr (EqBinaryOp NEq a b)        sm = mkBOp sm P.NEq a b
 codeExpr (LABinaryOp Index a b)      sm = indx sm a b
-codeExpr (LABinaryOp IndexOf a b)      sm = indx sm a b
+codeExpr (LABinaryOp IndexOf a b)    sm = indx sm a b
 codeExpr (OrdBinaryOp Lt a b)        sm = mkBOp sm P.Lt a b
 codeExpr (OrdBinaryOp Gt a b)        sm = mkBOp sm P.Gt a b
 codeExpr (OrdBinaryOp LEq a b)       sm = mkBOp sm P.LEq a b

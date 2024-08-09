@@ -98,6 +98,7 @@ mePrec FCall{}                = 210
 mePrec Case{}                 = 200
 mePrec Matrix{}               = 220
 mePrec Set{}                  = 220
+mePrec (Variable _ _)         = 220
 mePrec (UnaryOp fn _)         = prec1 fn
 mePrec (UnaryOpB fn _)        = prec1B fn
 mePrec (UnaryOpVV fn _)       = prec1VV fn

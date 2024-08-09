@@ -3,7 +3,6 @@
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil hiding (None, new)
-import Language.Drasil.Development (showUID)
 import Language.Drasil.Display (Symbol(Variable))
 import Database.Drasil
 import SysInfo.Drasil hiding (sysinfodb)

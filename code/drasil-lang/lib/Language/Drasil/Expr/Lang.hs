@@ -286,7 +286,7 @@ instance Typed Expr Space where
     
   infer cxt (C uid) = inferFromContext cxt uid
 
-  infer cxt (Variable s n) = infer cxt n
+  infer cxt (Variable _ n) = infer cxt n
 
   infer cxt (FCall uid exs) = case (inferFromContext cxt uid, map (infer cxt) exs) of
     (Left (S.Function params out), exst) -> if NE.toList params == lefts exst

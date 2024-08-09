@@ -9,7 +9,7 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 ) where
 
 import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
-  Space (Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..), mkUid, showUID)
+  Space (Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..), showUID)
 import Database.Drasil (symbResolve)
 import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&), in')
 import Language.Drasil.CodeExpr.Development hiding (Set)
@@ -41,7 +41,7 @@ import qualified Language.Drasil.Mod as M (Class(..))
 import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
   Initializers, SharedProg, OOProg, PermanenceSym(..), bodyStatements,
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), ScopeSym(..), OOVariableSym(..),
+  BlockSym(..), TypeSym(..), VariableSym(..), ScopeSym(..), OOVariableSym(..),
   staticConst, VariableElim(..), ($->), ValueSym(..), Literal(..),
   VariableValue(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), OOValueExpression(..),
@@ -370,6 +370,7 @@ convExpr(Variable s (S.Set l)) = do
   ar <- mapM convExpr l
   let varSet = var s (setType $ fmap valueType (head ar)) local
   return $ valueOf varSet
+convExpr(Variable _ _) = error "convExpr: Variable"
 convExpr Operator{} = error "convExpr: Operator"
 convExpr (RealI c ri)  = do
   g <- get
@@ -1066,6 +1067,11 @@ convExprProc (S.Set l) = do
   ar <- mapM convExprProc l
                                     -- hd will never fail here
   return $ litSet (fmap valueType (head ar)) ar
+convExprProc (Variable s (S.Set l)) = do
+  ar <- mapM convExprProc l
+  let varSet = var s (setType $ fmap valueType (head ar)) local
+  return $ valueOf varSet
+convExprProc (Variable _ _) = error "convExpr: Variable"
 convExprProc Operator{} = error "convExprProc: Operator"
 convExprProc (RealI c ri)  = do
   g <- get

@@ -392,7 +392,8 @@ exc :: (OOProg r) => (CodeVarChunk, ConstraintCE) ->
 exc (v, Elem _ e) = do
   lb <- convExpr e
   t <- codeType v
-  let mkValue = var ("set_" ++ codeName v) (setType (convType t)) local
+  let name = v ^. uid
+  let mkValue = var ("set_" ++ show name) (setType (convType t)) local
   return [setDecDef mkValue lb]
 exc _ = return [emptyStmt]
 
@@ -402,7 +403,7 @@ exc _ = return [emptyStmt]
 constraintViolatedMsg :: (OOProg r) => CodeVarChunk -> String ->
   ConstraintCE -> GenState [MSStatement r]
 constraintViolatedMsg q s c = do
-  pc <- printConstraint c
+  pc <- printConstraint q c
   v <- mkVal (quantvar q)
   return $ [printStr $ codeName q ++ " has value ",
     print v,
@@ -411,29 +412,30 @@ constraintViolatedMsg q s c = do
 -- | Generates statements to print descriptions of constraints, using words and
 -- the constrained values. Constrained values are followed by printing the
 -- expression they originated from, using printExpr.
-printConstraint :: (OOProg r) => ConstraintCE ->
+printConstraint :: (OOProg r) => CodeVarChunk -> ConstraintCE ->
   GenState [MSStatement r]
-printConstraint c = do
+printConstraint v c = do
   g <- get
   let db = sysinfodb $ codeSpec g
-      printConstraint' :: (OOProg r) => ConstraintCE -> GenState
+      printConstraint' :: (OOProg r) => CodeVarChunk -> ConstraintCE -> GenState
         [MSStatement r]
-      printConstraint' (Range _ (Bounded (_, e1) (_, e2))) = do
+      printConstraint' _ (Range _ (Bounded (_, e1) (_, e2))) = do
         lb <- convExpr e1
         ub <- convExpr e2
         return $ [printStr "between ", print lb] ++ printExpr e1 db ++
           [printStr " and ", print ub] ++ printExpr e2 db ++ [printStrLn "."]
-      printConstraint' (Range _ (UpTo (_, e))) = do
+      printConstraint' _ (Range _ (UpTo (_, e))) = do
         ub <- convExpr e
         return $ [printStr "below ", print ub] ++ printExpr e db ++
           [printStrLn "."]
-      printConstraint' (Range _ (UpFrom (_, e))) = do
+      printConstraint' _ (Range _ (UpFrom (_, e))) = do
         lb <- convExpr e
         return $ [printStr "above ", print lb] ++ printExpr e db ++ [printStrLn "."]
-      printConstraint' (Elem _ e) = do
-        lb <- convExpr e
+      printConstraint' ch (Elem _ e) = do
+        let name = ch ^. uid
+        lb <- convExpr (Variable ("set_"++ show name) e)
         return $ [printStr "an element of the set ", print lb] ++ [printStrLn "."]
-  printConstraint' c
+  printConstraint' v c
 
 
 -- | Don't print expressions that are just literals, because that would be

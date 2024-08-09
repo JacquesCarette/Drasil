@@ -93,9 +93,6 @@ andOp = andPrec "&&"
 
 orOp :: (Monad r) => VSOp r
 orOp = orPrec "||"
-
-inOp :: (Monad r) => VSOp r
-inOp = inPrec ""
 -- Variables --
 
 self :: (OORenderSym r) => SVariable r

@@ -115,7 +115,6 @@ class BinaryOpSym r where
   moduloOp       :: VSBinOp r
   andOp          :: VSBinOp r
   orOp           :: VSBinOp r
-  inOp           :: VSBinOp r
 
 class OpElim r where
   uOp :: r (UnaryOp r) -> Doc

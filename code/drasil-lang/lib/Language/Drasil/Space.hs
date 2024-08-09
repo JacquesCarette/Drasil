@@ -88,7 +88,7 @@ getActorName _         = error "getActorName called on non-actor space"
 -- | Gets the inner 'Space' of a vector or set.
 getInnerSpace :: Space -> Space
 getInnerSpace (Vect s) = s
---getInnerSpace (Set s) = s
+getInnerSpace (Set s) = s
 getInnerSpace _        = error "getInnerSpace called on non-vector space"
 
 -- | Is this Space a basic numeric space?

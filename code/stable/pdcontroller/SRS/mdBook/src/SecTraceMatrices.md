@@ -83,7 +83,7 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 ![TraceGraphAvsA](./assets/avsa.svg)
 
-**TraceGraphAvsA**
+**Figure: TraceGraphAvsA**
 
 </div>
 
@@ -91,7 +91,7 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 ![TraceGraphAvsAll](./assets/avsall.svg)
 
-**TraceGraphAvsAll**
+**Figure: TraceGraphAvsAll**
 
 </div>
 
@@ -99,7 +99,7 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 ![TraceGraphRefvsRef](./assets/refvsref.svg)
 
-**TraceGraphRefvsRef**
+**Figure: TraceGraphRefvsRef**
 
 </div>
 
@@ -107,7 +107,7 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 ![TraceGraphAllvsR](./assets/allvsr.svg)
 
-**TraceGraphAllvsR**
+**Figure: TraceGraphAllvsR**
 
 </div>
 
@@ -115,7 +115,7 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 ![TraceGraphAllvsAll](./assets/allvsall.svg)
 
-**TraceGraphAllvsAll**
+**Figure: TraceGraphAllvsAll**
 
 </div>
 

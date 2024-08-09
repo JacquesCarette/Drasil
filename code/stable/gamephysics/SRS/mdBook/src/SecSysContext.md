@@ -6,7 +6,7 @@
 
 ![System Context](./assets/sysctx.png)
 
-**System Context**
+**Figure: System Context**
 
 </div>
 

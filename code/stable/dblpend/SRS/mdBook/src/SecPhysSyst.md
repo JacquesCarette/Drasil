@@ -14,6 +14,6 @@ PS4: The second object.
 
 ![The physical system](./assets/dblpend.png)
 
-**The physical system**
+**Figure: The physical system**
 
 </div>

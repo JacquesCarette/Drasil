@@ -197,7 +197,7 @@ graphSecBwPkgs = "The graph displayed below shows the dependencies between the p
 
 -- | Function to create displayable versions of the graphs.
 dependencyGraphs :: FilePath -> String -> Contents
-dependencyGraphs path pkg = LlC $ llcc (makeFigRef $ "Figure" ++ pkg) $ fig (S $ "Package: " ++ pkg) $ drasilDisplayDepGraphPath path pkg
+dependencyGraphs path pkg = LlC $ llcc (makeFigRef $ "Figure" ++ pkg) $ fig (S $ "Package - " ++ pkg) $ drasilDisplayDepGraphPath path pkg
 
 -- | Function to get the paths of graphs we want to display on the website.
 drasilDisplayDepGraphPath :: FilePath -> FilePath -> String

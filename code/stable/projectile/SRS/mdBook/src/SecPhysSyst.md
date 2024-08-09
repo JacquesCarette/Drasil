@@ -12,6 +12,6 @@ PS3: The target.
 
 ![The physical system](./assets/Launch.jpg)
 
-**The physical system**
+**Figure: The physical system**
 
 </div>

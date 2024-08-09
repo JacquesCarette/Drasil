@@ -6,6 +6,7 @@ import Drasil.GOOL (MSBlock, MSStatement, SMethod, SharedProg, OOProg,
   BodySym(..), BlockSym(..), TypeSym(..), DeclStatement(..), IOStatement(..), 
   ControlStatement(..), mainVar, Literal(..), VariableValue(..), Comparison(..), 
   List(..), MethodSym(..))
+
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)

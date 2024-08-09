@@ -61,7 +61,7 @@ import qualified Drasil.GOOL.LanguageRenderer as R (sqrt, abs, log10,
   commentedMod, commentedItem)
 import Drasil.GOOL.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
   VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
-  binExprNumDbl', typeBinExpr, inPrec)
+  binExprNumDbl', typeBinExpr)
 import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,

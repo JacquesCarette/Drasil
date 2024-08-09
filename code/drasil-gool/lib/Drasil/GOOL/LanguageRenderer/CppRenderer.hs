@@ -2457,10 +2457,6 @@ addCAssertImport v = do
   modify (addLangImport cassert)
   v
 
-
-setIterVar :: CommonRenderSym r=> SVariable r -> SValue r
-setIterVar = G.valueOf
-
 iterator :: CommonRenderSym r => VSType r -> VSType r
 iterator t = do
     modify (addLangImportVS cppIterator)

@@ -378,6 +378,11 @@ instance ControlStatement CodeInfoOO where
   tryCatch _ cb = do
     _ <- cb
     noInfo
+  
+  assert cond msg = do
+    _ <- zoom lensMStoVS cond
+    _ <- zoom lensMStoVS msg
+    noInfo
 
 instance ObserverPattern CodeInfoOO where
   notifyObservers f _ _ = execute1 (zoom lensMStoVS f)

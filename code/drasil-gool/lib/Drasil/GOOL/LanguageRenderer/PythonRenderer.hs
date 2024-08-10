@@ -456,7 +456,7 @@ instance List PythonCode where
   indexOf = CP.indexOf pyIndex
 
 instance Set PythonCode where
-  contains a b = (typeBinExpr (inPrec pyIn) bool) b a
+  contains a b = typeBinExpr (inPrec pyIn) bool b a
 
 instance InternalList PythonCode where
   listSlice' b e s vn vo = pyListSlice vn vo (getVal b) (getVal e) (getVal s)

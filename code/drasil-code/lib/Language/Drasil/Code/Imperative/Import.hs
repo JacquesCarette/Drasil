@@ -493,7 +493,7 @@ vecVecNumBfunc Dot = error "convExpr DotProduct"
 numVecVecBfunc :: NVVBinOp -> (SValue r -> SValue r -> SValue r)
 numVecVecBfunc Scale = error "convExpr Scaling of Vectors"
 
--- Maps a 'ESSBinOp' to it's corresponding GOOL binary function.
+-- Maps a 'ESSBinOp' to its corresponding GOOL binary function.
 elementSetSetBfunc :: ESSBinOp -> (SValue r -> SValue r -> SValue r)
 elementSetSetBfunc SAdd = error "convExpr Adding an Element to a Set"
 elementSetSetBfunc SRemove = error "convExpr Removing an Element to a Set"

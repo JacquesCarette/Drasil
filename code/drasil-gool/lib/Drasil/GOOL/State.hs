@@ -27,7 +27,7 @@ module Drasil.GOOL.State (
   isOutputsDeclared, addException, addExceptions, getExceptions, addCall, 
   setMainDoc, getMainDoc, setVisibility, getVisibility, setCurrMainFunc,
   getCurrMainFunc, setThrowUsed, getThrowUsed, setErrorDefined, getErrorDefined,
-  addIter, getIter, resetIter, incrementLine, incrementWord, getLineIndex,
+  incrementLine, incrementWord, getLineIndex,
   getWordIndex,  resetIndices, useVarName, genVarName, genLoopIndex,
   genVarNameIf, varNameAvailable, setVarScope, getVarScope
 ) where
@@ -42,7 +42,7 @@ import Utils.Drasil (nubSort)
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set, _1, _2, both, at)
 import Control.Monad.State (State, modify, gets)
 import Data.Char (isDigit)
-import Data.List (nub, delete)
+import Data.List (nub)
 import Data.Foldable (foldl')
 import Data.Maybe (isNothing, fromMaybe)
 import Data.Map (Map)
@@ -125,7 +125,6 @@ data MethodState = MS {
                           -- documentation to function in C++
   _currMainFunc :: Bool, -- Used by C++ to put documentation for the main
                         -- function in source instead of header file
-  _iterators :: [String],
 
   -- Only used for Swift
   _contentsIndices :: (Index, Index) -- Used to keep track of the current place
@@ -271,7 +270,6 @@ initialMS = MS {
 
   _currVisibility  = Priv,
   _currMainFunc = False,
-  _iterators = [],
 
   _contentsIndices = (0,0)
 }
@@ -536,15 +534,6 @@ setErrorDefined = set (lensMStoGS . errorDefined) True
 
 getErrorDefined :: MS Bool
 getErrorDefined = gets (^. (lensMStoGS . errorDefined))
-
-addIter :: String -> MethodState -> MethodState
-addIter st = over iterators ([st]++)
-
-getIter :: MS [String]
-getIter = gets (^. iterators)
-
-resetIter :: String -> MethodState -> MethodState
-resetIter st = over iterators (delete st)
 
 incrementLine :: MethodState -> MethodState
 incrementLine = over (contentsIndices . _1) (+1)  . set (contentsIndices . _2) 0

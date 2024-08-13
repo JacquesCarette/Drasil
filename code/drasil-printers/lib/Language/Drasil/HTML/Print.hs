@@ -337,7 +337,7 @@ pItem (Nested s l) = vcat [pSpec s, makeList l]
 -----------------------------------------------------------------
 -- | Renders figures in HTML.
 makeFigure :: Doc -> Doc -> Doc -> L.MaxWidthPercent -> Doc
-makeFigure r c f wp = refwrap r (image f c wp)
+makeFigure r c f wp = refwrap r (image f (if c == mempty then Nothing else Just c) wp)
 
 -- | Renders assumptions, requirements, likely changes.
 makeRefList :: Doc -> Doc -> Doc -> Doc

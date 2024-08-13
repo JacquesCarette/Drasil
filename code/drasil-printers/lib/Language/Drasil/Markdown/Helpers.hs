@@ -61,17 +61,9 @@ reflinkURI ref txt = if ref == txt then ang ref
   else brackets txt <> parens ref
 
 -- | Helper for setting up figures
-image :: Doc -> Doc -> Doc
-image f c =  text "!" <> reflinkURI fp c $^$ figCaption c
-  where
-    fp = text $ "./assets/" ++ takeFileName (show f)
-    figCaption cap
-      | isEmpty cap = mempty
-      | otherwise   = bold (text "Figure: " <> cap)
-
--- | Helper function to check if the caption is empty.
-isEmpty :: Doc -> Bool
-isEmpty c = c == mempty || c == text ""
+image :: Doc -> Maybe Doc -> Doc
+image f Nothing = text "!" <> reflinkURI (text $ "./assets/" ++ takeFileName (show f)) (text "")
+image f (Just c) = text "!" <> reflinkURI (text $ "./assets/" ++ takeFileName (show f)) c $^$ bold (text "Figure: " <> c)
 
 -- | Helper for setting up captions
 caption :: Doc -> Doc

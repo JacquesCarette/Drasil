@@ -307,7 +307,7 @@ item rm (Nested s l) = vcat [pSpec rm s, makeList rm l 0]
 
 -- | Renders figures in Markdown
 makeFigure :: Doc -> Doc -> Doc -> Doc
-makeFigure r c f = centeredDivId r (image f c)
+makeFigure r c f = centeredDivId r (image f (if c == mempty then Nothing else Just c))
 
 -----------------------------------------------------------------
 ------------------ Bibliography Printing ------------------------

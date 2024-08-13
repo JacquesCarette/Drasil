@@ -141,9 +141,9 @@ reflinkURI rf txt = text ("<a href=\"" ++ rf ++ "\">") <> txt <> text "</a>"
 -- | Helper for setting up figures.
 image :: Doc -> Maybe Doc -> MaxWidthPercent -> Doc
 image f Nothing wp = 
-  figure $ vcat [img $ [("src", f), ("alt", text "")] ++ if wp == 100 then [] else [("width", text $ show wp ++ "%")]]
+  figure $ vcat [img $ [("src", f), ("alt", text "")] ++ [("width", text $ show wp ++ "%") | wp /= 100]]
 image f (Just c) wp =
-  figure $ vcat [img $ [("src", f), ("alt", c)] ++ if wp == 100 then [] else [("width", text $ show wp ++ "%")], figcaption $ text "Figure: " <> c]
+  figure $ vcat [img $ [("src", f), ("alt", c)] ++ [("width", text $ show wp ++ "%") | wp /= 100], figcaption $ text "Figure: " <> c]
 
 em, sup, sub, bold :: Doc -> Doc
 -- | Emphasis (italics) tag.

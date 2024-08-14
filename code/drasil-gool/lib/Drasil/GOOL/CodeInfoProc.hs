@@ -100,10 +100,10 @@ instance ScopeSym CodeInfoProc where
 
 instance VariableSym CodeInfoProc where
   type Variable CodeInfoProc = ()
-  var'      _ _ _ = noInfo
-  constant' _ _ _ = noInfo
-  extVar    _ _ _ = noInfo
-  arrayElem _ _   = noInfo
+  var       _ _ = noInfo
+  constant  _ _ = noInfo
+  extVar  _ _ _ = noInfo
+  arrayElem _ _ = noInfo
 
 instance VariableElim CodeInfoProc where
   variableName _ = ""

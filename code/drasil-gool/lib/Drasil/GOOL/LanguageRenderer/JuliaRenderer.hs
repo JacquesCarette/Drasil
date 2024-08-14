@@ -13,8 +13,8 @@ import Utils.Drasil (indent)
 import Drasil.GOOL.CodeType (CodeType(..))
 import Drasil.GOOL.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
   SVariable, MSStatement, MSBlock, SMethod, BodySym(..), BlockSym(..),
-  TypeSym(..), TypeElim(..), VariableSym(..), var, locVar, VariableElim(..),
-  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..),
+  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..),
   InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
@@ -44,12 +44,12 @@ import Drasil.GOOL.RendererClassesProc (ProcRenderSym, RenderFile(..),
 import qualified Drasil.GOOL.RendererClassesProc as RC (module')
 import Drasil.GOOL.LanguageRenderer (printLabel, listSep, listSep',
   variableList, parameterList, forLabel, inLabel, tryLabel, catchLabel)
-import qualified Drasil.GOOL.LanguageRenderer as R (var, sqrt, abs, log10, log,
+import qualified Drasil.GOOL.LanguageRenderer as R (sqrt, abs, log10, log,
   exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
   addComments, blockCmt, docCmt, commentedMod, listSetFunc, commentedItem,
   break, continue)
-import Drasil.GOOL.LanguageRenderer.Constructors (mkVal, mkStateVal, mkStateVar,
-  VSOp, unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
+import Drasil.GOOL.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
+  unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
   typeBinExpr, mkStmt, mkStmtNoEnd)
 import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
@@ -58,7 +58,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, call, funcAppMixedArgs, lambda,
   listAccess, listSet, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
   emptyStmt, assign, increment, subAssign, print, comment, valStmt, returnStmt,
-  param, docFunc, throw, arg, argsList, ifCond, smartAdd, local)
+  param, docFunc, throw, arg, argsList, ifCond, smartAdd, local, var)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (bool,
   boolRender, extVar, funcType, litArray, listDec, listDecDef, listAccessFunc,
   listSetFunc, notNull, extFuncAppMixedArgs, functionDoc, listSize, listAdd,
@@ -252,8 +252,8 @@ instance ScopeSym JuliaCode where
 
 instance VariableSym JuliaCode where
   type Variable JuliaCode = VarData
-  var' n _ t = mkStateVar n t (R.var n)
-  constant' = var' -- TODO: add `const` keyword in global scope, and follow Python for local
+  var = G.var
+  constant = var -- TODO: add `const` keyword in global scope, and follow Python for local
   extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
   arrayElem i = A.arrayElem (litInt i)
 
@@ -413,7 +413,7 @@ instance ThunkAssign JuliaCode where
   thunkAssign v t = do
     iName <- genLoopIndex
     let
-      i = locVar iName int
+      i = var iName int
       dim = fmap pure $ t >>= commonThunkDim (fmap unJLC . (\l -> listSize l #- litInt 1) . fmap pure) . unJLC
       loopInit = zoom lensMStoVS (fmap unJLC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
@@ -697,7 +697,7 @@ jlIndexOf l v = do
   v' <- v
   let t = toCode $ valueType v'
   indexToInt $ funcApp
-    jlListAbsdex t [lambda [locVar "x" t] (valueOf (locVar "x" t) ?== v), l]
+    jlListAbsdex t [lambda [var "x" t] (valueOf (var "x" t) ?== v), l]
 
 jlListSlice :: (CommonRenderSym r) => SVariable r -> SValue r ->
   Maybe (SValue r) -> Maybe (SValue r) -> SValue r -> MSBlock r
@@ -708,8 +708,8 @@ jlListSlice vn vo beg end step = do
   bName <- genVarNameIf (isNothing beg && isNothing mbStepV) "begIdx"
   eName <- genVarNameIf (isNothing mbStepV) "endIdx"
 
-  let begVar = var bName int local -- TODO: get scope from vn
-      endVar = var eName int local -- TODO: get scope from vn
+  let begVar = var bName int
+      endVar = var eName int
 
       (setBeg, begVal) = case (beg, mbStepV) of
         -- If we have a value for beg, just use it
@@ -718,7 +718,7 @@ jlListSlice vn vo beg end step = do
         (Nothing, Just s)  -> (emptyStmt,
           if s > 0 then mkStateVal int jlBegin else mkStateVal int jlEnd)
         -- Otherwise, generate an if-statement to calculate `beg` at runtime
-        (Nothing, Nothing) -> (varDecDef begVar $
+        (Nothing, Nothing) -> (varDecDef begVar $ -- TODO: get scope from vn
           inlineIf (step ?> litInt 0) (litInt 1) (listSize vo),
           valueOf begVar)
       
@@ -727,12 +727,12 @@ jlListSlice vn vo beg end step = do
       (setEnd, endVal) = case (end, mbStepV) of
         (Just e, Just s)  -> (emptyStmt,
           if s > 0 then e else e `G.smartAdd` litInt 2)
-        (Just e, Nothing) -> (varDecDef endVar $
+        (Just e, Nothing) -> (varDecDef endVar $ -- TODO: get scope from vn
           inlineIf (step ?> litInt 0) e (e `G.smartAdd` litInt 2),
           valueOf endVar)
         (Nothing, Just s) -> (emptyStmt,
           if s > 0 then mkStateVal int jlEnd else mkStateVal int jlBegin)
-        (Nothing, Nothing) -> (varDecDef endVar $
+        (Nothing, Nothing) -> (varDecDef endVar $ -- TODO: get scope from vn
           inlineIf (step ?> litInt 0) (listSize vo) (litInt 1), valueOf endVar)
 
       setToSlice = jlListSlice' vn vo begVal endVal step mbStepV

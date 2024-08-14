@@ -23,7 +23,7 @@ import Drasil.GOOL.InterfaceCommon (
   PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, BodySym(body), TypeSym(listType), FunctionSym, MethodSym,
-  VariableSym, var, ScopeSym(..), ValueSym(valueType), VariableValue(valueOf),
+  VariableSym(var), ScopeSym(..), ValueSym(valueType), VariableValue(valueOf),
   ValueExpression, List(listSize, listAdd), listOf, StatementSym(valStmt),
   DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), convType)
 import Drasil.GOOL.CodeType (CodeType(..), ClassName)
@@ -220,14 +220,14 @@ class (StatementSym r, OOFunctionSym r) => ObserverPattern r where
 observerListName :: Label
 observerListName = "observerList"
 
-initObserverList :: (DeclStatement r) => VSType r -> [SValue r] ->
-  r (Scope r) -> MSStatement r
-initObserverList t os s = listDecDef (var observerListName (listType t) s) os
+initObserverList :: (DeclStatement r) => VSType r -> [SValue r] -> r (Scope r)
+  -> MSStatement r
+initObserverList t os _ = listDecDef (var observerListName (listType t)) os -- s will be needed again
 
-addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r -> 
-  r (Scope r) -> MSStatement r
-addObserver o s = valStmt $ listAdd obsList lastelem o
-  where obsList = valueOf $ listOf observerListName (onStateValue valueType o) s
+addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r
+  -> MSStatement r
+addObserver o = valStmt $ listAdd obsList lastelem o
+  where obsList = valueOf $ listOf observerListName (onStateValue valueType o)
         lastelem = listSize obsList
 
 class (BodySym r, VariableSym r) => StrategyPattern r where

@@ -113,10 +113,10 @@ instance ScopeSym CodeInfoOO where
 
 instance VariableSym CodeInfoOO where
   type Variable CodeInfoOO = ()
-  var'      _ _ _ = noInfo
-  constant' _ _ _ = noInfo
-  extVar   _ _ _  = noInfo
-  arrayElem _ _   = noInfo
+  var       _ _ = noInfo
+  constant  _ _ = noInfo
+  extVar  _ _ _ = noInfo
+  arrayElem _ _ = noInfo
 
 instance OOVariableSym CodeInfoOO where
   staticVar'  _ _ _ = noInfo

@@ -11,9 +11,9 @@ import Utils.Drasil (blank, indent)
 import Drasil.GOOL.CodeType (CodeType(..))
 import Drasil.GOOL.InterfaceCommon (SharedProg, Label, Library, VSType,
   VSFunction, SVariable, SValue, MSStatement, MixedCtorCall, BodySym(..),
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), locVar, constant,
-  VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VisibilitySym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, extFuncApp, List(..), InternalList(..),
   ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
@@ -270,8 +270,8 @@ instance ScopeSym PythonCode where
 
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
-  var' n _     = G.var n
-  constant' n  = var' $ toConstName n
+  var          = G.var
+  constant n   = var $ toConstName n
   extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
   arrayElem i  = G.arrayElem (litInt i)
 
@@ -473,7 +473,7 @@ instance ThunkAssign PythonCode where
   thunkAssign v t = do
     iName <- genLoopIndex
     let
-      i = locVar iName int
+      i = var iName int
       dim = fmap pure $ t >>= commonThunkDim (fmap unPC . listSize . fmap pure) . unPC
       loopInit = zoom lensMStoVS (fmap unPC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
@@ -550,7 +550,7 @@ instance DeclStatement PythonCode where
   constDecDef v e = do
     v' <- zoom lensMStoVS v
     let n = toConstName $ variableName v'
-        newConst = constant n (pure (variableType v')) local -- TODO: get scope from v
+        newConst = constant n (pure (variableType v'))
     available <- varNameAvailable n
     if available
       then varDecDef newConst e
@@ -634,7 +634,7 @@ instance ControlStatement PythonCode where
       mkStmtNoEnd (pyAssert cond errMsg)
 
 instance ObserverPattern PythonCode where
-  notifyObservers = M.notifyObservers'
+  notifyObservers f t _ = M.notifyObservers' f t
 
 instance StrategyPattern PythonCode where
   runStrategy = M.runStrategy

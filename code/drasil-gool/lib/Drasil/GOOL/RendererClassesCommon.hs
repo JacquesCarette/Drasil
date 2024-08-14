@@ -21,7 +21,7 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
   InternalList(..), VectorExpression(..), StatementSym(..), AssignStatement(..),
   DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  VisibilitySym(..), ParameterSym(..), MethodSym(..))
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), ScopeSym)
 import Drasil.GOOL.CodeType (CodeType)
 import Drasil.GOOL.AST (Binding, Terminator, VisibilityTag)
 import Drasil.GOOL.State (MS, VS)
@@ -41,7 +41,7 @@ class (AssignStatement r, DeclStatement r, IOStatement r,
   InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable r,
   InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r,
   BlockCommentSym r, BlockCommentElim r, ValueExpression r, RenderMethod r,
-  MethodElim r, ParameterSym r
+  MethodElim r, ParameterSym r, ScopeSym r
   ) => CommonRenderSym r
 
 

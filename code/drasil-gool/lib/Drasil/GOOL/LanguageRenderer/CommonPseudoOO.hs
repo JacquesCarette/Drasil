@@ -24,7 +24,7 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, Body, MSBody, VSFunction,
   ValueSym(valueType), Comparison(..), (&=), ControlStatement(returnStmt),
   VisibilitySym(..), MethodSym(function), funcApp)
 import qualified Drasil.GOOL.InterfaceCommon as IC (argsList,
-  TypeSym(int, double, string, listType, arrayType, void), locVar,
+  TypeSym(int, double, string, listType, arrayType, void), VariableSym(var),
   Literal(litTrue, litFalse, litList, litInt, litString),
   VariableValue(valueOf), StatementSym(valStmt), DeclStatement(varDec,
   varDecDef, constDecDef), List(intToIndex, indexToInt), ParameterSym(param,
@@ -243,7 +243,7 @@ docMain b = commentedFunc (docComment $ toState $ functionDox
 
 mainFunction :: (OORenderSym r) => VSType r -> Label -> MSBody r -> SMethod r
 mainFunction s n = S.intFunc True n public static (mType IC.void)
-  [IC.param (IC.locVar args (s >>= (\argT -> typeFromData (List String) 
+  [IC.param (IC.var args (s >>= (\argT -> typeFromData (List String) 
   (render (RC.type' argT) ++ array) (RC.type' argT <> array'))))]
 
 -- | Used by the language renderers to build the module.
@@ -317,7 +317,7 @@ bindingError :: String -> String
 bindingError l = "Binding unimplemented in " ++ l
 
 notNull :: (CommonRenderSym r) => String -> SValue r -> SValue r
-notNull nil v = v ?!= IC.valueOf (IC.locVar nil $ onStateValue valueType v)
+notNull nil v = v ?!= IC.valueOf (IC.var nil $ onStateValue valueType v)
 
 listDecDef :: (CommonRenderSym r) => SVariable r -> [SValue r] -> MSStatement r
 listDecDef v vals = do

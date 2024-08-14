@@ -38,7 +38,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim, MethodTypeSym(..),
   RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
-  MethodElim, BlockCommentSym(..), BlockCommentElim)
+  MethodElim, BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
@@ -107,7 +107,7 @@ import Drasil.GOOL.State (VS, lensGStoFS, lensMStoFS, lensMStoVS, lensVStoFS,
   addLangImport, addLangImportVS, addExceptionImports, getModuleName, 
   setFileType, getClassName, setCurrMain, setOutputsDeclared, 
   isOutputsDeclared, getExceptions, getMethodExcMap, addExceptions, useVarName,
-  genLoopIndex)
+  genLoopIndex, setVarScope)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
@@ -277,6 +277,9 @@ instance ScopeSym JavaCode where
   global = CP.global
   mainFn = local
   local = G.local
+
+instance ScopeElim JavaCode where
+  scopeData = unJC
 
 instance VariableSym JavaCode where
   type Variable JavaCode = VarData
@@ -939,6 +942,7 @@ jConstDecDef v' scp def' = do
   v <- zoom lensMStoVS v'
   def <- zoom lensMStoVS def'
   modify $ useVarName $ variableName v
+  modify $ setVarScope (variableName v) (scopeData scp)
   mkStmt $ jFinal <+> RC.type' (variableType v) <+> 
     RC.variable v <+> equals <+> RC.value def
 
@@ -947,6 +951,7 @@ jFuncDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) ->
 jFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
+  modify $ setVarScope (variableName vr) (scopeData scp)
   pms <- mapM (zoom lensMStoVS) ps
   b <- bod
   mkStmt $ RC.type' (variableType vr) <+> RC.variable vr <+> equals <+>

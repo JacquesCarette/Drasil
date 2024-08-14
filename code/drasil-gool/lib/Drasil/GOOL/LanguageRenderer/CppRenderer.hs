@@ -40,7 +40,8 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim, MSMthdType,
   MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
-  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim)
+  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
+  ScopeElim(..))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
@@ -107,7 +108,7 @@ import Drasil.GOOL.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing,
   setFileType, getModuleName, setModuleName, setClassName, getClassName, setCurrMain,
   getCurrMain, getClassMap, setVisibility, getVisibility, setCurrMainFunc, getCurrMainFunc,
-  addIter, getIter, resetIter, useVarName, genLoopIndex)
+  addIter, getIter, resetIter, useVarName, genLoopIndex, setVarScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,log,exp,mod,max)
 import Control.Lens.Zoom (zoom)
@@ -280,6 +281,9 @@ instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) where
   global = pair global global
   mainFn = pair mainFn mainFn
   local = pair local local
+
+instance (Pair p) => ScopeElim (p CppSrcCode CppHdrCode) where
+  scopeData = unCPPSC . pfst
 
 instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   type Variable (p CppSrcCode CppHdrCode) = VarData
@@ -1186,6 +1190,9 @@ instance ScopeSym CppSrcCode where
   mainFn = local
   local = G.local
 
+instance ScopeElim CppSrcCode where
+  scopeData = unCPPSC
+
 instance VariableSym CppSrcCode where
   type Variable CppSrcCode = VarData
   var          = G.var
@@ -1470,6 +1477,7 @@ instance DeclStatement CppSrcCode where
     sz <- zoom lensMStoVS sz'
     v <- zoom lensMStoVS vr
     modify $ useVarName $ variableName v
+    modify $ setVarScope (variableName v) (scopeData scp)
     mkStmt $ RC.type' (variableType v) <+> RC.variable v <>
       brackets (RC.value sz)
   arrayDecDef vr scp vals = do
@@ -1902,6 +1910,9 @@ instance ScopeSym CppHdrCode where
   global = CP.global
   mainFn = local
   local = G.local
+
+instance ScopeElim CppHdrCode where
+  scopeData = unCPPHC
 
 instance VariableSym CppHdrCode where
   type Variable CppHdrCode = VarData
@@ -2698,6 +2709,7 @@ cppFuncDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) ->
 cppFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
+  modify $ setVarScope (variableName vr) (scopeData scp)
   pms <- mapM (zoom lensMStoVS) ps
   b <- bod
   mkStmt $ RC.type' (variableType vr) <+> RC.variable vr <+> equals <+>

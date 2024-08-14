@@ -38,7 +38,8 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim,
   MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
-  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim)
+  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
+  ScopeElim(..))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block, 
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
@@ -267,6 +268,9 @@ instance ScopeSym PythonCode where
   global = CP.global
   mainFn = global
   local = G.local
+
+instance ScopeElim PythonCode where
+  scopeData = unPC
 
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData

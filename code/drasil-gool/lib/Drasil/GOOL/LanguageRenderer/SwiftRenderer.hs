@@ -41,7 +41,8 @@ import Drasil.GOOL.RendererClassesCommon (MSMthdType, CommonRenderSym,
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim,
   MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
-  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim)
+  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
+  ScopeElim(..))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
@@ -102,7 +103,7 @@ import Drasil.GOOL.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getModuleName, getCurrMain, getMethodExcMap, getMainDoc, setThrowUsed,
   getThrowUsed, setErrorDefined, getErrorDefined, incrementLine, incrementWord,
   getLineIndex, getWordIndex, resetIndices, useVarName, genLoopIndex,
-  genVarNameIf)
+  genVarNameIf, setVarScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -277,6 +278,9 @@ instance ScopeSym SwiftCode where
   global = CP.global
   mainFn = global
   local = G.local
+
+instance ScopeElim SwiftCode where
+  scopeData = unSC
 
 instance VariableSym SwiftCode where
   type Variable SwiftCode = VarData
@@ -1124,6 +1128,7 @@ swiftVarDec :: Doc -> SVariable SwiftCode -> SwiftCode (Scope SwiftCode)
 swiftVarDec dec v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
+  modify $ setVarScope (variableName v) (scopeData scp)
   let bind Static = static :: SwiftCode (Permanence SwiftCode)
       bind Dynamic = dynamic :: SwiftCode (Permanence SwiftCode)
       p = bind $ variableBind v

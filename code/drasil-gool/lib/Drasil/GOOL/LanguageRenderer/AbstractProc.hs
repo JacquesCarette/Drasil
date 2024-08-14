@@ -14,7 +14,7 @@ import Drasil.GOOL.InterfaceProc (SFile, FSModule, FileSym (File),
   ModuleSym(Module))
 import qualified Drasil.GOOL.RendererClassesCommon as RCC (MethodElim(..),
   BlockCommentSym(..), ValueElim(value), InternalVarElim(variable),
-  MethodTypeSym(mType))
+  MethodTypeSym(mType), ScopeElim(scopeData))
 import Drasil.GOOL.RendererClassesProc (ProcRenderSym)
 import qualified Drasil.GOOL.RendererClassesProc as RCP (RenderFile(..),
   ModuleElim(..), RenderMod(..), ProcRenderMethod(intFunc))
@@ -26,7 +26,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (modDoc')
 import Drasil.GOOL.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVar)
 import Drasil.GOOL.State (FS, lensFStoGS, lensFStoMS, lensMStoVS, getModuleName, 
   setModuleName, setMainMod, currFileType, currMain, addFile, useVarName,
-  currParameters)
+  currParameters, setVarScope)
 
 import Prelude hiding ((<>))
 import Control.Monad.State (get, modify)
@@ -94,6 +94,7 @@ funcDecDef :: (ProcRenderSym r) => SVariable r -> r (Scope r) -> [SVariable r]
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
+  modify $ setVarScope (variableName vr) (RCC.scopeData scp)
   s <- get
   f <- IC.function (variableName vr) private (return $ variableType vr) 
     (map IC.param ps) b

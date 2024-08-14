@@ -35,7 +35,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
   RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
-  BlockCommentSym(..), BlockCommentElim)
+  BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
@@ -82,7 +82,8 @@ import Drasil.GOOL.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
 import Drasil.GOOL.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
   getModuleImports, addModuleImportVS, getUsing, getLangImports, getLibImports,
-  addLibImportVS, useVarName, getMainDoc, genLoopIndex, genVarNameIf)
+  addLibImportVS, useVarName, getMainDoc, genLoopIndex, genVarNameIf,
+  setVarScope)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe, isNothing)
@@ -249,6 +250,9 @@ instance ScopeSym JuliaCode where
   global = toCode $ sd Global
   mainFn = global
   local = G.local
+
+instance ScopeElim JuliaCode where
+  scopeData = unJLC
 
 instance VariableSym JuliaCode where
   type Variable JuliaCode = VarData
@@ -684,6 +688,7 @@ jlConstDecDef v' scp def' = do
   v <- zoom lensMStoVS v'
   def <- zoom lensMStoVS def'
   modify $ useVarName $ variableName v
+  modify $ setVarScope (variableName v) (scopeData scp)
   mkStmt $ RC.variable v <+> equals <+> RC.value def --TODO: prepend `constDec' ` when in global scope
 
 -- List API

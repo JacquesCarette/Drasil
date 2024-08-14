@@ -38,7 +38,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim, MethodTypeSym(..),
   RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
-  MethodElim, BlockCommentSym(..), BlockCommentElim)
+  MethodElim, BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
@@ -99,7 +99,7 @@ import Drasil.GOOL.Helpers (angles, hicat, toCode, toState, onCodeValue,
   on2StateWrapped, onCodeList, onStateList)
 import Drasil.GOOL.State (VS, lensGStoFS, lensMStoVS, modifyReturn, revFiles,
   addLangImport, addLangImportVS, setFileType, getClassName, setCurrMain,
-  useVarName, genLoopIndex)
+  useVarName, genLoopIndex, setVarScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -271,6 +271,9 @@ instance ScopeSym CSharpCode where
   global = CP.global
   mainFn = local
   local = G.local
+
+instance ScopeElim CSharpCode where
+  scopeData = unCSC
 
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
@@ -857,6 +860,7 @@ csFuncDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) ->
 csFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
+  modify $ setVarScope (variableName vr) (scopeData scp)
   pms <- mapM (zoom lensMStoVS) ps
   t <- zoom lensMStoVS $ funcType (map (pure . variableType) pms) 
     (pure $ variableType vr)

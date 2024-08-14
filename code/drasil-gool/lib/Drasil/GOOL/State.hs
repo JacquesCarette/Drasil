@@ -29,10 +29,11 @@ module Drasil.GOOL.State (
   getCurrMainFunc, setThrowUsed, getThrowUsed, setErrorDefined, getErrorDefined,
   addIter, getIter, resetIter, incrementLine, incrementWord, getLineIndex,
   getWordIndex,  resetIndices, useVarName, genVarName, genLoopIndex,
-  genVarNameIf, varNameAvailable
+  genVarNameIf, varNameAvailable, setVarScope, getVarScope
 ) where
 
-import Drasil.GOOL.AST (FileType(..), VisibilityTag(..), QualifiedName, qualName)
+import Drasil.GOOL.AST (FileType(..), VisibilityTag(..), ScopeData(..),
+  QualifiedName, qualName)
 import Drasil.GOOL.CodeAnalysis (Exception, ExceptionType, printExc, hasLoc)
 import Drasil.GOOL.CodeType (ClassName)
 
@@ -110,6 +111,9 @@ data MethodState = MS {
   _currParameters :: [String], -- Used to get parameter names when generating 
                                -- function documentation
   _varNames :: Map String Int, -- Used to generate fresh variable names
+  
+  -- Only used for Julia
+  _varScopes :: Map String ScopeData, -- Used to keep track of a variable's scope from its declaration
 
   -- Only used for Java
   _outputsDeclared :: Bool, -- So Java doesn't redeclare outputs variable when using inOutCall
@@ -258,6 +262,8 @@ initialMS = MS {
   _classState = initialCS,
   _currParameters = [],
   _varNames = Map.empty,
+
+  _varScopes = Map.empty,
 
   _outputsDeclared = False,
   _exceptions = [],
@@ -595,3 +601,13 @@ bumpVarName (n,c) = do
   let suffix = maybe count (flip fmap count . max) c
   modify $ set (varNames . at n) $ Just $ maybe 0 (+1) suffix
   return $ maybe n ((n ++) . show) count
+
+setVarScope :: String -> ScopeData -> MethodState -> MethodState
+setVarScope n s ms = over varScopes (Map.insert n s) ms
+
+getVarScope :: String -> MS ScopeData
+getVarScope n = do
+  sMap <- gets (^. varScopes)
+  return $ case Map.lookup n sMap of
+    Nothing -> error $ "Variable with no declared scope: " ++ n
+    (Just scp) -> scp

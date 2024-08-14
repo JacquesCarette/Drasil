@@ -22,7 +22,7 @@ import qualified Drasil.GOOL.InterfaceGOOL as IG (OOTypeSym(obj),
   OOValueExpression(newObjMixedArgs))
 import Drasil.GOOL.RendererClassesCommon (MSMthdType, CommonRenderSym,
   RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData), 
-  ValueElim(valuePrec))
+  ValueElim(valuePrec), ScopeElim(scopeData))
 import qualified Drasil.GOOL.RendererClassesCommon as S (
   InternalListFunc(listSizeFunc), RenderStatement(stmt, loopStmt))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (BodyElim(..),
@@ -39,7 +39,7 @@ import qualified Drasil.GOOL.LanguageRenderer as R (switch, increment,
 import Drasil.GOOL.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
   mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
 import Drasil.GOOL.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName,
-  useVarName)
+  useVarName, setVarScope)
 
 import Prelude hiding (break,(<>))
 import Control.Applicative ((<|>))
@@ -145,6 +145,7 @@ varDec :: (OORenderSym r) => r (Permanence r) -> r (Permanence r) -> Doc ->
 varDec s d pdoc v' scp = do 
   v <- zoom lensMStoVS v' 
   modify $ useVarName (variableName v)
+  modify $ setVarScope (variableName v) (scopeData scp)
   mkStmt (RC.perm (bind $ variableBind v)
     <+> RC.type' (variableType v) <+> (ptrdoc (getType (variableType v)) <> 
     RC.variable v))

@@ -37,7 +37,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), RenderType(..), RenderVariable(varFromData),
   InternalVarElim(variableBind), RenderFunction(funcFromData),
   MethodTypeSym(mType), RenderMethod(commentedFunc, mthdFromData),
-  BlockCommentSym(..))
+  BlockCommentSym(..), ScopeElim(scopeData))
 import qualified Drasil.GOOL.RendererClassesCommon as S (RenderBody(multiBody),
   RenderValue(call), RenderStatement(stmt, emptyStmt),
   InternalAssignStmt(multiAssign), InternalControlStmt(multiReturn),
@@ -67,7 +67,7 @@ import Drasil.GOOL.AST (VisibilityTag(..), ScopeTag(Global), ScopeData, sd)
 import Drasil.GOOL.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
   lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports,
   getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc,
-  useVarName)
+  useVarName, setVarScope)
 
 import Prelude hiding (print,pi,(<>))
 import Data.List (sort, intercalate)
@@ -207,6 +207,7 @@ arrayDec n vr scp = do
   sz <- zoom lensMStoVS n
   v <- zoom lensMStoVS vr
   modify $ useVarName $ variableName v
+  modify $ setVarScope (variableName v) (scopeData scp)
   let tp = variableType v
   innerTp <- zoom lensMStoVS $ listInnerType $ return tp
   mkStmt $ RC.type' tp <+> RC.variable v <+> equals <+> new' <+>
@@ -297,6 +298,7 @@ constDecDef vr' scp v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
   modify $ useVarName $ variableName vr
+  modify $ setVarScope (variableName vr) (scopeData scp)
   mkStmt (R.constDecDef vr v)
 
 docInOutFunc :: (CommonRenderSym r) => ([SVariable r] -> [SVariable r] ->
@@ -423,6 +425,7 @@ funcDecDef :: (OORenderSym r) => SVariable r -> r (Scope r) -> [SVariable r] ->
 funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
+  modify $ setVarScope (variableName vr) (scopeData scp)
   s <- get
   f <- function (variableName vr) private (return $ variableType vr) 
     (map IC.param ps) b
@@ -551,6 +554,7 @@ varDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> Maybe (SValue 
 varDecDef v scp e = do
   v' <- zoom lensMStoVS v
   modify $ useVarName (variableName v')
+  modify $ setVarScope (variableName v') (scopeData scp)
   def e
   where
     def Nothing = S.emptyStmt

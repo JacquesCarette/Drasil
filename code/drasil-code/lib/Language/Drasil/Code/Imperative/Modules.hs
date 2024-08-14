@@ -93,7 +93,7 @@ genMainFunc = do
     g <- get
     let mainFunc Library = return Nothing
         mainFunc Program = do
-          modify (\st -> st {currentScope = Local})
+          modify (\st -> st {currentScope = MainFn})
           v_filename <- mkVar (quantvar inFileName)
           logInFile <- maybeLog v_filename
           co <- initConsts
@@ -103,7 +103,7 @@ genMainFunc = do
           wo <- genOutputCall
           return $ Just $ (if CommentFunc `elem` commented g then docMain else
             mainFunction) $ bodyStatements $ initLogFileVar (logKind g) mainFn
-            ++ varDecDef v_filename local (arg 0)
+            ++ varDecDef v_filename mainFn (arg 0)
             : logInFile
             -- Constants must be declared before inputs because some derived
             -- input definitions or input constraints may use the constants
@@ -619,7 +619,7 @@ genMainFuncProc = do
     g <- get
     let mainFunc Library = return Nothing
         mainFunc Program = do
-          modify (\st -> st {currentScope = Local})
+          modify (\st -> st {currentScope = MainFn})
           v_filename <- mkVarProc (quantvar inFileName)
           logInFile <- maybeLog v_filename
           co <- initConstsProc
@@ -629,7 +629,7 @@ genMainFuncProc = do
           wo <- genOutputCallProc
           return $ Just $ (if CommentFunc `elem` commented g then docMain else
             mainFunction) $ bodyStatements $ initLogFileVar (logKind g) mainFn
-            ++ varDecDef v_filename local (arg 0)
+            ++ varDecDef v_filename mainFn (arg 0)
             : logInFile
             -- Constants must be declared before inputs because some derived
             -- input definitions or input constraints may use the constants

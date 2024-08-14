@@ -32,8 +32,8 @@ module Drasil.GOOL.State (
   genVarNameIf, varNameAvailable, setVarScope, getVarScope
 ) where
 
-import Drasil.GOOL.AST (FileType(..), VisibilityTag(..), ScopeData(..),
-  QualifiedName, qualName)
+import Drasil.GOOL.AST (FileType(..), VisibilityTag(..), ScopeTag(..),
+  ScopeData(..), sd, QualifiedName, qualName)
 import Drasil.GOOL.CodeAnalysis (Exception, ExceptionType, printExc, hasLoc)
 import Drasil.GOOL.CodeType (ClassName)
 
@@ -263,7 +263,7 @@ initialMS = MS {
   _currParameters = [],
   _varNames = Map.empty,
 
-  _varScopes = Map.empty,
+  _varScopes = Map.fromList [("", sd Local)], -- Hack for multiAssign
 
   _outputsDeclared = False,
   _exceptions = [],

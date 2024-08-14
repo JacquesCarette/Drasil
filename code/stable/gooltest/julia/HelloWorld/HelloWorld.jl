@@ -10,20 +10,20 @@ include("Helper.jl")
 import .Helper
 
 # Initializing variables
-b = 5
-myOtherList = [1.0, 1.5]
-oneIndex = findfirst(x -> x == 1.0, myOtherList) - 1
+global b = 5
+global myOtherList = [1.0, 1.5]
+global oneIndex = findfirst(x -> x == 1.0, myOtherList) - 1
 println(oneIndex)
-a = length(myOtherList)
+global a = length(myOtherList)
 @assert a == 2 "List size should be 2"
 insert!(myOtherList, 3, 2.0)
 append!(myOtherList, 2.5)
-e = myOtherList[2]
+global e = myOtherList[2]
 myOtherList[2] = 17.4
-myName = []
-myName = split("Brooks Mac", " ")
+global myName = []
+global myName = split("Brooks Mac", " ")
 println(myName)
-boringList = [false, false, false, false, false]
+global boringList = [false, false, false, false, false]
 println(boringList)
 @assert b == 5 "b should be 5"
 @assert length(myOtherList) == 4 "myOtherList should have 4 elements"
@@ -31,51 +31,51 @@ println(boringList)
 
 # List slicing tests
 # Create variables for list slices
-mySlicedList = []
-mySlicedList2 = []
-mySlicedList3 = []
-mySlicedList4 = []
-mySlicedList5 = []
-mySlicedList6 = []
-mySlicedList7 = []
-mySlicedList8 = []
-mySlicedList9 = []
-mySlicedList10 = []
-mySlicedList11 = []
+global mySlicedList = []
+global mySlicedList2 = []
+global mySlicedList3 = []
+global mySlicedList4 = []
+global mySlicedList5 = []
+global mySlicedList6 = []
+global mySlicedList7 = []
+global mySlicedList8 = []
+global mySlicedList9 = []
+global mySlicedList10 = []
+global mySlicedList11 = []
 
 # Create some variables for later tests
-x = 3
-y = 1
-z = -1
+global x = 3
+global y = 1
+global z = -1
 
-mySlicedList = myOtherList[2:3]
+global mySlicedList = myOtherList[2:3]
 
-mySlicedList2 = myOtherList[2:2:4]
+global mySlicedList2 = myOtherList[2:2:4]
 
-mySlicedList3 = myOtherList[2:end]
+global mySlicedList3 = myOtherList[2:end]
 
-mySlicedList4 = myOtherList[4:1]
+global mySlicedList4 = myOtherList[4:1]
 
-mySlicedList5 = myOtherList[4:-1:3]
+global mySlicedList5 = myOtherList[4:-1:3]
 
-mySlicedList6 = myOtherList[end:-1:3]
+global mySlicedList6 = myOtherList[end:-1:3]
 
-mySlicedList7 = myOtherList[4:-1:begin]
+global mySlicedList7 = myOtherList[4:-1:begin]
 
 endIdx = z > 0 ? 0 : 2
-mySlicedList8 = myOtherList[4:z:endIdx]
+global mySlicedList8 = myOtherList[4:z:endIdx]
 
 endIdx0 = z > 0 ? y : y + 2
-mySlicedList9 = myOtherList[x + 1:z:endIdx0]
+global mySlicedList9 = myOtherList[x + 1:z:endIdx0]
 
 endIdx1 = z > 0 ? length(myOtherList) : 1
-mySlicedList10 = myOtherList[3:z:endIdx1]
+global mySlicedList10 = myOtherList[3:z:endIdx1]
 
 endIdx2 = z > 0 ? length(myOtherList) : 1
-mySlicedList10 = myOtherList[3:z:endIdx2]
+global mySlicedList10 = myOtherList[3:z:endIdx2]
 
 endIdx3 = z > 0 ? x : x + 2
-mySlicedList11 = myOtherList[y + 1:z:endIdx3]
+global mySlicedList11 = myOtherList[y + 1:z:endIdx3]
 
 # Print results of list slicing tests
 println("")
@@ -107,23 +107,23 @@ println(mySlicedList11)
 
 println("")
 if b >= 6
-    dummy = "dummy"
+    global dummy = "dummy"
 elseif b == 5
     # If body -----------------------------------------------------------------
-    a = 5
-    b = a + 2
-    c = b + 3
-    d = b
-    d -= a
-    c -= d
-    b += 17;
-    c += 17;
-    a += 1;
-    d += 1;
-    c -= 1
-    b -= 1
-    myList = []
-    myConst = "Imconstant";
+    global a = 5
+    global b = a + 2
+    global c = b + 3
+    global d = b
+    global d -= a
+    global c -= d
+    global b += 17;
+    global c += 17;
+    global a += 1;
+    global d += 1;
+    global c -= 1
+    global b -= 1
+    global myList = []
+    const myConst = "Imconstant";
     println(myConst)
     println(a)
     println(b)
@@ -132,7 +132,7 @@ elseif b == 5
     println(myOtherList)
     println(mySlicedList)
     println("Type an int")
-    d = parse(Int64, readline())
+    global d = parse(Int64, readline())
     println("Type another")
     readline()
     
@@ -178,18 +178,18 @@ else
     println("Great, no bores!")
 end
 if a == 5
-    b = 10
+    global b = 10
 elseif a == 0
-    b = 5
+    global b = 5
 else
-    b = 0
+    global b = 0
 end
 for i in 0:1:9
     println(i)
 end
 while a < 13
     println("Hello")
-    a += 1;
+    global a += 1;
 end
 for num in myOtherList
     println(Helper.doubleAndAdd(num, 1.0))

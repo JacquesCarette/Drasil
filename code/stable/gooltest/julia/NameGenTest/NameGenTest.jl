@@ -8,10 +8,10 @@ function helper(temp::Array{Int64})
     @assert length(result) == 2 "Result list should have 2 elements after slicing."
 end
 
-temp = [1, 2, 3]
-result = []
+global temp = [1, 2, 3]
+global result = []
 
-result = temp[2:3]
+global result = temp[2:3]
 
 @assert length(result) == 2 "Result list should have 2 elements after slicing."
 

@@ -124,15 +124,15 @@ function write_output(s::String, d_offset::Float64, t_flight::Float64)
     close(outputfile)
 end
 
-filename = ARGS[1]
-g = 9.8
-epsilon = 2.0e-2
+global filename = ARGS[1]
+global g = 9.8
+global epsilon = 2.0e-2
 v_launch, theta, p_target = get_input(filename)
 input_constraints(v_launch, theta, p_target)
-t_flight = func_t_flight(v_launch, theta, g)
-p_land = func_p_land(v_launch, theta, g)
-d_offset = func_d_offset(p_target, p_land)
-s = func_s(p_target, epsilon, d_offset)
+global t_flight = func_t_flight(v_launch, theta, g)
+global p_land = func_p_land(v_launch, theta, g)
+global d_offset = func_d_offset(p_target, p_land)
+global s = func_s(p_target, epsilon, d_offset)
 write_output(s, d_offset, t_flight)
 
 end

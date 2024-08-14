@@ -5,7 +5,7 @@ module FileTests (fileTestsOO, fileTestsProc) where
 import Drasil.GOOL (MSBlock, MSStatement, SMethod, SharedProg, OOProg,
   BodySym(..), BlockSym(..), TypeSym(..), DeclStatement(..), IOStatement(..), 
   ControlStatement(..), VariableSym(var), Literal(..), VariableValue(..),
-  Comparison(..), List(..), MethodSym(..))
+  Comparison(..), List(..), MethodSym(..), ScopeSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -29,7 +29,7 @@ fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
 -- | Generates functions that write to the file.
 writeStory :: (SharedProg r) => MSBlock r
 writeStory = block [
-  varDec $ var "fileToWrite" outfile, --mainFn
+  varDec (var "fileToWrite" outfile) mainFn,
 
   openFileW (var "fileToWrite" outfile) (litString "testText.txt"),
   printFile (valueOf $ var "fileToWrite" outfile) (litInt 0),
@@ -39,14 +39,14 @@ writeStory = block [
   printFileStrLn (valueOf $ var "fileToWrite" outfile) "!!",
   closeFile (valueOf $ var "fileToWrite" outfile),
 
-  varDec $ var "fileToRead" infile, --mainFn
+  varDec (var "fileToRead" infile) mainFn,
   openFileR (var "fileToRead" infile) (litString "testText.txt"),
-  varDec $ var "fileLine" string, --mainFn
+  varDec (var "fileLine" string) mainFn,
   getFileInput (valueOf $ var "fileToRead" infile)
                     (var "fileLine" string),
   discardFileLine (valueOf $ var "fileToRead" infile),
   assert (valueOf (var "fileLine" string) ?!= litString "") (litString "First line should not be empty."),
-  listDec 0 (var "fileContents" (listType string))] --mainFn
+  listDec 0 (var "fileContents" (listType string)) mainFn]
 
 -- | Generates functions to read from a file.
 readStory :: (SharedProg r) => MSStatement r

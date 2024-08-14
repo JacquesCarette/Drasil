@@ -49,7 +49,7 @@ logBody n vars b = do
 -- inputs it was called with.
 loggedMethod :: (SharedProg r) => FilePath -> Label -> [SVariable r] -> MSBlock r
 loggedMethod lName n vars = block [
-      varDec varLogFile, --local
+      varDec varLogFile local,
       openFileA varLogFile (litString lName),
       printFileStrLn valLogFile ("function " ++ n ++ " called with inputs: {"),
       multi $ printInputs vars,

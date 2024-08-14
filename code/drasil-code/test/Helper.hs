@@ -4,7 +4,7 @@ module Helper (helperOO, helperProc) where
 import Drasil.GOOL (SMethod, SharedProg, OOProg, bodyStatements, TypeSym(..),
   DeclStatement(..), ControlStatement(..), (&=), VariableSym(var), Literal(..),
   VariableValue(..), NumericExpression(..), VisibilitySym(..), ParameterSym(..),
-  MethodSym(..))
+  MethodSym(..), ScopeSym(local))
 import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as GProc (SFile, FileSym(..), ModuleSym(..))
@@ -26,7 +26,7 @@ doubleAndAdd = docFunc "This function adds two numbers"
   function "doubleAndAdd"  public double
   [param $ var "num1" double, param $ var "num2" double]
   (bodyStatements [
-    varDec $ var "doubledSum" double, --local
+    varDec (var "doubledSum" double) local,
     var "doubledSum" double &= ((litDouble 2.0 #*
       valueOf (var "num1" double)) #+
       (litDouble 2.0 #* valueOf (var "num2" double))),

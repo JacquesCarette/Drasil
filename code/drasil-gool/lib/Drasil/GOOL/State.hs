@@ -603,7 +603,7 @@ bumpVarName (n,c) = do
   return $ maybe n ((n ++) . show) count
 
 setVarScope :: String -> ScopeData -> MethodState -> MethodState
-setVarScope n s ms = over varScopes (Map.insert n s) ms
+setVarScope n s = over varScopes (Map.insert n s)
 
 getVarScope :: String -> MS ScopeData
 getVarScope n = do

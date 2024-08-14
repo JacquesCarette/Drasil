@@ -22,7 +22,7 @@ import Language.Drasil.Code.Imperative.FunctionCalls (genCalcCall,
 import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), genModule,
   genModuleProc, genModuleWithImports, genModuleWithImportsProc, primaryClass,
   auxClass)
-import Language.Drasil.Code.Imperative.Helpers (liftS)
+import Language.Drasil.Code.Imperative.Helpers (liftS, convScope)
 import Language.Drasil.Code.Imperative.Import (codeType, convExpr, convExprProc,
   convStmt, convStmtProc, genConstructor, mkVal, mkValProc, mkVar, mkVarProc,
   privateInOutMethod, privateMethod, privateFuncProc, publicFunc,
@@ -103,7 +103,7 @@ genMainFunc = do
           wo <- genOutputCall
           return $ Just $ (if CommentFunc `elem` commented g then docMain else
             mainFunction) $ bodyStatements $ initLogFileVar (logKind g) mainFn
-            ++ varDecDef v_filename (arg 0)
+            ++ varDecDef v_filename local (arg 0)
             : logInFile
             -- Constants must be declared before inputs because some derived
             -- input definitions or input constraints may use the constants
@@ -122,6 +122,7 @@ genMainFunc = do
 getInputDecl :: (OOProg r) => GenState (Maybe (MSStatement r))
 getInputDecl = do
   g <- get
+  let scp = convScope $ currentScope g
   v_params <- mkVar (quantvar inParams)
   constrParams <- getInConstructorParams
   cps <- mapM mkVal constrParams
@@ -131,10 +132,10 @@ getInputDecl = do
         (conStruct g)
       getDecl ([],ins) = do
         vars <- mapM mkVar ins
-        return $ Just $ multi $ map varDec vars
+        return $ Just $ multi $ map (`varDec` scp) vars
       getDecl (i:_,[]) = return $ Just $ (if currentModule g ==
         eMap g ! codeName i then objDecNew
-        else extObjDecNew cname) v_params cps
+        else extObjDecNew cname) v_params scp cps
       getDecl _ = error ("Inputs or constants are only partially contained in "
         ++ "a class")
       constIns ([],[]) _ _ = return Nothing
@@ -156,6 +157,7 @@ getInputDecl = do
 initConsts :: (OOProg r) => GenState (Maybe (MSStatement r))
 initConsts = do
   g <- get
+  let scp = convScope $ currentScope g
   v_consts <- mkVar (quantvar consts)
   cname <- genICName Constants
   let cs = constants $ codeSpec g
@@ -168,20 +170,20 @@ initConsts = do
         vars <- mapM (mkVar . quantvar) cs
         vals <- mapM (convExpr . (^. codeExpr)) cs
         logs <- mapM maybeLog vars
-        return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++
-          concat logs
+        return $ Just $ multi $
+          zipWith (\vr -> defFunc (conRepr g) vr scp) vars vals ++ concat logs
       defFunc Var = varDecDef
       defFunc Const = constDecDef
       declObj [] _ = Nothing
       declObj (c:_) Var = Just $ (if currentModule g == eMap g ! codeName c
-        then objDecNewNoParams else extObjDecNewNoParams cname) v_consts
+        then objDecNewNoParams else extObjDecNewNoParams cname) v_consts scp
       declObj _ Const = Nothing
   getDecl (conStruct g) (inStruct g)
 
 -- | Generates a statement to declare the variable representing the log file,
 -- if the user chose to turn on logs for variable assignments.
 initLogFileVar :: (SharedProg r) => [Logging] -> r (Scope r) -> [MSStatement r]
-initLogFileVar l _ = [varDec varLogFile | LogVar `elem` l] --scp will be needed
+initLogFileVar l scp = [varDec varLogFile scp | LogVar `elem` l]
 
 ------- INPUT ----------
 
@@ -518,7 +520,7 @@ genCalcFunc cdef = do
                  (\el -> do
                    defStmts <- mapM convStmt (el ^. defs)
                    stepStmts <- mapM convStmt (el ^. steps)
-                   return [block (varDec v : defStmts),
+                   return [block (varDec v local : defStmts),
                      block stepStmts,
                      block [returnStmt $ valueOf v]])
                  (Map.lookup nm (extLibMap g))
@@ -594,7 +596,7 @@ genOutputFormat = do
         desc <- woFuncDesc
         mthd <- publicFunc woName void desc (map pcAuto parms) Nothing
           [block $ [
-          varDec var_outfile, -- local
+          varDec var_outfile local,
           openFileW var_outfile (litString "output.txt") ] ++
           concat outp ++ [ closeFile v_outfile ]]
         return $ Just mthd
@@ -627,7 +629,7 @@ genMainFuncProc = do
           wo <- genOutputCallProc
           return $ Just $ (if CommentFunc `elem` commented g then docMain else
             mainFunction) $ bodyStatements $ initLogFileVar (logKind g) mainFn
-            ++ varDecDef v_filename (arg 0)
+            ++ varDecDef v_filename local (arg 0)
             : logInFile
             -- Constants must be declared before inputs because some derived
             -- input definitions or input constraints may use the constants
@@ -646,7 +648,8 @@ genMainFuncProc = do
 initConstsProc :: (SharedProg r) => GenState (Maybe (MSStatement r))
 initConstsProc = do
   g <- get
-  let cs = constants $ codeSpec g
+  let scp = convScope $ currentScope g
+      cs = constants $ codeSpec g
       getDecl (Store Unbundled) _ = declVars
       getDecl (Store Bundled) _ = error "initConstsProc: Procedural renderers do not support bundled constants."
       getDecl WithInputs Unbundled = declVars
@@ -656,8 +659,8 @@ initConstsProc = do
         vars <- mapM (mkVarProc . quantvar) cs
         vals <- mapM (convExprProc . (^. codeExpr)) cs
         logs <- mapM maybeLog vars
-        return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++
-          concat logs
+        return $ Just $ multi $
+          zipWith (\vr -> defFunc (conRepr g) vr scp) vars vals ++ concat logs
       defFunc Var = varDecDef
       defFunc Const = constDecDef
   getDecl (conStruct g) (inStruct g)
@@ -714,10 +717,11 @@ checkInputClass = do
 getInputDeclProc :: (SharedProg r) => GenState (Maybe (MSStatement r))
 getInputDeclProc = do
   g <- get
-  let getDecl ([],[]) = return Nothing
+  let scp = convScope $ currentScope g
+      getDecl ([],[]) = return Nothing
       getDecl ([],ins) = do
         vars <- mapM mkVarProc ins
-        return $ Just $ multi $ map varDec vars
+        return $ Just $ multi $ map (`varDec` scp) vars
       getDecl _ = error "getInputDeclProc: Procedural renderers do not support bundled inputs"
   getDecl (partition (flip member (eMap g) . codeName)
     (inputs $ codeSpec g))
@@ -750,7 +754,7 @@ genCalcFuncProc cdef = do
                  (\el -> do
                    defStmts <- mapM convStmtProc (el ^. defs)
                    stepStmts <- mapM convStmtProc (el ^. steps)
-                   return [block (varDec v : defStmts),
+                   return [block (varDec v local : defStmts),
                      block stepStmts,
                      block [returnStmt $ valueOf v]])
                  (Map.lookup nm (extLibMap g))
@@ -977,7 +981,7 @@ genOutputFormatProc = do
         desc <- woFuncDesc
         mthd <- publicFuncProc woName void desc (map pcAuto parms) Nothing
           [block $ [
-          varDec var_outfile, -- local
+          varDec var_outfile local,
           openFileW var_outfile (litString "output.txt") ] ++
           concat outp ++ [ closeFile v_outfile ]]
         return $ Just mthd

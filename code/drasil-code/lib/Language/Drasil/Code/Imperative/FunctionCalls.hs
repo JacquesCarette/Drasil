@@ -6,6 +6,7 @@ module Language.Drasil.Code.Imperative.FunctionCalls (
 
 import Language.Drasil.Code.Imperative.GenerateGOOL (fApp, fAppProc, fAppInOut,
   fAppInOutProc)
+import Language.Drasil.Code.Imperative.Helpers (convScope)
 import Language.Drasil.Code.Imperative.Import (codeType, mkVal, mkValProc,
   mkVar, mkVarProc)
 import Language.Drasil.Code.Imperative.Logging (maybeLog)
@@ -62,11 +63,13 @@ genConstraintCall = do
 -- value being calculated.
 genCalcCall :: (OOProg r) => CodeDefinition -> GenState (Maybe (MSStatement r))
 genCalcCall c = do
+  g <- get
+  let scp = convScope $ currentScope g
   t <- codeType c
   val <- genFuncCall (codeName c) (convTypeOO t) (getCalcParams c)
   v <- mkVar (quantvar c)
   l <- maybeLog v
-  return $ fmap (multi . (: l) . varDecDef v) val
+  return $ fmap (multi . (: l) . varDecDef v scp) val
 
 -- | Generates a call to the function for printing outputs.
 genOutputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
@@ -160,11 +163,13 @@ genConstraintCallProc = do
 genCalcCallProc :: (SharedProg r) => CodeDefinition ->
   GenState (Maybe (MSStatement r))
 genCalcCallProc c = do
+  g <- get
+  let scp = convScope $ currentScope g
   t <- codeType c
   val <- genFuncCallProc (codeName c) (convType t) (getCalcParams c)
   v <- mkVarProc (quantvar c)
   l <- maybeLog v
-  return $ fmap (multi . (: l) . varDecDef v) val
+  return $ fmap (multi . (: l) . (`varDecDef` scp) v) val
 
 -- | Generates a call to the function for printing outputs.
 genOutputCallProc :: (SharedProg r) => GenState (Maybe (MSStatement r))

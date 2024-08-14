@@ -654,7 +654,7 @@ instance ControlStatement SwiftCode where
     mkStmtNoEnd (swiftAssert cond errMsg)
 
 instance ObserverPattern SwiftCode where
-  notifyObservers f t = M.notifyObservers' f t
+  notifyObservers = M.notifyObservers'
 
 instance StrategyPattern SwiftCode where
   runStrategy = M.runStrategy

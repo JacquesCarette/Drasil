@@ -563,7 +563,7 @@ instance DeclStatement PythonCode where
 
 instance OODeclStatement PythonCode where
   objDecDef = varDecDef
-  objDecNew v scp = G.objDecNew v scp
+  objDecNew = G.objDecNew
   extObjDecNew lib v scp vs = do
     modify (addModuleImport lib)
     varDecDef v scp (extNewObj lib (onStateValue variableType v) vs)
@@ -638,7 +638,7 @@ instance ControlStatement PythonCode where
       mkStmtNoEnd (pyAssert cond errMsg)
 
 instance ObserverPattern PythonCode where
-  notifyObservers f t = M.notifyObservers' f t
+  notifyObservers = M.notifyObservers'
 
 instance StrategyPattern PythonCode where
   runStrategy = M.runStrategy

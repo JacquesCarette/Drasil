@@ -4,7 +4,7 @@ import Drasil.GOOL (SVariable, SMethod, SharedProg, OOProg, BodySym(..),
   BlockSym(..), TypeSym(..), VariableSym(var), Literal(..), VectorType(..),
   VectorDecl(..), VectorThunk(..), VectorExpression(..), DeclStatement(..),
   ControlStatement(..), Comparison(..), VariableValue(..), 
-  ThunkAssign(..), MethodSym(..))
+  ThunkAssign(..), MethodSym(..), ScopeSym(mainFn))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -29,10 +29,10 @@ x :: SharedProg r => SVariable r
 x = var "x" double
 
 main :: SharedProg r => SMethod r
-main = mainFunction $ body [block [vecDecDef v1 [litDouble 1, litDouble 1.5], --mainFn
-  vecDecDef v2 [litDouble 0, litDouble (-1)], --mainFn
+main = mainFunction $ body [block [vecDecDef v1 mainFn [litDouble 1, litDouble 1.5],
+  vecDecDef v2 mainFn [litDouble 0, litDouble (-1)],
   thunkAssign v1 (vecAdd (vecScale (litDouble 2) (vecThunk v1)) (vecThunk v2)),
-  varDec x, --mainFn
+  varDec x mainFn,
   thunkAssign x (vecDot (vecThunk v1) (vecThunk v2)),
   
   assert (valueOf (var "x" double) ?== litDouble (-2)) 

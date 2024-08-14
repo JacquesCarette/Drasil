@@ -44,7 +44,7 @@ patternTest = prog progName "" [fileDoc (buildModule progName []
 -- | Creates the main function for PatternTest.
 patternTestMainMethod :: (OOProg r) => SMethod r
 patternTestMainMethod = mainFunction (body [block [
-  varDec n], --mainFn
+  varDec n mainFn],
 
   runStrategy strat1
     [(strat1, oneLiner $ printStrLn strat1),
@@ -52,13 +52,13 @@ patternTestMainMethod = mainFunction (body [block [
     (Just $ litInt 3) (Just n),
 
   block [
-    varDecDef obs1 newObserver, --mainFn
-    varDecDef obs2 newObserver], --mainFn
+    varDecDef obs1 mainFn newObserver,
+    varDecDef obs2 mainFn newObserver],
 
   block [
     initObserverList observerType [valueOf obs1] mainFn,
     addObserver (valueOf obs2),
-    notifyObservers (func printNum void []) observerType mainFn],
+    notifyObservers (func printNum void []) observerType],
 
   block [
     valStmt $ set (valueOf obs1) x (litInt 10),

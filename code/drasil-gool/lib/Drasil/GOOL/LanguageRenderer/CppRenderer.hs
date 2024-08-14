@@ -487,8 +487,8 @@ instance Pair p => VectorType (p CppSrcCode CppHdrCode) where
 instance Pair p => VectorDecl (p CppSrcCode CppHdrCode) where
   vecDec n v scp = (pair1 (\v' -> vecDec n v' (pfst scp))
     (\v' -> vecDec n v' (psnd scp)) . zoom lensMStoVS) v
-  vecDecDef vr scp = pair1Val1List (`vecDecDef` (pfst scp))
-    (`vecDecDef` (psnd scp)) (zoom lensMStoVS vr) . map (zoom lensMStoVS)
+  vecDecDef vr scp = pair1Val1List (`vecDecDef` pfst scp)
+    (`vecDecDef` psnd scp) (zoom lensMStoVS vr) . map (zoom lensMStoVS)
 
 instance Pair p => VectorThunk (p CppSrcCode CppHdrCode) where
   vecThunk = pair1 vecThunk vecThunk
@@ -545,28 +545,28 @@ instance (Pair p) => AssignStatement (p CppSrcCode CppHdrCode) where
   (&--) vl = pair1 (&--) (&--) (zoom lensMStoVS vl)
 
 instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) where
-  varDec vr scp = pair1 (`varDec` (pfst scp)) (`varDec` (psnd scp))
+  varDec vr scp = pair1 (`varDec` pfst scp) (`varDec` psnd scp)
     (zoom lensMStoVS vr)
-  varDecDef vr scp vl = pair2 (`varDecDef` (pfst scp)) (`varDecDef` (psnd scp))
+  varDecDef vr scp vl = pair2 (`varDecDef` pfst scp) (`varDecDef` psnd scp)
     (zoom lensMStoVS vr) (zoom lensMStoVS vl)
   listDec n vr scp = pair1 (\v -> listDec n v (pfst scp))
     (\v -> listDec n v (psnd scp)) (zoom lensMStoVS vr)
-  listDecDef vr scp vs = pair1Val1List (`listDecDef` (pfst scp))
-    (`listDecDef` (psnd scp)) (zoom lensMStoVS vr) (map (zoom lensMStoVS) vs)
+  listDecDef vr scp vs = pair1Val1List (`listDecDef` pfst scp)
+    (`listDecDef` psnd scp) (zoom lensMStoVS vr) (map (zoom lensMStoVS) vs)
   arrayDec n vr scp = pair1 (\v -> arrayDec n v (pfst scp))
     (\v -> arrayDec n v (psnd scp)) (zoom lensMStoVS vr)
-  arrayDecDef vr scp vs = pair1Val1List (`arrayDecDef` (pfst scp))
-    (`arrayDecDef` (psnd scp)) (zoom lensMStoVS vr) (map (zoom lensMStoVS) vs)
-  constDecDef vr scp vl = pair2 (`constDecDef` (pfst scp))
+  arrayDecDef vr scp vs = pair1Val1List (`arrayDecDef` pfst scp)
+    (`arrayDecDef` psnd scp) (zoom lensMStoVS vr) (map (zoom lensMStoVS) vs)
+  constDecDef vr scp vl = pair2 (`constDecDef` pfst scp)
     (`constDecDef` psnd scp) (zoom lensMStoVS vr) (zoom lensMStoVS vl)
-  funcDecDef v scp ps = pairValListVal (`funcDecDef` (pfst scp))
+  funcDecDef v scp ps = pairValListVal (`funcDecDef` pfst scp)
     (`funcDecDef` psnd scp) (zoom lensMStoVS v) (map (zoom lensMStoVS) ps)
 
 instance (Pair p) => OODeclStatement (p CppSrcCode CppHdrCode) where
-  objDecDef o scp v = pair2 (`objDecDef` (pfst scp)) (`objDecDef` (psnd scp))
+  objDecDef o scp v = pair2 (`objDecDef` pfst scp) (`objDecDef` psnd scp)
     (zoom lensMStoVS o) (zoom lensMStoVS v)
-  objDecNew vr scp vs = pair1Val1List (`objDecNew` (pfst scp))
-    (`objDecNew` (psnd scp)) (zoom lensMStoVS vr) (map (zoom lensMStoVS) vs)
+  objDecNew vr scp vs = pair1Val1List (`objDecNew` pfst scp)
+    (`objDecNew` psnd scp) (zoom lensMStoVS vr) (map (zoom lensMStoVS) vs)
   extObjDecNew lib vr scp vs = pair1Val1List
     (\vr' -> extObjDecNew lib vr' (pfst scp))
     (\vr' -> extObjDecNew lib vr' (psnd scp))
@@ -669,8 +669,8 @@ instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) where
 
 
 instance (Pair p) => ObserverPattern (p CppSrcCode CppHdrCode) where
-  notifyObservers f t = pair2 (\fn tp -> notifyObservers fn tp) 
-    (\fn tp -> notifyObservers fn tp) (zoom lensMStoVS f) (zoom lensMStoVS t)
+  notifyObservers f t = pair2 notifyObservers notifyObservers
+    (zoom lensMStoVS f) (zoom lensMStoVS t)
 
 instance (Pair p) => StrategyPattern (p CppSrcCode CppHdrCode) where
   -- How I handle values with both State and Maybe might cause problems later on,

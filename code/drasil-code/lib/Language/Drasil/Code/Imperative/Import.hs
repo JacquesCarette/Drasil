@@ -524,7 +524,7 @@ genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
   vars <- mapM mkVar (fstdecl (sysinfodb $ codeSpec g) s
     \\ (map quantvar parms ++ map stVar svs))
   t <- spaceCodeType o
-  f n (convTypeOO t) desc parms rd [block $ map varDec vars, block stmts] --local
+  f n (convTypeOO t) desc parms rd [block $ map (`varDec` local) vars, block stmts]
 genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
   g <- get
   modify (\st -> st {currentScope = Local})
@@ -535,7 +535,7 @@ genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
   vars <- mapM mkVar (fstdecl (sysinfodb $ codeSpec g) s
     \\ (map quantvar parms ++ map stVar svs))
   genInitConstructor n desc parms (zip initvars inits)
-    [block $ map varDec vars, block stmts] --local
+    [block $ map (`varDec` local) vars, block stmts]
 genFunc _ _ (FData (FuncData n desc ddef)) = do
   modify (\st -> st {currentScope = Local})
   genDataFunc n desc ddef
@@ -602,31 +602,37 @@ convStmt (FTry t c) = do
   return $ tryCatch (bodyStatements stmt1) (bodyStatements stmt2)
 convStmt FContinue = return continue
 convStmt (FDecDef v (Matrix [[]])) = do
+  g <- get
+  let scp = convScope $ currentScope g
   vari <- mkVar v
-  let convDec (C.List _) = listDec 0 vari --need scp
-      convDec (C.Array _) = arrayDec 0 vari --need scp
-      convDec _ = varDec vari --need scp
-  fmap convDec (codeType v)
+  let convDec (C.List _) = listDec 0 vari
+      convDec (C.Array _) = arrayDec 0 vari
+      convDec _ = varDec vari
+  fmap (`convDec` scp) (codeType v)
 convStmt (FDecDef v e) = do
+  g <- get
+  let scp = convScope $ currentScope g
   v' <- mkVar v
   l <- maybeLog v'
   t <- codeType v
   let convDecDef (Matrix [lst]) = do
-        let contDecDef (C.List _) = listDecDef --need scp
-            contDecDef (C.Array _) = arrayDecDef --need scp
+        let contDecDef (C.List _) = listDecDef
+            contDecDef (C.Array _) = arrayDecDef
             contDecDef _ = error "Type mismatch between variable and value in declare-define FuncStmt"
         e' <- mapM convExpr lst
-        return $ contDecDef t v' e'
+        return $ contDecDef t v' scp e'
       convDecDef _ = do
         e' <- convExpr e
-        return $ varDecDef v' e' --need scp
+        return $ varDecDef v' scp e'
   dd <- convDecDef e
   return $ multi $ dd : l
 convStmt (FFuncDef f ps sts) = do
+  g <- get
+  let scp = convScope $ currentScope g
   f' <- mkVar (quantvar f)
   pms <- mapM (mkVar . quantvar) ps
   b <- mapM convStmt sts
-  return $ funcDecDef f' pms (bodyStatements b) --need scp
+  return $ funcDecDef f' scp pms (bodyStatements b)
 convStmt (FVal e) = do
   e' <- convExpr e
   return $ valStmt e'
@@ -657,10 +663,10 @@ readData ddef = do
   inD <- mapM (`inData` scope) ddef
   v_filename <- mkVal (quantvar inFileName)
   return [block $
-    varDec var_infile : --scope
-    (if any (\d -> isLine d || isLines d) ddef then [varDec var_line,
-    listDec 0 var_linetokens] else []) ++
-    [listDec 0 var_lines | any isLines ddef] ++ openFileR var_infile
+    varDec var_infile scope :
+    (if any (\d -> isLine d || isLines d) ddef then [varDec var_line scope,
+    listDec 0 var_linetokens scope ] else []) ++
+    [listDec 0 var_lines scope | any isLines ddef] ++ openFileR var_infile
     v_filename : concat inD ++ [closeFile v_infile]]
   where inData :: (OOProg r) => Data -> r (Scope r) -> GenState [MSStatement r]
         inData (Singleton v) _ = do
@@ -705,8 +711,8 @@ readData ddef = do
         ---------------
         clearTemp :: (OOProg r) => String -> DataItem -> r (Scope r) ->
           GenState (MSStatement r)
-        clearTemp sfx v _ = fmap (\t -> listDecDef (var (codeName v ++ sfx)
-          (listInnerType $ convTypeOO t)) []) (codeType v)
+        clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
+          (listInnerType $ convTypeOO t)) scp []) (codeType v)
         ---------------
         appendTemps :: (OOProg r) => Maybe String -> [DataItem]
           -> [GenState (MSStatement r)]
@@ -878,7 +884,7 @@ genFuncProc f svs (FDef (FuncDef n desc parms o rd s)) = do
   vars <- mapM mkVarProc (fstdecl (sysinfodb $ codeSpec g) s
     \\ (map quantvar parms ++ map stVar svs))
   t <- spaceCodeType o
-  f n (convType t) desc parms rd [block $ map varDec vars, block stmts] --local
+  f n (convType t) desc parms rd [block $ map (`varDec` local) vars, block stmts]
 genFuncProc _ _ (FDef (CtorDef {})) = error "genFuncProc: Procedural renderers do not support constructors"
 genFuncProc _ _ (FData (FuncData n desc ddef)) = genDataFuncProc n desc ddef
 
@@ -895,10 +901,10 @@ readDataProc ddef = do
   inD <- mapM (`inData` scope) ddef
   v_filename <- mkValProc (quantvar inFileName)
   return [block $
-    varDec var_infile : --scope
-    (if any (\d -> isLine d || isLines d) ddef then [varDec var_line,
-    listDec 0 var_linetokens] else []) ++
-    [listDec 0 var_lines | any isLines ddef] ++ openFileR var_infile
+    varDec var_infile scope :
+    (if any (\d -> isLine d || isLines d) ddef then [varDec var_line scope,
+    listDec 0 var_linetokens scope] else []) ++
+    [listDec 0 var_lines scope | any isLines ddef] ++ openFileR var_infile
     v_filename : concat inD ++ [closeFile v_infile]]
   where inData :: (SharedProg r) => Data -> r (Scope r) -> GenState [MSStatement r]
         inData (Singleton v) _ = do
@@ -943,8 +949,8 @@ readDataProc ddef = do
         ---------------
         clearTemp :: (SharedProg r) => String -> DataItem -> r (Scope r) ->
           GenState (MSStatement r)
-        clearTemp sfx v _ = fmap (\t -> listDecDef (var (codeName v ++ sfx)
-          (listInnerType $ convType t)) []) (codeType v)
+        clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
+          (listInnerType $ convType t)) scp []) (codeType v)
         ---------------
         appendTemps :: (SharedProg r) => Maybe String -> [DataItem]
           -> [GenState (MSStatement r)]
@@ -1121,12 +1127,16 @@ convStmtProc (FTry t c) = do
   return $ tryCatch (bodyStatements stmt1) (bodyStatements stmt2)
 convStmtProc FContinue = return continue
 convStmtProc (FDecDef v (Matrix [[]])) = do
+  g <- get
+  let scp = convScope $ currentScope g
   vari <- mkVarProc v
-  let convDec (C.List _) = listDec 0 vari --need scp
+  let convDec (C.List _) = listDec 0 vari
       convDec (C.Array _) = arrayDec 0 vari
       convDec _ = varDec vari
-  fmap convDec (codeType v)
+  fmap (`convDec` scp) (codeType v)
 convStmtProc (FDecDef v e) = do
+  g <- get
+  let scp = convScope $ currentScope g
   v' <- mkVarProc v
   l <- maybeLog v'
   t <- codeType v
@@ -1135,17 +1145,19 @@ convStmtProc (FDecDef v e) = do
             contDecDef (C.Array _) = arrayDecDef
             contDecDef _ = error "Type mismatch between variable and value in declare-define FuncStmt"
         e' <- mapM convExprProc lst
-        return $ contDecDef t v' e'
+        return $ contDecDef t v' scp e'
       convDecDef _ = do
         e' <- convExprProc e
-        return $ varDecDef v' e'
+        return $ varDecDef v' scp e'
   dd <- convDecDef e
   return $ multi $ dd : l
 convStmtProc (FFuncDef f ps sts) = do
+  g <- get
+  let scp = convScope $ currentScope g
   f' <- mkVarProc (quantvar f)
   pms <- mapM (mkVarProc . quantvar) ps
   b <- mapM convStmtProc sts
-  return $ funcDecDef f' pms (bodyStatements b)
+  return $ funcDecDef f' scp pms (bodyStatements b)
 convStmtProc (FVal e) = do
   e' <- convExprProc e
   return $ valStmt e'

@@ -19,6 +19,8 @@
 \newcommand{\lt}{\ensuremath <}
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
+\def\inDefScale{0.8}
+\def\outDefScale{1.0}
 \newsavebox{\mybox}
 \newcommand{\resizeExpression}[2]{
   \savebox{\mybox}{$#1$}
@@ -114,7 +116,7 @@ Units & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{h_{\text{g}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{p}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{p}}}}}{0.8}
+           \resizeExpression{{h_{\text{g}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{p}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{p}}}}}{\inDefScale}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -145,7 +147,7 @@ Units & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{h_{\text{c}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{b}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{b}}}}}{0.8}
+           \resizeExpression{{h_{\text{c}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{b}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{b}}}}}{\inDefScale}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}

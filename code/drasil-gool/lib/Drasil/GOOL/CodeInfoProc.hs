@@ -320,6 +320,11 @@ instance ControlStatement CodeInfoProc where
   tryCatch _ cb = do
     _ <- cb
     noInfo
+  
+  assert cond msg = do
+    _ <- zoom lensMStoVS cond
+    _ <- zoom lensMStoVS msg
+    noInfo
 
 instance VisibilitySym CodeInfoProc where
   type Visibility CodeInfoProc = VisibilityTag

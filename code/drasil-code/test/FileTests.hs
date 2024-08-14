@@ -3,14 +3,14 @@
 module FileTests (fileTestsOO, fileTestsProc) where
 
 import Drasil.GOOL (MSBlock, MSStatement, SMethod, SharedProg, OOProg,
-  BodySym(..), BlockSym(..), TypeSym(..), DeclStatement(..), IOStatement(..),
-  mainVar,Literal(..), VariableValue(..), MethodSym(..))
+  BodySym(..), BlockSym(..), TypeSym(..), DeclStatement(..), IOStatement(..), 
+  ControlStatement(..), mainVar, Literal(..), VariableValue(..), Comparison(..), 
+  List(..), MethodSym(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
-import Prelude hiding (return, print, log, exp, sin, cos, tan)
 
 -- | Creates a program in GOOL to test reading and writing to files.
 fileTestsOO :: (OOProg r) => OO.GSProgram r
@@ -45,6 +45,7 @@ writeStory = block [
   getFileInput (valueOf $ mainVar "fileToRead" infile)
                     (mainVar "fileLine" string),
   discardFileLine (valueOf $ mainVar "fileToRead" infile),
+  assert (valueOf (mainVar "fileLine" string) ?!= litString "") (litString "First line should not be empty."),
   listDec 0 (mainVar "fileContents" (listType string))]
 
 -- | Generates functions to read from a file.
@@ -57,4 +58,6 @@ readStory = getFileInputAll (valueOf $ mainVar "fileToRead" infile)
 goodBye :: (SharedProg r) => MSBlock r
 goodBye = block [
   printLn (valueOf $ mainVar "fileContents" (listType string)),
+  assert (listSize (valueOf (mainVar "fileContents" (listType string))) ?> litInt 0) 
+  (litString "fileContents should not be empty."),
   closeFile (valueOf $ mainVar "fileToRead" infile)]

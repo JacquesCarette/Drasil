@@ -14,6 +14,10 @@ public class NameGenTest {
             temp0.add(temp.get(i));
         }
         result = temp0;
+        
+        assert result.size() == 2 : "Result list should have 2 elements after slicing.";
+        
+        assert result.get(0) == 2 : "First element of result should be 2.";
     }
     
     private static void helper(ArrayList<Integer> temp) {
@@ -24,5 +28,7 @@ public class NameGenTest {
             temp0.add(temp.get(i));
         }
         result = temp0;
+        
+        assert result.size() == 2 : "Result list should have 2 elements after slicing.";
     }
 }

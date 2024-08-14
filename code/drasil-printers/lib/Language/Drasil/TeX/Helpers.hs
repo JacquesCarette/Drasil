@@ -1,7 +1,7 @@
 -- | Defines helper functions used in printing LaTeX documents.
 module Language.Drasil.TeX.Helpers where
 
-import Text.PrettyPrint (text, double)
+import Text.PrettyPrint (text)
 import qualified Text.PrettyPrint as TP
 
 import Language.Drasil (MaxWidthPercent)
@@ -279,10 +279,21 @@ useTikz = usepackage "luatex85" $+$ command0 "def" <>
 -- on Monad...
 
 -- | toEqn is special; it switches to 'Math', but inserts an equation environment.
--- The 'scale' parameter determines the maximum width of the equation, 
--- calculated as scale * page width.
-toEqn :: Double -> D -> D
-toEqn scale (PL g) = equation $ command2D "resizeExpression" (PL (\_ -> g Math)) (pure (double scale))
+-- The 'scale' parameter determines the maximum width of the equation based on
+-- the corresponding scaling command.
+toEqn :: ExprScale -> D -> D
+toEqn scale (PL g) = equation $ command2D "resizeExpression" (PL (\_ -> g Math)) (command0 (show scale))
+
+-- | Represents the scaling factor for an equation.
+-- 'InDef' and 'OutDef' correspond to predefined scaling commands.
+-- Commands are defined in 'Preamble.hs'
+data ExprScale = InDef | OutDef
+
+-- | Provides a string representation for 'ExprScale' values.
+-- Used to convert 'ExprScale' to the corresponding command string.
+instance Show ExprScale where
+  show InDef  = "inDefScale"
+  show OutDef = "outDefScale"
 
 -----------------------------------------------------------------------------
 -- | Helper(s) for String-Printing in TeX where it varies from HTML/Plaintext.

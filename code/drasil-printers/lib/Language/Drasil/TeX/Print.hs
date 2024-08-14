@@ -33,7 +33,7 @@ import Language.Drasil.TeX.Helpers (author, bold, br, caption, center, centering
   empty, enumerate, externalref, figure, fraction, includegraphics, item, item',
   itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgBr, mkEnvArgSq,
   mkMinipage, newline, newpage, parens, quote, sec, snref, sq, superscript,
-  symbDescription, texSym, title, toEqn)
+  symbDescription, texSym, title, toEqn, ExprScale(InDef, OutDef))
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (%%), ($+$),
   hpunctuate, lub, runPrint, switch, toMath, toText, unPL, vcat, vpunctuate)
 import Language.Drasil.TeX.Preamble (genPreamble)
@@ -62,7 +62,7 @@ lo :: LayoutObj -> PrintingInformation -> D
 lo (Header d t l)         _ = sec d (spec t) %% label (spec l)
 lo (HDiv _ con _)        sm = print sm con -- FIXME ignoring 2 arguments?
 lo (Paragraph contents)   _ = toText $ newline (spec contents)
-lo (EqnBlock contents)    _ = makeEquation contents 1
+lo (EqnBlock contents)    _ = makeEquation contents OutDef
 lo (Table _ rows r bl t)  _ = toText $ makeTable rows (spec r) bl (spec t)
 lo (Definition _ ssPs l) sm = toText $ makeDefn sm ssPs $ spec l
 lo (List l)               _ = toText $ makeList l
@@ -80,7 +80,7 @@ lo (CodeBlock _) _          = empty
 -- This function is specific to definitions.
 lo' :: LayoutObj -> PrintingInformation -> D
 lo' (HDiv _ con _)      sm = printDef sm con
-lo' (EqnBlock contents) _  = makeEquation contents 0.8
+lo' (EqnBlock contents) _  = makeEquation contents InDef
 lo' obj                 sm = lo obj sm
 
 -- | Converts layout objects into a document form.
@@ -366,8 +366,8 @@ makeDRows sm ls      = foldl1 (%%) $ map (\(f, d) ->
 ------------------ EQUATION PRINTING------------------------
 -----------------------------------------------------------------
 
--- | Prints an equation with a max width of scale * page width.
-makeEquation :: Spec -> Double -> D
+-- | Prints an equation with a maximum width determined by the given scale.
+makeEquation :: Spec -> ExprScale -> D
 makeEquation contents scale = toEqn scale (spec contents)
 
   --TODO: Add auto-generated labels -> Need to be able to ensure labeling based

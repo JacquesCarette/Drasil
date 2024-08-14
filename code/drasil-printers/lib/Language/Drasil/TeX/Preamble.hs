@@ -7,7 +7,7 @@ import Text.PrettyPrint (text)
 import Language.Drasil.Printing.LayoutObj (LayoutObj(..))
 import Language.Drasil.TeX.Monad (D, vcat, (%%), nest)
 import Language.Drasil.TeX.Helpers (docclass, command, command1o, command2, command3,
-  usepackage, command0, lbrace, rbrace)
+  usepackage, command0, lbrace, rbrace, ExprScale(InDef, OutDef))
 import Language.Drasil.Printing.Helpers (sq, brace)
 
 import Language.Drasil.Config (hyperSettings, fontSize, bibFname)
@@ -81,6 +81,8 @@ data Def = Bibliography
          | SymbDescriptionP1
          | SymbDescriptionP2
          | SaveBox
+         | InDefScale
+         | OutDefScale
          | ResizeExpr
          deriving Eq
 
@@ -93,6 +95,8 @@ addDef SetMathFont   = command "setmathfont" "Latin Modern Math"
 addDef SymbDescriptionP1 = command3 "newlist" "symbDescription" "description" "1"
 addDef SymbDescriptionP2 = command1o "setlist" (Just "symbDescription") "noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt"
 addDef SaveBox       = command "newsavebox" "\\mybox"
+addDef InDefScale    = command0 "def" <> command (show InDef)  "0.8"
+addDef OutDefScale   = command0 "def" <> command (show OutDef) "1.0"
 addDef ResizeExpr = vcat [
     command "newcommand" "\\resizeExpression" <> pure (sq "2") <> lbrace,
     nest 2 $ vcat [
@@ -138,6 +142,6 @@ parseDoc los' =
     parseDoc' Header{}     = ([], [])
     parseDoc' Paragraph{}  = ([], [])
     parseDoc' List{}       = ([EnumItem], [])
-    parseDoc' EqnBlock{}   = ([Graphicx, Calc], [SaveBox, ResizeExpr])
+    parseDoc' EqnBlock{}   = ([Graphicx, Calc], [InDefScale, OutDefScale, SaveBox, ResizeExpr])
     parseDoc' Cell{}       = ([], [])
     parseDoc' CodeBlock{}  = ([], [])

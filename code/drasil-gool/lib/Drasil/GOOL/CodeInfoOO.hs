@@ -267,8 +267,8 @@ instance VectorType CodeInfoOO where
   vecType _ = noInfoType
 
 instance VectorDecl CodeInfoOO where
-  vecDec _ _ = noInfo
-  vecDecDef _ = zoom lensMStoVS . executeList
+  vecDec  _ _ _ = noInfo
+  vecDecDef _ _ = zoom lensMStoVS . executeList
 
 instance VectorThunk CodeInfoOO where
   vecThunk _ = noInfo
@@ -292,19 +292,19 @@ instance AssignStatement CodeInfoOO where
   (&--)  _ = noInfo
 
 instance DeclStatement CodeInfoOO where
-  varDec                 _ = noInfo
-  varDecDef              _ = zoom lensMStoVS . execute1
-  listDec              _ _ = noInfo
-  listDecDef             _ = zoom lensMStoVS . executeList
-  arrayDec             _ _ = noInfo
-  arrayDecDef            _ = zoom lensMStoVS . executeList
-  constDecDef            _ = zoom lensMStoVS . execute1
-  funcDecDef           _ _ = execute1
+  varDec               _ _ = noInfo
+  varDecDef            _ _ = zoom lensMStoVS . execute1
+  listDec            _ _ _ = noInfo
+  listDecDef           _ _ = zoom lensMStoVS . executeList
+  arrayDec           _ _ _ = noInfo
+  arrayDecDef          _ _ = zoom lensMStoVS . executeList
+  constDecDef          _ _ = zoom lensMStoVS . execute1
+  funcDecDef         _ _ _ = execute1
 
 instance OODeclStatement CodeInfoOO where
-  objDecDef              _ = zoom lensMStoVS . execute1
-  objDecNew              _ = zoom lensMStoVS . executeList
-  extObjDecNew         _ _ = zoom lensMStoVS . executeList
+  objDecDef            _ _ = zoom lensMStoVS . execute1
+  objDecNew            _ _ = zoom lensMStoVS . executeList
+  extObjDecNew       _ _ _ = zoom lensMStoVS . executeList
 
 instance IOStatement CodeInfoOO where
   print        = zoom lensMStoVS . execute1
@@ -385,7 +385,7 @@ instance ControlStatement CodeInfoOO where
     noInfo
 
 instance ObserverPattern CodeInfoOO where
-  notifyObservers f _ _ = execute1 (zoom lensMStoVS f)
+  notifyObservers f _ = execute1 (zoom lensMStoVS f)
   
 instance StrategyPattern CodeInfoOO where
   runStrategy _ ss vl _ = do

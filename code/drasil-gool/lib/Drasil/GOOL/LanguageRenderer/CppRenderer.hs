@@ -481,9 +481,10 @@ instance Pair p => VectorType (p CppSrcCode CppHdrCode) where
   vecType = pair1 vecType vecType
 
 instance Pair p => VectorDecl (p CppSrcCode CppHdrCode) where
-  vecDec n = pair1 (vecDec n) (vecDec n) . zoom lensMStoVS
-  vecDecDef vr = pair1Val1List vecDecDef vecDecDef (zoom lensMStoVS vr) .
-    map (zoom lensMStoVS)
+  vecDec n v scp = (pair1 (\v' -> vecDec n v' (pfst scp))
+    (\v' -> vecDec n v' (psnd scp)) . zoom lensMStoVS) v
+  vecDecDef vr scp = pair1Val1List (`vecDecDef` (pfst scp))
+    (`vecDecDef` (psnd scp)) (zoom lensMStoVS vr) . map (zoom lensMStoVS)
 
 instance Pair p => VectorThunk (p CppSrcCode CppHdrCode) where
   vecThunk = pair1 vecThunk vecThunk
@@ -540,26 +541,31 @@ instance (Pair p) => AssignStatement (p CppSrcCode CppHdrCode) where
   (&--) vl = pair1 (&--) (&--) (zoom lensMStoVS vl)
 
 instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) where
-  varDec vr = pair1 varDec varDec (zoom lensMStoVS vr)
-  varDecDef vr vl = pair2 varDecDef varDecDef (zoom lensMStoVS vr)
-    (zoom lensMStoVS vl)
-  listDec n vr = pair1 (listDec n) (listDec n) (zoom lensMStoVS vr)
-  listDecDef vr vs = pair1Val1List listDecDef listDecDef (zoom lensMStoVS vr)
-    (map (zoom lensMStoVS) vs)
-  arrayDec n vr = pair1 (arrayDec n) (arrayDec n) (zoom lensMStoVS vr)
-  arrayDecDef vr vs = pair1Val1List arrayDecDef arrayDecDef (zoom lensMStoVS vr)
-    (map (zoom lensMStoVS) vs)
-  constDecDef vr vl = pair2 constDecDef constDecDef (zoom lensMStoVS vr)
-    (zoom lensMStoVS vl)
-  funcDecDef v ps = pairValListVal funcDecDef funcDecDef (zoom lensMStoVS v)
-    (map (zoom lensMStoVS) ps)
+  varDec vr scp = pair1 (`varDec` (pfst scp)) (`varDec` (psnd scp))
+    (zoom lensMStoVS vr)
+  varDecDef vr scp vl = pair2 (`varDecDef` (pfst scp)) (`varDecDef` (psnd scp))
+    (zoom lensMStoVS vr) (zoom lensMStoVS vl)
+  listDec n vr scp = pair1 (\v -> listDec n v (pfst scp))
+    (\v -> listDec n v (psnd scp)) (zoom lensMStoVS vr)
+  listDecDef vr scp vs = pair1Val1List (`listDecDef` (pfst scp))
+    (`listDecDef` (psnd scp)) (zoom lensMStoVS vr) (map (zoom lensMStoVS) vs)
+  arrayDec n vr scp = pair1 (\v -> arrayDec n v (pfst scp))
+    (\v -> arrayDec n v (psnd scp)) (zoom lensMStoVS vr)
+  arrayDecDef vr scp vs = pair1Val1List (`arrayDecDef` (pfst scp))
+    (`arrayDecDef` (psnd scp)) (zoom lensMStoVS vr) (map (zoom lensMStoVS) vs)
+  constDecDef vr scp vl = pair2 (`constDecDef` (pfst scp))
+    (`constDecDef` psnd scp) (zoom lensMStoVS vr) (zoom lensMStoVS vl)
+  funcDecDef v scp ps = pairValListVal (`funcDecDef` (pfst scp))
+    (`funcDecDef` psnd scp) (zoom lensMStoVS v) (map (zoom lensMStoVS) ps)
 
 instance (Pair p) => OODeclStatement (p CppSrcCode CppHdrCode) where
-  objDecDef o v = pair2 objDecDef objDecDef (zoom lensMStoVS o)
-    (zoom lensMStoVS v)
-  objDecNew vr vs = pair1Val1List objDecNew objDecNew (zoom lensMStoVS vr)
-    (map (zoom lensMStoVS) vs)
-  extObjDecNew lib vr vs = pair1Val1List (extObjDecNew lib) (extObjDecNew lib)
+  objDecDef o scp v = pair2 (`objDecDef` (pfst scp)) (`objDecDef` (psnd scp))
+    (zoom lensMStoVS o) (zoom lensMStoVS v)
+  objDecNew vr scp vs = pair1Val1List (`objDecNew` (pfst scp))
+    (`objDecNew` (psnd scp)) (zoom lensMStoVS vr) (map (zoom lensMStoVS) vs)
+  extObjDecNew lib vr scp vs = pair1Val1List
+    (\vr' -> extObjDecNew lib vr' (pfst scp))
+    (\vr' -> extObjDecNew lib vr' (psnd scp))
     (zoom lensMStoVS vr) (map (zoom lensMStoVS) vs)
 
 instance (Pair p) => IOStatement (p CppSrcCode CppHdrCode) where
@@ -659,9 +665,8 @@ instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) where
 
 
 instance (Pair p) => ObserverPattern (p CppSrcCode CppHdrCode) where
-  notifyObservers f t s = pair2 (\fn tp -> notifyObservers fn tp (pfst s)) 
-    (\fn tp -> notifyObservers fn tp (psnd s))
-    (zoom lensMStoVS f) (zoom lensMStoVS t)
+  notifyObservers f t = pair2 (\fn tp -> notifyObservers fn tp) 
+    (\fn tp -> notifyObservers fn tp) (zoom lensMStoVS f) (zoom lensMStoVS t)
 
 instance (Pair p) => StrategyPattern (p CppSrcCode CppHdrCode) where
   -- How I handle values with both State and Maybe might cause problems later on,
@@ -1460,15 +1465,15 @@ instance DeclStatement CppSrcCode where
   varDecDef = C.varDecDef Semi
   listDec n = C.listDec cppListDecDoc (litInt n)
   listDecDef = cppListDecDef cppListDecDefDoc
-  arrayDec n vr = do
+  arrayDec n vr scp = do
     let sz' = litInt n :: SValue CppSrcCode
     sz <- zoom lensMStoVS sz'
     v <- zoom lensMStoVS vr
     modify $ useVarName $ variableName v
     mkStmt $ RC.type' (variableType v) <+> RC.variable v <>
       brackets (RC.value sz)
-  arrayDecDef vr vals = do
-    vdc <- arrayDec (toInteger $ length vals) vr
+  arrayDecDef vr scp vals = do
+    vdc <- arrayDec (toInteger $ length vals) vr scp
     vs <- mapM (zoom lensMStoVS) vals
     mkStmt $ RC.statement vdc <+> equals <+> braces (valueList vs)
   constDecDef = CP.constDecDef
@@ -1508,7 +1513,7 @@ instance IOStatement CppSrcCode where
                             var_line = var l_line string
                             v_line = valueOf var_line
                         in
-    multi [varDec var_line, --local?
+    multi [varDec var_line local, -- TODO: get scope from v
       while (getLineFunc f v_line)
         (oneLiner $ valStmt $ listAppend (valueOf v) v_line)]
 
@@ -1522,9 +1527,9 @@ instance StringStatement CppSrcCode where
                          in
     modify (addLangImport sstream) >> multi [
       valStmt $ valueOf vnew $. clearFunc,
-      varDec var_ss, --local?
+      varDec var_ss local, -- TODO: get scope from vnew
       valStmt $ strFunc v_ss s,
-      varDec var_word,
+      varDec var_word local, -- TODO: get scope from vnew
       while (getLine3ArgFunc v_ss v_word d)
         (oneLiner $ valStmt $ listAppend (valueOf vnew) v_word)
     ]
@@ -1563,8 +1568,8 @@ instance ControlStatement CppSrcCode where
     e <- zoom lensMStoVS i
     let l = variableName e
         t = toState $ variableType e
-        iterI = var l (iterator t) --local
-    for (varDecDef iterI (iterBegin v)) (setIterVar iterI ?!= iterEnd v) 
+        iterI = var l (iterator t)
+    for (varDecDef iterI local (iterBegin v)) (setIterVar iterI ?!= iterEnd v) 
       (iterI &++) b
   while = C.while parens bodyStart bodyEnd
 
@@ -1660,7 +1665,7 @@ instance OORenderMethod CppSrcCode where
     let i = var "i" int
         deleteStatements = map (onStateValue (onCodeValue destructSts) . 
           zoom lensMStoCS) vs
-        loopIndexDec = varDec i -- local
+        loopIndexDec = varDec i local
         dbody = on2StateValues (on2CodeValues emptyIfEmpty)
           (onStateList (onCodeList (vcat . map fst)) deleteStatements) $
           bodyStatements $ loopIndexDec : deleteStatements
@@ -2085,8 +2090,8 @@ instance VectorType CppHdrCode where
   vecType = listType
 
 instance VectorDecl CppHdrCode where
-  vecDec _ _ = emptyStmt
-  vecDecDef _ _ = emptyStmt
+  vecDec _ _ _ = emptyStmt
+  vecDecDef _ _ _ = emptyStmt
 
 instance VectorThunk CppHdrCode where
   vecThunk = pure . pure . pureValue . fmap unCPPHC . valueOf
@@ -2140,17 +2145,17 @@ instance AssignStatement CppHdrCode where
 instance DeclStatement CppHdrCode where
   varDec = C.varDec static dynamic empty
   varDecDef = C.varDecDef Semi
-  listDec _ _ = emptyStmt
-  listDecDef _ _ = emptyStmt
-  arrayDec _ _ = emptyStmt
-  arrayDecDef _ _ = emptyStmt
+  listDec _ _ _ = emptyStmt
+  listDecDef _ _ _ = emptyStmt
+  arrayDec _ _ _ = emptyStmt
+  arrayDecDef _ _ _ = emptyStmt
   constDecDef = CP.constDecDef
-  funcDecDef _ _ _ = emptyStmt
+  funcDecDef _ _ _ _ = emptyStmt
 
 instance OODeclStatement CppHdrCode where
-  objDecDef _ _ = emptyStmt
-  objDecNew _ _ = emptyStmt
-  extObjDecNew _ _ _ = emptyStmt
+  objDecDef _ _ _ = emptyStmt
+  objDecNew _ _ _ = emptyStmt
+  extObjDecNew _ _ _ _ = emptyStmt
 
 instance IOStatement CppHdrCode where
   print _ = emptyStmt
@@ -2216,7 +2221,7 @@ instance ControlStatement CppHdrCode where
   assert _ _ = emptyStmt
 
 instance ObserverPattern CppHdrCode where
-  notifyObservers _ _ _ = emptyStmt
+  notifyObservers _ _ = emptyStmt
 
 instance StrategyPattern CppHdrCode where
   runStrategy _ _ _ _ = toState $ toCode empty
@@ -2304,7 +2309,7 @@ instance MethodElim CppHdrCode where
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
   stateVar s p v = do
-    dec <- zoom lensCStoMS $ stmt $ C.varDec static dynamic (text "&") v
+    dec <- zoom lensCStoMS $ stmt $ C.varDec static dynamic (text "&") v local
     emptS <- zoom lensCStoMS emptyStmt
     pure $ on3CodeValues svd (onCodeValue snd s)
       (toCode $ R.stateVar empty (RC.perm p) (RC.statement dec)) emptS
@@ -2606,9 +2611,9 @@ cppIterEndFunc :: VSType CppSrcCode -> VSFunction CppSrcCode
 cppIterEndFunc t = func cppIterEnd (iterator t) []
 
 cppListDecDef :: (CommonRenderSym r) => ([r (Value r)] -> Doc) -> SVariable r ->
-  [SValue r] -> MSStatement r
-cppListDecDef f v vls = do
-  vdc <- varDec v
+  r (Scope r) -> [SValue r] -> MSStatement r
+cppListDecDef f v scp vls = do
+  vdc <- varDec v scp
   vs <- zoom lensMStoVS $ sequence vls
   mkStmt (RC.statement vdc <> f vs)
 
@@ -2688,9 +2693,9 @@ cppListDecDoc n = parens (RC.value n)
 cppListDecDefDoc :: (CommonRenderSym r) => [r (Value r)] -> Doc
 cppListDecDefDoc vs = braces (valueList vs)
 
-cppFuncDecDef :: (CommonRenderSym r) => SVariable r -> [SVariable r] -> MSBody r ->
-  MSStatement r
-cppFuncDecDef v ps bod = do
+cppFuncDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) ->
+  [SVariable r] -> MSBody r -> MSStatement r
+cppFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
   pms <- mapM (zoom lensMStoVS) ps
@@ -2815,8 +2820,8 @@ cppsStateVarDef cns s p vr' vl' = do
 cpphStateVarDef :: (OORenderSym r) => Doc -> r (Permanence r) -> SVariable r ->
   SValue r -> CS Doc
 cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (RC.perm p) .
-  RC.statement) (zoom lensCStoMS $ stmt $ onBinding (binding p) (varDec
-  vr) (varDecDef vr vl))
+  RC.statement) (zoom lensCStoMS $ stmt $ onBinding (binding p)
+  (varDec vr local) (varDecDef vr local vl))
 
 cpphVarsFuncsList :: VisibilityTag -> [CppHdrCode (StateVar CppHdrCode)] -> 
   [CppHdrCode (Method CppHdrCode)] -> Doc
@@ -2864,7 +2869,7 @@ cppsInOut :: (VSType CppSrcCode -> [MSParameter CppSrcCode] -> MSBody CppSrcCode
   MSBody CppSrcCode -> SMethod CppSrcCode
 cppsInOut f ins [v] [] b = f (onStateValue variableType v)
   (cppInOutParams ins [v] []) (on3StateValues (on3CodeValues surroundBody)
-  (varDec v) b (returnStmt $ valueOf v))
+  (varDec v local) b (returnStmt $ valueOf v))
 cppsInOut f ins [] [v] b = f (onStateValue variableType v)
   (cppInOutParams ins [] [v]) (on2StateValues (on2CodeValues appendToBody) b
   (returnStmt $ valueOf v))

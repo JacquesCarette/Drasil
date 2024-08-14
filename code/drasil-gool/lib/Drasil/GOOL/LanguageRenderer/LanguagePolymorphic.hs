@@ -28,13 +28,13 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
   variableType), ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/),
   sin, cos, tan), Comparison(..), funcApp, StatementSym(multi),
   AssignStatement((&++)), (&=), IOStatement(printStr, printStrLn, printFile,
-  printFileStr, printFileStrLn), ifNoElse)
+  printFileStr, printFileStrLn), ifNoElse, ScopeSym(Scope))
 import qualified Drasil.GOOL.InterfaceCommon as IC (TypeSym(int, double, char,
   string, listType, arrayType, listInnerType, funcType, void), VariableSym(var),
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
   IOStatement(print), ControlStatement(returnStmt, for), ParameterSym(param),
-  List(intToIndex))
+  List(intToIndex), ScopeSym(local))
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, Initializers,
   CSStateVar, FileSym(File), ModuleSym(Module), newObj, objMethodCallNoParams,
   ($.), PermanenceSym(..), convTypeOO)
@@ -368,13 +368,14 @@ increment vr' v'= do
   v <- zoom lensMStoVS v'
   mkStmt $ R.addAssign vr v
 
-objDecNew :: (OORenderSym r) => SVariable r -> [SValue r] -> MSStatement r
-objDecNew v vs = IC.varDecDef v (newObj (onStateValue variableType v) vs)
+objDecNew :: (OORenderSym r) => SVariable r -> r (Scope r) -> [SValue r]
+  -> MSStatement r
+objDecNew v scp vs = IC.varDecDef v scp (newObj (onStateValue variableType v) vs)
 
 printList :: (CommonRenderSym r) => Integer -> SValue r -> (SValue r -> MSStatement r)
   -> (String -> MSStatement r) -> (String -> MSStatement r) -> MSStatement r
 printList n v prFn prStrFn prLnFn = multi [prStrFn "[", 
-  IC.for (IC.varDecDef i (IC.litInt 0)) 
+  IC.for (IC.varDecDef i IC.local (IC.litInt 0)) 
     (IC.valueOf i ?< (IC.listSize v #- IC.litInt 1)) (i &++) 
     (bodyStatements [prFn (IC.listAccess v (IC.valueOf i)), prStrFn ", "]), 
   ifNoElse [(IC.listSize v ?> IC.litInt 0, oneLiner $

@@ -7,7 +7,7 @@ module Drasil.GOOL.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
 
 import Drasil.GOOL.InterfaceCommon (Label, SMethod, MSBody, MSStatement, SValue,
   SVariable, MSParameter, VSType, VariableElim(variableName, variableType),
-  VisibilitySym(..), getType, convType)
+  VisibilitySym(..), getType, convType, ScopeSym(Scope))
 import qualified Drasil.GOOL.InterfaceCommon as IC (MethodSym(function),
   List(intToIndex), ParameterSym(param))
 import Drasil.GOOL.InterfaceProc (SFile, FSModule, FileSym (File),
@@ -89,9 +89,9 @@ arrayElem i' v' = do
       vRender = RCC.variable v <> brackets (RCC.value i)
   mkStateVar vName vType vRender
 
-funcDecDef :: (ProcRenderSym r) => SVariable r -> [SVariable r] -> MSBody r ->
-  MSStatement r
-funcDecDef v ps b = do
+funcDecDef :: (ProcRenderSym r) => SVariable r -> r (Scope r) -> [SVariable r]
+  -> MSBody r -> MSStatement r
+funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
   s <- get

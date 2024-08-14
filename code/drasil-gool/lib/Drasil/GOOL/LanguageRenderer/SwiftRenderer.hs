@@ -550,8 +550,8 @@ instance DeclStatement SwiftCode where
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
-  constDecDef vr vl' = do
-    vdec <- swiftVarDec swiftConst vr
+  constDecDef vr scp vl' = do
+    vdec <- swiftVarDec swiftConst vr scp
     vl <- zoom lensMStoVS vl'
     mkStmtNoEnd $ RC.statement vdec <+> equals <+> RC.value vl
   funcDecDef = CP.funcDecDef
@@ -583,7 +583,7 @@ instance IOStatement SwiftCode where
   discardFileInput _ = modify incrementWord >> emptyStmt
 
   openFileR v pth = multi [CP.openFileR swiftOpenFile v pth,
-    varDec swiftContentsVar, swiftReadFile swiftContentsVar (valueOf v)]
+    varDec swiftContentsVar local, swiftReadFile swiftContentsVar (valueOf v)] -- TODO: get scope from v
   openFileW = swiftOpenFileWA False
   openFileA = swiftOpenFileWA True
   closeFile = swiftCloseFile
@@ -594,7 +594,7 @@ instance IOStatement SwiftCode where
     modify incrementLine
     slc <- listSlice swiftLineVar (listAccess swiftContentsVal (litInt li))
       (Just $ litInt wi) Nothing Nothing
-    multi [varDec swiftLineVar, mkStmtNoEnd $ RC.block slc,
+    multi [varDec swiftLineVar local, mkStmtNoEnd $ RC.block slc, -- TODO: get scope from v
       v &= swiftJoinedFunc ' ' swiftLineVal]
   discardFileLine _ = modify incrementLine >> emptyStmt
   getFileInputAll _ v = do
@@ -650,7 +650,7 @@ instance ControlStatement SwiftCode where
     mkStmtNoEnd (swiftAssert cond errMsg)
 
 instance ObserverPattern SwiftCode where
-  notifyObservers f t _ = M.notifyObservers' f t
+  notifyObservers f t = M.notifyObservers' f t
 
 instance StrategyPattern SwiftCode where
   runStrategy = M.runStrategy
@@ -1119,8 +1119,9 @@ swiftReadFile v f = let l = var "l" string
     (lambda [l] (swiftSplitFunc ' ' (valueOf l))))
   (oneLiner $ throw "Error reading from file.")
 
-swiftVarDec :: Doc -> SVariable SwiftCode -> MSStatement SwiftCode
-swiftVarDec dec v' = do
+swiftVarDec :: Doc -> SVariable SwiftCode -> SwiftCode (Scope SwiftCode)
+  -> MSStatement SwiftCode
+swiftVarDec dec v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
   let bind Static = static :: SwiftCode (Permanence SwiftCode)

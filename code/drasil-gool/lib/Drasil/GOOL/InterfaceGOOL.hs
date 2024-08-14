@@ -200,29 +200,31 @@ objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r -> Label
 objMethodCallNoParams t o f = objMethodCall t o f []
 
 class (DeclStatement r, OOVariableSym r) => OODeclStatement r where
-  objDecDef    :: SVariable r -> SValue r -> MSStatement r
-  objDecNew    :: SVariable r -> [SValue r] -> MSStatement r
-  extObjDecNew :: Library -> SVariable r -> [SValue r] -> MSStatement r
+  objDecDef    :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+  objDecNew    :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+  extObjDecNew :: Library -> SVariable r -> r (Scope r) -> [SValue r]
+    -> MSStatement r
 
-objDecNewNoParams :: (OODeclStatement r) => SVariable r -> MSStatement r
-objDecNewNoParams v = objDecNew v []
+objDecNewNoParams :: (OODeclStatement r) => SVariable r -> r (Scope r)
+  -> MSStatement r
+objDecNewNoParams v s = objDecNew v s []
 
 extObjDecNewNoParams :: (OODeclStatement r) => Library -> SVariable r -> 
-  MSStatement r
-extObjDecNewNoParams l v = extObjDecNew l v []
+  r (Scope r) -> MSStatement r
+extObjDecNewNoParams l v s = extObjDecNew l v s []
 
 class (FuncAppStatement r, OOVariableSym r) => OOFuncAppStatement r where
   selfInOutCall :: InOutCall r
 
 class (StatementSym r, OOFunctionSym r) => ObserverPattern r where
-  notifyObservers :: VSFunction r -> VSType r -> r (Scope r) -> MSStatement r
+  notifyObservers :: VSFunction r -> VSType r -> MSStatement r
 
 observerListName :: Label
 observerListName = "observerList"
 
 initObserverList :: (DeclStatement r) => VSType r -> [SValue r] -> r (Scope r)
   -> MSStatement r
-initObserverList t os _ = listDecDef (var observerListName (listType t)) os -- s will be needed again
+initObserverList t os scp = listDecDef (var observerListName (listType t)) scp os
 
 addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r
   -> MSStatement r

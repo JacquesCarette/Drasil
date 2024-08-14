@@ -541,28 +541,28 @@ instance AssignStatement PythonCode where
   (&--) = M.decrement1
 
 instance DeclStatement PythonCode where
-  varDec v = CP.varDecDef v Nothing
-  varDecDef v e = CP.varDecDef v (Just e)
+  varDec v scp = CP.varDecDef v scp Nothing
+  varDecDef v scp e = CP.varDecDef v scp (Just e)
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
-  constDecDef v e = do
+  constDecDef v scp e = do
     v' <- zoom lensMStoVS v
     let n = toConstName $ variableName v'
         newConst = constant n (pure (variableType v'))
     available <- varNameAvailable n
     if available
-      then varDecDef newConst e
+      then varDecDef newConst scp e
       else error "Cannot safely capitalize constant."
   funcDecDef = CP.funcDecDef
 
 instance OODeclStatement PythonCode where
   objDecDef = varDecDef
-  objDecNew = G.objDecNew
-  extObjDecNew lib v vs = do
+  objDecNew v scp = G.objDecNew v scp
+  extObjDecNew lib v scp vs = do
     modify (addModuleImport lib)
-    varDecDef v (extNewObj lib (onStateValue variableType v) vs)
+    varDecDef v scp (extNewObj lib (onStateValue variableType v) vs)
 
 instance IOStatement PythonCode where
   print      = pyOut False Nothing printFunc
@@ -634,7 +634,7 @@ instance ControlStatement PythonCode where
       mkStmtNoEnd (pyAssert cond errMsg)
 
 instance ObserverPattern PythonCode where
-  notifyObservers f t _ = M.notifyObservers' f t
+  notifyObservers f t = M.notifyObservers' f t
 
 instance StrategyPattern PythonCode where
   runStrategy = M.runStrategy

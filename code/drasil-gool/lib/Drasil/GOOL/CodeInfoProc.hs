@@ -219,8 +219,8 @@ instance VectorType CodeInfoProc where
   vecType _ = noInfoType
 
 instance VectorDecl CodeInfoProc where
-  vecDec _ _ = noInfo
-  vecDecDef _ = zoom lensMStoVS . executeList
+  vecDec  _ _ _ = noInfo
+  vecDecDef _ _ = zoom lensMStoVS . executeList
 
 instance VectorThunk CodeInfoProc where
   vecThunk _ = noInfo
@@ -244,14 +244,14 @@ instance AssignStatement CodeInfoProc where
   (&--)  _ = noInfo
 
 instance DeclStatement CodeInfoProc where
-  varDec                 _ = noInfo
-  varDecDef              _ = zoom lensMStoVS . execute1
-  listDec              _ _ = noInfo
-  listDecDef             _ = zoom lensMStoVS . executeList
-  arrayDec             _ _ = noInfo
-  arrayDecDef            _ = zoom lensMStoVS . executeList
-  constDecDef            _ = zoom lensMStoVS . execute1
-  funcDecDef           _ _ = execute1
+  varDec               _ _ = noInfo
+  varDecDef            _ _ = zoom lensMStoVS . execute1
+  listDec            _ _ _ = noInfo
+  listDecDef           _ _ = zoom lensMStoVS . executeList
+  arrayDec           _ _ _ = noInfo
+  arrayDecDef          _ _ = zoom lensMStoVS . executeList
+  constDecDef          _ _ = zoom lensMStoVS . execute1
+  funcDecDef         _ _ _ = execute1
 
 instance IOStatement CodeInfoProc where
   print        = zoom lensMStoVS . execute1

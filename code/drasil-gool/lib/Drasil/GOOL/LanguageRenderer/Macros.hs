@@ -106,9 +106,10 @@ listSlice beg end step vnew vold = do
                       endVal ?< v_i ?&& v_i ?<= begVal ?&& step' ?< IC.litInt 0
 
   IC.block [
-    IC.listDec 0 var_temp,
+    IC.listDec 0 var_temp IC.local, -- TODO: get scope from vnew
     setBeg, setEnd,
-    IC.for (IC.varDecDef var_i begVal) cond (maybe (var_i &++) (var_i &+=) step)
+    IC.for (IC.varDecDef var_i IC.local begVal) cond
+      (maybe (var_i &++) (var_i &+=) step)
       (oneLiner $ IC.valStmt $ IC.listAppend v_temp (IC.listAccess vold v_i)),
     vnew &= v_temp]
 
@@ -127,9 +128,9 @@ makeSetterVal :: (CommonRenderSym r) => Label -> SValue r -> Maybe Integer ->
   (MSStatement r, SValue r)
 makeSetterVal _     _    _      (Just v) _  _  _   = (S.emptyStmt, v)
 makeSetterVal _     _   (Just s) _       lb rb _   = (S.emptyStmt, if s > 0 then lb else rb)
-makeSetterVal vName step _       _       lb rb _ = -- scp will be needed again
+makeSetterVal vName step _       _       lb rb  scp =
   let theVar = IC.var vName IC.int
-      theSetter = IC.varDecDef theVar $ IC.inlineIf (step ?> IC.litInt 0) lb rb
+      theSetter = IC.varDecDef theVar scp $ IC.inlineIf (step ?> IC.litInt 0) lb rb
   in (theSetter, IC.intToIndex $ IC.valueOf theVar)
 
 stringListVals :: (CommonRenderSym r) => [SVariable r] -> SValue r -> MSStatement r
@@ -169,8 +170,8 @@ stringListLists lsts sl = do
 
 forRange :: (CommonRenderSym r) => SVariable r -> SValue r -> SValue r -> SValue r -> 
   MSBody r -> MSStatement r
-forRange i initv finalv stepv = IC.for (IC.varDecDef i initv) (IC.valueOf i ?< 
-  finalv) (i &+= stepv)
+forRange i initv finalv stepv = IC.for (IC.varDecDef i IC.local initv)
+  (IC.valueOf i ?< finalv) (i &+= stepv)
 
 observerIndex :: (CommonRenderSym r) => SVariable r
 observerIndex = IC.var "observerIndex" IC.int
@@ -184,11 +185,10 @@ obsList t = IC.valueOf $ listOf observerListName t
 notify :: (OORenderSym r) => VSType r -> VSFunction r -> MSBody r
 notify t f = oneLiner $ IC.valStmt $ at (obsList t) observerIdxVal $. f
 
-notifyObservers :: (OORenderSym r) => VSFunction r -> VSType r -> r (IC.Scope r)
-  -> MSStatement r
-notifyObservers f t _ = IC.for initv (observerIdxVal ?< IC.listSize (obsList t)) -- s will be needed again
+notifyObservers :: (OORenderSym r) => VSFunction r -> VSType r -> MSStatement r
+notifyObservers f t = IC.for initv (observerIdxVal ?< IC.listSize (obsList t))
   (observerIndex &++) (notify t f)
-  where initv = IC.varDecDef observerIndex $ IC.litInt 0
+  where initv = IC.varDecDef observerIndex IC.local $ IC.litInt 0
 
 notifyObservers' :: (OORenderSym r) => VSFunction r -> VSType r -> MSStatement r
 notifyObservers' f t = IC.forRange observerIndex initv (IC.listSize $ obsList t )

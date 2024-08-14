@@ -314,9 +314,9 @@ class (VariableSym r, ThunkSym r, StatementSym r) => ThunkAssign r where
 class TypeSym r => VectorType r where
   vecType :: VSType r -> VSType r
 
-class (VariableSym r, StatementSym r) => VectorDecl r where
-  vecDec :: Integer -> SVariable r -> MSStatement r
-  vecDecDef :: SVariable r -> [SValue r] -> MSStatement r
+class (DeclStatement r) => VectorDecl r where
+  vecDec :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
+  vecDecDef :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
 
 class (VariableSym r, ThunkSym r) => VectorThunk r where
   vecThunk :: SVariable r -> VSThunk r
@@ -354,15 +354,16 @@ assignToListIndex :: (StatementSym r, VariableValue r, List r) => SVariable r
   -> SValue r -> SValue r -> MSStatement r
 assignToListIndex lst index v = valStmt $ listSet (valueOf lst) index v
 
-class (VariableSym r, StatementSym r) => DeclStatement r where
-  varDec       :: SVariable r -> MSStatement r
-  varDecDef    :: SVariable r -> SValue r -> MSStatement r
-  listDec      :: Integer -> SVariable r -> MSStatement r
-  listDecDef   :: SVariable r -> [SValue r] -> MSStatement r
-  arrayDec     :: Integer -> SVariable r -> MSStatement r
-  arrayDecDef  :: SVariable r -> [SValue r] -> MSStatement r
-  constDecDef  :: SVariable r -> SValue r -> MSStatement r
-  funcDecDef   :: SVariable r -> [SVariable r] -> MSBody r -> MSStatement r
+class (VariableSym r, StatementSym r, ScopeSym r) => DeclStatement r where
+  varDec       :: SVariable r -> r (Scope r) -> MSStatement r
+  varDecDef    :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+  listDec      :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
+  listDecDef   :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+  arrayDec     :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
+  arrayDecDef  :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+  constDecDef  :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+  funcDecDef   :: SVariable r -> r (Scope r) -> [SVariable r] -> MSBody r
+    -> MSStatement r
 
 
 class (VariableSym r, StatementSym r) => IOStatement r where

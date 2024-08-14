@@ -478,8 +478,8 @@ instance AssignStatement JuliaCode where
   (&--) = M.decrement1
 
 instance DeclStatement JuliaCode where
-  varDec v = CP.varDecDef v Nothing
-  varDecDef v e = CP.varDecDef v (Just e)
+  varDec v scp = CP.varDecDef v scp Nothing
+  varDecDef v scp e = CP.varDecDef v scp (Just e)
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
   arrayDec = listDec
@@ -678,8 +678,9 @@ jlCast t' v' = do
       jlCast' _      _    vDoc' tDoc' = tDoc' <> parens vDoc'
   mkVal t (jlCast' vTp tTp vDoc tDoc)
 
-jlConstDecDef :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
-jlConstDecDef v' def' = do
+jlConstDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> SValue r
+  -> MSStatement r
+jlConstDecDef v' scp def' = do
   v <- zoom lensMStoVS v'
   def <- zoom lensMStoVS def'
   modify $ useVarName $ variableName v
@@ -718,7 +719,7 @@ jlListSlice vn vo beg end step = do
         (Nothing, Just s)  -> (emptyStmt,
           if s > 0 then mkStateVal int jlBegin else mkStateVal int jlEnd)
         -- Otherwise, generate an if-statement to calculate `beg` at runtime
-        (Nothing, Nothing) -> (varDecDef begVar $ -- TODO: get scope from vn
+        (Nothing, Nothing) -> (varDecDef begVar local $ -- TODO: get scope from vn
           inlineIf (step ?> litInt 0) (litInt 1) (listSize vo),
           valueOf begVar)
       
@@ -727,12 +728,12 @@ jlListSlice vn vo beg end step = do
       (setEnd, endVal) = case (end, mbStepV) of
         (Just e, Just s)  -> (emptyStmt,
           if s > 0 then e else e `G.smartAdd` litInt 2)
-        (Just e, Nothing) -> (varDecDef endVar $ -- TODO: get scope from vn
+        (Just e, Nothing) -> (varDecDef endVar local $ -- TODO: get scope from vn
           inlineIf (step ?> litInt 0) e (e `G.smartAdd` litInt 2),
           valueOf endVar)
         (Nothing, Just s) -> (emptyStmt,
           if s > 0 then mkStateVal int jlEnd else mkStateVal int jlBegin)
-        (Nothing, Nothing) -> (varDecDef endVar $ -- TODO: get scope from vn
+        (Nothing, Nothing) -> (varDecDef endVar local $ -- TODO: get scope from vn
           inlineIf (step ?> litInt 0) (listSize vo) (litInt 1), valueOf endVar)
 
       setToSlice = jlListSlice' vn vo begVal endVal step mbStepV

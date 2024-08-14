@@ -525,11 +525,11 @@ instance AssignStatement CSharpCode where
   (&--) = C.decrement1
 
 instance DeclStatement CSharpCode where
-  varDec v = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $ 
-    C.varDec static dynamic empty v)
+  varDec v scp = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $ 
+    C.varDec static dynamic empty v scp)
   varDecDef = C.varDecDef Semi
-  listDec n v = zoom lensMStoVS v >>= (\v' -> C.listDec (R.listDec v') 
-    (litInt n) v)
+  listDec n v scp = zoom lensMStoVS v >>= (\v' -> C.listDec (R.listDec v') 
+    (litInt n) v scp)
   listDecDef = CP.listDecDef
   arrayDec n = CP.arrayDec (litInt n)
   arrayDecDef = CP.arrayDecDef
@@ -852,9 +852,9 @@ csCast = join .: on2StateValues (\t v -> csCast' (getType t) (getType $
 -- all features of C# 7, so we cannot generate local functions.
 -- If support for local functions is added to mcs in the future, this
 -- should be re-written to generate a local function.
-csFuncDecDef :: (CommonRenderSym r) => SVariable r -> [SVariable r] -> MSBody r -> 
-  MSStatement r
-csFuncDecDef v ps bod = do
+csFuncDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) ->
+  [SVariable r] -> MSBody r -> MSStatement r
+csFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
   pms <- mapM (zoom lensMStoVS) ps
@@ -936,7 +936,7 @@ csInOut :: (VSType CSharpCode -> [MSParameter CSharpCode] -> MSBody CSharpCode -
   [SVariable CSharpCode] -> [SVariable CSharpCode] -> [SVariable CSharpCode] -> 
   MSBody CSharpCode -> SMethod CSharpCode
 csInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
-  (on3StateValues (on3CodeValues surroundBody) (varDec v) b (returnStmt $ 
+  (on3StateValues (on3CodeValues surroundBody) (varDec v local) b (returnStmt $ 
   valueOf v))
 csInOut f ins [] [v] b = f (onStateValue variableType v) 
   (map param $ v : ins) (on2StateValues (on2CodeValues appendToBody) b 

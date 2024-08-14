@@ -9,7 +9,6 @@ import Drasil.GOOL (Label, MSBody, MSBlock, SVariable, SValue, MSStatement,
   SharedProg, BodySym(..), BlockSym(..), TypeSym(..), var, VariableElim(..),
   Literal(..), VariableValue(..), StatementSym(..), DeclStatement(..),
   IOStatement(..), lensMStoVS, ScopeSym(..))
-import Language.Drasil.Code.Imperative.Helpers (convScope)
 
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (get)
@@ -26,14 +25,13 @@ maybeLog v = do
 loggedVar :: (SharedProg r) => SVariable r -> GenState (MSStatement r)
 loggedVar v = do
   g <- get
-  let scp = convScope $ currentScope g
   return $ multi [
-    openFileA (varLogFile scp) (litString $ logName g),
-    zoom lensMStoVS v >>= (\v' -> printFileStr (valLogFile scp) ("var '" ++
+    openFileA varLogFile (litString $ logName g),
+    zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("var '" ++
       variableName v' ++ "' assigned ")),
-    printFile (valLogFile scp) (valueOf v),
-    printFileStrLn (valLogFile scp) (" in module " ++ currentModule g),
-    closeFile (valLogFile scp)]
+    printFile valLogFile (valueOf v),
+    printFileStrLn valLogFile (" in module " ++ currentModule g),
+    closeFile valLogFile]
 
 -- | Generates the body of a function with the given name, list of parameters,
 -- and blocks to include in the body. If the user chose to turn on logging of
@@ -51,28 +49,28 @@ logBody n vars b = do
 -- inputs it was called with.
 loggedMethod :: (SharedProg r) => FilePath -> Label -> [SVariable r] -> MSBlock r
 loggedMethod lName n vars = block [
-      varDec (varLogFile local),
-      openFileA (varLogFile local) (litString lName),
-      printFileStrLn (valLogFile local) ("function " ++ n ++ " called with inputs: {"),
+      varDec varLogFile, --local
+      openFileA varLogFile (litString lName),
+      printFileStrLn valLogFile ("function " ++ n ++ " called with inputs: {"),
       multi $ printInputs vars,
-      printFileStrLn (valLogFile local) "  }",
-      closeFile (valLogFile local) ]
+      printFileStrLn valLogFile "  }",
+      closeFile valLogFile]
   where
     printInputs [] = []
     printInputs [v] = [
-      zoom lensMStoVS v >>= (\v' -> printFileStr (valLogFile local) ("  " ++
+      zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("  " ++
         variableName v' ++ " = ")),
-      printFileLn (valLogFile local) (valueOf v)]
+      printFileLn valLogFile (valueOf v)]
     printInputs (v:vs) = [
-      zoom lensMStoVS v >>= (\v' -> printFileStr (valLogFile local) ("  " ++
+      zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("  " ++
         variableName v' ++ " = ")),
-      printFile (valLogFile local) (valueOf v),
-      printFileStrLn (valLogFile local) ", "] ++ printInputs vs
+      printFile valLogFile (valueOf v),
+      printFileStrLn valLogFile ", "] ++ printInputs vs
 
 -- | The variable representing the log file in write mode.
-varLogFile :: (SharedProg r) => r (Scope r) -> SVariable r
+varLogFile :: (SharedProg r) => SVariable r
 varLogFile = var "outfile" outfile
 
 -- | The value of the variable representing the log file in write mode.
-valLogFile :: (SharedProg r) => r (Scope r) -> SValue r
-valLogFile s = valueOf $ varLogFile s
+valLogFile :: (SharedProg r) => SValue r
+valLogFile = valueOf varLogFile

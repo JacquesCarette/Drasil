@@ -53,7 +53,7 @@ import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc)
 
 import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MSStatement,
   SMethod, CSStateVar, SClass, SharedProg, OOProg, BodySym(..), bodyStatements,
-  oneLiner, BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..), var,
+  oneLiner, BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..),
   ScopeSym(..), Literal(..), VariableValue(..), CommandLineArgs(..),
   BooleanExpression(..), StatementSym(..), AssignStatement(..),
   DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
@@ -181,7 +181,7 @@ initConsts = do
 -- | Generates a statement to declare the variable representing the log file,
 -- if the user chose to turn on logs for variable assignments.
 initLogFileVar :: (SharedProg r) => [Logging] -> r (Scope r) -> [MSStatement r]
-initLogFileVar l scp = [varDec (varLogFile scp) | LogVar `elem` l]
+initLogFileVar l _ = [varDec varLogFile | LogVar `elem` l] --scp will be needed
 
 ------- INPUT ----------
 
@@ -238,9 +238,9 @@ genInputClass scp = do
       genClass inps csts = do
         vals <- mapM (convExpr . (^. codeExpr)) csts
         inputVars <- mapM (\x -> fmap (pubDVar . 
-          var' (codeName x) local . convTypeOO) (codeType x)) inps
+          var (codeName x) . convTypeOO) (codeType x)) inps
         constVars <- zipWithM (\c vl -> fmap (\t -> constVarFunc (conRepr g)
-          (var (codeName c) (convTypeOO t) local) vl) (codeType c))
+          (var (codeName c) (convTypeOO t)) vl) (codeType c))
           csts vals
         let getFunc Primary = primaryClass
             getFunc Auxiliary = auxClass
@@ -476,7 +476,7 @@ genConstClass scp = do
       genClass [] = return Nothing
       genClass vs = do
         vals <- mapM (convExpr . (^. codeExpr)) vs
-        vars <- mapM (\x -> fmap (var' (codeName x) local . convTypeOO)
+        vars <- mapM (\x -> fmap (var (codeName x) . convTypeOO)
           (codeType x)) vs
         let constVars = zipWith (constVarFunc (conRepr g)) vars vals
             getFunc Primary = primaryClass
@@ -583,7 +583,7 @@ genOutputFormat = do
       genOutput Nothing = return Nothing
       genOutput (Just _) = do
         let l_outfile = "outputfile"
-            var_outfile = var l_outfile outfile local
+            var_outfile = var l_outfile outfile
             v_outfile = valueOf var_outfile
         parms <- getOutputParams
         outp <- mapM (\x -> do
@@ -594,7 +594,7 @@ genOutputFormat = do
         desc <- woFuncDesc
         mthd <- publicFunc woName void desc (map pcAuto parms) Nothing
           [block $ [
-          varDec var_outfile,
+          varDec var_outfile, -- local
           openFileW var_outfile (litString "output.txt") ] ++
           concat outp ++ [ closeFile v_outfile ]]
         return $ Just mthd
@@ -966,7 +966,7 @@ genOutputFormatProc = do
       genOutput Nothing = return Nothing
       genOutput (Just _) = do
         let l_outfile = "outputfile"
-            var_outfile = var l_outfile outfile local
+            var_outfile = var l_outfile outfile
             v_outfile = valueOf var_outfile
         parms <- getOutputParams
         outp <- mapM (\x -> do
@@ -977,7 +977,7 @@ genOutputFormatProc = do
         desc <- woFuncDesc
         mthd <- publicFuncProc woName void desc (map pcAuto parms) Nothing
           [block $ [
-          varDec var_outfile,
+          varDec var_outfile, -- local
           openFileW var_outfile (litString "output.txt") ] ++
           concat outp ++ [ closeFile v_outfile ]]
         return $ Just mthd

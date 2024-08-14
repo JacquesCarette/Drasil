@@ -5,10 +5,10 @@ module GOOL.PatternTest (patternTest) where
 import Drasil.GOOL (GSProgram, VSType, SVariable, SValue, SMethod, OOProg,
   ProgramSym(..), FileSym(..), BodySym(..), oneLiner, BlockSym(..),
   TypeSym(..), OOTypeSym(..), StatementSym(..), DeclStatement(..),
-  IOStatement(..), initObserverList, addObserver, mainVar, OOVariableSym(..),
-  ScopeSym(..), Literal(..), VariableValue(..), OOValueExpression(..),
-  extNewObj, OOFunctionSym(..), GetSet(..), ObserverPattern(..),
-  StrategyPattern(..), MethodSym(..), ModuleSym(..))
+  IOStatement(..), initObserverList, addObserver, VariableSym(var),
+  OOVariableSym(..), ScopeSym(..), Literal(..), VariableValue(..),
+  OOValueExpression(..), extNewObj, OOFunctionSym(..), GetSet(..),
+  ObserverPattern(..), StrategyPattern(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import GOOL.Observer (observer, observerName, printNum, x)
 
@@ -28,9 +28,9 @@ observerType = obj observerName
 
 -- | Variables used in the generated code.
 n, obs1, obs2 :: (OOVariableSym r) => SVariable r
-n = mainVar nName int
-obs1 = mainVar obs1Name observerType
-obs2 = mainVar obs2Name observerType
+n = var nName int
+obs1 = var obs1Name observerType
+obs2 = var obs2Name observerType
 
 -- | New Observer object.
 newObserver :: (OOValueExpression r) => SValue r
@@ -44,7 +44,7 @@ patternTest = prog progName "" [fileDoc (buildModule progName []
 -- | Creates the main function for PatternTest.
 patternTestMainMethod :: (OOProg r) => SMethod r
 patternTestMainMethod = mainFunction (body [block [
-  varDec n],
+  varDec n], --mainFn
 
   runStrategy strat1
     [(strat1, oneLiner $ printStrLn strat1),
@@ -52,12 +52,12 @@ patternTestMainMethod = mainFunction (body [block [
     (Just $ litInt 3) (Just n),
 
   block [
-    varDecDef obs1 newObserver,
-    varDecDef obs2 newObserver],
+    varDecDef obs1 newObserver, --mainFn
+    varDecDef obs2 newObserver], --mainFn
 
   block [
     initObserverList observerType [valueOf obs1] mainFn,
-    addObserver (valueOf obs2) mainFn,
+    addObserver (valueOf obs2),
     notifyObservers (func printNum void []) observerType mainFn],
 
   block [

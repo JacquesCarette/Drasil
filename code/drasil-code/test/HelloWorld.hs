@@ -7,7 +7,7 @@ import Drasil.GOOL (MSBody, MSBlock, MSStatement, SMethod, SVariable,
   SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..),
   listSlice, TypeSym(..), StatementSym(..), AssignStatement(..), (&=),
   DeclStatement(..), IOStatement(..), StringStatement(..), CommentStatement(..),
-  ControlStatement(..), mainVar, locVar, constant, ScopeSym(..), Literal(..),
+  ControlStatement(..), VariableSym(var, constant), ScopeSym(..), Literal(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), extFuncApp,
   List(..), MethodSym(..), OODeclStatement(objDecDef))
@@ -38,16 +38,16 @@ description = "Tests various GOOL functions. It should run without errors."
 
 -- | Variable for a list of doubles
 myOtherList :: (SharedProg r) => SVariable r
-myOtherList = mainVar "myOtherList" (listType double)
+myOtherList = var "myOtherList" (listType double)
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 helloWorldMainOO :: (OOProg r) => SMethod r
 helloWorldMainOO = mainFunction (body ([ helloInitVariables] ++ listSliceTests
     ++ [block [printLn $ litString "", ifCond [
-      (valueOf (mainVar "b" int) ?>= litInt 6, bodyStatements [
-        varDecDef (mainVar "dummy" string) (litString "dummy"),
-        objDecDef (mainVar "myObj" char) (litChar 'o')]),
-      (valueOf (mainVar "b" int) ?== litInt 5, helloIfBody)] helloElseBody,
+      (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
+        varDecDef (var "dummy" string) (litString "dummy"), --mainFn
+        objDecDef (var "myObj" char) (litChar 'o')]), --mainFn
+      (valueOf (var "b" int) ?== litInt 5, helloIfBody)] helloElseBody,
       helloIfExists, helloSwitch, helloForLoop, helloWhileLoop,
       helloForEachLoop, helloTryCatch]]))
 
@@ -55,55 +55,55 @@ helloWorldMainOO = mainFunction (body ([ helloInitVariables] ++ listSliceTests
 helloWorldMainProc :: (ProcProg r) => SMethod r
 helloWorldMainProc = mainFunction (body ([ helloInitVariables] ++ listSliceTests
     ++ [block [printLn $ litString "", ifCond [
-      (valueOf (mainVar "b" int) ?>= litInt 6, bodyStatements [
-        varDecDef (mainVar "dummy" string) (litString "dummy")]),
-      (valueOf (mainVar "b" int) ?== litInt 5, helloIfBody)] helloElseBody,
+      (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
+        varDecDef (var "dummy" string) (litString "dummy")]), --mainFn
+      (valueOf (var "b" int) ?== litInt 5, helloIfBody)] helloElseBody,
       helloIfExists, helloSwitch, helloForLoop, helloWhileLoop,
       helloForEachLoop, helloTryCatch]]))
 
 -- | Initialize variables used in the generated program.
 helloInitVariables :: (SharedProg r) => MSBlock r
 helloInitVariables = block [comment "Initializing variables",
-  varDec $ mainVar "a" int,
-  varDecDef (mainVar "b" int) (litInt 5),
-  listDecDef myOtherList [litDouble 1.0,
+  varDec $ var "a" int, --mainFn
+  varDecDef (var "b" int) (litInt 5), --mainFn
+  listDecDef myOtherList [litDouble 1.0, --mainFn
     litDouble 1.5],
-  varDecDef (mainVar "oneIndex" int) (indexOf (valueOf myOtherList) (litDouble 1.0)),
-  printLn (valueOf $ mainVar "oneIndex" int),
-  mainVar "a" int &= listSize (valueOf myOtherList),
-  assert (valueOf (mainVar "a" int) ?== litInt 2) (litString "List size should be 2"),
+  varDecDef (var "oneIndex" int) (indexOf (valueOf myOtherList) (litDouble 1.0)), --mainFn
+  printLn (valueOf $ var "oneIndex" int),
+  var "a" int &= listSize (valueOf myOtherList),
+  assert (valueOf (var "a" int) ?== litInt 2) (litString "List size should be 2"),
   valStmt (listAdd (valueOf myOtherList)
     (litInt 2) (litDouble 2.0)),
   valStmt (listAppend (valueOf myOtherList)
     (litDouble 2.5)),
-  varDec $ mainVar "e" double,
-  mainVar "e" int &= listAccess (valueOf myOtherList) (litInt 1),
+  varDec $ var "e" double, --mainFn
+  var "e" int &= listAccess (valueOf myOtherList) (litInt 1),
   valStmt (listSet (valueOf myOtherList)
     (litInt 1) (litDouble 17.4)),
-  listDec 7 (mainVar "myName" (listType string)),
-  stringSplit ' ' (mainVar "myName" (listType string)) (litString "Brooks Mac"),
-  printLn (valueOf $ mainVar "myName" (listType string)),
-  listDecDef (mainVar "boringList" (listType bool))
+  listDec 7 (var "myName" (listType string)), --mainFn
+  stringSplit ' ' (var "myName" (listType string)) (litString "Brooks Mac"),
+  printLn (valueOf $ var "myName" (listType string)),
+  listDecDef (var "boringList" (listType bool)) --mainFn
     [litFalse, litFalse, litFalse, litFalse, litFalse],
-  printLn (valueOf $ mainVar "boringList" (listType bool)),
-  assert (valueOf (mainVar "b" int) ?== litInt 5) (litString "b should be 5"),
+  printLn (valueOf $ var "boringList" (listType bool)),
+  assert (valueOf (var "b" int) ?== litInt 5) (litString "b should be 5"),
   assert (listSize (valueOf myOtherList) ?== litInt 4) (litString "myOtherList should have 4 elements"),
-  assert (valueOf (mainVar "oneIndex" int) ?== litInt 0) (litString "oneIndex should be 0")]
+  assert (valueOf (var "oneIndex" int) ?== litInt 0) (litString "oneIndex should be 0")]
 
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9, 
   mySlicedList10, mySlicedList11 :: (SharedProg r) => SVariable r
-mySlicedList = mainVar "mySlicedList" (listType double)
-mySlicedList2 = mainVar "mySlicedList2" (listType double)
-mySlicedList3 = mainVar "mySlicedList3" (listType double)
-mySlicedList4 = mainVar "mySlicedList4" (listType double)
-mySlicedList5 = mainVar "mySlicedList5" (listType double)
-mySlicedList6 = mainVar "mySlicedList6" (listType double)
-mySlicedList7 = mainVar "mySlicedList7" (listType double)
-mySlicedList8 = mainVar "mySlicedList8" (listType double)
-mySlicedList9 = mainVar "mySlicedList9" (listType double)
-mySlicedList10 = mainVar "mySlicedList10" (listType double)
-mySlicedList11 = mainVar "mySlicedList11" (listType double)
+mySlicedList = var "mySlicedList" (listType double)
+mySlicedList2 = var "mySlicedList2" (listType double)
+mySlicedList3 = var "mySlicedList3" (listType double)
+mySlicedList4 = var "mySlicedList4" (listType double)
+mySlicedList5 = var "mySlicedList5" (listType double)
+mySlicedList6 = var "mySlicedList6" (listType double)
+mySlicedList7 = var "mySlicedList7" (listType double)
+mySlicedList8 = var "mySlicedList8" (listType double)
+mySlicedList9 = var "mySlicedList9" (listType double)
+mySlicedList10 = var "mySlicedList10" (listType double)
+mySlicedList11 = var "mySlicedList11" (listType double)
 
 listSliceTests :: (SharedProg r) => [MSBlock r]
 listSliceTests = [
@@ -112,24 +112,24 @@ listSliceTests = [
   block [
     comment "List slicing tests",
     comment "Create variables for list slices",
-    listDec 2 mySlicedList,
-    listDec 2 mySlicedList2,
-    listDec 3 mySlicedList3,
-    listDec 0 mySlicedList4,
-    listDec 2 mySlicedList5,
-    listDec 2 mySlicedList6,
-    listDec 4 mySlicedList7,
-    listDec 3 mySlicedList8,
-    listDec 2 mySlicedList9,
-    listDec 3 mySlicedList10,
-    listDec 0 mySlicedList11],
+    listDec 2 mySlicedList, --mainFn
+    listDec 2 mySlicedList2, --mainFn
+    listDec 3 mySlicedList3, --mainFn
+    listDec 0 mySlicedList4, --mainFn
+    listDec 2 mySlicedList5, --mainFn
+    listDec 2 mySlicedList6, --mainFn
+    listDec 4 mySlicedList7, --mainFn
+    listDec 3 mySlicedList8, --mainFn
+    listDec 2 mySlicedList9, --mainFn
+    listDec 3 mySlicedList10, --mainFn
+    listDec 0 mySlicedList11], --mainFn
 
   -- | Initialize and assign any variables necessary for list slices
   block [
     comment "Create some variables for later tests",
-    varDecDef (mainVar "x" int) (litInt 3),
-    varDecDef (mainVar "y" int) (litInt 1),
-    varDecDef (mainVar "z" int) (litInt (-1))],
+    varDecDef (var "x" int) (litInt 3), --mainFn
+    varDecDef (var "y" int) (litInt 1), --mainFn
+    varDecDef (var "z" int) (litInt (-1))], --mainFn
 
   -- | Initialize and assign a value to a new variable @mySlicedList@.
   --   Both bounds are set, end > start, with step defaulting to 1
@@ -170,27 +170,27 @@ listSliceTests = [
   -- | List slicing where the step is a variable with negative value
   listSlice mySlicedList8
     (valueOf myOtherList) (Just (litInt 3))
-    (Just (litInt 0)) (Just (valueOf (mainVar "z" int))),
+    (Just (litInt 0)) (Just (valueOf (var "z" int))),
 
   -- | List slicing where the bounds are variables with start > end, and step is a variable < 0
   listSlice mySlicedList9
-    (valueOf myOtherList) (Just (valueOf (mainVar "x" int)))
-    (Just (valueOf (mainVar "y" int))) (Just (valueOf (mainVar "z" int))),
+    (valueOf myOtherList) (Just (valueOf (var "x" int)))
+    (Just (valueOf (var "y" int))) (Just (valueOf (var "z" int))),
 
   -- | List slicing where end isn't given and step is a variable < 0
   listSlice mySlicedList10
     (valueOf myOtherList) (Just (litInt 2))
-    Nothing (Just (valueOf (mainVar "z" int))),
+    Nothing (Just (valueOf (var "z" int))),
 
   -- | Do it again, to make sure a unique variable name for endIdx is being generated
   listSlice mySlicedList10
   (valueOf myOtherList) (Just (litInt 2))
-  Nothing (Just (valueOf (mainVar "z" int))),
+  Nothing (Just (valueOf (var "z" int))),
 
   -- | List slicing where end > beg, but step is a variable < 0
   listSlice mySlicedList11
-    (valueOf myOtherList) (Just (valueOf (mainVar "y" int)))
-    (Just (valueOf (mainVar "x" int))) (Just (valueOf (mainVar "z" int))),
+    (valueOf myOtherList) (Just (valueOf (var "y" int)))
+    (Just (valueOf (var "x" int))) (Just (valueOf (var "z" int))),
 
   -- | Print results of list slicing tests
   block [
@@ -227,34 +227,34 @@ listSliceTests = [
 helloIfBody :: (SharedProg r) => MSBody r
 helloIfBody = addComments "If body" (body [
   block [
-    varDec $ mainVar "c" int,
-    varDec $ mainVar "d" int,
-    assign (mainVar "a" int) (litInt 5),
-    mainVar "b" int &= (valueOf (mainVar "a" int) #+ litInt 2),
-    mainVar "c" int &= (valueOf (mainVar "b" int) #+ litInt 3),
-    mainVar "d" int &= valueOf (mainVar "b" int),
-    mainVar "d" int &-= valueOf (mainVar "a" int),
-    mainVar "c" int &-= valueOf (mainVar "d" int),
-    mainVar "b" int &+= litInt 17,
-    mainVar "c" int &+= litInt 17,
-    (&++) (mainVar "a" int),
-    (&++) (mainVar "d" int),
-    (&--) (mainVar "c" int),
-    (&--) (mainVar "b" int),
+    varDec $ var "c" int, --mainFn
+    varDec $ var "d" int, --mainFn
+    assign (var "a" int) (litInt 5),
+    var "b" int &= (valueOf (var "a" int) #+ litInt 2),
+    var "c" int &= (valueOf (var "b" int) #+ litInt 3),
+    var "d" int &= valueOf (var "b" int),
+    var "d" int &-= valueOf (var "a" int),
+    var "c" int &-= valueOf (var "d" int),
+    var "b" int &+= litInt 17,
+    var "c" int &+= litInt 17,
+    (&++) (var "a" int),
+    (&++) (var "d" int),
+    (&--) (var "c" int),
+    (&--) (var "b" int),
   
-    listDec 5 (mainVar "myList" (listType int)),
-    constDecDef (constant "myConst" string mainFn) (litString "Imconstant"),
+    listDec 5 (var "myList" (listType int)), --mainFn
+    constDecDef (constant "myConst" string) (litString "Imconstant"), --mainFn
 
-    printLn (valueOf $ constant "myConst" string mainFn),
-    printLn (valueOf $ mainVar "a" int),
-    printLn (valueOf $ mainVar "b" int),
-    printLn (valueOf $ mainVar "c" int),
-    printLn (valueOf $ mainVar "d" int),
+    printLn (valueOf $ constant "myConst" string),
+    printLn (valueOf $ var "a" int),
+    printLn (valueOf $ var "b" int),
+    printLn (valueOf $ var "c" int),
+    printLn (valueOf $ var "d" int),
     printLn (valueOf myOtherList),
     printLn (valueOf mySlicedList),
   
     printStrLn "Type an int",
-    getInput (mainVar "d" int),
+    getInput (var "d" int),
     printStrLn "Type another",
     discardInput],
   block [
@@ -287,7 +287,7 @@ helloIfBody = addComments "If body" (body [
     printLn (litInt 6 #+ (litInt 2 #* litInt 3)),
     printLn (csc (litDouble 1.0)),
     printLn (sec (litDouble 1.0)),
-    printLn (valueOf $ mainVar "a" int),
+    printLn (valueOf $ var "a" int),
     printLn (inlineIf litTrue (litInt 5) (litInt 0)),
     printLn (cot (litDouble 1.0))]])
 
@@ -298,32 +298,32 @@ helloElseBody = bodyStatements [printLn (arg 5)]
 
 -- | If-else statement checking if a list is empty.
 helloIfExists :: (SharedProg r) => MSStatement r
-helloIfExists = ifExists (valueOf $ mainVar "boringList" (listType bool))
+helloIfExists = ifExists (valueOf $ var "boringList" (listType bool))
   (oneLiner (printStrLn "Ew, boring list!")) (oneLiner (printStrLn "Great, no bores!"))
 
 -- | Creates a switch statement.
 helloSwitch :: (SharedProg r) => MSStatement r
-helloSwitch = switch (valueOf $ mainVar "a" int) [(litInt 5, oneLiner (mainVar "b" int &= litInt 10)),
-  (litInt 0, oneLiner (mainVar "b" int &= litInt 5))]
-  (oneLiner (mainVar "b" int &= litInt 0))
+helloSwitch = switch (valueOf $ var "a" int) [(litInt 5, oneLiner (var "b" int &= litInt 10)),
+  (litInt 0, oneLiner (var "b" int &= litInt 5))]
+  (oneLiner (var "b" int &= litInt 0))
 
 -- | Creates a for loop.
 helloForLoop :: (SharedProg r) => MSStatement r
 helloForLoop = forRange i (litInt 0) (litInt 9) (litInt 1) (oneLiner (printLn
   (valueOf i)))
-  where i = locVar "i" int
+  where i = var "i" int
 
 -- | Creates a while loop.
 helloWhileLoop :: (SharedProg r) => MSStatement r
-helloWhileLoop = while (valueOf (mainVar "a" int) ?< litInt 13) (bodyStatements
-  [printStrLn "Hello", (&++) (mainVar "a" int)])
+helloWhileLoop = while (valueOf (var "a" int) ?< litInt 13) (bodyStatements
+  [printStrLn "Hello", (&++) (var "a" int)])
 
 -- | Creates a for-each loop.
 helloForEachLoop :: (SharedProg r) => MSStatement r
 helloForEachLoop = forEach i (valueOf myOtherList)
   (oneLiner (printLn (extFuncApp "Helper" "doubleAndAdd" double [valueOf i,
   litDouble 1.0])))
-  where i = locVar "num" double
+  where i = var "num" double
 
 -- | Creates a try statement to catch an intentional error.
 helloTryCatch :: (SharedProg r) => MSStatement r

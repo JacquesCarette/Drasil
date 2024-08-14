@@ -42,9 +42,9 @@ import qualified Language.Drasil.Mod as M (Class(..))
 import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
   Initializers, SharedProg, OOProg, PermanenceSym(..), bodyStatements,
-  BlockSym(..), TypeSym(..), VariableSym(..), var, constant, ScopeSym(..),
-  OOVariableSym(..), staticConst, VariableElim(..), ($->), ValueSym(..),
-  Literal(..), VariableValue(..), NumericExpression(..), BooleanExpression(..),
+  BlockSym(..), TypeSym(..), VariableSym(..), ScopeSym(..), OOVariableSym(..),
+  staticConst, VariableElim(..), ($->), ValueSym(..), Literal(..),
+  VariableValue(..), NumericExpression(..), BooleanExpression(..),
   Comparison(..), ValueExpression(..), OOValueExpression(..),
   objMethodCallMixedArgs, List(..), StatementSym(..), AssignStatement(..),
   DeclStatement(..), IOStatement(..), StringStatement(..), ControlStatement(..),
@@ -104,16 +104,15 @@ value u s t = do
 variable :: (OOProg r) => Name -> VSType r -> GenState (SVariable r)
 variable s t = do
   g <- get
-  let scp = convScope $ currentScope g
-      cs = codeSpec g
-      defFunc Var = \nm tp -> var nm tp scp
+  let cs = codeSpec g
+      defFunc Var = var
       defFunc Const = staticConst
   if s `elem` map codeName (inputs cs)
-    then inputVariable (inStruct g) Var (var s t scp)
+    then inputVariable (inStruct g) Var (var s t)
     else if s `elem` map codeName (constants $ codeSpec g)
       then constVariable (conStruct g) (conRepr g)
               ((defFunc $ conRepr g) s t)
-      else return $ var s t scp
+      else return $ var s t
 
 -- | If 'Unbundled' inputs, just return variable as-is.
 -- If 'Bundled' inputs, access variable through object, where the object is self
@@ -176,27 +175,23 @@ classVariable c v = do
 -- | Generates a GOOL Value for a variable represented by a 'CodeVarChunk'.
 mkVal :: (OOProg r) => CodeVarChunk -> GenState (SValue r)
 mkVal v = do
-  g <- get
   t <- codeType v
-  let scp = convScope $ currentScope g
-      toGOOLVal Nothing = value (v ^. uid) (codeName v) (convTypeOO t)
+  let toGOOLVal Nothing = value (v ^. uid) (codeName v) (convTypeOO t)
       toGOOLVal (Just o) = do
         ot <- codeType o
-        return $ valueOf $ objVar (var (codeName o) (convTypeOO ot) scp)
-          (var (codeName v) (convTypeOO t) local)
+        return $ valueOf $ objVar (var (codeName o) (convTypeOO ot))
+          (var (codeName v) (convTypeOO t))
   toGOOLVal (v ^. obv)
 
 -- | Generates a GOOL Variable for a variable represented by a 'CodeVarChunk'.
 mkVar :: (OOProg r) => CodeVarChunk -> GenState (SVariable r)
 mkVar v = do
-  g <- get
   t <- codeType v
-  let scp = convScope $ currentScope g
-      toGOOLVar Nothing = variable (codeName v) (convTypeOO t)
+  let toGOOLVar Nothing = variable (codeName v) (convTypeOO t)
       toGOOLVar (Just o) = do
         ot <- codeType o
-        return $ objVar (var (codeName o) (convTypeOO ot) scp)
-          (var (codeName v) (convTypeOO t) local)
+        return $ objVar (var (codeName o) (convTypeOO ot))
+          (var (codeName v) (convTypeOO t))
   toGOOLVar (v ^. obv)
 
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
@@ -509,7 +504,7 @@ genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
                                                  svar Priv = privDVar
   in do
   modify (\st -> st {currentScope = Local})
-  svrs <- mapM (\(SV s v) -> fmap (svar s . var' (codeName v) local .
+  svrs <- mapM (\(SV s v) -> fmap (svar s . var (codeName v) .
                 convTypeOO) (codeType v)) svs
   f n i desc svrs (mapM (genFunc publicMethod svs) cs) 
                   (mapM (genFunc publicMethod svs) ms)
@@ -529,18 +524,18 @@ genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
   vars <- mapM mkVar (fstdecl (sysinfodb $ codeSpec g) s
     \\ (map quantvar parms ++ map stVar svs))
   t <- spaceCodeType o
-  f n (convTypeOO t) desc parms rd [block $ map varDec vars, block stmts]
+  f n (convTypeOO t) desc parms rd [block $ map varDec vars, block stmts] --local
 genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
   g <- get
   modify (\st -> st {currentScope = Local})
   inits <- mapM (convExpr . snd) i
-  initvars <- mapM ((\iv -> fmap (var' (codeName iv) local . convTypeOO)
+  initvars <- mapM ((\iv -> fmap (var (codeName iv) . convTypeOO)
     (codeType iv)) . fst) i
   stmts <- mapM convStmt s
   vars <- mapM mkVar (fstdecl (sysinfodb $ codeSpec g) s
     \\ (map quantvar parms ++ map stVar svs))
   genInitConstructor n desc parms (zip initvars inits)
-    [block $ map varDec vars, block stmts]
+    [block $ map varDec vars, block stmts] --local
 genFunc _ _ (FData (FuncData n desc ddef)) = do
   modify (\st -> st {currentScope = Local})
   genDataFunc n desc ddef
@@ -608,30 +603,30 @@ convStmt (FTry t c) = do
 convStmt FContinue = return continue
 convStmt (FDecDef v (Matrix [[]])) = do
   vari <- mkVar v
-  let convDec (C.List _) = listDec 0 vari
-      convDec (C.Array _) = arrayDec 0 vari
-      convDec _ = varDec vari
+  let convDec (C.List _) = listDec 0 vari --need scp
+      convDec (C.Array _) = arrayDec 0 vari --need scp
+      convDec _ = varDec vari --need scp
   fmap convDec (codeType v)
 convStmt (FDecDef v e) = do
   v' <- mkVar v
   l <- maybeLog v'
   t <- codeType v
   let convDecDef (Matrix [lst]) = do
-        let contDecDef (C.List _) = listDecDef
-            contDecDef (C.Array _) = arrayDecDef
+        let contDecDef (C.List _) = listDecDef --need scp
+            contDecDef (C.Array _) = arrayDecDef --need scp
             contDecDef _ = error "Type mismatch between variable and value in declare-define FuncStmt"
         e' <- mapM convExpr lst
         return $ contDecDef t v' e'
       convDecDef _ = do
         e' <- convExpr e
-        return $ varDecDef v' e'
+        return $ varDecDef v' e' --need scp
   dd <- convDecDef e
   return $ multi $ dd : l
 convStmt (FFuncDef f ps sts) = do
   f' <- mkVar (quantvar f)
   pms <- mapM (mkVar . quantvar) ps
   b <- mapM convStmt sts
-  return $ funcDecDef f' pms (bodyStatements b)
+  return $ funcDecDef f' pms (bodyStatements b) --need scp
 convStmt (FVal e) = do
   e' <- convExpr e
   return $ valStmt e'
@@ -662,46 +657,46 @@ readData ddef = do
   inD <- mapM (`inData` scope) ddef
   v_filename <- mkVal (quantvar inFileName)
   return [block $
-    varDec (var_infile scope) :
-    (if any (\d -> isLine d || isLines d) ddef then [varDec (var_line scope),
-    listDec 0 (var_linetokens scope)] else []) ++
-    [listDec 0 (var_lines scope) | any isLines ddef] ++ openFileR (var_infile scope)
-    v_filename : concat inD ++ [closeFile (v_infile scope) ]]
+    varDec var_infile : --scope
+    (if any (\d -> isLine d || isLines d) ddef then [varDec var_line,
+    listDec 0 var_linetokens] else []) ++
+    [listDec 0 var_lines | any isLines ddef] ++ openFileR var_infile
+    v_filename : concat inD ++ [closeFile v_infile]]
   where inData :: (OOProg r) => Data -> r (Scope r) -> GenState [MSStatement r]
-        inData (Singleton v) scp = do
+        inData (Singleton v) _ = do
             vv <- mkVar v
             l <- maybeLog vv
-            return [multi $ getFileInput (v_infile scp) vv : l]
-        inData JunkData scp = return [discardFileLine (v_infile scp)]
+            return [multi $ getFileInput v_infile vv : l]
+        inData JunkData _ = return [discardFileLine v_infile]
         inData (Line lp d) scp = do
           lnI <- lineData Nothing lp scp
           logs <- getEntryVarLogs lp
-          return $ [getFileInputLine (v_infile scp) (var_line scp),
-            stringSplit d (var_linetokens scp) (v_line scp)] ++ lnI ++ logs
+          return $ [getFileInputLine v_infile var_line,
+            stringSplit d var_linetokens v_line] ++ lnI ++ logs
         inData (Lines lp ls d) scp = do
           lnV <- lineData (Just "_temp") lp scp
           logs <- getEntryVarLogs lp
-          let readLines Nothing = [getFileInputAll (v_infile scp) (var_lines scp),
-                forRange var_i (litInt 0) (listSize (v_lines scp)) (litInt 1)
-                  (bodyStatements $ stringSplit d (var_linetokens scp) (
-                  listAccess (v_lines scp) v_i) : lnV)]
+          let readLines Nothing = [getFileInputAll v_infile var_lines,
+                forRange var_i (litInt 0) (listSize v_lines) (litInt 1)
+                  (bodyStatements $ stringSplit d var_linetokens (
+                  listAccess v_lines v_i) : lnV)]
               readLines (Just numLines) = [forRange var_i (litInt 0)
                 (litInt numLines) (litInt 1)
                 (bodyStatements $
-                  [getFileInputLine (v_infile scp) (var_line scp),
-                   stringSplit d (var_linetokens scp) (v_line scp)
+                  [getFileInputLine v_infile var_line,
+                   stringSplit d var_linetokens v_line
                   ] ++ lnV)]
           return $ readLines ls ++ logs
         ---------------
         lineData :: (OOProg r) => Maybe String -> LinePattern -> r (Scope r) ->
           GenState [MSStatement r]
-        lineData s p@(Straight _) scp = do
+        lineData s p@(Straight _) _ = do
           vs <- getEntryVars s p
-          return [stringListVals vs (v_linetokens scp)]
+          return [stringListVals vs v_linetokens]
         lineData s p@(Repeat ds) scp = do
           vs <- getEntryVars s p
           sequence $ clearTemps s ds scp ++ return
-            (stringListLists vs (v_linetokens scp)) : appendTemps s ds scp
+            (stringListLists vs v_linetokens) : appendTemps s ds
         ---------------
         clearTemps :: (OOProg r) => Maybe String -> [DataItem] -> r (Scope r) ->
           [GenState (MSStatement r)]
@@ -710,19 +705,19 @@ readData ddef = do
         ---------------
         clearTemp :: (OOProg r) => String -> DataItem -> r (Scope r) ->
           GenState (MSStatement r)
-        clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
-          (listInnerType $ convTypeOO t) scp) []) (codeType v)
+        clearTemp sfx v _ = fmap (\t -> listDecDef (var (codeName v ++ sfx)
+          (listInnerType $ convTypeOO t)) []) (codeType v)
         ---------------
-        appendTemps :: (OOProg r) => Maybe String -> [DataItem] -> r (Scope r)
+        appendTemps :: (OOProg r) => Maybe String -> [DataItem]
           -> [GenState (MSStatement r)]
-        appendTemps Nothing _ _ = []
-        appendTemps (Just sfx) es scp = map (\v -> appendTemp sfx v scp) es
+        appendTemps Nothing _ = []
+        appendTemps (Just sfx) es = map (appendTemp sfx) es
         ---------------
-        appendTemp :: (OOProg r) => String -> DataItem -> r (Scope r) ->
+        appendTemp :: (OOProg r) => String -> DataItem ->
           GenState (MSStatement r)
-        appendTemp sfx v scp = fmap (\t -> valStmt $ listAppend
-          (valueOf $ var (codeName v) (convTypeOO t) scp)
-          (valueOf $ var (codeName v ++ sfx) (convTypeOO t) scp)) (codeType v)
+        appendTemp sfx v = fmap (\t -> valStmt $ listAppend
+          (valueOf $ var (codeName v) (convTypeOO t))
+          (valueOf $ var (codeName v ++ sfx) (convTypeOO t))) (codeType v)
 
 -- | Get entry variables.
 getEntryVars :: (OOProg r) => Maybe String -> LinePattern ->
@@ -771,16 +766,15 @@ valueProc u s t = do
 variableProc :: (SharedProg r) => Name -> VSType r -> GenState (SVariable r)
 variableProc s t = do
   g <- get
-  let scp = convScope $ currentScope g
-      cs = codeSpec g
-      defFunc Var = \nm tp -> var nm tp scp
-      defFunc Const = \nm tp -> constant nm tp scp -- This might be wrong
+  let cs = codeSpec g
+      defFunc Var = var
+      defFunc Const = constant -- This might be wrong
   if s `elem` map codeName (inputs cs)
-    then inputVariableProc (inStruct g) Var (var s t scp)
+    then inputVariableProc (inStruct g) Var (var s t)
     else if s `elem` map codeName (constants $ codeSpec g)
       then constVariableProc (conStruct g) (conRepr g)
               ((defFunc $ conRepr g) s t)
-      else return $ var s t scp
+      else return $ var s t
 
 -- | If 'Unbundled' inputs, just return variable as-is.
 -- If 'Bundled' inputs, throw an error, since procedural renderers
@@ -884,7 +878,7 @@ genFuncProc f svs (FDef (FuncDef n desc parms o rd s)) = do
   vars <- mapM mkVarProc (fstdecl (sysinfodb $ codeSpec g) s
     \\ (map quantvar parms ++ map stVar svs))
   t <- spaceCodeType o
-  f n (convType t) desc parms rd [block $ map varDec vars, block stmts]
+  f n (convType t) desc parms rd [block $ map varDec vars, block stmts] --local
 genFuncProc _ _ (FDef (CtorDef {})) = error "genFuncProc: Procedural renderers do not support constructors"
 genFuncProc _ _ (FData (FuncData n desc ddef)) = genDataFuncProc n desc ddef
 
@@ -901,46 +895,46 @@ readDataProc ddef = do
   inD <- mapM (`inData` scope) ddef
   v_filename <- mkValProc (quantvar inFileName)
   return [block $
-    varDec (var_infile scope) :
-    (if any (\d -> isLine d || isLines d) ddef then [varDec (var_line scope),
-    listDec 0 (var_linetokens scope)] else []) ++
-    [listDec 0 (var_lines scope) | any isLines ddef] ++ openFileR (var_infile scope)
-    v_filename : concat inD ++ [closeFile (v_infile scope) ]]
+    varDec var_infile : --scope
+    (if any (\d -> isLine d || isLines d) ddef then [varDec var_line,
+    listDec 0 var_linetokens] else []) ++
+    [listDec 0 var_lines | any isLines ddef] ++ openFileR var_infile
+    v_filename : concat inD ++ [closeFile v_infile]]
   where inData :: (SharedProg r) => Data -> r (Scope r) -> GenState [MSStatement r]
-        inData (Singleton v) scp = do
+        inData (Singleton v) _ = do
             vv <- mkVarProc v
             l <- maybeLog vv
-            return [multi $ getFileInput (v_infile scp) vv : l]
-        inData JunkData scp = return [discardFileLine (v_infile scp)]
+            return [multi $ getFileInput v_infile vv : l]
+        inData JunkData _ = return [discardFileLine v_infile]
         inData (Line lp d) scp = do
           lnI <- lineData Nothing lp scp
           logs <- getEntryVarLogsProc lp
-          return $ [getFileInputLine (v_infile scp) (var_line scp),
-            stringSplit d (var_linetokens scp) (v_line scp)] ++ lnI ++ logs
+          return $ [getFileInputLine v_infile var_line,
+            stringSplit d var_linetokens v_line] ++ lnI ++ logs
         inData (Lines lp ls d) scp = do
           lnV <- lineData (Just "_temp") lp scp
           logs <- getEntryVarLogsProc lp
-          let readLines Nothing = [getFileInputAll (v_infile scp) (var_lines scp),
-                forRange var_i (litInt 0) (listSize (v_lines scp)) (litInt 1)
-                  (bodyStatements $ stringSplit d (var_linetokens scp) (
-                  listAccess (v_lines scp) v_i) : lnV)]
+          let readLines Nothing = [getFileInputAll v_infile var_lines,
+                forRange var_i (litInt 0) (listSize v_lines) (litInt 1)
+                  (bodyStatements $ stringSplit d var_linetokens (
+                  listAccess v_lines v_i) : lnV)]
               readLines (Just numLines) = [forRange var_i (litInt 0)
                 (litInt numLines) (litInt 1)
                 (bodyStatements $
-                  [getFileInputLine (v_infile scp) (var_line scp),
-                   stringSplit d (var_linetokens scp) (v_line scp)
+                  [getFileInputLine v_infile var_line,
+                   stringSplit d var_linetokens v_line
                   ] ++ lnV)]
           return $ readLines ls ++ logs
         ---------------
         lineData :: (SharedProg r) => Maybe String -> LinePattern -> r (Scope r) ->
           GenState [MSStatement r]
-        lineData s p@(Straight _) scp = do
+        lineData s p@(Straight _) _ = do
           vs <- getEntryVarsProc s p
-          return [stringListVals vs (v_linetokens scp)]
+          return [stringListVals vs v_linetokens]
         lineData s p@(Repeat ds) scp = do
           vs <- getEntryVarsProc s p
           sequence $ clearTemps s ds scp ++ return
-            (stringListLists vs (v_linetokens scp)) : appendTemps s ds scp
+            (stringListLists vs v_linetokens) : appendTemps s ds
         ---------------
         clearTemps :: (SharedProg r) => Maybe String -> [DataItem] -> r (Scope r) ->
           [GenState (MSStatement r)]
@@ -949,19 +943,19 @@ readDataProc ddef = do
         ---------------
         clearTemp :: (SharedProg r) => String -> DataItem -> r (Scope r) ->
           GenState (MSStatement r)
-        clearTemp sfx v scp = fmap (\t -> listDecDef (var (codeName v ++ sfx)
-          (listInnerType $ convType t) scp) []) (codeType v)
+        clearTemp sfx v _ = fmap (\t -> listDecDef (var (codeName v ++ sfx)
+          (listInnerType $ convType t)) []) (codeType v)
         ---------------
-        appendTemps :: (SharedProg r) => Maybe String -> [DataItem] -> r (Scope r)
+        appendTemps :: (SharedProg r) => Maybe String -> [DataItem]
           -> [GenState (MSStatement r)]
-        appendTemps Nothing _ _ = []
-        appendTemps (Just sfx) es scp = map (\v -> appendTemp sfx v scp) es
+        appendTemps Nothing _ = []
+        appendTemps (Just sfx) es = map (appendTemp sfx) es
         ---------------
-        appendTemp :: (SharedProg r) => String -> DataItem -> r (Scope r) ->
+        appendTemp :: (SharedProg r) => String -> DataItem ->
           GenState (MSStatement r)
-        appendTemp sfx v scp = fmap (\t -> valStmt $ listAppend
-          (valueOf $ var (codeName v) (convType t) scp)
-          (valueOf $ var (codeName v ++ sfx) (convType t) scp)) (codeType v)
+        appendTemp sfx v = fmap (\t -> valStmt $ listAppend
+          (valueOf $ var (codeName v) (convType t))
+          (valueOf $ var (codeName v ++ sfx) (convType t))) (codeType v)
 
 -- | Get entry variables.
 getEntryVarsProc :: (SharedProg r) => Maybe String -> LinePattern ->
@@ -1128,7 +1122,7 @@ convStmtProc (FTry t c) = do
 convStmtProc FContinue = return continue
 convStmtProc (FDecDef v (Matrix [[]])) = do
   vari <- mkVarProc v
-  let convDec (C.List _) = listDec 0 vari
+  let convDec (C.List _) = listDec 0 vari --need scp
       convDec (C.Array _) = arrayDec 0 vari
       convDec _ = varDec vari
   fmap convDec (codeType v)
@@ -1212,24 +1206,22 @@ genInOutFuncProc f docf n desc ins' outs' b = do
 
 -- Used for readData and readDataProc
 l_line, l_lines, l_linetokens, l_infile, l_i :: Label
-var_line, var_lines, var_linetokens, var_infile ::
-  (SharedProg r) => r (Scope r) -> SVariable r
-var_i :: (SharedProg r) => SVariable r
-v_line, v_lines, v_linetokens, v_infile ::
-  (SharedProg r) => r (Scope r) -> SValue r
-v_i :: (SharedProg r) => SValue r
+var_line, var_lines, var_linetokens, var_infile, var_i ::
+  (SharedProg r) => SVariable r
+v_line, v_lines, v_linetokens, v_infile, v_i ::
+  (SharedProg r) => SValue r
 l_line = "line"
 var_line = var l_line string
-v_line scp = valueOf $ var_line scp
+v_line = valueOf var_line
 l_lines = "lines"
 var_lines = var l_lines (listType string)
-v_lines scp = valueOf $ var_lines scp
+v_lines = valueOf var_lines
 l_linetokens = "linetokens"
 var_linetokens = var l_linetokens (listType string)
-v_linetokens scp = valueOf $ var_linetokens scp
+v_linetokens = valueOf var_linetokens
 l_infile = "infile"
 var_infile = var l_infile infile
-v_infile scp = valueOf $ var_infile scp
+v_infile = valueOf var_infile
 l_i = "i"
-var_i = var l_i int local
+var_i = var l_i int
 v_i = valueOf var_i

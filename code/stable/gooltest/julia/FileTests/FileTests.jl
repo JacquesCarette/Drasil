@@ -10,11 +10,13 @@ close(fileToWrite)
 fileToRead = open("testText.txt", "r")
 fileLine = readline(fileToRead)
 readline(fileToRead)
+@assert fileLine != "" "First line should not be empty."
 fileContents = []
 
 fileContents = readlines(fileToRead)
 
 println(fileContents)
+@assert length(fileContents) > 0 "fileContents should not be empty."
 close(fileToRead)
 
 end

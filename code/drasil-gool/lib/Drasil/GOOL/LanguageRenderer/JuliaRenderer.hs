@@ -84,7 +84,6 @@ import Drasil.GOOL.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
   getModuleImports, addModuleImportVS, getUsing, getLangImports, getLibImports,
   addLibImportVS, useVarName, getMainDoc, genLoopIndex, genVarNameIf)
 
-import Control.Applicative (liftA2)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe, isNothing)
 import Data.Functor ((<&>))
@@ -539,6 +538,10 @@ instance ControlStatement JuliaCode where
   forEach = CP.forEach' jlForEach
   while = C.while id empty jlEnd
   tryCatch = G.tryCatch jlTryCatch
+  assert condition errorMessage = do
+    cond <- zoom lensMStoVS condition
+    errMsg <- zoom lensMStoVS errorMessage
+    mkStmtNoEnd (jlAssert cond errMsg)
 
 instance VisibilitySym JuliaCode where
   type Visibility JuliaCode = Doc
@@ -861,6 +864,12 @@ jlException = text "ErrorException"
 includeLabel, importLabel :: Doc
 includeLabel = text "include"
 importLabel = text "import"
+
+-- Assertions
+jlAssert :: (CommonRenderSym r) => r (Value r) -> r (Value r) -> Doc
+jlAssert condition errorMessage = vcat [
+  text "@assert" <+> RC.value condition <+> RC.value errorMessage
+  ]
 
 jlMod, elseIfLabel, jlFunc, jlBegin, jlEnd, jlThrowLabel :: Doc
 jlMod        = text "module"

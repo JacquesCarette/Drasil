@@ -98,7 +98,6 @@ import Drasil.GOOL.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, revFiles,
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
-import Control.Applicative (liftA2)
 import Control.Lens.Zoom (zoom)
 import Control.Monad (join)
 import Control.Monad.State (modify)
@@ -106,7 +105,7 @@ import Data.List (intercalate, sort)
 import Data.Char (toUpper, isUpper, isLower)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
-  vcat, colon, brackets, isEmpty, quotes)
+  vcat, colon, brackets, isEmpty, quotes, comma)
 import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 
 pyExt :: String
@@ -629,6 +628,11 @@ instance ControlStatement PythonCode where
 
   tryCatch = G.tryCatch pyTryCatch
 
+  assert condition errorMessage = do
+      cond <- zoom lensMStoVS condition
+      errMsg <- zoom lensMStoVS errorMessage
+      mkStmtNoEnd (pyAssert cond errMsg)
+
 instance ObserverPattern PythonCode where
   notifyObservers = M.notifyObservers'
 
@@ -985,6 +989,9 @@ pyTryCatch tryB catchB = vcat [
   indent $ RC.body tryB,
   pyExcept <+> exceptionObj' <> colon,
   indent $ RC.body catchB]
+
+pyAssert :: (CommonRenderSym r) => r (Value r) -> r (Value r) -> Doc
+pyAssert condition message = text "assert" <+> RC.value condition <> comma <+> RC.value message
 
 pyListSlice :: (CommonRenderSym r, Monad r) => SVariable r -> SValue r -> SValue r -> 
   SValue r -> SValue r -> MS (r Doc)

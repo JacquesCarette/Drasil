@@ -15,6 +15,7 @@ myOtherList = [1.0, 1.5]
 oneIndex = findfirst(x -> x == 1.0, myOtherList) - 1
 println(oneIndex)
 a = length(myOtherList)
+@assert a == 2 "List size should be 2"
 insert!(myOtherList, 3, 2.0)
 append!(myOtherList, 2.5)
 e = myOtherList[2]
@@ -24,6 +25,9 @@ myName = split("Brooks Mac", " ")
 println(myName)
 boringList = [false, false, false, false, false]
 println(boringList)
+@assert b == 5 "b should be 5"
+@assert length(myOtherList) == 4 "myOtherList should have 4 elements"
+@assert oneIndex == 0 "oneIndex should be 0"
 
 # List slicing tests
 # Create variables for list slices
@@ -120,6 +124,7 @@ elseif b == 5
     b -= 1
     myList = []
     myConst = "Imconstant";
+    println(myConst)
     println(a)
     println(b)
     println(c)

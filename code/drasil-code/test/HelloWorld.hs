@@ -1,45 +1,68 @@
 {-# LANGUAGE PostfixOperators #-}
 -- | GOOL test program for various OO program functionality.
 -- Should run print statements, basic loops, math, and create a helper module without errors.
-module GOOL.HelloWorld (helloWorld) where
+module HelloWorld (helloWorldOO, helloWorldProc) where
 
-import Drasil.GOOL (GSProgram, MSBody, MSBlock, MSStatement, SMethod, SVariable,
-  OOProg, ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, oneLiner,
-  BlockSym(..), listSlice, TypeSym(..), StatementSym(..), AssignStatement(..), 
-  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
-  CommentStatement(..), ControlStatement(..), mainVar, locVar, constant,
-  ScopeSym(..), Literal(..), VariableValue(..), CommandLineArgs(..),
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), extFuncApp, List(..), MethodSym(..), ModuleSym(..),
-  OODeclStatement(objDecDef))
+import Drasil.GOOL (MSBody, MSBlock, MSStatement, SMethod, SVariable,
+  SharedProg, OOProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..),
+  listSlice, TypeSym(..), StatementSym(..), AssignStatement(..), (&=),
+  DeclStatement(..), IOStatement(..), StringStatement(..), CommentStatement(..),
+  ControlStatement(..), mainVar, locVar, constant, ScopeSym(..), Literal(..),
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
+  BooleanExpression(..), Comparison(..), ValueExpression(..), extFuncApp,
+  List(..), MethodSym(..), OODeclStatement(objDecDef))
+import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
+  ModuleSym(..))
+import Drasil.GProc (ProcProg)
+import qualified Drasil.GProc as GProc (GSProgram, ProgramSym(..), FileSym(..),
+  ModuleSym(..))
+
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
-import GOOL.Helper (helper)
+import Helper (helperOO, helperProc)
 
 -- | Creates the HelloWorld program and necessary files.
-helloWorld :: (OOProg r) => GSProgram r
-helloWorld = prog "HelloWorld" "" [docMod description
-  ["Brooks MacLachlan"] "" $ fileDoc (buildModule "HelloWorld" []
-  [helloWorldMain] []), helper]
+helloWorldOO :: (OOProg r) => OO.GSProgram r
+helloWorldOO = OO.prog "HelloWorld" "" [OO.docMod description
+  ["Brooks MacLachlan"] "" $ OO.fileDoc (OO.buildModule "HelloWorld" []
+  [helloWorldMainOO] []), helperOO]
+
+-- | Creates the HelloWorld program and necessary files.
+helloWorldProc :: (ProcProg r) => GProc.GSProgram r
+helloWorldProc = GProc.prog "HelloWorld" "" [GProc.docMod description
+  ["Brooks MacLachlan"] "" $ GProc.fileDoc (GProc.buildModule "HelloWorld" []
+  [helloWorldMainProc]), helperProc]
 
 -- | Description of program.
 description :: String
 description = "Tests various GOOL functions. It should run without errors."
 
 -- | Variable for a list of doubles
-myOtherList :: (OOProg r) => SVariable r
+myOtherList :: (SharedProg r) => SVariable r
 myOtherList = mainVar "myOtherList" (listType double)
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
-helloWorldMain :: (OOProg r) => SMethod r
-helloWorldMain = mainFunction (body ([ helloInitVariables] ++ listSliceTests ++
-    [block [printLn $ litString "", ifCond [
+helloWorldMainOO :: (OOProg r) => SMethod r
+helloWorldMainOO = mainFunction (body ([ helloInitVariables] ++ listSliceTests
+    ++ [block [printLn $ litString "", ifCond [
+      (valueOf (mainVar "b" int) ?>= litInt 6, bodyStatements [
+        varDecDef (mainVar "dummy" string) (litString "dummy"),
+        objDecDef (mainVar "myObj" char) (litChar 'o')]),
+      (valueOf (mainVar "b" int) ?== litInt 5, helloIfBody)] helloElseBody,
+      helloIfExists, helloSwitch, helloForLoop, helloWhileLoop,
+      helloForEachLoop, helloTryCatch]]))
+
+-- | Main function. Initializes variables and combines all the helper functions defined below.
+helloWorldMainProc :: (ProcProg r) => SMethod r
+helloWorldMainProc = mainFunction (body ([ helloInitVariables] ++ listSliceTests
+    ++ [block [printLn $ litString "", ifCond [
       (valueOf (mainVar "b" int) ?>= litInt 6, bodyStatements [
         varDecDef (mainVar "dummy" string) (litString "dummy")]),
-      (valueOf (mainVar "b" int) ?== litInt 5, helloIfBody)] helloElseBody, helloIfExists,
-    helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch]]))
+      (valueOf (mainVar "b" int) ?== litInt 5, helloIfBody)] helloElseBody,
+      helloIfExists, helloSwitch, helloForLoop, helloWhileLoop,
+      helloForEachLoop, helloTryCatch]]))
 
 -- | Initialize variables used in the generated program.
-helloInitVariables :: (OOProg r) => MSBlock r
+helloInitVariables :: (SharedProg r) => MSBlock r
 helloInitVariables = block [comment "Initializing variables",
   varDec $ mainVar "a" int,
   varDecDef (mainVar "b" int) (litInt 5),
@@ -48,6 +71,7 @@ helloInitVariables = block [comment "Initializing variables",
   varDecDef (mainVar "oneIndex" int) (indexOf (valueOf myOtherList) (litDouble 1.0)),
   printLn (valueOf $ mainVar "oneIndex" int),
   mainVar "a" int &= listSize (valueOf myOtherList),
+  assert (valueOf (mainVar "a" int) ?== litInt 2) (litString "List size should be 2"),
   valStmt (listAdd (valueOf myOtherList)
     (litInt 2) (litDouble 2.0)),
   valStmt (listAppend (valueOf myOtherList)
@@ -61,11 +85,14 @@ helloInitVariables = block [comment "Initializing variables",
   printLn (valueOf $ mainVar "myName" (listType string)),
   listDecDef (mainVar "boringList" (listType bool))
     [litFalse, litFalse, litFalse, litFalse, litFalse],
-  printLn (valueOf $ mainVar "boringList" (listType bool))]
+  printLn (valueOf $ mainVar "boringList" (listType bool)),
+  assert (valueOf (mainVar "b" int) ?== litInt 5) (litString "b should be 5"),
+  assert (listSize (valueOf myOtherList) ?== litInt 4) (litString "myOtherList should have 4 elements"),
+  assert (valueOf (mainVar "oneIndex" int) ?== litInt 0) (litString "oneIndex should be 0")]
 
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9, 
-  mySlicedList10, mySlicedList11 :: (OOProg r) => SVariable r
+  mySlicedList10, mySlicedList11 :: (SharedProg r) => SVariable r
 mySlicedList = mainVar "mySlicedList" (listType double)
 mySlicedList2 = mainVar "mySlicedList2" (listType double)
 mySlicedList3 = mainVar "mySlicedList3" (listType double)
@@ -78,7 +105,7 @@ mySlicedList9 = mainVar "mySlicedList9" (listType double)
 mySlicedList10 = mainVar "mySlicedList10" (listType double)
 mySlicedList11 = mainVar "mySlicedList11" (listType double)
 
-listSliceTests :: (OOProg r) => [MSBlock r]
+listSliceTests :: (SharedProg r) => [MSBlock r]
 listSliceTests = [
 
   -- | Declare variables for list slices
@@ -197,7 +224,7 @@ listSliceTests = [
 
 -- | Create an If statement.
 {-# ANN module "HLint: ignore Evaluate" #-}
-helloIfBody :: (OOProg r) => MSBody r
+helloIfBody :: (SharedProg r) => MSBody r
 helloIfBody = addComments "If body" (body [
   block [
     varDec $ mainVar "c" int,
@@ -214,9 +241,8 @@ helloIfBody = addComments "If body" (body [
     (&++) (mainVar "d" int),
     (&--) (mainVar "c" int),
     (&--) (mainVar "b" int),
-
+  
     listDec 5 (mainVar "myList" (listType int)),
-    objDecDef (mainVar "myObj" char) (litChar 'o'),
     constDecDef (constant "myConst" string mainFn) (litString "Imconstant"),
 
     printLn (valueOf $ constant "myConst" string mainFn),
@@ -226,12 +252,11 @@ helloIfBody = addComments "If body" (body [
     printLn (valueOf $ mainVar "d" int),
     printLn (valueOf myOtherList),
     printLn (valueOf mySlicedList),
-
+  
     printStrLn "Type an int",
     getInput (mainVar "d" int),
     printStrLn "Type another",
     discardInput],
-
   block [
     printLn (litString " too"),
     printStr "boo",
@@ -266,40 +291,41 @@ helloIfBody = addComments "If body" (body [
     printLn (inlineIf litTrue (litInt 5) (litInt 0)),
     printLn (cot (litDouble 1.0))]])
 
+
 -- | Print the 5th given argument.
-helloElseBody :: (OOProg r) => MSBody r
+helloElseBody :: (SharedProg r) => MSBody r
 helloElseBody = bodyStatements [printLn (arg 5)]
 
 -- | If-else statement checking if a list is empty.
-helloIfExists :: (OOProg r) => MSStatement r
+helloIfExists :: (SharedProg r) => MSStatement r
 helloIfExists = ifExists (valueOf $ mainVar "boringList" (listType bool))
   (oneLiner (printStrLn "Ew, boring list!")) (oneLiner (printStrLn "Great, no bores!"))
 
 -- | Creates a switch statement.
-helloSwitch :: (OOProg r) => MSStatement r
+helloSwitch :: (SharedProg r) => MSStatement r
 helloSwitch = switch (valueOf $ mainVar "a" int) [(litInt 5, oneLiner (mainVar "b" int &= litInt 10)),
   (litInt 0, oneLiner (mainVar "b" int &= litInt 5))]
   (oneLiner (mainVar "b" int &= litInt 0))
 
 -- | Creates a for loop.
-helloForLoop :: (OOProg r) => MSStatement r
+helloForLoop :: (SharedProg r) => MSStatement r
 helloForLoop = forRange i (litInt 0) (litInt 9) (litInt 1) (oneLiner (printLn
   (valueOf i)))
   where i = locVar "i" int
 
 -- | Creates a while loop.
-helloWhileLoop :: (OOProg r) => MSStatement r
+helloWhileLoop :: (SharedProg r) => MSStatement r
 helloWhileLoop = while (valueOf (mainVar "a" int) ?< litInt 13) (bodyStatements
   [printStrLn "Hello", (&++) (mainVar "a" int)])
 
 -- | Creates a for-each loop.
-helloForEachLoop :: (OOProg r) => MSStatement r
+helloForEachLoop :: (SharedProg r) => MSStatement r
 helloForEachLoop = forEach i (valueOf myOtherList)
   (oneLiner (printLn (extFuncApp "Helper" "doubleAndAdd" double [valueOf i,
   litDouble 1.0])))
   where i = locVar "num" double
 
 -- | Creates a try statement to catch an intentional error.
-helloTryCatch :: (OOProg r) => MSStatement r
+helloTryCatch :: (SharedProg r) => MSStatement r
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
   (oneLiner (printStrLn "Caught intentional error"))

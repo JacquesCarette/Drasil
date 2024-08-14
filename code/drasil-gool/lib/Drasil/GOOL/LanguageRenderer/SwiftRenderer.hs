@@ -105,7 +105,6 @@ import Drasil.GOOL.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   genVarNameIf)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
-import Control.Applicative (liftA2)
 import Control.Lens.Zoom (zoom)
 import Control.Monad.State (modify)
 import Data.Composition ((.:))
@@ -645,6 +644,11 @@ instance ControlStatement SwiftCode where
 
   tryCatch = G.tryCatch swiftTryCatch
 
+  assert condition errorMessage = do
+    cond <- zoom lensMStoVS condition
+    errMsg <- zoom lensMStoVS errorMessage
+    mkStmtNoEnd (swiftAssert cond errMsg)
+
 instance ObserverPattern SwiftCode where
   notifyObservers = M.notifyObservers'
 
@@ -1141,6 +1145,11 @@ swiftTryCatch tb cb = vcat [
   rbrace <+> catchLabel <+> lbrace,
   indent $ RC.body cb,
   rbrace]
+
+swiftAssert :: (CommonRenderSym r) => r (Value r) -> r (Value r) -> Doc
+swiftAssert condition errorMessage = vcat [
+  text "assert(" <+> RC.value condition <+> text "," <+> RC.value errorMessage <> text ")"
+  ]
 
 swiftParam :: (CommonRenderSym r) => Doc -> r (Variable r) -> Doc
 swiftParam io v = swiftNoLabel <+> RC.variable v <> swiftTypeSpec <+> io

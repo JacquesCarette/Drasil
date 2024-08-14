@@ -21,7 +21,7 @@ velXDerivEqn2_1 = sy xPos_1 $= positionXEqn_1
 velXDerivEqn3_1 = sy xVel_1 $= deriv positionXEqn_1 time
 velXDerivEqn4_1 = sy xVel_1 $= sy lenRod_1 $* deriv (sin (sy pendDisAngle_1)) time
 
-velYDerivEqn2_1,velYDerivEqn3_1,velYDerivEqn4_1 :: ModelExpr
+velYDerivEqn2_1, velYDerivEqn3_1, velYDerivEqn4_1 :: ModelExpr
 velYDerivEqn2_1 = sy yPos_1 $= express (positionYQD_1 ^. defnExpr)
 velYDerivEqn3_1 = sy yVel_1 $= neg (deriv (sy lenRod_1 $* cos (sy pendDisAngle_1)) time)
 velYDerivEqn4_1 = sy yVel_1 $= neg (sy lenRod_1 $* deriv (cos (sy pendDisAngle_1)) time)
@@ -46,7 +46,7 @@ accelXDerivEqn4_1 = sy xAccel_1 $= deriv (sy angularVel_1) time $* sy lenRod_1 $
 accelYDerivEqn3_1, accelYDerivEqn4_1 :: ModelExpr
 accelYDerivEqn3_1 = sy yAccel_1 $= deriv (sy angularVel_1 $* sy lenRod_1 $* sin (sy pendDisAngle_1)) time
 accelYDerivEqn4_1 = sy yAccel_1 $= deriv (sy angularVel_1) time $* sy lenRod_1 $* sin (sy pendDisAngle_1)
-                    $+ (sy angularVel_1 $* sy lenRod_1 $* cos (sy pendDisAngle_1) $* deriv (sy pendDisAngle_1) time)    
+                    $+ (sy angularVel_1 $* sy lenRod_1 $* cos (sy pendDisAngle_1) $* deriv (sy pendDisAngle_1) time)
 
 -- Acceleration X/Y Second Object
 accelXDerivEqn3_2 :: ModelExpr

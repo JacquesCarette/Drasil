@@ -308,9 +308,14 @@ $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
 
 # Compiles GOOL examples to concrete code (Java, C++, etc.)
 $(GOOLTEST)$(GEN_E_SUFFIX):
+	- rm -rf "$(BUILD_FOLDER)$(GOOLTEST_DIR)"
+	make $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME)
 	stack build $(stackArgs) "drasil-code:exe:$(GOOLTEST_EXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(GOOLTEST_DIR)"
 	cd "$(BUILD_FOLDER)$(GOOLTEST_DIR)" && $(STACK_EXEC) -- "$(GOOLTEST_EXE)"
+	@mkdir -p "$(LOG_FOLDER)"
+	- $(DIFF) "$(STABLE_FOLDER)$(GOOLTEST_DIR)/" "$(BUILD_FOLDER)$(GOOLTEST_DIR)/" > "$(LOG_FOLDER)$(GOOLTEST_DIR)$(LOG_SUFFIX)"
+	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)log_check.sh"
 
 # Install individual Drasil examples
 $(filter %$(INSTALL_E_SUFFIX), $(INSTALL_EXAMPLES)): %$(INSTALL_E_SUFFIX):
@@ -538,6 +543,9 @@ stan: ##@Stan Run Stan static analysis tool on the Drasil packages.
 	find . -type d -name 'drasil-*' -exec sh -c 'cd {} && stan > stan.log' \;
 	cat drasil-*/stan.log
 #use to display stan logs, cat drasil-*/stan.log
+
+weeder:
+	weeder
 
 # Credits to "nowox" from StackOverflow: https://stackoverflow.com/a/30796664/16760741
 HELP_FUN = \

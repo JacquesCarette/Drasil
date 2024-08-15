@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# LANGUAGE LambdaCase #-}
 
 module Language.Drasil.Code.Imperative.Modules (
   genMain, genMainProc, genMainFunc, genMainFuncProc, genInputClass,
@@ -354,12 +355,13 @@ chooseConstr :: (OOProg r) => ConstraintBehaviour ->
   [(CodeVarChunk, [ConstraintCE])] -> GenState [MSStatement r]
 chooseConstr cb cs = do
   let ch = transform cs
-  varDecs <- mapM exc ch
-  let varDefs = concat varDecs
+  varDecs <- mapM (\case
+    (q, Elem _ e) -> constrVarDec q e
+    _             -> return emptyStmt) ch
   conds <- mapM (\(q,cns) -> mapM (convExpr . renderC q) cns) cs
   bods <- mapM (chooseCB cb) cs
   let bodies = concat $ zipWith (zipWith (\cond bod -> ifNoElse [((?!) cond, bod)])) conds bods
-  return $ interleave varDefs bodies
+  return $ interleave varDecs bodies
   where chooseCB Warning = constrWarn
         chooseCB Exception = constrExc
 
@@ -387,15 +389,14 @@ constrExc c = do
   msgs <- mapM (constraintViolatedMsg q "expected") cs
   return $ map (bodyStatements . (++ [throw "InputError"])) msgs
 
-exc :: (OOProg r) => (CodeVarChunk, ConstraintCE) ->
-  GenState [MSStatement r]
-exc (v, Elem _ e) = do
+constrVarDec :: (OOProg r) => CodeVarChunk -> CodeExpr ->
+  GenState (MSStatement r)
+constrVarDec v e = do
   lb <- convExpr e
   t <- codeType v
   let name = v ^. uid
   let mkValue = var ("set_" ++ show name) (setType (convType t)) local
-  return [setDecDef mkValue lb]
-exc _ = return [emptyStmt]
+  return (setDecDef mkValue lb)
 
 -- | Generates statements that print a message for when a constraint is violated.
 -- Message includes the name of the cosntraint quantity, its value, and a

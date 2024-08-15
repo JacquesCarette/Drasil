@@ -382,7 +382,7 @@ convCall c x ns f libf = do
       funcNm = codeName funcCd
   funcTp <- codeType funcCd
   args <- mapM convExpr x
-  nms <- mapM (mkVar . quantvar . symbResolve info . fst) ns -- TODO: get scope from state
+  nms <- mapM (mkVar . quantvar . symbResolve info . fst) ns
   nargs <- mapM (convExpr . snd) ns
   maybe (maybe (error $ "Call to non-existent function " ++ funcNm)
       (\m -> return $ libf m funcNm (convTypeOO funcTp) args (zip nms nargs))

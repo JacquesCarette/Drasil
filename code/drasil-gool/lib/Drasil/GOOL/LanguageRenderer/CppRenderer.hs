@@ -23,7 +23,7 @@ import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..))
+  MethodSym(..), convScope)
 import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   PermanenceSym(..), pubMethod, StateVarSym(..), OOValueSym, OOVariableValue,
@@ -106,9 +106,10 @@ import Drasil.GOOL.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getHeaderLangImports, addHeaderModImport, getHeaderLibImports,
   getHeaderModImports, addDefine, getDefines, addHeaderDefine,
   getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing,
-  setFileType, getModuleName, setModuleName, setClassName, getClassName, setCurrMain,
-  getCurrMain, getClassMap, setVisibility, getVisibility, setCurrMainFunc, getCurrMainFunc,
-  addIter, getIter, resetIter, useVarName, genLoopIndex, setVarScope)
+  setFileType, getModuleName, setModuleName, setClassName, getClassName,
+  setCurrMain, getCurrMain, getClassMap, setVisibility, getVisibility,
+  setCurrMainFunc, getCurrMainFunc, addIter, getIter, resetIter, useVarName,
+  genLoopIndex, setVarScope, getVarScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,log,exp,mod,max)
 import Control.Lens.Zoom (zoom)
@@ -1517,30 +1518,36 @@ instance IOStatement CppSrcCode where
 
   getFileInputLine f v = valStmt $ getLineFunc f (valueOf v)
   discardFileLine f = addLimitsImport $ cppDiscardInput '\n' f
-  getFileInputAll f v = let l_line = "nextLine"
-                            var_line = var l_line string
-                            v_line = valueOf var_line
-                        in
-    multi [varDec var_line local, -- TODO: get scope from v
+  getFileInputAll f v = do
+    v' <- zoom lensMStoVS v
+    scpData <- getVarScope $ variableName v'
+    let scp = convScope scpData
+        l_line = "nextLine"
+        var_line = var l_line string
+        v_line = valueOf var_line
+    multi [varDec var_line scp,
       while (getLineFunc f v_line)
         (oneLiner $ valStmt $ listAppend (valueOf v) v_line)]
 
 instance StringStatement CppSrcCode where
-  stringSplit d vnew s = let l_ss = "ss"
-                             var_ss = var l_ss (obj stringstream)
-                             v_ss = valueOf var_ss
-                             l_word = "word"
-                             var_word = var l_word string
-                             v_word = valueOf var_word
-                         in
+  stringSplit d vnew s = do
+    vn <- zoom lensMStoVS vnew
+    scpData <- getVarScope $ variableName vn
+    let scp = convScope scpData
+        l_ss = "ss"
+        var_ss = var l_ss (obj stringstream)
+        v_ss = valueOf var_ss
+        l_word = "word"
+        var_word = var l_word string
+        v_word = valueOf var_word
     modify (addLangImport sstream) >> multi [
-      valStmt $ valueOf vnew $. clearFunc,
-      varDec var_ss local, -- TODO: get scope from vnew
-      valStmt $ strFunc v_ss s,
-      varDec var_word local, -- TODO: get scope from vnew
-      while (getLine3ArgFunc v_ss v_word d)
-        (oneLiner $ valStmt $ listAppend (valueOf vnew) v_word)
-    ]
+        valStmt $ valueOf vnew $. clearFunc,
+        varDec var_ss scp,
+        valStmt $ strFunc v_ss s,
+        varDec var_word scp,
+        while (getLine3ArgFunc v_ss v_word d)
+          (oneLiner $ valStmt $ listAppend (valueOf vnew) v_word)
+      ]
 
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists

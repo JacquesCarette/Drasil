@@ -62,19 +62,19 @@ global mySlicedList6 = myOtherList[end:-1:3]
 
 global mySlicedList7 = myOtherList[4:-1:begin]
 
-endIdx = z > 0 ? 0 : 2
+global endIdx = z > 0 ? 0 : 2
 global mySlicedList8 = myOtherList[4:z:endIdx]
 
-endIdx0 = z > 0 ? y : y + 2
+global endIdx0 = z > 0 ? y : y + 2
 global mySlicedList9 = myOtherList[x + 1:z:endIdx0]
 
-endIdx1 = z > 0 ? length(myOtherList) : 1
+global endIdx1 = z > 0 ? length(myOtherList) : 1
 global mySlicedList10 = myOtherList[3:z:endIdx1]
 
-endIdx2 = z > 0 ? length(myOtherList) : 1
+global endIdx2 = z > 0 ? length(myOtherList) : 1
 global mySlicedList10 = myOtherList[3:z:endIdx2]
 
-endIdx3 = z > 0 ? x : x + 2
+global endIdx3 = z > 0 ? x : x + 2
 global mySlicedList11 = myOtherList[y + 1:z:endIdx3]
 
 # Print results of list slicing tests

@@ -7,15 +7,16 @@ module Drasil.GOOL.InterfaceCommon (
   MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
-  TypeElim(..), VariableSym(..), ScopeSym(..), VariableElim(..), listOf,
-  listVar, ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  funcAppNamedArgs, extFuncApp, libFuncApp, exists, List(..), InternalList(..),
-  listSlice, listIndexExists, at, ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), assignToListIndex, DeclStatement(..),
-  IOStatement(..), StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  TypeElim(..), VariableSym(..), ScopeSym(..), convScope, VariableElim(..),
+  listOf, listVar, ValueSym(..), Argument(..), Literal(..), litZero,
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp,
+  exists, List(..), InternalList(..), listSlice, listIndexExists, at,
+  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
+  (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
+  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
   VisibilitySym(..), ParameterSym(..), MethodSym(..), convType
   ) where
@@ -26,6 +27,7 @@ import Drasil.GOOL.State (MS, VS)
 import qualified Data.Kind as K (Type)
 import Data.Bifunctor (first)
 import CodeLang.Drasil (Comment)
+import Drasil.GOOL.AST (ScopeData(..), ScopeTag(..))
 
 type Label = String
 type Library = String
@@ -501,3 +503,7 @@ convType Void = void
 convType InFile = infile
 convType OutFile = outfile
 convType (Object _) = error "Objects not supported"
+
+convScope :: (ScopeSym r) => ScopeData -> r (Scope r)
+convScope (SD {scopeTag = Global}) = global
+convScope (SD {scopeTag = Local}) = local

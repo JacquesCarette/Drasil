@@ -22,7 +22,7 @@ import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, MSBlock, VSType,
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..))
+  MethodSym(..), convScope)
 import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
@@ -103,7 +103,7 @@ import Drasil.GOOL.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getModuleName, getCurrMain, getMethodExcMap, getMainDoc, setThrowUsed,
   getThrowUsed, setErrorDefined, getErrorDefined, incrementLine, incrementWord,
   getLineIndex, getWordIndex, resetIndices, useVarName, genLoopIndex,
-  genVarNameIf, setVarScope)
+  genVarNameIf, setVarScope, getVarScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -586,19 +586,26 @@ instance IOStatement SwiftCode where
       (listAccess (listAccess swiftContentsVal (litInt li)) (litInt wi))
   discardFileInput _ = modify incrementWord >> emptyStmt
 
-  openFileR v pth = multi [CP.openFileR swiftOpenFile v pth,
-    varDec swiftContentsVar local, swiftReadFile swiftContentsVar (valueOf v)] -- TODO: get scope from v
+  openFileR v pth = do
+    v' <- zoom lensMStoVS v
+    scpData <- getVarScope $ variableName v'
+    let scp = convScope scpData
+    multi [CP.openFileR swiftOpenFile v pth,
+      varDec swiftContentsVar scp, swiftReadFile swiftContentsVar (valueOf v)]
   openFileW = swiftOpenFileWA False
   openFileA = swiftOpenFileWA True
   closeFile = swiftCloseFile
 
   getFileInputLine _ v = do
+    v' <- zoom lensMStoVS v
+    scpData <- getVarScope $ variableName v'
+    let scp = convScope scpData
     wi <- getWordIndex
     li <- getLineIndex
     modify incrementLine
     slc <- listSlice swiftLineVar (listAccess swiftContentsVal (litInt li))
       (Just $ litInt wi) Nothing Nothing
-    multi [varDec swiftLineVar local, mkStmtNoEnd $ RC.block slc, -- TODO: get scope from v
+    multi [varDec swiftLineVar scp, mkStmtNoEnd $ RC.block slc,
       v &= swiftJoinedFunc ' ' swiftLineVal]
   discardFileLine _ = modify incrementLine >> emptyStmt
   getFileInputAll _ v = do
@@ -1027,6 +1034,11 @@ swiftIndexOf = swiftUnwrapVal .: swiftIndexFunc
 swiftListSlice :: (OORenderSym r) => SVariable r -> SValue r ->
   Maybe (SValue r) -> Maybe (SValue r) -> SValue r -> MSBlock r
 swiftListSlice vn vo beg end step = do
+
+  vnew <- zoom lensMStoVS vn
+  scpData <- getVarScope $ variableName vnew
+  let scp = convScope scpData
+
   stepV <- zoom lensMStoVS step
   let mbStepV = valueInt stepV
 
@@ -1034,8 +1046,8 @@ swiftListSlice vn vo beg end step = do
   begName <- genVarNameIf (isNothing beg && isNothing mbStepV) "begIdx"
   endName <- genVarNameIf (isNothing end && isNothing mbStepV) "endIdx"
 
-  let (setBeg, begVal) = M.makeSetterVal begName step mbStepV beg (litInt 0)    (listSize vo #- litInt 1) local -- TODO: get scope from vn
-      (setEnd, endVal) = M.makeSetterVal endName step mbStepV end (listSize vo) (litInt (-1)) local -- TODO: get scope from vn
+  let (setBeg, begVal) = M.makeSetterVal begName step mbStepV beg (litInt 0)    (listSize vo #- litInt 1) scp
+      (setEnd, endVal) = M.makeSetterVal endName step mbStepV end (listSize vo) (litInt (-1)) scp
       
       i = var "i" int
       setToSlice = vn &= swiftMapFunc (swiftStrideFunc begVal endVal step) (lambda [i] (listAccess vo (valueOf i)))

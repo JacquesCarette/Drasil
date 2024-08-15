@@ -10,10 +10,10 @@ module Drasil.GOOL.LanguageRenderer.Macros (
 import Drasil.GOOL.CodeType (CodeType(..))
 import Drasil.GOOL.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
   SVariable, SValue, MSStatement, bodyStatements, oneLiner, TypeElim(getType),
-  VariableElim(variableType), listOf, ValueSym(valueType), 
+  VariableElim(..), listOf, ValueSym(valueType), 
   NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
   BooleanExpression((?&&), (?||)), at, StatementSym(multi),
-  AssignStatement((&+=), (&-=), (&++)), (&=))
+  AssignStatement((&+=), (&-=), (&++)), (&=), convScope)
 import qualified Drasil.GOOL.InterfaceCommon as IC (BlockSym(block), 
   TypeSym(int, listInnerType), VariableSym(var), ScopeSym(..), Literal(litInt),
   VariableValue(valueOf), ValueExpression(notNull), List(listSize, listAppend,
@@ -30,7 +30,7 @@ import qualified Drasil.GOOL.RendererClassesCommon as RC (BodyElim(..),
 import Drasil.GOOL.RendererClassesOO (OORenderSym)
 import Drasil.GOOL.Helpers (toCode, onStateValue, on2StateValues)
 import Drasil.GOOL.State (MS, lensMStoVS, genVarName, genLoopIndex,
-  genVarNameIf)
+  genVarNameIf, getVarScope)
 
 import Data.Maybe (fromMaybe, isNothing)
 import Data.Functor ((<&>))
@@ -69,7 +69,10 @@ listSlice beg end step vnew vold = do
   
   l_temp <- genVarName [] "temp"
   l_i <- genLoopIndex
-  let var_temp = IC.var l_temp (onStateValue variableType vnew)
+  vn <- zoom lensMStoVS vnew
+  scpData <- getVarScope $ variableName vn
+  let scp = convScope scpData
+      var_temp = IC.var l_temp (onStateValue variableType vnew)
       v_temp = IC.valueOf var_temp
       var_i = IC.var l_i IC.int
       v_i = IC.valueOf var_i
@@ -82,8 +85,8 @@ listSlice beg end step vnew vold = do
   begName <- genVarNameIf (isNothing beg && isNothing mbStepV) "begIdx"
   endName <- genVarNameIf (isNothing end && isNothing mbStepV) "endIdx"
 
-  let (setBeg, begVal) = makeSetterVal begName step' mbStepV beg (IC.litInt 0)    (IC.listSize vold #- IC.litInt 1) IC.local -- TODO: get scope from vnew
-      (setEnd, endVal) = makeSetterVal endName step' mbStepV end (IC.listSize vold) (IC.litInt (-1)) IC.local -- TODO: get scope from vnew
+  let (setBeg, begVal) = makeSetterVal begName step' mbStepV beg (IC.litInt 0)    (IC.listSize vold #- IC.litInt 1) scp
+      (setEnd, endVal) = makeSetterVal endName step' mbStepV end (IC.listSize vold) (IC.litInt (-1)) scp
 
   mbBegV <- case beg of
         Nothing -> pure Nothing
@@ -106,7 +109,7 @@ listSlice beg end step vnew vold = do
                       endVal ?< v_i ?&& v_i ?<= begVal ?&& step' ?< IC.litInt 0
 
   IC.block [
-    IC.listDec 0 var_temp IC.local, -- TODO: get scope from vnew
+    IC.listDec 0 var_temp scp,
     setBeg, setEnd,
     IC.for (IC.varDecDef var_i IC.local begVal) cond
       (maybe (var_i &++) (var_i &+=) step)

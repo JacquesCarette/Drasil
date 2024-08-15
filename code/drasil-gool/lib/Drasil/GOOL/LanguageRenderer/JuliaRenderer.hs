@@ -22,7 +22,7 @@ import Drasil.GOOL.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), VisibilitySym(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), (&=), switchAsIf)
+  MethodSym(..), (&=), switchAsIf, convScope)
 import Drasil.GOOL.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
@@ -734,6 +734,11 @@ jlIndexOf l v = do
 jlListSlice :: (CommonRenderSym r) => SVariable r -> SValue r ->
   Maybe (SValue r) -> Maybe (SValue r) -> SValue r -> MSBlock r
 jlListSlice vn vo beg end step = do
+
+  vnew <- zoom lensMStoVS vn
+  scpData <- getVarScope $ variableName vnew
+  let scp = convScope scpData
+
   stepV <- zoom lensMStoVS step
 
   let mbStepV = valueInt stepV
@@ -750,7 +755,7 @@ jlListSlice vn vo beg end step = do
         (Nothing, Just s)  -> (emptyStmt,
           if s > 0 then mkStateVal int jlBegin else mkStateVal int jlEnd)
         -- Otherwise, generate an if-statement to calculate `beg` at runtime
-        (Nothing, Nothing) -> (varDecDef begVar local $ -- TODO: get scope from vn
+        (Nothing, Nothing) -> (varDecDef begVar scp $
           inlineIf (step ?> litInt 0) (litInt 1) (listSize vo),
           valueOf begVar)
       
@@ -759,12 +764,12 @@ jlListSlice vn vo beg end step = do
       (setEnd, endVal) = case (end, mbStepV) of
         (Just e, Just s)  -> (emptyStmt,
           if s > 0 then e else e `G.smartAdd` litInt 2)
-        (Just e, Nothing) -> (varDecDef endVar local $ -- TODO: get scope from vn
+        (Just e, Nothing) -> (varDecDef endVar scp $
           inlineIf (step ?> litInt 0) e (e `G.smartAdd` litInt 2),
           valueOf endVar)
         (Nothing, Just s) -> (emptyStmt,
           if s > 0 then mkStateVal int jlEnd else mkStateVal int jlBegin)
-        (Nothing, Nothing) -> (varDecDef endVar local $ -- TODO: get scope from vn
+        (Nothing, Nothing) -> (varDecDef endVar scp $
           inlineIf (step ?> litInt 0) (listSize vo) (litInt 1), valueOf endVar)
 
       setToSlice = jlListSlice' vn vo begVal endVal step mbStepV

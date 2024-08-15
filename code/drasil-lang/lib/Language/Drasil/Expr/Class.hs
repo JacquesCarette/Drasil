@@ -15,7 +15,7 @@ import Control.Lens ((^.))
 import Language.Drasil.Symbol
 import Language.Drasil.Expr.Lang
 import Language.Drasil.Literal.Lang
-import Language.Drasil.Space (DomainDesc(..), RTopology(..), RealInterval)
+import Language.Drasil.Space (DomainDesc(..), RTopology(..), RealInterval, Space)
 import qualified Language.Drasil.ModelExpr.Lang as M
 import qualified Language.Drasil.CodeExpr.Lang as C
 import Language.Drasil.Literal.Class (LiteralC(..))
@@ -64,9 +64,9 @@ apply2 f a b = apply f [sy a, sy b]
 m2x2 :: ExprC r => r -> r -> r -> r -> r
 m2x2 a b c d = matrix [[a,b],[c,d]]
 
-mkSet :: ExprC r => [r] -> r
-mkSet [r] = set' [r]
-mkSet r = set' r
+mkSet :: ExprC r => Space -> [r] -> r
+mkSet = set'
+
 -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
 vec2D :: ExprC r => r -> r -> r
 vec2D a b = matrix [[a],[b]]
@@ -214,7 +214,7 @@ class ExprC r where
   matrix :: [[r]] -> r
 
   -- | Create a Set.
-  set' :: [r] -> r
+  set' :: Space -> [r] -> r
 
   -- | Applies a given function with a list of parameters.
   apply :: (HasUID f, HasSymbol f) => f -> [r] -> r

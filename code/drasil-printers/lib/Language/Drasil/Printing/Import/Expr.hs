@@ -122,7 +122,7 @@ expr (Case _ ps)              sm =
     then error "Attempting to use multi-case expr incorrectly"
     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
 expr (Matrix a)               sm = P.Mtx $ map (map (`expr` sm)) a
-expr (Set a)                  sm = P.Set $ map (`expr` sm) a
+expr (Set _ a)                sm = P.Set $ map (`expr` sm) a
 expr (Variable _ l)           sm = expr l sm
 expr (UnaryOp Log u)          sm = mkCall sm P.Log u
 expr (UnaryOp Ln u)           sm = mkCall sm P.Ln u

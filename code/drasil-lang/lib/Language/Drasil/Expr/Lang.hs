@@ -122,7 +122,7 @@ data Expr where
   -- | Represents a matrix of expressions.
   Matrix   :: [[Expr]] -> Expr
   -- | Represents a set of expressions
-  Set :: [Expr] -> Expr
+  Set      :: Space -> [Expr] -> Expr
   -- | used to refernce the (name + type = variable )
   Variable :: String -> Expr -> Expr
   -- | Unary operation for most functions (eg. sin, cos, log, etc.).
@@ -319,11 +319,7 @@ instance Typed Expr Space where
               (const False) expT
         t = fromLeft (error "Infer on Matrix had a strong expectation of Left-valued data.") expT -- This error should never occur.
 
-  infer cxt (Set exs) =
-    case infer cxt (head exs) of
-        Left sp -> if S.isBasicNumSpace sp then Left sp else Right (show sp)
-        Right err -> Right ("Expressions in case" ++ show err)
-  --infer _ (Set _) = Right "Expressions in case"
+  infer _ (Set s _) = Left s
 
   infer cxt (UnaryOp uf ex) = case infer cxt ex of
     Left sp -> case uf of

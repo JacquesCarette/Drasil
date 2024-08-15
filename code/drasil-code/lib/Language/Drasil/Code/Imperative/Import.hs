@@ -362,13 +362,13 @@ convExpr (Matrix [l]) = do
                                     -- hd will never fail here
   return $ litArray (fmap valueType (head ar)) ar
 convExpr Matrix{} = error "convExpr: Matrix"
-convExpr (S.Set l) = do
+convExpr (S.Set s l) = do 
   ar <- mapM convExpr l
-                                    -- hd will never fail here
-  return $ litSet (fmap valueType (head ar)) ar
-convExpr(Variable s (S.Set l)) = do
-  ar <- mapM convExpr l
-  let varSet = var s (setType $ fmap valueType (head ar)) local
+  sm <- spaceCodeType s
+  return $ litSet (convTypeOO sm) ar
+convExpr(Variable s (S.Set l _)) = do
+  sm <- spaceCodeType l
+  let varSet = var s (setType $ convTypeOO sm) local
   return $ valueOf varSet
 convExpr(Variable _ _) = error "convExpr: Variable"
 convExpr Operator{} = error "convExpr: Operator"
@@ -531,7 +531,7 @@ genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
   modify (\st -> st {currentScope = Local})
   svrs <- mapM (\(SV s v) -> fmap (svar s . var (codeName v) .
                 convTypeOO) (codeType v)) svs
-  f n i desc svrs (mapM (genFunc publicMethod svs) cs) 
+  f n i desc svrs (mapM (genFunc publicMethod svs) cs)
                   (mapM (genFunc publicMethod svs) ms)
 
 -- | Converts a 'Func' (from the Mod AST) to GOOL.
@@ -753,7 +753,7 @@ readData ddef = do
 -- | Get entry variables.
 getEntryVars :: (OOProg r) => Maybe String -> LinePattern ->
   GenState [SVariable r]
-getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>= 
+getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
   (variable (codeName v ++ st) . listInnerType . convTypeOO))
     s) (getPatternInputs lp)
 
@@ -991,7 +991,7 @@ readDataProc ddef = do
 -- | Get entry variables.
 getEntryVarsProc :: (SharedProg r) => Maybe String -> LinePattern ->
   GenState [SVariable r]
-getEntryVarsProc s lp = mapM (maybe mkVarProc (\st v -> codeType v >>= 
+getEntryVarsProc s lp = mapM (maybe mkVarProc (\st v -> codeType v >>=
   (variableProc (codeName v ++ st) . listInnerType . convType))
     s) (getPatternInputs lp)
 
@@ -1063,13 +1063,13 @@ convExprProc (Matrix [l]) = do
                                     -- hd will never fail here
   return $ litArray (fmap valueType (head ar)) ar
 convExprProc Matrix{} = error "convExprProc: Matrix"
-convExprProc (S.Set l) = do
+convExprProc (S.Set s l) = do 
   ar <- mapM convExprProc l
-                                    -- hd will never fail here
-  return $ litSet (fmap valueType (head ar)) ar
-convExprProc (Variable s (S.Set l)) = do
-  ar <- mapM convExprProc l
-  let varSet = var s (setType $ fmap valueType (head ar)) local
+  sm <- spaceCodeType s
+  return $ litSet (convType sm) ar
+convExprProc (Variable s (S.Set l _)) = do
+  sm <- spaceCodeType l
+  let varSet = var s (setType $ convType sm) local
   return $ valueOf varSet
 convExprProc (Variable _ _) = error "convExpr: Variable"
 convExprProc Operator{} = error "convExprProc: Operator"

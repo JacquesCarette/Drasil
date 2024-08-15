@@ -137,7 +137,7 @@ modelExpr (Case _ ps)                sm =
     then error "Attempting to use multi-case modelExpr incorrectly"
     else P.Case (zip (map (flip modelExpr sm . fst) ps) (map (flip modelExpr sm . snd) ps))
 modelExpr (Matrix a)                 sm = P.Mtx $ map (map (`modelExpr` sm)) a
-modelExpr (Set l)                    sm = setExpr P.And (precB And) l sm
+modelExpr (Set _ l)                  sm = setExpr P.And (precB And) l sm
 modelExpr (Variable _ l)             sm = modelExpr l sm
 modelExpr (UnaryOp Log u)            sm = mkCall sm P.Log u
 modelExpr (UnaryOp Ln u)             sm = mkCall sm P.Ln u

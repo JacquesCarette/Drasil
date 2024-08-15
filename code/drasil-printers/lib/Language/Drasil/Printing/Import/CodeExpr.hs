@@ -125,7 +125,7 @@ codeExpr (Case _ ps)              sm =
     then error "Attempting to use multi-case codeExpr incorrectly"
     else P.Case (zip (map (flip codeExpr sm . fst) ps) (map (flip codeExpr sm . snd) ps))
 codeExpr (Matrix a)                  sm = P.Mtx $ map (map (`codeExpr` sm)) a
-codeExpr (Set a)                     sm = P.Row $ map (`codeExpr` sm) a
+codeExpr (Set _ a)                   sm = P.Row $ map (`codeExpr` sm) a
 codeExpr (Variable _ l)              sm = codeExpr l sm
 codeExpr (UnaryOp Log u)             sm = mkCall sm P.Log u
 codeExpr (UnaryOp Ln u)              sm = mkCall sm P.Ln u

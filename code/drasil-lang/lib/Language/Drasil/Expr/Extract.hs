@@ -33,7 +33,7 @@ eNames (ESSBinaryOp _ _ s)   = eNames s
 eNames (ESBBinaryOp _ _ s)   = eNames s
 eNames (Operator _ _ e)      = eNames e
 eNames (Matrix a)            = concatMap (concatMap eNames) a
-eNames (Set a)               = concatMap eNames a
+eNames (Set _ a)             = concatMap eNames a
 eNames (Variable _ e)        = eNames e
 eNames (RealI c b)           = c : eNamesRI b
 
@@ -71,7 +71,7 @@ eNames' (ESSBinaryOp _ _ s)   = eNames' s
 eNames' (ESBBinaryOp _ _ s)   = eNames' s
 eNames' (Operator _ _ e)      = eNames' e
 eNames' (Matrix a)            = concatMap (concatMap eNames') a
-eNames' (Set a)               = concatMap eNames' a
+eNames' (Set _ a)             = concatMap eNames' a
 eNames' (Variable _ e)        = eNames' e
 eNames' (RealI c b)           = c : eNamesRI' b
 

@@ -124,7 +124,7 @@ data ModelExpr where
   -- | Represents a matrix of expressions.
   Matrix    :: [[ModelExpr]] -> ModelExpr
   -- | Represents a set of expressions
-  Set :: [ModelExpr] -> ModelExpr
+  Set       :: Space -> [ModelExpr] -> ModelExpr
   -- | used to refernce the (name + type = variable )
   Variable :: String -> ModelExpr -> ModelExpr
   -- | Unary operation for most functions (eg. sin, cos, log, etc.).

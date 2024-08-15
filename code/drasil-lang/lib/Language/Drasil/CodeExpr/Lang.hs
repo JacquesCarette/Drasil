@@ -7,7 +7,7 @@ import Prelude hiding (sqrt)
 import Language.Drasil.Expr.Lang (Completeness)
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal(..))
-import Language.Drasil.Space (RealInterval, DiscreteDomainDesc)
+import Language.Drasil.Space (Space, RealInterval, DiscreteDomainDesc)
 import Language.Drasil.UID (UID)
 
 -- * Operators (mostly binary)
@@ -121,7 +121,7 @@ data CodeExpr where
   -- | Represents a matrix of expressions.
   Matrix   :: [[CodeExpr]] -> CodeExpr
   -- | Represents a set of expressions
-  Set :: [CodeExpr] -> CodeExpr
+  Set      :: Space -> [CodeExpr] -> CodeExpr
   -- | used to refernce the (name + type = variable )
   Variable :: String -> CodeExpr -> CodeExpr
   -- | Unary operation for most functions (eg. sin, cos, log, etc.).

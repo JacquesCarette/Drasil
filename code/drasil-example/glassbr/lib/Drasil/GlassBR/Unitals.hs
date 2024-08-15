@@ -104,12 +104,12 @@ standOffDist = uq (constrained' (uc sD (variable "SD") Real metre)
     sfwrRange $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
 
 nomThick = cuc "nomThick"
-  (nounPhraseSent $ S "nominal thickness t is in" +:+ eS (mkSet (map dbl nominalThicknesses)))
+  (nounPhraseSent $ S "nominal thickness t is in" +:+ eS (mkSet Rational (map dbl nominalThicknesses)))
   lT millimetre {-Discrete nominalThicknesses, but not implemented-} Rational
-  [sfwrElem $ mkSet (map dbl nominalThicknesses)] $ exactDbl 8 -- for testing
+  [sfwrElem $ mkSet Rational (map dbl nominalThicknesses)] $ exactDbl 8 -- for testing
 
 glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)
-  [sfwrElem $ mkSet $ map (str . abrv . snd) glassType]
+  [sfwrElem $ mkSet String $ map (str . abrv . snd) glassType]
 
 
 outputs :: [QuantityDict]

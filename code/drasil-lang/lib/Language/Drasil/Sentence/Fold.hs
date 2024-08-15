@@ -17,12 +17,13 @@ import Language.Drasil.Constraint
     ( Constraint(Range, Elem), ConstraintE )
 import Language.Drasil.Document ( mkParagraph )
 import Language.Drasil.Document.Core ( Contents )
-import Language.Drasil.Expr.Class ( ExprC(($&&), realInterval, set') )
+import Language.Drasil.Expr.Class ( ExprC(($&&), realInterval) )
 import Language.Drasil.Sentence
     ( Sentence(S, E, EmptyS, (:+:)), sParen, (+:+), sC, (+:+.), (+:) )
 import qualified Language.Drasil.Sentence.Combinators as S (and_, or_)
 import Utils.Drasil
 import Data.Foldable (foldl')
+
 -- TODO: This looks like it should be moved to wherever uses it, it's too specific.
 -- | Helper for formatting a list of constraints.
 foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
@@ -30,7 +31,7 @@ foldConstraints _ [] = EmptyS
 foldConstraints c e  = E $ foldr1 ($&&) $ map constraintToExpr e
   where
     constraintToExpr (Range _ ri) = express $ realInterval c ri
-    constraintToExpr (Elem _ ri) = express $ set' [ri]
+    constraintToExpr (Elem _ set) = express set
 
 
 -- | Partial function application of 'foldle' for sentences specifically.

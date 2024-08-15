@@ -403,7 +403,7 @@ exc _ = return [emptyStmt]
 constraintViolatedMsg :: (OOProg r) => CodeVarChunk -> String ->
   ConstraintCE -> GenState [MSStatement r]
 constraintViolatedMsg q s c = do
-  pc <- printConstraint q c
+  pc <- printConstraint (show $ q ^. uid) c
   v <- mkVal (quantvar q)
   return $ [printStr $ codeName q ++ " has value ",
     print v,
@@ -412,12 +412,12 @@ constraintViolatedMsg q s c = do
 -- | Generates statements to print descriptions of constraints, using words and
 -- the constrained values. Constrained values are followed by printing the
 -- expression they originated from, using printExpr.
-printConstraint :: (OOProg r) => CodeVarChunk -> ConstraintCE ->
+printConstraint :: (OOProg r) => String -> ConstraintCE ->
   GenState [MSStatement r]
 printConstraint v c = do
   g <- get
   let db = sysinfodb $ codeSpec g
-      printConstraint' :: (OOProg r) => CodeVarChunk -> ConstraintCE -> GenState
+      printConstraint' :: (OOProg r) => String -> ConstraintCE -> GenState
         [MSStatement r]
       printConstraint' _ (Range _ (Bounded (_, e1) (_, e2))) = do
         lb <- convExpr e1
@@ -431,9 +431,8 @@ printConstraint v c = do
       printConstraint' _ (Range _ (UpFrom (_, e))) = do
         lb <- convExpr e
         return $ [printStr "above ", print lb] ++ printExpr e db ++ [printStrLn "."]
-      printConstraint' ch (Elem _ e) = do
-        let name = ch ^. uid
-        lb <- convExpr (Variable ("set_"++ show name) e)
+      printConstraint' name (Elem _ e) = do
+        lb <- convExpr (Variable ("set_" ++ name) e)
         return $ [printStr "an element of the set ", print lb] ++ [printStrLn "."]
   printConstraint' v c
 

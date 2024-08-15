@@ -104,6 +104,7 @@ allow-newer-deps:
 - stan
 - weeder
 - multiplate
+- extensions
 
 # Used only for a basic set of flags for haddock
 build:

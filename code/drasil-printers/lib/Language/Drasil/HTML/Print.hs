@@ -107,7 +107,10 @@ printLO (Table ts rows r b t)  = makeTable ts rows (pSpec r) b (pSpec t)
 printLO (Definition dt ssPs l) = makeDefn dt ssPs (pSpec l)
 printLO (Header n contents _)  = h (n + 1) $ pSpec contents -- FIXME
 printLO (List t)               = makeList t
-printLO (Figure r c f wp)      = makeFigure (pSpec r) (pSpec c) (text f) wp
+printLO (Figure r c f wp)      = 
+  let maybeDoc    = checkSpec =<< c
+      checkSpec s = if pSpec s == mempty then Nothing else Just (pSpec s)
+  in makeFigure (pSpec r) maybeDoc (text f) wp
 printLO (Bib bib)              = makeBib bib
 printLO Graph{}                = empty -- FIXME
 printLO Cell{}                 = empty
@@ -336,8 +339,8 @@ pItem (Nested s l) = vcat [pSpec s, makeList l]
 ------------------BEGIN FIGURE PRINTING--------------------------
 -----------------------------------------------------------------
 -- | Renders figures in HTML.
-makeFigure :: Doc -> Doc -> Doc -> L.MaxWidthPercent -> Doc
-makeFigure r c f wp = refwrap r (image f (if c == mempty then Nothing else Just c) wp)
+makeFigure :: Doc -> Maybe Doc -> Doc -> L.MaxWidthPercent -> Doc
+makeFigure r c f wp = refwrap r (image f c wp)
 
 -- | Renders assumptions, requirements, likely changes.
 makeRefList :: Doc -> Doc -> Doc -> Doc

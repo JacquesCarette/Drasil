@@ -81,7 +81,10 @@ printLO (EqnBlock contents)              = nbformat mathEqn
 printLO (Table _ rows r _ _)            = nbformat empty $$ makeTable rows (pSpec r)
 printLO (Definition dt ssPs l)          = nbformat (text "<br>") $$ makeDefn dt ssPs (pSpec l)
 printLO (List t)                        = nbformat empty $$ makeList t False
-printLO (Figure r c f wp)               = makeFigure (pSpec r) (pSpec c) (text f) wp
+printLO (Figure r c f wp)               = 
+  let maybeDoc    = checkSpec =<< c
+      checkSpec s = if pSpec s == mempty then Nothing else Just (pSpec s)
+  in makeFigure (pSpec r) maybeDoc (text f) wp
 printLO (Bib bib)                       = makeBib bib
 printLO Graph{}                         = empty 
 printLO CodeBlock {}                    = empty
@@ -101,7 +104,10 @@ printLO' (EqnBlock contents)              = nbformat mathEqn
 printLO' (Table _ rows r _ _)            = markdownCell $ makeTable rows (pSpec r)
 printLO' Definition {}                   = empty
 printLO' (List t)                        = markdownCell $ makeList t False
-printLO' (Figure r c f wp)               = markdownCell $ makeFigure (pSpec r) (pSpec c) (text f) wp
+printLO' (Figure r c f wp)               =
+  let maybeDoc    = checkSpec =<< c
+      checkSpec s = if pSpec s == mempty then Nothing else Just (pSpec s)
+  in markdownCell $ makeFigure (pSpec r) maybeDoc (text f) wp
 printLO' (Bib bib)                       = markdownCell $ makeBib bib
 printLO' Graph{}                         = empty 
 printLO' (CodeBlock contents)            = codeCell $ codeformat $ cSpec contents
@@ -286,7 +292,7 @@ sItem (Flat s)     = pSpec s
 sItem (Nested s l) = vcat [pSpec s, makeList l False]
 
 -- | Renders figures in HTML
-makeFigure :: Doc -> Doc -> Doc -> L.MaxWidthPercent -> Doc
+makeFigure :: Doc -> Maybe Doc -> Doc -> L.MaxWidthPercent -> Doc
 makeFigure r c f wp = refID r $$ image f c wp
 
 -- | Renders assumptions, requirements, likely changes

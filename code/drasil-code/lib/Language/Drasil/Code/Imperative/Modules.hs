@@ -398,8 +398,8 @@ constrVarDec v e = do
   lb <- convExpr e
   t <- codeType v
   let name = v ^. uid
-  let mkValue = var ("set_" ++ show name) (setType (convType t)) local
-  return (setDecDef mkValue lb)
+  let mkValue = var ("set_" ++ show name) (setType (convType t))
+  return (setDecDef mkValue local lb)
 
 -- | Generates statements that print a message for when a constraint is violated.
 -- Message includes the name of the cosntraint quantity, its value, and a

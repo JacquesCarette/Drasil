@@ -1155,10 +1155,11 @@ swiftVarDec dec v' scp = do
   mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec
     <+> RC.type' (variableType v))
 
-swiftSetDec :: Doc -> SVariable SwiftCode -> MSStatement SwiftCode
-swiftSetDec dec v' = do
+swiftSetDec :: Doc -> SVariable SwiftCode -> SwiftCode (Scope SwiftCode) -> MSStatement SwiftCode
+swiftSetDec dec v' scp = do
   v <- zoom lensMStoVS v'
   modify $ useVarName (variableName v)
+  modify $ setVarScope (variableName v) (scopeData scp)
   let bind Static = static :: SwiftCode (Permanence SwiftCode)
       bind Dynamic = dynamic :: SwiftCode (Permanence SwiftCode)
       p = bind $ variableBind v

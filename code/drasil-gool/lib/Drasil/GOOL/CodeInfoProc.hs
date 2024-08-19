@@ -253,8 +253,8 @@ instance AssignStatement CodeInfoProc where
 instance DeclStatement CodeInfoProc where
   varDec               _ _ = noInfo
   varDecDef            _ _ = zoom lensMStoVS . execute1
-  setDec                 _ = noInfo
-  setDecDef              _ = zoom lensMStoVS . execute1
+  setDec               _ _ = noInfo
+  setDecDef            _ _ = zoom lensMStoVS . execute1
   listDec            _ _ _ = noInfo
   listDecDef           _ _ = zoom lensMStoVS . executeList
   arrayDec           _ _ _ = noInfo

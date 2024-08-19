@@ -337,22 +337,16 @@ listDecDef v scp vals = do
   let lst = IC.litList (listInnerType $ return $ variableType vr) vals
   IC.varDecDef (return vr) scp lst
 
-setDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
-setDecDef v vals = do
+setDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+setDecDef v scp vals = do
   vr <- zoom lensMStoVS v 
   let st = IC.litSet (listInnerType $ return $ variableType vr) vals
-  IC.varDecDef (return vr) st
+  IC.varDecDef (return vr) scp st
 
-setDecDef :: (OORenderSym r) => SVariable r -> [SValue r] -> MSStatement r
-setDecDef v vals = do
-  vr <- zoom lensMStoVS v 
-  let st = IC.litSet (listInnerType $ return $ variableType vr) vals
-  IC.varDecDef (return vr) st
-
-setDec :: (OORenderSym r) => (r (Value r) -> Doc) -> SValue r -> SVariable r -> MSStatement r
-setDec f vl v = do 
+setDec :: (OORenderSym r) => (r (Value r) -> Doc) -> SValue r -> SVariable r -> r (Scope r) -> MSStatement r
+setDec f vl v scp = do 
   sz <- zoom lensMStoVS vl
-  vd <- IC.varDec v
+  vd <- IC.varDec v scp
   mkStmt (RC.statement vd <> f sz)
 
 destructorError :: String -> String

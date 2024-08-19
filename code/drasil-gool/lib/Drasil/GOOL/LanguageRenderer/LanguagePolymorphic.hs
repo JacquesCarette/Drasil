@@ -385,32 +385,13 @@ printList n v prFn prStrFn prLnFn = multi [prStrFn "[",
     prFn (IC.listAccess v (IC.listSize v #- IC.litInt 1)))], 
   prLnFn "]"]
   where l_i = "list_i" ++ show n
-        i = IC.locVar l_i IC.int
+        i = IC.var l_i IC.int
 
 printSet :: (CommonRenderSym r) => Integer -> SValue r -> (SValue r -> MSStatement r)
   -> (String -> MSStatement r) -> (String -> MSStatement r) -> VSType r -> MSStatement r
 printSet n v prFn prStrFn prLnFn s = multi [prStrFn "{ ", 
   IC.forEach i v
     (bodyStatements [prFn (IC.valueOf i),prStrFn " "]),
-  prLnFn "}"]
-  where set_i = "set_i" ++ show n
-        i = IC.locVar set_i s
-
-printSet :: (RenderSym r) => Integer -> SValue r -> (SValue r -> MSStatement r)
-  -> (String -> MSStatement r) -> (String -> MSStatement r) -> MSStatement r
-printSet n v prFn prStrFn prLnFn = multi [prStrFn "{ ", 
-  IC.forEach i v
-    (bodyStatements [prFn (IC.valueOf i),prStrFn " "]),
-  prLnFn "}"]
-  where set_i = "set_i" ++ show n
-        i = IC.var set_i I
-
-printSet :: (RenderSym r) => Integer -> SValue r -> (SValue r -> MSStatement r)
-  -> (String -> MSStatement r) -> (String -> MSStatement r) -> MSStatement r
-printSet n v prFn prStrFn prLnFn = multi [prStrFn "{ ", 
-  IC.forEach i v
-    (bodyStatements [prFn (IC.valueOf i),prStrFn " "]),
---(IC.forEach i v (bodyStatements [prFn (IC.valueOf i)])),
   prLnFn "}"]
   where set_i = "set_i" ++ show n
         i = IC.var set_i s

@@ -49,6 +49,7 @@ import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   ifNoElse, VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
   pubDVar, privDVar, nonInitConstructor, convType, convTypeOO,
   VisibilityTag(..), CodeType(..), onStateValue)
+import qualified Drasil.GOOL as S (Set(..))
 import qualified Drasil.GOOL as OO (SFile)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
 import Drasil.GProc (ProcProg)
@@ -367,7 +368,7 @@ convExpr (S.Set s l) = do
   return $ litSet (convTypeOO sm) ar
 convExpr(Variable s (S.Set l _)) = do
   sm <- spaceCodeType l
-  let varSet = var s (setType $ convTypeOO sm) local
+  let varSet = var s (setType $ convTypeOO sm)
   return $ valueOf varSet
 convExpr(Variable _ _) = error "convExpr: Variable"
 convExpr Operator{} = error "convExpr: Operator"
@@ -499,7 +500,7 @@ elementSetSetBfunc SRemove = error "convExpr Removing an Element to a Set"
 
 -- Maps a 'ESSBinOp' to it's corresponding GOOL binary function.
 elementSetBoolBfunc :: (SharedProg r) => ESBBinOp -> (SValue r -> SValue r -> SValue r)
-elementSetBoolBfunc SContains = contains
+elementSetBoolBfunc SContains = S.contains
 
 -- medium hacks --
 
@@ -1068,7 +1069,7 @@ convExprProc (S.Set s l) = do
   return $ litSet (convType sm) ar
 convExprProc (Variable s (S.Set l _)) = do
   sm <- spaceCodeType l
-  let varSet = var s (setType $ convType sm) local
+  let varSet = var s (setType $ convType sm)
   return $ valueOf varSet
 convExprProc (Variable _ _) = error "convExpr: Variable"
 convExprProc Operator{} = error "convExprProc: Operator"

@@ -169,10 +169,10 @@ varDecDef t vr scp vl' = do
       stmtCtor Semi = mkStmt
   stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
-setDecDef :: (CommonRenderSym r) => Terminator -> SVariable r -> SValue r -> 
+setDecDef :: (CommonRenderSym r) => Terminator -> SVariable r -> r (Scope r) -> SValue r -> 
   MSStatement r
-setDecDef t vr vl' = do 
-  vd <- IC.setDec vr
+setDecDef t vr scp vl' = do 
+  vd <- IC.setDec vr scp
   vl <- zoom lensMStoVS vl'
   let stmtCtor Empty = mkStmtNoEnd
       stmtCtor Semi = mkStmt

@@ -109,6 +109,10 @@ vpunctuate x = tpRunPrint (TP.vcat . TP.punctuate x)
 -- Combine 'TP.hcat' and 'TP.punctuate'.
 hpunctuate :: TP.Doc -> [D] -> D
 hpunctuate x = tpRunPrint (TP.hcat . TP.punctuate x)
+
+-- | Nest a 'D' by a specified indentation level.
+nest :: Int -> D -> D
+nest i (PL f) = PL $ \ctx -> TP.nest i (f ctx)
 --------
 -- | MathContext operations.
 lub :: MathContext -> MathContext -> MathContext

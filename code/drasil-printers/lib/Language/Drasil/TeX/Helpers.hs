@@ -25,10 +25,7 @@ import Data.List (isSuffixOf)
 -- | Helper for adding fencing symbols.
 br, sq, parens, quote :: D -> D
 -- | Curly braces.
-br x = lb <> x <> rb
-  where
-  lb = pure $ text "{"
-  rb = pure $ text "}"
+br x = lbrace <> x <> rbrace
 -- | Square brackets.
 sq x = ls <> x <> rs
   where
@@ -44,6 +41,12 @@ quote x = lq <> x <> rq
   where
   lq = pure $ text "``"
   rq = pure $ text "''"
+
+lbrace, rbrace :: D
+-- | Helper for opening curly brace.
+lbrace = pure $ text "{"
+-- | Helper for closing curly brace.
+rbrace = pure $ text "}"
 
 -- | 0-argument command.
 command0 :: String -> D
@@ -276,8 +279,21 @@ useTikz = usepackage "luatex85" $+$ command0 "def" <>
 -- on Monad...
 
 -- | toEqn is special; it switches to 'Math', but inserts an equation environment.
-toEqn :: D -> D
-toEqn (PL g) = equation $ PL (\_ -> g Math)
+-- The 'scale' parameter determines the maximum width of the equation based on
+-- the corresponding scaling command.
+toEqn :: ExprScale -> D -> D
+toEqn scale (PL g) = equation $ command2D "resizeExpression" (PL (\_ -> g Math)) (command0 (show scale))
+
+-- | Represents the scaling factor for an equation.
+-- 'InDef' and 'OutDef' correspond to predefined scaling commands.
+-- Commands are defined in 'Preamble.hs'
+data ExprScale = InDef | OutDef
+
+-- | Provides a string representation for 'ExprScale' values.
+-- Used to convert 'ExprScale' to the corresponding command string.
+instance Show ExprScale where
+  show InDef  = "inDefScale"
+  show OutDef = "outDefScale"
 
 -----------------------------------------------------------------------------
 -- | Helper(s) for String-Printing in TeX where it varies from HTML/Plaintext.

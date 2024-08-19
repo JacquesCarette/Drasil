@@ -23,6 +23,7 @@ ReadMeInfo	[shape=oval, color=turquoise4, label="ReadMeInfo"];
 AuxData	[shape=oval, color=turquoise4, label="AuxData"];
 PackData	[shape=oval, color=turquoise4, label="PackData"];
 Configuration	[shape=oval, color=turquoise4, label="Configuration"];
+ScopeType	[shape=oval, color=turquoise4, label="ScopeType"];
 DrasilState	[shape=oval, color=turquoise4, label="DrasilState"];
 ClassType	[shape=oval, color=turquoise4, label="ClassType"];
 CalcType	[shape=oval, color=turquoise4, label="CalcType"];

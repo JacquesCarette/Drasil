@@ -321,6 +321,10 @@ digraph alltypes {
 		DrasilState -> Int;
 		DrasilState -> Doc;
 		DrasilState -> Space;
+		DrasilState -> ScopeType;
+		}
+		subgraph scopetype{
+		ScopeType	[shape=oval, color=darkviolet, label="ScopeType"];
 		}
 		subgraph matchedspaces{
 		MatchedSpaces	[shape=oval, color=red2, label="MatchedSpaces"];

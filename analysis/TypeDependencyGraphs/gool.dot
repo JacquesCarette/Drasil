@@ -842,10 +842,6 @@ digraph alltypes {
 		StateVarData -> VisibilityTag;
 		StateVarData -> Doc;
 		}
-		subgraph scopetag{
-		ScopeTag	[shape=oval, color=cyan3, label="ScopeTag"];
-		ScopeTag -> ScopeTag;
-		}
 		subgraph typedata{
 		TypeData	[shape=oval, color=cyan3, label="TypeData"];
 		TypeData -> CodeType;
@@ -884,6 +880,11 @@ digraph alltypes {
 		Binding	[shape=oval, color=darkviolet, label="Binding"];
 		Binding -> Binding;
 		Binding -> a;
+		}
+		subgraph scopetag{
+		ScopeTag	[shape=oval, color=darkviolet, label="ScopeTag"];
+		ScopeTag -> ScopeTag;
+		ScopeTag -> ScopeData;
 		}
 		subgraph commonthunks{
 		CommonThunks	[shape=oval, color=darkviolet, label="CommonThunks"];
@@ -1216,6 +1217,7 @@ digraph alltypes {
 		MethodState -> ClassState;
 		MethodState -> String;
 		MethodState -> MapStringInt;
+		MethodState -> MapStringScopeData;
 		MethodState -> Bool;
 		MethodState -> ExceptionType;
 		MethodState -> QualifiedName;

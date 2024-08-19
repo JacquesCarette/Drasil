@@ -26,4 +26,5 @@ DrasilState -> SetName;
 DrasilState -> Int;
 DrasilState -> Doc;
 DrasilState -> Space;
+DrasilState -> ScopeType;
 }

@@ -1726,7 +1726,7 @@ type GenState = State DrasilState
 
 -- | Private State, used to push these options around the generator.
 data DrasilState
-DrasilState :: CodeSpec -> Modularity -> ImplementationType -> Structure -> ConstantStructure -> ConstantRepr -> MatchedConceptMap -> MatchedSpaces -> ConstraintBehaviour -> ConstraintBehaviour -> [Comments] -> Verbosity -> String -> String -> [Logging] -> [AuxFile] -> [Expr] -> (InternalConcept -> Name) -> [Mod] -> [(Name, Version)] -> ExtLibMap -> [FilePath] -> ModExportMap -> ModExportMap -> ClassDefinitionMap -> Set Name -> Int -> String -> String -> Doc -> [(Space, CodeType)] -> DrasilState
+DrasilState :: CodeSpec -> Modularity -> ImplementationType -> Structure -> ConstantStructure -> ConstantRepr -> MatchedConceptMap -> MatchedSpaces -> ConstraintBehaviour -> ConstraintBehaviour -> [Comments] -> Verbosity -> String -> String -> [Logging] -> [AuxFile] -> [Expr] -> (InternalConcept -> Name) -> [Mod] -> [(Name, Version)] -> ExtLibMap -> [FilePath] -> ModExportMap -> ModExportMap -> ClassDefinitionMap -> Set Name -> Int -> String -> String -> Doc -> [(Space, CodeType)] -> ScopeType -> DrasilState
 [codeSpec] :: DrasilState -> CodeSpec
 [modular] :: DrasilState -> Modularity
 [implType] :: DrasilState -> ImplementationType
@@ -1758,6 +1758,7 @@ DrasilState :: CodeSpec -> Modularity -> ImplementationType -> Structure -> Cons
 [currentClass] :: DrasilState -> String
 [_designLog] :: DrasilState -> Doc
 [_loggedSpaces] :: DrasilState -> [(Space, CodeType)]
+[currentScope] :: DrasilState -> ScopeType
 designLog :: Lens' DrasilState Doc
 
 -- | Type for the mapping between <a>Space</a>s and <a>CodeType</a>s.
@@ -1768,6 +1769,12 @@ type ModExportMap = Map String String
 
 -- | Variable/function name maps to class name.
 type ClassDefinitionMap = Map String String
+
+-- | Variable scope
+data ScopeType
+Local :: ScopeType
+Global :: ScopeType
+MainFn :: ScopeType
 
 -- | Builds the module export map, mapping each function and state variable
 --   name in the generated code to the name of the generated module that
@@ -1838,7 +1845,7 @@ module Language.Drasil.Code.Imperative.Logging
 
 -- | Generates a statement that logs the given variable's value, if the
 --   user chose to turn on logging of variable assignments.
-maybeLog :: SharedProg r => SVariable r -> r (Scope r) -> GenState [MSStatement r]
+maybeLog :: SharedProg r => SVariable r -> GenState [MSStatement r]
 
 -- | Generates the body of a function with the given name, list of
 --   parameters, and blocks to include in the body. If the user chose to
@@ -1853,7 +1860,7 @@ logBody :: SharedProg r => Label -> [SVariable r] -> [MSBlock r] -> GenState (MS
 loggedMethod :: SharedProg r => FilePath -> Label -> [SVariable r] -> MSBlock r
 
 -- | The variable representing the log file in write mode.
-varLogFile :: SharedProg r => r (Scope r) -> SVariable r
+varLogFile :: SharedProg r => SVariable r
 
 module Language.Drasil.Code.Imperative.Helpers
 
@@ -1862,6 +1869,9 @@ liftS :: State a b -> State a [b]
 
 -- | Gets the <a>QuantityDict</a> corresponding to a <a>UID</a>.
 lookupC :: DrasilState -> UID -> QuantityDict
+
+-- | Converts a <a>ScopeType</a> to a <a>Scope</a>
+convScope :: SharedProg r => ScopeType -> r (Scope r)
 
 module Language.Drasil.Code.Imperative.GenerateGOOL
 data ClassType
@@ -2204,19 +2214,19 @@ genConstructor :: OOProg r => Label -> Description -> [ParameterChunk] -> [MSBlo
 
 -- | Generates a GOOL Variable for a variable represented by a
 --   <a>CodeVarChunk</a>.
-mkVar :: OOProg r => CodeVarChunk -> r (Scope r) -> GenState (SVariable r)
+mkVar :: OOProg r => CodeVarChunk -> GenState (SVariable r)
 
 -- | Generates a GOOL Variable for a variable represented by a
 --   <a>CodeVarChunk</a>.
-mkVarProc :: SharedProg r => CodeVarChunk -> r (Scope r) -> GenState (SVariable r)
+mkVarProc :: SharedProg r => CodeVarChunk -> GenState (SVariable r)
 
 -- | Generates a GOOL Value for a variable represented by a
 --   <a>CodeVarChunk</a>.
-mkVal :: OOProg r => CodeVarChunk -> r (Scope r) -> GenState (SValue r)
+mkVal :: OOProg r => CodeVarChunk -> GenState (SValue r)
 
 -- | Generates a GOOL Value for a variable represented by a
 --   <a>CodeVarChunk</a>.
-mkValProc :: SharedProg r => CodeVarChunk -> r (Scope r) -> GenState (SValue r)
+mkValProc :: SharedProg r => CodeVarChunk -> GenState (SValue r)
 
 -- | Converts an <tt>Expr</tt> to a GOOL Value.
 convExpr :: OOProg r => CodeExpr -> GenState (SValue r)
@@ -2247,11 +2257,11 @@ genModClasses :: OOProg r => Mod -> [GenState (SClass r)]
 
 -- | Read from a data description into a <a>MSBlock</a> of
 --   <a>MSStatement</a>s.
-readData :: OOProg r => DataDesc -> r (Scope r) -> GenState [MSBlock r]
+readData :: OOProg r => DataDesc -> GenState [MSBlock r]
 
 -- | Read from a data description into a <a>MSBlock</a> of
 --   <a>MSStatement</a>s.
-readDataProc :: SharedProg r => DataDesc -> r (Scope r) -> GenState [MSBlock r]
+readDataProc :: SharedProg r => DataDesc -> GenState [MSBlock r]
 
 -- | Converts a <a>Constraint</a> to a <a>CodeExpr</a>.
 renderC :: (HasUID c, HasSymbol c) => c -> Constraint CodeExpr -> CodeExpr
@@ -2292,11 +2302,11 @@ genConstraintCallProc :: SharedProg r => GenState (Maybe (MSStatement r))
 
 -- | Generates a call to a calculation function, given the
 --   <a>CodeDefinition</a> for the value being calculated.
-genCalcCall :: OOProg r => CodeDefinition -> r (Scope r) -> GenState (Maybe (MSStatement r))
+genCalcCall :: OOProg r => CodeDefinition -> GenState (Maybe (MSStatement r))
 
 -- | Generates a call to a calculation function, given the
 --   <a>CodeDefinition</a> for the value being calculated.
-genCalcCallProc :: SharedProg r => CodeDefinition -> r (Scope r) -> GenState (Maybe (MSStatement r))
+genCalcCallProc :: SharedProg r => CodeDefinition -> GenState (Maybe (MSStatement r))
 
 -- | Generates a call to the function for printing outputs.
 genOutputCall :: OOProg r => GenState (Maybe (MSStatement r))

@@ -82,9 +82,9 @@ class ThunkSym r where {
 }
 class TypeSym r => VectorType r
 vecType :: VectorType r => VSType r -> VSType r
-class (VariableSym r, StatementSym r) => VectorDecl r
-vecDec :: VectorDecl r => Integer -> SVariable r -> MSStatement r
-vecDecDef :: VectorDecl r => SVariable r -> [SValue r] -> MSStatement r
+class (DeclStatement r) => VectorDecl r
+vecDec :: VectorDecl r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
+vecDecDef :: VectorDecl r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
 class (VariableSym r, ThunkSym r) => VectorThunk r
 vecThunk :: VectorThunk r => SVariable r -> VSThunk r
 class (ThunkSym r, ValueSym r) => VectorExpression r
@@ -112,21 +112,21 @@ infixl 8 &--
 (&=) :: AssignStatement r => SVariable r -> SValue r -> MSStatement r
 infixr 1 &=
 assignToListIndex :: (StatementSym r, VariableValue r, List r) => SVariable r -> SValue r -> SValue r -> MSStatement r
-class (VariableSym r, StatementSym r) => DeclStatement r
-varDec :: DeclStatement r => SVariable r -> MSStatement r
-varDecDef :: DeclStatement r => SVariable r -> SValue r -> MSStatement r
-listDec :: DeclStatement r => Integer -> SVariable r -> MSStatement r
-listDecDef :: DeclStatement r => SVariable r -> [SValue r] -> MSStatement r
-arrayDec :: DeclStatement r => Integer -> SVariable r -> MSStatement r
-arrayDecDef :: DeclStatement r => SVariable r -> [SValue r] -> MSStatement r
-constDecDef :: DeclStatement r => SVariable r -> SValue r -> MSStatement r
-funcDecDef :: DeclStatement r => SVariable r -> [SVariable r] -> MSBody r -> MSStatement r
+class (VariableSym r, StatementSym r, ScopeSym r) => DeclStatement r
+varDec :: DeclStatement r => SVariable r -> r (Scope r) -> MSStatement r
+varDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+listDec :: DeclStatement r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
+listDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+arrayDec :: DeclStatement r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
+arrayDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+constDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+funcDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SVariable r] -> MSBody r -> MSStatement r
 class (DeclStatement r, OOVariableSym r) => OODeclStatement r
-objDecDef :: OODeclStatement r => SVariable r -> SValue r -> MSStatement r
-objDecNew :: OODeclStatement r => SVariable r -> [SValue r] -> MSStatement r
-extObjDecNew :: OODeclStatement r => Library -> SVariable r -> [SValue r] -> MSStatement r
-objDecNewNoParams :: OODeclStatement r => SVariable r -> MSStatement r
-extObjDecNewNoParams :: OODeclStatement r => Library -> SVariable r -> MSStatement r
+objDecDef :: OODeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+objDecNew :: OODeclStatement r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+extObjDecNew :: OODeclStatement r => Library -> SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+objDecNewNoParams :: OODeclStatement r => SVariable r -> r (Scope r) -> MSStatement r
+extObjDecNewNoParams :: OODeclStatement r => Library -> SVariable r -> r (Scope r) -> MSStatement r
 class (VariableSym r, StatementSym r) => IOStatement r
 print :: IOStatement r => SValue r -> MSStatement r
 printLn :: IOStatement r => SValue r -> MSStatement r
@@ -159,7 +159,7 @@ selfInOutCall :: OOFuncAppStatement r => InOutCall r
 class (StatementSym r) => CommentStatement r
 comment :: CommentStatement r => Comment -> MSStatement r
 initObserverList :: DeclStatement r => VSType r -> [SValue r] -> r (Scope r) -> MSStatement r
-addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r -> r (Scope r) -> MSStatement r
+addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r -> MSStatement r
 class (BodySym r, VariableSym r) => ControlStatement r
 break :: ControlStatement r => MSStatement r
 continue :: ControlStatement r => MSStatement r
@@ -179,25 +179,13 @@ tryCatch :: ControlStatement r => MSBody r -> MSBody r -> MSStatement r
 assert :: ControlStatement r => SValue r -> SValue r -> MSStatement r
 ifNoElse :: ControlStatement r => [(SValue r, MSBody r)] -> MSStatement r
 switchAsIf :: (ControlStatement r, Comparison r) => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
-class (TypeSym r, ScopeSym r) => VariableSym r where {
+class (TypeSym r) => VariableSym r where {
     type Variable r;
 }
-var' :: VariableSym r => Label -> r (Scope r) -> VSType r -> SVariable r
-constant' :: VariableSym r => Label -> r (Scope r) -> VSType r -> SVariable r
+var :: VariableSym r => Label -> VSType r -> SVariable r
+constant :: VariableSym r => Label -> VSType r -> SVariable r
 extVar :: VariableSym r => Library -> Label -> VSType r -> SVariable r
 arrayElem :: VariableSym r => Integer -> SVariable r -> SVariable r
-
--- | Smart constructor to rearrange the parameters of var'
-var :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
-
--- | Smart constructor to rearrange the parameters of constant'
-constant :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
-
--- | Smart constructor for a local variable.
-locVar :: VariableSym r => Label -> VSType r -> SVariable r
-
--- | Smart constructor for a variable in the main function.
-mainVar :: VariableSym r => Label -> VSType r -> SVariable r
 class ScopeSym r where {
     type Scope r;
 }
@@ -218,8 +206,8 @@ variableName :: VariableElim r => r (Variable r) -> String
 variableType :: VariableElim r => r (Variable r) -> r (Type r)
 ($->) :: OOVariableSym r => SVariable r -> SVariable r -> SVariable r
 infixl 9 $->
-listOf :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
-listVar :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
+listOf :: VariableSym r => Label -> VSType r -> SVariable r
+listVar :: VariableSym r => Label -> VSType r -> SVariable r
 class (TypeSym r) => ValueSym r where {
     type Value r;
 }
@@ -383,7 +371,7 @@ listSlice :: InternalList r => SVariable r -> SValue r -> Maybe (SValue r) -> Ma
 listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 at :: List r => SValue r -> SValue r -> SValue r
 class (StatementSym r, OOFunctionSym r) => ObserverPattern r
-notifyObservers :: ObserverPattern r => VSFunction r -> VSType r -> r (Scope r) -> MSStatement r
+notifyObservers :: ObserverPattern r => VSFunction r -> VSType r -> MSStatement r
 class (BodySym r, VariableSym r) => StrategyPattern r
 runStrategy :: StrategyPattern r => Label -> [(Label, MSBody r)] -> Maybe (SValue r) -> Maybe (SVariable r) -> MSBlock r
 class VisibilitySym r where {
@@ -564,9 +552,9 @@ class ThunkSym r where {
 }
 class TypeSym r => VectorType r
 vecType :: VectorType r => VSType r -> VSType r
-class (VariableSym r, StatementSym r) => VectorDecl r
-vecDec :: VectorDecl r => Integer -> SVariable r -> MSStatement r
-vecDecDef :: VectorDecl r => SVariable r -> [SValue r] -> MSStatement r
+class (DeclStatement r) => VectorDecl r
+vecDec :: VectorDecl r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
+vecDecDef :: VectorDecl r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
 class (VariableSym r, ThunkSym r) => VectorThunk r
 vecThunk :: VectorThunk r => SVariable r -> VSThunk r
 class (ThunkSym r, ValueSym r) => VectorExpression r
@@ -594,15 +582,15 @@ infixl 8 &--
 (&=) :: AssignStatement r => SVariable r -> SValue r -> MSStatement r
 infixr 1 &=
 assignToListIndex :: (StatementSym r, VariableValue r, List r) => SVariable r -> SValue r -> SValue r -> MSStatement r
-class (VariableSym r, StatementSym r) => DeclStatement r
-varDec :: DeclStatement r => SVariable r -> MSStatement r
-varDecDef :: DeclStatement r => SVariable r -> SValue r -> MSStatement r
-listDec :: DeclStatement r => Integer -> SVariable r -> MSStatement r
-listDecDef :: DeclStatement r => SVariable r -> [SValue r] -> MSStatement r
-arrayDec :: DeclStatement r => Integer -> SVariable r -> MSStatement r
-arrayDecDef :: DeclStatement r => SVariable r -> [SValue r] -> MSStatement r
-constDecDef :: DeclStatement r => SVariable r -> SValue r -> MSStatement r
-funcDecDef :: DeclStatement r => SVariable r -> [SVariable r] -> MSBody r -> MSStatement r
+class (VariableSym r, StatementSym r, ScopeSym r) => DeclStatement r
+varDec :: DeclStatement r => SVariable r -> r (Scope r) -> MSStatement r
+varDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+listDec :: DeclStatement r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
+listDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+arrayDec :: DeclStatement r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
+arrayDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+constDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+funcDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SVariable r] -> MSBody r -> MSStatement r
 class (VariableSym r, StatementSym r) => IOStatement r
 print :: IOStatement r => SValue r -> MSStatement r
 printLn :: IOStatement r => SValue r -> MSStatement r
@@ -651,25 +639,13 @@ tryCatch :: ControlStatement r => MSBody r -> MSBody r -> MSStatement r
 assert :: ControlStatement r => SValue r -> SValue r -> MSStatement r
 ifNoElse :: ControlStatement r => [(SValue r, MSBody r)] -> MSStatement r
 switchAsIf :: (ControlStatement r, Comparison r) => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
-class (TypeSym r, ScopeSym r) => VariableSym r where {
+class (TypeSym r) => VariableSym r where {
     type Variable r;
 }
-var' :: VariableSym r => Label -> r (Scope r) -> VSType r -> SVariable r
-constant' :: VariableSym r => Label -> r (Scope r) -> VSType r -> SVariable r
+var :: VariableSym r => Label -> VSType r -> SVariable r
+constant :: VariableSym r => Label -> VSType r -> SVariable r
 extVar :: VariableSym r => Library -> Label -> VSType r -> SVariable r
 arrayElem :: VariableSym r => Integer -> SVariable r -> SVariable r
-
--- | Smart constructor to rearrange the parameters of var'
-var :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
-
--- | Smart constructor to rearrange the parameters of constant'
-constant :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
-
--- | Smart constructor for a local variable.
-locVar :: VariableSym r => Label -> VSType r -> SVariable r
-
--- | Smart constructor for a variable in the main function.
-mainVar :: VariableSym r => Label -> VSType r -> SVariable r
 class ScopeSym r where {
     type Scope r;
 }
@@ -679,8 +655,8 @@ local :: ScopeSym r => r (Scope r)
 class (VariableSym r) => VariableElim r
 variableName :: VariableElim r => r (Variable r) -> String
 variableType :: VariableElim r => r (Variable r) -> r (Type r)
-listOf :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
-listVar :: VariableSym r => Label -> VSType r -> r (Scope r) -> SVariable r
+listOf :: VariableSym r => Label -> VSType r -> SVariable r
+listVar :: VariableSym r => Label -> VSType r -> SVariable r
 class (TypeSym r) => ValueSym r where {
     type Value r;
 }

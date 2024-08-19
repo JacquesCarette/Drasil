@@ -306,17 +306,17 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">_instModels</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[InstanceModel]
 </span><a href="Drasil.PDController.IModel.html#instanceModels"><span class="hs-identifier hs-var">instanceModels</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-110"></span><span>  </span><span class="annot"><span class="annottext">_configFiles :: [String]
-</span><a href="#local-6989586621679063776"><span class="hs-identifier hs-var">_configFiles</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679063803"><span class="hs-identifier hs-var">_configFiles</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-111"></span><span>  </span><span class="annot"><span class="annottext">_inputs :: [QuantityDict]
-</span><a href="#local-6989586621679063777"><span class="hs-identifier hs-var">_inputs</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><a href="#local-6989586621679063804"><span class="hs-identifier hs-var">_inputs</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.PDController.Unitals.html#inputs"><span class="hs-identifier hs-var">inputs</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-112"></span><span>  </span><span class="annot"><span class="annottext">_outputs :: [QuantityDict]
-</span><a href="#local-6989586621679063778"><span class="hs-identifier hs-var">_outputs</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><a href="#local-6989586621679063805"><span class="hs-identifier hs-var">_outputs</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.PDController.Unitals.html#outputs"><span class="hs-identifier hs-var">outputs</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-113"></span><span>  </span><span class="annot"><span class="annottext">_defSequence :: [Block SimpleQDef]
-</span><a href="#local-6989586621679063779"><span class="hs-identifier hs-var">_defSequence</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Block</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679063806"><span class="hs-identifier hs-var">_defSequence</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Block</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-114"></span><span>  </span><span class="annot"><span class="annottext">_constraints :: [ConstrainedChunk]
-</span><a href="#local-6989586621679063780"><span class="hs-identifier hs-var">_constraints</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConstrConcept -&gt; ConstrainedChunk)
+</span><a href="#local-6989586621679063807"><span class="hs-identifier hs-var">_constraints</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConstrConcept -&gt; ConstrainedChunk)
 -&gt; [ConstrConcept] -&gt; [ConstrainedChunk]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; ConstrainedChunk
@@ -326,16 +326,16 @@ c -&gt; ConstrainedChunk
 </span><span class="hs-identifier hs-var">cnstrw</span></span><span> </span><span class="annot"><span class="annottext">[ConstrConcept]
 </span><a href="Drasil.PDController.Unitals.html#inpConstrained"><span class="hs-identifier hs-var">inpConstrained</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-115"></span><span>  </span><span class="annot"><span class="annottext">_constants :: [ConstQDef]
-</span><a href="#local-6989586621679063782"><span class="hs-identifier hs-var">_constants</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[ConstQDef]
+</span><a href="#local-6989586621679063809"><span class="hs-identifier hs-var">_constants</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[ConstQDef]
 </span><a href="Drasil.PDController.Unitals.html#pidConstants"><span class="hs-identifier hs-var">pidConstants</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-116"></span><span>  </span><span class="annot"><span class="annottext">_sysinfodb :: ChunkDB
-</span><a href="#local-6989586621679063783"><span class="hs-identifier hs-var">_sysinfodb</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679063810"><span class="hs-identifier hs-var">_sysinfodb</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
 </span><a href="Drasil.PDController.Body.html#symbMap"><span class="hs-identifier hs-var">symbMap</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-117"></span><span>  </span><span class="annot"><span class="annottext">_usedinfodb :: ChunkDB
-</span><a href="#local-6989586621679063785"><span class="hs-identifier hs-var">_usedinfodb</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679063812"><span class="hs-identifier hs-var">_usedinfodb</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
 </span><a href="Drasil.PDController.Body.html#usedDB"><span class="hs-identifier hs-var">usedDB</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-118"></span><span>   </span><span class="annot"><span class="annottext">refdb :: ReferenceDB
-</span><a href="#local-6989586621679063787"><span class="hs-identifier hs-var">refdb</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ReferenceDB
+</span><a href="#local-6989586621679063814"><span class="hs-identifier hs-var">refdb</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ReferenceDB
 </span><a href="Drasil.PDController.Body.html#refDB"><span class="hs-identifier hs-var">refDB</span></a></span><span class="hs-special">}</span><span>
 </span><span id="line-119"></span><span>
 </span><span id="line-120"></span><span class="annot"><a href="Drasil.PDController.Body.html#purp"><span class="hs-identifier hs-type">purp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>

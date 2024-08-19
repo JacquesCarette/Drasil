@@ -354,10 +354,13 @@ chooseConstr :: (OOProg r) => ConstraintBehaviour ->
   [(CodeVarChunk, [ConstraintCE])] -> GenState [MSStatement r]
 chooseConstr cb cs = do
   let ch = transform cs
+  -- Generate variable declarations based on constraints
   varDecs <- mapM (\case
     (q, Elem _ e) -> constrVarDec q e
     _             -> return emptyStmt) ch
+  -- Generate conditions for constraints
   conds <- mapM (\(q,cns) -> mapM (convExpr . renderC q) cns) cs
+  -- Generate bodies based on constraint behavior
   bods <- mapM (chooseCB cb) cs
   let bodies = concat $ zipWith (zipWith (\cond bod -> ifNoElse [((?!) cond, bod)])) conds bods
   return $ interleave varDecs bodies
@@ -388,6 +391,7 @@ constrExc c = do
   msgs <- mapM (constraintViolatedMsg q "expected") cs
   return $ map (bodyStatements . (++ [throw "InputError"])) msgs
 
+-- | Generates set variable dec
 constrVarDec :: (OOProg r) => CodeVarChunk -> CodeExpr ->
   GenState (MSStatement r)
 constrVarDec v e = do

@@ -12,17 +12,16 @@ import Utils.Drasil (indent)
 import Drasil.GOOL.CodeType (CodeType(..))
 import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..),
-  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), var,
-  locVar, VisibilitySym(..), VariableElim(..),ValueSym(..), Argument(..),
-  Literal(..), litZero, MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..),
-  InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
-  VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..))
+  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
+  VisibilitySym(..), VariableElim(..),ValueSym(..), Argument(..), Literal(..),
+  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, extFuncApp, List(..), InternalList(..),
+  ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
+  VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
+  (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
+  FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
 import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
@@ -39,7 +38,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim, MethodTypeSym(..),
   RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
-  MethodElim, BlockCommentSym(..), BlockCommentElim)
+  MethodElim, BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
@@ -108,7 +107,7 @@ import Drasil.GOOL.State (VS, lensGStoFS, lensMStoFS, lensMStoVS, lensVStoFS,
   addLangImport, addLangImportVS, addExceptionImports, getModuleName, 
   setFileType, getClassName, setCurrMain, setOutputsDeclared, 
   isOutputsDeclared, getExceptions, getMethodExcMap, addExceptions, useVarName,
-  genLoopIndex)
+  genLoopIndex, setVarScope)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
@@ -279,10 +278,13 @@ instance ScopeSym JavaCode where
   mainFn = local
   local = G.local
 
+instance ScopeElim JavaCode where
+  scopeData = unJC
+
 instance VariableSym JavaCode where
   type Variable JavaCode = VarData
-  var' n _    = G.var n
-  constant'   = var'
+  var         = G.var
+  constant    = var
   extVar      = CP.extVar
   arrayElem i = G.arrayElem (litInt i)
 
@@ -489,7 +491,7 @@ instance ThunkAssign JavaCode where
   thunkAssign v t = do
     iName <- genLoopIndex
     let
-      i = locVar iName int
+      i = var iName int
       dim = fmap pure $ t >>= commonThunkDim (fmap unJC . listSize . fmap pure) . unJC
       loopInit = zoom lensMStoVS (fmap unJC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
@@ -559,8 +561,8 @@ instance AssignStatement JavaCode where
 instance DeclStatement JavaCode where
   varDec = C.varDec static dynamic empty
   varDecDef = C.varDecDef Semi
-  listDec n v = zoom lensMStoVS v >>= (\v' -> C.listDec (R.listDec v') 
-    (litInt n) v)
+  listDec n v scp = zoom lensMStoVS v >>= (\v' -> C.listDec (R.listDec v') 
+    (litInt n) v scp)
   listDecDef = CP.listDecDef
   arrayDec n = CP.arrayDec (litInt n)
   arrayDecDef = CP.arrayDecDef
@@ -934,19 +936,22 @@ jCast = join .: on2StateValues (\t v -> jCast' (getType t) (getType $ valueType
         jCast' _ _ t v = mkStateVal (toState t) (R.castObj (R.cast (RC.type' t))
           (RC.value v))
 
-jConstDecDef :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
-jConstDecDef v' def' = do
+jConstDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> SValue r
+  -> MSStatement r
+jConstDecDef v' scp def' = do
   v <- zoom lensMStoVS v'
   def <- zoom lensMStoVS def'
   modify $ useVarName $ variableName v
+  modify $ setVarScope (variableName v) (scopeData scp)
   mkStmt $ jFinal <+> RC.type' (variableType v) <+> 
     RC.variable v <+> equals <+> RC.value def
 
-jFuncDecDef :: (CommonRenderSym r) => SVariable r -> [SVariable r] -> MSBody r ->
-  MSStatement r
-jFuncDecDef v ps bod = do
+jFuncDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) ->
+  [SVariable r] -> MSBody r -> MSStatement r
+jFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
+  modify $ setVarScope (variableName vr) (scopeData scp)
   pms <- mapM (zoom lensMStoVS) ps
   b <- bod
   mkStmt $ RC.type' (variableType vr) <+> RC.variable vr <+> equals <+>
@@ -1014,7 +1019,7 @@ jMethod n es s p t ps b = vcat [
   rbrace]
 
 outputs :: SVariable JavaCode
-outputs = var "outputs" jArrayType local
+outputs = var "outputs" jArrayType
 
 jAssignFromArray :: Integer -> [SVariable JavaCode] -> [MSStatement JavaCode]
 jAssignFromArray _ [] = []
@@ -1034,7 +1039,7 @@ jInOutCall f n ins outs both = fCall rets
         fCall [x] = assign x $ f n (onStateValue variableType x) 
           (map valueOf both ++ ins)
         fCall xs = isOutputsDeclared >>= (\odec -> modify setOutputsDeclared >>
-          multi ((if odec then assign else varDecDef) outputs 
+          multi ((if odec then assign else (`varDecDef` local)) outputs 
           (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 xs))
 
 jInOut :: (VSType JavaCode -> [MSParameter JavaCode] -> MSBody JavaCode -> 
@@ -1043,7 +1048,7 @@ jInOut :: (VSType JavaCode -> [MSParameter JavaCode] -> MSBody JavaCode ->
   MSBody JavaCode -> SMethod JavaCode
 jInOut f ins [] [] b = f void (map param ins) b
 jInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins) 
-  (on3StateValues (on3CodeValues surroundBody) (varDec v) b (returnStmt $ 
+  (on3StateValues (on3CodeValues surroundBody) (varDec v local) b (returnStmt $ 
   valueOf v))
 jInOut f ins [] [v] b = f (onStateValue variableType v) 
   (map param $ v : ins) (on2StateValues (on2CodeValues appendToBody) b 
@@ -1054,13 +1059,13 @@ jInOut f ins outs both b = f (returnTp rets)
   where returnTp [x] = onStateValue variableType x
         returnTp _ = jArrayType
         returnSt [x] = returnStmt $ valueOf x
-        returnSt _ = multi (arrayDec (toInteger $ length rets) outputs
+        returnSt _ = multi (arrayDec (toInteger $ length rets) outputs local
           : assignArray 0 (map valueOf rets)
           ++ [returnStmt (valueOf outputs)])
         assignArray :: Integer -> [SValue JavaCode] -> [MSStatement JavaCode]
         assignArray _ [] = []
         assignArray c (v:vs) = (arrayElem c outputs &= v) : assignArray (c+1) vs
-        decls = multi $ map varDec outs
+        decls = multi $ map (`varDec` local) outs
         rets = both ++ outs
 
 jDocInOut :: (CommonRenderSym r) => ([SVariable r] -> [SVariable r] -> [SVariable r] -> 

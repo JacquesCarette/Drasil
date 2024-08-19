@@ -10,6 +10,7 @@ module Drasil.GOOL.RendererClassesCommon (
   RenderStatement(..), StatementElim(..), RenderVisibility(..), VisibilityElim(..),
   MSMthdType, MethodTypeSym(..), RenderParam(..), ParamElim(..),
   RenderMethod(..), MethodElim(..), BlockCommentSym(..), BlockCommentElim(..),
+  ScopeElim(..)
 ) where
 
 import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
@@ -21,9 +22,9 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
   InternalList(..), VectorExpression(..), StatementSym(..), AssignStatement(..),
   DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
-  VisibilitySym(..), ParameterSym(..), MethodSym(..))
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), ScopeSym(..))
 import Drasil.GOOL.CodeType (CodeType)
-import Drasil.GOOL.AST (Binding, Terminator, VisibilityTag)
+import Drasil.GOOL.AST (Binding, Terminator, VisibilityTag, ScopeData)
 import Drasil.GOOL.State (MS, VS)
 
 import Control.Monad.State (State)
@@ -41,7 +42,7 @@ class (AssignStatement r, DeclStatement r, IOStatement r,
   InternalTypeElim r, RenderValue r, ValueElim r, RenderVariable r,
   InternalVarElim r, ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r,
   BlockCommentSym r, BlockCommentElim r, ValueExpression r, RenderMethod r,
-  MethodElim r, ParameterSym r
+  MethodElim r, ParameterSym r, ScopeElim r
   ) => CommonRenderSym r
 
 
@@ -120,6 +121,9 @@ class OpElim r where
   bOp :: r (BinaryOp r) -> Doc
   uOpPrec :: r (UnaryOp r) -> Int
   bOpPrec :: r (BinaryOp r) -> Int
+
+class ScopeElim r where
+  scopeData :: r (Scope r) -> ScopeData
   
 class RenderVariable r where
   varFromData :: Binding -> String -> VSType r -> Doc -> SVariable r

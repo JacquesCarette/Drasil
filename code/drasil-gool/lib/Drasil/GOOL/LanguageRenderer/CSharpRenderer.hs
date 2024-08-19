@@ -12,7 +12,7 @@ import Utils.Drasil (indent)
 import Drasil.GOOL.CodeType (CodeType(..))
 import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..),
-  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), locVar,
+  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
   VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
@@ -38,7 +38,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim, MethodTypeSym(..),
   RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
-  MethodElim, BlockCommentSym(..), BlockCommentElim)
+  MethodElim, BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
@@ -99,7 +99,7 @@ import Drasil.GOOL.Helpers (angles, hicat, toCode, toState, onCodeValue,
   on2StateWrapped, onCodeList, onStateList)
 import Drasil.GOOL.State (VS, lensGStoFS, lensMStoVS, modifyReturn, revFiles,
   addLangImport, addLangImportVS, setFileType, getClassName, setCurrMain,
-  useVarName, genLoopIndex)
+  useVarName, genLoopIndex, setVarScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -272,10 +272,13 @@ instance ScopeSym CSharpCode where
   mainFn = local
   local = G.local
 
+instance ScopeElim CSharpCode where
+  scopeData = unCSC
+
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
-  var' n _    = G.var n
-  constant'   = var'
+  var         = G.var
+  constant    = var
   extVar      = CP.extVar
   arrayElem i = G.arrayElem (litInt i)
 
@@ -458,7 +461,7 @@ instance ThunkAssign CSharpCode where
   thunkAssign v t = do
     iName <- genLoopIndex
     let
-      i = locVar iName int
+      i = var iName int
       dim = fmap pure $ t >>= commonThunkDim (fmap unCSC . listSize . fmap pure) . unCSC
       loopInit = zoom lensMStoVS (fmap unCSC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
@@ -525,11 +528,11 @@ instance AssignStatement CSharpCode where
   (&--) = C.decrement1
 
 instance DeclStatement CSharpCode where
-  varDec v = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $ 
-    C.varDec static dynamic empty v)
+  varDec v scp = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $ 
+    C.varDec static dynamic empty v scp)
   varDecDef = C.varDecDef Semi
-  listDec n v = zoom lensMStoVS v >>= (\v' -> C.listDec (R.listDec v') 
-    (litInt n) v)
+  listDec n v scp = zoom lensMStoVS v >>= (\v' -> C.listDec (R.listDec v') 
+    (litInt n) v scp)
   listDecDef = CP.listDecDef
   arrayDec n = CP.arrayDec (litInt n)
   arrayDecDef = CP.arrayDecDef
@@ -852,11 +855,12 @@ csCast = join .: on2StateValues (\t v -> csCast' (getType t) (getType $
 -- all features of C# 7, so we cannot generate local functions.
 -- If support for local functions is added to mcs in the future, this
 -- should be re-written to generate a local function.
-csFuncDecDef :: (CommonRenderSym r) => SVariable r -> [SVariable r] -> MSBody r -> 
-  MSStatement r
-csFuncDecDef v ps bod = do
+csFuncDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) ->
+  [SVariable r] -> MSBody r -> MSStatement r
+csFuncDecDef v scp ps bod = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
+  modify $ setVarScope (variableName vr) (scopeData scp)
   pms <- mapM (zoom lensMStoVS) ps
   t <- zoom lensMStoVS $ funcType (map (pure . variableType) pms) 
     (pure $ variableType vr)
@@ -936,7 +940,7 @@ csInOut :: (VSType CSharpCode -> [MSParameter CSharpCode] -> MSBody CSharpCode -
   [SVariable CSharpCode] -> [SVariable CSharpCode] -> [SVariable CSharpCode] -> 
   MSBody CSharpCode -> SMethod CSharpCode
 csInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
-  (on3StateValues (on3CodeValues surroundBody) (varDec v) b (returnStmt $ 
+  (on3StateValues (on3CodeValues surroundBody) (varDec v local) b (returnStmt $ 
   valueOf v))
 csInOut f ins [] [v] b = f (onStateValue variableType v) 
   (map param $ v : ins) (on2StateValues (on2CodeValues appendToBody) b 

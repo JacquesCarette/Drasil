@@ -2,9 +2,9 @@
 module Helper (helperOO, helperProc) where
 
 import Drasil.GOOL (SMethod, SharedProg, OOProg, bodyStatements, TypeSym(..),
-  DeclStatement(..), ControlStatement(..), (&=), locVar, Literal(..),
+  DeclStatement(..), ControlStatement(..), (&=), VariableSym(var), Literal(..),
   VariableValue(..), NumericExpression(..), VisibilitySym(..), ParameterSym(..),
-  MethodSym(..))
+  MethodSym(..), ScopeSym(local))
 import qualified Drasil.GOOL as OO (SFile, FileSym(..), ModuleSym(..))
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as GProc (SFile, FileSym(..), ModuleSym(..))
@@ -24,10 +24,10 @@ doubleAndAdd :: (SharedProg r) => SMethod r
 doubleAndAdd = docFunc "This function adds two numbers"
   ["First number to add", "Second number to add"] (Just "Sum") $
   function "doubleAndAdd"  public double
-  [param $ locVar "num1" double, param $ locVar "num2" double]
+  [param $ var "num1" double, param $ var "num2" double]
   (bodyStatements [
-    varDec $ locVar "doubledSum" double,
-    locVar "doubledSum" double &= ((litDouble 2.0 #*
-      valueOf (locVar "num1" double)) #+
-      (litDouble 2.0 #* valueOf (locVar "num2" double))),
-    returnStmt (valueOf (locVar "doubledSum" double))])
+    varDec (var "doubledSum" double) local,
+    var "doubledSum" double &= ((litDouble 2.0 #*
+      valueOf (var "num1" double)) #+
+      (litDouble 2.0 #* valueOf (var "num2" double))),
+    returnStmt (valueOf (var "doubledSum" double))])

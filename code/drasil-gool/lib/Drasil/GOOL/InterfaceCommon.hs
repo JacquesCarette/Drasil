@@ -7,18 +7,18 @@ module Drasil.GOOL.InterfaceCommon (
   MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
-  TypeElim(..), VariableSym(..), var, constant, locVar, mainVar, ScopeSym(..),
-  VariableElim(..), listOf, listVar, ValueSym(..), Argument(..), Literal(..),
-  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  TypeElim(..), VariableSym(..), ScopeSym(..), convScope, VariableElim(..),
+  listOf, listVar, ValueSym(..), Argument(..), Literal(..), litZero,
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp,
   exists, List(..), InternalList(..), listSlice, listIndexExists, at,
   ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ifNoElse, switchAsIf, VisibilitySym(..),
-  ParameterSym(..), MethodSym(..), convType
+  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), convType
   ) where
 
 import Drasil.GOOL.CodeType (CodeType(..))
@@ -27,6 +27,7 @@ import Drasil.GOOL.State (MS, VS)
 import qualified Data.Kind as K (Type)
 import Data.Bifunctor (first)
 import CodeLang.Drasil (Comment)
+import Drasil.GOOL.AST (ScopeData(..), ScopeTag(..))
 
 type Label = String
 type Library = String
@@ -98,37 +99,21 @@ class ScopeSym r where
 
 type SVariable a = VS (a (Variable a))
 
-class (TypeSym r, ScopeSym r) => VariableSym r where
+class (TypeSym r) => VariableSym r where
   type Variable r
-  var'      :: Label -> r (Scope r) -> VSType r -> SVariable r
-  constant' :: Label -> r (Scope r) -> VSType r -> SVariable r
+  var       :: Label -> VSType r -> SVariable r
+  constant  :: Label -> VSType r -> SVariable r
   extVar    :: Library -> Label -> VSType r -> SVariable r
   arrayElem :: Integer -> SVariable r -> SVariable r
-  
--- | Smart constructor to rearrange the parameters of var'
-var :: (VariableSym r) => Label -> VSType r -> r (Scope r) -> SVariable r
-var n t s = var' n s t
-
--- | Smart constructor to rearrange the parameters of constant'
-constant :: (VariableSym r) => Label -> VSType r -> r (Scope r) -> SVariable r
-constant n t s = constant' n s t
-
--- | Smart constructor for a local variable.
-locVar :: (VariableSym r) => Label -> VSType r -> SVariable r
-locVar n = var' n local
-
--- | Smart constructor for a variable in the main function.
-mainVar :: (VariableSym r) => Label -> VSType r -> SVariable r
-mainVar n = var' n mainFn
 
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
   variableType :: r (Variable r) -> r (Type r)
 
-listVar :: (VariableSym r) => Label -> VSType r -> r (Scope r) -> SVariable r
+listVar :: (VariableSym r) => Label -> VSType r -> SVariable r
 listVar n t = var n (listType t)
 
-listOf :: (VariableSym r) => Label -> VSType r -> r (Scope r) -> SVariable r
+listOf :: (VariableSym r) => Label -> VSType r -> SVariable r
 listOf = listVar
 
 type SValue a = VS (a (Value a))
@@ -331,9 +316,9 @@ class (VariableSym r, ThunkSym r, StatementSym r) => ThunkAssign r where
 class TypeSym r => VectorType r where
   vecType :: VSType r -> VSType r
 
-class (VariableSym r, StatementSym r) => VectorDecl r where
-  vecDec :: Integer -> SVariable r -> MSStatement r
-  vecDecDef :: SVariable r -> [SValue r] -> MSStatement r
+class (DeclStatement r) => VectorDecl r where
+  vecDec :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
+  vecDecDef :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
 
 class (VariableSym r, ThunkSym r) => VectorThunk r where
   vecThunk :: SVariable r -> VSThunk r
@@ -371,15 +356,16 @@ assignToListIndex :: (StatementSym r, VariableValue r, List r) => SVariable r
   -> SValue r -> SValue r -> MSStatement r
 assignToListIndex lst index v = valStmt $ listSet (valueOf lst) index v
 
-class (VariableSym r, StatementSym r) => DeclStatement r where
-  varDec       :: SVariable r -> MSStatement r
-  varDecDef    :: SVariable r -> SValue r -> MSStatement r
-  listDec      :: Integer -> SVariable r -> MSStatement r
-  listDecDef   :: SVariable r -> [SValue r] -> MSStatement r
-  arrayDec     :: Integer -> SVariable r -> MSStatement r
-  arrayDecDef  :: SVariable r -> [SValue r] -> MSStatement r
-  constDecDef  :: SVariable r -> SValue r -> MSStatement r
-  funcDecDef   :: SVariable r -> [SVariable r] -> MSBody r -> MSStatement r
+class (VariableSym r, StatementSym r, ScopeSym r) => DeclStatement r where
+  varDec       :: SVariable r -> r (Scope r) -> MSStatement r
+  varDecDef    :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+  listDec      :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
+  listDecDef   :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+  arrayDec     :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
+  arrayDecDef  :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+  constDecDef  :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+  funcDecDef   :: SVariable r -> r (Scope r) -> [SVariable r] -> MSBody r
+    -> MSStatement r
 
 
 class (VariableSym r, StatementSym r) => IOStatement r where
@@ -517,3 +503,7 @@ convType Void = void
 convType InFile = infile
 convType OutFile = outfile
 convType (Object _) = error "Objects not supported"
+
+convScope :: (ScopeSym r) => ScopeData -> r (Scope r)
+convScope (SD {scopeTag = Global}) = global
+convScope (SD {scopeTag = Local}) = local

@@ -13,7 +13,7 @@ import Utils.Drasil (indent)
 import Drasil.GOOL.CodeType (CodeType(..))
 import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, VSType, SVariable, 
   SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall, 
-  TypeElim(getType, getTypeString), 
+  TypeElim(getType, getTypeString), ScopeSym(..),
   VariableElim(..), ValueSym(Value, valueType), VisibilitySym(..))
 import qualified Drasil.GOOL.InterfaceCommon as IC (TypeSym(bool, float),
   ValueExpression(funcAppMixedArgs), DeclStatement(varDec, varDecDef))
@@ -22,7 +22,7 @@ import qualified Drasil.GOOL.InterfaceGOOL as IG (OOTypeSym(obj),
   OOValueExpression(newObjMixedArgs))
 import Drasil.GOOL.RendererClassesCommon (MSMthdType, CommonRenderSym,
   RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData), 
-  ValueElim(valuePrec))
+  ValueElim(valuePrec), ScopeElim(scopeData))
 import qualified Drasil.GOOL.RendererClassesCommon as S (
   InternalListFunc(listSizeFunc), RenderStatement(stmt, loopStmt))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (BodyElim(..),
@@ -39,7 +39,7 @@ import qualified Drasil.GOOL.LanguageRenderer as R (switch, increment,
 import Drasil.GOOL.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
   mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
 import Drasil.GOOL.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName,
-  useVarName)
+  useVarName, setVarScope)
 
 import Prelude hiding (break,(<>))
 import Control.Applicative ((<|>))
@@ -141,10 +141,11 @@ decrement1 vr' = do
   (mkStmt . R.decrement) vr
 
 varDec :: (OORenderSym r) => r (Permanence r) -> r (Permanence r) -> Doc -> 
-  SVariable r -> MSStatement r
-varDec s d pdoc v' = do 
+  SVariable r -> r (Scope r) -> MSStatement r
+varDec s d pdoc v' scp = do 
   v <- zoom lensMStoVS v' 
   modify $ useVarName (variableName v)
+  modify $ setVarScope (variableName v) (scopeData scp)
   mkStmt (RC.perm (bind $ variableBind v)
     <+> RC.type' (variableType v) <+> (ptrdoc (getType (variableType v)) <> 
     RC.variable v))
@@ -153,26 +154,26 @@ varDec s d pdoc v' = do
         ptrdoc (List _) = pdoc
         ptrdoc _ = empty
 
-varDecDef :: (CommonRenderSym r) => Terminator -> SVariable r -> SValue r -> 
-  MSStatement r
-varDecDef t vr vl' = do 
-  vd <- IC.varDec vr
+varDecDef :: (CommonRenderSym r) => Terminator -> SVariable r -> r (Scope r) ->
+  SValue r -> MSStatement r
+varDecDef t vr scp vl' = do 
+  vd <- IC.varDec vr scp
   vl <- zoom lensMStoVS vl'
   let stmtCtor Empty = mkStmtNoEnd
       stmtCtor Semi = mkStmt
   stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
-listDec :: (CommonRenderSym r) => (r (Value r) -> Doc) -> SValue r -> SVariable r -> 
-  MSStatement r
-listDec f vl v = do 
+listDec :: (CommonRenderSym r) => (r (Value r) -> Doc) -> SValue r ->
+  SVariable r -> r (Scope r) -> MSStatement r
+listDec f vl v scp = do 
   sz <- zoom lensMStoVS vl
-  vd <- IC.varDec v
+  vd <- IC.varDec v scp
   mkStmt (RC.statement vd <> f sz)
   
-extObjDecNew :: (OORenderSym r) => Library -> SVariable r -> [SValue r] -> 
-  MSStatement r
-extObjDecNew l v vs = IC.varDecDef v (extNewObj l (onStateValue variableType v)
-  vs)
+extObjDecNew :: (OORenderSym r) => Library -> SVariable r -> r (Scope r) ->
+  [SValue r] -> MSStatement r
+extObjDecNew l v scp vs = IC.varDecDef v scp
+  (extNewObj l (onStateValue variableType v) vs)
 
 -- 1st parameter is a Doc function to apply to the render of the control value (i.e. parens)
 -- 2nd parameter is a statement to end every case with

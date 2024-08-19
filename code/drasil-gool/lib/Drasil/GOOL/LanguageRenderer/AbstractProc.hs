@@ -7,14 +7,14 @@ module Drasil.GOOL.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
 
 import Drasil.GOOL.InterfaceCommon (Label, SMethod, MSBody, MSStatement, SValue,
   SVariable, MSParameter, VSType, VariableElim(variableName, variableType),
-  VisibilitySym(..), getType, convType)
+  VisibilitySym(..), getType, convType, ScopeSym(Scope))
 import qualified Drasil.GOOL.InterfaceCommon as IC (MethodSym(function),
   List(intToIndex), ParameterSym(param))
 import Drasil.GOOL.InterfaceProc (SFile, FSModule, FileSym (File),
   ModuleSym(Module))
 import qualified Drasil.GOOL.RendererClassesCommon as RCC (MethodElim(..),
   BlockCommentSym(..), ValueElim(value), InternalVarElim(variable),
-  MethodTypeSym(mType))
+  MethodTypeSym(mType), ScopeElim(scopeData))
 import Drasil.GOOL.RendererClassesProc (ProcRenderSym)
 import qualified Drasil.GOOL.RendererClassesProc as RCP (RenderFile(..),
   ModuleElim(..), RenderMod(..), ProcRenderMethod(intFunc))
@@ -26,7 +26,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (modDoc')
 import Drasil.GOOL.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVar)
 import Drasil.GOOL.State (FS, lensFStoGS, lensFStoMS, lensMStoVS, getModuleName, 
   setModuleName, setMainMod, currFileType, currMain, addFile, useVarName,
-  currParameters)
+  currParameters, setVarScope)
 
 import Prelude hiding ((<>))
 import Control.Monad.State (get, modify)
@@ -89,11 +89,12 @@ arrayElem i' v' = do
       vRender = RCC.variable v <> brackets (RCC.value i)
   mkStateVar vName vType vRender
 
-funcDecDef :: (ProcRenderSym r) => SVariable r -> [SVariable r] -> MSBody r ->
-  MSStatement r
-funcDecDef v ps b = do
+funcDecDef :: (ProcRenderSym r) => SVariable r -> r (Scope r) -> [SVariable r]
+  -> MSBody r -> MSStatement r
+funcDecDef v scp ps b = do
   vr <- zoom lensMStoVS v
   modify $ useVarName $ variableName vr
+  modify $ setVarScope (variableName vr) (RCC.scopeData scp)
   s <- get
   f <- IC.function (variableName vr) private (return $ variableType vr) 
     (map IC.param ps) b

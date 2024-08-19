@@ -124,7 +124,7 @@ svd :: VisibilityTag -> Doc -> (Doc, Terminator) -> StateVarData
 svd = SVD
 
 -- Used as the underlying data type for Scopes in the Julia renderer
-data ScopeTag = Local | Global
+data ScopeTag = Local | Global deriving Eq
 
 newtype ScopeData = SD {scopeTag :: ScopeTag}
 

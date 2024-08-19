@@ -6,6 +6,7 @@ module Language.Drasil.Code.Imperative.FunctionCalls (
 
 import Language.Drasil.Code.Imperative.GenerateGOOL (fApp, fAppProc, fAppInOut,
   fAppInOutProc)
+import Language.Drasil.Code.Imperative.Helpers (convScope)
 import Language.Drasil.Code.Imperative.Import (codeType, mkVal, mkValProc,
   mkVar, mkVarProc)
 import Language.Drasil.Code.Imperative.Logging (maybeLog)
@@ -21,7 +22,7 @@ import Language.Drasil.Choices (InternalConcept(..))
 
 import Drasil.GOOL (VSType, SValue, MSStatement, SharedProg, OOProg,
   TypeSym(..), VariableValue(..), StatementSym(..), DeclStatement(..),
-  ScopeSym(..), convType, convTypeOO)
+  convType, convTypeOO)
 
 import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)
@@ -60,14 +61,15 @@ genConstraintCall = do
 
 -- | Generates a call to a calculation function, given the 'CodeDefinition' for the
 -- value being calculated.
-genCalcCall :: (OOProg r) => CodeDefinition -> r (Scope r) ->
-  GenState (Maybe (MSStatement r))
-genCalcCall c scp = do
+genCalcCall :: (OOProg r) => CodeDefinition -> GenState (Maybe (MSStatement r))
+genCalcCall c = do
+  g <- get
+  let scp = convScope $ currentScope g
   t <- codeType c
   val <- genFuncCall (codeName c) (convTypeOO t) (getCalcParams c)
-  v <- mkVar (quantvar c) scp
-  l <- maybeLog v scp
-  return $ fmap (multi . (: l) . varDecDef v) val
+  v <- mkVar (quantvar c)
+  l <- maybeLog v
+  return $ fmap (multi . (: l) . varDecDef v scp) val
 
 -- | Generates a call to the function for printing outputs.
 genOutputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
@@ -85,7 +87,7 @@ genFuncCall n t funcPs = do
   let genFuncCall' Nothing = return Nothing
       genFuncCall' (Just m) = do
         cs <- funcPs
-        pvals <- mapM (`mkVal` local) cs -- TODO: get scope from state
+        pvals <- mapM mkVal cs
         val <- fApp m n t pvals []
         return $ Just val
   genFuncCall' mm
@@ -100,9 +102,9 @@ genInOutCall n inFunc outFunc = do
       genInOutCall' (Just m) = do
         ins' <- inFunc
         outs' <- outFunc
-        ins <- mapM (`mkVar` local) (ins' \\ outs') -- TODO: get scope from state
-        outs <- mapM (`mkVar` local) (outs' \\ ins') -- TODO: get scope from state
-        both <- mapM (`mkVar` local) (ins' `intersect` outs') -- TODO: get scope from state
+        ins <- mapM mkVar (ins' \\ outs')
+        outs <- mapM mkVar (outs' \\ ins')
+        both <- mapM mkVar (ins' `intersect` outs')
         stmt <- fAppInOut m n (map valueOf ins) outs both
         return $ Just stmt
   genInOutCall' mm
@@ -158,14 +160,16 @@ genConstraintCallProc = do
 
 -- | Generates a call to a calculation function, given the 'CodeDefinition' for the
 -- value being calculated.
-genCalcCallProc :: (SharedProg r) => CodeDefinition -> r (Scope r) ->
+genCalcCallProc :: (SharedProg r) => CodeDefinition ->
   GenState (Maybe (MSStatement r))
-genCalcCallProc c scp = do
+genCalcCallProc c = do
+  g <- get
+  let scp = convScope $ currentScope g
   t <- codeType c
   val <- genFuncCallProc (codeName c) (convType t) (getCalcParams c)
-  v <- mkVarProc (quantvar c) scp
-  l <- maybeLog v scp
-  return $ fmap (multi . (: l) . varDecDef v) val
+  v <- mkVarProc (quantvar c)
+  l <- maybeLog v
+  return $ fmap (multi . (: l) . (`varDecDef` scp) v) val
 
 -- | Generates a call to the function for printing outputs.
 genOutputCallProc :: (SharedProg r) => GenState (Maybe (MSStatement r))
@@ -183,7 +187,7 @@ genFuncCallProc n t funcPs = do
   let genFuncCall' Nothing = return Nothing
       genFuncCall' (Just m) = do
         cs <- funcPs
-        pvals <- mapM (`mkValProc` local) cs -- TODO: get scope from state
+        pvals <- mapM mkValProc cs
         val <- fAppProc m n t pvals []
         return $ Just val
   genFuncCall' mm
@@ -198,9 +202,9 @@ genInOutCallProc n inFunc outFunc = do
       genInOutCall' (Just m) = do
         ins' <- inFunc
         outs' <- outFunc
-        ins <- mapM (`mkVarProc` local) (ins' \\ outs') -- TODO: get scope from state
-        outs <- mapM (`mkVarProc` local) (outs' \\ ins') -- TODO: get scope from state
-        both <- mapM (`mkVarProc` local) (ins' `intersect` outs') -- TODO: get scope from state
+        ins <- mapM mkVarProc (ins' \\ outs')
+        outs <- mapM mkVarProc (outs' \\ ins')
+        both <- mapM mkVarProc (ins' `intersect` outs')
         stmt <- fAppInOutProc m n (map valueOf ins) outs both
         return $ Just stmt
   genInOutCall' mm

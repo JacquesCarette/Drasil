@@ -11,9 +11,9 @@ import Utils.Drasil (blank, indent)
 import Drasil.GOOL.CodeType (CodeType(..))
 import Drasil.GOOL.InterfaceCommon (SharedProg, Label, Library, VSType,
   VSFunction, SVariable, SValue, MSStatement, MixedCtorCall, BodySym(..),
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), locVar, constant,
-  VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VisibilitySym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, extFuncApp, List(..), InternalList(..),
   ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
@@ -38,7 +38,8 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim,
   MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
-  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim)
+  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
+  ScopeElim(..))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block, 
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
@@ -268,10 +269,13 @@ instance ScopeSym PythonCode where
   mainFn = global
   local = G.local
 
+instance ScopeElim PythonCode where
+  scopeData = unPC
+
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
-  var' n _     = G.var n
-  constant' n  = var' $ toConstName n
+  var          = G.var
+  constant n   = var $ toConstName n
   extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
   arrayElem i  = G.arrayElem (litInt i)
 
@@ -473,7 +477,7 @@ instance ThunkAssign PythonCode where
   thunkAssign v t = do
     iName <- genLoopIndex
     let
-      i = locVar iName int
+      i = var iName int
       dim = fmap pure $ t >>= commonThunkDim (fmap unPC . listSize . fmap pure) . unPC
       loopInit = zoom lensMStoVS (fmap unPC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
@@ -541,28 +545,28 @@ instance AssignStatement PythonCode where
   (&--) = M.decrement1
 
 instance DeclStatement PythonCode where
-  varDec v = CP.varDecDef v Nothing
-  varDecDef v e = CP.varDecDef v (Just e)
+  varDec v scp = CP.varDecDef v scp Nothing
+  varDecDef v scp e = CP.varDecDef v scp (Just e)
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
-  constDecDef v e = do
+  constDecDef v scp e = do
     v' <- zoom lensMStoVS v
     let n = toConstName $ variableName v'
-        newConst = constant n (pure (variableType v')) local -- TODO: get scope from v
+        newConst = constant n (pure (variableType v'))
     available <- varNameAvailable n
     if available
-      then varDecDef newConst e
+      then varDecDef newConst scp e
       else error "Cannot safely capitalize constant."
   funcDecDef = CP.funcDecDef
 
 instance OODeclStatement PythonCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
-  extObjDecNew lib v vs = do
+  extObjDecNew lib v scp vs = do
     modify (addModuleImport lib)
-    varDecDef v (extNewObj lib (onStateValue variableType v) vs)
+    varDecDef v scp (extNewObj lib (onStateValue variableType v) vs)
 
 instance IOStatement PythonCode where
   print      = pyOut False Nothing printFunc

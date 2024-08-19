@@ -324,6 +324,9 @@ units :: [UnitDefn]
 si :: SystemInformation
 purp :: Sentence
 symbMap :: ChunkDB
+
+-- | Holds all references and links used in the document.
+allRefs :: [Reference]
 usedDB :: ChunkDB
 refDB :: ReferenceDB
 mkSRS :: SRSDecl
@@ -336,6 +339,7 @@ priorityNFReqs :: [ConceptChunk]
 introStart :: Sentence
 introStartSWHS :: Sentence
 introEnd :: Sentence -> CI -> Sentence
+externalLinkRef :: Reference
 scope :: Sentence
 charsOfReader :: [Sentence]
 charReaderHTT :: Sentence

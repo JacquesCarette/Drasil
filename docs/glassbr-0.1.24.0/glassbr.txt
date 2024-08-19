@@ -256,6 +256,9 @@ si :: SystemInformation
 mkSRS :: SRSDecl
 purp :: Sentence
 symbMap :: ChunkDB
+
+-- | Holds all references and links used in the document.
+allRefs :: [Reference]
 concIns :: [ConceptInstance]
 labCon :: [LabelledContent]
 usedDB :: ChunkDB
@@ -269,6 +272,7 @@ solChSpecSubsections :: [CI]
 auxiliaryConstants :: [ConstQDef]
 priorityNFReqs :: [ConceptChunk]
 startIntro :: NamedIdea n => n -> Sentence -> CI -> Sentence
+externalLinkRef :: Reference
 undIR :: [Sentence]
 appStanddIR :: [Sentence]
 scope :: Sentence

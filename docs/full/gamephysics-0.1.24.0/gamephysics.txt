@@ -223,8 +223,10 @@ stdFields :: Fields
 refDB :: ReferenceDB
 units :: [UnitDefn]
 symbMap :: ChunkDB
+allRefs :: [Reference]
 usedDB :: ChunkDB
 para1_introduction_intro :: Sentence
+externalLinkRef :: Reference
 scope :: Sentence
 sysCtxIntro :: Contents
 sysCtxFig1 :: LabelledContent

@@ -89,6 +89,7 @@ module Drasil.PDController.IntroSection
 introPara :: Sentence
 introPurposeOfDoc :: Sentence
 introscopeOfReq :: Sentence
+externalLinkRef :: Reference
 introUserChar1 :: [Sentence]
 introUserChar2 :: [Sentence]
 

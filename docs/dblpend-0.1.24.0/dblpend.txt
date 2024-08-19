@@ -235,11 +235,15 @@ si :: SystemInformation
 purp :: Sentence
 symbolsAll :: [QuantityDict]
 symbMap :: ChunkDB
+
+-- | Holds all references and links used in the document.
+allRefs :: [Reference]
 usedDB :: ChunkDB
 stdFields :: Fields
 refDB :: ReferenceDB
 concIns :: [ConceptInstance]
 justification :: CI -> Sentence
+externalLinkRef :: Reference
 scope :: Sentence
 charsOfReader :: [Sentence]
 sysCtxIntro :: CI -> Contents

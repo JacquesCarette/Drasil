@@ -120,6 +120,9 @@ progName :: CI
 si :: SystemInformation
 purp :: Sentence
 symbMap :: ChunkDB
+
+-- | Holds all references and links used in the document.
+allRefs :: [Reference]
 usedDB :: ChunkDB
 refDB :: ReferenceDB
 concIns :: [ConceptInstance]

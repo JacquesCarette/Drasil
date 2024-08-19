@@ -107,10 +107,7 @@ printLO (Table ts rows r b t)  = makeTable ts rows (pSpec r) b (pSpec t)
 printLO (Definition dt ssPs l) = makeDefn dt ssPs (pSpec l)
 printLO (Header n contents _)  = h (n + 1) $ pSpec contents -- FIXME
 printLO (List t)               = makeList t
-printLO (Figure r c f wp)      = 
-  let maybeDoc    = checkSpec =<< c
-      checkSpec s = if pSpec s == mempty then Nothing else Just (pSpec s)
-  in makeFigure (pSpec r) maybeDoc (text f) wp
+printLO (Figure r c f wp)      = makeFigure (pSpec r) (fmap pSpec c) (text f) wp
 printLO (Bib bib)              = makeBib bib
 printLO Graph{}                = empty -- FIXME
 printLO Cell{}                 = empty

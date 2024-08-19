@@ -135,7 +135,7 @@ outConstraints = []
 
 figTemp :: LabelledContent
 figTemp = llcc (makeFigRef "dblpend") $ figWithWidth EmptyS
-  (resourcePath ++ "dblpend.png") 60
+  (resourcePath ++ "dblpend.png") 60 WithCaption
 
 
 -- MOVE TO CONCEPTS

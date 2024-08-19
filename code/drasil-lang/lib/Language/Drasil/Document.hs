@@ -4,7 +4,7 @@ module Language.Drasil.Document where
 
 import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
 import Language.Drasil.Document.Core (UnlabelledContent(UnlblC),
-  LabelledContent(LblC), RawContent(Figure, Paragraph),
+  LabelledContent(LblC), HasCaption(..), RawContent(Figure, Paragraph),
   Contents(..), Lbl, Filepath, Author, Title, MaxWidthPercent )
 import Language.Drasil.Label.Type (getAdd, prepend, LblType(..),
   Referable(..), HasRefAddress(..) )
@@ -133,11 +133,11 @@ getSecCons (Sub sec) = getSec sec
 getSecCons (Con _)   = []
 
 -- | 'Figure' smart constructor with a 'Lbl' and a 'Filepath'. Assumes 100% of page width as max width.
-fig :: Lbl -> Filepath -> RawContent
+fig :: Lbl -> Filepath -> HasCaption -> RawContent
 fig l f = Figure l f 100
 
 -- | 'Figure' smart constructor that allows for customized max widths.
-figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
+figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> HasCaption -> RawContent
 figWithWidth = Figure
 
 ---------------------------------------------------------------------------

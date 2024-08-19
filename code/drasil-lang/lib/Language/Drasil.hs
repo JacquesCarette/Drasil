@@ -226,7 +226,7 @@ module Language.Drasil (
   -- Language.Drasil.Document
   , Document(..), ShowTableOfContents(..), DType(..), Section(..)
   , Contents(..), SecCons(..), ListType(..), ItemType(..), ListTuple
-  , LabelledContent(..), UnlabelledContent(..), extractSection
+  , LabelledContent(..), UnlabelledContent(..), HasCaption(..), extractSection
   , mkParagraph, mkRawLC, checkToC
   , llcc, ulcc
   , section, fig, figWithWidth
@@ -322,7 +322,7 @@ import Language.Drasil.Document (section, fig, figWithWidth
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), DType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)
-  , LabelledContent(..), UnlabelledContent(..) )
+  , LabelledContent(..), UnlabelledContent(..), HasCaption(..))
 import Language.Drasil.Document.Contents (lbldExpr, unlbldExpr, unlbldCode
   , enumBullet, enumBulletU, enumSimple, enumSimpleU, mkEnumSimpleD)
 import Language.Drasil.Document.Combinators

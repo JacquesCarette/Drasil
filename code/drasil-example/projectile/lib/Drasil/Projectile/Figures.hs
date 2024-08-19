@@ -10,8 +10,8 @@ resourcePath = "../../../../datafiles/projectile/"
 
 figLaunch :: LabelledContent
 figLaunch = llcc (makeFigRef "Launch") $ figWithWidth (atStartNP (the physicalSystem))
-  (resourcePath ++ "Launch.jpg") 70
+  (resourcePath ++ "Launch.jpg") 70 WithCaption
 
 sysCtxFig1 :: LabelledContent
 sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont) 
-  (resourcePath ++ "SystemContextFigure.png")
+  (resourcePath ++ "SystemContextFigure.png") WithCaption

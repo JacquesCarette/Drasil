@@ -228,7 +228,7 @@ sysCtxIntro = foldlSP
 
 sysCtxFig1 :: LabelledContent
 sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont) 
-  (resourcePath ++ "sysctx.png")
+  (resourcePath ++ "sysctx.png") WithCaption
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_

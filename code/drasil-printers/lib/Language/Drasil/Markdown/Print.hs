@@ -94,10 +94,7 @@ printLO rm (EqnBlock contents)   = text "\\\\[" <> rndr contents <> text "\\\\]"
 printLO rm (Table _ rows r b t)  = makeTable rm rows (pSpec rm r) b (pSpec rm t)
 printLO rm (Definition _ ssPs l) = makeDefn rm ssPs (pSpec rm l)
 printLO rm (List t)              = makeList rm t 0
-printLO rm (Figure r c f _)     = 
-  let maybeDoc    = checkSpec =<< c
-      checkSpec s = if pSpec rm s == mempty then Nothing else Just (pSpec rm s)
-  in makeFigure (pSpec rm r) maybeDoc (text f)
+printLO rm (Figure r c f _) = makeFigure (pSpec rm r) (fmap (pSpec rm) c) (text f)
 printLO rm (Bib bib)             = makeBib rm bib
 printLO _ Graph {}               = empty 
 printLO _ CodeBlock {}           = empty

@@ -20,6 +20,7 @@ sysFigure
       figWithWidth (atStartNP $ the physicalSystem)
         "../../../../datafiles/pdcontroller/Fig_PDController.png"
         70
+        WithCaption
 
 sysGoalInput :: [Sentence]
 sysGoalInput

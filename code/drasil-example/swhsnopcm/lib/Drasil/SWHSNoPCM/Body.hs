@@ -271,7 +271,7 @@ orgDocEnd = foldlSent_ [atStartNP (the inModel),
 sysCntxtFig :: LabelledContent
 sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
   [refS sysCntxtFig +: EmptyS, titleize sysCont])
-  $ resourcePath ++ "SystemContextFigure.png"
+  (resourcePath ++ "SystemContextFigure.png") WithCaption
 
 ------------------------------------
 --Section 3.2 : USER CHARACTERISTICS
@@ -303,7 +303,7 @@ terms = [htFlux, heatCapSpec, thermalConduction, transient]
 figTank :: LabelledContent
 figTank = llcc (makeFigRef "Tank") $ fig (atStart sWHT `sC` S "with" +:+ phrase htFlux +:+
   S "from" +:+ phrase coil `S.of_` ch htFluxC)
-  $ resourcePath ++ "TankWaterOnly.png"
+  (resourcePath ++ "TankWaterOnly.png") WithCaption
 
 physSystParts :: [Sentence]
 physSystParts = map foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFluxC]

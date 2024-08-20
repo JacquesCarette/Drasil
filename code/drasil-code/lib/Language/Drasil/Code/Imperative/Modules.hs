@@ -50,7 +50,7 @@ import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
   Logging(..), Structure(..), hasSampleInput, InternalConcept(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
-import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc)
+import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc, showHasSymbImpl)
 
 import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MSStatement,
   SMethod, CSStateVar, SClass, SharedProg, OOProg, BodySym(..), bodyStatements,
@@ -397,8 +397,7 @@ constrVarDec :: (OOProg r) => CodeVarChunk -> CodeExpr ->
 constrVarDec v e = do
   lb <- convExpr e
   t <- codeType v
-  let name = v ^. uid
-  let mkValue = var ("set_" ++ show name) (setType (convType t))
+  let mkValue = var ("set_" ++ showHasSymbImpl v) (setType (convType t))
   return (setDecDef mkValue local lb)
 
 -- | Generates statements that print a message for when a constraint is violated.
@@ -407,7 +406,7 @@ constrVarDec v e = do
 constraintViolatedMsg :: (OOProg r) => CodeVarChunk -> String ->
   ConstraintCE -> GenState [MSStatement r]
 constraintViolatedMsg q s c = do
-  pc <- printConstraint (show $ q ^. uid) c
+  pc <- printConstraint (showHasSymbImpl q) c
   v <- mkVal (quantvar q)
   return $ [printStr $ codeName q ++ " has value ",
     print v,

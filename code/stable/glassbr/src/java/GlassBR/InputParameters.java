@@ -259,14 +259,14 @@ public class InputParameters {
             System.out.println(".");
             throw new Exception("InputError");
         }
-        Set<String> set_glassTy = Set.of("AN", "FT", "HS");
-        if (!(set_glassTy.contains(this.g))) {
+        Set<String> set_g = Set.of("AN", "FT", "HS");
+        if (!(set_g.contains(this.g))) {
             System.out.print("g has value ");
             System.out.print(this.g);
             System.out.print(", but is expected to be ");
             System.out.print("an element of the set ");
             System.out.print("{ ");
-            for (String set_i1 : set_glassTy) {
+            for (String set_i1 : set_g) {
                 System.out.print(set_i1);
                 System.out.print(" ");
             }
@@ -274,14 +274,14 @@ public class InputParameters {
             System.out.println(".");
             throw new Exception("InputError");
         }
-        Set<Double> set_nomThick = Set.of(2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0);
-        if (!(set_nomThick.contains(this.t))) {
+        Set<Double> set_t = Set.of(2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0);
+        if (!(set_t.contains(this.t))) {
             System.out.print("t has value ");
             System.out.print(this.t);
             System.out.print(", but is expected to be ");
             System.out.print("an element of the set ");
             System.out.print("{ ");
-            for (double set_i1 : set_nomThick) {
+            for (double set_i1 : set_t) {
                 System.out.print(set_i1);
                 System.out.print(" ");
             }

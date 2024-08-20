@@ -253,14 +253,14 @@ public class InputParameters {
             Console.WriteLine(".");
             throw new Exception("InputError");
         }
-        HashSet<string> set_glassTy = new HashSet<string> {"AN", "FT", "HS"};
-        if (!(set_glassTy.Contains(this.g))) {
+        HashSet<string> set_g = new HashSet<string> {"AN", "FT", "HS"};
+        if (!(set_g.Contains(this.g))) {
             Console.Write("g has value ");
             Console.Write(this.g);
             Console.Write(", but is expected to be ");
             Console.Write("an element of the set ");
             Console.Write("{ ");
-            foreach (string set_i1 in set_glassTy) {
+            foreach (string set_i1 in set_g) {
                 Console.Write(set_i1);
                 Console.Write(" ");
             }
@@ -268,14 +268,14 @@ public class InputParameters {
             Console.WriteLine(".");
             throw new Exception("InputError");
         }
-        HashSet<double> set_nomThick = new HashSet<double> {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0};
-        if (!(set_nomThick.Contains(this.t))) {
+        HashSet<double> set_t = new HashSet<double> {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0};
+        if (!(set_t.Contains(this.t))) {
             Console.Write("t has value ");
             Console.Write(this.t);
             Console.Write(", but is expected to be ");
             Console.Write("an element of the set ");
             Console.Write("{ ");
-            foreach (double set_i1 in set_nomThick) {
+            foreach (double set_i1 in set_t) {
                 Console.Write(set_i1);
                 Console.Write(" ");
             }

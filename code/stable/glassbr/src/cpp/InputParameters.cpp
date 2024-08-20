@@ -238,14 +238,14 @@ void InputParameters::input_constraints() {
         std::cout << "." << std::endl;
         throw("InputError");
     }
-    set<string> set_glassTy = {"AN", "FT", "HS"};
-    if (!(set_glassTy.find(this->g) != set_glassTy.end())) {
+    set<string> set_g = {"AN", "FT", "HS"};
+    if (!(set_g.find(this->g) != set_g.end())) {
         std::cout << "g has value ";
         std::cout << this->g;
         std::cout << ", but is expected to be ";
         std::cout << "an element of the set ";
         std::cout << "{ ";
-        for (const string &set_i1 : set_glassTy) {
+        for (const string &set_i1 : set_g) {
             std::cout << set_i1;
             std::cout << " ";
         }
@@ -253,14 +253,14 @@ void InputParameters::input_constraints() {
         std::cout << "." << std::endl;
         throw("InputError");
     }
-    set<double> set_nomThick = {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0};
-    if (!(set_nomThick.find(this->t) != set_nomThick.end())) {
+    set<double> set_t = {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0};
+    if (!(set_t.find(this->t) != set_t.end())) {
         std::cout << "t has value ";
         std::cout << this->t;
         std::cout << ", but is expected to be ";
         std::cout << "an element of the set ";
         std::cout << "{ ";
-        for (const double &set_i1 : set_nomThick) {
+        for (const double &set_i1 : set_t) {
             std::cout << set_i1;
             std::cout << " ";
         }

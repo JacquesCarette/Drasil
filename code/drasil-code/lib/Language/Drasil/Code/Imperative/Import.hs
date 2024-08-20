@@ -9,7 +9,7 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 ) where
 
 import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
-  Space (Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..), showUID)
+  Space (Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..))
 import Database.Drasil (symbResolve)
 import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&), in')
 import Language.Drasil.CodeExpr.Development hiding (Set)
@@ -36,6 +36,7 @@ import Language.Drasil.Literal.Development
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
   Mod(..), Name, Description, StateVariable(..), fstdecl)
 import qualified Language.Drasil.Mod as M (Class(..))
+import Language.Drasil.Printers (showHasSymbImpl)
 
 import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
@@ -418,7 +419,7 @@ renderRealInt s (UpFrom  (Inc, a))          = sy s $>= a
 renderRealInt s (UpFrom  (Exc, a))          = sy s $>  a
 
 renderSet :: (HasUID c, HasSymbol c) => c -> CodeExpr -> CodeExpr
-renderSet e s = in' (Variable ("set_" ++ showUID e) s) (sy e)
+renderSet e s = in' (Variable ("set_" ++ showHasSymbImpl e) s) (sy e)
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.
 unop :: (SharedProg r) => UFunc -> (SValue r -> SValue r)

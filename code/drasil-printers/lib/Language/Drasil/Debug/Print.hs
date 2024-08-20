@@ -8,7 +8,7 @@ import           Database.Drasil
 import           Utils.Drasil (stringList)
 import qualified Data.Map as Map
 import           Control.Lens ((^.), view)
-import           Data.List (nub, sort, sortBy)
+import           Data.List (sort, sortBy)
 import           Data.Foldable (foldl')
 import           Data.Maybe (fromMaybe)
 import           Data.Bifunctor (second)
@@ -17,6 +17,8 @@ import           Text.PrettyPrint.HughesPJ
 import           Language.Drasil.Plain.Print
 import           Language.Drasil.Printing.PrintingInformation
 import           Prelude hiding ((<>))
+
+import Data.Containers.ListUtils (nubOrd)
 
 -- * Main Function
 -- | Gathers all printing functions and creates the debugging tables from them.
@@ -321,7 +323,7 @@ mkListShowUsedUIDs PI { _ckdb = db } = sortBy (compare `on` fst)
 -- Currently Unused
 -- | Get all 'UID's from a database ('ChunkDB').
 mkListAll :: ChunkDB -> [UID]
-mkListAll db = nub
+mkListAll db = nubOrd
   $ sort
   $ map fst (Map.assocs $ symbolTable db)
   ++ map fst (Map.assocs $ termTable db)

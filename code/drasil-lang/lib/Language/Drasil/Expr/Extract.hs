@@ -1,7 +1,7 @@
 -- | Extract UIDs from an expression so that they can be looked up in the chunk database and rendered.
 module Language.Drasil.Expr.Extract where
 
-import Data.List (nub)
+import Data.Containers.ListUtils (nubOrd)
 
 import Language.Drasil.Expr.Lang (Expr(..))
 import Language.Drasil.Space (RealInterval(..))
@@ -76,4 +76,4 @@ eNamesRI' (UpFrom il)     = eNames' (snd il)
 
 -- | Get dependencies from an equation.  
 eDep :: Expr -> [UID]
-eDep = nub . eNames
+eDep = nubOrd . eNames

@@ -1,7 +1,7 @@
-Languages selected as Python Cpp CSharp Java.
+Languages selected as Python Cpp CSharp Java Julia.
 Modularity selected as Modular.
 Input Structure selected as Unbundled.
-Constant Structure selected as Store Bundled.
+Constant Structure selected as Store Unbundled.
 Constant Representation selected as Const.
 Implementation Type selected as Program.
 Software Constraint Behaviour selected as Warning.
@@ -16,8 +16,8 @@ Language CSharp is not compatible with chosen library SciPy, trying next choice.
 ODE Library package selected as OSLO.
 Successfully matched String with String.
 Successfully matched Actor "Constants" with Object "Constants".
-Successfully matched Actor "InputParameters" with Object "InputParameters".
 Successfully matched Real with Double.
+Successfully matched Actor "InputParameters" with Object "InputParameters".
 Successfully matched Vect Real with List Double.
 Successfully matched Actor "Vector" with Object "Vector".
 Successfully matched Array Real with Array Double.

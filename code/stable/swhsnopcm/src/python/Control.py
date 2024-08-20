@@ -10,9 +10,22 @@ import InputParameters
 import OutputFormat
 
 filename = sys.argv[1]
+PI = 3.14159265
+L_MIN = 0.1
+L_MAX = 50.0
+RHO_W_MIN = 950.0
+RHO_W_MAX = 1000.0
+A_C_MAX = 100000.0
+C_W_MIN = 4170.0
+C_W_MAX = 4210.0
+H_C_MIN = 10.0
+H_C_MAX = 10000.0
+T_FINAL_MAX = 86400.0
+AR_MIN = 1.0e-2
+AR_MAX = 100.0
 A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, A_tol, R_tol, E_W = InputParameters.get_input(filename)
-V_tank = InputParameters.derived_values(D, L)
-InputParameters.input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, E_W)
+V_tank = InputParameters.derived_values(D, L, PI)
+InputParameters.input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, E_W, A_C_MAX, C_W_MIN, C_W_MAX, H_C_MIN, H_C_MAX, T_FINAL_MAX, L_MIN, L_MAX, RHO_W_MIN, RHO_W_MAX, AR_MIN, AR_MAX)
 V_W = Calculations.func_V_W(V_tank)
 m_W = Calculations.func_m_W(rho_W, V_W)
 tau_W = Calculations.func_tau_W(C_W, h_C, A_C, m_W)

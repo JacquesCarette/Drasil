@@ -17,6 +17,19 @@ public class Control {
     */
     public static void main(String[] args) throws FileNotFoundException, IOException {
         String filename = args[0];
+        final double pi = 3.14159265;
+        final double L_min = 0.1;
+        final double L_max = 50.0;
+        final double rho_W_min = 950.0;
+        final double rho_W_max = 1000.0;
+        final double A_C_max = 100000.0;
+        final double C_W_min = 4170.0;
+        final double C_W_max = 4210.0;
+        final double h_C_min = 10.0;
+        final double h_C_max = 10000.0;
+        final double t_final_max = 86400.0;
+        final double AR_min = 1.0e-2;
+        final double AR_max = 100.0;
         double A_C;
         double C_W;
         double h_C;
@@ -45,8 +58,8 @@ public class Control {
         A_tol = (double)(outputs[10]);
         R_tol = (double)(outputs[11]);
         E_W = (double)(outputs[12]);
-        V_tank = InputParameters.derived_values(D, L);
-        InputParameters.input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, E_W);
+        V_tank = InputParameters.derived_values(D, L, pi);
+        InputParameters.input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, E_W, A_C_max, C_W_min, C_W_max, h_C_min, h_C_max, t_final_max, L_min, L_max, rho_W_min, rho_W_max, AR_min, AR_max);
         double V_W = Calculations.func_V_W(V_tank);
         double m_W = Calculations.func_m_W(rho_W, V_W);
         double tau_W = Calculations.func_tau_W(C_W, h_C, A_C, m_W);

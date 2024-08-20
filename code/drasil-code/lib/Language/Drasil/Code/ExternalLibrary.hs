@@ -9,7 +9,7 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..),
   lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, preDefinedNamedArg,
   functionArg, customObjArg, recordArg, lockedParam, unnamedParam, customClass,
   implementation, constructorInfo, methodInfo, methodInfoNoReturn,
-  appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj,
+  appendCurrSol, populateSolList, populateSolList', assignArrayIndex, assignSolFromObj,
   initSolListFromArray, initSolListWithVal, solveAndPopulateWhile,
   returnExprList, fixedReturn, fixedReturn', initSolWithVal
 ) where
@@ -259,6 +259,17 @@ populateSolList arr el fld = [statementStep (\cdchs es -> case (cdchs, es) of
     ([s], []) -> FForEach el (sy arr) [appendCurrSolFS (field el fld) s]
     (_,_) -> error popErr)]
   where popErr = "Fill for populateSolList should provide one CodeChunk and no Exprs"
+
+-- | Specifies a statement where a solution list is populated by iterating
+--   through a solution array.
+populateSolList' :: CodeVarChunk -> CodeVarChunk -> [Step]
+populateSolList' arr el = [statementStep (\cdchs es -> case (cdchs, es) of
+    ([s], []) -> FAsg s (Matrix [[]])
+    (_,_) -> error popErr),
+  statementStep (\cdchs es -> case (cdchs, es) of
+    ([s], []) -> FForEach el (sy arr) [FAppend (sy s) (sy el)]
+    (_,_) -> error popErr)]
+  where popErr = "Fill for populateSolList' should provide one CodeChunk and no Exprs"
 
 -- | Specifies statements where every index of an array is assigned a value.
 assignArrayIndex :: Step

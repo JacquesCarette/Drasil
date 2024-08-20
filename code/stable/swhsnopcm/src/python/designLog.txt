@@ -1,7 +1,7 @@
-Languages selected as Python Cpp CSharp Java.
+Languages selected as Python Cpp CSharp Java Julia.
 Modularity selected as Modular.
 Input Structure selected as Unbundled.
-Constant Structure selected as Store Bundled.
+Constant Structure selected as Store Unbundled.
 Constant Representation selected as Const.
 Implementation Type selected as Program.
 Software Constraint Behaviour selected as Warning.
@@ -15,8 +15,8 @@ Auxiliary Files selected as SampleInput ../../datafiles/swhsnopcm/sampleInput.tx
 Successfully selected first choice ODE Library package SciPy.
 Successfully matched String with String.
 Successfully matched Actor "Constants" with Object "Constants".
-Successfully matched Actor "InputParameters" with Object "InputParameters".
 Successfully matched Real with Double.
+Successfully matched Actor "InputParameters" with Object "InputParameters".
 Successfully matched Vect Real with List Double.
 Successfully matched Array Real with Array Double.
 Successfully matched Actor "ode" with Object "ode".

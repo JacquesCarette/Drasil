@@ -799,7 +799,7 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = SWHSNoPCM/Control.java SWHSNoPCM/InputParameters.java SWHSNoPCM/Constants.java SWHSNoPCM/Calculations.java SWHSNoPCM/OutputFormat.java SWHSNoPCM/ODE.java SWHSNoPCM/ODEStepHandler.java
+INPUT                  = SWHSNoPCM/Control.java SWHSNoPCM/InputParameters.java SWHSNoPCM/Calculations.java SWHSNoPCM/OutputFormat.java SWHSNoPCM/ODE.java SWHSNoPCM/ODEStepHandler.java
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses

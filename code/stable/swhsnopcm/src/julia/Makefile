@@ -8,9 +8,8 @@
 build:
 
 run: build
-	python3 Control.py $(RUNARGS)
+	julia Control.jl $(RUNARGS)
 
-doc: doxConfig Control.py InputParameters.py Calculations.py OutputFormat.py
-	doxygen doxConfig
+doc: Control.jl InputParameters.jl Calculations.jl OutputFormat.jl
 
 .PHONY: build run doc

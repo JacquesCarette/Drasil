@@ -12,20 +12,13 @@ Dates selected as Hide.
 Log File Name selected as log.txt.
 Logging selected as None.
 Auxiliary Files selected as SampleInput ../../datafiles/swhsnopcm/sampleInput.txt ReadME.
-Language Java is not compatible with chosen library SciPy, trying next choice.
-Language Java is not compatible with chosen library OSLO, trying next choice.
-ODE Library package selected as Apache.
+Language Julia is not compatible with chosen library SciPy, trying next choice.
+Language Julia is not compatible with chosen library OSLO, trying next choice.
+Language Julia is not compatible with chosen library Apache, trying next choice.
+Language Julia is not compatible with chosen library odeint, trying next choice.
+ODE Library package selected as DifferentialEquations.jl.
 Successfully matched String with String.
-Successfully matched Actor "Constants" with Object "Constants".
 Successfully matched Real with Double.
-Successfully matched Actor "InputParameters" with Object "InputParameters".
 Successfully matched Vect Real with List Double.
-Successfully matched Actor "ODEStepHandler" with Object "ODEStepHandler".
-Successfully matched Actor "ODE" with Object "ODE".
 Successfully matched Array Real with Array Double.
-Successfully matched Actor "FirstOrderIntegrator" with Object "FirstOrderIntegrator".
-Successfully matched Actor "DormandPrince54Integrator" with Object "DormandPrince54Integrator".
 Successfully matched Void with Void.
-Successfully matched Natural with Integer.
-Successfully matched Actor "StepInterpolator" with Object "StepInterpolator".
-Successfully matched Boolean with Boolean.

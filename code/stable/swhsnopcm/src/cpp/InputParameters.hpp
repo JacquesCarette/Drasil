@@ -9,8 +9,6 @@
 
 #include <string>
 
-#include "Constants.hpp"
-
 using std::ifstream;
 using std::string;
 
@@ -35,9 +33,10 @@ void get_input(string filename, double &A_C, double &C_W, double &h_C, double &T
 /** \brief Calculates values that can be immediately derived from the inputs
     \param D diameter of tank: the diameter of the tank (m)
     \param L length of tank: the length of the tank (m)
+    \param pi ratio of circumference to diameter for any circle: The ratio of a circle's circumference to its diameter
     \return volume of the cylindrical tank: the amount of space encompassed by a tank (m^3)
 */
-double derived_values(double D, double L);
+double derived_values(double D, double L, double pi);
 
 /** \brief Verifies that input values satisfy the physical constraints and software constraints
     \param A_C heating coil surface area: area covered by the outermost layer of the coil (m^2)
@@ -51,7 +50,19 @@ double derived_values(double D, double L);
     \param rho_W density of water: mass per unit volume of water (kg/m^3)
     \param D diameter of tank: the diameter of the tank (m)
     \param E_W change in heat energy in the water: change in thermal energy within the water (J)
+    \param A_C_max maximum surface area of coil (m^2)
+    \param C_W_min minimum specific heat capacity of water (J/(kg degreeC))
+    \param C_W_max maximum specific heat capacity of water (J/(kg degreeC))
+    \param h_C_min minimum convective heat transfer coefficient between coil and water (W/(m^2 degreeC))
+    \param h_C_max maximum convective heat transfer coefficient between coil and water (W/(m^2 degreeC))
+    \param t_final_max maximum final time (s)
+    \param L_min minimum length of tank (m)
+    \param L_max maximum length of tank (m)
+    \param rho_W_min minimum density of water (kg/m^3)
+    \param rho_W_max maximum density of water (kg/m^3)
+    \param AR_min minimum aspect ratio
+    \param AR_max maximum aspect ratio
 */
-void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double E_W);
+void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double E_W, double A_C_max, double C_W_min, double C_W_max, double h_C_min, double h_C_max, double t_final_max, double L_min, double L_max, double rho_W_min, double rho_W_max, double AR_min, double AR_max);
 
 #endif

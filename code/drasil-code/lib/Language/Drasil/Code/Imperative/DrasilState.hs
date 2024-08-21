@@ -8,6 +8,8 @@ module Language.Drasil.Code.Imperative.DrasilState (
 import Language.Drasil
 import Drasil.GOOL (VisibilityTag(..), CodeType)
 
+import Data.Containers.ListUtils (nubOrd)
+
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
 import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),
@@ -107,7 +109,7 @@ modExportMap cs@CodeSpec {
   constants = cns
   } chs@Choices {
     architecture = m
-  } ms = fromList $ nub $ concatMap mpair ms
+  } ms = fromList $ nubOrd $ concatMap mpair ms
     ++ getExpInput prn chs ins
     ++ getExpConstants prn chs cns
     ++ getExpDerived prn chs ds

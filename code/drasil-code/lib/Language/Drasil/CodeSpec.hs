@@ -192,4 +192,4 @@ getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 -- | Get a list of 'CodeChunk's from a constraint.
 constraintvars :: ConstraintCE -> ChunkDB -> [CodeChunk]
 constraintvars (Range _ ri) m =
-  map (codeChunk . varResolve m) $ nub $ eNamesRI ri
+  map (codeChunk . varResolve m) $ eNamesRI ri

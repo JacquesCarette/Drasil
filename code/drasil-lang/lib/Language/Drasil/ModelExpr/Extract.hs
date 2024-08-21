@@ -1,7 +1,7 @@
 -- | Defines functions to find Chunk UIDs within 'ModelExpr's.
 module Language.Drasil.ModelExpr.Extract where
 
-import Data.List (nub)
+import Data.Containers.ListUtils (nubOrd)
 
 import Language.Drasil.ModelExpr.Lang (ModelExpr(..))
 import Language.Drasil.Space (RealInterval(..))
@@ -86,4 +86,4 @@ meNamesRI' (UpFrom il)     = meNames' (snd il)
 
 -- | Get dependencies from an equation.  
 meDep :: ModelExpr -> [UID]
-meDep = nub . meNames
+meDep = nubOrd . meNames

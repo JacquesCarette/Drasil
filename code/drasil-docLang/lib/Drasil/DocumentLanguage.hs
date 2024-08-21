@@ -434,7 +434,7 @@ mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
 
 -- | Helper to get headers of rows and columns
 header :: ([UID] -> [UID]) -> SystemInformation -> [Sentence]
-header f = TM.traceMHeader (f . nub . Map.keys . (^. refbyTable))
+header f = TM.traceMHeader (f . Map.keys . (^. refbyTable))
 
 -- ** Off the Shelf Solutions
 

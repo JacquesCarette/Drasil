@@ -8,7 +8,7 @@ import Language.Drasil.UID (UID)
 
 import Language.Drasil.CodeExpr.Lang (CodeExpr(..))
 
-import Data.List (nub)
+import Data.Containers.ListUtils (nubOrd)
 
 -- | Generic traverse of all expressions that could lead to names.
 eNames :: CodeExpr -> [UID]
@@ -90,8 +90,8 @@ eNamesRI' (UpFrom il)     = eNames' (snd il)
 
 -- | Get dependencies from an equation.
 eDep :: CodeExpr -> [UID]
-eDep = nub . eNames
+eDep = nubOrd . eNames
 
 -- | Get dependencies from an equation, without functions.
 eDep' :: CodeExpr -> [UID]
-eDep' = nub . eNames'
+eDep' = nubOrd . eNames'

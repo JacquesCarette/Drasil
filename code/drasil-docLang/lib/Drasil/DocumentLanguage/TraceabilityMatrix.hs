@@ -12,8 +12,10 @@ import Data.Drasil.Concepts.Documentation (purpose, component, dependency,
 
 import Drasil.DocumentLanguage.Definitions (helpToRefField)
 
+import Data.Containers.ListUtils (nubOrd)
+
 import Control.Lens ((^.), Getting)
-import Data.List (nub)
+
 import qualified Data.Map as Map
 
 -- * Types
@@ -49,11 +51,11 @@ generateTraceTableView u desc cols rows c = llcc (makeTabRef' u) $ Table
 
 -- | Helper that finds the traceability matrix references (things being referenced).
 traceMReferees :: ([UID] -> [UID]) -> ChunkDB -> [UID]
-traceMReferees f = f . nub . Map.keys . (^. refbyTable)
+traceMReferees f = f . nubOrd . Map.keys . (^. refbyTable)
 
 -- | Helper that finds the traceability matrix references (things that are referring to other things).
 traceMReferrers :: ([UID] -> [UID]) -> ChunkDB -> [UID]
-traceMReferrers f = f . nub . concat . Map.elems . (^. refbyTable)
+traceMReferrers f = f . nubOrd . concat . Map.elems . (^. refbyTable)
 
 -- | Helper that finds the header of a traceability matrix.
 traceMHeader :: (ChunkDB -> [UID]) -> SystemInformation -> [Sentence]

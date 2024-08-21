@@ -15,8 +15,7 @@
 \usepackage{svg}
 \usepackage{float}
 \usepackage{enumitem}
-\usepackage{graphicx}
-\usepackage{calc}
+\usepackage{adjustbox}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
@@ -25,16 +24,8 @@
 \newcommand{\lt}{\ensuremath <}
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
-\def\inDefScale{0.8}
-\def\outDefScale{1.0}
-\newsavebox{\mybox}
-\newcommand{\resizeExpression}[2]{
-  \savebox{\mybox}{$#1$}
-  \ifdim\wd\mybox>#2\linewidth
-    \resizebox{#2\textwidth}{!}{\usebox{\mybox}}
-  \else
-    \usebox{\mybox}
-  \fi
+\newcommand{\resizeExpression}[1]{
+  \adjustbox{max width=\linewidth}{$#1$}
 }
 \bibliography{bibfile}
 \title{Software Requirements Specification for GamePhysics}
@@ -381,7 +372,7 @@ Label & Newton's second law of motion
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\symbf{F}=m\,\symbf{a}\text{(}t\text{)}}{\inDefScale}
+           \resizeExpression{\symbf{F}=m\,\symbf{a}\text{(}t\text{)}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -414,7 +405,7 @@ Label & Newton's third law of motion
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{\symbf{F}_{1}}=-{\symbf{F}_{2}}}{\inDefScale}
+           \resizeExpression{{\symbf{F}_{1}}=-{\symbf{F}_{2}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -445,7 +436,7 @@ Label & Newton's law of universal gravitation
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\symbf{F}=G\,\frac{{m_{1}}\,{m_{2}}}{\|\symbf{d}\|^{2}}\,\symbf{\hat{d}}=G\,\frac{{m_{1}}\,{m_{2}}}{\|\symbf{d}\|^{2}}\,\frac{\symbf{d}}{\|\symbf{d}\|}}{\inDefScale}
+           \resizeExpression{\symbf{F}=G\,\frac{{m_{1}}\,{m_{2}}}{\|\symbf{d}\|^{2}}\,\symbf{\hat{d}}=G\,\frac{{m_{1}}\,{m_{2}}}{\|\symbf{d}\|^{2}}\,\frac{\symbf{d}}{\|\symbf{d}\|}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -482,7 +473,7 @@ Label & Newton's second law for rotational motion
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\symbf{τ}=\symbf{I}\,α}{\inDefScale}
+           \resizeExpression{\symbf{τ}=\symbf{I}\,α}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -524,7 +515,7 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\symbf{g}=-\frac{G\,M}{\|\symbf{d}\|^{2}}\,\symbf{\hat{d}}}{\inDefScale}
+           \resizeExpression{\symbf{g}=-\frac{G\,M}{\|\symbf{d}\|^{2}}\,\symbf{\hat{d}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -552,27 +543,27 @@ RefBy & \hyperref[IM:transMot]{IM:transMot}
 From \hyperref[TM:UniversalGravLaw]{Newton's law of universal gravitation}, we have:
 
 \begin{displaymath}
-\resizeExpression{\symbf{F}=\frac{G\,{m_{1}}\,{m_{2}}}{{\|\symbf{d}\|^{2}}}\,\symbf{\hat{d}}}{\outDefScale}
+\resizeExpression{\symbf{F}=\frac{G\,{m_{1}}\,{m_{2}}}{{\|\symbf{d}\|^{2}}}\,\symbf{\hat{d}}}
 \end{displaymath}
 The above equation governs the gravitational attraction between two bodies. Suppose that one of the bodies is significantly more massive than the other, so that we concern ourselves with the force the massive body exerts on the lighter body. Further, suppose that the Cartesian coordinate system is chosen such that this force acts on a line which lies along one of the principal axes. Then our unit vector directed from the center of the large mass to the center of the smaller mass $\symbf{\hat{d}}$ for the x or y axes is:
 
 \begin{displaymath}
-\resizeExpression{\symbf{\hat{d}}=\frac{\symbf{d}}{\|\symbf{d}\|}}{\outDefScale}
+\resizeExpression{\symbf{\hat{d}}=\frac{\symbf{d}}{\|\symbf{d}\|}}
 \end{displaymath}
 Given the above assumptions, let $M$ and $m$ be the mass of the massive and light body respectively. Equating $\symbf{F}$ above with Newton's second law for the force experienced by the light body, we get:
 
 \begin{displaymath}
-\resizeExpression{{\symbf{F}_{\symbf{g}}}=G\,\frac{M\,m}{{\|\symbf{d}\|^{2}}}\,\symbf{\hat{d}}=m\,\symbf{g}}{\outDefScale}
+\resizeExpression{{\symbf{F}_{\symbf{g}}}=G\,\frac{M\,m}{{\|\symbf{d}\|^{2}}}\,\symbf{\hat{d}}=m\,\symbf{g}}
 \end{displaymath}
 where $\symbf{g}$ is the gravitational acceleration. Dividing the above equation by $m$,  we have:
 
 \begin{displaymath}
-\resizeExpression{G\,\frac{M}{{\|\symbf{d}\|^{2}}}\,\symbf{\hat{d}}=\symbf{g}}{\outDefScale}
+\resizeExpression{G\,\frac{M}{{\|\symbf{d}\|^{2}}}\,\symbf{\hat{d}}=\symbf{g}}
 \end{displaymath}
 and thus the negative sign indicates that the force is an attractive force:
 
 \begin{displaymath}
-\resizeExpression{\symbf{g}=-G\,\frac{M}{{\|\symbf{d}\|^{2}}}\,\symbf{\hat{d}}}{\outDefScale}
+\resizeExpression{\symbf{g}=-G\,\frac{M}{{\|\symbf{d}\|^{2}}}\,\symbf{\hat{d}}}
 \end{displaymath}
 \medskip
 \noindent
@@ -589,7 +580,7 @@ Units & $\text{N}\text{s}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{j=\frac{-\left(1+{C_{\text{R}}}\right)\,{{\symbf{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right)\,\|\symbf{n}\|^{2}+\frac{\|{\symbf{u}_{\text{A}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{A}}}}+\frac{\|{\symbf{u}_{\text{B}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{B}}}}}}{\inDefScale}
+           \resizeExpression{j=\frac{-\left(1+{C_{\text{R}}}\right)\,{{\symbf{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right)\,\|\symbf{n}\|^{2}+\frac{\|{\symbf{u}_{\text{A}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{A}}}}+\frac{\|{\symbf{u}_{\text{B}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{B}}}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -644,7 +635,7 @@ Units & ${\text{m}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{\symbf{p}\text{(}t\text{)}_{\text{CM}}}=\frac{\displaystyle\sum{{m_{j}}\,{\symbf{p}\text{(}t\text{)}_{j}}}}{{m_{T}}}}{\inDefScale}
+           \resizeExpression{{\symbf{p}\text{(}t\text{)}_{\text{CM}}}=\frac{\displaystyle\sum{{m_{j}}\,{\symbf{p}\text{(}t\text{)}_{j}}}}{{m_{T}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -684,7 +675,7 @@ Units & ${\text{m}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{u\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}\left(t\right)}{\,dt}}{\inDefScale}
+           \resizeExpression{u\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}\left(t\right)}{\,dt}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -723,7 +714,7 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{v\text{(}t\text{)}=\frac{\,d\symbf{u}\left(t\right)}{\,dt}}{\inDefScale}
+           \resizeExpression{v\text{(}t\text{)}=\frac{\,d\symbf{u}\left(t\right)}{\,dt}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -762,7 +753,7 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{a\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}\left(t\right)}{\,dt}}{\inDefScale}
+           \resizeExpression{a\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}\left(t\right)}{\,dt}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -801,7 +792,7 @@ Units & ${\text{rad}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{θ=\frac{\,dϕ\left(t\right)}{\,dt}}{\inDefScale}
+           \resizeExpression{θ=\frac{\,dϕ\left(t\right)}{\,dt}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -840,7 +831,7 @@ Units & $\frac{\text{rad}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{ω=\frac{\,dθ\left(t\right)}{\,dt}}{\inDefScale}
+           \resizeExpression{ω=\frac{\,dθ\left(t\right)}{\,dt}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -879,7 +870,7 @@ Units & $\frac{\text{rad}}{\text{s}^{2}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{α=\frac{\,dω\left(t\right)}{\,dt}}{\inDefScale}
+           \resizeExpression{α=\frac{\,dω\left(t\right)}{\,dt}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -918,7 +909,7 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{\symbf{v}\text{(}t\text{)}_{\text{B}}}={\symbf{v}\text{(}t\text{)}_{\text{O}}}+ω\times{\symbf{u}_{\text{O}\text{B}}}}{\inDefScale}
+           \resizeExpression{{\symbf{v}\text{(}t\text{)}_{\text{B}}}={\symbf{v}\text{(}t\text{)}_{\text{O}}}+ω\times{\symbf{u}_{\text{O}\text{B}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -959,7 +950,7 @@ Units & $\text{N}\text{m}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\symbf{τ}=\symbf{r}\times\symbf{F}}{\inDefScale}
+           \resizeExpression{\symbf{τ}=\symbf{r}\times\symbf{F}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -997,7 +988,7 @@ Units & ${\text{J}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{KE=m\,\frac{\|\symbf{v}\text{(}t\text{)}\|^{2}}{2}}{\inDefScale}
+           \resizeExpression{KE=m\,\frac{\|\symbf{v}\text{(}t\text{)}\|^{2}}{2}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1039,7 +1030,7 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{C_{\text{R}}}=-\left(\frac{{{\symbf{v}\text{(}t\text{)}_{\text{f}}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}{{{\symbf{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}\right)}{\inDefScale}
+           \resizeExpression{{C_{\text{R}}}=-\left(\frac{{{\symbf{v}\text{(}t\text{)}_{\text{f}}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}{{{\symbf{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1078,7 +1069,7 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{{\symbf{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}={\symbf{v}\text{(}t\text{)}^{\text{A}\text{P}}}-{\symbf{v}\text{(}t\text{)}^{\text{B}\text{P}}}}{\inDefScale}
+           \resizeExpression{{{\symbf{v}\text{(}t\text{)}_{\text{i}}}^{\text{A}\text{B}}}={\symbf{v}\text{(}t\text{)}^{\text{A}\text{P}}}-{\symbf{v}\text{(}t\text{)}^{\text{B}\text{P}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1118,7 +1109,7 @@ Units & $\text{N}\text{s}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\symbf{J}=m\,Δ\symbf{v}}{\inDefScale}
+           \resizeExpression{\symbf{J}=m\,Δ\symbf{v}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1145,17 +1136,17 @@ RefBy &
 Newton's second law of motion states:
 
 \begin{displaymath}
-\resizeExpression{\symbf{F}=m\,\symbf{a}\text{(}t\text{)}=m\,\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}}{\outDefScale}
+\resizeExpression{\symbf{F}=m\,\symbf{a}\text{(}t\text{)}=m\,\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}}
 \end{displaymath}
 Rearranging:
 
 \begin{displaymath}
-\resizeExpression{\int_{{t_{1}}}^{{t_{2}}}{\symbf{F}}\,dt=m\,\left(\int_{{\symbf{v}\text{(}t\text{)}_{1}}}^{{\symbf{v}\text{(}t\text{)}_{2}}}{1}\,d\symbf{v}\text{(}t\text{)}\right)}{\outDefScale}
+\resizeExpression{\int_{{t_{1}}}^{{t_{2}}}{\symbf{F}}\,dt=m\,\left(\int_{{\symbf{v}\text{(}t\text{)}_{1}}}^{{\symbf{v}\text{(}t\text{)}_{2}}}{1}\,d\symbf{v}\text{(}t\text{)}\right)}
 \end{displaymath}
 Integrating the right hand side:
 
 \begin{displaymath}
-\resizeExpression{\int_{{t_{1}}}^{{t_{2}}}{\symbf{F}}\,dt=m\,{\symbf{v}\text{(}t\text{)}_{2}}-m\,{\symbf{v}\text{(}t\text{)}_{1}}=m\,Δ\symbf{v}}{\outDefScale}
+\resizeExpression{\int_{{t_{1}}}^{{t_{2}}}{\symbf{F}}\,dt=m\,{\symbf{v}\text{(}t\text{)}_{2}}-m\,{\symbf{v}\text{(}t\text{)}_{1}}=m\,Δ\symbf{v}}
 \end{displaymath}
 \medskip
 \noindent
@@ -1175,7 +1166,7 @@ Units & ${\text{J}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{PE=m\,\symbf{g}\,h}{\inDefScale}
+           \resizeExpression{PE=m\,\symbf{g}\,h}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1218,7 +1209,7 @@ Units & $\text{kg}\text{m}^{2}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\symbf{I}=\displaystyle\sum{{m_{j}}\,{d_{j}}^{2}}}{\inDefScale}
+           \resizeExpression{\symbf{I}=\displaystyle\sum{{m_{j}}\,{d_{j}}^{2}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1264,25 +1255,25 @@ Output & ${\symbf{a}\text{(}t\text{)}_{j}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \resizeExpression{{\symbf{v}\text{(}t\text{)}_{j}}\gt{}0}{\inDefScale}
+                    \resizeExpression{{\symbf{v}\text{(}t\text{)}_{j}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{t\gt{}0}{\inDefScale}
+                    \resizeExpression{t\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{\symbf{g}\gt{}0}{\inDefScale}
+                    \resizeExpression{\symbf{g}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{{\symbf{F}_{j}}\gt{}0}{\inDefScale}
+                    \resizeExpression{{\symbf{F}_{j}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{{m_{j}}\gt{}0}{\inDefScale}
+                    \resizeExpression{{m_{j}}\gt{}0}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{\symbf{a}\text{(}t\text{)}_{j}}=\symbf{g}+\frac{{\symbf{F}_{j}}\left(t\right)}{{m_{j}}}}{\inDefScale}
+           \resizeExpression{{\symbf{a}\text{(}t\text{)}_{j}}=\symbf{g}+\frac{{\symbf{F}_{j}}\left(t\right)}{{m_{j}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1315,12 +1306,12 @@ RefBy &
 We may calculate the total acceleration of rigid body $j$ by calculating the derivative of it's velocity with respect to time (from \hyperref[DD:linAcc]{DD:linAcc}).
 
 \begin{displaymath}
-\resizeExpression{{α_{j}}=\frac{\,d{\symbf{v}\text{(}t\text{)}_{j}}\left(t\right)}{\,dt}}{\outDefScale}
+\resizeExpression{{α_{j}}=\frac{\,d{\symbf{v}\text{(}t\text{)}_{j}}\left(t\right)}{\,dt}}
 \end{displaymath}
 Performing the derivative, we obtain:
 
 \begin{displaymath}
-\resizeExpression{{\symbf{a}\text{(}t\text{)}_{j}}=\symbf{g}+\frac{{\symbf{F}_{j}}\left(t\right)}{{m_{j}}}}{\outDefScale}
+\resizeExpression{{\symbf{a}\text{(}t\text{)}_{j}}=\symbf{g}+\frac{{\symbf{F}_{j}}\left(t\right)}{{m_{j}}}}
 \end{displaymath}
 \medskip
 \noindent
@@ -1340,24 +1331,24 @@ Output & ${α_{j}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \resizeExpression{ω\gt{}0}{\inDefScale}
+                    \resizeExpression{ω\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{t\gt{}0}{\inDefScale}
+                    \resizeExpression{t\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{{\symbf{τ}_{j}}\gt{}0}{\inDefScale}
+                    \resizeExpression{{\symbf{τ}_{j}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{\symbf{I}\gt{}0}{\inDefScale}
+                    \resizeExpression{\symbf{I}\gt{}0}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & \begin{displaymath}
-                     \resizeExpression{{α_{j}}\gt{}0}{\inDefScale}
+                     \resizeExpression{{α_{j}}\gt{}0}
                      \end{displaymath}
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{α_{j}}=\frac{{\symbf{τ}_{j}}\left(t\right)}{\symbf{I}}}{\inDefScale}
+           \resizeExpression{{α_{j}}=\frac{{\symbf{τ}_{j}}\left(t\right)}{\symbf{I}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1387,12 +1378,12 @@ RefBy &
 We may calculate the total angular acceleration of rigid body $j$ by calculating the derivative of its angular velocity with respect to time (from \hyperref[DD:angAccel]{DD:angAccel}).
 
 \begin{displaymath}
-\resizeExpression{{α_{j}}=\frac{\,dω\left(t\right)}{\,dt}}{\outDefScale}
+\resizeExpression{{α_{j}}=\frac{\,dω\left(t\right)}{\,dt}}
 \end{displaymath}
 Performing the derivative, we obtain:
 
 \begin{displaymath}
-\resizeExpression{{α_{j}}=\frac{{\symbf{τ}_{j}}\left(t\right)}{\symbf{I}}}{\outDefScale}
+\resizeExpression{{α_{j}}=\frac{{\symbf{τ}_{j}}\left(t\right)}{\symbf{I}}}
 \end{displaymath}
 \medskip
 \noindent
@@ -1412,24 +1403,24 @@ Output & ${t_{\text{c}}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \resizeExpression{t\gt{}0}{\inDefScale}
+                    \resizeExpression{t\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{j\gt{}0}{\inDefScale}
+                    \resizeExpression{j\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{{m_{\text{A}}}\gt{}0}{\inDefScale}
+                    \resizeExpression{{m_{\text{A}}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{\symbf{n}\gt{}0}{\inDefScale}
+                    \resizeExpression{\symbf{n}\gt{}0}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & \begin{displaymath}
-                     \resizeExpression{{t_{\text{c}}}\gt{}0}{\inDefScale}
+                     \resizeExpression{{t_{\text{c}}}\gt{}0}
                      \end{displaymath}
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{\symbf{v}\text{(}t\text{)}_{\text{A}}}\left({t_{\text{c}}}\right)={\symbf{v}\text{(}t\text{)}_{\text{A}}}\left(t\right)+\frac{j}{{m_{\text{A}}}}\,\symbf{n}}{\inDefScale}
+           \resizeExpression{{\symbf{v}\text{(}t\text{)}_{\text{A}}}\left({t_{\text{c}}}\right)={\symbf{v}\text{(}t\text{)}_{\text{A}}}\left(t\right)+\frac{j}{{m_{\text{A}}}}\,\symbf{n}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}

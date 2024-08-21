@@ -279,22 +279,9 @@ useTikz = usepackage "luatex85" $+$ command0 "def" <>
 -- on Monad...
 
 -- | toEqn is special; it switches to 'Math', but inserts an equation environment.
--- The 'scale' parameter determines the maximum width of the equation based on
--- the corresponding scaling command.
-toEqn :: ExprScale -> D -> D
-toEqn scale (PL g) = equation $ command2D "resizeExpression" (PL (\_ -> g Math)) (command0 (show scale))
-
--- | Represents the scaling factor for an equation.
--- 'InDef' and 'OutDef' correspond to predefined scaling commands.
--- Commands are defined in 'Preamble.hs'
-data ExprScale = InDef | OutDef
-
--- | Provides a string representation for 'ExprScale' values.
--- Used to convert 'ExprScale' to the corresponding command string.
-instance Show ExprScale where
-  show InDef  = "inDefScale"
-  show OutDef = "outDefScale"
-
+-- Uses resizeExpression macro (defined in Preamble.hs) to prevent page overflow.
+toEqn :: D -> D
+toEqn (PL g) = equation $ commandD "resizeExpression" $ PL (\_ -> g Math)
 -----------------------------------------------------------------------------
 -- | Helper(s) for String-Printing in TeX where it varies from HTML/Plaintext.
 paren, sqbrac :: String -> String

@@ -15,8 +15,7 @@
 \usepackage{svg}
 \usepackage{float}
 \usepackage{enumitem}
-\usepackage{graphicx}
-\usepackage{calc}
+\usepackage{adjustbox}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
@@ -25,16 +24,8 @@
 \newcommand{\lt}{\ensuremath <}
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
-\def\inDefScale{0.8}
-\def\outDefScale{1.0}
-\newsavebox{\mybox}
-\newcommand{\resizeExpression}[2]{
-  \savebox{\mybox}{$#1$}
-  \ifdim\wd\mybox>#2\linewidth
-    \resizebox{#2\textwidth}{!}{\usebox{\mybox}}
-  \else
-    \usebox{\mybox}
-  \fi
+\newcommand{\resizeExpression}[1]{
+  \adjustbox{max width=\linewidth}{$#1$}
 }
 \bibliography{bibfile}
 \title{Software Requirements Specification for PD Controller}
@@ -322,7 +313,7 @@ Label & Laplace Transform
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{F_{\text{s}}}=\int_{\mathit{-∞}}^{∞}{{f_{\text{t}}}\,e^{-s\,t}}\,dt}{\inDefScale}
+           \resizeExpression{{F_{\text{s}}}=\int_{\mathit{-∞}}^{∞}{{f_{\text{t}}}\,e^{-s\,t}}\,dt}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -356,7 +347,7 @@ Label & Inverse Laplace Transform
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{f_{\text{t}}}=\mathit{L⁻¹[F(s)]}}{\inDefScale}
+           \resizeExpression{{f_{\text{t}}}=\mathit{L⁻¹[F(s)]}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -388,7 +379,7 @@ Label & Second Order Mass-Spring-Damper System
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\frac{1}{m\,s^{2}+c\,s+k}}{\inDefScale}
+           \resizeExpression{\frac{1}{m\,s^{2}+c\,s+k}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -426,7 +417,7 @@ Label & The Transfer Function of the Power Plant
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\frac{1}{s^{2}+s+20}}{\inDefScale}
+           \resizeExpression{\frac{1}{s^{2}+s+20}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -467,7 +458,7 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{E_{\text{s}}}={R_{\text{s}}}-{Y_{\text{s}}}}{\inDefScale}
+           \resizeExpression{{E_{\text{s}}}={R_{\text{s}}}-{Y_{\text{s}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -506,7 +497,7 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{P_{\text{s}}}={K_{\text{p}}}\,{E_{\text{s}}}}{\inDefScale}
+           \resizeExpression{{P_{\text{s}}}={K_{\text{p}}}\,{E_{\text{s}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -545,7 +536,7 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{D_{\text{s}}}={K_{\text{d}}}\,{E_{\text{s}}}\,s}{\inDefScale}
+           \resizeExpression{{D_{\text{s}}}={K_{\text{d}}}\,{E_{\text{s}}}\,s}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -585,7 +576,7 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{C_{\text{s}}}={E_{\text{s}}}\,\left({K_{\text{p}}}+{K_{\text{d}}}\,s\right)}{\inDefScale}
+           \resizeExpression{{C_{\text{s}}}={E_{\text{s}}}\,\left({K_{\text{p}}}+{K_{\text{d}}}\,s\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -630,21 +621,21 @@ Output & ${y_{\text{t}}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \resizeExpression{{r_{\text{t}}}\gt{}0}{\inDefScale}
+                    \resizeExpression{{r_{\text{t}}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{{K_{\text{p}}}\gt{}0}{\inDefScale}
+                    \resizeExpression{{K_{\text{p}}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{{K_{\text{d}}}\gt{}0}{\inDefScale}
+                    \resizeExpression{{K_{\text{d}}}\gt{}0}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & \begin{displaymath}
-                     \resizeExpression{{y_{\text{t}}}\gt{}0}{\inDefScale}
+                     \resizeExpression{{y_{\text{t}}}\gt{}0}
                      \end{displaymath}
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\frac{\,d^{2}{y_{\text{t}}}}{\,dt^{2}}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{{y_{\text{t}}}}={r_{\text{t}}}\,{K_{\text{p}}}}{\inDefScale}
+           \resizeExpression{\frac{\,d^{2}{y_{\text{t}}}}{\,dt^{2}}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{{y_{\text{t}}}}={r_{\text{t}}}\,{K_{\text{p}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -669,22 +660,22 @@ RefBy & \hyperref[outputValues]{FR:Output-Values} and \hyperref[calculateValues]
 The Process Variable ${Y_{\text{s}}}$ in a PD Control Loop is the product of the Process Error (from \hyperref[DD:ddProcessError]{DD:ddProcessError}), Control Variable (from \hyperref[DD:ddCtrlVar]{DD:ddCtrlVar}), and the Power Plant (from \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant}).
 
 \begin{displaymath}
-\resizeExpression{{Y_{\text{s}}}=\left({R_{\text{s}}}-{Y_{\text{s}}}\right)\,\left({K_{\text{p}}}+{K_{\text{d}}}\,s\right)\,\frac{1}{s^{2}+s+20}}{\outDefScale}
+\resizeExpression{{Y_{\text{s}}}=\left({R_{\text{s}}}-{Y_{\text{s}}}\right)\,\left({K_{\text{p}}}+{K_{\text{d}}}\,s\right)\,\frac{1}{s^{2}+s+20}}
 \end{displaymath}
 Substituting the values and rearranging the equation.
 
 \begin{displaymath}
-\resizeExpression{s^{2}\,{Y_{\text{s}}}+\left(1+{K_{\text{d}}}\right)\,{Y_{\text{s}}}\,s+\left(20+{K_{\text{p}}}\right)\,{Y_{\text{s}}}-{R_{\text{s}}}\,s\,{K_{\text{d}}}-{R_{\text{s}}}\,{K_{\text{p}}}=0}{\outDefScale}
+\resizeExpression{s^{2}\,{Y_{\text{s}}}+\left(1+{K_{\text{d}}}\right)\,{Y_{\text{s}}}\,s+\left(20+{K_{\text{p}}}\right)\,{Y_{\text{s}}}-{R_{\text{s}}}\,s\,{K_{\text{d}}}-{R_{\text{s}}}\,{K_{\text{p}}}=0}
 \end{displaymath}
 Computing the Inverse Laplace Transform of a function (from \hyperref[TM:invLaplaceTransform]{TM:invLaplaceTransform}) of the equation.
 
 \begin{displaymath}
-\resizeExpression{\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{y_{\text{t}}}-{K_{\text{d}}}\,\frac{\,d{r_{\text{t}}}}{\,dt}-{r_{\text{t}}}\,{K_{\text{p}}}=0}{\outDefScale}
+\resizeExpression{\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{y_{\text{t}}}-{K_{\text{d}}}\,\frac{\,d{r_{\text{t}}}}{\,dt}-{r_{\text{t}}}\,{K_{\text{p}}}=0}
 \end{displaymath}
 The Set-Point ${r_{\text{t}}}$ is a step function and a constant (from \hyperref[setPoint]{A:Set-Point}). Therefore the differential of the set point is zero. Hence the equation reduces to
 
 \begin{displaymath}
-\resizeExpression{\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{y_{\text{t}}}-{r_{\text{t}}}\,{K_{\text{p}}}=0}{\outDefScale}
+\resizeExpression{\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{y_{\text{t}}}-{r_{\text{t}}}\,{K_{\text{p}}}=0}
 \end{displaymath}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}

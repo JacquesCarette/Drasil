@@ -11,7 +11,8 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
   Space (Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..))
 import Database.Drasil (symbResolve)
-import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&), ($=), exactDbl, idx)
+import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&), in')
+import qualified Language.Drasil.CodeExpr.Development as S (CodeExpr(..))
 import Language.Drasil.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
   AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..), BoolBinOp(..), EqBinOp(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),

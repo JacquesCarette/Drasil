@@ -12,81 +12,82 @@
 </span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Build.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Annotation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-operator">(+:+)</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">genMake</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">makeS</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">MakeString</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mkFile</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mkRule</span></span><span class="hs-special">,</span><span>
 </span><span id="line-13"></span><span>  </span><span class="annot"><span class="hs-identifier">mkCheckedCommand</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mkFreeVar</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">RuleTransformer</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">makeRule</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-14"></span><span>
-</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(^.)</span></span><span class="hs-special">)</span><span>
-</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Maybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">maybeToList</span></span><span class="hs-special">)</span><span>
-</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">nub</span></span><span class="hs-special">)</span><span>
-</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.FilePath.Posix</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">takeExtension</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">takeBaseName</span></span><span class="hs-special">)</span><span>
-</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.PrettyPrint.HughesPJ</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Doc</span></span><span class="hs-special">)</span><span>
-</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">capitalize</span></span><span class="hs-special">)</span><span>
-</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Metadata.Drasil.DrasilMetaCall</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">watermark</span></span><span class="hs-special">)</span><span>
-</span><span id="line-22"></span><span>
-</span><span id="line-23"></span><span class="annot"><span class="hs-comment">-- | Holds all the needed information to run a program.</span></span><span>
-</span><span id="line-24"></span><span class="hs-keyword">data</span><span> </span><span id="CodeHarness"><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#CodeHarness"><span class="hs-identifier hs-var">CodeHarness</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Ch"><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#Ch"><span class="hs-identifier hs-var">Ch</span></a></span></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-25"></span><span>  </span><span id="buildConfig"><span class="annot"><span class="annottext">CodeHarness -&gt; Maybe BuildConfig
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Containers.ListUtils</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">nubOrd</span></span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(^.)</span></span><span class="hs-special">)</span><span>
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Maybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">maybeToList</span></span><span class="hs-special">)</span><span>
+</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.FilePath.Posix</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">takeExtension</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">takeBaseName</span></span><span class="hs-special">)</span><span>
+</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.PrettyPrint.HughesPJ</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Doc</span></span><span class="hs-special">)</span><span>
+</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">capitalize</span></span><span class="hs-special">)</span><span>
+</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Metadata.Drasil.DrasilMetaCall</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">watermark</span></span><span class="hs-special">)</span><span>
+</span><span id="line-23"></span><span>
+</span><span id="line-24"></span><span class="annot"><span class="hs-comment">-- | Holds all the needed information to run a program.</span></span><span>
+</span><span id="line-25"></span><span class="hs-keyword">data</span><span> </span><span id="CodeHarness"><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#CodeHarness"><span class="hs-identifier hs-var">CodeHarness</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Ch"><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#Ch"><span class="hs-identifier hs-var">Ch</span></a></span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-26"></span><span>  </span><span id="buildConfig"><span class="annot"><span class="annottext">CodeHarness -&gt; Maybe BuildConfig
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#buildConfig"><span class="hs-identifier hs-var hs-var">buildConfig</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildConfig"><span class="hs-identifier hs-type">BuildConfig</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-26"></span><span>  </span><span id="runnable"><span class="annot"><span class="annottext">CodeHarness -&gt; Maybe Runnable
+</span><span id="line-27"></span><span>  </span><span id="runnable"><span class="annot"><span class="annottext">CodeHarness -&gt; Maybe Runnable
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#runnable"><span class="hs-identifier hs-var hs-var">runnable</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#Runnable"><span class="hs-identifier hs-type">Runnable</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-27"></span><span>  </span><span id="goolState"><span class="annot"><span class="annottext">CodeHarness -&gt; GOOLState
+</span><span id="line-28"></span><span>  </span><span id="goolState"><span class="annot"><span class="annottext">CodeHarness -&gt; GOOLState
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#goolState"><span class="hs-identifier hs-var hs-var">goolState</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GOOLState</span></span><span class="hs-special">,</span><span>
-</span><span id="line-28"></span><span>  </span><span id="progData"><span class="annot"><span class="annottext">CodeHarness -&gt; ProgData
+</span><span id="line-29"></span><span>  </span><span id="progData"><span class="annot"><span class="annottext">CodeHarness -&gt; ProgData
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#progData"><span class="hs-identifier hs-var hs-var">progData</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ProgData</span></span><span class="hs-special">,</span><span>
-</span><span id="line-29"></span><span>  </span><span id="docConfig"><span class="annot"><span class="annottext">CodeHarness -&gt; Maybe DocConfig
+</span><span id="line-30"></span><span>  </span><span id="docConfig"><span class="annot"><span class="annottext">CodeHarness -&gt; Maybe DocConfig
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#docConfig"><span class="hs-identifier hs-var hs-var">docConfig</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#DocConfig"><span class="hs-identifier hs-type">DocConfig</span></a></span><span class="hs-special">}</span><span>
-</span><span id="line-30"></span><span>
-</span><span id="line-31"></span><span class="annot"><span class="hs-comment">-- | Transforms information in 'CodeHarness' into a list of Makefile rules.</span></span><span>
-</span><span id="line-32"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">RuleTransformer</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#CodeHarness"><span class="hs-identifier hs-type">CodeHarness</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-33"></span><span>  </span><span id="local-6989586621679314712"><span class="annot"><span class="annottext">makeRule :: CodeHarness -&gt; [Rule]
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">makeRule</span></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#Ch"><span class="hs-identifier hs-type">Ch</span></a></span><span> </span><span id="local-6989586621679314713"><span class="annot"><span class="annottext">Maybe BuildConfig
-</span><a href="#local-6989586621679314713"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span id="local-6989586621679314714"><span class="annot"><span class="annottext">Maybe Runnable
-</span><a href="#local-6989586621679314714"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span id="local-6989586621679314715"><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314715"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679314716"><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314716"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679314717"><span class="annot"><span class="annottext">Maybe DocConfig
-</span><a href="#local-6989586621679314717"><span class="hs-identifier hs-var">d</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Rule] -&gt; (BuildConfig -&gt; [Rule]) -&gt; Maybe BuildConfig -&gt; [Rule]
+</span><span id="line-31"></span><span>
+</span><span id="line-32"></span><span class="annot"><span class="hs-comment">-- | Transforms information in 'CodeHarness' into a list of Makefile rules.</span></span><span>
+</span><span id="line-33"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">RuleTransformer</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#CodeHarness"><span class="hs-identifier hs-type">CodeHarness</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-34"></span><span>  </span><span id="local-6989586621679314283"><span class="annot"><span class="annottext">makeRule :: CodeHarness -&gt; [Rule]
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">makeRule</span></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#Ch"><span class="hs-identifier hs-type">Ch</span></a></span><span> </span><span id="local-6989586621679314284"><span class="annot"><span class="annottext">Maybe BuildConfig
+</span><a href="#local-6989586621679314284"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span id="local-6989586621679314285"><span class="annot"><span class="annottext">Maybe Runnable
+</span><a href="#local-6989586621679314285"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span id="local-6989586621679314286"><span class="annot"><span class="annottext">GOOLState
+</span><a href="#local-6989586621679314286"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679314287"><span class="annot"><span class="annottext">ProgData
+</span><a href="#local-6989586621679314287"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679314288"><span class="annot"><span class="annottext">Maybe DocConfig
+</span><a href="#local-6989586621679314288"><span class="hs-identifier hs-var">d</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Rule] -&gt; (BuildConfig -&gt; [Rule]) -&gt; Maybe BuildConfig -&gt; [Rule]
 forall b a. b -&gt; (a -&gt; b) -&gt; Maybe a -&gt; b
 </span><span class="hs-identifier hs-var">maybe</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[String] -&gt; MakeString -&gt; Dependencies -&gt; [Command] -&gt; Rule
 </span><span class="hs-identifier hs-var">mkRule</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ProgData -&gt; [String]
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#openingComments"><span class="hs-identifier hs-var">openingComments</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314716"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">MakeString
-</span><a href="#local-6989586621679314720"><span class="hs-identifier hs-var">buildTarget</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">]</span><span>
-</span><span id="line-34"></span><span>    </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildConfig"><span class="hs-identifier hs-type">BuildConfig</span></a></span><span> </span><span id="local-6989586621679314721"><span class="annot"><span class="annottext">Dependencies -&gt; MakeString -&gt; MakeString -&gt; [Dependencies]
-</span><a href="#local-6989586621679314721"><span class="hs-identifier hs-var">comp</span></a></span></span><span> </span><span id="local-6989586621679314722"><span class="annot"><span class="annottext">Maybe BuildName
-</span><a href="#local-6989586621679314722"><span class="hs-identifier hs-var">onm</span></a></span></span><span> </span><span id="local-6989586621679314723"><span class="annot"><span class="annottext">Maybe BuildName
-</span><a href="#local-6989586621679314723"><span class="hs-identifier hs-var">anm</span></a></span></span><span> </span><span id="local-6989586621679314724"><span class="annot"><span class="annottext">BuildDependencies
-</span><a href="#local-6989586621679314724"><span class="hs-identifier hs-var">bt</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span>
-</span><span id="line-35"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679314725"><span class="annot"><span class="annottext">outnm :: MakeString
-</span><a href="#local-6989586621679314725"><span class="hs-identifier hs-var hs-var">outnm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MakeString
+</span><a href="#local-6989586621679314287"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">MakeString
+</span><a href="#local-6989586621679314291"><span class="hs-identifier hs-var">buildTarget</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">]</span><span>
+</span><span id="line-35"></span><span>    </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildConfig"><span class="hs-identifier hs-type">BuildConfig</span></a></span><span> </span><span id="local-6989586621679314292"><span class="annot"><span class="annottext">Dependencies -&gt; MakeString -&gt; MakeString -&gt; [Dependencies]
+</span><a href="#local-6989586621679314292"><span class="hs-identifier hs-var">comp</span></a></span></span><span> </span><span id="local-6989586621679314293"><span class="annot"><span class="annottext">Maybe BuildName
+</span><a href="#local-6989586621679314293"><span class="hs-identifier hs-var">onm</span></a></span></span><span> </span><span id="local-6989586621679314294"><span class="annot"><span class="annottext">Maybe BuildName
+</span><a href="#local-6989586621679314294"><span class="hs-identifier hs-var">anm</span></a></span></span><span> </span><span id="local-6989586621679314295"><span class="annot"><span class="annottext">BuildDependencies
+</span><a href="#local-6989586621679314295"><span class="hs-identifier hs-var">bt</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><span id="line-36"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679314296"><span class="annot"><span class="annottext">outnm :: MakeString
+</span><a href="#local-6989586621679314296"><span class="hs-identifier hs-var hs-var">outnm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MakeString
 -&gt; (BuildName -&gt; MakeString) -&gt; Maybe BuildName -&gt; MakeString
 forall b a. b -&gt; (a -&gt; b) -&gt; Maybe a -&gt; b
 </span><span class="hs-identifier hs-var">maybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; MakeString
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#asFragment"><span class="hs-identifier hs-var">asFragment</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">GOOLState -&gt; ProgData -&gt; NameOpts -&gt; BuildName -&gt; MakeString
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderBuildName"><span class="hs-identifier hs-var">renderBuildName</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314715"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314716"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">NameOpts
+</span><a href="#local-6989586621679314286"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
+</span><a href="#local-6989586621679314287"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">NameOpts
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#nameOpts"><span class="hs-identifier hs-var">nameOpts</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe BuildName
-</span><a href="#local-6989586621679314722"><span class="hs-identifier hs-var">onm</span></a></span><span>
-</span><span id="line-36"></span><span>        </span><span id="local-6989586621679314727"><span class="annot"><span class="annottext">addnm :: MakeString
-</span><a href="#local-6989586621679314727"><span class="hs-identifier hs-var hs-var">addnm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MakeString
+</span><a href="#local-6989586621679314293"><span class="hs-identifier hs-var">onm</span></a></span><span>
+</span><span id="line-37"></span><span>        </span><span id="local-6989586621679314298"><span class="annot"><span class="annottext">addnm :: MakeString
+</span><a href="#local-6989586621679314298"><span class="hs-identifier hs-var hs-var">addnm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MakeString
 -&gt; (BuildName -&gt; MakeString) -&gt; Maybe BuildName -&gt; MakeString
 forall b a. b -&gt; (a -&gt; b) -&gt; Maybe a -&gt; b
 </span><span class="hs-identifier hs-var">maybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; MakeString
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#asFragment"><span class="hs-identifier hs-var">asFragment</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">GOOLState -&gt; ProgData -&gt; NameOpts -&gt; BuildName -&gt; MakeString
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderBuildName"><span class="hs-identifier hs-var">renderBuildName</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314715"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314716"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">NameOpts
+</span><a href="#local-6989586621679314286"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
+</span><a href="#local-6989586621679314287"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">NameOpts
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#nameOpts"><span class="hs-identifier hs-var">nameOpts</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe BuildName
-</span><a href="#local-6989586621679314723"><span class="hs-identifier hs-var">anm</span></a></span><span>
-</span><span id="line-37"></span><span>    </span><span class="hs-keyword">in</span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-38"></span><span>    </span><span class="annot"><span class="annottext">[String] -&gt; MakeString -&gt; Dependencies -&gt; [Command] -&gt; Rule
+</span><a href="#local-6989586621679314294"><span class="hs-identifier hs-var">anm</span></a></span><span>
+</span><span id="line-38"></span><span>    </span><span class="hs-keyword">in</span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-39"></span><span>    </span><span class="annot"><span class="annottext">[String] -&gt; MakeString -&gt; Dependencies -&gt; [Command] -&gt; Rule
 </span><span class="hs-identifier hs-var">mkRule</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ProgData -&gt; [String]
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#openingComments"><span class="hs-identifier hs-var">openingComments</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314716"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">MakeString
-</span><a href="#local-6989586621679314720"><span class="hs-identifier hs-var">buildTarget</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">MakeString
-</span><a href="#local-6989586621679314725"><span class="hs-identifier hs-var">outnm</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-39"></span><span>    </span><span class="annot"><span class="annottext">[String] -&gt; MakeString -&gt; Dependencies -&gt; [Command] -&gt; Rule
+</span><a href="#local-6989586621679314287"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">MakeString
+</span><a href="#local-6989586621679314291"><span class="hs-identifier hs-var">buildTarget</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">MakeString
+</span><a href="#local-6989586621679314296"><span class="hs-identifier hs-var">outnm</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-40"></span><span>    </span><span class="annot"><span class="annottext">[String] -&gt; MakeString -&gt; Dependencies -&gt; [Command] -&gt; Rule
 </span><span class="hs-identifier hs-var">mkFile</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">MakeString
-</span><a href="#local-6989586621679314725"><span class="hs-identifier hs-var">outnm</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(FileData -&gt; MakeString) -&gt; [FileData] -&gt; Dependencies
+</span><a href="#local-6989586621679314296"><span class="hs-identifier hs-var">outnm</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(FileData -&gt; MakeString) -&gt; [FileData] -&gt; Dependencies
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; MakeString
 </span><span class="hs-identifier hs-var">makeS</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; MakeString)
@@ -95,10 +96,10 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">FileData -&gt; String
 </span><span class="hs-identifier hs-var">filePath</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ProgData -&gt; [FileData]
 </span><span class="hs-identifier hs-var">progMods</span></span><span> </span><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314716"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([Command] -&gt; Rule) -&gt; [Command] -&gt; Rule
+</span><a href="#local-6989586621679314287"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([Command] -&gt; Rule) -&gt; [Command] -&gt; Rule
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-40"></span><span>      </span><span class="annot"><span class="annottext">(Dependencies -&gt; Command) -&gt; [Dependencies] -&gt; [Command]
+</span><span id="line-41"></span><span>      </span><span class="annot"><span class="annottext">(Dependencies -&gt; Command) -&gt; [Dependencies] -&gt; [Command]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">MakeString -&gt; Command
 </span><span class="hs-identifier hs-var">mkCheckedCommand</span></span><span> </span><span class="annot"><span class="annottext">(MakeString -&gt; Command)
@@ -116,105 +117,105 @@ forall a. Monoid a =&gt; a
 </span><span class="hs-identifier hs-var">mempty</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([Dependencies] -&gt; [Command]) -&gt; [Dependencies] -&gt; [Command]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-41"></span><span>        </span><span class="annot"><span class="annottext">Dependencies -&gt; MakeString -&gt; MakeString -&gt; [Dependencies]
-</span><a href="#local-6989586621679314721"><span class="hs-identifier hs-var">comp</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">BuildDependencies -&gt; GOOLState -&gt; ProgData -&gt; Dependencies
+</span><span id="line-42"></span><span>        </span><span class="annot"><span class="annottext">Dependencies -&gt; MakeString -&gt; MakeString -&gt; [Dependencies]
+</span><a href="#local-6989586621679314292"><span class="hs-identifier hs-var">comp</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">BuildDependencies -&gt; GOOLState -&gt; ProgData -&gt; Dependencies
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#getCompilerInput"><span class="hs-identifier hs-var">getCompilerInput</span></a></span><span> </span><span class="annot"><span class="annottext">BuildDependencies
-</span><a href="#local-6989586621679314724"><span class="hs-identifier hs-var">bt</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314715"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314716"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">MakeString
-</span><a href="#local-6989586621679314725"><span class="hs-identifier hs-var">outnm</span></a></span><span> </span><span class="annot"><span class="annottext">MakeString
-</span><a href="#local-6989586621679314727"><span class="hs-identifier hs-var">addnm</span></a></span><span>
-</span><span id="line-42"></span><span>    </span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe BuildConfig
-</span><a href="#local-6989586621679314713"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">[Rule] -&gt; [Rule] -&gt; [Rule]
+</span><a href="#local-6989586621679314295"><span class="hs-identifier hs-var">bt</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState
+</span><a href="#local-6989586621679314286"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
+</span><a href="#local-6989586621679314287"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">MakeString
+</span><a href="#local-6989586621679314296"><span class="hs-identifier hs-var">outnm</span></a></span><span> </span><span class="annot"><span class="annottext">MakeString
+</span><a href="#local-6989586621679314298"><span class="hs-identifier hs-var">addnm</span></a></span><span>
+</span><span id="line-43"></span><span>    </span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe BuildConfig
+</span><a href="#local-6989586621679314284"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">[Rule] -&gt; [Rule] -&gt; [Rule]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[Rule] -&gt; (Runnable -&gt; [Rule]) -&gt; Maybe Runnable -&gt; [Rule]
 forall b a. b -&gt; (a -&gt; b) -&gt; Maybe a -&gt; b
-</span><span class="hs-identifier hs-var">maybe</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#Runnable"><span class="hs-identifier hs-type">Runnable</span></a></span><span> </span><span id="local-6989586621679314733"><span class="annot"><span class="annottext">BuildName
-</span><a href="#local-6989586621679314733"><span class="hs-identifier hs-var">nm</span></a></span></span><span> </span><span id="local-6989586621679314734"><span class="annot"><span class="annottext">NameOpts
-</span><a href="#local-6989586621679314734"><span class="hs-identifier hs-var">no</span></a></span></span><span> </span><span id="local-6989586621679314735"><span class="annot"><span class="annottext">RunType
-</span><a href="#local-6989586621679314735"><span class="hs-identifier hs-var">ty</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-43"></span><span>    </span><span class="annot"><span class="annottext">[String] -&gt; MakeString -&gt; Dependencies -&gt; [Command] -&gt; Rule
+</span><span class="hs-identifier hs-var">maybe</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#Runnable"><span class="hs-identifier hs-type">Runnable</span></a></span><span> </span><span id="local-6989586621679314304"><span class="annot"><span class="annottext">BuildName
+</span><a href="#local-6989586621679314304"><span class="hs-identifier hs-var">nm</span></a></span></span><span> </span><span id="local-6989586621679314305"><span class="annot"><span class="annottext">NameOpts
+</span><a href="#local-6989586621679314305"><span class="hs-identifier hs-var">no</span></a></span></span><span> </span><span id="local-6989586621679314306"><span class="annot"><span class="annottext">RunType
+</span><a href="#local-6989586621679314306"><span class="hs-identifier hs-var">ty</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-44"></span><span>    </span><span class="annot"><span class="annottext">[String] -&gt; MakeString -&gt; Dependencies -&gt; [Command] -&gt; Rule
 </span><span class="hs-identifier hs-var">mkRule</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; MakeString
 </span><span class="hs-identifier hs-var">makeS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;run&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">MakeString
-</span><a href="#local-6989586621679314720"><span class="hs-identifier hs-var">buildTarget</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-44"></span><span>      </span><span class="annot"><span class="annottext">MakeString -&gt; Command
+</span><a href="#local-6989586621679314291"><span class="hs-identifier hs-var">buildTarget</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-45"></span><span>      </span><span class="annot"><span class="annottext">MakeString -&gt; Command
 </span><span class="hs-identifier hs-var">mkCheckedCommand</span></span><span> </span><span class="annot"><span class="annottext">(MakeString -&gt; Command) -&gt; MakeString -&gt; Command
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">MakeString -&gt; RunType -&gt; MakeString
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#buildRunTarget"><span class="hs-identifier hs-var">buildRunTarget</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">GOOLState -&gt; ProgData -&gt; NameOpts -&gt; BuildName -&gt; MakeString
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderBuildName"><span class="hs-identifier hs-var">renderBuildName</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314715"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314716"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">NameOpts
-</span><a href="#local-6989586621679314734"><span class="hs-identifier hs-var">no</span></a></span><span> </span><span class="annot"><span class="annottext">BuildName
-</span><a href="#local-6989586621679314733"><span class="hs-identifier hs-var">nm</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">RunType
-</span><a href="#local-6989586621679314735"><span class="hs-identifier hs-var">ty</span></a></span><span> </span><span class="annot"><span class="annottext">MakeString -&gt; MakeString -&gt; MakeString
+</span><a href="#local-6989586621679314286"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
+</span><a href="#local-6989586621679314287"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">NameOpts
+</span><a href="#local-6989586621679314305"><span class="hs-identifier hs-var">no</span></a></span><span> </span><span class="annot"><span class="annottext">BuildName
+</span><a href="#local-6989586621679314304"><span class="hs-identifier hs-var">nm</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">RunType
+</span><a href="#local-6989586621679314306"><span class="hs-identifier hs-var">ty</span></a></span><span> </span><span class="annot"><span class="annottext">MakeString -&gt; MakeString -&gt; MakeString
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-45"></span><span>      </span><span class="annot"><span class="annottext">String -&gt; MakeString
+</span><span id="line-46"></span><span>      </span><span class="annot"><span class="annottext">String -&gt; MakeString
 </span><span class="hs-identifier hs-var">mkFreeVar</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;RUNARGS&quot;</span></span><span>
-</span><span id="line-46"></span><span>      </span><span class="hs-special">]</span><span>
-</span><span id="line-47"></span><span>    </span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe Runnable
-</span><a href="#local-6989586621679314714"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">[Rule] -&gt; [Rule] -&gt; [Rule]
+</span><span id="line-47"></span><span>      </span><span class="hs-special">]</span><span>
+</span><span id="line-48"></span><span>    </span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe Runnable
+</span><a href="#local-6989586621679314285"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">[Rule] -&gt; [Rule] -&gt; [Rule]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[Rule] -&gt; (DocConfig -&gt; [Rule]) -&gt; Maybe DocConfig -&gt; [Rule]
 forall b a. b -&gt; (a -&gt; b) -&gt; Maybe a -&gt; b
-</span><span class="hs-identifier hs-var">maybe</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#DocConfig"><span class="hs-identifier hs-type">DocConfig</span></a></span><span> </span><span id="local-6989586621679314738"><span class="annot"><span class="annottext">Dependencies
-</span><a href="#local-6989586621679314738"><span class="hs-identifier hs-var">dps</span></a></span></span><span> </span><span id="local-6989586621679314739"><span class="annot"><span class="annottext">[Command]
-</span><a href="#local-6989586621679314739"><span class="hs-identifier hs-var">cmds</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-48"></span><span>      </span><span class="annot"><span class="annottext">[String] -&gt; MakeString -&gt; Dependencies -&gt; [Command] -&gt; Rule
+</span><span class="hs-identifier hs-var">maybe</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#DocConfig"><span class="hs-identifier hs-type">DocConfig</span></a></span><span> </span><span id="local-6989586621679314309"><span class="annot"><span class="annottext">Dependencies
+</span><a href="#local-6989586621679314309"><span class="hs-identifier hs-var">dps</span></a></span></span><span> </span><span id="local-6989586621679314310"><span class="annot"><span class="annottext">[Command]
+</span><a href="#local-6989586621679314310"><span class="hs-identifier hs-var">cmds</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-49"></span><span>      </span><span class="annot"><span class="annottext">[String] -&gt; MakeString -&gt; Dependencies -&gt; [Command] -&gt; Rule
 </span><span class="hs-identifier hs-var">mkRule</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; MakeString
 </span><span class="hs-identifier hs-var">makeS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;doc&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Dependencies
-</span><a href="#local-6989586621679314738"><span class="hs-identifier hs-var">dps</span></a></span><span> </span><span class="annot"><span class="annottext">Dependencies -&gt; Dependencies -&gt; Dependencies
+</span><a href="#local-6989586621679314309"><span class="hs-identifier hs-var">dps</span></a></span><span> </span><span class="annot"><span class="annottext">Dependencies -&gt; Dependencies -&gt; Dependencies
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">GOOLState -&gt; Dependencies
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#getCommentedFiles"><span class="hs-identifier hs-var">getCommentedFiles</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314715"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Command]
-</span><a href="#local-6989586621679314739"><span class="hs-identifier hs-var">cmds</span></a></span><span>
-</span><span id="line-49"></span><span>    </span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe DocConfig
-</span><a href="#local-6989586621679314717"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-50"></span><span>      </span><span id="local-6989586621679314720"><span class="annot"><span class="annottext">buildTarget :: MakeString
-</span><a href="#local-6989586621679314720"><span class="hs-identifier hs-var hs-var">buildTarget</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; MakeString
+</span><a href="#local-6989586621679314286"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Command]
+</span><a href="#local-6989586621679314310"><span class="hs-identifier hs-var">cmds</span></a></span><span>
+</span><span id="line-50"></span><span>    </span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe DocConfig
+</span><a href="#local-6989586621679314288"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-51"></span><span>      </span><span id="local-6989586621679314291"><span class="annot"><span class="annottext">buildTarget :: MakeString
+</span><a href="#local-6989586621679314291"><span class="hs-identifier hs-var hs-var">buildTarget</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; MakeString
 </span><span class="hs-identifier hs-var">makeS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;build&quot;</span></span><span>
-</span><span id="line-51"></span><span>
-</span><span id="line-52"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#openingComments"><span class="hs-identifier hs-type">openingComments</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ProgData</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Annotation</span></span><span>
-</span><span id="line-53"></span><span id="openingComments"><span class="annot"><span class="annottext">openingComments :: ProgData -&gt; [String]
-</span><a href="Language.Drasil.Code.Imperative.Build.Import.html#openingComments"><span class="hs-identifier hs-var hs-var">openingComments</span></a></span></span><span> </span><span id="local-6989586621679314741"><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314741"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String
+</span><span id="line-52"></span><span>
+</span><span id="line-53"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#openingComments"><span class="hs-identifier hs-type">openingComments</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ProgData</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Annotation</span></span><span>
+</span><span id="line-54"></span><span id="openingComments"><span class="annot"><span class="annottext">openingComments :: ProgData -&gt; [String]
+</span><a href="Language.Drasil.Code.Imperative.Build.Import.html#openingComments"><span class="hs-identifier hs-var hs-var">openingComments</span></a></span></span><span> </span><span id="local-6989586621679314312"><span class="annot"><span class="annottext">ProgData
+</span><a href="#local-6989586621679314312"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String
 </span><span class="hs-identifier hs-var">watermark</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Project Name: &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">ProgData -&gt; String
 </span><span class="hs-identifier hs-var">progName</span></span><span> </span><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314741"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ProgData -&gt; String
+</span><a href="#local-6989586621679314312"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ProgData -&gt; String
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#progPurpAdd"><span class="hs-identifier hs-var">progPurpAdd</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314741"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-54"></span><span>
-</span><span id="line-55"></span><span class="annot"><span class="hs-comment">-- | Helper that renders project purpose into a string if there is one.</span></span><span>
-</span><span id="line-56"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#progPurpAdd"><span class="hs-identifier hs-type">progPurpAdd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ProgData</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-57"></span><span id="progPurpAdd"><span class="annot"><span class="annottext">progPurpAdd :: ProgData -&gt; String
-</span><a href="Language.Drasil.Code.Imperative.Build.Import.html#progPurpAdd"><span class="hs-identifier hs-var hs-var">progPurpAdd</span></a></span></span><span> </span><span id="local-6989586621679314744"><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314744"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">ProgData -&gt; String
+</span><a href="#local-6989586621679314312"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-55"></span><span>
+</span><span id="line-56"></span><span class="annot"><span class="hs-comment">-- | Helper that renders project purpose into a string if there is one.</span></span><span>
+</span><span id="line-57"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#progPurpAdd"><span class="hs-identifier hs-type">progPurpAdd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ProgData</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-58"></span><span id="progPurpAdd"><span class="annot"><span class="annottext">progPurpAdd :: ProgData -&gt; String
+</span><a href="Language.Drasil.Code.Imperative.Build.Import.html#progPurpAdd"><span class="hs-identifier hs-var hs-var">progPurpAdd</span></a></span></span><span> </span><span id="local-6989586621679314315"><span class="annot"><span class="annottext">ProgData
+</span><a href="#local-6989586621679314315"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">ProgData -&gt; String
 </span><span class="hs-identifier hs-var">progPurp</span></span><span> </span><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314744"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Bool
+</span><a href="#local-6989586621679314315"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">/=</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Project Purpose: &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-58"></span><span>                  </span><span class="annot"><span class="annottext">String -&gt; String
+</span><span id="line-59"></span><span>                  </span><span class="annot"><span class="annottext">String -&gt; String
 </span><span class="hs-identifier hs-var">capitalize</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ProgData -&gt; String
 </span><span class="hs-identifier hs-var">progPurp</span></span><span> </span><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314744"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-59"></span><span>                </span><span class="hs-keyword">else</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-60"></span><span>
-</span><span id="line-61"></span><span class="annot"><span class="hs-comment">-- | Helper that renders information into a MakeString. Dependent on the 'BuildName' criteria.</span></span><span>
-</span><span id="line-62"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderBuildName"><span class="hs-identifier hs-type">renderBuildName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GOOLState</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ProgData</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#NameOpts"><span class="hs-identifier hs-type">NameOpts</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildName"><span class="hs-identifier hs-type">BuildName</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MakeString</span></span><span>
-</span><span id="line-63"></span><span id="renderBuildName"><span class="annot"><span class="annottext">renderBuildName :: GOOLState -&gt; ProgData -&gt; NameOpts -&gt; BuildName -&gt; MakeString
-</span><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderBuildName"><span class="hs-identifier hs-var hs-var">renderBuildName</span></a></span></span><span> </span><span id="local-6989586621679314747"><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314747"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="annot"><span class="annottext">ProgData
+</span><a href="#local-6989586621679314315"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-60"></span><span>                </span><span class="hs-keyword">else</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-61"></span><span>
+</span><span id="line-62"></span><span class="annot"><span class="hs-comment">-- | Helper that renders information into a MakeString. Dependent on the 'BuildName' criteria.</span></span><span>
+</span><span id="line-63"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderBuildName"><span class="hs-identifier hs-type">renderBuildName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GOOLState</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ProgData</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#NameOpts"><span class="hs-identifier hs-type">NameOpts</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildName"><span class="hs-identifier hs-type">BuildName</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MakeString</span></span><span>
+</span><span id="line-64"></span><span id="renderBuildName"><span class="annot"><span class="annottext">renderBuildName :: GOOLState -&gt; ProgData -&gt; NameOpts -&gt; BuildName -&gt; MakeString
+</span><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderBuildName"><span class="hs-identifier hs-var hs-var">renderBuildName</span></a></span></span><span> </span><span id="local-6989586621679314318"><span class="annot"><span class="annottext">GOOLState
+</span><a href="#local-6989586621679314318"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="annot"><span class="annottext">ProgData
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">NameOpts
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">BuildName
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#BMain"><span class="hs-identifier hs-var">BMain</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; MakeString
@@ -226,168 +227,168 @@ forall b a. b -&gt; (a -&gt; b) -&gt; Maybe a -&gt; b
 forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Main module missing&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-64"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; String
+</span><span id="line-65"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; String
 </span><span class="hs-identifier hs-var">takeBaseName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314747"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState
+</span><a href="#local-6989586621679314318"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState
 -&gt; Getting (Maybe String) GOOLState (Maybe String) -&gt; Maybe String
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting (Maybe String) GOOLState (Maybe String)
 Lens' GOOLState (Maybe String)
 </span><span class="hs-identifier hs-var">mainMod</span></span><span class="hs-special">)</span><span>
-</span><span id="line-65"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderBuildName"><span class="hs-identifier hs-var">renderBuildName</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679314750"><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314750"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="annot"><span class="annottext">NameOpts
+</span><span id="line-66"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderBuildName"><span class="hs-identifier hs-var">renderBuildName</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679314321"><span class="annot"><span class="annottext">ProgData
+</span><a href="#local-6989586621679314321"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="annot"><span class="annottext">NameOpts
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">BuildName
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#BPackName"><span class="hs-identifier hs-var">BPackName</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; MakeString
 </span><span class="hs-identifier hs-var">makeS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ProgData -&gt; String
 </span><span class="hs-identifier hs-var">progName</span></span><span> </span><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314750"><span class="hs-identifier hs-var">p</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-66"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderBuildName"><span class="hs-identifier hs-var">renderBuildName</span></a></span><span> </span><span id="local-6989586621679314752"><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314752"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679314753"><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314753"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679314754"><span class="annot"><span class="annottext">NameOpts
-</span><a href="#local-6989586621679314754"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BPack"><span class="hs-identifier hs-type">BPack</span></a></span><span> </span><span id="local-6989586621679314756"><span class="annot"><span class="annottext">BuildName
-</span><a href="#local-6989586621679314756"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GOOLState -&gt; ProgData -&gt; NameOpts -&gt; BuildName -&gt; MakeString
+</span><a href="#local-6989586621679314321"><span class="hs-identifier hs-var">p</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-67"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderBuildName"><span class="hs-identifier hs-var">renderBuildName</span></a></span><span> </span><span id="local-6989586621679314323"><span class="annot"><span class="annottext">GOOLState
+</span><a href="#local-6989586621679314323"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679314324"><span class="annot"><span class="annottext">ProgData
+</span><a href="#local-6989586621679314324"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679314325"><span class="annot"><span class="annottext">NameOpts
+</span><a href="#local-6989586621679314325"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BPack"><span class="hs-identifier hs-type">BPack</span></a></span><span> </span><span id="local-6989586621679314327"><span class="annot"><span class="annottext">BuildName
+</span><a href="#local-6989586621679314327"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GOOLState -&gt; ProgData -&gt; NameOpts -&gt; BuildName -&gt; MakeString
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderBuildName"><span class="hs-identifier hs-var">renderBuildName</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314752"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314753"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">NameOpts
-</span><a href="#local-6989586621679314754"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">BuildName
+</span><a href="#local-6989586621679314323"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
+</span><a href="#local-6989586621679314324"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">NameOpts
+</span><a href="#local-6989586621679314325"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">BuildName
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#BPackName"><span class="hs-identifier hs-var">BPackName</span></a></span><span> </span><span class="annot"><span class="annottext">MakeString -&gt; MakeString -&gt; MakeString
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span>
-</span><span id="line-67"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; MakeString
+</span><span id="line-68"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; MakeString
 </span><span class="hs-identifier hs-var">makeS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NameOpts -&gt; String
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#packSep"><span class="hs-identifier hs-var">packSep</span></a></span><span> </span><span class="annot"><span class="annottext">NameOpts
-</span><a href="#local-6989586621679314754"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">MakeString -&gt; MakeString -&gt; MakeString
+</span><a href="#local-6989586621679314325"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">MakeString -&gt; MakeString -&gt; MakeString
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">GOOLState -&gt; ProgData -&gt; NameOpts -&gt; BuildName -&gt; MakeString
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderBuildName"><span class="hs-identifier hs-var">renderBuildName</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314752"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314753"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">NameOpts
-</span><a href="#local-6989586621679314754"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">BuildName
-</span><a href="#local-6989586621679314756"><span class="hs-identifier hs-var">a</span></a></span><span>
-</span><span id="line-68"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderBuildName"><span class="hs-identifier hs-var">renderBuildName</span></a></span><span> </span><span id="local-6989586621679314757"><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314757"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679314758"><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314758"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679314759"><span class="annot"><span class="annottext">NameOpts
-</span><a href="#local-6989586621679314759"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BWithExt"><span class="hs-identifier hs-type">BWithExt</span></a></span><span> </span><span id="local-6989586621679314761"><span class="annot"><span class="annottext">BuildName
-</span><a href="#local-6989586621679314761"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679314762"><span class="annot"><span class="annottext">Ext
-</span><a href="#local-6989586621679314762"><span class="hs-identifier hs-var">e</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GOOLState -&gt; ProgData -&gt; NameOpts -&gt; BuildName -&gt; MakeString
+</span><a href="#local-6989586621679314323"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
+</span><a href="#local-6989586621679314324"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">NameOpts
+</span><a href="#local-6989586621679314325"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">BuildName
+</span><a href="#local-6989586621679314327"><span class="hs-identifier hs-var">a</span></a></span><span>
+</span><span id="line-69"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderBuildName"><span class="hs-identifier hs-var">renderBuildName</span></a></span><span> </span><span id="local-6989586621679314328"><span class="annot"><span class="annottext">GOOLState
+</span><a href="#local-6989586621679314328"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679314329"><span class="annot"><span class="annottext">ProgData
+</span><a href="#local-6989586621679314329"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679314330"><span class="annot"><span class="annottext">NameOpts
+</span><a href="#local-6989586621679314330"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BWithExt"><span class="hs-identifier hs-type">BWithExt</span></a></span><span> </span><span id="local-6989586621679314332"><span class="annot"><span class="annottext">BuildName
+</span><a href="#local-6989586621679314332"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679314333"><span class="annot"><span class="annottext">Ext
+</span><a href="#local-6989586621679314333"><span class="hs-identifier hs-var">e</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GOOLState -&gt; ProgData -&gt; NameOpts -&gt; BuildName -&gt; MakeString
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderBuildName"><span class="hs-identifier hs-var">renderBuildName</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314757"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314758"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">NameOpts
-</span><a href="#local-6989586621679314759"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">BuildName
-</span><a href="#local-6989586621679314761"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">MakeString -&gt; MakeString -&gt; MakeString
+</span><a href="#local-6989586621679314328"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
+</span><a href="#local-6989586621679314329"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">NameOpts
+</span><a href="#local-6989586621679314330"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">BuildName
+</span><a href="#local-6989586621679314332"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">MakeString -&gt; MakeString -&gt; MakeString
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span>
-</span><span id="line-69"></span><span>  </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">NameOpts -&gt; Bool
+</span><span id="line-70"></span><span>  </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">NameOpts -&gt; Bool
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#includeExt"><span class="hs-identifier hs-var">includeExt</span></a></span><span> </span><span class="annot"><span class="annottext">NameOpts
-</span><a href="#local-6989586621679314759"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">Ext -&gt; String -&gt; MakeString
+</span><a href="#local-6989586621679314330"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">Ext -&gt; String -&gt; MakeString
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderExt"><span class="hs-identifier hs-var">renderExt</span></a></span><span> </span><span class="annot"><span class="annottext">Ext
-</span><a href="#local-6989586621679314762"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[String] -&gt; String
+</span><a href="#local-6989586621679314333"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[String] -&gt; String
 forall {a}. [a] -&gt; a
-</span><a href="#local-6989586621679314764"><span class="hs-identifier hs-var">takeSrc</span></a></span><span> </span><span class="annot"><span class="annottext">([String] -&gt; String) -&gt; [String] -&gt; String
+</span><a href="#local-6989586621679314335"><span class="hs-identifier hs-var">takeSrc</span></a></span><span> </span><span class="annot"><span class="annottext">([String] -&gt; String) -&gt; [String] -&gt; String
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314757"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState -&gt; Getting [String] GOOLState [String] -&gt; [String]
+</span><a href="#local-6989586621679314328"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState -&gt; Getting [String] GOOLState [String] -&gt; [String]
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting [String] GOOLState [String]
 Lens' GOOLState [String]
 </span><span class="hs-identifier hs-var">sources</span></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">String -&gt; MakeString
 </span><span class="hs-identifier hs-var">makeS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&quot;</span></span><span>
-</span><span id="line-70"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679314764"><span class="annot"><span class="annottext">takeSrc :: [a] -&gt; a
-</span><a href="#local-6989586621679314764"><span class="hs-identifier hs-var hs-var">takeSrc</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679314767"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679314767"><span class="hs-identifier hs-var">src</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span class="annot"><span class="annottext">[a]
+</span><span id="line-71"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679314335"><span class="annot"><span class="annottext">takeSrc :: [a] -&gt; a
+</span><a href="#local-6989586621679314335"><span class="hs-identifier hs-var hs-var">takeSrc</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679314338"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679314338"><span class="hs-identifier hs-var">src</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span class="annot"><span class="annottext">[a]
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679314767"><span class="hs-identifier hs-var">src</span></a></span><span>
-</span><span id="line-71"></span><span>        </span><span class="annot"><a href="#local-6989586621679314764"><span class="hs-identifier hs-var">takeSrc</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; a
+</span><a href="#local-6989586621679314338"><span class="hs-identifier hs-var">src</span></a></span><span>
+</span><span id="line-72"></span><span>        </span><span class="annot"><a href="#local-6989586621679314335"><span class="hs-identifier hs-var">takeSrc</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; a
 forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Generated code has no source files&quot;</span></span><span>
-</span><span id="line-72"></span><span>
-</span><span id="line-73"></span><span class="annot"><span class="hs-comment">-- | Helper that renders an extension onto a 'FilePath'.</span></span><span>
-</span><span id="line-74"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderExt"><span class="hs-identifier hs-type">renderExt</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#Ext"><span class="hs-identifier hs-type">Ext</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MakeString</span></span><span>
-</span><span id="line-75"></span><span id="renderExt"><span class="annot"><span class="annottext">renderExt :: Ext -&gt; String -&gt; MakeString
+</span><span id="line-73"></span><span>
+</span><span id="line-74"></span><span class="annot"><span class="hs-comment">-- | Helper that renders an extension onto a 'FilePath'.</span></span><span>
+</span><span id="line-75"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderExt"><span class="hs-identifier hs-type">renderExt</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#Ext"><span class="hs-identifier hs-type">Ext</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MakeString</span></span><span>
+</span><span id="line-76"></span><span id="renderExt"><span class="annot"><span class="annottext">renderExt :: Ext -&gt; String -&gt; MakeString
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderExt"><span class="hs-identifier hs-var hs-var">renderExt</span></a></span></span><span> </span><span class="annot"><span class="annottext">Ext
-</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#CodeExt"><span class="hs-identifier hs-var">CodeExt</span></a></span><span> </span><span id="local-6989586621679314770"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679314770"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; MakeString
+</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#CodeExt"><span class="hs-identifier hs-var">CodeExt</span></a></span><span> </span><span id="local-6989586621679314341"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679314341"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; MakeString
 </span><span class="hs-identifier hs-var">makeS</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; MakeString) -&gt; String -&gt; MakeString
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String
 </span><span class="hs-identifier hs-var">takeExtension</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679314770"><span class="hs-identifier hs-var">f</span></a></span><span>
-</span><span id="line-76"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderExt"><span class="hs-identifier hs-var">renderExt</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#OtherExt"><span class="hs-identifier hs-type">OtherExt</span></a></span><span> </span><span id="local-6989586621679314772"><span class="annot"><span class="annottext">MakeString
-</span><a href="#local-6989586621679314772"><span class="hs-identifier hs-var">e</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679314341"><span class="hs-identifier hs-var">f</span></a></span><span>
+</span><span id="line-77"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderExt"><span class="hs-identifier hs-var">renderExt</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#OtherExt"><span class="hs-identifier hs-type">OtherExt</span></a></span><span> </span><span id="local-6989586621679314343"><span class="annot"><span class="annottext">MakeString
+</span><a href="#local-6989586621679314343"><span class="hs-identifier hs-var">e</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MakeString
-</span><a href="#local-6989586621679314772"><span class="hs-identifier hs-var">e</span></a></span><span>
-</span><span id="line-77"></span><span>
-</span><span id="line-78"></span><span class="annot"><span class="hs-comment">-- | Helper that records the compiler input information.</span></span><span>
-</span><span id="line-79"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#getCompilerInput"><span class="hs-identifier hs-type">getCompilerInput</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildDependencies"><span class="hs-identifier hs-type">BuildDependencies</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GOOLState</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ProgData</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">MakeString</span></span><span class="hs-special">]</span><span>
-</span><span id="line-80"></span><span id="getCompilerInput"><span class="annot"><span class="annottext">getCompilerInput :: BuildDependencies -&gt; GOOLState -&gt; ProgData -&gt; Dependencies
+</span><a href="#local-6989586621679314343"><span class="hs-identifier hs-var">e</span></a></span><span>
+</span><span id="line-78"></span><span>
+</span><span id="line-79"></span><span class="annot"><span class="hs-comment">-- | Helper that records the compiler input information.</span></span><span>
+</span><span id="line-80"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#getCompilerInput"><span class="hs-identifier hs-type">getCompilerInput</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildDependencies"><span class="hs-identifier hs-type">BuildDependencies</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GOOLState</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ProgData</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">MakeString</span></span><span class="hs-special">]</span><span>
+</span><span id="line-81"></span><span id="getCompilerInput"><span class="annot"><span class="annottext">getCompilerInput :: BuildDependencies -&gt; GOOLState -&gt; ProgData -&gt; Dependencies
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#getCompilerInput"><span class="hs-identifier hs-var hs-var">getCompilerInput</span></a></span></span><span> </span><span class="annot"><span class="annottext">BuildDependencies
-</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#BcSource"><span class="hs-identifier hs-var">BcSource</span></a></span><span> </span><span id="local-6989586621679314774"><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314774"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="annot"><span class="annottext">ProgData
+</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#BcSource"><span class="hs-identifier hs-var">BcSource</span></a></span><span> </span><span id="local-6989586621679314345"><span class="annot"><span class="annottext">GOOLState
+</span><a href="#local-6989586621679314345"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="annot"><span class="annottext">ProgData
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; MakeString) -&gt; [String] -&gt; Dependencies
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; MakeString
 </span><span class="hs-identifier hs-var">makeS</span></span><span> </span><span class="annot"><span class="annottext">([String] -&gt; Dependencies) -&gt; [String] -&gt; Dependencies
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314774"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState -&gt; Getting [String] GOOLState [String] -&gt; [String]
+</span><a href="#local-6989586621679314345"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState -&gt; Getting [String] GOOLState [String] -&gt; [String]
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting [String] GOOLState [String]
 Lens' GOOLState [String]
 </span><span class="hs-identifier hs-var">sources</span></span><span>
-</span><span id="line-81"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#getCompilerInput"><span class="hs-identifier hs-var">getCompilerInput</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BcSingle"><span class="hs-identifier hs-type">BcSingle</span></a></span><span> </span><span id="local-6989586621679314776"><span class="annot"><span class="annottext">BuildName
-</span><a href="#local-6989586621679314776"><span class="hs-identifier hs-var">n</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679314777"><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314777"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679314778"><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314778"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">GOOLState -&gt; ProgData -&gt; NameOpts -&gt; BuildName -&gt; MakeString
+</span><span id="line-82"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#getCompilerInput"><span class="hs-identifier hs-var">getCompilerInput</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BcSingle"><span class="hs-identifier hs-type">BcSingle</span></a></span><span> </span><span id="local-6989586621679314347"><span class="annot"><span class="annottext">BuildName
+</span><a href="#local-6989586621679314347"><span class="hs-identifier hs-var">n</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679314348"><span class="annot"><span class="annottext">GOOLState
+</span><a href="#local-6989586621679314348"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679314349"><span class="annot"><span class="annottext">ProgData
+</span><a href="#local-6989586621679314349"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">GOOLState -&gt; ProgData -&gt; NameOpts -&gt; BuildName -&gt; MakeString
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#renderBuildName"><span class="hs-identifier hs-var">renderBuildName</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314777"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314778"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">NameOpts
+</span><a href="#local-6989586621679314348"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
+</span><a href="#local-6989586621679314349"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">NameOpts
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#nameOpts"><span class="hs-identifier hs-var">nameOpts</span></a></span><span> </span><span class="annot"><span class="annottext">BuildName
-</span><a href="#local-6989586621679314776"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-82"></span><span>
-</span><span id="line-83"></span><span class="annot"><span class="hs-comment">-- | Helper that retrieves commented files.</span></span><span>
-</span><span id="line-84"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#getCommentedFiles"><span class="hs-identifier hs-type">getCommentedFiles</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GOOLState</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">MakeString</span></span><span class="hs-special">]</span><span>
-</span><span id="line-85"></span><span id="getCommentedFiles"><span class="annot"><span class="annottext">getCommentedFiles :: GOOLState -&gt; Dependencies
-</span><a href="Language.Drasil.Code.Imperative.Build.Import.html#getCommentedFiles"><span class="hs-identifier hs-var hs-var">getCommentedFiles</span></a></span></span><span> </span><span id="local-6989586621679314779"><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314779"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; MakeString) -&gt; [String] -&gt; Dependencies
+</span><a href="#local-6989586621679314347"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-83"></span><span>
+</span><span id="line-84"></span><span class="annot"><span class="hs-comment">-- | Helper that retrieves commented files.</span></span><span>
+</span><span id="line-85"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#getCommentedFiles"><span class="hs-identifier hs-type">getCommentedFiles</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GOOLState</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">MakeString</span></span><span class="hs-special">]</span><span>
+</span><span id="line-86"></span><span id="getCommentedFiles"><span class="annot"><span class="annottext">getCommentedFiles :: GOOLState -&gt; Dependencies
+</span><a href="Language.Drasil.Code.Imperative.Build.Import.html#getCommentedFiles"><span class="hs-identifier hs-var hs-var">getCommentedFiles</span></a></span></span><span> </span><span id="local-6989586621679314350"><span class="annot"><span class="annottext">GOOLState
+</span><a href="#local-6989586621679314350"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; MakeString) -&gt; [String] -&gt; Dependencies
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; MakeString
 </span><span class="hs-identifier hs-var">makeS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[String] -&gt; [String]
-forall a. Eq a =&gt; [a] -&gt; [a]
-</span><span class="hs-identifier hs-var">nub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314779"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState -&gt; Getting [String] GOOLState [String] -&gt; [String]
+forall a. Ord a =&gt; [a] -&gt; [a]
+</span><span class="hs-identifier hs-var">nubOrd</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">GOOLState
+</span><a href="#local-6989586621679314350"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState -&gt; Getting [String] GOOLState [String] -&gt; [String]
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting [String] GOOLState [String]
 Lens' GOOLState [String]
 </span><span class="hs-identifier hs-var">headers</span></span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [String] -&gt; [String]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-86"></span><span>  </span><span class="annot"><span class="annottext">Maybe String -&gt; [String]
+</span><span id="line-87"></span><span>  </span><span class="annot"><span class="annottext">Maybe String -&gt; [String]
 forall a. Maybe a -&gt; [a]
 </span><span class="hs-identifier hs-var">maybeToList</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314779"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState
+</span><a href="#local-6989586621679314350"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState
 -&gt; Getting (Maybe String) GOOLState (Maybe String) -&gt; Maybe String
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting (Maybe String) GOOLState (Maybe String)
 Lens' GOOLState (Maybe String)
 </span><span class="hs-identifier hs-var">mainMod</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-87"></span><span>
-</span><span id="line-88"></span><span class="annot"><span class="hs-comment">-- | Helper that builds and runs a target.</span></span><span>
-</span><span id="line-89"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#buildRunTarget"><span class="hs-identifier hs-type">buildRunTarget</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MakeString</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#RunType"><span class="hs-identifier hs-type">RunType</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MakeString</span></span><span>
-</span><span id="line-90"></span><span id="buildRunTarget"><span class="annot"><span class="annottext">buildRunTarget :: MakeString -&gt; RunType -&gt; MakeString
-</span><a href="Language.Drasil.Code.Imperative.Build.Import.html#buildRunTarget"><span class="hs-identifier hs-var hs-var">buildRunTarget</span></a></span></span><span> </span><span id="local-6989586621679314780"><span class="annot"><span class="annottext">MakeString
-</span><a href="#local-6989586621679314780"><span class="hs-identifier hs-var">fn</span></a></span></span><span> </span><span class="annot"><span class="annottext">RunType
+</span><span id="line-88"></span><span>
+</span><span id="line-89"></span><span class="annot"><span class="hs-comment">-- | Helper that builds and runs a target.</span></span><span>
+</span><span id="line-90"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#buildRunTarget"><span class="hs-identifier hs-type">buildRunTarget</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MakeString</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#RunType"><span class="hs-identifier hs-type">RunType</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MakeString</span></span><span>
+</span><span id="line-91"></span><span id="buildRunTarget"><span class="annot"><span class="annottext">buildRunTarget :: MakeString -&gt; RunType -&gt; MakeString
+</span><a href="Language.Drasil.Code.Imperative.Build.Import.html#buildRunTarget"><span class="hs-identifier hs-var hs-var">buildRunTarget</span></a></span></span><span> </span><span id="local-6989586621679314351"><span class="annot"><span class="annottext">MakeString
+</span><a href="#local-6989586621679314351"><span class="hs-identifier hs-var">fn</span></a></span></span><span> </span><span class="annot"><span class="annottext">RunType
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#Standalone"><span class="hs-identifier hs-var">Standalone</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; MakeString
 </span><span class="hs-identifier hs-var">makeS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;./&quot;</span></span><span> </span><span class="annot"><span class="annottext">MakeString -&gt; MakeString -&gt; MakeString
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">MakeString
-</span><a href="#local-6989586621679314780"><span class="hs-identifier hs-var">fn</span></a></span><span>
-</span><span id="line-91"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#buildRunTarget"><span class="hs-identifier hs-var">buildRunTarget</span></a></span><span> </span><span id="local-6989586621679314782"><span class="annot"><span class="annottext">MakeString
-</span><a href="#local-6989586621679314782"><span class="hs-identifier hs-var">fn</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#Interpreter"><span class="hs-identifier hs-type">Interpreter</span></a></span><span> </span><span id="local-6989586621679314784"><span class="annot"><span class="annottext">Dependencies
-</span><a href="#local-6989586621679314784"><span class="hs-identifier hs-var">i</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(MakeString -&gt; MakeString -&gt; MakeString)
+</span><a href="#local-6989586621679314351"><span class="hs-identifier hs-var">fn</span></a></span><span>
+</span><span id="line-92"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#buildRunTarget"><span class="hs-identifier hs-var">buildRunTarget</span></a></span><span> </span><span id="local-6989586621679314353"><span class="annot"><span class="annottext">MakeString
+</span><a href="#local-6989586621679314353"><span class="hs-identifier hs-var">fn</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#Interpreter"><span class="hs-identifier hs-type">Interpreter</span></a></span><span> </span><span id="local-6989586621679314355"><span class="annot"><span class="annottext">Dependencies
+</span><a href="#local-6989586621679314355"><span class="hs-identifier hs-var">i</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(MakeString -&gt; MakeString -&gt; MakeString)
 -&gt; MakeString -&gt; Dependencies -&gt; MakeString
 forall a b. (a -&gt; b -&gt; b) -&gt; b -&gt; [a] -&gt; b
 forall (t :: * -&gt; *) a b.
@@ -399,41 +400,41 @@ forall a. Monoid a =&gt; a
 </span><span class="hs-identifier hs-var">mempty</span></span><span> </span><span class="annot"><span class="annottext">(Dependencies -&gt; MakeString) -&gt; Dependencies -&gt; MakeString
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Dependencies
-</span><a href="#local-6989586621679314784"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">Dependencies -&gt; Dependencies -&gt; Dependencies
+</span><a href="#local-6989586621679314355"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">Dependencies -&gt; Dependencies -&gt; Dependencies
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">MakeString
-</span><a href="#local-6989586621679314782"><span class="hs-identifier hs-var">fn</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-92"></span><span>
-</span><span id="line-93"></span><span class="annot"><span class="hs-comment">-- | Creates a Makefile.</span></span><span>
-</span><span id="line-94"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#makeBuild"><span class="hs-identifier hs-type">makeBuild</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#DocConfig"><span class="hs-identifier hs-type">DocConfig</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildConfig"><span class="hs-identifier hs-type">BuildConfig</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#Runnable"><span class="hs-identifier hs-type">Runnable</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span>
-</span><span id="line-95"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">GOOLState</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ProgData</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
-</span><span id="line-96"></span><span id="makeBuild"><span class="annot"><span class="annottext">makeBuild :: Maybe DocConfig
+</span><a href="#local-6989586621679314353"><span class="hs-identifier hs-var">fn</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-93"></span><span>
+</span><span id="line-94"></span><span class="annot"><span class="hs-comment">-- | Creates a Makefile.</span></span><span>
+</span><span id="line-95"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#makeBuild"><span class="hs-identifier hs-type">makeBuild</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#DocConfig"><span class="hs-identifier hs-type">DocConfig</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildConfig"><span class="hs-identifier hs-type">BuildConfig</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#Runnable"><span class="hs-identifier hs-type">Runnable</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><span id="line-96"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">GOOLState</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ProgData</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
+</span><span id="line-97"></span><span id="makeBuild"><span class="annot"><span class="annottext">makeBuild :: Maybe DocConfig
 -&gt; Maybe BuildConfig
 -&gt; Maybe Runnable
 -&gt; GOOLState
 -&gt; ProgData
 -&gt; Doc
-</span><a href="Language.Drasil.Code.Imperative.Build.Import.html#makeBuild"><span class="hs-identifier hs-var hs-var">makeBuild</span></a></span></span><span> </span><span id="local-6989586621679314785"><span class="annot"><span class="annottext">Maybe DocConfig
-</span><a href="#local-6989586621679314785"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span id="local-6989586621679314786"><span class="annot"><span class="annottext">Maybe BuildConfig
-</span><a href="#local-6989586621679314786"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span id="local-6989586621679314787"><span class="annot"><span class="annottext">Maybe Runnable
-</span><a href="#local-6989586621679314787"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span id="local-6989586621679314788"><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314788"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679314789"><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314789"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CodeHarness] -&gt; Doc
+</span><a href="Language.Drasil.Code.Imperative.Build.Import.html#makeBuild"><span class="hs-identifier hs-var hs-var">makeBuild</span></a></span></span><span> </span><span id="local-6989586621679314356"><span class="annot"><span class="annottext">Maybe DocConfig
+</span><a href="#local-6989586621679314356"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span id="local-6989586621679314357"><span class="annot"><span class="annottext">Maybe BuildConfig
+</span><a href="#local-6989586621679314357"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span id="local-6989586621679314358"><span class="annot"><span class="annottext">Maybe Runnable
+</span><a href="#local-6989586621679314358"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span id="local-6989586621679314359"><span class="annot"><span class="annottext">GOOLState
+</span><a href="#local-6989586621679314359"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679314360"><span class="annot"><span class="annottext">ProgData
+</span><a href="#local-6989586621679314360"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CodeHarness] -&gt; Doc
 forall c. RuleTransformer c =&gt; [c] -&gt; Doc
 </span><span class="hs-identifier hs-var">genMake</span></span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.Import.html#Ch"><span class="hs-identifier hs-type">Ch</span></a></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-97"></span><span>  </span><span class="annot"><span class="annottext">buildConfig :: Maybe BuildConfig
+</span><span id="line-98"></span><span>  </span><span class="annot"><span class="annottext">buildConfig :: Maybe BuildConfig
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#buildConfig"><span class="hs-identifier hs-var">buildConfig</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe BuildConfig
-</span><a href="#local-6989586621679314786"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-98"></span><span>  </span><span class="annot"><span class="annottext">runnable :: Maybe Runnable
+</span><a href="#local-6989586621679314357"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-99"></span><span>  </span><span class="annot"><span class="annottext">runnable :: Maybe Runnable
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#runnable"><span class="hs-identifier hs-var">runnable</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe Runnable
-</span><a href="#local-6989586621679314787"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-99"></span><span>  </span><span class="annot"><span class="annottext">goolState :: GOOLState
+</span><a href="#local-6989586621679314358"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-100"></span><span>  </span><span class="annot"><span class="annottext">goolState :: GOOLState
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#goolState"><span class="hs-identifier hs-var">goolState</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679314788"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-100"></span><span>  </span><span class="annot"><span class="annottext">progData :: ProgData
+</span><a href="#local-6989586621679314359"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-101"></span><span>  </span><span class="annot"><span class="annottext">progData :: ProgData
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#progData"><span class="hs-identifier hs-var">progData</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679314789"><span class="hs-identifier hs-var">p</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-101"></span><span>  </span><span class="annot"><span class="annottext">docConfig :: Maybe DocConfig
+</span><a href="#local-6989586621679314360"><span class="hs-identifier hs-var">p</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-102"></span><span>  </span><span class="annot"><span class="annottext">docConfig :: Maybe DocConfig
 </span><a href="Language.Drasil.Code.Imperative.Build.Import.html#docConfig"><span class="hs-identifier hs-var">docConfig</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe DocConfig
-</span><a href="#local-6989586621679314785"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">}</span><span class="hs-special">]</span><span>
-</span><span id="line-102"></span></pre></body></html>
+</span><a href="#local-6989586621679314356"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">}</span><span class="hs-special">]</span><span>
+</span><span id="line-103"></span></pre></body></html>

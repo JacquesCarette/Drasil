@@ -20,7 +20,7 @@ insert!(myOtherList, 3, 2.0)
 append!(myOtherList, 2.5)
 global e = myOtherList[2]
 myOtherList[2] = 17.4
-global myName = []
+global myName = String[]
 global myName = split("Brooks Mac", " ")
 println(myName)
 global boringList = [false, false, false, false, false]
@@ -31,17 +31,17 @@ println(boringList)
 
 # List slicing tests
 # Create variables for list slices
-global mySlicedList = []
-global mySlicedList2 = []
-global mySlicedList3 = []
-global mySlicedList4 = []
-global mySlicedList5 = []
-global mySlicedList6 = []
-global mySlicedList7 = []
-global mySlicedList8 = []
-global mySlicedList9 = []
-global mySlicedList10 = []
-global mySlicedList11 = []
+global mySlicedList = Float64[]
+global mySlicedList2 = Float64[]
+global mySlicedList3 = Float64[]
+global mySlicedList4 = Float64[]
+global mySlicedList5 = Float64[]
+global mySlicedList6 = Float64[]
+global mySlicedList7 = Float64[]
+global mySlicedList8 = Float64[]
+global mySlicedList9 = Float64[]
+global mySlicedList10 = Float64[]
+global mySlicedList11 = Float64[]
 
 # Create some variables for later tests
 global x = 3
@@ -122,7 +122,7 @@ elseif b == 5
     global d += 1;
     global c -= 1
     global b -= 1
-    global myList = []
+    global myList = Int64[]
     const myConst = "Imconstant";
     println(myConst)
     println(a)

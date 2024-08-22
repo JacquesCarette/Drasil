@@ -27,6 +27,7 @@ dependencies:
 - drasil-sysinfo
 - drasil-theory
 - drasil-utils
+- deriving-compat
 
 ghc-options:
 - -Wall

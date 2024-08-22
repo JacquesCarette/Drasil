@@ -75,6 +75,7 @@ import Control.Monad (liftM2, zipWithM)
 import Control.Monad.State (get, gets, modify)
 import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (render)
+import Data.Deriving.Internal (interleave)
 
 type ConstraintCE = Constraint CodeExpr
 
@@ -340,20 +341,12 @@ physCBody cs = do
   let cb = onPhysC g
   chooseConstr cb cs
 
-transform :: [(CodeVarChunk, [ConstraintCE])] -> [(CodeVarChunk, ConstraintCE)]
-transform xs = [(s, n) | (s, ns) <- xs, n <- ns]
-
-interleave :: [a] -> [a] -> [a]
-interleave [] ys = ys
-interleave xs [] = xs
-interleave (x:xs) (y:ys) = x : y : interleave xs ys
-
 -- | Generates conditional statements for checking constraints, where the
 -- bodies depend on user's choice of constraint violation behaviour.
 chooseConstr :: (OOProg r) => ConstraintBehaviour ->
   [(CodeVarChunk, [ConstraintCE])] -> GenState [MSStatement r]
 chooseConstr cb cs = do
-  let ch = transform cs
+  let ch = concatMap (\(s, ns) -> [(s, n) | n <- ns]) cs
   -- Generate variable declarations based on constraints
   varDecs <- mapM (\case
     (q, Elem _ e) -> constrVarDec q e

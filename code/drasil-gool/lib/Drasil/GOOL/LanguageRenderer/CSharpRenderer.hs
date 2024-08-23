@@ -33,7 +33,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
+  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..), InternalSetFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim, MethodTypeSym(..),
@@ -66,7 +66,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
+  lambda, func, get, set, setAddFunc, setAdd, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
   increment, objDecNew, print, closeFile, returnStmt, valStmt,
   comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
@@ -445,8 +445,8 @@ instance List CSharpCode where
   indexOf = CP.indexOf csIndex
 
 instance Set CSharpCode where
-  contains = CP.contains csContains
-  setAdd = G.listAppend
+  contains a b = CP.contains csContains (setAdd a b) b
+  setAdd = G.setAdd
 
 instance InternalList CSharpCode where
   listSlice' = M.listSlice
@@ -461,6 +461,9 @@ instance InternalListFunc CSharpCode where
   listAppendFunc _ = G.listAppendFunc csListAppend
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
+
+instance InternalSetFunc CSharpCode where
+  setAddFunc _ = G.setAddFunc csListAppend
 
 instance ThunkSym CSharpCode where
   type Thunk CSharpCode = CommonThunk VS

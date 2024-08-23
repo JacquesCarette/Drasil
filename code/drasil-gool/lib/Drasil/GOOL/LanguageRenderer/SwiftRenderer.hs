@@ -69,7 +69,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, setAdd, setRemove, setMethodFunc, listAdd, listAppend, listAccess, listSet, getFunc,
+  lambda, func, get, set, setAdd, setRemove, setUnion, setMethodFunc, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
   increment, objDecNew, print, returnStmt, valStmt, comment, throw, ifCond,
   tryCatch, construct, param, method, getMethod, setMethod, initStmts,
@@ -464,6 +464,7 @@ instance Set SwiftCode where
   contains = CP.contains swiftContains
   setAdd = G.setAdd
   setRemove = G.setRemove
+  setUnion = G.setUnion
 
 instance InternalList SwiftCode where
   listSlice' b e s vn vo = swiftListSlice vn vo b e (fromMaybe (litInt 1) s)
@@ -484,6 +485,7 @@ instance InternalListFunc SwiftCode where
 instance InternalSetFunc SwiftCode where
   setAddFunc _ = G.setMethodFunc swiftListAdd
   setRemoveFunc _ = G.setMethodFunc swiftListRemove
+  setUnionFunc _ = G.setMethodFunc swiftUnion
 
 instance ThunkSym SwiftCode where
   type Thunk SwiftCode = CommonThunk VS
@@ -913,7 +915,7 @@ swiftMain, swiftFoundation, swiftMath, swiftNil, swiftInt, swiftChar,
   swiftSeekEnd, swiftClose, swiftJoined, swiftAppendPath, swiftUrls, swiftSplit,
   swiftData, swiftEncoding, swiftOf, swiftFrom, swiftTo, swiftBy, swiftAt,
   swiftTerm, swiftFor, swiftIn, swiftContentsOf, swiftWriteTo, swiftSep,
-  swiftSepBy, swiftUnwrap, swiftContains, swiftSet :: String
+  swiftSepBy, swiftUnwrap, swiftContains, swiftSet, swiftUnion :: String
 swiftMain = "main"
 swiftFoundation = "Foundation"
 swiftMath = swiftFoundation
@@ -959,6 +961,7 @@ swiftSepBy = "separatedBy"
 swiftUnwrap = "!"
 swiftContains = "contains"
 swiftSet = "Set"
+swiftUnion = "union"
 
 swiftUnaryMath :: (Monad r) => String -> VSOp r
 swiftUnaryMath = addMathImport . unOpPrec

@@ -66,7 +66,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, listAdd, setAdd, setRemove, setMethodFunc, listAppend, 
+  lambda, func, get, set, listAdd, setAdd, setRemove, setUnion, setMethodFunc, listAppend, 
   listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, 
   assign, subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, 
   comment, throw, ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
@@ -459,6 +459,7 @@ instance Set PythonCode where
   contains a b = typeBinExpr (inPrec pyIn) bool b a
   setAdd = G.setAdd
   setRemove = G.setRemove
+  setUnion = G.setUnion
 
 instance InternalList PythonCode where
   listSlice' b e s vn vo = pyListSlice vn vo (getVal b) (getVal e) (getVal s)
@@ -480,6 +481,7 @@ instance InternalListFunc PythonCode where
 instance InternalSetFunc PythonCode where
   setAddFunc _ = G.setMethodFunc pyAdd
   setRemoveFunc _ = G.setMethodFunc pyRemove
+  setUnionFunc _ = G.setMethodFunc pyUnion
 
 instance ThunkSym PythonCode where
   type Thunk PythonCode = CommonThunk VS
@@ -842,7 +844,7 @@ pyInputFunc = text "input()" -- raw_input() for < Python 3.0
 pyPrintFunc = text printLabel
 
 pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyClose, 
-  pySplit, pyRange, pyRstrip, pyMath, pyIn, pyAdd, pyRemove :: String
+  pySplit, pyRange, pyRstrip, pyMath, pyIn, pyAdd, pyRemove, pyUnion :: String
 pyListSize = "len"
 pyIndex = "index"
 pyInsert = "insert"
@@ -857,6 +859,7 @@ pyMath = "math"
 pyIn = "in"
 pyAdd = "add"
 pyRemove = "remove"
+pyUnion = "union"
 
 pyDef, pyLambdaDec, pyElseIf, pyRaise, pyExcept :: Doc
 pyDef = text "def"

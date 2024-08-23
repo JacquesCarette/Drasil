@@ -10,7 +10,7 @@ module Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (fileFromData,
   classVarCheckStatic, arrayElem, local, litChar, litDouble, litInt, litString, 
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd, 
-  listAppend, setAdd, setRemove, listAccess, listSet, getFunc, setFunc, 
+  listAppend, setAdd, setRemove, setUnion, listAccess, listSet, getFunc, setFunc, 
   listAppendFunc, setMethodFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment,
   objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
   tryCatch, construct, param, method, getMethod, setMethod, initStmts,
@@ -50,7 +50,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, RenderType(..),
   BlockCommentSym(..))
 import qualified Drasil.GOOL.RendererClassesCommon as S (RenderValue(call),
   InternalListFunc (listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
-  RenderStatement(stmt), InternalIOStmt(..), InternalSetFunc (setAddFunc, setRemoveFunc))
+  RenderStatement(stmt), InternalIOStmt(..), InternalSetFunc (setAddFunc, setRemoveFunc, setUnionFunc))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (BodyElim(..),
   BlockElim(..), InternalVarElim(variable), ValueElim(value, valueInt),
   FunctionElim(..), StatementElim(statement), BlockCommentElim(..))
@@ -313,6 +313,9 @@ setAdd v vToApp = v $. S.setAddFunc v vToApp
 
 setRemove :: (OORenderSym r) => SValue r -> SValue r -> SValue r
 setRemove v vToApp = v $. S.setRemoveFunc v vToApp
+
+setUnion :: (OORenderSym r) => SValue r -> SValue r -> SValue r
+setUnion v vToApp = v $. S.setUnionFunc v vToApp
 
 listAccess :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r
 listAccess v i = do

@@ -73,7 +73,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, setAdd, setRemove, setMethodFunc, listAdd, listAppend, listAccess, listSet, getFunc,
+  lambda, func, get, set, setAdd, setRemove, setUnion, setMethodFunc, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
   increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
@@ -1412,6 +1412,7 @@ instance InternalListFunc CppSrcCode where
 instance InternalSetFunc CppSrcCode where
   setAddFunc _ = G.setMethodFunc cppListAdd
   setRemoveFunc _ = G.setMethodFunc cppListRemove
+  setUnionFunc _ = G.setMethodFunc cppUnion
 
 instance ThunkSym CppSrcCode where
   type Thunk CppSrcCode = CommonThunk VS

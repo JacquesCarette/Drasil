@@ -294,7 +294,7 @@ class (ValueSym r) => Set r where
   setRemove :: SValue r -> SValue r -> SValue r
   -- | Removes a value from a set
   -- Arguments are: Set, Set
-  --setUnion :: SValue r -> SValue r -> SValue r
+  setUnion :: SValue r -> SValue r -> SValue r
 
 class (ValueSym r) => InternalList r where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) 

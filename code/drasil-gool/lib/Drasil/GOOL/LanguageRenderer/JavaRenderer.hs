@@ -68,7 +68,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, listAdd, setAdd, setRemove, setMethodFunc, listAppend, listAccess, listSet, getFunc,
+  lambda, func, get, set, listAdd, setAdd, setRemove, setUnion, setMethodFunc, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
   increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
@@ -477,6 +477,7 @@ instance Set JavaCode where
   contains = CP.contains jContains
   setAdd = G.setAdd
   setRemove = G.setRemove
+  setUnion = G.setUnion
 
 instance InternalList JavaCode where
   listSlice' = M.listSlice
@@ -495,6 +496,7 @@ instance InternalListFunc JavaCode where
 instance InternalSetFunc JavaCode where
   setAddFunc _ = G.setMethodFunc jListAdd
   setRemoveFunc _ = G.setMethodFunc jListRemove
+  setUnionFunc _ = G.setMethodFunc jListUnion
 
 instance ThunkSym JavaCode where
   type Thunk JavaCode = CommonThunk VS
@@ -822,7 +824,7 @@ jLambdaSep = text "->"
 arrayList, jBool, jBool', jInteger, jObject, jScanner, jContains,
   jPrintWriter, jFile, jFileWriter, jIOExc, jFNFExc, jArrays, jSet, jAsList, jSetOf, jStdIn, 
   jStdOut, jPrintLn, jEquals, jParseInt, jParseDbl, jParseFloat, jIndex, 
-  jListAdd, jListRemove, jListAccess, jListSet, jClose, jNext, jNextLine, jNextBool, 
+  jListAdd, jListRemove, jListUnion, jListAccess, jListSet, jClose, jNext, jNextLine, jNextBool, 
   jHasNextLine, jCharAt, jSplit, io, util :: String
 arrayList = "ArrayList"
 jBool = "boolean"
@@ -850,6 +852,7 @@ jParseFloat = CP.floatRender `access` "parseFloat"
 jIndex = "indexOf"
 jListAdd = "add"
 jListRemove = "remove"
+jListUnion = "addAll"
 jListAccess = "get"
 jListSet = "set"
 jClose = "close"

@@ -173,6 +173,8 @@ class InternalSetFunc r where
   -- | Set, Value
   setAddFunc :: SValue r -> SValue r -> VSFunction r
   setRemoveFunc :: SValue r -> SValue r -> VSFunction r
+  -- | Set, Set
+  setUnionFunc :: SValue r -> SValue r -> VSFunction r
 
 class RenderFunction r where
   funcFromData :: Doc -> VSType r -> VSFunction r

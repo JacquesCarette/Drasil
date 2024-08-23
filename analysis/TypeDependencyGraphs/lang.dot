@@ -219,6 +219,15 @@ digraph alltypes {
 		subgraph nvvbinop{
 		NVVBinOp	[shape=oval, color=darkviolet, label="NVVBinOp"];
 		}
+		subgraph essbinop{
+		ESSBinOp	[shape=oval, color=darkviolet, label="ESSBinOp"];
+		}
+		subgraph esbbinop{
+		ESBBinOp	[shape=oval, color=darkviolet, label="ESBBinOp"];
+		}
+		subgraph assocconcatoper{
+		AssocConcatOper	[shape=oval, color=darkviolet, label="AssocConcatOper"];
+		}
 		subgraph assocarithoper{
 		AssocArithOper	[shape=oval, color=darkviolet, label="AssocArithOper"];
 		}
@@ -243,8 +252,11 @@ digraph alltypes {
 		CodeExpr -> CodeExpr;
 		CodeExpr -> AssocArithOper;
 		CodeExpr -> AssocBoolOper;
+		CodeExpr -> AssocConcatOper;
 		CodeExpr -> UID;
 		CodeExpr -> Completeness;
+		CodeExpr -> Space;
+		CodeExpr -> String;
 		CodeExpr -> UFunc;
 		CodeExpr -> UFuncB;
 		CodeExpr -> UFuncVV;
@@ -257,6 +269,8 @@ digraph alltypes {
 		CodeExpr -> VVVBinOp;
 		CodeExpr -> VVNBinOp;
 		CodeExpr -> NVVBinOp;
+		CodeExpr -> ESSBinOp;
+		CodeExpr -> ESBBinOp;
 		CodeExpr -> DiscreteDomainDesc;
 		CodeExpr -> RealInterval;
 		}
@@ -401,6 +415,15 @@ digraph alltypes {
 		subgraph nvvbinop{
 		NVVBinOp	[shape=oval, color=darkviolet, label="NVVBinOp"];
 		}
+		subgraph essbinop{
+		ESSBinOp	[shape=oval, color=darkviolet, label="ESSBinOp"];
+		}
+		subgraph esbbinop{
+		ESBBinOp	[shape=oval, color=darkviolet, label="ESBBinOp"];
+		}
+		subgraph assocconcatoper{
+		AssocConcatOper	[shape=oval, color=darkviolet, label="AssocConcatOper"];
+		}
 		subgraph assocarithoper{
 		AssocArithOper	[shape=oval, color=darkviolet, label="AssocArithOper"];
 		}
@@ -428,9 +451,12 @@ digraph alltypes {
 		Expr -> Expr;
 		Expr -> AssocArithOper;
 		Expr -> AssocBoolOper;
+		Expr -> AssocConcatOper;
 		Expr -> UID;
 		Expr -> Completeness;
 		Expr -> Relation;
+		Expr -> Space;
+		Expr -> String;
 		Expr -> UFunc;
 		Expr -> UFuncB;
 		Expr -> UFuncVV;
@@ -443,6 +469,8 @@ digraph alltypes {
 		Expr -> VVVBinOp;
 		Expr -> VVNBinOp;
 		Expr -> NVVBinOp;
+		Expr -> ESSBinOp;
+		Expr -> ESBBinOp;
 		Expr -> DiscreteDomainDesc;
 		Expr -> RealInterval;
 		}
@@ -514,6 +542,15 @@ digraph alltypes {
 		subgraph nvvbinop{
 		NVVBinOp	[shape=oval, color=darkviolet, label="NVVBinOp"];
 		}
+		subgraph essbinop{
+		ESSBinOp	[shape=oval, color=darkviolet, label="ESSBinOp"];
+		}
+		subgraph esbbinop{
+		ESBBinOp	[shape=oval, color=darkviolet, label="ESBBinOp"];
+		}
+		subgraph assocconcatoper{
+		AssocConcatOper	[shape=oval, color=darkviolet, label="AssocConcatOper"];
+		}
 		subgraph assocarithoper{
 		AssocArithOper	[shape=oval, color=darkviolet, label="AssocArithOper"];
 		}
@@ -548,10 +585,12 @@ digraph alltypes {
 		ModelExpr -> Space;
 		ModelExpr -> AssocArithOper;
 		ModelExpr -> AssocBoolOper;
+		ModelExpr -> AssocConcatOper;
 		ModelExpr -> Integer;
 		ModelExpr -> DerivType;
 		ModelExpr -> UID;
 		ModelExpr -> Completeness;
+		ModelExpr -> String;
 		ModelExpr -> UFunc;
 		ModelExpr -> UFuncB;
 		ModelExpr -> UFuncVV;
@@ -566,6 +605,8 @@ digraph alltypes {
 		ModelExpr -> VVVBinOp;
 		ModelExpr -> VVNBinOp;
 		ModelExpr -> NVVBinOp;
+		ModelExpr -> ESSBinOp;
+		ModelExpr -> ESBBinOp;
 		ModelExpr -> DomainDesc;
 		ModelExpr -> t;
 		ModelExpr -> RealInterval;
@@ -819,7 +860,8 @@ digraph alltypes {
 	}
 	subgraph space {
 		subgraph space{
-		Space	[shape=oval, color=cyan3, label="Space"];
+		Space	[shape=oval, color=darkviolet, label="Space"];
+		Space -> Space;
 		}
 		subgraph rtopology{
 		RTopology	[shape=oval, color=darkviolet, label="RTopology"];

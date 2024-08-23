@@ -1,0 +1,3 @@
+digraph esbbinop{
+ESBBinOp	[shape=oval, color=darkviolet, label="ESBBinOp"];
+}

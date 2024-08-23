@@ -1230,7 +1230,7 @@ String
 </span><span id="line-266"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">,</span><span>
 </span><span id="line-267"></span><span>  </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">sfwrc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">sfwrRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -1287,7 +1287,7 @@ String
 </span><span class="hs-identifier hs-var">Real</span></span><span>
 </span><span id="line-273"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">sfwrc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">sfwrRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -1348,7 +1348,7 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">m_3</span></span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span>
 </span><span id="line-280"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">physc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">physRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -1364,7 +1364,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#tankVol"><span class="hs-identifier hs-var">tankVol</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-281"></span><span>   </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">sfwrc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">sfwrRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -1450,7 +1450,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-294"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">,</span><span>
 </span><span id="line-295"></span><span>  </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">sfwrc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">sfwrRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -1529,7 +1529,7 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">Real</span></span><span>
 </span><span id="line-302"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">sfwrc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">sfwrRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -1593,7 +1593,7 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">centigrade</span></span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span>
 </span><span id="line-310"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">physc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">physRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -1661,7 +1661,7 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span id="line-318"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">,</span><span>
 </span><span id="line-319"></span><span>  </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">sfwrc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">sfwrRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -1731,7 +1731,7 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span id="line-328"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">,</span><span>
 </span><span id="line-329"></span><span>  </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">sfwrc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">sfwrRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -1792,7 +1792,7 @@ String
 </span><span id="line-336"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">,</span><span>
 </span><span id="line-337"></span><span>  </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">sfwrc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">sfwrRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -1873,7 +1873,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-346"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">,</span><span>
 </span><span id="line-347"></span><span>  </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">sfwrc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">sfwrRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -1928,7 +1928,7 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">centigrade</span></span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span>
 </span><span id="line-353"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">physc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">physRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -1994,7 +1994,7 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">Real</span></span><span>
 </span><span id="line-358"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">sfwrc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">sfwrRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -2063,7 +2063,7 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span id="line-366"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">,</span><span>
 </span><span id="line-367"></span><span>  </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">sfwrc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">sfwrRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -2131,7 +2131,7 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span id="line-376"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">,</span><span>
 </span><span id="line-377"></span><span>  </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">sfwrc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">sfwrRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -2196,7 +2196,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span id="line-385"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">,</span><span>
 </span><span id="line-386"></span><span>  </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">sfwrc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">sfwrRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -2256,7 +2256,7 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">centigrade</span></span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span>
 </span><span id="line-392"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">physc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">physRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -2321,7 +2321,7 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span id="line-399"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">,</span><span>
 </span><span id="line-400"></span><span>  </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">sfwrc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">sfwrRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -2379,7 +2379,7 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">second</span></span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span>
 </span><span id="line-406"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">physc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">physRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -2449,7 +2449,7 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">Vect</span></span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span>
 </span><span id="line-419"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">physc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">physRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -2507,7 +2507,7 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">centigrade</span></span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span>
 </span><span id="line-426"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">physc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">physRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -2564,7 +2564,7 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">joule</span></span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span>
 </span><span id="line-432"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">physc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">physRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -2615,7 +2615,7 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">joule</span></span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span>
 </span><span id="line-438"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">physc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">physRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -2654,7 +2654,7 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><a href="Drasil.SWHS.Unitals.html#lTol"><span class="hs-identifier hs-var">lTol</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span>
 </span><span id="line-448"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">physc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">physRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -2699,7 +2699,7 @@ forall a. Maybe a
 </span><a href="Drasil.SWHS.Unitals.html#lTol"><span class="hs-identifier hs-var">lTol</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span>
 </span><span id="line-453"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
-</span><span class="hs-identifier hs-var">physc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+</span><span class="hs-identifier hs-var">physRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr

@@ -43,6 +43,7 @@ String :: CodeType
 InFile :: CodeType
 OutFile :: CodeType
 List :: CodeType -> CodeType
+Set :: CodeType -> CodeType
 Array :: CodeType -> CodeType
 Object :: ClassName -> CodeType
 Func :: [CodeType] -> CodeType -> CodeType
@@ -288,7 +289,7 @@ type PosCtorCall r = VSType r -> [SValue r] -> SValue r
 type InOutCall r = Label -> [SValue r] -> [SVariable r] -> [SVariable r] -> MSStatement r
 type InOutFunc r = [SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r
 type DocInOutFunc r = String -> [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
-class (VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, List r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r) => SharedProg r
+class (VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, List r, Set r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r) => SharedProg r
 class (BlockSym r) => BodySym r where {
     type Body r;
 }
@@ -312,6 +313,7 @@ string :: TypeSym r => VSType r
 infile :: TypeSym r => VSType r
 outfile :: TypeSym r => VSType r
 listType :: TypeSym r => VSType r -> VSType r
+setType :: TypeSym r => VSType r -> VSType r
 arrayType :: TypeSym r => VSType r -> VSType r
 listInnerType :: TypeSym r => VSType r -> VSType r
 funcType :: TypeSym r => [VSType r] -> VSType r -> VSType r
@@ -354,6 +356,7 @@ litInt :: Literal r => Integer -> SValue r
 litString :: Literal r => String -> SValue r
 litArray :: Literal r => VSType r -> [SValue r] -> SValue r
 litList :: Literal r => VSType r -> [SValue r] -> SValue r
+litSet :: Literal r => VSType r -> [SValue r] -> SValue r
 litZero :: (TypeElim r, Literal r) => VSType r -> SValue r
 class (ValueSym r) => MathConstant r
 pi :: MathConstant r => SValue r
@@ -457,6 +460,8 @@ listSet :: List r => SValue r -> SValue r -> SValue r -> SValue r
 -- | Finds the index of the first occurrence of a value in a list.
 --   Arguments are: List, Value
 indexOf :: List r => SValue r -> SValue r -> SValue r
+class (ValueSym r) => Set r
+contains :: Set r => SValue r -> SValue r -> SValue r
 class (ValueSym r) => InternalList r
 listSlice' :: InternalList r => Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
 
@@ -489,6 +494,7 @@ class (ValueSym r) => StatementSym r where {
     type Statement r;
 }
 valStmt :: StatementSym r => SValue r -> MSStatement r
+emptyStmt :: StatementSym r => MSStatement r
 multi :: StatementSym r => [MSStatement r] -> MSStatement r
 class (VariableSym r, StatementSym r) => AssignStatement r
 (&-=) :: AssignStatement r => SVariable r -> SValue r -> MSStatement r
@@ -508,6 +514,8 @@ varDec :: DeclStatement r => SVariable r -> r (Scope r) -> MSStatement r
 varDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
 listDec :: DeclStatement r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
 listDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+setDec :: DeclStatement r => SVariable r -> r (Scope r) -> MSStatement r
+setDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
 arrayDec :: DeclStatement r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
 arrayDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
 constDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
@@ -701,7 +709,6 @@ multiReturn :: InternalControlStmt r => [SValue r] -> MSStatement r
 class RenderStatement r
 stmt :: RenderStatement r => MSStatement r -> MSStatement r
 loopStmt :: RenderStatement r => MSStatement r -> MSStatement r
-emptyStmt :: RenderStatement r => MSStatement r
 stmtFromData :: RenderStatement r => Doc -> Terminator -> MSStatement r
 class StatementElim r
 statement :: StatementElim r => r (Statement r) -> Doc
@@ -1157,6 +1164,7 @@ andPrec :: Monad r => String -> VSOp r
 
 -- | Construct an operator with disjunction-level precedence
 orPrec :: Monad r => String -> VSOp r
+inPrec :: Monad r => String -> VSOp r
 
 -- | Constructs a unary expression like ln(v), for some operator ln and
 --   value v
@@ -1319,6 +1327,8 @@ extVar :: CommonRenderSym r => Label -> Label -> VSType r -> SVariable r
 classVar :: CommonRenderSym r => (Doc -> Doc -> Doc) -> VSType r -> SVariable r -> SVariable r
 objVarSelf :: OORenderSym r => SVariable r -> SVariable r
 indexOf :: OORenderSym r => Label -> SValue r -> SValue r -> SValue r
+contains :: OORenderSym r => Label -> SValue r -> SValue r -> SValue r
+containsInt :: OORenderSym r => Label -> Label -> SValue r -> SValue r -> SValue r
 listAddFunc :: OORenderSym r => Label -> SValue r -> SValue r -> VSFunction r
 discardFileLine :: OORenderSym r => Label -> SValue r -> MSStatement r
 
@@ -1360,7 +1370,9 @@ destructorError :: String -> String
 stateVarDef :: (OORenderSym r, Monad r) => r (Visibility r) -> r (Permanence r) -> SVariable r -> SValue r -> CS (r Doc)
 constVar :: (CommonRenderSym r, Monad r) => Doc -> r (Visibility r) -> SVariable r -> SValue r -> CS (r Doc)
 litArray :: CommonRenderSym r => (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
+litSet :: OORenderSym r => (Doc -> Doc) -> (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
 listSetFunc :: CommonRenderSym r => (Doc -> Doc -> Doc) -> SValue r -> SValue r -> SValue r -> VSFunction r
+litSetFunc :: OORenderSym r => String -> VSType r -> [SValue r] -> SValue r
 extraClass :: OORenderSym r => Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
 listAccessFunc :: CommonRenderSym r => VSType r -> SValue r -> VSFunction r
 doubleRender :: String
@@ -1390,6 +1402,8 @@ implements :: Monad r => [Label] -> r ParentSpec
 -- | Call to get the size of a list in a language where this is not a
 --   method.
 listSize :: CommonRenderSym r => SValue r -> SValue r
+setDecDef :: CommonRenderSym r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+setDec :: OORenderSym r => (r (Value r) -> Doc) -> SValue r -> SVariable r -> r (Scope r) -> MSStatement r
 
 -- | Call to insert a value into a list in a language where this is not a
 --   method.
@@ -1489,6 +1503,7 @@ instance Drasil.GOOL.InterfaceCommon.FunctionSym Drasil.GOOL.LanguageRenderer.Py
 instance Drasil.GOOL.InterfaceGOOL.OOFunctionSym Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceGOOL.GetSet Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.List Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
+instance Drasil.GOOL.InterfaceCommon.Set Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.InterfaceCommon.InternalList Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.RendererClassesOO.InternalGetSet Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
 instance Drasil.GOOL.RendererClassesCommon.InternalListFunc Drasil.GOOL.LanguageRenderer.PythonRenderer.PythonCode
@@ -1549,6 +1564,7 @@ float :: CommonRenderSym r => VSType r
 double :: CommonRenderSym r => VSType r
 char :: CommonRenderSym r => VSType r
 listType :: CommonRenderSym r => String -> VSType r -> VSType r
+setType :: OORenderSym r => String -> VSType r -> VSType r
 void :: CommonRenderSym r => VSType r
 notOp :: Monad r => VSOp r
 andOp :: Monad r => VSOp r
@@ -1565,6 +1581,7 @@ increment1 :: CommonRenderSym r => SVariable r -> MSStatement r
 decrement1 :: CommonRenderSym r => SVariable r -> MSStatement r
 varDec :: OORenderSym r => r (Permanence r) -> r (Permanence r) -> Doc -> SVariable r -> r (Scope r) -> MSStatement r
 varDecDef :: CommonRenderSym r => Terminator -> SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+setDecDef :: CommonRenderSym r => Terminator -> SVariable r -> r (Scope r) -> SValue r -> MSStatement r
 listDec :: CommonRenderSym r => (r (Value r) -> Doc) -> SValue r -> SVariable r -> r (Scope r) -> MSStatement r
 extObjDecNew :: OORenderSym r => Library -> SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
 switch :: CommonRenderSym r => (Doc -> Doc) -> MSStatement r -> SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
@@ -1639,6 +1656,7 @@ instance Drasil.GOOL.InterfaceCommon.FunctionSym Drasil.GOOL.LanguageRenderer.Sw
 instance Drasil.GOOL.InterfaceGOOL.OOFunctionSym Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceGOOL.GetSet Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.List Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
+instance Drasil.GOOL.InterfaceCommon.Set Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.InterfaceCommon.InternalList Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.RendererClassesOO.InternalGetSet Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
 instance Drasil.GOOL.RendererClassesCommon.InternalListFunc Drasil.GOOL.LanguageRenderer.SwiftRenderer.SwiftCode
@@ -1754,6 +1772,7 @@ instance Drasil.GOOL.InterfaceCommon.FunctionSym Drasil.GOOL.LanguageRenderer.Ja
 instance Drasil.GOOL.InterfaceGOOL.OOFunctionSym Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceGOOL.GetSet Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.List Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
+instance Drasil.GOOL.InterfaceCommon.Set Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.InterfaceCommon.InternalList Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.RendererClassesOO.InternalGetSet Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
 instance Drasil.GOOL.RendererClassesCommon.InternalListFunc Drasil.GOOL.LanguageRenderer.JavaRenderer.JavaCode
@@ -1881,6 +1900,7 @@ instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.FunctionSym (
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.OOFunctionSym (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceGOOL.GetSet (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.List (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
+instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.Set (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.InterfaceCommon.InternalList (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesOO.InternalGetSet (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
 instance Drasil.GOOL.Classes.Pair p => Drasil.GOOL.RendererClassesCommon.InternalListFunc (p Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode)
@@ -1983,6 +2003,7 @@ instance Drasil.GOOL.InterfaceCommon.FunctionSym Drasil.GOOL.LanguageRenderer.Cp
 instance Drasil.GOOL.InterfaceGOOL.OOFunctionSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceGOOL.GetSet Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.List Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
+instance Drasil.GOOL.InterfaceCommon.Set Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.InterfaceCommon.InternalList Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.RendererClassesOO.InternalGetSet Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
 instance Drasil.GOOL.RendererClassesCommon.InternalListFunc Drasil.GOOL.LanguageRenderer.CppRenderer.CppHdrCode
@@ -2085,6 +2106,7 @@ instance Drasil.GOOL.InterfaceCommon.FunctionSym Drasil.GOOL.LanguageRenderer.Cp
 instance Drasil.GOOL.InterfaceGOOL.OOFunctionSym Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceGOOL.GetSet Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.List Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
+instance Drasil.GOOL.InterfaceCommon.Set Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.InterfaceCommon.InternalList Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.RendererClassesOO.InternalGetSet Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
 instance Drasil.GOOL.RendererClassesCommon.InternalListFunc Drasil.GOOL.LanguageRenderer.CppRenderer.CppSrcCode
@@ -2200,6 +2222,7 @@ instance Drasil.GOOL.InterfaceCommon.FunctionSym Drasil.GOOL.LanguageRenderer.CS
 instance Drasil.GOOL.InterfaceGOOL.OOFunctionSym Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceGOOL.GetSet Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.List Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
+instance Drasil.GOOL.InterfaceCommon.Set Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.InterfaceCommon.InternalList Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.RendererClassesOO.InternalGetSet Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
 instance Drasil.GOOL.RendererClassesCommon.InternalListFunc Drasil.GOOL.LanguageRenderer.CSharpRenderer.CSharpCode
@@ -2315,6 +2338,7 @@ instance Drasil.GOOL.InterfaceCommon.ValueExpression Drasil.GOOL.LanguageRendere
 instance Drasil.GOOL.RendererClassesCommon.RenderValue Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
 instance Drasil.GOOL.RendererClassesCommon.ValueElim Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
 instance Drasil.GOOL.InterfaceCommon.List Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
+instance Drasil.GOOL.InterfaceCommon.Set Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
 instance Drasil.GOOL.InterfaceCommon.InternalList Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
 instance Drasil.GOOL.RendererClassesCommon.InternalListFunc Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
 instance Drasil.GOOL.InterfaceCommon.ThunkSym Drasil.GOOL.LanguageRenderer.JuliaRenderer.JuliaCode
@@ -2387,6 +2411,7 @@ instance Drasil.GOOL.InterfaceCommon.Comparison Drasil.GOOL.CodeInfoProc.CodeInf
 instance Drasil.GOOL.InterfaceCommon.ValueExpression Drasil.GOOL.CodeInfoProc.CodeInfoProc
 instance Drasil.GOOL.InterfaceCommon.FunctionSym Drasil.GOOL.CodeInfoProc.CodeInfoProc
 instance Drasil.GOOL.InterfaceCommon.List Drasil.GOOL.CodeInfoProc.CodeInfoProc
+instance Drasil.GOOL.InterfaceCommon.Set Drasil.GOOL.CodeInfoProc.CodeInfoProc
 instance Drasil.GOOL.InterfaceCommon.InternalList Drasil.GOOL.CodeInfoProc.CodeInfoProc
 instance Drasil.GOOL.InterfaceCommon.ThunkSym Drasil.GOOL.CodeInfoProc.CodeInfoProc
 instance Drasil.GOOL.InterfaceCommon.ThunkAssign Drasil.GOOL.CodeInfoProc.CodeInfoProc
@@ -2447,6 +2472,7 @@ instance Drasil.GOOL.InterfaceCommon.FunctionSym Drasil.GOOL.CodeInfoOO.CodeInfo
 instance Drasil.GOOL.InterfaceGOOL.OOFunctionSym Drasil.GOOL.CodeInfoOO.CodeInfoOO
 instance Drasil.GOOL.InterfaceGOOL.GetSet Drasil.GOOL.CodeInfoOO.CodeInfoOO
 instance Drasil.GOOL.InterfaceCommon.List Drasil.GOOL.CodeInfoOO.CodeInfoOO
+instance Drasil.GOOL.InterfaceCommon.Set Drasil.GOOL.CodeInfoOO.CodeInfoOO
 instance Drasil.GOOL.InterfaceCommon.InternalList Drasil.GOOL.CodeInfoOO.CodeInfoOO
 instance Drasil.GOOL.InterfaceCommon.ThunkSym Drasil.GOOL.CodeInfoOO.CodeInfoOO
 instance Drasil.GOOL.InterfaceCommon.ThunkAssign Drasil.GOOL.CodeInfoOO.CodeInfoOO
@@ -2494,7 +2520,7 @@ type SClass a = CS (a (Class a))
 type FSModule a = FS (a (Module a))
 type NamedArgs r = [(SVariable r, SValue r)]
 type Initializers r = [(SVariable r, SValue r)]
-class (VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, List r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r) => SharedProg r
+class (VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, List r, Set r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r) => SharedProg r
 class (SharedProg r, ProgramSym r, OOVariableValue r, OODeclStatement r, OOFuncAppStatement r, OOValueExpression r, InternalValueExp r, GetSet r, ObserverPattern r, StrategyPattern r) => OOProg r
 class (FileSym r) => ProgramSym r where {
     type Program r;
@@ -2533,6 +2559,7 @@ string :: TypeSym r => VSType r
 infile :: TypeSym r => VSType r
 outfile :: TypeSym r => VSType r
 listType :: TypeSym r => VSType r -> VSType r
+setType :: TypeSym r => VSType r -> VSType r
 arrayType :: TypeSym r => VSType r -> VSType r
 listInnerType :: TypeSym r => VSType r -> VSType r
 funcType :: TypeSym r => [VSType r] -> VSType r -> VSType r
@@ -2563,6 +2590,7 @@ class (ValueSym r) => StatementSym r where {
     type Statement r;
 }
 valStmt :: StatementSym r => SValue r -> MSStatement r
+emptyStmt :: StatementSym r => MSStatement r
 multi :: StatementSym r => [MSStatement r] -> MSStatement r
 class (VariableSym r, StatementSym r) => AssignStatement r
 (&-=) :: AssignStatement r => SVariable r -> SValue r -> MSStatement r
@@ -2582,6 +2610,8 @@ varDec :: DeclStatement r => SVariable r -> r (Scope r) -> MSStatement r
 varDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
 listDec :: DeclStatement r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
 listDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+setDec :: DeclStatement r => SVariable r -> r (Scope r) -> MSStatement r
+setDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
 arrayDec :: DeclStatement r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
 arrayDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
 constDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
@@ -2689,6 +2719,7 @@ litInt :: Literal r => Integer -> SValue r
 litString :: Literal r => String -> SValue r
 litArray :: Literal r => VSType r -> [SValue r] -> SValue r
 litList :: Literal r => VSType r -> [SValue r] -> SValue r
+litSet :: Literal r => VSType r -> [SValue r] -> SValue r
 class (ValueSym r) => MathConstant r
 pi :: MathConstant r => SValue r
 class (VariableSym r, ValueSym r) => VariableValue r
@@ -2826,6 +2857,8 @@ listSet :: List r => SValue r -> SValue r -> SValue r -> SValue r
 -- | Finds the index of the first occurrence of a value in a list.
 --   Arguments are: List, Value
 indexOf :: List r => SValue r -> SValue r -> SValue r
+class (ValueSym r) => Set r
+contains :: Set r => SValue r -> SValue r -> SValue r
 
 -- | Creates a slice of a list and assigns it to a variable. Arguments are:
 --   Variable to assign List to read from [Start index] inclusive. (if
@@ -2916,6 +2949,7 @@ String :: CodeType
 InFile :: CodeType
 OutFile :: CodeType
 List :: CodeType -> CodeType
+Set :: CodeType -> CodeType
 Array :: CodeType -> CodeType
 Object :: ClassName -> CodeType
 Func :: [CodeType] -> CodeType -> CodeType
@@ -2971,7 +3005,7 @@ type MSParameter a = MS (a (Parameter a))
 type SMethod a = MS (a (Method a))
 type FSModule a = FS (a (Module a))
 type NamedArgs r = [(SVariable r, SValue r)]
-class (VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, List r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r) => SharedProg r
+class (VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, List r, Set r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r) => SharedProg r
 class (SharedProg r, ProgramSym r) => ProcProg r
 class (FileSym r) => ProgramSym r where {
     type Program r;
@@ -3005,6 +3039,7 @@ string :: TypeSym r => VSType r
 infile :: TypeSym r => VSType r
 outfile :: TypeSym r => VSType r
 listType :: TypeSym r => VSType r -> VSType r
+setType :: TypeSym r => VSType r -> VSType r
 arrayType :: TypeSym r => VSType r -> VSType r
 listInnerType :: TypeSym r => VSType r -> VSType r
 funcType :: TypeSym r => [VSType r] -> VSType r -> VSType r
@@ -3033,6 +3068,7 @@ class (ValueSym r) => StatementSym r where {
     type Statement r;
 }
 valStmt :: StatementSym r => SValue r -> MSStatement r
+emptyStmt :: StatementSym r => MSStatement r
 multi :: StatementSym r => [MSStatement r] -> MSStatement r
 class (VariableSym r, StatementSym r) => AssignStatement r
 (&-=) :: AssignStatement r => SVariable r -> SValue r -> MSStatement r
@@ -3052,6 +3088,8 @@ varDec :: DeclStatement r => SVariable r -> r (Scope r) -> MSStatement r
 varDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
 listDec :: DeclStatement r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
 listDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+setDec :: DeclStatement r => SVariable r -> r (Scope r) -> MSStatement r
+setDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
 arrayDec :: DeclStatement r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
 arrayDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
 constDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
@@ -3138,6 +3176,7 @@ litInt :: Literal r => Integer -> SValue r
 litString :: Literal r => String -> SValue r
 litArray :: Literal r => VSType r -> [SValue r] -> SValue r
 litList :: Literal r => VSType r -> [SValue r] -> SValue r
+litSet :: Literal r => VSType r -> [SValue r] -> SValue r
 class (ValueSym r) => MathConstant r
 pi :: MathConstant r => SValue r
 class (VariableSym r, ValueSym r) => VariableValue r
@@ -3243,6 +3282,8 @@ listSet :: List r => SValue r -> SValue r -> SValue r -> SValue r
 -- | Finds the index of the first occurrence of a value in a list.
 --   Arguments are: List, Value
 indexOf :: List r => SValue r -> SValue r -> SValue r
+class (ValueSym r) => Set r
+contains :: Set r => SValue r -> SValue r -> SValue r
 
 -- | Creates a slice of a list and assigns it to a variable. Arguments are:
 --   Variable to assign List to read from [Start index] inclusive. (if
@@ -3292,6 +3333,7 @@ String :: CodeType
 InFile :: CodeType
 OutFile :: CodeType
 List :: CodeType -> CodeType
+Set :: CodeType -> CodeType
 Array :: CodeType -> CodeType
 Object :: ClassName -> CodeType
 Func :: [CodeType] -> CodeType -> CodeType

@@ -652,11 +652,10 @@ Boolean :: Space
 Char :: Space
 String :: Space
 Vect :: Space -> Space
+Set :: Space -> Space
 Matrix :: Int -> Int -> Space -> Space
 Array :: Space -> Space
 Actor :: String -> Space
-DiscreteD :: [Double] -> Space
-DiscreteS :: [String] -> Space
 Function :: NonEmpty Primitive -> Primitive -> Space
 Void :: Space
 type Primitive = Space
@@ -696,7 +695,7 @@ typ :: HasSpace c => Getter c Space
 -- | Gets the name of an <a>Actor</a>.
 getActorName :: Space -> String
 
--- | Gets the inner <a>Space</a> of a vector.
+-- | Gets the inner <a>Space</a> of a vector or set.
 getInnerSpace :: Space -> Space
 mkFunction :: [Primitive] -> Primitive -> Space
 
@@ -1383,6 +1382,7 @@ Iff :: BoolBinOp
 -- | Index operator.
 data LABinOp
 Index :: LABinOp
+IndexOf :: LABinOp
 
 -- | Ordered binary operators (less than, greater than, less than or equal
 --   to, greater than or equal to).
@@ -1406,6 +1406,17 @@ Dot :: VVNBinOp
 -- | <tt>Number x Vector -&gt; Vector</tt> binary operations (scaling).
 data NVVBinOp
 Scale :: NVVBinOp
+
+-- | Element + Set -&gt; Set
+data ESSBinOp
+SAdd :: ESSBinOp
+SRemove :: ESSBinOp
+
+-- | Element + Set -&gt; Bool
+data ESBBinOp
+SContains :: ESBBinOp
+data AssocConcatOper
+SUnion :: AssocConcatOper
 
 -- | Associative operators (adding and multiplication). Also specifies
 --   whether it is for integers or for real numbers.
@@ -1467,6 +1478,7 @@ data Expr
 
 -- | Takes an associative boolean operator with a list of expressions.
 [AssocB] :: AssocBoolOper -> [Expr] -> Expr
+[AssocC] :: AssocConcatOper -> [Expr] -> Expr
 
 -- | C stands for <a>Chunk</a>, for referring to a chunk in an expression.
 --   Implicitly assumes that the chunk has a symbol.
@@ -1480,6 +1492,12 @@ data Expr
 
 -- | Represents a matrix of expressions.
 [Matrix] :: [[Expr]] -> Expr
+
+-- | Represents a set of expressions
+[Set] :: Space -> [Expr] -> Expr
+
+-- | used to refernce the (name + type = variable )
+[Variable] :: String -> Expr -> Expr
 
 -- | Unary operation for most functions (eg. sin, cos, log, etc.).
 [UnaryOp] :: UFunc -> Expr -> Expr
@@ -1522,6 +1540,12 @@ data Expr
 --   (scaling).
 [NVVBinaryOp] :: NVVBinOp -> Expr -> Expr -> Expr
 
+-- | Set operator for Element + Set -&gt; Set
+[ESSBinaryOp] :: ESSBinOp -> Expr -> Expr -> Expr
+
+-- | Set operator for Element + Set -&gt; Bool
+[ESBBinaryOp] :: ESBBinOp -> Expr -> Expr -> Expr
+
 -- | Operators are generalized arithmetic operators over a
 --   <tt>DomainDesc</tt> of an <a>Expr</a>. Could be called BigOp. ex:
 --   Summation is represented via <a>Add</a> over a discrete domain.
@@ -1541,6 +1565,9 @@ instance GHC.Classes.Eq Language.Drasil.Expr.Lang.OrdBinOp
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.VVVBinOp
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.VVNBinOp
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.NVVBinOp
+instance GHC.Classes.Eq Language.Drasil.Expr.Lang.ESSBinOp
+instance GHC.Classes.Eq Language.Drasil.Expr.Lang.ESBBinOp
+instance GHC.Classes.Eq Language.Drasil.Expr.Lang.AssocConcatOper
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.AssocArithOper
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.AssocBoolOper
 instance GHC.Show.Show Language.Drasil.Expr.Lang.UFunc
@@ -1578,6 +1605,7 @@ Iff :: BoolBinOp
 -- | Index operator.
 data LABinOp
 Index :: LABinOp
+IndexOf :: LABinOp
 
 -- | Ordered binary operators (less than, greater than, less than or equal
 --   to, greater than or equal to).
@@ -1601,6 +1629,17 @@ Dot :: VVNBinOp
 -- | <tt>Number x Vector -&gt; Vector</tt> binary operations (scaling).
 data NVVBinOp
 Scale :: NVVBinOp
+
+-- | Element + Set -&gt; Set
+data ESSBinOp
+SAdd :: ESSBinOp
+SRemove :: ESSBinOp
+
+-- | Element + Set -&gt; Bool
+data ESBBinOp
+SContains :: ESBBinOp
+data AssocConcatOper
+SUnion :: AssocConcatOper
 
 -- | Associative operators (adding and multiplication). Also specifies
 --   whether it is for integers or for real numbers.
@@ -1675,6 +1714,7 @@ data ModelExpr
 
 -- | Takes an associative boolean operator with a list of expressions.
 [AssocB] :: AssocBoolOper -> [ModelExpr] -> ModelExpr
+[AssocC] :: AssocConcatOper -> [ModelExpr] -> ModelExpr
 
 -- | Derivative syntax is: Type (<a>Part</a>ial or <a>Total</a>) -&gt;
 --   principal part of change -&gt; with respect to For example: Deriv Part
@@ -1693,6 +1733,12 @@ data ModelExpr
 
 -- | Represents a matrix of expressions.
 [Matrix] :: [[ModelExpr]] -> ModelExpr
+
+-- | Represents a set of expressions
+[Set] :: Space -> [ModelExpr] -> ModelExpr
+
+-- | used to refernce the (name + type = variable )
+[Variable] :: String -> ModelExpr -> ModelExpr
 
 -- | Unary operation for most functions (eg. sin, cos, log, etc.).
 [UnaryOp] :: UFunc -> ModelExpr -> ModelExpr
@@ -1741,6 +1787,12 @@ data ModelExpr
 --   (scaling).
 [NVVBinaryOp] :: NVVBinOp -> ModelExpr -> ModelExpr -> ModelExpr
 
+-- | Set operator for Element + Set -&gt; Set
+[ESSBinaryOp] :: ESSBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Set operator for Element + Set -&gt; Bool
+[ESBBinaryOp] :: ESBBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
 -- | Operators are generalized arithmetic operators over a
 --   <a>DomainDesc</a> of an <tt>Expr</tt>. Could be called BigOp. ex:
 --   Summation is represented via <a>Add</a> over a discrete domain.
@@ -1763,6 +1815,9 @@ instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.OrdBinOp
 instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.VVVBinOp
 instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.VVNBinOp
 instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.NVVBinOp
+instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.ESSBinOp
+instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.ESBBinOp
+instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.AssocConcatOper
 instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.AssocArithOper
 instance GHC.Show.Show Language.Drasil.ModelExpr.Lang.AssocBoolOper
 instance GHC.Classes.Eq Language.Drasil.ModelExpr.Lang.AssocBoolOper
@@ -1808,6 +1863,8 @@ prec2VVN :: VVNBinOp -> Int
 -- | prec2NVV - precedence for Num-&gt;Vec-&gt;Vec-related binary
 --   operations.
 prec2NVV :: NVVBinOp -> Int
+prec2ESS :: ESSBinOp -> Int
+prec2ESB :: ESBBinOp -> Int
 
 -- | precA - precedence for arithmetic-related Binary-Associative
 --   (Commutative) operators.
@@ -1816,6 +1873,7 @@ precA :: AssocArithOper -> Int
 -- | precB - precedence for boolean-related Binary-Associative
 --   (Commutative) operators.
 precB :: AssocBoolOper -> Int
+precC :: AssocConcatOper -> Int
 
 -- | prec1 - precedence of unary operators.
 prec1 :: UFunc -> Int
@@ -1914,6 +1972,7 @@ instance Language.Drasil.ModelExpr.Class.ModelExprC Language.Drasil.ModelExpr.La
 module Language.Drasil.ModelExpr.Convert
 assocArithOper :: AssocArithOper -> AssocArithOper
 assocBoolOper :: AssocBoolOper -> AssocBoolOper
+assocConcatOper :: AssocConcatOper -> AssocConcatOper
 uFunc :: UFunc -> UFunc
 uFuncB :: UFuncB -> UFuncB
 uFuncVV :: UFuncVV -> UFuncVV
@@ -1926,6 +1985,8 @@ ordBinOp :: OrdBinOp -> OrdBinOp
 vvvBinOp :: VVVBinOp -> VVVBinOp
 vvnBinOp :: VVNBinOp -> VVNBinOp
 nvvBinOp :: NVVBinOp -> NVVBinOp
+essBinOp :: ESSBinOp -> ESSBinOp
+esbBinOp :: ESBBinOp -> ESBBinOp
 expr :: Expr -> ModelExpr
 realInterval :: RealInterval Expr Expr -> RealInterval ModelExpr ModelExpr
 domainDesc :: DiscreteDomainDesc Expr Expr -> DiscreteDomainDesc ModelExpr ModelExpr
@@ -1950,6 +2011,7 @@ data ModelExpr
 
 -- | Takes an associative boolean operator with a list of expressions.
 [AssocB] :: AssocBoolOper -> [ModelExpr] -> ModelExpr
+[AssocC] :: AssocConcatOper -> [ModelExpr] -> ModelExpr
 
 -- | Derivative syntax is: Type (<a>Part</a>ial or <a>Total</a>) -&gt;
 --   principal part of change -&gt; with respect to For example: Deriv Part
@@ -1968,6 +2030,12 @@ data ModelExpr
 
 -- | Represents a matrix of expressions.
 [Matrix] :: [[ModelExpr]] -> ModelExpr
+
+-- | Represents a set of expressions
+[Set] :: Space -> [ModelExpr] -> ModelExpr
+
+-- | used to refernce the (name + type = variable )
+[Variable] :: String -> ModelExpr -> ModelExpr
 
 -- | Unary operation for most functions (eg. sin, cos, log, etc.).
 [UnaryOp] :: UFunc -> ModelExpr -> ModelExpr
@@ -2015,6 +2083,12 @@ data ModelExpr
 -- | Binary operator for <tt>Number x Vector -&gt; Vector</tt> operations
 --   (scaling).
 [NVVBinaryOp] :: NVVBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Set operator for Element + Set -&gt; Set
+[ESSBinaryOp] :: ESSBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+
+-- | Set operator for Element + Set -&gt; Bool
+[ESBBinaryOp] :: ESBBinOp -> ModelExpr -> ModelExpr -> ModelExpr
 
 -- | Operators are generalized arithmetic operators over a
 --   <a>DomainDesc</a> of an <tt>Expr</tt>. Could be called BigOp. ex:
@@ -2079,6 +2153,7 @@ NEq :: EqBinOp
 -- | Index operator.
 data LABinOp
 Index :: LABinOp
+IndexOf :: LABinOp
 
 -- | Ordered binary operators (less than, greater than, less than or equal
 --   to, greater than or equal to).
@@ -2111,6 +2186,15 @@ Dot :: VVNBinOp
 data NVVBinOp
 Scale :: NVVBinOp
 
+-- | Element + Set -&gt; Set
+data ESSBinOp
+SAdd :: ESSBinOp
+SRemove :: ESSBinOp
+
+-- | Element + Set -&gt; Bool
+data ESBBinOp
+SContains :: ESBBinOp
+
 -- | Associative operators (adding and multiplication). Also specifies
 --   whether it is for integers or for real numbers.
 data AssocArithOper
@@ -2122,6 +2206,8 @@ data AssocBoolOper
 And :: AssocBoolOper
 Or :: AssocBoolOper
 Equivalence :: AssocBoolOper
+data AssocConcatOper
+SUnion :: AssocConcatOper
 
 -- | Determines the type of the derivative (either a partial derivative or
 --   a total derivative).
@@ -2140,6 +2226,7 @@ meDep :: ModelExpr -> [UID]
 
 -- | eprec - <a>ModelExpr</a> precedence.
 mePrec :: ModelExpr -> Int
+precC :: AssocConcatOper -> Int
 
 -- | precB - precedence for boolean-related Binary-Associative
 --   (Commutative) operators.
@@ -2953,6 +3040,14 @@ prec2VVN :: VVNBinOp -> Int
 --   operations.
 prec2NVV :: NVVBinOp -> Int
 
+-- | prec2ESS - precedence for Element-&gt;Set-&gt;Set-related binary
+--   operations.
+prec2ESS :: ESSBinOp -> Int
+
+-- | prec2ESS - precedence for Element-&gt;Set-&gt;Bool-related binary
+--   operations.
+prec2ESB :: ESBBinOp -> Int
+
 -- | precA - precedence for arithmetic-related Binary-Associative
 --   (Commutative) operators.
 precA :: AssocArithOper -> Int
@@ -2960,6 +3055,7 @@ precA :: AssocArithOper -> Int
 -- | precB - precedence for boolean-related Binary-Associative
 --   (Commutative) operators.
 precB :: AssocBoolOper -> Int
+precC :: AssocConcatOper -> Int
 
 -- | prec1 - precedence of unary operators.
 prec1 :: UFunc -> Int
@@ -3016,6 +3112,7 @@ data Expr
 
 -- | Takes an associative boolean operator with a list of expressions.
 [AssocB] :: AssocBoolOper -> [Expr] -> Expr
+[AssocC] :: AssocConcatOper -> [Expr] -> Expr
 
 -- | C stands for <a>Chunk</a>, for referring to a chunk in an expression.
 --   Implicitly assumes that the chunk has a symbol.
@@ -3029,6 +3126,12 @@ data Expr
 
 -- | Represents a matrix of expressions.
 [Matrix] :: [[Expr]] -> Expr
+
+-- | Represents a set of expressions
+[Set] :: Space -> [Expr] -> Expr
+
+-- | used to refernce the (name + type = variable )
+[Variable] :: String -> Expr -> Expr
 
 -- | Unary operation for most functions (eg. sin, cos, log, etc.).
 [UnaryOp] :: UFunc -> Expr -> Expr
@@ -3070,6 +3173,12 @@ data Expr
 -- | Binary operator for <tt>Expr x Vector -&gt; Vector</tt> operations
 --   (scaling).
 [NVVBinaryOp] :: NVVBinOp -> Expr -> Expr -> Expr
+
+-- | Set operator for Element + Set -&gt; Set
+[ESSBinaryOp] :: ESSBinOp -> Expr -> Expr -> Expr
+
+-- | Set operator for Element + Set -&gt; Bool
+[ESBBinaryOp] :: ESBBinOp -> Expr -> Expr -> Expr
 
 -- | Operators are generalized arithmetic operators over a
 --   <tt>DomainDesc</tt> of an <a>Expr</a>. Could be called BigOp. ex:
@@ -3131,6 +3240,7 @@ NEq :: EqBinOp
 -- | Index operator.
 data LABinOp
 Index :: LABinOp
+IndexOf :: LABinOp
 
 -- | Ordered binary operators (less than, greater than, less than or equal
 --   to, greater than or equal to).
@@ -3155,6 +3265,15 @@ Dot :: VVNBinOp
 data NVVBinOp
 Scale :: NVVBinOp
 
+-- | Element + Set -&gt; Set
+data ESSBinOp
+SAdd :: ESSBinOp
+SRemove :: ESSBinOp
+
+-- | Element + Set -&gt; Bool
+data ESBBinOp
+SContains :: ESBBinOp
+
 -- | Associative operators (adding and multiplication). Also specifies
 --   whether it is for integers or for real numbers.
 data AssocArithOper
@@ -3165,6 +3284,8 @@ Mul :: AssocArithOper
 data AssocBoolOper
 And :: AssocBoolOper
 Or :: AssocBoolOper
+data AssocConcatOper
+SUnion :: AssocConcatOper
 
 -- | For case expressions (either complete or incomplete).
 data Completeness
@@ -3197,6 +3318,7 @@ precA :: AssocArithOper -> Int
 -- | precB - precedence for boolean-related Binary-Associative
 --   (Commutative) operators.
 precB :: AssocBoolOper -> Int
+precC :: AssocConcatOper -> Int
 
 -- | eprec - <a>Expression</a> precedence.
 eprec :: Expr -> Int
@@ -3211,6 +3333,7 @@ data Constraint a
 
 -- | By default, physical and software constraints are ranges.
 [Range] :: ConstraintReason -> RealInterval a a -> Constraint a
+[Elem] :: ConstraintReason -> a -> Constraint a
 
 -- | Type synonym for <a>ConstraintE</a>
 type ConstraintE = Constraint Expr
@@ -3222,11 +3345,13 @@ Software :: ConstraintReason
 
 -- | Smart constructor for range of <a>Physical</a> constraints between two
 --   given expressions.
-physc :: RealInterval Expr Expr -> ConstraintE
+physRange :: RealInterval Expr Expr -> ConstraintE
 
 -- | Smart constructor for range of <a>Software</a> constraints between two
 --   given expressions.
-sfwrc :: RealInterval Expr Expr -> ConstraintE
+sfwrRange :: RealInterval Expr Expr -> ConstraintE
+physElem :: Expr -> ConstraintE
+sfwrElem :: Expr -> ConstraintE
 
 -- | Helpful for filtering for Physical constraints. True if constraint is
 --   <a>Physical</a>.
@@ -3258,6 +3383,7 @@ Iff :: BoolBinOp
 -- | Index operator.
 data LABinOp
 Index :: LABinOp
+IndexOf :: LABinOp
 
 -- | Ordered binary operators (less than, greater than, less than or equal
 --   to, greater than or equal to).
@@ -3281,6 +3407,17 @@ Dot :: VVNBinOp
 -- | <tt>Number x Vector -&gt; Vector</tt> binary operations (scaling).
 data NVVBinOp
 Scale :: NVVBinOp
+
+-- | Element + Set -&gt; Set
+data ESSBinOp
+SAdd :: ESSBinOp
+SRemove :: ESSBinOp
+
+-- | Element + Set -&gt; Bool
+data ESBBinOp
+SContains :: ESBBinOp
+data AssocConcatOper
+SUnion :: AssocConcatOper
 
 -- | Associative operators (adding and multiplication). Also specifies
 --   whether it is for integers or for real numbers.
@@ -3336,6 +3473,7 @@ data CodeExpr
 
 -- | Takes an associative boolean operator with a list of expressions.
 [AssocB] :: AssocBoolOper -> [CodeExpr] -> CodeExpr
+[AssocC] :: AssocConcatOper -> [CodeExpr] -> CodeExpr
 
 -- | C stands for <a>Chunk</a>, for referring to a chunk in an expression.
 --   Implicitly assumes that the chunk has a symbol.
@@ -3375,6 +3513,12 @@ data CodeExpr
 
 -- | Represents a matrix of expressions.
 [Matrix] :: [[CodeExpr]] -> CodeExpr
+
+-- | Represents a set of expressions
+[Set] :: Space -> [CodeExpr] -> CodeExpr
+
+-- | used to refernce the (name + type = variable )
+[Variable] :: String -> CodeExpr -> CodeExpr
 
 -- | Unary operation for most functions (eg. sin, cos, log, etc.).
 [UnaryOp] :: UFunc -> CodeExpr -> CodeExpr
@@ -3417,6 +3561,12 @@ data CodeExpr
 --   (scaling).
 [NVVBinaryOp] :: NVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
 
+-- | Set operator for Set + Set -&gt; Set
+[ESSBinaryOp] :: ESSBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+
+-- | Set operator for Element + Set -&gt; Bool
+[ESBBinaryOp] :: ESBBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+
 -- | Operators are generalized arithmetic operators over a
 --   <tt>DomainDesc</tt> of an <tt>Expr</tt>. Could be called BigOp. ex:
 --   Summation is represented via <a>Add</a> over a discrete domain.
@@ -3434,6 +3584,9 @@ instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.OrdBinOp
 instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.VVVBinOp
 instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.VVNBinOp
 instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.NVVBinOp
+instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.ESSBinOp
+instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.ESBBinOp
+instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.AssocConcatOper
 instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.AssocArithOper
 instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.AssocBoolOper
 instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.UFunc
@@ -3475,6 +3628,10 @@ lit :: ExprC r => Literal -> r
 ($<=>) :: ExprC r => r -> r -> r
 ($&&) :: ExprC r => r -> r -> r
 ($||) :: ExprC r => r -> r -> r
+
+-- | Smart constructor for set-theoretic membership relation. Added ' to
+--   avoid conflict.
+in' :: ExprC r => r -> r -> r
 
 -- | Smart constructor for taking the absolute value of an expression.
 abs_ :: ExprC r => r -> r
@@ -3536,6 +3693,10 @@ not_ :: ExprC r => r -> r
 -- | Smart constructor for indexing.
 idx :: ExprC r => r -> r -> r
 
+-- | Smart constructor for indexOf. Finds the index of the first occurrence
+--   of a value in a list.
+idxOf :: ExprC r => r -> r -> r
+
 -- | Smart constructor for the summation, product, and integral functions
 --   over an interval.
 defint :: ExprC r => Symbol -> r -> r -> r -> r
@@ -3575,6 +3736,9 @@ incompleteCase :: ExprC r => [(r, r)] -> r
 
 -- | Create a matrix.
 matrix :: ExprC r => [[r]] -> r
+
+-- | Create a Set.
+set' :: ExprC r => Space -> [r] -> r
 
 -- | Applies a given function with a list of parameters.
 apply :: (ExprC r, HasUID f, HasSymbol f) => f -> [r] -> r
@@ -3640,6 +3804,7 @@ rowVec :: ExprC r => [r] -> r
 
 -- | Create a column vector
 columnVec :: ExprC r => [r] -> r
+mkSet :: ExprC r => Space -> [r] -> r
 instance Language.Drasil.Expr.Class.ExprC Language.Drasil.Expr.Lang.Expr
 instance Language.Drasil.Expr.Class.ExprC Language.Drasil.ModelExpr.Lang.ModelExpr
 instance Language.Drasil.Expr.Class.ExprC Language.Drasil.CodeExpr.Lang.CodeExpr
@@ -5145,12 +5310,6 @@ makeListRef :: [a] -> Section -> [Sentence]
 -- | Converts input to a <a>Sentence</a> and appends %.
 addPercent :: Show a => a -> Sentence
 
--- | Produces a <a>Sentence</a> that displays the constraints in a set {}.
-displayStrConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
-
--- | Produces a <a>Sentence</a> that displays the constraints in a set {}.
-displayDblConstrntsAsSet :: Quantity a => a -> [Double] -> Sentence
-
 -- | Prepends the word <a>Equation</a> to an <a>Int</a>.
 eqN :: Int -> Sentence
 
@@ -5485,6 +5644,7 @@ data CodeExpr
 
 -- | Takes an associative boolean operator with a list of expressions.
 [AssocB] :: AssocBoolOper -> [CodeExpr] -> CodeExpr
+[AssocC] :: AssocConcatOper -> [CodeExpr] -> CodeExpr
 
 -- | C stands for <a>Chunk</a>, for referring to a chunk in an expression.
 --   Implicitly assumes that the chunk has a symbol.
@@ -5524,6 +5684,12 @@ data CodeExpr
 
 -- | Represents a matrix of expressions.
 [Matrix] :: [[CodeExpr]] -> CodeExpr
+
+-- | Represents a set of expressions
+[Set] :: Space -> [CodeExpr] -> CodeExpr
+
+-- | used to refernce the (name + type = variable )
+[Variable] :: String -> CodeExpr -> CodeExpr
 
 -- | Unary operation for most functions (eg. sin, cos, log, etc.).
 [UnaryOp] :: UFunc -> CodeExpr -> CodeExpr
@@ -5566,6 +5732,12 @@ data CodeExpr
 --   (scaling).
 [NVVBinaryOp] :: NVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
 
+-- | Set operator for Set + Set -&gt; Set
+[ESSBinaryOp] :: ESSBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+
+-- | Set operator for Element + Set -&gt; Bool
+[ESBBinaryOp] :: ESBBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+
 -- | Operators are generalized arithmetic operators over a
 --   <tt>DomainDesc</tt> of an <tt>Expr</tt>. Could be called BigOp. ex:
 --   Summation is represented via <a>Add</a> over a discrete domain.
@@ -5596,6 +5768,7 @@ Iff :: BoolBinOp
 -- | Index operator.
 data LABinOp
 Index :: LABinOp
+IndexOf :: LABinOp
 
 -- | Ordered binary operators (less than, greater than, less than or equal
 --   to, greater than or equal to).
@@ -5620,6 +5793,15 @@ Dot :: VVNBinOp
 data NVVBinOp
 Scale :: NVVBinOp
 
+-- | Element + Set -&gt; Set
+data ESSBinOp
+SAdd :: ESSBinOp
+SRemove :: ESSBinOp
+
+-- | Element + Set -&gt; Bool
+data ESBBinOp
+SContains :: ESBBinOp
+
 -- | Associative operators (adding and multiplication). Also specifies
 --   whether it is for integers or for real numbers.
 data AssocArithOper
@@ -5630,6 +5812,8 @@ Mul :: AssocArithOper
 data AssocBoolOper
 And :: AssocBoolOper
 Or :: AssocBoolOper
+data AssocConcatOper
+SUnion :: AssocConcatOper
 
 -- | Unary functions (abs, log, ln, sin, etc.).
 data UFunc
@@ -5784,6 +5968,10 @@ lit :: ExprC r => Literal -> r
 ($&&) :: ExprC r => r -> r -> r
 ($||) :: ExprC r => r -> r -> r
 
+-- | Smart constructor for set-theoretic membership relation. Added ' to
+--   avoid conflict.
+in' :: ExprC r => r -> r -> r
+
 -- | Smart constructor for taking the absolute value of an expression.
 abs_ :: ExprC r => r -> r
 
@@ -5844,6 +6032,10 @@ not_ :: ExprC r => r -> r
 -- | Smart constructor for indexing.
 idx :: ExprC r => r -> r -> r
 
+-- | Smart constructor for indexOf. Finds the index of the first occurrence
+--   of a value in a list.
+idxOf :: ExprC r => r -> r -> r
+
 -- | Smart constructor for the summation, product, and integral functions
 --   over an interval.
 defint :: ExprC r => Symbol -> r -> r -> r -> r
@@ -5883,6 +6075,9 @@ incompleteCase :: ExprC r => [(r, r)] -> r
 
 -- | Create a matrix.
 matrix :: ExprC r => [[r]] -> r
+
+-- | Create a Set.
+set' :: ExprC r => Space -> [r] -> r
 
 -- | Applies a given function with a list of parameters.
 apply :: (ExprC r, HasUID f, HasSymbol f) => f -> [r] -> r
@@ -6271,6 +6466,10 @@ lit :: ExprC r => Literal -> r
 ($&&) :: ExprC r => r -> r -> r
 ($||) :: ExprC r => r -> r -> r
 
+-- | Smart constructor for set-theoretic membership relation. Added ' to
+--   avoid conflict.
+in' :: ExprC r => r -> r -> r
+
 -- | Smart constructor for taking the absolute value of an expression.
 abs_ :: ExprC r => r -> r
 
@@ -6331,6 +6530,10 @@ not_ :: ExprC r => r -> r
 -- | Smart constructor for indexing.
 idx :: ExprC r => r -> r -> r
 
+-- | Smart constructor for indexOf. Finds the index of the first occurrence
+--   of a value in a list.
+idxOf :: ExprC r => r -> r -> r
+
 -- | Smart constructor for the summation, product, and integral functions
 --   over an interval.
 defint :: ExprC r => Symbol -> r -> r -> r -> r
@@ -6370,6 +6573,9 @@ incompleteCase :: ExprC r => [(r, r)] -> r
 
 -- | Create a matrix.
 matrix :: ExprC r => [[r]] -> r
+
+-- | Create a Set.
+set' :: ExprC r => Space -> [r] -> r
 
 -- | Applies a given function with a list of parameters.
 apply :: (ExprC r, HasUID f, HasSymbol f) => f -> [r] -> r
@@ -6435,6 +6641,7 @@ rowVec :: ExprC r => [r] -> r
 
 -- | Create a column vector
 columnVec :: ExprC r => [r] -> r
+mkSet :: ExprC r => Space -> [r] -> r
 
 -- | For case expressions (either complete or incomplete).
 data Completeness
@@ -6453,6 +6660,9 @@ perc :: LiteralC r => Integer -> Integer -> r
 --   but that meaning may not be that of a definite value. For example,
 --   specification expressions, especially with quantifiers, belong here.
 data ModelExpr
+
+-- | Introduce Space values into the expression language.
+[Spc] :: Space -> ModelExpr
 
 -- | Determines the type of the derivative (either a partial derivative or
 --   a total derivative).
@@ -6686,6 +6896,10 @@ mkUid :: String -> UID
 
 -- | Nest UID under a namespace
 nsUid :: String -> UID -> UID
+
+-- | Grabs the UID from something that has a UID and displays it as a
+--   String.
+showUID :: HasUID a => a -> String
 
 -- | For when we need to modify a UID. We first take the base chunk's UID
 --   and then append a suffix to it.
@@ -7246,17 +7460,20 @@ data Constraint a
 
 -- | By default, physical and software constraints are ranges.
 [Range] :: ConstraintReason -> RealInterval a a -> Constraint a
+[Elem] :: ConstraintReason -> a -> Constraint a
 
 -- | Type synonym for <a>ConstraintE</a>
 type ConstraintE = Constraint Expr
 
 -- | Smart constructor for range of <a>Physical</a> constraints between two
 --   given expressions.
-physc :: RealInterval Expr Expr -> ConstraintE
+physRange :: RealInterval Expr Expr -> ConstraintE
 
 -- | Smart constructor for range of <a>Software</a> constraints between two
 --   given expressions.
-sfwrc :: RealInterval Expr Expr -> ConstraintE
+sfwrRange :: RealInterval Expr Expr -> ConstraintE
+physElem :: Expr -> ConstraintE
+sfwrElem :: Expr -> ConstraintE
 
 -- | Helpful for filtering for Physical constraints. True if constraint is
 --   <a>Physical</a>.
@@ -8566,12 +8783,6 @@ makeListRef :: [a] -> Section -> [Sentence]
 -- | Converts input to a <a>Sentence</a> and appends %.
 addPercent :: Show a => a -> Sentence
 
--- | Produces a <a>Sentence</a> that displays the constraints in a set {}.
-displayStrConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
-
--- | Produces a <a>Sentence</a> that displays the constraints in a set {}.
-displayDblConstrntsAsSet :: Quantity a => a -> [Double] -> Sentence
-
 -- | Prepends the word <a>Equation</a> to an <a>Int</a>.
 eqN :: Int -> Sentence
 
@@ -8705,11 +8916,10 @@ Boolean :: Space
 Char :: Space
 String :: Space
 Vect :: Space -> Space
+Set :: Space -> Space
 Matrix :: Int -> Int -> Space -> Space
 Array :: Space -> Space
 Actor :: String -> Space
-DiscreteD :: [Double] -> Space
-DiscreteS :: [String] -> Space
 Function :: NonEmpty Primitive -> Primitive -> Space
 Void :: Space
 
@@ -8742,7 +8952,7 @@ type DiscreteDomainDesc a b = DomainDesc 'Discrete a b
 -- | Gets the name of an <a>Actor</a>.
 getActorName :: Space -> String
 
--- | Gets the inner <a>Space</a> of a vector.
+-- | Gets the inner <a>Space</a> of a vector or set.
 getInnerSpace :: Space -> Space
 mkFunction :: [Primitive] -> Primitive -> Space
 type Primitive = Space

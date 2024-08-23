@@ -29,7 +29,7 @@ type SClass a = CS (a (Class a))
 type FSModule a = FS (a (Module a))
 type NamedArgs r = [(SVariable r, SValue r)]
 type Initializers r = [(SVariable r, SValue r)]
-class (VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, List r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r) => SharedProg r
+class (VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, List r, Set r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r) => SharedProg r
 class (SharedProg r, ProgramSym r, OOVariableValue r, OODeclStatement r, OOFuncAppStatement r, OOValueExpression r, InternalValueExp r, GetSet r, ObserverPattern r, StrategyPattern r) => OOProg r
 class (FileSym r) => ProgramSym r where {
     type Program r;
@@ -68,6 +68,7 @@ string :: TypeSym r => VSType r
 infile :: TypeSym r => VSType r
 outfile :: TypeSym r => VSType r
 listType :: TypeSym r => VSType r -> VSType r
+setType :: TypeSym r => VSType r -> VSType r
 arrayType :: TypeSym r => VSType r -> VSType r
 listInnerType :: TypeSym r => VSType r -> VSType r
 funcType :: TypeSym r => [VSType r] -> VSType r -> VSType r
@@ -98,6 +99,7 @@ class (ValueSym r) => StatementSym r where {
     type Statement r;
 }
 valStmt :: StatementSym r => SValue r -> MSStatement r
+emptyStmt :: StatementSym r => MSStatement r
 multi :: StatementSym r => [MSStatement r] -> MSStatement r
 class (VariableSym r, StatementSym r) => AssignStatement r
 (&-=) :: AssignStatement r => SVariable r -> SValue r -> MSStatement r
@@ -117,6 +119,8 @@ varDec :: DeclStatement r => SVariable r -> r (Scope r) -> MSStatement r
 varDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
 listDec :: DeclStatement r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
 listDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+setDec :: DeclStatement r => SVariable r -> r (Scope r) -> MSStatement r
+setDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
 arrayDec :: DeclStatement r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
 arrayDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
 constDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
@@ -224,6 +228,7 @@ litInt :: Literal r => Integer -> SValue r
 litString :: Literal r => String -> SValue r
 litArray :: Literal r => VSType r -> [SValue r] -> SValue r
 litList :: Literal r => VSType r -> [SValue r] -> SValue r
+litSet :: Literal r => VSType r -> [SValue r] -> SValue r
 class (ValueSym r) => MathConstant r
 pi :: MathConstant r => SValue r
 class (VariableSym r, ValueSym r) => VariableValue r
@@ -361,6 +366,8 @@ listSet :: List r => SValue r -> SValue r -> SValue r -> SValue r
 -- | Finds the index of the first occurrence of a value in a list.
 --   Arguments are: List, Value
 indexOf :: List r => SValue r -> SValue r -> SValue r
+class (ValueSym r) => Set r
+contains :: Set r => SValue r -> SValue r -> SValue r
 
 -- | Creates a slice of a list and assigns it to a variable. Arguments are:
 --   Variable to assign List to read from [Start index] inclusive. (if
@@ -451,6 +458,7 @@ String :: CodeType
 InFile :: CodeType
 OutFile :: CodeType
 List :: CodeType -> CodeType
+Set :: CodeType -> CodeType
 Array :: CodeType -> CodeType
 Object :: ClassName -> CodeType
 Func :: [CodeType] -> CodeType -> CodeType
@@ -506,7 +514,7 @@ type MSParameter a = MS (a (Parameter a))
 type SMethod a = MS (a (Method a))
 type FSModule a = FS (a (Module a))
 type NamedArgs r = [(SVariable r, SValue r)]
-class (VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, List r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r) => SharedProg r
+class (VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, List r, Set r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r) => SharedProg r
 class (SharedProg r, ProgramSym r) => ProcProg r
 class (FileSym r) => ProgramSym r where {
     type Program r;
@@ -540,6 +548,7 @@ string :: TypeSym r => VSType r
 infile :: TypeSym r => VSType r
 outfile :: TypeSym r => VSType r
 listType :: TypeSym r => VSType r -> VSType r
+setType :: TypeSym r => VSType r -> VSType r
 arrayType :: TypeSym r => VSType r -> VSType r
 listInnerType :: TypeSym r => VSType r -> VSType r
 funcType :: TypeSym r => [VSType r] -> VSType r -> VSType r
@@ -568,6 +577,7 @@ class (ValueSym r) => StatementSym r where {
     type Statement r;
 }
 valStmt :: StatementSym r => SValue r -> MSStatement r
+emptyStmt :: StatementSym r => MSStatement r
 multi :: StatementSym r => [MSStatement r] -> MSStatement r
 class (VariableSym r, StatementSym r) => AssignStatement r
 (&-=) :: AssignStatement r => SVariable r -> SValue r -> MSStatement r
@@ -587,6 +597,8 @@ varDec :: DeclStatement r => SVariable r -> r (Scope r) -> MSStatement r
 varDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
 listDec :: DeclStatement r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
 listDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+setDec :: DeclStatement r => SVariable r -> r (Scope r) -> MSStatement r
+setDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
 arrayDec :: DeclStatement r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
 arrayDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
 constDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
@@ -673,6 +685,7 @@ litInt :: Literal r => Integer -> SValue r
 litString :: Literal r => String -> SValue r
 litArray :: Literal r => VSType r -> [SValue r] -> SValue r
 litList :: Literal r => VSType r -> [SValue r] -> SValue r
+litSet :: Literal r => VSType r -> [SValue r] -> SValue r
 class (ValueSym r) => MathConstant r
 pi :: MathConstant r => SValue r
 class (VariableSym r, ValueSym r) => VariableValue r
@@ -778,6 +791,8 @@ listSet :: List r => SValue r -> SValue r -> SValue r -> SValue r
 -- | Finds the index of the first occurrence of a value in a list.
 --   Arguments are: List, Value
 indexOf :: List r => SValue r -> SValue r -> SValue r
+class (ValueSym r) => Set r
+contains :: Set r => SValue r -> SValue r -> SValue r
 
 -- | Creates a slice of a list and assigns it to a variable. Arguments are:
 --   Variable to assign List to read from [Start index] inclusive. (if
@@ -827,6 +842,7 @@ String :: CodeType
 InFile :: CodeType
 OutFile :: CodeType
 List :: CodeType -> CodeType
+Set :: CodeType -> CodeType
 Array :: CodeType -> CodeType
 Object :: ClassName -> CodeType
 Func :: [CodeType] -> CodeType -> CodeType

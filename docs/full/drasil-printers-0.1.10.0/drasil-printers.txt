@@ -292,6 +292,10 @@ ForAll :: Ops
 VAdd :: Ops
 VSub :: Ops
 Partial :: Ops
+SAdd :: Ops
+SRemove :: Ops
+SUnion :: Ops
+SContains :: Ops
 
 -- | Holds the type of "text fencing" ("(), {}, |, ||").
 data Fence
@@ -328,6 +332,7 @@ Case :: [(Expr, Expr)] -> Expr
 
 -- | Matrix.
 Mtx :: [[Expr]] -> Expr
+Set :: [Expr] -> Expr
 Row :: [Expr] -> Expr
 Ident :: String -> Expr
 Label :: String -> Expr
@@ -1153,22 +1158,15 @@ defaultConfiguration :: PrintingConfiguration
 instance Language.Drasil.Printing.PrintingInformation.HasPrintingOptions Language.Drasil.Printing.PrintingInformation.PrintingInformation
 instance Language.Drasil.Printing.PrintingInformation.HasPrintingOptions Language.Drasil.Printing.PrintingInformation.PrintingConfiguration
 
-module Language.Drasil.Printing.Import.Literal
-literal :: Literal -> PrintingInformation -> Expr
-
-
--- | Defines functions for printing expressions.
-module Language.Drasil.Printing.Import.Expr
-
--- | Translate Exprs to printable layout AST.
-expr :: Expr -> PrintingInformation -> Expr
-
 
 -- | Defines functions to render <a>Space</a>s into printable <a>Expr</a>s.
 module Language.Drasil.Printing.Import.Space
 
 -- | Render a <a>Space</a>.
 space :: PrintingInformation -> Space -> Expr
+
+module Language.Drasil.Printing.Import.Literal
+literal :: Literal -> PrintingInformation -> Expr
 
 
 -- | Defines functions to render <tt>CodeExpr</tt>s as printable
@@ -1217,6 +1215,7 @@ modelExpr :: ModelExpr -> PrintingInformation -> Expr
 -- | Common method of converting associative operations into printable
 --   layout AST.
 assocExpr :: Ops -> Int -> [ModelExpr] -> PrintingInformation -> Expr
+setExpr :: Ops -> Int -> [ModelExpr] -> PrintingInformation -> Expr
 
 -- | Add add symbol only when the second Expr is not negation
 addExpr :: [ModelExpr] -> AssocArithOper -> PrintingInformation -> [Expr]
@@ -1250,6 +1249,13 @@ renderURI :: ctx -> ShortName -> Sentence
 
 -- | Renders citation information.
 renderCitInfo :: RefInfo -> Sentence
+
+
+-- | Defines functions for printing expressions.
+module Language.Drasil.Printing.Import.Expr
+
+-- | Translate Exprs to printable layout AST.
+expr :: Expr -> PrintingInformation -> Expr
 
 
 -- | Defines functions to render <a>CodeExpr</a>s as printable

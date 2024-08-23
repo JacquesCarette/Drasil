@@ -1,3 +1,4 @@
 digraph space{
-Space	[shape=oval, color=cyan3, label="Space"];
+Space	[shape=oval, color=darkviolet, label="Space"];
+Space -> Space;
 }

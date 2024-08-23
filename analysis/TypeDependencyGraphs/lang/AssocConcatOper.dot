@@ -1,0 +1,3 @@
+digraph assocconcatoper{
+AssocConcatOper	[shape=oval, color=darkviolet, label="AssocConcatOper"];
+}

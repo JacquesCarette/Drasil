@@ -74,7 +74,8 @@ class TypeSym r where
   type Type r
   bool          :: VSType r
   int           :: VSType r -- This is 32-bit signed ints except in Python, 
-                            -- which has unlimited precision ints
+                            -- which has unlimited precision ints; and Julia,
+                            -- Which defaults to 64-bit signed ints
   float         :: VSType r
   double        :: VSType r
   char          :: VSType r
@@ -94,9 +95,9 @@ class (TypeSym r) => TypeElim r where
 
 class ScopeSym r where
   type Scope r
-  global :: r (Scope r)
-  mainFn :: r (Scope r)
-  local  :: r (Scope r)
+  global :: r (Scope r) -- Definite global scope
+  mainFn :: r (Scope r) -- Main program - either main function or global scope
+  local  :: r (Scope r) -- Definite local scope
 
 type SVariable a = VS (a (Variable a))
 
@@ -293,11 +294,11 @@ class (ValueSym r) => InternalList r where
 --   Arguments are: 
 --   Variable to assign
 --   List to read from
---   [Start index] inclusive.
+--   (optional) Start index inclusive.
 --      (if Nothing, then list start if step > 0, list end if step < 0)
---   [End index] exclusive.
+--   (optional) End index exclusive.
 --      (if Nothing, then list end if step > 0, list start if step > 0)
---   [Step] (if Nothing, then defaults to 1)
+--   (optional) Step (if Nothing, then defaults to 1)
 listSlice :: (InternalList r) => SVariable r -> SValue r -> Maybe (SValue r) -> 
   Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listSlice vnew vold b e s = listSlice' b e s vnew vold
@@ -307,6 +308,8 @@ listIndexExists lst index = listSize lst ?> index
 
 at :: (List r) => SValue r -> SValue r -> SValue r
 at = listAccess
+
+-- Vector Typeclasses --
 
 type VSThunk a = VS (a (Thunk a))
 
@@ -323,6 +326,7 @@ class TypeSym r => VectorType r where
   vecType :: VSType r -> VSType r
 
 class (DeclStatement r) => VectorDecl r where
+  -- First argument is size of the vector
   vecDec :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
   vecDecDef :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
 
@@ -366,10 +370,12 @@ assignToListIndex lst index v = valStmt $ listSet (valueOf lst) index v
 class (VariableSym r, StatementSym r, ScopeSym r) => DeclStatement r where
   varDec       :: SVariable r -> r (Scope r) -> MSStatement r
   varDecDef    :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+  -- First argument is size of the list
   listDec      :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
   listDecDef   :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
   setDec       :: SVariable r -> r (Scope r) -> MSStatement r
   setDecDef    :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+  -- First argument is size of the array
   arrayDec     :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
   arrayDecDef  :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
   constDecDef  :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
@@ -383,6 +389,7 @@ class (VariableSym r, StatementSym r) => IOStatement r where
   printStr   :: String -> MSStatement r
   printStrLn :: String -> MSStatement r
 
+  -- First argument is file handle, second argument is value to print
   printFile      :: SValue r -> SValue r -> MSStatement r
   printFileLn    :: SValue r -> SValue r -> MSStatement r
   printFileStr   :: SValue r -> String -> MSStatement r
@@ -403,6 +410,7 @@ class (VariableSym r, StatementSym r) => IOStatement r where
   getFileInputAll  :: SValue r -> SVariable r -> MSStatement r
 
 class (VariableSym r, StatementSym r) => StringStatement r where
+  -- Parameters are: char to split on, variable to store result in, string to split
   stringSplit :: Char -> SVariable r -> SValue r -> MSStatement r
 
   stringListVals  :: [SVariable r] -> SValue r -> MSStatement r
@@ -442,6 +450,7 @@ class (BodySym r, VariableSym r) => ControlStatement r where
 
   for      :: MSStatement r -> SValue r -> MSStatement r -> MSBody r -> 
     MSStatement r
+  -- Iterator variable, start value, end value, step value, loop body
   forRange :: SVariable r -> SValue r -> SValue r -> SValue r -> MSBody r -> 
     MSStatement r
   forEach  :: SVariable r -> SValue r -> MSBody r -> MSStatement r

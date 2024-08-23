@@ -33,5 +33,5 @@ type FSModule a = FS (a (Module a))
 
 class (MethodSym r) => ModuleSym r where
   type Module r
-  -- Module name, import names, module functions, module classes
+  -- Module name, import names, module functions
   buildModule :: Label -> [Label] -> [SMethod r] -> FSModule r

@@ -464,6 +464,7 @@ instance (Pair p) => List (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => Set (p CppSrcCode CppHdrCode) where
   contains = pair2 contains contains
+  setAdd = pair2 setAdd setAdd
 
 instance (Pair p) => InternalList (p CppSrcCode CppHdrCode) where
   listSlice' b e s vr vl = pair2
@@ -1390,6 +1391,7 @@ instance List CppSrcCode where
 
 instance Set CppSrcCode where
   contains = CP.containsInt cppIndex cppIterEnd
+  setAdd = G.listAppend
 
 
 instance InternalList CppSrcCode where
@@ -2095,6 +2097,7 @@ instance List CppHdrCode where
 
 instance Set CppHdrCode where
   contains _ _ = mkStateVal void empty
+  setAdd _ _ = mkStateVal void empty
 
 instance InternalList CppHdrCode where
   listSlice' _ _ _ _ _ = toState $ toCode empty

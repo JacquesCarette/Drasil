@@ -475,6 +475,7 @@ instance List JavaCode where
 
 instance Set JavaCode where
   contains = CP.contains jContains
+  setAdd = G.listAppend
 
 instance InternalList JavaCode where
   listSlice' = M.listSlice

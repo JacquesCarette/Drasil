@@ -446,6 +446,7 @@ instance List CSharpCode where
 
 instance Set CSharpCode where
   contains = CP.contains csContains
+  setAdd = G.listAppend
 
 instance InternalList CSharpCode where
   listSlice' = M.listSlice

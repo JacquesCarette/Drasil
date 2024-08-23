@@ -462,6 +462,7 @@ instance List SwiftCode where
 
 instance Set SwiftCode where
   contains = CP.contains swiftContains
+  setAdd = G.listAppend
 
 instance InternalList SwiftCode where
   listSlice' b e s vn vo = swiftListSlice vn vo b e (fromMaybe (litInt 1) s)

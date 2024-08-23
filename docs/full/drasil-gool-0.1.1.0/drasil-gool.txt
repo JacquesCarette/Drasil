@@ -1368,9 +1368,9 @@ destructorError :: String -> String
 stateVarDef :: (OORenderSym r, Monad r) => r (Visibility r) -> r (Permanence r) -> SVariable r -> SValue r -> CS (r Doc)
 constVar :: (CommonRenderSym r, Monad r) => Doc -> r (Visibility r) -> SVariable r -> SValue r -> CS (r Doc)
 litArray :: CommonRenderSym r => (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
-litSet :: OORenderSym r => (Doc -> Doc) -> (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
+litSet :: CommonRenderSym r => (Doc -> Doc) -> (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
 listSetFunc :: CommonRenderSym r => (Doc -> Doc -> Doc) -> SValue r -> SValue r -> SValue r -> VSFunction r
-litSetFunc :: OORenderSym r => String -> VSType r -> [SValue r] -> SValue r
+litSetFunc :: CommonRenderSym r => String -> VSType r -> [SValue r] -> SValue r
 extraClass :: OORenderSym r => Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> SClass r
 listAccessFunc :: CommonRenderSym r => VSType r -> SValue r -> VSFunction r
 doubleRender :: String

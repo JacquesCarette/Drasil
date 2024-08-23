@@ -400,6 +400,7 @@ instance List JuliaCode where
 
 instance Set JuliaCode where
   contains s e = funcApp "in" bool [e, s]
+  setAdd = CP.listAppend
 
 instance InternalList JuliaCode where
   listSlice' b e s vn vo = jlListSlice vn vo b e (fromMaybe (litInt 1) s)

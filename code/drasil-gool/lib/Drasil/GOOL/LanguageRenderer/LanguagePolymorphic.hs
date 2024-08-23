@@ -10,8 +10,8 @@ module Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (fileFromData,
   classVarCheckStatic, arrayElem, local, litChar, litDouble, litInt, litString, 
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd, 
-  listAppend, listAccess, listSet, getFunc, setFunc, 
-  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment,
+  listAppend, setAdd, listAccess, listSet, getFunc, setFunc, 
+  listAppendFunc, setAddFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment,
   objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
   tryCatch, construct, param, method, getMethod, setMethod, initStmts,
   function, docFuncRepr, docFunc, buildClass, implementingClass, docClass,
@@ -32,7 +32,7 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
   AssignStatement((&++)), (&=), IOStatement(printStr, printStrLn, printFile,
   printFileStr, printFileStrLn), ifNoElse, ScopeSym(Scope), convType)
 import qualified Drasil.GOOL.InterfaceCommon as IC (TypeSym(int, double, char,
-  string, listType, arrayType, listInnerType, funcType, void), VariableSym(var),
+  string, listType, setType, arrayType, listInnerType, funcType, void), VariableSym(var),
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
   IOStatement(print), ControlStatement(returnStmt, for, forEach), ParameterSym(param),
@@ -50,7 +50,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, RenderType(..),
   BlockCommentSym(..))
 import qualified Drasil.GOOL.RendererClassesCommon as S (RenderValue(call),
   InternalListFunc (listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
-  RenderStatement(stmt), InternalIOStmt(..))
+  RenderStatement(stmt), InternalIOStmt(..), InternalSetFunc (setAddFunc))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (BodyElim(..),
   BlockElim(..), InternalVarElim(variable), ValueElim(value, valueInt),
   FunctionElim(..), StatementElim(statement), BlockCommentElim(..))
@@ -308,6 +308,9 @@ listAdd v i vToAdd = v $. S.listAddFunc v (IC.intToIndex i) vToAdd
 listAppend :: (OORenderSym r) => SValue r -> SValue r -> SValue r
 listAppend v vToApp = v $. S.listAppendFunc v vToApp
 
+setAdd :: (OORenderSym r, S.InternalSetFunc r) => SValue r -> SValue r -> SValue r
+setAdd v vToApp = v $. S.setAddFunc v vToApp
+
 listAccess :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r
 listAccess v i = do
   v' <- v
@@ -337,6 +340,9 @@ setFunc t v toVal = v >>= (\vr -> IG.func (setterName $ variableName vr) t
 
 listAppendFunc :: (OORenderSym r) => Label -> SValue r -> VSFunction r
 listAppendFunc f v = IG.func f (IC.listType $ onStateValue valueType v) [v]
+
+setAddFunc :: (OORenderSym r) => Label -> SValue r -> VSFunction r
+setAddFunc f v = IG.func f (IC.setType $ onStateValue valueType v) [v]
 
 -- Statements --
 

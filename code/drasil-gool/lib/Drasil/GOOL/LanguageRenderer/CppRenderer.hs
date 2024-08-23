@@ -36,7 +36,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
   RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
+  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..), InternalSetFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim, MSMthdType,
@@ -73,7 +73,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
+  lambda, func, get, set, setAdd, setAddFunc, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
   increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
@@ -464,6 +464,7 @@ instance (Pair p) => List (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => Set (p CppSrcCode CppHdrCode) where
   contains = pair2 contains contains
+  setAdd = pair2 setAdd setAdd
 
 instance (Pair p) => InternalList (p CppSrcCode CppHdrCode) where
   listSlice' b e s vr vl = pair2
@@ -483,6 +484,9 @@ instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where
   listAppendFunc = pair2 listAppendFunc listAppendFunc
   listAccessFunc = pair2 listAccessFunc listAccessFunc
   listSetFunc = pair3 listSetFunc listSetFunc
+
+instance (Pair p) => InternalSetFunc (p CppSrcCode CppHdrCode) where
+  setAddFunc = pair2 setAddFunc setAddFunc
 
 instance ThunkSym (p CppSrcCode CppHdrCode) where
   type Thunk (p CppSrcCode CppHdrCode) = CommonThunk VS
@@ -1386,7 +1390,7 @@ instance List CppSrcCode where
 
 instance Set CppSrcCode where
   contains = CP.containsInt cppIndex cppIterEnd
-
+  setAdd = G.setAdd
 
 instance InternalList CppSrcCode where
   listSlice' = M.listSlice
@@ -1401,6 +1405,9 @@ instance InternalListFunc CppSrcCode where
   listAppendFunc _ = G.listAppendFunc cppListAppend
   listAccessFunc = CP.listAccessFunc' cppListAccess
   listSetFunc = CP.listSetFunc cppListSetDoc
+
+instance InternalSetFunc CppSrcCode where
+  setAddFunc _ = G.setAddFunc cppListAdd
 
 instance ThunkSym CppSrcCode where
   type Thunk CppSrcCode = CommonThunk VS
@@ -2091,6 +2098,7 @@ instance List CppHdrCode where
 
 instance Set CppHdrCode where
   contains _ _ = mkStateVal void empty
+  setAdd _ _ = mkStateVal void empty
 
 instance InternalList CppHdrCode where
   listSlice' _ _ _ _ _ = toState $ toCode empty
@@ -2105,6 +2113,9 @@ instance InternalListFunc CppHdrCode where
   listAppendFunc _ _ = funcFromData empty void
   listAccessFunc _ _ = funcFromData empty void
   listSetFunc _ _ _ = funcFromData empty void
+
+instance InternalSetFunc CppHdrCode where
+  setAddFunc _ _ = funcFromData empty void
 
 instance ThunkSym CppHdrCode where
   type Thunk CppHdrCode = CommonThunk VS

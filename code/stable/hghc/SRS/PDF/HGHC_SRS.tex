@@ -11,24 +11,15 @@
 \usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{caption}
-\usepackage{graphicx}
-\usepackage{calc}
+\usepackage{adjustbox}
 \usepackage{enumitem}
 \setmathfont{Latin Modern Math}
 \newcommand{\gt}{\ensuremath >}
 \newcommand{\lt}{\ensuremath <}
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
-\def\inDefScale{0.8}
-\def\outDefScale{1.0}
-\newsavebox{\mybox}
-\newcommand{\resizeExpression}[2]{
-  \savebox{\mybox}{$#1$}
-  \ifdim\wd\mybox>#2\linewidth
-    \resizebox{#2\textwidth}{!}{\usebox{\mybox}}
-  \else
-    \usebox{\mybox}
-  \fi
+\newcommand{\resizeExpression}[1]{
+  \adjustbox{max width=\linewidth}{$#1$}
 }
 \title{Software Requirements Specification for HGHC}
 \author{W. Spencer Smith}
@@ -116,7 +107,7 @@ Units & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{h_{\text{g}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{p}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{p}}}}}{\inDefScale}
+           \resizeExpression{{h_{\text{g}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{p}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{p}}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -147,7 +138,7 @@ Units & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{h_{\text{c}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{b}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{b}}}}}{\inDefScale}
+           \resizeExpression{{h_{\text{c}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{b}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{b}}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}

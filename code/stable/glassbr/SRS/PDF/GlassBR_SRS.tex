@@ -15,8 +15,7 @@
 \usepackage{svg}
 \usepackage{float}
 \usepackage{enumitem}
-\usepackage{graphicx}
-\usepackage{calc}
+\usepackage{adjustbox}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
@@ -25,16 +24,8 @@
 \newcommand{\lt}{\ensuremath <}
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
-\def\inDefScale{0.8}
-\def\outDefScale{1.0}
-\newsavebox{\mybox}
-\newcommand{\resizeExpression}[2]{
-  \savebox{\mybox}{$#1$}
-  \ifdim\wd\mybox>#2\linewidth
-    \resizebox{#2\textwidth}{!}{\usebox{\mybox}}
-  \else
-    \usebox{\mybox}
-  \fi
+\newcommand{\resizeExpression}[1]{
+  \adjustbox{max width=\linewidth}{$#1$}
 }
 \bibliography{bibfile}
 \title{Software Requirements Specification for GlassBR}
@@ -411,7 +402,7 @@ Label & Safety Probability
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\mathit{isSafeProb}={P_{\text{f}}}\lt{}{P_{\text{f}\text{tol}}}}{\inDefScale}
+           \resizeExpression{\mathit{isSafeProb}={P_{\text{f}}}\lt{}{P_{\text{f}\text{tol}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -443,7 +434,7 @@ Label & Safety Load
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\mathit{isSafeLoad}=\mathit{capacity}\gt{}\mathit{Load}}{\inDefScale}
+           \resizeExpression{\mathit{isSafeLoad}=\mathit{capacity}\gt{}\mathit{Load}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -502,7 +493,7 @@ Equation & \begin{displaymath}
                                                15.09, & t=16.0\\
                                                18.26, & t=19.0\\
                                                21.44, & t=22.0
-                                               \end{cases}}{\inDefScale}
+                                               \end{cases}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -540,7 +531,7 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\mathit{LDF}=\left(\frac{{t_{\text{d}}}}{60}\right)^{\frac{m}{16}}}{\inDefScale}
+           \resizeExpression{\mathit{LDF}=\left(\frac{{t_{\text{d}}}}{60}\right)^{\frac{m}{16}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -585,7 +576,7 @@ Equation & \begin{displaymath}
                                           1, & g=\text{``AN''}\\
                                           4, & g=\text{``FT''}\\
                                           2, & g=\text{``HS''}
-                                          \end{cases}}{\inDefScale}
+                                          \end{cases}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -627,7 +618,7 @@ Units & ${\text{m}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\mathit{SD}=\sqrt{{\mathit{SD}_{\text{x}}}^{2}+{\mathit{SD}_{\text{y}}}^{2}+{\mathit{SD}_{\text{z}}}^{2}}}{\inDefScale}
+           \resizeExpression{\mathit{SD}=\sqrt{{\mathit{SD}_{\text{x}}}^{2}+{\mathit{SD}_{\text{y}}}^{2}+{\mathit{SD}_{\text{z}}}^{2}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -664,7 +655,7 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\mathit{AR}=\frac{a}{b}}{\inDefScale}
+           \resizeExpression{\mathit{AR}=\frac{a}{b}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -703,7 +694,7 @@ Units & ${\text{kg}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{w_{\mathit{TNT}}}=w\,\mathit{TNT}}{\inDefScale}
+           \resizeExpression{{w_{\mathit{TNT}}}=w\,\mathit{TNT}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -739,7 +730,7 @@ Units & ${\text{Pa}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{q=\mathit{interpY}\left(\text{``TSD.txt''},\mathit{SD},{w_{\mathit{TNT}}}\right)}{\inDefScale}
+           \resizeExpression{q=\mathit{interpY}\left(\text{``TSD.txt''},\mathit{SD},{w_{\mathit{TNT}}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -785,16 +776,16 @@ Output & $B$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \resizeExpression{a\gt{}0}{\inDefScale}
+                    \resizeExpression{a\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{0\lt{}b\leq{}a}{\inDefScale}
+                    \resizeExpression{0\lt{}b\leq{}a}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{B=\frac{k}{\left(a\,b\right)^{m-1}}\,\left(E\,h^{2}\right)^{m}\,\mathit{LDF}\,e^{J}}{\inDefScale}
+           \resizeExpression{B=\frac{k}{\left(a\,b\right)^{m-1}}\,\left(E\,h^{2}\right)^{m}\,\mathit{LDF}\,e^{J}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -845,15 +836,15 @@ Output & $J$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \resizeExpression{\mathit{AR}\geq{}1}{\inDefScale}
+                    \resizeExpression{\mathit{AR}\geq{}1}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & \begin{displaymath}
-                     \resizeExpression{{J_{\text{min}}}\leq{}J\leq{}{J_{\text{max}}}}{\inDefScale}
+                     \resizeExpression{{J_{\text{min}}}\leq{}J\leq{}{J_{\text{max}}}}
                      \end{displaymath}
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{J=\mathit{interpZ}\left(\text{``SDF.txt''},\mathit{AR},\hat{q}\right)}{\inDefScale}
+           \resizeExpression{J=\mathit{interpZ}\left(\text{``SDF.txt''},\mathit{AR},\hat{q}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -897,16 +888,16 @@ Output & $\mathit{NFL}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \resizeExpression{a\gt{}0}{\inDefScale}
+                    \resizeExpression{a\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{0\lt{}b\leq{}a}{\inDefScale}
+                    \resizeExpression{0\lt{}b\leq{}a}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\mathit{NFL}=\frac{{\hat{q}_{\text{tol}}}\,E\,h^{4}}{\left(a\,b\right)^{2}}}{\inDefScale}
+           \resizeExpression{\mathit{NFL}=\frac{{\hat{q}_{\text{tol}}}\,E\,h^{4}}{\left(a\,b\right)^{2}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -954,16 +945,16 @@ Output & $\hat{q}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \resizeExpression{a\gt{}0}{\inDefScale}
+                    \resizeExpression{a\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{0\lt{}b\leq{}a}{\inDefScale}
+                    \resizeExpression{0\lt{}b\leq{}a}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\hat{q}=\frac{q\,\left(a\,b\right)^{2}}{E\,h^{4}\,\mathit{GTF}}}{\inDefScale}
+           \resizeExpression{\hat{q}=\frac{q\,\left(a\,b\right)^{2}}{E\,h^{4}\,\mathit{GTF}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1014,13 +1005,13 @@ Output & ${\hat{q}_{\text{tol}}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \resizeExpression{\mathit{AR}\geq{}1}{\inDefScale}
+                    \resizeExpression{\mathit{AR}\geq{}1}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{\hat{q}_{\text{tol}}}=\mathit{interpY}\left(\text{``SDF.txt''},\mathit{AR},{J_{\text{tol}}}\right)}{\inDefScale}
+           \resizeExpression{{\hat{q}_{\text{tol}}}=\mathit{interpY}\left(\text{``SDF.txt''},\mathit{AR},{J_{\text{tol}}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1064,19 +1055,19 @@ Output & ${J_{\text{tol}}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \resizeExpression{0\leq{}{P_{\text{b}\text{tol}}}\leq{}1}{\inDefScale}
+                    \resizeExpression{0\leq{}{P_{\text{b}\text{tol}}}\leq{}1}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{a\gt{}0}{\inDefScale}
+                    \resizeExpression{a\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{0\lt{}b\leq{}a}{\inDefScale}
+                    \resizeExpression{0\lt{}b\leq{}a}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right)\,\frac{\left(a\,b\right)^{m-1}}{k\,\left(E\,h^{2}\right)^{m}\,\mathit{LDF}}\right)}{\inDefScale}
+           \resizeExpression{{J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right)\,\frac{\left(a\,b\right)^{m-1}}{k\,\left(E\,h^{2}\right)^{m}\,\mathit{LDF}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1131,11 +1122,11 @@ Output & ${P_{\text{b}}}$
 Input Constraints & 
 \\ \midrule
 Output Constraints & \begin{displaymath}
-                     \resizeExpression{0\leq{}{P_{\text{b}}}\leq{}1}{\inDefScale}
+                     \resizeExpression{0\leq{}{P_{\text{b}}}\leq{}1}
                      \end{displaymath}
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{P_{\text{b}}}=1-e^{-B}}{\inDefScale}
+           \resizeExpression{{P_{\text{b}}}=1-e^{-B}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1177,7 +1168,7 @@ Input Constraints &
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\mathit{LR}=\mathit{NFL}\,\mathit{GTF}\,\mathit{LSF}}{\inDefScale}
+           \resizeExpression{\mathit{LR}=\mathit{NFL}\,\mathit{GTF}\,\mathit{LSF}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1221,16 +1212,16 @@ Output & $\mathit{isSafePb}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \resizeExpression{0\leq{}{P_{\text{b}}}\leq{}1}{\inDefScale}
+                    \resizeExpression{0\leq{}{P_{\text{b}}}\leq{}1}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{0\leq{}{P_{\text{b}\text{tol}}}\leq{}1}{\inDefScale}
+                    \resizeExpression{0\leq{}{P_{\text{b}\text{tol}}}\leq{}1}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\mathit{isSafePb}={P_{\text{b}}}\lt{}{P_{\text{b}\text{tol}}}}{\inDefScale}
+           \resizeExpression{\mathit{isSafePb}={P_{\text{b}}}\lt{}{P_{\text{b}\text{tol}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1273,16 +1264,16 @@ Output & $\mathit{isSafeLR}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \resizeExpression{\mathit{LR}\gt{}0}{\inDefScale}
+                    \resizeExpression{\mathit{LR}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{q\gt{}0}{\inDefScale}
+                    \resizeExpression{q\gt{}0}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\mathit{isSafeLR}=\mathit{LR}\gt{}q}{\inDefScale}
+           \resizeExpression{\mathit{isSafeLR}=\mathit{LR}\gt{}q}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}

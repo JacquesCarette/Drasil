@@ -15,8 +15,7 @@
 \usepackage{svg}
 \usepackage{float}
 \usepackage{enumitem}
-\usepackage{graphicx}
-\usepackage{calc}
+\usepackage{adjustbox}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
@@ -25,16 +24,8 @@
 \newcommand{\lt}{\ensuremath <}
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
-\def\inDefScale{0.8}
-\def\outDefScale{1.0}
-\newsavebox{\mybox}
-\newcommand{\resizeExpression}[2]{
-  \savebox{\mybox}{$#1$}
-  \ifdim\wd\mybox>#2\linewidth
-    \resizebox{#2\textwidth}{!}{\usebox{\mybox}}
-  \else
-    \usebox{\mybox}
-  \fi
+\newcommand{\resizeExpression}[1]{
+  \adjustbox{max width=\linewidth}{$#1$}
 }
 \bibliography{bibfile}
 \title{Software Requirements Specification for Projectile}
@@ -330,7 +321,7 @@ Label & Acceleration
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}}{\inDefScale}
+           \resizeExpression{\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -360,7 +351,7 @@ Label & Velocity
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}}{\inDefScale}
+           \resizeExpression{\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -397,7 +388,7 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{v\text{(}t\text{)}={v^{\text{i}}}+{a^{c}}\,t}{\inDefScale}
+           \resizeExpression{v\text{(}t\text{)}={v^{\text{i}}}+{a^{c}}\,t}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -421,17 +412,17 @@ RefBy & \hyperref[GD:velVec]{GD:velVec} and \hyperref[GD:rectPos]{GD:rectPos}
 Assume we have rectilinear motion of a particle (of negligible size and shape, from \hyperref[pointMass]{A:pointMass}); that is, motion in a straight line. The velocity is $v$ and the acceleration is $a$. The motion in \hyperref[TM:acceleration]{TM:acceleration} is now one-dimensional with a constant acceleration, represented by ${a^{c}}$. The initial velocity (at $t=0$, from \hyperref[timeStartZero]{A:timeStartZero}) is represented by ${v^{\text{i}}}$. From \hyperref[TM:acceleration]{TM:acceleration} in 1D, and using the above symbols we have:
 
 \begin{displaymath}
-\resizeExpression{{a^{c}}=\frac{\,dv}{\,dt}}{\outDefScale}
+\resizeExpression{{a^{c}}=\frac{\,dv}{\,dt}}
 \end{displaymath}
 Rearranging and integrating, we have:
 
 \begin{displaymath}
-\resizeExpression{\int_{{v^{\text{i}}}}^{v}{1}\,dv=\int_{0}^{t}{{a^{c}}}\,dt}{\outDefScale}
+\resizeExpression{\int_{{v^{\text{i}}}}^{v}{1}\,dv=\int_{0}^{t}{{a^{c}}}\,dt}
 \end{displaymath}
 Performing the integration, we have the required equation:
 
 \begin{displaymath}
-\resizeExpression{v\text{(}t\text{)}={v^{\text{i}}}+{a^{c}}\,t}{\outDefScale}
+\resizeExpression{v\text{(}t\text{)}={v^{\text{i}}}+{a^{c}}\,t}
 \end{displaymath}
 \medskip
 \noindent
@@ -448,7 +439,7 @@ Units & ${\text{m}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{p\text{(}t\text{)}={p^{\text{i}}}+{v^{\text{i}}}\,t+\frac{{a^{c}}\,t^{2}}{2}}{\inDefScale}
+           \resizeExpression{p\text{(}t\text{)}={p^{\text{i}}}+{v^{\text{i}}}\,t+\frac{{a^{c}}\,t^{2}}{2}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -473,22 +464,22 @@ RefBy & \hyperref[GD:posVec]{GD:posVec}
 Assume we have rectilinear motion of a particle (of negligible size and shape, from \hyperref[pointMass]{A:pointMass}); that is, motion in a straight line. The position is $p$ and the velocity is $v$. The motion in \hyperref[TM:velocity]{TM:velocity} is now one-dimensional. The initial position (at $t=0$, from \hyperref[timeStartZero]{A:timeStartZero}) is represented by ${p^{\text{i}}}$. From \hyperref[TM:velocity]{TM:velocity} in 1D, and using the above symbols we have:
 
 \begin{displaymath}
-\resizeExpression{v=\frac{\,dp}{\,dt}}{\outDefScale}
+\resizeExpression{v=\frac{\,dp}{\,dt}}
 \end{displaymath}
 Rearranging and integrating, we have:
 
 \begin{displaymath}
-\resizeExpression{\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{v}\,dt}{\outDefScale}
+\resizeExpression{\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{v}\,dt}
 \end{displaymath}
 From \hyperref[GD:rectVel]{GD:rectVel}, we can replace $v$:
 
 \begin{displaymath}
-\resizeExpression{\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{{v^{\text{i}}}+{a^{c}}\,t}\,dt}{\outDefScale}
+\resizeExpression{\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{{v^{\text{i}}}+{a^{c}}\,t}\,dt}
 \end{displaymath}
 Performing the integration, we have the required equation:
 
 \begin{displaymath}
-\resizeExpression{p\text{(}t\text{)}={p^{\text{i}}}+{v^{\text{i}}}\,t+\frac{{a^{c}}\,t^{2}}{2}}{\outDefScale}
+\resizeExpression{p\text{(}t\text{)}={p^{\text{i}}}+{v^{\text{i}}}\,t+\frac{{a^{c}}\,t^{2}}{2}}
 \end{displaymath}
 \medskip
 \noindent
@@ -508,7 +499,7 @@ Equation & \begin{displaymath}
            \resizeExpression{\symbf{v}\text{(}t\text{)}=\begin{bmatrix}
                                                         {{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}}\,t\\
                                                         {{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}}\,t
-                                                        \end{bmatrix}}{\inDefScale}
+                                                        \end{bmatrix}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -548,7 +539,7 @@ For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A:twoDM
 \resizeExpression{\symbf{v}\text{(}t\text{)}=\begin{bmatrix}
                                              {{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}}\,t\\
                                              {{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}}\,t
-                                             \end{bmatrix}}{\outDefScale}
+                                             \end{bmatrix}}
 \end{displaymath}
 \medskip
 \noindent
@@ -568,7 +559,7 @@ Equation & \begin{displaymath}
            \resizeExpression{\symbf{p}\text{(}t\text{)}=\begin{bmatrix}
                                                         {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}}\,t+\frac{{{a_{\text{x}}}^{\text{c}}}\,t^{2}}{2}\\
                                                         {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}}\,t+\frac{{{a_{\text{y}}}^{\text{c}}}\,t^{2}}{2}
-                                                        \end{bmatrix}}{\inDefScale}
+                                                        \end{bmatrix}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -614,7 +605,7 @@ For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A:twoDM
 \resizeExpression{\symbf{p}\text{(}t\text{)}=\begin{bmatrix}
                                              {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}}\,t+\frac{{{a_{\text{x}}}^{\text{c}}}\,t^{2}}{2}\\
                                              {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}}\,t+\frac{{{a_{\text{y}}}^{\text{c}}}\,t^{2}}{2}
-                                             \end{bmatrix}}{\outDefScale}
+                                             \end{bmatrix}}
 \end{displaymath}
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
@@ -638,7 +629,7 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{v=\|\symbf{v}\text{(}t\text{)}\|}{\inDefScale}
+           \resizeExpression{v=\|\symbf{v}\text{(}t\text{)}\|}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -676,7 +667,7 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{{v_{\text{x}}}^{\text{i}}}={v^{\text{i}}}\,\cos\left(θ\right)}{\inDefScale}
+           \resizeExpression{{{v_{\text{x}}}^{\text{i}}}={v^{\text{i}}}\,\cos\left(θ\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -717,7 +708,7 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{{v_{\text{y}}}^{\text{i}}}={v^{\text{i}}}\,\sin\left(θ\right)}{\inDefScale}
+           \resizeExpression{{{v_{\text{y}}}^{\text{i}}}={v^{\text{i}}}\,\sin\left(θ\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -762,18 +753,18 @@ Output & ${t_{\text{flight}}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \resizeExpression{{v_{\text{launch}}}\gt{}0}{\inDefScale}
+                    \resizeExpression{{v_{\text{launch}}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{0\lt{}θ\lt{}\frac{π}{2}}{\inDefScale}
+                    \resizeExpression{0\lt{}θ\lt{}\frac{π}{2}}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & \begin{displaymath}
-                     \resizeExpression{{t_{\text{flight}}}\gt{}0}{\inDefScale}
+                     \resizeExpression{{t_{\text{flight}}}\gt{}0}
                      \end{displaymath}
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{t_{\text{flight}}}=\frac{2\,{v_{\text{launch}}}\,\sin\left(θ\right)}{g}}{\inDefScale}
+           \resizeExpression{{t_{\text{flight}}}=\frac{2\,{v_{\text{launch}}}\,\sin\left(θ\right)}{g}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -804,27 +795,27 @@ RefBy & \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}, \hyperref[outputVal
 We know that ${{p_{\text{y}}}^{\text{i}}}=0$ (\hyperref[launchOrigin]{A:launchOrigin}) and ${{a_{\text{y}}}^{\text{c}}}=-g$ (\hyperref[accelYGravity]{A:accelYGravity}). Substituting these values into the y-direction of \hyperref[GD:posVec]{GD:posVec} gives us:
 
 \begin{displaymath}
-\resizeExpression{{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}}\,t-\frac{g\,t^{2}}{2}}{\outDefScale}
+\resizeExpression{{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}}\,t-\frac{g\,t^{2}}{2}}
 \end{displaymath}
 To find the time that the projectile lands, we want to find the $t$ value (${t_{\text{flight}}}$) where ${p_{\text{y}}}=0$ (since the target is on the $x$-axis from \hyperref[targetXAxis]{A:targetXAxis}). From the equation above we get:
 
 \begin{displaymath}
-\resizeExpression{{{v_{\text{y}}}^{\text{i}}}\,{t_{\text{flight}}}-\frac{g\,{t_{\text{flight}}}^{2}}{2}=0}{\outDefScale}
+\resizeExpression{{{v_{\text{y}}}^{\text{i}}}\,{t_{\text{flight}}}-\frac{g\,{t_{\text{flight}}}^{2}}{2}=0}
 \end{displaymath}
 Dividing by ${t_{\text{flight}}}$ (with the constraint ${t_{\text{flight}}}\gt{}0$) gives us:
 
 \begin{displaymath}
-\resizeExpression{{{v_{\text{y}}}^{\text{i}}}-\frac{g\,{t_{\text{flight}}}}{2}=0}{\outDefScale}
+\resizeExpression{{{v_{\text{y}}}^{\text{i}}}-\frac{g\,{t_{\text{flight}}}}{2}=0}
 \end{displaymath}
 Solving for ${t_{\text{flight}}}$ gives us:
 
 \begin{displaymath}
-\resizeExpression{{t_{\text{flight}}}=\frac{2\,{{v_{\text{y}}}^{\text{i}}}}{g}}{\outDefScale}
+\resizeExpression{{t_{\text{flight}}}=\frac{2\,{{v_{\text{y}}}^{\text{i}}}}{g}}
 \end{displaymath}
 From \hyperref[DD:speedIY]{DD:speedIY} (with ${v^{\text{i}}}={v_{\text{launch}}}$) we can replace ${{v_{\text{y}}}^{\text{i}}}$:
 
 \begin{displaymath}
-\resizeExpression{{t_{\text{flight}}}=\frac{2\,{v_{\text{launch}}}\,\sin\left(θ\right)}{g}}{\outDefScale}
+\resizeExpression{{t_{\text{flight}}}=\frac{2\,{v_{\text{launch}}}\,\sin\left(θ\right)}{g}}
 \end{displaymath}
 \medskip
 \noindent
@@ -844,18 +835,18 @@ Output & ${p_{\text{land}}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \resizeExpression{{v_{\text{launch}}}\gt{}0}{\inDefScale}
+                    \resizeExpression{{v_{\text{launch}}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{0\lt{}θ\lt{}\frac{π}{2}}{\inDefScale}
+                    \resizeExpression{0\lt{}θ\lt{}\frac{π}{2}}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & \begin{displaymath}
-                     \resizeExpression{{p_{\text{land}}}\gt{}0}{\inDefScale}
+                     \resizeExpression{{p_{\text{land}}}\gt{}0}
                      \end{displaymath}
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{p_{\text{land}}}=\frac{2\,{v_{\text{launch}}}^{2}\,\sin\left(θ\right)\,\cos\left(θ\right)}{g}}{\inDefScale}
+           \resizeExpression{{p_{\text{land}}}=\frac{2\,{v_{\text{launch}}}^{2}\,\sin\left(θ\right)\,\cos\left(θ\right)}{g}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -886,22 +877,22 @@ RefBy & \hyperref[IM:offsetIM]{IM:offsetIM} and \hyperref[calcValues]{FR:Calcula
 We know that ${{p_{\text{x}}}^{\text{i}}}=0$ (\hyperref[launchOrigin]{A:launchOrigin}) and ${{a_{\text{x}}}^{\text{c}}}=0$ (\hyperref[accelXZero]{A:accelXZero}). Substituting these values into the x-direction of \hyperref[GD:posVec]{GD:posVec} gives us:
 
 \begin{displaymath}
-\resizeExpression{{p_{\text{x}}}={{v_{\text{x}}}^{\text{i}}}\,t}{\outDefScale}
+\resizeExpression{{p_{\text{x}}}={{v_{\text{x}}}^{\text{i}}}\,t}
 \end{displaymath}
 To find the landing position, we want to find the ${p_{\text{x}}}$ value (${p_{\text{land}}}$) at flight duration (from \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}):
 
 \begin{displaymath}
-\resizeExpression{{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2\,{v_{\text{launch}}}\,\sin\left(θ\right)}{g}}{\outDefScale}
+\resizeExpression{{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2\,{v_{\text{launch}}}\,\sin\left(θ\right)}{g}}
 \end{displaymath}
 From \hyperref[DD:speedIX]{DD:speedIX} (with ${v^{\text{i}}}={v_{\text{launch}}}$) we can replace ${{v_{\text{x}}}^{\text{i}}}$:
 
 \begin{displaymath}
-\resizeExpression{{p_{\text{land}}}=\frac{{v_{\text{launch}}}\,\cos\left(θ\right)\cdot{}2\,{v_{\text{launch}}}\,\sin\left(θ\right)}{g}}{\outDefScale}
+\resizeExpression{{p_{\text{land}}}=\frac{{v_{\text{launch}}}\,\cos\left(θ\right)\cdot{}2\,{v_{\text{launch}}}\,\sin\left(θ\right)}{g}}
 \end{displaymath}
 Rearranging this gives us the required equation:
 
 \begin{displaymath}
-\resizeExpression{{p_{\text{land}}}=\frac{2\,{v_{\text{launch}}}^{2}\,\sin\left(θ\right)\,\cos\left(θ\right)}{g}}{\outDefScale}
+\resizeExpression{{p_{\text{land}}}=\frac{2\,{v_{\text{launch}}}^{2}\,\sin\left(θ\right)\,\cos\left(θ\right)}{g}}
 \end{displaymath}
 \medskip
 \noindent
@@ -921,16 +912,16 @@ Output & ${d_{\text{offset}}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \resizeExpression{{p_{\text{land}}}\gt{}0}{\inDefScale}
+                    \resizeExpression{{p_{\text{land}}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{{p_{\text{target}}}\gt{}0}{\inDefScale}
+                    \resizeExpression{{p_{\text{target}}}\gt{}0}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{d_{\text{offset}}}={p_{\text{land}}}-{p_{\text{target}}}}{\inDefScale}
+           \resizeExpression{{d_{\text{offset}}}={p_{\text{land}}}-{p_{\text{target}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -971,10 +962,10 @@ Output & $s$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \resizeExpression{{d_{\text{offset}}}\gt{}-{p_{\text{target}}}}{\inDefScale}
+                    \resizeExpression{{d_{\text{offset}}}\gt{}-{p_{\text{target}}}}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{{p_{\text{target}}}\gt{}0}{\inDefScale}
+                    \resizeExpression{{p_{\text{target}}}\gt{}0}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
@@ -984,7 +975,7 @@ Equation & \begin{displaymath}
                                \text{``The target was hit.''}, & |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}|\lt{}ε\\
                                \text{``The projectile fell short.''}, & {d_{\text{offset}}}\lt{}0\\
                                \text{``The projectile went long.''}, & {d_{\text{offset}}}\gt{}0
-                               \end{cases}}{\inDefScale}
+                               \end{cases}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}

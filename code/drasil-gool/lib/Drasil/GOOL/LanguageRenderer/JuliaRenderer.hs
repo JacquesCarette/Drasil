@@ -43,7 +43,8 @@ import Drasil.GOOL.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
 import qualified Drasil.GOOL.RendererClassesProc as RC (module')
 import Drasil.GOOL.LanguageRenderer (printLabel, listSep, listSep',
-  variableList, parameterList, forLabel, inLabel, tryLabel, catchLabel)
+  variableList, parameterList, forLabel, inLabel, tryLabel, catchLabel,
+  valueList)
 import qualified Drasil.GOOL.LanguageRenderer as R (sqrt, abs, log10, log,
   exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
   addComments, blockCmt, docCmt, commentedMod, listSetFunc, commentedItem,
@@ -60,7 +61,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   emptyStmt, print, comment, valStmt, returnStmt, param, docFunc, throw, arg,
   argsList, ifCond, smartAdd, local, var)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (bool,
-  boolRender, extVar, funcType, litArray, listDec, listDecDef, listAccessFunc,
+  boolRender, extVar, funcType, listDec, listDecDef, listAccessFunc,
   listSetFunc, notNull, extFuncAppMixedArgs, functionDoc, listSize, listAdd,
   listAppend, intToIndex', indexToInt', inOutFunc, docInOutFunc', forLoopError,
   varDecDef, openFileR', openFileW', openFileA', multiReturn, multiAssign,
@@ -138,10 +139,11 @@ instance RenderFile JuliaCode where
 instance ImportSym JuliaCode where
   type Import JuliaCode = Doc
   langImport n = let modName = text n
-                     fileName = text $ n ++ '.' : jlExt
+    in toCode $ importLabel <+> modName
+  modImport n = let modName = text n
+                    fileName = text $ n ++ '.' : jlExt
     in toCode $ vcat [includeLabel <> parens (doubleQuotes fileName),
-      importLabel <+> text "." <> modName] -- TODO: we want a dot only when the import is locally defined.
-  modImport = langImport
+                      importLabel <+> text "." <> modName]
 
 instance ImportElim JuliaCode where
   import' = unJLC
@@ -257,7 +259,7 @@ instance ScopeElim JuliaCode where
 instance VariableSym JuliaCode where
   type Variable JuliaCode = VarData
   var = G.var
-  constant = var -- TODO: add `const` keyword in global scope, and follow Python for local
+  constant = var
   extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
   arrayElem i = A.arrayElem (litInt i)
 
@@ -289,8 +291,8 @@ instance Literal JuliaCode where
   litFloat = jlLitFloat
   litInt = G.litInt
   litString = G.litString
-  litArray = CP.litArray brackets
-  litList = litArray
+  litArray = litList
+  litList = jlLitList
 
 instance MathConstant JuliaCode where
   pi :: SValue JuliaCode
@@ -661,6 +663,14 @@ jlClassError = "Classes are not supported in Julia"
 jlLitFloat :: (CommonRenderSym r) => Float -> SValue r
 jlLitFloat f = mkStateVal float (text jlFloatConc <> parens (D.float f))
 
+jlLitList :: (CommonRenderSym r) => VSType r -> [SValue r] -> SValue r
+jlLitList t' es = do
+  t <- t'
+  let lt' = listType t'
+  elems <- sequence es
+  let typeDec = if null es then RC.type' t else empty
+  mkStateVal lt' (typeDec <> brackets (valueList elems))
+
 jlCast :: (CommonRenderSym r) => VSType r -> SValue r -> SValue r
 jlCast t' v' = do
   t <- t'
@@ -962,7 +972,7 @@ jlModStart n = jlMod <+> text n
 using :: Doc
 using = text "using"
 
-usingModule :: Label -> Doc -- TODO: see if you need to add context for package vs file
+usingModule :: Label -> Doc
 usingModule n = using <+> text n
 
 -- IO

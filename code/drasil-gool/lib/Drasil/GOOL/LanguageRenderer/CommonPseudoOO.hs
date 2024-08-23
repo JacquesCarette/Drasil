@@ -418,7 +418,7 @@ multiReturn f vs = do
   returnStmt $ mkStateVal IC.void $ f $ valueList vs'
 
 listDec :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> MSStatement r
-listDec v scp = IC.varDecDef v scp $ IC.litList (onStateValue variableType v) []
+listDec v scp = listDecDef v scp []
 
 funcDecDef :: (OORenderSym r) => SVariable r -> r (Scope r) -> [SVariable r] ->
   MSBody r -> MSStatement r

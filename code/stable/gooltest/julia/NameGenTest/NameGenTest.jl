@@ -1,7 +1,7 @@
 module NameGenTest
 
 function helper(temp::Array{Int64})
-    result = []
+    result = Int64[]
     
     result = temp[2:3]
     
@@ -9,7 +9,7 @@ function helper(temp::Array{Int64})
 end
 
 global temp = [1, 2, 3]
-global result = []
+global result = Int64[]
 
 global result = temp[2:3]
 

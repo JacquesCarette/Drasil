@@ -11,7 +11,7 @@ global fileToRead = open("testText.txt", "r")
 global fileLine = readline(fileToRead)
 readline(fileToRead)
 @assert fileLine != "" "First line should not be empty."
-global fileContents = []
+global fileContents = String[]
 
 global fileContents = readlines(fileToRead)
 

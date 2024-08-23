@@ -4334,9 +4334,6 @@ digraph alltypes {
 		}
 	}
 	subgraph helpers {
-		subgraph exprscale{
-		ExprScale	[shape=oval, color=darkviolet, label="ExprScale"];
-		}
 	}
 	subgraph monad {
 		subgraph mathcontext{

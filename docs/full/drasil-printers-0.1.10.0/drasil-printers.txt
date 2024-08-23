@@ -1794,16 +1794,9 @@ hyperConfig :: D
 useTikz :: D
 
 -- | toEqn is special; it switches to <a>Math</a>, but inserts an equation
---   environment. The <tt>scale</tt> parameter determines the maximum width
---   of the equation based on the corresponding scaling command.
-toEqn :: ExprScale -> D -> D
-
--- | Represents the scaling factor for an equation. <a>InDef</a> and
---   <a>OutDef</a> correspond to predefined scaling commands. Commands are
---   defined in <a>hs</a>
-data ExprScale
-InDef :: ExprScale
-OutDef :: ExprScale
+--   environment. Uses resizeExpression macro (defined in Preamble.hs) to
+--   prevent page overflow.
+toEqn :: D -> D
 
 -- | Wrap with parenthesis.
 --   
@@ -1816,7 +1809,6 @@ paren :: String -> String
 --   Helper(s) for String-Printing in TeX where it varies from
 --   HTML/Plaintext.
 sqbrac :: String -> String
-instance GHC.Show.Show Language.Drasil.TeX.Helpers.ExprScale
 
 
 -- | Defines types and functions to help generate common LaTeX preamble.

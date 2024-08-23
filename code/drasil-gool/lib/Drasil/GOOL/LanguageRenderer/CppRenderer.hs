@@ -111,7 +111,7 @@ import Drasil.GOOL.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing,
   setFileType, getModuleName, setModuleName, setClassName, getClassName,
   setCurrMain, getCurrMain, getClassMap, setVisibility, getVisibility,
-  setCurrMainFunc, getCurrMainFunc, addIter, resetIter, useVarName,
+  setCurrMainFunc, getCurrMainFunc, useVarName,
   genLoopIndex, setVarScope, getVarScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,log,exp,mod,max)
@@ -666,11 +666,7 @@ instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) where
   forRange i initv finalv stepv = pair5 forRange forRange (zoom lensMStoVS i)
     (zoom lensMStoVS initv) (zoom lensMStoVS finalv) (zoom lensMStoVS stepv)
   forEach e' v b = do
-    e <- zoom lensMStoVS e'
-    let le = variableName e
-    modify (addIter le)
     loop <- pair3 forEach forEach (zoom lensMStoVS e') (zoom lensMStoVS v) b
-    modify (resetIter le)
     toState loop
   while v = pair2 while while (zoom lensMStoVS v)
 

@@ -10,9 +10,9 @@ include("Helper.jl")
 import .Helper
 
 # Initializing variables
-b = 5
-myOtherList = [1.0, 1.5]
-oneIndex = findfirst(x -> x == 1.0, myOtherList) - 1
+global b = 5
+global myOtherList = [1.0, 1.5]
+global oneIndex = -1
 println(oneIndex)
 a = length(myOtherList)
 @assert a == 2 "List size should be 2"
@@ -62,20 +62,15 @@ mySlicedList6 = myOtherList[end:-1:3]
 
 mySlicedList7 = myOtherList[4:-1:begin]
 
-endIdx = z > 0 ? 0 : 2
-mySlicedList8 = myOtherList[4:z:endIdx]
+global mySlicedList8 = myOtherList[4:z:2]
 
-endIdx0 = z > 0 ? y : y + 2
-mySlicedList9 = myOtherList[x + 1:z:endIdx0]
+global mySlicedList9 = myOtherList[1:z:2]
 
-endIdx1 = z > 0 ? length(myOtherList) : 1
-mySlicedList10 = myOtherList[3:z:endIdx1]
+global mySlicedList10 = myOtherList[3:z:begin]
 
-endIdx2 = z > 0 ? length(myOtherList) : 1
-mySlicedList10 = myOtherList[3:z:endIdx2]
+global mySlicedList10 = myOtherList[3:z:begin]
 
-endIdx3 = z > 0 ? x : x + 2
-mySlicedList11 = myOtherList[y + 1:z:endIdx3]
+global mySlicedList11 = myOtherList[1:z:2]
 
 # Print results of list slicing tests
 println("")

@@ -369,11 +369,11 @@ litArray :: (CommonRenderSym r) => (Doc -> Doc) -> VSType r -> [SValue r] -> SVa
 litArray f t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t) 
   (f $ valueList elems))
 
-litSet :: (OORenderSym r) => (Doc -> Doc) -> (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
+litSet :: (CommonRenderSym r) => (Doc -> Doc) -> (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
 litSet f1 f2 t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t) 
   (f1 $ f2 $ valueList elems))
 
-litSetFunc :: (OORenderSym r) => String -> VSType r -> [SValue r] -> SValue r
+litSetFunc :: (CommonRenderSym r) => String -> VSType r -> [SValue r] -> SValue r
 litSetFunc s t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t) 
   (text s <> parens (valueList elems)))
 

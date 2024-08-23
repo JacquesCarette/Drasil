@@ -65,7 +65,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (bool,
   listSetFunc, notNull, extFuncAppMixedArgs, functionDoc, listSize, listAdd,
   listAppend, intToIndex', indexToInt', inOutFunc, docInOutFunc', forLoopError,
   varDecDef, openFileR', openFileW', openFileA', multiReturn, multiAssign,
-  inOutCall, mainBody, argExists, forEach')
+  inOutCall, mainBody, argExists, forEach', litSet)
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (litTrue, litFalse,
   notOp, andOp, orOp, inlineIf, while)
 import qualified Drasil.GOOL.LanguageRenderer.AbstractProc as A (fileDoc,
@@ -181,7 +181,7 @@ instance TypeSym JuliaCode where
   infile = jlInfileType
   outfile = jlOutfileType
   listType = jlListType
-  setType = listType
+  setType = jlSetType
   arrayType = listType -- Treat arrays and lists the same, as in Python
   listInnerType = A.listInnerType
   funcType = CP.funcType
@@ -294,7 +294,7 @@ instance Literal JuliaCode where
   litString = G.litString
   litArray = litList
   litList = jlLitList
-  litSet = litList
+  litSet = CP.litSet (text "Set" <>) (parens . brackets)
 
 instance MathConstant JuliaCode where
   pi :: SValue JuliaCode
@@ -399,7 +399,7 @@ instance List JuliaCode where
   indexOf = jlIndexOf
 
 instance Set JuliaCode where
-  contains = jlIndexOf
+  contains s e = funcApp "in" bool [e, s]
 
 instance InternalList JuliaCode where
   listSlice' b e s vn vo = jlListSlice vn vo b e (fromMaybe (litInt 1) s)
@@ -641,13 +641,14 @@ jlVersion = "1.10.3"
 
 -- Concrete versions of each Julia datatype
 jlIntConc, jlFloatConc, jlDoubleConc, jlCharConc, jlStringConc, jlListConc,
-  jlFile, jlVoid :: String
+  jlSetConc, jlFile, jlVoid :: String
 jlIntConc = "Int64"
 jlFloatConc = "Float32"
 jlDoubleConc = "Float64"
 jlCharConc = "Char"
 jlStringConc = "String"
 jlListConc = "Array"
+jlSetConc = "Set"
 jlFile = "IOStream"
 jlVoid = "Nothing"
 
@@ -955,6 +956,12 @@ jlListType t' = do
   t <- t'
   let typeName = jlListConc ++ "{" ++ getTypeString t ++ "}"
   typeFromData (List $ getType t) typeName (text typeName)
+
+jlSetType :: (CommonRenderSym r) => VSType r -> VSType r
+jlSetType t' = do
+  t <- t'
+  let typeName = jlSetConc ++ "{" ++ getTypeString t ++ "}"
+  typeFromData (Set $ getType t) typeName (text typeName)
 
 jlVoidType :: (CommonRenderSym r) => VSType r
 jlVoidType = typeFromData Void jlVoid (text jlVoid)

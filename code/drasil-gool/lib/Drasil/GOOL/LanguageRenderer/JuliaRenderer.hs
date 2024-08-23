@@ -82,7 +82,7 @@ import Drasil.GOOL.AST (Terminator(..), FileType(..), FileData(..), fileD,
 import Drasil.GOOL.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
 import Drasil.GOOL.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
-  getModuleImports, addModuleImportVS, getUsing, getLangImports, getLibImports,
+  getModuleImports, addModuleImportVS, getLangImports, getLibImports,
   addLibImportVS, useVarName, getMainDoc, genLoopIndex, genVarNameIf,
   setVarScope, getVarScope)
 
@@ -190,7 +190,7 @@ instance TypeElim JuliaCode where
   getType = cType . unJLC
   getTypeString v = let tp = typeString $ unJLC v in
     case cType $ unJLC v of
-      (Object _) -> error jlClassError -- TODO: think about splitting up CodeType
+      (Object _) -> error jlClassError
       _ -> tp
 
 instance RenderType JuliaCode where
@@ -644,18 +644,6 @@ jlListConc = "Array"
 jlFile = "IOStream"
 jlVoid = "Nothing"
 
--- Abstract versions of each Julia datatype
--- Currently only concrete ones are used, but because of Julia's workflow
--- It might be nice to use abstract types when possible
--- jlIntAbs, jlFloatAbs, jlDoubleAbs, jlCharAbs, jlStringAbs, jlListAbs, jlFile,
---   jlVoid :: String
--- jlIntAbs = "Integer"
--- jlFloatAbs = "AbstractFloat"
--- jlDoubleAbs = "AbstractFloat"
--- jlCharAbs = "AbstractChar"
--- jlStringAbs = "AbstractString"
--- jlListAbs = "AbstractArray"
-
 jlClassError :: String
 jlClassError = "Classes are not supported in Julia"
 
@@ -696,25 +684,28 @@ jlAssign :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
 jlAssign vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
-  scpData <- getVarScope (variableName vr)
-  let decDoc = if scopeTag scpData == Global then text "global" else empty
-  mkStmtNoEnd $ decDoc <+> R.assign vr v
+  scpData <- getVarScope (variableName vr) -- Need to do global declarations
+  mkStmtNoEnd $ jlGlobalDec scpData <+> R.assign vr v
 
 jlSubAssign :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
-jlSubAssign vr' v' = do 
+jlSubAssign vr' v' = do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
-  scpData <- getVarScope (variableName vr)
-  let decDoc = if scopeTag scpData == Global then text "global" else empty
-  mkStmtNoEnd $ decDoc <+> R.subAssign vr v
+  scpData <- getVarScope (variableName vr) -- Need to do global declarations
+  mkStmtNoEnd $ jlGlobalDec scpData <+> R.subAssign vr v
 
 jlIncrement :: (CommonRenderSym r) => SVariable r -> SValue r -> MSStatement r
-jlIncrement vr' v'= do 
+jlIncrement vr' v'= do
   vr <- zoom lensMStoVS vr'
   v <- zoom lensMStoVS v'
-  scpData <- getVarScope (variableName vr)
-  let decDoc = if scopeTag scpData == Global then text "global" else empty
-  mkStmt $ decDoc <+> R.addAssign vr v
+  scpData <- getVarScope (variableName vr) -- Need to do global declarations
+  mkStmt $ jlGlobalDec scpData <+> R.addAssign vr v
+
+jlGlobalDec :: ScopeData -> Doc
+jlGlobalDec scp = if scopeTag scp == Global then jlGlobal else empty
+
+jlGlobal :: Doc
+jlGlobal = text "global"
 
 jlConstDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> SValue r
   -> MSStatement r
@@ -726,13 +717,13 @@ jlConstDecDef v' scp def' = do
   modify $ setVarScope (variableName v) scpData
   let decDoc = if scopeTag scpData == Global then R.constDec' else empty
   mkStmt $ decDoc <+> RC.variable v <+> equals <+> RC.value def
-  
+
 -- List API
 jlListSize, jlListAdd, jlListAppend, jlListAbsdex :: Label
-jlListSize = "length"
-jlListAdd = "insert!"
+jlListSize   = "length"
+jlListAdd    = "insert!"
 jlListAppend = "append!"
-jlListAbsdex    = "findfirst"
+jlListAbsdex = "findfirst"
 
 jlIndexOf :: (SharedProg r) => SValue r -> SValue r -> SValue r
 jlIndexOf l v = do
@@ -741,6 +732,8 @@ jlIndexOf l v = do
   indexToInt $ funcApp
     jlListAbsdex t [lambda [var "x" t] (valueOf (var "x" t) ?== v), l]
 
+-- List slicing in Julia.  See HelloWorld.jl to see the full suite of
+-- possible outputs of this function.
 jlListSlice :: (CommonRenderSym r) => SVariable r -> SValue r ->
   Maybe (SValue r) -> Maybe (SValue r) -> SValue r -> MSBlock r
 jlListSlice vn vo beg end step = do
@@ -768,9 +761,10 @@ jlListSlice vn vo beg end step = do
         (Nothing, Nothing) -> (varDecDef begVar scp $
           inlineIf (step ?> litInt 0) (litInt 1) (listSize vo),
           valueOf begVar)
-      
+
       -- Similar to `begVal`, but if we're given a value, we have to either
-      -- do nothing or add 2 based on the sign of `step`, because `end` needs to be inclusive, 
+      -- do nothing or add 2 based on the sign of `step`, because `end` needs
+      -- to be inclusive
       (setEnd, endVal) = case (end, mbStepV) of
         (Just e, Just s)  -> (emptyStmt,
           if s > 0 then e else e `G.smartAdd` litInt 2)
@@ -802,7 +796,6 @@ jlListSlice' vn vo beg end step mStep = do
         _        -> colon <> RC.value step'
       theSlice = mkStateVal void (RC.value vold <> brackets (RC.value beg' <> stepDoc <> colon <> RC.value end'))
   vn &= theSlice
-  
 
 -- Other functionality
 jlRange :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
@@ -870,25 +863,24 @@ jlModContents n is = A.buildModule n (do
   lis <- getLangImports
   libis <- getLibImports
   mis <- getModuleImports
-  us <- getUsing
   pure $ vibcat [
     vcat (map (RC.import' . li) lis),
     vcat (map (RC.import' . li) (sort $ is ++ libis)),
-    vcat (map (RC.import' . mi) mis),
-    vcat (map usingModule us)])
+    vcat (map (RC.import' . mi) mis)])
   (do getMainDoc)
   where mi, li :: Label -> JuliaCode (Import JuliaCode)
         mi = modImport
         li = langImport
 
 -- Functions
--- | Creates a function.  n is function name, pms is list of parameters, and 
+-- | Creates a function.  n is function name, pms is list of parameters, and
 --   bod is body.
 jlIntFunc :: (CommonRenderSym r) => Label -> [r (Parameter r)] ->
   r (Body r) -> Doc
 jlIntFunc n pms bod = do
   vcat [jlFunc <+> text n <> parens (parameterList pms),
-    indent $ RC.body bod, jlEnd]
+        indent $ RC.body bod,
+        jlEnd]
 
 jlLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 jlLambda ps ex = variableList ps <+> arrow <+> RC.value ex
@@ -968,12 +960,6 @@ jlNull = "nothing"
 --   n is the name of the module.
 jlModStart :: Label -> Doc
 jlModStart n = jlMod <+> text n
-
-using :: Doc
-using = text "using"
-
-usingModule :: Label -> Doc
-usingModule n = using <+> text n
 
 -- IO
 jlPrint :: Bool -> Maybe (SValue JuliaCode) -> SValue JuliaCode ->

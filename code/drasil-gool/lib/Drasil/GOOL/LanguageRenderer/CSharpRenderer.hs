@@ -445,7 +445,7 @@ instance List CSharpCode where
   indexOf = CP.indexOf csIndex
 
 instance Set CSharpCode where
-  contains a b = CP.contains csContains (setAdd a b) b
+  contains = CP.contains csContains
   setAdd = G.setAdd
 
 instance InternalList CSharpCode where

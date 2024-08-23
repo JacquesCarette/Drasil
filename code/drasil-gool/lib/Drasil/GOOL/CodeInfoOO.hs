@@ -257,6 +257,7 @@ instance Set CodeInfoOO where
   contains = execute2
   setAdd = execute2
   setRemove = execute2
+  setUnion = execute2
 
 instance InternalList CodeInfoOO where
   listSlice' b e s _ vl = zoom lensMStoVS $ do

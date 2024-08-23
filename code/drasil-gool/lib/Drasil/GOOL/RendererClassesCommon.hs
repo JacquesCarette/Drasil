@@ -52,7 +52,9 @@ class (AssignStatement r, DeclStatement r, IOStatement r,
 
 class ImportSym r where
   type Import r
+  -- For importing an external library
   langImport :: Label -> r (Import r)
+  -- For importing a local (same project) module
   modImport :: Label -> r (Import r)
 
 class ImportElim r where

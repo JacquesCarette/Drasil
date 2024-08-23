@@ -201,6 +201,9 @@ objMethodCallNoParams t o f = objMethodCall t o f []
 
 class (DeclStatement r, OOVariableSym r) => OODeclStatement r where
   objDecDef    :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+  -- Parameters: variable to store the object, scope of the variable,
+  --             constructor arguments.  Object type is not needed,
+  --             as it is inferred from the variable's type.
   objDecNew    :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
   extObjDecNew :: Library -> SVariable r -> r (Scope r) -> [SValue r]
     -> MSStatement r

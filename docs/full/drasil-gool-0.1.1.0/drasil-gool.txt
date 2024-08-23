@@ -252,9 +252,6 @@ setThrowUsed :: MethodState -> MethodState
 getThrowUsed :: MS Bool
 setErrorDefined :: MethodState -> MethodState
 getErrorDefined :: MS Bool
-addIter :: String -> MethodState -> MethodState
-getIter :: MS [String]
-resetIter :: String -> MethodState -> MethodState
 incrementLine :: MethodState -> MethodState
 incrementWord :: MethodState -> MethodState
 getLineIndex :: MS Index
@@ -466,10 +463,11 @@ class (ValueSym r) => InternalList r
 listSlice' :: InternalList r => Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
 
 -- | Creates a slice of a list and assigns it to a variable. Arguments are:
---   Variable to assign List to read from [Start index] inclusive. (if
---   Nothing, then list start if step &gt; 0, list end if step &lt; 0) [End
---   index] exclusive. (if Nothing, then list end if step &gt; 0, list
---   start if step &gt; 0) [Step] (if Nothing, then defaults to 1)
+--   Variable to assign List to read from (optional) Start index inclusive.
+--   (if Nothing, then list start if step &gt; 0, list end if step &lt; 0)
+--   (optional) End index exclusive. (if Nothing, then list end if step
+--   &gt; 0, list start if step &gt; 0) (optional) Step (if Nothing, then
+--   defaults to 1)
 listSlice :: InternalList r => SVariable r -> SValue r -> Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 at :: List r => SValue r -> SValue r -> SValue r
@@ -2861,10 +2859,11 @@ class (ValueSym r) => Set r
 contains :: Set r => SValue r -> SValue r -> SValue r
 
 -- | Creates a slice of a list and assigns it to a variable. Arguments are:
---   Variable to assign List to read from [Start index] inclusive. (if
---   Nothing, then list start if step &gt; 0, list end if step &lt; 0) [End
---   index] exclusive. (if Nothing, then list end if step &gt; 0, list
---   start if step &gt; 0) [Step] (if Nothing, then defaults to 1)
+--   Variable to assign List to read from (optional) Start index inclusive.
+--   (if Nothing, then list start if step &gt; 0, list end if step &lt; 0)
+--   (optional) End index exclusive. (if Nothing, then list end if step
+--   &gt; 0, list start if step &gt; 0) (optional) Step (if Nothing, then
+--   defaults to 1)
 listSlice :: InternalList r => SVariable r -> SValue r -> Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 at :: List r => SValue r -> SValue r -> SValue r
@@ -3286,10 +3285,11 @@ class (ValueSym r) => Set r
 contains :: Set r => SValue r -> SValue r -> SValue r
 
 -- | Creates a slice of a list and assigns it to a variable. Arguments are:
---   Variable to assign List to read from [Start index] inclusive. (if
---   Nothing, then list start if step &gt; 0, list end if step &lt; 0) [End
---   index] exclusive. (if Nothing, then list end if step &gt; 0, list
---   start if step &gt; 0) [Step] (if Nothing, then defaults to 1)
+--   Variable to assign List to read from (optional) Start index inclusive.
+--   (if Nothing, then list start if step &gt; 0, list end if step &lt; 0)
+--   (optional) End index exclusive. (if Nothing, then list end if step
+--   &gt; 0, list start if step &gt; 0) (optional) Step (if Nothing, then
+--   defaults to 1)
 listSlice :: InternalList r => SVariable r -> SValue r -> Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 at :: List r => SValue r -> SValue r -> SValue r

@@ -1,3 +1,5 @@
+{-# LANGUAGE LambdaCase #-}
+
 module Language.Drasil.Code.Imperative.Modules (
   genMain, genMainProc, genMainFunc, genMainFuncProc, genInputClass,
   genInputDerived, genInputDerivedProc, genInputMod, genInputModProc,
@@ -6,7 +8,6 @@ module Language.Drasil.Code.Imperative.Modules (
   genCalcModProc, genCalcFunc, genCalcFuncProc, genOutputMod, genOutputModProc,
   genOutputFormat, genOutputFormatProc, genSampleInput
 ) where
-
 import Language.Drasil (Constraint(..), RealInterval(..),
   HasUID(uid), Stage(..))
 import Database.Drasil (ChunkDB)
@@ -45,11 +46,11 @@ import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.Code.ExtLibImport (defs, imports, steps)
 import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
-  ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..), 
+  ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..),
   Logging(..), Structure(..), hasSampleInput, InternalConcept(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
-import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc)
+import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc, showHasSymbImpl)
 
 import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MSStatement,
   SMethod, CSStateVar, SClass, SharedProg, OOProg, BodySym(..), bodyStatements,
@@ -60,6 +61,7 @@ import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MSStatement,
   extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse,
   VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convType,
     convTypeOO, VisibilityTag(..))
+
 import qualified Drasil.GOOL as OO (SFile)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (SFile)
@@ -73,6 +75,7 @@ import Control.Monad (liftM2, zipWithM)
 import Control.Monad.State (get, gets, modify)
 import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (render)
+import Data.Deriving.Internal (interleave)
 
 type ConstraintCE = Constraint CodeExpr
 
@@ -239,7 +242,7 @@ genInputClass scp = do
       genClass [] [] = return Nothing
       genClass inps csts = do
         vals <- mapM (convExpr . (^. codeExpr)) csts
-        inputVars <- mapM (\x -> fmap (pubDVar . 
+        inputVars <- mapM (\x -> fmap (pubDVar .
           var (codeName x) . convTypeOO) (codeType x)) inps
         constVars <- zipWithM (\c vl -> fmap (\t -> constVarFunc (conRepr g)
           (var (codeName c) (convTypeOO t)) vl) (codeType c))
@@ -343,12 +346,20 @@ physCBody cs = do
 chooseConstr :: (OOProg r) => ConstraintBehaviour ->
   [(CodeVarChunk, [ConstraintCE])] -> GenState [MSStatement r]
 chooseConstr cb cs = do
+  let ch = concatMap (\(s, ns) -> [(s, n) | n <- ns]) cs
+  -- Generate variable declarations based on constraints
+  varDecs <- mapM (\case
+    (q, Elem _ e) -> constrVarDec q e
+    _             -> return emptyStmt) ch
+  -- Generate conditions for constraints
   conds <- mapM (\(q,cns) -> mapM (convExpr . renderC q) cns) cs
+  -- Generate bodies based on constraint behavior
   bods <- mapM (chooseCB cb) cs
-  return $ concat $ zipWith (zipWith (\cond bod -> ifNoElse [((?!) cond, bod)]))
-    conds bods
+  let bodies = concat $ zipWith (zipWith (\cond bod -> ifNoElse [((?!) cond, bod)])) conds bods
+  return $ interleave varDecs bodies
   where chooseCB Warning = constrWarn
         chooseCB Exception = constrExc
+
 
 -- | Generates body defining constraint violation behaviour if Warning chosen from 'chooseConstr'.
 -- Prints a \"Warning\" message followed by a message that says
@@ -361,6 +372,7 @@ constrWarn c = do
   msgs <- mapM (constraintViolatedMsg q "suggested") cs
   return $ map (bodyStatements . (printStr "Warning: " :)) msgs
 
+
 -- | Generates body defining constraint violation behaviour if Exception chosen from 'chooseConstr'.
 -- Prints a message that says what value was \"expected\",
 -- followed by throwing an exception.
@@ -372,13 +384,22 @@ constrExc c = do
   msgs <- mapM (constraintViolatedMsg q "expected") cs
   return $ map (bodyStatements . (++ [throw "InputError"])) msgs
 
+-- | Generates set variable dec
+constrVarDec :: (OOProg r) => CodeVarChunk -> CodeExpr ->
+  GenState (MSStatement r)
+constrVarDec v e = do
+  lb <- convExpr e
+  t <- codeType v
+  let mkValue = var ("set_" ++ showHasSymbImpl v) (setType (convType t))
+  return (setDecDef mkValue local lb)
+
 -- | Generates statements that print a message for when a constraint is violated.
 -- Message includes the name of the cosntraint quantity, its value, and a
 -- description of the constraint that is violated.
 constraintViolatedMsg :: (OOProg r) => CodeVarChunk -> String ->
   ConstraintCE -> GenState [MSStatement r]
 constraintViolatedMsg q s c = do
-  pc <- printConstraint c
+  pc <- printConstraint (showHasSymbImpl q) c
   v <- mkVal (quantvar q)
   return $ [printStr $ codeName q ++ " has value ",
     print v,
@@ -387,26 +408,30 @@ constraintViolatedMsg q s c = do
 -- | Generates statements to print descriptions of constraints, using words and
 -- the constrained values. Constrained values are followed by printing the
 -- expression they originated from, using printExpr.
-printConstraint :: (OOProg r) => ConstraintCE ->
+printConstraint :: (OOProg r) => String -> ConstraintCE ->
   GenState [MSStatement r]
-printConstraint c = do
+printConstraint v c = do
   g <- get
   let db = sysinfodb $ codeSpec g
-      printConstraint' :: (OOProg r) => ConstraintCE -> GenState
+      printConstraint' :: (OOProg r) => String -> ConstraintCE -> GenState
         [MSStatement r]
-      printConstraint' (Range _ (Bounded (_, e1) (_, e2))) = do
+      printConstraint' _ (Range _ (Bounded (_, e1) (_, e2))) = do
         lb <- convExpr e1
         ub <- convExpr e2
         return $ [printStr "between ", print lb] ++ printExpr e1 db ++
           [printStr " and ", print ub] ++ printExpr e2 db ++ [printStrLn "."]
-      printConstraint' (Range _ (UpTo (_, e))) = do
+      printConstraint' _ (Range _ (UpTo (_, e))) = do
         ub <- convExpr e
         return $ [printStr "below ", print ub] ++ printExpr e db ++
           [printStrLn "."]
-      printConstraint' (Range _ (UpFrom (_, e))) = do
+      printConstraint' _ (Range _ (UpFrom (_, e))) = do
         lb <- convExpr e
         return $ [printStr "above ", print lb] ++ printExpr e db ++ [printStrLn "."]
-  printConstraint' c
+      printConstraint' name (Elem _ e) = do
+        lb <- convExpr (Variable ("set_" ++ name) e)
+        return $ [printStr "an element of the set ", print lb] ++ [printStrLn "."]
+  printConstraint' v c
+
 
 -- | Don't print expressions that are just literals, because that would be
 -- redundant (the values are already printed by printConstraint).
@@ -452,7 +477,7 @@ genSampleInput :: (AuxiliarySym r) => GenState (Maybe (r (Auxiliary r)))
 genSampleInput = do
   g <- get
   dd <- genDataDesc
-  if hasSampleInput (auxiliaries g) then (return . Just) $ sampleInput
+  if hasSampleInput (auxiliaries g) then return . Just $ sampleInput
     (sysinfodb $ codeSpec g) dd (sampleData g) else return Nothing
 
 ----- CONSTANTS -----
@@ -951,6 +976,9 @@ printConstraintProc c = do
       printConstraint' (Range _ (UpFrom (_, e))) = do
         lb <- convExprProc e
         return $ [printStr "above ", print lb] ++ printExpr e db ++ [printStrLn "."]
+      printConstraint' (Elem _ e) = do
+        lb <- convExprProc e
+        return $ [printStr "an element of the set ", print lb] ++ [printStrLn "."]
   printConstraint' c
 
 -- | Generates a module containing the function for printing outputs.

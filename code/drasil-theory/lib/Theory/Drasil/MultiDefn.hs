@@ -15,7 +15,6 @@ import Control.Lens (makeLenses, view, (^.))
 import Data.List (union)
 import qualified Data.List.NonEmpty as NE
 import Language.Drasil hiding (DefiningExpr)
-import Language.Drasil.Development (showUID)
 
 -- | 'DefiningExpr' are the data that make up a (quantity) definition, namely
 --   the description, the defining (rhs) expression and the context domain(s).

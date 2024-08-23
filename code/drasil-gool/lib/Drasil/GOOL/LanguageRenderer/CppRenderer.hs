@@ -1,6 +1,7 @@
 {-# LANGUAGE TypeFamilies, Rank2Types #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE InstanceSigs #-}
 
 -- | The logic to render C++ code is contained in this module
 module Drasil.GOOL.LanguageRenderer.CppRenderer (
@@ -18,7 +19,7 @@ import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   ValueSym(..), Argument(..), Literal(..), litZero, MathConstant(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  extFuncApp, List(..), InternalList(..), ThunkSym(..), VectorType(..),
+  extFuncApp, List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
   VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
@@ -51,6 +52,8 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   RenderMod(..), ModuleElim)
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
+
+
 import Drasil.GOOL.LanguageRenderer (addExt, classDec, dot, blockCmtStart,
   blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, commentStart,
   returnLabel, elseIfLabel, tryLabel, catchLabel, throwLabel, array', constDec',
@@ -79,12 +82,12 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
 import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, funcType, buildModule, litArray,
-  call', listSizeFunc, listAccessFunc', string, constDecDef, docInOutFunc,
+  call', listSizeFunc, listAccessFunc', containsInt, string, constDecDef, docInOutFunc,
   listSetFunc, extraClass, intToIndex, indexToInt, global)
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize,
-  increment1, decrement1, varDec, varDecDef, listDec, extObjDecNew, switch,
+  increment1, decrement1, varDec, setType, varDecDef, listDec, extObjDecNew, switch,
   for, while, intFunc, multiAssignError, multiReturnError, multiTypeError)
 import qualified Drasil.GOOL.LanguageRenderer.Macros as M (runStrategy,
   listSlice, stringListVals, stringListLists, forRange, notifyObservers)
@@ -108,7 +111,7 @@ import Drasil.GOOL.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing,
   setFileType, getModuleName, setModuleName, setClassName, getClassName,
   setCurrMain, getCurrMain, getClassMap, setVisibility, getVisibility,
-  setCurrMainFunc, getCurrMainFunc, addIter, getIter, resetIter, useVarName,
+  setCurrMainFunc, getCurrMainFunc, addIter, resetIter, useVarName,
   genLoopIndex, setVarScope, getVarScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,log,exp,mod,max)
@@ -217,6 +220,7 @@ instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   infile = on2StateValues pair infile infile
   outfile = on2StateValues pair outfile outfile
   listType = pair1 listType listType
+  setType = pair1 setType setType
   arrayType = pair1 arrayType arrayType
   listInnerType = pair1 listInnerType listInnerType
   funcType = pair1List1Val funcType funcType
@@ -331,6 +335,7 @@ instance (Pair p) => Literal (p CppSrcCode CppHdrCode) where
   litInt v =on2StateValues  pair (litInt v) (litInt v)
   litString s = on2StateValues pair (litString s) (litString s)
   litArray = pair1Val1List litArray litArray
+  litSet = pair1Val1List litSet litSet
   litList = pair1Val1List litList litList
 
 instance (Pair p) => MathConstant (p CppSrcCode CppHdrCode) where
@@ -457,6 +462,9 @@ instance (Pair p) => List (p CppSrcCode CppHdrCode) where
   listSet = pair3 listSet listSet
   indexOf = pair2 indexOf indexOf
 
+instance (Pair p) => Set (p CppSrcCode CppHdrCode) where
+  contains = pair2 contains contains
+
 instance (Pair p) => InternalList (p CppSrcCode CppHdrCode) where
   listSlice' b e s vr vl = pair2
     (listSlice' (fmap (onStateValue pfst) b) (fmap (onStateValue pfst) e)
@@ -524,9 +532,6 @@ instance (Pair p) => InternalControlStmt (p CppSrcCode CppHdrCode) where
 instance (Pair p) => RenderStatement (p CppSrcCode CppHdrCode) where
   stmt = pair1 stmt stmt
   loopStmt = pair1 loopStmt loopStmt
-
-  emptyStmt = on2StateValues pair emptyStmt emptyStmt
-
   stmtFromData d t = on2StateValues pair (stmtFromData d t) (stmtFromData d t)
 
 instance (Pair p) => StatementElim (p CppSrcCode CppHdrCode) where
@@ -536,6 +541,7 @@ instance (Pair p) => StatementElim (p CppSrcCode CppHdrCode) where
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
   valStmt = pair1 valStmt valStmt . zoom lensMStoVS
+  emptyStmt = on2StateValues pair emptyStmt emptyStmt
   multi = pair1List multi multi
 
 instance (Pair p) => AssignStatement (p CppSrcCode CppHdrCode) where
@@ -549,6 +555,10 @@ instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) where
   varDec vr scp = pair1 (`varDec` pfst scp) (`varDec` psnd scp)
     (zoom lensMStoVS vr)
   varDecDef vr scp vl = pair2 (`varDecDef` pfst scp) (`varDecDef` psnd scp)
+    (zoom lensMStoVS vr) (zoom lensMStoVS vl)
+  setDec vr scp = pair1 (`setDec` pfst scp) (`setDec` psnd scp)
+    (zoom lensMStoVS vr)
+  setDecDef vr scp vl = pair2 (`setDecDef` pfst scp) (`setDecDef` psnd scp)
     (zoom lensMStoVS vr) (zoom lensMStoVS vl)
   listDec n vr scp = pair1 (\v -> listDec n v (pfst scp))
     (\v -> listDec n v (psnd scp)) (zoom lensMStoVS vr)
@@ -1121,6 +1131,9 @@ instance TypeSym CppSrcCode where
   listType t = do
     modify (addUsing vector . addLangImportVS vector)
     C.listType vector t
+  setType t = do
+    modify (addUsing cppSet . addLangImportVS cppSet) 
+    C.setType cppSet t
   arrayType = cppArrayType
   listInnerType = G.listInnerType
   funcType = CP.funcType
@@ -1253,6 +1266,7 @@ instance Literal CppSrcCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray braces
+  litSet = cppLitSet setType
   litList _ _ = error $ "List literals not supported in " ++ cppName
 
 instance MathConstant CppSrcCode where
@@ -1261,14 +1275,7 @@ instance MathConstant CppSrcCode where
     addMathHImport (mkStateVal double cppPi)
 
 instance VariableValue CppSrcCode where
-  valueOf vr' = do
-    vr <- vr'
-    its <- zoom lensVStoMS getIter
-    let namevr = variableName vr
-    if namevr `elem` its then
-      mkStateVal (iterator $ toState $ variableType vr)
-        (parens $ cppDeref <> RC.variable vr)
-      else G.valueOf vr'
+  valueOf = G.valueOf
 
 instance OOVariableValue CppSrcCode
 
@@ -1381,6 +1388,10 @@ instance List CppSrcCode where
   listSet = G.listSet
   indexOf l v = addAlgorithmImportVS $ cppIndexFunc l v #- iterBegin l
 
+instance Set CppSrcCode where
+  contains = CP.containsInt cppIndex cppIterEnd
+
+
 instance InternalList CppSrcCode where
   listSlice' = M.listSlice
 
@@ -1447,9 +1458,6 @@ instance InternalControlStmt CppSrcCode where
 instance RenderStatement CppSrcCode where
   stmt = G.stmt
   loopStmt = G.loopStmt
-
-  emptyStmt = G.emptyStmt
-
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CppSrcCode where
@@ -1459,6 +1467,7 @@ instance StatementElim CppSrcCode where
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
   valStmt = G.valStmt Semi
+  emptyStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement CppSrcCode where
@@ -1471,6 +1480,8 @@ instance AssignStatement CppSrcCode where
 instance DeclStatement CppSrcCode where
   varDec = C.varDec static dynamic empty
   varDecDef = C.varDecDef Semi
+  setDec = varDec
+  setDecDef = varDecDef
   listDec n = C.listDec cppListDecDoc (litInt n)
   listDecDef = cppListDecDef cppListDecDefDoc
   arrayDec n vr scp = do
@@ -1579,13 +1590,7 @@ instance ControlStatement CppSrcCode where
 
   for = C.for bodyStart bodyEnd
   forRange = M.forRange
-  forEach i v b = do
-    e <- zoom lensMStoVS i
-    let l = variableName e
-        t = toState $ variableType e
-        iterI = var l (iterator t)
-    for (varDecDef iterI local (iterBegin v)) (setIterVar iterI ?!= iterEnd v) 
-      (iterI &++) b
+  forEach = cppForEach bodyStart bodyEnd (text cppFor) (text cppIn)
   while = C.while parens bodyStart bodyEnd
 
   tryCatch = G.tryCatch cppTryCatch
@@ -1851,6 +1856,9 @@ instance TypeSym CppHdrCode where
   listType t = do
     modify (addHeaderUsing vector . addHeaderLangImport vector)
     C.listType vector t
+  setType t = do
+    modify (addHeaderUsing cppSet . addHeaderLangImport cppSet) 
+    C.setType cppSet t
   arrayType = cppArrayType
   listInnerType = G.listInnerType
   funcType = CP.funcType
@@ -1967,6 +1975,7 @@ instance Literal CppHdrCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray braces
+  litSet = cppLitSet setType
   litList _ _ = error $ "List literals not supported in " ++ cppName
 
 instance MathConstant CppHdrCode where
@@ -2084,6 +2093,9 @@ instance List CppHdrCode where
   listSet _ _ _ = mkStateVal void empty
   indexOf _ _ = mkStateVal void empty
 
+instance Set CppHdrCode where
+  contains _ _ = mkStateVal void empty
+
 instance InternalList CppHdrCode where
   listSlice' _ _ _ _ _ = toState $ toCode empty
 
@@ -2139,9 +2151,6 @@ instance InternalControlStmt CppHdrCode where
 instance RenderStatement CppHdrCode where
   stmt = G.stmt
   loopStmt _ = emptyStmt
-
-  emptyStmt = G.emptyStmt
-
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CppHdrCode where
@@ -2151,6 +2160,7 @@ instance StatementElim CppHdrCode where
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)
   valStmt _ = emptyStmt
+  emptyStmt = G.emptyStmt
   multi _ = emptyStmt
 
 instance AssignStatement CppHdrCode where
@@ -2163,6 +2173,8 @@ instance AssignStatement CppHdrCode where
 instance DeclStatement CppHdrCode where
   varDec = C.varDec static dynamic empty
   varDecDef = C.varDecDef Semi
+  setDec = varDec
+  setDecDef = varDecDef
   listDec _ _ _ = emptyStmt
   listDecDef _ _ _ = emptyStmt
   arrayDec _ _ _ = emptyStmt
@@ -2449,10 +2461,6 @@ addCAssertImport v = do
   modify (addLangImport cassert)
   v
 
-
-setIterVar :: CommonRenderSym r=> SVariable r -> SValue r
-setIterVar = G.valueOf
-
 iterator :: CommonRenderSym r => VSType r -> VSType r
 iterator t = do
     modify (addLangImportVS cppIterator)
@@ -2490,14 +2498,15 @@ catchAll = text "..."
 cppPi = text "M_PI"
 ptrAccess' = text ptrAccess
 
-nmSpc, ptrAccess, std, algorithm, cppString, vector, sstream, stringstream,
+nmSpc, ptrAccess, cppFor, std, algorithm, cppString, vector, sstream, stringstream,
   fstream, iostream, limits, mathh, cassert, cppBool, cppInfile, cppOutfile,
   cppIterator, cppOpen, stod, stof, cppIgnore, numLimits, streamsize, max,
   endl, cin, cout, cppIndex, cppListAccess, cppListAdd, cppListAppend,
   cppIterBegin, cppIterEnd, cppR, cppW, cppA, cppGetLine, cppClose, cppClear,
-  cppStr, mathDefines :: String
+  cppStr, mathDefines, cppSet, cppIn, cppConst :: String
 nmSpc = "::"
 ptrAccess = "->"
+cppFor = "for"
 std = "std"
 algorithm = "algorithm"
 cppString = "string"
@@ -2537,6 +2546,9 @@ cppClose = "close"
 cppClear = "clear"
 cppStr = "str"
 mathDefines = "_USE_MATH_DEFINES"
+cppSet = "set"
+cppIn = ":"
+cppConst = "const"
 
 nmSpcAccess :: String -> String -> String
 nmSpcAccess ns e = ns ++ nmSpc ++ e
@@ -2835,6 +2847,25 @@ cppsStateVarDef cns s p vr' vl' = do
       text n `nmSpcAccess'` RC.variable vr <+> equals <+> RC.value vl <>
       endStatement) empty)
     emptS
+
+cppForEach :: (CommonRenderSym r) => Doc -> Doc -> Doc -> Doc -> SVariable r -> SValue r
+  -> MSBody r -> MSStatement r
+cppForEach bStart bEnd forEachLabel inLbl e' v' b' = do
+  e <- zoom lensMStoVS e'
+  v <- zoom lensMStoVS v'
+  b <- b'
+  mkStmtNoEnd $ vcat [
+    forEachLabel <+> parens ((text cppConst <+> RC.type' (variableType e) <+> text "&") <> RC.variable e <+>
+      inLbl <+> RC.value v) <+> bStart,
+    indent $ RC.body b,
+    bEnd]
+
+cppLitSet :: (OORenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
+    -> SValue r
+cppLitSet f t' es' = do 
+  es <- sequence es' 
+  lt <- f t'
+  mkVal lt ( braces (valueList es))
 
 cpphStateVarDef :: (OORenderSym r) => Doc -> r (Permanence r) -> SVariable r ->
   SValue r -> CS Doc

@@ -11,11 +11,12 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
   Space (Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..))
 import Database.Drasil (symbResolve)
-import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&))
+import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&), in')
+import qualified Language.Drasil.CodeExpr.Development as S (CodeExpr(..))
 import Language.Drasil.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
-  AssocArithOper(..), AssocBoolOper(..), BoolBinOp(..), EqBinOp(..),
+  AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..), BoolBinOp(..), EqBinOp(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
-  VVNBinOp(..), VVVBinOp(..), NVVBinOp(..))
+  VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..))
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, fAppProc,
@@ -38,6 +39,7 @@ import Language.Drasil.Literal.Development
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
   Mod(..), Name, Description, StateVariable(..), fstdecl)
 import qualified Language.Drasil.Mod as M (Class(..))
+import Language.Drasil.Printers (showHasSymbImpl)
 
 import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
@@ -51,6 +53,7 @@ import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   ifNoElse, VisibilitySym(..), ParameterSym(..), MethodSym(..), OOMethodSym(..),
   pubDVar, privDVar, nonInitConstructor, convType, convTypeOO,
   VisibilityTag(..), CodeType(..), onStateValue)
+import qualified Drasil.GOOL as S (Set(..))
 import qualified Drasil.GOOL as OO (SFile)
 import qualified Drasil.GOOL as C (CodeType(List, Array))
 import Drasil.GProc (ProcProg)
@@ -310,6 +313,7 @@ convExpr (AssocA Add l) = foldl1 (#+)  <$> mapM convExpr l
 convExpr (AssocA Mul l) = foldl1 (#*)  <$> mapM convExpr l
 convExpr (AssocB And l) = foldl1 (?&&) <$> mapM convExpr l
 convExpr (AssocB Or l)  = foldl1 (?||) <$> mapM convExpr l
+convExpr (AssocC SUnion l)  = foldl1 (#+) <$> mapM convExpr l
 convExpr (C c)   = do
   g <- get
   let v = quantvar (lookupC g c)
@@ -349,6 +353,8 @@ convExpr (OrdBinaryOp o a b)   = liftM2 (ordBfunc o) (convExpr a) (convExpr b)
 convExpr (VVVBinaryOp o a b)   = liftM2 (vecVecVecBfunc o) (convExpr a) (convExpr b)
 convExpr (VVNBinaryOp o a b)   = liftM2 (vecVecNumBfunc o) (convExpr a) (convExpr b)
 convExpr (NVVBinaryOp o a b)   = liftM2 (numVecVecBfunc o) (convExpr a) (convExpr b)
+convExpr (ESSBinaryOp o a b)   = liftM2 (elementSetSetBfunc o) (convExpr a) (convExpr b)
+convExpr (ESBBinaryOp o a b)   = liftM2 (elementSetBoolBfunc o) (convExpr a) (convExpr b)
 convExpr (Case c l)            = doit l -- FIXME this is sub-optimal
   where
     doit [] = error "should never happen" -- TODO: change error message?
@@ -360,6 +366,15 @@ convExpr (Matrix [l]) = do
                                     -- hd will never fail here
   return $ litArray (fmap valueType (head ar)) ar
 convExpr Matrix{} = error "convExpr: Matrix"
+convExpr (S.Set s l) = do 
+  ar <- mapM convExpr l
+  sm <- spaceCodeType s
+  return $ litSet (convTypeOO sm) ar
+convExpr(Variable s (S.Set l _)) = do
+  sm <- spaceCodeType l
+  let varSet = var s (setType $ convTypeOO sm)
+  return $ valueOf varSet
+convExpr(Variable _ _) = error "convExpr: Variable"
 convExpr Operator{} = error "convExpr: Operator"
 convExpr (RealI c ri)  = do
   g <- get
@@ -393,6 +408,7 @@ convCall c x ns f libf = do
 -- | Converts a 'Constraint' to a 'CodeExpr'.
 renderC :: (HasUID c, HasSymbol c) => c -> Constraint CodeExpr -> CodeExpr
 renderC s (Range _ rr)         = renderRealInt s rr
+renderC s (Elem _ rr)          = renderSet s rr
 
 -- | Converts an interval ('RealInterval') to a 'CodeExpr'.
 renderRealInt :: (HasUID c, HasSymbol c) => c -> RealInterval CodeExpr CodeExpr -> CodeExpr
@@ -404,6 +420,9 @@ renderRealInt s (UpTo    (Inc, a))          = sy s $<= a
 renderRealInt s (UpTo    (Exc, a))          = sy s $<  a
 renderRealInt s (UpFrom  (Inc, a))          = sy s $>= a
 renderRealInt s (UpFrom  (Exc, a))          = sy s $>  a
+
+renderSet :: (HasUID c, HasSymbol c) => c -> CodeExpr -> CodeExpr
+renderSet e s = in' (Variable ("set_" ++ showHasSymbImpl e) s) (sy e)
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.
 unop :: (SharedProg r) => UFunc -> (SValue r -> SValue r)
@@ -455,6 +474,7 @@ eqBfunc NEq = (?!=)
 -- Maps an 'LABinOp' to it's corresponding GOOL binary function.
 laBfunc :: (SharedProg r) => LABinOp -> (SValue r -> SValue r -> SValue r)
 laBfunc Index = listAccess
+laBfunc IndexOf = indexOf
 
 -- Maps an 'OrdBinOp' to it's corresponding GOOL binary function.
 ordBfunc :: (SharedProg r) => OrdBinOp -> (SValue r -> SValue r -> SValue r)
@@ -476,6 +496,15 @@ vecVecNumBfunc Dot = error "convExpr DotProduct"
 -- Maps a 'NVVBinOp' to it's corresponding GOOL binary function.
 numVecVecBfunc :: NVVBinOp -> (SValue r -> SValue r -> SValue r)
 numVecVecBfunc Scale = error "convExpr Scaling of Vectors"
+
+-- Maps a 'ESSBinOp' to its corresponding GOOL binary function.
+elementSetSetBfunc :: ESSBinOp -> (SValue r -> SValue r -> SValue r)
+elementSetSetBfunc SAdd = error "convExpr Adding an Element to a Set"
+elementSetSetBfunc SRemove = error "convExpr Removing an Element to a Set"
+
+-- Maps a 'ESSBinOp' to it's corresponding GOOL binary function.
+elementSetBoolBfunc :: (SharedProg r) => ESBBinOp -> (SValue r -> SValue r -> SValue r)
+elementSetBoolBfunc SContains = S.contains
 
 -- medium hacks --
 
@@ -506,7 +535,7 @@ genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
   modify (\st -> st {currentScope = Local})
   svrs <- mapM (\(SV s v) -> fmap (svar s . var (codeName v) .
                 convTypeOO) (codeType v)) svs
-  f n i desc svrs (mapM (genFunc publicMethod svs) cs) 
+  f n i desc svrs (mapM (genFunc publicMethod svs) cs)
                   (mapM (genFunc publicMethod svs) ms)
 
 -- | Converts a 'Func' (from the Mod AST) to GOOL.
@@ -728,7 +757,7 @@ readData ddef = do
 -- | Get entry variables.
 getEntryVars :: (OOProg r) => Maybe String -> LinePattern ->
   GenState [SVariable r]
-getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>= 
+getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>=
   (variable (codeName v ++ st) . listInnerType . convTypeOO))
     s) (getPatternInputs lp)
 
@@ -966,7 +995,7 @@ readDataProc ddef = do
 -- | Get entry variables.
 getEntryVarsProc :: (SharedProg r) => Maybe String -> LinePattern ->
   GenState [SVariable r]
-getEntryVarsProc s lp = mapM (maybe mkVarProc (\st v -> codeType v >>= 
+getEntryVarsProc s lp = mapM (maybe mkVarProc (\st v -> codeType v >>=
   (variableProc (codeName v ++ st) . listInnerType . convType))
     s) (getPatternInputs lp)
 
@@ -998,6 +1027,7 @@ convExprProc (AssocA Add l) = foldl1 (#+)  <$> mapM convExprProc l
 convExprProc (AssocA Mul l) = foldl1 (#*)  <$> mapM convExprProc l
 convExprProc (AssocB And l) = foldl1 (?&&) <$> mapM convExprProc l
 convExprProc (AssocB Or l)  = foldl1 (?||) <$> mapM convExprProc l
+convExprProc (AssocC SUnion l)  = foldl1 (#+) <$> mapM convExprProc l
 convExprProc (C c) = do
   g <- get
   let v = quantvar (lookupC g c)
@@ -1024,6 +1054,8 @@ convExprProc (OrdBinaryOp o a b)   = liftM2 (ordBfunc o) (convExprProc a) (convE
 convExprProc (VVVBinaryOp o a b)   = liftM2 (vecVecVecBfunc o) (convExprProc a) (convExprProc b)
 convExprProc (VVNBinaryOp o a b)   = liftM2 (vecVecNumBfunc o) (convExprProc a) (convExprProc b)
 convExprProc (NVVBinaryOp o a b)   = liftM2 (numVecVecBfunc o) (convExprProc a) (convExprProc b)
+convExprProc (ESSBinaryOp o a b)   = liftM2 (elementSetSetBfunc o) (convExprProc a) (convExprProc b)
+convExprProc (ESBBinaryOp o a b)   = liftM2 (elementSetBoolBfunc o) (convExprProc a) (convExprProc b)
 convExprProc (Case c l)            = doit l -- FIXME this is sub-optimal
   where
     doit [] = error "should never happen" -- TODO: change error message?
@@ -1035,6 +1067,15 @@ convExprProc (Matrix [l]) = do
                                     -- hd will never fail here
   return $ litArray (fmap valueType (head ar)) ar
 convExprProc Matrix{} = error "convExprProc: Matrix"
+convExprProc (S.Set s l) = do 
+  ar <- mapM convExprProc l
+  sm <- spaceCodeType s
+  return $ litSet (convType sm) ar
+convExprProc (Variable s (S.Set l _)) = do
+  sm <- spaceCodeType l
+  let varSet = var s (setType $ convType sm)
+  return $ valueOf varSet
+convExprProc (Variable _ _) = error "convExpr: Variable"
 convExprProc Operator{} = error "convExprProc: Operator"
 convExprProc (RealI c ri)  = do
   g <- get

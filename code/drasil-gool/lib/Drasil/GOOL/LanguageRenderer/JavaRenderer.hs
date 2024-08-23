@@ -16,7 +16,7 @@ import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   VisibilitySym(..), VariableElim(..),ValueSym(..), Argument(..), Literal(..),
   litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, List(..), InternalList(..),
+  ValueExpression(..), funcApp, extFuncApp, List(..), Set(..), InternalList(..),
   ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
@@ -77,8 +77,8 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
 import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int, 
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
-  extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
-  funcType, arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, 
+  extFuncAppMixedArgs, indexOf, contains, listAddFunc, discardFileLine, intClass, 
+  funcType, arrayType, litSet, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, 
   docMain, mainFunction, buildModule', bindingError, listDecDef, 
   destructorError, stateVarDef, constVar, litArray, call', listSizeFunc, 
   listAccessFunc', notNull, doubleRender, double, openFileR, openFileW, 
@@ -87,7 +87,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CLike as C (float, double, char,
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
   decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
-  intFunc, multiAssignError, multiReturnError, multiTypeError)
+  intFunc, multiAssignError, multiReturnError, multiTypeError, setType)
 import qualified Drasil.GOOL.LanguageRenderer.Macros as M (ifExists, 
   runStrategy, listSlice, stringListVals, stringListLists, forRange, 
   notifyObservers)
@@ -212,6 +212,7 @@ instance TypeSym JavaCode where
   infile = jInfileType
   outfile = jOutfileType
   listType = jListType
+  setType = jSetType
   arrayType = CP.arrayType
   listInnerType = G.listInnerType
   funcType = CP.funcType
@@ -327,6 +328,8 @@ instance Literal JavaCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray braces
+  litSet = CP.litSet (text jSetOf <>) parens
+
   litList t es = do
     zoom lensVStoMS $ modify (if null es then id else addLangImport $ utilImport
       jArrays)
@@ -470,6 +473,9 @@ instance List JavaCode where
   listSet = G.listSet
   indexOf = CP.indexOf jIndex
 
+instance Set JavaCode where
+  contains = CP.contains jContains
+
 instance InternalList JavaCode where
   listSlice' = M.listSlice
 
@@ -536,9 +542,6 @@ instance InternalControlStmt JavaCode where
 instance RenderStatement JavaCode where
   stmt = G.stmt
   loopStmt = G.loopStmt
-
-  emptyStmt = G.emptyStmt
-  
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim JavaCode where
@@ -549,6 +552,7 @@ instance StatementSym JavaCode where
   -- Terminator determines how statements end
   type Statement JavaCode = (Doc, Terminator)
   valStmt = G.valStmt Semi
+  emptyStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement JavaCode where
@@ -561,6 +565,8 @@ instance AssignStatement JavaCode where
 instance DeclStatement JavaCode where
   varDec = C.varDec static dynamic empty
   varDecDef = C.varDecDef Semi
+  setDec = varDec
+  setDecDef = varDecDef
   listDec n v scp = zoom lensMStoVS v >>= (\v' -> C.listDec (R.listDec v') 
     (litInt n) v scp)
   listDecDef = CP.listDecDef
@@ -807,8 +813,8 @@ jFinal = text "final"
 jScanner' = text jScanner
 jLambdaSep = text "->"
 
-arrayList, jBool, jBool', jInteger, jObject, jScanner,
-  jPrintWriter, jFile, jFileWriter, jIOExc, jFNFExc, jArrays, jAsList, jStdIn, 
+arrayList, jBool, jBool', jInteger, jObject, jScanner, jContains,
+  jPrintWriter, jFile, jFileWriter, jIOExc, jFNFExc, jArrays, jSet, jAsList, jSetOf, jStdIn, 
   jStdOut, jPrintLn, jEquals, jParseInt, jParseDbl, jParseFloat, jIndex, 
   jListAdd, jListAccess, jListSet, jClose, jNext, jNextLine, jNextBool, 
   jHasNextLine, jCharAt, jSplit, io, util :: String
@@ -818,13 +824,16 @@ jBool' = "Boolean"
 jInteger = "Integer"
 jObject = "Object"
 jScanner = "Scanner"
+jContains = "contains"
 jPrintWriter = "PrintWriter"
 jFile = "File"
 jFileWriter = "FileWriter"
 jIOExc = "IOException"
 jFNFExc = "FileNotFoundException"
 jArrays = "Arrays"
+jSet = "Set"
 jAsList = jArrays `access` "asList"
+jSetOf = jSet `access` "of"
 jStdIn = "in"
 jStdOut = "out"
 jPrintLn = "println"
@@ -869,6 +878,19 @@ jListType t = do
         jListType' _ = C.listType arrayList t
         lstInt = arrayList `containing` jInteger
         lstBool = arrayList `containing` jBool'
+
+jSetType :: (OORenderSym r) => VSType r -> VSType r
+jSetType t = do
+  modify (addLangImportVS $ utilImport "Set") 
+  t >>= (jSetType' . getType)
+  where jSetType' Integer = typeFromData (Set Integer) 
+          stInt (text stInt)
+        jSetType' Float = C.setType "Set" CP.float
+        jSetType' Double = C.setType "Set" CP.double
+        jSetType' Boolean = typeFromData (Set Boolean) stBool (text stBool)
+        jSetType' _ = C.setType "Set" t
+        stInt = "Set" `containing` jInteger
+        stBool = "Set" `containing` jBool'
 
 jArrayType :: VSType JavaCode
 jArrayType = arrayType (obj jObject)

@@ -16,7 +16,7 @@ import Drasil.GOOL.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
   TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..),
-  Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..),
+  Comparison(..), ValueExpression(..), funcApp, extFuncApp, List(..), Set(..),
   InternalList(..), ThunkSym(..), VectorType(..), VectorDecl(..),
   VectorThunk(..), VectorExpression(..), ThunkAssign(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..),
@@ -181,6 +181,7 @@ instance TypeSym JuliaCode where
   infile = jlInfileType
   outfile = jlOutfileType
   listType = jlListType
+  setType = listType
   arrayType = listType -- Treat arrays and lists the same, as in Python
   listInnerType = A.listInnerType
   funcType = CP.funcType
@@ -293,6 +294,7 @@ instance Literal JuliaCode where
   litString = G.litString
   litArray = litList
   litList = jlLitList
+  litSet = litList
 
 instance MathConstant JuliaCode where
   pi :: SValue JuliaCode
@@ -396,6 +398,9 @@ instance List JuliaCode where
   listSet = G.listSet
   indexOf = jlIndexOf
 
+instance Set JuliaCode where
+  contains = jlIndexOf
+
 instance InternalList JuliaCode where
   listSlice' b e s vn vo = jlListSlice vn vo b e (fromMaybe (litInt 1) s)
 
@@ -464,7 +469,6 @@ instance InternalControlStmt JuliaCode where
 instance RenderStatement JuliaCode where
   stmt = G.stmt
   loopStmt = G.loopStmt
-  emptyStmt = G.emptyStmt
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim JuliaCode where
@@ -474,6 +478,7 @@ instance StatementElim JuliaCode where
 instance StatementSym JuliaCode where
   type Statement JuliaCode = (Doc, Terminator)
   valStmt = G.valStmt Empty
+  emptyStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement JuliaCode where
@@ -486,6 +491,8 @@ instance AssignStatement JuliaCode where
 instance DeclStatement JuliaCode where
   varDec v scp = CP.varDecDef v scp Nothing
   varDecDef v scp e = CP.varDecDef v scp (Just e)
+  setDec = varDec
+  setDecDef = varDecDef
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
   arrayDec = listDec

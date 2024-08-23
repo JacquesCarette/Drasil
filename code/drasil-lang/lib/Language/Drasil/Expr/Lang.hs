@@ -39,7 +39,7 @@ data BoolBinOp = Impl | Iff
   deriving Eq
 
 -- | Index operator.
-data LABinOp = Index
+data LABinOp = Index | IndexOf
   deriving Eq
 
 -- | Ordered binary operators (less than, greater than, less than or equal to, greater than or equal to).
@@ -58,7 +58,17 @@ data VVNBinOp = Dot
 data NVVBinOp = Scale
   deriving Eq
 
--- TODO: I suppose these can be merged to just Add and Mul?
+-- | Element + Set -> Set
+data ESSBinOp = SAdd | SRemove
+  deriving Eq
+
+-- | Element + Set -> Bool
+data ESBBinOp = SContains
+  deriving Eq
+
+data AssocConcatOper = SUnion
+  deriving Eq
+
 -- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.
 data AssocArithOper = Add | Mul
   deriving Eq
@@ -100,6 +110,8 @@ data Expr where
   AssocA   :: AssocArithOper -> [Expr] -> Expr
   -- | Takes an associative boolean operator with a list of expressions.
   AssocB   :: AssocBoolOper  -> [Expr] -> Expr
+
+  AssocC   :: AssocConcatOper -> [Expr] -> Expr
   -- | C stands for "Chunk", for referring to a chunk in an expression.
   --   Implicitly assumes that the chunk has a symbol.
   C        :: UID -> Expr
@@ -109,7 +121,10 @@ data Expr where
   Case     :: Completeness -> [(Expr, Relation)] -> Expr
   -- | Represents a matrix of expressions.
   Matrix   :: [[Expr]] -> Expr
-
+  -- | Represents a set of expressions
+  Set      :: Space -> [Expr] -> Expr
+  -- | used to refernce the (name + type = variable )
+  Variable :: String -> Expr -> Expr
   -- | Unary operation for most functions (eg. sin, cos, log, etc.).
   UnaryOp       :: UFunc -> Expr -> Expr
   -- | Unary operation for @Bool -> Bool@ operations.
@@ -135,7 +150,10 @@ data Expr where
   VVNBinaryOp   :: VVNBinOp -> Expr -> Expr -> Expr
   -- | Binary operator for @Expr x Vector -> Vector@ operations (scaling).
   NVVBinaryOp   :: NVVBinOp -> Expr -> Expr -> Expr
-
+  -- | Set operator for Element + Set -> Set
+  ESSBinaryOp :: ESSBinOp -> Expr -> Expr -> Expr
+  -- | Set operator for Element + Set -> Bool
+  ESBBinaryOp :: ESBBinOp -> Expr -> Expr -> Expr
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.
   --   ex: Summation is represented via 'Add' over a discrete domain.
@@ -163,6 +181,8 @@ instance Eq Expr where
   VVVBinaryOp o a b   == VVVBinaryOp p c d   =   o == p && a == c && b == d
   VVNBinaryOp o a b   == VVNBinaryOp p c d   =   o == p && a == c && b == d
   NVVBinaryOp o a b   == NVVBinaryOp p c d   =   o == p && a == c && b == d
+  ESSBinaryOp o a b   == ESSBinaryOp p c d   =   o == p && a == c && b == d
+  ESBBinaryOp o a b   == ESBBinaryOp p c d   =   o == p && a == c && b == d
   _                   == _                   =   False
 -- ^ TODO: This needs to add more equality checks
 
@@ -250,7 +270,23 @@ instance Typed Expr Space where
   infer cxt (AssocB _ exs) = allOfType cxt exs S.Boolean S.Boolean
     $ "Associative boolean operation expects all operands to be of the same type (" ++ show S.Boolean ++ ")."
 
+  infer cxt (AssocC _ (e:exs)) = 
+    case infer cxt e of
+      Left spaceValue | spaceValue /= S.Void -> 
+          -- If the inferred type of e is a valid Space, call allOfType with spaceValue
+          allOfType cxt exs spaceValue spaceValue 
+              "Associative arithmetic operation expects all operands to be of the same expected type."
+      Left l ->
+          -- Handle the case when sp is a Left value but spaceValue is invalid
+          Right ("Expected all operands in addition/multiplication to be numeric, but found " ++ show l)
+      Right r ->
+          -- If sp is a Right value containing a TypeError
+          Right r
+  infer _ (AssocC SUnion _) = Right "Associative addition requires at least one operand."
+    
   infer cxt (C uid) = inferFromContext cxt uid
+
+  infer cxt (Variable _ n) = infer cxt n
 
   infer cxt (FCall uid exs) = case (inferFromContext cxt uid, map (infer cxt) exs) of
     (Left (S.Function params out), exst) -> if NE.toList params == lefts exst
@@ -282,6 +318,8 @@ instance Typed Expr Space where
               (\_ -> all (\ r -> length r == columns && all (== expT) r) sss)
               (const False) expT
         t = fromLeft (error "Infer on Matrix had a strong expectation of Left-valued data.") expT -- This error should never occur.
+
+  infer _ (Set s _) = Left s
 
   infer cxt (UnaryOp uf ex) = case infer cxt ex of
     Left sp -> case uf of
@@ -361,13 +399,30 @@ instance Typed Expr Space where
     (Left lt         , Left _)  -> Right $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
     (_               , Right e) -> Right e
     (Right e         , _      ) -> Right e
-
+  infer cxt (LABinaryOp IndexOf l n) = case (infer cxt l, infer cxt n) of
+    (Left (S.Set lt), Left nt) -> if S.isBasicNumSpace lt && nt == lt-- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
+      then Left lt
+      else Right $ "List accessor not of type Integer nor Natural, but of type `" ++ show nt ++ "`"
+    (Left lt         , Left _)  -> Right $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
+    (_               , Right e) -> Right e
+    (Right e         , _      ) -> Right e
   infer cxt (OrdBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
     (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt
       then Left S.Boolean
       else Right $ "Both operands of a numeric comparison must be the same numeric type, got: " ++ show lt ++ ", " ++ show rt ++ "."
     (_, Right re) -> Right re
     (Right le, _) -> Right le
+
+  infer cxt (NVVBinaryOp Scale l r) = case (infer cxt l, infer cxt r) of
+    (Left lt, Left (S.Vect rsp)) -> if S.isBasicNumSpace lt && lt == rsp
+      then Left rsp
+      else if lt /= rsp then
+        Right $ "Vector scaling expects a scaling by the same kind as the vector's but found scaling by`" ++ show lt ++ "` over vectors of type `" ++ show rsp ++ "`."
+      else
+        Right $ "Vector scaling expects a numeric scaling, but found `" ++ show lt ++ "`."
+    (Left _, Left rsp) -> Right $ "Vector scaling expects vector as second operand. Received `" ++ show rsp ++ "`."
+    (_, Right rx) -> Right rx
+    (Right lx, _) -> Right lx
 
   infer cxt (VVVBinaryOp o l r) = vvvInfer cxt o l r
     {- case (infer cxt l, infer cxt r) of
@@ -386,16 +441,21 @@ instance Typed Expr Space where
     (_, Right rx) -> Right rx
     (Right lx, _) -> Right lx
 
-  infer cxt (NVVBinaryOp Scale l r) = case (infer cxt l, infer cxt r) of
-    (Left lt, Left (S.Vect rsp)) -> if S.isBasicNumSpace lt && lt == rsp
-      then Left rsp
-      else if lt /= rsp then
-        Right $ "Vector scaling expects a scaling by the same kind as the vector's but found scaling by`" ++ show lt ++ "` over vectors of type `" ++ show rsp ++ "`."
-      else
-        Right $ "Vector scaling expects a numeric scaling, but found `" ++ show lt ++ "`."
-    (Left _, Left rsp) -> Right $ "Vector scaling expects vector as second operand. Received `" ++ show rsp ++ "`."
-    (_, Right rx) -> Right rx
-    (Right lx, _) -> Right lx
+  infer cxt (ESSBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
+    (Left lt, Left rt@(S.Set rsp)) -> if S.isBasicNumSpace lt && lt == rsp
+      then Left lt
+      else Right $ "Set Add/Sub should only be applied to Set of same space. Received `" ++ show lt ++ "` / `" ++ show rt ++ "`."
+    (_      , Right e) -> Right e
+    (Right e, _      ) -> Right e
+    (Left lt, Left rsp) -> Right $ "Set union expects set operands. Received `" ++ show lt ++ "` · `" ++ show rsp ++ "`."
+
+  infer cxt (ESBBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
+    (Left lt, Left rt@(S.Set rsp)) -> if S.isBasicNumSpace lt && lt == rsp
+      then Left lt
+      else Right $ "Set contains should only be applied to Set of same space. Received `" ++ show lt ++ "` / `" ++ show rt ++ "`."
+    (_      , Right e) -> Right e
+    (Right e, _      ) -> Right e
+    (Left lt, Left rsp) -> Right $ "Set union expects set operands. Received `" ++ show lt ++ "` · `" ++ show rsp ++ "`."
 
   infer cxt (Operator _ (S.BoundedDD _ _ bot top) body) =
     let expTy = S.Integer in

@@ -13,7 +13,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, VSUnOp, VSBinOp,
   RenderValue(..), ValueElim(valuePrec), RenderStatement(..))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (uOp, bOp, value)
 import Drasil.GOOL.LanguageRenderer (unOpDocD, unOpDocD', binOpDocD, binOpDocD')
-import Drasil.GOOL.AST (Terminator(..), Binding(..), OpData, od)
+import Drasil.GOOL.AST (Terminator(..), Binding(..), OpData, od, LitValue(..))
 import Drasil.GOOL.CodeType (CodeType(..))
 import Drasil.GOOL.Helpers (toCode, toState, on2StateValues)
 import Drasil.GOOL.State (VS)
@@ -36,11 +36,11 @@ mkStmtNoEnd = flip stmtFromData Empty
 
 -- | Constructs a value in a stateful context
 mkStateVal :: (CommonRenderSym r) => VSType r -> Doc -> SValue r
-mkStateVal = valFromData Nothing Nothing
+mkStateVal = valFromData Nothing (LitInt 0)
 
 -- | Constructs a value in a non-stateful context
 mkVal :: (CommonRenderSym r) => r (Type r) -> Doc -> SValue r
-mkVal t = valFromData Nothing Nothing (toState t)
+mkVal t = valFromData Nothing (LitInt 0) (toState t)
 
 -- Variables --
 
@@ -210,7 +210,7 @@ exprRender' f b' v1' v2' = do
   toState $ f b v1 v2
 
 mkExpr :: (CommonRenderSym r) => Int -> r (Type r) -> Doc -> SValue r
-mkExpr p t = valFromData (Just p) Nothing (toState t)
+mkExpr p t = valFromData (Just p) (LitInt 0) (toState t)
 
 binOpDocDRend :: (CommonRenderSym r) => r (BinaryOp r) -> r (Value r) -> 
   r (Value r) -> Doc

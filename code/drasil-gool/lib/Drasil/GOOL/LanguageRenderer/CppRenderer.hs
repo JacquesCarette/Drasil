@@ -35,7 +35,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
   RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
+  RenderValue(..), ValueElim(..), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim, MSMthdType,
@@ -423,7 +423,11 @@ instance (Pair p) => RenderValue (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ValueElim (p CppSrcCode CppHdrCode) where
   valuePrec v = valuePrec $ pfst v
+  valueChar v = valueChar $ pfst v
+  valueDouble v = valueDouble $ pfst v
+  valueFloat v = valueFloat $ pfst v
   valueInt v = valueInt $ pfst v
+  valueString v = valueString $ pfst v
   value v = RC.value $ pfst v
 
 instance (Pair p) => InternalValueExp (p CppSrcCode CppHdrCode) where
@@ -1341,7 +1345,21 @@ instance RenderValue CppSrcCode where
 
 instance ValueElim CppSrcCode where
   valuePrec = valPrec . unCPPSC
-  valueInt = valInt . unCPPSC
+  valueChar sc = case litVal (unCPPSC sc) of
+    LitChar c -> Just c
+    _ -> Nothing
+  valueDouble sc = case litVal (unCPPSC sc) of
+    LitDouble d -> Just d
+    _ -> Nothing
+  valueFloat sc = case litVal (unCPPSC sc) of
+    LitFloat f -> Just f
+    _ -> Nothing
+  valueInt sc = case litVal (unCPPSC sc) of
+    LitInt i -> Just i
+    _ -> Nothing
+  valueString sc = case litVal (unCPPSC sc) of
+    LitString s -> Just s
+    _ -> Nothing
   value = val . unCPPSC
 
 instance InternalValueExp CppSrcCode where
@@ -2034,7 +2052,21 @@ instance RenderValue CppHdrCode where
 
 instance ValueElim CppHdrCode where
   valuePrec = valPrec . unCPPHC
-  valueInt = valInt . unCPPHC
+  valueChar sc = case litVal (unCPPHC sc) of
+    LitChar c -> Just c
+    _ -> Nothing
+  valueDouble sc = case litVal (unCPPHC sc) of
+    LitDouble d -> Just d
+    _ -> Nothing
+  valueFloat sc = case litVal (unCPPHC sc) of
+    LitFloat f -> Just f
+    _ -> Nothing
+  valueInt sc = case litVal (unCPPHC sc) of
+    LitInt i -> Just i
+    _ -> Nothing
+  valueString sc = case litVal (unCPPHC sc) of
+    LitString s -> Just s
+    _ -> Nothing
   value = val . unCPPHC
 
 instance InternalValueExp CppHdrCode where

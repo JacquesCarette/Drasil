@@ -137,14 +137,21 @@ data TypeData = TD {cType :: CodeType, typeString :: String, typeDoc :: Doc}
 td :: CodeType -> String -> Doc -> TypeData
 td = TD
 
+-- FIXME: Currently, this is used to hold certain types of literal values. 
+-- It needs to be extended to support additional types.
+data LitValue = LitChar Char              
+              | LitDouble Double
+              | LitFloat Float
+              | LitInt Integer
+              | LitString String
 -- Used as the underlying data type for Values in all renderers
 -- valPrec is the precedence of the operator involved if the value is an expression,
--- valInt is the int the value is holding if the value is a litInt,
+-- litVal is the literal value is holding,
 -- valType is the type of the value,
 -- val is the printed representation of the value.
-data ValData = VD {valPrec :: Maybe Int, valInt :: Maybe Integer, valType :: TypeData, val :: Doc}
+data ValData = VD {valPrec :: Maybe Int, litVal :: LitValue, valType :: TypeData, val :: Doc}
 
-vd :: Maybe Int -> Maybe Integer -> TypeData -> Doc -> ValData
+vd :: Maybe Int -> LitValue -> TypeData -> Doc -> ValData
 vd = VD
 
 updateValDoc :: (Doc -> Doc) -> ValData -> ValData

@@ -50,7 +50,7 @@ import qualified Drasil.GOOL.RendererClassesCommon as S (RenderValue(call),
   InternalListFunc (listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
   RenderStatement(stmt), InternalIOStmt(..))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (BodyElim(..),
-  BlockElim(..), InternalVarElim(variable), ValueElim(value, valueInt),
+  BlockElim(..), InternalVarElim(variable), ValueElim(..),
   FunctionElim(..), StatementElim(statement), BlockCommentElim(..))
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(commentedMod),
   OORenderMethod(intMethod), RenderClass(inherit, implements),
@@ -134,16 +134,26 @@ smartAdd v1 v2 = do
   v1' <- v1
   v2' <- v2
   case (RC.valueInt v1', RC.valueInt v2') of
-    (Just i1, Just i2) -> litInt (i1 + i2)
-    _                  -> v1 #+ v2
+    (Just i1,Just i2) -> litInt (i1 + i2)
+    _ -> case (RC.valueDouble v1', RC.valueDouble v2') of
+      (Just d1, Just d2) -> litDouble (d1 + d2)
+      _ -> case (RC.valueFloat v1', RC.valueFloat v2') of
+        (Just f1, Just f2) -> IC.litFloat (f1 + f2)
+        _ -> case (RC.valueString v1', RC.valueString v2') of
+          (Just s1, Just s2) -> litString (s1 ++ s2)
+          _ -> v1 #+ v2
 
 smartSub :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r
 smartSub v1 v2 = do
   v1' <- v1
   v2' <- v2
   case (RC.valueInt v1', RC.valueInt v2') of
-    (Just i1, Just i2) -> litInt (i1 - i2)
-    _                  -> v1 #- v2
+    (Just i1,Just i2) -> litInt (i1 - i2)
+    _ -> case (RC.valueDouble v1', RC.valueDouble v2') of
+      (Just d1, Just d2) -> litDouble (d1 - d2)
+      _ -> case (RC.valueFloat v1', RC.valueFloat v2') of
+        (Just f1, Just f2) -> IC.litFloat (f1 - f2)
+        _ -> v1 #- v2
 
 equalOp :: (Monad r) => VSOp r
 equalOp = compEqualPrec "=="
@@ -220,16 +230,16 @@ local = toCode $ sd Local
 -- Values --
 
 litChar :: (CommonRenderSym r) => (Doc -> Doc) -> Char -> SValue r
-litChar f c = mkStateVal IC.char (f $ if c == '\n' then text "\\n" else D.char c)
+litChar f c = valFromData Nothing (LitChar c) IC.char (f $ if c == '\n' then text "\\n" else D.char c)
 
 litDouble :: (CommonRenderSym r) => Double -> SValue r
-litDouble d = mkStateVal IC.double (D.double d)
+litDouble d = valFromData Nothing (LitDouble d) IC.double (D.double d)
 
 litInt :: (CommonRenderSym r) => Integer -> SValue r
-litInt i = valFromData Nothing (Just i) IC.int (integer i)
+litInt i = valFromData Nothing (LitInt i) IC.int (integer i)
 
 litString :: (CommonRenderSym r) => String -> SValue r
-litString s = mkStateVal IC.string (doubleQuotedText s)
+litString s = valFromData Nothing (LitString s) IC.string (doubleQuotedText s)
 
 valueOf :: (CommonRenderSym r) => SVariable r -> SValue r
 valueOf v' = do 
@@ -278,7 +288,7 @@ lambda f ps' ex' = do
   ps <- sequence ps'
   ex <- ex'
   let ft = IC.funcType (map (return . variableType) ps) (return $ valueType ex)
-  valFromData (Just 0) Nothing ft (f ps ex)
+  valFromData (Just 0) (LitInt 0) ft (f ps ex)
 
 objAccess :: (CommonRenderSym r) => SValue r -> VSFunction r -> SValue r
 objAccess = on2StateWrapped (\v f-> mkVal (functionType f) 

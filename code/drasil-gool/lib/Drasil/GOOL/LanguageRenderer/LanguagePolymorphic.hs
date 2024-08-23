@@ -10,8 +10,8 @@ module Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (fileFromData,
   classVarCheckStatic, arrayElem, local, litChar, litDouble, litInt, litString, 
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd, 
-  listAppend, setAdd, listAccess, listSet, getFunc, setFunc, 
-  listAppendFunc, setAddFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment,
+  listAppend, setAdd, setRemove, listAccess, listSet, getFunc, setFunc, 
+  listAppendFunc, setMethodFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment,
   objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond,
   tryCatch, construct, param, method, getMethod, setMethod, initStmts,
   function, docFuncRepr, docFunc, buildClass, implementingClass, docClass,
@@ -50,7 +50,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, RenderType(..),
   BlockCommentSym(..))
 import qualified Drasil.GOOL.RendererClassesCommon as S (RenderValue(call),
   InternalListFunc (listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
-  RenderStatement(stmt), InternalIOStmt(..), InternalSetFunc (setAddFunc))
+  RenderStatement(stmt), InternalIOStmt(..), InternalSetFunc (setAddFunc, setRemoveFunc))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (BodyElim(..),
   BlockElim(..), InternalVarElim(variable), ValueElim(value, valueInt),
   FunctionElim(..), StatementElim(statement), BlockCommentElim(..))
@@ -308,8 +308,11 @@ listAdd v i vToAdd = v $. S.listAddFunc v (IC.intToIndex i) vToAdd
 listAppend :: (OORenderSym r) => SValue r -> SValue r -> SValue r
 listAppend v vToApp = v $. S.listAppendFunc v vToApp
 
-setAdd :: (OORenderSym r, S.InternalSetFunc r) => SValue r -> SValue r -> SValue r
+setAdd :: (OORenderSym r) => SValue r -> SValue r -> SValue r
 setAdd v vToApp = v $. S.setAddFunc v vToApp
+
+setRemove :: (OORenderSym r) => SValue r -> SValue r -> SValue r
+setRemove v vToApp = v $. S.setRemoveFunc v vToApp
 
 listAccess :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r
 listAccess v i = do
@@ -341,8 +344,8 @@ setFunc t v toVal = v >>= (\vr -> IG.func (setterName $ variableName vr) t
 listAppendFunc :: (OORenderSym r) => Label -> SValue r -> VSFunction r
 listAppendFunc f v = IG.func f (IC.listType $ onStateValue valueType v) [v]
 
-setAddFunc :: (OORenderSym r) => Label -> SValue r -> VSFunction r
-setAddFunc f v = IG.func f (IC.setType $ onStateValue valueType v) [v]
+setMethodFunc :: (OORenderSym r) => Label -> SValue r -> VSFunction r
+setMethodFunc f v = IG.func f (IC.setType $ onStateValue valueType v) [v]
 
 -- Statements --
 

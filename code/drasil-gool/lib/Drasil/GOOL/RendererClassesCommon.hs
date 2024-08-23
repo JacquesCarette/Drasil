@@ -35,7 +35,7 @@ class (AssignStatement r, DeclStatement r, IOStatement r,
   r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
   NumericExpression r, BooleanExpression r, Comparison r, List r,
   InternalList r, VectorExpression r, TypeElim r, VariableElim r, RenderBlock r,
-  BlockElim r, RenderBody r, BodyElim r, InternalListFunc r, RenderFunction r,
+  BlockElim r, RenderBody r, BodyElim r, InternalListFunc r, InternalSetFunc r, RenderFunction r,
   FunctionElim r, OpElim r, RenderParam r, ParamElim r, RenderVisibility r,
   VisibilityElim r, InternalAssignStmt r, InternalIOStmt r,
   InternalControlStmt r, RenderStatement r, StatementElim r, RenderType r,
@@ -172,6 +172,7 @@ class InternalListFunc r where
 class InternalSetFunc r where
   -- | Set, Value
   setAddFunc :: SValue r -> SValue r -> VSFunction r
+  setRemoveFunc :: SValue r -> SValue r -> VSFunction r
 
 class RenderFunction r where
   funcFromData :: Doc -> VSType r -> VSFunction r

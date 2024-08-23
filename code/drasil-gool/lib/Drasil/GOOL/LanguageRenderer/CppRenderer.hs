@@ -73,7 +73,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, setAdd, setAddFunc, listAdd, listAppend, listAccess, listSet, getFunc,
+  lambda, func, get, set, setAdd, setRemove, setMethodFunc, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
   increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
@@ -465,6 +465,7 @@ instance (Pair p) => List (p CppSrcCode CppHdrCode) where
 instance (Pair p) => Set (p CppSrcCode CppHdrCode) where
   contains = pair2 contains contains
   setAdd = pair2 setAdd setAdd
+  setRemove = pair2 setRemove setRemove
 
 instance (Pair p) => InternalList (p CppSrcCode CppHdrCode) where
   listSlice' b e s vr vl = pair2
@@ -487,6 +488,7 @@ instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => InternalSetFunc (p CppSrcCode CppHdrCode) where
   setAddFunc = pair2 setAddFunc setAddFunc
+  setRemoveFunc = pair2 setRemoveFunc setRemoveFunc
 
 instance ThunkSym (p CppSrcCode CppHdrCode) where
   type Thunk (p CppSrcCode CppHdrCode) = CommonThunk VS
@@ -1391,6 +1393,7 @@ instance List CppSrcCode where
 instance Set CppSrcCode where
   contains = CP.containsInt cppIndex cppIterEnd
   setAdd = G.setAdd
+  setRemove = G.setRemove
 
 instance InternalList CppSrcCode where
   listSlice' = M.listSlice
@@ -1407,7 +1410,8 @@ instance InternalListFunc CppSrcCode where
   listSetFunc = CP.listSetFunc cppListSetDoc
 
 instance InternalSetFunc CppSrcCode where
-  setAddFunc _ = G.setAddFunc cppListAdd
+  setAddFunc _ = G.setMethodFunc cppListAdd
+  setRemoveFunc _ = G.setMethodFunc cppListRemove
 
 instance ThunkSym CppSrcCode where
   type Thunk CppSrcCode = CommonThunk VS
@@ -2099,6 +2103,7 @@ instance List CppHdrCode where
 instance Set CppHdrCode where
   contains _ _ = mkStateVal void empty
   setAdd _ _ = mkStateVal void empty
+  setRemove _ _ = mkStateVal void empty
 
 instance InternalList CppHdrCode where
   listSlice' _ _ _ _ _ = toState $ toCode empty
@@ -2116,6 +2121,7 @@ instance InternalListFunc CppHdrCode where
 
 instance InternalSetFunc CppHdrCode where
   setAddFunc _ _ = funcFromData empty void
+  setRemoveFunc _ _ = funcFromData empty void
 
 instance ThunkSym CppHdrCode where
   type Thunk CppHdrCode = CommonThunk VS
@@ -2508,7 +2514,7 @@ ptrAccess' = text ptrAccess
 nmSpc, ptrAccess, cppFor, std, algorithm, cppString, vector, sstream, stringstream,
   fstream, iostream, limits, mathh, cassert, cppBool, cppInfile, cppOutfile,
   cppIterator, cppOpen, stod, stof, cppIgnore, numLimits, streamsize, max,
-  endl, cin, cout, cppIndex, cppListAccess, cppListAdd, cppListAppend,
+  endl, cin, cout, cppIndex, cppListAccess, cppListAdd, cppListRemove, cppListAppend,
   cppIterBegin, cppIterEnd, cppR, cppW, cppA, cppGetLine, cppClose, cppClear,
   cppStr, mathDefines, cppSet, cppIn, cppConst :: String
 nmSpc = "::"
@@ -2542,6 +2548,7 @@ cout = stdAccess "cout"
 cppIndex= "find"
 cppListAccess = "at"
 cppListAdd = "insert"
+cppListRemove = "erase"
 cppListAppend = "push_back"
 cppIterBegin = "begin"
 cppIterEnd = "end"

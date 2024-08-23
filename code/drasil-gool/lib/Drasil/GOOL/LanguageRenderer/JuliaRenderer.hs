@@ -30,7 +30,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
   RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  RenderValue(..), ValueElim(..), InternalListFunc(..), RenderFunction(..),
+  RenderValue(..), ValueElim(..), InternalListFunc(..), InternalSetFunc(..), RenderFunction(..),
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..),
   InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm),
   RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
@@ -401,6 +401,7 @@ instance List JuliaCode where
 instance Set JuliaCode where
   contains s e = funcApp "in" bool [e, s]
   setAdd = CP.listAppend
+  setRemove = CP.listAppend
 
 instance InternalList JuliaCode where
   listSlice' b e s vn vo = jlListSlice vn vo b e (fromMaybe (litInt 1) s)
@@ -417,6 +418,10 @@ instance InternalListFunc JuliaCode where
     funcFromData (RC.value f) void
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
+
+instance InternalSetFunc JuliaCode where
+  setAddFunc = listAppendFunc
+  setRemoveFunc = listAppendFunc
 
 instance ThunkSym JuliaCode where
   type Thunk JuliaCode = CommonThunk VS

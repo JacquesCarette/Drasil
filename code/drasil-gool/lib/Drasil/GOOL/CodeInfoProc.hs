@@ -209,6 +209,7 @@ instance List CodeInfoProc where
 instance Set CodeInfoProc where
  contains = execute2
  setAdd = execute2
+ setRemove = execute2
 
 instance InternalList CodeInfoProc where
   listSlice' b e s _ vl = zoom lensMStoVS $ do

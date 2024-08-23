@@ -66,11 +66,11 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, listAdd, setAdd, setAddFunc, listAppend, listAccess, listSet, getFunc,
-  setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
-  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
+  lambda, func, get, set, listAdd, setAdd, setRemove, setMethodFunc, listAppend, 
+  listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, 
+  assign, subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, 
+  comment, throw, ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
+  function, buildClass, implementingClass, commentedClass, modFromData, fileDoc,
   fileFromData, local)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
@@ -458,6 +458,7 @@ instance List PythonCode where
 instance Set PythonCode where
   contains a b = typeBinExpr (inPrec pyIn) bool b a
   setAdd = G.setAdd
+  setRemove = G.setRemove
 
 instance InternalList PythonCode where
   listSlice' b e s vn vo = pyListSlice vn vo (getVal b) (getVal e) (getVal s)
@@ -477,7 +478,8 @@ instance InternalListFunc PythonCode where
   listSetFunc = CP.listSetFunc R.listSetFunc
 
 instance InternalSetFunc PythonCode where
-  setAddFunc _ = G.setAddFunc pyAdd
+  setAddFunc _ = G.setMethodFunc pyAdd
+  setRemoveFunc _ = G.setMethodFunc pyRemove
 
 instance ThunkSym PythonCode where
   type Thunk PythonCode = CommonThunk VS
@@ -840,7 +842,7 @@ pyInputFunc = text "input()" -- raw_input() for < Python 3.0
 pyPrintFunc = text printLabel
 
 pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyClose, 
-  pySplit, pyRange, pyRstrip, pyMath, pyIn, pyAdd :: String
+  pySplit, pyRange, pyRstrip, pyMath, pyIn, pyAdd, pyRemove :: String
 pyListSize = "len"
 pyIndex = "index"
 pyInsert = "insert"
@@ -854,6 +856,7 @@ pyRstrip = "rstrip"
 pyMath = "math"
 pyIn = "in"
 pyAdd = "add"
+pyRemove = "remove"
 
 pyDef, pyLambdaDec, pyElseIf, pyRaise, pyExcept :: Doc
 pyDef = text "def"

@@ -289,6 +289,12 @@ class (ValueSym r) => Set r where
   -- | Inserts a value into a set
   -- Arguments are: Set, Value
   setAdd :: SValue r -> SValue r -> SValue r
+  -- | Removes a value from a set
+  -- Arguments are: Set, Value
+  setRemove :: SValue r -> SValue r -> SValue r
+  -- | Removes a value from a set
+  -- Arguments are: Set, Set
+  --setUnion :: SValue r -> SValue r -> SValue r
 
 class (ValueSym r) => InternalList r where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) 

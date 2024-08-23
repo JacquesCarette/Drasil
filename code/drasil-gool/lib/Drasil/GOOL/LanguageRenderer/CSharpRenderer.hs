@@ -66,7 +66,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, setAddFunc, setAdd, listAdd, listAppend, listAccess, listSet, getFunc,
+  lambda, func, get, set, setMethodFunc, setAdd, setRemove, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
   increment, objDecNew, print, closeFile, returnStmt, valStmt,
   comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
@@ -447,6 +447,7 @@ instance List CSharpCode where
 instance Set CSharpCode where
   contains = CP.contains csContains
   setAdd = G.setAdd
+  setRemove = G.setRemove
 
 instance InternalList CSharpCode where
   listSlice' = M.listSlice
@@ -463,7 +464,8 @@ instance InternalListFunc CSharpCode where
   listSetFunc = CP.listSetFunc R.listSetFunc
 
 instance InternalSetFunc CSharpCode where
-  setAddFunc _ = G.setAddFunc csListAppend
+  setAddFunc _ = G.setMethodFunc csListAppend
+  setRemoveFunc _ = G.setMethodFunc csListRemove
 
 instance ThunkSym CSharpCode where
   type Thunk CSharpCode = CommonThunk VS
@@ -779,7 +781,7 @@ csLambdaSep = text "=>"
 
 csSystem, csConsole, csGeneric, csDiagnostics, csIO, csList, csSet, csInt, csFloat, csBool, 
   csChar, csParse, csReader, csWriter, csReadLine, csWrite, csWriteLine, 
-  csIndex, csContains, csListAdd, csListAppend, csClose, csEOS, csSplit, csMain,
+  csIndex, csContains, csListAdd, csListAppend, csListRemove, csClose, csEOS, csSplit, csMain,
   csFunc :: String
 csSystem = "System"
 csConsole = "Console"
@@ -802,6 +804,7 @@ csIndex = "IndexOf"
 csContains = "Contains"
 csListAdd = "Insert"
 csListAppend = "Add"
+csListRemove = "Remove"
 csClose = "Close"
 csEOS = "EndOfStream"
 csSplit = "Split"

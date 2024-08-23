@@ -400,8 +400,8 @@ instance List JuliaCode where
 
 instance Set JuliaCode where
   contains s e = funcApp "in" bool [e, s]
-  setAdd = CP.listAppend
-  setRemove = CP.listAppend
+  setAdd s e = funcApp "push!" void [s, e]
+  setRemove s e = funcApp "delete!" void [s, e]
 
 instance InternalList JuliaCode where
   listSlice' b e s vn vo = jlListSlice vn vo b e (fromMaybe (litInt 1) s)
@@ -420,8 +420,8 @@ instance InternalListFunc JuliaCode where
   listSetFunc = CP.listSetFunc R.listSetFunc
 
 instance InternalSetFunc JuliaCode where
-  setAddFunc = listAppendFunc
-  setRemoveFunc = listAppendFunc
+  setAddFunc _ _ = error "not used by Julia"
+  setRemoveFunc _ _ = error "not used by Julia"
 
 instance ThunkSym JuliaCode where
   type Thunk JuliaCode = CommonThunk VS

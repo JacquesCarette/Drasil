@@ -27,6 +27,8 @@ print(boringList)
 assert b == 5, "b should be 5"
 assert len(myOtherList) == 4, "myOtherList should have 4 elements"
 assert oneIndex == 0, "oneIndex should be 0"
+s = {4, 7, 5}
+assert 7 in s, "Set s should contain 7"
 
 # List slicing tests
 # Create variables for list slices

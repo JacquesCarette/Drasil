@@ -492,7 +492,7 @@ instance InternalListFunc JavaCode where
   listSetFunc = jListSetFunc
 
 instance InternalSetFunc JavaCode where
-  setAddFunc _ = G.setAddFunc "add"
+  setAddFunc _ = G.setAddFunc jListAdd
 
 instance ThunkSym JavaCode where
   type Thunk JavaCode = CommonThunk VS

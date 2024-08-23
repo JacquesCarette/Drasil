@@ -21,7 +21,7 @@ import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..))
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..), convType)
 import Drasil.GOOL.InterfaceGOOL (SClass, CSStateVar, OOProg, ProgramSym(..),
   FileSym(..), ModuleSym(..), ClassSym(..), OOTypeSym(..), OOVariableSym(..),
   StateVarSym(..), PermanenceSym(..), OOValueSym, OOVariableValue,
@@ -33,7 +33,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..), InternalSetFunc(..),
+  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim, MethodTypeSym(..),
@@ -68,7 +68,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, listAdd, setAdd, setRemove, setUnion, setMethodFunc, listAppend, listAccess, listSet, getFunc,
+  lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
   increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
@@ -82,7 +82,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   docMain, mainFunction, buildModule', bindingError, listDecDef, 
   destructorError, stateVarDef, constVar, litArray, call', listSizeFunc, 
   listAccessFunc', notNull, doubleRender, double, openFileR, openFileW, 
-  stateVar, floatRender, float, string', intToIndex, indexToInt, global)
+  stateVar, floatRender, float, string', intToIndex, indexToInt, global, setMethodCall)
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -475,9 +475,9 @@ instance List JavaCode where
 
 instance Set JavaCode where
   contains = CP.contains jContains
-  setAdd = G.setAdd
-  setRemove = G.setRemove
-  setUnion = G.setUnion
+  setAdd = CP.setMethodCall jListAdd
+  setRemove = CP.setMethodCall jListRemove
+  setUnion = CP.setMethodCall jListUnion
 
 instance InternalList JavaCode where
   listSlice' = M.listSlice
@@ -492,11 +492,6 @@ instance InternalListFunc JavaCode where
   listAppendFunc _ = G.listAppendFunc jListAdd
   listAccessFunc = CP.listAccessFunc' jListAccess
   listSetFunc = jListSetFunc
-
-instance InternalSetFunc JavaCode where
-  setAddFunc _ = G.setMethodFunc jListAdd
-  setRemoveFunc _ = G.setMethodFunc jListRemove
-  setUnionFunc _ = G.setMethodFunc jListUnion
 
 instance ThunkSym JavaCode where
   type Thunk JavaCode = CommonThunk VS

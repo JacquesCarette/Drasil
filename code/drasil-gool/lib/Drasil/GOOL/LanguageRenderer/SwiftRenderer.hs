@@ -36,7 +36,7 @@ import Drasil.GOOL.RendererClassesCommon (MSMthdType, CommonRenderSym,
   ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..), InternalSetFunc(..),
+  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim,
@@ -69,7 +69,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, setAdd, setRemove, setUnion, setMethodFunc, listAdd, listAppend, listAccess, listSet, getFunc,
+  lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
   increment, objDecNew, print, returnStmt, valStmt, comment, throw, ifCond,
   tryCatch, construct, param, method, getMethod, setMethod, initStmts,
@@ -82,7 +82,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (classVar,
   openFileW, self, multiAssign, multiReturn, listDec, funcDecDef,
   inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', bool, float,
   stringRender', string', inherit, implements, functionDoc, intToIndex,
-  indexToInt, forEach', global)
+  indexToInt, forEach', global, setMethodCall)
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (notOp, andOp, orOp,
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs,
   listSize, varDecDef, setDecDef, extObjDecNew, switch, while)
@@ -462,9 +462,9 @@ instance List SwiftCode where
 
 instance Set SwiftCode where
   contains = CP.contains swiftContains
-  setAdd = G.setAdd
-  setRemove = G.setRemove
-  setUnion = G.setUnion
+  setAdd = CP.setMethodCall swiftListAdd
+  setRemove = CP.setMethodCall swiftListRemove
+  setUnion = CP.setMethodCall swiftUnion
 
 instance InternalList SwiftCode where
   listSlice' b e s vn vo = swiftListSlice vn vo b e (fromMaybe (litInt 1) s)
@@ -481,11 +481,6 @@ instance InternalListFunc SwiftCode where
   listAppendFunc _ = G.listAppendFunc swiftListAppend
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
-
-instance InternalSetFunc SwiftCode where
-  setAddFunc _ = G.setMethodFunc swiftListAdd
-  setRemoveFunc _ = G.setMethodFunc swiftListRemove
-  setUnionFunc _ = G.setMethodFunc swiftUnion
 
 instance ThunkSym SwiftCode where
   type Thunk SwiftCode = CommonThunk VS

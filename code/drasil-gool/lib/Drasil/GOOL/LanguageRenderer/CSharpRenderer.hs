@@ -33,7 +33,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..), InternalSetFunc(..),
+  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim, MethodTypeSym(..),
@@ -66,7 +66,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, setMethodFunc, setAdd, setRemove, setUnion, listAdd, listAppend, listAccess, listSet, getFunc,
+  lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
   setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
   increment, objDecNew, print, closeFile, returnStmt, valStmt,
   comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
@@ -79,7 +79,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   mainFunction, buildModule', string, constDecDef, docInOutFunc, bindingError, 
   notNull, listDecDef, destructorError, stateVarDef, constVar, listSetFunc, 
   extraClass, listAccessFunc, doubleRender, openFileR, openFileW, stateVar, 
-  inherit, implements, intToIndex, indexToInt, global)
+  inherit, implements, intToIndex, indexToInt, global, setMethodCall)
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (setType, float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -446,9 +446,9 @@ instance List CSharpCode where
 
 instance Set CSharpCode where
   contains = CP.contains csContains
-  setAdd = G.setAdd
-  setRemove = G.setRemove
-  setUnion = G.setUnion
+  setAdd = CP.setMethodCall csListAppend
+  setRemove = CP.setMethodCall csListRemove
+  setUnion = CP.setMethodCall csUnionWith
 
 instance InternalList CSharpCode where
   listSlice' = M.listSlice
@@ -463,11 +463,6 @@ instance InternalListFunc CSharpCode where
   listAppendFunc _ = G.listAppendFunc csListAppend
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
-
-instance InternalSetFunc CSharpCode where
-  setAddFunc _ = G.setMethodFunc csListAppend
-  setRemoveFunc _ = G.setMethodFunc csListRemove
-  setUnionFunc _ = G.setMethodFunc csUnionWith
 
 instance ThunkSym CSharpCode where
   type Thunk CSharpCode = CommonThunk VS

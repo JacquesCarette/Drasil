@@ -11,7 +11,7 @@ module Drasil.GOOL.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   forLoopError, mainBody, inOutFunc, docInOutFunc', boolRender, bool,
   floatRender, float, stringRender', string', inherit, implements, listSize, setDecDef, setDec,
   listAdd, listAppend, intToIndex, indexToInt, intToIndex', indexToInt',
-  varDecDef, openFileR', openFileW', openFileA', argExists, global
+  varDecDef, openFileR', openFileW', openFileA', argExists, global, setMethodCall
 ) where
 
 import Utils.Drasil (indent, stringList)
@@ -30,7 +30,7 @@ import qualified Drasil.GOOL.InterfaceCommon as IC (argsList,
   varDecDef, constDecDef), List(intToIndex, indexToInt), ParameterSym(param,
   pointerParam), MethodSym(mainFunction), AssignStatement(assign), ScopeSym(..))
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
-  OOTypeSym(obj), PermanenceSym(..), Initializers, objMethodCallNoParams)
+  OOTypeSym(obj), PermanenceSym(..), Initializers, objMethodCallNoParams, objMethodCall)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (ClassSym(buildClass),
   OOVariableSym(self, objVar), OOFunctionSym(..))
 import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
@@ -348,6 +348,9 @@ setDec f vl v scp = do
   sz <- zoom lensMStoVS vl
   vd <- IC.varDec v scp
   mkStmt (RC.statement vd <> f sz)
+
+setMethodCall :: (OORenderSym r) => Label -> SValue r ->  SValue r -> SValue r
+setMethodCall n a b = objMethodCall (listInnerType $ onStateValue valueType a) a n [b] 
 
 destructorError :: String -> String
 destructorError l = "Destructors not allowed in " ++ l

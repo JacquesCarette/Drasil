@@ -33,7 +33,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
+  RenderValue(..), ValueElim(..), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim, MethodTypeSym(..),
@@ -438,7 +438,21 @@ instance RenderValue JavaCode where
 
 instance ValueElim JavaCode where
   valuePrec = valPrec . unJC
-  valueInt = valInt . unJC
+  valueChar sc = case litVal (unJC sc) of
+    LitChar c -> Just c
+    _ -> Nothing
+  valueDouble sc = case litVal (unJC sc) of
+    LitDouble d -> Just d
+    _ -> Nothing
+  valueFloat sc = case litVal (unJC sc) of
+    LitFloat f -> Just f
+    _ -> Nothing
+  valueInt sc = case litVal (unJC sc) of
+    LitInt i -> Just i
+    _ -> Nothing
+  valueString sc = case litVal (unJC sc) of
+    LitString s -> Just s
+    _ -> Nothing
   value = val . unJC
 
 instance InternalValueExp JavaCode where

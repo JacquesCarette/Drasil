@@ -67,11 +67,9 @@ mySlicedList8 = [Int](stride(from: 3, to: 0, by: z)).map({(i: Int) -> Double in 
 
 mySlicedList9 = [Int](stride(from: x, to: y, by: z)).map({(i: Int) -> Double in myOtherList[i]})
 
-var endIdx: Int = z > 0 ? myOtherList.count : -1
-mySlicedList10 = [Int](stride(from: 2, to: endIdx, by: z)).map({(i: Int) -> Double in myOtherList[i]})
+mySlicedList10 = [Int](stride(from: 2, to: -1, by: z)).map({(i: Int) -> Double in myOtherList[i]})
 
-var endIdx0: Int = z > 0 ? myOtherList.count : -1
-mySlicedList10 = [Int](stride(from: 2, to: endIdx0, by: z)).map({(i: Int) -> Double in myOtherList[i]})
+mySlicedList10 = [Int](stride(from: 2, to: -1, by: z)).map({(i: Int) -> Double in myOtherList[i]})
 
 mySlicedList11 = [Int](stride(from: y, to: x, by: z)).map({(i: Int) -> Double in myOtherList[i]})
 

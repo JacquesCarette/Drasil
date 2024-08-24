@@ -36,7 +36,7 @@ import Drasil.GOOL.RendererClassesCommon (MSMthdType, CommonRenderSym,
   ImportSym(..), ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
+  RenderValue(..), ValueElim(..), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim,
@@ -431,7 +431,21 @@ instance RenderValue SwiftCode where
 
 instance ValueElim SwiftCode where
   valuePrec = valPrec . unSC
-  valueInt = valInt . unSC
+  valueChar sc = case litVal (unSC sc) of
+    LitChar c -> Just c
+    _ -> Nothing
+  valueDouble sc = case litVal (unSC sc) of
+    LitDouble d -> Just d
+    _ -> Nothing
+  valueFloat sc = case litVal (unSC sc) of
+    LitFloat f -> Just f
+    _ -> Nothing
+  valueInt sc = case litVal (unSC sc) of
+    LitInt i -> Just i
+    _ -> Nothing
+  valueString sc = case litVal (unSC sc) of
+    LitString s -> Just s
+    _ -> Nothing
   value = val . unSC
 
 instance InternalValueExp SwiftCode where

@@ -104,14 +104,14 @@ litFalse :: (CommonRenderSym r) => SValue r
 litFalse = mkStateVal IC.bool (text "false")
 
 litFloat :: (CommonRenderSym r) => Float -> SValue r
-litFloat f = mkStateVal IC.float (D.float f <> text "f")
+litFloat f = valFromData Nothing (LitFloat f) IC.float (D.float f <> text "f")
 
 inlineIf :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 inlineIf c' v1' v2' = do
   c <- c'
   v1 <- v1'
-  v2 <- v2' 
-  valFromData (prec c) Nothing (toState $ valueType v1) 
+  v2 <- v2'
+  valFromData (prec c) (LitInt 0) (toState $ valueType v1) 
     (RC.value c <+> text "?" <+> RC.value v1 <+> text ":" <+> RC.value v2) 
   where prec cd = valuePrec cd <|> Just 0
 

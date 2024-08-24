@@ -24,7 +24,7 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   VisibilitySym(..), ParameterSym(..), MethodSym(..), ScopeSym(..))
 import Drasil.GOOL.CodeType (CodeType)
-import Drasil.GOOL.AST (Binding, Terminator, VisibilityTag, ScopeData)
+import Drasil.GOOL.AST (Binding, Terminator, VisibilityTag, LitValue(..), ScopeData)
 import Drasil.GOOL.State (MS, VS)
 
 import Control.Monad.State (State)
@@ -148,11 +148,15 @@ class RenderValue r where
   -- calls.
   call :: Maybe Library -> Maybe Doc -> MixedCall r
 
-  valFromData :: Maybe Int -> Maybe Integer -> VSType r -> Doc -> SValue r
+  valFromData :: Maybe Int -> LitValue -> VSType r -> Doc -> SValue r
 
 class ValueElim r where
   valuePrec :: r (Value r) -> Maybe Int
+  valueChar :: r (Value r) -> Maybe Char
+  valueDouble :: r (Value r) -> Maybe Double
+  valueFloat :: r (Value r) -> Maybe Float
   valueInt :: r (Value r) -> Maybe Integer
+  valueString :: r (Value r) -> Maybe String
   value :: r (Value r) -> Doc
 
 class InternalListFunc r where

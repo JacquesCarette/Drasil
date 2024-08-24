@@ -126,33 +126,31 @@ int main(int argc, const char *argv[]) {
     mySlicedList7 = temp5;
     
     vector<double> temp6(0);
-    for (int i4 = 3; 0 < i4 && i4 <= 3 && z < 0; i4 += z) {
+    for (int i4 = 3; i4 < 0; i4 += z) {
         temp6.push_back(myOtherList.at(i4));
     }
     mySlicedList8 = temp6;
     
     vector<double> temp7(0);
-    for (int i5 = x; x <= i5 && i5 < y && z > 0 || y < i5 && i5 <= x && z < 0; i5 += z) {
+    for (int i5 = x; i5 < y; i5 += z) {
         temp7.push_back(myOtherList.at(i5));
     }
     mySlicedList9 = temp7;
     
     vector<double> temp8(0);
-    int endIdx = z > 0 ? (int)(myOtherList.size()) : -1;
-    for (int i6 = 2; 2 <= i6 && i6 < endIdx && z > 0 || endIdx < i6 && i6 <= 2 && z < 0; i6 += z) {
+    for (int i6 = 2; i6 < -1; i6 += z) {
         temp8.push_back(myOtherList.at(i6));
     }
     mySlicedList10 = temp8;
     
     vector<double> temp9(0);
-    int endIdx0 = z > 0 ? (int)(myOtherList.size()) : -1;
-    for (int i7 = 2; 2 <= i7 && i7 < endIdx0 && z > 0 || endIdx0 < i7 && i7 <= 2 && z < 0; i7 += z) {
+    for (int i7 = 2; i7 < -1; i7 += z) {
         temp9.push_back(myOtherList.at(i7));
     }
     mySlicedList10 = temp9;
     
     vector<double> temp10(0);
-    for (int i8 = y; y <= i8 && i8 < x && z > 0 || x < i8 && i8 <= y && z < 0; i8 += z) {
+    for (int i8 = y; i8 < x; i8 += z) {
         temp10.push_back(myOtherList.at(i8));
     }
     mySlicedList11 = temp10;

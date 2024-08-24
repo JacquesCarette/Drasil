@@ -97,33 +97,31 @@ public class HelloWorld {
         mySlicedList7 = temp5;
         
         ArrayList<Double> temp6 = new ArrayList<Double>(0);
-        for (int i4 = 3; 0 < i4 && i4 <= 3 && z < 0; i4 += z) {
+        for (int i4 = 3; i4 < 0; i4 += z) {
             temp6.add(myOtherList.get(i4));
         }
         mySlicedList8 = temp6;
         
         ArrayList<Double> temp7 = new ArrayList<Double>(0);
-        for (int i5 = x; x <= i5 && i5 < y && z > 0 || y < i5 && i5 <= x && z < 0; i5 += z) {
+        for (int i5 = x; i5 < y; i5 += z) {
             temp7.add(myOtherList.get(i5));
         }
         mySlicedList9 = temp7;
         
         ArrayList<Double> temp8 = new ArrayList<Double>(0);
-        int endIdx = z > 0 ? myOtherList.size() : -1;
-        for (int i6 = 2; 2 <= i6 && i6 < endIdx && z > 0 || endIdx < i6 && i6 <= 2 && z < 0; i6 += z) {
+        for (int i6 = 2; i6 < -1; i6 += z) {
             temp8.add(myOtherList.get(i6));
         }
         mySlicedList10 = temp8;
         
         ArrayList<Double> temp9 = new ArrayList<Double>(0);
-        int endIdx0 = z > 0 ? myOtherList.size() : -1;
-        for (int i7 = 2; 2 <= i7 && i7 < endIdx0 && z > 0 || endIdx0 < i7 && i7 <= 2 && z < 0; i7 += z) {
+        for (int i7 = 2; i7 < -1; i7 += z) {
             temp9.add(myOtherList.get(i7));
         }
         mySlicedList10 = temp9;
         
         ArrayList<Double> temp10 = new ArrayList<Double>(0);
-        for (int i8 = y; y <= i8 && i8 < x && z > 0 || x < i8 && i8 <= y && z < 0; i8 += z) {
+        for (int i8 = y; i8 < x; i8 += z) {
             temp10.add(myOtherList.get(i8));
         }
         mySlicedList11 = temp10;

@@ -12,7 +12,7 @@ import .Helper
 # Initializing variables
 global b = 5
 global myOtherList = [1.0, 1.5]
-global oneIndex = findfirst(x -> x == 1.0, myOtherList) - 1
+global oneIndex = -1
 println(oneIndex)
 global a = length(myOtherList)
 @assert a == 2 "List size should be 2"
@@ -62,20 +62,15 @@ global mySlicedList6 = myOtherList[end:-1:3]
 
 global mySlicedList7 = myOtherList[4:-1:begin]
 
-global endIdx = z > 0 ? 0 : 2
-global mySlicedList8 = myOtherList[4:z:endIdx]
+global mySlicedList8 = myOtherList[4:z:2]
 
-global endIdx0 = z > 0 ? y : y + 2
-global mySlicedList9 = myOtherList[x + 1:z:endIdx0]
+global mySlicedList9 = myOtherList[1:z:2]
 
-global endIdx1 = z > 0 ? length(myOtherList) : 1
-global mySlicedList10 = myOtherList[3:z:endIdx1]
+global mySlicedList10 = myOtherList[3:z:begin]
 
-global endIdx2 = z > 0 ? length(myOtherList) : 1
-global mySlicedList10 = myOtherList[3:z:endIdx2]
+global mySlicedList10 = myOtherList[3:z:begin]
 
-global endIdx3 = z > 0 ? x : x + 2
-global mySlicedList11 = myOtherList[y + 1:z:endIdx3]
+global mySlicedList11 = myOtherList[1:z:2]
 
 # Print results of list slicing tests
 println("")

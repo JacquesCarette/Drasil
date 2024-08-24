@@ -33,7 +33,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
-  RenderValue(..), ValueElim(valuePrec, valueInt), InternalListFunc(..),
+  RenderValue(..), ValueElim(..), InternalListFunc(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim,
@@ -426,7 +426,21 @@ instance RenderValue PythonCode where
 
 instance ValueElim PythonCode where
   valuePrec = valPrec . unPC
-  valueInt = valInt . unPC
+  valueChar sc = case litVal (unPC sc) of
+    LitChar c -> Just c
+    _ -> Nothing
+  valueDouble sc = case litVal (unPC sc) of
+    LitDouble d -> Just d
+    _ -> Nothing
+  valueFloat sc = case litVal (unPC sc) of
+    LitFloat f -> Just f
+    _ -> Nothing
+  valueInt sc = case litVal (unPC sc) of
+    LitInt i -> Just i
+    _ -> Nothing
+  valueString sc = case litVal (unPC sc) of
+    LitString s -> Just s
+    _ -> Nothing
   value = val . unPC
 
 instance InternalValueExp PythonCode where
@@ -932,7 +946,7 @@ pyInlineIf c' v1' v2' = do
   c <- c'
   v1 <- v1'
   v2 <- v2'
-  valFromData (valuePrec c) (valueInt c) (toState $ valueType v1) 
+  valFromData (valuePrec c) (LitInt 0) (toState $ valueType v1) 
     (RC.value v1 <+> ifLabel <+> RC.value c <+> elseLabel <+> RC.value v2)
 
 pyLambda :: (CommonRenderSym r) => [r (Variable r)] -> r (Value r) -> Doc

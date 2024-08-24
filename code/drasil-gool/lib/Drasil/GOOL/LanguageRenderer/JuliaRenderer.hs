@@ -381,7 +381,21 @@ instance RenderValue JuliaCode where
 
 instance ValueElim JuliaCode where
   valuePrec = valPrec . unJLC
-  valueInt = valInt . unJLC
+  valueChar sc = case litVal (unJLC sc) of
+    LitChar c -> Just c
+    _ -> Nothing
+  valueDouble sc = case litVal (unJLC sc) of
+    LitDouble d -> Just d
+    _ -> Nothing
+  valueFloat sc = case litVal (unJLC sc) of
+    LitFloat f -> Just f
+    _ -> Nothing
+  valueInt sc = case litVal (unJLC sc) of
+    LitInt i -> Just i
+    _ -> Nothing
+  valueString sc = case litVal (unJLC sc) of
+    LitString s -> Just s
+    _ -> Nothing
   value = val . unJLC
 
 instance List JuliaCode where

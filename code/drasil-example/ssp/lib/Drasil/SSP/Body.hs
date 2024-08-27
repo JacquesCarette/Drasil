@@ -252,7 +252,6 @@ sysCtxIntro = foldlSP
    
 sysCtxFig1 :: LabelledContent
 sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png")
-  WithCaption
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
@@ -342,7 +341,7 @@ figPhysSyst :: LabelledContent
 figPhysSyst = llcc (makeFigRef "PhysicalSystem") $
   fig (foldlSent_ [S "An example", phraseNP (slope `for` analysis),
   S "by", short ssp `sC` S "where the dashed line represents the",
-  phrase waterTable]) (resourcePath ++ "PhysSyst.png") WithCaption
+  phrase waterTable]) (resourcePath ++ "PhysSyst.png")
 
 physSystContents :: [Contents]
 physSystContents = [physSysConv, LlC figIndexConv, physSysFbd, LlC figForceActing]
@@ -360,7 +359,7 @@ physSysConv = foldlSP [atStart morPrice, phrase analysis, refS morgenstern1965
 figIndexConv :: LabelledContent
 figIndexConv = llcc (makeFigRef "IndexConvention") $ 
   fig (foldlSent_ [S "Index convention for", phraseNP (slice `and_` 
-  intrslce), plural value]) (resourcePath ++ "IndexConvention.png") WithCaption
+  intrslce), plural value]) (resourcePath ++ "IndexConvention.png")
 
 physSysFbd :: Contents
 physSysFbd = foldlSP [atStartNP' (NP.a_ (fbd `ofThe` force)), S "acting on a",
@@ -371,7 +370,7 @@ physSysFbd = foldlSP [atStartNP' (NP.a_ (fbd `ofThe` force)), S "acting on a",
 figForceActing :: LabelledContent
 figForceActing = llcc (makeFigRef "ForceDiagram") $
   fig (atStartNP' (fbd `of_` force) +:+ S "acting on a" +:+
-  phrase slice) (resourcePath ++ "ForceDiagram.png") WithCaption
+  phrase slice) (resourcePath ++ "ForceDiagram.png")
 
 -- SECTION 4.1.3 --
 goalsInputs :: [Sentence]

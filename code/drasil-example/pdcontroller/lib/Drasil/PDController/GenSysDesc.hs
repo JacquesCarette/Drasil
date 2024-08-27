@@ -12,7 +12,6 @@ gsdSysContextFig
   = llcc (makeFigRef "systemContextDiag") $
       fig (titleize sysCont)
         "../../../../datafiles/pdcontroller/Fig_SystemContext.png"
-        WithCaption
 
 gsdSysContextP1, gsdSysContextP2 :: Contents
 gsdSysContextP1

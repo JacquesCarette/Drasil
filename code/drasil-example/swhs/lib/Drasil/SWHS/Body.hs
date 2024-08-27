@@ -299,7 +299,7 @@ sysCntxtDesc pro = foldlSP [refS sysCntxtFig, S "shows the" +:+.
 sysCntxtFig :: LabelledContent
 sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
   [refS sysCntxtFig +: EmptyS, titleize sysCont])
-  (resourcePath ++ "SystemContextFigure.png") WithCaption
+  $ resourcePath ++ "SystemContextFigure.png"
 
 sysCntxtRespIntro :: CI -> Contents
 sysCntxtRespIntro pro = foldlSPCol [short pro +:+. S "is mostly self-contained",
@@ -388,7 +388,7 @@ figTank :: LabelledContent
 figTank = llcc (makeFigRef "Tank") $ fig (
   foldlSent_ [atStart sWHT `sC` S "with", phrase htFluxC `S.of_`
   ch htFluxC `S.and_` phrase htFluxP `S.of_` ch htFluxP])
-  (resourcePath ++ "Tank.png") WithCaption
+  $ resourcePath ++ "Tank.png"
 
 -----------------------------
 -- 4.1.3 : Goal Statements --

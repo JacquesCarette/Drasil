@@ -132,13 +132,21 @@ getSecCons :: SecCons -> [Section]
 getSecCons (Sub sec) = getSec sec
 getSecCons (Con _)   = []
 
--- | 'Figure' smart constructor with a 'Lbl' and a 'Filepath'. Assumes 100% of page width as max width.
-fig :: Lbl -> Filepath -> HasCaption -> RawContent
-fig l f = Figure l f 100
+-- | 'Figure' smart constructor with a 'Lbl' and a 'Filepath'. Assumes 100% of page width as max width. Defaults to 'WithCaption'.
+fig :: Lbl -> Filepath -> RawContent
+fig l f = Figure l f 100 WithCaption
 
--- | 'Figure' smart constructor that allows for customized max widths.
-figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> HasCaption -> RawContent
-figWithWidth = Figure
+-- | 'Figure' smart constructor without a caption.
+figNoCap :: Lbl -> Filepath -> RawContent
+figNoCap l f = Figure l f 100 NoCaption
+
+-- | 'Figure' smart constructor that allows for customized max widths. Defaults to 'WithCaption'.
+figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
+figWithWidth l f wp = Figure l f wp WithCaption
+
+-- | 'Figure' smart constructor with customized max widths and no caption.
+figNoCapWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
+figNoCapWithWidth l f wp = Figure l f wp NoCaption
 
 ---------------------------------------------------------------------------
 -- * Reference Constructors

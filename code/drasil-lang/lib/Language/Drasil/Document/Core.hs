@@ -62,7 +62,7 @@ data DType = General
            | Theory
            | Data
 
-           -- | Indicates whether a figure has a caption or not.
+-- | Indicates whether a figure has a caption or not.
 data HasCaption = NoCaption | WithCaption
   deriving (Eq) 
 

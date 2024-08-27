@@ -47,6 +47,10 @@ data CodeSpec where
   purpose :: Purpose,
   -- | Example Background.
   background :: Background,
+  -- | Example Scope.
+  scope :: Scope,
+  -- | Example Motivation.
+  motivation :: Motivation,
   -- | All inputs.
   inputs :: [Input],
   -- | Explicit inputs (values to be supplied by a file).
@@ -98,6 +102,8 @@ codeSpec SI {_sys         = sys
            , _authors     = as
            , _purpose     = ps
            , _background  = bk
+           , _scope       = scp
+           , _motivation  = mtvtn
            , _instModels  = ims
            , _datadefs    = ddefs
            , _configFiles = cfp
@@ -123,6 +129,8 @@ codeSpec SI {_sys         = sys
         authors = as,
         purpose = ps,
         background = bk,
+        scope = scp,
+        motivation  = mtvtn,
         inputs = allInputs,
         extInputs = inputs',
         derivedInputs = derived,

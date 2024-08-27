@@ -10,13 +10,13 @@ module SysInfo.Drasil.SystemInformation (
   -- ** Types
   SystemInformation(..), Block(..),
   -- ** Lenses
-  instModels, datadefs, configFiles, inputs, purpose, background,
-  defSequence, constraints, constants, sysinfodb, usedinfodb,
+  instModels, datadefs, configFiles, inputs, purpose, background, scope,
+  motivation, defSequence, constraints, constants, sysinfodb, usedinfodb,
   -- ** Lookup Functions
   citeDB, citationsFromBibMap,
   -- * Reference Database
   -- ** Types
-  ReferenceDB, RefMap, Purpose, Background,
+  ReferenceDB, RefMap, Purpose, Background, Scope, SoftwareReview, Motivation,
   -- ** Constructors
   rdb, simpleMap,
   -- ** Lenses
@@ -50,6 +50,9 @@ data SystemInformation where
   , _authors     :: [c]
   , _purpose     :: Purpose
   , _background  :: Background
+  , _scope       :: Scope
+  , _sftwe_rev   :: SoftwareReview
+  , _motivation  :: Motivation
   , _quants      :: [e]
   , _concepts    :: [f]
   , _instModels  :: [InstanceModel]
@@ -70,6 +73,12 @@ data SystemInformation where
 type Purpose = [Sentence]
 -- | Project Example background information, used in the 'What' section of README.
 type Background = [Sentence]
+-- | Project Example scope.
+type Scope = [Sentence]
+-- | Project Example software revision.
+type SoftwareReview = [Sentence]
+-- | Project Example motivation.
+type Motivation = [Sentence]
 
 -- | for listing 'QDefinition's in 'SystemInformation'.
 data Block a = Coupled a a [a] | Parallel a [a]

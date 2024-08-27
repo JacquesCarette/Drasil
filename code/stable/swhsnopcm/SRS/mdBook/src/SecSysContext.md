@@ -6,7 +6,7 @@
 
 ![[Fig:SysCon](./SecSysContext.md#Figure:SysCon): System Context](./assets/SystemContextFigure.png)
 
-**[Fig:SysCon](./SecSysContext.md#Figure:SysCon): System Context**
+**Figure: [Fig:SysCon](./SecSysContext.md#Figure:SysCon): System Context**
 
 </div>
 

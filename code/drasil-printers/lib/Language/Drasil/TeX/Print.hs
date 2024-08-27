@@ -66,7 +66,7 @@ lo (EqnBlock contents)    _ = makeEquation contents
 lo (Table _ rows r bl t)  _ = toText $ makeTable rows (spec r) bl (spec t)
 lo (Definition _ ssPs l) sm = toText $ makeDefn sm ssPs $ spec l
 lo (List l)               _ = toText $ makeList l
-lo (Figure r c f wp)      _ = toText $ makeFigure (spec r) (spec c) f wp
+lo (Figure r c f wp)      _ = toText $ makeFigure (spec r) (maybe empty spec c) f wp
 lo (Bib bib)             sm = toText $ makeBib sm bib
 lo (Graph ps w h c l)    _  = toText $ makeGraph
   (map (bimap spec spec) ps)

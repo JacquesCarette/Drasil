@@ -226,10 +226,10 @@ module Language.Drasil (
   -- Language.Drasil.Document
   , Document(..), ShowTableOfContents(..), DType(..), Section(..)
   , Contents(..), SecCons(..), ListType(..), ItemType(..), ListTuple
-  , LabelledContent(..), UnlabelledContent(..), extractSection
+  , LabelledContent(..), UnlabelledContent(..), HasCaption(..), extractSection
   , mkParagraph, mkRawLC, checkToC
   , llcc, ulcc
-  , section, fig, figWithWidth
+  , section, fig, figNoCap, figWithWidth, figNoCapWithWidth
   , MaxWidthPercent
   , HasContents(accessContents)
   , RawContent(..)
@@ -314,7 +314,7 @@ import Language.Drasil.ModelExpr.Class (ModelExprC(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr, DerivType, ModelExpr(Spc))
 import Language.Drasil.CodeExpr.Lang (CodeExpr)
 import Language.Drasil.CodeExpr.Class (CodeExprC(..))
-import Language.Drasil.Document (section, fig, figWithWidth
+import Language.Drasil.Document (section, fig, figNoCap, figWithWidth, figNoCapWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC, extractSection
   , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI
@@ -322,7 +322,7 @@ import Language.Drasil.Document (section, fig, figWithWidth
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), DType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)
-  , LabelledContent(..), UnlabelledContent(..) )
+  , LabelledContent(..), UnlabelledContent(..), HasCaption(..))
 import Language.Drasil.Document.Contents (lbldExpr, unlbldExpr, unlbldCode
   , enumBullet, enumBulletU, enumSimple, enumSimpleU, mkEnumSimpleD)
 import Language.Drasil.Document.Combinators

@@ -44,7 +44,7 @@ data LayoutObj =
    | EqnBlock Contents                                               -- ^ Equation block.
    | Definition DType [(String,[LayoutObj])] Label                   -- ^ Definition. Holds the type, contents, and a label.
    | List ListType                                                   -- ^ List.
-   | Figure Label Caption Filepath MaxWidthPercent                   -- ^ Holds all information needed for a figure.
+   | Figure Label (Maybe Caption) Filepath MaxWidthPercent           -- ^ Holds all information needed for a figure.
    | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label -- ^ Holds all information needed for a graph.
    | CodeBlock Contents                                              -- ^ Code block.
    | HDiv Tags [LayoutObj] Label                                     -- ^ Holds tags, more contents, and a label.

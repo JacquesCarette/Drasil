@@ -22,13 +22,13 @@ endif
 
 build: SWHSNoPCM$(TARGET_EXTENSION)
 
-SWHSNoPCM$(TARGET_EXTENSION): Control.cs InputParameters.cs Constants.cs Calculations.cs OutputFormat.cs
-	$(CSC) -out:SWHSNoPCM$(TARGET_EXTENSION) -r:Microsoft.Research.Oslo.dll Control.cs InputParameters.cs Constants.cs Calculations.cs OutputFormat.cs
+SWHSNoPCM$(TARGET_EXTENSION): Control.cs InputParameters.cs Calculations.cs OutputFormat.cs
+	$(CSC) -out:SWHSNoPCM$(TARGET_EXTENSION) -r:Microsoft.Research.Oslo.dll Control.cs InputParameters.cs Calculations.cs OutputFormat.cs
 
 run: build
 	./SWHSNoPCM$(TARGET_EXTENSION) $(RUNARGS)
 
-doc: doxConfig Control.cs InputParameters.cs Constants.cs Calculations.cs OutputFormat.cs
+doc: doxConfig Control.cs InputParameters.cs Calculations.cs OutputFormat.cs
 	doxygen doxConfig
 
 .PHONY: build run doc

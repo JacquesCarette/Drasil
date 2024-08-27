@@ -537,7 +537,7 @@ reflinkInfo :: String -> Doc -> Doc -> Doc
 reflinkURI :: String -> Doc -> Doc
 
 -- | Helper for setting up figures.
-image :: Doc -> Doc -> MaxWidthPercent -> Doc
+image :: Doc -> Maybe Doc -> MaxWidthPercent -> Doc
 
 -- | Emphasis (italics) tag.
 em :: Doc -> Doc
@@ -872,8 +872,8 @@ reflink :: String -> Doc -> Doc
 -- | Helper for setting up links to external URIs
 reflinkURI :: String -> Doc -> Doc
 
--- | Helper for setting up figures
-image :: Doc -> Doc -> MaxWidthPercent -> Doc
+-- | Helper for setting up figures.
+image :: Doc -> Maybe Doc -> MaxWidthPercent -> Doc
 h :: Int -> Doc
 
 -- | Curly braces.
@@ -1045,7 +1045,7 @@ Definition :: DType -> [(String, [LayoutObj])] -> Label -> LayoutObj
 List :: ListType -> LayoutObj
 
 -- | Holds all information needed for a figure.
-Figure :: Label -> Caption -> Filepath -> MaxWidthPercent -> LayoutObj
+Figure :: Label -> Maybe Caption -> Filepath -> MaxWidthPercent -> LayoutObj
 
 -- | Holds all information needed for a graph.
 Graph :: [(Spec, Spec)] -> Maybe Width -> Maybe Height -> Caption -> Label -> LayoutObj
@@ -1098,7 +1098,7 @@ reflinkInfo :: RefMap -> String -> Doc -> Doc -> Doc
 reflinkURI :: Doc -> Doc -> Doc
 
 -- | Helper for setting up figures
-image :: Doc -> Doc -> Doc
+image :: Doc -> Maybe Doc -> Doc
 
 -- | Helper for setting up captions
 caption :: Doc -> Doc

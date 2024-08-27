@@ -3868,6 +3868,11 @@ Instance :: DType
 Theory :: DType
 Data :: DType
 
+-- | Indicates whether a figure has a caption or not.
+data HasCaption
+NoCaption :: HasCaption
+WithCaption :: HasCaption
+
 -- | Types of layout objects we deal with explicitly.
 data RawContent
 
@@ -3890,8 +3895,9 @@ Enumeration :: ListType -> RawContent
 -- | Defines something with a type, identifier, and <a>Contents</a>.
 Defini :: DType -> [(Identifier, [Contents])] -> RawContent
 
--- | For creating figures in a document. Should use relative file path.
-Figure :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
+-- | For creating figures in a document includes whether the figure has a
+--   caption.
+Figure :: Lbl -> Filepath -> MaxWidthPercent -> HasCaption -> RawContent
 
 -- | Grants the ability to reference something.
 Bib :: BibRef -> RawContent
@@ -3936,6 +3942,7 @@ instance GHC.Classes.Eq Language.Drasil.Document.Core.LabelledContent
 instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Document.Core.LabelledContent
 instance Language.Drasil.ShortName.HasShortName Language.Drasil.Document.Core.LabelledContent
 instance Language.Drasil.Label.Type.Referable Language.Drasil.Document.Core.LabelledContent
+instance GHC.Classes.Eq Language.Drasil.Document.Core.HasCaption
 
 
 -- | Document Description Language.
@@ -4013,11 +4020,20 @@ getSec :: Section -> [Section]
 getSecCons :: SecCons -> [Section]
 
 -- | <a>Figure</a> smart constructor with a <a>Lbl</a> and a
---   <a>Filepath</a>. Assumes 100% of page width as max width.
+--   <a>Filepath</a>. Assumes 100% of page width as max width. Defaults to
+--   <a>WithCaption</a>.
 fig :: Lbl -> Filepath -> RawContent
 
+-- | <a>Figure</a> smart constructor without a caption.
+figNoCap :: Lbl -> Filepath -> RawContent
+
 -- | <a>Figure</a> smart constructor that allows for customized max widths.
+--   Defaults to <a>WithCaption</a>.
 figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
+
+-- | <a>Figure</a> smart constructor with customized max widths and no
+--   caption.
+figNoCapWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
 docNs :: UID -> UID
 docUid :: String -> UID
 
@@ -8557,6 +8573,11 @@ newtype UnlabelledContent
 UnlblC :: RawContent -> UnlabelledContent
 [_cntnts] :: UnlabelledContent -> RawContent
 
+-- | Indicates whether a figure has a caption or not.
+data HasCaption
+NoCaption :: HasCaption
+WithCaption :: HasCaption
+
 -- | Smart constructor for retrieving the contents (<a>Section</a>s) from a
 --   <a>Document</a>.
 extractSection :: Document -> [Section]
@@ -8586,11 +8607,20 @@ ulcc :: RawContent -> UnlabelledContent
 section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
 
 -- | <a>Figure</a> smart constructor with a <a>Lbl</a> and a
---   <a>Filepath</a>. Assumes 100% of page width as max width.
+--   <a>Filepath</a>. Assumes 100% of page width as max width. Defaults to
+--   <a>WithCaption</a>.
 fig :: Lbl -> Filepath -> RawContent
 
+-- | <a>Figure</a> smart constructor without a caption.
+figNoCap :: Lbl -> Filepath -> RawContent
+
 -- | <a>Figure</a> smart constructor that allows for customized max widths.
+--   Defaults to <a>WithCaption</a>.
 figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
+
+-- | <a>Figure</a> smart constructor with customized max widths and no
+--   caption.
+figNoCapWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
 
 -- | MaxWidthPercent should be kept in the range 1-100. Values outside this
 --   range may have unexpected results. Used for specifying max figure
@@ -8625,8 +8655,9 @@ Enumeration :: ListType -> RawContent
 -- | Defines something with a type, identifier, and <a>Contents</a>.
 Defini :: DType -> [(Identifier, [Contents])] -> RawContent
 
--- | For creating figures in a document. Should use relative file path.
-Figure :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
+-- | For creating figures in a document includes whether the figure has a
+--   caption.
+Figure :: Lbl -> Filepath -> MaxWidthPercent -> HasCaption -> RawContent
 
 -- | Grants the ability to reference something.
 Bib :: BibRef -> RawContent

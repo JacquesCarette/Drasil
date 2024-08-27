@@ -1,0 +1,3 @@
+digraph hascaption{
+HasCaption	[shape=oval, color=darkviolet, label="HasCaption"];
+}

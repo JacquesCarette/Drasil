@@ -329,6 +329,9 @@ digraph alltypes {
 		subgraph dtype{
 		DType	[shape=oval, color=darkviolet, label="DType"];
 		}
+		subgraph hascaption{
+		HasCaption	[shape=oval, color=darkviolet, label="HasCaption"];
+		}
 		subgraph rawcontent{
 		RawContent	[shape=oval, color=darkviolet, label="RawContent"];
 		RawContent -> Sentence;

@@ -103,6 +103,10 @@ mkSRS = [TableOfContents,
   Bibliography
   ]
 
+motivation :: Sentence
+motivation = foldlSent_ [phrase projectile, phrase motion, S "is a common" +:+
+  phraseNP (problem `in_` physics)]
+
 justification, scope :: Sentence
 justification = foldlSent [atStart projectile, phrase motion, S "is a common" +:+.
   phraseNP (problem `in_` physics), S "Therefore, it is useful to have a",
@@ -137,6 +141,8 @@ si = SI {
   _authors     = [samCrawford, brooks, spencerSmith],
   _purpose     = [purp],
   _background  = [],
+  _motivation  = [motivation],
+  _scope       = [scope],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = iMods,

@@ -1,7 +1,11 @@
 # Projectile 
 > Authors:  Samuel J. Crawford, Brooks MacLachlan, W. Spencer Smith
 
+> Motivation: Projectile motion is a common problem in physics.
+
 > Purpose: Predict whether a launched projectile hits its target.
+
+> Scope: The analysis of a two-dimensional (2D) projectile motion problem with constant acceleration.
 
 ------------------------------------------------------------
 ## Making Examples 

@@ -150,6 +150,10 @@ genPackage unRepr = do
         (foldlSent $ purpose $ codeSpec g)
       bckgrnd = show $ sentenceDoc db Implementation OneLine
         (foldlSent $ background $ codeSpec g)
+      mtvtn = show $ sentenceDoc db Implementation OneLine
+        (foldlSent $ motivation $ codeSpec g)
+      scp = show $ sentenceDoc db Implementation OneLine
+        (foldlSent $ scope $ codeSpec g)
   i <- genSampleInput
   d <- genDoxConfig s
   rm <- genReadMe ReadMeInfo {
@@ -164,6 +168,8 @@ genPackage unRepr = do
         caseName = "",
         examplePurpose = prps,
         exampleDescr = bckgrnd,
+        exampleMotivation = mtvtn,
+        exampleScope = scp,
         folderNum = getVal g,
         inputOutput = (sampleInputName, "output.txt")} -- This needs a more permanent solution
   return $ package pd (m:catMaybes [i,rm,d])
@@ -256,6 +262,10 @@ genPackageProc unRepr = do
         (foldlSent $ purpose $ codeSpec g)
       bckgrnd = show $ sentenceDoc db Implementation OneLine
         (foldlSent $ background $ codeSpec g)
+      mtvtn = show $ sentenceDoc db Implementation OneLine
+        (foldlSent $ motivation $ codeSpec g)
+      scp = show $ sentenceDoc db Implementation OneLine
+        (foldlSent $ scope $ codeSpec g)
   i <- genSampleInput
   d <- genDoxConfig s
   rm <- genReadMe ReadMeInfo {
@@ -270,6 +280,8 @@ genPackageProc unRepr = do
         caseName = "",
         examplePurpose = prps,
         exampleDescr = bckgrnd,
+        exampleMotivation = mtvtn,
+        exampleScope = scp,
         folderNum = getVal g,
         inputOutput = (sampleInputName, "output.txt")} -- This needs a more permanent solution
   return $ package pd (m:catMaybes [i,rm,d])

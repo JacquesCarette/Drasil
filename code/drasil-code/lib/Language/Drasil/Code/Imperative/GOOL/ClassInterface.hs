@@ -52,6 +52,10 @@ type CaseName = String
 type ExamplePurpose = String
 -- | Description of example
 type ExampleDescr = String
+-- | Motivation of example
+type ExampleMotivation = String
+-- | Scope of exmample
+type ExampleScope = String
 -- | File contributors
 type Contributor = String
 -- | Input File
@@ -71,6 +75,8 @@ data ReadMeInfo = ReadMeInfo {
   caseName :: CaseName,
   examplePurpose :: ExamplePurpose,
   exampleDescr :: ExampleDescr,
+  exampleMotivation :: ExampleMotivation,
+  exampleScope :: ExampleScope,
   folderNum :: Int,
   inputOutput :: (InFile, OutFile)
 }

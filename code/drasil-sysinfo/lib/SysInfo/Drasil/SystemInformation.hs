@@ -16,7 +16,7 @@ module SysInfo.Drasil.SystemInformation (
   citeDB, citationsFromBibMap,
   -- * Reference Database
   -- ** Types
-  ReferenceDB, RefMap, Purpose, Background, Scope, SoftwareReview, Motivation,
+  ReferenceDB, RefMap, Purpose, Background, Scope, Motivation,
   -- ** Constructors
   rdb, simpleMap,
   -- ** Lenses
@@ -51,7 +51,6 @@ data SystemInformation where
   , _purpose     :: Purpose
   , _background  :: Background
   , _scope       :: Scope
-  , _sftwe_rev   :: SoftwareReview
   , _motivation  :: Motivation
   , _quants      :: [e]
   , _concepts    :: [f]
@@ -75,8 +74,6 @@ type Purpose = [Sentence]
 type Background = [Sentence]
 -- | Project Example scope.
 type Scope = [Sentence]
--- | Project Example software revision.
-type SoftwareReview = [Sentence]
 -- | Project Example motivation.
 type Motivation = [Sentence]
 

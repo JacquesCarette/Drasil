@@ -5,6 +5,12 @@
 
 > Purpose: Predict whether a launched projectile hits its target.
 
+------------------------------------------------------------
+## What 
+ 
+
+> Background: Common examples of projectile motion include ballistics problems (missiles and bullets) and the flight of the balls in various sports (baseball, golf, football, etc.).
+
 > Scope: The analysis of a two-dimensional (2D) projectile motion problem with constant acceleration.
 
 ------------------------------------------------------------

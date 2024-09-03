@@ -1,7 +1,17 @@
 # DblPend 
 > Author: Dong Chen
 
+> Motivation: To simulate the motion of the pendulum and exhibit its chaotic characteristics.
+
 > Purpose: Predict the motion of a double pendulum.
+
+------------------------------------------------------------
+## What 
+ 
+
+> Background: A pendulum consists of mass attached to the end of a rod and its moving curve is highly sensitive to initial conditions.
+
+> Scope: The analysis of a two-dimensional (2D) pendulum motion problem with various initial conditions.
 
 ------------------------------------------------------------
 ## Making Examples 

@@ -30,9 +30,8 @@ makeReadMe ReadMeInfo {
         folderNum = number,
         inputOutput = inoutf} =
     makeMd [introInfo name auths (fieldEmptySTR motiv)
-      (fieldEmptySTR purp)
-      (fieldEmptySTR sc),
-    whatInfo $ fieldEmptySTR descr,
+      (fieldEmptySTR purp),
+    whatInfo (fieldEmptySTR descr) (fieldEmptySTR sc),
     makeInstr imptype configFPs name inoutf,
     verInfo progLang progLangVers,
     unsupOS unsupportedOSs,

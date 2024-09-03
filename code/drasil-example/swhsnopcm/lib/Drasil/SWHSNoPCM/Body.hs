@@ -41,9 +41,9 @@ import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
-import Drasil.SWHS.Body (charsOfReader, dataContMid, introStart, externalLinkRef,
-  physSyst1, physSyst2, sysCntxtDesc, systContRespBullets,
-  sysCntxtRespIntro, userChars)
+import Drasil.SWHS.Body (charsOfReader, dataContMid, motivation,
+  introStart, externalLinkRef, physSyst1, physSyst2, sysCntxtDesc, 
+  systContRespBullets, sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, sWHT, tank, transient, water, con, phsChgMtrl)
 import Drasil.SWHS.Requirements (nfRequirements)
@@ -176,9 +176,9 @@ si = SI {
   _kind        = Doc.srs,
   _authors     = [thulasi],
   _purpose     = [purp],
-  _background  = [],
-  _motivation  = [],
-  _scope       = [],
+  _background  = [introStartNoPCM],
+  _motivation  = [motivation],
+  _scope       = [scope],
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but 
   -- tau does not appear in the document and thus should not be displayed.

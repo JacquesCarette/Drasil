@@ -103,10 +103,6 @@ mkSRS = [TableOfContents,
   Bibliography
   ]
 
-motivation :: Sentence
-motivation = foldlSent_ [phrase projectile, phrase motion, S "is a common" +:+
-  phraseNP (problem `in_` physics)]
-
 justification, scope :: Sentence
 justification = foldlSent [atStart projectile, phrase motion, S "is a common" +:+.
   phraseNP (problem `in_` physics), S "Therefore, it is useful to have a",
@@ -140,7 +136,7 @@ si = SI {
   _kind        = Doc.srs,
   _authors     = [samCrawford, brooks, spencerSmith],
   _purpose     = [purp],
-  _background  = [],
+  _background  = [background],
   _motivation  = [motivation],
   _scope       = [scope],
   _quants      = symbols,
@@ -160,6 +156,15 @@ si = SI {
 
 purp :: Sentence
 purp = foldlSent_ [S "predict whether a launched", phrase projectile, S "hits its", phrase target]
+
+motivation :: Sentence
+motivation = foldlSent_ [phrase projectile, phrase motion, S "is a common" +:+
+  phraseNP (problem `in_` physics)]
+
+background :: Sentence
+background = foldlSent_ [S "Common examples of", phrase projectile, phrase motion, S "include",
+    S "ballistics", plural problem, S "(missiles and bullets)" `S.andThe` S "flight of the balls",
+    S "in various sports (baseball, golf, football, etc.)"]
 
 tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM]

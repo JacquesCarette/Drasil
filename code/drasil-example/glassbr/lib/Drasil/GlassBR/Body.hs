@@ -63,9 +63,9 @@ si = SI {
   _kind        = Doc.srs,
   _authors     = [nikitha, spencerSmith],
   _purpose     = [purp],
-  _background  = [],
+  _background  = [background],
   _motivation  = [],
-  _scope       = [],
+  _scope       = [scope],
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = iMods,
@@ -128,6 +128,11 @@ mkSRS = [TableOfContents,
 purp :: Sentence
 purp = foldlSent_ [S "predict whether a", phrase glaSlab, S "can withstand a", 
   phrase blast, S "under given", plural condition]
+
+background :: Sentence
+background = foldlSent_ [phrase explosion, S "in downtown areas are dangerous from the", 
+  phrase blast +:+ S "itself" `S.and_` S "also potentially from the secondary" 
+  +:+ S "effect of falling glass"]
 
 symbMap :: ChunkDB
 symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con

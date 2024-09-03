@@ -33,7 +33,7 @@ import Drasil.PDController.GenSysDesc
         gsduserCharacteristics)
 import Drasil.PDController.IModel (instanceModels, imPD)
 import Drasil.PDController.IntroSection (introPara, introPurposeOfDoc, externalLinkRef,
-       introUserChar1, introUserChar2, introscopeOfReq)
+       introUserChar1, introUserChar2, introscopeOfReq, scope)
 import Drasil.PDController.References (citations)
 import Drasil.PDController.Requirements (funcReqs, nonfuncReqs)
 import Drasil.PDController.SpSysDesc (goals, sysFigure, sysGoalInput, sysParts)
@@ -102,9 +102,9 @@ si = SI {
   _kind = Doc.srs,
   _authors = [naveen],
   _purpose = [purp],
-  _background = [],
-  _motivation  = [],
-  _scope       = [],
+  _background  = [background],
+  _motivation  = [motivation],
+  _scope       = [scope],
   _quants = symbolsAll,
   _concepts = [] :: [DefinedQuantityDict],
   _datadefs = dataDefinitions,
@@ -123,6 +123,15 @@ purp :: Sentence
 purp = foldlSent_ [S "provide a model of a", phrase pidC,
          S "that can be used for the tuning of the gain constants before",
          S "the deployment of the controller"]
+
+motivation :: Sentence
+motivation = foldlSent_ [S "The gains of a controller in an application" +:+
+              S "must be tuned before the controller is ready for production"]
+
+background :: Sentence
+background = foldlSent_ [S "Automatic process control with a controller (P/PI/PD/PID) is used",
+              S "in a variety of applications such as thermostats, automobile",
+              S "cruise-control, etc"]
 
 symbolsAll :: [QuantityDict]
 symbolsAll = symbols ++ map qw pidDqdConstants ++ map qw pidConstants

@@ -688,14 +688,14 @@ genDataFunc nameTitle desc ddef = do
 readData :: (OOProg r) => DataDesc -> GenState [MSBlock r]
 readData ddef = do
   g <- get
-  let scope = convScope $ currentScope g
-  inD <- mapM (`inData` scope) ddef
+  let localScope = convScope $ currentScope g
+  inD <- mapM (`inData` localScope) ddef
   v_filename <- mkVal (quantvar inFileName)
   return [block $
-    varDec var_infile scope :
-    (if any (\d -> isLine d || isLines d) ddef then [varDec var_line scope,
-    listDec 0 var_linetokens scope ] else []) ++
-    [listDec 0 var_lines scope | any isLines ddef] ++ openFileR var_infile
+    varDec var_infile localScope :
+    (if any (\d -> isLine d || isLines d) ddef then [varDec var_line localScope,
+    listDec 0 var_linetokens localScope ] else []) ++
+    [listDec 0 var_lines localScope | any isLines ddef] ++ openFileR var_infile
     v_filename : concat inD ++ [closeFile v_infile]]
   where inData :: (OOProg r) => Data -> r (Scope r) -> GenState [MSStatement r]
         inData (Singleton v) _ = do
@@ -926,14 +926,14 @@ genModFuncsProc (Mod _ _ _ _ fs) = map (genFuncProc publicFuncProc []) fs
 readDataProc :: (SharedProg r) => DataDesc -> GenState [MSBlock r]
 readDataProc ddef = do
   g <- get
-  let scope = convScope $ currentScope g
-  inD <- mapM (`inData` scope) ddef
+  let localScope = convScope $ currentScope g
+  inD <- mapM (`inData` localScope) ddef
   v_filename <- mkValProc (quantvar inFileName)
   return [block $
-    varDec var_infile scope :
-    (if any (\d -> isLine d || isLines d) ddef then [varDec var_line scope,
-    listDec 0 var_linetokens scope] else []) ++
-    [listDec 0 var_lines scope | any isLines ddef] ++ openFileR var_infile
+    varDec var_infile localScope :
+    (if any (\d -> isLine d || isLines d) ddef then [varDec var_line localScope,
+    listDec 0 var_linetokens localScope] else []) ++
+    [listDec 0 var_lines localScope | any isLines ddef] ++ openFileR var_infile
     v_filename : concat inD ++ [closeFile v_infile]]
   where inData :: (SharedProg r) => Data -> r (Scope r) -> GenState [MSStatement r]
         inData (Singleton v) _ = do

@@ -138,7 +138,7 @@ motivation = foldlSent_ [S "To simulate", phraseNP (motion `the_ofThe` pendulum)
 background :: Sentence
 background = foldlSent_ [phraseNP (a_ pendulum), S "consists" `S.of_` phrase mass, 
   S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
-  (S "highly sensitive to initial conditions")]
+  S "highly sensitive to initial conditions"]
 
 symbolsAll :: [QuantityDict]
 symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 

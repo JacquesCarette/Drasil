@@ -212,7 +212,7 @@ startIntro = foldlSent [atStartNP (a_ slope), S "of geological",
   S "assessment" `S.ofThe` S "safety of a" +:+ phrase slope `sC`
   S "identifying the", phrase surface,
   S "most likely to experience", phrase slip `S.and_`
-  S "an index of its relative stability known as the" +:+. phrase fs]
+  S "an index of its relative stability known as the" +:+ phrase fs]
 
 kSent = keySent ssa ssp
 

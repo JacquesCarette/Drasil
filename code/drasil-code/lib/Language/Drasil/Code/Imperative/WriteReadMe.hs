@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.WriteReadMe (
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Printers (makeMd, introInfo, verInfo, unsupOS,
     extLibSec, instDoc, endNote, whatInfo)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, empty)

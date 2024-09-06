@@ -19,7 +19,7 @@ resourcePath = "../../../../datafiles/glassbr/"
 sysCtxFig, physSystFig, traceItemSecsFig, traceReqsItemsFig, traceAssumpsOthersFig, demandVsSDFig, dimlessloadVsARFig :: LabelledContent
 
 sysCtxFig = llcc (makeFigRef "sysCtxDiag") $ 
-  fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png") 
+  fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png")
 
 physSystFig = llcc (makeFigRef "physSystImage") $ figWithWidth 
   (atStartNP $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30

@@ -14,6 +14,7 @@ myOtherList = [1.0, 1.5]
 oneIndex = myOtherList.index(1.0)
 print(oneIndex)
 a = len(myOtherList)
+assert a == 2, "List size should be 2"
 myOtherList.insert(2, 2.0)
 myOtherList.append(2.5)
 e = myOtherList[1]
@@ -23,6 +24,9 @@ myName = "Brooks Mac".split(" ")
 print(myName)
 boringList = [False, False, False, False, False]
 print(boringList)
+assert b == 5, "b should be 5"
+assert len(myOtherList) == 4, "myOtherList should have 4 elements"
+assert oneIndex == 0, "oneIndex should be 0"
 
 # List slicing tests
 # Create variables for list slices
@@ -98,6 +102,7 @@ print(mySlicedList11)
 print("")
 if b >= 6:
     dummy = "dummy"
+    myObj = 'o'
 elif b == 5:
     # If body -----------------------------------------------------------------
     a = 5
@@ -113,7 +118,6 @@ elif b == 5:
     c -= 1
     b -= 1
     myList = []
-    myObj = 'o'
     MY_CONST = "Imconstant"
     print(MY_CONST)
     print(a)

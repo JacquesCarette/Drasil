@@ -15,6 +15,7 @@
 \usepackage{svg}
 \usepackage{float}
 \usepackage{enumitem}
+\usepackage{adjustbox}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
@@ -23,6 +24,9 @@
 \newcommand{\lt}{\ensuremath <}
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
+\newcommand{\resizeExpression}[1]{
+  \adjustbox{max width=\linewidth}{$#1$}
+}
 \bibliography{bibfile}
 \title{Software Requirements Specification for Double Pendulum}
 \author{Dong Chen}
@@ -174,7 +178,7 @@ Uncert. & Typical Uncertainty
 \end{longtblr}
 \section{Introduction}
 \label{Sec:Intro}
-A pendulum consists of mass attached to the end of a rod and its moving curve is highly sensitive to initial conditions. Therefore, it is useful to have a program to simulate the motion of the pendulum to exhibit its chaotic characteristics. The program documented here is called Double Pendulum.
+A pendulum consists of mass attached to the end of a rod and its moving curve is highly sensitive to initial conditions. Therefore, it is useful to have a program to simulate the motion of the pendulum to exhibit its chaotic characteristics. The document describes the program called Double Pendulum , which is based on the original, manually created version of \hyperref{https://github.com/Zhang-Zhi-ZZ/CAS741Project/tree/master/Double%20Pendulum}{}{}{Double Pendulum}.
 
 The following section provides an overview of the Software Requirements Specification (SRS) for Double Pendulum. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
@@ -311,7 +315,7 @@ Label & Acceleration
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
+           \resizeExpression{\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -340,7 +344,7 @@ Label & Velocity
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
+           \resizeExpression{\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -369,7 +373,7 @@ Label & Newton's second law of motion
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{F}=m\,\symbf{a}\text{(}t\text{)}
+           \resizeExpression{\symbf{F}=m\,\symbf{a}\text{(}t\text{)}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -408,7 +412,7 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {v_{\text{x}1}}={w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)
+           \resizeExpression{{v_{\text{x}1}}={w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -431,27 +435,27 @@ RefBy &
 At a given point in time, velocity is defined in \hyperref[DD:positionGDD]{DD:positionGDD}
 
 \begin{displaymath}
-\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
+\resizeExpression{\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}}
 \end{displaymath}
 We also know the horizontal position that is defined in \hyperref[DD:positionXDD1]{DD:positionXDD1}
 
 \begin{displaymath}
-{p_{\text{x}1}}={L_{1}}\,\sin\left({θ_{1}}\right)
+\resizeExpression{{p_{\text{x}1}}={L_{1}}\,\sin\left({θ_{1}}\right)}
 \end{displaymath}
 Applying this,
 
 \begin{displaymath}
-{v_{\text{x}1}}=\frac{\,d{L_{1}}\,\sin\left({θ_{1}}\right)}{\,dt}
+\resizeExpression{{v_{\text{x}1}}=\frac{\,d{L_{1}}\,\sin\left({θ_{1}}\right)}{\,dt}}
 \end{displaymath}
 ${L_{1}}$ is constant with respect to time, so
 
 \begin{displaymath}
-{v_{\text{x}1}}={L_{1}}\,\frac{\,d\sin\left({θ_{1}}\right)}{\,dt}
+\resizeExpression{{v_{\text{x}1}}={L_{1}}\,\frac{\,d\sin\left({θ_{1}}\right)}{\,dt}}
 \end{displaymath}
 Therefore, using the chain rule,
 
 \begin{displaymath}
-{v_{\text{x}1}}={w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)
+\resizeExpression{{v_{\text{x}1}}={w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)}
 \end{displaymath}
 \medskip
 \noindent
@@ -468,7 +472,7 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {v_{\text{y}1}}={w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)
+           \resizeExpression{{v_{\text{y}1}}={w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -491,27 +495,27 @@ RefBy &
 At a given point in time, velocity is defined in \hyperref[DD:positionGDD]{DD:positionGDD}
 
 \begin{displaymath}
-\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
+\resizeExpression{\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}}
 \end{displaymath}
 We also know the vertical position that is defined in \hyperref[DD:positionYDD1]{DD:positionYDD1}
 
 \begin{displaymath}
-{p_{\text{y}1}}=-{L_{1}}\,\cos\left({θ_{1}}\right)
+\resizeExpression{{p_{\text{y}1}}=-{L_{1}}\,\cos\left({θ_{1}}\right)}
 \end{displaymath}
 Applying this,
 
 \begin{displaymath}
-{v_{\text{y}1}}=-\left(\frac{\,d{L_{1}}\,\cos\left({θ_{1}}\right)}{\,dt}\right)
+\resizeExpression{{v_{\text{y}1}}=-\left(\frac{\,d{L_{1}}\,\cos\left({θ_{1}}\right)}{\,dt}\right)}
 \end{displaymath}
 ${L_{1}}$ is constant with respect to time, so
 
 \begin{displaymath}
-{v_{\text{y}1}}=-{L_{1}}\,\frac{\,d\cos\left({θ_{1}}\right)}{\,dt}
+\resizeExpression{{v_{\text{y}1}}=-{L_{1}}\,\frac{\,d\cos\left({θ_{1}}\right)}{\,dt}}
 \end{displaymath}
 Therefore, using the chain rule,
 
 \begin{displaymath}
-{v_{\text{y}1}}={w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)
+\resizeExpression{{v_{\text{y}1}}={w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)}
 \end{displaymath}
 \medskip
 \noindent
@@ -528,7 +532,7 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)
+           \resizeExpression{{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -552,22 +556,22 @@ RefBy &
 At a given point in time, velocity is defined in \hyperref[DD:positionGDD]{DD:positionGDD}
 
 \begin{displaymath}
-\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
+\resizeExpression{\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}}
 \end{displaymath}
 We also know the horizontal position that is defined in \hyperref[DD:positionXDD2]{DD:positionXDD2}
 
 \begin{displaymath}
-{p_{\text{x}2}}={p_{\text{x}1}}+{L_{2}}\,\sin\left({θ_{2}}\right)
+\resizeExpression{{p_{\text{x}2}}={p_{\text{x}1}}+{L_{2}}\,\sin\left({θ_{2}}\right)}
 \end{displaymath}
 Applying this,
 
 \begin{displaymath}
-{v_{\text{x}2}}=\frac{\,d{p_{\text{x}1}}+{L_{2}}\,\sin\left({θ_{2}}\right)}{\,dt}
+\resizeExpression{{v_{\text{x}2}}=\frac{\,d{p_{\text{x}1}}+{L_{2}}\,\sin\left({θ_{2}}\right)}{\,dt}}
 \end{displaymath}
 ${L_{1}}$ is constant with respect to time, so
 
 \begin{displaymath}
-{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)
+\resizeExpression{{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)}
 \end{displaymath}
 \medskip
 \noindent
@@ -584,7 +588,7 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)
+           \resizeExpression{{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -608,22 +612,22 @@ RefBy &
 At a given point in time, velocity is defined in \hyperref[DD:positionGDD]{DD:positionGDD}
 
 \begin{displaymath}
-\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
+\resizeExpression{\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}}
 \end{displaymath}
 We also know the vertical position that is defined in \hyperref[DD:positionYDD2]{DD:positionYDD2}
 
 \begin{displaymath}
-{p_{\text{y}2}}={p_{\text{y}1}}-{L_{2}}\,\cos\left({θ_{2}}\right)
+\resizeExpression{{p_{\text{y}2}}={p_{\text{y}1}}-{L_{2}}\,\cos\left({θ_{2}}\right)}
 \end{displaymath}
 Applying this,
 
 \begin{displaymath}
-{v_{\text{y}2}}=-\left(\frac{\,d{p_{\text{y}1}}-{L_{2}}\,\cos\left({θ_{2}}\right)}{\,dt}\right)
+\resizeExpression{{v_{\text{y}2}}=-\left(\frac{\,d{p_{\text{y}1}}-{L_{2}}\,\cos\left({θ_{2}}\right)}{\,dt}\right)}
 \end{displaymath}
 Therefore, using the chain rule,
 
 \begin{displaymath}
-{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)
+\resizeExpression{{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)}
 \end{displaymath}
 \medskip
 \noindent
@@ -640,7 +644,7 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {a_{\text{x}1}}=-{w_{1}}^{2}\,{L_{1}}\,\sin\left({θ_{1}}\right)+{α_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)
+           \resizeExpression{{a_{\text{x}1}}=-{w_{1}}^{2}\,{L_{1}}\,\sin\left({θ_{1}}\right)+{α_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -665,27 +669,27 @@ RefBy & \hyperref[IM:calOfAngle2]{IM:calOfAngle2}
 Our acceleration is:
 
 \begin{displaymath}
-\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
+\resizeExpression{\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}}
 \end{displaymath}
 Earlier, we found the horizontal velocity to be
 
 \begin{displaymath}
-{v_{\text{x}1}}={w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)
+\resizeExpression{{v_{\text{x}1}}={w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)}
 \end{displaymath}
 Applying this to our equation for acceleration
 
 \begin{displaymath}
-{a_{\text{x}1}}=\frac{\,d{w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)}{\,dt}
+\resizeExpression{{a_{\text{x}1}}=\frac{\,d{w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)}{\,dt}}
 \end{displaymath}
 By the product and chain rules, we find
 
 \begin{displaymath}
-{a_{\text{x}1}}=\frac{\,d{w_{1}}}{\,dt}\,{L_{1}}\,\cos\left({θ_{1}}\right)-{w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)\,\frac{\,d{θ_{1}}}{\,dt}
+\resizeExpression{{a_{\text{x}1}}=\frac{\,d{w_{1}}}{\,dt}\,{L_{1}}\,\cos\left({θ_{1}}\right)-{w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)\,\frac{\,d{θ_{1}}}{\,dt}}
 \end{displaymath}
 Simplifying,
 
 \begin{displaymath}
-{a_{\text{x}1}}=-{w_{1}}^{2}\,{L_{1}}\,\sin\left({θ_{1}}\right)+{α_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)
+\resizeExpression{{a_{\text{x}1}}=-{w_{1}}^{2}\,{L_{1}}\,\sin\left({θ_{1}}\right)+{α_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)}
 \end{displaymath}
 \medskip
 \noindent
@@ -702,7 +706,7 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {a_{\text{y}1}}={w_{1}}^{2}\,{L_{1}}\,\cos\left({θ_{1}}\right)+{α_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)
+           \resizeExpression{{a_{\text{y}1}}={w_{1}}^{2}\,{L_{1}}\,\cos\left({θ_{1}}\right)+{α_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -727,27 +731,27 @@ RefBy & \hyperref[IM:calOfAngle2]{IM:calOfAngle2}
 Our acceleration is:
 
 \begin{displaymath}
-\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
+\resizeExpression{\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}}
 \end{displaymath}
 Earlier, we found the vertical velocity to be
 
 \begin{displaymath}
-{v_{\text{y}1}}={w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)
+\resizeExpression{{v_{\text{y}1}}={w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)}
 \end{displaymath}
 Applying this to our equation for acceleration
 
 \begin{displaymath}
-{a_{\text{y}1}}=\frac{\,d{w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)}{\,dt}
+\resizeExpression{{a_{\text{y}1}}=\frac{\,d{w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)}{\,dt}}
 \end{displaymath}
 By the product and chain rules, we find
 
 \begin{displaymath}
-{a_{\text{y}1}}=\frac{\,d{w_{1}}}{\,dt}\,{L_{1}}\,\sin\left({θ_{1}}\right)+{w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)\,\frac{\,d{θ_{1}}}{\,dt}
+\resizeExpression{{a_{\text{y}1}}=\frac{\,d{w_{1}}}{\,dt}\,{L_{1}}\,\sin\left({θ_{1}}\right)+{w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)\,\frac{\,d{θ_{1}}}{\,dt}}
 \end{displaymath}
 Simplifying,
 
 \begin{displaymath}
-{a_{\text{y}1}}={w_{1}}^{2}\,{L_{1}}\,\cos\left({θ_{1}}\right)+{α_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)
+\resizeExpression{{a_{\text{y}1}}={w_{1}}^{2}\,{L_{1}}\,\cos\left({θ_{1}}\right)+{α_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)}
 \end{displaymath}
 \medskip
 \noindent
@@ -764,7 +768,7 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {a_{\text{x}2}}={a_{\text{x}1}}-{w_{2}}^{2}\,{L_{2}}\,\sin\left({θ_{2}}\right)+{α_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)
+           \resizeExpression{{a_{\text{x}2}}={a_{\text{x}1}}-{w_{2}}^{2}\,{L_{2}}\,\sin\left({θ_{2}}\right)+{α_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -790,22 +794,22 @@ RefBy & \hyperref[IM:calOfAngle2]{IM:calOfAngle2}
 Our acceleration is:
 
 \begin{displaymath}
-\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
+\resizeExpression{\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}}
 \end{displaymath}
 Earlier, we found the horizontal velocity to be
 
 \begin{displaymath}
-{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)
+\resizeExpression{{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)}
 \end{displaymath}
 Applying this to our equation for acceleration
 
 \begin{displaymath}
-{a_{\text{x}2}}=\frac{\,d{v_{\text{x}1}}+{w_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)}{\,dt}
+\resizeExpression{{a_{\text{x}2}}=\frac{\,d{v_{\text{x}1}}+{w_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)}{\,dt}}
 \end{displaymath}
 By the product and chain rules, we find
 
 \begin{displaymath}
-{a_{\text{x}2}}={a_{\text{x}1}}-{w_{2}}^{2}\,{L_{2}}\,\sin\left({θ_{2}}\right)+{α_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)
+\resizeExpression{{a_{\text{x}2}}={a_{\text{x}1}}-{w_{2}}^{2}\,{L_{2}}\,\sin\left({θ_{2}}\right)+{α_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)}
 \end{displaymath}
 \medskip
 \noindent
@@ -822,7 +826,7 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {a_{\text{y}2}}={a_{\text{y}1}}+{w_{2}}^{2}\,{L_{2}}\,\cos\left({θ_{2}}\right)+{α_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)
+           \resizeExpression{{a_{\text{y}2}}={a_{\text{y}1}}+{w_{2}}^{2}\,{L_{2}}\,\cos\left({θ_{2}}\right)+{α_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -848,22 +852,22 @@ RefBy & \hyperref[IM:calOfAngle2]{IM:calOfAngle2}
 Our acceleration is:
 
 \begin{displaymath}
-\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
+\resizeExpression{\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}}
 \end{displaymath}
 Earlier, we found the horizontal velocity to be
 
 \begin{displaymath}
-{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)
+\resizeExpression{{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)}
 \end{displaymath}
 Applying this to our equation for acceleration
 
 \begin{displaymath}
-{a_{\text{y}2}}=\frac{\,d{v_{\text{y}1}}+{w_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)}{\,dt}
+\resizeExpression{{a_{\text{y}2}}=\frac{\,d{v_{\text{y}1}}+{w_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)}{\,dt}}
 \end{displaymath}
 By the product and chain rules, we find
 
 \begin{displaymath}
-{a_{\text{y}2}}={a_{\text{y}1}}+{w_{2}}^{2}\,{L_{2}}\,\cos\left({θ_{2}}\right)+{α_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)
+\resizeExpression{{a_{\text{y}2}}={a_{\text{y}1}}+{w_{2}}^{2}\,{L_{2}}\,\cos\left({θ_{2}}\right)+{α_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)}
 \end{displaymath}
 \medskip
 \noindent
@@ -880,7 +884,7 @@ Units & ${\text{N}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)+{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)
+           \resizeExpression{\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)+{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -905,7 +909,7 @@ RefBy & \hyperref[IM:calOfAngle2]{IM:calOfAngle2}
 \paragraph{Detailed derivation of force on the first object:}
 \label{GD:xForce1Deriv}
 \begin{displaymath}
-\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)+{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)
+\resizeExpression{\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)+{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)}
 \end{displaymath}
 \medskip
 \noindent
@@ -922,7 +926,7 @@ Units & ${\text{N}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{1}}\,\symbf{g}
+           \resizeExpression{\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{1}}\,\symbf{g}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -949,7 +953,7 @@ RefBy & \hyperref[IM:calOfAngle2]{IM:calOfAngle2}
 \paragraph{Detailed derivation of force on the first object:}
 \label{GD:yForce1Deriv}
 \begin{displaymath}
-\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{1}}\,\symbf{g}
+\resizeExpression{\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{1}}\,\symbf{g}}
 \end{displaymath}
 \medskip
 \noindent
@@ -966,7 +970,7 @@ Units & ${\text{N}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)
+           \resizeExpression{\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -989,7 +993,7 @@ RefBy & \hyperref[IM:calOfAngle2]{IM:calOfAngle2}
 \paragraph{Detailed derivation of force on the second object:}
 \label{GD:xForce2Deriv}
 \begin{displaymath}
-\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)
+\resizeExpression{\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)}
 \end{displaymath}
 \medskip
 \noindent
@@ -1006,7 +1010,7 @@ Units & ${\text{N}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{2}}\,\symbf{g}
+           \resizeExpression{\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{2}}\,\symbf{g}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1031,7 +1035,7 @@ RefBy & \hyperref[IM:calOfAngle2]{IM:calOfAngle2}
 \paragraph{Detailed derivation of force on the second object:}
 \label{GD:yForce2Deriv}
 \begin{displaymath}
-\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{2}}\,\symbf{g}
+\resizeExpression{\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{2}}\,\symbf{g}}
 \end{displaymath}
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
@@ -1055,7 +1059,7 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}
+           \resizeExpression{\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1091,7 +1095,7 @@ Units & ${\text{m}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {p_{\text{x}1}}={L_{1}}\,\sin\left({θ_{1}}\right)
+           \resizeExpression{{p_{\text{x}1}}={L_{1}}\,\sin\left({θ_{1}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1132,7 +1136,7 @@ Units & ${\text{m}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {p_{\text{y}1}}=-{L_{1}}\,\cos\left({θ_{1}}\right)
+           \resizeExpression{{p_{\text{y}1}}=-{L_{1}}\,\cos\left({θ_{1}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1173,7 +1177,7 @@ Units & ${\text{m}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {p_{\text{x}2}}={p_{\text{x}1}}+{L_{2}}\,\sin\left({θ_{2}}\right)
+           \resizeExpression{{p_{\text{x}2}}={p_{\text{x}1}}+{L_{2}}\,\sin\left({θ_{2}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1215,7 +1219,7 @@ Units & ${\text{m}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {p_{\text{y}2}}={p_{\text{y}1}}-{L_{2}}\,\cos\left({θ_{2}}\right)
+           \resizeExpression{{p_{\text{y}2}}={p_{\text{y}1}}-{L_{2}}\,\cos\left({θ_{2}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1257,7 +1261,7 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}
+           \resizeExpression{\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1292,7 +1296,7 @@ Units & ${\text{N}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \symbf{F}=m \symbf{a}\text{(}t\text{)}
+           \resizeExpression{\symbf{F}=m \symbf{a}\text{(}t\text{)}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1331,22 +1335,22 @@ Output & ${θ_{1}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    {L_{1}}\gt{}0
+                    \resizeExpression{{L_{1}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    {L_{2}}\gt{}0
+                    \resizeExpression{{L_{2}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    {m_{1}}\gt{}0
+                    \resizeExpression{{m_{1}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    {m_{2}}\gt{}0
+                    \resizeExpression{{m_{2}}\gt{}0}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           {α_{1}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{-g\,\left(2\,{m_{1}}+{m_{2}}\right)\,\sin\left({θ_{1}}\right)-{m_{2}}\,g\,\sin\left({θ_{1}}-2\,{θ_{2}}\right)-2\,\sin\left({θ_{1}}-{θ_{2}}\right)\,{m_{2}}\,\left({w_{2}}^{2}\,{L_{2}}+{w_{1}}^{2}\,{L_{1}}\,\cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{1}}\,\left(2\,{m_{1}}+{m_{2}}-{m_{2}}\,\cos\left(2\,{θ_{1}}-2\,{θ_{2}}\right)\right)}
+           \resizeExpression{{α_{1}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{-g\,\left(2\,{m_{1}}+{m_{2}}\right)\,\sin\left({θ_{1}}\right)-{m_{2}}\,g\,\sin\left({θ_{1}}-2\,{θ_{2}}\right)-2\,\sin\left({θ_{1}}-{θ_{2}}\right)\,{m_{2}}\,\left({w_{2}}^{2}\,{L_{2}}+{w_{1}}^{2}\,{L_{1}}\,\cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{1}}\,\left(2\,{m_{1}}+{m_{2}}-{m_{2}}\,\cos\left(2\,{θ_{1}}-2\,{θ_{2}}\right)\right)}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1392,22 +1396,22 @@ Output & ${θ_{2}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    {L_{1}}\gt{}0
+                    \resizeExpression{{L_{1}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    {L_{2}}\gt{}0
+                    \resizeExpression{{L_{2}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    {m_{1}}\gt{}0
+                    \resizeExpression{{m_{1}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    {m_{2}}\gt{}0
+                    \resizeExpression{{m_{2}}\gt{}0}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           {α_{2}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{2\,\sin\left({θ_{1}}-{θ_{2}}\right)\,\left({w_{1}}^{2}\,{L_{1}}\,\left({m_{1}}+{m_{2}}\right)+g\,\left({m_{1}}+{m_{2}}\right)\,\cos\left({θ_{1}}\right)+{w_{2}}^{2}\,{L_{2}}\,{m_{2}}\,\cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{2}}\,\left(2\,{m_{1}}+{m_{2}}-{m_{2}}\,\cos\left(2\,{θ_{1}}-2\,{θ_{2}}\right)\right)}
+           \resizeExpression{{α_{2}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{2\,\sin\left({θ_{1}}-{θ_{2}}\right)\,\left({w_{1}}^{2}\,{L_{1}}\,\left({m_{1}}+{m_{2}}\right)+g\,\left({m_{1}}+{m_{2}}\right)\,\cos\left({θ_{1}}\right)+{w_{2}}^{2}\,{L_{2}}\,{m_{2}}\,\cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{2}}\,\left(2\,{m_{1}}+{m_{2}}-{m_{2}}\,\cos\left(2\,{θ_{1}}-2\,{θ_{2}}\right)\right)}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1440,39 +1444,39 @@ RefBy & \hyperref[outputValues]{FR:Output-Values}, \hyperref[calcAng]{FR:Calcula
 By solving equations \hyperref[GD:xForce2]{GD:xForce2} and \hyperref[GD:yForce2]{GD:yForce2} for ${\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)$ and ${\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)$ and then substituting into equation \hyperref[GD:xForce1]{GD:xForce1} and \hyperref[GD:yForce1]{GD:yForce1} , We can get equations 1 and 2:
 
 \begin{displaymath}
-{m_{1}}\,{a_{\text{x}1}}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)-{m_{2}}\,{a_{\text{x}2}}
+\resizeExpression{{m_{1}}\,{a_{\text{x}1}}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)-{m_{2}}\,{a_{\text{x}2}}}
 \end{displaymath}
 
 \begin{displaymath}
-{m_{1}}\,{a_{\text{y}1}}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{m_{2}}\,{a_{\text{y}2}}-{m_{2}}\,g-{m_{1}}\,g
+\resizeExpression{{m_{1}}\,{a_{\text{y}1}}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{m_{2}}\,{a_{\text{y}2}}-{m_{2}}\,g-{m_{1}}\,g}
 \end{displaymath}
 Multiply the equation 1 by $\cos\left({θ_{1}}\right)$ and the equation 2 by $\sin\left({θ_{1}}\right)$ and rearrange to get:
 
 \begin{displaymath}
-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)\,\cos\left({θ_{1}}\right)=-\cos\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{x}1}}+{m_{2}}\,{a_{\text{x}2}}\right)
+\resizeExpression{{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)\,\cos\left({θ_{1}}\right)=-\cos\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{x}1}}+{m_{2}}\,{a_{\text{x}2}}\right)}
 \end{displaymath}
 
 \begin{displaymath}
-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)\,\cos\left({θ_{1}}\right)=\sin\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{y}1}}+{m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g+{m_{1}}\,g\right)
+\resizeExpression{{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)\,\cos\left({θ_{1}}\right)=\sin\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{y}1}}+{m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g+{m_{1}}\,g\right)}
 \end{displaymath}
 This leads to the equation 3
 
 \begin{displaymath}
-\sin\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{y}1}}+{m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g+{m_{1}}\,g\right)=-\cos\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{x}1}}+{m_{2}}\,{a_{\text{x}2}}\right)
+\resizeExpression{\sin\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{y}1}}+{m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g+{m_{1}}\,g\right)=-\cos\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{x}1}}+{m_{2}}\,{a_{\text{x}2}}\right)}
 \end{displaymath}
 Next, multiply equation \hyperref[GD:xForce2]{GD:xForce2} by $\cos\left({θ_{2}}\right)$ and equation \hyperref[GD:yForce2]{GD:yForce2} by $\sin\left({θ_{2}}\right)$ and rearrange to get:
 
 \begin{displaymath}
-{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\,\cos\left({θ_{2}}\right)=-\cos\left({θ_{2}}\right)\,{m_{2}}\,{a_{\text{x}2}}
+\resizeExpression{{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\,\cos\left({θ_{2}}\right)=-\cos\left({θ_{2}}\right)\,{m_{2}}\,{a_{\text{x}2}}}
 \end{displaymath}
 
 \begin{displaymath}
-{\symbf{T}_{1}}\,\sin\left({θ_{2}}\right)\,\cos\left({θ_{2}}\right)=\sin\left({θ_{2}}\right)\,\left({m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g\right)
+\resizeExpression{{\symbf{T}_{1}}\,\sin\left({θ_{2}}\right)\,\cos\left({θ_{2}}\right)=\sin\left({θ_{2}}\right)\,\left({m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g\right)}
 \end{displaymath}
 which leads to equation 4
 
 \begin{displaymath}
-\sin\left({θ_{2}}\right)\,\left({m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g\right)=-\cos\left({θ_{2}}\right)\,{m_{2}}\,{a_{\text{x}2}}
+\resizeExpression{\sin\left({θ_{2}}\right)\,\left({m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g\right)=-\cos\left({θ_{2}}\right)\,{m_{2}}\,{a_{\text{x}2}}}
 \end{displaymath}
 By giving equations \hyperref[GD:accelerationX1]{GD:accelerationX1} and \hyperref[GD:accelerationX2]{GD:accelerationX2} and \hyperref[GD:accelerationY1]{GD:accelerationY1} and \hyperref[GD:accelerationY2]{GD:accelerationY2} plus additional two equations, 3 and 4, we can get \hyperref[IM:calOfAngle1]{IM:calOfAngle1} and \hyperref[IM:calOfAngle2]{IM:calOfAngle2} via a computer algebra program:
 

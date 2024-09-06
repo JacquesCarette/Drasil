@@ -23,7 +23,7 @@ import Drasil.GOOL.InterfaceCommon (
   PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, BodySym(body), TypeSym(listType), FunctionSym, MethodSym,
-  VariableSym, var, ScopeSym(..), ValueSym(valueType), VariableValue(valueOf),
+  VariableSym(var), ScopeSym(..), ValueSym(valueType), VariableValue(valueOf),
   ValueExpression, List(listSize, listAdd), listOf, StatementSym(valStmt),
   DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), convType)
 import Drasil.GOOL.CodeType (CodeType(..), ClassName)
@@ -200,34 +200,39 @@ objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r -> Label
 objMethodCallNoParams t o f = objMethodCall t o f []
 
 class (DeclStatement r, OOVariableSym r) => OODeclStatement r where
-  objDecDef    :: SVariable r -> SValue r -> MSStatement r
-  objDecNew    :: SVariable r -> [SValue r] -> MSStatement r
-  extObjDecNew :: Library -> SVariable r -> [SValue r] -> MSStatement r
+  objDecDef    :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+  -- Parameters: variable to store the object, scope of the variable,
+  --             constructor arguments.  Object type is not needed,
+  --             as it is inferred from the variable's type.
+  objDecNew    :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+  extObjDecNew :: Library -> SVariable r -> r (Scope r) -> [SValue r]
+    -> MSStatement r
 
-objDecNewNoParams :: (OODeclStatement r) => SVariable r -> MSStatement r
-objDecNewNoParams v = objDecNew v []
+objDecNewNoParams :: (OODeclStatement r) => SVariable r -> r (Scope r)
+  -> MSStatement r
+objDecNewNoParams v s = objDecNew v s []
 
 extObjDecNewNoParams :: (OODeclStatement r) => Library -> SVariable r -> 
-  MSStatement r
-extObjDecNewNoParams l v = extObjDecNew l v []
+  r (Scope r) -> MSStatement r
+extObjDecNewNoParams l v s = extObjDecNew l v s []
 
 class (FuncAppStatement r, OOVariableSym r) => OOFuncAppStatement r where
   selfInOutCall :: InOutCall r
 
 class (StatementSym r, OOFunctionSym r) => ObserverPattern r where
-  notifyObservers :: VSFunction r -> VSType r -> r (Scope r) -> MSStatement r
+  notifyObservers :: VSFunction r -> VSType r -> MSStatement r
 
 observerListName :: Label
 observerListName = "observerList"
 
-initObserverList :: (DeclStatement r) => VSType r -> [SValue r] ->
-  r (Scope r) -> MSStatement r
-initObserverList t os s = listDecDef (var observerListName (listType t) s) os
+initObserverList :: (DeclStatement r) => VSType r -> [SValue r] -> r (Scope r)
+  -> MSStatement r
+initObserverList t os scp = listDecDef (var observerListName (listType t)) scp os
 
-addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r -> 
-  r (Scope r) -> MSStatement r
-addObserver o s = valStmt $ listAdd obsList lastelem o
-  where obsList = valueOf $ listOf observerListName (onStateValue valueType o) s
+addObserver :: (StatementSym r, OOVariableValue r, List r) => SValue r
+  -> MSStatement r
+addObserver o = valStmt $ listAdd obsList lastelem o
+  where obsList = valueOf $ listOf observerListName (onStateValue valueType o)
         lastelem = listSize obsList
 
 class (BodySym r, VariableSym r) => StrategyPattern r where

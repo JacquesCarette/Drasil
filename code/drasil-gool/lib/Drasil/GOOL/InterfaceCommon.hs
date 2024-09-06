@@ -7,18 +7,18 @@ module Drasil.GOOL.InterfaceCommon (
   MixedCtorCall, PosCall, PosCtorCall, InOutCall, InOutFunc, DocInOutFunc,
   -- Typeclasses
   SharedProg, BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
-  TypeElim(..), VariableSym(..), var, constant, locVar, mainVar, ScopeSym(..),
-  VariableElim(..), listOf, listVar, ValueSym(..), Argument(..), Literal(..),
-  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  TypeElim(..), VariableSym(..), ScopeSym(..), convScope, VariableElim(..),
+  listOf, listVar, ValueSym(..), Argument(..), Literal(..), litZero,
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp, libFuncApp,
-  exists, List(..), InternalList(..), listSlice, listIndexExists, at,
+  exists, List(..), Set(..), InternalList(..), listSlice, listIndexExists, at,
   ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), assignToListIndex, DeclStatement(..), IOStatement(..),
-  StringStatement(..), FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), ifNoElse, switchAsIf, VisibilitySym(..),
-  ParameterSym(..), MethodSym(..), convType
+  StringStatement(..), FunctionSym(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), ifNoElse, switchAsIf,
+  VisibilitySym(..), ParameterSym(..), MethodSym(..), convType
   ) where
 
 import Drasil.GOOL.CodeType (CodeType(..))
@@ -27,6 +27,7 @@ import Drasil.GOOL.State (MS, VS)
 import qualified Data.Kind as K (Type)
 import Data.Bifunctor (first)
 import CodeLang.Drasil (Comment)
+import Drasil.GOOL.AST (ScopeData(..), ScopeTag(..))
 
 type Label = String
 type Library = String
@@ -41,7 +42,7 @@ class (VectorType r, VectorDecl r, VectorThunk r,
   IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r,
   CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r,
   MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r,
-  BooleanExpression r, Comparison r, ValueExpression r, List r, TypeElim r,
+  BooleanExpression r, Comparison r, ValueExpression r, List r, Set r, TypeElim r,
   VariableElim r, MethodSym r, ScopeSym r
   ) => SharedProg r
 
@@ -73,7 +74,8 @@ class TypeSym r where
   type Type r
   bool          :: VSType r
   int           :: VSType r -- This is 32-bit signed ints except in Python, 
-                            -- which has unlimited precision ints
+                            -- which has unlimited precision ints; and Julia,
+                            -- Which defaults to 64-bit signed ints
   float         :: VSType r
   double        :: VSType r
   char          :: VSType r
@@ -81,6 +83,7 @@ class TypeSym r where
   infile        :: VSType r
   outfile       :: VSType r
   listType      :: VSType r -> VSType r
+  setType       :: VSType r -> VSType r
   arrayType     :: VSType r -> VSType r
   listInnerType :: VSType r -> VSType r
   funcType      :: [VSType r] -> VSType r -> VSType r
@@ -92,43 +95,27 @@ class (TypeSym r) => TypeElim r where
 
 class ScopeSym r where
   type Scope r
-  global :: r (Scope r)
-  mainFn :: r (Scope r)
-  local  :: r (Scope r)
+  global :: r (Scope r) -- Definite global scope
+  mainFn :: r (Scope r) -- Main program - either main function or global scope
+  local  :: r (Scope r) -- Definite local scope
 
 type SVariable a = VS (a (Variable a))
 
-class (TypeSym r, ScopeSym r) => VariableSym r where
+class (TypeSym r) => VariableSym r where
   type Variable r
-  var'      :: Label -> r (Scope r) -> VSType r -> SVariable r
-  constant' :: Label -> r (Scope r) -> VSType r -> SVariable r
+  var       :: Label -> VSType r -> SVariable r
+  constant  :: Label -> VSType r -> SVariable r
   extVar    :: Library -> Label -> VSType r -> SVariable r
   arrayElem :: Integer -> SVariable r -> SVariable r
-  
--- | Smart constructor to rearrange the parameters of var'
-var :: (VariableSym r) => Label -> VSType r -> r (Scope r) -> SVariable r
-var n t s = var' n s t
-
--- | Smart constructor to rearrange the parameters of constant'
-constant :: (VariableSym r) => Label -> VSType r -> r (Scope r) -> SVariable r
-constant n t s = constant' n s t
-
--- | Smart constructor for a local variable.
-locVar :: (VariableSym r) => Label -> VSType r -> SVariable r
-locVar n = var' n local
-
--- | Smart constructor for a variable in the main function.
-mainVar :: (VariableSym r) => Label -> VSType r -> SVariable r
-mainVar n = var' n mainFn
 
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
   variableType :: r (Variable r) -> r (Type r)
 
-listVar :: (VariableSym r) => Label -> VSType r -> r (Scope r) -> SVariable r
+listVar :: (VariableSym r) => Label -> VSType r -> SVariable r
 listVar n t = var n (listType t)
 
-listOf :: (VariableSym r) => Label -> VSType r -> r (Scope r) -> SVariable r
+listOf :: (VariableSym r) => Label -> VSType r -> SVariable r
 listOf = listVar
 
 type SValue a = VS (a (Value a))
@@ -150,6 +137,7 @@ class (ValueSym r) => Literal r where
   litString :: String -> SValue r
   litArray  :: VSType r -> [SValue r] -> SValue r
   litList   :: VSType r -> [SValue r] -> SValue r
+  litSet    :: VSType r -> [SValue r] -> SValue r
 
 litZero :: (TypeElim r, Literal r) => VSType r -> SValue r
 litZero t = do
@@ -294,6 +282,10 @@ class (ValueSym r) => List r where
   --   Arguments are: List, Value
   indexOf :: SValue r -> SValue r -> SValue r
 
+class (ValueSym r) => Set r where
+  -- set, element
+  contains :: SValue r -> SValue r -> SValue r
+
 class (ValueSym r) => InternalList r where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) 
     -> SVariable r -> SValue r -> MSBlock r
@@ -302,11 +294,11 @@ class (ValueSym r) => InternalList r where
 --   Arguments are: 
 --   Variable to assign
 --   List to read from
---   [Start index] inclusive.
+--   (optional) Start index inclusive.
 --      (if Nothing, then list start if step > 0, list end if step < 0)
---   [End index] exclusive.
+--   (optional) End index exclusive.
 --      (if Nothing, then list end if step > 0, list start if step > 0)
---   [Step] (if Nothing, then defaults to 1)
+--   (optional) Step (if Nothing, then defaults to 1)
 listSlice :: (InternalList r) => SVariable r -> SValue r -> Maybe (SValue r) -> 
   Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listSlice vnew vold b e s = listSlice' b e s vnew vold
@@ -316,6 +308,8 @@ listIndexExists lst index = listSize lst ?> index
 
 at :: (List r) => SValue r -> SValue r -> SValue r
 at = listAccess
+
+-- Vector Typeclasses --
 
 type VSThunk a = VS (a (Thunk a))
 
@@ -331,9 +325,10 @@ class (VariableSym r, ThunkSym r, StatementSym r) => ThunkAssign r where
 class TypeSym r => VectorType r where
   vecType :: VSType r -> VSType r
 
-class (VariableSym r, StatementSym r) => VectorDecl r where
-  vecDec :: Integer -> SVariable r -> MSStatement r
-  vecDecDef :: SVariable r -> [SValue r] -> MSStatement r
+class (DeclStatement r) => VectorDecl r where
+  -- First argument is size of the vector
+  vecDec :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
+  vecDecDef :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
 
 class (VariableSym r, ThunkSym r) => VectorThunk r where
   vecThunk :: SVariable r -> VSThunk r
@@ -349,6 +344,7 @@ type MSStatement a = MS (a (Statement a))
 class (ValueSym r) => StatementSym r where
   type Statement r
   valStmt :: SValue r -> MSStatement r -- converts value to statement
+  emptyStmt :: MSStatement r
   multi     :: [MSStatement r] -> MSStatement r
 
 class (VariableSym r, StatementSym r) => AssignStatement r where
@@ -371,15 +367,20 @@ assignToListIndex :: (StatementSym r, VariableValue r, List r) => SVariable r
   -> SValue r -> SValue r -> MSStatement r
 assignToListIndex lst index v = valStmt $ listSet (valueOf lst) index v
 
-class (VariableSym r, StatementSym r) => DeclStatement r where
-  varDec       :: SVariable r -> MSStatement r
-  varDecDef    :: SVariable r -> SValue r -> MSStatement r
-  listDec      :: Integer -> SVariable r -> MSStatement r
-  listDecDef   :: SVariable r -> [SValue r] -> MSStatement r
-  arrayDec     :: Integer -> SVariable r -> MSStatement r
-  arrayDecDef  :: SVariable r -> [SValue r] -> MSStatement r
-  constDecDef  :: SVariable r -> SValue r -> MSStatement r
-  funcDecDef   :: SVariable r -> [SVariable r] -> MSBody r -> MSStatement r
+class (VariableSym r, StatementSym r, ScopeSym r) => DeclStatement r where
+  varDec       :: SVariable r -> r (Scope r) -> MSStatement r
+  varDecDef    :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+  -- First argument is size of the list
+  listDec      :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
+  listDecDef   :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+  setDec       :: SVariable r -> r (Scope r) -> MSStatement r
+  setDecDef    :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+  -- First argument is size of the array
+  arrayDec     :: Integer -> SVariable r -> r (Scope r) -> MSStatement r
+  arrayDecDef  :: SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+  constDecDef  :: SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+  funcDecDef   :: SVariable r -> r (Scope r) -> [SVariable r] -> MSBody r
+    -> MSStatement r
 
 
 class (VariableSym r, StatementSym r) => IOStatement r where
@@ -388,6 +389,7 @@ class (VariableSym r, StatementSym r) => IOStatement r where
   printStr   :: String -> MSStatement r
   printStrLn :: String -> MSStatement r
 
+  -- First argument is file handle, second argument is value to print
   printFile      :: SValue r -> SValue r -> MSStatement r
   printFileLn    :: SValue r -> SValue r -> MSStatement r
   printFileStr   :: SValue r -> String -> MSStatement r
@@ -408,6 +410,7 @@ class (VariableSym r, StatementSym r) => IOStatement r where
   getFileInputAll  :: SValue r -> SVariable r -> MSStatement r
 
 class (VariableSym r, StatementSym r) => StringStatement r where
+  -- Parameters are: char to split on, variable to store result in, string to split
   stringSplit :: Char -> SVariable r -> SValue r -> MSStatement r
 
   stringListVals  :: [SVariable r] -> SValue r -> MSStatement r
@@ -447,12 +450,15 @@ class (BodySym r, VariableSym r) => ControlStatement r where
 
   for      :: MSStatement r -> SValue r -> MSStatement r -> MSBody r -> 
     MSStatement r
+  -- Iterator variable, start value, end value, step value, loop body
   forRange :: SVariable r -> SValue r -> SValue r -> SValue r -> MSBody r -> 
     MSStatement r
   forEach  :: SVariable r -> SValue r -> MSBody r -> MSStatement r
   while    :: SValue r -> MSBody r -> MSStatement r 
 
   tryCatch :: MSBody r -> MSBody r -> MSStatement r
+
+  assert :: SValue r -> SValue r -> MSStatement r
 
 ifNoElse :: (ControlStatement r) => [(SValue r, MSBody r)] -> MSStatement r
 ifNoElse bs = ifCond bs $ body []
@@ -509,9 +515,14 @@ convType Double = double
 convType Char = char
 convType String = string
 convType (List t) = listType (convType t)
+convType (Set t) = setType (convType t)
 convType (Array t) = arrayType (convType t)
 convType (Func ps r) = funcType (map convType ps) (convType r)
 convType Void = void
 convType InFile = infile
 convType OutFile = outfile
 convType (Object _) = error "Objects not supported"
+
+convScope :: (ScopeSym r) => ScopeData -> r (Scope r)
+convScope (SD {scopeTag = Global}) = global
+convScope (SD {scopeTag = Local}) = local

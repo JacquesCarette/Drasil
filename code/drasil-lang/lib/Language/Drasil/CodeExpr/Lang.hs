@@ -7,7 +7,7 @@ import Prelude hiding (sqrt)
 import Language.Drasil.Expr.Lang (Completeness)
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal(..))
-import Language.Drasil.Space (RealInterval, DiscreteDomainDesc)
+import Language.Drasil.Space (Space, RealInterval, DiscreteDomainDesc)
 import Language.Drasil.UID (UID)
 
 -- * Operators (mostly binary)
@@ -26,7 +26,7 @@ data BoolBinOp = Impl | Iff
   deriving Eq
 
 -- | Index operator.
-data LABinOp = Index
+data LABinOp = Index | IndexOf
   deriving Eq
 
 -- | Ordered binary operators (less than, greater than, less than or equal to, greater than or equal to).
@@ -45,6 +45,16 @@ data VVNBinOp = Dot
 data NVVBinOp = Scale
   deriving Eq
 
+-- | Element + Set -> Set
+data ESSBinOp = SAdd | SRemove
+  deriving Eq
+
+-- | Element + Set -> Bool
+data ESBBinOp = SContains
+  deriving Eq
+
+data AssocConcatOper = SUnion
+  deriving Eq
 -- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.
 data AssocArithOper = Add | Mul
   deriving Eq
@@ -82,6 +92,8 @@ data CodeExpr where
   AssocA   :: AssocArithOper -> [CodeExpr] -> CodeExpr
   -- | Takes an associative boolean operator with a list of expressions.
   AssocB   :: AssocBoolOper  -> [CodeExpr] -> CodeExpr
+
+  AssocC :: AssocConcatOper -> [CodeExpr] -> CodeExpr
   -- | C stands for "Chunk", for referring to a chunk in an expression.
   --   Implicitly assumes that the chunk has a symbol.
   C        :: UID -> CodeExpr
@@ -108,7 +120,10 @@ data CodeExpr where
   Case     :: Completeness -> [(CodeExpr, CodeExpr)] -> CodeExpr
   -- | Represents a matrix of expressions.
   Matrix   :: [[CodeExpr]] -> CodeExpr
-  
+  -- | Represents a set of expressions
+  Set      :: Space -> [CodeExpr] -> CodeExpr
+  -- | used to refernce the (name + type = variable )
+  Variable :: String -> CodeExpr -> CodeExpr
   -- | Unary operation for most functions (eg. sin, cos, log, etc.).
   UnaryOp       :: UFunc -> CodeExpr -> CodeExpr
   -- | Unary operation for @Bool -> Bool@ operations.
@@ -134,6 +149,10 @@ data CodeExpr where
   VVNBinaryOp   :: VVNBinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Binary operator for @Number x Vector -> Vector@ operations (scaling).
   NVVBinaryOp   :: NVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+  -- | Set operator for Set + Set -> Set
+  ESSBinaryOp :: ESSBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+  -- | Set operator for Element + Set -> Bool
+  ESBBinaryOp :: ESBBinOp -> CodeExpr -> CodeExpr -> CodeExpr
 
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.

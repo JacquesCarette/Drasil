@@ -8,7 +8,7 @@ import Drasil.GOOL.InterfaceCommon (MSBody, SValue, MSStatement, SMethod,
   ScopeSym(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), List(..), InternalList(..), ThunkSym(..), VectorType(..),
+  ValueExpression(..), List(..), Set(..), InternalList(..), ThunkSym(..), VectorType(..),
   VectorDecl(..), VectorThunk(..), VectorExpression(..), ThunkAssign(..),
   StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
@@ -46,6 +46,7 @@ instance Monad CodeInfoProc where
   CI x >>= f = f x
 
 instance SharedProg CodeInfoProc
+
 instance ProcProg CodeInfoProc
 
 instance ProgramSym CodeInfoProc where
@@ -83,6 +84,7 @@ instance TypeSym CodeInfoProc where
   infile            = noInfoType
   outfile           = noInfoType
   listType      _   = noInfoType
+  setType      _   = noInfoType
   arrayType     _   = noInfoType
   listInnerType _   = noInfoType
   funcType      _ _ = noInfoType
@@ -100,10 +102,10 @@ instance ScopeSym CodeInfoProc where
 
 instance VariableSym CodeInfoProc where
   type Variable CodeInfoProc = ()
-  var'      _ _ _ = noInfo
-  constant' _ _ _ = noInfo
-  extVar    _ _ _ = noInfo
-  arrayElem _ _   = noInfo
+  var       _ _ = noInfo
+  constant  _ _ = noInfo
+  extVar  _ _ _ = noInfo
+  arrayElem _ _ = noInfo
 
 instance VariableElim CodeInfoProc where
   variableName _ = ""
@@ -126,6 +128,7 @@ instance Literal CodeInfoProc where
   litString _ = noInfo
   litArray  _ = executeList
   litList   _ = executeList
+  litSet   _ = executeList
 
 instance MathConstant CodeInfoProc where
   pi = noInfo
@@ -202,7 +205,10 @@ instance List CodeInfoProc where
   listAccess = execute2
   listSet    = execute3
   indexOf    = execute2
-  
+
+instance Set CodeInfoProc where
+ contains = execute2
+
 instance InternalList CodeInfoProc where
   listSlice' b e s _ vl = zoom lensMStoVS $ do
     mapM_ (fromMaybe noInfo) [b,e,s]
@@ -219,8 +225,8 @@ instance VectorType CodeInfoProc where
   vecType _ = noInfoType
 
 instance VectorDecl CodeInfoProc where
-  vecDec _ _ = noInfo
-  vecDecDef _ = zoom lensMStoVS . executeList
+  vecDec  _ _ _ = noInfo
+  vecDecDef _ _ = zoom lensMStoVS . executeList
 
 instance VectorThunk CodeInfoProc where
   vecThunk _ = noInfo
@@ -234,6 +240,7 @@ instance VectorExpression CodeInfoProc where
 instance StatementSym CodeInfoProc where
   type Statement CodeInfoProc = ()
   valStmt = zoom lensMStoVS . execute1
+  emptyStmt = noInfo
   multi    = executeList
   
 instance AssignStatement CodeInfoProc where
@@ -244,14 +251,16 @@ instance AssignStatement CodeInfoProc where
   (&--)  _ = noInfo
 
 instance DeclStatement CodeInfoProc where
-  varDec                 _ = noInfo
-  varDecDef              _ = zoom lensMStoVS . execute1
-  listDec              _ _ = noInfo
-  listDecDef             _ = zoom lensMStoVS . executeList
-  arrayDec             _ _ = noInfo
-  arrayDecDef            _ = zoom lensMStoVS . executeList
-  constDecDef            _ = zoom lensMStoVS . execute1
-  funcDecDef           _ _ = execute1
+  varDec               _ _ = noInfo
+  varDecDef            _ _ = zoom lensMStoVS . execute1
+  setDec               _ _ = noInfo
+  setDecDef            _ _ = zoom lensMStoVS . execute1
+  listDec            _ _ _ = noInfo
+  listDecDef           _ _ = zoom lensMStoVS . executeList
+  arrayDec           _ _ _ = noInfo
+  arrayDecDef          _ _ = zoom lensMStoVS . executeList
+  constDecDef          _ _ = zoom lensMStoVS . execute1
+  funcDecDef         _ _ _ = execute1
 
 instance IOStatement CodeInfoProc where
   print        = zoom lensMStoVS . execute1
@@ -319,6 +328,11 @@ instance ControlStatement CodeInfoProc where
 
   tryCatch _ cb = do
     _ <- cb
+    noInfo
+  
+  assert cond msg = do
+    _ <- zoom lensMStoVS cond
+    _ <- zoom lensMStoVS msg
     noInfo
 
 instance VisibilitySym CodeInfoProc where

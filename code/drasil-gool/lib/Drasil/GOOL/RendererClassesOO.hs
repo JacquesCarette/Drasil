@@ -69,6 +69,7 @@ class StateVarElim r where
 type ParentSpec = Doc
 
 class (BlockCommentSym r) => RenderClass r where
+  -- class name, visibility, parent, state variables, constructor(s), methods
   intClass :: Label -> r (Visibility r) -> r ParentSpec -> [IG.CSStateVar r] 
     -> [SMethod r] -> [SMethod r] -> IG.SClass r
     

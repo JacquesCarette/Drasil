@@ -194,17 +194,6 @@ genModuleProc :: (ProcProg r) => Name -> Description ->
   [GenState (Maybe (SMethod r))] -> GenState (Proc.SFile r)
 genModuleProc n desc = genModuleWithImportsProc n desc []
 
--- | Gets the current module and calls mkArg on the arguments.
--- Called by more specific function call generators ('fApp' and 'ctorCall').
-fCallProc :: (SharedProg r) => (Name -> [SValue r] -> NamedArgs r -> SValue r) ->
-  [SValue r] -> NamedArgs r -> GenState (SValue r)
-fCallProc f vl ns = do
-  g <- get
-  let cm = currentModule g
-      args = map mkArg vl
-      nargs = map (second mkArg) ns
-  return $ f cm args nargs
-
 -- | Function call generator.
 -- The first parameter (@m@) is the module where the function is defined.
 -- If @m@ is not the current module, use GOOL's function for calling functions from
@@ -218,7 +207,7 @@ fAppProc :: (SharedProg r) => Name -> Name -> VSType r -> [SValue r] ->
   NamedArgs r -> GenState (SValue r)
 fAppProc m s t vl ns = do
   g <- get
-  fCallProc (\cm args nargs ->
+  fCall (\cm args nargs ->
     if m /= cm then extFuncAppMixedArgs m s t args nargs else
       if Map.lookup s (eMap g) == Just cm then funcAppMixedArgs s t args nargs
       else error "fAppProc: Procedural languages do not support method calls.") vl ns

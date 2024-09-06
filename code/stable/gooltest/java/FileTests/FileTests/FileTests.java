@@ -24,6 +24,7 @@ public class FileTests {
         String fileLine;
         fileLine = fileToRead.nextLine();
         fileToRead.nextLine();
+        assert fileLine != "" : "First line should not be empty.";
         ArrayList<String> fileContents = new ArrayList<String>(0);
         
         while (fileToRead.hasNextLine()) {
@@ -31,6 +32,7 @@ public class FileTests {
         }
         
         System.out.println(fileContents);
+        assert fileContents.size() > 0 : "fileContents should not be empty.";
         fileToRead.close();
     }
 }

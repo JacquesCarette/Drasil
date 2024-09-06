@@ -32,7 +32,7 @@ import Drasil.PDController.GenSysDesc
        (gsdSysContextFig, gsdSysContextList, gsdSysContextP1, gsdSysContextP2,
         gsduserCharacteristics)
 import Drasil.PDController.IModel (instanceModels, imPD)
-import Drasil.PDController.IntroSection (introPara, introPurposeOfDoc,
+import Drasil.PDController.IntroSection (introPara, introPurposeOfDoc, externalLinkRef,
        introUserChar1, introUserChar2, introscopeOfReq)
 import Drasil.PDController.References (citations)
 import Drasil.PDController.Requirements (funcReqs, nonfuncReqs)
@@ -142,7 +142,11 @@ symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf
   conceptInstances
   ([] :: [Section])
   ([] :: [LabelledContent])
-  ([] :: [Reference])
+  allRefs
+
+-- | Holds all references and links used in the document.
+allRefs :: [Reference]
+allRefs = [externalLinkRef]
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbolsAll)

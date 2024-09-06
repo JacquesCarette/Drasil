@@ -27,12 +27,13 @@ module Drasil.GOOL.State (
   isOutputsDeclared, addException, addExceptions, getExceptions, addCall, 
   setMainDoc, getMainDoc, setVisibility, getVisibility, setCurrMainFunc,
   getCurrMainFunc, setThrowUsed, getThrowUsed, setErrorDefined, getErrorDefined,
-  addIter, getIter, resetIter, incrementLine, incrementWord, getLineIndex,
+  incrementLine, incrementWord, getLineIndex,
   getWordIndex,  resetIndices, useVarName, genVarName, genLoopIndex,
-  genVarNameIf, varNameAvailable
+  genVarNameIf, varNameAvailable, setVarScope, getVarScope
 ) where
 
-import Drasil.GOOL.AST (FileType(..), VisibilityTag(..), QualifiedName, qualName)
+import Drasil.GOOL.AST (FileType(..), VisibilityTag(..), ScopeTag(..),
+  ScopeData(..), sd, QualifiedName, qualName)
 import Drasil.GOOL.CodeAnalysis (Exception, ExceptionType, printExc, hasLoc)
 import Drasil.GOOL.CodeType (ClassName)
 
@@ -41,7 +42,7 @@ import Utils.Drasil (nubSort)
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set, _1, _2, both, at)
 import Control.Monad.State (State, modify, gets)
 import Data.Char (isDigit)
-import Data.List (nub, delete)
+import Data.List (nub)
 import Data.Foldable (foldl')
 import Data.Maybe (isNothing, fromMaybe)
 import Data.Map (Map)
@@ -110,6 +111,9 @@ data MethodState = MS {
   _currParameters :: [String], -- Used to get parameter names when generating 
                                -- function documentation
   _varNames :: Map String Int, -- Used to generate fresh variable names
+  
+  -- Only used for Julia
+  _varScopes :: Map String ScopeData, -- Used to keep track of a variable's scope from its declaration
 
   -- Only used for Java
   _outputsDeclared :: Bool, -- So Java doesn't redeclare outputs variable when using inOutCall
@@ -121,7 +125,6 @@ data MethodState = MS {
                           -- documentation to function in C++
   _currMainFunc :: Bool, -- Used by C++ to put documentation for the main
                         -- function in source instead of header file
-  _iterators :: [String],
 
   -- Only used for Swift
   _contentsIndices :: (Index, Index) -- Used to keep track of the current place
@@ -259,13 +262,14 @@ initialMS = MS {
   _currParameters = [],
   _varNames = Map.empty,
 
+  _varScopes = Map.fromList [("", sd Local)], -- Hack for multiAssign
+
   _outputsDeclared = False,
   _exceptions = [],
   _calls = [],
 
   _currVisibility  = Priv,
   _currMainFunc = False,
-  _iterators = [],
 
   _contentsIndices = (0,0)
 }
@@ -470,7 +474,7 @@ callMapTransClosure = over callMap tClosure
         traceCalls :: Map QualifiedName [QualifiedName] -> [QualifiedName] -> 
           [QualifiedName]
         traceCalls _ [] = []
-        traceCalls cm (c:cs) = nub $ c : traceCalls cm (nub $ cs ++ 
+        traceCalls cm (c:cs) = c : traceCalls cm (cs ++ 
           Map.findWithDefault [] c cm)
 
 updateMEMWithCalls :: GOOLState -> GOOLState
@@ -531,15 +535,6 @@ setErrorDefined = set (lensMStoGS . errorDefined) True
 getErrorDefined :: MS Bool
 getErrorDefined = gets (^. (lensMStoGS . errorDefined))
 
-addIter :: String -> MethodState -> MethodState
-addIter st = over iterators ([st]++)
-
-getIter :: MS [String]
-getIter = gets (^. iterators)
-
-resetIter :: String -> MethodState -> MethodState
-resetIter st = over iterators (delete st)
-
 incrementLine :: MethodState -> MethodState
 incrementLine = over (contentsIndices . _1) (+1)  . set (contentsIndices . _2) 0
 
@@ -595,3 +590,13 @@ bumpVarName (n,c) = do
   let suffix = maybe count (flip fmap count . max) c
   modify $ set (varNames . at n) $ Just $ maybe 0 (+1) suffix
   return $ maybe n ((n ++) . show) count
+
+setVarScope :: String -> ScopeData -> MethodState -> MethodState
+setVarScope n s = over varScopes (Map.insert n s)
+
+getVarScope :: String -> MS ScopeData
+getVarScope n = do
+  sMap <- gets (^. varScopes)
+  return $ case Map.lookup n sMap of
+    Nothing -> error $ "Variable with no declared scope: " ++ n
+    (Just scp) -> scp

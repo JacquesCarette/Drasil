@@ -5,7 +5,7 @@ module Language.Drasil.Expr.Class (
   square, half,
   oneHalf, oneThird,
   apply1, apply2,
-  m2x2, vec2D, dgnl2x2, rowVec, columnVec
+  m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet
 ) where
 
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
@@ -15,7 +15,7 @@ import Control.Lens ((^.))
 import Language.Drasil.Symbol
 import Language.Drasil.Expr.Lang
 import Language.Drasil.Literal.Lang
-import Language.Drasil.Space (DomainDesc(..), RTopology(..), RealInterval)
+import Language.Drasil.Space (DomainDesc(..), RTopology(..), RealInterval, Space)
 import qualified Language.Drasil.ModelExpr.Lang as M
 import qualified Language.Drasil.CodeExpr.Lang as C
 import Language.Drasil.Literal.Class (LiteralC(..))
@@ -64,6 +64,9 @@ apply2 f a b = apply f [sy a, sy b]
 m2x2 :: ExprC r => r -> r -> r -> r -> r
 m2x2 a b c d = matrix [[a,b],[c,d]]
 
+mkSet :: ExprC r => Space -> [r] -> r
+mkSet = set'
+
 -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
 vec2D :: ExprC r => r -> r -> r
 vec2D a b = matrix [[a],[b]]
@@ -90,7 +93,6 @@ class ExprC r where
   infixr 4 $=
   infixr 9 $&&
   infixr 9 $||
-  
   lit :: Literal -> r
 
   -- * Binary Operators
@@ -114,7 +116,10 @@ class ExprC r where
   ($=>), ($<=>) :: r -> r -> r
   
   ($&&), ($||) :: r -> r -> r
-  
+
+  -- | Smart constructor for set-theoretic membership relation. Added ' to avoid conflict.
+  in' :: r -> r -> r
+
   -- | Smart constructor for taking the absolute value of an expression.
   abs_ :: r -> r
   
@@ -174,13 +179,16 @@ class ExprC r where
   
   -- | Smart constructor for indexing.
   idx :: r -> r -> r
-  
+
+  -- | Smart constructor for indexOf. Finds the index of the first occurrence of a value in a list.
+  idxOf :: r -> r -> r
+
   -- | Smart constructor for the summation, product, and integral functions over an interval.
   defint, defsum, defprod :: Symbol -> r -> r -> r -> r
   
   -- | Smart constructor for 'real interval' membership.
   realInterval :: HasUID c => c -> RealInterval r r -> r
-  
+
   -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
   euclidean :: [r] -> r
   
@@ -204,6 +212,9 @@ class ExprC r where
   
   -- | Create a matrix.
   matrix :: [[r]] -> r
+
+  -- | Create a Set.
+  set' :: Space -> [r] -> r
 
   -- | Applies a given function with a list of parameters.
   apply :: (HasUID f, HasSymbol f) => f -> [r] -> r
@@ -273,7 +284,9 @@ instance ExprC Expr where
   a $&& b = AssocB And [a, b]
   -- | Smart constructor for the boolean /or/ operator.
   a $|| b = AssocB Or  [a, b]
-  
+
+  in' = ESBBinaryOp SContains
+
   -- | Smart constructor for taking the absolute value of an expression.
   abs_ = UnaryOp Abs
   
@@ -336,6 +349,7 @@ instance ExprC Expr where
   -- | Smart constructor for indexing.
   idx = LABinaryOp Index
   
+  idxOf = LABinaryOp IndexOf
   -- | Integrate over some expression with bounds (∫).
   defint v low high = Operator Add (BoundedDD v Continuous low high)
   
@@ -367,6 +381,7 @@ instance ExprC Expr where
   
   matrix = Matrix
 
+  set' = Set
   -- | Applies a given function with a list of parameters.
   apply f [] = sy f
   apply f ps = FCall (f ^. uid) ps
@@ -435,6 +450,8 @@ instance ExprC M.ModelExpr where
   -- | Smart constructor for the boolean /or/ operator.
   a $|| b = M.AssocB M.Or  [a, b]
 
+  in' = M.ESBBinaryOp M.SContains
+
   -- | Smart constructor for taking the absolute value of an expression.
   abs_ = M.UnaryOp M.Abs
 
@@ -497,6 +514,9 @@ instance ExprC M.ModelExpr where
   -- | Smart constructor for indexing.
   idx = M.LABinaryOp M.Index
 
+  -- | Smart constructor for indexing.
+  idxOf = M.LABinaryOp M.IndexOf
+
   -- | Integrate over some expression with bounds (∫).
   defint v low high = M.Operator M.Add (BoundedDD v Continuous low high)
 
@@ -528,6 +548,7 @@ instance ExprC M.ModelExpr where
 
   matrix = M.Matrix
 
+  set' = M.Set
   -- | Applies a given function with a list of parameters.
   apply f [] = sy f
   apply f ps = M.FCall (f ^. uid) ps
@@ -598,6 +619,8 @@ instance ExprC C.CodeExpr where
   -- | Smart constructor for the boolean /or/ operator.
   a $|| b = C.AssocB C.Or  [a, b]
   
+  in' = C.ESBBinaryOp C.SContains
+
   -- | Smart constructor for taking the absolute value of an expression.
   abs_ = C.UnaryOp C.Abs
   
@@ -660,6 +683,7 @@ instance ExprC C.CodeExpr where
   -- | Smart constructor for indexing.
   idx = C.LABinaryOp C.Index
   
+  idxOf = C.LABinaryOp C.IndexOf
   -- | Integrate over some expression with bounds (∫).
   defint v low high = C.Operator C.Add (BoundedDD v Continuous low high)
   
@@ -691,6 +715,7 @@ instance ExprC C.CodeExpr where
   
   matrix = C.Matrix
 
+  set' = C.Set
   -- | Applies a given function with a list of parameters.
   apply f [] = sy f
   apply f ps = C.FCall (f ^. uid) ps []

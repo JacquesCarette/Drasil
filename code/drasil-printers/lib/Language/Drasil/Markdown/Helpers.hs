@@ -61,10 +61,9 @@ reflinkURI ref txt = if ref == txt then ang ref
   else brackets txt <> parens ref
 
 -- | Helper for setting up figures
-image :: Doc -> Doc -> Doc
-image f c =  text "!" <> reflinkURI fp c $^$ bold c
-  where
-    fp = text $ "./assets/" ++ takeFileName (show f)
+image :: Doc -> Maybe Doc -> Doc
+image f Nothing = text "!" <> reflinkURI (text $ "./assets/" ++ takeFileName (show f)) (text "")
+image f (Just c) = text "!" <> reflinkURI (text $ "./assets/" ++ takeFileName (show f)) c $^$ bold (text "Figure: " <> c)
 
 -- | Helper for setting up captions
 caption :: Doc -> Doc

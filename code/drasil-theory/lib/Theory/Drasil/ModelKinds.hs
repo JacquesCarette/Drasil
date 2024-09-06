@@ -10,7 +10,7 @@ module Theory.Drasil.ModelKinds (
   newDEModel', deModel', equationalConstraints', equationalModel', equationalRealm', othModel',
   equationalModelU, equationalModelN, equationalRealmU, equationalRealmN,
   -- * Lenses
-  setMk, elimMk, lensMk,
+  setMk, elimMk, lensMk, getterMk,
   -- * Functions
   getEqModQds
   ) where
@@ -123,7 +123,7 @@ othModel' :: RelationConcept -> ModelKind e
 othModel' rc = MK (OthModel rc) (modelNs $ rc ^. uid) (rc ^. term)
 
 -- | Finds the 'UID' of the 'ModelKinds'.
-instance HasUID        (ModelKinds e) where uid     = lensMk uid uid uid uid uid
+instance HasUID        (ModelKinds e) where uid     = getterMk uid uid uid uid uid
 -- | Finds the term ('NP') of the 'ModelKinds'.
 instance NamedIdea     (ModelKinds e) where term    = lensMk term term term term term
 -- | Finds the idea of the 'ModelKinds'.
@@ -201,6 +201,17 @@ lensMk ld lr lcs lq lmd = lens g s
           g = elimMk ld lr lcs lq lmd
           s :: ModelKinds e -> a -> ModelKinds e
           s mk_ = setMk mk_ ld lr lcs lq lmd
+
+-- | Make a 'Getter' for 'ModelKinds'.
+getterMk :: forall e a.
+     Getter DifferentialModel a
+  -> Getter RelationConcept a 
+  -> Getter (ConstraintSet e) a 
+  -> Getter (QDefinition e) a 
+  -> Getter (MultiDefn e) a
+  -> Getter (ModelKinds e) a
+getterMk gd gr gcs gq gmd = to $ \modelKinds ->
+    elimMk gd gr gcs gq gmd modelKinds
 
 -- | Extract a list of 'QDefinition's from a list of 'ModelKinds'.
 getEqModQds :: [ModelKind e] -> [QDefinition e]

@@ -11,11 +11,11 @@ import Utils.Drasil (blank, indent)
 import Drasil.GOOL.CodeType (CodeType(..))
 import Drasil.GOOL.InterfaceCommon (SharedProg, Label, Library, VSType,
   VSFunction, SVariable, SValue, MSStatement, MixedCtorCall, BodySym(..),
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), locVar, constant,
-  VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
-  litZero, MathConstant(..), VariableValue(..), CommandLineArgs(..),
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VisibilitySym(..),
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
+  MathConstant(..), VariableValue(..), CommandLineArgs(..),
   NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, extFuncApp, List(..), InternalList(..),
+  ValueExpression(..), funcApp, extFuncApp, List(..), Set(..), InternalList(..),
   ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
   VectorExpression(..), ThunkAssign(..), StatementSym(..), AssignStatement(..),
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..),
@@ -38,7 +38,8 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim,
   MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
-  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim)
+  RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
+  ScopeElim(..))
 import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block, 
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
@@ -57,7 +58,7 @@ import qualified Drasil.GOOL.LanguageRenderer as R (sqrt, fabs, log10,
   classVar, listSetFunc, castObj, dynamic, break, continue, addComments, 
   commentedMod, commentedItem, var)
 import Drasil.GOOL.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal, 
-  mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, 
+  mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, inPrec, 
   unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkStaticVar)
 import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
@@ -105,7 +106,7 @@ import Data.List (intercalate, sort)
 import Data.Char (toUpper, isUpper, isLower)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
-  vcat, colon, brackets, isEmpty, quotes)
+  vcat, colon, brackets, isEmpty, quotes, comma, braces)
 import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 
 pyExt :: String
@@ -202,6 +203,7 @@ instance TypeSym PythonCode where
   infile = typeFromData InFile "" empty
   outfile = typeFromData OutFile "" empty
   listType t' = t' >>=(\t -> typeFromData (List (getType t)) "" empty)
+  setType t' = t' >>=(\t -> typeFromData (Set (getType t)) "" empty)
   arrayType = listType
   listInnerType = G.listInnerType
   funcType = CP.funcType
@@ -268,10 +270,13 @@ instance ScopeSym PythonCode where
   mainFn = global
   local = G.local
 
+instance ScopeElim PythonCode where
+  scopeData = unPC
+
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
-  var' n _     = G.var n
-  constant' n  = var' $ toConstName n
+  var          = G.var
+  constant n   = var $ toConstName n
   extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
   arrayElem i  = G.arrayElem (litInt i)
 
@@ -317,6 +322,7 @@ instance Literal PythonCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray brackets
+  litSet = CP.litArray braces
   litList = litArray
 
 instance MathConstant PythonCode where
@@ -449,6 +455,9 @@ instance List PythonCode where
   listSet = G.listSet
   indexOf = CP.indexOf pyIndex
 
+instance Set PythonCode where
+  contains a b = typeBinExpr (inPrec pyIn) bool b a
+
 instance InternalList PythonCode where
   listSlice' b e s vn vo = pyListSlice vn vo (getVal b) (getVal e) (getVal s)
     where getVal = fromMaybe (mkStateVal void empty)
@@ -473,7 +482,7 @@ instance ThunkAssign PythonCode where
   thunkAssign v t = do
     iName <- genLoopIndex
     let
-      i = locVar iName int
+      i = var iName int
       dim = fmap pure $ t >>= commonThunkDim (fmap unPC . listSize . fmap pure) . unPC
       loopInit = zoom lensMStoVS (fmap unPC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
@@ -518,9 +527,6 @@ instance InternalControlStmt PythonCode where
 instance RenderStatement PythonCode where
   stmt = G.stmt
   loopStmt = G.loopStmt
-  
-  emptyStmt = G.emptyStmt
-
   stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim PythonCode where
@@ -531,6 +537,7 @@ instance StatementSym PythonCode where
   -- Terminator determines how statements end
   type Statement PythonCode = (Doc, Terminator)
   valStmt = G.valStmt Empty
+  emptyStmt = G.emptyStmt
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement PythonCode where
@@ -541,28 +548,30 @@ instance AssignStatement PythonCode where
   (&--) = M.decrement1
 
 instance DeclStatement PythonCode where
-  varDec v = CP.varDecDef v Nothing
-  varDecDef v e = CP.varDecDef v (Just e)
+  varDec v scp = CP.varDecDef v scp Nothing
+  varDecDef v scp e = CP.varDecDef v scp (Just e)
+  setDec = varDec
+  setDecDef = varDecDef
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
-  constDecDef v e = do
+  constDecDef v scp e = do
     v' <- zoom lensMStoVS v
     let n = toConstName $ variableName v'
-        newConst = constant n (pure (variableType v')) local -- TODO: get scope from v
+        newConst = constant n (pure (variableType v'))
     available <- varNameAvailable n
     if available
-      then varDecDef newConst e
+      then varDecDef newConst scp e
       else error "Cannot safely capitalize constant."
   funcDecDef = CP.funcDecDef
 
 instance OODeclStatement PythonCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
-  extObjDecNew lib v vs = do
+  extObjDecNew lib v scp vs = do
     modify (addModuleImport lib)
-    varDecDef v (extNewObj lib (onStateValue variableType v) vs)
+    varDecDef v scp (extNewObj lib (onStateValue variableType v) vs)
 
 instance IOStatement PythonCode where
   print      = pyOut False Nothing printFunc
@@ -627,6 +636,11 @@ instance ControlStatement PythonCode where
     mkStmtNoEnd (pyWhile v b)
 
   tryCatch = G.tryCatch pyTryCatch
+
+  assert condition errorMessage = do
+      cond <- zoom lensMStoVS condition
+      errMsg <- zoom lensMStoVS errorMessage
+      mkStmtNoEnd (pyAssert cond errMsg)
 
 instance ObserverPattern PythonCode where
   notifyObservers = M.notifyObservers'
@@ -822,7 +836,7 @@ pyInputFunc = text "input()" -- raw_input() for < Python 3.0
 pyPrintFunc = text printLabel
 
 pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyClose, 
-  pySplit, pyRange, pyRstrip, pyMath :: String
+  pySplit, pyRange, pyRstrip, pyMath, pyIn :: String
 pyListSize = "len"
 pyIndex = "index"
 pyInsert = "insert"
@@ -834,6 +848,7 @@ pySplit = "split"
 pyRange = "range"
 pyRstrip = "rstrip"
 pyMath = "math"
+pyIn = "in"
 
 pyDef, pyLambdaDec, pyElseIf, pyRaise, pyExcept :: Doc
 pyDef = text "def"
@@ -984,6 +999,9 @@ pyTryCatch tryB catchB = vcat [
   indent $ RC.body tryB,
   pyExcept <+> exceptionObj' <> colon,
   indent $ RC.body catchB]
+
+pyAssert :: (CommonRenderSym r) => r (Value r) -> r (Value r) -> Doc
+pyAssert condition message = text "assert" <+> RC.value condition <> comma <+> RC.value message
 
 pyListSlice :: (CommonRenderSym r, Monad r) => SVariable r -> SValue r -> SValue r -> 
   SValue r -> SValue r -> MS (r Doc)

@@ -81,7 +81,7 @@ printLO (EqnBlock contents)              = nbformat mathEqn
 printLO (Table _ rows r _ _)            = nbformat empty $$ makeTable rows (pSpec r)
 printLO (Definition dt ssPs l)          = nbformat (text "<br>") $$ makeDefn dt ssPs (pSpec l)
 printLO (List t)                        = nbformat empty $$ makeList t False
-printLO (Figure r c f wp)               = makeFigure (pSpec r) (pSpec c) (text f) wp
+printLO (Figure r c f wp)               = makeFigure (pSpec r) (fmap pSpec c) (text f) wp
 printLO (Bib bib)                       = makeBib bib
 printLO Graph{}                         = empty 
 printLO CodeBlock {}                    = empty
@@ -101,7 +101,7 @@ printLO' (EqnBlock contents)              = nbformat mathEqn
 printLO' (Table _ rows r _ _)            = markdownCell $ makeTable rows (pSpec r)
 printLO' Definition {}                   = empty
 printLO' (List t)                        = markdownCell $ makeList t False
-printLO' (Figure r c f wp)               = markdownCell $ makeFigure (pSpec r) (pSpec c) (text f) wp
+printLO' (Figure r c f wp)               = markdownCell $ makeFigure (pSpec r) (fmap pSpec c) (text f) wp
 printLO' (Bib bib)                       = markdownCell $ makeBib bib
 printLO' Graph{}                         = empty 
 printLO' (CodeBlock contents)            = codeCell $ codeformat $ cSpec contents
@@ -145,6 +145,7 @@ pExpr (Int i)        = text $ show i
 pExpr (Str s)        = doubleQuotes $ text s
 pExpr (Div n d)      = mkDiv "frac" (pExpr n) (pExpr d)
 pExpr (Row l)        = hcat $ map pExpr l
+pExpr (Set l)        = hcat $ map pExpr l
 pExpr (Ident s)      = text s
 pExpr (Label s)      = text s
 pExpr (Spec s)       = text $ unPH $ L.special s
@@ -164,57 +165,60 @@ pExpr e              = printMath $ toMath $ TeX.pExpr e
 
 -- TODO: edit all operations in markdown format
 pOps :: Ops -> String
-pOps IsIn     = "&thinsp;&isin;&thinsp;"
-pOps Integer  = "&#8484;"
-pOps Rational = "&#8474;"
-pOps Real     = "&#8477;"
-pOps Natural  = "&#8469;"
-pOps Boolean  = "&#120121;"
-pOps Comma    = ","
-pOps Prime    = "&prime;"
-pOps Log      = "log"
-pOps Ln       = "ln"
-pOps Sin      = "sin"
-pOps Cos      = "cos"
-pOps Tan      = "tan"
-pOps Sec      = "sec"
-pOps Csc      = "csc"
-pOps Cot      = "cot"
-pOps Arcsin   = "arcsin"
-pOps Arccos   = "arccos"
-pOps Arctan   = "arctan"
-pOps Not      = "&not;"
-pOps Dim      = "dim"
-pOps Exp      = "e"
-pOps Neg      = "-"
-pOps Cross    = "&#10799;"
-pOps VAdd     = " + "
-pOps VSub     = " - "
-pOps Dot      = "&sdot;"
-pOps Scale    = "" -- same as Mul
-pOps Eq       = " = " -- with spaces?
-pOps NEq      = "&ne;"
-pOps Lt       = "&thinsp;&lt;&thinsp;" --thin spaces make these more readable
-pOps Gt       = "&thinsp;&gt;&thinsp;"
-pOps LEq      = "&thinsp;&le;&thinsp;"
-pOps GEq      = "&thinsp;&ge;&thinsp;"
-pOps Impl     = " &rArr; "
-pOps Iff      = " &hArr; "
-pOps Subt     = " - "
-pOps And      = " &and; "
-pOps Or       = " &or; "
-pOps Add      = " + "
-pOps Mul      = ""
-pOps Summ     = "&sum"
-pOps Inte     = "&int;"
-pOps Prod     = "&prod;"
-pOps Point    = "."
-pOps Perc     = "%"
-pOps LArrow   = " &larr; "
-pOps RArrow   = " &rarr; "
-pOps ForAll   = " ForAll "
-pOps Partial  = "&part;"
-
+pOps IsIn       = "&thinsp;&isin;&thinsp;"
+pOps Integer    = "&#8484;"
+pOps Rational   = "&#8474;"
+pOps Real       = "&#8477;"
+pOps Natural    = "&#8469;"
+pOps Boolean    = "&#120121;"
+pOps Comma      = ","
+pOps Prime      = "&prime;"
+pOps Log        = "log"
+pOps Ln         = "ln"
+pOps Sin        = "sin"
+pOps Cos        = "cos"
+pOps Tan        = "tan"
+pOps Sec        = "sec"
+pOps Csc        = "csc"
+pOps Cot        = "cot"
+pOps Arcsin     = "arcsin"
+pOps Arccos     = "arccos"
+pOps Arctan     = "arctan"
+pOps Not        = "&not;"
+pOps Dim        = "dim"
+pOps Exp        = "e"
+pOps Neg        = "-"
+pOps Cross      = "&#10799;"
+pOps VAdd       = " + "
+pOps VSub       = " - "
+pOps Dot        = "&sdot;"
+pOps Scale      = "" -- same as Mul
+pOps Eq         = " = " -- with spaces?
+pOps NEq        = "&ne;"
+pOps Lt         = "&thinsp;&lt;&thinsp;" --thin spaces make these more readable
+pOps Gt         = "&thinsp;&gt;&thinsp;"
+pOps LEq        = "&thinsp;&le;&thinsp;"
+pOps GEq        = "&thinsp;&ge;&thinsp;"
+pOps Impl       = " &rArr; "
+pOps Iff        = " &hArr; "
+pOps Subt       = " - "
+pOps And        = " &and; "
+pOps Or         = " &or; "
+pOps Add        = " + "
+pOps Mul        = ""
+pOps Summ       = "&sum"
+pOps Inte       = "&int;"
+pOps Prod       = "&prod;"
+pOps Point      = "."
+pOps Perc       = "%"
+pOps LArrow     = " &larr; "
+pOps RArrow     = " &rarr; "
+pOps ForAll     = " ForAll "
+pOps Partial    = "&part;"
+pOps SAdd       = " + "
+pOps SRemove    = " - "
+pOps SContains  = " in "
+pOps SUnion     = " and "
 
 -- | Renders Markdown table, called by 'printLO'
 makeTable :: [[Spec]] -> Doc -> Doc
@@ -286,7 +290,7 @@ sItem (Flat s)     = pSpec s
 sItem (Nested s l) = vcat [pSpec s, makeList l False]
 
 -- | Renders figures in HTML
-makeFigure :: Doc -> Doc -> Doc -> L.MaxWidthPercent -> Doc
+makeFigure :: Doc -> Maybe Doc -> Doc -> L.MaxWidthPercent -> Doc
 makeFigure r c f wp = refID r $$ image f c wp
 
 -- | Renders assumptions, requirements, likely changes

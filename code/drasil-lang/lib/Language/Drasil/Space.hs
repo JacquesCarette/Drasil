@@ -37,11 +37,10 @@ data Space =
   | Char
   | String
   | Vect Space -- TODO: Length for vectors?
+  | Set Space
   | Matrix Int Int Space
   | Array Space
-  | Actor String
-  | DiscreteD [Double]
-  | DiscreteS [String] --ex. let Meal = {"breakfast", "lunch", "dinner"}
+  | Actor String 
   | Function (NE.NonEmpty Primitive) Primitive
   | Void
   deriving (Eq, Show)
@@ -86,9 +85,10 @@ getActorName :: Space -> String
 getActorName (Actor n) = n
 getActorName _         = error "getActorName called on non-actor space"
 
--- | Gets the inner 'Space' of a vector.
+-- | Gets the inner 'Space' of a vector or set.
 getInnerSpace :: Space -> Space
 getInnerSpace (Vect s) = s
+getInnerSpace (Set s) = s
 getInnerSpace _        = error "getInnerSpace called on non-vector space"
 
 -- | Is this Space a basic numeric space?
@@ -100,11 +100,10 @@ isBasicNumSpace Natural      = True
 isBasicNumSpace Boolean      = False
 isBasicNumSpace Char         = False
 isBasicNumSpace String       = False
+isBasicNumSpace Set {}       = False
 isBasicNumSpace Vect {}      = False
 isBasicNumSpace Matrix {}    = False
 isBasicNumSpace Array {}     = False
 isBasicNumSpace Actor {}     = False
-isBasicNumSpace DiscreteD {} = False
-isBasicNumSpace DiscreteS {} = False
 isBasicNumSpace Function {}  = False
 isBasicNumSpace Void         = False

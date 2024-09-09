@@ -69,8 +69,8 @@ transMotDeriv = mkDerivName (phrase transMot)
 
 transMotDerivStmts :: [Sentence]
 transMotDerivStmts = [
-    foldlSent [S "We may calculate the total acceleration of rigid body", 
-      P lJ, S "by calculating the derivative of it's velocity with respect to time", fromSource linAccDD],
+    foldlSent [S "We may calculate the total acceleration" `S.of_` S "rigid body", 
+      P lJ, S "by calculating the derivative" `S.of_` S "it's velocity with respect to time", fromSource linAccDD],
     S "Performing the derivative, we obtain:"
   ]
 
@@ -106,8 +106,8 @@ rotMotDeriv = mkDerivName (phrase rotMot)
 
 rotMotDerivStmts :: [Sentence]
 rotMotDerivStmts = [
-    foldlSent [S "We may calculate the total angular acceleration of rigid body", 
-      P lJ, S "by calculating the derivative of its angular velocity with respect to time", fromSource angAccelDD],
+    foldlSent [S "We may calculate the total angular acceleration" `S.of_` S "rigid body", 
+      P lJ, S "by calculating the derivative" `S.of_` S "its angular velocity with respect to time", fromSource angAccelDD],
     S "Performing the derivative, we obtain:"
   ]
 

@@ -69,9 +69,9 @@ accelGravityQD :: ModelQDef
 accelGravityQD = mkQuantDef' QP.gravitationalAccel (nounPhraseSP "Acceleration due to gravity") accelGravityExpr
 
 accelGravityDesc :: Sentence
-accelGravityDesc = foldlSent [S "If one of the", plural QPP.mass, S "is much larger than the other" `sC`
+accelGravityDesc = foldlSent [S "If one of the", plural QPP.mass `S.is` S "much larger than the other" `sC`
   (S "it is convenient to define a gravitational field around the larger mass as shown above" !.),
-  S "The negative sign in the equation indicates that the", phrase QP.force, S "is an attractive",
+  S "The negative sign" `S.inThe` S "equation indicates that the", phrase QP.force, S "is an attractive",
   phrase QP.force]
 
 accelGravityExpr :: PExpr
@@ -80,7 +80,7 @@ accelGravityExpr = neg ((sy QP.gravitationalConst $* sy mLarger $/
 
 accelGravitySrc :: Reference
 accelGravitySrc = makeURI "accelGravitySrc" "https://en.wikipedia.org/wiki/Gravitational_acceleration" $
-  shortname' $ S "Definition of Gravitational Acceleration"
+  shortname' $ S "Definition" `S.of_` S "Gravitational Acceleration"
 
 accelGravityDeriv :: Derivation
 accelGravityDeriv = mkDerivName (phrase QP.gravitationalAccel)
@@ -92,7 +92,8 @@ accelGravityDerivSentences = map foldlSentCol [accelGravityDerivSentence1,
  accelGravityDerivSentence5]
 
 accelGravityDerivSentence1 :: [Sentence]
-accelGravityDerivSentence1 = [S "From", namedRef newtonLUG (S "Newton's law of universal gravitation") `sC` S "we have"]
+accelGravityDerivSentence1 = [S "From", 
+        namedRef newtonLUG (S "Newton's law" `S.of_` S "universal gravitation") `sC` S "we have"]
 
 
 accelGravityDerivSentence2 :: [Sentence]
@@ -102,7 +103,7 @@ accelGravityDerivSentence2 = [(S "The above equation governs the gravitational a
         S "the massive body",
         (S "exerts on the lighter body" !.), S "Further" `sC` S "suppose that the", phrase cartesian `S.is`
         S "chosen such that this", phrase QP.force, S "acts on a", phrase line,
-        (S "which lies along one of the principal axes" !.),
+        (S "which lies along one" `S.ofThe` S "principal axes" !.),
         S "Then our", getTandS dVect, S "for the x or y axes is"]
 
 accelGravityDerivSentence3 :: [Sentence]

@@ -49,8 +49,8 @@ conservationOfMomentRel = UnaryOp $ Summation Nothing
 
 conservationOfMomentDesc :: Sentence
 conservationOfMomentDesc = foldlSent [S "In an isolated system,",
-  S "where the sum of external", phrase impulseS, S "acting on the system is zero,",
-  S "the total momentum of the bodies is constant (conserved)"
+  S "where the sum of external", phrase impulseS, S "acting" `S.onThe` S "system is zero,",
+  S "the total momentum" `S.ofThe` S "bodies is constant (conserved)"
   ]
 
 --[mass, initialVelocity, finalVelocity]
@@ -60,12 +60,12 @@ conservationOfMomentDeriv = foldlSent [S "When bodies collide, they exert",
   S "an equal (force) on each other in opposite directions" +:+.
   S "This is Newton's third law:",
   S "(expr1)",
-  S "The objects collide with each other for the exact same amount of", 
+  S "The objects collide with each other" `S.for` S "the exact same amount of", 
   phrase time, getS time,
-  S "The above equation is equal to the", phrase impulseS, 
+  S "The above equation is equal" `S.toThe` phrase impulseS, 
   S "(GD1 ref)",
   S "(expr2)",
-  S "The", phrase impulseS, S "is equal to the change in momentum:",
+  S "The", phrase impulseS, S "is equal" `S.toThe` S "change in momentum:",
   S "(expr3)",
   S "Substituting 2*ref to 2* into 1*ref to 1* yields:",
   S "(expr4)",
@@ -126,7 +126,7 @@ relativeVelocityInCollisionsDesc :: Sentence
 relativeVelocityInCollisionsDesc = foldlSent [S "In a collision, the",
   phrase velocity `S.of_` S "rigid body A", 
   S "colliding with another body B relative to that",
-  S "body, (symbol vAB), is the difference between the", plural velocity, 
+  S "body, (symbol vAB)," `S.is` "the difference between the", plural velocity, 
   S "of A", S "and B at point P"
   ]
 
@@ -145,9 +145,9 @@ coefficientOfRestitutionDesc :: Sentence
 coefficientOfRestitutionDesc = foldlSent [S "The", phrase restitutionCoef, 
   getS restitutionCoef, S "is",
   S "a unitless, dimensionless quantity that determines the elasticity of a",
-  S "collision between two bodies. (symbol/expr)[CR = 1] results in an elastic",
-  S "collision, while (symbol/expr)[CR < 1] results in an inelastic collision,",
-  S "and (symbol/expr)[CR = 0] results in a totally inelastic collision"
+  S "collision between two bodies. (symbol/expr)[CR = 1] results" `S.in_` S "an elastic",
+  S "collision, while (symbol/expr)[CR < 1] results" `S.in_` S "an inelastic collision,",
+  S "and (symbol/expr)[CR = 0] results" `S.in_` S "a totally inelastic collision"
   ]
 
 --[restitutionCoef, normCollisionVect, initRelativeVelocityAB, finalRelativeVelocityAB]
@@ -164,7 +164,7 @@ torqueGDef = makeRC "torque"
 
 torqueDesc :: Sentence
 torqueDesc = foldlSent [S "The", phrase torque, getS torque, 
-  S "on a body measures the", S "the tendency of a", phrase force, 
+  S "on a body measures the", S "the tendency" `S.ofA` phrase force, 
   S "to rotate the body around an axis or pivot"
   ]
 

@@ -124,7 +124,7 @@ relativeVelocityInCollisionsGDef = makeRC "relVeloInColl"
 
 relativeVelocityInCollisionsDesc :: Sentence
 relativeVelocityInCollisionsDesc = foldlSent [S "In a collision, the",
-  phrase velocity, S "of", S "rigid body A", 
+  phrase velocity `S.of_` S "rigid body A", 
   S "colliding with another body B relative to that",
   S "body, (symbol vAB), is the difference between the", plural velocity, 
   S "of A", S "and B at point P"

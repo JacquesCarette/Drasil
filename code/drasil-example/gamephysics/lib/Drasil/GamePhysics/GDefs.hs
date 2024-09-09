@@ -50,7 +50,7 @@ conservationOfMomentRel = UnaryOp $ Summation Nothing
 conservationOfMomentDesc :: Sentence
 conservationOfMomentDesc = foldlSent [S "In an isolated system,",
   S "where the sum of external", phrase impulseS, S "acting on the system is zero,",
-  S "the total momentum of the bodies is constant (conserved)"
+  S "the total momentum of the bodies" `S.is` S "constant (conserved)"
   ]
 
 --[mass, initialVelocity, finalVelocity]
@@ -62,10 +62,10 @@ conservationOfMomentDeriv = foldlSent [S "When bodies collide, they exert",
   S "(expr1)",
   S "The objects collide with each other for the exact same amount of", 
   phrase time, getS time,
-  S "The above equation is equal to the", phrase impulseS, 
+  S "The above equation is equal" `S.toThe` phrase impulseS, 
   S "(GD1 ref)",
   S "(expr2)",
-  S "The", phrase impulseS, S "is equal to the change in momentum:",
+  S "The", phrase impulseS, S "is equal" `S.toThe` S "change in momentum:",
   S "(expr3)",
   S "Substituting 2*ref to 2* into 1*ref to 1* yields:",
   S "(expr4)",
@@ -124,9 +124,9 @@ relativeVelocityInCollisionsGDef = makeRC "relVeloInColl"
 
 relativeVelocityInCollisionsDesc :: Sentence
 relativeVelocityInCollisionsDesc = foldlSent [S "In a collision, the",
-  phrase velocity, S "of", S "rigid body A", 
+  phrase velocity `S.of_` S "rigid body A", 
   S "colliding with another body B relative to that",
-  S "body, (symbol vAB), is the difference between the", plural velocity, 
+  S "body, (symbol vAB)," `S.is` S "the difference between the", plural velocity, 
   S "of A", S "and B at point P"
   ]
 

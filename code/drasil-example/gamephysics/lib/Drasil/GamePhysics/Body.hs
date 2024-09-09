@@ -231,7 +231,7 @@ scope = foldlSent_ [phraseNP (the physicalSim) `S.of_` getAcc twoD,
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
   [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
-   S "A circle represents an entity external to the", phrase software
+   S "A circle represents an entity external" `S.toThe` phrase software
    `sC` phraseNP (the user), S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself", sParen (short gamePhysics) +:+. EmptyS,
    S "Arrows are used to show the data flow between the", phraseNP (system
@@ -249,7 +249,7 @@ sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_
 
 sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
-  physical) +:+ S "state of the" +:+ phrase simulation `sC`
+  physical) +:+ S "state" `S.ofThe` phrase simulation `sC`
   plural CP.rigidBody +:+ S "present, and" +:+ plural QP.force +:+.
   S "applied to them",
   S "Ensure application programming" +:+ phrase interface +:+
@@ -267,7 +267,7 @@ sysCtxSysResp = [S "Determine if the" +:+ pluralNP (input_ `and_PS`
     S "within the" +:+ phrase simulation +:+ S "at each" +:+
     phrase simulation +:+. S "step",
   S "Provide updated" +:+ phrase physical +:+ S "state of all" +:+
-    plural CP.rigidBody +:+ S "at the end of a" +:+ phrase simulation +:+.
+    plural CP.rigidBody +:+ S "at the end" `S.ofA` phrase simulation +:+.
     S "step"]
 
 sysCtxResp :: [Sentence]
@@ -306,7 +306,7 @@ userCharacteristicsIntro = foldlSP
 probDescIntro :: Sentence
 probDescIntro = foldlSent_
   [purp, S "in a", foldlList Comma List $ map S ["simple", "lightweight", "fast", "portable"],
-  S "manner" `sC` S "which will allow for the production of higher quality" +:+. plural product_,
+  S "manner" `sC` S "which will allow" `S.for` S "the production of higher quality" +:+. plural product_,
   S "Creating a gaming", phrase physLib, S "is a difficult" +:+. phrase task, titleize' game,
   S "need", plural physLib, S "that simulate", plural object, S "acting under various", phrase physical,
   plural condition `sC` S "while simultaneously being fast and efficient enough to work in soft",

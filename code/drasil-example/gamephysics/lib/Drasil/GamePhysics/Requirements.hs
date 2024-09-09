@@ -104,8 +104,8 @@ nonfuncReqs = [performance, correctness, usability, understandability, maintaina
 
 performance :: ConceptInstance
 performance = cic "performance" (foldlSent [
-  S "The execution time for collision detection and collision resolution shall be", 
-  S "comparable to an existing 2D physics library on the market (e.g. Pymunk)"
+  S "The execution time" `S.for` S "collision detection" `S.and_` S "collision resolution shall be", 
+  S "comparable to an existing 2D physics library" `S.onThe` S "market (e.g. Pymunk)"
   ]) "Performance" nonFuncReqDom
 
 correctness :: ConceptInstance
@@ -124,14 +124,14 @@ usability = cic "usability" (foldlSent [
   S "Software shall be easy to learn" `S.and_` S "use. Usability shall be measured by", 
   S "how long it takes a user to learn how to use the library to create a small program", 
   S "to simulate the movement" `S.of_` S "2 bodies over time in space. Creating a program", 
-  S "should take no less than 30 to 60 minutes for an intermediate to experienced programmer"
+  S "should take no less than 30 to 60 minutes" `S.for` S "an intermediate to experienced programmer"
   ]) "Usability" nonFuncReqDom
 
 understandability :: ConceptInstance
 understandability = cic "understandability" (foldlSent [
   (S "Users" `S.of_` S "Tamias2D shall be able to learn the software with ease" !.), 
   (S "Users shall be able to easily create a small program using the library" !.), 
-  S "Creating a small program to simulate the movement of 2 bodies" `S.in_` 
+  S "Creating a small program to simulate the movement" `S.of_` S "2 bodies" `S.in_` 
   S "space should take no less that 60 minutes"
   ]) "Understandability" nonFuncReqDom
 

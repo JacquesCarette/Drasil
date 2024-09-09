@@ -5,15 +5,15 @@
  -->
 <!-- Title: G Pages: 1 -->
 <svg width="431pt" height="288pt"
- viewBox="0.00 0.00 430.69 288.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ viewBox="0.00 0.00 430.53 288.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="graph0" class="graph" transform="scale(0.4 0.4) rotate(0) translate(4 712.67)">
 <title>G</title>
-<polygon fill="white" stroke="transparent" points="-4,4 -4,-712.67 1067.73,-712.67 1067.73,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-712.67 1067.33,-712.67 1067.33,4 -4,4"/>
 <!-- u0 -->
 <g id="node1" class="node">
 <title>u0</title>
-<ellipse fill="#bbffbb" stroke="black" cx="525.29" cy="-638" rx="63.89" ry="18"/>
-<text text-anchor="middle" x="525.29" y="-634.3" font-family="Times,serif" font-size="14.00">Utils.Drasil</text>
+<ellipse fill="#bbffbb" stroke="black" cx="494.29" cy="-638" rx="63.89" ry="18"/>
+<text text-anchor="middle" x="494.29" y="-634.3" font-family="Times,serif" font-size="14.00">Utils.Drasil</text>
 </g>
 <!-- u5 -->
 <g id="node3" class="node">
@@ -24,68 +24,68 @@
 <!-- u0&#45;&gt;u5 -->
 <g id="edge5" class="edge">
 <title>u0&#45;&gt;u5</title>
-<path fill="none" stroke="black" d="M501.08,-621.23C428.06,-573.68 209.86,-431.57 125.81,-376.83"/>
-<polygon fill="black" stroke="black" points="127.69,-373.88 117.4,-371.36 123.87,-379.75 127.69,-373.88"/>
+<path fill="none" stroke="black" d="M471.53,-621.03C403.72,-573.46 202.92,-432.6 124.33,-377.48"/>
+<polygon fill="black" stroke="black" points="126.01,-374.37 115.81,-371.5 121.99,-380.1 126.01,-374.37"/>
 </g>
 <!-- u4 -->
 <g id="node4" class="node">
 <title>u4</title>
-<ellipse fill="#ffffbb" stroke="black" cx="304.29" cy="-354" rx="102.08" ry="18"/>
-<text text-anchor="middle" x="304.29" y="-350.3" font-family="Times,serif" font-size="14.00">Utils.Drasil.English</text>
+<ellipse fill="#ffffbb" stroke="black" cx="289.29" cy="-354" rx="86.38" ry="18"/>
+<text text-anchor="middle" x="289.29" y="-350.3" font-family="Times,serif" font-size="14.00">Utils.Drasil.CSV</text>
 </g>
 <!-- u0&#45;&gt;u4 -->
 <g id="edge4" class="edge">
 <title>u0&#45;&gt;u4</title>
-<path fill="none" stroke="black" d="M512.13,-620.2C474.83,-572.61 368.27,-436.64 323.98,-380.12"/>
-<polygon fill="black" stroke="black" points="326.59,-377.78 317.66,-372.06 321.08,-382.09 326.59,-377.78"/>
+<path fill="none" stroke="black" d="M482.08,-620.2C447.55,-572.71 349.05,-437.2 307.81,-380.47"/>
+<polygon fill="black" stroke="black" points="310.41,-378.1 301.7,-372.06 304.75,-382.21 310.41,-378.1"/>
 </g>
 <!-- u3 -->
 <g id="node5" class="node">
 <title>u3</title>
-<ellipse fill="#ffffbb" stroke="black" cx="525.29" cy="-354" rx="100.98" ry="18"/>
-<text text-anchor="middle" x="525.29" y="-350.3" font-family="Times,serif" font-size="14.00">Utils.Drasil.Strings</text>
+<ellipse fill="#ffffbb" stroke="black" cx="494.29" cy="-354" rx="100.98" ry="18"/>
+<text text-anchor="middle" x="494.29" y="-350.3" font-family="Times,serif" font-size="14.00">Utils.Drasil.Strings</text>
 </g>
 <!-- u0&#45;&gt;u3 -->
 <g id="edge3" class="edge">
 <title>u0&#45;&gt;u3</title>
-<path fill="none" stroke="black" d="M525.29,-619.78C525.29,-572.49 525.29,-440.26 525.29,-382.54"/>
-<polygon fill="black" stroke="black" points="528.79,-382.35 525.29,-372.35 521.79,-382.35 528.79,-382.35"/>
+<path fill="none" stroke="black" d="M494.29,-619.78C494.29,-572.49 494.29,-440.26 494.29,-382.54"/>
+<polygon fill="black" stroke="black" points="497.79,-382.35 494.29,-372.35 490.79,-382.35 497.79,-382.35"/>
 </g>
 <!-- u2 -->
 <g id="node6" class="node">
 <title>u2</title>
-<ellipse fill="#ffffbb" stroke="black" cx="758.29" cy="-354" rx="114.28" ry="18"/>
-<text text-anchor="middle" x="758.29" y="-350.3" font-family="Times,serif" font-size="14.00">Utils.Drasil.Document</text>
+<ellipse fill="#ffffbb" stroke="black" cx="727.29" cy="-354" rx="114.28" ry="18"/>
+<text text-anchor="middle" x="727.29" y="-350.3" font-family="Times,serif" font-size="14.00">Utils.Drasil.Document</text>
 </g>
 <!-- u0&#45;&gt;u2 -->
 <g id="edge2" class="edge">
 <title>u0&#45;&gt;u2</title>
-<path fill="none" stroke="black" d="M539.17,-620.2C578.49,-572.61 690.84,-436.64 737.54,-380.12"/>
-<polygon fill="black" stroke="black" points="740.52,-382 744.19,-372.06 735.12,-377.54 740.52,-382"/>
+<path fill="none" stroke="black" d="M508.17,-620.2C547.49,-572.61 659.84,-436.64 706.54,-380.12"/>
+<polygon fill="black" stroke="black" points="709.52,-382 713.19,-372.06 704.12,-377.54 709.52,-382"/>
 </g>
 <!-- u1 -->
 <g id="node7" class="node">
 <title>u1</title>
-<ellipse fill="#ffffbb" stroke="black" cx="977.29" cy="-354" rx="86.38" ry="18"/>
-<text text-anchor="middle" x="977.29" y="-350.3" font-family="Times,serif" font-size="14.00">Utils.Drasil.CSV</text>
+<ellipse fill="#ffffbb" stroke="black" cx="961.29" cy="-354" rx="102.08" ry="18"/>
+<text text-anchor="middle" x="961.29" y="-350.3" font-family="Times,serif" font-size="14.00">Utils.Drasil.English</text>
 </g>
 <!-- u0&#45;&gt;u1 -->
 <g id="edge1" class="edge">
 <title>u0&#45;&gt;u1</title>
-<path fill="none" stroke="black" d="M550.24,-621.44C626.28,-573.99 855.31,-431.1 942.8,-376.52"/>
-<polygon fill="black" stroke="black" points="944.67,-379.48 951.3,-371.21 940.97,-373.54 944.67,-379.48"/>
+<path fill="none" stroke="black" d="M520.06,-621.44C598.54,-574.05 834.7,-431.44 925.34,-376.71"/>
+<polygon fill="black" stroke="black" points="927.4,-379.56 934.15,-371.39 923.78,-373.56 927.4,-379.56"/>
 </g>
 <!-- u6 -->
 <g id="node2" class="node">
 <title>u6</title>
-<ellipse fill="#ffffbb" stroke="black" cx="525.29" cy="-71" rx="89.08" ry="18"/>
-<text text-anchor="middle" x="525.29" y="-67.3" font-family="Times,serif" font-size="14.00">Utils.Drasil.Lists</text>
+<ellipse fill="#ffffbb" stroke="black" cx="494.29" cy="-71" rx="89.08" ry="18"/>
+<text text-anchor="middle" x="494.29" y="-67.3" font-family="Times,serif" font-size="14.00">Utils.Drasil.Lists</text>
 </g>
 <!-- u3&#45;&gt;u6 -->
 <g id="edge6" class="edge">
 <title>u3&#45;&gt;u6</title>
-<path fill="none" stroke="black" d="M525.29,-335.85C525.29,-288.72 525.29,-156.96 525.29,-99.44"/>
-<polygon fill="black" stroke="black" points="528.79,-99.29 525.29,-89.29 521.79,-99.29 528.79,-99.29"/>
+<path fill="none" stroke="black" d="M494.29,-335.85C494.29,-288.72 494.29,-156.96 494.29,-99.44"/>
+<polygon fill="black" stroke="black" points="497.79,-99.29 494.29,-89.29 490.79,-99.29 497.79,-99.29"/>
 </g>
 </g>
 </svg>

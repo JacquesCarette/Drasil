@@ -97,7 +97,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">intro</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RefTab
 </span><span class="hs-identifier hs-var">TUnits</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[TSIntro] -&gt; RefTab
 </span><span class="hs-identifier hs-var">tsymb</span></span><span> </span><span class="annot"><span class="annottext">[TSIntro]
-</span><a href="#local-6989586621679069426"><span class="hs-identifier hs-var">tableOfSymbols</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">RefTab
+</span><a href="#local-6989586621679069475"><span class="hs-identifier hs-var">tableOfSymbols</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">RefTab
 </span><span class="hs-identifier hs-var">TAandA</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-64"></span><span>  </span><span class="annot"><span class="annottext">IntroSec -&gt; DocSection
 </span><span class="hs-identifier hs-var">IntroSec</span></span><span> </span><span class="annot"><span class="annottext">(IntroSec -&gt; DocSection) -&gt; IntroSec -&gt; DocSection
@@ -295,8 +295,8 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="Drasil.GamePhysics.Concepts.html#gamePhysics"><span class="hs-identifier hs-var">gamePhysics</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-97"></span><span>    </span><span class="annot"><span class="annottext">DocSection
 </span><span class="hs-identifier hs-var">Bibliography</span></span><span class="hs-special">]</span><span>
-</span><span id="line-98"></span><span>      </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679069426"><span class="annot"><span class="annottext">tableOfSymbols :: [TSIntro]
-</span><a href="#local-6989586621679069426"><span class="hs-identifier hs-var hs-var">tableOfSymbols</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TSIntro
+</span><span id="line-98"></span><span>      </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679069475"><span class="annot"><span class="annottext">tableOfSymbols :: [TSIntro]
+</span><a href="#local-6989586621679069475"><span class="hs-identifier hs-var hs-var">tableOfSymbols</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TSIntro
 </span><span class="hs-identifier hs-var">TSPurpose</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[TConvention] -&gt; TSIntro
 </span><span class="hs-identifier hs-var">TypogConvention</span></span><span class="hs-special">[</span><span class="annot"><span class="annottext">Emphasis -&gt; TConvention
 </span><span class="hs-identifier hs-var">Vector</span></span><span> </span><span class="annot"><span class="annottext">Emphasis
@@ -352,7 +352,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SimpleQDef -&gt; [SimpleQDef] -&gt; Block SimpleQDef
 forall a. a -&gt; [a] -&gt; Block a
 </span><span class="hs-operator hs-var">`Parallel`</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[SimpleQDef]
-</span><a href="#local-6989586621679069520"><span class="hs-identifier hs-var">qDefs</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679069569"><span class="hs-identifier hs-var">qDefs</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-119"></span><span>  </span><span class="annot"><span class="annottext">_constraints :: [UncertQ]
 </span><span class="hs-identifier hs-var">_constraints</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[UncertQ]
 </span><a href="Drasil.GamePhysics.Unitals.html#inputConstraints"><span class="hs-identifier hs-var">inputConstraints</span></a></span><span class="hs-special">,</span><span>
@@ -368,8 +368,8 @@ forall a. a -&gt; [a] -&gt; Block a
 </span><span class="hs-identifier hs-var">refdb</span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ReferenceDB
 </span><a href="Drasil.GamePhysics.Body.html#refDB"><span class="hs-identifier hs-var">refDB</span></a></span><span>
 </span><span id="line-124"></span><span class="hs-special">}</span><span>
-</span><span id="line-125"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679069520"><span class="annot"><span class="annottext">qDefs :: [SimpleQDef]
-</span><a href="#local-6989586621679069520"><span class="hs-identifier hs-var hs-var">qDefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(DataDefinition -&gt; Maybe SimpleQDef)
+</span><span id="line-125"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679069569"><span class="annot"><span class="annottext">qDefs :: [SimpleQDef]
+</span><a href="#local-6989586621679069569"><span class="hs-identifier hs-var hs-var">qDefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(DataDefinition -&gt; Maybe SimpleQDef)
 -&gt; [DataDefinition] -&gt; [SimpleQDef]
 forall a b. (a -&gt; Maybe b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">mapMaybe</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Maybe SimpleQDef
@@ -875,7 +875,8 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">sysCont</span></span><span class="hs-special">,</span><span>
 </span><span id="line-234"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;A circle represents an entity external to the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span class="hs-string">&quot;A circle represents an entity external&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.toThe`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">software</span></span><span>
@@ -976,8 +977,8 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-identifier hs-var">physical</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;state of the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span class="hs-string">&quot;state&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">simulation</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -1125,8 +1126,8 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">CP.rigidBody</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;at the end of a&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span class="hs-string">&quot;at the end&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofA`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">simulation</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -1253,7 +1254,10 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-string">&quot;manner&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;which will allow for the production of higher quality&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-string">&quot;which will allow&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.for`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;the production of higher quality&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict

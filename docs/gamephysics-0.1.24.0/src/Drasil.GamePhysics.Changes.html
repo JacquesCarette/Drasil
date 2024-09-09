@@ -176,11 +176,17 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span id="line-54"></span><span id="unlikelyChangesStmt1"><span class="annot"><span class="annottext">unlikelyChangesStmt1 :: Sentence
 </span><a href="Drasil.GamePhysics.Changes.html#unlikelyChangesStmt1"><span class="hs-identifier hs-var hs-var">unlikelyChangesStmt1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;The goal of the system is to simulate the interactions of rigid bodies&quot;</span></span><span> </span><span class="hs-operator">!.</span><span class="hs-special">)</span><span>
+</span><span class="hs-string">&quot;The goal of the system&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;to simulate the interactions of rigid bodies&quot;</span></span><span> </span><span class="hs-operator">!.</span><span class="hs-special">)</span><span>
 </span><span id="line-55"></span><span id="unlikelyChangesStmt2"><span class="annot"><span class="annottext">unlikelyChangesStmt2 :: Sentence
 </span><a href="Drasil.GamePhysics.Changes.html#unlikelyChangesStmt2"><span class="hs-identifier hs-var hs-var">unlikelyChangesStmt2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;There will always be a source of input data external to the software&quot;</span></span><span> </span><span class="hs-operator">!.</span><span class="hs-special">)</span><span>
+</span><span class="hs-string">&quot;There will always be a source of input data external&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.toThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;software&quot;</span></span><span> </span><span class="hs-operator">!.</span><span class="hs-special">)</span><span>
 </span><span id="line-56"></span><span id="unlikelyChangesStmt3"><span class="annot"><span class="annottext">unlikelyChangesStmt3 :: Sentence
 </span><a href="Drasil.GamePhysics.Changes.html#unlikelyChangesStmt3"><span class="hs-identifier hs-var hs-var">unlikelyChangesStmt3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -188,7 +194,10 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span id="line-57"></span><span id="unlikelyChangesStmt4"><span class="annot"><span class="annottext">unlikelyChangesStmt4 :: Sentence
 </span><a href="Drasil.GamePhysics.Changes.html#unlikelyChangesStmt4"><span class="hs-identifier hs-var hs-var">unlikelyChangesStmt4</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;All objects are rigid bodies&quot;</span></span><span> </span><span class="hs-operator">!.</span><span class="hs-special">)</span><span>
+</span><span class="hs-string">&quot;All objects&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.are`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;rigid bodies&quot;</span></span><span> </span><span class="hs-operator">!.</span><span class="hs-special">)</span><span>
 </span><span id="line-58"></span><span>
 </span><span id="line-59"></span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#ucSRB"><span class="hs-identifier hs-type">ucSRB</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#ucEI"><span class="hs-identifier hs-type">ucEI</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#ucCCS"><span class="hs-identifier hs-type">ucCCS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Changes.html#ucORB"><span class="hs-identifier hs-type">ucORB</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
 </span><span id="line-60"></span><span>

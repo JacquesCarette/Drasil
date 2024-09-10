@@ -146,8 +146,10 @@ genPackage unRepr = do
       as = case codeSpec g of CodeSpec {authors = a} -> map name a
       cfp = configFiles $ codeSpec g
       db = sysinfodb $ codeSpec g
-      prps = show $ sentenceDoc db Implementation OneLine
-        (foldlSent $ purpose $ codeSpec g)
+      -- prps = show $ sentenceDoc db Implementation OneLine
+      --   (foldlSent $ purpose $ codeSpec g)
+      prps = show $ sentenceDoc db Implementation OneLine 
+        (foldlSent $ sysInfo ^. purpose)  
       bckgrnd = show $ sentenceDoc db Implementation OneLine
         (foldlSent $ background $ codeSpec g)
       mtvtn = show $ sentenceDoc db Implementation OneLine

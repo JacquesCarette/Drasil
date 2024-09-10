@@ -6,6 +6,8 @@ import Language.Drasil hiding (None, new)
 import Language.Drasil.Display (Symbol(Variable))
 import Database.Drasil
 import SysInfo.Drasil hiding (sysinfodb)
+import SysInfo.Drasil (SystemInformation, _purpose)
+
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
@@ -16,6 +18,7 @@ import Language.Drasil.CodeExpr.Development (expr, eNamesRI, eDep)
 import Language.Drasil.Chunk.CodeBase
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 
+--import SysInfo.Drasil
 import Utils.Drasil (subsetOf)
 
 import Control.Lens ((^.))
@@ -43,14 +46,6 @@ data CodeSpec where
   pName :: Name,
   -- | Authors.
   authors :: [a],
-  -- | Purpose.
-  purpose :: Purpose,
-  -- | Example Background.
-  background :: Background,
-  -- | Example Scope.
-  scope :: Scope,
-  -- | Example Motivation.
-  motivation :: Motivation,
   -- | All inputs.
   inputs :: [Input],
   -- | Explicit inputs (values to be supplied by a file).
@@ -74,7 +69,9 @@ data CodeSpec where
   -- automatically define.
   mods :: [Mod],  -- medium hack
   -- | The database of all chunks used in the problem.
-  sysinfodb :: ChunkDB
+  sysinfodb :: ChunkDB,
+  -- | Reference to the system information.
+  sysInfo :: SystemInformation
   } -> CodeSpec
 
 -- | Maps constants to their respective 'CodeDefinition'.
@@ -98,51 +95,47 @@ mapODE (Just ode) = map odeDef $ odeInfo ode
 -- | Defines a 'CodeSpec' based on the 'SystemInformation', 'Choices', and 'Mod's
 -- defined by the user.
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
-codeSpec SI {_sys         = sys
-           , _authors     = as
-           , _purpose     = ps
-           , _background  = bk
-           , _scope       = scp
-           , _motivation  = mtvtn
-           , _instModels  = ims
-           , _datadefs    = ddefs
-           , _configFiles = cfp
-           , _inputs      = ins
-           , _outputs     = outs
-           , _constraints = cs
-           , _constants   = cnsts
-           , _sysinfodb   = db} chs ms =
-  let n = programName sys
+codeSpec sysInfo chs ms =
+  let SI {_sys         = sys
+        , _authors     = as
+        , _purpose     = ps
+        , _background  = bk
+        , _scope       = scp
+        , _motivation  = mtvtn
+        , _instModels  = ims
+        , _datadefs    = ddefs
+        , _configFiles = cfp
+        , _inputs      = ins
+        , _outputs     = outs
+        , _constraints = cs
+        , _constants   = cnsts
+        , _sysinfodb   = db} = sysInfo
+      n = programName sys
       inputs' = map quantvar ins
-      const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
-        cnsts)
+      const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid)) cnsts)
       derived = map qtov $ getDerivedInputs ddefs inputs' const' db
       rels = (map qtoc (getEqModQdsFromIm ims ++ mapMaybe qdEFromDD ddefs) \\ derived)
         ++ mapODE (getODE $ extLibs chs)
-      -- TODO: When we have better DEModels, we should be deriving our ODE information
-      --       directly from the instance models (ims) instead of directly from the choices.
       outs' = map quantvar outs
       allInputs = nub $ inputs' ++ map quantvar derived
       exOrder = getExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
-  in  CodeSpec {
-        pName = n,
-        authors = as,
-        purpose = ps,
-        background = bk,
-        scope = scp,
-        motivation  = mtvtn,
-        inputs = allInputs,
-        extInputs = inputs',
-        derivedInputs = derived,
-        outputs = outs',
-        configFiles = cfp,
-        execOrder = exOrder,
-        cMap = constraintMap cs,
-        constants = const',
-        constMap = assocToMap const',
-        mods = ms,
-        sysinfodb = db
-      }
+  in CodeSpec {
+       pName = n,
+       authors = as,
+       inputs = allInputs,
+       extInputs = inputs',
+       derivedInputs = derived,
+       outputs = outs',
+       configFiles = cfp,
+       execOrder = exOrder,
+       cMap = constraintMap cs,
+       constants = const',
+       constMap = assocToMap const',
+       mods = ms,
+       sysinfodb = db,
+       sysInfo = sysInfo  -- Reference to SystemInformation
+     }
+
 
 -- medium hacks ---
 

@@ -32,7 +32,7 @@ import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
   Visibility(..), DataInfo(..), Constraints(..), choicesSent, DocConfig(..),
   LogConfig(..), OptionalFeatures(..), InternalConcept(..))
-import Language.Drasil.CodeSpec (CodeSpec(..), getODE)
+import Language.Drasil.CodeSpec (CodeSpec(..), getODE, sysInfo)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
 
 import Drasil.GOOL (OOProg, VisibilityTag(..),
@@ -40,6 +40,7 @@ import Drasil.GOOL (OOProg, VisibilityTag(..),
 import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
+import SysInfo.Drasil hiding (sysinfodb)
 
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing,
   getCurrentDirectory)
@@ -149,13 +150,13 @@ genPackage unRepr = do
       -- prps = show $ sentenceDoc db Implementation OneLine
       --   (foldlSent $ purpose $ codeSpec g)
       prps = show $ sentenceDoc db Implementation OneLine 
-        (foldlSent $ sysInfo ^. purpose)  
+        (foldlSent $ codeSpec g ^. sysInfo .purpose)  
       bckgrnd = show $ sentenceDoc db Implementation OneLine
-        (foldlSent $ background $ codeSpec g)
+        (foldlSent $ codeSpec g ^. sysInfo . background)
       mtvtn = show $ sentenceDoc db Implementation OneLine
-        (foldlSent $ motivation $ codeSpec g)
+        (foldlSent $ codeSpec g ^. sysInfo . motivation)
       scp = show $ sentenceDoc db Implementation OneLine
-        (foldlSent $ scope $ codeSpec g)
+        (foldlSent $ codeSpec g ^. sysInfo . scope)
   i <- genSampleInput
   d <- genDoxConfig s
   rm <- genReadMe ReadMeInfo {
@@ -182,7 +183,7 @@ genProgram = do
   g <- get
   ms <- chooseModules $ modular g
   let n = pName $ codeSpec g
-  let p = show $ sentenceDoc (sysinfodb $ codeSpec g) Implementation OneLine $ foldlSent $ purpose $ codeSpec g
+  let p = show $ sentenceDoc (sysinfodb $ codeSpec g) Implementation OneLine $ foldlSent $ codeSpec g ^. sysInfo .purpose
   return $ OO.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice
@@ -261,13 +262,13 @@ genPackageProc unRepr = do
       cfp = configFiles $ codeSpec g
       db = sysinfodb $ codeSpec g
       prps = show $ sentenceDoc db Implementation OneLine
-        (foldlSent $ purpose $ codeSpec g)
+        (foldlSent $ codeSpec g ^. sysInfo .purpose)
       bckgrnd = show $ sentenceDoc db Implementation OneLine
-        (foldlSent $ background $ codeSpec g)
+        (foldlSent $ codeSpec g ^. sysInfo . background)
       mtvtn = show $ sentenceDoc db Implementation OneLine
-        (foldlSent $ motivation $ codeSpec g)
+        (foldlSent $ codeSpec g ^. sysInfo . motivation)
       scp = show $ sentenceDoc db Implementation OneLine
-        (foldlSent $ scope $ codeSpec g)
+        (foldlSent $ codeSpec g ^. sysInfo . scope)
   i <- genSampleInput
   d <- genDoxConfig s
   rm <- genReadMe ReadMeInfo {
@@ -294,7 +295,7 @@ genProgramProc = do
   g <- get
   ms <- chooseModulesProc $ modular g
   let n = pName $ codeSpec g
-  let p = show $ sentenceDoc (sysinfodb $ codeSpec g) Implementation OneLine $ foldlSent $ purpose $ codeSpec g
+  let p = show $ sentenceDoc (sysinfodb $ codeSpec g) Implementation OneLine $ foldlSent $ codeSpec g ^. sysInfo .purpose
   return $ Proc.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice

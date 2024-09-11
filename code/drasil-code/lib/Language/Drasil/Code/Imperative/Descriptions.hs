@@ -15,7 +15,7 @@ import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   genICName)
 import Language.Drasil.Choices (ImplementationType(..), Structure(..), 
   InternalConcept(..))
-import Language.Drasil.CodeSpec (CodeSpec(..))
+import Language.Drasil.CodeSpec (CodeSpec(..), sysInfo)
 import Language.Drasil.Mod (Description)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
 
@@ -24,6 +24,7 @@ import qualified Data.Map as Map (filter, lookup, null)
 import Data.Maybe (mapMaybe)
 import Control.Lens ((^.))
 import Control.Monad.State (get)
+import SysInfo.Drasil hiding (sysinfodb)
 
 -- | Returns a module description based on a list of descriptions of what is
 -- contained in the module.
@@ -40,7 +41,7 @@ unmodularDesc = do
       implTypeStr Program = "program"
       implTypeStr Library = "library"
   return $ show $ sentenceDoc (sysinfodb spec) Implementation OneLine $ capSent $
-    foldlSent ([S "a", S (implTypeStr (implType g)), S "to"] ++ purpose spec)
+    foldlSent ([S "a", S (implTypeStr (implType g)), S "to"] ++ codeSpec g ^. sysInfo .purpose)
 
 -- | Returns description of what is contained in the Input Parameters module.
 -- If user chooses the 'Bundled' input parameter, this module will include the structure for holding the

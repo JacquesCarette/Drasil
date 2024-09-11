@@ -95,10 +95,6 @@ mapODE (Just ode) = map odeDef $ odeInfo ode
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 codeSpec si@SI{ _sys         = sys
               , _authors     = as
-              , _purpose     = ps
-              , _background  = bk
-              , _scope       = scp
-              , _motivation  = mtvtn
               , _instModels  = ims
               , _datadefs    = ddefs
               , _configFiles = cfp

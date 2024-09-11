@@ -240,7 +240,7 @@ sysCtxUsrResp prog = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
   phrase problem +:+ S "input to the" +:+. phrase software]
 
 sysCtxSysResp :: [Sentence]
-sysCtxSysResp = [(S "Detect data type mismatch, such as a string of characters") +:+
+sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +:+
   phrase input_ +:+. (S "instead" `S.ofA` S "floating point number"),
   S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+.
   pluralNP (physical `and_` softwareConstraint),

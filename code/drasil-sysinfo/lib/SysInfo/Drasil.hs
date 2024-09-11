@@ -1,6 +1,8 @@
 module SysInfo.Drasil (
  -- * System Information
    SystemInformation(..), Block(Parallel), sysinfodb
+ -- * Lenses
+ , purpose, background, scope, motivation
  -- * Reference Database
  , ReferenceDB, RefMap, Purpose, Background, Scope, Motivation
  , citeDB, rdb, simpleMap, citationDB, conceptDB

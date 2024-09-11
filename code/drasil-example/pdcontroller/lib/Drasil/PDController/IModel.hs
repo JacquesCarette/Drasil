@@ -66,7 +66,7 @@ derivStmt1 :: Sentence
 derivStmt1
   = foldlSent
       [atStartNP (the processVariable), eS' qdProcessVariableFD, S "in a", phrase pidCL +:+
-         S "is the product of the", phrase processError, fromSource ddErrSig `sC`
+         S "is the product" `S.ofThe` phrase processError, fromSource ddErrSig `sC`
          phrase controlVariable, fromSource ddCtrlVar `sC` EmptyS
          `S.andThe` phrase powerPlant, fromSource gdPowerPlant]
 
@@ -107,7 +107,7 @@ derivStmt4
       [atStartNP (the setPoint), eS' qdSetPointTD, S "is a step function and a constant" +:+.
          fromSource aSP,
        S "Therefore the",
-         S "differential of the set point is zero. Hence the equation",
+         S "differential" `S.ofThe` S "set point" `S.is` S "zero. Hence the equation",
          S "reduces to"]
 
 derivEqn4 :: ModelExpr

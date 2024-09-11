@@ -75,7 +75,7 @@ invLaplaceDesc
   = foldlSent
       [(S "Inverse Laplace Transform of F(S)" !.),
        S "The Inverse Laplace transforms are",
-         S "typically inferred from a pre-computed table of Laplace Transforms",
+         S "typically inferred from a pre-computed table" `S.of_` S "Laplace Transforms",
          sParen (refS laplaceWiki)]
 
 --------

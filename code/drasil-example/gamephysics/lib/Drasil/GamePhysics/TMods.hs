@@ -40,7 +40,7 @@ newtonTLExpr = neg (sy force_2)
 newtonTLNote :: Sentence
 newtonTLNote = foldlSent [(S "Every action has an equal and opposite reaction" !.),
   S "In other words, the", phrase force, ch force_1, S "exerted on the second",
-  phrase rigidBody, S "by the first is equal in magnitude and in the opposite direction" `S.toThe`
+  phrase rigidBody, S "by the first is equal in magnitude and" `S.inThe` S "opposite direction" `S.toThe`
   phrase force, ch force_2, S "exerted on the first", phrase rigidBody, S "by the second"]
 
 -- T3 : Newton's law of universal gravitation --
@@ -71,7 +71,7 @@ newtonForceQuant = mkQuant' "force" (nounPhraseSP "Newton's law of universal gra
 newtonLUGNotes :: [Sentence]
 newtonLUGNotes = [foldlSent
   [S "Two", plural rigidBody `S.inThe` S "universe attract each other with a",
-   getTandS force, S "that is directly proportional to the product of their",
+   getTandS force, S "that is directly proportional" `S.toThe` S "product of their",
    plural mass `sC` ch mass_1 `S.and_` ch mass_2 `sC` EmptyS `S.and_`
    S "inversely proportional" `S.toThe` getTandS sqrDist, S "between them"]]
 

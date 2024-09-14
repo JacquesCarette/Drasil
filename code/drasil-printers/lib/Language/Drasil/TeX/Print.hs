@@ -66,7 +66,7 @@ lo (EqnBlock contents)    _ = makeEquation contents
 lo (Table _ rows r bl t)  _ = toText $ makeTable rows (spec r) bl (spec t)
 lo (Definition _ ssPs l) sm = toText $ makeDefn sm ssPs $ spec l
 lo (List l)               _ = toText $ makeList l
-lo (Figure r c f wp)      _ = toText $ makeFigure (spec r) (spec c) f wp
+lo (Figure r c f wp)      _ = toText $ makeFigure (spec r) (maybe empty spec c) f wp
 lo (Bib bib)             sm = toText $ makeBib sm bib
 lo (Graph ps w h c l)    _  = toText $ makeGraph
   (map (bimap spec spec) ps)
@@ -109,6 +109,7 @@ pExpr (Case ps)      = mkEnv "cases" ($+$) (cases ps vpunctuate dbs pExpr)
 pExpr (Mtx a)        = mkEnv "bmatrix" ($+$) (pMatrix a vpunctuate dbs pExpr)
 pExpr (Row [x])      = br $ pExpr x -- FIXME: Hack needed for symbols with multiple subscripts, etc.
 pExpr (Row l)        = foldl1 (<>) (map pExpr l)
+pExpr (Set l)        = foldl1 (<>) (map pExpr l)
 pExpr (Ident s@[_])  = pure . text . escapeIdentSymbols $ s
 pExpr (Ident s)      = commandD "mathit" (pure . text . escapeIdentSymbols $ s)
 pExpr (Label s)      = command "text" s
@@ -165,6 +166,10 @@ pOps Iff      = commandD "iff" empty
 pOps Subt     = pure hyph
 pOps And      = commandD "land" empty
 pOps Or       = commandD "lor" empty
+pOps SAdd     = pure pls
+pOps SRemove  = pure hyph
+pOps SContains = commandD " in " empty
+pOps SUnion   = commandD "+" empty
 pOps Add      = pure pls
 pOps Mul      = pure $ text "\\,"
 pOps Summ     = command0 "displaystyle" <> command0 "sum"
@@ -345,9 +350,10 @@ makeDefTable sm ps l = mkEnvArgBr "tabular" (col rr colAwidth ++ col (rr ++ "\\a
 
 -- | Helper that makes the rows of a definition table.
 makeDRows :: PrintingInformation -> [(String,[LayoutObj])] -> D
-makeDRows _  []         = error "No fields to create Defn table"
-makeDRows sm ls    = foldl1 (%%) $ map (\(f, d) -> dBoilerplate %%  pure (text (f ++ " & ")) <> print sm d) ls
-  where dBoilerplate = pure $ dbs <+> text "\\midrule"
+makeDRows _  []      = error "No fields to create Defn table"
+makeDRows sm ls      = foldl1 (%%) $ map (\(f, d) -> 
+  pure (dbs <+> text "\\midrule") %% 
+  pure (text (f ++ " & ")) <> print sm d) ls
 
 -----------------------------------------------------------------
 ------------------ EQUATION PRINTING------------------------
@@ -355,7 +361,7 @@ makeDRows sm ls    = foldl1 (%%) $ map (\(f, d) -> dBoilerplate %%  pure (text (
 
 -- | Prints an equation.
 makeEquation :: Spec -> D
-makeEquation contents = toEqn (spec contents)
+makeEquation contents = toEqn $ spec contents
 
   --TODO: Add auto-generated labels -> Need to be able to ensure labeling based
   --  on chunk (i.e. "eq:h_g" for h_g = ...

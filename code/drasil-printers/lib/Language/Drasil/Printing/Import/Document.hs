@@ -4,7 +4,6 @@ module Language.Drasil.Printing.Import.Document where
 import Data.Map (fromList)
 
 import Language.Drasil hiding (neg, sec, symbol, isIn, codeExpr)
-import Language.Drasil.Development (showUID)
 
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
@@ -139,9 +138,10 @@ layLabelled sm x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
 layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"]
   [T.EqnBlock (P.E (modelExpr c sm))]
   (P.S $ getAdd $ getRefAdd x)
-layLabelled sm x@(LblC _ (Figure c f wp))     = T.Figure
+layLabelled sm x@(LblC _ (Figure c f wp hc))     = T.Figure
   (P.S $ getAdd $ getRefAdd x)
-  (spec sm c) f wp
+  (if hc == WithCaption then Just (spec sm c) else Nothing)
+  f wp
 layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph
   (map (bimap (spec sm) (spec sm)) ps) w h (spec sm t)
   (P.S $ getAdd $ getRefAdd x)
@@ -168,7 +168,8 @@ layUnlabelled sm (DerivBlock h d) = T.HDiv ["subsubsubsection"]
   (T.Header 3 (spec sm h) refr : map (layUnlabelled sm) d) refr
   where refr = P.S "nolabel1"
 layUnlabelled sm (Enumeration cs) = T.List $ makeL sm cs
-layUnlabelled sm (Figure c f wp)  = T.Figure (P.S "nolabel2") (spec sm c) f wp
+layUnlabelled sm (Figure c f wp hc)  = T.Figure (P.S "nolabel2") 
+  (if hc == WithCaption then Just (spec sm c) else Nothing) f wp
 layUnlabelled sm (Graph ps w h t) = T.Graph (map (bimap (spec sm) (spec sm)) ps)
                                w h (spec sm t) (P.S "nolabel6")
 layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")

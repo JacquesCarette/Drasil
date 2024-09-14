@@ -1,12 +1,14 @@
 {-# LANGUAGE TemplateHaskell, TupleSections #-}
 module Language.Drasil.Code.Imperative.DrasilState (
   GenState, DrasilState(..), designLog, MatchedSpaces, ModExportMap,
-  ClassDefinitionMap, modExportMap, clsDefMap, addToDesignLog, addLoggedSpace,
-  genICName
+  ClassDefinitionMap, ScopeType(..), modExportMap, clsDefMap, addToDesignLog,
+  addLoggedSpace, genICName
 ) where
 
 import Language.Drasil
 import Drasil.GOOL (VisibilityTag(..), CodeType)
+
+import Data.Containers.ListUtils (nubOrd)
 
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
@@ -37,6 +39,9 @@ type ModExportMap = Map String String
 
 -- | Variable/function name maps to class name.
 type ClassDefinitionMap = Map String String
+
+-- | Variable scope
+data ScopeType = Local | Global | MainFn
 
 -- | Abbreviation used throughout generator.
 type GenState = State DrasilState
@@ -77,7 +82,8 @@ data DrasilState = DrasilState {
   currentModule :: String,
   currentClass :: String,
   _designLog :: Doc,
-  _loggedSpaces :: [(Space, CodeType)]
+  _loggedSpaces :: [(Space, CodeType)],
+  currentScope :: ScopeType
 }
 makeLenses ''DrasilState
 
@@ -103,7 +109,7 @@ modExportMap cs@CodeSpec {
   constants = cns
   } chs@Choices {
     architecture = m
-  } ms = fromList $ nub $ concatMap mpair ms
+  } ms = fromList $ nubOrd $ concatMap mpair ms
     ++ getExpInput prn chs ins
     ++ getExpConstants prn chs cns
     ++ getExpDerived prn chs ds

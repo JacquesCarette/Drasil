@@ -32,9 +32,9 @@ flightDurUnc = uq flightDur defaultUncrt
 flightDur, landPos, launAngle, launSpeed, offset, targPos :: ConstrConcept
 flightDur = constrainedNRV' (uc       C.flightDur (subStr lT "flight") Real second) [gtZeroConstr]
 landPos   = constrainedNRV' (uc       C.landPos   (subStr lP "land"  ) Real metre ) [gtZeroConstr]
-launAngle = constrained'    (ucStaged C.launAngle (autoStage lTheta  ) Real radian) [physc $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)] (sy pi_ $/ exactDbl 4)
+launAngle = constrained'    (ucStaged C.launAngle (autoStage lTheta  ) Real radian) [physRange $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)] (sy pi_ $/ exactDbl 4)
 launSpeed = constrained'    (uc       C.launSpeed (subStr lV "launch") Real velU  ) [gtZeroConstr] (exactDbl 100)
-offset    = constrainedNRV' (uc       C.offset    (subStr lD "offset") Real metre ) [physc $ UpFrom (Exc, neg $ sy targPos)]
+offset    = constrainedNRV' (uc       C.offset    (subStr lD "offset") Real metre ) [physRange $ UpFrom (Exc, neg $ sy targPos)]
 targPos   = constrained'    (uc       C.targPos   (subStr lP "target") Real metre ) [gtZeroConstr] (exactDbl 1000)
 
 ---

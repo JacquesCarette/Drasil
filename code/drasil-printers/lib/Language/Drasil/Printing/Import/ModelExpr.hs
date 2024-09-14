@@ -6,7 +6,7 @@ module Language.Drasil.Printing.Import.ModelExpr where -- TODO: tighten exports
 -- TODO: tighten exports
 import Language.Drasil (UID, DomainDesc(..), RealInterval(..), Inclusive(..),
   RTopology(..), LiteralC(int))
-import Language.Drasil.Display (Symbol(..))
+import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Literal.Development (Literal(..))
 import Language.Drasil.ModelExpr.Development
 
@@ -58,12 +58,12 @@ indx sm (C c) i = f s
   where
     i' = modelExpr i sm
     s = lookupC (sm ^. stg) (sm ^. ckdb) c
-    f (Corners [] [] [] [b] e) =
+    f (S.Corners [] [] [] [b] e) =
       let e' = symbol e
           b' = symbol b in
       P.Row [P.Row [e', P.Sub (P.Row [b', P.MO P.Comma, i'])]] -- FIXME, extra Row
-    f a@(Variable _) = P.Row [symbol a, P.Sub i']
-    f a@(Label _)    = P.Row [symbol a, P.Sub i']
+    f a@(S.Variable _) = P.Row [symbol a, P.Sub i']
+    f a@(S.Label _)    = P.Row [symbol a, P.Sub i']
 --    f a@(Greek _)  = P.Row [symbol a, P.Sub i']
     f   e          = let e' = symbol e in P.Row [P.Row [e'], P.Sub i']
 indx sm a i = P.Row [P.Row [modelExpr a sm], P.Sub $ modelExpr i sm]
@@ -115,8 +115,9 @@ modelExpr (Lit l)                    sm = literal l sm
 modelExpr (AssocB And l)             sm = assocExpr P.And (precB And) l sm
 modelExpr (AssocB Or l)              sm = assocExpr P.Or (precB Or) l sm
 modelExpr (AssocB Equivalence l)     sm = assocExpr P.Eq (precB Equivalence) l sm
-modelExpr (AssocA Add l)            sm = P.Row $ addExpr l Add sm
-modelExpr (AssocA Mul l)           sm = P.Row $ mulExpr l Mul sm
+modelExpr (AssocA Add l)             sm = P.Row $ addExpr l Add sm
+modelExpr (AssocA Mul l)             sm = P.Row $ mulExpr l Mul sm
+modelExpr (AssocC SUnion l)          sm = assocExpr P.SUnion (precC SUnion) l sm
 modelExpr (Deriv 0 Part a _)         sm = P.Row [modelExpr a sm]
 modelExpr (Deriv 0 Total a _)        sm = P.Row [modelExpr a sm]
 modelExpr (Deriv n Part a b)         sm =
@@ -136,6 +137,8 @@ modelExpr (Case _ ps)                sm =
     then error "Attempting to use multi-case modelExpr incorrectly"
     else P.Case (zip (map (flip modelExpr sm . fst) ps) (map (flip modelExpr sm . snd) ps))
 modelExpr (Matrix a)                 sm = P.Mtx $ map (map (`modelExpr` sm)) a
+modelExpr (Set _ l)                  sm = setExpr P.And (precB And) l sm
+modelExpr (Variable _ l)             sm = modelExpr l sm
 modelExpr (UnaryOp Log u)            sm = mkCall sm P.Log u
 modelExpr (UnaryOp Ln u)             sm = mkCall sm P.Ln u
 modelExpr (UnaryOp Sin u)            sm = mkCall sm P.Sin u
@@ -163,6 +166,7 @@ modelExpr (BoolBinaryOp Iff a b)     sm = mkBOp sm P.Iff a b
 modelExpr (EqBinaryOp Eq a b)        sm = mkBOp sm P.Eq a b
 modelExpr (EqBinaryOp NEq a b)       sm = mkBOp sm P.NEq a b
 modelExpr (LABinaryOp Index a b)     sm = indx sm a b
+modelExpr (LABinaryOp IndexOf a b)   sm = indx sm a b
 modelExpr (OrdBinaryOp Lt a b)       sm = mkBOp sm P.Lt a b
 modelExpr (OrdBinaryOp Gt a b)       sm = mkBOp sm P.Gt a b
 modelExpr (OrdBinaryOp LEq a b)      sm = mkBOp sm P.LEq a b
@@ -172,6 +176,9 @@ modelExpr (VVVBinaryOp Cross a b)    sm = mkBOp sm P.Cross a b
 modelExpr (VVVBinaryOp VAdd a b)     sm = mkBOp sm P.VAdd a b
 modelExpr (VVVBinaryOp VSub a b)     sm = mkBOp sm P.VSub a b
 modelExpr (NVVBinaryOp Scale a b)    sm = mkBOp sm P.Scale a b
+modelExpr (ESSBinaryOp SAdd a b)     sm = mkBOp sm P.SAdd a b
+modelExpr (ESSBinaryOp SRemove a b)    sm = mkBOp sm P.SRemove a b
+modelExpr (ESBBinaryOp SContains a b)  sm = mkBOp sm P.SContains a b
 modelExpr (Operator o d e)           sm = eop sm o d e
 modelExpr (RealI c ri)               sm = renderRealInt sm (lookupC (sm ^. stg)
   (sm ^. ckdb) c) ri
@@ -186,6 +193,9 @@ modelExpr (ForAll c s de)            sm = P.Row [
 -- | Common method of converting associative operations into printable layout AST.
 assocExpr :: P.Ops -> Int -> [ModelExpr] -> PrintingInformation -> P.Expr
 assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (modelExpr' sm prec) exprs
+
+setExpr :: P.Ops -> Int -> [ModelExpr] -> PrintingInformation -> P.Expr
+setExpr _ prec exprs sm = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map (modelExpr' sm prec) exprs
 
 -- | Add add symbol only when the second Expr is not negation 
 addExpr :: [ModelExpr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
@@ -220,7 +230,7 @@ pow prI a@(ArithBinaryOp Pow _ _)  b = withParens prI a b
 pow prI a                          b = P.Row [modelExpr a prI, P.Sup (modelExpr b prI)]
 
 -- | Print a 'RealInterval'.
-renderRealInt :: PrintingInformation -> Symbol -> RealInterval ModelExpr ModelExpr -> P.Expr
+renderRealInt :: PrintingInformation -> S.Symbol -> RealInterval ModelExpr ModelExpr -> P.Expr
 renderRealInt st s (Bounded (Inc,a) (Inc,b)) =
   P.Row [modelExpr a st, P.MO P.LEq, symbol s, P.MO P.LEq, modelExpr b st]
 renderRealInt st s (Bounded (Inc,a) (Exc,b)) =

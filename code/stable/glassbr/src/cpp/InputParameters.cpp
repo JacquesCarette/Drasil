@@ -5,10 +5,12 @@
 #include <iostream>
 #include <limits>
 #include <math.h>
+#include <set>
 #include <string>
 
 using std::ifstream;
 using std::ofstream;
+using std::set;
 using std::string;
 
 InputParameters::InputParameters(string filename) {
@@ -233,6 +235,36 @@ void InputParameters::input_constraints() {
         std::cout << " and ";
         std::cout << 910.0;
         std::cout << " (w_max)";
+        std::cout << "." << std::endl;
+        throw("InputError");
+    }
+    set<string> set_g = {"AN", "FT", "HS"};
+    if (!(set_g.find(this->g) != set_g.end())) {
+        std::cout << "g has value ";
+        std::cout << this->g;
+        std::cout << ", but is expected to be ";
+        std::cout << "an element of the set ";
+        std::cout << "{ ";
+        for (const string &set_i1 : set_g) {
+            std::cout << set_i1;
+            std::cout << " ";
+        }
+        std::cout << "}";
+        std::cout << "." << std::endl;
+        throw("InputError");
+    }
+    set<double> set_t = {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0};
+    if (!(set_t.find(this->t) != set_t.end())) {
+        std::cout << "t has value ";
+        std::cout << this->t;
+        std::cout << ", but is expected to be ";
+        std::cout << "an element of the set ";
+        std::cout << "{ ";
+        for (const double &set_i1 : set_t) {
+            std::cout << set_i1;
+            std::cout << " ";
+        }
+        std::cout << "}";
         std::cout << "." << std::endl;
         throw("InputError");
     }

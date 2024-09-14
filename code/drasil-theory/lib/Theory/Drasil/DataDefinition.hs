@@ -5,7 +5,6 @@ module Theory.Drasil.DataDefinition where
 
 import Control.Lens
 import Language.Drasil
-import Language.Drasil.Development (showUID)
 import Data.Drasil.TheoryConcepts (dataDefn)
 import Theory.Drasil.Classes (HasOutput(..))
 
@@ -66,7 +65,7 @@ ddPkt lpkt = lens g s
     s (DDME qd pkt) a' = DDME qd (pkt & lpkt .~ a')
 
 -- | Finds the 'UID' of a 'DataDefinition where'.
-instance HasUID             DataDefinition where uid = ddQD uid uid
+instance HasUID             DataDefinition where uid = ddQDGetter uid uid
 -- | Finds the term ('NP') of the 'QDefinition' used to make the 'DataDefinition where'.
 instance NamedIdea          DataDefinition where term = ddQD term term
 -- | Finds the idea contained in the 'QDefinition' used to make the 'DataDefinition where'.

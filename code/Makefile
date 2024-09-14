@@ -184,7 +184,7 @@ BATCHTERM=dumb
 
 # Default `make` will just run examples and test them against stable. See `test`
 # target for more details.
-all: test test_website ##@Examples Run examples and test against stable.
+all: test test_website codegenTest_diff ##@Examples Run examples and test against stable.
 
 install: ##@Examples Install all example project binaries into your local binary path (see $(stack path) for local-bin-path).
 	stack install $(stackArgs)
@@ -308,9 +308,16 @@ $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
 
 # Compiles GOOL examples to concrete code (Java, C++, etc.)
 $(GOOLTEST)$(GEN_E_SUFFIX):
+	- rm -rf "$(BUILD_FOLDER)$(GOOLTEST_DIR)"
 	stack build $(stackArgs) "drasil-code:exe:$(GOOLTEST_EXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(GOOLTEST_DIR)"
 	cd "$(BUILD_FOLDER)$(GOOLTEST_DIR)" && $(STACK_EXEC) -- "$(GOOLTEST_EXE)"
+	
+
+$(GOOLTEST)$(TEST_E_SUFFIX): $(GOOLTEST)$(GEN_E_SUFFIX) $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME)
+	@mkdir -p "$(LOG_FOLDER)"
+	- $(DIFF) "$(STABLE_FOLDER)$(GOOLTEST_DIR)/" "$(BUILD_FOLDER)$(GOOLTEST_DIR)/" > "$(LOG_FOLDER)$(GOOLTEST_DIR)$(LOG_SUFFIX)"
+	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)log_check.sh"
 
 # Install individual Drasil examples
 $(filter %$(INSTALL_E_SUFFIX), $(INSTALL_EXAMPLES)): %$(INSTALL_E_SUFFIX):
@@ -363,6 +370,10 @@ $(filter %$(BC_E_SUFFIX), $(BC_WEBSITE)): %$(BC_E_SUFFIX):
 $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_EXAMPLES)): %$(STABILIZE_E_SUFFIX): %$(BC_E_SUFFIX) %$(GEN_E_SUFFIX)
 	- rm -rf "$(STABLE_FOLDER)$*/"
 	- cp -r "$(BUILD_FOLDER)$(EDIR)" "$(STABLE_FOLDER)$*/"
+
+$(GOOLTEST)$(STABILIZE_E_SUFFIX): $(GOOLTEST)$(GEN_E_SUFFIX)
+	- rm -rf "$(STABLE_FOLDER)$(GOOLTEST_DIR)/"
+	- cp -r "$(BUILD_FOLDER)$(GOOLTEST_DIR)/" "$(STABLE_FOLDER)$(GOOLTEST_DIR)"
 
 # The website stabilization. First builds the website, and then copies the
 # contents from the website folder into stable-website.
@@ -457,7 +468,7 @@ $(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(GEN_E_SUFFI
 	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)code_build.sh"
 
 # GOOL testing for examples that generate code.
-$(GOOLTEST): $(GOOLTEST)$(GEN_E_SUFFIX)
+$(GOOLTEST): $(GOOLTEST)$(TEST_E_SUFFIX)
 	@EDIR="$(GOOLTEST_DIR)" BUILD_FOLDER="$(BUILD_FOLDER)" TARGET=$(TARGET) \
 	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)gooltest_build.sh"
 

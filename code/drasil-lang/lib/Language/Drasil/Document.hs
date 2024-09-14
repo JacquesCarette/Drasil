@@ -4,7 +4,7 @@ module Language.Drasil.Document where
 
 import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
 import Language.Drasil.Document.Core (UnlabelledContent(UnlblC),
-  LabelledContent(LblC), RawContent(Figure, Paragraph),
+  LabelledContent(LblC), HasCaption(..), RawContent(Figure, Paragraph),
   Contents(..), Lbl, Filepath, Author, Title, MaxWidthPercent )
 import Language.Drasil.Label.Type (getAdd, prepend, LblType(..),
   Referable(..), HasRefAddress(..) )
@@ -132,13 +132,21 @@ getSecCons :: SecCons -> [Section]
 getSecCons (Sub sec) = getSec sec
 getSecCons (Con _)   = []
 
--- | 'Figure' smart constructor with a 'Lbl' and a 'Filepath'. Assumes 100% of page width as max width.
+-- | 'Figure' smart constructor with a 'Lbl' and a 'Filepath'. Assumes 100% of page width as max width. Defaults to 'WithCaption'.
 fig :: Lbl -> Filepath -> RawContent
-fig l f = Figure l f 100
+fig l f = Figure l f 100 WithCaption
 
--- | 'Figure' smart constructor that allows for customized max widths.
+-- | 'Figure' smart constructor without a caption.
+figNoCap :: Lbl -> Filepath -> RawContent
+figNoCap l f = Figure l f 100 NoCaption
+
+-- | 'Figure' smart constructor that allows for customized max widths. Defaults to 'WithCaption'.
 figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
-figWithWidth = Figure
+figWithWidth l f wp = Figure l f wp WithCaption
+
+-- | 'Figure' smart constructor with customized max widths and no caption.
+figNoCapWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
+figNoCapWithWidth l f wp = Figure l f wp NoCaption
 
 ---------------------------------------------------------------------------
 -- * Reference Constructors

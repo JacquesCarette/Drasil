@@ -15,6 +15,7 @@
 \usepackage{svg}
 \usepackage{float}
 \usepackage{enumitem}
+\usepackage{adjustbox}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
@@ -23,6 +24,9 @@
 \newcommand{\lt}{\ensuremath <}
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
+\newcommand{\resizeExpression}[1]{
+  \adjustbox{max width=\linewidth}{$#1$}
+}
 \bibliography{bibfile}
 \title{Software Requirements Specification for GlassBR}
 \author{Nikitha Krithnan and W. Spencer Smith}
@@ -147,7 +151,7 @@ ${\mathit{SD}_{\text{y}}}$ & Stand off distance ($y$-component) & ${\text{m}}$
 \\
 ${\mathit{SD}_{\text{z}}}$ & Stand off distance ($z$-component) & ${\text{m}}$
 \\
-$t$ & Nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ & ${\text{mm}}$
+$t$ & Nominal thickness t is in $\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ & ${\text{mm}}$
 \\
 ${t_{\text{d}}}$ & Duration of load & ${\text{s}}$
 \\
@@ -224,7 +228,7 @@ Uncert. & Typical Uncertainty
 \end{longtblr}
 \section{Introduction}
 \label{Sec:Intro}
-Explosions in downtown areas are dangerous from the blast itself and also potentially from the secondary effect of falling glass. Therefore, software is needed to predict whether a glass slab can withstand a blast under given conditions. For example, we might wish to know whether a pane of glass fails from a gas main explosion or from a small fertilizer truck bomb. The program documented here is called GlassBR.
+Explosions in downtown areas are dangerous from the blast itself and also potentially from the secondary effect of falling glass. Therefore, software is needed to predict whether a glass slab can withstand a blast under given conditions. For example, we might wish to know whether a pane of glass fails from a gas main explosion or from a small fertilizer truck bomb. The document describes the program called GlassBR , which is based on the original, manually created version of \hyperref{https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass}{}{}{GlassBR}.
 
 The following section provides an overview of the Software Requirements Specification (SRS) for GlassBR. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
@@ -398,7 +402,7 @@ Label & Safety Probability
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \mathit{isSafeProb}={P_{\text{f}}}\lt{}{P_{\text{f}\text{tol}}}
+           \resizeExpression{\mathit{isSafeProb}={P_{\text{f}}}\lt{}{P_{\text{f}\text{tol}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -430,7 +434,7 @@ Label & Safety Load
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \mathit{isSafeLoad}=\mathit{capacity}\gt{}\mathit{Load}
+           \resizeExpression{\mathit{isSafeLoad}=\mathit{capacity}\gt{}\mathit{Load}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -476,25 +480,25 @@ Units & ${\text{m}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           h=\frac{1}{1000}\,\begin{cases}
-                             2.16, & t=2.5\\
-                             2.59, & t=2.7\\
-                             2.92, & t=3.0\\
-                             3.78, & t=4.0\\
-                             4.57, & t=5.0\\
-                             5.56, & t=6.0\\
-                             7.42, & t=8.0\\
-                             9.02, & t=10.0\\
-                             11.91, & t=12.0\\
-                             15.09, & t=16.0\\
-                             18.26, & t=19.0\\
-                             21.44, & t=22.0
-                             \end{cases}
+           \resizeExpression{h=\frac{1}{1000}\,\begin{cases}
+                                               2.16, & t=2.5\\
+                                               2.59, & t=2.7\\
+                                               2.92, & t=3.0\\
+                                               3.78, & t=4.0\\
+                                               4.57, & t=5.0\\
+                                               5.56, & t=6.0\\
+                                               7.42, & t=8.0\\
+                                               9.02, & t=10.0\\
+                                               11.91, & t=12.0\\
+                                               15.09, & t=16.0\\
+                                               18.26, & t=19.0\\
+                                               21.44, & t=22.0
+                                               \end{cases}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
               \item{$h$ is the minimum thickness (${\text{m}}$)}
-              \item{$t$ is the nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ (${\text{mm}}$)}
+              \item{$t$ is the nominal thickness t is in $\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ (${\text{mm}}$)}
               \end{symbDescription}
 \\ \midrule
 Notes & $t$ is a function that maps from the nominal thickness ($h$) to the minimum thickness.
@@ -527,7 +531,7 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \mathit{LDF}=\left(\frac{{t_{\text{d}}}}{60}\right)^{\frac{m}{16}}
+           \resizeExpression{\mathit{LDF}=\left(\frac{{t_{\text{d}}}}{60}\right)^{\frac{m}{16}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -568,11 +572,11 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \mathit{GTF}=\begin{cases}
-                        1, & g=\text{``AN''}\\
-                        4, & g=\text{``FT''}\\
-                        2, & g=\text{``HS''}
-                        \end{cases}
+           \resizeExpression{\mathit{GTF}=\begin{cases}
+                                          1, & g=\text{``AN''}\\
+                                          4, & g=\text{``FT''}\\
+                                          2, & g=\text{``HS''}
+                                          \end{cases}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -614,7 +618,7 @@ Units & ${\text{m}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \mathit{SD}=\sqrt{{\mathit{SD}_{\text{x}}}^{2}+{\mathit{SD}_{\text{y}}}^{2}+{\mathit{SD}_{\text{z}}}^{2}}
+           \resizeExpression{\mathit{SD}=\sqrt{{\mathit{SD}_{\text{x}}}^{2}+{\mathit{SD}_{\text{y}}}^{2}+{\mathit{SD}_{\text{z}}}^{2}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -651,7 +655,7 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \mathit{AR}=\frac{a}{b}
+           \resizeExpression{\mathit{AR}=\frac{a}{b}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -690,7 +694,7 @@ Units & ${\text{kg}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           {w_{\mathit{TNT}}}=w\,\mathit{TNT}
+           \resizeExpression{{w_{\mathit{TNT}}}=w\,\mathit{TNT}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -726,7 +730,7 @@ Units & ${\text{Pa}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           q=\mathit{interpY}\left(\text{``TSD.txt''},\mathit{SD},{w_{\mathit{TNT}}}\right)
+           \resizeExpression{q=\mathit{interpY}\left(\text{``TSD.txt''},\mathit{SD},{w_{\mathit{TNT}}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -772,16 +776,16 @@ Output & $B$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    a\gt{}0
+                    \resizeExpression{a\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    0\lt{}b\leq{}a
+                    \resizeExpression{0\lt{}b\leq{}a}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           B=\frac{k}{\left(a\,b\right)^{m-1}}\,\left(E\,h^{2}\right)^{m}\,\mathit{LDF}\,e^{J}
+           \resizeExpression{B=\frac{k}{\left(a\,b\right)^{m-1}}\,\left(E\,h^{2}\right)^{m}\,\mathit{LDF}\,e^{J}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -832,15 +836,15 @@ Output & $J$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \mathit{AR}\geq{}1
+                    \resizeExpression{\mathit{AR}\geq{}1}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & \begin{displaymath}
-                     {J_{\text{min}}}\leq{}J\leq{}{J_{\text{max}}}
+                     \resizeExpression{{J_{\text{min}}}\leq{}J\leq{}{J_{\text{max}}}}
                      \end{displaymath}
 \\ \midrule
 Equation & \begin{displaymath}
-           J=\mathit{interpZ}\left(\text{``SDF.txt''},\mathit{AR},\hat{q}\right)
+           \resizeExpression{J=\mathit{interpZ}\left(\text{``SDF.txt''},\mathit{AR},\hat{q}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -884,16 +888,16 @@ Output & $\mathit{NFL}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    a\gt{}0
+                    \resizeExpression{a\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    0\lt{}b\leq{}a
+                    \resizeExpression{0\lt{}b\leq{}a}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \mathit{NFL}=\frac{{\hat{q}_{\text{tol}}}\,E\,h^{4}}{\left(a\,b\right)^{2}}
+           \resizeExpression{\mathit{NFL}=\frac{{\hat{q}_{\text{tol}}}\,E\,h^{4}}{\left(a\,b\right)^{2}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -941,16 +945,16 @@ Output & $\hat{q}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    a\gt{}0
+                    \resizeExpression{a\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    0\lt{}b\leq{}a
+                    \resizeExpression{0\lt{}b\leq{}a}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \hat{q}=\frac{q\,\left(a\,b\right)^{2}}{E\,h^{4}\,\mathit{GTF}}
+           \resizeExpression{\hat{q}=\frac{q\,\left(a\,b\right)^{2}}{E\,h^{4}\,\mathit{GTF}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1001,13 +1005,13 @@ Output & ${\hat{q}_{\text{tol}}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \mathit{AR}\geq{}1
+                    \resizeExpression{\mathit{AR}\geq{}1}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           {\hat{q}_{\text{tol}}}=\mathit{interpY}\left(\text{``SDF.txt''},\mathit{AR},{J_{\text{tol}}}\right)
+           \resizeExpression{{\hat{q}_{\text{tol}}}=\mathit{interpY}\left(\text{``SDF.txt''},\mathit{AR},{J_{\text{tol}}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1051,19 +1055,19 @@ Output & ${J_{\text{tol}}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    0\leq{}{P_{\text{b}\text{tol}}}\leq{}1
+                    \resizeExpression{0\leq{}{P_{\text{b}\text{tol}}}\leq{}1}
                     \end{displaymath}
                     \begin{displaymath}
-                    a\gt{}0
+                    \resizeExpression{a\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    0\lt{}b\leq{}a
+                    \resizeExpression{0\lt{}b\leq{}a}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           {J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right)\,\frac{\left(a\,b\right)^{m-1}}{k\,\left(E\,h^{2}\right)^{m}\,\mathit{LDF}}\right)
+           \resizeExpression{{J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right)\,\frac{\left(a\,b\right)^{m-1}}{k\,\left(E\,h^{2}\right)^{m}\,\mathit{LDF}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1118,11 +1122,11 @@ Output & ${P_{\text{b}}}$
 Input Constraints & 
 \\ \midrule
 Output Constraints & \begin{displaymath}
-                     0\leq{}{P_{\text{b}}}\leq{}1
+                     \resizeExpression{0\leq{}{P_{\text{b}}}\leq{}1}
                      \end{displaymath}
 \\ \midrule
 Equation & \begin{displaymath}
-           {P_{\text{b}}}=1-e^{-B}
+           \resizeExpression{{P_{\text{b}}}=1-e^{-B}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1164,7 +1168,7 @@ Input Constraints &
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \mathit{LR}=\mathit{NFL}\,\mathit{GTF}\,\mathit{LSF}
+           \resizeExpression{\mathit{LR}=\mathit{NFL}\,\mathit{GTF}\,\mathit{LSF}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1208,16 +1212,16 @@ Output & $\mathit{isSafePb}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    0\leq{}{P_{\text{b}}}\leq{}1
+                    \resizeExpression{0\leq{}{P_{\text{b}}}\leq{}1}
                     \end{displaymath}
                     \begin{displaymath}
-                    0\leq{}{P_{\text{b}\text{tol}}}\leq{}1
+                    \resizeExpression{0\leq{}{P_{\text{b}\text{tol}}}\leq{}1}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \mathit{isSafePb}={P_{\text{b}}}\lt{}{P_{\text{b}\text{tol}}}
+           \resizeExpression{\mathit{isSafePb}={P_{\text{b}}}\lt{}{P_{\text{b}\text{tol}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1260,16 +1264,16 @@ Output & $\mathit{isSafeLR}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \mathit{LR}\gt{}0
+                    \resizeExpression{\mathit{LR}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    q\gt{}0
+                    \resizeExpression{q\gt{}0}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
-           \mathit{isSafeLR}=\mathit{LR}\gt{}q
+           \resizeExpression{\mathit{isSafeLR}=\mathit{LR}\gt{}q}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
@@ -1367,7 +1371,7 @@ ${\mathit{SD}_{\text{y}}}$ & Stand off distance ($y$-component) & ${\text{m}}$
 \\
 ${\mathit{SD}_{\text{z}}}$ & Stand off distance ($z$-component) & ${\text{m}}$
 \\
-$t$ & Nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ & ${\text{mm}}$
+$t$ & Nominal thickness t is in $\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ & ${\text{mm}}$
 \\
 $\mathit{TNT}$ & TNT equivalent factor & --
 \\

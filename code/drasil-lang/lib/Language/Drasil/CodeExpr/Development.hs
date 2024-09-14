@@ -3,7 +3,7 @@ module Language.Drasil.CodeExpr.Development (
     -- CodeExpr
     CodeExpr(..), 
     ArithBinOp(..), EqBinOp(..), BoolBinOp(..), LABinOp(..), OrdBinOp(..),
-    VVVBinOp(..), VVNBinOp(..), NVVBinOp(..), AssocArithOper(..), AssocBoolOper(..),
+    VVVBinOp(..), VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..), AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..),
     UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
     -- Class
     CodeExprC(..),
@@ -18,7 +18,7 @@ module Language.Drasil.CodeExpr.Development (
 
 import Language.Drasil.CodeExpr.Lang (CodeExpr(..),
     UFuncVV(..), UFuncVN(..), UFuncB(..), UFunc(..),
-    AssocBoolOper(..), AssocArithOper(..), VVNBinOp(..), NVVBinOp(..),
+    AssocBoolOper(..), AssocArithOper(..), AssocConcatOper(..),VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..),
     VVVBinOp(..), OrdBinOp(..), LABinOp(..), BoolBinOp(..), EqBinOp(..),
     ArithBinOp(..))
 import Language.Drasil.CodeExpr.Class (CodeExprC(..))

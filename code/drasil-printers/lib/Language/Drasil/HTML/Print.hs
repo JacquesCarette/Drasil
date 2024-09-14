@@ -107,7 +107,7 @@ printLO (Table ts rows r b t)  = makeTable ts rows (pSpec r) b (pSpec t)
 printLO (Definition dt ssPs l) = makeDefn dt ssPs (pSpec l)
 printLO (Header n contents _)  = h (n + 1) $ pSpec contents -- FIXME
 printLO (List t)               = makeList t
-printLO (Figure r c f wp)      = makeFigure (pSpec r) (pSpec c) (text f) wp
+printLO (Figure r c f wp)      = makeFigure (pSpec r) (fmap pSpec c) (text f) wp
 printLO (Bib bib)              = makeBib bib
 printLO Graph{}                = empty -- FIXME
 printLO Cell{}                 = empty
@@ -190,56 +190,60 @@ pExpr (Mtx a)        = text "<table class=\"matrix\">\n" <> pMatrix a <> text "<
 
 -- | Converts expression operators into HTML characters.
 pOps :: Ops -> String
-pOps IsIn     = "&thinsp;&isin;&thinsp;"
-pOps Integer  = "&#8484;"
-pOps Rational = "&#8474;"
-pOps Real     = "&#8477;"
-pOps Natural  = "&#8469;"
-pOps Boolean  = "&#120121;"
-pOps Comma    = ","
-pOps Prime    = "&prime;"
-pOps Log      = "log"
-pOps Ln       = "ln"
-pOps Sin      = "sin"
-pOps Cos      = "cos"
-pOps Tan      = "tan"
-pOps Sec      = "sec"
-pOps Csc      = "csc"
-pOps Cot      = "cot"
-pOps Arcsin   = "arcsin"
-pOps Arccos   = "arccos"
-pOps Arctan   = "arctan"
-pOps Not      = "&not;"
-pOps Dim      = "dim"
-pOps Exp      = "e"
-pOps Neg      = "&minus;"
-pOps Cross    = "&#10799;"
-pOps VAdd     = "&plus;"
-pOps VSub     = "&minus;"
-pOps Dot      = "&sdot;"
-pOps Scale    = "&#8239;" -- same as Mul
-pOps Eq       = " = " -- with spaces?
-pOps NEq      = "&ne;"
-pOps Lt       = "&thinsp;&lt;&thinsp;" --thin spaces make these more readable
-pOps Gt       = "&thinsp;&gt;&thinsp;"
-pOps LEq      = "&thinsp;&le;&thinsp;"
-pOps GEq      = "&thinsp;&ge;&thinsp;"
-pOps Impl     = " &rArr; "
-pOps Iff      = " &hArr; "
-pOps Subt     = "&minus;"
-pOps And      = " &and; "
-pOps Or       = " &or; "
-pOps Add      = "&plus;"
-pOps Mul      = "&#8239;"
-pOps Summ     = "&sum;"
-pOps Inte     = "&int;"
-pOps Prod     = "&prod;"
-pOps Point    = "."
-pOps Perc     = "%"
-pOps LArrow   = " &larr; "
-pOps RArrow   = " &rarr; "
-pOps ForAll   = " &forall; "
-pOps Partial  = "&part;"
+pOps IsIn       = "&thinsp;&isin;&thinsp;"
+pOps Integer    = "&#8484;"
+pOps Rational   = "&#8474;"
+pOps Real       = "&#8477;"
+pOps Natural    = "&#8469;"
+pOps Boolean    = "&#120121;"
+pOps Comma      = ","
+pOps Prime      = "&prime;"
+pOps Log        = "log"
+pOps Ln         = "ln"
+pOps Sin        = "sin"
+pOps Cos        = "cos"
+pOps Tan        = "tan"
+pOps Sec        = "sec"
+pOps Csc        = "csc"
+pOps Cot        = "cot"
+pOps Arcsin     = "arcsin"
+pOps Arccos     = "arccos"
+pOps Arctan     = "arctan"
+pOps Not        = "&not;"
+pOps Dim        = "dim"
+pOps Exp        = "e"
+pOps Neg        = "&minus;"
+pOps Cross      = "&#10799;"
+pOps VAdd       = "&plus;"
+pOps VSub       = "&minus;"
+pOps Dot        = "&sdot;"
+pOps Scale      = "&#8239;" -- same as Mul
+pOps Eq         = " = " -- with spaces?
+pOps NEq        = "&ne;"
+pOps Lt         = "&thinsp;&lt;&thinsp;" --thin spaces make these more readable
+pOps Gt         = "&thinsp;&gt;&thinsp;"
+pOps LEq        = "&thinsp;&le;&thinsp;"
+pOps GEq        = "&thinsp;&ge;&thinsp;"
+pOps Impl       = " &rArr; "
+pOps Iff        = " &hArr; "
+pOps Subt       = "&minus;"
+pOps And        = " &and; "
+pOps Or         = " &or; "
+pOps Add        = "&plus;"
+pOps Mul        = "&#8239;"
+pOps Summ       = "&sum;"
+pOps Inte       = "&int;"
+pOps Prod       = "&prod;"
+pOps Point      = "."
+pOps Perc       = "%"
+pOps LArrow     = " &larr; "
+pOps RArrow     = " &rarr; "
+pOps ForAll     = " &forall; "
+pOps Partial    = "&part;"
+pOps SAdd       = " + "
+pOps SRemove    = " - "
+pOps SContains  = " in "
+pOps SUnion     = " and "
 
 -- | Allows for open/closed variants of parenthesis, curly brackets, absolute value symbols, and normal symbols.
 fence :: OpenClose -> Fence -> String
@@ -336,7 +340,7 @@ pItem (Nested s l) = vcat [pSpec s, makeList l]
 ------------------BEGIN FIGURE PRINTING--------------------------
 -----------------------------------------------------------------
 -- | Renders figures in HTML.
-makeFigure :: Doc -> Doc -> Doc -> L.MaxWidthPercent -> Doc
+makeFigure :: Doc -> Maybe Doc -> Doc -> L.MaxWidthPercent -> Doc
 makeFigure r c f wp = refwrap r (image f c wp)
 
 -- | Renders assumptions, requirements, likely changes.

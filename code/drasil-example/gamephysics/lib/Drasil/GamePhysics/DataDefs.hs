@@ -308,7 +308,7 @@ momentOfInertiaEqn = sumAll (variable "j") $ sy massj $* square (sy rRot)
 momentOfInertiaDesc :: Sentence
 momentOfInertiaDesc = foldlSent [S "The", getTandS QP.momentOfInertia,
  S "of a body measures how much", phrase QP.torque,
- S "is needed for the body to achieve angular acceleration about the axis of rotation"]
+ S "is needed" `S.for` S "the body to achieve angular acceleration about the axis of rotation"]
 
 ---------------------------DD17 Potential Energy-------------------------------------------
 

@@ -1,4 +1,6 @@
 {-# LANGUAGE PostfixOperators #-}
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Redundant return" #-}
 
 -- | Implementations defined here are valid for any language renderer.
 module Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (fileFromData,
@@ -28,13 +30,13 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
   variableType), ValueSym(Value, valueType), NumericExpression((#+), (#-), (#/),
   sin, cos, tan), Comparison(..), funcApp, StatementSym(multi),
   AssignStatement((&++)), (&=), IOStatement(printStr, printStrLn, printFile,
-  printFileStr, printFileStrLn), ifNoElse)
+  printFileStr, printFileStrLn), ifNoElse, ScopeSym(Scope), convType)
 import qualified Drasil.GOOL.InterfaceCommon as IC (TypeSym(int, double, char,
-  string, listType, arrayType, listInnerType, funcType, void), locVar,
+  string, listType, arrayType, listInnerType, funcType, void), VariableSym(var),
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
-  IOStatement(print), ControlStatement(returnStmt, for), ParameterSym(param),
-  List(intToIndex))
+  IOStatement(print), ControlStatement(returnStmt, for, forEach), ParameterSym(param),
+  List(intToIndex), ScopeSym(local))
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, Initializers,
   CSStateVar, FileSym(File), ModuleSym(Module), newObj, objMethodCallNoParams,
   ($.), PermanenceSym(..), convTypeOO)
@@ -312,6 +314,7 @@ listAccess v i = do
   let i' = IC.intToIndex i
       t  = IC.listInnerType $ return $ valueType v'
       checkType (List _) = S.listAccessFunc t i'
+      checkType (Set _) = S.listAccessFunc t i'
       checkType (Array _) = i' >>= 
                               (\ix -> funcFromData (brackets (RC.value ix)) t)
       checkType _ = error "listAccess called on non-list-type value"
@@ -368,30 +371,41 @@ increment vr' v'= do
   v <- zoom lensMStoVS v'
   mkStmt $ R.addAssign vr v
 
-objDecNew :: (OORenderSym r) => SVariable r -> [SValue r] -> MSStatement r
-objDecNew v vs = IC.varDecDef v (newObj (onStateValue variableType v) vs)
+objDecNew :: (OORenderSym r) => SVariable r -> r (Scope r) -> [SValue r]
+  -> MSStatement r
+objDecNew v scp vs = IC.varDecDef v scp (newObj (onStateValue variableType v) vs)
 
 printList :: (CommonRenderSym r) => Integer -> SValue r -> (SValue r -> MSStatement r)
   -> (String -> MSStatement r) -> (String -> MSStatement r) -> MSStatement r
 printList n v prFn prStrFn prLnFn = multi [prStrFn "[", 
-  IC.for (IC.varDecDef i (IC.litInt 0)) 
+  IC.for (IC.varDecDef i IC.local (IC.litInt 0)) 
     (IC.valueOf i ?< (IC.listSize v #- IC.litInt 1)) (i &++) 
     (bodyStatements [prFn (IC.listAccess v (IC.valueOf i)), prStrFn ", "]), 
   ifNoElse [(IC.listSize v ?> IC.litInt 0, oneLiner $
     prFn (IC.listAccess v (IC.listSize v #- IC.litInt 1)))], 
   prLnFn "]"]
   where l_i = "list_i" ++ show n
-        i = IC.locVar l_i IC.int
+        i = IC.var l_i IC.int
+
+printSet :: (CommonRenderSym r) => Integer -> SValue r -> (SValue r -> MSStatement r)
+  -> (String -> MSStatement r) -> (String -> MSStatement r) -> VSType r -> MSStatement r
+printSet n v prFn prStrFn prLnFn s = multi [prStrFn "{ ", 
+  IC.forEach i v
+    (bodyStatements [prFn (IC.valueOf i),prStrFn " "]),
+  prLnFn "}"]
+  where set_i = "set_i" ++ show n
+        i = IC.var set_i s
 
 printObj :: ClassName -> (String -> MSStatement r) -> MSStatement r
 printObj n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
-print :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> 
+print :: (CommonRenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r ->
   MSStatement r
 print newLn f printFn v = zoom lensMStoVS v >>= print' . getType . valueType
   where print' (List t) = printList (getNestDegree 1 t) v prFn prStrFn 
           prLnFn
         print' (Object n) = printObj n prLnFn
+        print' (Set t) = printSet (getNestDegree 1 t) v prFn prStrFn prLnFn (convType t)
         print' _ = S.printSt newLn f printFn v
         prFn = maybe IC.print printFile f
         prStrFn = maybe printStr printFileStr f

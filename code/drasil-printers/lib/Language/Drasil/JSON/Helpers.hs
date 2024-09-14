@@ -95,14 +95,14 @@ reflink ref txt = text "[" <> txt <> text ("](#" ++ ref ++ ")")
 reflinkURI :: String -> Doc -> Doc
 reflinkURI ref txt = text ("<a href=\\\"" ++ ref ++ "\\\">") <> txt <> text "</a>"
 
--- | Helper for setting up figures
-image :: Doc -> Doc -> MaxWidthPercent -> Doc
-image f c 100 =
+-- | Helper for setting up figures.
+image :: Doc -> Maybe Doc -> MaxWidthPercent -> Doc
+image f Nothing wp =
   figure $ vcat [
-  nbformat $ img [("src", f), ("alt", c)]]
-image f c wp =
+  nbformat $ img $ [("src", f), ("alt", text "")] ++ [("width", text $ show wp ++ "%") | wp /= 100]]
+image f (Just c) wp =
   figure $ vcat [
-  nbformat $ img [("src", f), ("alt", c), ("width", text $ show wp ++ "%")]]
+  nbformat $ img $ [("src", f), ("alt", c)] ++ [("width", text $ show wp ++ "%") | wp /= 100]]
 
 h :: Int -> Doc
 h n       | n < 1 = error "Illegal header (too small)"

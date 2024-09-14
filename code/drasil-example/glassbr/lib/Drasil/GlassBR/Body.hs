@@ -136,7 +136,11 @@ symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw symb ++ terms ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) GB.dataDefs iMods [] tMods concIns section
-  labCon []
+  labCon allRefs
+
+-- | Holds all references and links used in the document.
+allRefs :: [Reference]
+allRefs = [externalLinkRef]
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
@@ -197,13 +201,20 @@ priorityNFReqs = [correctness, verifiability, understandability,
 
 startIntro :: (NamedIdea n) => n -> Sentence -> CI -> Sentence
 startIntro prgm _ progName = foldlSent [
-  atStart' explosion, S "in downtown areas are dangerous from the", 
-  phrase blast +:+ S "itself" `S.and_` S "also potentially from the secondary" 
-  +:+ S "effect of falling glass. Therefore" `sC` phrase prgm, S "is needed to" 
-  +:+. purp, S "For example" `sC` S "we might wish to know whether a pane of",
+  atStart' explosion, S "in downtown areas are dangerous" `S.fromThe` phrase blast +:+ 
+  S "itself" `S.and_` S "also potentially from the secondary" +:+ 
+  S "effect of falling glass. Therefore" `sC` phrase prgm `S.is` S "needed to" +:+. 
+  purp, S "For example" `sC` S "we might wish to know whether a pane of",
   phrase glass, S "fails from a gas main", phrase explosion `S.or_` 
   S "from a small fertilizer truck bomb." +:+
-  S "The program documented here is called", short progName]
+  S "The document describes the program called", short progName,
+  S ", which is based" `S.onThe` S "original" `sC` S "manually created version of" +:+
+  namedRef externalLinkRef (S "GlassBR")]
+
+externalLinkRef :: Reference
+externalLinkRef = makeURI "glassBRSRSLink" 
+  "https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass" 
+  (shortname' $ S "glassBRSRSLink")
 
 undIR, appStanddIR :: [Sentence]
 undIR = [phrase scndYrCalculus, phrase structuralMechanics, phrase glBreakage,
@@ -214,7 +225,7 @@ appStanddIR = [S "applicable" +:+ plural standard +:+
   namedRef (SRS.reference ([]::[Contents]) ([]::[Section])) (plural reference)]
 
 scope :: Sentence
-scope = foldlSent_ [S "determining the safety of a", phrase glaSlab,
+scope = foldlSent_ [S "determining the safety" `S.ofA` phrase glaSlab,
   S "under a", phrase blast, S "loading following the ASTM", phrase standard,
   sParen $ refS astm2009]
 
@@ -252,13 +263,12 @@ sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
   [S "The interaction between the", phraseNP (product_ `andThe` user),
    S "is through a user" +:+. phrase interface,
-   S "The responsibilities of the", phraseNP (user `andThe` system),
+   S "The responsibilities" `S.ofThe` phraseNP (user `andThe` system),
    S "are as follows"]
    
 sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide the" +:+ plural inDatum +:+ S "related to the" +:+
-  phraseNP (glaSlab `and_` blastTy) `sC` S "ensuring no errors in the" +:+
-  plural datum +:+. S "entry",
+  phraseNP (glaSlab `and_` blastTy) `sC` S "ensuring no errors" `S.inThe` plural datum +:+. S "entry",
   S "Ensure that consistent units are used for" +:+. pluralNP (combineNINI input_ variable),
   S "Ensure required" +:+ 
   namedRef (SRS.assumpt [] []) (pluralNP (combineNINI software assumption))

@@ -12,6 +12,6 @@ PS3: The Power Plant.
 
 ![The physical system](./assets/Fig_PDController.png)
 
-**The physical system**
+**Figure: The physical system**
 
 </div>

@@ -26,7 +26,7 @@ reviewEqns
 
 reviewContextP2
   = foldlSP 
-      [S "Only two of these", plural equation, S "are independent, since the third" +:+
+      [S "Only two of these", plural equation, S "are independent" `sC` S "since the third" +:+
        phrase equation, S "can always be derived from the other two"]
 
 

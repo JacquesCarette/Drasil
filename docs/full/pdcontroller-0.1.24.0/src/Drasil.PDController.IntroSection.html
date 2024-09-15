@@ -18,14 +18,18 @@
 </span><span class="hs-string">&quot;in a variety of applications such as thermostats, automobile&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-13"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;cruise-control, etc. The gains of a controller in an application&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-string">&quot;cruise-control, etc. The gains&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofA`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;controller in an application&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span>
 </span><span id="line-14"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;must be tuned before the controller is ready for production&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-15"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-15"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Therefore, a simulation of the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><span class="hs-string">&quot;Therefore, a simulation&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#pidC"><span class="hs-identifier hs-var">pidC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -37,7 +41,10 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><a href="Drasil.PDController.Concepts.html#secondOrderSystem"><span class="hs-identifier hs-var">secondOrderSystem</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-17"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;is created in this project based on the original, manually created version of&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-string">&quot;is created in this project based&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.onThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;original, manually created version of&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
 </span><span id="line-18"></span><span>         </span><span class="annot"><span class="annottext">Reference -&gt; Sentence -&gt; Sentence
 forall r.
@@ -98,17 +105,27 @@ forall c. NamedIdea c =&gt; c -&gt; NP
 </span><a href="Drasil.PDController.Concepts.html#powerPlant"><span class="hs-identifier hs-var">powerPlant</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-32"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Only the Proportional and Derivative controllers are used in this software;&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+.</span></span><span>
-</span><span id="line-33"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-string">&quot;Only the Proportional and Derivative controllers&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.are`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;the Integral controller is beyond the scope of this project&quot;</span></span><span class="hs-special">,</span><span>
+</span><span class="hs-string">&quot;used in this software;&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span>
+</span><span id="line-33"></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;the Integral controller&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;beyond the scope of this project&quot;</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-34"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Additionally, this software is intended to aid with the manual&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-35"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-string">&quot;Additionally, this software&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;tuning of the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><span class="hs-string">&quot;intended to aid with the manual&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-35"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;tuning&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#pidC"><span class="hs-identifier hs-var">pidC</span></a></span><span class="hs-special">]</span><span>
@@ -119,14 +136,17 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span>
 </span><span id="line-39"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;The purpose of this document is to capture all the necessary&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-40"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-string">&quot;The purpose of this document&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;to capture all the necessary&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-40"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;information including assumptions, data definitions, constraints,&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-41"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-41"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;models, and requirements to facilitate an unambiguous development&quot;</span></span><span>
-</span><span id="line-42"></span><span>         </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span id="line-42"></span><span>       </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk

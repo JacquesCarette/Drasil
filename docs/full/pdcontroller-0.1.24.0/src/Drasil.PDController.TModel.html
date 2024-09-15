@@ -282,7 +282,10 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-string">&quot;The Inverse Laplace transforms are&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-78"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;typically inferred from a pre-computed table of Laplace Transforms&quot;</span></span><span class="hs-special">,</span><span>
+</span><span class="hs-string">&quot;typically inferred from a pre-computed table&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Laplace Transforms&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-79"></span><span>         </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Citation -&gt; Sentence
 forall r.

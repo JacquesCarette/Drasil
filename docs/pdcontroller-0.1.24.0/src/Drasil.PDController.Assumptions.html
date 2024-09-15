@@ -208,7 +208,8 @@ r -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span>
 </span><span id="line-68"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;The decoupled form of the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><span class="hs-string">&quot;The decoupled form&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#pidC"><span class="hs-identifier hs-var">pidC</span></a></span><span class="hs-special">,</span><span>
@@ -261,7 +262,8 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span>
 </span><span id="line-83"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;This model will be used for manual tuning of the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><span class="hs-string">&quot;This model will be used for manual tuning&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#pidC"><span class="hs-identifier hs-var">pidC</span></a></span><span class="hs-special">]</span><span>
@@ -272,7 +274,8 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span>
 </span><span id="line-87"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;The initial value of the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><span class="hs-string">&quot;The initial value&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#processVariable"><span class="hs-identifier hs-var">processVariable</span></a></span><span class="hs-special">,</span><span>
@@ -286,7 +289,10 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span>
 </span><span id="line-92"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;The Parallel form of the equation is used for the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><span class="hs-string">&quot;The Parallel form&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;equation is used for the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.PDController.Concepts.html#pidC"><span class="hs-identifier hs-var">pidC</span></a></span><span class="hs-special">]</span><span>
@@ -297,7 +303,10 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span>
 </span><span id="line-96"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;A pure derivative function is used for this simulation;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span class="hs-string">&quot;A pure derivative function&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;used for this simulation;&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-97"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;there are no filters applied&quot;</span></span><span class="hs-special">]</span><span>
@@ -311,69 +320,78 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">mass</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-102"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">mass</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;of the spring in the mass-spring-damper system&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-103"></span><span>       </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-string">&quot;spring&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.inThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;mass-spring-damper system&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-102"></span><span>       </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.PDController.Assumptions.html#aPwrPlant"><span class="hs-identifier hs-var">aPwrPlant</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-104"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-103"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is assumed to be 1&quot;</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-105"></span><span>       </span><span class="annot"><span class="annottext">UnitDefn -&gt; Sentence
+</span><span id="line-104"></span><span>       </span><span class="annot"><span class="annottext">UnitDefn -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">kilogram</span></span><span class="hs-special">]</span><span>
-</span><span id="line-106"></span><span>
-</span><span id="line-107"></span><span id="aDampingCoeffDesc"><span class="annot"><span class="annottext">aDampingCoeffDesc :: Sentence
+</span><span id="line-105"></span><span>
+</span><span id="line-106"></span><span id="aDampingCoeffDesc"><span class="annot"><span class="annottext">aDampingCoeffDesc :: Sentence
 </span><a href="Drasil.PDController.Assumptions.html#aDampingCoeffDesc"><span class="hs-identifier hs-var hs-var">aDampingCoeffDesc</span></a></span></span><span>
-</span><span id="line-108"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-107"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span>
-</span><span id="line-109"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><span id="line-108"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="Drasil.PDController.Concepts.html#ccDampingCoeff"><span class="hs-identifier hs-var">ccDampingCoeff</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a href="Drasil.PDController.Concepts.html#ccDampingCoeff"><span class="hs-identifier hs-var">ccDampingCoeff</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;spring&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.inThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;mass-spring-damper system&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-109"></span><span>       </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence
+</span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.PDController.Assumptions.html#aPwrPlant"><span class="hs-identifier hs-var">aPwrPlant</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-110"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;of the spring in the mass-spring-damper system&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-111"></span><span>       </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
-</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
-forall r.
-(HasUID r, HasRefAddress r, HasShortName r) =&gt;
-r -&gt; Sentence
-</span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
-</span><a href="Drasil.PDController.Assumptions.html#aPwrPlant"><span class="hs-identifier hs-var">aPwrPlant</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-112"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is assumed to be 1&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-113"></span><span>
-</span><span id="line-114"></span><span id="aStiffnessCoeffDesc"><span class="annot"><span class="annottext">aStiffnessCoeffDesc :: Sentence
+</span><span id="line-111"></span><span>
+</span><span id="line-112"></span><span id="aStiffnessCoeffDesc"><span class="annot"><span class="annottext">aStiffnessCoeffDesc :: Sentence
 </span><a href="Drasil.PDController.Assumptions.html#aStiffnessCoeffDesc"><span class="hs-identifier hs-var hs-var">aStiffnessCoeffDesc</span></a></span></span><span>
-</span><span id="line-115"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-113"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span>
-</span><span id="line-116"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><span id="line-114"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="Drasil.PDController.Concepts.html#ccStiffCoeff"><span class="hs-identifier hs-var">ccStiffCoeff</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-117"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="Drasil.PDController.Concepts.html#ccStiffCoeff"><span class="hs-identifier hs-var">ccStiffCoeff</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;of the spring in the mass-spring-damper system&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-118"></span><span>       </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-string">&quot;spring&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.inThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;mass-spring-damper system&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-115"></span><span>       </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.PDController.Assumptions.html#aPwrPlant"><span class="hs-identifier hs-var">aPwrPlant</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-119"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-116"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is assumed to be 20&quot;</span></span><span class="hs-special">]</span></pre></body></html>

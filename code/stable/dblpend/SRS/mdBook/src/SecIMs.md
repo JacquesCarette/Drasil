@@ -42,7 +42,7 @@ This section transforms the problem defined in the [problem description](./SecPr
 
 #### Detailed derivation of angle of the second rod: {#IM:calOfAngle2Deriv}
 
-By solving equations [GD:xForce2](./SecGDs.md#GD:xForce2) and [GD:yForce2](./SecGDs.md#GD:yForce2) for \\({\boldsymbol{T}\_{2}}\\,\sin\left({θ\_{2}}\right)\\) and \\({\boldsymbol{T}\_{2}}\\,\cos\left({θ\_{2}}\right)\\) and then substituting into equation [GD:xForce1](./SecGDs.md#GD:xForce1) and [GD:yForce1](./SecGDs.md#GD:yForce1) , We can get equations 1 and 2:
+By solving equations [GD:xForce2](./SecGDs.md#GD:xForce2) and [GD:yForce2](./SecGDs.md#GD:yForce2) for \\({\boldsymbol{T}\_{2}}\\,\sin\left({θ\_{2}}\right)\\) and \\({\boldsymbol{T}\_{2}}\\,\cos\left({θ\_{2}}\right)\\) and then substituting into equation [GD:xForce1](./SecGDs.md#GD:xForce1) and [GD:yForce1](./SecGDs.md#GD:yForce1) , we can get equations 1 and 2:
 
 \\[{m\_{1}}\\,{a\_{\text{x}1}}=-{\boldsymbol{T}\_{1}}\\,\sin\left({θ\_{1}}\right)-{m\_{2}}\\,{a\_{\text{x}2}}\\]
 

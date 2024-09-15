@@ -216,24 +216,24 @@ charsOfReader = [phrase undergraduate +:+ S "level 2" +:+ phrase Doc.physics,
 sysCtxIntro :: CI -> Contents
 sysCtxIntro prog = foldlSP
   [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
-   S "A circle represents an entity external to the", phrase software
+   S "A circle represents an entity external" `S.toThe` phrase software
    `sC` phraseNP (the user), S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself", sParen (short prog) +:+. EmptyS,
-   S "Arrows are used to show the data flow between the", phraseNP (system
+   S "Arrows" `S.are` S "used to show the data flow between the", phraseNP (system
    `andIts` environment)]
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_
    `andThe` user), S "is through an application programming" +:+.
-   phrase interface, S "The responsibilities of the", phraseNP (user 
+   phrase interface, S "The responsibilities" `S.ofThe` phraseNP (user 
    `andThe` system), S "are as follows"]
 
 sysCtxUsrResp :: CI -> [Sentence]
 sysCtxUsrResp prog = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
-  physical) +:+ S "state of the" +:+ phrase motion +:+ S "and the" +:+ plural inDatum +:+ S "related to the" +:+
+  physical) +:+ S "state" `S.ofThe` phrase motion +:+ S "and the" +:+ plural inDatum +:+ S "related to the" +:+
   phrase prog `sC` S "ensuring no errors in the" +:+
   plural datum +:+. S "entry",
-  S "Ensure that consistent units are used for" +:+. pluralNP (combineNINI input_ Doc.variable),
+  S "Ensure that consistent units" `S.are` S "used for" +:+. pluralNP (combineNINI input_ Doc.variable),
   S "Ensure required" +:+
   namedRef (SRS.assumpt ([]::[Contents]) ([]::[Section])) (phrase software +:+ plural assumption) +:+
   S "are appropriate for any particular" +:+
@@ -241,7 +241,7 @@ sysCtxUsrResp prog = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
 
 sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +:+
-  phrase input_ +:+. S "instead of a floating point number",
+  phrase input_ +:+. (S "instead" `S.ofA` S "floating point number"),
   S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+.
   pluralNP (physical `and_` softwareConstraint),
   S "Calculate the required" +:+. plural output_, 

@@ -275,11 +275,11 @@ coeffRestitutionEqn = neg $ sy finRelVel $.
 
 coeffRestitutionDesc :: Sentence
 coeffRestitutionDesc = foldlSent [S "The", getTandS QP.restitutionCoef,
-  S "determines the elasticity of a collision between two" +:+. plural rigidBody,
+  S "determines the elasticity" `S.ofA` S "collision between two" +:+. plural rigidBody,
   foldlList Comma List [
-  eS (sy QP.restitutionCoef $= exactDbl 1) +:+ S "results in an elastic collision",
-  eS (sy QP.restitutionCoef $< exactDbl 1) +:+ S "results in an inelastic collision",
-  eS (sy QP.restitutionCoef $= exactDbl 0) +:+ S "results in a totally inelastic collision"]]
+  eS (sy QP.restitutionCoef $= exactDbl 1) +:+ S "results" `S.in_` S "an elastic collision",
+  eS (sy QP.restitutionCoef $< exactDbl 1) +:+ S "results" `S.in_` S "an inelastic collision",
+  eS (sy QP.restitutionCoef $= exactDbl 0) +:+ S "results" `S.in_` S "a totally inelastic collision"]]
 -----------------------DD15 Kinetic Energy--------------------------------  
 kEnergyDD :: DataDefinition
 kEnergyDD = ddENoRefs kEnergy Nothing "kEnergy"
@@ -330,7 +330,7 @@ potEnergyDesc = foldlSent [atStartNP (the QP.potEnergy) `S.of_`
 ---
 
 collisionAssump, noDampingAssump, rightHandAssump, rigidBodyAssump, rigidTwoDAssump :: Sentence
-collisionAssump = S "All collisions are vertex-to-edge" +:+. fromSource assumpCT
+collisionAssump = S "All collisions" `S.are` S "vertex-to-edge" +:+. fromSource assumpCT
 noDampingAssump = S "No damping occurs during the simulation" +:+. fromSource assumpDI
 rightHandAssump = S "A" +:+ phrase rightHand `S.is` S "used" +:+. fromSource assumpAD
 rigidBodyAssump = S "All bodies are assumed to be rigid" +:+. fromSource assumpOT

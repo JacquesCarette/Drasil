@@ -52,7 +52,7 @@ likelyChgs = [lcVODES, lcEC, lcID, lcIJC]
 unlikelyChangesStmt1, unlikelyChangesStmt2, unlikelyChangesStmt3, unlikelyChangesStmt4 :: Sentence
 
 unlikelyChangesStmt1 = (S "The goal of the system" `S.is` S "to simulate the interactions of rigid bodies" !.)
-unlikelyChangesStmt2 = (S "There will always be a source of input data external" `S.toThe` S "software" !.)
+unlikelyChangesStmt2 = (S "There will always be a source of input data external to the software" !.)
 unlikelyChangesStmt3 = (S "A Cartesian Coordinate system is used" !.)
 unlikelyChangesStmt4 = (S "All objects" `S.are` S "rigid bodies" !.)
 

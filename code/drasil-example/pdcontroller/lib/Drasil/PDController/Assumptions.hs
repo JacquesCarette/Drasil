@@ -65,7 +65,7 @@ apwrPlantTxFnxDesc
 
 aDecoupledDesc
   = foldlSent
-      [S "The decoupled form of the", phrase pidC,
+      [S "The decoupled form" `S.ofThe` phrase pidC,
          S "equation used in this", phrase simulation]
 
 aSPDesc
@@ -80,40 +80,37 @@ aExtDisturbDesc
 
 aManualTuningDesc
   = foldlSent
-      [S "This model will be used for manual tuning of the", phrase pidC]
+      [S "This model will be used for manual tuning" `S.ofThe` phrase pidC]
 
 aInitialValueDesc
   = foldlSent
-      [S "The initial value of the", phrase processVariable,
+      [S "The initial value" `S.ofThe` phrase processVariable,
          S "is assumed to be zero"]
 
 aParallelEqDesc
   = foldlSent
-      [S "The Parallel form of the equation is used for the", phrase pidC]
+      [S "The Parallel form" `S.ofThe` S "equation is used for the", phrase pidC]
 
 aUnfilteredDerivativeDesc
   = foldlSent
-      [S "A pure derivative function is used for this simulation;",
+      [S "A pure derivative function" `S.is` S "used for this simulation;",
        S "there are no filters applied"]
 
 aMassDesc
   = foldlSent
-      [atStartNP (the mass),
-       S "of the spring in the mass-spring-damper system",
+      [atStartNP (the mass) `S.ofThe` S "spring" `S.inThe` S "mass-spring-damper system",
        sParen (refS aPwrPlant),
        S "is assumed to be 1", 
        phrase kilogram]
 
 aDampingCoeffDesc
   = foldlSent
-      [atStartNP (the ccDampingCoeff),
-       S "of the spring in the mass-spring-damper system",
+      [atStartNP (the ccDampingCoeff) `S.ofThe` S "spring" `S.inThe` S "mass-spring-damper system",
        sParen (refS aPwrPlant), 
        S "is assumed to be 1"]
 
 aStiffnessCoeffDesc
   = foldlSent
-      [atStartNP (the ccStiffCoeff),
-       S "of the spring in the mass-spring-damper system",
+      [atStartNP (the ccStiffCoeff) `S.ofThe` S "spring" `S.inThe` S "mass-spring-damper system",
        sParen (refS aPwrPlant), 
        S "is assumed to be 20"]

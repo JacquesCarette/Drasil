@@ -182,12 +182,12 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)
 para1_introduction_intro :: Sentence
 para1_introduction_intro = foldlSent
   [S "Due to the rising cost of developing", plural videoGame `sC` 
-  S "developers are looking for ways to save time and money for their" +:+.
+  S "developers are looking" `S.for` S "ways to save time and money for their" +:+.
   plural project, S "Using an", phrase openSource, 
   phrase physLib,
   S "that is reliable and free will cut down development costs and lead",
   S "to better quality" +:+. plural product_ ,
-  S "The document describes the program" ,
+  S "The document describes the program",
   S " based on the original, manually created version of" +:+
   namedRef externalLinkRef (S "GamePhysics")]
 
@@ -244,7 +244,7 @@ sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont)
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_
    `andThe` user), S "is through an application programming" +:+.
-   phrase interface, S "The responsibilities of the", phraseNP (user 
+   phrase interface, S "The responsibilities" `S.ofThe` phraseNP (user 
    `andThe` system), S "are as follows"]
 
 sysCtxUsrResp :: [Sentence]
@@ -420,7 +420,7 @@ offShelfSolsIntro, offShelfSols2DList,
   offShelfSolsMid, offShelfSols3DList :: Contents
 
 offShelfSolsIntro = mkParagraph $ foldlSentCol 
-  [S "As mentioned in the", namedRef (SRS.probDesc [] []) (phrase problemDescription) `sC`
+  [S "As mentioned" `S.inThe` namedRef (SRS.probDesc [] []) (phrase problemDescription) `sC`
   S "there already exist free", phrase openSource, phrase game +:+.
   plural physLib, S "Similar", getAcc twoD, plural physLib, S "are"]
 

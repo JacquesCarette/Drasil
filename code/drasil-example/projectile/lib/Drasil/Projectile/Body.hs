@@ -105,12 +105,12 @@ mkSRS = [TableOfContents,
 
 justification, scope :: Sentence
 justification = foldlSent [atStart projectile, phrase motion, S "is a common" +:+.
-  phraseNP (problem `in_` physics), S "Therefore, it is useful to have a",
+  phraseNP (problem `in_` physics), S "Therefore" `sC` S "it is useful to have a",
   phrase program, S "to solve and model these types of" +:+. plural problem, 
   S "Common", plural example `S.of_` phraseNP (combineNINI projectile motion), 
   S "include" +:+. foldlList Comma List projectileExamples,
   S "The document describes the program called", phrase projectileTitle,
-  S ", which is based on the original, manually created version of" +:+
+  S ", which is based" `S.onThe` S "original, manually created version of" +:+
   namedRef externalLinkRef (S "Projectile")]
 scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)),
   sParen (getAcc twoD), phraseNP (combineNINI projectile motion), phrase problem, 
@@ -216,13 +216,13 @@ sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = map foldlSent [[S "Provide initial", pluralNP (condition `ofThePS`
   physical), S "state" `S.ofThe` phrase motion `S.andThe` plural inDatum, S "related" `S.toThe`
   phrase projectileTitle `sC` S "ensuring no errors" `S.inThe` plural datum, S "entry"], 
-  [S "Ensure that consistent units are used for", pluralNP (combineNINI input_ Doc.variable)],
+  [S "Ensure that consistent units" `S.are` S "used for", pluralNP (combineNINI input_ Doc.variable)],
   [S "Ensure required", namedRef (SRS.assumpt ([]::[Contents]) ([]::[Section])) 
    (phrase software +:+ plural assumption), S "are appropriate for any particular",
   phrase problem, phrase input_ `S.toThe` phrase software]]
 
 sysCtxSysResp :: [Sentence]
-sysCtxSysResp = map foldlSent [[S "Detect data type mismatch, such as a string of characters",
+sysCtxSysResp = map foldlSent [[S "Detect data type mismatch" `sC` S "such as a string of characters",
   phrase input_, S "instead of a floating point number"],
   [S "Determine if the", plural input_, S "satisfy the required",
   pluralNP (physical `and_` softwareConstraint)],

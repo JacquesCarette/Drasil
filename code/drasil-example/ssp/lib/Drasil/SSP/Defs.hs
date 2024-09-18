@@ -74,13 +74,13 @@ slpSrf = dccWDS "slip surface" (cn' "slip surface")
 --FIXME: move to Concepts/soldMechanics.hs? They are too specific though
 plnStrn = dccWDS "plane strain" (cn' "plane strain") 
   (S "A condition where the resultant" +:+ plural stress +:+ S "in one of" +:+
-  S "the directions of a " +:+ phrase threeD +:+ S "material can be" +:+
+  S "the directions" `S.ofA` phrase threeD +:+ S "material can be" +:+
   S "approximated as zero. This condition results when a body is" +:+ 
   S "constrained to not deform in one direction, or when the" +:+ 
-  phrase len +:+ S "of one" +:+ phrase dimension +:+ S "of the body" +:+
-  S "dominates the others, to the point where it can be assumed as" +:+.
-  S "infinite" +:+ atStart' stress +:+ S "in the direction of the" +:+
-  S "dominant" +:+ phrase dimension +:+ S "can be approximated as zero")
+  phrase len +:+ S "of one" +:+ phrase dimension `S.ofThe` S "body" +:+
+  S "dominates the others" `sC` S "to the point where it can be assumed as" +:+.
+  S "infinite" +:+ atStart' stress +:+ S "in the direction" `S.ofThe` S "dominant" +:+ 
+  phrase dimension +:+ S "can be approximated as zero")
 
 crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface") 
   (atStartNP (slpSrf `ofThe` slope) +:+
@@ -89,7 +89,7 @@ crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface")
 
 fsConcept = dccWDS "FS" factorOfSafety
   (S "The global stability metric" `S.ofA` phraseNP (slpSrf `ofA` slope) `sC` 
-  S "defined as the ratio of" +:+ phrase shearRes +:+ 
+  S "defined as the ratio" `S.of_` phrase shearRes +:+ 
   S "to" +:+ phrase mobShear)
 -- OLD DEFN: Stability metric. How likely a slip surface is to
 -- experience failure through slipping.

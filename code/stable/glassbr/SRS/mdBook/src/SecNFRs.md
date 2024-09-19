@@ -4,7 +4,7 @@ This section provides the non-functional requirements, the qualities that the so
 
 <div id="correct"></div>
 
-Correctness: The outputs of the code have the properties described in [Sec:Properties of a Correct Solution](./SecCorSolProps.md#Sec:CorSolProps).
+Correctness: The outputs of the code have the [properties of a correct solution](./SecCorSolProps.md#Sec:CorSolProps).
 
 <div id="verifiable"></div>
 

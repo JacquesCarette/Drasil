@@ -6,13 +6,13 @@ import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (InstanceModel, HasOutput(output))
 
-import Drasil.DocLang (inReq, mkMaintainableNFR)
+import Drasil.DocLang (inReq, mkMaintainableNFR, mkCorrectNFR, mkVerifiableNFR, 
+  mkUnderstandableNFR, mkReusableNFR)
 import Drasil.DocLang.SRS (datCon, propCorSol) 
 
 import Data.Drasil.Concepts.Computation (inValue)
-import Data.Drasil.Concepts.Documentation (code, condition,
-  funcReqDom, input_, mg, mis, nonFuncReqDom, output_,
-  physicalConstraint, property, propOfCorSol, value, vavPlan)
+import Data.Drasil.Concepts.Documentation (condition, funcReqDom, input_, output_,
+  physicalConstraint, propOfCorSol, value)
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 import Data.Drasil.Concepts.Thermodynamics as CT (lawConsEnergy, melting)
@@ -136,24 +136,16 @@ nfRequirements :: [ConceptInstance]
 nfRequirements = [correct, verifiable, understandable, reusable, maintainable]
 
 correct :: ConceptInstance
-correct = cic "correct" (foldlSent [atStartNP'
-  (output_ `the_ofThePS` code), S "have the",
-  plural property, S "described in", namedRef (propCorSol [] []) (titleize' propOfCorSol)
-  ]) "Correct" nonFuncReqDom
+correct = mkCorrectNFR "correct" "Correctness"
  
 verifiable :: ConceptInstance
-verifiable = cic "verifiable" (foldlSent [
-  atStartNP (the code), S "is tested with complete",
-  phrase vavPlan]) "Verifiable" nonFuncReqDom
+verifiable = mkVerifiableNFR "verifiable" "Verifiability"
 
 understandable :: ConceptInstance
-understandable = cic "understandable" (foldlSent [
-  atStartNP (the code), S "is modularized with complete",
-  phrase mg `S.and_` phrase mis]) "Understandable" nonFuncReqDom
+understandable = mkUnderstandableNFR "understandable" "Understandability"
 
 reusable :: ConceptInstance
-reusable = cic "reusable" (foldlSent [
-  atStartNP (the code), S "is modularized"]) "Reusable" nonFuncReqDom
+reusable = mkReusableNFR "reusable" "Reusability"
 
 maintainable :: ConceptInstance
-maintainable = mkMaintainableNFR "maintainable" 10 "Maintainable"
+maintainable = mkMaintainableNFR "maintainable" 10 "Maintainability"

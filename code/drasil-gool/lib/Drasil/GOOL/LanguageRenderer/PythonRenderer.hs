@@ -66,11 +66,11 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess,
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs,
-  lambda, func, get, set, listAdd, listAppend, listAccess, listSet, getFunc,
-  setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign,
-  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw,
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
-  buildClass, implementingClass, commentedClass, modFromData, fileDoc,
+  lambda, func, get, set, listAdd, listAppend, 
+  listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, 
+  assign, subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, 
+  comment, throw, ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
+  function, buildClass, implementingClass, commentedClass, modFromData, fileDoc,
   fileFromData, local)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
@@ -79,7 +79,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   stateVarDef, constVar, litArray, listSetFunc, extraClass, listAccessFunc, 
   multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
   mainBody, inOutFunc, docInOutFunc', listSize, intToIndex, indexToInt,
-  varDecDef, openFileR', openFileW', openFileA', argExists, forEach', global)
+  varDecDef, openFileR', openFileW', openFileA', argExists, forEach', global, setMethodCall)
 import qualified Drasil.GOOL.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
   notifyObservers')
@@ -457,6 +457,9 @@ instance List PythonCode where
 
 instance Set PythonCode where
   contains a b = typeBinExpr (inPrec pyIn) bool b a
+  setAdd = CP.setMethodCall pyAdd
+  setRemove = CP.setMethodCall pyRemove
+  setUnion = CP.setMethodCall pyUnion
 
 instance InternalList PythonCode where
   listSlice' b e s vn vo = pyListSlice vn vo (getVal b) (getVal e) (getVal s)
@@ -836,7 +839,7 @@ pyInputFunc = text "input()" -- raw_input() for < Python 3.0
 pyPrintFunc = text printLabel
 
 pyListSize, pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyClose, 
-  pySplit, pyRange, pyRstrip, pyMath, pyIn :: String
+  pySplit, pyRange, pyRstrip, pyMath, pyIn, pyAdd, pyRemove, pyUnion :: String
 pyListSize = "len"
 pyIndex = "index"
 pyInsert = "insert"
@@ -849,6 +852,9 @@ pyRange = "range"
 pyRstrip = "rstrip"
 pyMath = "math"
 pyIn = "in"
+pyAdd = "add"
+pyRemove = "remove"
+pyUnion = "union"
 
 pyDef, pyLambdaDec, pyElseIf, pyRaise, pyExcept :: Doc
 pyDef = text "def"

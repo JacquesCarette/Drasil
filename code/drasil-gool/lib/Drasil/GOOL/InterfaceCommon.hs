@@ -283,8 +283,18 @@ class (ValueSym r) => List r where
   indexOf :: SValue r -> SValue r -> SValue r
 
 class (ValueSym r) => Set r where
-  -- set, element
+  -- | Checks membership
+  -- Arguments are: Set, Value
   contains :: SValue r -> SValue r -> SValue r
+  -- | Inserts a value into a set
+  -- Arguments are: Set, Value
+  setAdd :: SValue r -> SValue r -> SValue r
+  -- | Removes a value from a set
+  -- Arguments are: Set, Value
+  setRemove :: SValue r -> SValue r -> SValue r
+  -- | Removes a value from a set
+  -- Arguments are: Set, Set
+  setUnion :: SValue r -> SValue r -> SValue r
 
 class (ValueSym r) => InternalList r where
   listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) 

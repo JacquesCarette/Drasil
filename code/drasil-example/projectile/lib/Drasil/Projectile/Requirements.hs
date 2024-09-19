@@ -2,7 +2,6 @@ module Drasil.Projectile.Requirements (funcReqs, nonfuncReqs) where
 
 import Language.Drasil
 import Drasil.DocLang.SRS (datCon)
-import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.DocLang (mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, 
   mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR)

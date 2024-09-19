@@ -16,4 +16,4 @@ Maintainability: If a likely change is made to the finished software, it will ta
 
 <div id="verifiability"></div>
 
-Verifiability: The code shall be verifiable against a Verification and Validation plan.
+Verifiability: The code is tested with complete verification and validation plan.

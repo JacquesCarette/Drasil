@@ -3,7 +3,6 @@ module Drasil.DblPend.Requirements where
 import Language.Drasil
 import Drasil.DocLang.SRS (datCon)
 import Drasil.DocLang (mkPortableNFR, mkCorrectNFR)
-import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Computation (inValue)

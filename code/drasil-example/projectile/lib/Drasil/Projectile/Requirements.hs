@@ -1,15 +1,15 @@
 module Drasil.Projectile.Requirements (funcReqs, nonfuncReqs) where
 
 import Language.Drasil
-import Drasil.DocLang.SRS (datCon, propCorSol)
+import Drasil.DocLang.SRS (datCon)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.DocLang (mkMaintainableNFR, mkPortableNFR)
+import Drasil.DocLang (mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, 
+  mkVerifiableNFR, mkUnderstandableNFR, mkReusableNFR)
 
 import Data.Drasil.Concepts.Computation (inValue)
-import Data.Drasil.Concepts.Documentation (code, datumConstraint,
-  funcReqDom, mg, mis, nonFuncReqDom, output_,
-  property, value, vavPlan, propOfCorSol)
+import Data.Drasil.Concepts.Documentation (datumConstraint,
+  funcReqDom, output_, value)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.Software (errMsg)
 
@@ -53,23 +53,16 @@ nonfuncReqs :: [ConceptInstance]
 nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, portable]
 
 correct :: ConceptInstance
-correct = cic "correct" (foldlSent [
-  atStartNP' (output_ `the_ofThePS` code), S "have the",
-  plural property, S "described in", namedRef (propCorSol [] []) (titleize' propOfCorSol)
-  ]) "Correctness" nonFuncReqDom
+correct = mkCorrectNFR "correct" "Correctness"
  
 verifiable :: ConceptInstance
-verifiable = cic "verifiable" (foldlSent [
-  atStartNP (the code), S "is tested with complete",
-  phrase vavPlan]) "Verifiability" nonFuncReqDom
+verifiable = mkVerifiableNFR "verifiable" "Verifiability"
 
 understandable :: ConceptInstance
-understandable = cic "understandable" (foldlSent [
-  atStartNP (the code), S "is modularized with complete",
-  phraseNP (mg `and_` mis)]) "Understandability" nonFuncReqDom
+understandable = mkUnderstandableNFR "understandable" "Understandability"
 
 reusable :: ConceptInstance
-reusable = cic "reusable" (foldlSent [atStartNP (the code), S "is modularized"]) "Reusability" nonFuncReqDom
+reusable = mkReusableNFR "reusable" "Reusability"
 
 maintainable :: ConceptInstance
 maintainable = mkMaintainableNFR "maintainable" 10 "Maintainability"

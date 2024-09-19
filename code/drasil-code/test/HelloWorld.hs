@@ -10,7 +10,7 @@ import Drasil.GOOL (MSBody, MSBlock, MSStatement, SMethod, SVariable,
   ControlStatement(..), VariableSym(var, constant), ScopeSym(..), Literal(..),
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), extFuncApp,
-  List(..), MethodSym(..), OODeclStatement(objDecDef))
+  List(..), MethodSym(..), OODeclStatement(objDecDef), Set(..))
 import qualified Drasil.GOOL as OO (GSProgram, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GProc (ProcProg)
@@ -88,7 +88,10 @@ helloInitVariables = block [comment "Initializing variables",
   printLn (valueOf $ var "boringList" (listType bool)),
   assert (valueOf (var "b" int) ?== litInt 5) (litString "b should be 5"),
   assert (listSize (valueOf myOtherList) ?== litInt 4) (litString "myOtherList should have 4 elements"),
-  assert (valueOf (var "oneIndex" int) ?== litInt 0) (litString "oneIndex should be 0")]
+  assert (valueOf (var "oneIndex" int) ?== litInt 0) (litString "oneIndex should be 0"),
+  setDecDef (var "s" (setType int)) mainFn (litSet int [litInt 4, litInt 7, litInt 5]),
+  assert (contains (valueOf (var "s" (setType int))) (litInt 7))
+    (litString "Set s should contain 7")]
 
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9, 

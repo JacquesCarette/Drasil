@@ -10,12 +10,14 @@
 #include <iterator>
 #include <limits>
 #include <math.h>
+#include <set>
 #include <sstream>
 #include <string>
 #include <vector>
 
 #include "Helper.hpp"
 
+using std::set;
 using std::string;
 using std::vector;
 
@@ -63,6 +65,8 @@ int main(int argc, const char *argv[]) {
     assert(b == 5 && "b should be 5");
     assert((int)(myOtherList.size()) == 4 && "myOtherList should have 4 elements");
     assert(oneIndex == 0 && "oneIndex should be 0");
+    set<int> s = {4, 7, 5};
+    assert(s.find(7) != s.end() && "Set s should contain 7");
     
     // List slicing tests
     // Create variables for list slices

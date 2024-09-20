@@ -4,13 +4,13 @@
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span>
 </span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
 </span><span id="line-6"></span><span>
-</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DocLang</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">mkInputPropsTable</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mkMaintainableNFR</span></span><span class="hs-special">)</span><span>
-</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DocLang.SRS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">datCon</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">propCorSol</span></span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-9"></span><span>
-</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Computation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">inDatum</span></span><span class="hs-special">)</span><span>
-</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">code</span></span><span class="hs-special">,</span><span>
-</span><span id="line-12"></span><span>  </span><span class="annot"><span class="hs-identifier">datum</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">funcReqDom</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">input_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mg</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mis</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">name_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">nonFuncReqDom</span></span><span class="hs-special">,</span><span>
-</span><span id="line-13"></span><span>  </span><span class="annot"><span class="hs-identifier">output_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">physicalConstraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">property</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">symbol_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">user</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">value</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">propOfCorSol</span></span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DocLang</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">mkInputPropsTable</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mkMaintainableNFR</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mkCorrectNFR</span></span><span class="hs-special">,</span><span>
+</span><span id="line-8"></span><span>  </span><span class="annot"><span class="hs-identifier">mkUnderstandableNFR</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mkReusableNFR</span></span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DocLang.SRS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">datCon</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">propCorSol</span></span><span class="hs-special">)</span><span> </span><span>
+</span><span id="line-10"></span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Computation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">inDatum</span></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">datum</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">funcReqDom</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">input_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">name_</span></span><span class="hs-special">,</span><span>
+</span><span id="line-13"></span><span>  </span><span class="annot"><span class="hs-identifier">output_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">physicalConstraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">symbol_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">user</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">value</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">propOfCorSol</span></span><span class="hs-special">)</span><span>
 </span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">twoD</span></span><span class="hs-special">)</span><span>
 </span><span id="line-15"></span><span>
 </span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SSP.Defs.html"><span class="hs-identifier">Drasil.SSP.Defs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SSP.Defs.html#crtSlpSrf"><span class="hs-identifier">crtSlpSrf</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Defs.html#slope"><span class="hs-identifier">slope</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.Defs.html#slpSrf"><span class="hs-identifier">slpSrf</span></a></span><span class="hs-special">)</span><span>
@@ -519,90 +519,30 @@ Sentence -&gt; r -&gt; Sentence
 </span><span id="line-109"></span><span>
 </span><span id="line-110"></span><span class="annot"><a href="Drasil.SSP.Requirements.html#correct"><span class="hs-identifier hs-type">correct</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
 </span><span id="line-111"></span><span id="correct"><span class="annot"><span class="annottext">correct :: ConceptInstance
-</span><a href="Drasil.SSP.Requirements.html#correct"><span class="hs-identifier hs-var hs-var">correct</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
-forall c.
-Concept c =&gt;
-String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
-</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;correct&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
-</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-112"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-forall n. NounPhrase n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">atStartNP'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict
-</span><span class="hs-identifier hs-var">output_</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; NP
-forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
-</span><span class="hs-operator hs-var">`the_ofThePS`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
-</span><span class="hs-identifier hs-var">code</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;have the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-113"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
-forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
-</span><span class="hs-identifier hs-var">property</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;described in&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Section -&gt; Sentence
-forall r.
-(HasUID r, HasRefAddress r, HasShortName r) =&gt;
-r -&gt; Sentence
-</span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
-</span><span class="hs-identifier hs-var">propCorSol</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-114"></span><span>  </span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Correct&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">nonFuncReqDom</span></span><span>
+</span><a href="Drasil.SSP.Requirements.html#correct"><span class="hs-identifier hs-var hs-var">correct</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">mkCorrectNFR</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;correct&quot;</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Correctness&quot;</span></span><span>
+</span><span id="line-112"></span><span>
+</span><span id="line-113"></span><span class="annot"><a href="Drasil.SSP.Requirements.html#understandable"><span class="hs-identifier hs-type">understandable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-114"></span><span id="understandable"><span class="annot"><span class="annottext">understandable :: ConceptInstance
+</span><a href="Drasil.SSP.Requirements.html#understandable"><span class="hs-identifier hs-var hs-var">understandable</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">mkUnderstandableNFR</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;understandable&quot;</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Understandability&quot;</span></span><span>
 </span><span id="line-115"></span><span>
-</span><span id="line-116"></span><span class="annot"><a href="Drasil.SSP.Requirements.html#understandable"><span class="hs-identifier hs-type">understandable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-117"></span><span id="understandable"><span class="annot"><span class="annottext">understandable :: ConceptInstance
-</span><a href="Drasil.SSP.Requirements.html#understandable"><span class="hs-identifier hs-var hs-var">understandable</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
-forall c.
-Concept c =&gt;
-String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
-</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;understandable&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
-</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-118"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-forall n. NounPhrase n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; NP
-forall t. NamedIdea t =&gt; t -&gt; NP
-</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
-</span><span class="hs-identifier hs-var">code</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;is modularized with complete&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-119"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
-forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><span class="hs-identifier hs-var">mg</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
-forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><span class="hs-identifier hs-var">mis</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Understandable&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">nonFuncReqDom</span></span><span>
-</span><span id="line-120"></span><span>
-</span><span id="line-121"></span><span class="annot"><a href="Drasil.SSP.Requirements.html#reusable"><span class="hs-identifier hs-type">reusable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-122"></span><span id="reusable"><span class="annot"><span class="annottext">reusable :: ConceptInstance
-</span><a href="Drasil.SSP.Requirements.html#reusable"><span class="hs-identifier hs-var hs-var">reusable</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
-forall c.
-Concept c =&gt;
-String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
-</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;reusable&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
-</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-123"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-forall n. NounPhrase n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; NP
-forall t. NamedIdea t =&gt; t -&gt; NP
-</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
-</span><span class="hs-identifier hs-var">code</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;is modularized&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Reusable&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">nonFuncReqDom</span></span><span>
-</span><span id="line-124"></span><span>
-</span><span id="line-125"></span><span class="annot"><a href="Drasil.SSP.Requirements.html#maintainable"><span class="hs-identifier hs-type">maintainable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-126"></span><span id="maintainable"><span class="annot"><span class="annottext">maintainable :: ConceptInstance
+</span><span id="line-116"></span><span class="annot"><a href="Drasil.SSP.Requirements.html#reusable"><span class="hs-identifier hs-type">reusable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-117"></span><span id="reusable"><span class="annot"><span class="annottext">reusable :: ConceptInstance
+</span><a href="Drasil.SSP.Requirements.html#reusable"><span class="hs-identifier hs-var hs-var">reusable</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">mkReusableNFR</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;reusable&quot;</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Reusability&quot;</span></span><span>
+</span><span id="line-118"></span><span>
+</span><span id="line-119"></span><span class="annot"><a href="Drasil.SSP.Requirements.html#maintainable"><span class="hs-identifier hs-type">maintainable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-120"></span><span id="maintainable"><span class="annot"><span class="annottext">maintainable :: ConceptInstance
 </span><a href="Drasil.SSP.Requirements.html#maintainable"><span class="hs-identifier hs-var hs-var">maintainable</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Integer -&gt; String -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">mkMaintainableNFR</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;maintainable&quot;</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">10</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Maintainable&quot;</span></span><span>
-</span><span id="line-127"></span></pre></body></html>
+</span><span class="hs-string">&quot;Maintainability&quot;</span></span><span>
+</span><span id="line-121"></span></pre></body></html>

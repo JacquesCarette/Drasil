@@ -458,7 +458,18 @@ listSet :: List r => SValue r -> SValue r -> SValue r -> SValue r
 --   Arguments are: List, Value
 indexOf :: List r => SValue r -> SValue r -> SValue r
 class (ValueSym r) => Set r
+
+-- | Checks membership Arguments are: Set, Value
 contains :: Set r => SValue r -> SValue r -> SValue r
+
+-- | Inserts a value into a set Arguments are: Set, Value
+setAdd :: Set r => SValue r -> SValue r -> SValue r
+
+-- | Removes a value from a set Arguments are: Set, Value
+setRemove :: Set r => SValue r -> SValue r -> SValue r
+
+-- | Removes a value from a set Arguments are: Set, Set
+setUnion :: Set r => SValue r -> SValue r -> SValue r
 class (ValueSym r) => InternalList r
 listSlice' :: InternalList r => Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
 
@@ -1437,6 +1448,7 @@ openFileW' :: CommonRenderSym r => SValue r -> SValue r
 openFileA' :: CommonRenderSym r => SValue r -> SValue r
 argExists :: CommonRenderSym r => Integer -> SValue r
 global :: Monad r => r ScopeData
+setMethodCall :: OORenderSym r => Label -> SValue r -> SValue r -> SValue r
 
 
 -- | The logic to render Python code is contained in this module
@@ -2856,7 +2868,18 @@ listSet :: List r => SValue r -> SValue r -> SValue r -> SValue r
 --   Arguments are: List, Value
 indexOf :: List r => SValue r -> SValue r -> SValue r
 class (ValueSym r) => Set r
+
+-- | Checks membership Arguments are: Set, Value
 contains :: Set r => SValue r -> SValue r -> SValue r
+
+-- | Inserts a value into a set Arguments are: Set, Value
+setAdd :: Set r => SValue r -> SValue r -> SValue r
+
+-- | Removes a value from a set Arguments are: Set, Value
+setRemove :: Set r => SValue r -> SValue r -> SValue r
+
+-- | Removes a value from a set Arguments are: Set, Set
+setUnion :: Set r => SValue r -> SValue r -> SValue r
 
 -- | Creates a slice of a list and assigns it to a variable. Arguments are:
 --   Variable to assign List to read from (optional) Start index inclusive.
@@ -3282,7 +3305,18 @@ listSet :: List r => SValue r -> SValue r -> SValue r -> SValue r
 --   Arguments are: List, Value
 indexOf :: List r => SValue r -> SValue r -> SValue r
 class (ValueSym r) => Set r
+
+-- | Checks membership Arguments are: Set, Value
 contains :: Set r => SValue r -> SValue r -> SValue r
+
+-- | Inserts a value into a set Arguments are: Set, Value
+setAdd :: Set r => SValue r -> SValue r -> SValue r
+
+-- | Removes a value from a set Arguments are: Set, Value
+setRemove :: Set r => SValue r -> SValue r -> SValue r
+
+-- | Removes a value from a set Arguments are: Set, Set
+setUnion :: Set r => SValue r -> SValue r -> SValue r
 
 -- | Creates a slice of a list and assigns it to a variable. Arguments are:
 --   Variable to assign List to read from (optional) Start index inclusive.

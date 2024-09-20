@@ -1041,6 +1041,21 @@ mkMaintainableNFR :: String -> Integer -> String -> ConceptInstance
 -- | Common Non-Functional Requirement for Portability.
 mkPortableNFR :: String -> [String] -> String -> ConceptInstance
 
+-- | Common Non-Functional Requirement for Correctness.
+mkCorrectNFR :: String -> String -> ConceptInstance
+
+-- | Common Non-Functional Requirement for Verifiability.
+mkVerifiableNFR :: String -> String -> ConceptInstance
+
+-- | Common Non-Functional Requirement for Understandability.
+mkUnderstandableNFR :: String -> String -> ConceptInstance
+
+-- | Common Non-Functional Requirement for Reusability.
+mkReusableNFR :: String -> String -> ConceptInstance
+
+-- | Common Non-Functional Requirement for Security.
+mkSecurityNFR :: String -> String -> ConceptInstance
+
 -- | General <a>Sentence</a> that describes some auxiliary specifications
 --   of the system.
 auxSpecSent :: Sentence

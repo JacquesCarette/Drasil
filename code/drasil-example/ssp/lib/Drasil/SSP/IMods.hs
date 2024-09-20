@@ -103,15 +103,15 @@ fctSftyDerivEqns2 = [fctSftyDerivEqn11, fctSftyDerivEqn12, fctSftyDerivEqn13,
 
 fctSftyDerivSentence1 :: [Sentence]
 fctSftyDerivSentence1 = [atStartNP (the mobShrI), definedIn'' bsShrFEqGD, 
-  S "can be substituted into the definition of",
-  phrase mobShrI, S "based on the", phrase fs `sC` S "from",
+  S "can be substituted into the definition" `S.of_` phrase mobShrI, 
+  S "based on the", phrase fs `sC` S "from",
   refS mobShrGD, S "yielding", eqN 1, S "below"]
 
 fctSftyDerivSentence2 :: [Sentence]
 fctSftyDerivSentence2 = [S "An expression for the", phrase nrmFSubWat `sC`
   ch nrmFSubWat `sC` S "can be derived by substituting the",
   phrase totNrmForce, S "equilibrium from", refS normForcEqGD,
-  S "into the definition for", phrase nrmFSubWat, S "from" +:+. refS resShearWOGD, S "This results in", eqN 2]
+  S "into the definition" `S.for` phrase nrmFSubWat, S "from" +:+. refS resShearWOGD, S "This results in", eqN 2]
 
 fctSftyDerivSentence3 :: [Sentence]
 fctSftyDerivSentence3 = [S "Substituting", eqN 2, S "into", eqN 1, S "gives"]
@@ -119,23 +119,23 @@ fctSftyDerivSentence3 = [S "Substituting", eqN 2, S "into", eqN 1, S "gives"]
 fctSftyDerivSentence4 :: [Sentence]
 fctSftyDerivSentence4 = [S "Since the", phrase intShrForce,
   ch intShrForce `S.and_` phrase intNormForce, ch intNormForce,
-  S "are unknown, they are separated from the other terms as follows"]
+  S "are unknown" `sC` S "they are separated from the other terms as follows"]
 
 fctSftyDerivSentence5 :: [Sentence]
 fctSftyDerivSentence5 = [S "Applying assumptions", refS assumpSF `S.and_`
   refS assumpSL `sC` S "which state that the",
   phraseNP (earthqkLoadFctr `andThe` surfLoad) `sC`
-  S "respectively, are zero, allows for further simplification as shown below"]
+  S "respectively" `sC` S "are zero" `sC` S "allows" `S.for` S "further simplification as shown below"]
 
 fctSftyDerivSentence6 :: [Sentence]
 fctSftyDerivSentence6 = [S "The definitions of", refS resShearWOGD
-  `S.and_` refS mobShearWOGD, S "are present in this equation, and",
+  `S.and_` refS mobShearWOGD, S "are present in this equation" `sC` S "and",
   S "thus can be replaced by", eS (inxi shearRNoIntsl) `S.and_`
   eS (inxi shearFNoIntsl) `sC` S "respectively"]
 
 fctSftyDerivSentence7 :: [Sentence]
 fctSftyDerivSentence7 = [atStartNP (the intShrForce), ch intShrForce,
-  S "can be expressed in terms of the", phrase intNormForce,
+  S "can be expressed in terms" `S.ofThe` phrase intNormForce,
   ch intNormForce, S "using", refS assumpINSFL `S.and_`
   refS normShrRGD `sC` S "resulting in"]
 
@@ -157,7 +157,7 @@ fctSftyDerivEllipsis = S "..."
 fctSftyDerivSentence11 :: [Sentence]
 fctSftyDerivSentence11 = [S "Applying", refS assumpES `sC`
   S "which says that", eS (idx (sy intNormForce) (int 0)) `S.and_`
-  eS (indxn intNormForce), S "are zero, results in the following special cases:",eqN 8, S "for the first slice"]
+  eS (indxn intNormForce), S "are zero" `sC` S "results in the following special cases:",eqN 8, S "for the first slice"]
 
 fctSftyDerivSentence12 :: [Sentence]
 fctSftyDerivSentence12 = [S "and", eqN 9, S "for the", ch numbSlices :+:
@@ -183,19 +183,19 @@ fctSftyDerivSentence17 = [S "This can be rearranged by multiplying both sides",
   S "over addition to obtain"]
 
 fctSftyDerivSentence18 :: [Sentence]
-fctSftyDerivSentence18 = [S "The multiplication of the", ch mobShrC,
+fctSftyDerivSentence18 = [S "The multiplication" `S.ofThe` ch mobShrC,
   S "terms can be further distributed over the subtractions, resulting in the",
   S "equation having terms that each either contain an", ch shearRNoIntsl,
   S "or a" +:+. ch shearFNoIntsl, S "The equation can then be rearranged so",
-  S "terms containing an", ch shearRNoIntsl, S "are on one side of the",
-  S "equality, and terms containing a", ch shearFNoIntsl +:+.
+  S "terms containing an", ch shearRNoIntsl, S "are on one side" `S.ofThe` S "equality" `sC` 
+  S "and terms containing a", ch shearFNoIntsl +:+.
   S "are on the other", S "The multiplication by the", phrase fs,
-  S "is common to all of the", ch shearFNoIntsl, S "terms, and thus can be",
-  S "factored out, resulting in"]
+  S "is common to all" `S.ofThe` ch shearFNoIntsl, S "terms" `sC` S "and thus can be",
+  S "factored out" `sC` S "resulting in"]
 
 fctSftyDerivSentence19 :: [Sentence]
 fctSftyDerivSentence19 = [S "Isolating the", phrase fs, S "on the left-hand",
-  S "side and using compact notation for the products and sums yields",
+  S "side and using compact notation" `S.for` S "the products and sums yields",
   eqN 13 `sC` S "which can also be seen in", refS fctSfty]
 
 fctSftyDerivSentence20 :: [Sentence]
@@ -398,8 +398,8 @@ nrmShrDeriv = mkDerivNoHeader (weave [nrmShrDerivationSentences, map eS nrmShrDe
 
 nrmShrDerivSentence1 :: [Sentence]
 nrmShrDerivSentence1 = [S "From the", phrase momentEqlGD `S.of_`
-  refS momentEqlGD, S "with the primary", phrase assumption,
-  S "for the Morgenstern-Price method of", refS assumpINSFL `S.and_`
+  refS momentEqlGD, S "with the primary", phrase assumption `S.for`
+  S "the Morgenstern-Price method" `S.of_` refS assumpINSFL `S.and_`
   S "associated", phrase definition, refS normShrRGD `sC` eqN 14,
   S "can be derived"]
 
@@ -557,7 +557,7 @@ intrSlcDeriv :: Derivation
 intrSlcDeriv = mkDerivNoHeader (weave [intrSlcDerivationSentences, map eS intrSlcDerivEqns] ++ intrSlcDerivSentence3)
 
 intrSlcDerivSentence1 :: [Sentence]
-intrSlcDerivSentence1 = [S "This derivation is identical to the derivation for",
+intrSlcDerivSentence1 = [S "This derivation" `S.is` S "identical to the derivation for",
   refS fctSfty, S "up until", eqN 3, S "shown again below"]
 
 intrSlcDerivSentence2 :: [Sentence]
@@ -623,15 +623,15 @@ crtSlpIdDesc :: Sentence
 crtSlpIdDesc = foldlSent [atStartNP (the minFunction), S "must enforce the",
   pluralNP (constraint `onThePS` crtSlpSrf), S "expressed in" +:+.
   (refS assumpSSC `S.and_` refS (propCorSol [] [])),
-  S "The sizes of", ch waterDist `S.and_` ch waterHght +:+.
+  S "The sizes" `S.of_` ch waterDist `S.and_` ch waterHght +:+.
   S "must be equal and not 1", S "The", S "sizes of", ch slopeDist `S.and_`
   ch slopeHght +:+. (S "must be equal" `S.and_` S "at least 2"),
   atStartNP (the first) `S.and_` S "last", ch waterDist,
-  plural value, S "must be equal to the", phrase first `S.and_` S "last",
+  plural value, S "must be equal" `S.toThe` phrase first `S.and_` S "last",
   ch slopeDist +:+. plural value, ch waterDist `S.and_` ch slopeDist,
   plural value +:+. S "must be monotonically increasing", ch xMaxExtSlip `sC`
   ch xMaxEtrSlip `sC` ch xMinExtSlip `sC` S "and", ch xMinEtrSlip, S "must be",
-  S "between or equal to the minimum and maximum", ch slopeDist +:+.
+  S "between or equal" `S.toThe` S "minimum and maximum", ch slopeDist +:+.
   plural value, ch yMaxSlip, S "cannot be below the minimum", ch slopeHght +:+.
   phrase value, ch yMinSlip, S "cannot be above the maximum", ch slopeHght +:+.
   phrase value, S "All", ch xi, plural value `S.of_` ch critCoords, S "must be",
@@ -640,7 +640,7 @@ crtSlpIdDesc = foldlSent [atStartNP (the minFunction), S "must enforce the",
   S "For any given vertex in", ch critCoords, S "the", ch yi, phrase value,
   S "must not exceed the", ch slopeHght, phrase value, S "corresponding to the",
   S "same", ch xi +:+. phrase value, atStartNP (the first) `S.and_` S "last",
-  S "vertices in", ch critCoords, S "must each be equal to one of the vertices",
+  S "vertices in", ch critCoords, S "must each be equal to one" `S.ofThe` S "vertices",
   S "formed by" +:+. (ch slopeDist `S.and_` ch slopeHght), S "The slope between",
   S "consecutive vertices must be always increasing as", ch xi +:+.
   S "increases", S "The internal", phrase angle, S "between consecutive",

@@ -400,6 +400,9 @@ instance List JuliaCode where
 
 instance Set JuliaCode where
   contains s e = funcApp "in" bool [e, s]
+  setAdd s e = funcApp "push!" void [s, e]
+  setRemove s e = funcApp "delete!" void [s, e]
+  setUnion a b = funcApp "union!" void [a, b]
 
 instance InternalList JuliaCode where
   listSlice' b e s vn vo = jlListSlice vn vo b e (fromMaybe (litInt 1) s)

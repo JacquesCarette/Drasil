@@ -48,6 +48,8 @@ public class HelloWorld {
         Debug.Assert( b == 5 , "b should be 5");
         Debug.Assert( myOtherList.Count == 4 , "myOtherList should have 4 elements");
         Debug.Assert( oneIndex == 0 , "oneIndex should be 0");
+        HashSet<int> s = new HashSet<int> {4, 7, 5};
+        Debug.Assert( s.Contains(7) , "Set s should contain 7");
         
         // List slicing tests
         // Create variables for list slices

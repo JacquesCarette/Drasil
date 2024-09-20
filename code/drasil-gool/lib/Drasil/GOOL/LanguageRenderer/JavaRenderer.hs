@@ -82,7 +82,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   docMain, mainFunction, buildModule', bindingError, listDecDef, 
   destructorError, stateVarDef, constVar, litArray, call', listSizeFunc, 
   listAccessFunc', notNull, doubleRender, double, openFileR, openFileW, 
-  stateVar, floatRender, float, string', intToIndex, indexToInt, global)
+  stateVar, floatRender, float, string', intToIndex, indexToInt, global, setMethodCall)
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -475,6 +475,9 @@ instance List JavaCode where
 
 instance Set JavaCode where
   contains = CP.contains jContains
+  setAdd = CP.setMethodCall jListAdd
+  setRemove = CP.setMethodCall jListRemove
+  setUnion = CP.setMethodCall jListUnion
 
 instance InternalList JavaCode where
   listSlice' = M.listSlice
@@ -816,7 +819,7 @@ jLambdaSep = text "->"
 arrayList, jBool, jBool', jInteger, jObject, jScanner, jContains,
   jPrintWriter, jFile, jFileWriter, jIOExc, jFNFExc, jArrays, jSet, jAsList, jSetOf, jStdIn, 
   jStdOut, jPrintLn, jEquals, jParseInt, jParseDbl, jParseFloat, jIndex, 
-  jListAdd, jListAccess, jListSet, jClose, jNext, jNextLine, jNextBool, 
+  jListAdd, jListRemove, jListUnion, jListAccess, jListSet, jClose, jNext, jNextLine, jNextBool, 
   jHasNextLine, jCharAt, jSplit, io, util :: String
 arrayList = "ArrayList"
 jBool = "boolean"
@@ -843,6 +846,8 @@ jParseDbl = CP.doubleRender `access` "parseDouble"
 jParseFloat = CP.floatRender `access` "parseFloat"
 jIndex = "indexOf"
 jListAdd = "add"
+jListRemove = "remove"
+jListUnion = "addAll"
 jListAccess = "get"
 jListSet = "set"
 jClose = "close"

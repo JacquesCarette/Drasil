@@ -142,15 +142,15 @@ PExpr
 </span><span id="line-64"></span><span id="fctSftyExpr"><span class="annot"><span class="annottext">fctSftyExpr :: PExpr
 </span><a href="Drasil.SSP.IMods.html#fctSftyExpr"><span class="hs-identifier hs-var hs-var">fctSftyExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall {c}. (HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><a href="#local-6989586621679086354"><span class="hs-identifier hs-var">sumOp</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="#local-6989586621679086908"><span class="hs-identifier hs-var">sumOp</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#shearRNoIntsl"><span class="hs-identifier hs-var">shearRNoIntsl</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall {c}. (HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><a href="#local-6989586621679086354"><span class="hs-identifier hs-var">sumOp</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="#local-6989586621679086908"><span class="hs-identifier hs-var">sumOp</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#shearFNoIntsl"><span class="hs-identifier hs-var">shearFNoIntsl</span></a></span><span>
-</span><span id="line-65"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679086373"><span class="annot"><span class="annottext">prodOp :: r
-</span><a href="#local-6989586621679086373"><span class="hs-identifier hs-var hs-var">prodOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; r -&gt; r -&gt; r -&gt; r
+</span><span id="line-65"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679086927"><span class="annot"><span class="annottext">prodOp :: r
+</span><a href="#local-6989586621679086927"><span class="hs-identifier hs-var hs-var">prodOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; r -&gt; r -&gt; r -&gt; r
 forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">defprod</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
@@ -180,9 +180,9 @@ forall {c}. (HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#varblV"><span class="hs-identifier hs-var">varblV</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-67"></span><span>        </span><span id="local-6989586621679086354"><span class="annot"><span class="annottext">sumOp :: c -&gt; r
-</span><a href="#local-6989586621679086354"><span class="hs-identifier hs-var hs-var">sumOp</span></a></span></span><span> </span><span id="local-6989586621679086406"><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679086406"><span class="hs-identifier hs-var">sym</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; r -&gt; r -&gt; r -&gt; r
+</span><span id="line-67"></span><span>        </span><span id="local-6989586621679086908"><span class="annot"><span class="annottext">sumOp :: c -&gt; r
+</span><a href="#local-6989586621679086908"><span class="hs-identifier hs-var hs-var">sumOp</span></a></span></span><span> </span><span id="local-6989586621679086960"><span class="annot"><span class="annottext">c
+</span><a href="#local-6989586621679086960"><span class="hs-identifier hs-var">sym</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; r -&gt; r -&gt; r -&gt; r
 forall r. ExprC r =&gt; Symbol -&gt; r -&gt; r -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">defsum</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
@@ -206,14 +206,14 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall {c}. (HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679086406"><span class="hs-identifier hs-var">sym</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; r
+</span><a href="#local-6989586621679086960"><span class="hs-identifier hs-var">sym</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; r
 forall {c}. (HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#index"><span class="hs-identifier hs-var">index</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679086373"><span class="hs-identifier hs-var">prodOp</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
+</span><a href="#local-6989586621679086927"><span class="hs-identifier hs-var">prodOp</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
@@ -221,7 +221,7 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall {c}. (HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679086406"><span class="hs-identifier hs-var">sym</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; r
+</span><a href="#local-6989586621679086960"><span class="hs-identifier hs-var">sym</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; r
 forall {c}. (HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
@@ -346,7 +346,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><a href="Drasil.SSP.IMods.html#fctSftyDerivSentence18"><span class="hs-identifier hs-var">fctSftyDerivSentence18</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.SSP.IMods.html#fctSftyDerivSentence19"><span class="hs-identifier hs-var">fctSftyDerivSentence19</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-93"></span><span>
-</span><span id="line-94"></span><span id="local-6989586621679085307"><span class="annot"><a href="Drasil.SSP.IMods.html#fctSftyDerivEqns1"><span class="hs-identifier hs-type">fctSftyDerivEqns1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679085307"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679085307"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679085307"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
+</span><span id="line-94"></span><span id="local-6989586621679085861"><span class="annot"><a href="Drasil.SSP.IMods.html#fctSftyDerivEqns1"><span class="hs-identifier hs-type">fctSftyDerivEqns1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679085861"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679085861"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679085861"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
 </span><span id="line-95"></span><span id="fctSftyDerivEqns1"><span class="annot"><span class="annottext">fctSftyDerivEqns1 :: forall r. (ExprC r, LiteralC r) =&gt; [r]
 </span><a href="Drasil.SSP.IMods.html#fctSftyDerivEqns1"><span class="hs-identifier hs-var hs-var">fctSftyDerivEqns1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">r
 PExpr
@@ -372,7 +372,7 @@ PExpr
 PExpr
 </span><a href="Drasil.SSP.IMods.html#fctSftyDerivEqn10a"><span class="hs-identifier hs-var">fctSftyDerivEqn10a</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-98"></span><span>
-</span><span id="line-99"></span><span id="local-6989586621679086479"><span class="annot"><a href="Drasil.SSP.IMods.html#fctSftyDerivEqns2"><span class="hs-identifier hs-type">fctSftyDerivEqns2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679086479"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679086479"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679086479"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
+</span><span id="line-99"></span><span id="local-6989586621679087033"><span class="annot"><a href="Drasil.SSP.IMods.html#fctSftyDerivEqns2"><span class="hs-identifier hs-type">fctSftyDerivEqns2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679087033"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679087033"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679087033"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
 </span><span id="line-100"></span><span id="fctSftyDerivEqns2"><span class="annot"><span class="annottext">fctSftyDerivEqns2 :: forall r. (ExprC r, LiteralC r) =&gt; [r]
 </span><a href="Drasil.SSP.IMods.html#fctSftyDerivEqns2"><span class="hs-identifier hs-var hs-var">fctSftyDerivEqns2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">r
 PExpr
@@ -415,11 +415,12 @@ forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><a href="Drasil.SSP.GenDefs.html#bsShrFEqGD"><span class="hs-identifier hs-var">bsShrFEqGD</span></a></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-106"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;can be substituted into the definition of&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-107"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><span class="hs-string">&quot;can be substituted into the definition&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Drasil.SSP.Unitals.html#mobShrI"><span class="hs-identifier hs-var">mobShrI</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="Drasil.SSP.Unitals.html#mobShrI"><span class="hs-identifier hs-var">mobShrI</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-107"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;based on the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -470,7 +471,8 @@ r -&gt; Sentence
 </span><a href="Drasil.SSP.GenDefs.html#normForcEqGD"><span class="hs-identifier hs-var">normForcEqGD</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-114"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;into the definition for&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><span class="hs-string">&quot;into the definition&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.for`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#nrmFSubWat"><span class="hs-identifier hs-var">nrmFSubWat</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -522,7 +524,10 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><a href="Drasil.SSP.Unitals.html#intNormForce"><span class="hs-identifier hs-var">intNormForce</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-122"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;are unknown, they are separated from the other terms as follows&quot;</span></span><span class="hs-special">]</span><span>
+</span><span class="hs-string">&quot;are unknown&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;they are separated from the other terms as follows&quot;</span></span><span class="hs-special">]</span><span>
 </span><span id="line-123"></span><span>
 </span><span id="line-124"></span><span class="annot"><a href="Drasil.SSP.IMods.html#fctSftyDerivSentence5"><span class="hs-identifier hs-type">fctSftyDerivSentence5</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-125"></span><span id="fctSftyDerivSentence5"><span class="annot"><span class="annottext">fctSftyDerivSentence5 :: [Sentence]
@@ -554,7 +559,16 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`sC`</span></span><span>
 </span><span id="line-128"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;respectively, are zero, allows for further simplification as shown below&quot;</span></span><span class="hs-special">]</span><span>
+</span><span class="hs-string">&quot;respectively&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;are zero&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;allows&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.for`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;further simplification as shown below&quot;</span></span><span class="hs-special">]</span><span>
 </span><span id="line-129"></span><span>
 </span><span id="line-130"></span><span class="annot"><a href="Drasil.SSP.IMods.html#fctSftyDerivSentence6"><span class="hs-identifier hs-type">fctSftyDerivSentence6</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-131"></span><span id="fctSftyDerivSentence6"><span class="annot"><span class="annottext">fctSftyDerivSentence6 :: [Sentence]
@@ -574,7 +588,10 @@ r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">GenDefn
 </span><a href="Drasil.SSP.GenDefs.html#mobShearWOGD"><span class="hs-identifier hs-var">mobShearWOGD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;are present in this equation, and&quot;</span></span><span class="hs-special">,</span><span>
+</span><span class="hs-string">&quot;are present in this equation&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;and&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-133"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;thus can be replaced by&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
@@ -605,7 +622,8 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><a href="Drasil.SSP.Unitals.html#intShrForce"><span class="hs-identifier hs-var">intShrForce</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-138"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;can be expressed in terms of the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><span class="hs-string">&quot;can be expressed in terms&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#intNormForce"><span class="hs-identifier hs-var">intNormForce</span></a></span><span class="hs-special">,</span><span>
@@ -728,7 +746,10 @@ forall r a. (ExprC r, Quantity a) =&gt; a -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#indxn"><span class="hs-identifier hs-var">indxn</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#intNormForce"><span class="hs-identifier hs-var">intNormForce</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;are zero, results in the following special cases:&quot;</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Int -&gt; Sentence
+</span><span class="hs-string">&quot;are zero&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;results in the following special cases:&quot;</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Int -&gt; Sentence
 </span><span class="hs-identifier hs-var">eqN</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">8</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -848,7 +869,8 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span id="line-186"></span><span id="fctSftyDerivSentence18"><span class="annot"><span class="annottext">fctSftyDerivSentence18 :: [Sentence]
 </span><a href="Drasil.SSP.IMods.html#fctSftyDerivSentence18"><span class="hs-identifier hs-var hs-var">fctSftyDerivSentence18</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;The multiplication of the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Sentence
+</span><span class="hs-string">&quot;The multiplication&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#mobShrC"><span class="hs-identifier hs-var">mobShrC</span></a></span><span class="hs-special">,</span><span>
@@ -877,10 +899,14 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#shearRNoIntsl"><span class="hs-identifier hs-var">shearRNoIntsl</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;are on one side of the&quot;</span></span><span class="hs-special">,</span><span>
+</span><span class="hs-string">&quot;are on one side&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;equality&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span>
 </span><span id="line-191"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;equality, and terms containing a&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><span class="hs-string">&quot;and terms containing a&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#shearFNoIntsl"><span class="hs-identifier hs-var">shearFNoIntsl</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -895,15 +921,22 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><a href="Drasil.SSP.Unitals.html#fs"><span class="hs-identifier hs-var">fs</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-193"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;is common to all of the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><span class="hs-string">&quot;is common to all&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#shearFNoIntsl"><span class="hs-identifier hs-var">shearFNoIntsl</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;terms, and thus can be&quot;</span></span><span class="hs-special">,</span><span>
+</span><span class="hs-string">&quot;terms&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;and thus can be&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-194"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;factored out, resulting in&quot;</span></span><span class="hs-special">]</span><span>
+</span><span class="hs-string">&quot;factored out&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;resulting in&quot;</span></span><span class="hs-special">]</span><span>
 </span><span id="line-195"></span><span>
 </span><span id="line-196"></span><span class="annot"><a href="Drasil.SSP.IMods.html#fctSftyDerivSentence19"><span class="hs-identifier hs-type">fctSftyDerivSentence19</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-197"></span><span id="fctSftyDerivSentence19"><span class="annot"><span class="annottext">fctSftyDerivSentence19 :: [Sentence]
@@ -917,7 +950,10 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-string">&quot;on the left-hand&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-198"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;side and using compact notation for the products and sums yields&quot;</span></span><span class="hs-special">,</span><span>
+</span><span class="hs-string">&quot;side and using compact notation&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.for`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;the products and sums yields&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-199"></span><span>  </span><span class="annot"><span class="annottext">Int -&gt; Sentence
 </span><span class="hs-identifier hs-var">eqN</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">13</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -975,10 +1011,10 @@ forall r.
 forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">cos</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679086568"><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679086568"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679086569"><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679086569"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679086568"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">cos</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679087124"><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679087124"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679087125"><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679087125"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679087124"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
@@ -991,7 +1027,7 @@ forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#intShrForce"><span class="hs-identifier hs-var">intShrForce</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679086569"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679087125"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-209"></span><span>  </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
@@ -1040,10 +1076,10 @@ forall r.
 forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">cos</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679086594"><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679086594"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679086595"><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679086595"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679086594"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679087150"><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679087150"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679087151"><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679087151"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679087150"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span>
 </span><span id="line-214"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
@@ -1057,7 +1093,7 @@ forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#intShrForce"><span class="hs-identifier hs-var">intShrForce</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679086595"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
+</span><a href="#local-6989586621679087151"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
@@ -1074,10 +1110,10 @@ forall r.
 forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">cos</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679086646"><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679086646"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679086647"><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679086647"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679086646"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">cos</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679087202"><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679087202"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679087203"><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679087203"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679087202"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
@@ -1091,7 +1127,7 @@ forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#intShrForce"><span class="hs-identifier hs-var">intShrForce</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679086647"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
+</span><a href="#local-6989586621679087203"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">(r -&gt; r) -&gt; (r -&gt; r) -&gt; (r -&gt; r -&gt; r) -&gt; r
 forall r.
@@ -1101,10 +1137,10 @@ forall r.
 forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">cos</span></span><span> </span><span class="annot"><span class="annottext">r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679086648"><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679086648"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679086649"><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679086649"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679086648"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
+</span><span class="hs-identifier hs-var">sin</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679087204"><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679087204"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679087205"><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679087205"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679087204"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span>
 </span><span id="line-219"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
@@ -1118,7 +1154,7 @@ forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#intShrForce"><span class="hs-identifier hs-var">intShrForce</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679086649"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
+</span><a href="#local-6989586621679087205"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; r
 forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
@@ -3681,10 +3717,12 @@ r -&gt; Sentence
 </span><span class="hs-string">&quot;with the primary&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><span class="hs-identifier hs-var">assumption</span></span><span class="hs-special">,</span><span>
+</span><span class="hs-identifier hs-var">assumption</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.for`</span></span><span>
 </span><span id="line-402"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;for the Morgenstern-Price method of&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
+</span><span class="hs-string">&quot;the Morgenstern-Price method&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
@@ -3921,7 +3959,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><a href="Drasil.SSP.IMods.html#nrmShrDerivSentence3"><span class="hs-identifier hs-var">nrmShrDerivSentence3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.SSP.IMods.html#nrmShrDerivSentence4"><span class="hs-identifier hs-var">nrmShrDerivSentence4</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-434"></span><span>
-</span><span id="line-435"></span><span id="local-6989586621679088107"><span class="annot"><a href="Drasil.SSP.IMods.html#nrmShrDerivEqns"><span class="hs-identifier hs-type">nrmShrDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679088107"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679088107"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679088107"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
+</span><span id="line-435"></span><span id="local-6989586621679088662"><span class="annot"><a href="Drasil.SSP.IMods.html#nrmShrDerivEqns"><span class="hs-identifier hs-type">nrmShrDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679088662"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679088662"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679088662"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
 </span><span id="line-436"></span><span id="nrmShrDerivEqns"><span class="annot"><span class="annottext">nrmShrDerivEqns :: forall r. (ExprC r, LiteralC r) =&gt; [r]
 </span><a href="Drasil.SSP.IMods.html#nrmShrDerivEqns"><span class="hs-identifier hs-var hs-var">nrmShrDerivEqns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">r
 PExpr
@@ -3944,10 +3982,10 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span>
 </span><span id="line-441"></span><span>  </span><span class="annot"><span class="annottext">(r -&gt; r -&gt; r) -&gt; r
 forall r. (ExprC r, LiteralC r) =&gt; (r -&gt; r -&gt; r) -&gt; r
-</span><a href="Drasil.SSP.BasicExprs.html#momExpr"><span class="hs-identifier hs-var">momExpr</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span> </span><span id="local-6989586621679088156"><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679088156"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679088157"><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679088157"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679088156"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
+</span><a href="Drasil.SSP.BasicExprs.html#momExpr"><span class="hs-identifier hs-var">momExpr</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span> </span><span id="local-6989586621679088711"><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679088711"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679088712"><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679088712"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">r
+</span><a href="#local-6989586621679088711"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; r
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -3985,7 +4023,7 @@ forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#scalFunc"><span class="hs-identifier hs-var">scalFunc</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">r -&gt; r -&gt; r
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">r
-</span><a href="#local-6989586621679088157"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679088712"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-444"></span><span>
 </span><span id="line-445"></span><span id="nrmShrDerivEqn2"><span class="annot"><span class="annottext">nrmShrDerivEqn2 :: PExpr
 </span><a href="Drasil.SSP.IMods.html#nrmShrDerivEqn2"><span class="hs-identifier hs-var hs-var">nrmShrDerivEqn2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; r
@@ -4243,11 +4281,11 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">[(Relation, Relation)] -&gt; Relation
 forall r. ExprC r =&gt; [(r, r)] -&gt; r
 </span><span class="hs-identifier hs-var">incompleteCase</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">(Relation, Relation)
-</span><a href="#local-6989586621679088292"><span class="hs-identifier hs-var">case1</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">(Relation, Relation)
-</span><a href="#local-6989586621679088293"><span class="hs-identifier hs-var">case2</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">(Relation, Relation)
-</span><a href="#local-6989586621679088294"><span class="hs-identifier hs-var">case3</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-474"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679088292"><span class="annot"><span class="annottext">case1 :: (Relation, Relation)
-</span><a href="#local-6989586621679088292"><span class="hs-identifier hs-var hs-var">case1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+</span><a href="#local-6989586621679088847"><span class="hs-identifier hs-var">case1</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">(Relation, Relation)
+</span><a href="#local-6989586621679088848"><span class="hs-identifier hs-var">case2</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">(Relation, Relation)
+</span><a href="#local-6989586621679088849"><span class="hs-identifier hs-var">case3</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-474"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679088847"><span class="annot"><span class="annottext">case1 :: (Relation, Relation)
+</span><a href="#local-6989586621679088847"><span class="hs-identifier hs-var hs-var">case1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
 forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#indx1"><span class="hs-identifier hs-var">indx1</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseWthX"><span class="hs-identifier hs-var">baseWthX</span></a></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
@@ -4278,8 +4316,8 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
-</span><span id="line-476"></span><span>        </span><span id="local-6989586621679088293"><span class="annot"><span class="annottext">case2 :: (Relation, Relation)
-</span><a href="#local-6989586621679088293"><span class="hs-identifier hs-var hs-var">case2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+</span><span id="line-476"></span><span>        </span><span id="local-6989586621679088848"><span class="annot"><span class="annottext">case2 :: (Relation, Relation)
+</span><a href="#local-6989586621679088848"><span class="hs-identifier hs-var hs-var">case2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
 forall r e. (ExprC r, LiteralC r, Quantity e) =&gt; e -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseWthX"><span class="hs-identifier hs-var">baseWthX</span></a></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
@@ -4351,8 +4389,8 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-481"></span><span>        </span><span id="local-6989586621679088294"><span class="annot"><span class="annottext">case3 :: (Relation, Relation)
-</span><a href="#local-6989586621679088294"><span class="hs-identifier hs-var hs-var">case3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+</span><span id="line-481"></span><span>        </span><span id="local-6989586621679088849"><span class="annot"><span class="annottext">case3 :: (Relation, Relation)
+</span><a href="#local-6989586621679088849"><span class="hs-identifier hs-var hs-var">case3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
 forall r a. (ExprC r, Quantity a) =&gt; a -&gt; r
 </span><a href="Drasil.SSP.Unitals.html#indxn"><span class="hs-identifier hs-var">indxn</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseWthX"><span class="hs-identifier hs-var">baseWthX</span></a></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
@@ -4970,7 +5008,10 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span id="line-560"></span><span id="intrSlcDerivSentence1"><span class="annot"><span class="annottext">intrSlcDerivSentence1 :: [Sentence]
 </span><a href="Drasil.SSP.IMods.html#intrSlcDerivSentence1"><span class="hs-identifier hs-var hs-var">intrSlcDerivSentence1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;This derivation is identical to the derivation for&quot;</span></span><span class="hs-special">,</span><span>
+</span><span class="hs-string">&quot;This derivation&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;identical to the derivation for&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-561"></span><span>  </span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
@@ -5140,7 +5181,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span id="line-579"></span><span>  </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.SSP.IMods.html#intrSlcDerivSentence2"><span class="hs-identifier hs-var">intrSlcDerivSentence2</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-580"></span><span>
-</span><span id="line-581"></span><span id="local-6989586621679088415"><span class="annot"><a href="Drasil.SSP.IMods.html#intrSlcDerivEqns"><span class="hs-identifier hs-type">intrSlcDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679088415"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679088415"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679088415"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
+</span><span id="line-581"></span><span id="local-6989586621679088971"><span class="annot"><a href="Drasil.SSP.IMods.html#intrSlcDerivEqns"><span class="hs-identifier hs-type">intrSlcDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ExprC</span></span><span> </span><span class="annot"><a href="#local-6989586621679088971"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LiteralC</span></span><span> </span><span class="annot"><a href="#local-6989586621679088971"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679088971"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
 </span><span id="line-582"></span><span id="intrSlcDerivEqns"><span class="annot"><span class="annottext">intrSlcDerivEqns :: forall r. (ExprC r, LiteralC r) =&gt; [r]
 </span><a href="Drasil.SSP.IMods.html#intrSlcDerivEqns"><span class="hs-identifier hs-var hs-var">intrSlcDerivEqns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">r
 PExpr
@@ -5329,7 +5370,8 @@ r -&gt; Sentence
 </span><span class="hs-identifier hs-var">propCorSol</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-626"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;The sizes of&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Sentence
+</span><span class="hs-string">&quot;The sizes&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SSP.Unitals.html#waterDist"><span class="hs-identifier hs-var">waterDist</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -5376,7 +5418,8 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">value</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;must be equal to the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><span class="hs-string">&quot;must be equal&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.toThe`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">first</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -5427,7 +5470,10 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-string">&quot;must be&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-634"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;between or equal to the minimum and maximum&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Sentence
+</span><span class="hs-string">&quot;between or equal&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.toThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;minimum and maximum&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SSP.Unitals.html#slopeDist"><span class="hs-identifier hs-var">slopeDist</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -5556,7 +5602,10 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#critCoords"><span class="hs-identifier hs-var">critCoords</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;must each be equal to one of the vertices&quot;</span></span><span class="hs-special">,</span><span>
+</span><span class="hs-string">&quot;must each be equal to one&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;vertices&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-644"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;formed by&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence

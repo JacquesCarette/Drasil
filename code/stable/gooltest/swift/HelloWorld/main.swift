@@ -29,6 +29,8 @@ print(boringList)
 assert( b == 5 , "b should be 5")
 assert( myOtherList.count == 4 , "myOtherList should have 4 elements")
 assert( oneIndex == 0 , "oneIndex should be 0")
+let s: Set<Int> = [4, 7, 5]
+assert( s.contains(7) , "Set s should contain 7")
 
 // List slicing tests
 // Create variables for list slices

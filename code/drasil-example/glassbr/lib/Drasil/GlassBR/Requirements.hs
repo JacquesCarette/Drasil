@@ -3,17 +3,19 @@ module Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, inReqDesc, nonfunc
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Drasil.DocLang (inReq, mkQRTuple, mkQRTupleRef, mkValsSourceTable, mkMaintainableNFR, mkPortableNFR)
-import Drasil.DocLang.SRS (datCon, propCorSol)
+import Drasil.DocLang (inReq, mkQRTuple, mkQRTupleRef, mkValsSourceTable, 
+  mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, mkVerifiableNFR, 
+  mkUnderstandableNFR, mkReusableNFR)
+import Drasil.DocLang.SRS (datCon)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (DataDefinition)
 
 import Data.Drasil.Concepts.Computation (inValue)
-import Data.Drasil.Concepts.Documentation (characteristic, code,
-  condition, datumConstraint, funcReqDom, message, mg,
-  mis, nonFuncReqDom, output_, property, system, type_, value, vavPlan)
+import Data.Drasil.Concepts.Documentation (characteristic, condition, 
+  datumConstraint, funcReqDom, message, output_, system, 
+  type_, value)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Software (errMsg)
@@ -93,24 +95,16 @@ nonfuncReqs :: [ConceptInstance]
 nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, portable]
 
 correct :: ConceptInstance
-correct = cic "correct" (foldlSent [
-  atStartNP' (output_ `the_ofThePS` code), S "have the",
-  plural property, S "described in", refS (propCorSol [] [])
-  ]) "Correctness" nonFuncReqDom
+correct = mkCorrectNFR "correct" "Correctness"
  
 verifiable :: ConceptInstance
-verifiable = cic "verifiable" (foldlSent [
-  atStartNP (the code), S "is tested with complete",
-  phrase vavPlan]) "Verifiability" nonFuncReqDom
+verifiable = mkVerifiableNFR "verifiable" "Verifiability"
 
 understandable :: ConceptInstance
-understandable = cic "understandable" (foldlSent [
-  atStartNP (the code), S "is modularized with complete",
-  phrase mg `S.and_` phrase mis]) "Understandability" nonFuncReqDom
+understandable = mkUnderstandableNFR "understandable" "Understandability"
 
 reusable :: ConceptInstance
-reusable = cic "reusable" (foldlSent [
-  atStartNP (the code), S "is modularized"]) "Reusability" nonFuncReqDom
+reusable = mkReusableNFR "reusable" "Reusability"
 
 maintainable :: ConceptInstance
 maintainable = mkMaintainableNFR "maintainable" 10 "Maintainability"

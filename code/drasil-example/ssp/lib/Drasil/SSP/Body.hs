@@ -191,7 +191,7 @@ refDB = rdb citations concIns
 tableOfSymbIntro :: [TSIntro]
 tableOfSymbIntro = [TSPurpose, TypogConvention [Verb $ foldlSent_
   [S "a subscript", ch index, S "indicates that the", phrase value, 
-  S "will be taken at, and analyzed at, a", phrase slice `S.or_` phrase slice, 
+  S "will be taken at" `sC` S "and analyzed at, a", phrase slice `S.or_` phrase slice, 
   S "interface composing the total slip", phrase mass]], VectorUnits]
 
 -- SECTION 1.3 --
@@ -201,18 +201,18 @@ tableOfSymbIntro = [TSPurpose, TypogConvention [Verb $ foldlSent_
 startIntro, kSent :: Sentence
 startIntro = foldlSent [atStartNP (a_ slope), S "of geological",
   phrase mass `sC` S "composed of", phrase soil, S "and rock and sometimes",
-  S "water, is subject to the influence" `S.of_` (phraseNP (gravity `onThe` mass) !.),
-  S "This can cause instability in the form" `S.of_` phrase soil +:+.
+  S "water" `sC` S "is subject" `S.toThe` S "influence" `S.of_` (phraseNP (gravity `onThe` mass) !.),
+  S "This can cause instability" `S.inThe` S "form" `S.of_` phrase soil +:+.
   S "or rock movement", atStartNP' (NP.the (effect `of_PS` soil)),
   S "or rock movement can range from inconvenient to",
-  S "seriously hazardous, resulting in significant life and economic" +:+.
+  S "seriously hazardous" `sC` S "resulting in significant life and economic" +:+.
   plural loss, atStart slope, S "stability is of", phrase interest,
   S "both when analysing natural", plural slope `sC`
   S "and when designing an excavated" +:+. phrase slope, atStart ssa `S.isThe`
-  S "assessment" `S.ofThe` S "safety of a" +:+ phrase slope `sC`
+  S "assessment" `S.ofThe` S "safety" `S.ofA` phrase slope `sC`
   S "identifying the", phrase surface,
   S "most likely to experience", phrase slip `S.and_`
-  S "an index of its relative stability known as the" +:+ phrase fs]
+  S "an index" `S.of_` S "its relative stability known as the" +:+. phrase fs]
 
 kSent = keySent ssa ssp
 
@@ -268,7 +268,7 @@ sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont) (resourcePa
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
-  [S "The responsibilities of the", phraseNP (user `andThe` system),
+  [S "The responsibilities" `S.ofThe` phraseNP (user `andThe` system),
    S "are as follows"]
    
 sysCtxUsrResp :: [Sentence]
@@ -312,7 +312,7 @@ userCharIntro = userChar ssp [S "Calculus", titleize Doc.physics]
 userChar :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] -> Contents
 userChar pname understandings familiarities specifics = foldlSP [
   atStartNP (the endUser) `S.of_` short pname,
-  S "should have an understanding of undergraduate Level 1",
+  S "should have an understanding" `S.of_` S "undergraduate Level 1",
   foldlList Comma List understandings `sC`
   S "and be familiar with", foldlList Comma List familiarities `sC` 
   S "specifically", foldlList Comma List specifics]
@@ -364,7 +364,7 @@ physSysConv = foldlSP [atStart morPrice, phrase analysis, refS morgenstern1965
   `S.ofThe` phrase slope, S "involves representing the", phrase slope,
   S "as a series of vertical" +:+. plural slice, S "As shown in",
   refS figIndexConv `sC` phraseNP (the index), ch index, S "is used to denote a",
-  phrase value, S "for a single", phrase slice `sC` S "and an", phrase intrslce, 
+  phrase value `S.for` S "a single", phrase slice `sC` S "and an", phrase intrslce, 
   phrase value, S "at a given", phrase index, ch index, S "refers to the",
   phrase value, S "between", phrase slice, ch index `S.and_` S "adjacent", phrase slice,
   eS $ sy index $+ int 1]

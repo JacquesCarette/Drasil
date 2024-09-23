@@ -10,11 +10,11 @@ introPara
   = foldlSent
       [S "Automatic process control with a controller (P/PI/PD/PID) is used",
          S "in a variety of applications such as thermostats, automobile",
-         S "cruise-control, etc. The gains of a controller in an application" +:+. 
+         S "cruise-control, etc. The gains" `S.ofA` S "controller in an application" +:+. 
          S "must be tuned before the controller is ready for production",
-       S "Therefore, a simulation of the", phrase pidC, S "with a",
+         S "Therefore, a simulation" `S.ofThe` phrase pidC, S "with a",
          phrase secondOrderSystem,
-         S "is created in this project based on the original, manually created version of" +:+
+         S "is created in this project based" `S.onThe` S "original, manually created version of" +:+
          namedRef externalLinkRef (S "PD Controller"),
          S "that can be used to tune the gain constants"]
 
@@ -29,10 +29,10 @@ introscopeOfReq
        S "with three subsystems, namely:" +:+.
           foldlList Comma List (map (phraseNP.a_)
            [pidC, summingPt, powerPlant]),
-       S "Only the Proportional and Derivative controllers are used in this software;" +:+.
-         S "the Integral controller is beyond the scope of this project",
-       S "Additionally, this software is intended to aid with the manual",
-         S "tuning of the", phrase pidC]
+       S "Only the Proportional and Derivative controllers" `S.are` S "used in this software;" +:+.
+       (S "the Integral controller" `S.is` S "beyond the scope of this project"),
+       S "Additionally, this software" `S.is` S "intended to aid with the manual",
+       S "tuning" `S.ofThe` phrase pidC]
 
 scope :: Sentence
 scope = foldlSent_ [phraseNP (a_ pidCL),
@@ -42,10 +42,10 @@ scope = foldlSent_ [phraseNP (a_ pidCL),
 
 introPurposeOfDoc
   = foldlSent
-      [S "The purpose of this document is to capture all the necessary",
-         S "information including assumptions, data definitions, constraints,",
-         S "models, and requirements to facilitate an unambiguous development"
-         `S.ofThe` phrase pidC, S "software and test procedures"]
+      [S "The purpose of this document" `S.is` S "to capture all the necessary",
+       S "information including assumptions, data definitions, constraints,",
+       S "models, and requirements to facilitate an unambiguous development"
+       `S.ofThe` phrase pidC, S "software and test procedures"]
 
 introUserChar1, introUserChar2 :: [Sentence]
 introUserChar1

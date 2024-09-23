@@ -33,11 +33,11 @@ ddErrSigNote
   = foldlSent
       [atStartNP (the processError), S "is the difference between the Set-Point and" +:+.
          phrase processVariable,
-       atStartNP (the equation), S "is converted to the", phrase ccFrequencyDomain,
+       atStartNP (the equation), S "is converted" `S.toThe` phrase ccFrequencyDomain,
          S "by applying the", atStart ccLaplaceTransform +:+. fromSource tmLaplace,
        atStartNP (the setPoint), S "is assumed to be constant throughout the",
          phrase simulation +:+. fromSource aSP,
-       S "The initial value of the", phrase processVariable, S "is assumed",
+       S "The initial value" `S.ofThe` phrase processVariable, S "is assumed",
          S "to be zero", fromSource aInitialValue]
 
 ----------------------------------------------
@@ -56,9 +56,9 @@ ddPropCtrlEqn = sy qdPropGain $* sy qdProcessErrorFD
 ddPropCtrlNote :: Sentence
 ddPropCtrlNote
   = foldlSent
-      [S "The Proportional Controller is the product of the", phraseNP (propGain `andThe`
+      [S "The Proportional Controller" `S.is` S "the product" `S.ofThe` phraseNP (propGain `andThe`
          processError) +:+. fromSource ddErrSig,
-         atStartNP (the equation), S "is converted to the", phrase ccFrequencyDomain,
+         atStartNP (the equation), S "is converted" `S.toThe` phrase ccFrequencyDomain,
          S "by applying the", atStart ccLaplaceTransform, fromSource tmLaplace]
 
 ----------------------------------------------
@@ -78,11 +78,11 @@ ddDerivCtrlEqn
 ddDerivCtrlNote :: Sentence
 ddDerivCtrlNote
   = foldlSent
-      [S "The Derivative Controller is the product of the", phrase derGain
+      [S "The Derivative Controller" `S.is` S "the product" `S.ofThe` phrase derGain
          `S.andThe` S "differential" `S.ofThe` phrase processError +:+. fromSource ddErrSig,
-       atStartNP (the equation), S "is converted to the", phrase ccFrequencyDomain,
+       atStartNP (the equation), S "is converted" `S.toThe` phrase ccFrequencyDomain,
          S "by applying the", atStart ccLaplaceTransform +:+. fromSource tmLaplace,
-       S "A pure form of the Derivative controller is used in this",
+       S "A pure form" `S.ofThe` S "Derivative controller" `S.is` S "used in this",
          S "application", fromSource aUnfilteredDerivative]
 
 ----------------------------------------------
@@ -102,11 +102,10 @@ ddCtrlEqn
 ddCtrlNote :: Sentence
 ddCtrlNote
   = foldlSent
-      [atStartNP (the controlVariable) +:+. S "is the output of the controller",
-       S "In this case" `sC` S "it is the sum of the Proportional", fromSource ddPropCtrl,
+      [atStartNP (the controlVariable) +:+. (S "is the output" `S.ofThe` S "controller"),
+       S "In this case" `sC` S "it is the sum" `S.ofThe` S "Proportional", fromSource ddPropCtrl,
          S "and Derivative", fromSource ddDerivCtrl +:+.
          S "controllers",
        S "The parallel", fromSource aParallelEq,
          S "and de-coupled", fromSource aDecoupled,
-         S "form of the PD equation is",
-         S "used in this document"]
+         S "form of the PD equation" `S.is` S "used in this document"]

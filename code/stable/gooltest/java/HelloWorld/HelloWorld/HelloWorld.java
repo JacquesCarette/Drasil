@@ -9,6 +9,7 @@ package HelloWorld;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.Set;
 
 public class HelloWorld {
     
@@ -34,6 +35,8 @@ public class HelloWorld {
         assert b == 5 : "b should be 5";
         assert myOtherList.size() == 4 : "myOtherList should have 4 elements";
         assert oneIndex == 0 : "oneIndex should be 0";
+        Set<Integer> s = Set.of(4, 7, 5);
+        assert s.contains(7) : "Set s should contain 7";
         
         // List slicing tests
         // Create variables for list slices

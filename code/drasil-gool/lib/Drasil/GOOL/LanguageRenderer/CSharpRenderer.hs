@@ -79,7 +79,7 @@ import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   mainFunction, buildModule', string, constDecDef, docInOutFunc, bindingError, 
   notNull, listDecDef, destructorError, stateVarDef, constVar, listSetFunc, 
   extraClass, listAccessFunc, doubleRender, openFileR, openFileW, stateVar, 
-  inherit, implements, intToIndex, indexToInt, global)
+  inherit, implements, intToIndex, indexToInt, global, setMethodCall)
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (setType, float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -446,6 +446,9 @@ instance List CSharpCode where
 
 instance Set CSharpCode where
   contains = CP.contains csContains
+  setAdd = CP.setMethodCall csListAppend
+  setRemove = CP.setMethodCall csListRemove
+  setUnion = CP.setMethodCall csUnionWith
 
 instance InternalList CSharpCode where
   listSlice' = M.listSlice
@@ -775,8 +778,8 @@ csLambdaSep = text "=>"
 
 csSystem, csConsole, csGeneric, csDiagnostics, csIO, csList, csSet, csInt, csFloat, csBool, 
   csChar, csParse, csReader, csWriter, csReadLine, csWrite, csWriteLine, 
-  csIndex, csContains, csListAdd, csListAppend, csClose, csEOS, csSplit, csMain,
-  csFunc :: String
+  csIndex, csContains, csListAdd, csListAppend, csListRemove, csClose, csEOS, csSplit, csMain,
+  csFunc, csUnionWith :: String
 csSystem = "System"
 csConsole = "Console"
 csGeneric = csSysAccess $ "Collections" `access` "Generic"
@@ -798,11 +801,13 @@ csIndex = "IndexOf"
 csContains = "Contains"
 csListAdd = "Insert"
 csListAppend = "Add"
+csListRemove = "Remove"
 csClose = "Close"
 csEOS = "EndOfStream"
 csSplit = "Split"
 csMain = "Main"
 csFunc = "Func"
+csUnionWith = "UnionWith"
 
 csSysAccess :: String -> String
 csSysAccess = access csSystem

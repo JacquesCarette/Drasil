@@ -58,22 +58,22 @@ monotonicF = foldlSent [atStartNP (the slpSrf),
   sParen (ch slipDist `sC` ch slipHght), S "coordinates" `S.ofA` 
   phrase slpSrf, S "follow a concave up function"]
 
-slopeS = foldlSent [S "The factor of safety is assumed to be", phrase constant,
+slopeS = foldlSent [S "The factor of safety" `S.is` S "assumed to be", phrase constant,
   S "across the entire", phrase slpSrf]
 
 homogeneousL = foldlSent [atStartNP (the soil), S "mass is homogeneous" `sC`
   S "with consistent", plural soilPrpty, S "throughout"]
 
-propertiesS = foldlSent [atStartNP' (the soilPrpty), S "are independent of dry or saturated",
-  plural condition `sC` S "with the exception of", phrase unit_, S "weight"]
+propertiesS = foldlSent [atStartNP' (the soilPrpty), S "are independent" `S.of_` S "dry or saturated",
+  plural condition `sC` S "with the exception" `S.of_` phrase unit_, S "weight"]
 
 isotropicP = foldlSent [atStartNP (the soil), S "mass is treated as if the", 
   phraseNP (effCohesion `and_` fricAngle), S "are isotropic properties"]
 
-linearS = foldlSent [S "Following the", phrase assumption, S "of Morgenstern",
+linearS = foldlSent [S "Following the", phrase assumption `S.of_` S "Morgenstern",
   S "and Price", sParen (refS morgenstern1965) `sC` 
   phraseNP (intNormForce `and_` intShrForce),
-  S "have a proportional relationship, depending on a proportionality",
+  S "have a proportional relationship" `sC` S "depending on a proportionality",
   phrase constant, sParen (ch normToShear), S "and a function", 
   sParen (ch scalFunc), S "describing variation depending on", ch xi, 
   phrase position]
@@ -103,11 +103,11 @@ waterBIntersect = foldlSent [atStartNP (the waterTable), S "only intersects",
   S "the base" `S.ofA` phrase slice, S "at an edge" `S.ofThe` phrase slice]
 
 waterSIntersect = foldlSent [atStartNP (the waterTable), S "only intersects", 
-  phraseNP (the slopeSrf), S "at the edge of a", phrase slice]
+  phraseNP (the slopeSrf), S "at the edge" `S.ofA` phrase slice]
 
 negligibleSlopeEffect = foldlSent [atStartNP (the effect)
   `S.ofThe` S "slope" `S.ofThe` phraseNP (surface `ofThe` soil) `S.onThe` S "seismic",
-  phrase force, S "is assumed to be negligible"]
+  phrase force `S.is` S "assumed to be negligible"]
 
 hydrostaticFMidpoint = foldlSent [S "The resultant", phrase surfHydroForce,
   S "act into the midpoint of each", phrase slice, S "surface" `S.andThe`

@@ -83,7 +83,7 @@ import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, funcType, buildModule, litArray,
   call', listSizeFunc, listAccessFunc', containsInt, string, constDecDef, docInOutFunc,
-  listSetFunc, extraClass, intToIndex, indexToInt, global)
+  listSetFunc, extraClass, intToIndex, indexToInt, global, setMethodCall)
 import qualified Drasil.GOOL.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize,
@@ -464,6 +464,9 @@ instance (Pair p) => List (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => Set (p CppSrcCode CppHdrCode) where
   contains = pair2 contains contains
+  setAdd = pair2 setAdd setAdd
+  setRemove = pair2 setRemove setRemove
+  setUnion = pair2 setUnion setUnion
 
 instance (Pair p) => InternalList (p CppSrcCode CppHdrCode) where
   listSlice' b e s vr vl = pair2
@@ -1386,7 +1389,9 @@ instance List CppSrcCode where
 
 instance Set CppSrcCode where
   contains = CP.containsInt cppIndex cppIterEnd
-
+  setAdd = CP.setMethodCall cppListAdd
+  setRemove = CP.setMethodCall cppListRemove
+  setUnion = error "not done yet"
 
 instance InternalList CppSrcCode where
   listSlice' = M.listSlice
@@ -2091,6 +2096,9 @@ instance List CppHdrCode where
 
 instance Set CppHdrCode where
   contains _ _ = mkStateVal void empty
+  setAdd _ _ = mkStateVal void empty
+  setRemove _ _ = mkStateVal void empty
+  setUnion _ _ = mkStateVal void empty
 
 instance InternalList CppHdrCode where
   listSlice' _ _ _ _ _ = toState $ toCode empty
@@ -2497,7 +2505,7 @@ ptrAccess' = text ptrAccess
 nmSpc, ptrAccess, cppFor, std, algorithm, cppString, vector, sstream, stringstream,
   fstream, iostream, limits, mathh, cassert, cppBool, cppInfile, cppOutfile,
   cppIterator, cppOpen, stod, stof, cppIgnore, numLimits, streamsize, max,
-  endl, cin, cout, cppIndex, cppListAccess, cppListAdd, cppListAppend,
+  endl, cin, cout, cppIndex, cppListAccess, cppListAdd, cppListRemove, cppListAppend,
   cppIterBegin, cppIterEnd, cppR, cppW, cppA, cppGetLine, cppClose, cppClear,
   cppStr, mathDefines, cppSet, cppIn, cppConst :: String
 nmSpc = "::"
@@ -2531,6 +2539,7 @@ cout = stdAccess "cout"
 cppIndex= "find"
 cppListAccess = "at"
 cppListAdd = "insert"
+cppListRemove = "erase"
 cppListAppend = "push_back"
 cppIterBegin = "begin"
 cppIterEnd = "end"

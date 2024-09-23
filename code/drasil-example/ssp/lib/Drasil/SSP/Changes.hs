@@ -36,12 +36,12 @@ lcCISLDesc = foldlSent [chgsStart assumpSLH (S "The"), phrase system,
 lcCSFDesc :: Sentence
 lcCSFDesc = foldlSent [chgsStart assumpSF (S "The"), phrase system,
   S "currently assumes no seismic" +:+. phrase force, S "In the future" `sC`
-  plural calculation, S "can be added for the presence of seismic", phrase force]
+  plural calculation, S "can be added" `S.for` S "the presence of seismic", phrase force]
 
 lcCEFDesc :: Sentence
 lcCEFDesc = foldlSent [chgsStart assumpSL (S "The"), phrase system,
   S "currently assumes no" +:+. phrase surfLoad, S "In the future" `sC`
-  plural calculation, S "can be added for an imposed surface load on the", 
+  plural calculation, S "can be added" `S.for` S "an imposed surface load on the", 
   phrase slope]
 
 unlikelyChgs :: [ConceptInstance]

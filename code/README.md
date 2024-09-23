@@ -93,11 +93,14 @@ you should instead open the `code/docs/full/index.html` file.
 **drasil-code**
   - Contains the code for code generation in Drasil
 
+**drasil-codeLang**
+  - Contains the code language for Drasil
+
 **drasil-data**
   - Contains the current common-knowledge base for Drasil
 
 **drasil-database**
-* Contains the database for Drasil
+  - Contains the database for Drasil
 
 **drasil-docLang**
   - Contains the document language for Drasil
@@ -127,7 +130,7 @@ you should instead open the `code/docs/full/index.html` file.
   - Contains utilities used throughout Drasil
 
 **drasil-website**
-- Contains all of the necessary code to generate the [Drasil website](https://jacquescarette.github.io/Drasil/).
+  - Contains all of the necessary code to generate the [Drasil website](https://jacquescarette.github.io/Drasil/).
 
 **scripts**
   - Contains all Drasil-related scripts for compiling and deploying Drasil

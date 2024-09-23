@@ -8,7 +8,8 @@ module Drasil.Sections.Requirements (
   fullReqs, fullTables, inReq, inTable,
   mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
   -- * Non-functional Requirements
-  nfReqF, mkMaintainableNFR, mkPortableNFR
+  nfReqF, mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, mkVerifiableNFR, 
+  mkUnderstandableNFR, mkReusableNFR, mkSecurityNFR
   ) where
 
 import Utils.Drasil (stringList)
@@ -20,8 +21,8 @@ import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 import Theory.Drasil (HasOutput(output))
 
 import Data.Drasil.Concepts.Documentation (description, funcReqDom, nonFuncReqDom,
-  functionalRequirement, input_, nonfunctionalRequirement, {-output_,-} section_,
-  software, symbol_, value, reqInput)
+  functionalRequirement, input_, nonfunctionalRequirement, output_, section_,
+  software, symbol_, value, reqInput, code, propOfCorSol, vavPlan, mg, mis)
 import Data.Drasil.Concepts.Math (unit_)
 
 import qualified Drasil.DocLang.SRS as SRS
@@ -122,7 +123,37 @@ mkPortableNFR refAddress osList lbl = cic refAddress (foldlSent [
   S "The code shall be portable to multiple environments, particularly",
   S $ stringList osList
   ]) lbl nonFuncReqDom
- 
+
+-- | Common Non-Functional Requirement for Correctness.
+mkCorrectNFR :: String -> String -> ConceptInstance
+mkCorrectNFR refAddress lbl = cic refAddress (foldlSent [
+  atStartNP' (output_ `the_ofThePS` code), S "have the",
+  namedRef (SRS.propCorSol [] []) (plural propOfCorSol)
+  ]) lbl nonFuncReqDom
+
+-- | Common Non-Functional Requirement for Verifiability.
+mkVerifiableNFR :: String -> String -> ConceptInstance
+mkVerifiableNFR refAddress lbl = cic refAddress (foldlSent [
+  atStartNP (the code), S "is tested with complete",
+  phrase vavPlan]) lbl nonFuncReqDom
+
+-- | Common Non-Functional Requirement for Understandability.
+mkUnderstandableNFR :: String -> String -> ConceptInstance
+mkUnderstandableNFR refAddress lbl = cic refAddress (foldlSent [
+  atStartNP (the code), S "is modularized with complete",
+  phrase mg `S.and_` phrase mis]) lbl nonFuncReqDom
+
+-- | Common Non-Functional Requirement for Reusability.
+mkReusableNFR :: String -> String -> ConceptInstance
+mkReusableNFR refAddress lbl = cic refAddress (foldlSent [
+  atStartNP (the code), S "is modularized"]) lbl nonFuncReqDom
+
+-- | Common Non-Functional Requirement for Security.
+mkSecurityNFR :: String -> String -> ConceptInstance
+mkSecurityNFR refAddress lbl = cic refAddress (foldlSent [
+  S "The code shall be immune to common security problems such as memory",
+  S "leaks, divide by zero errors, and the square root of negative numbers"
+  ]) lbl nonFuncReqDom
 
 -- | Creates an Input Data Table for use in the Functional Requirments section. Takes a list of wrapped variables and something that is 'Referable'.
 mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => 

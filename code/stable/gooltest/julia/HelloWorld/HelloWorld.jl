@@ -28,6 +28,8 @@ println(boringList)
 @assert b == 5 "b should be 5"
 @assert length(myOtherList) == 4 "myOtherList should have 4 elements"
 @assert oneIndex == 0 "oneIndex should be 0"
+global s = Set([4, 7, 5])
+@assert in(7, s) "Set s should contain 7"
 
 # List slicing tests
 # Create variables for list slices

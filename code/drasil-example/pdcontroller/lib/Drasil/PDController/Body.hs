@@ -120,9 +120,9 @@ si = SI {
    refdb = refDB}
 
 purp :: Sentence
-purp = foldlSent_ [S "provide a model of a", phrase pidC,
-         S "that can be used for the tuning of the gain constants before",
-         S "the deployment of the controller"]
+purp = foldlSent_ [S "provide a model" `S.ofA` phrase pidC,
+         S "that can be used for the tuning" `S.ofThe` S "gain constants before",
+         S "the deployment" `S.ofThe` S "controller"]
 
 motivation :: Sentence
 motivation = foldlSent_ [S "The gains of a controller in an application" +:+

@@ -10,8 +10,7 @@ module SysInfo.Drasil.SystemInformation (
   -- ** Types
   SystemInformation(..), Block(..),
   -- ** Lenses
-  instModels, datadefs, configFiles, inputs, purpose, background, scope,
-  motivation, defSequence, constraints, constants, sysinfodb, usedinfodb,
+  HasSystemInformation(..),
   -- ** Lookup Functions
   citeDB, citationsFromBibMap,
   -- * Reference Database
@@ -27,7 +26,7 @@ import Language.Drasil
 import Theory.Drasil
 import Database.Drasil (ChunkDB)
 
-import Control.Lens ((^.), makeLenses)
+import Control.Lens ((^.), makeLenses, makeClassy)
 import Data.Function (on)
 import Data.List (groupBy, sortBy)
 import Data.Maybe (mapMaybe)
@@ -41,13 +40,13 @@ data SystemInformation where
 --There should be a way to remove redundant "Quantity" constraint.
 -- I'm thinking for getting concepts that are also quantities, we could
 -- use a lookup of some sort from their internal (Drasil) ids.
- SI :: (CommonIdea a, Idea a, Idea b, HasName c,
+ SI :: (CommonIdea a, Idea a, Idea b,
   Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f,
   Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i,
   HasUID j, Constrained j) => 
   { _sys         :: a
   , _kind        :: b
-  , _authors     :: [c]
+  , _authors     :: People
   , _purpose     :: Purpose
   , _background  :: Background
   , _scope       :: Scope
@@ -147,6 +146,7 @@ data ReferenceDB = RDB -- organized in order of appearance in SmithEtAl template
   }
 
 makeLenses ''ReferenceDB
+makeClassy ''SystemInformation
 
 -- | Smart constructor for creating a reference database from a bibliography and concept instances.
 rdb :: BibRef -> [ConceptInstance] -> ReferenceDB
@@ -181,5 +181,3 @@ conceptMap cs = Map.fromList $ zip (map (^. uid) (concat grp)) $ concatMap
 -- | Compare two things by their 'UID's.
 uidSort :: HasUID c => c -> c -> Ordering
 uidSort = compare `on` (^. uid)
-
-makeLenses ''SystemInformation

@@ -9,7 +9,7 @@ import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
 import Language.Drasil.Choices (Comments(..), AuxFile(..))
-import Language.Drasil.CodeSpec (CodeSpec(..))
+import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Mod (Name, Description, Import)
 
 import Drasil.GOOL (VSType, SVariable, SValue, MSStatement, SMethod,
@@ -26,6 +26,7 @@ import Data.Bifunctor (second)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (catMaybes)
 import Control.Monad.State (get, modify)
+import Control.Lens ((^.))
 
 -- | Defines a GOOL module. If the user chose 'CommentMod', the module will have
 -- Doxygen comments. If the user did not choose 'CommentMod' but did choose
@@ -38,8 +39,7 @@ genModuleWithImports :: (OOProg r) => Name -> Description -> [Import] ->
 genModuleWithImports n desc is maybeMs maybeCs = do
   g <- get
   modify (\s -> s { currentModule = n })
-  -- Below line of code cannot be simplified because authors has a generic type
-  let as = case codeSpec g of CodeSpec {authors = a} -> map name a
+  let as = map name (codeSpec g ^. authorsO )
   cs <- sequence maybeCs
   ms <- sequence maybeMs
   let commMod | CommentMod `elem` commented g                   = OO.docMod desc
@@ -59,7 +59,7 @@ genModule n desc = genModuleWithImports n desc []
 genDoxConfig :: (AuxiliarySym r) => GOOLState -> GenState (Maybe (r (Auxiliary r)))
 genDoxConfig s = do
   g <- get
-  let n = pName $ codeSpec g
+  let n = codeSpec g ^. pNameO
       cms = commented g
       v = doxOutput g
   return $ if not (null cms) then Just (doxConfig n s v) else Nothing
@@ -68,7 +68,7 @@ genDoxConfig s = do
 genReadMe :: (AuxiliarySym r) => ReadMeInfo -> GenState (Maybe (r (Auxiliary r)))
 genReadMe rmi = do
   g <- get
-  let n = pName $ codeSpec g
+  let n = codeSpec g ^. pNameO
   return $ getReadMe (auxiliaries g) rmi {caseName = n}
 
 -- | Helper for generating a README file.
@@ -179,8 +179,7 @@ genModuleWithImportsProc :: (ProcProg r) => Name -> Description -> [Import] ->
 genModuleWithImportsProc n desc is maybeMs = do
   g <- get
   modify (\s -> s { currentModule = n })
-  -- Below line of code cannot be simplified because authors has a generic type
-  let as = case codeSpec g of CodeSpec {authors = a} -> map name a
+  let as = map name (codeSpec g ^. authorsO )
   ms <- sequence maybeMs
   let commMod | CommentMod `elem` commented g                   = Proc.docMod desc
                   as (date g)

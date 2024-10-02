@@ -1,0 +1,15 @@
+digraph oldcodespec{
+OldCodeSpec	[shape=oval, color=cyan3, label="OldCodeSpec"];
+OldCodeSpec -> Name;
+OldCodeSpec -> People;
+OldCodeSpec -> Input;
+OldCodeSpec -> Derived;
+OldCodeSpec -> Output;
+OldCodeSpec -> FilePath;
+OldCodeSpec -> Def;
+OldCodeSpec -> ConstraintCEMap;
+OldCodeSpec -> Const;
+OldCodeSpec -> ConstantMap;
+OldCodeSpec -> Mod;
+OldCodeSpec -> ChunkDB;
+}

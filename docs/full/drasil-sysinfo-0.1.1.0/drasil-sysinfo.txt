@@ -44,28 +44,26 @@ module SysInfo.Drasil.SystemInformation
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data SystemInformation
-[SI] :: (CommonIdea a, Idea a, Idea b, HasName c, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> [c] -> Purpose -> Background -> [e] -> [f] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [Block SimpleQDef] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
+[SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [f] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [Block SimpleQDef] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
 
 -- | for listing <a>QDefinition</a>s in <a>SystemInformation</a>.
 data Block a
 Coupled :: a -> a -> [a] -> Block a
 Parallel :: a -> [a] -> Block a
-instModels :: Lens' SystemInformation [InstanceModel]
-datadefs :: Lens' SystemInformation [DataDefinition]
-configFiles :: Lens' SystemInformation [String]
-
--- | Provides a <tt>Lens</tt> that holds a <a>QuantityDict</a> and maybe
---   constraints.
-inputs :: HasInputs c => Lens' c [(QuantityDict, Maybe (RealInterval Expr Expr))]
-purpose :: Lens' SystemInformation Purpose
-background :: Lens' SystemInformation Background
-defSequence :: Lens' SystemInformation [Block SimpleQDef]
-
--- | Provides a <tt>Lens</tt> to the <tt>Constraint</tt>s.
-constraints :: Constrained c => Lens' c [ConstraintE]
-constants :: Lens' SystemInformation [ConstQDef]
-sysinfodb :: Lens' SystemInformation ChunkDB
-usedinfodb :: Lens' SystemInformation ChunkDB
+class HasSystemInformation c_a95x
+systemInformation :: HasSystemInformation c_a95x => Lens' c_a95x SystemInformation
+authors :: HasSystemInformation c_a95x => Lens' c_a95x People
+background :: HasSystemInformation c_a95x => Lens' c_a95x Background
+configFiles :: HasSystemInformation c_a95x => Lens' c_a95x [String]
+constants :: HasSystemInformation c_a95x => Lens' c_a95x [ConstQDef]
+datadefs :: HasSystemInformation c_a95x => Lens' c_a95x [DataDefinition]
+defSequence :: HasSystemInformation c_a95x => Lens' c_a95x [Block SimpleQDef]
+instModels :: HasSystemInformation c_a95x => Lens' c_a95x [InstanceModel]
+motivation :: HasSystemInformation c_a95x => Lens' c_a95x Motivation
+purpose :: HasSystemInformation c_a95x => Lens' c_a95x Purpose
+scope :: HasSystemInformation c_a95x => Lens' c_a95x Scope
+sysinfodb :: HasSystemInformation c_a95x => Lens' c_a95x ChunkDB
+usedinfodb :: HasSystemInformation c_a95x => Lens' c_a95x ChunkDB
 
 -- | Helper for extracting a bibliography from the system information.
 citeDB :: SystemInformation -> BibRef
@@ -90,6 +88,12 @@ type Purpose = [Sentence]
 --   section of README.
 type Background = [Sentence]
 
+-- | Project Example scope.
+type Scope = [Sentence]
+
+-- | Project Example motivation.
+type Motivation = [Sentence]
+
 -- | Smart constructor for creating a reference database from a
 --   bibliography and concept instances.
 rdb :: BibRef -> [ConceptInstance] -> ReferenceDB
@@ -99,18 +103,32 @@ rdb :: BibRef -> [ConceptInstance] -> ReferenceDB
 simpleMap :: HasUID a => [a] -> RefMap a
 citationDB :: Lens' ReferenceDB BibMap
 conceptDB :: Lens' ReferenceDB ConceptMap
+instance SysInfo.Drasil.SystemInformation.HasSystemInformation SysInfo.Drasil.SystemInformation.SystemInformation
 
 module SysInfo.Drasil
 
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data SystemInformation
-[SI] :: (CommonIdea a, Idea a, Idea b, HasName c, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> [c] -> Purpose -> Background -> [e] -> [f] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [Block SimpleQDef] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
+[SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [f] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [Block SimpleQDef] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
 
 -- | for listing <a>QDefinition</a>s in <a>SystemInformation</a>.
 data Block a
 Parallel :: a -> [a] -> Block a
-sysinfodb :: Lens' SystemInformation ChunkDB
+class HasSystemInformation c_a95x
+systemInformation :: HasSystemInformation c_a95x => Lens' c_a95x SystemInformation
+authors :: HasSystemInformation c_a95x => Lens' c_a95x People
+background :: HasSystemInformation c_a95x => Lens' c_a95x Background
+configFiles :: HasSystemInformation c_a95x => Lens' c_a95x [String]
+constants :: HasSystemInformation c_a95x => Lens' c_a95x [ConstQDef]
+datadefs :: HasSystemInformation c_a95x => Lens' c_a95x [DataDefinition]
+defSequence :: HasSystemInformation c_a95x => Lens' c_a95x [Block SimpleQDef]
+instModels :: HasSystemInformation c_a95x => Lens' c_a95x [InstanceModel]
+motivation :: HasSystemInformation c_a95x => Lens' c_a95x Motivation
+purpose :: HasSystemInformation c_a95x => Lens' c_a95x Purpose
+scope :: HasSystemInformation c_a95x => Lens' c_a95x Scope
+sysinfodb :: HasSystemInformation c_a95x => Lens' c_a95x ChunkDB
+usedinfodb :: HasSystemInformation c_a95x => Lens' c_a95x ChunkDB
 
 -- | Database for internal references. Contains citations and referrable
 --   concepts.
@@ -128,6 +146,12 @@ type Purpose = [Sentence]
 -- | Project Example background information, used in the <tt>What</tt>
 --   section of README.
 type Background = [Sentence]
+
+-- | Project Example scope.
+type Scope = [Sentence]
+
+-- | Project Example motivation.
+type Motivation = [Sentence]
 
 -- | Helper for extracting a bibliography from the system information.
 citeDB :: SystemInformation -> BibRef

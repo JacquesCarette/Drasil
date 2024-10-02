@@ -14,12 +14,25 @@ module SysInfo.Drasil
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data SystemInformation
-[SI] :: (CommonIdea a, Idea a, Idea b, HasName c, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> [c] -> Purpose -> Background -> [e] -> [f] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [Block SimpleQDef] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
+[SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [f] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [Block SimpleQDef] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
 
 -- | for listing <a>QDefinition</a>s in <a>SystemInformation</a>.
 data Block a
 Parallel :: a -> [a] -> Block a
-sysinfodb :: Lens' SystemInformation ChunkDB
+class HasSystemInformation c_a94G
+systemInformation :: HasSystemInformation c_a94G => Lens' c_a94G SystemInformation
+authors :: HasSystemInformation c_a94G => Lens' c_a94G People
+background :: HasSystemInformation c_a94G => Lens' c_a94G Background
+configFiles :: HasSystemInformation c_a94G => Lens' c_a94G [String]
+constants :: HasSystemInformation c_a94G => Lens' c_a94G [ConstQDef]
+datadefs :: HasSystemInformation c_a94G => Lens' c_a94G [DataDefinition]
+defSequence :: HasSystemInformation c_a94G => Lens' c_a94G [Block SimpleQDef]
+instModels :: HasSystemInformation c_a94G => Lens' c_a94G [InstanceModel]
+motivation :: HasSystemInformation c_a94G => Lens' c_a94G Motivation
+purpose :: HasSystemInformation c_a94G => Lens' c_a94G Purpose
+scope :: HasSystemInformation c_a94G => Lens' c_a94G Scope
+sysinfodb :: HasSystemInformation c_a94G => Lens' c_a94G ChunkDB
+usedinfodb :: HasSystemInformation c_a94G => Lens' c_a94G ChunkDB
 
 -- | Database for internal references. Contains citations and referrable
 --   concepts.
@@ -37,6 +50,12 @@ type Purpose = [Sentence]
 -- | Project Example background information, used in the <tt>What</tt>
 --   section of README.
 type Background = [Sentence]
+
+-- | Project Example scope.
+type Scope = [Sentence]
+
+-- | Project Example motivation.
+type Motivation = [Sentence]
 
 -- | Helper for extracting a bibliography from the system information.
 citeDB :: SystemInformation -> BibRef

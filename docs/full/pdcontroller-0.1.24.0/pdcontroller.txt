@@ -90,6 +90,7 @@ introPara :: Sentence
 introPurposeOfDoc :: Sentence
 introscopeOfReq :: Sentence
 externalLinkRef :: Reference
+scope :: Sentence
 introUserChar1 :: [Sentence]
 introUserChar2 :: [Sentence]
 

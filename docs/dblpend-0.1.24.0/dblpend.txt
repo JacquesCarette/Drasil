@@ -233,6 +233,8 @@ printSetting :: PrintingInformation
 mkSRS :: SRSDecl
 si :: SystemInformation
 purp :: Sentence
+motivation :: Sentence
+background :: Sentence
 symbolsAll :: [QuantityDict]
 symbMap :: ChunkDB
 

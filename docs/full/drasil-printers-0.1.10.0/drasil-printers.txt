@@ -795,11 +795,11 @@ module Language.Drasil.Markdown.CreateMd
 makeMd :: [Doc] -> Doc
 
 -- | Example title, authors, and maybe purpose section.
-introInfo :: String -> [String] -> Maybe String -> Doc
+introInfo :: String -> [String] -> Maybe String -> Maybe String -> Doc
 
--- | <tt>What</tt> section in generated README file, does not display if
---   empty
-whatInfo :: Maybe String -> Doc
+-- | <tt>What</tt> section in generated README file, displays description
+--   and scope if not empty
+whatInfo :: Maybe String -> Maybe String -> Doc
 
 -- | Language version section.
 verInfo :: String -> String -> Doc
@@ -2023,7 +2023,7 @@ makeCSS :: Document -> Doc
 makeMd :: [Doc] -> Doc
 
 -- | Example title, authors, and maybe purpose section.
-introInfo :: String -> [String] -> Maybe String -> Doc
+introInfo :: String -> [String] -> Maybe String -> Maybe String -> Doc
 
 -- | Language version section.
 verInfo :: String -> String -> Doc
@@ -2048,9 +2048,9 @@ extLibSec :: [(String, String)] -> [String] -> Doc
 -- | End section.
 endNote :: Int -> [String] -> Doc
 
--- | <tt>What</tt> section in generated README file, does not display if
---   empty
-whatInfo :: Maybe String -> Doc
+-- | <tt>What</tt> section in generated README file, displays description
+--   and scope if not empty
+whatInfo :: Maybe String -> Maybe String -> Doc
 
 -- | Data is either linear or not.
 data SingleLine

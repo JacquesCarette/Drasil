@@ -1,0 +1,4 @@
+digraph examplemotivation{
+ExampleMotivation	[shape=oval, color=red2, label="ExampleMotivation"];
+ExampleMotivation -> String;
+}

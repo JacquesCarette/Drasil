@@ -10,6 +10,8 @@ ReadMeInfo -> Contributor;
 ReadMeInfo -> CaseName;
 ReadMeInfo -> ExamplePurpose;
 ReadMeInfo -> ExampleDescr;
+ReadMeInfo -> ExampleMotivation;
+ReadMeInfo -> ExampleScope;
 ReadMeInfo -> Int;
 ReadMeInfo -> InFile;
 }

@@ -323,6 +323,7 @@ resourcePath :: String
 units :: [UnitDefn]
 si :: SystemInformation
 purp :: Sentence
+motivation :: Sentence
 symbMap :: ChunkDB
 
 -- | Holds all references and links used in the document.

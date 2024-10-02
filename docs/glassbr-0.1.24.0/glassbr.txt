@@ -255,6 +255,7 @@ printSetting :: PrintingInformation
 si :: SystemInformation
 mkSRS :: SRSDecl
 purp :: Sentence
+background :: Sentence
 symbMap :: ChunkDB
 
 -- | Holds all references and links used in the document.

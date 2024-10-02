@@ -1,17 +1,5 @@
 digraph codespec{
 CodeSpec	[shape=oval, color=cyan3, label="CodeSpec"];
-CodeSpec -> Name;
-CodeSpec -> a;
-CodeSpec -> Purpose;
-CodeSpec -> Background;
-CodeSpec -> Input;
-CodeSpec -> Derived;
-CodeSpec -> Output;
-CodeSpec -> FilePath;
-CodeSpec -> Def;
-CodeSpec -> ConstraintCEMap;
-CodeSpec -> Const;
-CodeSpec -> ConstantMap;
-CodeSpec -> Mod;
-CodeSpec -> ChunkDB;
+CodeSpec -> SystemInformation;
+CodeSpec -> OldCodeSpec;
 }

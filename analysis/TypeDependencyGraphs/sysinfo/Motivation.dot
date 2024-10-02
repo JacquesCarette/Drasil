@@ -1,0 +1,4 @@
+digraph motivation{
+Motivation	[shape=oval, color=red2, label="Motivation"];
+Motivation -> Sentence;
+}

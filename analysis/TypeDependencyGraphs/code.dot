@@ -216,6 +216,30 @@ digraph alltypes {
 		}
 	}
 	subgraph clasinterfaces {
+	}
+	subgraph data {
+		subgraph auxdata{
+		AuxData	[shape=oval, color=cyan3, label="AuxData"];
+		AuxData -> FilePath;
+		AuxData -> Doc;
+		}
+		subgraph packdata{
+		PackData	[shape=oval, color=cyan3, label="PackData"];
+		PackData -> ProgData;
+		PackData -> AuxData;
+		}
+	}
+	subgraph languagerenderer {
+	}
+	subgraph configparers {
+		subgraph configuration{
+		Configuration	[shape=oval, color=cyan3, label="Configuration"];
+		Configuration -> String;
+		Configuration -> MaybeString;
+		Configuration -> Options;
+		}
+	}
+	subgraph import {
 		subgraph readmeinfo{
 		ReadMeInfo	[shape=oval, color=cyan3, label="ReadMeInfo"];
 		ReadMeInfo -> LangAbbrev;
@@ -228,6 +252,8 @@ digraph alltypes {
 		ReadMeInfo -> CaseName;
 		ReadMeInfo -> ExamplePurpose;
 		ReadMeInfo -> ExampleDescr;
+		ReadMeInfo -> ExampleMotivation;
+		ReadMeInfo -> ExampleScope;
 		ReadMeInfo -> Int;
 		ReadMeInfo -> InFile;
 		}
@@ -251,6 +277,14 @@ digraph alltypes {
 		ExampleDescr	[shape=oval, color=red2, label="ExampleDescr"];
 		ExampleDescr -> String;
 		}
+		subgraph examplemotivation{
+		ExampleMotivation	[shape=oval, color=red2, label="ExampleMotivation"];
+		ExampleMotivation -> String;
+		}
+		subgraph examplescope{
+		ExampleScope	[shape=oval, color=red2, label="ExampleScope"];
+		ExampleScope -> String;
+		}
 		subgraph contributor{
 		Contributor	[shape=oval, color=red2, label="Contributor"];
 		Contributor -> String;
@@ -262,28 +296,6 @@ digraph alltypes {
 		subgraph outfile{
 		OutFile	[shape=oval, color=red2, label="OutFile"];
 		OutFile -> String;
-		}
-	}
-	subgraph data {
-		subgraph auxdata{
-		AuxData	[shape=oval, color=cyan3, label="AuxData"];
-		AuxData -> FilePath;
-		AuxData -> Doc;
-		}
-		subgraph packdata{
-		PackData	[shape=oval, color=cyan3, label="PackData"];
-		PackData -> ProgData;
-		PackData -> AuxData;
-		}
-	}
-	subgraph languagerenderer {
-	}
-	subgraph configparers {
-		subgraph configuration{
-		Configuration	[shape=oval, color=cyan3, label="Configuration"];
-		Configuration -> String;
-		Configuration -> MaybeString;
-		Configuration -> Options;
 		}
 	}
 	subgraph comments {
@@ -745,22 +757,25 @@ digraph alltypes {
 	subgraph code {
 	}
 	subgraph codespec {
+		subgraph oldcodespec{
+		OldCodeSpec	[shape=oval, color=cyan3, label="OldCodeSpec"];
+		OldCodeSpec -> Name;
+		OldCodeSpec -> People;
+		OldCodeSpec -> Input;
+		OldCodeSpec -> Derived;
+		OldCodeSpec -> Output;
+		OldCodeSpec -> FilePath;
+		OldCodeSpec -> Def;
+		OldCodeSpec -> ConstraintCEMap;
+		OldCodeSpec -> Const;
+		OldCodeSpec -> ConstantMap;
+		OldCodeSpec -> Mod;
+		OldCodeSpec -> ChunkDB;
+		}
 		subgraph codespec{
 		CodeSpec	[shape=oval, color=cyan3, label="CodeSpec"];
-		CodeSpec -> Name;
-		CodeSpec -> a;
-		CodeSpec -> Purpose;
-		CodeSpec -> Background;
-		CodeSpec -> Input;
-		CodeSpec -> Derived;
-		CodeSpec -> Output;
-		CodeSpec -> FilePath;
-		CodeSpec -> Def;
-		CodeSpec -> ConstraintCEMap;
-		CodeSpec -> Const;
-		CodeSpec -> ConstantMap;
-		CodeSpec -> Mod;
-		CodeSpec -> ChunkDB;
+		CodeSpec -> SystemInformation;
+		CodeSpec -> OldCodeSpec;
 		}
 		subgraph input{
 		Input	[shape=oval, color=red2, label="Input"];

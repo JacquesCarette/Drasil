@@ -1,0 +1,4 @@
+digraph scope{
+Scope	[shape=oval, color=red2, label="Scope"];
+Scope -> Sentence;
+}

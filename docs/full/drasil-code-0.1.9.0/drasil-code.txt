@@ -1606,12 +1606,80 @@ type Derived = CodeDefinition
 -- | Mathematical definition.
 type Def = CodeDefinition
 
--- | Code specifications. Holds information needed to generate code.
-data CodeSpec
-[CodeSpec] :: HasName a => Name -> [a] -> Purpose -> Background -> [Input] -> [Input] -> [Derived] -> [Output] -> [FilePath] -> [Def] -> ConstraintCEMap -> [Const] -> ConstantMap -> [Mod] -> ChunkDB -> CodeSpec
-
 -- | Maps constants to their respective <a>CodeDefinition</a>.
 type ConstantMap = Map UID CodeDefinition
+
+-- | Old Code specifications. Holds information needed to generate code.
+data OldCodeSpec
+OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> [FilePath] -> [Def] -> ConstraintCEMap -> [Const] -> ConstantMap -> [Mod] -> ChunkDB -> OldCodeSpec
+
+-- | Program name.
+[_pName] :: OldCodeSpec -> Name
+
+-- | Authors.
+[_authors] :: OldCodeSpec -> People
+
+-- | All inputs.
+[_inputs] :: OldCodeSpec -> [Input]
+
+-- | Explicit inputs (values to be supplied by a file).
+[_extInputs] :: OldCodeSpec -> [Input]
+
+-- | Derived inputs (each calculated from explicit inputs in a single
+--   step).
+[_derivedInputs] :: OldCodeSpec -> [Derived]
+
+-- | All outputs.
+[_outputs] :: OldCodeSpec -> [Output]
+
+-- | List of files that must be in same directory for running the
+--   executable.
+[_configFiles] :: OldCodeSpec -> [FilePath]
+
+-- | Mathematical definitions, ordered so that they form a path from inputs
+--   to outputs.
+[_execOrder] :: OldCodeSpec -> [Def]
+
+-- | Map from <a>UID</a>s to constraints for all constrained chunks used in
+--   the problem.
+[_cMap] :: OldCodeSpec -> ConstraintCEMap
+
+-- | List of all constants used in the problem.
+[_constants] :: OldCodeSpec -> [Const]
+
+-- | Map containing all constants used in the problem.
+[_constMap] :: OldCodeSpec -> ConstantMap
+
+-- | Additional modules required in the generated code, which Drasil cannot
+--   yet automatically define.
+[_mods] :: OldCodeSpec -> [Mod]
+
+-- | The database of all chunks used in the problem.
+[_sysinfodb] :: OldCodeSpec -> ChunkDB
+class HasOldCodeSpec c_avd8
+oldCodeSpec :: HasOldCodeSpec c_avd8 => Lens' c_avd8 OldCodeSpec
+authorsO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 People
+cMapO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 [FilePath]
+constMapO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 ConstantMap
+constantsO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 [Const]
+derivedInputsO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 [Derived]
+execOrderO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 [Def]
+extInputsO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 [Input]
+inputsO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 [Input]
+modsO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 [Mod]
+outputsO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 [Output]
+pNameO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 Name
+sysinfodbO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 ChunkDB
+
+-- | New Code Specification. Holds system information and a reference to
+--   <a>OldCodeSpec</a>.
+data CodeSpec
+CS :: SystemInformation -> OldCodeSpec -> CodeSpec
+[_sysInfo] :: CodeSpec -> SystemInformation
+[_oldCode] :: CodeSpec -> OldCodeSpec
+sysInfo :: Lens' CodeSpec SystemInformation
+oldCode :: Lens' CodeSpec OldCodeSpec
 
 -- | Converts a list of chunks that have <a>UID</a>s to a Map from
 --   <a>UID</a> to the associated chunk.
@@ -1623,9 +1691,18 @@ getODE :: [ExtLib] -> Maybe ODE
 -- | Maps ODE to their respective <a>CodeDefinition</a>.
 mapODE :: Maybe ODE -> [CodeDefinition]
 
--- | Defines a <a>CodeSpec</a> based on the <a>SystemInformation</a>,
---   <a>Choices</a>, and <a>Mod</a>s defined by the user.
+-- | Creates a <a>CodeSpec</a> using the provided
+--   <tt>SystemInformation</tt>, <a>Choices</a>, and <a>Mod</a>s. The
+--   <a>CodeSpec</a> consists of the system information and a corresponding
+--   <a>OldCodeSpec</a>.
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
+
+-- | Generates an <a>OldCodeSpec</a> from <tt>SystemInformation</tt>,
+--   <a>Choices</a>, and a list of <a>Mod</a>s. This function extracts
+--   various components (e.g., inputs, outputs, constraints, etc.) from
+--   <tt>SystemInformation</tt> to populate the <a>OldCodeSpec</a>
+--   structure.
+oldcodeSpec :: SystemInformation -> Choices -> [Mod] -> OldCodeSpec
 
 -- | Convert a <a>Func</a> to an implementation-stage <a>QuantityDict</a>
 --   representing the function.
@@ -1655,6 +1732,38 @@ getConstraints :: HasUID c => ConstraintCEMap -> [c] -> [ConstraintCE]
 
 -- | Get a list of <a>CodeChunk</a>s from a constraint.
 constraintvars :: ConstraintCE -> ChunkDB -> [CodeChunk]
+instance SysInfo.Drasil.SystemInformation.HasSystemInformation Language.Drasil.CodeSpec.CodeSpec
+instance Language.Drasil.CodeSpec.HasOldCodeSpec Language.Drasil.CodeSpec.CodeSpec
+instance Language.Drasil.CodeSpec.HasOldCodeSpec Language.Drasil.CodeSpec.OldCodeSpec
+
+
+-- | This module defines structures and functions for handling README
+--   files, which are used as auxiliary documentation files for the system.
+module Language.Drasil.Code.Imperative.ReadMe.Import
+
+-- | Holds all information needed to create a README file.
+data ReadMeInfo
+ReadMeInfo :: LangAbbrev -> LangVers -> Maybe String -> ImplementationType -> [(Name, Version)] -> [FilePath] -> [Contributor] -> [FilePath] -> CaseName -> ExamplePurpose -> ExampleDescr -> ExampleMotivation -> ExampleScope -> Int -> (InFile, OutFile) -> ReadMeInfo
+[langName] :: ReadMeInfo -> LangAbbrev
+[langVersion] :: ReadMeInfo -> LangVers
+[invalidOS] :: ReadMeInfo -> Maybe String
+[implementType] :: ReadMeInfo -> ImplementationType
+[extLibNV] :: ReadMeInfo -> [(Name, Version)]
+[extLibFP] :: ReadMeInfo -> [FilePath]
+[contributors] :: ReadMeInfo -> [Contributor]
+[configFP] :: ReadMeInfo -> [FilePath]
+[caseName] :: ReadMeInfo -> CaseName
+[examplePurpose] :: ReadMeInfo -> ExamplePurpose
+[exampleDescr] :: ReadMeInfo -> ExampleDescr
+[exampleMotivation] :: ReadMeInfo -> ExampleMotivation
+[exampleScope] :: ReadMeInfo -> ExampleScope
+[folderNum] :: ReadMeInfo -> Int
+[inputOutput] :: ReadMeInfo -> (InFile, OutFile)
+
+module Language.Drasil.Code.Imperative.WriteReadMe
+
+-- | Generates a README file.
+makeReadMe :: ReadMeInfo -> Doc
 
 module Language.Drasil.Code.Imperative.GenODE
 
@@ -1672,23 +1781,6 @@ chooseODELib :: Lang -> Maybe ODE -> State [Sentence] ODEGenInfo
 -- | Defines a package extension for GOOL, with functions for pairing a
 --   GOOL program with auxiliary, non-source-code files.
 module Language.Drasil.Code.Imperative.GOOL.ClassInterface
-
--- | Holds all information needed to create a README file.
-data ReadMeInfo
-ReadMeInfo :: LangAbbrev -> LangVers -> Maybe String -> ImplementationType -> [(Name, Version)] -> [FilePath] -> [Contributor] -> [FilePath] -> CaseName -> ExamplePurpose -> ExampleDescr -> Int -> (InFile, OutFile) -> ReadMeInfo
-[langName] :: ReadMeInfo -> LangAbbrev
-[langVersion] :: ReadMeInfo -> LangVers
-[invalidOS] :: ReadMeInfo -> Maybe String
-[implementType] :: ReadMeInfo -> ImplementationType
-[extLibNV] :: ReadMeInfo -> [(Name, Version)]
-[extLibFP] :: ReadMeInfo -> [FilePath]
-[contributors] :: ReadMeInfo -> [Contributor]
-[configFP] :: ReadMeInfo -> [FilePath]
-[caseName] :: ReadMeInfo -> CaseName
-[examplePurpose] :: ReadMeInfo -> ExamplePurpose
-[exampleDescr] :: ReadMeInfo -> ExampleDescr
-[folderNum] :: ReadMeInfo -> Int
-[inputOutput] :: ReadMeInfo -> (InFile, OutFile)
 
 -- | Members of this class must have all the information necessary for the
 --   <a>AuxiliarySym</a> in addition to information necessary to create a
@@ -1713,11 +1805,6 @@ optimizeDox :: AuxiliarySym r => r (AuxHelper r)
 makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> GOOLState -> ProgData -> r (Auxiliary r)
 auxHelperDoc :: AuxiliarySym r => r (AuxHelper r) -> Doc
 auxFromData :: AuxiliarySym r => FilePath -> Doc -> r (Auxiliary r)
-
-module Language.Drasil.Code.Imperative.WriteReadMe
-
--- | Generates a README file.
-makeReadMe :: ReadMeInfo -> Doc
 
 module Language.Drasil.Code.Imperative.DrasilState
 
@@ -1779,12 +1866,12 @@ MainFn :: ScopeType
 -- | Builds the module export map, mapping each function and state variable
 --   name in the generated code to the name of the generated module that
 --   exports it.
-modExportMap :: CodeSpec -> Choices -> [Mod] -> ModExportMap
+modExportMap :: OldCodeSpec -> Choices -> [Mod] -> ModExportMap
 
 -- | Builds the class definition map, mapping each generated method and
 --   state variable name to the name of the generated class where it is
 --   defined.
-clsDefMap :: CodeSpec -> Choices -> [Mod] -> ClassDefinitionMap
+clsDefMap :: OldCodeSpec -> Choices -> [Mod] -> ClassDefinitionMap
 
 -- | Adds a message to the design log if the given
 --   <a>Space</a>-<a>CodeType</a> match has not already been logged.
@@ -2719,9 +2806,81 @@ Hide :: Visibility
 --   specifications can be built.
 defaultChoices :: Choices
 
--- | Code specifications. Holds information needed to generate code.
+-- | New Code Specification. Holds system information and a reference to
+--   <a>OldCodeSpec</a>.
 data CodeSpec
-[CodeSpec] :: HasName a => Name -> [a] -> Purpose -> Background -> [Input] -> [Input] -> [Derived] -> [Output] -> [FilePath] -> [Def] -> ConstraintCEMap -> [Const] -> ConstantMap -> [Mod] -> ChunkDB -> CodeSpec
+CS :: SystemInformation -> OldCodeSpec -> CodeSpec
+[_sysInfo] :: CodeSpec -> SystemInformation
+[_oldCode] :: CodeSpec -> OldCodeSpec
+
+-- | Old Code specifications. Holds information needed to generate code.
+data OldCodeSpec
+OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> [FilePath] -> [Def] -> ConstraintCEMap -> [Const] -> ConstantMap -> [Mod] -> ChunkDB -> OldCodeSpec
+
+-- | Program name.
+[_pName] :: OldCodeSpec -> Name
+
+-- | Authors.
+[_authors] :: OldCodeSpec -> People
+
+-- | All inputs.
+[_inputs] :: OldCodeSpec -> [Input]
+
+-- | Explicit inputs (values to be supplied by a file).
+[_extInputs] :: OldCodeSpec -> [Input]
+
+-- | Derived inputs (each calculated from explicit inputs in a single
+--   step).
+[_derivedInputs] :: OldCodeSpec -> [Derived]
+
+-- | All outputs.
+[_outputs] :: OldCodeSpec -> [Output]
+
+-- | List of files that must be in same directory for running the
+--   executable.
+[_configFiles] :: OldCodeSpec -> [FilePath]
+
+-- | Mathematical definitions, ordered so that they form a path from inputs
+--   to outputs.
+[_execOrder] :: OldCodeSpec -> [Def]
+
+-- | Map from <a>UID</a>s to constraints for all constrained chunks used in
+--   the problem.
+[_cMap] :: OldCodeSpec -> ConstraintCEMap
+
+-- | List of all constants used in the problem.
+[_constants] :: OldCodeSpec -> [Const]
+
+-- | Map containing all constants used in the problem.
+[_constMap] :: OldCodeSpec -> ConstantMap
+
+-- | Additional modules required in the generated code, which Drasil cannot
+--   yet automatically define.
+[_mods] :: OldCodeSpec -> [Mod]
+
+-- | The database of all chunks used in the problem.
+[_sysinfodb] :: OldCodeSpec -> ChunkDB
+
+-- | Creates a <a>CodeSpec</a> using the provided
+--   <tt>SystemInformation</tt>, <a>Choices</a>, and <a>Mod</a>s. The
+--   <a>CodeSpec</a> consists of the system information and a corresponding
+--   <a>OldCodeSpec</a>.
+codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
+class HasOldCodeSpec c_avd8
+oldCodeSpec :: HasOldCodeSpec c_avd8 => Lens' c_avd8 OldCodeSpec
+authorsO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 People
+cMapO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 [FilePath]
+constMapO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 ConstantMap
+constantsO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 [Const]
+derivedInputsO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 [Derived]
+execOrderO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 [Def]
+extInputsO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 [Input]
+inputsO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 [Input]
+modsO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 [Mod]
+outputsO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 [Output]
+pNameO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 Name
+sysinfodbO :: HasOldCodeSpec c_avd8 => Lens' c_avd8 ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID
@@ -2729,10 +2888,6 @@ funcUID :: Func -> UID
 -- | Convert a <a>Func</a> to an implementation-stage <a>QuantityDict</a>
 --   representing the function.
 asVC :: Func -> QuantityDict
-
--- | Defines a <a>CodeSpec</a> based on the <a>SystemInformation</a>,
---   <a>Choices</a>, and <a>Mod</a>s defined by the user.
-codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 
 -- | Define an assignment statement.
 ($:=) :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> FuncStmt

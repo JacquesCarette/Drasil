@@ -1,0 +1,4 @@
+digraph examplescope{
+ExampleScope	[shape=oval, color=red2, label="ExampleScope"];
+ExampleScope -> String;
+}

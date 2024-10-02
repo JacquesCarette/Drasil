@@ -293,9 +293,81 @@ Hide :: Visibility
 --   specifications can be built.
 defaultChoices :: Choices
 
--- | Code specifications. Holds information needed to generate code.
+-- | New Code Specification. Holds system information and a reference to
+--   <a>OldCodeSpec</a>.
 data CodeSpec
-[CodeSpec] :: HasName a => Name -> [a] -> Purpose -> Background -> [Input] -> [Input] -> [Derived] -> [Output] -> [FilePath] -> [Def] -> ConstraintCEMap -> [Const] -> ConstantMap -> [Mod] -> ChunkDB -> CodeSpec
+CS :: SystemInformation -> OldCodeSpec -> CodeSpec
+[_sysInfo] :: CodeSpec -> SystemInformation
+[_oldCode] :: CodeSpec -> OldCodeSpec
+
+-- | Old Code specifications. Holds information needed to generate code.
+data OldCodeSpec
+OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> [FilePath] -> [Def] -> ConstraintCEMap -> [Const] -> ConstantMap -> [Mod] -> ChunkDB -> OldCodeSpec
+
+-- | Program name.
+[_pName] :: OldCodeSpec -> Name
+
+-- | Authors.
+[_authors] :: OldCodeSpec -> People
+
+-- | All inputs.
+[_inputs] :: OldCodeSpec -> [Input]
+
+-- | Explicit inputs (values to be supplied by a file).
+[_extInputs] :: OldCodeSpec -> [Input]
+
+-- | Derived inputs (each calculated from explicit inputs in a single
+--   step).
+[_derivedInputs] :: OldCodeSpec -> [Derived]
+
+-- | All outputs.
+[_outputs] :: OldCodeSpec -> [Output]
+
+-- | List of files that must be in same directory for running the
+--   executable.
+[_configFiles] :: OldCodeSpec -> [FilePath]
+
+-- | Mathematical definitions, ordered so that they form a path from inputs
+--   to outputs.
+[_execOrder] :: OldCodeSpec -> [Def]
+
+-- | Map from <a>UID</a>s to constraints for all constrained chunks used in
+--   the problem.
+[_cMap] :: OldCodeSpec -> ConstraintCEMap
+
+-- | List of all constants used in the problem.
+[_constants] :: OldCodeSpec -> [Const]
+
+-- | Map containing all constants used in the problem.
+[_constMap] :: OldCodeSpec -> ConstantMap
+
+-- | Additional modules required in the generated code, which Drasil cannot
+--   yet automatically define.
+[_mods] :: OldCodeSpec -> [Mod]
+
+-- | The database of all chunks used in the problem.
+[_sysinfodb] :: OldCodeSpec -> ChunkDB
+
+-- | Creates a <a>CodeSpec</a> using the provided
+--   <tt>SystemInformation</tt>, <a>Choices</a>, and <a>Mod</a>s. The
+--   <a>CodeSpec</a> consists of the system information and a corresponding
+--   <a>OldCodeSpec</a>.
+codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
+class HasOldCodeSpec c_ava8
+oldCodeSpec :: HasOldCodeSpec c_ava8 => Lens' c_ava8 OldCodeSpec
+authorsO :: HasOldCodeSpec c_ava8 => Lens' c_ava8 People
+cMapO :: HasOldCodeSpec c_ava8 => Lens' c_ava8 ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_ava8 => Lens' c_ava8 [FilePath]
+constMapO :: HasOldCodeSpec c_ava8 => Lens' c_ava8 ConstantMap
+constantsO :: HasOldCodeSpec c_ava8 => Lens' c_ava8 [Const]
+derivedInputsO :: HasOldCodeSpec c_ava8 => Lens' c_ava8 [Derived]
+execOrderO :: HasOldCodeSpec c_ava8 => Lens' c_ava8 [Def]
+extInputsO :: HasOldCodeSpec c_ava8 => Lens' c_ava8 [Input]
+inputsO :: HasOldCodeSpec c_ava8 => Lens' c_ava8 [Input]
+modsO :: HasOldCodeSpec c_ava8 => Lens' c_ava8 [Mod]
+outputsO :: HasOldCodeSpec c_ava8 => Lens' c_ava8 [Output]
+pNameO :: HasOldCodeSpec c_ava8 => Lens' c_ava8 Name
+sysinfodbO :: HasOldCodeSpec c_ava8 => Lens' c_ava8 ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID
@@ -303,10 +375,6 @@ funcUID :: Func -> UID
 -- | Convert a <a>Func</a> to an implementation-stage <a>QuantityDict</a>
 --   representing the function.
 asVC :: Func -> QuantityDict
-
--- | Defines a <a>CodeSpec</a> based on the <a>SystemInformation</a>,
---   <a>Choices</a>, and <a>Mod</a>s defined by the user.
-codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 
 -- | Define an assignment statement.
 ($:=) :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> FuncStmt

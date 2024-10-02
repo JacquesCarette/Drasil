@@ -21,9 +21,9 @@ import Language.Drasil.Code.Imperative.WriteReadMe (makeReadMe)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (doxConfigName,
   makefileName, sampleInputName, readMeName)
 
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface ( ReadMeInfo(..),
-  AuxiliarySym(Auxiliary, AuxHelper, auxHelperDoc, auxFromData))
-
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(Auxiliary, AuxHelper, auxHelperDoc, auxFromData))
+import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
+  
 -- | Defines a Doxygen configuration file.
 doxConfig :: (AuxiliarySym r) => r (AuxHelper r) -> String ->
   GOOLState -> Verbosity -> r (Auxiliary r)

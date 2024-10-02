@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.WriteReadMe (
 import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Printers (makeMd, introInfo, verInfo, unsupOS,
     extLibSec, instDoc, endNote, whatInfo)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..))
+import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, empty)
@@ -25,10 +25,13 @@ makeReadMe ReadMeInfo {
         caseName = name,
         examplePurpose = purp,
         exampleDescr = descr,
+        exampleMotivation = motiv,
+        exampleScope = sc,
         folderNum = number,
         inputOutput = inoutf} =
-    makeMd [introInfo name auths $ fieldEmptySTR purp,
-    whatInfo $ fieldEmptySTR descr,
+    makeMd [introInfo name auths (fieldEmptySTR motiv)
+      (fieldEmptySTR purp),
+    whatInfo (fieldEmptySTR descr) (fieldEmptySTR sc),
     makeInstr imptype configFPs name inoutf,
     verInfo progLang progLangVers,
     unsupOS unsupportedOSs,

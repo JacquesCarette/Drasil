@@ -22,8 +22,8 @@ import Language.Drasil.Code.Imperative.Modules (genInputMod, genInputModProc,
   genOutputModProc, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
   ScopeType(..), designLog, modExportMap, clsDefMap, genICName)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
-  PackageSym(..), AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer(sampleInputName)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
@@ -32,7 +32,7 @@ import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Architecture(..),
   Visibility(..), DataInfo(..), Constraints(..), choicesSent, DocConfig(..),
   LogConfig(..), OptionalFeatures(..), InternalConcept(..))
-import Language.Drasil.CodeSpec (CodeSpec(..), getODE)
+import Language.Drasil.CodeSpec (CodeSpec(..), HasOldCodeSpec(..), getODE)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
 
 import Drasil.GOOL (OOProg, VisibilityTag(..),
@@ -40,6 +40,7 @@ import Drasil.GOOL (OOProg, VisibilityTag(..),
 import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
+import SysInfo.Drasil hiding (sysinfodb)
 
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing,
   getCurrentDirectory)
@@ -96,12 +97,12 @@ generator l dt sd chs spec = DrasilState {
         ((pth, elmap, lname), libLog) = runState (chooseODELib l $ getODE $ extLibs chs) []
         els = map snd elmap
         nms = [lname]
-        mem = modExportMap spec chs modules'
+        mem = modExportMap (spec ^. oldCodeSpec) chs modules'
         lem = fromList (concatMap (^. modExports) els)
-        cdm = clsDefMap spec chs modules'
-        modules' = mods spec ++ concatMap (^. auxMods) els
+        cdm = clsDefMap (spec ^. oldCodeSpec) chs modules'
+        modules' = (spec ^. modsO) ++ concatMap (^. auxMods) els
         nonPrefChs = choicesSent chs
-        des = vcat . map (sentenceDoc (sysinfodb spec) Implementation OneLine) $
+        des = vcat . map (sentenceDoc (spec ^. sysinfodbO) Implementation OneLine) $
           (nonPrefChs ++ concLog ++ libLog)
 
 -- OO Versions --
@@ -143,13 +144,19 @@ genPackage unRepr = do
       (reprPD, s) = runState p info
       pd = unRepr reprPD
       m = makefile (libPaths g) (implType g) (commented g) s pd
-      as = case codeSpec g of CodeSpec {authors = a} -> map name a
-      cfp = configFiles $ codeSpec g
-      db = sysinfodb $ codeSpec g
-      prps = show $ sentenceDoc db Implementation OneLine
-        (foldlSent $ purpose $ codeSpec g)
+      as = map name (codeSpec g ^. authorsO)
+      cfp = codeSpec g ^. configFilesO
+      db = codeSpec g ^. sysinfodbO
+      -- prps = show $ sentenceDoc db Implementation OneLine
+      --   (foldlSent $ purpose $ codeSpec g)
+      prps = show $ sentenceDoc db Implementation OneLine 
+        (foldlSent $ codeSpec g ^. purpose)  
       bckgrnd = show $ sentenceDoc db Implementation OneLine
-        (foldlSent $ background $ codeSpec g)
+        (foldlSent $ codeSpec g ^. background)
+      mtvtn = show $ sentenceDoc db Implementation OneLine
+        (foldlSent $ codeSpec g ^. motivation)
+      scp = show $ sentenceDoc db Implementation OneLine
+        (foldlSent $ codeSpec g ^. scope)
   i <- genSampleInput
   d <- genDoxConfig s
   rm <- genReadMe ReadMeInfo {
@@ -164,6 +171,8 @@ genPackage unRepr = do
         caseName = "",
         examplePurpose = prps,
         exampleDescr = bckgrnd,
+        exampleMotivation = mtvtn,
+        exampleScope = scp,
         folderNum = getVal g,
         inputOutput = (sampleInputName, "output.txt")} -- This needs a more permanent solution
   return $ package pd (m:catMaybes [i,rm,d])
@@ -173,8 +182,8 @@ genProgram :: (OOProg r) => GenState (OO.GSProgram r)
 genProgram = do
   g <- get
   ms <- chooseModules $ modular g
-  let n = pName $ codeSpec g
-  let p = show $ sentenceDoc (sysinfodb $ codeSpec g) Implementation OneLine $ foldlSent $ purpose $ codeSpec g
+  let n = codeSpec g ^. pNameO 
+  let p = show $ sentenceDoc (codeSpec g ^. sysinfodbO) Implementation OneLine $ foldlSent $ codeSpec g ^. purpose
   return $ OO.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice
@@ -191,11 +200,11 @@ genUnmodular = do
   giName <- genICName GetInput
   dvName <- genICName DerivedValuesFn
   icName <- genICName InputConstraintsFn
-  let n = pName $ codeSpec g
+  let n = codeSpec g ^. pNameO
       cls = any (`member` clsMap g) [giName, dvName, icName]
   genModuleWithImports n umDesc (concatMap (^. imports) (elems $ extLibMap g))
     (genMainFunc
-      : map (fmap Just) (map genCalcFunc (execOrder $ codeSpec g)
+      : map (fmap Just) (map genCalcFunc (codeSpec g ^. execOrderO)
         ++ concatMap genModFuncs (modules g))
       ++ ((if cls then [] else [genInputFormat Pub, genInputDerived Pub,
         genInputConstraints Pub]) ++ [genOutputFormat]))
@@ -249,13 +258,17 @@ genPackageProc unRepr = do
       (reprPD, s) = runState p info
       pd = unRepr reprPD
       m = makefile (libPaths g) (implType g) (commented g) s pd
-      as = case codeSpec g of CodeSpec {authors = a} -> map name a
-      cfp = configFiles $ codeSpec g
-      db = sysinfodb $ codeSpec g
+      as = map name (codeSpec g ^. authorsO)
+      cfp = codeSpec g ^. configFilesO
+      db = codeSpec g ^. sysinfodbO
       prps = show $ sentenceDoc db Implementation OneLine
-        (foldlSent $ purpose $ codeSpec g)
+        (foldlSent $ codeSpec g ^. purpose)
       bckgrnd = show $ sentenceDoc db Implementation OneLine
-        (foldlSent $ background $ codeSpec g)
+        (foldlSent $ codeSpec g ^. background)
+      mtvtn = show $ sentenceDoc db Implementation OneLine
+        (foldlSent $ codeSpec g ^. motivation)
+      scp = show $ sentenceDoc db Implementation OneLine
+        (foldlSent $ codeSpec g ^. scope)
   i <- genSampleInput
   d <- genDoxConfig s
   rm <- genReadMe ReadMeInfo {
@@ -270,6 +283,8 @@ genPackageProc unRepr = do
         caseName = "",
         examplePurpose = prps,
         exampleDescr = bckgrnd,
+        exampleMotivation = mtvtn,
+        exampleScope = scp,
         folderNum = getVal g,
         inputOutput = (sampleInputName, "output.txt")} -- This needs a more permanent solution
   return $ package pd (m:catMaybes [i,rm,d])
@@ -279,8 +294,8 @@ genProgramProc :: (ProcProg r) => GenState (Proc.GSProgram r)
 genProgramProc = do
   g <- get
   ms <- chooseModulesProc $ modular g
-  let n = pName $ codeSpec g
-  let p = show $ sentenceDoc (sysinfodb $ codeSpec g) Implementation OneLine $ foldlSent $ purpose $ codeSpec g
+  let n = codeSpec g ^. pNameO
+  let p = show $ sentenceDoc (codeSpec g ^. sysinfodbO) Implementation OneLine $ foldlSent $ codeSpec g ^. purpose
   return $ Proc.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice
@@ -297,12 +312,12 @@ genUnmodularProc = do
   giName <- genICName GetInput
   dvName <- genICName DerivedValuesFn
   icName <- genICName InputConstraintsFn
-  let n = pName $ codeSpec g
+  let n = codeSpec g ^. pNameO
       cls = any (`member` clsMap g) [giName, dvName, icName]
   if cls then error "genUnmodularProc: Procedural renderers do not support classes"
   else genModuleWithImportsProc n umDesc (concatMap (^. imports) (elems $ extLibMap g))
         (genMainFuncProc
-          : map (fmap Just) (map genCalcFuncProc (execOrder $ codeSpec g)
+          : map (fmap Just) (map genCalcFuncProc (codeSpec g ^. execOrderO)
             ++ concatMap genModFuncsProc (modules g))
           ++ ([genInputFormatProc Pub, genInputDerivedProc Pub,
               genInputConstraintsProc Pub] ++ [genOutputFormatProc]))

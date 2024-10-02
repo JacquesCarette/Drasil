@@ -110,7 +110,9 @@ si = SI {
   _kind        = Doc.srs,
   _authors     = [dong],
   _purpose     = [purp],
-  _background  = [], 
+  _background  = [background],
+  _motivation  = [motivation],
+  _scope       = [scope],
   _quants      = symbolsAll,
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = iMods,
@@ -128,6 +130,15 @@ si = SI {
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum]
+
+motivation :: Sentence
+motivation = foldlSent_ [S "To simulate", phraseNP (motion `the_ofThe` pendulum),
+  S "and exhibit its chaotic characteristics"]
+
+background :: Sentence
+background = foldlSent_ [phraseNP (a_ pendulum), S "consists" `S.of_` phrase mass, 
+  S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
+  S "highly sensitive to initial conditions"]
 
 symbolsAll :: [QuantityDict]
 symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 

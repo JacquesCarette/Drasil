@@ -6,7 +6,7 @@ module Language.Drasil.Code.Imperative.Comments (
 import Language.Drasil
 import Database.Drasil (defTable)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
-import Language.Drasil.CodeSpec (CodeSpec(..))
+import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, unitDoc)
 
 import qualified Data.Map as Map (lookup)
@@ -18,7 +18,7 @@ import Text.PrettyPrint.HughesPJ (Doc, (<+>), colon, empty, parens, render)
 getTermDoc :: (CodeIdea c) => c -> GenState Doc
 getTermDoc c = do
   g <- get
-  let db = sysinfodb $ codeSpec g
+  let db = codeSpec g ^. sysinfodbO
   return $ sentenceDoc db Implementation OneLine $ phraseNP $ codeChunk c ^. term
 
 -- | Gets a plain rendering of the definition of a chunk, preceded by a colon
@@ -27,7 +27,7 @@ getTermDoc c = do
 getDefnDoc :: (CodeIdea c) => c -> GenState Doc
 getDefnDoc c = do
   g <- get
-  let db = sysinfodb $ codeSpec g
+  let db = codeSpec g ^. sysinfodbO
   return $ maybe empty ((<+>) colon . sentenceDoc db Implementation OneLine .
     (^. defn) . fst) (Map.lookup (codeChunk c ^. uid) $ defTable db)
 

@@ -34,6 +34,12 @@ introscopeOfReq
        S "Additionally, this software" `S.is` S "intended to aid with the manual",
        S "tuning" `S.ofThe` phrase pidC]
 
+scope :: Sentence
+scope = foldlSent_ [phraseNP (a_ pidCL),
+  S "with three subsystems, namely:" +:+
+  foldlList Comma List (map (phraseNP.a_)
+  [pidC, summingPt, powerPlant])]
+
 introPurposeOfDoc
   = foldlSent
       [S "The purpose of this document" `S.is` S "to capture all the necessary",

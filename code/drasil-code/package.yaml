@@ -52,6 +52,7 @@ library:
     - Language.Drasil.Code.ExternalLibraryCall
     - Language.Drasil.Code.ExtLibImport
     - Language.Drasil.Code.Lang
+    - Language.Drasil.Code.Imperative.ReadMe.Import
     - Language.Drasil.Code.Imperative.Build.AST
     - Language.Drasil.Code.Imperative.Build.Import
     - Language.Drasil.Code.Imperative.ConceptMatch

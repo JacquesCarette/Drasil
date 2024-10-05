@@ -136,7 +136,7 @@ this paper. More information, including detailed definitions of all the types
 and current state of Drasil can be found in the wiki 
 (\href{https://github.com/JacquesCarette/Drasil/wiki/}
 {https://github.com/JacquesCarette/Drasil/wiki/}) or the Haddock documentation 
-which can be generated from the source code or found online at 
+which can be generated from the Drasil source code or found online at 
 \href{https://jacquescarette.github.io/Drasil/docs/full/}
 {https://jacquescarette.github.io/Drasil/docs/full/}
 
@@ -216,26 +216,25 @@ firstnumber=21]{code/SI_Units.hs}
 We start by building a \codeH{ConceptChunk} for the Force concept as seen in 
 Figure~\ref{fig:forceCC}. It is built from a common noun (``force") and a 
 definition. Next we need to capture the units of measurement to the force 
-concept by defining what we call a \codeH{UnitalChunk}. This definition for 
-force can be seen in Figure~\ref{fig:forceUC}. Note that we are not re-defining 
-force in this instance. We are instead using a smart constructor to build atop 
-the existing force chunk (\codeH{CP.force}) and adding a symbolic 
+concept by defining what we have named a \codeH{UnitalChunk}. This definition 
+for force can be seen in Figure~\ref{fig:forceUC}. Note that we are not 
+re-defining force in this instance. We are instead using a smart constructor to 
+build atop the existing force chunk (\codeH{CP.force}) and adding a symbolic 
 representation (\codeH{vec cF}, which is shorthand for the selected vector 
 representation\footnote{More on this in Section~\ref{sec:recipes}} of the 
-capital letter \emph{F}). We also must capture the units force is measured with 
+capital letter \emph{F}). We also must capture the units used to measure force
 (\codeH{newton}) which are defined in \codeH{Data.Drasil.SI_Units} and can be 
 seen in Figure~\ref{fig:Data.Drasil.SI}. The SI Units are captured using 
 another type of chunk known as a \codeH{UnitDefn} which are built atop a 
 \codeH{ConceptChunk} and \codeH{UnitSymbol}. The \codeH{UnitSymbol} is also a 
 chunk that can be one of several other chunk types.\footnote{For brevity we are 
 glossing over many chunk definitions and the differences between them as there 
-are chunks all the way down. The full technical documentation can be found on 
-our github repository.}. Returning to the force \codeH{UnitalChunk}, the smart 
-constructor \codeH{uc} we are using will actually capture even more knowledge 
-than just what we've fed it as we want it to assume we are working in the real 
-number space. There are other smart constructors for other spaces, which are 
-also captured using other chunks elsewhere in Drasil (see: 
-\codeH{Language.Drasil.Space}).
+are a large variety in use for even simple examples. They are covered in more 
+depth in the full technical documentation found on our github repository.}. 
+Returning to the force \codeH{UnitalChunk}, the smart constructor \codeH{uc} we 
+are using will assume we are working in the real number space. There are 
+other smart constructors for other spaces, which are also captured using other 
+chunks elsewhere in Drasil (see: \codeH{Language.Drasil.Space}).
 
 \fig{
 \lstinputlisting[language=Haskell, linerange={11-20}, 
@@ -256,7 +255,7 @@ Now we have almost everything we need to finish our definition of Newton's
 second law. Everything thus far has been defined in natural language using our 
 \codeH{Sentence} DSL, but it is not well-suited to the one piece we are 
 currently missing: a way to define expressions relating chunks in a universal 
-\ds{language agnostic?} (mathematics) context.
+\ds{language agnostic?} (mathematics) context \ds{/representation}.
 
 \subsection{Relating Chunks via Expressions}
 \label{sec:expr}
@@ -321,11 +320,11 @@ numbers=none]{code/PhysicsEquations.hs}
 
 The \codeH{Expr} DSL grants us flexibility in defining relationships without 
 imposing any particular structure on a chunk other than ``contains an 
-\codeH{Expr}", or more specifically ``is modeled using an \codeH{Expr}." Our 
-example also shows us that a few simple chunk types can be combined repeatedly 
-to build much more robust, complex, and information-dense chunks. On the other 
-hand, encoding even a relatively simple theory like Newton's Second Law of 
-motion requires us to define chunks all the way down to the fundamentals. 
+\codeH{Expr}", or more specifically ``can be modeled using an \codeH{Expr}." 
+Our example also shows us that a few simple chunk types can be combined 
+repeatedly to build much more robust, complex, and information-dense chunks. On 
+the other hand, encoding even a relatively simple theory like Newton's Second 
+Law of motion requires us to define chunks down to the fundamentals. 
 Luckily, that is another area where chunks shine as they are infinitely 
 reusable. Once a chunk has been defined and added to our knowledge-base, we 
 never need to redefine it. We simply use it wherever it is needed.
@@ -335,21 +334,213 @@ structuring them such that we can actually do something useful with them. For
 example, how would we go from chunks to \sfs{}? Look forward to that in 
 Section~\ref{sec:recipes}.
 
-\subsection{Chunk Summary}
+\subsection{Chunk Classification}
+%\ds{Prev title: ``Chunk Summary" and comment: I kind 
+%of want to skip this section, though I can
+%also understand keeping it. It does feel a little too ``in the weeds" to go 
+%through the whole Chunk Hierarchy, but I do think it's worthwhile to include
+%the kinds of things we can capture. Maybe a brief ``We've touched on Blah, and 
+%we've also determined we need to be able to capture `blerb, flerb, and 
+%gerb'"(Constraints or something).}
 
-\ds{TODO: Repeat some stuff, and give a general overview of the hierarchy?}
+\ds{I've modified this section to not only be called something different, but 
+to get into the weeds a bit on chunk classification, so we can show the high 
+level ``Class of chunk has this property" instead of ``Here are all our chunk 
+datatypes"}
+
+In the previous sections, we used the idea of ``chunks" of knowledge as our 
+building blocks. They range in complexity from simple single terms, to complex 
+relationships between expressions and overarching conceptual frameworks. Each 
+chunk is useful for a particular encoding, and complex chunks are built from 
+simpler, more fundamental chunks. With all of the complexities of mixing and 
+matching chunks, we have developed a need for a way to determine which chunks 
+expose the same types of knowledge (and how they differ). Not only would such a 
+system ease our ability to develop new chunks, by avoiding repetition and 
+ensuring the new chunk is uniquely suited to its purpose, but it 
+also aids in our understanding of which chunks are suited to capture what types 
+of knowledge.
+
+We have developed a classification system for chunks grouping them based on 
+the properties they encode. For example, all chunks encoding things that are 
+measured with units would be instances of the \codeH{Unitary} type. Chunks that 
+capture quantities, whether Unitary or not, 
+would be instances of the \codeH{Quantity} type. As we simplify, we end up 
+determining what qualifies something as a chunk in the first place. That is, 
+what is the root property that \emph{all} chunks must have to be considered a 
+chunk? That is the \codeH{HasUID} classification, which essentially states that 
+a given chunk of knowledge can be referred to by some unique identifier. For a 
+more intuitive example, the \codeH{NamedIdea} classification is used 
+for chunks that encode knowledge represented by given terms such as ``force", 
+``computer", ``priority", and so on.
+
+Figure~\ref{fig:chunkClasses} and Figure~\ref{fig:chunksClassified} show a 
+subset of the different ways we classify chunks and some example chunk types 
+and how they would be classified, respectively. Note there is a one to many 
+relationship between a given chunk and its classifications. \ds{Use UnitalChunk 
+and DefinedQuantityDict in the figure to show how they differ, yet are 
+classified into many of the same types} As you can see, the \codeH{UnitalChunk} 
+and \codeH{DefinedQuantityDict} are very closely related in that they both 
+contain their own \codeH{NamedIdea}, \codeH{Space}, \codeH{Symbol}, and 
+\codeH{Quantity}, however, the \codeH{UnitalChunk} is also classified as 
+\codeH{Unitary} as it \emph{must} have a unit associated with it.
+
+\fig{\begin{center}
+\includegraphics[width=\linewidth]{figures/ChunkClasses.png}
+\end{center}}{A subset of Drasil's Chunk Classification system showing some of 
+the encoded property relationships}{fig:chunkClasses}
+
+\fig{\begin{center}
+\includegraphics[width=0.75\linewidth]{figures/ChunkClassified.png}
+\end{center}
+}{A subset of Drasil's chunks showing how different chunks may belong to 
+multiple classifications}{fig:chunksClassified}
+
 
 \section{Recipes: Codifying Structure}
 \label{sec:recipes}
-  - Organized knowledge is fine, but is essentially just a collection of (collections of) definitions. Pretty meaningless on its own so we need the structure (in our case from the templates / case studies) to have meaning.
-  - Each \sf{} has its own recipe for combining knowledge
-  - As we consider \sfs{} "views" of the knowledge, we need to 
-  combine/transform/manipulate the knowledge into a meaningful form for the 
-  given view - ex: Math formula for human-readable doc, Function/method for 
-  code (show examples).
-  - Recipes define the "how" and "where" of putting together the knowledge. The rendering engine reads the recipe and follows its instructions.
+
+Now that we have a means of encoding and organizing knowledge, we need some 
+way to operationalize it. Our knowledge base is essentially just a collection 
+of chunks, which are themselves a collection of definitions, encoded in our 
+Expr and Sentence DSLs. To generate \sfs{} we need a means to define the 
+overall structure of the \sf{} as well as the knowledge projections we require 
+to expose the appropriate knowledge from our chunks in a meaningful way for the 
+target audience of that particular \sf{}. This is where our \emph{Recipe} DSL 
+comes into play.
+
+A recipe is, in it's simplest form, a specification for one or more \sfs{}. 
+It not only allows us to structure where knowledge should be presented, but 
+also gives us tools for automatically generating non-trivial sections of our 
+\sfs{}. For example, a traceability matrix can be automatically generated 
+by traversing the relationship tree between chunks within a recipe, although 
+we'll discuss that in more depth in Section~\ref{sec:gen}.
+
+As we saw in Section~\ref{sec:patterns}, there are patterns of repetition for 
+the way knowledge is projected and organized within and between our \sfs{}. The 
+recipe DSL has been designed to take advantage of our knowledge capture 
+mechanisms to reduce unnecessary repetition and duplication. We consider the 
+\sfs{} as different views of the same knowledge, and project only that which is 
+relevant to the audience of the specific \sf{} our recipe applies to. For 
+example, a human readable document may use symbolic mathematics notation for 
+representing formulae whereas the source code would represent the same formulae 
+using syntax specific to the programming language in use (or in the case of 
+punch cards, punched cards). Regardless, we would define the underlying 
+knowledge once in our chunks, and use the recipe DSL to select the 
+representation.
+
+\ds{A little repetitive above, but wanted to really hammer in what recipes are 
+for}.
+
+As our case studies are following templates for our \sfs{}, they give us a 
+solid foundation with which to write our recipes. We already know how the 
+knowledge should be organized, greatly simplifying how we can begin structuring 
+our recipe DSL. The most straightforward, practical approach would be to start 
+by defining a recipe for a given \sf{} type (SRS, MG, Code, etc.). Then flesh 
+that out section by section, following the template as an organizational guide, 
+using the patterns we discovered earlier (Section~\ref{sec:patterns}) as a 
+means of avoiding unnecessary duplication. This is the approach we have chosen 
+to follow, and it has lead to some interesting results.
+
+\fig{
+\lstinputlisting[language=Haskell, linerange={25-42}, 
+firstnumber=25]{code/DocDecl.hs}
+}{Recipe Language for SRS}{fig:recipeSRS}
+
+As an example, let us take a look at the recipe language we have defined 
+\ds{What do we call 
+this? I mean the generic recipe for SRSes, not the specific example of glassbr 
+or w/e} for an SRS using the \smithea{} template.
+Looking at the \codeH{DocSection} definition from Figure~\ref{fig:recipeSRS}, 
+we can see a striking resemblance to (a subset of) the template's 
+Table of Contents (Figure~\ref{fig:SRSToC}). Each section is defined by a 
+datatype, which is, through a similar mechanism, decomposed into multiple 
+subsections (for example, Figure~\ref{fig:recipeReqSec} shows the decomposition 
+of the requirements section) which then defines the types of organizational 
+structures we use for specifying the contents of a given subsection. When 
+populated, the recipe specifies both the structure of our expected \sf{} and 
+the knowledge (chunks) contained therein.
+
+\fig{
+\lstinputlisting[language=Haskell, linerange={88-98}, 
+firstnumber=88]{code/DocDecl.hs}
+}{\codeH{ReqrmntSec} Decomposition and Definitions}{fig:recipeReqSec}
+
+As the given recipe so far has provided nothing but structure, you may be 
+wondering how we populate it with the appropriate knowledge chunks to produce a 
+\sf{}? For that, we should look at a specific example from one of our case 
+studies (GlassBR).
+
+\subsection{Example: SRS recipe for GlassBR}
+
+\fig{
+\lstinputlisting[language=Haskell, linerange={54-55}, 
+firstnumber=54]{code/Body.hs}
+\vdots{}
+\lstinputlisting[language=Haskell, linerange={85-126}, 
+firstnumber=85]{code/Body.hs}
+}{SRS Recipe for GlassBR}{fig:glassBRSRSRecipe}
+
+The recipe for the GlassBR SRS can be seen in Figure~\ref{fig:glassBRSRSRecipe}.
+This should looks familiar, as it follows a similar structure to the \smithea{} 
+template table of contents. We use a number of helper functions and data types 
+to condense and collect the chunks we require and avoid writing any generic 
+boilerplate text. The structure of the document can be rearranged to an extent, 
+in that we can add, remove, or reorder sections at will by simply moving them 
+around within the \codeH{SRSDecl}. As for the chunks necessary for generating 
+the document, each section includes references to them through a supplied list 
+in something we call the \codeH{System Information} object 
+(Figure~\ref{fig:systemInformation}).
+
+\fig{
+\lstinputlisting[language=Haskell, linerange={63-82}, 
+firstnumber=63]{code/Body.hs}
+}{System Information for GlassBR}{fig:systemInformation}
+
+The system information object uses helper functions to keep track of the lists 
+of chunks necessary for \ds{TODO - basically the list is obviously referencing 
+other things, which are themselves defined elsewhere, and we can follow that 
+through to figure out wtf is going on. I will pick one (DD) and traverse the SI 
+to show how things (ex. GTF) are defined. It'll be a bunch more code snippets.}
+
+The combination of system information and the SRS recipe is all we need to move 
+on to creating our generator for the finished SRS document. Before we move on 
+to discussing the generator we will need to follow a similar procedure to 
+define the rest of our \sfs{}. As the other \sf{} recipes were developed in 
+tandem with the SRS, they follow a similar structure and in the interest of 
+brevity we will skip the breakdown of each recipe. It is left to the reader to 
+investigate them by diving into our examples via the Drasil github. 
+
+There is one \sf{} that is significantly different, and as such, we will go 
+into more depth in discussing in the following section. The source code recipe, 
+allows us to not only specify knowledge and the way we wish it structured, but 
+also implementation choices that we would like to make in the final generated 
+source code.
+
+\ds{For the glassbr example, make sure to say something like ``The complete 
+recipe for the SRS specification (not including chunks referenced from within 
+our knowledge bases) is contained in a single file in 
+less than 370 lines of code. The generated SRS in PDF format is 44 pages in 
+length." It has stripped away all of the common boilerplate because we don't 
+need to worry about that right now, as that will be a problem for the generator 
+(Section~\ref{sec:gen} and what want out of a recipe is a simplified, 
+duplication-avoiding representation of our target \sf{}.}
+
+\ds{example goes here}
+\ds{Make sure to touch on selected vector representation format as an example 
+choice, seeing as we alluded to it earlier}
+
+\subsection{Example: Source Code recipe for GlassBR}
+
+
+
+
+
+The recipe DSL is an intermediate representation. It selects which 
+knowledge is relevant, and how it should be organized. Recipes are then 
+consumed by the rendering engine to produce our final \sfs{}.
 
 \section{Cooking it all up: Generation/Rendering}
+\label{sec:gen}
   - Recipes are “little programs”
   - Each recipe can be rendered a number of ways, based on parameters fed to the generator.
   -  Implicit parameters vs explicit: Ex. an SRS will always be rendered based on the recipe, but its output will either be LaTeX or HTML based on an explicit choice. Implicit params fed to gen table of symbols/A\&A / ToU.
@@ -364,8 +555,6 @@ Section~\ref{sec:recipes}.
   mindset
 
   - Observe the amount of effort required to correct errors - show examples
-
-  - Most of the code we’ll show off should be in here.
 
   - Tau example (see issue 348) and its implications - symbols and definitions 
   didn't match. -> implicit 1m depth into the page (means we may need to change 

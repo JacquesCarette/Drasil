@@ -44,7 +44,7 @@ acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angularFrequency, 
   period, frequency, chgMomentum :: UnitalChunk
 
-acceleration         = uc CP.acceleration (vec lA) accelU
+acceleration = uc CP.acceleration (vec lA) accelU
 angularAccel         = uc CP.angAccel lAlpha angAccelU
 angularDisplacement  = uc CP.angDisp lTheta radian
 angularFrequency     = uc CP.angFreq cOmega second
@@ -54,7 +54,7 @@ constAccel           = uc CP.constAccel (sup lA lC) accelU
 displacement         = uc CP.displacement (vec lU) metre
 distance             = uc CP.distance lD metre
 energy               = uc CP.energy cE joule
-force                = uc CP.force (vec cF) newton
+force = uc CP.force (vec cF) newton
 frequency            = uc CP.frequency lF hertz
 gravitationalAccel   = uc CP.gravitationalAccel (vec lG) accelU
 gravitationalConst   = uc CP.gravitationalConst cG gravConstU

@@ -31,7 +31,7 @@ import Language.Drasil.Chunk.Parameter (ParameterChunk(..), PassBy(..), pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Choices (Comments(..), ConstantRepr(..),
   ConstantStructure(..), Structure(..), InternalConcept(..))
-import Language.Drasil.CodeSpec (CodeSpec(..))
+import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight),
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
   getPatternInputs)
@@ -87,7 +87,7 @@ value :: (OOProg r) => UID -> Name -> VSType r -> GenState (SValue r)
 value u s t = do
   g <- get
   let cs = codeSpec g
-      mm = constMap cs
+      mm = cs ^. constMapO
       constDef = do
         cd <- Map.lookup u mm
         maybeInline (conStruct g) cd
@@ -110,9 +110,9 @@ variable s t = do
   let cs = codeSpec g
       defFunc Var = var
       defFunc Const = staticConst
-  if s `elem` map codeName (inputs cs)
+  if s `elem` map codeName (cs ^. inputsO)
     then inputVariable (inStruct g) Var (var s t)
-    else if s `elem` map codeName (constants $ codeSpec g)
+    else if s `elem` map codeName (cs ^. constantsO)
       then constVariable (conStruct g) (conRepr g)
               ((defFunc $ conRepr g) s t)
       else return $ var s t
@@ -323,7 +323,7 @@ convExpr (New c x ns) = convCall c x ns (\m _ -> ctorCall m)
   (\m _ -> libNewObjMixedArgs m)
 convExpr (Message a m x ns) = do
   g <- get
-  let info = sysinfodb $ codeSpec g
+  let info = codeSpec g ^. sysinfodbO
       objCd = quantvar (symbResolve info a)
   o <- mkVal objCd
   convCall m x ns
@@ -390,7 +390,7 @@ convCall :: (OOProg r) => UID -> [CodeExpr] -> [(UID, CodeExpr)] ->
   -> NamedArgs r -> SValue r) -> GenState (SValue r)
 convCall c x ns f libf = do
   g <- get
-  let info = sysinfodb $ codeSpec g
+  let info = codeSpec g ^. sysinfodbO
       mem = eMap g
       lem = libEMap g
       funcCd = quantfunc (symbResolve info c)
@@ -550,7 +550,7 @@ genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
   g <- get
   modify (\st -> st {currentScope = Local})
   stmts <- mapM convStmt s
-  vars <- mapM mkVar (fstdecl (sysinfodb $ codeSpec g) s
+  vars <- mapM mkVar (fstdecl (codeSpec g ^. sysinfodbO) s
     \\ (map quantvar parms ++ map stVar svs))
   t <- spaceCodeType o
   f n (convTypeOO t) desc parms rd [block $ map (`varDec` local) vars, block stmts]
@@ -561,7 +561,7 @@ genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
   initvars <- mapM ((\iv -> fmap (var (codeName iv) . convTypeOO)
     (codeType iv)) . fst) i
   stmts <- mapM convStmt s
-  vars <- mapM mkVar (fstdecl (sysinfodb $ codeSpec g) s
+  vars <- mapM mkVar (fstdecl (codeSpec g ^. sysinfodbO) s
     \\ (map quantvar parms ++ map stVar svs))
   genInitConstructor n desc parms (zip initvars inits)
     [block $ map (`varDec` local) vars, block stmts]
@@ -688,14 +688,14 @@ genDataFunc nameTitle desc ddef = do
 readData :: (OOProg r) => DataDesc -> GenState [MSBlock r]
 readData ddef = do
   g <- get
-  let scope = convScope $ currentScope g
-  inD <- mapM (`inData` scope) ddef
+  let localScope = convScope $ currentScope g
+  inD <- mapM (`inData` localScope) ddef
   v_filename <- mkVal (quantvar inFileName)
   return [block $
-    varDec var_infile scope :
-    (if any (\d -> isLine d || isLines d) ddef then [varDec var_line scope,
-    listDec 0 var_linetokens scope ] else []) ++
-    [listDec 0 var_lines scope | any isLines ddef] ++ openFileR var_infile
+    varDec var_infile localScope :
+    (if any (\d -> isLine d || isLines d) ddef then [varDec var_line localScope,
+    listDec 0 var_linetokens localScope ] else []) ++
+    [listDec 0 var_lines localScope | any isLines ddef] ++ openFileR var_infile
     v_filename : concat inD ++ [closeFile v_infile]]
   where inData :: (OOProg r) => Data -> r (Scope r) -> GenState [MSStatement r]
         inData (Singleton v) _ = do
@@ -780,7 +780,7 @@ valueProc :: (SharedProg r) => UID -> Name -> VSType r -> GenState (SValue r)
 valueProc u s t = do
   g <- get
   let cs = codeSpec g
-      mm = constMap cs
+      mm = cs ^. constMapO
       constDef = do
         cd <- Map.lookup u mm
         maybeInline (conStruct g) cd
@@ -804,9 +804,9 @@ variableProc s t = do
   let cs = codeSpec g
       defFunc Var = var
       defFunc Const = constant -- This might be wrong
-  if s `elem` map codeName (inputs cs)
+  if s `elem` map codeName (cs ^. inputsO)
     then inputVariableProc (inStruct g) Var (var s t)
-    else if s `elem` map codeName (constants $ codeSpec g)
+    else if s `elem` map codeName (cs ^. constantsO)
       then constVariableProc (conStruct g) (conRepr g)
               ((defFunc $ conRepr g) s t)
       else return $ var s t
@@ -910,7 +910,7 @@ genFuncProc f svs (FDef (FuncDef n desc parms o rd s)) = do
   g <- get
   modify (\st -> st {currentScope = Local})
   stmts <- mapM convStmtProc s
-  vars <- mapM mkVarProc (fstdecl (sysinfodb $ codeSpec g) s
+  vars <- mapM mkVarProc (fstdecl (codeSpec g ^. sysinfodbO) s
     \\ (map quantvar parms ++ map stVar svs))
   t <- spaceCodeType o
   f n (convType t) desc parms rd [block $ map (`varDec` local) vars, block stmts]
@@ -926,14 +926,14 @@ genModFuncsProc (Mod _ _ _ _ fs) = map (genFuncProc publicFuncProc []) fs
 readDataProc :: (SharedProg r) => DataDesc -> GenState [MSBlock r]
 readDataProc ddef = do
   g <- get
-  let scope = convScope $ currentScope g
-  inD <- mapM (`inData` scope) ddef
+  let localScope = convScope $ currentScope g
+  inD <- mapM (`inData` localScope) ddef
   v_filename <- mkValProc (quantvar inFileName)
   return [block $
-    varDec var_infile scope :
-    (if any (\d -> isLine d || isLines d) ddef then [varDec var_line scope,
-    listDec 0 var_linetokens scope] else []) ++
-    [listDec 0 var_lines scope | any isLines ddef] ++ openFileR var_infile
+    varDec var_infile localScope :
+    (if any (\d -> isLine d || isLines d) ddef then [varDec var_line localScope,
+    listDec 0 var_linetokens localScope] else []) ++
+    [listDec 0 var_lines localScope | any isLines ddef] ++ openFileR var_infile
     v_filename : concat inD ++ [closeFile v_infile]]
   where inData :: (SharedProg r) => Data -> r (Scope r) -> GenState [MSStatement r]
         inData (Singleton v) _ = do
@@ -1091,7 +1091,7 @@ convCallProc :: (SharedProg r) => UID -> [CodeExpr] -> [(UID, CodeExpr)] ->
   -> NamedArgs r -> SValue r) -> GenState (SValue r)
 convCallProc c x ns f libf = do
   g <- get
-  let info = sysinfodb $ codeSpec g
+  let info = codeSpec g ^. sysinfodbO
       mem = eMap g
       lem = libEMap g
       funcCd = quantfunc (symbResolve info c)

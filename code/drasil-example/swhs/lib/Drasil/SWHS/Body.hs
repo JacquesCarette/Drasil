@@ -81,6 +81,8 @@ si = SI {
   _authors     = [thulasi, brooks, spencerSmith],
   _purpose     = [purp],
   _background  = [],
+  _motivation  = [motivation],
+  _scope       = [scope],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = insModel,
@@ -99,6 +101,10 @@ si = SI {
 purp :: Sentence
 purp = foldlSent_ [S "investigate the effect" `S.of_` S "employing",
   short phsChgMtrl, S "within a", phrase sWHT]
+
+motivation :: Sentence
+motivation = foldlSent_ [S "the demand is high for renewable", pluralNP (enerSrc `and_PS`
+  energy), S "storage technology"]
 
 symbMap :: ChunkDB
 symbMap = cdb (qw (heatEInPCM ^. output) : symbolsAll) -- heatEInPCM ?

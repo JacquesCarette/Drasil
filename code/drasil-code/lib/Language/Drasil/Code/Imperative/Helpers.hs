@@ -6,10 +6,11 @@ import Language.Drasil (UID, QuantityDict)
 import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..),
   ScopeType(..))
-import Language.Drasil.CodeSpec (CodeSpec(..))
+import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Drasil.GOOL (SharedProg, ScopeSym(..))
 
 import Control.Monad.State (State)
+import Control.Lens ((^.))
 
 -- | Puts a state-dependent value into a singleton list.
 liftS :: State a b -> State a [b]
@@ -17,7 +18,7 @@ liftS = fmap (: [])
 
 -- | Gets the 'QuantityDict' corresponding to a 'UID'.
 lookupC :: DrasilState -> UID -> QuantityDict
-lookupC g = symbResolve (sysinfodb $ codeSpec g)
+lookupC g = symbResolve (codeSpec g ^. sysinfodbO)
 
 -- | Converts a 'ScopeType' to a 'Scope'
 convScope :: (SharedProg r) => ScopeType -> r (Scope r)

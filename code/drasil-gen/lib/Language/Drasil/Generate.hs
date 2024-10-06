@@ -28,8 +28,8 @@ import Language.Drasil.Printers (DocType(SRS, Website, Lesson), makeCSS, genHTML
   genTeX, Format(TeX, HTML, Jupyter, MDBook), genJupyter, genMDBook, 
   PrintingInformation, outputDot, makeBook, makeRequirements)
 import Language.Drasil.Code (generator, generateCode, generateCodeProc,
-  Choices(..), CodeSpec(..), Lang(..), getSampleData, readWithDataDesc,
-  sampleInputDD, unPP, unJP, unCSP, unCPPP, unSP, unJLP)
+  Choices(..), CodeSpec(..), HasOldCodeSpec(..), Lang(..), 
+  getSampleData, readWithDataDesc, sampleInputDD, unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 import Language.Drasil.Output.Formats(Filename, DocSpec(DocSpec), DocChoices(DC))
 
 import Language.Drasil.TypeCheck
@@ -37,6 +37,7 @@ import Language.Drasil.Dump
 
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC)
 import Drasil.GProc (unJLC)
+import Control.Lens ((^.))
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
@@ -160,7 +161,7 @@ genCode chs spec = do
   workingDir <- getCurrentDirectory
   time <- getCurrentTime
   sampData <- maybe (return []) (\sd -> readWithDataDesc sd $ sampleInputDD
-    (extInputs spec)) (getSampleData chs)
+    (spec ^. extInputsO)) (getSampleData chs)
   createDirectoryIfMissing False "src"
   setCurrentDirectory "src"
   let genLangCode Java = genCall Java unJC unJP

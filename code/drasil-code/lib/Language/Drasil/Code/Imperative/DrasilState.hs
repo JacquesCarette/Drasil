@@ -17,7 +17,7 @@ import Language.Drasil.Choices (Choices(..), Architecture (..), DataInfo(..),
   MatchedConceptMap, ConstantRepr, ConstantStructure(..), ConstraintBehaviour, Logging, 
   Structure(..), InternalConcept(..))
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output, Def,
-  CodeSpec(..),  getConstraints)
+  CodeSpec(..),  OldCodeSpec(..), getConstraints)
 import Language.Drasil.Mod (Mod(..), Name, Version, Class(..),
   StateVariable(..), fname)
 
@@ -100,23 +100,23 @@ addLoggedSpace s t = over loggedSpaces ((s,t):)
 
 -- | Builds the module export map, mapping each function and state variable name
 -- in the generated code to the name of the generated module that exports it.
-modExportMap :: CodeSpec -> Choices -> [Mod] -> ModExportMap
-modExportMap cs@CodeSpec {
-  pName = prn,
-  inputs = ins,
-  extInputs = extIns,
-  derivedInputs = ds,
-  constants = cns
+modExportMap :: OldCodeSpec -> Choices -> [Mod] -> ModExportMap
+modExportMap cs@OldCodeSpec {
+  _pName = prn,
+  _inputs = ins,
+  _extInputs = extIns,
+  _derivedInputs = ds,
+  _constants = cns
   } chs@Choices {
     architecture = m
   } ms = fromList $ nubOrd $ concatMap mpair ms
     ++ getExpInput prn chs ins
     ++ getExpConstants prn chs cns
     ++ getExpDerived prn chs ds
-    ++ getExpConstraints prn chs (getConstraints (cMap cs) ins)
+    ++ getExpConstraints prn chs (getConstraints (_cMap cs) ins)
     ++ getExpInputFormat prn chs extIns
-    ++ getExpCalcs prn chs (execOrder cs)
-    ++ getExpOutput prn chs (outputs cs)
+    ++ getExpCalcs prn chs (_execOrder cs)
+    ++ getExpOutput prn chs (_outputs cs)
   where mpair (Mod n _ _ cls fs) = map
           (, defModName (modularity m) n)
           (map className cls
@@ -127,17 +127,17 @@ modExportMap cs@CodeSpec {
 
 -- | Builds the class definition map, mapping each generated method and state
 -- variable name to the name of the generated class where it is defined.
-clsDefMap :: CodeSpec -> Choices -> [Mod] -> ClassDefinitionMap
-clsDefMap cs@CodeSpec {
-  inputs = ins,
-  extInputs = extIns,
-  derivedInputs = ds,
-  constants = cns
+clsDefMap :: OldCodeSpec -> Choices -> [Mod] -> ClassDefinitionMap
+clsDefMap cs@OldCodeSpec {
+  _inputs = ins,
+  _extInputs = extIns,
+  _derivedInputs = ds,
+  _constants = cns
   } chs ms = fromList $ nub $ concatMap modClasses ms
     ++ getInputCls chs ins
     ++ getConstantsCls chs cns
     ++ getDerivedCls chs ds
-    ++ getConstraintsCls chs (getConstraints (cMap cs) ins)
+    ++ getConstraintsCls chs (getConstraints (_cMap cs) ins)
     ++ getInputFormatCls chs extIns
     where modClasses (Mod _ _ _ cls _) = concatMap (\cl ->
             let cln = className cl in

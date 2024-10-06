@@ -1,11 +1,14 @@
-{-# LANGUAGE GADTs #-}
+{-# LANGUAGE GADTs, TemplateHaskell #-}
+{-# LANGUAGE InstanceSigs #-}
 -- | Defines the CodeSpec structure and related functions.
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil hiding (None, new)
 import Language.Drasil.Display (Symbol(Variable))
 import Database.Drasil
-import SysInfo.Drasil hiding (sysinfodb)
+import qualified SysInfo.Drasil as SI
+import SysInfo.Drasil (HasSystemInformation(..))
+
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 
 import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
@@ -18,7 +21,7 @@ import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 
 import Utils.Drasil (subsetOf)
 
-import Control.Lens ((^.))
+import Control.Lens ((^.), makeLenses, Lens', makeClassyFor)
 import Data.List (intercalate, nub, (\\))
 import qualified Data.Map as Map
 import Data.Maybe (mapMaybe)
@@ -35,46 +38,118 @@ type Const = CodeDefinition
 type Derived = CodeDefinition
 -- | Mathematical definition.
 type Def = CodeDefinition
-
--- | Code specifications. Holds information needed to generate code.
-data CodeSpec where
-  CodeSpec :: (HasName a) => {
-  -- | Program name.
-  pName :: Name,
-  -- | Authors.
-  authors :: [a],
-  -- | Purpose.
-  purpose :: Purpose,
-  -- | Example Background.
-  background :: Background,
-  -- | All inputs.
-  inputs :: [Input],
-  -- | Explicit inputs (values to be supplied by a file).
-  extInputs :: [Input],
-  -- | Derived inputs (each calculated from explicit inputs in a single step).
-  derivedInputs :: [Derived],
-  -- | All outputs.
-  outputs :: [Output],
-  -- | List of files that must be in same directory for running the executable.
-  configFiles :: [FilePath],
-  -- | Mathematical definitions, ordered so that they form a path from inputs to
-  -- outputs.
-  execOrder :: [Def],
-  -- | Map from 'UID's to constraints for all constrained chunks used in the problem.
-  cMap :: ConstraintCEMap,
-  -- | List of all constants used in the problem.
-  constants :: [Const],
-  -- | Map containing all constants used in the problem.
-  constMap :: ConstantMap,
-  -- | Additional modules required in the generated code, which Drasil cannot yet
-  -- automatically define.
-  mods :: [Mod],  -- medium hack
-  -- | The database of all chunks used in the problem.
-  sysinfodb :: ChunkDB
-  } -> CodeSpec
-
 -- | Maps constants to their respective 'CodeDefinition'.
 type ConstantMap = Map.Map UID CodeDefinition
+
+-- | Old Code specifications. Holds information needed to generate code.
+data OldCodeSpec = OldCodeSpec {
+  -- | Program name.
+  _pName :: Name,
+  -- | Authors.
+  _authors :: People,
+  -- | All inputs.
+  _inputs :: [Input],
+  -- | Explicit inputs (values to be supplied by a file).
+  _extInputs :: [Input],
+  -- | Derived inputs (each calculated from explicit inputs in a single step).
+  _derivedInputs :: [Derived],
+  -- | All outputs.
+  _outputs :: [Output],
+  -- | List of files that must be in same directory for running the executable.
+  _configFiles :: [FilePath],
+  -- | Mathematical definitions, ordered so that they form a path from inputs to
+  -- outputs.
+  _execOrder :: [Def],
+  -- | Map from 'UID's to constraints for all constrained chunks used in the problem.
+  _cMap :: ConstraintCEMap,
+  -- | List of all constants used in the problem.
+  _constants :: [Const],
+  -- | Map containing all constants used in the problem.
+  _constMap :: ConstantMap,
+  -- | Additional modules required in the generated code, which Drasil cannot yet
+  -- automatically define.
+  _mods :: [Mod],  -- medium hack
+  -- | The database of all chunks used in the problem.
+  _sysinfodb :: ChunkDB
+  }
+
+makeClassyFor "HasOldCodeSpec" "oldCodeSpec"
+  [   ("_pName", "pNameO")
+    , ("_authors", "authorsO")
+    , ("_inputs", "inputsO")
+    , ("_extInputs", "extInputsO")
+    , ("_derivedInputs", "derivedInputsO")
+    , ("_outputs", "outputsO")
+    , ("_configFiles", "configFilesO") 
+    , ("_execOrder", "execOrderO")
+    , ("_cMap", "cMapO")
+    , ("_constants", "constantsO")
+    , ("_constMap", "constMapO")
+    , ("_mods", "modsO")
+    , ("_sysinfodb", "sysinfodbO")
+    ] ''OldCodeSpec
+
+-- | New Code Specification. Holds system information and a reference to `OldCodeSpec`.
+data CodeSpec = CS {
+  _sysInfo :: SI.SystemInformation,
+  _oldCode :: OldCodeSpec
+}
+makeLenses ''CodeSpec
+
+instance HasSystemInformation CodeSpec where
+  systemInformation :: Lens' CodeSpec SI.SystemInformation
+  systemInformation = sysInfo
+  background :: Lens' CodeSpec SI.Background
+  background = systemInformation . SI.background
+  purpose :: Lens' CodeSpec SI.Purpose
+  purpose = systemInformation . SI.purpose
+  scope :: Lens' CodeSpec SI.Scope
+  scope = systemInformation . SI.scope
+  motivation :: Lens' CodeSpec SI.Motivation
+  motivation = systemInformation . SI.motivation
+
+instance HasOldCodeSpec CodeSpec where
+  oldCodeSpec :: Lens' CodeSpec OldCodeSpec
+  oldCodeSpec = oldCode
+
+  pNameO :: Lens' CodeSpec Name
+  pNameO = oldCode . pNameO
+
+  authorsO :: Lens' CodeSpec People
+  authorsO = oldCode . authorsO
+
+  inputsO :: Lens' CodeSpec [Input]
+  inputsO = oldCode . inputsO
+
+  extInputsO :: Lens' CodeSpec [Input]
+  extInputsO = oldCode . extInputsO
+
+  derivedInputsO :: Lens' CodeSpec [Derived]
+  derivedInputsO = oldCode . derivedInputsO
+
+  outputsO :: Lens' CodeSpec [Output]
+  outputsO = oldCode . outputsO
+
+  configFilesO :: Lens' CodeSpec [FilePath]
+  configFilesO = oldCode . configFilesO
+
+  execOrderO :: Lens' CodeSpec [Def]
+  execOrderO = oldCode . execOrderO
+
+  cMapO :: Lens' CodeSpec ConstraintCEMap
+  cMapO = oldCode . cMapO
+
+  constantsO :: Lens' CodeSpec [Const]
+  constantsO = oldCode . constantsO
+
+  constMapO :: Lens' CodeSpec ConstantMap
+  constMapO = oldCode . constMapO
+
+  modsO :: Lens' CodeSpec [Mod]
+  modsO = oldCode . modsO
+
+  sysinfodbO :: Lens' CodeSpec ChunkDB
+  sysinfodbO = oldCode . sysinfodbO
 
 -- | Converts a list of chunks that have 'UID's to a Map from 'UID' to the associated chunk.
 assocToMap :: HasUID a => [a] -> Map.Map UID a
@@ -91,21 +166,28 @@ mapODE :: Maybe ODE -> [CodeDefinition]
 mapODE Nothing = []
 mapODE (Just ode) = map odeDef $ odeInfo ode
 
--- | Defines a 'CodeSpec' based on the 'SystemInformation', 'Choices', and 'Mod's
--- defined by the user.
-codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
-codeSpec SI {_sys         = sys
-           , _authors     = as
-           , _purpose     = ps
-           , _background  = bk
-           , _instModels  = ims
-           , _datadefs    = ddefs
-           , _configFiles = cfp
-           , _inputs      = ins
-           , _outputs     = outs
-           , _constraints = cs
-           , _constants   = cnsts
-           , _sysinfodb   = db} chs ms =
+-- | Creates a 'CodeSpec' using the provided 'SystemInformation', 'Choices', and 'Mod's.
+-- The 'CodeSpec' consists of the system information and a corresponding 'OldCodeSpec'.
+codeSpec :: SI.SystemInformation -> Choices -> [Mod] -> CodeSpec
+codeSpec si chs ms = CS {
+  _sysInfo = si,
+  _oldCode = oldcodeSpec si chs ms
+}
+
+-- | Generates an 'OldCodeSpec' from 'SystemInformation', 'Choices', and a list of 'Mod's.
+-- This function extracts various components (e.g., inputs, outputs, constraints, etc.)
+-- from 'SystemInformation' to populate the 'OldCodeSpec' structure.
+oldcodeSpec :: SI.SystemInformation -> Choices -> [Mod] -> OldCodeSpec
+oldcodeSpec SI.SI{ SI._sys = sys
+                   , SI._authors = as
+                   , SI._instModels = ims
+                   , SI._datadefs = ddefs
+                   , SI._configFiles = cfp
+                   , SI._inputs = ins
+                   , SI._outputs = outs
+                   , SI._constraints = cs
+                   , SI._constants = cnsts
+                   , SI._sysinfodb = db } chs ms =
   let n = programName sys
       inputs' = map quantvar ins
       const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
@@ -118,23 +200,22 @@ codeSpec SI {_sys         = sys
       outs' = map quantvar outs
       allInputs = nub $ inputs' ++ map quantvar derived
       exOrder = getExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
-  in  CodeSpec {
-        pName = n,
-        authors = as,
-        purpose = ps,
-        background = bk,
-        inputs = allInputs,
-        extInputs = inputs',
-        derivedInputs = derived,
-        outputs = outs',
-        configFiles = cfp,
-        execOrder = exOrder,
-        cMap = constraintMap cs,
-        constants = const',
-        constMap = assocToMap const',
-        mods = ms,
-        sysinfodb = db
-      }
+  in OldCodeSpec {
+        _pName = n,
+        _authors = as,
+        _inputs = allInputs,
+        _extInputs = inputs',
+        _derivedInputs = derived,
+        _outputs = outs',
+        _configFiles = cfp,
+        _execOrder = exOrder,
+        _cMap = constraintMap cs,
+        _constants = const',
+        _constMap = assocToMap const',
+        _mods = ms,
+        _sysinfodb = db
+      } 
+
 
 -- medium hacks ---
 

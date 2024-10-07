@@ -103,7 +103,7 @@ purp = foldlSent_ [S "investigate the effect" `S.of_` S "employing",
   short phsChgMtrl, S "within a", phrase sWHT]
 
 motivation :: Sentence
-motivation = foldlSent_ [S "the demand is high for renewable", pluralNP (enerSrc `and_PS`
+motivation = foldlSent_ [S "the demand" `S.is` S "high for renewable", pluralNP (enerSrc `and_PS`
   energy), S "storage technology"]
 
 symbMap :: ChunkDB
@@ -205,7 +205,7 @@ priorityNFReqs = [correctness, verifiability, understandability, reusability,
 introStart :: Sentence
 introStart = foldlSent [S "Due to", foldlList Comma List (map S
   ["increasing costs", "diminishing availability", "negative environmental impact"]) `S.of_`
-  S "fossil fuels" `sC` S "the demand is high for renewable", pluralNP (enerSrc `and_PS`
+  S "fossil fuels" `sC` S "the demand" `S.is` S "high for renewable", pluralNP (enerSrc `and_PS`
   energy), S "storage technology"]
 
 introStartSWHS :: Sentence
@@ -213,7 +213,7 @@ introStartSWHS = foldlSent [capSent $ pluralNP $ progName ^. term, S "incorporat
   phrase phsChgMtrl, sParen (short phsChgMtrl), S "use a renewable",
   phrase enerSrc `S.and_` S "provide a novel way of storing" +:+. phrase energy,
   atStart swhsPCM, S "improve over the traditional", plural progName,
-  S "because of their smaller size. The smaller size is possible because of the ability" `S.of_`
+  S "because of their smaller size. The smaller size" `S.is` S "possible because" `S.ofThe` S "ability" `S.of_`
   short phsChgMtrl, S "to store", phrase thermalEnergy, S "as", phrase latentHeat `sC`
   S "which allows higher", phrase thermalEnergy, S "storage capacity per",
   phrase unit_, S "weight"]
@@ -221,7 +221,7 @@ introStartSWHS = foldlSent [capSent $ pluralNP $ progName ^. term, S "incorporat
 introEnd :: Sentence -> CI -> Sentence
 introEnd progSent pro = foldlSent_ [(progSent !.), S "The developed",
   phrase program, S "will be referred to as", titleize pro, sParen (short pro),
-  S "based on the original, manually created version of" +:+
+  S "based on the original" `sC` S "manually created version of" +:+
   namedRef externalLinkRef (S "SWHS")]
   -- SSP has same style sentence here
 
@@ -275,7 +275,7 @@ charReaderDE = plural de +:+ S "from level 1 and 2" +:+ phrase calculus
 ------------------------------------
 orgDocEnd :: Sentence
 orgDocEnd = foldlSent_ [atStartNP' (the inModel), 
-  S "to be solved are referred to as" +:+. 
+  S "to be solved" `S.are` S "referred to as" +:+. 
   foldlList Comma List (map refS iMods), S "The", plural inModel,
   S "provide the", plural ode, sParen (short ode :+: S "s") `S.and_` 
   S "algebraic", plural equation, S "that", phrase model, 
@@ -310,7 +310,7 @@ sysCntxtDesc pro = foldlSP [refS sysCntxtFig, S "shows the" +:+.
   phrase sysCont, S "A circle represents an external entity outside the",
   phrase software `sC` phraseNP (the user) +:+. S "in this case",
   S "A rectangle represents the", phrase softwareSys, S "itself" +:+.
-  sParen (short pro), S "Arrows are used to show the", plural datum,
+  sParen (short pro), S "Arrows" `S.are` S "used to show the", plural datum,
   S "flow between the", phraseNP (system `andIts` environment)]
 
 sysCntxtFig :: LabelledContent
@@ -320,7 +320,7 @@ sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
 
 sysCntxtRespIntro :: CI -> Contents
 sysCntxtRespIntro pro = foldlSPCol [short pro +:+. S "is mostly self-contained",
-  S "The only external interaction is through the", phrase user +:+.
+  S "The only external interaction" `S.is` S "through the", phrase user +:+.
   S "interface", S "responsibilities" `S.the_ofTheC` phraseNP (user `andThe`
   system) `S.are` S "as follows"]
 
@@ -332,15 +332,15 @@ systContRespBullets prog = UlC $ ulcc $ Enumeration $ bulletNested
 userResp :: [Sentence]
 userResp = map foldlSent_ [
   [S "Provide the", phrase input_, plural datum `S.toThe`
-    phrase system `sC` S "ensuring no errors in the", plural datum, S "entry"],
-  [S "Take care that consistent", plural unit_, S "are used for",
+    phrase system `sC` S "ensuring no errors" `S.inThe` plural datum, S "entry"],
+  [S "Take care that consistent", plural unit_ `S.are` S "used for",
     phrase input_, plural variable]
   ]
 
 swhsResp :: [Sentence]
 swhsResp = map foldlSent_ [
-  [S "Detect", plural datum, S "type mismatch, such as a string" `S.of_`
-    S "characters instead of a floating point number"],
+  [S "Detect", plural datum, S "type mismatch" `sC` S "such as a string" `S.of_`
+    S "characters instead" `S.ofA` S "floating point number"],
   [S "Determine if the", plural input_, S "satisfy the required",
     phraseNP (physical `and_` software), plural constraint],
   [S "Calculate the required", plural output_]
@@ -352,7 +352,7 @@ swhsResp = map foldlSent_ [
 
 userChars :: CI -> Contents
 userChars pro = foldlSP [S "The end", phrase user `S.of_` short pro,
-  S "should have an understanding of undergraduate Level 1 Calculus" `S.and_`
+  S "should have an understanding" `S.of_` S "undergraduate Level 1 Calculus" `S.and_`
   titleize Doc.physics]
 
 -- Some of these course names are repeated between examples, could potentially
@@ -492,13 +492,13 @@ dataContFooter = foldlSent_ $ map foldlSent [
 
   [sParen (S "++"), atStartNP' (NP.the (constraint `onThePS` surArea)),
   S "are calculated by considering the", phrase surArea, S "to", phrase vol +:+.
-  S "ratio", atStartNP (the assumption), S "is that the lowest ratio is 1" `S.and_`
-  S "the highest possible is", eS (exactDbl 2 $/ sy thickness) `sC` S "where", ch thickness,
+  S "ratio", atStartNP (the assumption) `S.is` S "that the lowest ratio is 1" `S.and_`
+  S "the highest possible" `S.is` eS (exactDbl 2 $/ sy thickness) `sC` S "where", ch thickness,
   S "is the thickness of a" +:+. (Quote (S "sheet") `S.of_` short phsChgMtrl),
   S "A thin sheet has the greatest", phrase surArea, S "to", phrase vol, S "ratio"],
 
   [sParen (S "**"), atStartNP (the constraint), S "on the maximum", phrase time,
-  S "at the end of the simulation is the total number of seconds in one day"]
+  S "at the end" `S.ofThe` S "simulation" `S.is` S "the total number of seconds" `S.in_` S "one day"]
   
   ]
 ------------------------------

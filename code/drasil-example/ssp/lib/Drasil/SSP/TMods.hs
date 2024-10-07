@@ -64,11 +64,11 @@ equilibriumCS = mkConstraintSet
 -- makeRC "equilibriumRC" (nounPhraseSP "equilibrium") eqDesc eqRel
 
 eqDesc :: Sentence
-eqDesc = foldlSent [S "For a body in static equilibrium, the net",
-  pluralNP (force `and_PP` genericM) +:+. S "acting on the body will cancel out",
+eqDesc = foldlSent [S "For a body in static equilibrium" `sC` S "the net",
+  pluralNP (force `and_PP` genericM) +:+. (S "acting" `S.onThe` S "body will cancel out"),
   S "Assuming a 2D problem", sParen (refS assumpENSL) `sC` S "the", getTandS fx `S.and_`
   getTandS fy, S "will be equal to" +:+. eS (exactDbl 0), S "All", plural force,
-  S "and their", phrase distance, S "from the chosen point of rotation",
+  S "and their", phrase distance, S "from the chosen point" `S.of_` S "rotation",
   S "will create a net", phrase genericM, S "equal to" +:+ eS (exactDbl 0)]
 
 --
@@ -89,17 +89,17 @@ mcShrStrgthExpr = sy effNormStress $* tan (sy fricAngle) $+ sy effCohesion
 
 mcShrStrgthDesc :: Sentence
 mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",
-  getTandS shrStress, S "is proportional to the product of the",
-  phrase effNormStress, ch effNormStress, S "on the plane", 
-  S "with its static", phrase friction, S "in the angular form" +:+.
+  getTandS shrStress `S.is` S "proportional to the product" `S.ofThe` phrase effNormStress, 
+  ch effNormStress `S.onThe` S "plane", 
+  S "with its static", phrase friction `S.inThe` S "angular form" +:+.
   eS (tan $ sy fricAngle),
   S "The", ch shrStress, S "versus", ch effNormStress,
-  S "relationship is not truly",
+  S "relationship" `S.is` S "not truly",
   phrase linear `sC` S "but assuming the", phrase nrmFSubWat, 
-  S "is strong enough, it can be approximated with a", phrase linear,
+  S "is strong enough" `sC` S "it can be approximated with a", phrase linear,
   S "fit", sParen (refS assumpSBSBISL), S "where the", phrase effCohesion, 
   ch effCohesion, S "represents the", ch shrStress,
-  S "intercept of the fitted line"]
+  S "intercept" `S.ofThe` S "fitted line"]
 
 --
 ------------- New Chunk -----------

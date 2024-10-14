@@ -221,15 +221,77 @@ many areas, there is also code generation already present.
 And that's where part of the answer lies: there are places where we know
 this has been done for some of the artifacts.
 
+In other words, maybe we should consider artifacts in a repository
+as a particular *view* on some pre-existing knowledge, and then the creation
+of all software artifacts would consist of instructions on how to
+weave and tangle that into the appropriate format.
+
+**N** Oh, I think I'm beginning to see how this might fit together.
+So you're saying there is so much duplication that this would make writing
+software much more compact if this underlying knowledge was captured?
+
+**S** Yes, that's right. But of course, it's not quite that simple, is it?
+
+**N** Hmm, I guess that a lot of people complain about things like
+'requirement churn' and so on, and that won't magically disappear, will it?
+
+**S** Indeed. Key here is an observation that I first saw Dines Bjorner
+make: that for some applications, there is a (very large!) base of knowledge
+that does not change, and a small layer 'on top' of desired functionality
+that changes extremely rapidly.
+
+**N** Oh, that makes sense. So I guess it's important to be in a situation
+where that's the case?
+
+**S** Probably. It's unclear what the respective costs of each activity is,
+so it's unclear where the compromises lie.
+
+**N** But there seem to be compromises?
+
+**S** Yes indeed. But maybe that's diving too deep for now, and instead 
+we should take a look at some of your other questions now?
+
+## Is it feasible?
+
+**N** That's probably a good idea. This story you're telling me, it seems
+really nice, but could it even work?
+
+**S** Yes, absolutely. We've had glimpses that it could for a long time
+(literate programming, org-mode, Draco, MDE and more). But the 'everything'
+part, especially when it comes to *documentation*, had never been done
+before. We have a prototype (Drasil) that works on smaller examples.
+
+**N** Why didn't you say so earlier? Everyone should be doing this!
+
+**S** The word 'prototype' is an important one here. Because it is a 
+'first', we already know that there are many things that are not right
+with the current code. And lots of missing features. It's not ready for wide
+use.
+
+**N** Oh, sorry. But when it's ready, this is going to revolutionize
+how software is done!
+
+**S** Again, no. But the explanation of why this is so might not quite
+make sense yet. I think that first, I should explain "How it works".
+
+**N** Oh yes please! I'm surprised I didn't notice that this has not even
+been covered yet. I guess I was quite wrapped up in this fascinating
+exploration.
+
+## How does it work?
+
+**S** Thank you.  So I'm going to describe what we call the
+**Idealized Development Process** (or IDP for short) that we envision.
+By 'development process' we mean something akin to other models like
+Waterfall, Spiral, Agile, V and so forth. There are different activities
+done in different phases, each of which produces artifacts.
+
+
+
+
+
+
 ===
-Below here are notes for an older version.
-
-
-(lots of duplication)
-
-## Is it even feasible?
-
-(yes, we have a prototype)
 
 ## How does it work?
 
@@ -237,10 +299,6 @@ Below here are notes for an older version.
 
 - theories, basic ontology
 - meta-language of OO languages
-
-## Is this a new idea?
-
-(not really - but previous work didn't really succeed)
 
 ## So you have a silver bullet then?
 

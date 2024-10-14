@@ -284,14 +284,99 @@ exploration.
 **Idealized Development Process** (or IDP for short) that we envision.
 By 'development process' we mean something akin to other models like
 Waterfall, Spiral, Agile, V and so forth. There are different activities
-done in different phases, each of which produces artifacts.
+done in different phases, each of which produces artifacts. And, in
+general, there are different people who will perform these activities.
+
+So what would development of an application using the IDP be, assuming
+some future full-featured version of Drasil, and a large library of
+captured knowledge?
+
+A developper would:
+1. Figure out the 'context' in which their application exists,
+2. Gather from the Drasil library all the domain theories that fit
+that context,
+3. Refine and describe (in Drasil) the requirements for the application,
+including thinking about potential future changes,
+4. Instantiate the existing domain theories to their context of use,
+most significantly to the *domain assumptions* that they have,
+5. Make application architecture choices,
+6. Instantiate the right generators for these choices,
+7. Make further application-level design choices,
+8. Generate the full artifacts (more choices available here),
+9. Compile the resulting software; run the generated tests,
+10. Audit that what was generated corresponds to what was needed.
+11. Go back to any step where the choices where unsatisfactory, fix and
+repeat.
+
+**N** That resembles Waterfall, but with more theory?
+
+**S** Granted, written that way, it does look like that.
+
+What's different is that all of the work in all the steps is never lost
+or disconnected. Every part of the process involves writing some
+'instructions' down that are used by latter parts of the process.
+
+And that this can be done incrementally and repeatedly.
+
+**N** So the reason that I'm not quite understanding the difference is
+that all the steps are *formal*?
+
+**S** Yes, that's right.  Every step involves either 
+writing down specific 'knowledge' or gathering specific 'knowledge' for
+an existing library. 
+
+## Linguistics
+
+**N** Are you saying that there are a whole bunch of different 'languages'
+involved, for each of the different kinds of activities?
+
+**S** Yes, that's exactly right! This is one of the important ideas that
+emerges from much of the work that has influenced us. There are many
+'domain of knowledge' and each one of them ends up defining a vocabulary
+(and grammar and formation rules and ...).
+
+Some domains of knowledge are obvious, such as solid-body physics for
+simulation a whole host of 'motion', or the mathematical domain of
+differential equations, as model for many situations of interest. Others
+are less so: software construction itself is a 'domain of knowledge'.
+Capturing that allows a system to execute constructions and reason about 
+them too. So if you manage to capture various parts of science and
+engineering, including capturing the processes around building software
+for science and engineering applications, this can itself become part of
+your linguistic infrastructure.
+
+**N** Is this where this intersects with MDE?
+
+**S** In part, yes. Definitely the knowledge capture of application domain
+reflects the better parts of MDE, when they focus on first specifying the
+problem space (some older MDE work is very solution-space focused, which is
+the exact opposite of what we want.) Parts of MDE also ties itself in
+knots over modelling, meta-modelling, meta-meta-modelling and so forth.
+
+================
+
+What's different here is that act of capturing domain knowledge is
+incorporated as an explicit activity in the process. This is akin to
+considering the addition of new features to an open source library by the
+development team of a closed-source piece of software (that uses that library)
+as an integral part of the development. 
+
+We can divide the IDP into groups of activities:
+1. Infrastructure development
+2. Theory development
+3. Domain-specific theory development
+4. Requirements capture and encoding
+5. Theory instantiation and design weaving
+6. Artifact generation
+7. Using the produced software
+
+As Infrastructure development is akin to 'compiler writing', which is
+not normally seen as integral, we'll skip that.
 
 
 
 
 
-
-===
 
 ## How does it work?
 

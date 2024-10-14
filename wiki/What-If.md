@@ -1,13 +1,18 @@
 # The "story of Drasil"
 
 We will tell the "story of Drasil" as a conversation between someone who
-understands what it is (**S**), and someone new to it (**N**).
+understands what it is (**S**), and someone new to it (**N**). Headers are
+included to help with navigation but are external to the story itself.
 
+
+## The question
 
 **S**: Begin with this simple question:
 
     What if everything that is currently human-written in current software
     development was instead generated?
+
+## Explaining some terms
 
 **N**: What do you mean exactly by *everything*?
 
@@ -45,6 +50,8 @@ filtering and translation.
 particular slice out of the softifacts, and assume the rest will still be
 hand-written.
 
+## More questions
+
 **N** This brings up so many more questions! I'm not even sure what order
 to ask them all in. Maybe I can bombard you with my questions?
 
@@ -58,6 +65,8 @@ make sense.
 4. This sounds radical -- is it?
 5. You almost make it sound like a silver bullet! Is it?
 6. What do you mean by "more semantic source"?
+
+## Is this new?
 
 **S** All excellent questions. Let me address the simplest one first
 *this sounds radical -- is it?*
@@ -93,6 +102,8 @@ borrow 'fit' quite well with each other. In fact, sometimes it turns out
 to be *the exact same idea* in multiple guises! But we have to 'borrow' it
 multiple times to see that for ourselves.
 
+## Literate programming
+
 **N** Can you give me an example of a borrowed idea?
 
 **S** Of course!  Let's pick *literate programming* as an example.
@@ -103,15 +114,116 @@ key ideas:
 deeply about your code, resulting in better code.
 2. That explaining code to a human does not naturally follow the same
 order of the eventual program. In other words, the "explainable chunks" of
-a piece of code may not correspond at all to what the programming language
+a piece of code may not correspond to what the programming language
 would consider a program.
 3. That co-locating code and explanations helps hugely in keeping these 
 synchronized.
+4. The language of explanations for a lot of code mixes natural language
+and mathematics -- and ASCII is a horrible way to do that. Explanations
+ought to be pretty.
+
+**N** Those are certainly very interesting ideas indeed. But I'm not
+quite sure how they connect to "generate everything"?
+
+**S** This is because the connection is not immediately visible in the
+key ideas, but emerges more easily from the processes of literate
+programming. In particular, the processes of *weaving* and *tangling*.
+Weaving is the where a human-readable document is obtained from the literate
+code, while tangling produces computer code as expected by the underlying
+programming language. This works on the same 'source' thus maintaining
+consistency *by construction*.
+
+The resulting artifacts, i.e. the document and the code, are generated
+from the one source. The 'code' that is produced is reconceptualized as
+a *web of concepts* that needs to be tangled for the code to emerge.
+
+**N** Ah, I see now where the 'generation' comes from. But literate
+programming only supports two kinds of artifacts, right?
+
+**S** That's right, and that's why these ideas need to be generalized.
+
+**N** So are those ideas above the ones you use?
+
+**S** No. Those ideas are what inspired us. We can abstract further and
+get the following ideas:
+
+1. There is immense value in human-level explanations of artifacts.
+2. *Reusable knowledge* doesn't easily fit the confines of a 
+programming language.
+3. That synchronization between different guises of the same fundamental
+concept (i.e. a human-level explanation and a rendering of the executable
+part as code) is a huge problem; if these are always seen as an integral
+whole, then the synchronization problem disappears.
+4. There is power in usual the 'right language' for any given job at hand.
+
+It's important to note that these ideas can't be seen as direct descendants
+of literate programming: they weave in ideas from other sources too!
+
+**N** That's getting quite abstract, and I'm kind of losing the concrete
+consequences of these ideas.
+
+**S** Yes, sorry, I got a little over-enthusiastic there, and jumped to some
+conclusions that I'm not ready to justify!
+
+**N** Ok, let me store that away for now, for future pondering.
+
+Maybe you could try tackling a different question from my list?
+
+## Does this even make sense?
+
+**S** Sure! Let's try "Does this even make sense?". Let's start with a
+thought experiment: If you took a (large) repository full of code and documents,
+zipped and *compressed* it all, what would happen?
+
+**N** Well, it would get smaller.
+
+**S** Yes, but by how much?
+
+**N** Hmm, I don't know!
+
+**S** Ok, here's one data point: the 
+[Hutter Prize](https://en.wikipedia.org/wiki/Hutter_Prize)
+involves compressing 1Gb of a particular snapshot of Wikipedia, as an
+experiment in approximating [Kolmogorov Complexity](https://en.wikipedia.org/wiki/Kolmogorov_complexity).
+
+The 1Gb of data can currently be compressed to 112,578,322 bytes. But in some
+sense, that's not so impressive, as that is compression of
+*structured data*. 
+
+**N** Nice.  But how does that lead to an answer to my question?
+
+**S** Let's go back to our repository.  Why would it compress? Beyond the
+trivial fact that ASCII is information-sparse that is?
+
+**N** Oh, I actually know this one! This is because all the artifacts in
+question are actually on a single topic (what the application is about) and
+so there is naturally a lot of repetition in between artifacts.
+
+**S** Right. Much more impressive is the kind of compression you can
+achieve on 'knowledge'.
+
+Here the best example is from the (now defunct)
+[Viewpoints Research Institute](http://www.vpri.org/)'s
+[STEPS project](https://tinlizzie.org/VPRIPapers/rn2006002_nsfprop.pdf)
+which was aiming for a 1000x to 10,000x compression. (The
+[final report](https://tinlizzie.org/VPRIPapers/tr2012001_steps.pdf) gives
+ideas of ho well they did.) Roughly speaking: the "information content"
+of a full-stack system is quite small indeed.
+
+The lesson is that there are cases when the 'raw knowledge' contained
+in a particular application is quite small, *when viewed properly*. One of
+the key ideas in Kay et al.'s approach is **linguistic**: create the 'right'
+DSL to express the ideas of each domain, and then find a way to weave these
+together to the meaning of the whole. While parts of the work of Viewpoints
+prefers 'dynamic' solutions (Kay is co-inventor of Smalltalk, after all), in
+many areas, there is also code generation already present.
+
+And that's where part of the answer lies: there are places where we know
+this has been done for some of the artifacts.
 
 ===
 Below here are notes for an older version.
 
-## Does this even make sense?
 
 (lots of duplication)
 

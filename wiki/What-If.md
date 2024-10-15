@@ -281,13 +281,16 @@ exploration.
 ## How does it work?
 
 **S** Thank you.  So I'm going to describe what we call the
-**Idealized Development Process** (or IDP for short) that we envision.
+**Idealized Development Process** that we envision.
 By 'development process' we mean something akin to other models like
 Waterfall, Spiral, Agile, V and so forth. There are different activities
 done in different phases, each of which produces artifacts. And, in
 general, there are different people who will perform these activities.
+Because Waterfall and Spiral are also idealized development processes,
+we're going to dub ours the **Idealized Process for
+Theory-based Development** or IPTD for short.
 
-So what would development of an application using the IDP be, assuming
+So what would development of an application using the IPTD be, assuming
 some future full-featured version of Drasil, and a large library of
 captured knowledge?
 
@@ -319,15 +322,17 @@ or disconnected. Every part of the process involves writing some
 And that this can be done incrementally and repeatedly.
 
 **N** So the reason that I'm not quite understanding the difference is
-that all the steps are *formal*?
+that all the steps are things that the system has knowledge of?
+Even the documentation?
 
 **S** Yes, that's right.  Every step involves either 
 writing down specific 'knowledge' or gathering specific 'knowledge' for
-an existing library. 
+an existing library. It can be explanations meant for humans or lead
+to code or both.
 
 ## Linguistics
 
-**N** Are you saying that there are a whole bunch of different 'languages'
+**N** Are you implying that there are a whole bunch of different 'languages'
 involved, for each of the different kinds of activities?
 
 **S** Yes, that's exactly right! This is one of the important ideas that
@@ -345,70 +350,275 @@ engineering, including capturing the processes around building software
 for science and engineering applications, this can itself become part of
 your linguistic infrastructure.
 
+## MDE and DDD
+
 **N** Is this where this intersects with MDE?
 
 **S** In part, yes. Definitely the knowledge capture of application domain
 reflects the better parts of MDE, when they focus on first specifying the
 problem space (some older MDE work is very solution-space focused, which is
 the exact opposite of what we want.) Parts of MDE also ties itself in
-knots over modelling, meta-modelling, meta-meta-modelling and so forth.
+knots over modelling, meta-modelling, meta-meta-modelling and so forth,
+and this is not something that seems so problematic in our situation.
 
-================
+**N** So this is more like Domain-Driven Design?
 
-What's different here is that act of capturing domain knowledge is
-incorporated as an explicit activity in the process. This is akin to
-considering the addition of new features to an open source library by the
-development team of a closed-source piece of software (that uses that library)
-as an integral part of the development. 
+**S** We do intersect some, but DDD veers off into weird specifics very
+early on (it seems to be oriented towards particular kinds of software
+and assumes OO quite a lot). I'd say we're closer to the original ideas
+of Draco. But that's where terminology like 'domain knowledge' came from!
 
-We can divide the IDP into groups of activities:
+But we do agree with DDD on the fundamental importance of domains.
+
+## Activities
+
+**N** I'm still having a hard time seeing what the work is in doing
+development in this way of thinking.
+
+
+**S** One point of difference with classical development is that the act of
+capturing domain knowledge is incorporated as an explicit activity in the
+process. This is akin to considering the addition of new features to an open
+source library by the development team of a closed-source piece of software
+(that uses that library) as an integral part of the development. And in
+the same way, at some point the library is good enough and not so much work
+is done on it.
+
+We can divide the IPTD into groups of activities:
 1. Infrastructure development
 2. Theory development
 3. Domain-specific theory development
 4. Requirements capture and encoding
 5. Theory instantiation and design weaving
-6. Artifact generation
+6. Artifact generation and audit
 7. Using the produced software
 
 As Infrastructure development is akin to 'compiler writing', which is
 not normally seen as integral, we'll skip that.
 
+Usual development skips activities 2 and 3 and leave them as tacit
+knowledge in developer's heads. Activities 4 and 5 are done, of course,
+but usually somewhat informally, as the artifacts produced by those
+activities are *not reusable*. But these are the activities that generate
+the most value! Traditionally a huge amount of effort is spend on
+activity 6 (where we lump in many activities that are often separated
+out into individual items) where here we see this as mostly automated.
+
+**N** Yes, I see how that's quite different. Though I must admit that
+this remains somewhat vague. I don't quite see what you would *do*.
 
 
+## How does it work, with an example
 
+**S** You're right to point out that I've been explaining things at much
+too high a level, and I should try to be much more concrete. I'm going to
+use a simple (aka toy) example to illustrate things.
 
+Suppose you need to write software to compute where a projectile is
+going to land, based on a fixed launcher. Let's call this 'Projectile'.
 
-## How does it work?
+This problem is one where the fundamental rules come from Physics. So you
+grab the parts of physics that are in the library, and look for things
+that have to do with solid bodies, movement, forces, and collisions.
+An informal description of "compute the landing distance of a projectile
+launched at a particular angle with a certain initial velocity given
+flat ground. Assume no friction and the only force is gravity."
 
-(a basic idea of the workflow)
+All of this can be translated into semi-formal statements, which will all
+correspond to things that already exist in the library. The only
+domain-specific theory development you might need to do is if your
+projectile and launcher have specific properties that are not generic.
+Maybe it's important that your projectile is a sphere and that your point
+of launch is not at ground level, for example. You end up capturing all of
+that information in a "twinned" manner, that captures both natural language
+descriptions and the mathematical equivalent. This is where things cannot
+become de-synchronized: the knowledge capture tools fundamentally don't
+allow for that.
 
-- theories, basic ontology
-- meta-language of OO languages
+Then you decide how the software to do this should be structured. As there
+are a number of things that can vary (for example, launch angle), you have
+to decide whether these are read from a file or will be parameters. Are you
+building a library of functions for this purpose, or an application? These
+are architectural choices that you need to make.
 
-## So you have a silver bullet then?
+Then you need to decide further things, like which programming language
+will the code be produce in? Will the code produced by highly documented
+or quite raw? Overall, how much user documentation will there be?
 
-(Heck no! This has some pre-conditions for it to work.)
+Then, just like with literate programming, you write a description of
+each of the artifacts that you want. The same way that you 'weave' and
+'tangle' in literate programming, here is there is a different language
+for every artifact. You need to explicitly say how to slot in the information
+that you have (extracted from the 'web of theories') into the artifacts.
+Part of this process, just like it does for literate programming, involves
+choosing an *order* for things. Solving problems like projectile motion
+involves a sequence of computation steps, whether in the mathematics or
+in the code that implements the mathematics.
+
+**N** I think I see. I guess I'd want to see some of these things that
+you write to make it resonate even more.
+
+**S** Absolutely. But perhaps that can wait for another day?
+
+**N** Sure. This sounds quite revolutionary to me. Why did you say it's
+not?
+
+## Silver-bullet?
+
+**S** Ah yes, the hunt for the 'silver bullet', which doesn't exist.
+
+If you look at the developper steps and the activities, a lot of them
+involve 'knowledge capture' in the form of 'theories'. Underlying this is
+the implicit assumption that this knowledge exists and is already
+essential formal. Otherwise the effort to do this kind of work is
+enormous, and might far outweigh the effort of just writing all the
+artifacts in the traditional way.
+
+So we need to analyze the overall effort required under both the more
+traditional ways of doing things, and under the IPTD. The IPTD spends
+a lot of time and effort on knowledge capture, and that has to somehow
+be amortized over the project's lifetime. If a project's lifetime is not
+known to be 'long enough', then the short amortization period will not
+make such an investment worthwhile. It is crucially important that the
+investment in knowledge capture be seen as a long-term investment.
+
+An analogy: this is why people invest in "standard libraries" for the
+ecosystems that corresponds to various programming languages. The richer
+the library, the faster a programmer can write code that 'does stuff'.
+But here the "standard library" is one that isn't code, but theories.
+We can also see this in action for systems that are already theory-based,
+like the mathlib for Lean 4 or the AFP for Isabelle/HOL.
+
+Putting all these things together, we see that if
+
+1. The underlying theory of an application is **well-understood**,
+2. The theory is not changing much and is likely widely applicable,
+3. The project is planned, from the start, to have a **long lifetime**,
+4. The project will require non-trivial maintainance over its lifetime,
+
+then investing in the IPTD may well be worth it.
 
 ## Well-understood?
 
-(i.e. where theories of domain, typical design decisions and even
-architecture are all well documented in textbooks, and have been
-time tested for a long time.)
+**N** What do you mean by 'well understood'?
 
-## And then it's worth it?
+**S** We mean that there are standard textbooks that explain the
+applicable theory (like the physics of projectiles). But also that
+the typical design decisions and software architecture(s) for writing
+software in that domain are also well documented, preferably in textbooks,
+and have been under use for a long time.
 
-Nope. Long-lived is another component.
+In other words, the science and engineering of both the problem space
+and the solution space is amply documented, i.e. well understood.
 
-===
+## Long lifetime?
 
-Notes for stuff to remember:
-- Assumptions
-  1. code generation
-  2. organizing things in (flexiformal, triform) theories
-  3. product families
-  4. DSLs
-- current "linguistics" of writing software sub-optimal
-- not aiming for a silver bullet
-- context for success for this (well-understood, amortization)
-- meta-theory (theory of theories) needed for lib. dev
-- still need a viable dev processto make this work
+**N** And what about 'long lifetime'?
+
+**S** This is basically a proxy for a project thas a number of characteristics:
+- where it makes sense to think hard up-front about what is the underlying
+  theory that drives the software,
+- where documentation is seen as crucial as a way to instill confidence
+  that the software does the right thing, and solves the right problem,
+- where it is known that maintenance is likely to involvement making
+  various non-trivial changes to the design as the requirements come in,
+- where the project will live long enough that there will be staff turnover,
+  and so documentation capturing all the decisions along the way will be
+  needed.
+
+**N** Ah, I see. Yes, indeed, quite a lot of projects would not meet
+these criteria!  In fact, would there be any?
+
+## Domains of Interest
+
+**S** Yes, plenty. For example, take the software inside a space probe
+like the Pioneer and Voyager spacecrafts. But also inside things like
+nuclear power stations or many medical devices.
+
+There is also quite a lot of 'research software' where the surface
+requirements change all the time, but the deep theory is essentially fixed.
+The IPTD really lets you do "what if" experiments in those settings quite
+easily.
+
+But of course, pretty much all of the software where Agile would be
+appropriate are domains where IPTD would not be.
+
+**N** Oh yes, that makes a lot of sense.
+
+## Why now?
+
+Hmm, you mentioned a number of projects that were related. But I didn't really
+hear about any of them. Did they fail? And what's different now?
+
+**S** Good point.
+
+It's not so much that they failed, but that the tools part of the projects
+did not survive. Many of the projects had a substantial intellectural
+impact on many subsequent projects.
+
+The main reason for the tools to fall to the wayside is that the maintenance
+burden was too high compared to the amount of take-up by outsiders in a
+reasonable time frame. And a lot of that had three underlying reasons:
+1) poor technology, 2) overly ambitious aims, and 3) lack of theoretical
+foundations. Any one of them is not a fatal flaw, but the combination of all
+of them was too much.
+
+**N** So you think that's changed?
+
+**S** Yes, absolutely. There have been tremendous advances in
+meta-programming, statically typed programming, tooling for DSLs and
+generally a much better understanding on how to create languages.
+Our project tries to mitigate the 'overly ambitious' by trying to do
+the minimal infrastructure necessary to get things to work, and then
+refactor when necessary. We're also very example-driven when it comes to
+assessing the need for infrastructure. In other words, our own internal
+development is really not following our own process -- basically because
+we're continually inventing, the very opposite of 'well understood'.
+Lastly, the theory underlying languages (programming and specification alike,
+but also natural languages as well) has also improved dramatically.
+
+Basically enough has changed between then and now that it feels worthwhile
+learning the lessons of the older projects (i.e. both their good ideas and
+their mistakes) to try again. Of course we're also in a good position to
+learn from many projects.
+
+**N** Well, I think that covers it.
+
+**S** You forget one of your questions about "semantic sources".
+
+**N** Oh yeah!
+
+## Semantic sources
+
+**S** You might have noticed that I called it 'Idealized Process for
+Theory-based Development' and talked about theories a lot, but never quite
+explained that.
+
+**N** Now that you mention it...
+
+**S** I was equally vague with 'knowledge', wasn't I? The point is that
+whatever information we have, it needs to be organized. So we use two
+different mechanisms: theories and ontologies.
+
+Theories in the mathematical sense (defining types, function and
+relation symbols, oberying some axioms) but also in the more general
+scientific sense (such as Newton's First Law, and the vocabulary of
+modeling). Because we're doing various scientific theories, various items
+such as units of measure are important to us. But also what emerges are
+"systems of quantities" and other meta-theories useful for arranging
+theories of the real world.
+
+Furthermore we also mix in many concepts that occur in ontologies. We're
+forced to invent a lot of stuff here, because these various ideas have
+never been put together before.
+
+## Conclusion
+
+**N** And now that's it?
+
+**S** Let's say yes for now. Really we should more systematically go through
+the 'lessons learned' from all the other things that I mentioned, as well as
+do a synthesis of these into a more general set of "good ideas worth
+pursuing" and "pitfalls to avoid".
+
+And I should really show you a concrete example in full.

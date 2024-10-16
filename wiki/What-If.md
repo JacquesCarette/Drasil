@@ -1,9 +1,9 @@
 # The "story of Drasil"
 
 We will tell the "story of Drasil" as a conversation between someone who
-understands what it is (**S**), and someone new to it (**N**). Headers are
-included to help with navigation but are external to the story itself.
-
+understands what it is (**S**, who can be thought of as Socrates), and someone
+new to it (**N**). Headers are included to help with navigation but are
+external to the story itself.
 
 ## The question
 
@@ -32,23 +32,25 @@ often are not. A non-exhaustive list:
 - build infrastructure
 - (documented) code
 
-As a means to have a collective word for all of the above, we will
-label all of these **softifacts**.
-
 **N**: And what do you mean by *generating*? Like templates?
 
 **S** Not like templates. Like a program that uses a more semantic source for
-all the softifacts, selects the appropriate information for each piece, and
+all the artifacts, selects the appropriate information for each piece, and
 writes each out in its *native format*. The basic idea is that each
-softifact contains a quite particular *view* of the total information behind
+artifact contains a quite particular *view* of the total information behind
 a single software product, and so the generation process is one of
 filtering and translation.
 
-**N** Like Modelling then?
+**N** Like with Generative AI, i.e. LLMs (Large Language Models)?
 
-**S** Much closer to that. Typical MDE approaches are very concerned with a
-particular slice out of the softifacts, and assume the rest will still be
-hand-written.
+**S** Again, not at all. This is more like a correct-by-construction
+methodology, not a conjuring up plausible-seeming code as LLMs do.
+
+**N** Like Model-Driven Engineering then?
+
+**S** Much closer to that. Typical Model-Driven Engineering (MDE) approaches
+are very concerned with a particular slice out of the artifacts, and assume the
+rest will still be hand-written.
 
 ## More questions
 
@@ -207,7 +209,7 @@ Here the best example is from the (now defunct)
 [STEPS project](https://tinlizzie.org/VPRIPapers/rn2006002_nsfprop.pdf)
 which was aiming for a 1000x to 10,000x compression. (The
 [final report](https://tinlizzie.org/VPRIPapers/tr2012001_steps.pdf) gives
-ideas of ho well they did.) Roughly speaking: the "information content"
+ideas of how well they did.) Roughly speaking: the "information content"
 of a full-stack system is quite small indeed.
 
 The lesson is that there are cases when the 'raw knowledge' contained
@@ -260,6 +262,7 @@ really nice, but could it even work?
 (literate programming, org-mode, Draco, MDE and more). But the 'everything'
 part, especially when it comes to *documentation*, had never been done
 before. We have a prototype (Drasil) that works on smaller examples.
+So yes, it is feasible.
 
 **N** Why didn't you say so earlier? Everyone should be doing this!
 
@@ -287,14 +290,14 @@ Waterfall, Spiral, Agile, V and so forth. There are different activities
 done in different phases, each of which produces artifacts. And, in
 general, there are different people who will perform these activities.
 Because Waterfall and Spiral are also idealized development processes,
-we're going to dub ours the **Idealized Process for
-Theory-based Development** or IPTD for short.
+we're going to dub ours the **Idealized 
+Theory-based Development** process or ITD for short.
 
-So what would development of an application using the IPTD be, assuming
+So what would development of an application using the ITD process be, assuming
 some future full-featured version of Drasil, and a large library of
 captured knowledge?
 
-A developper would:
+A developer would:
 1. Figure out the 'context' in which their application exists,
 2. Gather from the Drasil library all the domain theories that fit
 that context,
@@ -330,10 +333,25 @@ writing down specific 'knowledge' or gathering specific 'knowledge' for
 an existing library. It can be explanations meant for humans or lead
 to code or both.
 
+**N** What if the library doesn't contain the theories needed?
+
+**S** This is the thorny part of the 'getting started' process. 
+Domain experts will need to work with Drasil experts to write those domain
+theories, creating a vocabulary that captures the core knowledge of
+critical domains.
+
+**N** So there are people other than developers involved?
+
+**S** In the most general case, yes. And right now, yes. There is a need
+for infrastructure builders, meta-theory builders and theory builders,
+who need to continue to bring up the system to where most of the work
+would be done by developers.
+
 ## Linguistics
 
-**N** Are you implying that there are a whole bunch of different 'languages'
-involved, for each of the different kinds of activities?
+**N** Coming back to the knowledge capture part, are you implying that there
+are a whole bunch of different 'languages' involved, for each of the different
+kinds of activities?
 
 **S** Yes, that's exactly right! This is one of the important ideas that
 emerges from much of the work that has influenced us. There are many
@@ -372,9 +390,8 @@ But we do agree with DDD on the fundamental importance of domains.
 
 ## Activities
 
-**N** I'm still having a hard time seeing what the work is in doing
-development in this way of thinking.
-
+**N** I'm still having a hard time seeing what a developer would actually
+do when using the ITD process.
 
 **S** One point of difference with classical development is that the act of
 capturing domain knowledge is incorporated as an explicit activity in the
@@ -384,7 +401,7 @@ source library by the development team of a closed-source piece of software
 the same way, at some point the library is good enough and not so much work
 is done on it.
 
-We can divide the IPTD into groups of activities:
+We can divide the ITD process into groups of activities:
 1. Infrastructure development
 2. Theory development
 3. Domain-specific theory development
@@ -419,16 +436,16 @@ going to land, based on a fixed launcher. Let's call this 'Projectile'.
 
 This problem is one where the fundamental rules come from Physics. So you
 grab the parts of physics that are in the library, and look for things
-that have to do with solid bodies, movement, forces, and collisions.
+that have to do with rigid bodies, kinematics, movement, forces, and collisions.
 An informal description of "compute the landing distance of a projectile
-launched at a particular angle with a certain initial velocity given
+launched at a particular angle with a certain initial speed given
 flat ground. Assume no friction and the only force is gravity."
 
 All of this can be translated into semi-formal statements, which will all
 correspond to things that already exist in the library. The only
 domain-specific theory development you might need to do is if your
 projectile and launcher have specific properties that are not generic.
-Maybe it's important that your projectile is a sphere and that your point
+Maybe it's important that your projectile is purple and that your point
 of launch is not at ground level, for example. You end up capturing all of
 that information in a "twinned" manner, that captures both natural language
 descriptions and the mathematical equivalent. This is where things cannot
@@ -439,7 +456,9 @@ Then you decide how the software to do this should be structured. As there
 are a number of things that can vary (for example, launch angle), you have
 to decide whether these are read from a file or will be parameters. Are you
 building a library of functions for this purpose, or an application? These
-are architectural choices that you need to make.
+are architectural choices that you need to make. In this case, there is
+also the choice of using a closed-form or computing the answer using
+numerical methods, and the latter would involve algorithmic choices.
 
 Then you need to decide further things, like which programming language
 will the code be produce in? Will the code produced by highly documented
@@ -467,7 +486,7 @@ not?
 
 **S** Ah yes, the hunt for the 'silver bullet', which doesn't exist.
 
-If you look at the developper steps and the activities, a lot of them
+If you look at the developer steps and the activities, a lot of them
 involve 'knowledge capture' in the form of 'theories'. Underlying this is
 the implicit assumption that this knowledge exists and is already
 essential formal. Otherwise the effort to do this kind of work is
@@ -475,7 +494,7 @@ enormous, and might far outweigh the effort of just writing all the
 artifacts in the traditional way.
 
 So we need to analyze the overall effort required under both the more
-traditional ways of doing things, and under the IPTD. The IPTD spends
+traditional ways of doing things, and under the ITD. The ITD spends
 a lot of time and effort on knowledge capture, and that has to somehow
 be amortized over the project's lifetime. If a project's lifetime is not
 known to be 'long enough', then the short amortization period will not
@@ -496,7 +515,13 @@ Putting all these things together, we see that if
 3. The project is planned, from the start, to have a **long lifetime**,
 4. The project will require non-trivial maintainance over its lifetime,
 
-then investing in the IPTD may well be worth it.
+then investing in the ITD may well be worth it.
+
+Note that it is not necessary for there to be a single underlying theory
+that applies. There is the concept of 'validity frame' which allows a
+variety of applicable theories to co-exist (like Newtonian and Relativistic
+Physics). So a change-of-theory is fine, as well as it was known from the
+start that this was a possibility.
 
 ## Well-understood?
 
@@ -537,17 +562,18 @@ nuclear power stations or many medical devices.
 
 There is also quite a lot of 'research software' where the surface
 requirements change all the time, but the deep theory is essentially fixed.
-The IPTD really lets you do "what if" experiments in those settings quite
-easily.
+The ITD process really lets you do "what if" experiments in those settings
+quite easily.
 
 But of course, pretty much all of the software where Agile would be
-appropriate are domains where IPTD would not be.
+appropriate are domains where ITD would not be.
 
 **N** Oh yes, that makes a lot of sense.
 
 ## Why now?
 
-Hmm, you mentioned a number of projects that were related. But I didn't really
+Hmm, you mentioned a number of projects that were related (Draco, DMS, GLisp,
+SpecWare). But I didn't really
 hear about any of them. Did they fail? And what's different now?
 
 **S** Good point.
@@ -601,7 +627,7 @@ whatever information we have, it needs to be organized. So we use two
 different mechanisms: theories and ontologies.
 
 Theories in the mathematical sense (defining types, function and
-relation symbols, oberying some axioms) but also in the more general
+relation symbols, obeying some axioms) but also in the more general
 scientific sense (such as Newton's First Law, and the vocabulary of
 modeling). Because we're doing various scientific theories, various items
 such as units of measure are important to us. But also what emerges are

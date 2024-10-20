@@ -102,8 +102,8 @@ eBalanceOnWtrDerivDesc1 htEnd oa ea htA = foldlSentCol [
   phrase water, S "from the", phrase coil, S "as", eS' htFluxC,
   sParen (refS htFluxWaterFromCoil) +:+ htEnd `sC` EmptyS +:+. oa, ea, S "No", phrase heatTrans, S "occurs to", S "outside" `S.the_ofThe`
   phrase tank `sC` S "since it has been assumed to be perfectly insulated" +:+.
-  sParen (refS assumpPIT), S "Since the", phrase assumption,
-  S "is made that no internal heat is generated" +:+. (sParen (refS htA) `sC`
+  sParen (refS assumpPIT), S "Since the", phrase assumption `S.is` S "made that no internal heat" `S.is` 
+  S "generated" +:+. (sParen (refS htA) `sC`
   eS (sy volHtGen $= exactDbl 0)), S "Therefore" `sC` phraseNP (the equation) `S.for`
   refS rocTempSimp, S "can be written as"]
 
@@ -115,9 +115,9 @@ overAreas :: Sentence
 overAreas = S "over areas" +:+ ch coilSA `S.and_` ch pcmSA `sC` S "respectively"
 
 extraAssumps :: Sentence
-extraAssumps = foldlSent [S "The thermal flux is constant over", ch coilSA `sC`
+extraAssumps = foldlSent [S "The thermal flux" `S.is` S "constant over", ch coilSA `sC`
   S "since", phraseNP (temp `the_ofThe` coil) `S.is` S "assumed to not vary along its length",
-  sParen (refS assumpTHCCoL) `sC` EmptyS `S.andThe` S "thermal flux is constant over",
+  sParen (refS assumpTHCCoL) `sC` EmptyS `S.andThe` S "thermal flux" `S.is` S "constant over",
   ch pcmSA `sC` S "since", phrase temp `S.the_ofThe` getAcc phsChgMtrl `S.isThe`
   S "same throughout its", phrase vol, sParen (refS assumpTPCAV) `S.andThe`
   phrase water `S.is` S "fully mixed", sParen (refS assumpCWTAT)]
@@ -143,7 +143,7 @@ eBalanceOnWtrDerivDesc6 :: Sentence
 eBalanceOnWtrDerivDesc6 = substitute [balanceDecayRate, balanceDecayTime]
 
 eBalanceOnWtrDerivDesc7 :: Expr -> Sentence
-eBalanceOnWtrDerivDesc7 eq22 = foldlSentCol [S "Finally, factoring out", eS' eq22 `sC`
+eBalanceOnWtrDerivDesc7 eq22 = foldlSentCol [S "Finally" `sC` S "factoring out", eS' eq22 `sC`
   S "we are left with the governing", getAcc ode `S.for` refS eBalanceOnWtr]
 
 eq1, eq2 :: Expr
@@ -198,7 +198,7 @@ balPCMNotes = map foldlSent [
 ----------------------------------------------
 eBalanceOnPCMDeriv :: Derivation
 eBalanceOnPCMDeriv = mkDerivName (phraseNP (the energy) +:+
-  S "balance on the PCM during sensible heating phase")
+  S "balance" `S.onThe` S "PCM during sensible heating phase")
   (weave [eBalanceOnPCMDerivSentences, map eS eBalanceOnPCMDerivEqnsIM2]
   ++ [eBalanceOnPCMDerivDesc5, eBalanceOnPCMDerivDesc6, eBalanceOnPCMDerivDesc7])
 
@@ -211,10 +211,10 @@ eBalanceOnPCMDerivDesc1 = foldlSentCol [
   S "To find the", phrase rOfChng `S.of_` ch tempPCM `sC` S "we look at the",
   phrase energy, S "balance on the" +:+. getAcc phsChgMtrl, S "The", phrase vol,
   S "being considered" `S.isThe` phrase pcmVol +:+. sParen (ch pcmVol),
-  S "The derivation that follows is initially for the solid" +:+. getAcc phsChgMtrl,
+  S "The derivation that follows" `S.is` S "initially for the solid" +:+. getAcc phsChgMtrl,
   S "The" +:+. (phrase pcmMass `S.is` ch pcmMass `S.andThe` phrase htCapSP `S.is` ch htCapSP),
   atStartNP (the htFluxP) `S.is` ch htFluxP, sParen (refS htFluxPCMFromWater),
-  S "over", phrase pcmSA +:+. ch pcmSA, S "The thermal flux is constant over",
+  S "over", phrase pcmSA +:+. ch pcmSA, S "The thermal flux" `S.is` S "constant over",
   ch pcmSA `sC` S "since", phrase temp `S.the_ofThe` getAcc phsChgMtrl `S.isThe`
   S "same throughout its", phrase vol, sParen (refS assumpTPCAV) `S.andThe`
   phrase water `S.is` S "fully mixed" +:+. sParen (refS assumpCWTAT),
@@ -239,19 +239,19 @@ eBalanceOnPCMDerivDesc5 = foldlSent [
   getAcc phsChgMtrl `S.is` S "melted" `sC` S "the same derivation applies" `sC` S "except that",
   htCapSP `isReplacedBy` htCapLP `sC` S "and thus" +:+. (tauSP `isReplacedBy` tauLP),
   S "Although a small change in", phrase surArea, S "would be expected with", phrase melting `sC`
-  S "this is not included" `sC` S "since the", phrase vol, S "change of the", getAcc phsChgMtrl,
-  S "with", phrase melting, S "is assumed to be negligible", sParen (refS assumpVCMPN)]
+  S "this" `S.is` S "not included" `sC` S "since the", phrase vol, S "change" `S.ofThe` getAcc phsChgMtrl,
+  S "with", phrase melting `S.is` S "assumed to be negligible", sParen (refS assumpVCMPN)]
   where isReplacedBy a b = ch a `S.is` S "replaced by" +:+ ch b
 
 eBalanceOnPCMDerivDesc6 :: Sentence
 eBalanceOnPCMDerivDesc6 = foldlSent [
-  S "In the case where", eS' eq6_1 `S.and_` S "not all of the", getAcc phsChgMtrl `S.is`
+  S "In the case where", eS' eq6_1 `S.and_` S "not all" `S.ofThe` getAcc phsChgMtrl `S.is`
   S "melted" `sC` S "the", phrase tempPCM +:+. S "does not change", S "Therefore" `sC` eq6_2]
 
 eBalanceOnPCMDerivDesc7 :: Sentence
 eBalanceOnPCMDerivDesc7 = foldlSent [
   S "This derivation does not consider", phrase boiling `S.the_ofThe` getAcc phsChgMtrl `sC`
-  S "as the PCM is assumed to either be in a", phrase solid, S "state or a",
+  S "as the PCM" `S.is` S "assumed to either be in a", phrase solid, S "state or a",
   phrase liquid, S "state", sParen (refS assumpNGSP)]
 
 eq6_1 :: Expr
@@ -285,7 +285,7 @@ htWtrExpr = sy htCapW $* sy wMass $*
 
 htWtrNotes :: [Sentence]
 htWtrNotes = map foldlSent [
-  [S "The above", phrase equation, S "is derived using", refS sensHtE],
+  [S "The above", phrase equation `S.is` S "derived using", refS sensHtE],
   [atStartNP (NP.the (change `in_`temp)) `S.isThe` S "difference between the",
    phrase temp, S "at", phrase time, ch time, sParen (unwrap $ getUnit tInitMelt) `sC`
   ch tempW `S.andThe` phrase tempInit `sC` ch tempInit, sParen (unwrap $ getUnit tempInit)],
@@ -324,7 +324,7 @@ htPCMNotes :: [Sentence]
 htPCMNotes = map foldlSent [
   [S "The above", phrase equation `S.is` S "derived using",
    refS sensHtE `S.and_` refS latentHtE],
-  [ch pcmE, S "for the", phrase solid, short phsChgMtrl, S "is found using",
+  [ch pcmE, S "for the", phrase solid, short phsChgMtrl `S.is` S "found using",
    refS sensHtE `S.for` phrase sensHeat :+: S "ing, with",
    phraseNP (heatCapSpec `the_ofThe` solid), short phsChgMtrl `sC` ch htCapSP,
    sParen (unwrap $ getUnit htCapSP) `S.andThe` phrase change `S.inThe`
@@ -333,7 +333,7 @@ htPCMNotes = map foldlSent [
    S "is found using", refS sensHtE `S.for` phraseNP (sensHeat `ofThe` liquid),
    short phsChgMtrl, S "plus the", phrase energy, S "when", phrase melting, S "starts" `sC`
    S "plus", (phrase energy +:+ S "required to melt all") `S.the_ofThe` short phsChgMtrl],
-  [atStartNP (the energy), S "required to melt all of the", short phsChgMtrl `S.is`
+  [atStartNP (the energy), S "required to melt all" `S.ofThe` short phsChgMtrl `S.is`
    eS (sy htFusion $* sy pcmMass), sParen (unwrap $ getUnit pcmInitMltE),
    fromSource ddHtFusion],
   [atStartNP (NP.the (change `in_` temp)) `S.is` eS (sy tempPCM $- sy tempMeltP),
@@ -345,7 +345,7 @@ htPCMNotes = map foldlSent [
    ch latentEP, sParen (unwrap $ getUnit latentEP), S "since the", phrase time, S "when",
    phrase melting, S "began", ch tInitMelt, sParen (unwrap $ getUnit tInitMelt)],
   [atStartNP (NP.the (combineNINI heat energy)) `S.for` phrase boiling `S.ofThe` short phsChgMtrl,
-   S "is not detailed" `sC` S "since the", short phsChgMtrl, S "is assumed to either be in a",
+   S "is not detailed" `sC` S "since the", short phsChgMtrl `S.is` S "assumed to either be in a",
    phrase solid `S.or_` phrase liquid, S "state", sParen (refS assumpNGSP),
    sParen (refS assumpPIS)]]
 
@@ -364,4 +364,4 @@ instModIntro = foldlSent [atStartNP' (the goal), foldlList Comma List
   refS heatEInWtr, S "can be solved once", refS eBalanceOnWtr +:+.
   S "has been solved", atStartNP' (the solution) `S.of_` refS eBalanceOnPCM `S.and_`
   refS heatEInPCM `S.are` S "also coupled" `sC` S "since the",
-  phrase tempPCM `S.andThe` phrase pcmE,S "depend on the", phrase phaseChange]
+  phrase tempPCM `S.andThe` phrase pcmE,S "depend" `S.onThe` phrase phaseChange]

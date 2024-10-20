@@ -107,7 +107,7 @@ rocTempDerivGauss = [S "Applying", titleize gaussDiv, S "to the first term over"
 
 rocTempDerivArbVol :: [Sentence]
 rocTempDerivArbVol = [S "We consider an arbitrary" +:+. phrase vol,
-  atStartNP (the volHtGen), S "is assumed constant. Then", eqN 1, S "can be written as"]
+  atStartNP (the volHtGen) `S.is` S "assumed constant. Then", eqN 1, S "can be written as"]
 
 rocTempDerivConsFlx :: Sentence -> [ConceptInstance] -> [Sentence]
 rocTempDerivConsFlx s assumps = [S "Where", 
@@ -119,7 +119,7 @@ rocTempDerivConsFlx s assumps = [S "Where",
 
 rocTempDerivConsFlxSWHS :: Sentence
 rocTempDerivConsFlxSWHS = foldlSent [S "The integral over the", phrase surface,
-  S "could be simplified because the thermal flux is assumed constant over",
+  S "could be simplified because the thermal flux" `S.is` S "assumed constant over",
   ch inSA `S.and_` ch outSA `S.and_` eS (exactDbl 0), S "on all other" +:+. plural surface,
   S "Outward flux is considered positive"]
 

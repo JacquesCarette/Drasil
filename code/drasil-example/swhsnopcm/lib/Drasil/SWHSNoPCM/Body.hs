@@ -238,8 +238,7 @@ introStartNoPCM = atStart' progName +:+ S "provide a novel way of storing" +:+. 
 introEnd :: Sentence -> CI -> Sentence
 introEnd progSent pro = foldlSent_ [progSent +:+ S "The developed program",
   S "will be referred to as", titleize pro, sParen (short pro),
-  S "based on the original, manually created version of" +:+
-  namedRef externalLinkRef' (S "SWHSNoPCM")]
+  S "based on the original" `sC` S "manually created version" `S.of_` namedRef externalLinkRef' (S "SWHSNoPCM")]
 
 externalLinkRef' :: Reference
 externalLinkRef' = makeURI "SWHSNoPCM_SRSLink" 
@@ -268,7 +267,7 @@ scope = phrase thermalAnalysis `S.of_` S "a single" +:+ phrase sWHT
 
 orgDocEnd :: Sentence
 orgDocEnd = foldlSent_ [atStartNP (the inModel),
-  S "to be solved is referred to as" +:+. refS eBalanceOnWtr,
+  S "to be solved" `S.is` S "referred to as" +:+. refS eBalanceOnWtr,
   atStartNP (the inModel), S "provides the", titleize ode,
   sParen (short ode), S "that models the" +:+. phrase progName,
   short progName, S "solves this", short ode]

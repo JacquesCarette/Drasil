@@ -30,14 +30,14 @@ likeChgUTP, likeChgTCVOD, likeChgTCVOL, likeChgDT, likeChgDITPW,
   likeChgTLH :: ConceptInstance
 
 likeChgUTP = cic "likeChgUTP" (
-  foldlSent [chgsStart assumpTPCAV (short phsChgMtrl), S "is actually a poor",
+  foldlSent [chgsStart assumpTPCAV (short phsChgMtrl) `S.is` S "actually a poor",
   phrase CT.thermalConductor `sC` S "so the", phrase assumption,
-  S "of uniform", phrase tempPCM, S "is not likely"] ) "Uniform-Temperature-PCM"
+  S "of uniform", phrase tempPCM `S.is` S "not likely"] ) "Uniform-Temperature-PCM"
   likeChgDom
 --
 likeChgTCVOD = cic "likeChgTCVOD" (
   foldlSent [chgsStart assumpTHCCoT (S "The"), phrase tempC, S "will change over",
-  S "course" `S.the_ofThe` S "day, depending", S "on the", phrase energy,
+  S "course" `S.the_ofThe` S "day, depending" `S.onThe` phrase energy,
   S "received from the sun"]) "Temperature-Coil-Variable-Over-Day" likeChgDom
 --
 likeChgTCVOL = cic "likeChgTCVOL" (
@@ -47,8 +47,8 @@ likeChgTCVOL = cic "likeChgTCVOL" (
 --
 likeChgDT = cic "likeChgDT" (
   foldlSent [chgsStart assumpCTNOD (S "The"), phrase model, S "currently only",
-  S "accounts for charging of the tank. A more complete", phrase model,
-  S "would also account for discharging of the tank"] ) "Discharging-Tank" likeChgDom
+  S "accounts" `S.for` S "charging" `S.ofThe` S "tank. A more complete", phrase model,
+  S "would also account" `S.for` S "discharging" `S.ofThe` S "tank"] ) "Discharging-Tank" likeChgDom
 --
 likeChgDITPW = cic "likeChgDITPW" (
   foldlSent [chgsStart assumpSITWP (S "To add more flexibility to the"),
@@ -68,17 +68,17 @@ unlikelyChgs = [unlikeChgWPFS, unlikeChgNIHG, unlikeChgNGS]
 
 unlikeChgWPFS, unlikeChgNIHG, unlikeChgNGS :: ConceptInstance
 unlikeChgWPFS = cic "unlikeChgWPFS" (
-  foldlSent [refS assumpWAL `sC` chgsStart assumpNGSP (S "It is unlikely for the change of"),
-  phrase water, S "from liquid to a solid or the state change of the", phrase phsChgMtrl,
+  foldlSent [refS assumpWAL `sC` chgsStart assumpNGSP (S "It is unlikely" `S.for` S "the change of"),
+  phrase water, S "from liquid to a solid or the state change" `S.ofThe` phrase phsChgMtrl,
   S "from a liquid to a gas to be considered"] ) "Water-PCM-Fixed-States" unlikeChgDom
 
 
 unlikeChgNIHG = cic "unlikeChgNIHG" (
-  foldlSent [chgsStart assumpNIHGBWP (S "Is used for the derivations of"),
+  foldlSent [chgsStart assumpNIHGBWP (S "Is used" `S.for` S "the derivations of"),
   refS eBalanceOnWtr `S.and_` refS eBalanceOnPCM] )
   "No-Internal-Heat-Generation" unlikeChgDom
 
 unlikeChgNGS = cic "unlikeChgNGS" (
-  foldlSent [chgsStart assumpNGSP (S "Is used for the derivation of"), refS eBalanceOnPCM,
+  foldlSent [chgsStart assumpNGSP (S "Is used" `S.for` S "the derivation of"), refS eBalanceOnPCM,
   S "and for the equation given by", refS heatEInPCM, S "to be valid"] )
   "No-Gaseous-State" unlikeChgDom

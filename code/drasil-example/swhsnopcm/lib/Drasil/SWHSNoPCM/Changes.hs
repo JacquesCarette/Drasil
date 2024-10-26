@@ -21,9 +21,9 @@ likelyChgs = [likeChgDT]
 likeChgDT :: ConceptInstance
 likeChgDT = cic "likeChgDT" (
   foldlSent [chgsStart assumpCTNTD (S "The"), phrase model,
-  S "currently only accounts for charging of the tank. That is, increasing the",
+  S "currently only accounts" `S.for` S "charging of the tank. That is" `sC` S "increasing the",
   phraseNP (temp `ofThe` water), S "to match the",(phrase temp `S.ofThe` S "coil" !.),
-  S "A more complete", phrase model, S "would also account for discharging of", phraseNP (the tank)]) 
+  S "A more complete", phrase model, S "would also account" `S.for` S "discharging" `S.of_` phraseNP (the tank)]) 
   "Discharging-Tank" likeChgDom
 
 
@@ -32,11 +32,11 @@ unlikelyChgs = [unlikeChgWFS, unlikeChgNIHG]
 
 unlikeChgWFS :: ConceptInstance
 unlikeChgWFS = cic "unlikeChgWFS" (
-  foldlSent [chgsStart assumpWAL (S "It is unlikely for the change of"),
-  phrase water, S "from liquid to a solid, or from liquid to gas to be considered"])
+  foldlSent [chgsStart assumpWAL (S "It is unlikely" `S.for` S "the change of"),
+  phrase water, S "from liquid to a solid" `sC` S "or from liquid to gas to be considered"])
   "Water-Fixed-States" unlikeChgDom
 
 unlikeChgNIHG :: ConceptInstance
 unlikeChgNIHG = cic "unlikeChgNIHG" (
-  foldlSent [chgsStart assumpNIHGBW (S "Is used for the derivations of"),
+  foldlSent [chgsStart assumpNIHGBW (S "Is used" `S.for` S "the derivations of"),
   refS eBalanceOnWtr] ) "No-Internal-Heat-Generation" unlikeChgDom

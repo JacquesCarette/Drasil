@@ -387,7 +387,10 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`sC`</span></span><span>
 </span><span id="line-86"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;they are each constant over their entire&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><span class="hs-string">&quot;they&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.are`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;each constant over their entire&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">vol</span></span><span class="hs-special">]</span><span>
@@ -417,7 +420,10 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-string">&quot;is&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;they are each constant over their entire&quot;</span></span><span class="hs-special">,</span><span>
+</span><span class="hs-string">&quot;they&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.are`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;each constant over their entire&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-91"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -522,7 +528,10 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span id="line-105"></span><span>  </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.SWHS.Unitals.html#tempPCM"><span class="hs-identifier hs-var">tempPCM</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;can only increase, or remain&quot;</span></span><span class="hs-special">,</span><span>
+</span><span class="hs-string">&quot;can only increase&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;or remain&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-106"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;constant; they do not decrease. This implies that the&quot;</span></span><span class="hs-special">,</span><span>
@@ -534,9 +543,10 @@ forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
-</span><a href="Drasil.SWHS.Assumptions.html#assumpSITWP"><span class="hs-identifier hs-var">assumpSITWP</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="Drasil.SWHS.Assumptions.html#assumpSITWP"><span class="hs-identifier hs-var">assumpSITWP</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;is less than (or equal)&quot;</span></span><span>
+</span><span class="hs-string">&quot;less than (or equal)&quot;</span></span><span>
 </span><span id="line-108"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.toThe`</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -583,8 +593,8 @@ forall c. Definition c =&gt; Lens' c Sentence
 Lens' ConceptChunk Sentence
 </span><span class="hs-identifier hs-var">defn</span></span><span class="hs-special">]</span><span>
 </span><span id="line-114"></span><span id="assumpS14"><span class="annot"><span class="annottext">assumpS14 :: Sentence -&gt; Sentence
-</span><a href="Drasil.SWHS.Assumptions.html#assumpS14"><span class="hs-identifier hs-var hs-var">assumpS14</span></a></span></span><span> </span><span id="local-6989586621679083716"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679083716"><span class="hs-identifier hs-var">mat</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><a href="Drasil.SWHS.Assumptions.html#assumpS14"><span class="hs-identifier hs-var hs-var">assumpS14</span></a></span></span><span> </span><span id="local-6989586621679083782"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679083782"><span class="hs-identifier hs-var">mat</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-115"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -603,10 +613,10 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-116"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is such that the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679083716"><span class="hs-identifier hs-var">mat</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-117"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679083782"><span class="hs-identifier hs-var">mat</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;is always in&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-string">&quot;always in&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">liquid</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Getting Sentence ConceptChunk Sentence -&gt; Sentence
 forall s a. s -&gt; Getting a s a -&gt; a
@@ -617,7 +627,7 @@ Lens' ConceptChunk Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;That is&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span>
-</span><span id="line-118"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><span id="line-117"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
@@ -625,7 +635,7 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">temp</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;will not drop below the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-119"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><span id="line-118"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">meltPt</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptChunk -&gt; NP
@@ -635,14 +645,14 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;or rise above its&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-120"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><span id="line-119"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">boilPt</span></span><span class="hs-special">]</span><span>
-</span><span id="line-121"></span><span id="assumpS15"><span class="annot"><span class="annottext">assumpS15 :: Sentence
+</span><span id="line-120"></span><span id="assumpS15"><span class="annot"><span class="annottext">assumpS15 :: Sentence
 </span><a href="Drasil.SWHS.Assumptions.html#assumpS15"><span class="hs-identifier hs-var hs-var">assumpS15</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-122"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><span id="line-121"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP
 </span><span class="hs-identifier hs-var">NP.the</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
@@ -650,7 +660,7 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`is`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.SWHS.Concepts.html#perfectInsul"><span class="hs-identifier hs-var">perfectInsul</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-123"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-122"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;so that there is no&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -658,22 +668,23 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">CT.heat</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;loss from the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-124"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><span id="line-123"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.SWHS.Concepts.html#tank"><span class="hs-identifier hs-var">tank</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-125"></span><span id="assumpS16"><span class="annot"><span class="annottext">assumpS16 :: Sentence
+</span><span id="line-124"></span><span id="assumpS16"><span class="annot"><span class="annottext">assumpS16 :: Sentence
 </span><a href="Drasil.SWHS.Assumptions.html#assumpS16"><span class="hs-identifier hs-var hs-var">assumpS16</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-126"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-125"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;No internal&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">CT.heat</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">CT.heat</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;is generated by either the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-127"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><span class="hs-string">&quot;generated by either the&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-126"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.SWHS.Concepts.html#water"><span class="hs-identifier hs-var">water</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -684,7 +695,7 @@ forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">:+:</span></span><span>
-</span><span id="line-128"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-127"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;; therefore&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
@@ -692,13 +703,14 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Drasil.SWHS.Unitals.html#volHtGen"><span class="hs-identifier hs-var">volHtGen</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="Drasil.SWHS.Unitals.html#volHtGen"><span class="hs-identifier hs-var">volHtGen</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;is zero&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-129"></span><span id="assumpS17"><span class="annot"><span class="annottext">assumpS17 :: Sentence
+</span><span class="hs-string">&quot;zero&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-128"></span><span id="assumpS17"><span class="annot"><span class="annottext">assumpS17 :: Sentence
 </span><a href="Drasil.SWHS.Assumptions.html#assumpS17"><span class="hs-identifier hs-var hs-var">assumpS17</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-130"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><span id="line-129"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">vol</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -710,18 +722,19 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-131"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-130"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;due to&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">CT.melting</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">CT.melting</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;is negligible&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-132"></span><span id="assumpS18"><span class="annot"><span class="annottext">assumpS18 :: Sentence
+</span><span class="hs-string">&quot;negligible&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-131"></span><span id="assumpS18"><span class="annot"><span class="annottext">assumpS18 :: Sentence
 </span><a href="Drasil.SWHS.Assumptions.html#assumpS18"><span class="hs-identifier hs-var hs-var">assumpS18</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-133"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-132"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
@@ -736,7 +749,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. Definition c =&gt; Lens' c Sentence
 Lens' ConceptChunk Sentence
 </span><span class="hs-identifier hs-var">defn</span></span><span class="hs-special">,</span><span>
-</span><span id="line-134"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-133"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;or a&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">solid</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Getting Sentence ConceptChunk Sentence -&gt; Sentence
@@ -753,21 +766,23 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. Definition c =&gt; Lens' c Sentence
 Lens' ConceptChunk Sentence
 </span><span class="hs-identifier hs-var">defn</span></span><span class="hs-special">]</span><span>
-</span><span id="line-135"></span><span id="assumpS19"><span class="annot"><span class="annottext">assumpS19 :: Sentence
+</span><span id="line-134"></span><span id="assumpS19"><span class="annot"><span class="annottext">assumpS19 :: Sentence
 </span><a href="Drasil.SWHS.Assumptions.html#assumpS19"><span class="hs-identifier hs-var hs-var">assumpS19</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-136"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-135"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;The pressure in the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><span class="hs-string">&quot;The pressure&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.inThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="Drasil.SWHS.Concepts.html#tank"><span class="hs-identifier hs-var">tank</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="Drasil.SWHS.Concepts.html#tank"><span class="hs-identifier hs-var">tank</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;is atmospheric&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-string">&quot;atmospheric&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;so the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-137"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><span id="line-136"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">meltPt</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk -&gt; NP
@@ -780,7 +795,7 @@ forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Integer</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">:+:</span></span><span>
-</span><span id="line-138"></span><span>  </span><span class="annot"><span class="annottext">USymb -&gt; Sentence
+</span><span id="line-137"></span><span>  </span><span class="annot"><span class="annottext">USymb -&gt; Sentence
 </span><span class="hs-identifier hs-var">Sy</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; USymb
 forall c. Unitary c =&gt; c -&gt; USymb
 </span><span class="hs-identifier hs-var">unit_symb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -791,7 +806,7 @@ forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">100</span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Integer</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">:+:</span></span><span>
-</span><span id="line-139"></span><span>  </span><span class="annot"><span class="annottext">USymb -&gt; Sentence
+</span><span id="line-138"></span><span>  </span><span class="annot"><span class="annottext">USymb -&gt; Sentence
 </span><span class="hs-identifier hs-var">Sy</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; USymb
 forall c. Unitary c =&gt; c -&gt; USymb
 </span><span class="hs-identifier hs-var">unit_symb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -799,10 +814,10 @@ forall c. Unitary c =&gt; c -&gt; USymb
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;respectively&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-140"></span><span id="assumpS20"><span class="annot"><span class="annottext">assumpS20 :: Sentence
+</span><span id="line-139"></span><span id="assumpS20"><span class="annot"><span class="annottext">assumpS20 :: Sentence
 </span><a href="Drasil.SWHS.Assumptions.html#assumpS20"><span class="hs-identifier hs-var hs-var">assumpS20</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-141"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-140"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;When considering the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -811,19 +826,19 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`inThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.SWHS.Concepts.html#tank"><span class="hs-identifier hs-var">tank</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-142"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span id="line-141"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">vol</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptChunk -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="Drasil.SWHS.Concepts.html#coil"><span class="hs-identifier hs-var">coil</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-143"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="Drasil.SWHS.Concepts.html#coil"><span class="hs-identifier hs-var">coil</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;is assumed to be negligible&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-144"></span><span>  </span><span class="hs-comment">--FIXME , sSqBr $ makeRefS req2]</span><span>
-</span><span id="line-145"></span><span>
-</span><span id="line-146"></span><span class="hs-comment">--- Again, list structure is same between all examples.</span><span>
-</span><span id="line-147"></span><span class="hs-comment">-- Can booktabs colored links be used? The box links completely cover nearby</span><span>
-</span><span id="line-148"></span><span class="hs-comment">-- punctuation.</span></pre></body></html>
+</span><span class="hs-string">&quot;assumed to be negligible&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-142"></span><span>  </span><span class="hs-comment">--FIXME , sSqBr $ makeRefS req2]</span><span>
+</span><span id="line-143"></span><span>
+</span><span id="line-144"></span><span class="hs-comment">--- Again, list structure is same between all examples.</span><span>
+</span><span id="line-145"></span><span class="hs-comment">-- Can booktabs colored links be used? The box links completely cover nearby</span><span>
+</span><span id="line-146"></span><span class="hs-comment">-- punctuation.</span></pre></body></html>

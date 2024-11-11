@@ -43,16 +43,35 @@ forced to manually write descriptions of systems in both code and comments.
 They also do not generate all software artifacts - commonly they are used to
 generate only API documentation targeted towards developers or user manuals.
 
+\ds{If we can truly understand the differences and commonalities between 
+software artifacts, we can develop tools to capitalize on them and streamline 
+the process of creating and maintaining software artifacts. For that we first 
+need to break down common artifacts to develop an understanding of their 
+contents, intended audience, and how they differ whether on intra- or 
+inter-project scales}.
+
 We propose a new framework, Drasil, alongside a knowledge-centric view of
-software, to help take advantage of inherent redundancy, while avoiding manual
-duplication and synchronization problems. Our approach looks at what underlies
-the problems we solve using software and capturing that "common" or "core"
-knowledge. We then use that knowledge to generate our software artifacts, thus
-gaining the benefits inherent to the generation process: lack of manual
-duplication, one source to maintain, and 'free' traceability of information.
+software, to help take advantage of inherent redundancy, while avoiding 
+\ds{/reducing} manual duplication and synchronization problems. Our approach 
+looks at what underlies the problems we solve using software and capturing that 
+``common" or ``core" knowledge. We then use that knowledge to generate our 
+software artifacts, thus gaining the benefits inherent to the generation 
+process: lack of manual duplication, one source to maintain, and 'free' 
+traceability of information.
 
 \section{Value in the mundane}
 ??
+\ds{What we're doing is not big and flashy, instead it is focused on the tedium 
+we deal with in our day-to-day lives as Software Engineers. We are focused on 
+improving the development experience holistically. The small annoyances can be 
+more frustrating than solving larger problems. Ex. The feeling of hours spent 
+banging heads against walls for an off-by-one or a typo that didn't get caught, 
+versus the sublime joy of finding a novel, interesting, scalable, and 
+maintainable solution to a problem.}
+
+\ds {More about the little pain points should go here - i.e. having to go 
+manually update artifacts after modifying code, particularly in regulated 
+industries}
 
 \section{Scope}
 \label{sec:scope}
@@ -76,7 +95,7 @@ are not necessarily invalidated. For example, rigid-body problems in physics are
 well-understood and the underlying modeling equations are unlikely to change.
 However, should they change, the current models will likely remain as good
 approximations under a specific set of assumptions. For instance, who hasn't
-heard 'assume each body is a sphere' during a physics lecture?
+heard `assume each body is a sphere' during a physics lecture?
 
 SC software could also benefit from buy-in to good software development 
 practices as many SC software developers put the emphasis on science and not 
@@ -87,6 +106,12 @@ agile~\citep{Segal2005, CarverEtAl2007, AckroydEtAl2008,
 EasterbrookAndJohns2009}, or amethododical~\citep{Kelly2013} processes instead.
 
 \section{Roadmap}
+
+\ds{Background - softifacts, software families / reuse, literate software, 
+generative programming; Our process - breaking down softifacts and finding 
+their commonalities; The Drasil Framework - using those commonalities to 
+underpin a framework for software generation; Early results \& Future 
+directions}
 
 \section{Contributions \& Publications}
 

@@ -140,9 +140,9 @@ ddHtFusion = ddE ddHtFusionQD [dRefInfo bueche1986 $ Page [282]]
 
 htFusionNote :: Sentence
 htFusionNote = foldlSent [atStartNP (the htFusion),
-  sParen (S "also known as the enthalpy of fusion"), S "of a substance is the",
-  phrase heat, phrase energy, S "required", sParen (ch latentHeat), S "to change the state of a unit of the",
-  phrase mass, sParen (ch mass), S "of the substance from solid to liquid" `sC`
+  sParen (S "also known as the enthalpy of fusion") `S.ofA` S "substance is the",
+  phrase heat, phrase energy, S "required", sParen (ch latentHeat), S "to change the state" `S.ofA` S "unit of the",
+  phrase mass, sParen (ch mass) `S.ofThe` S "substance from solid to liquid" `sC`
   S "at constant", phrase pressure]
 
 ----

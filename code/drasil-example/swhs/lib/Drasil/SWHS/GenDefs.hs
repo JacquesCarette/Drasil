@@ -107,7 +107,7 @@ rocTempDerivGauss = [S "Applying", titleize gaussDiv `S.toThe` S "first term ove
 
 rocTempDerivArbVol :: [Sentence]
 rocTempDerivArbVol = [S "We consider an arbitrary" +:+. phrase vol,
-  atStartNP (the volHtGen), S "is assumed constant. Then", eqN 1, S "can be written as"]
+  atStartNP (the volHtGen) `S.is` S "assumed constant. Then", eqN 1, S "can be written as"]
 
 rocTempDerivConsFlx :: Sentence -> [ConceptInstance] -> [Sentence]
 rocTempDerivConsFlx s assumps = [S "Where", 

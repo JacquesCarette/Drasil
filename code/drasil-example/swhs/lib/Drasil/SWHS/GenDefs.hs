@@ -99,7 +99,7 @@ rocTempDerivInteg = [S "Integrating", refS consThermE, S "over a",
   phrase vol, sParen (ch vol) `sC` S "we have"]
 
 rocTempDerivGauss :: [Sentence]
-rocTempDerivGauss = [S "Applying", titleize gaussDiv, S "to the first term over",
+rocTempDerivGauss = [S "Applying", titleize gaussDiv `S.toThe` S "first term over",
   (phrase surface +:+ ch surface `S.the_ofThe` phrase vol) `sC` S "with",
   ch thFluxVect, S "as the", phrase thFluxVect, S "for the",
   phrase surface `S.and_` ch uNormalVect, S "as a", phrase unit_,
@@ -121,7 +121,7 @@ rocTempDerivConsFlxSWHS :: Sentence
 rocTempDerivConsFlxSWHS = foldlSent [S "The integral over the", phrase surface,
   S "could be simplified because the thermal flux" `S.is` S "assumed constant over",
   ch inSA `S.and_` ch outSA `S.and_` eS (exactDbl 0), S "on all other" +:+. plural surface,
-  S "Outward flux is considered positive"]
+  S "Outward flux" `S.is` S "considered positive"]
 
 rocTempDerivDens :: [Sentence]
 rocTempDerivDens = [S "Using the fact that", ch density :+: S "=" :+: ch mass :+:

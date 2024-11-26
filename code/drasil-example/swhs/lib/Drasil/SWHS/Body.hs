@@ -558,7 +558,7 @@ propCorSolDeriv2 = unlbldExpr
 propCorSolDeriv3 :: NamedIdea a => a -> UnitalChunk -> CI -> ConceptChunk -> Contents
 propCorSolDeriv3 epcm en pcmat wa =
   foldlSP_ [S "In addition, the", phrase epcm, S "should equal the",
-  phrase en, phrase input_, S "to the", short pcmat,
+  phrase en, phrase input_ `S.toThe` short pcmat,
   S "from the" +:+. phrase wa, S "This can be expressed as"]
 
 propCorSolDeriv4 :: Contents

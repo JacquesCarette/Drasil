@@ -116,7 +116,7 @@ sensHtEdesc = foldlSent [
   atStart sensHeat :+: S "ing occurs as long as the material does not reach a",
   phrase temp, S "where a", phrase phaseChange, (S "occurs" !.), atStartNP (a_ phaseChange),
   S "occurs if" +:+. (eS (sy temp $= sy boilPt) `S.or_` eS (sy temp $= sy meltPt)),
-  S "If this is the case" `sC` S "refer to", refS latentHtE]
+  S "If this" `S.is` S "the case" `sC` S "refer to", refS latentHtE]
 
 --How to have new lines in the description?
 --Can't have relation and eqn chunks together since they are called in a list
@@ -156,7 +156,7 @@ latentHtENotes = map foldlSent [
   [eS' latentHtEFD `S.isThe` phrase rOfChng `S.of_` ch latentHeat `S.wrt` 
    phrase time, ch tau],
   [ch time `S.isThe` phrase time, S "elapsed" `sC` S "as long as the",
-   phrase phaseChange, S "is not complete"],
+   phrase phaseChange `S.is` S "not complete"],
   [S "status" `S.the_ofTheC` phrase phaseChange, S "depends on the",
    phrase meltFrac, sParen (S "from" +:+ refS ddMeltFrac)],
   [atStart latentHeat :+: S "ing stops when all material has changed to the new phase"]]
@@ -183,9 +183,9 @@ nwtnCoolingExpr = sy htTransCoeff $* apply1 deltaT time
 nwtnCoolingNotes :: [Sentence]
 nwtnCoolingNotes = map foldlSent [
   [atStart lawConvCooling +:+. S "describes convective cooling from a surface" +:
-   S "The law is stated as", S "the", phrase rate `S.of_` S "heat loss from a body" `S.is`
-   S "proportional to the difference in", plural temp, S "between the body and its surroundings"],
-  [ch htTransCoeff, S "is assumed to be independent" `S.of_` ch temp,
+   (S "The law" `S.is` S "stated as"), S "the", phrase rate `S.of_` S "heat loss from a body" `S.is`
+   S "proportional" `S.toThe` S "difference in", plural temp, S "between the body and its surroundings"],
+  [ch htTransCoeff `S.is` S "assumed to be independent" `S.of_` ch temp,
    sParen (S "from" +:+ refS assumpHTCC)],
   [E (defines (apply1 deltaT time) (apply1 temp time $- apply1 tempEnv time)) `S.isThe`
    S "time-dependant thermal gradient between the environment and the object"]]

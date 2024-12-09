@@ -198,7 +198,7 @@ balPCMNotes = map foldlSent [
 ----------------------------------------------
 eBalanceOnPCMDeriv :: Derivation
 eBalanceOnPCMDeriv = mkDerivName (phraseNP (the energy) +:+
-  S "balance on the PCM during sensible heating phase")
+  S "balance" `S.onThe` S "PCM during sensible heating phase")
   (weave [eBalanceOnPCMDerivSentences, map eS eBalanceOnPCMDerivEqnsIM2]
   ++ [eBalanceOnPCMDerivDesc5, eBalanceOnPCMDerivDesc6, eBalanceOnPCMDerivDesc7])
 
@@ -364,4 +364,4 @@ instModIntro = foldlSent [atStartNP' (the goal), foldlList Comma List
   refS heatEInWtr, S "can be solved once", refS eBalanceOnWtr +:+.
   S "has been solved", atStartNP' (the solution) `S.of_` refS eBalanceOnPCM `S.and_`
   refS heatEInPCM `S.are` S "also coupled" `sC` S "since the",
-  phrase tempPCM `S.andThe` phrase pcmE,S "depend on the", phrase phaseChange]
+  phrase tempPCM `S.andThe` phrase pcmE,S "depend" `S.onThe` phrase phaseChange]

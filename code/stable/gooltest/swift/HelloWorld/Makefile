@@ -16,8 +16,8 @@ endif
 
 build: HelloWorld$(TARGET_EXTENSION)
 
-HelloWorld$(TARGET_EXTENSION): main.swift Helper.swift
-	swiftc main.swift Helper.swift -o HelloWorld$(TARGET_EXTENSION)
+HelloWorld$(TARGET_EXTENSION): main.swift
+	swiftc main.swift -o HelloWorld$(TARGET_EXTENSION)
 
 run: build
 	./HelloWorld$(TARGET_EXTENSION) $(RUNARGS)

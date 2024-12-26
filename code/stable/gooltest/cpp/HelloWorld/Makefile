@@ -16,8 +16,8 @@ endif
 
 build: HelloWorld$(TARGET_EXTENSION)
 
-HelloWorld$(TARGET_EXTENSION): Helper.hpp HelloWorld.cpp Helper.cpp
-	"$(CXX)" HelloWorld.cpp Helper.cpp --std=c++11 -o HelloWorld$(TARGET_EXTENSION)
+HelloWorld$(TARGET_EXTENSION): HelloWorld.hpp HelloWorld.cpp
+	"$(CXX)" HelloWorld.cpp --std=c++11 -o HelloWorld$(TARGET_EXTENSION)
 
 run: build
 	./HelloWorld$(TARGET_EXTENSION) $(RUNARGS)

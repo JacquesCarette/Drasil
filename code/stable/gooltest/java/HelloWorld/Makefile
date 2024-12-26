@@ -4,7 +4,7 @@
 
 build: HelloWorld/HelloWorld.class
 
-HelloWorld/HelloWorld.class: HelloWorld/HelloWorld.java HelloWorld/Helper.java
+HelloWorld/HelloWorld.class: HelloWorld/HelloWorld.java
 	javac HelloWorld/HelloWorld.java
 
 run: build

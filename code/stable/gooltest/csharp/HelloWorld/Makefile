@@ -19,8 +19,8 @@ endif
 
 build: HelloWorld$(TARGET_EXTENSION)
 
-HelloWorld$(TARGET_EXTENSION): HelloWorld.cs Helper.cs
-	$(CSC) -out:HelloWorld$(TARGET_EXTENSION) HelloWorld.cs Helper.cs
+HelloWorld$(TARGET_EXTENSION): HelloWorld.cs
+	$(CSC) -out:HelloWorld$(TARGET_EXTENSION) HelloWorld.cs
 
 run: build
 	./HelloWorld$(TARGET_EXTENSION) $(RUNARGS)

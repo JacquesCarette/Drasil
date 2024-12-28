@@ -59,7 +59,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, call, funcAppMixedArgs, lambda,
   listAccess, listSet, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
   emptyStmt, print, comment, valStmt, returnStmt, param, docFunc, throw, arg,
-  argsList, ifCond, smartAdd, local, var)
+  argsList, ifCond, smartAdd, smartSub, local, var)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (bool,
   boolRender, extVar, funcType, listDec, listDecDef, listAccessFunc,
   listSetFunc, notNull, extFuncAppMixedArgs, functionDoc, listSize, listAdd,
@@ -814,7 +814,7 @@ jlRange initv finalv stepv = do
   t <- listType int
   iv <- initv
   sv <- stepv
-  fv <- finalv
+  fv <- finalv `G.smartSub` litInt 1
   mkVal t (RC.value iv <> colon <> RC.value sv <> colon <> RC.value fv)
 
 jlSplit :: String

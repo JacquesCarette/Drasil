@@ -34,17 +34,34 @@ often are not. A non-exhaustive list:
 
 **N**: And what do you mean by *generating*? Like templates?
 
-**S** Not like templates. Like a program that uses a more semantic source for
-all the artifacts, selects the appropriate information for each piece, and
-writes each out in its *native format*. The basic idea is that each
-artifact contains a quite particular *view* of the total information behind
-a single software product, and so the generation process is one of
-filtering and translation.
+**S** Sort of. Many templates are simplistic fill-in-the-hole, and
+that's not what is meant here. What we mean is turning a semantic
+description of all of the artifacts, and then *rendering it* it in
+one (or more) programming languages. We see each artifact that is generated
+as a particular *view* onto the semantic information behind a single
+software product, so the generation process is more one of filtering and
+translation.
+
+In other words, we want to *compute* the results. 
 
 **N** Like with Generative AI, i.e. LLMs (Large Language Models)?
 
-**S** Again, not at all. This is more like a correct-by-construction
-methodology, not a conjuring up plausible-seeming code as LLMs do.
+**S** Quite a bit closer, actually. Now LLMs compute a 'plausible'
+reply to a prompt, based on a huge amount of data. We don't do that at
+all: no training, no data needed.
+
+You could say we're closer to genetic programming, in the sense that there
+you specify constraints for a solution and a 'solution space vocabulary', 
+and generate tentative solutions programmatically. We too have those
+constraints for a solution (the specification). But we ask the user to
+*design* the solution as well -- at a very high level. We ask for just
+enough information so that producing the artifacts given that information
+is purely mechanical.  This is more like a correct-by-construction
+methodology.
+
+Note that LLMs require you to give quite a lot of information in the
+prompt to have a hope of being (partly) successful. We're asking for
+similar information, but in Drasil, there is no room for fuzziness.
 
 **N** Like Model-Driven Engineering then?
 
@@ -199,10 +216,14 @@ trivial fact that ASCII is information-sparse that is?
 
 **N** Oh, I actually know this one! This is because all the artifacts in
 question are actually on a single topic (what the application is about) and
-so there is naturally a lot of repetition in between artifacts.
+so there is naturally a lot of repetition in between artifacts. For
+example, whenever we do solid body physics, things like force and 
+acceleration and velocity will appear everywhere.
 
 **S** Right. Much more impressive is the kind of compression you can
-achieve on 'knowledge'.
+achieve on 'knowledge' that can take on different forms across
+artifacts (such expressions in vector notation in the theory and loops
+for computing those same expressions in code).
 
 Here the best example is from the (now defunct)
 [Viewpoints Research Institute](http://www.vpri.org/)'s
@@ -378,6 +399,8 @@ problem space (some older MDE work is very solution-space focused, which is
 the exact opposite of what we want.) Parts of MDE also ties itself in
 knots over modelling, meta-modelling, meta-meta-modelling and so forth,
 and this is not something that seems so problematic in our situation.
+Not that we're immune to such issues, more that there has yet been any
+reason to go 'that' meta.
 
 **N** So this is more like Domain-Driven Design?
 
@@ -421,6 +444,11 @@ the most value! Traditionally a huge amount of effort is spend on
 activity 6 (where we lump in many activities that are often separated
 out into individual items) where here we see this as mostly automated.
 
+It is important to note that many different people are involved in
+these activities. It is not expected that a single person would ever span
+them all. A more nuanced description of the activities would split things
+up also by that role.
+
 **N** Yes, I see how that's quite different. Though I must admit that
 this remains somewhat vague. I don't quite see what you would *do*.
 
@@ -446,11 +474,13 @@ correspond to things that already exist in the library. The only
 domain-specific theory development you might need to do is if your
 projectile and launcher have specific properties that are not generic.
 Maybe it's important that your projectile is purple and that your point
-of launch is not at ground level, for example. You end up capturing all of
+of launch is not at ground level, for example. You end up capturing such
 that information in a "twinned" manner, that captures both natural language
 descriptions and the mathematical equivalent. This is where things cannot
 become de-synchronized: the knowledge capture tools fundamentally don't
-allow for that.
+allow for that. Some information comes in different bundles (pictures,
+external libraries, etc). We emphasize the natural language + mathematical
+because they are the richest ones that we can best leverage.
 
 Then you decide how the software to do this should be structured. As there
 are a number of things that can vary (for example, launch angle), you have
@@ -508,7 +538,18 @@ But here the "standard library" is one that isn't code, but theories.
 We can also see this in action for systems that are already theory-based,
 like the mathlib for Lean 4 or the AFP for Isabelle/HOL.
 
-Putting all these things together, we see that if
+As amortization of costs is very important, let me be quite specific
+about how we see this playing out:
+
+1. start-up costs for wholly new projects (i.e. those whose knowledge
+has yet to be captured) will be *very* high.
+2. Drasil-based projects can handle change much better. Not only is it
+easy to understand what needs to change, the repercussions can be
+computed.
+3. Because of that, ongoing maintenance costs should be considerably
+lower than traditional development methods.
+
+So when is this all worth it? We think the conditions are:
 
 1. The underlying theory of an application is **well-understood**,
 2. The theory is not changing much and is likely widely applicable,
@@ -587,7 +628,9 @@ burden was too high compared to the amount of take-up by outsiders in a
 reasonable time frame. And a lot of that had three underlying reasons:
 1) poor technology, 2) overly ambitious aims, and 3) lack of theoretical
 foundations. Any one of them is not a fatal flaw, but the combination of all
-of them was too much.
+of them was too much. In some sense, a fourth reason is that some of them
+were just too far ahead of the state-of-the-art, and so used 'clunky'
+means to get the job done.
 
 **N** So you think that's changed?
 

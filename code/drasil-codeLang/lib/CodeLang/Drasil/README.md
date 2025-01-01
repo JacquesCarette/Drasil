@@ -1,7 +1,10 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 17, 2023
+Last updated: December, 2024
 --------------------------------------------------
 
-CommonConcept.hs
-  - Contains the common types and functions for Drasil. 
+LanguageStructure.hs
+  - Contains the comment types for Drasil. 
+
+README.md
+  - This file

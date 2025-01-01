@@ -428,7 +428,7 @@ instance ThunkAssign JuliaCode where
     iName <- genLoopIndex
     let
       i = var iName int
-      dim = fmap pure $ t >>= commonThunkDim (fmap unJLC . (\l -> listSize l #- litInt 1) . fmap pure) . unJLC
+      dim = fmap pure $ t >>= commonThunkDim (fmap unJLC . listSize . fmap pure) . unJLC
       loopInit = zoom lensMStoVS (fmap unJLC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
       loopBody = zoom lensMStoVS (fmap unJLC t) >>= commonThunkElim

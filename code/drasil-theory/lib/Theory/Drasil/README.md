@@ -1,7 +1,13 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: May 15, 2019
+Last updated: December 31, 2024
 --------------------------------------------------
+
+Classes.hs
+  - Defining all the classes which represent knowledge-about-theories
+
+ConstraintSet.hs
+  - Defines types used in models and theories
 
 DataDefinition.hs
   - Defines DataDefinition data type and constructors
@@ -11,6 +17,12 @@ GenDefn.hs
 
 InstanceModel.hs
   - Instance model chunks
+
+ModelKinds.hs
+  - Defines types and functions for creating models
+
+MultiDefn.hs
+  - Defines types and functions for creating mult-definitions
 
 README.md
   - This file

@@ -1,7 +1,10 @@
 ----------------------------------------------------------
 ### Quick Summary of Folder Structure and File Contents
-Last updated: July 20, 2018
+Last updated: December 31, 2024
 ----------------------------------------------------------
+
+**Import**
+  - Defines necessary external functions for layout AST.
 
 AST.hs
   - Layout AST used for both HTML and TeX.
@@ -19,5 +22,8 @@ Import.hs
 LayoutObj.hs
   - The layout AST version of layout objects. Similar to the Drasil layout objects.
   
+PrintingInformation.hs
+  - Defines types and functions to gather all the information needed for printing.
+
 README.md
   - This file.

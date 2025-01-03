@@ -1,10 +1,13 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: August 16, 2021
+Last updated: December 30, 2024
 --------------------------------------------------
 
 **Notebook**
   - Defines helper types and functions to create the document language for generating lesson plans through Jupyter notebooks.
+
+Core.hs
+  - Defines core types for use with the Drasil document language ("Drasil.DocumentLanguage").
 
 Definitions.hs
   - Defines types and functions to help generate some Solution Characteristics Specification subsections.
@@ -12,10 +15,7 @@ Definitions.hs
 README.md
   - This file
 
-RefHelpers.hs
-  - Contains helpers for referencing.
-
-TraceabilityMatrix.hs
+TraceabilityGraph.hs
   - Contains functions to build traceability graphs.
 
 TraceabilityMatrix.hs

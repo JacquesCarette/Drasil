@@ -1,16 +1,13 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: May 9, 2019
+Last updated: December 30, 2024
 --------------------------------------------------
-
-**ChunkDB**
-  - Contains helper functions for extracting information from chunk databases
 
 ChunkDB.hs
   - Chunk databases used by System Information for looking up knowledge
 
+Dump.hs
+  - Organizes all UIDs from Chunk databases into a structured map for debugging and analysis
+
 README.md
   - This file
-
-SystemInformation.hs
-  - Defines the SI type

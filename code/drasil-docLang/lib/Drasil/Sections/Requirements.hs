@@ -12,7 +12,7 @@ module Drasil.Sections.Requirements (
   mkUnderstandableNFR, mkReusableNFR, mkSecurityNFR
   ) where
 
-import Utils.Drasil (stringList)
+import Utils.Drasil (stringList, mkTable)
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators

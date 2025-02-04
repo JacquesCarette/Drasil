@@ -11,10 +11,11 @@ module Language.Drasil.Chunk.CommonIdea (
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nc)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
  CommonIdea(abrv), ConceptDomain(cdom))
-import Language.Drasil.Misc (repUnd)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.UID (UID, HasUID(uid))
+
+import Utils.Drasil (repUnd)
 
 import Control.Lens (makeLenses, (^.), view)
 

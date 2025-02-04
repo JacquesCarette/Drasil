@@ -277,8 +277,6 @@ module Language.Drasil (
   , Decoration, Symbol
   -- Language.Drasil.UnitLang
   , USymb(US)
-  -- Language.Drasil.Misc
-  , mkTable
   -- Language.Drasil.Stages
   , Stage(Equational,Implementation)
   -- Language.Drasil.Symbol.Helpers
@@ -390,7 +388,6 @@ import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol,
   label, variable)
 import Language.Drasil.Synonyms (ConstQDef, SimpleQDef, ModelQDef, PExpr)
 import Language.Drasil.Stages (Stage(..))
-import Language.Drasil.Misc (mkTable)
 import Language.Drasil.People (People, Person, person, HasName(..),
   person', personWM, personWM', mononym, name, nameStr, rendPersLFM,
   rendPersLFM', rendPersLFM'', comparePeople)

@@ -8,6 +8,8 @@ import Drasil.DocLang (mkInputPropsTable, mkMaintainableNFR, mkCorrectNFR,
   mkUnderstandableNFR, mkReusableNFR)
 import Drasil.DocLang.SRS (datCon, propCorSol) 
 
+import Utils.Drasil (mkTable)
+
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (datum, funcReqDom, input_, name_,
   output_, physicalConstraint, symbol_, user, value, propOfCorSol)

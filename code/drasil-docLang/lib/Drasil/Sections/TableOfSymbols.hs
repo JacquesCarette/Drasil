@@ -15,6 +15,7 @@ import Data.Drasil.Concepts.Documentation (symbol_, description, tOfSymb)
 import Data.Drasil.Concepts.Math (unit_)
 import Language.Drasil.Printers (symbolDoc)
 import Drasil.DocumentLanguage.Core (Literature(..), TConvention(..), TSIntro(..), LFunc(..), RefTab(..))
+import Utils.Drasil (mkTable)
 
 --Removed SymbolForm Constraint
 -- | Table of Symbols creation function. Takes in a 'Stage', 'Symbol's, and something that turns

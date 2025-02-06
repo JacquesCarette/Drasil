@@ -156,18 +156,25 @@ WEBSITE_FOLDER = $(WEBSITE_FOLDER_NAME)/HTML/
 FULL ?= 0
 
 # GHC debug options
-PROFALL = --profile
-PROFEXEC = --profile --rts-options '-xc -P'
+PROFALL := --profile
+PROFEXEC := --profile --rts-options '-xc -P'
 
 # GHC build options
 GHCTHREADS ?= 2
 
-override GHCFLAGS += -Wall -j$(GHCTHREADS)
-override stackArgs += --ghc-options="$(GHCFLAGS)"
+GHCFLAGS += -Wall -j$(GHCTHREADS)
+stackArgs += --ghc-options="$(GHCFLAGS)"
 
 # When running 'stack exec', the following stack arguments should be passed.
-STACK_EXEC_ARGS := --no-nix-pure
-STACK_EXEC := stack exec $(STACK_EXEC_ARGS)
+STACK_EXEC_ARGS = --no-nix-pure
+
+# Debugging changes the arguments passed to 'stack exec' slightly.
+debug: stackArgs += $(PROFALL)
+debug: STACK_EXEC_ARGS += $(PROFEXEC)
+debug: export DEBUG_ENV = 1
+
+STACK_EXEC = stack exec $(STACK_EXEC_ARGS)
+
 
 # Output amount control
 NOISY ?= no
@@ -189,9 +196,6 @@ all: test test_website codegenTest_diff ##@Examples Run examples and test agains
 install: ##@Examples Install all example project binaries into your local binary path (see $(stack path) for local-bin-path).
 	stack install $(stackArgs)
 
-%debug: stackArgs += $(PROFALL)
-%debug: STACK_EXEC += $(PROFEXEC)
-%debug: export DEBUG_ENV=1
 debug: test ##@Examples Run test target with better debugging tools.
 
 # Debugging individual examples

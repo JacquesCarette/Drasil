@@ -8,10 +8,11 @@
 </span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">symbol_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">description</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tOfUnit</span></span><span class="hs-special">)</span><span>
 </span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html"><span class="hs-identifier">Drasil.DocumentLanguage.Core</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TUIntro"><span class="hs-identifier">TUIntro</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#RefTab"><span class="hs-identifier">RefTab</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">unit_</span></span><span class="hs-special">)</span><span>
-</span><span id="line-11"></span><span>
-</span><span id="line-12"></span><span class="annot"><span class="hs-comment">-- | Creates the Table of Units with an &quot;SI Name&quot; column.</span></span><span>
-</span><span id="line-13"></span><span id="local-6989586621679100547"><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tOfUnitSIName"><span class="hs-identifier hs-type">tOfUnitSIName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IsUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679100547"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679100547"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span></span><span>
-</span><span id="line-14"></span><span id="tOfUnitSIName"><span class="annot"><span class="annottext">tOfUnitSIName :: forall s. IsUnit s =&gt; [s] -&gt; LabelledContent
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">mkTable</span></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span>
+</span><span id="line-13"></span><span class="annot"><span class="hs-comment">-- | Creates the Table of Units with an &quot;SI Name&quot; column.</span></span><span>
+</span><span id="line-14"></span><span id="local-6989586621679100021"><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tOfUnitSIName"><span class="hs-identifier hs-type">tOfUnitSIName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IsUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679100021"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679100021"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span></span><span>
+</span><span id="line-15"></span><span id="tOfUnitSIName"><span class="annot"><span class="annottext">tOfUnitSIName :: forall s. IsUnit s =&gt; [s] -&gt; LabelledContent
 </span><a href="Drasil.Sections.TableOfUnits.html#tOfUnitSIName"><span class="hs-identifier hs-var hs-var">tOfUnitSIName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [s -&gt; Sentence] -&gt; [s] -&gt; LabelledContent
 forall s. [Sentence] -&gt; [s -&gt; Sentence] -&gt; [s] -&gt; LabelledContent
 </span><a href="Drasil.Sections.TableOfUnits.html#tOfUnitHelper"><span class="hs-identifier hs-var">tOfUnitHelper</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
@@ -23,7 +24,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">description</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;SI Name&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-15"></span><span>                  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">USymb -&gt; Sentence
+</span><span id="line-16"></span><span>                  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">USymb -&gt; Sentence
 </span><span class="hs-identifier hs-var">Sy</span></span><span> </span><span class="annot"><span class="annottext">(USymb -&gt; Sentence) -&gt; (s -&gt; USymb) -&gt; s -&gt; Sentence
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">s -&gt; USymb
@@ -36,10 +37,10 @@ Lens' s Sentence
 </span><span class="hs-identifier hs-var">defn</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">s -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span class="hs-special">]</span><span>
-</span><span id="line-16"></span><span>
-</span><span id="line-17"></span><span class="annot"><span class="hs-comment">-- | Creates the Table of Units with SI name in the &quot;Description&quot; column.</span></span><span>
-</span><span id="line-18"></span><span id="local-6989586621679100644"><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tOfUnitDesc"><span class="hs-identifier hs-type">tOfUnitDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IsUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679100644"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679100644"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span></span><span>
-</span><span id="line-19"></span><span id="tOfUnitDesc"><span class="annot"><span class="annottext">tOfUnitDesc :: forall s. IsUnit s =&gt; [s] -&gt; LabelledContent
+</span><span id="line-17"></span><span>
+</span><span id="line-18"></span><span class="annot"><span class="hs-comment">-- | Creates the Table of Units with SI name in the &quot;Description&quot; column.</span></span><span>
+</span><span id="line-19"></span><span id="local-6989586621679100119"><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tOfUnitDesc"><span class="hs-identifier hs-type">tOfUnitDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IsUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679100119"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679100119"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span></span><span>
+</span><span id="line-20"></span><span id="tOfUnitDesc"><span class="annot"><span class="annottext">tOfUnitDesc :: forall s. IsUnit s =&gt; [s] -&gt; LabelledContent
 </span><a href="Drasil.Sections.TableOfUnits.html#tOfUnitDesc"><span class="hs-identifier hs-var hs-var">tOfUnitDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [s -&gt; Sentence] -&gt; [s] -&gt; LabelledContent
 forall s. [Sentence] -&gt; [s -&gt; Sentence] -&gt; [s] -&gt; LabelledContent
 </span><a href="Drasil.Sections.TableOfUnits.html#tOfUnitHelper"><span class="hs-identifier hs-var">tOfUnitHelper</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
@@ -49,14 +50,14 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStart</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">description</span></span><span class="hs-special">]</span><span>
-</span><span id="line-20"></span><span>                 </span><span class="hs-special">[</span><span class="annot"><span class="annottext">USymb -&gt; Sentence
+</span><span id="line-21"></span><span>                 </span><span class="hs-special">[</span><span class="annot"><span class="annottext">USymb -&gt; Sentence
 </span><span class="hs-identifier hs-var">Sy</span></span><span> </span><span class="annot"><span class="annottext">(USymb -&gt; Sentence) -&gt; (s -&gt; USymb) -&gt; s -&gt; Sentence
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">s -&gt; USymb
 forall u. HasUnitSymbol u =&gt; u -&gt; USymb
-</span><span class="hs-identifier hs-var">usymb</span></span><span class="hs-special">,</span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679100656"><span class="annot"><span class="annottext">s
-</span><a href="#local-6989586621679100656"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">s
-</span><a href="#local-6989586621679100656"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">s -&gt; Getting Sentence s Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">usymb</span></span><span class="hs-special">,</span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679100131"><span class="annot"><span class="annottext">s
+</span><a href="#local-6989586621679100131"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">s
+</span><a href="#local-6989586621679100131"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">s -&gt; Getting Sentence s Sentence -&gt; Sentence
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Sentence s Sentence
 forall c. Definition c =&gt; Lens' c Sentence
@@ -66,21 +67,21 @@ Lens' s Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">s -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">s
-</span><a href="#local-6989586621679100656"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-21"></span><span>
-</span><span id="line-22"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tOfUnitNone"><span class="hs-identifier hs-type">tOfUnitNone</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span>
-</span><span id="line-23"></span><span id="tOfUnitNone"><span class="annot"><span class="annottext">tOfUnitNone :: [UnitDefn] -&gt; LabelledContent
+</span><a href="#local-6989586621679100131"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tOfUnitNone"><span class="hs-identifier hs-type">tOfUnitNone</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span>
+</span><span id="line-24"></span><span id="tOfUnitNone"><span class="annot"><span class="annottext">tOfUnitNone :: [UnitDefn] -&gt; LabelledContent
 </span><a href="Drasil.Sections.TableOfUnits.html#tOfUnitNone"><span class="hs-identifier hs-var hs-var">tOfUnitNone</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Any -&gt; Sentence] -&gt; [Any] -&gt; LabelledContent
 forall s. [Sentence] -&gt; [s -&gt; Sentence] -&gt; [s] -&gt; LabelledContent
 </span><a href="Drasil.Sections.TableOfUnits.html#tOfUnitHelper"><span class="hs-identifier hs-var">tOfUnitHelper</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-24"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tOfUnitNone"><span class="hs-identifier hs-var">tOfUnitNone</span></a></span><span> </span><span class="annot"><span class="annottext">[UnitDefn]
+</span><span id="line-25"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tOfUnitNone"><span class="hs-identifier hs-var">tOfUnitNone</span></a></span><span> </span><span class="annot"><span class="annottext">[UnitDefn]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Any -&gt; Sentence] -&gt; [Any] -&gt; LabelledContent
 forall s. [Sentence] -&gt; [s -&gt; Sentence] -&gt; [s] -&gt; LabelledContent
 </span><a href="Drasil.Sections.TableOfUnits.html#tOfUnitHelper"><span class="hs-identifier hs-var">tOfUnitHelper</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-25"></span><span>
-</span><span id="line-26"></span><span class="annot"><span class="hs-comment">-- | Helper for making a Table of Units.</span></span><span>
-</span><span id="line-27"></span><span id="local-6989586621679100558"><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tOfUnitHelper"><span class="hs-identifier hs-type">tOfUnitHelper</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679100558"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679100558"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span></span><span>
-</span><span id="line-28"></span><span id="tOfUnitHelper"><span class="annot"><span class="annottext">tOfUnitHelper :: forall s. [Sentence] -&gt; [s -&gt; Sentence] -&gt; [s] -&gt; LabelledContent
+</span><span id="line-26"></span><span>
+</span><span id="line-27"></span><span class="annot"><span class="hs-comment">-- | Helper for making a Table of Units.</span></span><span>
+</span><span id="line-28"></span><span id="local-6989586621679100032"><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tOfUnitHelper"><span class="hs-identifier hs-type">tOfUnitHelper</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679100032"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679100032"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span></span><span>
+</span><span id="line-29"></span><span id="tOfUnitHelper"><span class="annot"><span class="annottext">tOfUnitHelper :: forall s. [Sentence] -&gt; [s -&gt; Sentence] -&gt; [s] -&gt; LabelledContent
 </span><a href="Drasil.Sections.TableOfUnits.html#tOfUnitHelper"><span class="hs-identifier hs-var hs-var">tOfUnitHelper</span></a></span></span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><span class="hs-identifier">_</span></span><span>       </span><span class="annot"><span class="annottext">[s -&gt; Sentence]
 </span><span class="hs-identifier">_</span></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
@@ -90,7 +91,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; RawContent
 </span><span class="hs-identifier hs-var">Paragraph</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span>
-</span><span id="line-29"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tOfUnitHelper"><span class="hs-identifier hs-var">tOfUnitHelper</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>      </span><span class="annot"><span class="annottext">[s -&gt; Sentence]
+</span><span id="line-30"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tOfUnitHelper"><span class="hs-identifier hs-var">tOfUnitHelper</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>      </span><span class="annot"><span class="annottext">[s -&gt; Sentence]
 </span><span class="hs-identifier">_</span></span><span>  </span><span class="annot"><span class="annottext">[s]
 </span><span class="hs-identifier">_</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="annot"><span class="annottext">Reference
@@ -99,7 +100,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; RawContent
 </span><span class="hs-identifier hs-var">Paragraph</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span>
-</span><span id="line-30"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tOfUnitHelper"><span class="hs-identifier hs-var">tOfUnitHelper</span></a></span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><span id="line-31"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tOfUnitHelper"><span class="hs-identifier hs-var">tOfUnitHelper</span></a></span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><span class="hs-identifier">_</span></span><span>       </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[s]
 </span><span class="hs-identifier">_</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="annot"><span class="annottext">Reference
@@ -108,63 +109,63 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; RawContent
 </span><span class="hs-identifier hs-var">Paragraph</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span>
-</span><span id="line-31"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tOfUnitHelper"><span class="hs-identifier hs-var">tOfUnitHelper</span></a></span><span> </span><span id="local-6989586621679100663"><span class="annot"><span class="annottext">[Sentence]
-</span><a href="#local-6989586621679100663"><span class="hs-identifier hs-var">headers</span></a></span></span><span> </span><span id="local-6989586621679100664"><span class="annot"><span class="annottext">[s -&gt; Sentence]
-</span><a href="#local-6989586621679100664"><span class="hs-identifier hs-var">fs</span></a></span></span><span> </span><span id="local-6989586621679100665"><span class="annot"><span class="annottext">[s]
-</span><a href="#local-6989586621679100665"><span class="hs-identifier hs-var">u</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
+</span><span id="line-32"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tOfUnitHelper"><span class="hs-identifier hs-var">tOfUnitHelper</span></a></span><span> </span><span id="local-6989586621679100138"><span class="annot"><span class="annottext">[Sentence]
+</span><a href="#local-6989586621679100138"><span class="hs-identifier hs-var">headers</span></a></span></span><span> </span><span id="local-6989586621679100139"><span class="annot"><span class="annottext">[s -&gt; Sentence]
+</span><a href="#local-6989586621679100139"><span class="hs-identifier hs-var">fs</span></a></span></span><span> </span><span id="local-6989586621679100140"><span class="annot"><span class="annottext">[s]
+</span><a href="#local-6989586621679100140"><span class="hs-identifier hs-var">u</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.Sections.TableOfUnits.html#unitTableRef"><span class="hs-identifier hs-var">unitTableRef</span></a></span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [[Sentence]] -&gt; Sentence -&gt; Bool -&gt; RawContent
 </span><span class="hs-identifier hs-var">Table</span></span><span> </span><span class="annot"><span class="annottext">[Sentence]
-</span><a href="#local-6989586621679100663"><span class="hs-identifier hs-var">headers</span></a></span><span>
-</span><span id="line-32"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[s -&gt; Sentence] -&gt; [s] -&gt; [[Sentence]]
+</span><a href="#local-6989586621679100138"><span class="hs-identifier hs-var">headers</span></a></span><span>
+</span><span id="line-33"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[s -&gt; Sentence] -&gt; [s] -&gt; [[Sentence]]
 forall a b. [a -&gt; b] -&gt; [a] -&gt; [[b]]
 </span><span class="hs-identifier hs-var">mkTable</span></span><span> </span><span class="annot"><span class="annottext">[s -&gt; Sentence]
-</span><a href="#local-6989586621679100664"><span class="hs-identifier hs-var">fs</span></a></span><span> </span><span class="annot"><span class="annottext">[s]
-</span><a href="#local-6989586621679100665"><span class="hs-identifier hs-var">u</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679100139"><span class="hs-identifier hs-var">fs</span></a></span><span> </span><span class="annot"><span class="annottext">[s]
+</span><a href="#local-6989586621679100140"><span class="hs-identifier hs-var">u</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Table of Units&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span>
-</span><span id="line-33"></span><span>
-</span><span id="line-34"></span><span class="annot"><span class="hs-comment">-- | Makes a reference to the Table of Units.</span></span><span>
-</span><span id="line-35"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#unitTableRef"><span class="hs-identifier hs-type">unitTableRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
-</span><span id="line-36"></span><span id="unitTableRef"><span class="annot"><span class="annottext">unitTableRef :: Reference
+</span><span id="line-34"></span><span>
+</span><span id="line-35"></span><span class="annot"><span class="hs-comment">-- | Makes a reference to the Table of Units.</span></span><span>
+</span><span id="line-36"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#unitTableRef"><span class="hs-identifier hs-type">unitTableRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
+</span><span id="line-37"></span><span id="unitTableRef"><span class="annot"><span class="annottext">unitTableRef :: Reference
 </span><a href="Drasil.Sections.TableOfUnits.html#unitTableRef"><span class="hs-identifier hs-var hs-var">unitTableRef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Reference
 </span><span class="hs-identifier hs-var">makeTabRef</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;ToU&quot;</span></span><span>
-</span><span id="line-37"></span><span>
-</span><span id="line-38"></span><span class="hs-comment">----- Table of units section helper functions -----</span><span>
-</span><span id="line-39"></span><span>
-</span><span id="line-40"></span><span class="annot"><span class="hs-comment">-- | Table of units constructors.</span></span><span>
-</span><span id="line-41"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tunit"><span class="hs-identifier hs-type">tunit</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tunit%27"><span class="hs-identifier hs-type">tunit'</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tunitNone"><span class="hs-identifier hs-type">tunitNone</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TUIntro"><span class="hs-identifier hs-type">TUIntro</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#RefTab"><span class="hs-identifier hs-type">RefTab</span></a></span><span>
-</span><span id="line-42"></span><span class="annot"><span class="hs-comment">-- | Table of units with an SI Name.</span></span><span>
-</span><span id="line-43"></span><span id="tunit"><span class="annot"><span class="annottext">tunit :: [TUIntro] -&gt; RefTab
-</span><a href="Drasil.Sections.TableOfUnits.html#tunit"><span class="hs-identifier hs-var hs-var">tunit</span></a></span></span><span>  </span><span id="local-6989586621679100669"><span class="annot"><span class="annottext">[TUIntro]
-</span><a href="#local-6989586621679100669"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TUIntro] -&gt; ([UnitDefn] -&gt; LabelledContent) -&gt; RefTab
+</span><span id="line-38"></span><span>
+</span><span id="line-39"></span><span class="hs-comment">----- Table of units section helper functions -----</span><span>
+</span><span id="line-40"></span><span>
+</span><span id="line-41"></span><span class="annot"><span class="hs-comment">-- | Table of units constructors.</span></span><span>
+</span><span id="line-42"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tunit"><span class="hs-identifier hs-type">tunit</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tunit%27"><span class="hs-identifier hs-type">tunit'</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tunitNone"><span class="hs-identifier hs-type">tunitNone</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TUIntro"><span class="hs-identifier hs-type">TUIntro</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#RefTab"><span class="hs-identifier hs-type">RefTab</span></a></span><span>
+</span><span id="line-43"></span><span class="annot"><span class="hs-comment">-- | Table of units with an SI Name.</span></span><span>
+</span><span id="line-44"></span><span id="tunit"><span class="annot"><span class="annottext">tunit :: [TUIntro] -&gt; RefTab
+</span><a href="Drasil.Sections.TableOfUnits.html#tunit"><span class="hs-identifier hs-var hs-var">tunit</span></a></span></span><span>  </span><span id="local-6989586621679100143"><span class="annot"><span class="annottext">[TUIntro]
+</span><a href="#local-6989586621679100143"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TUIntro] -&gt; ([UnitDefn] -&gt; LabelledContent) -&gt; RefTab
 </span><a href="Drasil.DocumentLanguage.Core.html#TUnits%27"><span class="hs-identifier hs-var">TUnits'</span></a></span><span> </span><span class="annot"><span class="annottext">[TUIntro]
-</span><a href="#local-6989586621679100669"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">[UnitDefn] -&gt; LabelledContent
+</span><a href="#local-6989586621679100143"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">[UnitDefn] -&gt; LabelledContent
 forall s. IsUnit s =&gt; [s] -&gt; LabelledContent
 </span><a href="Drasil.Sections.TableOfUnits.html#tOfUnitSIName"><span class="hs-identifier hs-var">tOfUnitSIName</span></a></span><span>
-</span><span id="line-44"></span><span class="annot"><span class="hs-comment">-- | Table of units with SI name in the description column.</span></span><span>
-</span><span id="line-45"></span><span id="tunit%27"><span class="annot"><span class="annottext">tunit' :: [TUIntro] -&gt; RefTab
-</span><a href="Drasil.Sections.TableOfUnits.html#tunit%27"><span class="hs-identifier hs-var hs-var">tunit'</span></a></span></span><span> </span><span id="local-6989586621679100671"><span class="annot"><span class="annottext">[TUIntro]
-</span><a href="#local-6989586621679100671"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TUIntro] -&gt; ([UnitDefn] -&gt; LabelledContent) -&gt; RefTab
+</span><span id="line-45"></span><span class="annot"><span class="hs-comment">-- | Table of units with SI name in the description column.</span></span><span>
+</span><span id="line-46"></span><span id="tunit%27"><span class="annot"><span class="annottext">tunit' :: [TUIntro] -&gt; RefTab
+</span><a href="Drasil.Sections.TableOfUnits.html#tunit%27"><span class="hs-identifier hs-var hs-var">tunit'</span></a></span></span><span> </span><span id="local-6989586621679100145"><span class="annot"><span class="annottext">[TUIntro]
+</span><a href="#local-6989586621679100145"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TUIntro] -&gt; ([UnitDefn] -&gt; LabelledContent) -&gt; RefTab
 </span><a href="Drasil.DocumentLanguage.Core.html#TUnits%27"><span class="hs-identifier hs-var">TUnits'</span></a></span><span> </span><span class="annot"><span class="annottext">[TUIntro]
-</span><a href="#local-6989586621679100671"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">[UnitDefn] -&gt; LabelledContent
+</span><a href="#local-6989586621679100145"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">[UnitDefn] -&gt; LabelledContent
 forall s. IsUnit s =&gt; [s] -&gt; LabelledContent
 </span><a href="Drasil.Sections.TableOfUnits.html#tOfUnitDesc"><span class="hs-identifier hs-var">tOfUnitDesc</span></a></span><span>
-</span><span id="line-46"></span><span class="annot"><span class="hs-comment">-- | Table of units with SI name in the description column.</span></span><span>
-</span><span id="line-47"></span><span id="tunitNone"><span class="annot"><span class="annottext">tunitNone :: [TUIntro] -&gt; RefTab
-</span><a href="Drasil.Sections.TableOfUnits.html#tunitNone"><span class="hs-identifier hs-var hs-var">tunitNone</span></a></span></span><span> </span><span id="local-6989586621679100672"><span class="annot"><span class="annottext">[TUIntro]
-</span><a href="#local-6989586621679100672"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TUIntro] -&gt; ([UnitDefn] -&gt; LabelledContent) -&gt; RefTab
+</span><span id="line-47"></span><span class="annot"><span class="hs-comment">-- | Table of units with SI name in the description column.</span></span><span>
+</span><span id="line-48"></span><span id="tunitNone"><span class="annot"><span class="annottext">tunitNone :: [TUIntro] -&gt; RefTab
+</span><a href="Drasil.Sections.TableOfUnits.html#tunitNone"><span class="hs-identifier hs-var hs-var">tunitNone</span></a></span></span><span> </span><span id="local-6989586621679100146"><span class="annot"><span class="annottext">[TUIntro]
+</span><a href="#local-6989586621679100146"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TUIntro] -&gt; ([UnitDefn] -&gt; LabelledContent) -&gt; RefTab
 </span><a href="Drasil.DocumentLanguage.Core.html#TUnits%27"><span class="hs-identifier hs-var">TUnits'</span></a></span><span> </span><span class="annot"><span class="annottext">[TUIntro]
-</span><a href="#local-6989586621679100672"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">[UnitDefn] -&gt; LabelledContent
+</span><a href="#local-6989586621679100146"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">[UnitDefn] -&gt; LabelledContent
 </span><a href="Drasil.Sections.TableOfUnits.html#tOfUnitNone"><span class="hs-identifier hs-var">tOfUnitNone</span></a></span><span>
-</span><span id="line-48"></span><span>
-</span><span id="line-49"></span><span class="annot"><span class="hs-comment">-- | Table of units introduction builder. Used by 'mkRefSec'.</span></span><span>
-</span><span id="line-50"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tuIntro"><span class="hs-identifier hs-type">tuIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TUIntro"><span class="hs-identifier hs-type">TUIntro</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
-</span><span id="line-51"></span><span id="tuIntro"><span class="annot"><span class="annottext">tuIntro :: [TUIntro] -&gt; Contents
+</span><span id="line-49"></span><span>
+</span><span id="line-50"></span><span class="annot"><span class="hs-comment">-- | Table of units introduction builder. Used by 'mkRefSec'.</span></span><span>
+</span><span id="line-51"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tuIntro"><span class="hs-identifier hs-type">tuIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TUIntro"><span class="hs-identifier hs-type">TUIntro</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-52"></span><span id="tuIntro"><span class="annot"><span class="annottext">tuIntro :: [TUIntro] -&gt; Contents
 </span><a href="Drasil.Sections.TableOfUnits.html#tuIntro"><span class="hs-identifier hs-var hs-var">tuIntro</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Contents
 </span><span class="hs-identifier hs-var">mkParagraph</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Contents) -&gt; Sentence -&gt; Contents
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -172,8 +173,8 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall n. NamedIdea n =&gt; [n] -&gt; Sentence
 </span><a href="Drasil.Sections.ReferenceMaterial.html#emptySectSentPlu"><span class="hs-identifier hs-var">emptySectSentPlu</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">unit_</span></span><span class="hs-special">]</span><span>
-</span><span id="line-52"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tuIntro"><span class="hs-identifier hs-var">tuIntro</span></a></span><span> </span><span id="local-6989586621679100674"><span class="annot"><span class="annottext">[TUIntro]
-</span><a href="#local-6989586621679100674"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Contents
+</span><span id="line-53"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tuIntro"><span class="hs-identifier hs-var">tuIntro</span></a></span><span> </span><span id="local-6989586621679100148"><span class="annot"><span class="annottext">[TUIntro]
+</span><a href="#local-6989586621679100148"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Contents
 </span><span class="hs-identifier hs-var">mkParagraph</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Contents) -&gt; Sentence -&gt; Contents
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(TUIntro -&gt; Sentence -&gt; Sentence)
@@ -189,19 +190,19 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">TUIntro -&gt; Sentence
 </span><a href="Drasil.Sections.TableOfUnits.html#tuI"><span class="hs-identifier hs-var">tuI</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">[TUIntro]
-</span><a href="#local-6989586621679100674"><span class="hs-identifier hs-var">x</span></a></span><span>
-</span><span id="line-53"></span><span>
-</span><span id="line-54"></span><span class="annot"><span class="hs-comment">-- | Table of units introduction writer. Translates a 'TUIntro' to a 'Sentence'.</span></span><span>
-</span><span id="line-55"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tuI"><span class="hs-identifier hs-type">tuI</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TUIntro"><span class="hs-identifier hs-type">TUIntro</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-56"></span><span id="tuI"><span class="annot"><span class="annottext">tuI :: TUIntro -&gt; Sentence
+</span><a href="#local-6989586621679100148"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-54"></span><span>
+</span><span id="line-55"></span><span class="annot"><span class="hs-comment">-- | Table of units introduction writer. Translates a 'TUIntro' to a 'Sentence'.</span></span><span>
+</span><span id="line-56"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tuI"><span class="hs-identifier hs-type">tuI</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TUIntro"><span class="hs-identifier hs-type">TUIntro</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-57"></span><span id="tuI"><span class="annot"><span class="annottext">tuI :: TUIntro -&gt; Sentence
 </span><a href="Drasil.Sections.TableOfUnits.html#tuI"><span class="hs-identifier hs-var hs-var">tuI</span></a></span></span><span> </span><span class="annot"><span class="annottext">TUIntro
 </span><a href="Drasil.DocumentLanguage.Core.html#System"><span class="hs-identifier hs-var">System</span></a></span><span>  </span><span class="hs-glyph">=</span><span>
-</span><span id="line-57"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-58"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The unit system used throughout is SI (Syst&#232;me International d'Unit&#233;s).&quot;</span></span><span>
-</span><span id="line-58"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tuI"><span class="hs-identifier hs-var">tuI</span></a></span><span> </span><span class="annot"><span class="annottext">TUIntro
+</span><span id="line-59"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tuI"><span class="hs-identifier hs-var">tuI</span></a></span><span> </span><span class="annot"><span class="annottext">TUIntro
 </span><a href="Drasil.DocumentLanguage.Core.html#TUPurpose"><span class="hs-identifier hs-var">TUPurpose</span></a></span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-59"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-60"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;For each unit&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -217,7 +218,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">tOfUnit</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-60"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-61"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;lists&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
@@ -230,7 +231,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">symbol_</span></span><span class="hs-special">,</span><span>
-</span><span id="line-61"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-62"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;a&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
@@ -239,17 +240,17 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">description</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the SI name&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-62"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tuI"><span class="hs-identifier hs-var">tuI</span></a></span><span> </span><span class="annot"><span class="annottext">TUIntro
+</span><span id="line-63"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#tuI"><span class="hs-identifier hs-var">tuI</span></a></span><span> </span><span class="annot"><span class="annottext">TUIntro
 </span><a href="Drasil.DocumentLanguage.Core.html#Derived"><span class="hs-identifier hs-var">Derived</span></a></span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-63"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-64"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;In addition to the basic units, several derived units are also used.&quot;</span></span><span>
-</span><span id="line-64"></span><span>
-</span><span id="line-65"></span><span class="annot"><span class="hs-comment">-- | Default table of units intro that contains the system, derivation, and purpose.</span></span><span>
-</span><span id="line-66"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#defaultTUI"><span class="hs-identifier hs-type">defaultTUI</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TUIntro"><span class="hs-identifier hs-type">TUIntro</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-67"></span><span id="defaultTUI"><span class="annot"><span class="annottext">defaultTUI :: [TUIntro]
+</span><span id="line-65"></span><span>
+</span><span id="line-66"></span><span class="annot"><span class="hs-comment">-- | Default table of units intro that contains the system, derivation, and purpose.</span></span><span>
+</span><span id="line-67"></span><span class="annot"><a href="Drasil.Sections.TableOfUnits.html#defaultTUI"><span class="hs-identifier hs-type">defaultTUI</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Drasil.DocumentLanguage.Core.html#TUIntro"><span class="hs-identifier hs-type">TUIntro</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-68"></span><span id="defaultTUI"><span class="annot"><span class="annottext">defaultTUI :: [TUIntro]
 </span><a href="Drasil.Sections.TableOfUnits.html#defaultTUI"><span class="hs-identifier hs-var hs-var">defaultTUI</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TUIntro
 </span><a href="Drasil.DocumentLanguage.Core.html#System"><span class="hs-identifier hs-var">System</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TUIntro
 </span><a href="Drasil.DocumentLanguage.Core.html#Derived"><span class="hs-identifier hs-var">Derived</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TUIntro
 </span><a href="Drasil.DocumentLanguage.Core.html#TUPurpose"><span class="hs-identifier hs-var">TUPurpose</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-68"></span></pre></body></html>
+</span><span id="line-69"></span></pre></body></html>

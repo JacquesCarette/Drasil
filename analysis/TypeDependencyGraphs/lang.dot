@@ -796,8 +796,6 @@ digraph alltypes {
 	}
 	subgraph exprclasess {
 	}
-	subgraph mics {
-	}
 	subgraph nounpraehs {
 		subgraph capitalization{
 		Capitalization	[shape=oval, color=red2, label="Capitalization"];

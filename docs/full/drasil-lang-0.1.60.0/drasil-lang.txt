@@ -34,29 +34,6 @@ instance GHC.Classes.Eq Language.Drasil.Data.Date.Month
 instance GHC.Show.Show Language.Drasil.Data.Date.Month
 
 
--- | A collection of <a>String</a>-handling routines as well as one for
---   making tables.
-module Language.Drasil.Misc
-
--- | Create a table body (not including header row) by applying the given
---   functions to the column elements of the table rows (in order). The
---   first argument is a list of functions to be applied (one per column).
---   This essentially creates the rows. The second argument is a list of
---   elements apply the functions to.
---   
---   For example, <tt>mkTable [id, *5] [1,2,3]</tt> should produce a table:
---   
---   <pre>
---   | 1 |  5 |
---   | 2 | 10 |
---   | 3 | 15 |
---   </pre>
-mkTable :: [a -> b] -> [a] -> [[b]]
-
--- | Replace underscores in a string with periods (<tt>.</tt>).
-repUnd :: String -> String
-
-
 -- | Defines types and functions to encode people, names, and naming
 --   convention. Used for referencing and authorship of work.
 module Language.Drasil.People
@@ -9017,21 +8994,6 @@ data Symbol
 --   negative, but should not be zero.
 newtype USymb
 US :: [(Symbol, Integer)] -> USymb
-
--- | Create a table body (not including header row) by applying the given
---   functions to the column elements of the table rows (in order). The
---   first argument is a list of functions to be applied (one per column).
---   This essentially creates the rows. The second argument is a list of
---   elements apply the functions to.
---   
---   For example, <tt>mkTable [id, *5] [1,2,3]</tt> should produce a table:
---   
---   <pre>
---   | 1 |  5 |
---   | 2 | 10 |
---   | 3 | 15 |
---   </pre>
-mkTable :: [a -> b] -> [a] -> [[b]]
 
 -- | Stages are what part of the development process we are in. There are
 --   currently two: 1) The Equational stage (should be called

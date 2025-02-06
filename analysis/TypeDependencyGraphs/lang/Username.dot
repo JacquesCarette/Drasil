@@ -1,4 +1,0 @@
-digraph username{
-Username	[shape=oval, color=red2, label="Username"];
-Username -> String;
-}

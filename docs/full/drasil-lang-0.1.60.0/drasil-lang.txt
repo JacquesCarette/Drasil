@@ -362,42 +362,6 @@ defer :: UID -> IRefProg
 prepend :: String -> IRefProg
 
 
--- | Abstract Syntax Tree for Uniform Resource Identifiers
-module Language.Drasil.URI.AST
-
--- | A uniform resource identifier (uses URLs or ISBNs).
-data URI
-URL :: Scheme -> Authority -> Path -> Query -> Fragment -> URI
-ISBN :: String -> URI
-
--- | URL scheme (either HTTP or FTP).
-data Scheme
-HTTP :: Scheme
-FTP :: Scheme
-
--- | Authentication if necessary.
-data Authority
-
--- | Full authentication.
-Full :: Username -> Password -> Host -> Port -> Authority
-
--- | Simplify for when authentication isn't necessary.
-Simple :: Host -> Port -> Authority
-type Path = -- | Type the full path excluding the first /. String
-type Query = -- | Make sure [] doesn't print a "?". -- Separate elements with "&". [String]
-type Fragment = -- | Make sure "" becomes "" not "#" when printing. String
-type Username = -- | Again make sure "" doesn't print anything. String
-type Password = -- | Don't print anything if "" or if Username="". String
-type Host = -- | Type the host address (ex. "www.github.com"). String
-data Port
-
--- | Take an integer port number if applicable.
-P :: Int -> Port
-
--- | Do nothing if port is not applicable.
-NA :: Port
-
-
 -- | Defines uncertainty types and functions.
 module Language.Drasil.Uncertainty
 

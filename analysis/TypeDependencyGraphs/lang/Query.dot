@@ -1,4 +1,0 @@
-digraph query{
-Query	[shape=oval, color=red2, label="Query"];
-Query -> String;
-}

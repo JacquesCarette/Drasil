@@ -106,33 +106,33 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span id="line-28"></span><span>
 </span><span id="line-29"></span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#allObject"><span class="hs-identifier hs-type">allObject</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-30"></span><span id="allObject"><span class="annot"><span class="annottext">allObject :: Sentence -&gt; [Sentence]
-</span><a href="Drasil.GamePhysics.Assumptions.html#allObject"><span class="hs-identifier hs-var hs-var">allObject</span></a></span></span><span> </span><span id="local-6989586621679065150"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679065150"><span class="hs-identifier hs-var">thing</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="Drasil.GamePhysics.Assumptions.html#allObject"><span class="hs-identifier hs-var hs-var">allObject</span></a></span></span><span> </span><span id="local-6989586621679065132"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679065132"><span class="hs-identifier hs-var">thing</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;All objects are&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679065150"><span class="hs-identifier hs-var">thing</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679065132"><span class="hs-identifier hs-var">thing</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-31"></span><span>
 </span><span id="line-32"></span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#thereNo"><span class="hs-identifier hs-type">thereNo</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-33"></span><span id="thereNo"><span class="annot"><span class="annottext">thereNo :: [Sentence] -&gt; [Sentence]
-</span><a href="Drasil.GamePhysics.Assumptions.html#thereNo"><span class="hs-identifier hs-var hs-var">thereNo</span></a></span></span><span> </span><span class="hs-special">[</span><span id="local-6989586621679065153"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679065153"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">]</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="Drasil.GamePhysics.Assumptions.html#thereNo"><span class="hs-identifier hs-var hs-var">thereNo</span></a></span></span><span> </span><span class="hs-special">[</span><span id="local-6989586621679065135"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679065135"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">]</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;There is no&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679065153"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679065135"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;involved throughout the&quot;</span></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-34"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">simulation</span></span><span class="hs-special">]</span><span>
-</span><span id="line-35"></span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#thereNo"><span class="hs-identifier hs-var">thereNo</span></a></span><span> </span><span id="local-6989586621679065155"><span class="annot"><span class="annottext">[Sentence]
-</span><a href="#local-6989586621679065155"><span class="hs-identifier hs-var">l</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-35"></span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#thereNo"><span class="hs-identifier hs-var">thereNo</span></a></span><span> </span><span id="local-6989586621679065137"><span class="annot"><span class="annottext">[Sentence]
+</span><a href="#local-6989586621679065137"><span class="hs-identifier hs-var">l</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;There are no&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlList</span></span><span> </span><span class="annot"><span class="annottext">SepType
 </span><span class="hs-identifier hs-var">Comma</span></span><span> </span><span class="annot"><span class="annottext">FoldType
 </span><span class="hs-identifier hs-var">List</span></span><span> </span><span class="annot"><span class="annottext">[Sentence]
-</span><a href="#local-6989586621679065155"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679065137"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;involved throughout the&quot;</span></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-36"></span><span>  </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
@@ -142,11 +142,11 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-37"></span><span>
 </span><span id="line-38"></span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#implies"><span class="hs-identifier hs-type">implies</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-39"></span><span id="implies"><span class="annot"><span class="annottext">implies :: Sentence -&gt; [Sentence]
-</span><a href="Drasil.GamePhysics.Assumptions.html#implies"><span class="hs-identifier hs-var hs-var">implies</span></a></span></span><span> </span><span id="local-6989586621679065160"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679065160"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="Drasil.GamePhysics.Assumptions.html#implies"><span class="hs-identifier hs-var hs-var">implies</span></a></span></span><span> </span><span id="local-6989586621679065142"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679065142"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;and this implies that there are no&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679065160"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">]</span><span> </span><span>
+</span><a href="#local-6989586621679065142"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">]</span><span> </span><span>
 </span><span id="line-40"></span><span class="hs-comment">--not sure if defining a new function is the best way to do this,</span><span>
 </span><span id="line-41"></span><span class="hs-comment">-- as was done in the original file,but it displays correctly</span><span>
 </span><span id="line-42"></span><span class="hs-comment">--(line 52 was added for assumption6)</span><span>

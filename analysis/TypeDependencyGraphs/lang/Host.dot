@@ -1,4 +1,0 @@
-digraph host{
-Host	[shape=oval, color=red2, label="Host"];
-Host -> String;
-}

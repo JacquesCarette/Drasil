@@ -1,9 +1,0 @@
-digraph uri{
-URI	[shape=oval, color=darkviolet, label="URI"];
-URI -> Scheme;
-URI -> Authority;
-URI -> Path;
-URI -> Query;
-URI -> Fragment;
-URI -> String;
-}

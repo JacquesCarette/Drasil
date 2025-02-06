@@ -663,55 +663,6 @@ digraph alltypes {
 	}
 	subgraph helpers {
 	}
-	subgraph ast {
-		subgraph uri{
-		URI	[shape=oval, color=darkviolet, label="URI"];
-		URI -> Scheme;
-		URI -> Authority;
-		URI -> Path;
-		URI -> Query;
-		URI -> Fragment;
-		URI -> String;
-		}
-		subgraph scheme{
-		Scheme	[shape=oval, color=darkviolet, label="Scheme"];
-		}
-		subgraph authority{
-		Authority	[shape=oval, color=darkviolet, label="Authority"];
-		Authority -> Username;
-		Authority -> Password;
-		Authority -> Host;
-		Authority -> Port;
-		}
-		subgraph port{
-		Port	[shape=oval, color=darkviolet, label="Port"];
-		Port -> Int;
-		}
-		subgraph path{
-		Path	[shape=oval, color=red2, label="Path"];
-		Path -> String;
-		}
-		subgraph query{
-		Query	[shape=oval, color=red2, label="Query"];
-		Query -> String;
-		}
-		subgraph fragment{
-		Fragment	[shape=oval, color=red2, label="Fragment"];
-		Fragment -> String;
-		}
-		subgraph username{
-		Username	[shape=oval, color=red2, label="Username"];
-		Username -> String;
-		}
-		subgraph password{
-		Password	[shape=oval, color=red2, label="Password"];
-		Password -> String;
-		}
-		subgraph host{
-		Host	[shape=oval, color=red2, label="Host"];
-		Host -> String;
-		}
-	}
 	subgraph clasess {
 		subgraph conceptc{
 		Conceptc	[shape=oval, color=red2, label="Conceptc"];

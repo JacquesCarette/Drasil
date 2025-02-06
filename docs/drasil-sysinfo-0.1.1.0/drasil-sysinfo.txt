@@ -19,20 +19,20 @@ data SystemInformation
 -- | for listing <a>QDefinition</a>s in <a>SystemInformation</a>.
 data Block a
 Parallel :: a -> [a] -> Block a
-class HasSystemInformation c_a94G
-systemInformation :: HasSystemInformation c_a94G => Lens' c_a94G SystemInformation
-authors :: HasSystemInformation c_a94G => Lens' c_a94G People
-background :: HasSystemInformation c_a94G => Lens' c_a94G Background
-configFiles :: HasSystemInformation c_a94G => Lens' c_a94G [String]
-constants :: HasSystemInformation c_a94G => Lens' c_a94G [ConstQDef]
-datadefs :: HasSystemInformation c_a94G => Lens' c_a94G [DataDefinition]
-defSequence :: HasSystemInformation c_a94G => Lens' c_a94G [Block SimpleQDef]
-instModels :: HasSystemInformation c_a94G => Lens' c_a94G [InstanceModel]
-motivation :: HasSystemInformation c_a94G => Lens' c_a94G Motivation
-purpose :: HasSystemInformation c_a94G => Lens' c_a94G Purpose
-scope :: HasSystemInformation c_a94G => Lens' c_a94G Scope
-sysinfodb :: HasSystemInformation c_a94G => Lens' c_a94G ChunkDB
-usedinfodb :: HasSystemInformation c_a94G => Lens' c_a94G ChunkDB
+class HasSystemInformation c_a94o
+systemInformation :: HasSystemInformation c_a94o => Lens' c_a94o SystemInformation
+authors :: HasSystemInformation c_a94o => Lens' c_a94o People
+background :: HasSystemInformation c_a94o => Lens' c_a94o Background
+configFiles :: HasSystemInformation c_a94o => Lens' c_a94o [String]
+constants :: HasSystemInformation c_a94o => Lens' c_a94o [ConstQDef]
+datadefs :: HasSystemInformation c_a94o => Lens' c_a94o [DataDefinition]
+defSequence :: HasSystemInformation c_a94o => Lens' c_a94o [Block SimpleQDef]
+instModels :: HasSystemInformation c_a94o => Lens' c_a94o [InstanceModel]
+motivation :: HasSystemInformation c_a94o => Lens' c_a94o Motivation
+purpose :: HasSystemInformation c_a94o => Lens' c_a94o Purpose
+scope :: HasSystemInformation c_a94o => Lens' c_a94o Scope
+sysinfodb :: HasSystemInformation c_a94o => Lens' c_a94o ChunkDB
+usedinfodb :: HasSystemInformation c_a94o => Lens' c_a94o ChunkDB
 
 -- | Database for internal references. Contains citations and referrable
 --   concepts.

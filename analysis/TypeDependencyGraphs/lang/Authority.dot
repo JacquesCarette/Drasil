@@ -1,7 +1,0 @@
-digraph authority{
-Authority	[shape=oval, color=darkviolet, label="Authority"];
-Authority -> Username;
-Authority -> Password;
-Authority -> Host;
-Authority -> Port;
-}

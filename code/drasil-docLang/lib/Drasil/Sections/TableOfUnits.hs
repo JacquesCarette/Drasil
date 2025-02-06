@@ -8,6 +8,7 @@ import Drasil.Sections.ReferenceMaterial(emptySectSentPlu)
 import Data.Drasil.Concepts.Documentation (symbol_, description, tOfUnit)
 import Drasil.DocumentLanguage.Core (TUIntro(..), RefTab(..))
 import Data.Drasil.Concepts.Math (unit_)
+import Utils.Drasil (mkTable)
 
 -- | Creates the Table of Units with an "SI Name" column.
 tOfUnitSIName :: IsUnit s => [s] -> LabelledContent

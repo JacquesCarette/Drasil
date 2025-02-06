@@ -19,7 +19,7 @@ This subsection provides a list of terms that are used in the subsequent section
    - Short duration load - Any load lasting 3 seconds or less.
    - Specified design load - The magnitude in Pa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority.
    - Long duration load - Any load lasting approximately 30 days.
-9. Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates (\\({\mathit{SD}\_{\text{x}}}\\), \\({\mathit{SD}\_{\text{y}}}\\), \\({\mathit{SD}\_{\text{z}}}\\)).
+9. Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge.
 10. Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thicknesses and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.
 11. Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.
 12. Aspect ratio (AR) - The ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5.

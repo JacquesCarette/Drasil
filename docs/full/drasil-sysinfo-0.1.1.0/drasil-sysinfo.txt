@@ -50,20 +50,20 @@ data SystemInformation
 data Block a
 Coupled :: a -> a -> [a] -> Block a
 Parallel :: a -> [a] -> Block a
-class HasSystemInformation c_a90t
-systemInformation :: HasSystemInformation c_a90t => Lens' c_a90t SystemInformation
-authors :: HasSystemInformation c_a90t => Lens' c_a90t People
-background :: HasSystemInformation c_a90t => Lens' c_a90t Background
-configFiles :: HasSystemInformation c_a90t => Lens' c_a90t [String]
-constants :: HasSystemInformation c_a90t => Lens' c_a90t [ConstQDef]
-datadefs :: HasSystemInformation c_a90t => Lens' c_a90t [DataDefinition]
-defSequence :: HasSystemInformation c_a90t => Lens' c_a90t [Block SimpleQDef]
-instModels :: HasSystemInformation c_a90t => Lens' c_a90t [InstanceModel]
-motivation :: HasSystemInformation c_a90t => Lens' c_a90t Motivation
-purpose :: HasSystemInformation c_a90t => Lens' c_a90t Purpose
-scope :: HasSystemInformation c_a90t => Lens' c_a90t Scope
-sysinfodb :: HasSystemInformation c_a90t => Lens' c_a90t ChunkDB
-usedinfodb :: HasSystemInformation c_a90t => Lens' c_a90t ChunkDB
+class HasSystemInformation c_a95f
+systemInformation :: HasSystemInformation c_a95f => Lens' c_a95f SystemInformation
+authors :: HasSystemInformation c_a95f => Lens' c_a95f People
+background :: HasSystemInformation c_a95f => Lens' c_a95f Background
+configFiles :: HasSystemInformation c_a95f => Lens' c_a95f [String]
+constants :: HasSystemInformation c_a95f => Lens' c_a95f [ConstQDef]
+datadefs :: HasSystemInformation c_a95f => Lens' c_a95f [DataDefinition]
+defSequence :: HasSystemInformation c_a95f => Lens' c_a95f [Block SimpleQDef]
+instModels :: HasSystemInformation c_a95f => Lens' c_a95f [InstanceModel]
+motivation :: HasSystemInformation c_a95f => Lens' c_a95f Motivation
+purpose :: HasSystemInformation c_a95f => Lens' c_a95f Purpose
+scope :: HasSystemInformation c_a95f => Lens' c_a95f Scope
+sysinfodb :: HasSystemInformation c_a95f => Lens' c_a95f ChunkDB
+usedinfodb :: HasSystemInformation c_a95f => Lens' c_a95f ChunkDB
 
 -- | Helper for extracting a bibliography from the system information.
 citeDB :: SystemInformation -> BibRef
@@ -115,20 +115,20 @@ data SystemInformation
 -- | for listing <a>QDefinition</a>s in <a>SystemInformation</a>.
 data Block a
 Parallel :: a -> [a] -> Block a
-class HasSystemInformation c_a90t
-systemInformation :: HasSystemInformation c_a90t => Lens' c_a90t SystemInformation
-authors :: HasSystemInformation c_a90t => Lens' c_a90t People
-background :: HasSystemInformation c_a90t => Lens' c_a90t Background
-configFiles :: HasSystemInformation c_a90t => Lens' c_a90t [String]
-constants :: HasSystemInformation c_a90t => Lens' c_a90t [ConstQDef]
-datadefs :: HasSystemInformation c_a90t => Lens' c_a90t [DataDefinition]
-defSequence :: HasSystemInformation c_a90t => Lens' c_a90t [Block SimpleQDef]
-instModels :: HasSystemInformation c_a90t => Lens' c_a90t [InstanceModel]
-motivation :: HasSystemInformation c_a90t => Lens' c_a90t Motivation
-purpose :: HasSystemInformation c_a90t => Lens' c_a90t Purpose
-scope :: HasSystemInformation c_a90t => Lens' c_a90t Scope
-sysinfodb :: HasSystemInformation c_a90t => Lens' c_a90t ChunkDB
-usedinfodb :: HasSystemInformation c_a90t => Lens' c_a90t ChunkDB
+class HasSystemInformation c_a95f
+systemInformation :: HasSystemInformation c_a95f => Lens' c_a95f SystemInformation
+authors :: HasSystemInformation c_a95f => Lens' c_a95f People
+background :: HasSystemInformation c_a95f => Lens' c_a95f Background
+configFiles :: HasSystemInformation c_a95f => Lens' c_a95f [String]
+constants :: HasSystemInformation c_a95f => Lens' c_a95f [ConstQDef]
+datadefs :: HasSystemInformation c_a95f => Lens' c_a95f [DataDefinition]
+defSequence :: HasSystemInformation c_a95f => Lens' c_a95f [Block SimpleQDef]
+instModels :: HasSystemInformation c_a95f => Lens' c_a95f [InstanceModel]
+motivation :: HasSystemInformation c_a95f => Lens' c_a95f Motivation
+purpose :: HasSystemInformation c_a95f => Lens' c_a95f Purpose
+scope :: HasSystemInformation c_a95f => Lens' c_a95f Scope
+sysinfodb :: HasSystemInformation c_a95f => Lens' c_a95f ChunkDB
+usedinfodb :: HasSystemInformation c_a95f => Lens' c_a95f ChunkDB
 
 -- | Database for internal references. Contains citations and referrable
 --   concepts.

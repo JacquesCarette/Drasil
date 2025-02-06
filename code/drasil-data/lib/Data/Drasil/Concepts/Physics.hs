@@ -62,8 +62,9 @@ angular = dcc "angular" (cn' "angular")
   "denoting physical properties or quantities measured with reference to or by means of an angle"
 body = dccWDS "body" (cnIES "body")
   (S "an object with" +:+ phrase QPP.mass)
-chgInVelocity = dccWDS "chgInVelocity" (cn "change in velocity")
-  (S "the" +:+ phraseNP (chgInVelocity `ofA` rigidBody))
+chgInVelocity = dccWDS "chgInVelocity" (cn desc)
+  (S "the " +:+ S desc +:+ phrase rigidBody)
+  where desc = "change in velocity" -- TODO: This is a hack to avoid an infinite loop should we enable strict data.
 chgMomentum = dccWDS "chgMomentum" (cn' "change in momentum")
   (S "The rate of change of a body's" +:+ phrase impulseV)  
 collision = dcc "collision" (cn' "collision")

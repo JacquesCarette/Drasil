@@ -186,7 +186,7 @@ elseif a == 0
 else
     global b = 0
 end
-for i in 0:1:9
+for i in 0:1:8
     println(i)
 end
 while a < 13

@@ -6,6 +6,20 @@ Development of Drasil is ongoing and the framework is still being iterated upon
 to date. In this section we present areas we believe have room for improvement
 along with plans for additional features to be added in the long-term.
 
+\section{Inference}
+
+\ds{something like the following}
+- As mentioned earlier throughout Section~\ref{sec:iterefine}, and explicitly 
+stated in Section~\ref{sec:glassBRSRSRecipe}, there are areas where Drasil can
+stand to be refined further, particularly around inferring necessary chunks as 
+opposed to explicitly defining them in lists. Taking the SRS as an example, we 
+should be able to refine the system to the point where the System Information 
+object can be simplified by inferring necessary chunks from the SRS Recipe 
+definition. The current system is used namely due to the rigidity of Haskell's 
+type system.
+Figure~\ref{fig:codeSpec} - \codeH{constMap} is another example we should be 
+able to infer eventually (hence the ``yet").
+
 \section{Typed Expression Language}
 - Will allow for much more in-depth sanity checking of generated \sfs{}
 
@@ -46,15 +60,19 @@ Journal papers, Jupyter notebooks, lesson plans, etc.
 
 \section{More languages (?)}
 
+\ds{Programming and natural languages.}
+
 \section{More scientific knowledge}
 
-Med, Chem, etc.
+As Drasil sees more use, the knowledge-base will inevitably expand to encompass 
+more knowledge within fields. We would also like to expand it into other 
+scientific fields such as chemistry, medicine, etc.
 
 \section{More computational knowledge}
 
 Higher order ODEs, linear system solvers, external libs, etc.
 
-\ds{More software engineering/process knowledge}
+More knowledge around software engineering and design processes.
 
 \section{Measuring Drasil's Effectiveness}
 

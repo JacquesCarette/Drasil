@@ -103,18 +103,18 @@ term. It is composed of a \codeH{UID}, or unique identifier, and a
 \lstinputlisting[language=Haskell, firstline=33, lastline=43, 
 firstnumber=33]{code/NamedIdea.hs}}{NamedChunk Definition}{fig:namedchunk}
 
-A single node does not a hierarchy make, but now with the root 
-\codeH{NamedChunk} defined, we can begin to progressively extend it to cover 
-any new chunk types we may need for our knowledge capture requirements. For 
-example, if we want to capture a simple term with its definition, we need more 
-than just a \codeH{NamedChunk}. We need to extend \codeH{NamedChunk} to include 
-a definition, and we refer to this particular variant chunk as a 
+A single node does not a hierarchy make, but with the root \codeH{NamedChunk} 
+defined, we can begin to progressively extend it to cover any new chunk types 
+we may need for our knowledge capture requirements. For example, if we want to 
+capture a simple term with its definition, we need more than just a 
+\codeH{NamedChunk}. We need to extend \codeH{NamedChunk} to include a 
+definition, and we refer to this particular variant chunk as a 
 \codeH{ConceptChunk}. For ease of creation, we define a number of semantic, 
 so-called \emph{smart constructors} for each chunk type which allow us to more 
 simply define our chunks and their intermediary datatypes (ie: \codeH{UID} and 
 \codeH{NP} from the \codeH{NamedChunk} example). An example of such smart 
-constructors being used to create some simple \codeH{ConceptChunk} instances 
-can be seen in Figure~\ref{fig:conceptchunk}. Note there are smart constructors 
+constructors being used to create simple instances of \codeH{ConceptChunk} can 
+be seen in Figure~\ref{fig:conceptchunk}. Note there are smart constructors 
 for each datatype when multiple variants exist and could be used in a given 
 place. Looking at the \codeH{ConceptChunk} example, we can see two different 
 smart constructors (\codeH{cnIES} and \codeH{cn'}) being used to create the 
@@ -208,11 +208,6 @@ firstnumber=91]{code/Physics.hs}
 numbers=none]{code/PhysicsQuantities.hs}
 }{The force and acceleration \codeH{UnitalChunk}s}{fig:forceUC}
 
-\fig{
-\lstinputlisting[language=Haskell, linerange={21-30}, 
-firstnumber=21]{code/SI_Units.hs}
-}{The fundamental SI Units as Captured in Drasil}{fig:Data.Drasil.SI}
-
 We start by building a \codeH{ConceptChunk} for the Force concept as seen in 
 Figure~\ref{fig:forceCC}. It is built from a common noun (``force") and a 
 definition. Next we need to capture the units of measurement to the force 
@@ -235,6 +230,11 @@ Returning to the force \codeH{UnitalChunk}, the smart constructor \codeH{uc} we
 are using will assume we are working in the real number space. There are 
 other smart constructors for other spaces, which are also captured using other 
 chunks elsewhere in Drasil (see: \codeH{Language.Drasil.Space}).
+
+\fig{
+\lstinputlisting[language=Haskell, linerange={21-30}, 
+firstnumber=21]{code/SI_Units.hs}
+}{The fundamental SI Units as Captured in Drasil}{fig:Data.Drasil.SI}
 
 \fig{
 \lstinputlisting[language=Haskell, linerange={11-20}, 
@@ -291,7 +291,7 @@ Figure~\ref{fig:mulRe}. \codeH{AssocA} refers to an associative arithmetic
 operator which can be applied across a list of expressions (in this case, 
 \codeH{mulRe}, though addition and other associative operations look very 
 similar). Derivation is much simpler to encode, as it is simply a relationship 
-between two existing chunks, ie. \codeH{deriv a b} implies taking the 
+between two existing chunks, ie. \codeH{deriv a b} represents taking the 
 derivative of \codeH{a} with respect to \codeH{b}.
 
 \fig{
@@ -395,6 +395,12 @@ the encoded property relationships}{fig:chunkClasses}
 }{A subset of Drasil's chunks showing how different chunks may belong to 
 multiple classifications}{fig:chunksClassified}
 
+\ds{I need something at the end here to finish up the section (for flow), but 
+something like ``With the ability to create unique chunks based on the 
+properties tied to the given underlying knowledge being encoding we are finally 
+ready to take things a step further and figure out how to use them." seems 
+redundant as I start the next section with basically the same line}
+
 
 \section{Recipes: Codifying Structure}
 \label{sec:recipes}
@@ -409,11 +415,15 @@ target audience of that particular \sf{}. This is where our \emph{Recipe} DSL
 comes into play.
 
 A recipe is, in it's simplest form, a specification for one or more \sfs{}. 
-It not only allows us to structure where knowledge should be presented, but 
-also gives us tools for automatically generating non-trivial sections of our 
-\sfs{}. For example, a traceability matrix can be automatically generated 
-by traversing the relationship tree between chunks within a recipe, although 
-we'll discuss that in more depth in Section~\ref{sec:gen}.
+It is an intermediate representation of a given \sf{} and can be thought of as 
+a ``little program". With it, we select which knowledge is relevant and how it 
+should be organized before passing the recipe to the generator/rendering engine 
+to be consumed and produce the final \sf{}. A recipe not only allows us to 
+structure where knowledge should be presented, but also gives us tools for 
+automatically generating non-trivial sections of our \sfs{}. For example, a 
+traceability matrix can be automatically generated by traversing the tree of 
+relationships between chunks within a recipe, although we'll discuss that in 
+more depth in Section~\ref{sec:gen}.
 
 As we saw in Section~\ref{sec:patterns}, there are patterns of repetition for 
 the way knowledge is projected and organized within and between our \sfs{}. The 
@@ -423,13 +433,13 @@ mechanisms to reduce unnecessary repetition and duplication. We consider the
 relevant to the audience of the specific \sf{} our recipe applies to. For 
 example, a human readable document may use symbolic mathematics notation for 
 representing formulae whereas the source code would represent the same formulae 
-using syntax specific to the programming language in use (or in the case of 
-punch cards, punched cards). Regardless, we would define the underlying 
-knowledge once in our chunks, and use the recipe DSL to select the 
-representation.
+using syntax specific to the programming language in use (or, taking an extreme 
+example in the case of punch cards, punched cards). Regardless, we would define 
+the underlying knowledge once in our chunks, and use the recipe DSL to select 
+the representation.
 
 \ds{A little repetitive above, but wanted to really hammer in what recipes are 
-for}.
+for.}
 
 As our case studies are following templates for our \sfs{}, they give us a 
 solid foundation with which to write our recipes. We already know how the 
@@ -468,9 +478,10 @@ firstnumber=88]{code/DocDecl.hs}
 As the given recipe so far has provided nothing but structure, you may be 
 wondering how we populate it with the appropriate knowledge chunks to produce a 
 \sf{}? For that, we should look at a specific example from one of our case 
-studies (GlassBR).
+studies (\gb{}).
 
-\subsection{Example: SRS recipe for GlassBR}
+\subsection{Example: SRS recipe for \gb{}}
+\label{sec:glassBRSRSRecipe}
 
 \fig{
 \lstinputlisting[language=Haskell, linerange={54-55}, 
@@ -478,66 +489,194 @@ firstnumber=54]{code/Body.hs}
 \vdots{}
 \lstinputlisting[language=Haskell, linerange={85-126}, 
 firstnumber=85]{code/Body.hs}
-}{SRS Recipe for GlassBR}{fig:glassBRSRSRecipe}
+}{SRS Recipe for \gb{}}{fig:glassBRSRSRecipe}
 
-The recipe for the GlassBR SRS can be seen in Figure~\ref{fig:glassBRSRSRecipe}.
-This should looks familiar, as it follows a similar structure to the \smithea{} 
+The recipe for the \gb{} SRS can be seen in Figure~\ref{fig:glassBRSRSRecipe}.
+This should look familiar, as it follows a similar structure to the \smithea{} 
 template table of contents. We use a number of helper functions and data types 
 to condense and collect the chunks we require and avoid writing any generic 
 boilerplate text. The structure of the document can be rearranged to an extent, 
 in that we can add, remove, or reorder sections at will by simply moving them 
-around within the \codeH{SRSDecl}. As for the chunks necessary for generating 
-the document, each section includes references to them through a supplied list 
-in something we call the \codeH{System Information} object 
-(Figure~\ref{fig:systemInformation}).
+around within the \codeH{SRSDecl}. We can also make choices regarding the 
+display of certain types of information in the final, generated \sf{}. For 
+example, we alluded to vector representations earlier 
+(Section~\ref{sec:chunky}) which we currently can display using either bold
+typeface or italics. This choice must be made using the \codeH{TypogConvention} 
+datatype which lists the choices made (ex. 
+\codeH{TypogConvention[Vector Bold]}) and is used by a relevant portion of the 
+SRS recipe if vectors are included in the \sf{}. Our \gb{} example does not 
+make use of this convention, however the \gp{} case study does.
+
+As for the chunks necessary for generating the \sf{}, each section includes 
+references to them through supplied lists in something we call the 
+\code{C}{System Information} %System is a Haskell kw
+object (Figure~\ref{fig:systemInformation}).
 
 \fig{
-\lstinputlisting[language=Haskell, linerange={63-82}, 
+\lstinputlisting[language=Haskell, linerange={63-81}, 
 firstnumber=63]{code/Body.hs}
-}{System Information for GlassBR}{fig:systemInformation}
+}{System Information for \gb{}}{fig:systemInformation}
 
 The system information object uses helper functions to keep track of the lists 
-of chunks necessary for \ds{TODO - basically the list is obviously referencing 
+of chunks necessary for filling in the sections of our \sf{}, the SRS. Each 
+piece of the object consists of one or more chunks to be used in filling in the 
+relevant sections. A quick description of each property can be found in 
+Table~\ref{tab:siBreakdown}, but it should be noted that some of the defined 
+properties are only there for convenience (and/or remain only until the next 
+refinement pass) as they are derived from other chunks with the use of 
+helper functions and could be inferred.
+
+\begin{table}[]
+\caption{System information object breakdown - every property is represented by 
+chunks encoding given information}
+\label{tab:siBreakdown}
+\begin{tabular}{| P{.2\linewidth} | p{.8\linewidth}|}
+\hline
+ \textbf{Property} & \textbf{Chunk(s) Referenced}
+
+
+\\ \hline
+	\_sys & System name (ex. "\gb{}").
+
+
+\\ \hline
+	\_kind & \SF{} type we are defining (ex. SRS).
+
+
+\\ \hline
+	\_authors & List of authors of the \sf{}.
+
+
+\\ \hline
+	\_purpose & Purpose of the \sf{}.
+
+
+\\ \hline
+	\_quants & List of required quantities.
+
+
+\\ \hline
+	\_concepts & List of required concepts not otherwise encoded.
+
+
+\\ \hline
+	\_instModels & List of required instance models.
+
+
+\\ \hline
+	\_datadefs & List of required data definitions.
+
+
+\\ \hline
+	\_configFiles & List of required configuration files.
+
+
+\\ \hline
+	\_inputs & List of required inputs to the system.
+
+
+\\ \hline
+	\_outputs & List of required outputs from the system.
+
+
+\\ \hline
+	\_constraints & List of constraints for the system (physical and software 
+	specific).
+
+
+\\ \hline
+	\_constants & List of required constants. 
+
+
+\\ \hline
+	\_sysinfodb & Database of all required symbols. \ds{confirm this}
+
+
+\\ \hline
+	\_usedinfodb & Database of all used acronyms and symbols. \ds{confirm this}
+
+
+\\ \hline
+	refdb & Database of all relevant external references/citations.
+
+	
+\\ \hline
+\end{tabular}
+\end{table}
+ 
+As should be obvious, the system information object is referencing other chunks 
+which have been defined elsewhere. Most definitions can be found in the 
+knowledge-base, with system-specific aggregations (i.e. lists of chunks) being 
+defined within the scope of the specific example project. For example, 
+\codeH{iMods} referenced as the \codeH{_instModels} property is defined 
+as shown in Figure~\ref{fig:iMods}, alongside the two system-specific instance 
+models listed within it. The two specific instance models can be seen to be 
+derived from other existing chunks, through the use of a series of helper 
+functions, thus ensuring their traceability to the knowledge-base.
+
+\fig{
+\lstinputlisting[language=Haskell, linerange={18-19}, 
+firstnumber=18]{code/IMods.hs}
+\vdots{}
+\lstinputlisting[language=Haskell, linerange={28-33}, 
+firstnumber=28]{code/IMods.hs}
+\vdots{}
+\lstinputlisting[language=Haskell, linerange={41-46}, 
+firstnumber=41]{code/IMods.hs}
+}{The \codeH{iMods} definition}{fig:iMods}
+
+Given that the system information object refers to all of the requisite chunks 
+for the knowledge contained in our \sfs{} and the SRS recipe defines how that 
+knowledge should be structured and organized within the \sf{}, it follows that 
+those are all we should need to generate our SRS. As an aside, the complete 
+recipe for the SRS specification of \gb{}\footnote{Not including chunks 
+referenced from within our knowledge bases as they can be shared, reused, and 
+are not necessarily specific to only this system.} including the system 
+information object is contained in a single file in less than 370 lines of 
+code\footnote{Including many comments, whitespace, and import statements.}. 
+Teasing our results: the generated SRS in PDF format is 44 pages in length. 
+This is partially due to our ability to strip away all of the common 
+boilerplate text that we need not worry about right now, as that will be a 
+problem for the generator (Section~\ref{sec:gen}). As it stands we have created 
+the recipe language to represent what we truly want out of a recipe: a 
+simplified, unnecessary-duplication-avoiding, fully traceable representation of 
+our target \sf{}.
+
+With the combination of system information and the SRS recipe we can soon move
+on to creating our generator for the finished SRS document. As the other \sf{} 
+recipes were developed in tandem with the SRS, they follow a similar structure 
+and in the interest of brevity we will skip the breakdown of each recipe. It is 
+left to the reader to investigate them by diving into our examples via the 
+Drasil github. However, there is one \sf{} that is significantly different, and 
+as such, we will go into more depth in discussing in the following section: the 
+executable code recipe. Said recipe allows us to not only specify knowledge and 
+the way we wish it structured, but also implementation choices that we would 
+like to make in the final generated source code.
+
+\ds{TODO ? (SEE BELOW COMMENT) - basically the list is obviously referencing 
 other things, which are themselves defined elsewhere, and we can follow that 
 through to figure out wtf is going on. I will pick one (DD) and traverse the SI 
 to show how things (ex. GTF) are defined. It'll be a bunch more code snippets.}
+\ds{Changed my mind on the above, I think the current example is shorter and 
+flows more easily. The chunk definitions aren't relevant to the recipe lang 
+itself or its definition, all that's relevant is that they exist. The generator 
+/ final generation example should follow a single DD throughout as described in 
+the above comment.}
 
-The combination of system information and the SRS recipe is all we need to move 
-on to creating our generator for the finished SRS document. Before we move on 
-to discussing the generator we will need to follow a similar procedure to 
-define the rest of our \sfs{}. As the other \sf{} recipes were developed in 
-tandem with the SRS, they follow a similar structure and in the interest of 
-brevity we will skip the breakdown of each recipe. It is left to the reader to 
-investigate them by diving into our examples via the Drasil github. 
+\subsection{Example: Executable Code recipe for \gb{}}
 
-There is one \sf{} that is significantly different, and as such, we will go 
-into more depth in discussing in the following section. The source code recipe, 
-allows us to not only specify knowledge and the way we wish it structured, but 
-also implementation choices that we would like to make in the final generated 
-source code.
+The recipe for the executable code (\codeH{CodeSpec}) is fairly straightforward 
+for our purposes and can be seen in Figure~\ref{fig:codeSpec}. If you squint, 
+it looks fairly similar to the system information object, albeit with a few 
+distinct differences. There are many references to modules, which we have not 
+yet explicitly discussed. We will look into them in a bit more depth in 
+Section~\ref{sec:gen}, but for now suffice to say they have their own DSL 
+similar to \codeH{Expr} for tying the various requisite chunks together.
 
-\ds{For the glassbr example, make sure to say something like ``The complete 
-recipe for the SRS specification (not including chunks referenced from within 
-our knowledge bases) is contained in a single file in 
-less than 370 lines of code. The generated SRS in PDF format is 44 pages in 
-length." It has stripped away all of the common boilerplate because we don't 
-need to worry about that right now, as that will be a problem for the generator 
-(Section~\ref{sec:gen} and what want out of a recipe is a simplified, 
-duplication-avoiding representation of our target \sf{}.}
-
-\ds{example goes here}
-\ds{Make sure to touch on selected vector representation format as an example 
-choice, seeing as we alluded to it earlier}
-
-\subsection{Example: Source Code recipe for GlassBR}
-
-
-
-
-
-The recipe DSL is an intermediate representation. It selects which 
-knowledge is relevant, and how it should be organized. Recipes are then 
-consumed by the rendering engine to produce our final \sfs{}.
+\fig{
+\lstinputlisting[language=Haskell, linerange={41-72}, 
+firstnumber=41]{code/CodeSpec.hs}
+}{The Recipe Language for Executable Code (CodeSpec)}{fig:codeSpec}
 
 \section{Cooking it all up: Generation/Rendering}
 \label{sec:gen}
@@ -547,6 +686,7 @@ consumed by the rendering engine to produce our final \sfs{}.
 
 
 \section{Iteration and refinement}
+\label{sec:iterefine}
 \ds{TODO: Figure out what belongs here and what belongs in results}
 
   - Practical approach to iron out kinks / find holes in Drasil

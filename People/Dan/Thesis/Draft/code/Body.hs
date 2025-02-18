@@ -73,7 +73,6 @@ si = SI {
   _configFiles = configFp,
   _inputs      = inputs,
   _outputs     = outputs,
-  _defSequence = qDefns,
   _constraints = constrained,
   _constants   = constants,
   _sysinfodb   = symbMap,

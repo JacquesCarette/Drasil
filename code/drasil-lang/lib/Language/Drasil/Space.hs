@@ -44,14 +44,15 @@ data Space =
   | Actor String 
   | Function (NE.NonEmpty Primitive) Primitive
   | Void
+  -- | Clifford algebra objects (Clifs)
   | Clif ClifShape
   deriving (Eq, Show)
 
--- The dimension of a clif
+-- | The dimension of a clif
 data Dimension where
-  -- Fixed dimension
+  -- | Fixed dimension
   Fixed :: Int -> Dimension
-  -- Variable dimension
+  -- | Variable dimension
   VDim  :: String -> Dimension
   deriving (Eq, Show)
 

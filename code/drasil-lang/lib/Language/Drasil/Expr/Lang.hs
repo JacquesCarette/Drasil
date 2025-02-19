@@ -168,7 +168,7 @@ data Basis where
   -- | ℝⁿ
   Rn :: Int -> Basis
 
--- | A clif is a clif, or the addition of clifs, or the scalar multiplication or geomertic product of clifs
+-- | A clif is a clif, or the addition of clifs, or the scalar multiplication or geometic product of clifs
 data Clif where
   -- | A scalar clif
   ScalarC     :: Clif

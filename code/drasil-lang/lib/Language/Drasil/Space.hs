@@ -14,7 +14,8 @@ module Language.Drasil.Space (
   -- * Class
   HasSpace(..),
   -- * Functions
-  getActorName, getInnerSpace, mkFunction, isBasicNumSpace
+  getActorName, getInnerSpace, mkFunction, isBasicNumSpace,
+  Dimension(..)
 ) where
 
 import qualified Data.List.NonEmpty        as NE
@@ -43,6 +44,29 @@ data Space =
   | Actor String 
   | Function (NE.NonEmpty Primitive) Primitive
   | Void
+  | Clif ClifShape
+  deriving (Eq, Show)
+
+-- The dimension of a clif
+data Dimension where
+  -- Fixed dimension
+  Fixed :: Int -> Dimension
+  -- Variable dimension
+  VDim  :: String -> Dimension
+  deriving (Eq, Show)
+
+-- The shape of a clif object
+data ClifShape where
+  -- Scalars
+  ScalarCS    :: ClifShape
+  -- Vectors with a given dimension
+  VectorCS    :: Dimension -> ClifShape
+  -- Bivectors (geometric extent 2) with a given dimension
+  BivectorCS  :: Dimension -> ClifShape
+  -- Trivectors (geometric extent 3) with a given dimension
+  TrivectorCS :: Dimension -> ClifShape
+  -- Clifs (geometric extent n) with a given dimension
+  NGradeCS    :: Int -> Dimension -> ClifShape
   deriving (Eq, Show)
 
 -- | HasSpace is anything which has a 'Space'.

@@ -161,6 +161,29 @@ data Expr where
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
   RealI    :: UID -> RealInterval Expr Expr -> Expr
 
+-- A clif is a clif, or the addition of clifs, or the scalar multiplication or geomertic product of clifs
+data Clif where
+  -- A scalar clif
+  ScalarC     :: Clif
+  -- A vector clif with a given dimension
+  VectorC     :: S.Dimension -> Clif
+  -- A bivector clif with a given dimension
+  BivectorC   :: S.Dimension -> Clif
+  -- A trivector clif with a given dimension
+  TrivectorC  :: S.Dimension -> Clif
+  -- An n-grade clif with a given dimension
+  NGradeC     :: S.Dimension -> Clif
+  -- Addition of two clifs (any grade, same dimension)
+  AdditionC   :: Clif -> Clif -> Clif
+  -- Scalar multiplication of any clif
+  ScalarMultC :: Clif -> Clif -> Clif
+  -- Dot product of two clifs (any grade, same dimension)
+  DotProdC    :: Clif -> Clif -> Clif
+  -- Wedge product of two clifs (any grade, same dimension)
+  WedgeProdC  :: Clif -> Clif -> Clif
+  -- Grade selection of a clif. The grade selection is the part of that clif of the given grade, or zero
+  GradeSelC   :: Int -> Clif -> Clif
+
 -- | Expressions are equal if their constructors and contents are equal.
 instance Eq Expr where
   Lit a               == Lit b               =   a == b

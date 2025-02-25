@@ -22,6 +22,8 @@ import qualified Data.List.NonEmpty        as NE
 
 import           Control.Lens              (Getter)
 import           Language.Drasil.Symbol    (Symbol)
+import           Numeric.Natural           (Natural)
+
 
 -- FIXME: These need to be spaces and not just types.
 
@@ -44,31 +46,18 @@ data Space =
   | Actor String 
   | Function (NE.NonEmpty Primitive) Primitive
   | Void
-  -- | Clifford algebra objects (Clifs)
-  | Clif ClifShape
+  -- | Clifford algebra objects (Clifs) with a grade and a dimension
+  | ClifS Natural Dimension Space
   deriving (Eq, Show)
 
 -- | The dimension of a clif
 data Dimension where
   -- | Fixed dimension
-  Fixed :: Int -> Dimension
+  Fixed :: Natural -> Dimension
   -- | Variable dimension
   VDim  :: String -> Dimension
   deriving (Eq, Show)
 
--- The shape of a clif object
-data ClifShape where
-  -- Scalars
-  ScalarCS    :: ClifShape
-  -- Vectors with a given dimension
-  VectorCS    :: Dimension -> ClifShape
-  -- Bivectors (geometric extent 2) with a given dimension
-  BivectorCS  :: Dimension -> ClifShape
-  -- Trivectors (geometric extent 3) with a given dimension
-  TrivectorCS :: Dimension -> ClifShape
-  -- Clifs (geometric extent n) with a given dimension
-  NGradeCS    :: Int -> Dimension -> ClifShape
-  deriving (Eq, Show)
 
 -- | HasSpace is anything which has a 'Space'.
 class HasSpace c where

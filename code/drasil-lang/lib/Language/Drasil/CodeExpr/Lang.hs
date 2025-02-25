@@ -72,12 +72,12 @@ data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
 data UFuncB = Not
   deriving Eq
 
--- | @Vector -> Vector@ operators.
-data UFuncVV = NegV
+-- | @Clif -> Clif@ operators.
+data UFuncCC = NegC
   deriving Eq
 
--- | @Vector -> Number@ operators.
-data UFuncVN = Norm | Dim
+-- | @Clif -> Number@ operators.
+data UFuncCN = Norm | Dim
   deriving Eq
 
 -- * CodeExpr
@@ -129,9 +129,9 @@ data CodeExpr where
   -- | Unary operation for @Bool -> Bool@ operations.
   UnaryOpB      :: UFuncB -> CodeExpr -> CodeExpr
   -- | Unary operation for @Vector -> Vector@ operations.
-  UnaryOpVV     :: UFuncVV -> CodeExpr -> CodeExpr
+  UnaryOpCC     :: UFuncCC -> CodeExpr -> CodeExpr
   -- | Unary operation for @Vector -> Number@ operations.
-  UnaryOpVN     :: UFuncVN -> CodeExpr -> CodeExpr
+  UnaryOpCN     :: UFuncCN -> CodeExpr -> CodeExpr
 
   -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
   ArithBinaryOp :: ArithBinOp -> CodeExpr -> CodeExpr -> CodeExpr
@@ -143,12 +143,12 @@ data CodeExpr where
   LABinaryOp    :: LABinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Binary operator for ordering expressions (less than, greater than, etc.).
   OrdBinaryOp   :: OrdBinOp -> CodeExpr -> CodeExpr -> CodeExpr
-  -- | Binary operator for @Vector x Vector -> Vector@ operations (cross product).
+  -- | Binary operator for @Clif x Clif -> Clif@ operations (cross product).
   VVVBinaryOp   :: VVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
-  -- | Binary operator for @Vector x Vector -> Number@ operations (dot product).
+  -- | Binary operator for @Clif x Clif -> Number@ operations (dot product).
   VVNBinaryOp   :: VVNBinOp -> CodeExpr -> CodeExpr -> CodeExpr
-  -- | Binary operator for @Number x Vector -> Vector@ operations (scaling).
-  NVVBinaryOp   :: NVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+  -- | Binary operator for @Number x Clif -> Clif@ operations (scaling).
+  NCCBinaryOp   :: NVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Set operator for Set + Set -> Set
   ESSBinaryOp :: ESSBinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Set operator for Element + Set -> Bool

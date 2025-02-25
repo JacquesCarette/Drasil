@@ -74,12 +74,12 @@ data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
 data UFuncB = Not
   deriving Eq
 
--- | @Vector -> Vector@ operators.
-data UFuncVV = NegV
+-- | @Clif -> Clif@ operators.
+data UFuncCC = NegC
   deriving Eq
 
--- | @Vector -> Number@ operators.
-data UFuncVN = Norm | Dim
+-- | @Clif -> Number@ operators.
+data UFuncCN = Norm | Dim
   deriving Eq
 
 -- | Statements involving 2 arguments.
@@ -132,9 +132,9 @@ data ModelExpr where
   -- | Unary operation for @Bool -> Bool@ operations.
   UnaryOpB      :: UFuncB -> ModelExpr -> ModelExpr
   -- | Unary operation for @Vector -> Vector@ operations.
-  UnaryOpVV     :: UFuncVV -> ModelExpr -> ModelExpr
+  UnaryOpCC     :: UFuncCC -> ModelExpr -> ModelExpr
   -- | Unary operation for @Vector -> Number@ operations.
-  UnaryOpVN     :: UFuncVN -> ModelExpr -> ModelExpr
+  UnaryOpCN     :: UFuncCN -> ModelExpr -> ModelExpr
 
   -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
   ArithBinaryOp :: ArithBinOp -> ModelExpr -> ModelExpr -> ModelExpr
@@ -151,11 +151,11 @@ data ModelExpr where
   -- | Statement-related binary operations.
   StatBinaryOp  :: StatBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Binary operator for @Vector x Vector -> Vector@ operations (cross product).
-  VVVBinaryOp   :: VVVBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+  CCCBinaryOp   :: CCCBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Binary operator for @Vector x Vector -> Number@ operations (dot product).
-  VVNBinaryOp   :: VVNBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+  CCNBinaryOp   :: CCNBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Binary operator for @Number x Vector -> Vector@ operations (scaling).
-  NVVBinaryOp   :: NVVBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+  NCCBinaryOp   :: NCCBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Set operator for Element + Set -> Set
   ESSBinaryOp :: ESSBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Set operator for Element + Set -> Bool
@@ -207,8 +207,8 @@ instance Eq ModelExpr where
   Case a b            == Case c d            =   a == c && b == d 
   UnaryOp a b         == UnaryOp c d         =   a == c && b == d
   UnaryOpB a b        == UnaryOpB c d        =   a == c && b == d
-  UnaryOpVV a b       == UnaryOpVV c d       =   a == c && b == d
-  UnaryOpVN a b       == UnaryOpVN c d       =   a == c && b == d
+  UnaryOpCC a b       == UnaryOpCC c d       =   a == c && b == d
+  UnaryOpCN a b       == UnaryOpCN c d       =   a == c && b == d
   ArithBinaryOp o a b == ArithBinaryOp p c d =   o == p && a == c && b == d
   BoolBinaryOp o a b  == BoolBinaryOp p c d  =   o == p && a == c && b == d
   EqBinaryOp o a b    == EqBinaryOp p c d    =   o == p && a == c && b == d

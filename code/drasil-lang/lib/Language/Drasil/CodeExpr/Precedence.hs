@@ -1,6 +1,6 @@
 module Language.Drasil.CodeExpr.Precedence (precA, precB, eprec) where
 
-import Language.Drasil.CodeExpr.Lang (CodeExpr(..), UFuncVV, UFuncVN, UFuncB(..),
+import Language.Drasil.CodeExpr.Lang (CodeExpr(..), UFuncCC, UFuncCN, UFuncB(..),
     UFunc(..), AssocBoolOper(..), AssocArithOper(..), VVNBinOp, NVVBinOp,
     VVVBinOp, OrdBinOp, LABinOp, BoolBinOp, EqBinOp, ArithBinOp(..), AssocConcatOper(..), ESSBinOp, ESBBinOp)
 
@@ -74,12 +74,12 @@ prec1B :: UFuncB -> Int
 prec1B Not = 230
 
 -- | prec1VV - precedence of vector-vector-related unary operators.
-prec1VV :: UFuncVV -> Int
-prec1VV _ = 250
+prec1CC :: UFuncCC -> Int
+prec1CC _ = 250
 
 -- | prec1VN - precedence of vector-number-related unary operators.
-prec1VN :: UFuncVN -> Int
-prec1VN _ = 230
+prec1CN :: UFuncCN -> Int
+prec1CN _ = 230
 
 -- | eprec - "Expression" precedence.
 eprec :: CodeExpr -> Int
@@ -98,17 +98,17 @@ eprec Set{}                  = 220
 eprec (Variable _ _)         = 220
 eprec (UnaryOp fn _)         = prec1 fn
 eprec (UnaryOpB fn _)        = prec1B fn
-eprec (UnaryOpVV fn _)       = prec1VV fn
-eprec (UnaryOpVN fn _)       = prec1VN fn
+eprec (UnaryOpCC fn _)       = prec1CC fn
+eprec (UnaryOpCN fn _)       = prec1CN fn
 eprec (Operator o _ _)       = precA o
 eprec (ArithBinaryOp bo _ _) = prec2Arith bo
 eprec (BoolBinaryOp bo _ _)  = prec2Bool bo
 eprec (EqBinaryOp bo _ _)    = prec2Eq bo
 eprec (LABinaryOp bo _ _)    = prec2LA bo
 eprec (OrdBinaryOp bo _ _)   = prec2Ord bo
-eprec (VVVBinaryOp bo _ _)   = prec2VVV bo
-eprec (VVNBinaryOp bo _ _)   = prec2VVN bo
-eprec (NVVBinaryOp bo _ _)   = prec2NVV bo
+eprec (CCCBinaryOp bo _ _)   = prec2CCC bo
+eprec (CCNBinaryOp bo _ _)   = prec2CCN bo
+eprec (NCCBinaryOp bo _ _)   = prec2NCC bo
 eprec (ESSBinaryOp bo _ _)   = prec2ESS bo
 eprec (ESBBinaryOp bo _ _)   = prec2ESB bo
 eprec RealI{}                = 170

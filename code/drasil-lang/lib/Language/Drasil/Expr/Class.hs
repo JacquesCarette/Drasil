@@ -332,16 +332,16 @@ instance ExprC Expr where
   -- | Smart constructor for the exponential (base e) function.
   exp = UnaryOp Exp
   
-  -- | Smart constructor for calculating the dimension of a vector.
-  dim = UnaryOpVN Dim
+  -- | Smart constructor for calculating the dimension of a clif.
+  dim = UnaryOpCN Dim
   
-  -- | Smart constructor for calculating the normal form of a vector.
-  norm = UnaryOpVN Norm
+  -- | Smart constructor for calculating the normal form of a clif.
+  norm = UnaryOpCN Norm
   
   -- | Smart constructor for negating vectors.
-  negVec = UnaryOpVV NegV
+  negClf = UnaryOpCC NegC
   -- | And more general scaling
-  vScale = NVVBinaryOp Scale
+  cScale = NCCBinaryOp Scale
   
   -- | Smart constructor for applying logical negation to an expression.
   not_ = UnaryOpB Not
@@ -497,16 +497,16 @@ instance ExprC M.ModelExpr where
   -- | Smart constructor for the exponential (base e) function.
   exp = M.UnaryOp M.Exp
 
-  -- | Smart constructor for calculating the dimension of a vector.
-  dim = M.UnaryOpVN M.Dim
+  -- | Smart constructor for calculating the dimension of a clif.
+  dim = M.UnaryOpCN M.Dim
 
-  -- | Smart constructor for calculating the normal form of a vector.
-  norm = M.UnaryOpVN M.Norm
+  -- | Smart constructor for calculating the normal form of a clif.
+  norm = M.UnaryOpCN M.Norm
 
   -- | Smart constructor for negating vectors.
-  negVec = M.UnaryOpVV M.NegV
+  negVec = M.UnaryOpCC M.NegC
   -- | More general scaling
-  vScale = M.NVVBinaryOp M.Scale
+  vScale = M.NCCBinaryOp M.Scale
 
   -- | Smart constructor for applying logical negation to an expression.
   not_ = M.UnaryOpB M.Not
@@ -667,15 +667,15 @@ instance ExprC C.CodeExpr where
   exp = C.UnaryOp C.Exp
   
   -- | Smart constructor for calculating the dimension of a vector.
-  dim = C.UnaryOpVN C.Dim
+  dim = C.UnaryOpCN C.Dim
   
   -- | Smart constructor for calculating the normal form of a vector.
-  norm = C.UnaryOpVN C.Norm
+  norm = C.UnaryOpCN C.Norm
   
   -- | Smart constructor for negating vectors.
-  negVec = C.UnaryOpVV C.NegV
+  negClf = C.UnaryOpCC C.NegC
   -- | And more general scaling
-  vScale = C.NVVBinaryOp C.Scale
+  cScale = C.NCCBinaryOp C.Scale
   
   -- | Smart constructor for applying logical negation to an expression.
   not_ = C.UnaryOpB C.Not

@@ -14,6 +14,7 @@ import           Language.Drasil.UID           (UID)
 import           Language.Drasil.WellTyped
 import Data.Either (lefts, fromLeft)
 import qualified Data.Foldable as NE
+import Numeric.Natural (Natural)
 
 -- * Expression Types
 
@@ -86,12 +87,12 @@ data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
 data UFuncB = Not
   deriving Eq
 
--- | @Vector -> Vector@ operators.
-data UFuncVV = NegV
+-- | @Clif -> Clif@ operators.
+data UFuncCC = NegC
   deriving Eq
 
--- | @Vector -> Number@ operators.
-data UFuncVN = Norm | Dim
+-- | @Clif -> Number@ operators.
+data UFuncCN = Norm | Dim
   deriving Eq
 
 -- | For case expressions (either complete or incomplete).
@@ -129,10 +130,10 @@ data Expr where
   UnaryOp       :: UFunc -> Expr -> Expr
   -- | Unary operation for @Bool -> Bool@ operations.
   UnaryOpB      :: UFuncB -> Expr -> Expr
-  -- | Unary operation for @Vector -> Vector@ operations.
-  UnaryOpVV     :: UFuncVV -> Expr -> Expr
-  -- | Unary operation for @Vector -> Number@ operations.
-  UnaryOpVN     :: UFuncVN -> Expr -> Expr
+  -- | Unary operation for @Clif -> Clif@ operations.
+  UnaryOpCC     :: UFuncCC -> Expr -> Expr
+  -- | Unary operation for @Clif -> Clif@ operations.
+  UnaryOpCN     :: UFuncCN -> Expr -> Expr
 
   -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
   ArithBinaryOp :: ArithBinOp -> Expr -> Expr -> Expr
@@ -145,11 +146,11 @@ data Expr where
   -- | Binary operator for ordering expressions (less than, greater than, etc.).
   OrdBinaryOp   :: OrdBinOp -> Expr -> Expr -> Expr
   -- | Binary operator for @Vector x Vector -> Vector@ operations (cross product).
-  VVVBinaryOp   :: VVVBinOp -> Expr -> Expr -> Expr
+  CCCBinaryOp   :: VVVBinOp -> Expr -> Expr -> Expr
   -- | Binary operator for @Vector x Vector -> Number@ operations (dot product).
-  VVNBinaryOp   :: VVNBinOp -> Expr -> Expr -> Expr
+  CCNBinaryOp   :: VVNBinOp -> Expr -> Expr -> Expr
   -- | Binary operator for @Expr x Vector -> Vector@ operations (scaling).
-  NVVBinaryOp   :: NVVBinOp -> Expr -> Expr -> Expr
+  NCCBinaryOp   :: NVVBinOp -> Expr -> Expr -> Expr
   -- | Set operator for Element + Set -> Set
   ESSBinaryOp :: ESSBinOp -> Expr -> Expr -> Expr
   -- | Set operator for Element + Set -> Bool
@@ -160,38 +161,13 @@ data Expr where
   Operator :: AssocArithOper -> DiscreteDomainDesc Expr Expr -> Expr -> Expr
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
   RealI    :: UID -> RealInterval Expr Expr -> Expr
-  -- | A clif is an expression
-  Clif     :: Clif -> Expr
+  -- | A clif of arbitrary (0 or greater) grade with a given dimension
+  Clif     :: Natural -> S.Dimension -> Expr -> Expr
 
 -- | The basis in which to project clifs
 data Basis where
   -- | ℝⁿ
-  Rn :: Int -> Basis
-
--- | A clif is a clif, or the addition of clifs, or the scalar multiplication or geometic product of clifs
-data Clif where
-  -- | A scalar clif
-  ScalarC     :: Clif
-  -- | A vector clif with a given dimension
-  VectorC     :: S.Dimension -> Clif
-  -- | A bivector clif with a given dimension
-  BivectorC   :: S.Dimension -> Clif
-  -- | A trivector clif with a given dimension
-  TrivectorC  :: S.Dimension -> Clif
-  -- | An n-grade clif with a given dimension
-  NGradeC     :: Int -> S.Dimension -> Clif
-  -- | Addition of two clifs (any grade, same dimension)
-  AdditionC   :: Clif -> Clif -> Clif
-  -- | Scalar multiplication of any clif
-  ScalarMultC :: Clif -> Clif -> Clif
-  -- | Dot product of two clifs (any grade, same dimension)
-  DotProdC    :: Clif -> Clif -> Clif
-  -- | Wedge product of two clifs (any grade, same dimension)
-  WedgeProdC  :: Clif -> Clif -> Clif
-  -- | Grade selection of a clif. The grade selection is the part of that clif of the given grade, or zero
-  GradeSelC   :: Int -> Clif -> Clif
-  -- | A clif projected into a basis
-  InBasis     :: Basis -> Clif -> Clif
+  Rn :: Natural -> Basis
 
 -- | Expressions are equal if their constructors and contents are equal.
 instance Eq Expr where
@@ -203,18 +179,19 @@ instance Eq Expr where
   Case a b            == Case c d            =   a == c && b == d
   UnaryOp a b         == UnaryOp c d         =   a == c && b == d
   UnaryOpB a b        == UnaryOpB c d        =   a == c && b == d
-  UnaryOpVV a b       == UnaryOpVV c d       =   a == c && b == d
-  UnaryOpVN a b       == UnaryOpVN c d       =   a == c && b == d
+  UnaryOpCC a b       == UnaryOpCC c d       =   a == c && b == d
+  UnaryOpCN a b       == UnaryOpCN c d       =   a == c && b == d
   ArithBinaryOp o a b == ArithBinaryOp p c d =   o == p && a == c && b == d
   BoolBinaryOp o a b  == BoolBinaryOp p c d  =   o == p && a == c && b == d
   EqBinaryOp o a b    == EqBinaryOp p c d    =   o == p && a == c && b == d
   OrdBinaryOp o a b   == OrdBinaryOp p c d   =   o == p && a == c && b == d
   LABinaryOp o a b    == LABinaryOp p c d    =   o == p && a == c && b == d
-  VVVBinaryOp o a b   == VVVBinaryOp p c d   =   o == p && a == c && b == d
-  VVNBinaryOp o a b   == VVNBinaryOp p c d   =   o == p && a == c && b == d
-  NVVBinaryOp o a b   == NVVBinaryOp p c d   =   o == p && a == c && b == d
+  CCCBinaryOp o a b   == CCCBinaryOp p c d   =   o == p && a == c && b == d
+  CCNBinaryOp o a b   == CCNBinaryOp p c d   =   o == p && a == c && b == d
+  NCCBinaryOp o a b   == NCCBinaryOp p c d   =   o == p && a == c && b == d
   ESSBinaryOp o a b   == ESSBinaryOp p c d   =   o == p && a == c && b == d
   ESBBinaryOp o a b   == ESBBinaryOp p c d   =   o == p && a == c && b == d
+  Clif m a b           == Clif n c d         =   m == n && a == c && b == d
   _                   == _                   =   False
 -- ^ TODO: This needs to add more equality checks
 
@@ -372,19 +349,19 @@ instance Typed Expr Space where
     Left sp        -> Right $ "¬ on non-boolean operand, " ++ show sp ++ "."
     x              -> x
 
-  infer cxt (UnaryOpVV NegV e) = case infer cxt e of
+  infer cxt (UnaryOpCC NegC e) = case infer cxt e of
     Left (S.Vect sp) -> if S.isBasicNumSpace sp && sp /= S.Natural
       then Left $ S.Vect sp
       else Right $ "Vector negation only applies to, non-natural, numbered vectors. Received `" ++ show sp ++ "`."
     Left sp -> Right $ "Vector negation should only be applied to numeric vectors. Received `" ++ show sp ++ "`."
     x -> x
 
-  infer cxt (UnaryOpVN Norm e) = case infer cxt e of
+  infer cxt (UnaryOpCN Norm e) = case infer cxt e of
     Left (S.Vect S.Real) -> Left S.Real
     Left sp -> Right $ "Vector norm only applies to vectors of real numbers. Received `" ++ show sp ++ "`."
     x -> x
 
-  infer cxt (UnaryOpVN Dim e) = case infer cxt e of
+  infer cxt (UnaryOpCN Dim e) = case infer cxt e of
     Left (S.Vect _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
     Left sp -> Right $ "Vector 'dim' only applies to vectors. Received `" ++ show sp ++ "`."
     x -> x
@@ -445,7 +422,7 @@ instance Typed Expr Space where
     (_, Right re) -> Right re
     (Right le, _) -> Right le
 
-  infer cxt (NVVBinaryOp Scale l r) = case (infer cxt l, infer cxt r) of
+  infer cxt (NCCBinaryOp Scale l r) = case (infer cxt l, infer cxt r) of
     (Left lt, Left (S.Vect rsp)) -> if S.isBasicNumSpace lt && lt == rsp
       then Left rsp
       else if lt /= rsp then
@@ -456,7 +433,7 @@ instance Typed Expr Space where
     (_, Right rx) -> Right rx
     (Right lx, _) -> Right lx
 
-  infer cxt (VVVBinaryOp o l r) = vvvInfer cxt o l r
+  infer cxt (CCCBinaryOp o l r) = vvvInfer cxt o l r
     {- case (infer cxt l, infer cxt r) of
     (Left lTy, Left rTy) -> if lTy == rTy && S.isBasicNumSpace lTy && lTy /= S.Natural
       then Left lTy
@@ -465,7 +442,7 @@ instance Typed Expr Space where
     (Right le, _       ) -> Right le
     -}
 
-  infer cxt (VVNBinaryOp Dot l r) = case (infer cxt l, infer cxt r) of
+  infer cxt (CCNBinaryOp Dot l r) = case (infer cxt l, infer cxt r) of
     (Left lt@(S.Vect lsp), Left rt@(S.Vect rsp)) -> if lsp == rsp && S.isBasicNumSpace lsp
       then Left lsp
       else Right $ "Vector dot product expects same numeric vector types, but found `" ++ show lt ++ "` · `" ++ show rt ++ "`."

@@ -241,15 +241,18 @@ instance LiteralC Expr where
 
 
 -- helper function for typechecking to help reduce duplication
+-- TODO: refactor these if expressions so they're more readable (the else is too far from the if)
 cccInfer :: TypingContext Space -> CCCBinOp -> Expr -> Expr -> Either Space TypeError
 cccInfer ctx op l r = case (infer ctx l, infer ctx r) of
-    (Left lt@(S.Vect lsp), Left (S.Vect rsp)) ->
-      if lsp == rsp && S.isBasicNumSpace lsp then
-        if op == CSub && (lsp == S.Natural || rsp == S.Natural) then
-          Right $ "Vector subtraction expects both operands to be vectors of non-natural numbers. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
-        else Left lt
-      else Right $ "Vector " ++ pretty op ++ " expects both operands to be vectors of non-natural numbers. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
-    (Left lsp, Left rsp) -> Right $ "Vector operation " ++ pretty op ++ " expects vector operands. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
+    (Left lt@(S.ClifS lGr lD lsp), Left (S.ClifS dGr rD rsp)) ->
+      if lD == rD then -- The dimension in which the clif is embedded must match
+        if lsp == rsp && S.isBasicNumSpace lsp then
+          if op == CSub && (lsp == S.Natural || rsp == S.Natural) then
+            Right $ "Clif subtraction expects both operands to be clifs of non-natural numbers. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
+          else Left lt
+        else Right $ "Clif " ++ pretty op ++ " expects both operands to be clifs of non-natural numbers. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
+      else Right $ "Clif " ++ pretty op ++ " expects both Clifs to be of the same dimension. Received `" ++ show lD ++ "` and `" ++ show rD ++ "`."
+    (Left lsp, Left rsp) -> Right $ "Vector operation " ++ pretty op ++ " expects clif operands. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
     (_       , Right re) -> Right re
     (Right le, _       ) -> Right le
 
@@ -350,19 +353,22 @@ instance Typed Expr Space where
     x              -> x
 
   infer cxt (UnaryOpCC NegC e) = case infer cxt e of
-    Left (S.Vect sp) -> if S.isBasicNumSpace sp && sp /= S.Natural
-      then Left $ S.Vect sp
-      else Right $ "Vector negation only applies to, non-natural, numbered vectors. Received `" ++ show sp ++ "`."
-    Left sp -> Right $ "Vector negation should only be applied to numeric vectors. Received `" ++ show sp ++ "`."
+    Left c@(S.ClifS gr dim sp) -> if S.isBasicNumSpace sp && sp /= S.Natural
+      then Left c
+      else Right $ "Clif negation only applies to, non-natural, numbered clifs. Received `" ++ show sp ++ "`."
+    Left sp -> Right $ "Clif negation should only be applied to numeric clifs. Received `" ++ show sp ++ "`."
     x -> x
 
+  -- TODO: support generalized clif norm
   infer cxt (UnaryOpCN Norm e) = case infer cxt e of
-    Left (S.Vect S.Real) -> Left S.Real
+    Left (S.ClifS 1 dim S.Real) -> Left S.Real
+    Left (S.ClifS n dim S.Real) -> Right $ "Norm on non-Vector (grade 1) clifs currently not supported. Received grade " ++ show n ++ " clif."
     Left sp -> Right $ "Vector norm only applies to vectors of real numbers. Received `" ++ show sp ++ "`."
     x -> x
 
   infer cxt (UnaryOpCN Dim e) = case infer cxt e of
-    Left (S.Vect _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
+    Left (S.ClifS 1 _ _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
+    Left (S.ClifS n _ _) -> Right $ "Vector 'dim' only applies to vector (grade 1) clifs. Received grade " ++ show n ++ " clif."
     Left sp -> Right $ "Vector 'dim' only applies to vectors. Received `" ++ show sp ++ "`."
     x -> x
 
@@ -402,9 +408,11 @@ instance Typed Expr Space where
     (Right le, _) -> Right le
 
   infer cxt (LABinaryOp Index l n) = case (infer cxt l, infer cxt n) of
-    (Left (S.Vect lt), Left nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
+    (Left (S.ClifS 1 d lt), Left nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
       then Left lt
       else Right $ "List accessor not of type Integer nor Natural, but of type `" ++ show nt ++ "`"
+    (Left (S.ClifS n d lt), Left nt) ->
+      Right $ "List accessor not implemented for non-vector (grade 1) clifs. Received grade " ++ show n ++ " clif."
     (Left lt         , Left _)  -> Right $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
     (_               , Right e) -> Right e
     (Right e         , _      ) -> Right e
@@ -423,7 +431,7 @@ instance Typed Expr Space where
     (Right le, _) -> Right le
 
   infer cxt (NCCBinaryOp Scale l r) = case (infer cxt l, infer cxt r) of
-    (Left lt, Left (S.Vect rsp)) -> if S.isBasicNumSpace lt && lt == rsp
+    (Left lt, Left (S.ClifS gr d rsp)) -> if S.isBasicNumSpace lt && lt == rsp
       then Left rsp
       else if lt /= rsp then
         Right $ "Vector scaling expects a scaling by the same kind as the vector's but found scaling by`" ++ show lt ++ "` over vectors of type `" ++ show rsp ++ "`."
@@ -443,9 +451,12 @@ instance Typed Expr Space where
     -}
 
   infer cxt (CCNBinaryOp Dot l r) = case (infer cxt l, infer cxt r) of
-    (Left lt@(S.Vect lsp), Left rt@(S.Vect rsp)) -> if lsp == rsp && S.isBasicNumSpace lsp
-      then Left lsp
-      else Right $ "Vector dot product expects same numeric vector types, but found `" ++ show lt ++ "` · `" ++ show rt ++ "`."
+    (Left lt@(S.ClifS lGr lD lsp), Left rt@(S.ClifS rGr rD rsp)) -> 
+      if lD == rD then
+        if lsp == rsp && S.isBasicNumSpace lsp
+        then Left lsp
+        else Right $ "Vector dot product expects same numeric vector types, but found `" ++ show lt ++ "` · `" ++ show rt ++ "`."
+      else Right $ "Clif dot product expects both Clifs to be of the same dimension. Received `" ++ show lD ++ "` and `" ++ show rD ++ "`."
     (Left lsp, Left rsp) -> Right $ "Vector dot product expects vector operands. Received `" ++ show lsp ++ "` · `" ++ show rsp ++ "`."
     (_, Right rx) -> Right rx
     (Right lx, _) -> Right lx

@@ -44,7 +44,8 @@ acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angularFrequency, 
   period, frequency, chgMomentum :: UnitalChunk
 
-acceleration           = uc CP.acceleration           (Concat [vec lA, label "(", lT, label ")"]) (Vect Real) accelU
+-- TODO: what should the type here be?
+acceleration           = uc CP.acceleration           (Concat [vec lA, label "(", lT, label ")"]) undefined   accelU
 angularAccel           = uc CP.angAccel               lAlpha                                      Real        angAccelU
 angularDisplacement    = uc CP.angDisp                lTheta                                      Real        radian
 angularFrequency       = uc CP.angFreq                cOmega                                      Real        second

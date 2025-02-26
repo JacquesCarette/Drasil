@@ -5,7 +5,8 @@ module Language.Drasil.Expr.Class (
   square, half,
   oneHalf, oneThird,
   apply1, apply2,
-  m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet
+  m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet,
+  vScale, vAdd, vSub
 ) where
 
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
@@ -86,6 +87,18 @@ rowVec a = matrix [a]
 -- | Create a column vector
 columnVec :: ExprC r => [r] -> r
 columnVec a = matrix $ toColumn a
+
+-- | Alias for `cScale`
+vScale :: (ExprC r) => r -> r -> r
+vScale = cScale
+
+-- | Alias for `cAdd`
+vAdd :: (ExprC r) => r -> r -> r
+vAdd = cAdd
+
+-- | Alias for `cSub`
+vSub :: (ExprC r) => r -> r -> r
+vSub = cSub
 
 class ExprC r where
   infixr 8 $^
@@ -198,23 +211,11 @@ class ExprC r where
   -- | Smart constructor for clif scaling
   cScale :: r -> r -> r
 
-  -- | Smart constructor for vector scaling
-  vScale :: r -> r -> r
-  vScale = cScale
-
   -- | Smart constructor for clif addition 
   cAdd :: r -> r -> r
 
-  -- | Smart constructor for vector addition
-  vAdd :: r -> r -> r
-  vAdd = cAdd
-
   -- | Smart constructor for clif subtraction
   cSub :: r -> r -> r
-
-  -- | Smart constructor for vector subtraction
-  vSub :: r -> r -> r
-  vSub = cSub
 
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase :: [(r, r)] -> r
@@ -382,9 +383,9 @@ instance ExprC Expr where
   -- | Smart constructor to cross product two expressions.
   cross = CCCBinaryOp Cross
   -- | Adding vectors
-  vAdd  = CCCBinaryOp CAdd
+  cAdd  = CCCBinaryOp CAdd
   -- | Subtracting vectors
-  vSub  = CCCBinaryOp CSub
+  cSub  = CCCBinaryOp CSub
   
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = Case Complete
@@ -550,9 +551,9 @@ instance ExprC M.ModelExpr where
   cross = M.CCCBinaryOp M.Cross
 
   -- | Adding vectors
-  vAdd  = M.CCCBinaryOp M.CAdd
+  cAdd  = M.CCCBinaryOp M.CAdd
   -- | Subtracting vectors
-  vSub  = M.CCCBinaryOp M.CSub
+  cSub  = M.CCCBinaryOp M.CSub
   
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = M.Case Complete
@@ -718,10 +719,10 @@ instance ExprC C.CodeExpr where
   cross = C.CCCBinaryOp C.Cross
   
   -- | Adding vectors
-  vAdd  = C.CCCBinaryOp C.CAdd
+  cAdd  = C.CCCBinaryOp C.CAdd
 
   -- | Subtracting vectors
-  vSub  = C.CCCBinaryOp C.CSub
+  cSub  = C.CCCBinaryOp C.CSub
 
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = C.Case Complete

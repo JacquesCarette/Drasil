@@ -7,7 +7,7 @@ import Language.Drasil hiding (Data, Matrix, CodeVarChunk)
 import Language.Drasil.Code.DataDesc (DataDesc'(..), Data'(..), DataItem'(..),
   Delimiter, dataDesc, junk, list, singleton')
 import Language.Drasil.Chunk.Code (CodeVarChunk)
-import Language.Drasil.Expr.Development (Expr(Matrix))
+import Language.Drasil.Expr.Development (Expr(Matrix, Clif)) -- TODO: remove Matrix entirely
 
 import Control.Lens ((^.))
 import Data.List (intersperse, isPrefixOf, transpose)
@@ -66,7 +66,7 @@ readWithDataDesc fp ddsc = do
 sampleInputDD :: [CodeVarChunk] -> DataDesc'
 sampleInputDD ds = dataDesc (junk : intersperse junk (map toData ds)) "\n"
   where toData d = toData' (d ^. typ) d
-        toData' t@(Vect _) d = list d
+        toData' t@(ClifS _ _ _) d = list d
           (take (getDimension t) ([", ", "; "] ++ iterate (':':) ":"))
         toData' _ d = singleton' d
 
@@ -83,7 +83,7 @@ strAsExpr _        _ = error "strAsExpr should only be numeric space or string"
 
 -- | Gets the dimension of a 'Space'.
 getDimension :: Space -> Int
-getDimension (Vect t) = 1 + getDimension t
+getDimension (ClifS _ _ s) = 1 + getDimension s -- TODO: Does this make sense? Maybe we're overloading the term "dimension" now.
 getDimension _ = 0
 
 -- | Splits a string at the first (and only the first) occurrence of a delimiter.
@@ -98,12 +98,12 @@ splitAtFirst = splitAtFirst' []
         dropDelim [] s = s
         dropDelim _ [] = error "impossible"
 
--- | Converts a list of 'String's to a Matrix 'Expr' of a given 'Space'.
+-- | Converts a list of 'String's to a Clif 'Expr' of a given 'Space'.
 strListAsExpr :: Space -> [String] -> Expr
-strListAsExpr (Vect t) ss = Matrix [map (strAsExpr t) ss]
+strListAsExpr (ClifS gr d s) ss = undefined -- TODO: fill this in
 strListAsExpr _ _ = error "strListsAsExpr called on non-vector space"
 
--- | Converts a 2D list of 'String's to a Matrix 'Expr' of a given 'Space'.
+-- | Converts a 2D list of 'String's to a Clif 'Expr' of a given 'Space'.
 strList2DAsExpr :: Space -> [[String]] -> Expr
-strList2DAsExpr (Vect (Vect t)) sss = Matrix $ map (map (strAsExpr t)) sss
+strList2DAsExpr (ClifS gr0 d0 (ClifS gr1 d1 s)) sss = undefined -- TODO: fill this in
 strList2DAsExpr _ _ = error "strLists2DAsExprs called on non-2D-vector space"

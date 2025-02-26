@@ -93,16 +93,16 @@ ordBinOp LD.Gt  = Gt
 ordBinOp LD.LEq = LEq
 ordBinOp LD.GEq = GEq
 
-vvvBinOp :: LD.VVVBinOp -> VVVBinOp
-vvvBinOp LD.Cross = Cross
-vvvBinOp LD.VAdd = VAdd
-vvvBinOp LD.VSub = VSub
+cccBinOp :: LD.CCCBinOp -> CCCBinOp
+cccBinOp LD.Cross = Cross
+cccBinOp LD.CAdd = CAdd
+cccBinOp LD.CSub = CSub
 
-vvnBinOp :: LD.VVNBinOp -> VVNBinOp
-vvnBinOp LD.Dot = Dot
+ccnBinOp :: LD.CCNBinOp -> CCNBinOp
+ccnBinOp LD.Dot = Dot
 
-nvvBinOp :: LD.NVVBinOp -> NVVBinOp
-nvvBinOp LD.Scale = Scale
+nccBinOp :: LD.NCCBinOp -> NCCBinOp
+nccBinOp LD.Scale = Scale
 
 essBinOp :: LD.ESSBinOp -> ESSBinOp
 essBinOp LD.SAdd = SAdd

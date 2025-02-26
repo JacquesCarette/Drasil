@@ -70,16 +70,16 @@ ordBinOp E.Gt  = Gt
 ordBinOp E.LEq = LEq
 ordBinOp E.GEq = GEq
 
-vvvBinOp :: E.VVVBinOp -> VVVBinOp
-vvvBinOp E.Cross = Cross
-vvvBinOp E.VAdd = VAdd
-vvvBinOp E.VSub = VSub
+cccBinOp :: E.CCCBinOp -> CCCBinOp
+cccBinOp E.Cross = Cross
+cccBinOp E.CAdd = CAdd
+cccBinOp E.CSub = CSub
 
-vvnBinOp :: E.VVNBinOp -> VVNBinOp
-vvnBinOp E.Dot = Dot
+ccnBinOp :: E.CCNBinOp -> CCNBinOp
+ccnBinOp E.Dot = Dot
 
-nvvBinOp :: E.NVVBinOp -> NVVBinOp
-nvvBinOp E.Scale = Scale
+nccBinOp :: E.NCCBinOp -> NCCBinOp
+nccBinOp E.Scale = Scale
 
 essBinOp :: E.ESSBinOp -> ESSBinOp
 essBinOp E.SAdd = SAdd
@@ -108,9 +108,9 @@ expr (E.BoolBinaryOp b l r)  = BoolBinaryOp (boolBinOp b) (expr l) (expr r)
 expr (E.EqBinaryOp e l r)    = EqBinaryOp (eqBinOp e) (expr l) (expr r)
 expr (E.LABinaryOp la l r)   = LABinaryOp (laBinOp la) (expr l) (expr r)
 expr (E.OrdBinaryOp o l r)   = OrdBinaryOp (ordBinOp o) (expr l) (expr r)
-expr (E.CCCBinaryOp v l r)   = CCCBinaryOp (vvvBinOp v) (expr l) (expr r)
-expr (E.CCNBinaryOp v l r)   = CCNBinaryOp (vvnBinOp v) (expr l) (expr r)
-expr (E.NCCBinaryOp v l r)   = NCCBinaryOp (nvvBinOp v) (expr l) (expr r)
+expr (E.CCCBinaryOp v l r)   = CCCBinaryOp (cccBinOp v) (expr l) (expr r)
+expr (E.CCNBinaryOp v l r)   = CCNBinaryOp (ccnBinOp v) (expr l) (expr r)
+expr (E.NCCBinaryOp v l r)   = NCCBinaryOp (nccBinOp v) (expr l) (expr r)
 expr (E.ESSBinaryOp o l r)   = ESSBinaryOp (essBinOp o) (expr l) (expr r)
 expr (E.ESBBinaryOp o l r)   = ESBBinaryOp (esbBinOp o) (expr l) (expr r)
 expr (E.Operator ao dd e)    = Operator (assocArithOper ao) (domainDesc dd) (expr e)

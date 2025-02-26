@@ -34,16 +34,16 @@ data LABinOp = Index | IndexOf
 data OrdBinOp = Lt | Gt | LEq | GEq
   deriving Eq
 
--- | @Vector x Vector -> Vector@ binary operations (cross product, vector addition, subtraction).
-data VVVBinOp = Cross | VAdd | VSub
+-- | @Clif x Clif -> Clif@ binary operations (cross product, vector addition, subtraction).
+data CCCBinOp = Cross | CAdd | CSub
   deriving Eq
 
 -- | @Vector x Vector -> Number@ binary operations (dot product).
-data VVNBinOp = Dot
+data CCNBinOp = Dot
   deriving Eq
 
 -- | @Number x Vector -> Vector@ binary operations (scaling).
-data NVVBinOp = Scale
+data NCCBinOp = Scale
   deriving Eq
 
 -- | Element + Set -> Set
@@ -216,8 +216,8 @@ instance Eq ModelExpr where
   SpaceBinaryOp o a b == SpaceBinaryOp p c d =   o == p && a == c && b == d
   StatBinaryOp o a b  == StatBinaryOp p c d  =   o == p && a == c && b == d
   LABinaryOp o a b    == LABinaryOp p c d    =   o == p && a == c && b == d
-  VVVBinaryOp o a b   == VVVBinaryOp p c d   =   o == p && a == c && b == d
-  VVNBinaryOp o a b   == VVNBinaryOp p c d   =   o == p && a == c && b == d
+  CCCBinaryOp o a b   == CCCBinaryOp p c d   =   o == p && a == c && b == d
+  CCNBinaryOp o a b   == CCNBinaryOp p c d   =   o == p && a == c && b == d
   ESSBinaryOp o a b   == ESSBinaryOp p c d   =   o == p && a == c && b == d
   ESBBinaryOp o a b   == ESBBinaryOp p c d   =   o == p && a == c && b == d
   _                   == _                   =   False

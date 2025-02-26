@@ -34,15 +34,15 @@ data OrdBinOp = Lt | Gt | LEq | GEq
   deriving Eq
 
 -- | @Vector x Vector -> Vector@ binary operations (cross product, vector addition, vector sub).
-data VVVBinOp = Cross | VAdd | VSub
+data CCCBinOp = Cross | CAdd | CSub
   deriving Eq
 
 -- | @Vector x Vector -> Number@ binary operations (dot product).
-data VVNBinOp = Dot
+data CCNBinOp = Dot
   deriving Eq
 
 -- | @Number x Vector -> Vector@ binary operations (scaling).
-data NVVBinOp = Scale
+data NCCBinOp = Scale
   deriving Eq
 
 -- | Element + Set -> Set
@@ -144,11 +144,11 @@ data CodeExpr where
   -- | Binary operator for ordering expressions (less than, greater than, etc.).
   OrdBinaryOp   :: OrdBinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Binary operator for @Clif x Clif -> Clif@ operations (cross product).
-  VVVBinaryOp   :: VVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+  CCCBinaryOp   :: CCCBinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Binary operator for @Clif x Clif -> Number@ operations (dot product).
-  VVNBinaryOp   :: VVNBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+  CCNBinaryOp   :: CCNBinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Binary operator for @Number x Clif -> Clif@ operations (scaling).
-  NCCBinaryOp   :: NVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+  NCCBinaryOp   :: NCCBinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Set operator for Set + Set -> Set
   ESSBinaryOp :: ESSBinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Set operator for Element + Set -> Bool

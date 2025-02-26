@@ -189,8 +189,8 @@ pOps Dim        = "dim"
 pOps Exp        = "e"
 pOps Neg        = "-"
 pOps Cross      = "&#10799;"
-pOps VAdd       = " + "
-pOps VSub       = " - "
+pOps CAdd       = " + "
+pOps CSub       = " - "
 pOps Dot        = "&sdot;"
 pOps Scale      = "" -- same as Mul
 pOps Eq         = " = " -- with spaces?

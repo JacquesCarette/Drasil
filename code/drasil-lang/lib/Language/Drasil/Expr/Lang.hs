@@ -48,15 +48,15 @@ data OrdBinOp = Lt | Gt | LEq | GEq
   deriving Eq
 
 -- | @Vector x Vector -> Vector@ binary operations (cross product, addition, subtraction).
-data VVVBinOp = Cross | VAdd | VSub
+data CCCBinOp = Cross | CAdd | CSub
   deriving Eq
 
 -- | @Vector x Vector -> Number@ binary operations (dot product).
-data VVNBinOp = Dot
+data CCNBinOp = Dot
   deriving Eq
 
 -- | @Number x Vector -> Vector@ binary operations (scaling).
-data NVVBinOp = Scale
+data NCCBinOp = Scale
   deriving Eq
 
 -- | Element + Set -> Set
@@ -146,11 +146,11 @@ data Expr where
   -- | Binary operator for ordering expressions (less than, greater than, etc.).
   OrdBinaryOp   :: OrdBinOp -> Expr -> Expr -> Expr
   -- | Binary operator for @Vector x Vector -> Vector@ operations (cross product).
-  CCCBinaryOp   :: VVVBinOp -> Expr -> Expr -> Expr
+  CCCBinaryOp   :: CCCBinOp -> Expr -> Expr -> Expr
   -- | Binary operator for @Vector x Vector -> Number@ operations (dot product).
-  CCNBinaryOp   :: VVNBinOp -> Expr -> Expr -> Expr
+  CCNBinaryOp   :: CCNBinOp -> Expr -> Expr -> Expr
   -- | Binary operator for @Expr x Vector -> Vector@ operations (scaling).
-  NCCBinaryOp   :: NVVBinOp -> Expr -> Expr -> Expr
+  NCCBinaryOp   :: NCCBinOp -> Expr -> Expr -> Expr
   -- | Set operator for Element + Set -> Set
   ESSBinaryOp :: ESSBinOp -> Expr -> Expr -> Expr
   -- | Set operator for Element + Set -> Bool
@@ -227,10 +227,10 @@ instance Eq Expr where
 class Pretty p where
   pretty :: p -> String
 
-instance Pretty VVVBinOp where
+instance Pretty CCCBinOp where
   pretty Cross = "cross product"
-  pretty VAdd  = "vector addition"
-  pretty VSub  = "vector subtraction"
+  pretty CAdd  = "clif addition"
+  pretty CSub  = "clif subtraction"
 
 instance LiteralC Expr where
   int = Lit . int
@@ -241,11 +241,11 @@ instance LiteralC Expr where
 
 
 -- helper function for typechecking to help reduce duplication
-vvvInfer :: TypingContext Space -> VVVBinOp -> Expr -> Expr -> Either Space TypeError
-vvvInfer ctx op l r = case (infer ctx l, infer ctx r) of
+cccInfer :: TypingContext Space -> CCCBinOp -> Expr -> Expr -> Either Space TypeError
+cccInfer ctx op l r = case (infer ctx l, infer ctx r) of
     (Left lt@(S.Vect lsp), Left (S.Vect rsp)) ->
       if lsp == rsp && S.isBasicNumSpace lsp then
-        if op == VSub && (lsp == S.Natural || rsp == S.Natural) then
+        if op == CSub && (lsp == S.Natural || rsp == S.Natural) then
           Right $ "Vector subtraction expects both operands to be vectors of non-natural numbers. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
         else Left lt
       else Right $ "Vector " ++ pretty op ++ " expects both operands to be vectors of non-natural numbers. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
@@ -433,7 +433,7 @@ instance Typed Expr Space where
     (_, Right rx) -> Right rx
     (Right lx, _) -> Right lx
 
-  infer cxt (CCCBinaryOp o l r) = vvvInfer cxt o l r
+  infer cxt (CCCBinaryOp o l r) = cccInfer cxt o l r
     {- case (infer cxt l, infer cxt r) of
     (Left lTy, Left rTy) -> if lTy == rTy && S.isBasicNumSpace lTy && lTy /= S.Natural
       then Left lTy

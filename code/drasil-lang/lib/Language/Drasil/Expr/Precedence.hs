@@ -2,9 +2,9 @@
 module Language.Drasil.Expr.Precedence where
 
 import Language.Drasil.Expr.Lang (Expr(..),
-  ArithBinOp(..), BoolBinOp, EqBinOp(..), LABinOp, OrdBinOp, VVNBinOp,
+  ArithBinOp(..), BoolBinOp, EqBinOp(..), LABinOp, OrdBinOp, CCNBinOp,
   UFunc(..), UFuncB(..), UFuncCC(..), UFuncCN(..),
-  AssocBoolOper(..), AssocArithOper(..), VVVBinOp, NVVBinOp, ESSBinOp, ESBBinOp, AssocConcatOper(..))
+  AssocBoolOper(..), AssocArithOper(..), CCCBinOp, NCCBinOp, ESSBinOp, ESBBinOp, AssocConcatOper(..))
 
 -- These precedences are inspired from Haskell/F# 
 -- as documented at http://kevincantu.org/code/operators.html
@@ -33,16 +33,16 @@ prec2Ord :: OrdBinOp -> Int
 prec2Ord _  = 130
 
 -- | prec2VVV - precedence for Vec->Vec->Vec-related binary operations.
-prec2VVV :: VVVBinOp -> Int
-prec2VVV _ = 190
+prec2CCC :: CCCBinOp -> Int
+prec2CCC _ = 190
 
 -- | prec2VVN - precedence for Vec->Vec->Num-related binary operations.
-prec2VVN :: VVNBinOp -> Int
-prec2VVN _ = 190
+prec2CCN :: CCNBinOp -> Int
+prec2CCN _ = 190
 
 -- | prec2NVV - precedence for Num->Vec->Vec-related binary operations.
-prec2NVV :: NVVBinOp -> Int
-prec2NVV _ = 190
+prec2NCC :: NCCBinOp -> Int
+prec2NCC _ = 190
 
 -- | prec2ESS - precedence for Element->Set->Set-related binary operations.
 prec2ESS :: ESSBinOp -> Int
@@ -106,8 +106,8 @@ eprec (BoolBinaryOp bo _ _)  = prec2Bool bo
 eprec (EqBinaryOp bo _ _)    = prec2Eq bo
 eprec (LABinaryOp bo _ _)    = prec2LA bo
 eprec (OrdBinaryOp bo _ _)   = prec2Ord bo
-eprec (VVVBinaryOp bo _ _)   = prec2CCC bo
-eprec (VVNBinaryOp bo _ _)   = prec2CCN bo
+eprec (CCCBinaryOp bo _ _)   = prec2CCC bo
+eprec (CCNBinaryOp bo _ _)   = prec2CCN bo
 eprec (NCCBinaryOp bo _ _)   = prec2NCC bo
 eprec (ESSBinaryOp bo _ _)   = prec2ESS bo
 eprec (ESBBinaryOp bo _ _)   = prec2ESB bo

@@ -195,14 +195,26 @@ class ExprC r where
   -- | Smart constructor to cross product two expressions.
   cross :: r -> r -> r
   
+  -- | Smart constructor for clif scaling
+  cScale :: r -> r -> r
+
   -- | Smart constructor for vector scaling
   vScale :: r -> r -> r
+  vScale = cScale
 
-  -- | Vector Addition
+  -- | Smart constructor for clif addition 
+  cAdd :: r -> r -> r
+
+  -- | Smart constructor for vector addition
   vAdd :: r -> r -> r
+  vAdd = cAdd
 
-  -- | Vector Subtraction
+  -- | Smart constructor for clif subtraction
+  cSub :: r -> r -> r
+
+  -- | Smart constructor for vector subtraction
   vSub :: r -> r -> r
+  vSub = cSub
 
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase :: [(r, r)] -> r
@@ -242,7 +254,7 @@ instance ExprC Expr where
   ($>=) = OrdBinaryOp GEq
   
   -- | Smart constructor for the dot product of two equations.
-  ($.) = VVNBinaryOp Dot
+  ($.) = CCNBinaryOp Dot
   
   -- | Add two expressions.
   ($+) (Lit (Int 0)) r = r
@@ -339,7 +351,8 @@ instance ExprC Expr where
   norm = UnaryOpCN Norm
   
   -- | Smart constructor for negating vectors.
-  negClf = UnaryOpCC NegC
+  negVec = UnaryOpCC NegC
+  
   -- | And more general scaling
   cScale = NCCBinaryOp Scale
   
@@ -367,11 +380,11 @@ instance ExprC Expr where
   euclidean = sqrt . foldr1 ($+) . map square
   
   -- | Smart constructor to cross product two expressions.
-  cross = VVVBinaryOp Cross
+  cross = CCCBinaryOp Cross
   -- | Adding vectors
-  vAdd  = VVVBinaryOp VAdd
+  vAdd  = CCCBinaryOp CAdd
   -- | Subtracting vectors
-  vSub  = VVVBinaryOp VSub
+  vSub  = CCCBinaryOp CSub
   
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = Case Complete
@@ -408,7 +421,7 @@ instance ExprC M.ModelExpr where
   ($>=) = M.OrdBinaryOp M.GEq
 
   -- | Smart constructor for the dot product of two equations.
-  ($.) = M.VVNBinaryOp M.Dot
+  ($.) = M.CCNBinaryOp M.Dot
 
   -- | Add two expressions.
   ($+) (M.Lit (Int 0)) r = r
@@ -505,8 +518,9 @@ instance ExprC M.ModelExpr where
 
   -- | Smart constructor for negating vectors.
   negVec = M.UnaryOpCC M.NegC
+
   -- | More general scaling
-  vScale = M.NCCBinaryOp M.Scale
+  cScale = M.NCCBinaryOp M.Scale
 
   -- | Smart constructor for applying logical negation to an expression.
   not_ = M.UnaryOpB M.Not
@@ -533,12 +547,12 @@ instance ExprC M.ModelExpr where
   euclidean = sqrt . foldr1 ($+) . map square
 
   -- | Smart constructor to cross product two expressions.
-  cross = M.VVVBinaryOp M.Cross
+  cross = M.CCCBinaryOp M.Cross
 
   -- | Adding vectors
-  vAdd  = M.VVVBinaryOp M.VAdd
+  vAdd  = M.CCCBinaryOp M.CAdd
   -- | Subtracting vectors
-  vSub  = M.VVVBinaryOp M.VSub
+  vSub  = M.CCCBinaryOp M.CSub
   
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = M.Case Complete
@@ -576,7 +590,7 @@ instance ExprC C.CodeExpr where
   ($>=) = C.OrdBinaryOp C.GEq
   
   -- | Smart constructor for the dot product of two equations.
-  ($.) = C.VVNBinaryOp C.Dot
+  ($.) = C.CCNBinaryOp C.Dot
   
   -- | Add two expressions.
   ($+) (C.Lit (Int 0)) r = r
@@ -673,7 +687,8 @@ instance ExprC C.CodeExpr where
   norm = C.UnaryOpCN C.Norm
   
   -- | Smart constructor for negating vectors.
-  negClf = C.UnaryOpCC C.NegC
+  negVec = C.UnaryOpCC C.NegC
+
   -- | And more general scaling
   cScale = C.NCCBinaryOp C.Scale
   
@@ -700,12 +715,13 @@ instance ExprC C.CodeExpr where
   euclidean = sqrt . foldr1 ($+) . map square
   
   -- | Smart constructor to cross product two expressions.
-  cross = C.VVVBinaryOp C.Cross
+  cross = C.CCCBinaryOp C.Cross
   
   -- | Adding vectors
-  vAdd  = C.VVVBinaryOp C.VAdd
+  vAdd  = C.CCCBinaryOp C.CAdd
+
   -- | Subtracting vectors
-  vSub  = C.VVVBinaryOp C.VSub
+  vSub  = C.CCCBinaryOp C.CSub
 
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = C.Case Complete

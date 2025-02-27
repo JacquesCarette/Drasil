@@ -90,7 +90,6 @@ si = SI {
   _configFiles = [],
   _inputs      = inputs,
   _outputs     = map qw outputs,
-  _defSequence = [] :: [Block SimpleQDef],
   _constraints = constrained,
   _constants   = specParamValList,
   _sysinfodb   = symbMap,

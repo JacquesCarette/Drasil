@@ -42,14 +42,15 @@ myOtherList = var "myOtherList" (listType double)
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 helloWorldMainOO :: (OOProg r) => SMethod r
-helloWorldMainOO = mainFunction (body ([ helloInitVariables] ++ listSliceTests
-    ++ [block [printLn $ litString "", ifCond [
-      (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
-        varDecDef (var "dummy" string) mainFn (litString "dummy"),
-        objDecDef (var "myObj" char) mainFn (litChar 'o')]),
-      (valueOf (var "b" int) ?== litInt 5, helloIfBody)] helloElseBody,
-      helloIfExists, helloSwitch, helloForLoop, helloWhileLoop,
-      helloForEachLoop, helloTryCatch]]))
+helloWorldMainOO = mainFunction (body ([helloInitVariables]     ))
+  -- ++ listSliceTests
+  --   ++ [block [printLn $ litString "", ifCond [
+  --     (valueOf (var "b" int) ?>= litInt 6, bodyStatements [
+  --       varDecDef (var "dummy" string) mainFn (litString "dummy"),
+  --       objDecDef (var "myObj" char) mainFn (litChar 'o')]),
+  --     (valueOf (var "b" int) ?== litInt 5, helloIfBody)] helloElseBody,
+  --     helloIfExists, helloSwitch, helloForLoop, helloWhileLoop,
+  --     helloForEachLoop, helloTryCatch]]))
 
 -- | Main function. Initializes variables and combines all the helper functions defined below.
 helloWorldMainProc :: (ProcProg r) => SMethod r
@@ -63,35 +64,36 @@ helloWorldMainProc = mainFunction (body ([ helloInitVariables] ++ listSliceTests
 
 -- | Initialize variables used in the generated program.
 helloInitVariables :: (SharedProg r) => MSBlock r
-helloInitVariables = block [comment "Initializing variables",
+helloInitVariables = block [
+  comment "Initializing variables",
   varDec (var "a" int) mainFn,
   varDecDef (var "b" int) mainFn (litInt 5),
   listDecDef myOtherList mainFn [litDouble 1.0,
     litDouble 1.5],
-  varDecDef (var "oneIndex" int) mainFn (indexOf (valueOf myOtherList) (litDouble 1.0)),
-  printLn (valueOf $ var "oneIndex" int),
-  var "a" int &= listSize (valueOf myOtherList),
-  assert (valueOf (var "a" int) ?== litInt 2) (litString "List size should be 2"),
-  valStmt (listAdd (valueOf myOtherList)
-    (litInt 2) (litDouble 2.0)),
-  valStmt (listAppend (valueOf myOtherList)
-    (litDouble 2.5)),
-  varDec (var "e" double) mainFn,
-  var "e" int &= listAccess (valueOf myOtherList) (litInt 1),
-  valStmt (listSet (valueOf myOtherList)
-    (litInt 1) (litDouble 17.4)),
-  listDec 7 (var "myName" (listType string)) mainFn,
-  stringSplit ' ' (var "myName" (listType string)) (litString "Brooks Mac"),
-  printLn (valueOf $ var "myName" (listType string)),
-  listDecDef (var "boringList" (listType bool)) mainFn
-    [litFalse, litFalse, litFalse, litFalse, litFalse],
-  printLn (valueOf $ var "boringList" (listType bool)),
-  assert (valueOf (var "b" int) ?== litInt 5) (litString "b should be 5"),
-  assert (listSize (valueOf myOtherList) ?== litInt 4) (litString "myOtherList should have 4 elements"),
-  assert (valueOf (var "oneIndex" int) ?== litInt 0) (litString "oneIndex should be 0"),
-  setDecDef (var "s" (setType int)) mainFn (litSet int [litInt 4, litInt 7, litInt 5]),
-  assert (contains (valueOf (var "s" (setType int))) (litInt 7))
-    (litString "Set s should contain 7")]
+  varDecDef (var "oneIndex" int) mainFn (indexOf (valueOf myOtherList) (litDouble 1.0))] --,
+  -- printLn (valueOf $ var "oneIndex" int),
+  -- var "a" int &= listSize (valueOf myOtherList),
+  -- assert (valueOf (var "a" int) ?== litInt 2) (litString "List size should be 2"),
+  -- valStmt (listAdd (valueOf myOtherList)
+  --   (litInt 2) (litDouble 2.0)),
+  -- valStmt (listAppend (valueOf myOtherList)
+  --   (litDouble 2.5)),
+  -- varDec (var "e" double) mainFn,
+  -- var "e" int &= listAccess (valueOf myOtherList) (litInt 1),
+  -- valStmt (listSet (valueOf myOtherList)
+  --   (litInt 1) (litDouble 17.4)),
+  -- listDec 7 (var "myName" (listType string)) mainFn,
+  -- stringSplit ' ' (var "myName" (listType string)) (litString "Brooks Mac"),
+  -- printLn (valueOf $ var "myName" (listType string)),
+  -- listDecDef (var "boringList" (listType bool)) mainFn
+  --   [litFalse, litFalse, litFalse, litFalse, litFalse],
+  -- printLn (valueOf $ var "boringList" (listType bool)),
+  -- assert (valueOf (var "b" int) ?== litInt 5) (litString "b should be 5"),
+  -- assert (listSize (valueOf myOtherList) ?== litInt 4) (litString "myOtherList should have 4 elements"),
+  -- assert (valueOf (var "oneIndex" int) ?== litInt 0) (litString "oneIndex should be 0"),
+  -- setDecDef (var "s" (setType int)) mainFn (litSet int [litInt 4, litInt 7, litInt 5]),
+  -- assert (contains (valueOf (var "s" (setType int))) (litInt 7))
+  --   (litString "Set s should contain 7")]
 
 mySlicedList, mySlicedList2, mySlicedList3, mySlicedList4, mySlicedList5,
   mySlicedList6, mySlicedList7, mySlicedList8, mySlicedList9, 

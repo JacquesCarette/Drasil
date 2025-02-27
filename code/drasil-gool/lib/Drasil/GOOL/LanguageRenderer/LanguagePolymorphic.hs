@@ -283,13 +283,14 @@ lambda f ps' ex' = do
   valFromData (Just 0) Nothing ft (f ps ex)
 
 objAccess :: (CommonRenderSym r) => SValue r -> VSFunction r -> SValue r
-objAccess = on2StateWrapped (\v f-> mkVal (functionType f) 
-  (R.objAccess (RC.value v) (RC.function f)))
+objAccess = on2StateWrapped $ \v f -> 
+  mkVal (functionType f) $ R.objAccess (RC.value v) (RC.function f)
 
 objMethodCall :: (CommonRenderSym r) => Label -> VSType r -> SValue r -> [SValue r] 
   -> NamedArgs r -> SValue r
-objMethodCall f t ob vs ns = ob >>= (\o -> S.call Nothing 
-  (Just $ RC.value o <> dot) f t vs ns)
+objMethodCall f t ob vs ns = do
+  o <- ob
+  S.call Nothing  (Just $ RC.value o <> dot) f t vs ns
 
 -- Functions --
 

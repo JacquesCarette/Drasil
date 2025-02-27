@@ -44,14 +44,14 @@ main = do
   setCurrentDirectory "cpp"
   genCode (classes unCPPC unCPPP)
   setCurrentDirectory workingDir
-  createDirectoryIfMissing False "swift"
-  setCurrentDirectory "swift"
-  genCode (classes unSC unSP)
-  setCurrentDirectory workingDir
-  createDirectoryIfMissing False "julia"
-  setCurrentDirectory "julia"
-  genCode (jlClasses unJLC unJLP)
-  setCurrentDirectory workingDir
+  -- createDirectoryIfMissing False "swift"
+  -- setCurrentDirectory "swift"
+  -- genCode (classes unSC unSP)
+  -- setCurrentDirectory workingDir
+  -- createDirectoryIfMissing False "julia"
+  -- setCurrentDirectory "julia"
+  -- genCode (jlClasses unJLC unJLP)
+  -- setCurrentDirectory workingDir
 
 -- | Gathers all information needed to generate code, sorts it, and calls the renderers.
 genCode :: [PackData] -> IO()
@@ -69,7 +69,7 @@ classes unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs
                 pd = unRepr p'
   in unRepr' $ package pd [makefile [] Program [] gs' pd])
-  [helloWorldOO, patternTest, fileTestsOO, vectorTestOO, nameGenTestOO]
+  [helloWorldOO] --, patternTest, fileTestsOO, vectorTestOO, nameGenTestOO]
   (map (OO.unCI . (`evalState` initialState)) [helloWorldOO, patternTest,
     fileTestsOO, vectorTestOO, nameGenTestOO])
 

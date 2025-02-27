@@ -7,7 +7,7 @@ import Drasil.DocLang (inReq)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Theory.Drasil (InstanceModel)
 
-import Data.Drasil.Concepts.Documentation (funcReqDom, input_, value)
+import Data.Drasil.Concepts.Documentation (value)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 
 import Drasil.SWHS.DataDefs (waterMass, tankVolume, balanceDecayRate)
@@ -17,7 +17,6 @@ import Drasil.SWHS.Requirements (calcValues, checkWithPhysConsts,
 
 import Drasil.SWHSNoPCM.DataDefs (waterVolume)
 import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr)
-import Drasil.SWHSNoPCM.Unitals (inputs)
 
 --------------------------
 --Section 5 : REQUIREMENTS

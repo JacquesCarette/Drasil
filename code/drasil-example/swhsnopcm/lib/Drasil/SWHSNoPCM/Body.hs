@@ -63,7 +63,7 @@ import Drasil.SWHSNoPCM.Goals (goals)
 import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr, instModIntro)
 import qualified Drasil.SWHSNoPCM.IMods as NoPCM (iMods)
 import Drasil.SWHSNoPCM.ODEs
-import Drasil.SWHSNoPCM.Requirements (funcReqs, inputInitValsTable)
+import Drasil.SWHSNoPCM.Requirements (funcReqs, inReqDesc)
 import Drasil.SWHSNoPCM.References (citations)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
   specParamValList)
@@ -148,7 +148,7 @@ mkSRS = [TableOfContents,
       ]
     ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub' [inputInitValsTable],
+    FReqsSub inReqDesc [],
     NonFReqsSub
   ],
   LCsSec,
@@ -160,9 +160,6 @@ mkSRS = [TableOfContents,
 concIns :: [ConceptInstance]
 concIns = goals ++ funcReqs ++ nfRequirements ++ assumptions ++
  [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH] ++ unlikelyChgs
-
-labCon :: [LabelledContent]
-labCon = [inputInitValsTable]
 
 section :: [Section]
 section = extractSection srs
@@ -217,7 +214,7 @@ symbMap = cdb symbolsAll (nw progName : map nw symbols ++ map nw acronyms ++ map
   ++ map nw physicalcon ++ map nw unitalChuncks ++ map nw [absTol, relTol]
   ++ [nw srsSWHS, nw algorithm, nw inValue, nw htTrans, nw materialProprty, nw phsChgMtrl])
   (map cw symbols ++ srsDomains) units NoPCM.dataDefs NoPCM.iMods genDefs
-  tMods concIns section labCon allRefs
+  tMods concIns section [] allRefs
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -285,8 +282,8 @@ orgDocEnd = foldlSent_ [atStartNP (the inModel),
 ------------------------------
 
 sysCntxtFig :: LabelledContent
-sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
-  [refS sysCntxtFig +: EmptyS, titleize sysCont])
+sysCntxtFig = llcc (makeFigRef "SysCon") 
+  $ fig (titleize sysCont)
   $ resourcePath ++ "SystemContextFigure.png"
 
 ------------------------------------

@@ -54,8 +54,11 @@ sysSetValsFollowingAssumpsDesc = foldlSent [atStartNP (the system), S "shall set
     plural value, S "as described in the table for", namedRef sysSetValsFollowingAssumpsTable (S "Required Assignments")]
 
 sysSetValsFollowingAssumpsTable :: LabelledContent
-sysSetValsFollowingAssumpsTable = mkValsSourceTable (mkQRTupleRef r2AQs r2ARs ++ mkQRTuple r2DDs) "ReqAssignments"
-                                  (S "Required Assignments" `follows` sysSetValsFollowingAssumps)
+sysSetValsFollowingAssumpsTable = 
+  mkValsSourceTable 
+    (mkQRTupleRef r2AQs r2ARs ++ mkQRTuple r2DDs)
+    "ReqAssignments"
+    (S "Required Assignments")
   where
     r2AQs = qw loadSF : map qw (take 4 assumptionConstants)
     r2ARs = assumpGL : replicate 4 assumpSV
@@ -84,7 +87,7 @@ outputValuesDesc = foldlSent [titleize output_, pluralNP (the value), S "from th
 
 outputValuesTable :: LabelledContent
 outputValuesTable = mkValsSourceTable (mkQRTuple iMods ++ mkQRTuple r6DDs) "ReqOutputs"
-                              (S "Required" +:+ titleize' output_ `follows` outputValues)
+                              (S "Required" +:+ titleize' output_)
   where
     r6DDs :: [DataDefinition]
     r6DDs = [glaTyFac, hFromt, aspRat]

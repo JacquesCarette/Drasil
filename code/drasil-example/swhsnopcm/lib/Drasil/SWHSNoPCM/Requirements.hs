@@ -1,9 +1,9 @@
-module Drasil.SWHSNoPCM.Requirements (funcReqs, inputInitValsTable) where
+module Drasil.SWHSNoPCM.Requirements (funcReqs, inReqDesc) where
 
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Drasil.DocLang (mkInputPropsTable)
+import Drasil.DocLang (inReq)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import Theory.Drasil (InstanceModel)
 
@@ -28,31 +28,21 @@ import Drasil.SWHSNoPCM.Unitals (inputs)
 ---------------------------------------
 
 --
-inputInitVals :: ConceptInstance
-inputInitVals = cic "inputInitVals" (foldlSent [
-  titleize input_, S "the following", plural value, S "described in the table for",
-  namedRef inputInitValsTable (S "Required Inputs") `sC` S "which define", inReqDesc])
-  "Input-Initial-Values" funcReqDom
-
---
 findMass :: ConceptInstance
-findMass = findMassConstruct inputInitVals (phrase mass) [eBalanceOnWtr]
+findMass = findMassConstruct (inReq EmptyS) (phrase mass) [eBalanceOnWtr]
             [waterMass, waterVolume, tankVolume]
 
 --
 oIDQVals :: [Sentence]
 oIDQVals = map foldlSent_ [
-  [pluralNP (the value), fromSource inputInitVals],
+  [pluralNP (the value), fromSource (inReq EmptyS)],
   [phraseNP (the mass), fromSource findMass],
   [ch (balanceDecayRate ^. defLhs), fromSource balanceDecayRate]
   ]
 
-inputInitValsTable :: LabelledContent
-inputInitValsTable = mkInputPropsTable inputs inputInitVals
-
 funcReqs :: [ConceptInstance]
-funcReqs = [inputInitVals, findMass, checkWithPhysConsts,
-  oIDQConstruct oIDQVals, calcValues noPCMOutputs, outputValues noPCMOutputs]
+funcReqs = [findMass, checkWithPhysConsts, oIDQConstruct oIDQVals, 
+            calcValues noPCMOutputs, outputValues noPCMOutputs]
 
 noPCMOutputs :: [InstanceModel]
 noPCMOutputs = [eBalanceOnWtr, heatEInWtr]

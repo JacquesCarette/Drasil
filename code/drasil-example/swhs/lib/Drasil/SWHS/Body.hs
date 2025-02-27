@@ -314,8 +314,8 @@ sysCntxtDesc pro = foldlSP [refS sysCntxtFig, S "shows the" +:+.
   S "flow between the", phraseNP (system `andIts` environment)]
 
 sysCntxtFig :: LabelledContent
-sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
-  [refS sysCntxtFig +: EmptyS, titleize sysCont])
+sysCntxtFig = llcc (makeFigRef "SysCon") 
+  $ fig (titleize sysCont)
   $ resourcePath ++ "SystemContextFigure.png"
 
 sysCntxtRespIntro :: CI -> Contents

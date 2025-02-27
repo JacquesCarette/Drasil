@@ -63,4 +63,4 @@ Output-Values: Output \\({T\_{\text{W}}}\\)(\\(t\\)) (from [IM:eBalanceOnWtr](./
 |\\({ρ\_{\text{P}}}\\)                |Density of PCM                                             |\\(\frac{\text{kg}}{\text{m}^{3}}\\)                 |
 |\\({ρ\_{\text{W}}}\\)                |Density of water                                           |\\(\frac{\text{kg}}{\text{m}^{3}}\\)                 |
 
-**<p align="center">Required Inputs following [FR:Input-Values](./SecFRs.md#inputValues)</p>**
+**<p align="center">Required Inputs</p>**

@@ -148,9 +148,6 @@ units = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [ne
 concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs
 
-section :: [Section]
-section = extractSection srs
-
 labCon :: [LabelledContent]
 labCon = [figPhysSyst, figIndexConv, figForceActing] ++ funcReqTables
 
@@ -167,7 +164,7 @@ symbMap = cdb (map (^. output) SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw units)
   (map cw SSP.iMods ++ map cw symbols ++ srsDomains) units SSP.dataDefs SSP.iMods
-  generalDefinitions tMods concIns section labCon allRefs
+  generalDefinitions tMods concIns [] labCon allRefs
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

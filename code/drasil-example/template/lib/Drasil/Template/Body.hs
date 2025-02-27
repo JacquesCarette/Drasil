@@ -114,13 +114,13 @@ symbMap = cdb ([] :: [QuantityDict]) (nw progName : nw inValue : [nw errMsg,
   map nw prodtcon ++ map nw mathcon) srsDomains
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  ([] :: [Section]) ([] :: [LabelledContent]) ([] :: [Reference])
+  ([] :: [LabelledContent]) ([] :: [Reference])
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  ([] :: [Section]) ([] :: [LabelledContent]) ([] :: [Reference])
+  ([] :: [LabelledContent]) ([] :: [Reference])
 
 refDB :: ReferenceDB
 refDB = rdb citations []

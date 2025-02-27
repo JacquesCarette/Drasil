@@ -10,11 +10,11 @@ module Database.Drasil (
   , termResolve, defResolve, symbResolve
   , traceLookup, refbyLookup
   , datadefnLookup, insmodelLookup, gendefLookup, theoryModelLookup
-  , conceptinsLookup, sectionLookup, labelledconLookup, refResolve
+  , conceptinsLookup, labelledconLookup, refResolve
   -- ** Lenses
   , unitTable, traceTable, refbyTable
   , dataDefnTable, insmodelTable, gendefTable, theoryModelTable
-  , conceptinsTable, sectionTable, labelledcontentTable, refTable
+  , conceptinsTable, labelledcontentTable, refTable
   -- ** Debugging Tools
   , dumpChunkDB, DumpedChunkDB
 ) where

@@ -130,11 +130,9 @@ fillSecAndLC dd si = si2
     -- extract sections and labelledcontent
     allSections = concatMap findAllSec $ mkSections si $ mkDocDesc si dd
     allLC = concatMap findAllLC allSections
-    existingSections = map (fst.snd) $ Map.assocs $ chkdb ^. sectionTable
     existingLC = map (fst.snd) $ Map.assocs $ chkdb ^. labelledcontentTable
     -- fill in the appropriate chunkdb fields
-    chkdb2 = set labelledcontentTable (idMap $ nub $ existingLC ++ allLC)
-      $ set sectionTable (idMap $ nub $ existingSections ++ allSections) chkdb
+    chkdb2 = set labelledcontentTable (idMap $ nub $ existingLC ++ allLC) chkdb
     -- return the filled in system information
     si2 = set sysinfodb chkdb2 si
     -- Helper and finder functions
@@ -169,7 +167,6 @@ fillReferences dd si@SI{_sys = sys} = si2
     imods   = map (fst.snd) $ Map.assocs $ chkdb ^. insmodelTable
     tmods   = map (fst.snd) $ Map.assocs $ chkdb ^. theoryModelTable
     concIns = map (fst.snd) $ Map.assocs $ chkdb ^. conceptinsTable
-    secs    = map (fst.snd) $ Map.assocs $ chkdb ^. sectionTable
     lblCon  = map (fst.snd) $ Map.assocs $ chkdb ^. labelledcontentTable
     cites   = citeDB si -- map (fst.snd) $ Map.assocs $ rfdb  ^. citationDB
     conins  = map (fst.snd) $ Map.assocs $ rfdb  ^. conceptDB
@@ -180,7 +177,7 @@ fillReferences dd si@SI{_sys = sys} = si2
       ++ map (ref.makeTabRef'.getTraceConfigUID) (traceMatStandard si) ++ secRefs -- secRefs can be removed once #946 is complete
       ++ traceyGraphGetRefs (programName sys) ++ map ref cites
       ++ map ref conins ++ map ref ddefs ++ map ref gdefs ++ map ref imods
-      ++ map ref tmods ++ map ref concIns ++ map ref secs ++ map ref lblCon
+      ++ map ref tmods ++ map ref concIns ++ map ref lblCon
       ++ refs) chkdb
     -- set new chunk database into system information
     si2 = set sysinfodb chkdb2 si

@@ -2,7 +2,7 @@
 module Language.Drasil.Dump where
 
 import qualified Database.Drasil as DB
-import SysInfo.Drasil (SystemInformation(_sysinfodb))
+import SysInfo.Drasil (SystemInformation, sysinfodb)
 
 import System.Directory
 import System.IO
@@ -36,7 +36,7 @@ dumpEverything si pinfo p = do
 dumpEverything0 :: SystemInformation -> PrintingInformation -> Path -> IO ()
 dumpEverything0 si pinfo targetPath = do
   createDirectoryIfMissing True targetPath
-  let chunkDb = _sysinfodb si
+  let chunkDb = si ^. sysinfodb
       chunkDump = DB.dumpChunkDB chunkDb
       invertedChunkDump = invert chunkDump
       sharedUIDs = SM.filter atLeast2 invertedChunkDump

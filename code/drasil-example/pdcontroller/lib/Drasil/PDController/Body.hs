@@ -151,7 +151,6 @@ symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf
   genDefns
   theoreticalModels
   conceptInstances
-  ([] :: [Section])
   ([] :: [LabelledContent])
   allRefs
 
@@ -168,7 +167,6 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbolsAll)
   ([] :: [GenDefn])
   ([] :: [TheoryModel])
   ([] :: [ConceptInstance])
-  ([] :: [Section])
   ([] :: [LabelledContent])
   ([] :: [Reference])
 

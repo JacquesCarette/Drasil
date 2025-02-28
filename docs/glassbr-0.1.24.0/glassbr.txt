@@ -155,7 +155,6 @@ constantK :: ConstQDef
 constantModElas :: ConstQDef
 constantLoadDur :: ConstQDef
 constantLoadSF :: ConstQDef
-sdVectorSent :: Sentence
 sdVector :: [UnitaryChunk]
 termsWithDefsOnly :: [ConceptChunk]
 termsWithAccDefn :: [ConceptChunk]

@@ -1109,13 +1109,10 @@ fullTables :: (Quantity i, MayHaveUnit i) => [i] -> [LabelledContent] -> [Labell
 -- | Creates a <a>ConceptInstance</a> of input values.
 inReq :: Sentence -> ConceptInstance
 
--- | Creates a generalized input-value table for the Requirements section.
-inTable :: (Quantity i, MayHaveUnit i) => [i] -> LabelledContent
-
 -- | Creates an Input Data Table for use in the Functional Requirments
 --   section. Takes a list of wrapped variables and something that is
 --   <a>Referable</a>.
-mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> r -> LabelledContent
+mkInputPropsTable :: (Quantity i, MayHaveUnit i) => [i] -> LabelledContent
 mkQRTuple :: (HasOutput i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
 mkQRTupleRef :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> [r] -> [(QuantityDict, Sentence)]
 
@@ -2245,13 +2242,10 @@ tunitNone :: [TUIntro] -> RefTab
 -- | Creates a <a>ConceptInstance</a> of input values.
 inReq :: Sentence -> ConceptInstance
 
--- | Creates a generalized input-value table for the Requirements section.
-inTable :: (Quantity i, MayHaveUnit i) => [i] -> LabelledContent
-
 -- | Creates an Input Data Table for use in the Functional Requirments
 --   section. Takes a list of wrapped variables and something that is
 --   <a>Referable</a>.
-mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> r -> LabelledContent
+mkInputPropsTable :: (Quantity i, MayHaveUnit i) => [i] -> LabelledContent
 mkQRTuple :: (HasOutput i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
 mkQRTupleRef :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> [r] -> [(QuantityDict, Sentence)]
 

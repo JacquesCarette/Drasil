@@ -65,16 +65,16 @@ noPCMODEInfo :: ODEInfo
 module Drasil.SWHSNoPCM.References
 citations :: BibRef
 
+module Drasil.SWHSNoPCM.Requirements
+funcReqs :: [ConceptInstance]
+inReqDesc :: Sentence
+
 module Drasil.SWHSNoPCM.Unitals
 inputs :: [QuantityDict]
 unconstrained :: [UncertainChunk]
 constrained :: [UncertQ]
 tempInit :: UncertQ
 specParamValList :: [ConstQDef]
-
-module Drasil.SWHSNoPCM.Requirements
-funcReqs :: [ConceptInstance]
-inputInitValsTable :: LabelledContent
 
 module Drasil.SWHSNoPCM.Body
 si :: SystemInformation

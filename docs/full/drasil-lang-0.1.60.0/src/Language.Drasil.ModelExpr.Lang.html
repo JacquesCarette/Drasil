@@ -15,7 +15,7 @@
 </span><span id="line-15"></span><span>
 </span><span id="line-16"></span><span class="annot"><span class="hs-comment">-- | Arithmetic operators (fractional, power, and subtraction).</span></span><span>
 </span><span id="line-17"></span><span class="hs-keyword">data</span><span> </span><span id="ArithBinOp"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ArithBinOp"><span class="hs-identifier hs-var">ArithBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Frac"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Frac"><span class="hs-identifier hs-var">Frac</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Pow"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Pow"><span class="hs-identifier hs-var">Pow</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Subt"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Subt"><span class="hs-identifier hs-var">Subt</span></a></span></span><span>
-</span><span id="line-18"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679393154"><span id="local-6989586621679393156"><span class="annot"><span class="annottext">ArithBinOp -&gt; ArithBinOp -&gt; Bool
+</span><span id="line-18"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679418082"><span id="local-6989586621679418084"><span class="annot"><span class="annottext">ArithBinOp -&gt; ArithBinOp -&gt; Bool
 (ArithBinOp -&gt; ArithBinOp -&gt; Bool)
 -&gt; (ArithBinOp -&gt; ArithBinOp -&gt; Bool) -&gt; Eq ArithBinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -27,7 +27,7 @@ $c/= :: ArithBinOp -&gt; ArithBinOp -&gt; Bool
 </span><span id="line-19"></span><span>
 </span><span id="line-20"></span><span class="annot"><span class="hs-comment">-- | Equality operators (equal or not equal).</span></span><span>
 </span><span id="line-21"></span><span class="hs-keyword">data</span><span> </span><span id="EqBinOp"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#EqBinOp"><span class="hs-identifier hs-var">EqBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Eq"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Eq"><span class="hs-identifier hs-var">Eq</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="NEq"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#NEq"><span class="hs-identifier hs-var">NEq</span></a></span></span><span>
-</span><span id="line-22"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679393163"><span id="local-6989586621679393165"><span class="annot"><span class="annottext">EqBinOp -&gt; EqBinOp -&gt; Bool
+</span><span id="line-22"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679418091"><span id="local-6989586621679418093"><span class="annot"><span class="annottext">EqBinOp -&gt; EqBinOp -&gt; Bool
 (EqBinOp -&gt; EqBinOp -&gt; Bool)
 -&gt; (EqBinOp -&gt; EqBinOp -&gt; Bool) -&gt; Eq EqBinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -40,7 +40,7 @@ $c/= :: EqBinOp -&gt; EqBinOp -&gt; Bool
 </span><span id="line-24"></span><span class="hs-comment">-- | Conditional and Biconditional operators (Expressions can imply</span><span>
 </span><span id="line-25"></span><span class="hs-comment">-- one another, or exist if and only if another expression exists).</span><span>
 </span><span id="line-26"></span><span class="hs-keyword">data</span><span> </span><span id="BoolBinOp"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#BoolBinOp"><span class="hs-identifier hs-var">BoolBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Impl"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Impl"><span class="hs-identifier hs-var">Impl</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Iff"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Iff"><span class="hs-identifier hs-var">Iff</span></a></span></span><span>
-</span><span id="line-27"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679393171"><span id="local-6989586621679393173"><span class="annot"><span class="annottext">BoolBinOp -&gt; BoolBinOp -&gt; Bool
+</span><span id="line-27"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679418099"><span id="local-6989586621679418101"><span class="annot"><span class="annottext">BoolBinOp -&gt; BoolBinOp -&gt; Bool
 (BoolBinOp -&gt; BoolBinOp -&gt; Bool)
 -&gt; (BoolBinOp -&gt; BoolBinOp -&gt; Bool) -&gt; Eq BoolBinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -52,7 +52,7 @@ $c/= :: BoolBinOp -&gt; BoolBinOp -&gt; Bool
 </span><span id="line-28"></span><span>
 </span><span id="line-29"></span><span class="annot"><span class="hs-comment">-- | Index operator.</span></span><span>
 </span><span id="line-30"></span><span class="hs-keyword">data</span><span> </span><span id="LABinOp"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#LABinOp"><span class="hs-identifier hs-var">LABinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Index"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Index"><span class="hs-identifier hs-var">Index</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="IndexOf"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#IndexOf"><span class="hs-identifier hs-var">IndexOf</span></a></span></span><span>
-</span><span id="line-31"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679393179"><span id="local-6989586621679393181"><span class="annot"><span class="annottext">LABinOp -&gt; LABinOp -&gt; Bool
+</span><span id="line-31"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679418107"><span id="local-6989586621679418109"><span class="annot"><span class="annottext">LABinOp -&gt; LABinOp -&gt; Bool
 (LABinOp -&gt; LABinOp -&gt; Bool)
 -&gt; (LABinOp -&gt; LABinOp -&gt; Bool) -&gt; Eq LABinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -64,7 +64,7 @@ $c/= :: LABinOp -&gt; LABinOp -&gt; Bool
 </span><span id="line-32"></span><span>
 </span><span id="line-33"></span><span class="annot"><span class="hs-comment">-- | Ordered binary operators (less than, greater than, less than or equal to, greater than or equal to).</span></span><span>
 </span><span id="line-34"></span><span class="hs-keyword">data</span><span> </span><span id="OrdBinOp"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#OrdBinOp"><span class="hs-identifier hs-var">OrdBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Lt"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lt"><span class="hs-identifier hs-var">Lt</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Gt"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Gt"><span class="hs-identifier hs-var">Gt</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="LEq"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#LEq"><span class="hs-identifier hs-var">LEq</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="GEq"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#GEq"><span class="hs-identifier hs-var">GEq</span></a></span></span><span>
-</span><span id="line-35"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679393189"><span id="local-6989586621679393191"><span class="annot"><span class="annottext">OrdBinOp -&gt; OrdBinOp -&gt; Bool
+</span><span id="line-35"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679418117"><span id="local-6989586621679418119"><span class="annot"><span class="annottext">OrdBinOp -&gt; OrdBinOp -&gt; Bool
 (OrdBinOp -&gt; OrdBinOp -&gt; Bool)
 -&gt; (OrdBinOp -&gt; OrdBinOp -&gt; Bool) -&gt; Eq OrdBinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -76,7 +76,7 @@ $c/= :: OrdBinOp -&gt; OrdBinOp -&gt; Bool
 </span><span id="line-36"></span><span>
 </span><span id="line-37"></span><span class="annot"><span class="hs-comment">-- | @Vector x Vector -&gt; Vector@ binary operations (cross product, vector addition, subtraction).</span></span><span>
 </span><span id="line-38"></span><span class="hs-keyword">data</span><span> </span><span id="VVVBinOp"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#VVVBinOp"><span class="hs-identifier hs-var">VVVBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Cross"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Cross"><span class="hs-identifier hs-var">Cross</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="VAdd"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#VAdd"><span class="hs-identifier hs-var">VAdd</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="VSub"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#VSub"><span class="hs-identifier hs-var">VSub</span></a></span></span><span>
-</span><span id="line-39"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679393198"><span id="local-6989586621679393200"><span class="annot"><span class="annottext">VVVBinOp -&gt; VVVBinOp -&gt; Bool
+</span><span id="line-39"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679418126"><span id="local-6989586621679418128"><span class="annot"><span class="annottext">VVVBinOp -&gt; VVVBinOp -&gt; Bool
 (VVVBinOp -&gt; VVVBinOp -&gt; Bool)
 -&gt; (VVVBinOp -&gt; VVVBinOp -&gt; Bool) -&gt; Eq VVVBinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -88,7 +88,7 @@ $c/= :: VVVBinOp -&gt; VVVBinOp -&gt; Bool
 </span><span id="line-40"></span><span>
 </span><span id="line-41"></span><span class="annot"><span class="hs-comment">-- | @Vector x Vector -&gt; Number@ binary operations (dot product).</span></span><span>
 </span><span id="line-42"></span><span class="hs-keyword">data</span><span> </span><span id="VVNBinOp"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#VVNBinOp"><span class="hs-identifier hs-var">VVNBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Dot"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Dot"><span class="hs-identifier hs-var">Dot</span></a></span></span><span>
-</span><span id="line-43"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679393205"><span id="local-6989586621679393207"><span class="annot"><span class="annottext">VVNBinOp -&gt; VVNBinOp -&gt; Bool
+</span><span id="line-43"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679418133"><span id="local-6989586621679418135"><span class="annot"><span class="annottext">VVNBinOp -&gt; VVNBinOp -&gt; Bool
 (VVNBinOp -&gt; VVNBinOp -&gt; Bool)
 -&gt; (VVNBinOp -&gt; VVNBinOp -&gt; Bool) -&gt; Eq VVNBinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -100,7 +100,7 @@ $c/= :: VVNBinOp -&gt; VVNBinOp -&gt; Bool
 </span><span id="line-44"></span><span>
 </span><span id="line-45"></span><span class="annot"><span class="hs-comment">-- | @Number x Vector -&gt; Vector@ binary operations (scaling).</span></span><span>
 </span><span id="line-46"></span><span class="hs-keyword">data</span><span> </span><span id="NVVBinOp"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#NVVBinOp"><span class="hs-identifier hs-var">NVVBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Scale"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Scale"><span class="hs-identifier hs-var">Scale</span></a></span></span><span>
-</span><span id="line-47"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679393212"><span id="local-6989586621679393214"><span class="annot"><span class="annottext">NVVBinOp -&gt; NVVBinOp -&gt; Bool
+</span><span id="line-47"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679418140"><span id="local-6989586621679418142"><span class="annot"><span class="annottext">NVVBinOp -&gt; NVVBinOp -&gt; Bool
 (NVVBinOp -&gt; NVVBinOp -&gt; Bool)
 -&gt; (NVVBinOp -&gt; NVVBinOp -&gt; Bool) -&gt; Eq NVVBinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -112,7 +112,7 @@ $c/= :: NVVBinOp -&gt; NVVBinOp -&gt; Bool
 </span><span id="line-48"></span><span>
 </span><span id="line-49"></span><span class="annot"><span class="hs-comment">-- | Element + Set -&gt; Set</span></span><span>
 </span><span id="line-50"></span><span class="hs-keyword">data</span><span> </span><span id="ESSBinOp"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ESSBinOp"><span class="hs-identifier hs-var">ESSBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="SAdd"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#SAdd"><span class="hs-identifier hs-var">SAdd</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="SRemove"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#SRemove"><span class="hs-identifier hs-var">SRemove</span></a></span></span><span>
-</span><span id="line-51"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679393220"><span id="local-6989586621679393222"><span class="annot"><span class="annottext">ESSBinOp -&gt; ESSBinOp -&gt; Bool
+</span><span id="line-51"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679418148"><span id="local-6989586621679418150"><span class="annot"><span class="annottext">ESSBinOp -&gt; ESSBinOp -&gt; Bool
 (ESSBinOp -&gt; ESSBinOp -&gt; Bool)
 -&gt; (ESSBinOp -&gt; ESSBinOp -&gt; Bool) -&gt; Eq ESSBinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -124,7 +124,7 @@ $c/= :: ESSBinOp -&gt; ESSBinOp -&gt; Bool
 </span><span id="line-52"></span><span>
 </span><span id="line-53"></span><span class="annot"><span class="hs-comment">-- | Element + Set -&gt; Bool</span></span><span>
 </span><span id="line-54"></span><span class="hs-keyword">data</span><span> </span><span id="ESBBinOp"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ESBBinOp"><span class="hs-identifier hs-var">ESBBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="SContains"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#SContains"><span class="hs-identifier hs-var">SContains</span></a></span></span><span>
-</span><span id="line-55"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679393227"><span id="local-6989586621679393229"><span class="annot"><span class="annottext">ESBBinOp -&gt; ESBBinOp -&gt; Bool
+</span><span id="line-55"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679418155"><span id="local-6989586621679418157"><span class="annot"><span class="annottext">ESBBinOp -&gt; ESBBinOp -&gt; Bool
 (ESBBinOp -&gt; ESBBinOp -&gt; Bool)
 -&gt; (ESBBinOp -&gt; ESBBinOp -&gt; Bool) -&gt; Eq ESBBinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -135,7 +135,7 @@ $c/= :: ESBBinOp -&gt; ESBBinOp -&gt; Bool
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span>
 </span><span id="line-56"></span><span>
 </span><span id="line-57"></span><span class="hs-keyword">data</span><span> </span><span id="AssocConcatOper"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocConcatOper"><span class="hs-identifier hs-var">AssocConcatOper</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="SUnion"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#SUnion"><span class="hs-identifier hs-var">SUnion</span></a></span></span><span>
-</span><span id="line-58"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679393234"><span id="local-6989586621679393236"><span class="annot"><span class="annottext">AssocConcatOper -&gt; AssocConcatOper -&gt; Bool
+</span><span id="line-58"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679418162"><span id="local-6989586621679418164"><span class="annot"><span class="annottext">AssocConcatOper -&gt; AssocConcatOper -&gt; Bool
 (AssocConcatOper -&gt; AssocConcatOper -&gt; Bool)
 -&gt; (AssocConcatOper -&gt; AssocConcatOper -&gt; Bool)
 -&gt; Eq AssocConcatOper
@@ -148,7 +148,7 @@ $c/= :: AssocConcatOper -&gt; AssocConcatOper -&gt; Bool
 </span><span id="line-59"></span><span>
 </span><span id="line-60"></span><span class="annot"><span class="hs-comment">-- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.</span></span><span>
 </span><span id="line-61"></span><span class="hs-keyword">data</span><span> </span><span id="AssocArithOper"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocArithOper"><span class="hs-identifier hs-var">AssocArithOper</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Add"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Add"><span class="hs-identifier hs-var">Add</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Mul"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Mul"><span class="hs-identifier hs-var">Mul</span></a></span></span><span>
-</span><span id="line-62"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679393242"><span id="local-6989586621679393244"><span class="annot"><span class="annottext">AssocArithOper -&gt; AssocArithOper -&gt; Bool
+</span><span id="line-62"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679418170"><span id="local-6989586621679418172"><span class="annot"><span class="annottext">AssocArithOper -&gt; AssocArithOper -&gt; Bool
 (AssocArithOper -&gt; AssocArithOper -&gt; Bool)
 -&gt; (AssocArithOper -&gt; AssocArithOper -&gt; Bool) -&gt; Eq AssocArithOper
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -160,7 +160,7 @@ $c/= :: AssocArithOper -&gt; AssocArithOper -&gt; Bool
 </span><span id="line-63"></span><span>
 </span><span id="line-64"></span><span class="annot"><span class="hs-comment">-- | Associative boolean operators (and, or).</span></span><span>
 </span><span id="line-65"></span><span class="hs-keyword">data</span><span> </span><span id="AssocBoolOper"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocBoolOper"><span class="hs-identifier hs-var">AssocBoolOper</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="And"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#And"><span class="hs-identifier hs-var">And</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Or"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Or"><span class="hs-identifier hs-var">Or</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Equivalence"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Equivalence"><span class="hs-identifier hs-var">Equivalence</span></a></span></span><span>
-</span><span id="line-66"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679393251"><span id="local-6989586621679393253"><span class="annot"><span class="annottext">AssocBoolOper -&gt; AssocBoolOper -&gt; Bool
+</span><span id="line-66"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679418179"><span id="local-6989586621679418181"><span class="annot"><span class="annottext">AssocBoolOper -&gt; AssocBoolOper -&gt; Bool
 (AssocBoolOper -&gt; AssocBoolOper -&gt; Bool)
 -&gt; (AssocBoolOper -&gt; AssocBoolOper -&gt; Bool) -&gt; Eq AssocBoolOper
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -168,7 +168,7 @@ $c== :: AssocBoolOper -&gt; AssocBoolOper -&gt; Bool
 == :: AssocBoolOper -&gt; AssocBoolOper -&gt; Bool
 $c/= :: AssocBoolOper -&gt; AssocBoolOper -&gt; Bool
 /= :: AssocBoolOper -&gt; AssocBoolOper -&gt; Bool
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679393257"><span id="local-6989586621679393259"><span id="local-6989586621679393263"><span class="annot"><span class="annottext">Int -&gt; AssocBoolOper -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679418185"><span id="local-6989586621679418187"><span id="local-6989586621679418191"><span class="annot"><span class="annottext">Int -&gt; AssocBoolOper -&gt; ShowS
 [AssocBoolOper] -&gt; ShowS
 AssocBoolOper -&gt; String
 (Int -&gt; AssocBoolOper -&gt; ShowS)
@@ -188,7 +188,7 @@ showList :: [AssocBoolOper] -&gt; ShowS
 </span><span id="line-68"></span><span class="annot"><span class="hs-comment">-- | Unary functions (abs, log, ln, sin, etc.).</span></span><span>
 </span><span id="line-69"></span><span class="hs-keyword">data</span><span> </span><span id="UFunc"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#UFunc"><span class="hs-identifier hs-var">UFunc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Abs"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Abs"><span class="hs-identifier hs-var">Abs</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Log"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Log"><span class="hs-identifier hs-var">Log</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Ln"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Ln"><span class="hs-identifier hs-var">Ln</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Sin"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Sin"><span class="hs-identifier hs-var">Sin</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Cos"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Cos"><span class="hs-identifier hs-var">Cos</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Tan"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Tan"><span class="hs-identifier hs-var">Tan</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Sec"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Sec"><span class="hs-identifier hs-var">Sec</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Csc"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Csc"><span class="hs-identifier hs-var">Csc</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Cot"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Cot"><span class="hs-identifier hs-var">Cot</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Arcsin"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Arcsin"><span class="hs-identifier hs-var">Arcsin</span></a></span></span><span>
 </span><span id="line-70"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="Arccos"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Arccos"><span class="hs-identifier hs-var">Arccos</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Arctan"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Arctan"><span class="hs-identifier hs-var">Arctan</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Exp"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Exp"><span class="hs-identifier hs-var">Exp</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Sqrt"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Sqrt"><span class="hs-identifier hs-var">Sqrt</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Neg"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Neg"><span class="hs-identifier hs-var">Neg</span></a></span></span><span>
-</span><span id="line-71"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679393282"><span id="local-6989586621679393284"><span class="annot"><span class="annottext">UFunc -&gt; UFunc -&gt; Bool
+</span><span id="line-71"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679418210"><span id="local-6989586621679418212"><span class="annot"><span class="annottext">UFunc -&gt; UFunc -&gt; Bool
 (UFunc -&gt; UFunc -&gt; Bool) -&gt; (UFunc -&gt; UFunc -&gt; Bool) -&gt; Eq UFunc
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
 $c== :: UFunc -&gt; UFunc -&gt; Bool
@@ -199,7 +199,7 @@ $c/= :: UFunc -&gt; UFunc -&gt; Bool
 </span><span id="line-72"></span><span>
 </span><span id="line-73"></span><span class="annot"><span class="hs-comment">-- | @Bool -&gt; Bool@ operators.</span></span><span>
 </span><span id="line-74"></span><span class="hs-keyword">data</span><span> </span><span id="UFuncB"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#UFuncB"><span class="hs-identifier hs-var">UFuncB</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Not"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Not"><span class="hs-identifier hs-var">Not</span></a></span></span><span>
-</span><span id="line-75"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679393289"><span id="local-6989586621679393291"><span class="annot"><span class="annottext">UFuncB -&gt; UFuncB -&gt; Bool
+</span><span id="line-75"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679418217"><span id="local-6989586621679418219"><span class="annot"><span class="annottext">UFuncB -&gt; UFuncB -&gt; Bool
 (UFuncB -&gt; UFuncB -&gt; Bool)
 -&gt; (UFuncB -&gt; UFuncB -&gt; Bool) -&gt; Eq UFuncB
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -211,7 +211,7 @@ $c/= :: UFuncB -&gt; UFuncB -&gt; Bool
 </span><span id="line-76"></span><span>
 </span><span id="line-77"></span><span class="annot"><span class="hs-comment">-- | @Vector -&gt; Vector@ operators.</span></span><span>
 </span><span id="line-78"></span><span class="hs-keyword">data</span><span> </span><span id="UFuncVV"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#UFuncVV"><span class="hs-identifier hs-var">UFuncVV</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="NegV"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#NegV"><span class="hs-identifier hs-var">NegV</span></a></span></span><span>
-</span><span id="line-79"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679393296"><span id="local-6989586621679393298"><span class="annot"><span class="annottext">UFuncVV -&gt; UFuncVV -&gt; Bool
+</span><span id="line-79"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679418224"><span id="local-6989586621679418226"><span class="annot"><span class="annottext">UFuncVV -&gt; UFuncVV -&gt; Bool
 (UFuncVV -&gt; UFuncVV -&gt; Bool)
 -&gt; (UFuncVV -&gt; UFuncVV -&gt; Bool) -&gt; Eq UFuncVV
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -223,7 +223,7 @@ $c/= :: UFuncVV -&gt; UFuncVV -&gt; Bool
 </span><span id="line-80"></span><span>
 </span><span id="line-81"></span><span class="annot"><span class="hs-comment">-- | @Vector -&gt; Number@ operators.</span></span><span>
 </span><span id="line-82"></span><span class="hs-keyword">data</span><span> </span><span id="UFuncVN"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#UFuncVN"><span class="hs-identifier hs-var">UFuncVN</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Norm"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Norm"><span class="hs-identifier hs-var">Norm</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Dim"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Dim"><span class="hs-identifier hs-var">Dim</span></a></span></span><span>
-</span><span id="line-83"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679393304"><span id="local-6989586621679393306"><span class="annot"><span class="annottext">UFuncVN -&gt; UFuncVN -&gt; Bool
+</span><span id="line-83"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679418232"><span id="local-6989586621679418234"><span class="annot"><span class="annottext">UFuncVN -&gt; UFuncVN -&gt; Bool
 (UFuncVN -&gt; UFuncVN -&gt; Bool)
 -&gt; (UFuncVN -&gt; UFuncVN -&gt; Bool) -&gt; Eq UFuncVN
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -235,7 +235,7 @@ $c/= :: UFuncVN -&gt; UFuncVN -&gt; Bool
 </span><span id="line-84"></span><span>
 </span><span id="line-85"></span><span class="annot"><span class="hs-comment">-- | Statements involving 2 arguments.</span></span><span>
 </span><span id="line-86"></span><span class="hs-keyword">data</span><span> </span><span id="StatBinOp"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#StatBinOp"><span class="hs-identifier hs-var">StatBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Defines"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Defines"><span class="hs-identifier hs-var">Defines</span></a></span></span><span>
-</span><span id="line-87"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679393311"><span id="local-6989586621679393313"><span class="annot"><span class="annottext">StatBinOp -&gt; StatBinOp -&gt; Bool
+</span><span id="line-87"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679418239"><span id="local-6989586621679418241"><span class="annot"><span class="annottext">StatBinOp -&gt; StatBinOp -&gt; Bool
 (StatBinOp -&gt; StatBinOp -&gt; Bool)
 -&gt; (StatBinOp -&gt; StatBinOp -&gt; Bool) -&gt; Eq StatBinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -247,7 +247,7 @@ $c/= :: StatBinOp -&gt; StatBinOp -&gt; Bool
 </span><span id="line-88"></span><span>
 </span><span id="line-89"></span><span class="annot"><span class="hs-comment">-- | @Value -&gt; Space -&gt; Bool@ operators.</span></span><span>
 </span><span id="line-90"></span><span class="hs-keyword">data</span><span> </span><span id="SpaceBinOp"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#SpaceBinOp"><span class="hs-identifier hs-var">SpaceBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="IsIn"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#IsIn"><span class="hs-identifier hs-var">IsIn</span></a></span></span><span>
-</span><span id="line-91"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679393318"><span id="local-6989586621679393320"><span class="annot"><span class="annottext">SpaceBinOp -&gt; SpaceBinOp -&gt; Bool
+</span><span id="line-91"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679418246"><span id="local-6989586621679418248"><span class="annot"><span class="annottext">SpaceBinOp -&gt; SpaceBinOp -&gt; Bool
 (SpaceBinOp -&gt; SpaceBinOp -&gt; Bool)
 -&gt; (SpaceBinOp -&gt; SpaceBinOp -&gt; Bool) -&gt; Eq SpaceBinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -259,7 +259,7 @@ $c/= :: SpaceBinOp -&gt; SpaceBinOp -&gt; Bool
 </span><span id="line-92"></span><span>
 </span><span id="line-93"></span><span class="annot"><span class="hs-comment">-- | Determines the type of the derivative (either a partial derivative or a total derivative).</span></span><span>
 </span><span id="line-94"></span><span class="hs-keyword">data</span><span> </span><span id="DerivType"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#DerivType"><span class="hs-identifier hs-var">DerivType</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Part"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Part"><span class="hs-identifier hs-var">Part</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Total"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Total"><span class="hs-identifier hs-var">Total</span></a></span></span><span>
-</span><span id="line-95"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679393326"><span id="local-6989586621679393328"><span class="annot"><span class="annottext">DerivType -&gt; DerivType -&gt; Bool
+</span><span id="line-95"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679418254"><span id="local-6989586621679418256"><span class="annot"><span class="annottext">DerivType -&gt; DerivType -&gt; Bool
 (DerivType -&gt; DerivType -&gt; Bool)
 -&gt; (DerivType -&gt; DerivType -&gt; Bool) -&gt; Eq DerivType
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -339,7 +339,7 @@ $c/= :: DerivType -&gt; DerivType -&gt; Bool
 </span><span id="line-164"></span><span>  </span><span class="hs-comment">-- | Operators are generalized arithmetic operators over a 'DomainDesc'</span><span>
 </span><span id="line-165"></span><span>  </span><span class="hs-comment">--   of an 'Expr'.  Could be called BigOp.</span><span>
 </span><span id="line-166"></span><span>  </span><span class="hs-comment">--   ex: Summation is represented via 'Add' over a discrete domain.</span><span>
-</span><span id="line-167"></span><span>  </span><span id="local-6989586621679393359"><span id="Operator"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Operator"><span class="hs-identifier hs-var">Operator</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocArithOper"><span class="hs-identifier hs-type">AssocArithOper</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Space.html#DomainDesc"><span class="hs-identifier hs-type">DomainDesc</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679393359"><span class="hs-identifier hs-type">t</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ModelExpr"><span class="hs-identifier hs-type">ModelExpr</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ModelExpr"><span class="hs-identifier hs-type">ModelExpr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ModelExpr"><span class="hs-identifier hs-type">ModelExpr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ModelExpr"><span class="hs-identifier hs-type">ModelExpr</span></a></span></span><span>
+</span><span id="line-167"></span><span>  </span><span id="local-6989586621679418287"><span id="Operator"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Operator"><span class="hs-identifier hs-var">Operator</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocArithOper"><span class="hs-identifier hs-type">AssocArithOper</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Space.html#DomainDesc"><span class="hs-identifier hs-type">DomainDesc</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679418287"><span class="hs-identifier hs-type">t</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ModelExpr"><span class="hs-identifier hs-type">ModelExpr</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ModelExpr"><span class="hs-identifier hs-type">ModelExpr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ModelExpr"><span class="hs-identifier hs-type">ModelExpr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ModelExpr"><span class="hs-identifier hs-type">ModelExpr</span></a></span></span><span>
 </span><span id="line-168"></span><span>  </span><span class="annot"><span class="hs-comment">-- | A different kind of 'IsIn'. A 'UID' is an element of an interval.</span></span><span>
 </span><span id="line-169"></span><span>  </span><span id="RealI"><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#RealI"><span class="hs-identifier hs-var">RealI</span></a></span></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Space.html#RealInterval"><span class="hs-identifier hs-type">RealInterval</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ModelExpr"><span class="hs-identifier hs-type">ModelExpr</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ModelExpr"><span class="hs-identifier hs-type">ModelExpr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ModelExpr"><span class="hs-identifier hs-type">ModelExpr</span></a></span><span>
 </span><span id="line-170"></span><span>  </span><span>
@@ -372,393 +372,393 @@ $c/= :: DerivType -&gt; DerivType -&gt; Bool
 </span><span id="line-197"></span><span class="hs-comment">--   signum _ = error &quot;should not use signum in expressions&quot;</span><span>
 </span><span id="line-198"></span><span>
 </span><span id="line-199"></span><span class="annot"><span class="hs-comment">-- | Expressions are equal if their constructors and contents are equal.</span></span><span>
-</span><span id="line-200"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679393366"><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ModelExpr"><span class="hs-identifier hs-type">ModelExpr</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-201"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">Lit</span></a></span><span> </span><span id="local-6989586621679393432"><span class="annot"><span class="annottext">Literal
-</span><a href="#local-6989586621679393432"><span class="hs-identifier hs-var">l</span></a></span></span><span>               </span><span id="local-6989586621679393433"><span class="annot"><span class="annottext">== :: ModelExpr -&gt; ModelExpr -&gt; Bool
-</span><span class="hs-operator hs-var hs-var hs-var hs-var">==</span></span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">Lit</span></a></span><span> </span><span id="local-6989586621679393434"><span class="annot"><span class="annottext">Literal
-</span><a href="#local-6989586621679393434"><span class="hs-identifier hs-var">r</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">Literal
-</span><a href="#local-6989586621679393432"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">Literal -&gt; Literal -&gt; Bool
+</span><span id="line-200"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679418294"><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ModelExpr"><span class="hs-identifier hs-type">ModelExpr</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-201"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">Lit</span></a></span><span> </span><span id="local-6989586621679418360"><span class="annot"><span class="annottext">Literal
+</span><a href="#local-6989586621679418360"><span class="hs-identifier hs-var">l</span></a></span></span><span>               </span><span id="local-6989586621679418361"><span class="annot"><span class="annottext">== :: ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><span class="hs-operator hs-var hs-var hs-var hs-var">==</span></span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-type">Lit</span></a></span><span> </span><span id="local-6989586621679418362"><span class="annot"><span class="annottext">Literal
+</span><a href="#local-6989586621679418362"><span class="hs-identifier hs-var">r</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">Literal
+</span><a href="#local-6989586621679418360"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">Literal -&gt; Literal -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Literal
-</span><a href="#local-6989586621679393434"><span class="hs-identifier hs-var">r</span></a></span><span>
-</span><span id="line-202"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">AssocA</span></a></span><span> </span><span id="local-6989586621679393435"><span class="annot"><span class="annottext">AssocArithOper
-</span><a href="#local-6989586621679393435"><span class="hs-identifier hs-var">o1</span></a></span></span><span> </span><span id="local-6989586621679393436"><span class="annot"><span class="annottext">[ModelExpr]
-</span><a href="#local-6989586621679393436"><span class="hs-identifier hs-var">l1</span></a></span></span><span>        </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">AssocA</span></a></span><span> </span><span id="local-6989586621679393437"><span class="annot"><span class="annottext">AssocArithOper
-</span><a href="#local-6989586621679393437"><span class="hs-identifier hs-var">o2</span></a></span></span><span> </span><span id="local-6989586621679393438"><span class="annot"><span class="annottext">[ModelExpr]
-</span><a href="#local-6989586621679393438"><span class="hs-identifier hs-var">l2</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">AssocArithOper
-</span><a href="#local-6989586621679393435"><span class="hs-identifier hs-var">o1</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper -&gt; AssocArithOper -&gt; Bool
+</span><a href="#local-6989586621679418362"><span class="hs-identifier hs-var">r</span></a></span><span>
+</span><span id="line-202"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">AssocA</span></a></span><span> </span><span id="local-6989586621679418363"><span class="annot"><span class="annottext">AssocArithOper
+</span><a href="#local-6989586621679418363"><span class="hs-identifier hs-var">o1</span></a></span></span><span> </span><span id="local-6989586621679418364"><span class="annot"><span class="annottext">[ModelExpr]
+</span><a href="#local-6989586621679418364"><span class="hs-identifier hs-var">l1</span></a></span></span><span>        </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocA"><span class="hs-identifier hs-type">AssocA</span></a></span><span> </span><span id="local-6989586621679418365"><span class="annot"><span class="annottext">AssocArithOper
+</span><a href="#local-6989586621679418365"><span class="hs-identifier hs-var">o2</span></a></span></span><span> </span><span id="local-6989586621679418366"><span class="annot"><span class="annottext">[ModelExpr]
+</span><a href="#local-6989586621679418366"><span class="hs-identifier hs-var">l2</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">AssocArithOper
+</span><a href="#local-6989586621679418363"><span class="hs-identifier hs-var">o1</span></a></span><span> </span><span class="annot"><span class="annottext">AssocArithOper -&gt; AssocArithOper -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">AssocArithOper
-</span><a href="#local-6989586621679393437"><span class="hs-identifier hs-var">o2</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418365"><span class="hs-identifier hs-var">o2</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
-</span><a href="#local-6989586621679393436"><span class="hs-identifier hs-var">l1</span></a></span><span> </span><span class="annot"><span class="annottext">[ModelExpr] -&gt; [ModelExpr] -&gt; Bool
+</span><a href="#local-6989586621679418364"><span class="hs-identifier hs-var">l1</span></a></span><span> </span><span class="annot"><span class="annottext">[ModelExpr] -&gt; [ModelExpr] -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
-</span><a href="#local-6989586621679393438"><span class="hs-identifier hs-var">l2</span></a></span><span>
-</span><span id="line-203"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocB"><span class="hs-identifier hs-type">AssocB</span></a></span><span> </span><span id="local-6989586621679393440"><span class="annot"><span class="annottext">AssocBoolOper
-</span><a href="#local-6989586621679393440"><span class="hs-identifier hs-var">o1</span></a></span></span><span> </span><span id="local-6989586621679393441"><span class="annot"><span class="annottext">[ModelExpr]
-</span><a href="#local-6989586621679393441"><span class="hs-identifier hs-var">l1</span></a></span></span><span>        </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocB"><span class="hs-identifier hs-type">AssocB</span></a></span><span> </span><span id="local-6989586621679393442"><span class="annot"><span class="annottext">AssocBoolOper
-</span><a href="#local-6989586621679393442"><span class="hs-identifier hs-var">o2</span></a></span></span><span> </span><span id="local-6989586621679393443"><span class="annot"><span class="annottext">[ModelExpr]
-</span><a href="#local-6989586621679393443"><span class="hs-identifier hs-var">l2</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">AssocBoolOper
-</span><a href="#local-6989586621679393440"><span class="hs-identifier hs-var">o1</span></a></span><span> </span><span class="annot"><span class="annottext">AssocBoolOper -&gt; AssocBoolOper -&gt; Bool
+</span><a href="#local-6989586621679418366"><span class="hs-identifier hs-var">l2</span></a></span><span>
+</span><span id="line-203"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocB"><span class="hs-identifier hs-type">AssocB</span></a></span><span> </span><span id="local-6989586621679418368"><span class="annot"><span class="annottext">AssocBoolOper
+</span><a href="#local-6989586621679418368"><span class="hs-identifier hs-var">o1</span></a></span></span><span> </span><span id="local-6989586621679418369"><span class="annot"><span class="annottext">[ModelExpr]
+</span><a href="#local-6989586621679418369"><span class="hs-identifier hs-var">l1</span></a></span></span><span>        </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#AssocB"><span class="hs-identifier hs-type">AssocB</span></a></span><span> </span><span id="local-6989586621679418370"><span class="annot"><span class="annottext">AssocBoolOper
+</span><a href="#local-6989586621679418370"><span class="hs-identifier hs-var">o2</span></a></span></span><span> </span><span id="local-6989586621679418371"><span class="annot"><span class="annottext">[ModelExpr]
+</span><a href="#local-6989586621679418371"><span class="hs-identifier hs-var">l2</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">AssocBoolOper
+</span><a href="#local-6989586621679418368"><span class="hs-identifier hs-var">o1</span></a></span><span> </span><span class="annot"><span class="annottext">AssocBoolOper -&gt; AssocBoolOper -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">AssocBoolOper
-</span><a href="#local-6989586621679393442"><span class="hs-identifier hs-var">o2</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418370"><span class="hs-identifier hs-var">o2</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
-</span><a href="#local-6989586621679393441"><span class="hs-identifier hs-var">l1</span></a></span><span> </span><span class="annot"><span class="annottext">[ModelExpr] -&gt; [ModelExpr] -&gt; Bool
+</span><a href="#local-6989586621679418369"><span class="hs-identifier hs-var">l1</span></a></span><span> </span><span class="annot"><span class="annottext">[ModelExpr] -&gt; [ModelExpr] -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
-</span><a href="#local-6989586621679393443"><span class="hs-identifier hs-var">l2</span></a></span><span>
-</span><span id="line-204"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Deriv"><span class="hs-identifier hs-type">Deriv</span></a></span><span> </span><span id="local-6989586621679393444"><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679393444"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393445"><span class="annot"><span class="annottext">DerivType
-</span><a href="#local-6989586621679393445"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679393446"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393446"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span id="local-6989586621679393447"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679393447"><span class="hs-identifier hs-var">c</span></a></span></span><span>      </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Deriv"><span class="hs-identifier hs-type">Deriv</span></a></span><span> </span><span id="local-6989586621679393448"><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679393448"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span id="local-6989586621679393449"><span class="annot"><span class="annottext">DerivType
-</span><a href="#local-6989586621679393449"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span id="local-6989586621679393450"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393450"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span id="local-6989586621679393451"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679393451"><span class="hs-identifier hs-var">f</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679393444"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Bool
+</span><a href="#local-6989586621679418371"><span class="hs-identifier hs-var">l2</span></a></span><span>
+</span><span id="line-204"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Deriv"><span class="hs-identifier hs-type">Deriv</span></a></span><span> </span><span id="local-6989586621679418372"><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679418372"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679418373"><span class="annot"><span class="annottext">DerivType
+</span><a href="#local-6989586621679418373"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679418374"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418374"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span id="local-6989586621679418375"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679418375"><span class="hs-identifier hs-var">c</span></a></span></span><span>      </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Deriv"><span class="hs-identifier hs-type">Deriv</span></a></span><span> </span><span id="local-6989586621679418376"><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679418376"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span id="local-6989586621679418377"><span class="annot"><span class="annottext">DerivType
+</span><a href="#local-6989586621679418377"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span id="local-6989586621679418378"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418378"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span id="local-6989586621679418379"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679418379"><span class="hs-identifier hs-var">f</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679418372"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679393448"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418376"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">DerivType
-</span><a href="#local-6989586621679393445"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">DerivType -&gt; DerivType -&gt; Bool
+</span><a href="#local-6989586621679418373"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">DerivType -&gt; DerivType -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">DerivType
-</span><a href="#local-6989586621679393449"><span class="hs-identifier hs-var">t2</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418377"><span class="hs-identifier hs-var">t2</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393446"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418374"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393450"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418378"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679393447"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Bool
+</span><a href="#local-6989586621679418375"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679393451"><span class="hs-identifier hs-var">f</span></a></span><span>
-</span><span id="line-205"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#C"><span class="hs-identifier hs-type">C</span></a></span><span> </span><span id="local-6989586621679393452"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679393452"><span class="hs-identifier hs-var">a</span></a></span></span><span>                 </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#C"><span class="hs-identifier hs-type">C</span></a></span><span> </span><span id="local-6989586621679393453"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679393453"><span class="hs-identifier hs-var">b</span></a></span></span><span>                 </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679393452"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Bool
+</span><a href="#local-6989586621679418379"><span class="hs-identifier hs-var">f</span></a></span><span>
+</span><span id="line-205"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#C"><span class="hs-identifier hs-type">C</span></a></span><span> </span><span id="local-6989586621679418380"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679418380"><span class="hs-identifier hs-var">a</span></a></span></span><span>                 </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#C"><span class="hs-identifier hs-type">C</span></a></span><span> </span><span id="local-6989586621679418381"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679418381"><span class="hs-identifier hs-var">b</span></a></span></span><span>                 </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679418380"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679393453"><span class="hs-identifier hs-var">b</span></a></span><span>
-</span><span id="line-206"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#FCall"><span class="hs-identifier hs-type">FCall</span></a></span><span> </span><span id="local-6989586621679393454"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679393454"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393455"><span class="annot"><span class="annottext">[ModelExpr]
-</span><a href="#local-6989586621679393455"><span class="hs-identifier hs-var">b</span></a></span></span><span>           </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#FCall"><span class="hs-identifier hs-type">FCall</span></a></span><span> </span><span id="local-6989586621679393456"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679393456"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679393457"><span class="annot"><span class="annottext">[ModelExpr]
-</span><a href="#local-6989586621679393457"><span class="hs-identifier hs-var">d</span></a></span></span><span>           </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679393454"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Bool
+</span><a href="#local-6989586621679418381"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><span id="line-206"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#FCall"><span class="hs-identifier hs-type">FCall</span></a></span><span> </span><span id="local-6989586621679418382"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679418382"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679418383"><span class="annot"><span class="annottext">[ModelExpr]
+</span><a href="#local-6989586621679418383"><span class="hs-identifier hs-var">b</span></a></span></span><span>           </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#FCall"><span class="hs-identifier hs-type">FCall</span></a></span><span> </span><span id="local-6989586621679418384"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679418384"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679418385"><span class="annot"><span class="annottext">[ModelExpr]
+</span><a href="#local-6989586621679418385"><span class="hs-identifier hs-var">d</span></a></span></span><span>           </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679418382"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679393456"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418384"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
-</span><a href="#local-6989586621679393455"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">[ModelExpr] -&gt; [ModelExpr] -&gt; Bool
+</span><a href="#local-6989586621679418383"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">[ModelExpr] -&gt; [ModelExpr] -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
-</span><a href="#local-6989586621679393457"><span class="hs-identifier hs-var">d</span></a></span><span>
-</span><span id="line-207"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Case"><span class="hs-identifier hs-type">Case</span></a></span><span> </span><span id="local-6989586621679393458"><span class="annot"><span class="annottext">Completeness
-</span><a href="#local-6989586621679393458"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393459"><span class="annot"><span class="annottext">[(ModelExpr, ModelExpr)]
-</span><a href="#local-6989586621679393459"><span class="hs-identifier hs-var">b</span></a></span></span><span>            </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Case"><span class="hs-identifier hs-type">Case</span></a></span><span> </span><span id="local-6989586621679393460"><span class="annot"><span class="annottext">Completeness
-</span><a href="#local-6989586621679393460"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679393461"><span class="annot"><span class="annottext">[(ModelExpr, ModelExpr)]
-</span><a href="#local-6989586621679393461"><span class="hs-identifier hs-var">d</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">Completeness
-</span><a href="#local-6989586621679393458"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Completeness -&gt; Completeness -&gt; Bool
+</span><a href="#local-6989586621679418385"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><span id="line-207"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Case"><span class="hs-identifier hs-type">Case</span></a></span><span> </span><span id="local-6989586621679418386"><span class="annot"><span class="annottext">Completeness
+</span><a href="#local-6989586621679418386"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679418387"><span class="annot"><span class="annottext">[(ModelExpr, ModelExpr)]
+</span><a href="#local-6989586621679418387"><span class="hs-identifier hs-var">b</span></a></span></span><span>            </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#Case"><span class="hs-identifier hs-type">Case</span></a></span><span> </span><span id="local-6989586621679418388"><span class="annot"><span class="annottext">Completeness
+</span><a href="#local-6989586621679418388"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679418389"><span class="annot"><span class="annottext">[(ModelExpr, ModelExpr)]
+</span><a href="#local-6989586621679418389"><span class="hs-identifier hs-var">d</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">Completeness
+</span><a href="#local-6989586621679418386"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Completeness -&gt; Completeness -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Completeness
-</span><a href="#local-6989586621679393460"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418388"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">[(ModelExpr, ModelExpr)]
-</span><a href="#local-6989586621679393459"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">[(ModelExpr, ModelExpr)] -&gt; [(ModelExpr, ModelExpr)] -&gt; Bool
+</span><a href="#local-6989586621679418387"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">[(ModelExpr, ModelExpr)] -&gt; [(ModelExpr, ModelExpr)] -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">[(ModelExpr, ModelExpr)]
-</span><a href="#local-6989586621679393461"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span>
-</span><span id="line-208"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-type">UnaryOp</span></a></span><span> </span><span id="local-6989586621679393462"><span class="annot"><span class="annottext">UFunc
-</span><a href="#local-6989586621679393462"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393463"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393463"><span class="hs-identifier hs-var">b</span></a></span></span><span>         </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-type">UnaryOp</span></a></span><span> </span><span id="local-6989586621679393464"><span class="annot"><span class="annottext">UFunc
-</span><a href="#local-6989586621679393464"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679393465"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393465"><span class="hs-identifier hs-var">d</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">UFunc
-</span><a href="#local-6989586621679393462"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; UFunc -&gt; Bool
+</span><a href="#local-6989586621679418389"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span>
+</span><span id="line-208"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-type">UnaryOp</span></a></span><span> </span><span id="local-6989586621679418390"><span class="annot"><span class="annottext">UFunc
+</span><a href="#local-6989586621679418390"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679418391"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418391"><span class="hs-identifier hs-var">b</span></a></span></span><span>         </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOp"><span class="hs-identifier hs-type">UnaryOp</span></a></span><span> </span><span id="local-6989586621679418392"><span class="annot"><span class="annottext">UFunc
+</span><a href="#local-6989586621679418392"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679418393"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418393"><span class="hs-identifier hs-var">d</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">UFunc
+</span><a href="#local-6989586621679418390"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">UFunc -&gt; UFunc -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">UFunc
-</span><a href="#local-6989586621679393464"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418392"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393463"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418391"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393465"><span class="hs-identifier hs-var">d</span></a></span><span>
-</span><span id="line-209"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOpB"><span class="hs-identifier hs-type">UnaryOpB</span></a></span><span> </span><span id="local-6989586621679393466"><span class="annot"><span class="annottext">UFuncB
-</span><a href="#local-6989586621679393466"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393467"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393467"><span class="hs-identifier hs-var">b</span></a></span></span><span>        </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOpB"><span class="hs-identifier hs-type">UnaryOpB</span></a></span><span> </span><span id="local-6989586621679393468"><span class="annot"><span class="annottext">UFuncB
-</span><a href="#local-6989586621679393468"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679393469"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393469"><span class="hs-identifier hs-var">d</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">UFuncB
-</span><a href="#local-6989586621679393466"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">UFuncB -&gt; UFuncB -&gt; Bool
+</span><a href="#local-6989586621679418393"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><span id="line-209"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOpB"><span class="hs-identifier hs-type">UnaryOpB</span></a></span><span> </span><span id="local-6989586621679418394"><span class="annot"><span class="annottext">UFuncB
+</span><a href="#local-6989586621679418394"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679418395"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418395"><span class="hs-identifier hs-var">b</span></a></span></span><span>        </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOpB"><span class="hs-identifier hs-type">UnaryOpB</span></a></span><span> </span><span id="local-6989586621679418396"><span class="annot"><span class="annottext">UFuncB
+</span><a href="#local-6989586621679418396"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679418397"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418397"><span class="hs-identifier hs-var">d</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">UFuncB
+</span><a href="#local-6989586621679418394"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">UFuncB -&gt; UFuncB -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">UFuncB
-</span><a href="#local-6989586621679393468"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418396"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393467"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418395"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393469"><span class="hs-identifier hs-var">d</span></a></span><span>
-</span><span id="line-210"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOpVV"><span class="hs-identifier hs-type">UnaryOpVV</span></a></span><span> </span><span id="local-6989586621679393470"><span class="annot"><span class="annottext">UFuncVV
-</span><a href="#local-6989586621679393470"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393471"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393471"><span class="hs-identifier hs-var">b</span></a></span></span><span>       </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOpVV"><span class="hs-identifier hs-type">UnaryOpVV</span></a></span><span> </span><span id="local-6989586621679393472"><span class="annot"><span class="annottext">UFuncVV
-</span><a href="#local-6989586621679393472"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679393473"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393473"><span class="hs-identifier hs-var">d</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">UFuncVV
-</span><a href="#local-6989586621679393470"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">UFuncVV -&gt; UFuncVV -&gt; Bool
+</span><a href="#local-6989586621679418397"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><span id="line-210"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOpVV"><span class="hs-identifier hs-type">UnaryOpVV</span></a></span><span> </span><span id="local-6989586621679418398"><span class="annot"><span class="annottext">UFuncVV
+</span><a href="#local-6989586621679418398"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679418399"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418399"><span class="hs-identifier hs-var">b</span></a></span></span><span>       </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOpVV"><span class="hs-identifier hs-type">UnaryOpVV</span></a></span><span> </span><span id="local-6989586621679418400"><span class="annot"><span class="annottext">UFuncVV
+</span><a href="#local-6989586621679418400"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679418401"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418401"><span class="hs-identifier hs-var">d</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">UFuncVV
+</span><a href="#local-6989586621679418398"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">UFuncVV -&gt; UFuncVV -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">UFuncVV
-</span><a href="#local-6989586621679393472"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418400"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393471"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418399"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393473"><span class="hs-identifier hs-var">d</span></a></span><span>
-</span><span id="line-211"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOpVN"><span class="hs-identifier hs-type">UnaryOpVN</span></a></span><span> </span><span id="local-6989586621679393474"><span class="annot"><span class="annottext">UFuncVN
-</span><a href="#local-6989586621679393474"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393475"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393475"><span class="hs-identifier hs-var">b</span></a></span></span><span>       </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOpVN"><span class="hs-identifier hs-type">UnaryOpVN</span></a></span><span> </span><span id="local-6989586621679393476"><span class="annot"><span class="annottext">UFuncVN
-</span><a href="#local-6989586621679393476"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679393477"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393477"><span class="hs-identifier hs-var">d</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">UFuncVN
-</span><a href="#local-6989586621679393474"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">UFuncVN -&gt; UFuncVN -&gt; Bool
+</span><a href="#local-6989586621679418401"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><span id="line-211"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOpVN"><span class="hs-identifier hs-type">UnaryOpVN</span></a></span><span> </span><span id="local-6989586621679418402"><span class="annot"><span class="annottext">UFuncVN
+</span><a href="#local-6989586621679418402"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679418403"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418403"><span class="hs-identifier hs-var">b</span></a></span></span><span>       </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#UnaryOpVN"><span class="hs-identifier hs-type">UnaryOpVN</span></a></span><span> </span><span id="local-6989586621679418404"><span class="annot"><span class="annottext">UFuncVN
+</span><a href="#local-6989586621679418404"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679418405"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418405"><span class="hs-identifier hs-var">d</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">UFuncVN
+</span><a href="#local-6989586621679418402"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">UFuncVN -&gt; UFuncVN -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">UFuncVN
-</span><a href="#local-6989586621679393476"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418404"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393475"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418403"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393477"><span class="hs-identifier hs-var">d</span></a></span><span>
-</span><span id="line-212"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ArithBinaryOp"><span class="hs-identifier hs-type">ArithBinaryOp</span></a></span><span> </span><span id="local-6989586621679393478"><span class="annot"><span class="annottext">ArithBinOp
-</span><a href="#local-6989586621679393478"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679393479"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393479"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393480"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393480"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ArithBinaryOp"><span class="hs-identifier hs-type">ArithBinaryOp</span></a></span><span> </span><span id="local-6989586621679393481"><span class="annot"><span class="annottext">ArithBinOp
-</span><a href="#local-6989586621679393481"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679393482"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393482"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679393483"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393483"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">ArithBinOp
-</span><a href="#local-6989586621679393478"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">ArithBinOp -&gt; ArithBinOp -&gt; Bool
+</span><a href="#local-6989586621679418405"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><span id="line-212"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ArithBinaryOp"><span class="hs-identifier hs-type">ArithBinaryOp</span></a></span><span> </span><span id="local-6989586621679418406"><span class="annot"><span class="annottext">ArithBinOp
+</span><a href="#local-6989586621679418406"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679418407"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418407"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679418408"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418408"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ArithBinaryOp"><span class="hs-identifier hs-type">ArithBinaryOp</span></a></span><span> </span><span id="local-6989586621679418409"><span class="annot"><span class="annottext">ArithBinOp
+</span><a href="#local-6989586621679418409"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679418410"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418410"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679418411"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418411"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">ArithBinOp
+</span><a href="#local-6989586621679418406"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">ArithBinOp -&gt; ArithBinOp -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ArithBinOp
-</span><a href="#local-6989586621679393481"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418409"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393479"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418407"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393482"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418410"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393480"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418408"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393483"><span class="hs-identifier hs-var">d</span></a></span><span>
-</span><span id="line-213"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#BoolBinaryOp"><span class="hs-identifier hs-type">BoolBinaryOp</span></a></span><span> </span><span id="local-6989586621679393484"><span class="annot"><span class="annottext">BoolBinOp
-</span><a href="#local-6989586621679393484"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679393485"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393485"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393486"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393486"><span class="hs-identifier hs-var">b</span></a></span></span><span>  </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#BoolBinaryOp"><span class="hs-identifier hs-type">BoolBinaryOp</span></a></span><span> </span><span id="local-6989586621679393487"><span class="annot"><span class="annottext">BoolBinOp
-</span><a href="#local-6989586621679393487"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679393488"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393488"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679393489"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393489"><span class="hs-identifier hs-var">d</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">BoolBinOp
-</span><a href="#local-6989586621679393484"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">BoolBinOp -&gt; BoolBinOp -&gt; Bool
+</span><a href="#local-6989586621679418411"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><span id="line-213"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#BoolBinaryOp"><span class="hs-identifier hs-type">BoolBinaryOp</span></a></span><span> </span><span id="local-6989586621679418412"><span class="annot"><span class="annottext">BoolBinOp
+</span><a href="#local-6989586621679418412"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679418413"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418413"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679418414"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418414"><span class="hs-identifier hs-var">b</span></a></span></span><span>  </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#BoolBinaryOp"><span class="hs-identifier hs-type">BoolBinaryOp</span></a></span><span> </span><span id="local-6989586621679418415"><span class="annot"><span class="annottext">BoolBinOp
+</span><a href="#local-6989586621679418415"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679418416"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418416"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679418417"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418417"><span class="hs-identifier hs-var">d</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">BoolBinOp
+</span><a href="#local-6989586621679418412"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">BoolBinOp -&gt; BoolBinOp -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">BoolBinOp
-</span><a href="#local-6989586621679393487"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418415"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393485"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418413"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393488"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418416"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393486"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418414"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393489"><span class="hs-identifier hs-var">d</span></a></span><span>
-</span><span id="line-214"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#EqBinaryOp"><span class="hs-identifier hs-type">EqBinaryOp</span></a></span><span> </span><span id="local-6989586621679393490"><span class="annot"><span class="annottext">EqBinOp
-</span><a href="#local-6989586621679393490"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679393491"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393491"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393492"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393492"><span class="hs-identifier hs-var">b</span></a></span></span><span>    </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#EqBinaryOp"><span class="hs-identifier hs-type">EqBinaryOp</span></a></span><span> </span><span id="local-6989586621679393493"><span class="annot"><span class="annottext">EqBinOp
-</span><a href="#local-6989586621679393493"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679393494"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393494"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679393495"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393495"><span class="hs-identifier hs-var">d</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">EqBinOp
-</span><a href="#local-6989586621679393490"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">EqBinOp -&gt; EqBinOp -&gt; Bool
+</span><a href="#local-6989586621679418417"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><span id="line-214"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#EqBinaryOp"><span class="hs-identifier hs-type">EqBinaryOp</span></a></span><span> </span><span id="local-6989586621679418418"><span class="annot"><span class="annottext">EqBinOp
+</span><a href="#local-6989586621679418418"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679418419"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418419"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679418420"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418420"><span class="hs-identifier hs-var">b</span></a></span></span><span>    </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#EqBinaryOp"><span class="hs-identifier hs-type">EqBinaryOp</span></a></span><span> </span><span id="local-6989586621679418421"><span class="annot"><span class="annottext">EqBinOp
+</span><a href="#local-6989586621679418421"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679418422"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418422"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679418423"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418423"><span class="hs-identifier hs-var">d</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">EqBinOp
+</span><a href="#local-6989586621679418418"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">EqBinOp -&gt; EqBinOp -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">EqBinOp
-</span><a href="#local-6989586621679393493"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418421"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393491"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418419"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393494"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418422"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393492"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418420"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393495"><span class="hs-identifier hs-var">d</span></a></span><span>
-</span><span id="line-215"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#OrdBinaryOp"><span class="hs-identifier hs-type">OrdBinaryOp</span></a></span><span> </span><span id="local-6989586621679393496"><span class="annot"><span class="annottext">OrdBinOp
-</span><a href="#local-6989586621679393496"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679393497"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393497"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393498"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393498"><span class="hs-identifier hs-var">b</span></a></span></span><span>   </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#OrdBinaryOp"><span class="hs-identifier hs-type">OrdBinaryOp</span></a></span><span> </span><span id="local-6989586621679393499"><span class="annot"><span class="annottext">OrdBinOp
-</span><a href="#local-6989586621679393499"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679393500"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393500"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679393501"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393501"><span class="hs-identifier hs-var">d</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">OrdBinOp
-</span><a href="#local-6989586621679393496"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">OrdBinOp -&gt; OrdBinOp -&gt; Bool
+</span><a href="#local-6989586621679418423"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><span id="line-215"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#OrdBinaryOp"><span class="hs-identifier hs-type">OrdBinaryOp</span></a></span><span> </span><span id="local-6989586621679418424"><span class="annot"><span class="annottext">OrdBinOp
+</span><a href="#local-6989586621679418424"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679418425"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418425"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679418426"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418426"><span class="hs-identifier hs-var">b</span></a></span></span><span>   </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#OrdBinaryOp"><span class="hs-identifier hs-type">OrdBinaryOp</span></a></span><span> </span><span id="local-6989586621679418427"><span class="annot"><span class="annottext">OrdBinOp
+</span><a href="#local-6989586621679418427"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679418428"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418428"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679418429"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418429"><span class="hs-identifier hs-var">d</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">OrdBinOp
+</span><a href="#local-6989586621679418424"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">OrdBinOp -&gt; OrdBinOp -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">OrdBinOp
-</span><a href="#local-6989586621679393499"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418427"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393497"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418425"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393500"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418428"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393498"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418426"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393501"><span class="hs-identifier hs-var">d</span></a></span><span>
-</span><span id="line-216"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#SpaceBinaryOp"><span class="hs-identifier hs-type">SpaceBinaryOp</span></a></span><span> </span><span id="local-6989586621679393502"><span class="annot"><span class="annottext">SpaceBinOp
-</span><a href="#local-6989586621679393502"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679393503"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393503"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393504"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393504"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#SpaceBinaryOp"><span class="hs-identifier hs-type">SpaceBinaryOp</span></a></span><span> </span><span id="local-6989586621679393505"><span class="annot"><span class="annottext">SpaceBinOp
-</span><a href="#local-6989586621679393505"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679393506"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393506"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679393507"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393507"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">SpaceBinOp
-</span><a href="#local-6989586621679393502"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">SpaceBinOp -&gt; SpaceBinOp -&gt; Bool
+</span><a href="#local-6989586621679418429"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><span id="line-216"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#SpaceBinaryOp"><span class="hs-identifier hs-type">SpaceBinaryOp</span></a></span><span> </span><span id="local-6989586621679418430"><span class="annot"><span class="annottext">SpaceBinOp
+</span><a href="#local-6989586621679418430"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679418431"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418431"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679418432"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418432"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#SpaceBinaryOp"><span class="hs-identifier hs-type">SpaceBinaryOp</span></a></span><span> </span><span id="local-6989586621679418433"><span class="annot"><span class="annottext">SpaceBinOp
+</span><a href="#local-6989586621679418433"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679418434"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418434"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679418435"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418435"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">SpaceBinOp
+</span><a href="#local-6989586621679418430"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">SpaceBinOp -&gt; SpaceBinOp -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">SpaceBinOp
-</span><a href="#local-6989586621679393505"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418433"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393503"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418431"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393506"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418434"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393504"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418432"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393507"><span class="hs-identifier hs-var">d</span></a></span><span>
-</span><span id="line-217"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#StatBinaryOp"><span class="hs-identifier hs-type">StatBinaryOp</span></a></span><span> </span><span id="local-6989586621679393508"><span class="annot"><span class="annottext">StatBinOp
-</span><a href="#local-6989586621679393508"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679393509"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393509"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393510"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393510"><span class="hs-identifier hs-var">b</span></a></span></span><span>  </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#StatBinaryOp"><span class="hs-identifier hs-type">StatBinaryOp</span></a></span><span> </span><span id="local-6989586621679393511"><span class="annot"><span class="annottext">StatBinOp
-</span><a href="#local-6989586621679393511"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679393512"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393512"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679393513"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393513"><span class="hs-identifier hs-var">d</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">StatBinOp
-</span><a href="#local-6989586621679393508"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">StatBinOp -&gt; StatBinOp -&gt; Bool
+</span><a href="#local-6989586621679418435"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><span id="line-217"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#StatBinaryOp"><span class="hs-identifier hs-type">StatBinaryOp</span></a></span><span> </span><span id="local-6989586621679418436"><span class="annot"><span class="annottext">StatBinOp
+</span><a href="#local-6989586621679418436"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679418437"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418437"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679418438"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418438"><span class="hs-identifier hs-var">b</span></a></span></span><span>  </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#StatBinaryOp"><span class="hs-identifier hs-type">StatBinaryOp</span></a></span><span> </span><span id="local-6989586621679418439"><span class="annot"><span class="annottext">StatBinOp
+</span><a href="#local-6989586621679418439"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679418440"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418440"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679418441"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418441"><span class="hs-identifier hs-var">d</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">StatBinOp
+</span><a href="#local-6989586621679418436"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">StatBinOp -&gt; StatBinOp -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">StatBinOp
-</span><a href="#local-6989586621679393511"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418439"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393509"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418437"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393512"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418440"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393510"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418438"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393513"><span class="hs-identifier hs-var">d</span></a></span><span>
-</span><span id="line-218"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#LABinaryOp"><span class="hs-identifier hs-type">LABinaryOp</span></a></span><span> </span><span id="local-6989586621679393514"><span class="annot"><span class="annottext">LABinOp
-</span><a href="#local-6989586621679393514"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679393515"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393515"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393516"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393516"><span class="hs-identifier hs-var">b</span></a></span></span><span>    </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#LABinaryOp"><span class="hs-identifier hs-type">LABinaryOp</span></a></span><span> </span><span id="local-6989586621679393517"><span class="annot"><span class="annottext">LABinOp
-</span><a href="#local-6989586621679393517"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679393518"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393518"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679393519"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393519"><span class="hs-identifier hs-var">d</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">LABinOp
-</span><a href="#local-6989586621679393514"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">LABinOp -&gt; LABinOp -&gt; Bool
+</span><a href="#local-6989586621679418441"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><span id="line-218"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#LABinaryOp"><span class="hs-identifier hs-type">LABinaryOp</span></a></span><span> </span><span id="local-6989586621679418442"><span class="annot"><span class="annottext">LABinOp
+</span><a href="#local-6989586621679418442"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679418443"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418443"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679418444"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418444"><span class="hs-identifier hs-var">b</span></a></span></span><span>    </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#LABinaryOp"><span class="hs-identifier hs-type">LABinaryOp</span></a></span><span> </span><span id="local-6989586621679418445"><span class="annot"><span class="annottext">LABinOp
+</span><a href="#local-6989586621679418445"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679418446"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418446"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679418447"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418447"><span class="hs-identifier hs-var">d</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">LABinOp
+</span><a href="#local-6989586621679418442"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">LABinOp -&gt; LABinOp -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">LABinOp
-</span><a href="#local-6989586621679393517"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418445"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393515"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418443"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393518"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418446"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393516"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418444"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393519"><span class="hs-identifier hs-var">d</span></a></span><span>
-</span><span id="line-219"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#VVVBinaryOp"><span class="hs-identifier hs-type">VVVBinaryOp</span></a></span><span> </span><span id="local-6989586621679393520"><span class="annot"><span class="annottext">VVVBinOp
-</span><a href="#local-6989586621679393520"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679393521"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393521"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393522"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393522"><span class="hs-identifier hs-var">b</span></a></span></span><span>   </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#VVVBinaryOp"><span class="hs-identifier hs-type">VVVBinaryOp</span></a></span><span> </span><span id="local-6989586621679393523"><span class="annot"><span class="annottext">VVVBinOp
-</span><a href="#local-6989586621679393523"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679393524"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393524"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679393525"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393525"><span class="hs-identifier hs-var">d</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">VVVBinOp
-</span><a href="#local-6989586621679393520"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">VVVBinOp -&gt; VVVBinOp -&gt; Bool
+</span><a href="#local-6989586621679418447"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><span id="line-219"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#VVVBinaryOp"><span class="hs-identifier hs-type">VVVBinaryOp</span></a></span><span> </span><span id="local-6989586621679418448"><span class="annot"><span class="annottext">VVVBinOp
+</span><a href="#local-6989586621679418448"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679418449"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418449"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679418450"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418450"><span class="hs-identifier hs-var">b</span></a></span></span><span>   </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#VVVBinaryOp"><span class="hs-identifier hs-type">VVVBinaryOp</span></a></span><span> </span><span id="local-6989586621679418451"><span class="annot"><span class="annottext">VVVBinOp
+</span><a href="#local-6989586621679418451"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679418452"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418452"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679418453"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418453"><span class="hs-identifier hs-var">d</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">VVVBinOp
+</span><a href="#local-6989586621679418448"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">VVVBinOp -&gt; VVVBinOp -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">VVVBinOp
-</span><a href="#local-6989586621679393523"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418451"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393521"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418449"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393524"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418452"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393522"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418450"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393525"><span class="hs-identifier hs-var">d</span></a></span><span>
-</span><span id="line-220"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#VVNBinaryOp"><span class="hs-identifier hs-type">VVNBinaryOp</span></a></span><span> </span><span id="local-6989586621679393526"><span class="annot"><span class="annottext">VVNBinOp
-</span><a href="#local-6989586621679393526"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679393527"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393527"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393528"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393528"><span class="hs-identifier hs-var">b</span></a></span></span><span>   </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#VVNBinaryOp"><span class="hs-identifier hs-type">VVNBinaryOp</span></a></span><span> </span><span id="local-6989586621679393529"><span class="annot"><span class="annottext">VVNBinOp
-</span><a href="#local-6989586621679393529"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679393530"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393530"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679393531"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393531"><span class="hs-identifier hs-var">d</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">VVNBinOp
-</span><a href="#local-6989586621679393526"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">VVNBinOp -&gt; VVNBinOp -&gt; Bool
+</span><a href="#local-6989586621679418453"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><span id="line-220"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#VVNBinaryOp"><span class="hs-identifier hs-type">VVNBinaryOp</span></a></span><span> </span><span id="local-6989586621679418454"><span class="annot"><span class="annottext">VVNBinOp
+</span><a href="#local-6989586621679418454"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679418455"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418455"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679418456"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418456"><span class="hs-identifier hs-var">b</span></a></span></span><span>   </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#VVNBinaryOp"><span class="hs-identifier hs-type">VVNBinaryOp</span></a></span><span> </span><span id="local-6989586621679418457"><span class="annot"><span class="annottext">VVNBinOp
+</span><a href="#local-6989586621679418457"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679418458"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418458"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679418459"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418459"><span class="hs-identifier hs-var">d</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">VVNBinOp
+</span><a href="#local-6989586621679418454"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">VVNBinOp -&gt; VVNBinOp -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">VVNBinOp
-</span><a href="#local-6989586621679393529"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418457"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393527"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418455"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393530"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418458"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393528"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418456"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393531"><span class="hs-identifier hs-var">d</span></a></span><span>
-</span><span id="line-221"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ESSBinaryOp"><span class="hs-identifier hs-type">ESSBinaryOp</span></a></span><span> </span><span id="local-6989586621679393532"><span class="annot"><span class="annottext">ESSBinOp
-</span><a href="#local-6989586621679393532"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679393533"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393533"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393534"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393534"><span class="hs-identifier hs-var">b</span></a></span></span><span>   </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ESSBinaryOp"><span class="hs-identifier hs-type">ESSBinaryOp</span></a></span><span> </span><span id="local-6989586621679393535"><span class="annot"><span class="annottext">ESSBinOp
-</span><a href="#local-6989586621679393535"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679393536"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393536"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679393537"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393537"><span class="hs-identifier hs-var">d</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">ESSBinOp
-</span><a href="#local-6989586621679393532"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">ESSBinOp -&gt; ESSBinOp -&gt; Bool
+</span><a href="#local-6989586621679418459"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><span id="line-221"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ESSBinaryOp"><span class="hs-identifier hs-type">ESSBinaryOp</span></a></span><span> </span><span id="local-6989586621679418460"><span class="annot"><span class="annottext">ESSBinOp
+</span><a href="#local-6989586621679418460"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679418461"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418461"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679418462"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418462"><span class="hs-identifier hs-var">b</span></a></span></span><span>   </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ESSBinaryOp"><span class="hs-identifier hs-type">ESSBinaryOp</span></a></span><span> </span><span id="local-6989586621679418463"><span class="annot"><span class="annottext">ESSBinOp
+</span><a href="#local-6989586621679418463"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679418464"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418464"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679418465"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418465"><span class="hs-identifier hs-var">d</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">ESSBinOp
+</span><a href="#local-6989586621679418460"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">ESSBinOp -&gt; ESSBinOp -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ESSBinOp
-</span><a href="#local-6989586621679393535"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418463"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393533"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418461"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393536"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418464"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393534"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418462"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393537"><span class="hs-identifier hs-var">d</span></a></span><span>
-</span><span id="line-222"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ESBBinaryOp"><span class="hs-identifier hs-type">ESBBinaryOp</span></a></span><span> </span><span id="local-6989586621679393538"><span class="annot"><span class="annottext">ESBBinOp
-</span><a href="#local-6989586621679393538"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679393539"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393539"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679393540"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393540"><span class="hs-identifier hs-var">b</span></a></span></span><span>   </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ESBBinaryOp"><span class="hs-identifier hs-type">ESBBinaryOp</span></a></span><span> </span><span id="local-6989586621679393541"><span class="annot"><span class="annottext">ESBBinOp
-</span><a href="#local-6989586621679393541"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679393542"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393542"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679393543"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393543"><span class="hs-identifier hs-var">d</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">ESBBinOp
-</span><a href="#local-6989586621679393538"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">ESBBinOp -&gt; ESBBinOp -&gt; Bool
+</span><a href="#local-6989586621679418465"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><span id="line-222"></span><span>  </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ESBBinaryOp"><span class="hs-identifier hs-type">ESBBinaryOp</span></a></span><span> </span><span id="local-6989586621679418466"><span class="annot"><span class="annottext">ESBBinOp
+</span><a href="#local-6989586621679418466"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679418467"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418467"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679418468"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418468"><span class="hs-identifier hs-var">b</span></a></span></span><span>   </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ESBBinaryOp"><span class="hs-identifier hs-type">ESBBinaryOp</span></a></span><span> </span><span id="local-6989586621679418469"><span class="annot"><span class="annottext">ESBBinOp
+</span><a href="#local-6989586621679418469"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679418470"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418470"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679418471"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679418471"><span class="hs-identifier hs-var">d</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">ESBBinOp
+</span><a href="#local-6989586621679418466"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">ESBBinOp -&gt; ESBBinOp -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ESBBinOp
-</span><a href="#local-6989586621679393541"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418469"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393539"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418467"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393542"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679418470"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393540"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
+</span><a href="#local-6989586621679418468"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679393543"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><a href="#local-6989586621679418471"><span class="hs-identifier hs-var">d</span></a></span><span>
 </span><span id="line-223"></span><span>  </span><span class="annot"><span class="annottext">ModelExpr
 </span><span class="hs-identifier">_</span></span><span>                   </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><span class="hs-identifier">_</span></span><span>                   </span><span class="hs-glyph">=</span><span>   </span><span class="annot"><span class="annottext">Bool
@@ -771,47 +771,47 @@ forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span id="line-229"></span><span class="hs-comment">--                                       (fromInteger $ denominator r)</span><span>
 </span><span id="line-230"></span><span>
 </span><span id="line-231"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Literal.Class.html#LiteralC"><span class="hs-identifier hs-type">LiteralC</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.ModelExpr.Lang.html#ModelExpr"><span class="hs-identifier hs-type">ModelExpr</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-232"></span><span>  </span><span id="local-6989586621679393553"><span class="annot"><span class="annottext">int :: Integer -&gt; ModelExpr
-</span><a href="#local-6989586621679393553"><span class="hs-identifier hs-var hs-var hs-var hs-var">int</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Literal -&gt; ModelExpr
+</span><span id="line-232"></span><span>  </span><span id="local-6989586621679418481"><span class="annot"><span class="annottext">int :: Integer -&gt; ModelExpr
+</span><a href="#local-6989586621679418481"><span class="hs-identifier hs-var hs-var hs-var hs-var">int</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Literal -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-var">Lit</span></a></span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ModelExpr)
 -&gt; (Integer -&gt; Literal) -&gt; Integer -&gt; ModelExpr
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><a href="Language.Drasil.Literal.Class.html#int"><span class="hs-identifier hs-var">int</span></a></span><span>
-</span><span id="line-233"></span><span>  </span><span id="local-6989586621679393557"><span class="annot"><span class="annottext">str :: String -&gt; ModelExpr
-</span><a href="#local-6989586621679393557"><span class="hs-identifier hs-var hs-var hs-var hs-var">str</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Literal -&gt; ModelExpr
+</span><span id="line-233"></span><span>  </span><span id="local-6989586621679418485"><span class="annot"><span class="annottext">str :: String -&gt; ModelExpr
+</span><a href="#local-6989586621679418485"><span class="hs-identifier hs-var hs-var hs-var hs-var">str</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Literal -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-var">Lit</span></a></span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ModelExpr)
 -&gt; (String -&gt; Literal) -&gt; String -&gt; ModelExpr
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Literal
 forall r. LiteralC r =&gt; String -&gt; r
 </span><a href="Language.Drasil.Literal.Class.html#str"><span class="hs-identifier hs-var">str</span></a></span><span>
-</span><span id="line-234"></span><span>  </span><span id="local-6989586621679393560"><span class="annot"><span class="annottext">dbl :: Double -&gt; ModelExpr
-</span><a href="#local-6989586621679393560"><span class="hs-identifier hs-var hs-var hs-var hs-var">dbl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Literal -&gt; ModelExpr
+</span><span id="line-234"></span><span>  </span><span id="local-6989586621679418488"><span class="annot"><span class="annottext">dbl :: Double -&gt; ModelExpr
+</span><a href="#local-6989586621679418488"><span class="hs-identifier hs-var hs-var hs-var hs-var">dbl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Literal -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-var">Lit</span></a></span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ModelExpr)
 -&gt; (Double -&gt; Literal) -&gt; Double -&gt; ModelExpr
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Double -&gt; Literal
 forall r. LiteralC r =&gt; Double -&gt; r
 </span><a href="Language.Drasil.Literal.Class.html#dbl"><span class="hs-identifier hs-var">dbl</span></a></span><span>
-</span><span id="line-235"></span><span>  </span><span id="local-6989586621679393563"><span class="annot"><span class="annottext">exactDbl :: Integer -&gt; ModelExpr
-</span><a href="#local-6989586621679393563"><span class="hs-identifier hs-var hs-var hs-var hs-var">exactDbl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Literal -&gt; ModelExpr
+</span><span id="line-235"></span><span>  </span><span id="local-6989586621679418491"><span class="annot"><span class="annottext">exactDbl :: Integer -&gt; ModelExpr
+</span><a href="#local-6989586621679418491"><span class="hs-identifier hs-var hs-var hs-var hs-var">exactDbl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Literal -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-var">Lit</span></a></span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ModelExpr)
 -&gt; (Integer -&gt; Literal) -&gt; Integer -&gt; ModelExpr
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><a href="Language.Drasil.Literal.Class.html#exactDbl"><span class="hs-identifier hs-var">exactDbl</span></a></span><span>
-</span><span id="line-236"></span><span>  </span><span id="local-6989586621679393566"><span class="annot"><span class="annottext">perc :: Integer -&gt; Integer -&gt; ModelExpr
-</span><a href="#local-6989586621679393566"><span class="hs-identifier hs-var hs-var hs-var hs-var">perc</span></a></span></span><span> </span><span id="local-6989586621679393568"><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679393568"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679393569"><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679393569"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Literal -&gt; ModelExpr
+</span><span id="line-236"></span><span>  </span><span id="local-6989586621679418494"><span class="annot"><span class="annottext">perc :: Integer -&gt; Integer -&gt; ModelExpr
+</span><a href="#local-6989586621679418494"><span class="hs-identifier hs-var hs-var hs-var hs-var">perc</span></a></span></span><span> </span><span id="local-6989586621679418496"><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679418496"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679418497"><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679418497"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Literal -&gt; ModelExpr
 </span><a href="Language.Drasil.ModelExpr.Lang.html#Lit"><span class="hs-identifier hs-var">Lit</span></a></span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ModelExpr) -&gt; Literal -&gt; ModelExpr
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Literal
 forall r. LiteralC r =&gt; Integer -&gt; Integer -&gt; r
 </span><a href="Language.Drasil.Literal.Class.html#perc"><span class="hs-identifier hs-var">perc</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679393568"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679393569"><span class="hs-identifier hs-var">r</span></a></span><span>
+</span><a href="#local-6989586621679418496"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679418497"><span class="hs-identifier hs-var">r</span></a></span><span>
 </span><span id="line-237"></span></pre></body></html>

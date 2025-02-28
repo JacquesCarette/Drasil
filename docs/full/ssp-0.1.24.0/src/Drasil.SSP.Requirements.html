@@ -421,10 +421,8 @@ r -&gt; Sentence
 </span><span id="line-93"></span><span class="hs-comment">------------------</span><span>
 </span><span id="line-94"></span><span class="annot"><a href="Drasil.SSP.Requirements.html#inputDataTable"><span class="hs-identifier hs-type">inputDataTable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span>
 </span><span id="line-95"></span><span id="inputDataTable"><span class="annot"><span class="annottext">inputDataTable :: LabelledContent
-</span><a href="Drasil.SSP.Requirements.html#inputDataTable"><span class="hs-identifier hs-var hs-var">inputDataTable</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict] -&gt; ConceptInstance -&gt; LabelledContent
-forall i r.
-(Quantity i, MayHaveUnit i, HasShortName r, Referable r) =&gt;
-[i] -&gt; r -&gt; LabelledContent
+</span><a href="Drasil.SSP.Requirements.html#inputDataTable"><span class="hs-identifier hs-var hs-var">inputDataTable</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict] -&gt; LabelledContent
+forall i. (Quantity i, MayHaveUnit i) =&gt; [i] -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">mkInputPropsTable</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; DefinedQuantityDict
 forall c.
 (Quantity c, Concept c, MayHaveUnit c) =&gt;
@@ -441,8 +439,7 @@ forall c.
 (Quantity c, Concept c, MayHaveUnit c) =&gt;
 c -&gt; DefinedQuantityDict
 </span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
-</span><a href="Drasil.SSP.Unitals.html#inputs"><span class="hs-identifier hs-var">inputs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
-</span><a href="Drasil.SSP.Requirements.html#readAndStore"><span class="hs-identifier hs-var">readAndStore</span></a></span><span>
+</span><a href="Drasil.SSP.Unitals.html#inputs"><span class="hs-identifier hs-var">inputs</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-96"></span><span>  </span><span class="hs-comment">--FIXME: this has to be seperate since coords is a different type</span><span>
 </span><span id="line-97"></span><span>
 </span><span id="line-98"></span><span class="annot"><a href="Drasil.SSP.Requirements.html#inputsToOutput"><span class="hs-identifier hs-type">inputsToOutput</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span>
@@ -501,50 +498,44 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
-</span><span class="hs-identifier hs-var">output_</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; ConceptInstance -&gt; Sentence
-forall r.
-(Referable r, HasShortName r) =&gt;
-Sentence -&gt; r -&gt; Sentence
-</span><span class="hs-operator hs-var">`follows`</span></span><span>
-</span><span id="line-106"></span><span>    </span><span class="annot"><span class="annottext">ConceptInstance
-</span><a href="Drasil.SSP.Requirements.html#displayInput"><span class="hs-identifier hs-var">displayInput</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">output_</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span>
-</span><span id="line-107"></span><span>
-</span><span id="line-108"></span><span class="hs-comment">{-Nonfunctional Requirements-}</span><span>
-</span><span id="line-109"></span><span class="annot"><a href="Drasil.SSP.Requirements.html#nonFuncReqs"><span class="hs-identifier hs-type">nonFuncReqs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
-</span><span id="line-110"></span><span id="nonFuncReqs"><span class="annot"><span class="annottext">nonFuncReqs :: [ConceptInstance]
+</span><span id="line-106"></span><span>
+</span><span id="line-107"></span><span class="hs-comment">{-Nonfunctional Requirements-}</span><span>
+</span><span id="line-108"></span><span class="annot"><a href="Drasil.SSP.Requirements.html#nonFuncReqs"><span class="hs-identifier hs-type">nonFuncReqs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
+</span><span id="line-109"></span><span id="nonFuncReqs"><span class="annot"><span class="annottext">nonFuncReqs :: [ConceptInstance]
 </span><a href="Drasil.SSP.Requirements.html#nonFuncReqs"><span class="hs-identifier hs-var hs-var">nonFuncReqs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SSP.Requirements.html#correct"><span class="hs-identifier hs-var">correct</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SSP.Requirements.html#understandable"><span class="hs-identifier hs-var">understandable</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SSP.Requirements.html#reusable"><span class="hs-identifier hs-var">reusable</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SSP.Requirements.html#maintainable"><span class="hs-identifier hs-var">maintainable</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-111"></span><span>
-</span><span id="line-112"></span><span class="annot"><a href="Drasil.SSP.Requirements.html#correct"><span class="hs-identifier hs-type">correct</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-113"></span><span id="correct"><span class="annot"><span class="annottext">correct :: ConceptInstance
+</span><span id="line-110"></span><span>
+</span><span id="line-111"></span><span class="annot"><a href="Drasil.SSP.Requirements.html#correct"><span class="hs-identifier hs-type">correct</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-112"></span><span id="correct"><span class="annot"><span class="annottext">correct :: ConceptInstance
 </span><a href="Drasil.SSP.Requirements.html#correct"><span class="hs-identifier hs-var hs-var">correct</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">mkCorrectNFR</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;correct&quot;</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Correctness&quot;</span></span><span>
-</span><span id="line-114"></span><span>
-</span><span id="line-115"></span><span class="annot"><a href="Drasil.SSP.Requirements.html#understandable"><span class="hs-identifier hs-type">understandable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-116"></span><span id="understandable"><span class="annot"><span class="annottext">understandable :: ConceptInstance
+</span><span id="line-113"></span><span>
+</span><span id="line-114"></span><span class="annot"><a href="Drasil.SSP.Requirements.html#understandable"><span class="hs-identifier hs-type">understandable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-115"></span><span id="understandable"><span class="annot"><span class="annottext">understandable :: ConceptInstance
 </span><a href="Drasil.SSP.Requirements.html#understandable"><span class="hs-identifier hs-var hs-var">understandable</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">mkUnderstandableNFR</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;understandable&quot;</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Understandability&quot;</span></span><span>
-</span><span id="line-117"></span><span>
-</span><span id="line-118"></span><span class="annot"><a href="Drasil.SSP.Requirements.html#reusable"><span class="hs-identifier hs-type">reusable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-119"></span><span id="reusable"><span class="annot"><span class="annottext">reusable :: ConceptInstance
+</span><span id="line-116"></span><span>
+</span><span id="line-117"></span><span class="annot"><a href="Drasil.SSP.Requirements.html#reusable"><span class="hs-identifier hs-type">reusable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-118"></span><span id="reusable"><span class="annot"><span class="annottext">reusable :: ConceptInstance
 </span><a href="Drasil.SSP.Requirements.html#reusable"><span class="hs-identifier hs-var hs-var">reusable</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">mkReusableNFR</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;reusable&quot;</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Reusability&quot;</span></span><span>
-</span><span id="line-120"></span><span>
-</span><span id="line-121"></span><span class="annot"><a href="Drasil.SSP.Requirements.html#maintainable"><span class="hs-identifier hs-type">maintainable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-122"></span><span id="maintainable"><span class="annot"><span class="annottext">maintainable :: ConceptInstance
+</span><span id="line-119"></span><span>
+</span><span id="line-120"></span><span class="annot"><a href="Drasil.SSP.Requirements.html#maintainable"><span class="hs-identifier hs-type">maintainable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-121"></span><span id="maintainable"><span class="annot"><span class="annottext">maintainable :: ConceptInstance
 </span><a href="Drasil.SSP.Requirements.html#maintainable"><span class="hs-identifier hs-var hs-var">maintainable</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Integer -&gt; String -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">mkMaintainableNFR</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;maintainable&quot;</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">10</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Maintainability&quot;</span></span><span>
-</span><span id="line-123"></span></pre></body></html>
+</span><span id="line-122"></span></pre></body></html>

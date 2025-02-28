@@ -2,10 +2,10 @@ digraph allvsr {
 	findMass -> wMass;
 	findMass -> wVol;
 	findMass -> tankVol;
-	findMass -> theory:eBalanceOnWtrRC;
-	findMass -> theory:eBalanceOnPCMRC;
+	findMass -> eBalanceOnWtrRC:theory;
+	findMass -> eBalanceOnPCMRC:theory;
 	findMass -> heatEInWtrIM;
-	findMass -> theory:heatEInPCMRC;
+	findMass -> heatEInPCMRC:theory;
 	findMass -> inputValues;
 	outputInputDerivVals -> tauW;
 	outputInputDerivVals -> eta;
@@ -13,16 +13,16 @@ digraph allvsr {
 	outputInputDerivVals -> tauLP;
 	outputInputDerivVals -> inputValues;
 	outputInputDerivVals -> findMass;
-	calcValues -> theory:eBalanceOnWtrRC;
-	calcValues -> theory:eBalanceOnPCMRC;
+	calcValues -> eBalanceOnWtrRC:theory;
+	calcValues -> eBalanceOnPCMRC:theory;
 	calcValues -> heatEInWtrIM;
-	calcValues -> theory:heatEInPCMRC;
-	calcPCMMeltBegin -> theory:eBalanceOnPCMRC;
-	calcPCMMeltEnd -> theory:eBalanceOnPCMRC;
-	outputValues -> theory:eBalanceOnWtrRC;
-	outputValues -> theory:eBalanceOnPCMRC;
+	calcValues -> heatEInPCMRC:theory;
+	calcPCMMeltBegin -> eBalanceOnPCMRC:theory;
+	calcPCMMeltEnd -> eBalanceOnPCMRC:theory;
+	outputValues -> eBalanceOnWtrRC:theory;
+	outputValues -> eBalanceOnPCMRC:theory;
 	outputValues -> heatEInWtrIM;
-	outputValues -> theory:heatEInPCMRC;
+	outputValues -> heatEInPCMRC:theory;
 
 
 	assumpTEO	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpTEO"];
@@ -67,33 +67,33 @@ digraph allvsr {
 	{wMass, wVol, tankVol, tauW, eta, tauSP, tauLP, htFusion, meltFrac, aspectRatio}
 	}
 
-	theory:consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
-	theory:sensHeat	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
+	consThermECS:theory	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
+	sensHeat:theory	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
 	latentHtETM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:latentHtE"];
 	nwtnCoolingTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
 
 	subgraph TM {
 	rank="same"
-	{theory:consThermECS, theory:sensHeat, latentHtETM, nwtnCoolingTM}
+	{consThermECS:theory, sensHeat:theory, latentHtETM, nwtnCoolingTM}
 	}
 
-	theory:rocTempSimpRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];
-	theory:htFluxC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:htFluxWaterFromCoil"];
-	theory:htFluxP	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:htFluxPCMFromWater"];
+	rocTempSimpRC:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];
+	htFluxC:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:htFluxWaterFromCoil"];
+	htFluxP:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:htFluxPCMFromWater"];
 
 	subgraph GD {
 	rank="same"
-	{theory:rocTempSimpRC, theory:htFluxC, theory:htFluxP}
+	{rocTempSimpRC:theory, htFluxC:theory, htFluxP:theory}
 	}
 
-	theory:eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
-	theory:eBalanceOnPCMRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnPCM"];
+	eBalanceOnWtrRC:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
+	eBalanceOnPCMRC:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnPCM"];
 	heatEInWtrIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
-	theory:heatEInPCMRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInPCM"];
+	heatEInPCMRC:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInPCM"];
 
 	subgraph IM {
 	rank="same"
-	{theory:eBalanceOnWtrRC, theory:eBalanceOnPCMRC, heatEInWtrIM, theory:heatEInPCMRC}
+	{eBalanceOnWtrRC:theory, eBalanceOnPCMRC:theory, heatEInWtrIM, heatEInPCMRC:theory}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

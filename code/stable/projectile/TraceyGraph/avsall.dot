@@ -1,30 +1,30 @@
 digraph avsall {
-	theory:projSpeed -> pointMass;
-	theory:projSpeed -> timeStartZero;
-	theory:projPos -> pointMass;
-	theory:projPos -> timeStartZero;
-	theory:velocity -> twoDMotion;
-	theory:velocity -> cartSyst;
-	theory:velocity -> constAccel;
-	theory:velocity -> timeStartZero;
-	theory:position -> twoDMotion;
-	theory:position -> cartSyst;
-	theory:position -> constAccel;
-	theory:position -> timeStartZero;
-	theory:flightduration -> yAxisGravity;
-	theory:flightduration -> launchOrigin;
-	theory:flightduration -> targetXAxis;
-	theory:flightduration -> posXDirection;
-	theory:flightduration -> accelYGravity;
-	theory:flightduration -> timeStartZero;
-	theory:flightduration -> gravAccelValue;
-	theory:landingposition -> yAxisGravity;
-	theory:landingposition -> launchOrigin;
-	theory:landingposition -> posXDirection;
-	theory:landingposition -> accelXZero;
-	theory:landingposition -> gravAccelValue;
-	theory:offset -> posXDirection;
-	theory:message -> posXDirection;
+	projSpeed:theory -> pointMass;
+	projSpeed:theory -> timeStartZero;
+	projPos:theory -> pointMass;
+	projPos:theory -> timeStartZero;
+	velocity:theory -> twoDMotion;
+	velocity:theory -> cartSyst;
+	velocity:theory -> constAccel;
+	velocity:theory -> timeStartZero;
+	position:theory -> twoDMotion;
+	position:theory -> cartSyst;
+	position:theory -> constAccel;
+	position:theory -> timeStartZero;
+	flightduration:theory -> yAxisGravity;
+	flightduration:theory -> launchOrigin;
+	flightduration:theory -> targetXAxis;
+	flightduration:theory -> posXDirection;
+	flightduration:theory -> accelYGravity;
+	flightduration:theory -> timeStartZero;
+	flightduration:theory -> gravAccelValue;
+	landingposition:theory -> yAxisGravity;
+	landingposition:theory -> launchOrigin;
+	landingposition:theory -> posXDirection;
+	landingposition:theory -> accelXZero;
+	landingposition:theory -> gravAccelValue;
+	offset:theory -> posXDirection;
+	message:theory -> posXDirection;
 
 
 	twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
@@ -65,24 +65,24 @@ digraph avsall {
 	{accelerationTM, velocityTM}
 	}
 
-	theory:projSpeed	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectVel"];
-	theory:projPos	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectPos"];
-	theory:velocity	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velVec"];
-	theory:position	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:posVec"];
+	projSpeed:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectVel"];
+	projPos:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectPos"];
+	velocity:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velVec"];
+	position:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:posVec"];
 
 	subgraph GD {
 	rank="same"
-	{theory:projSpeed, theory:projPos, theory:velocity, theory:position}
+	{projSpeed:theory, projPos:theory, velocity:theory, position:theory}
 	}
 
-	theory:flightduration	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingTime"];
-	theory:landingposition	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingDist"];
-	theory:offset	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:offsetIM"];
-	theory:message	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:messageIM"];
+	flightduration:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingTime"];
+	landingposition:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingDist"];
+	offset:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:offsetIM"];
+	message:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:messageIM"];
 
 	subgraph IM {
 	rank="same"
-	{theory:flightduration, theory:landingposition, theory:offset, theory:message}
+	{flightduration:theory, landingposition:theory, offset:theory, message:theory}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

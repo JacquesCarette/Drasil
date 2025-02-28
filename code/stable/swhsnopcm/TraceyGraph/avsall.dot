@@ -1,16 +1,16 @@
 digraph avsall {
 	wVol -> assumpVCN;
-	theory:consThermECS -> assumpTEO;
-	theory:sensHeat -> assumpWAL;
+	consThermECS:theory -> assumpTEO;
+	sensHeat:theory -> assumpWAL;
 	nwtnCoolingTM -> assumpHTCC;
-	theory:rocTempSimpRC -> assumpCWTAT;
-	theory:rocTempSimpRC -> assumpDWCoW;
-	theory:rocTempSimpRC -> assumpSHECoW;
-	theory:htFluxC -> assumpLCCCW;
-	theory:htFluxC -> assumpTHCCoT;
-	theory:eBalanceOnWtrRC -> assumpWAL;
-	theory:eBalanceOnWtrRC -> assumpPIT;
-	theory:eBalanceOnWtrRC -> assumpNIHGBW;
+	rocTempSimpRC:theory -> assumpCWTAT;
+	rocTempSimpRC:theory -> assumpDWCoW;
+	rocTempSimpRC:theory -> assumpSHECoW;
+	htFluxC:theory -> assumpLCCCW;
+	htFluxC:theory -> assumpTHCCoT;
+	eBalanceOnWtrRC:theory -> assumpWAL;
+	eBalanceOnWtrRC:theory -> assumpPIT;
+	eBalanceOnWtrRC:theory -> assumpNIHGBW;
 	heatEInWtrIM -> assumpWAL;
 	heatEInWtrIM -> assumpAPT;
 	likeChgTCVOD -> assumpTHCCoT;
@@ -51,29 +51,29 @@ digraph avsall {
 	{wMass, wVol, tankVol, tauW}
 	}
 
-	theory:consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
-	theory:sensHeat	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
+	consThermECS:theory	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
+	sensHeat:theory	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
 	nwtnCoolingTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
 
 	subgraph TM {
 	rank="same"
-	{theory:consThermECS, theory:sensHeat, nwtnCoolingTM}
+	{consThermECS:theory, sensHeat:theory, nwtnCoolingTM}
 	}
 
-	theory:rocTempSimpRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];
-	theory:htFluxC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:htFluxWaterFromCoil"];
+	rocTempSimpRC:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];
+	htFluxC:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:htFluxWaterFromCoil"];
 
 	subgraph GD {
 	rank="same"
-	{theory:rocTempSimpRC, theory:htFluxC}
+	{rocTempSimpRC:theory, htFluxC:theory}
 	}
 
-	theory:eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
+	eBalanceOnWtrRC:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
 	heatEInWtrIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
 
 	subgraph IM {
 	rank="same"
-	{theory:eBalanceOnWtrRC, heatEInWtrIM}
+	{eBalanceOnWtrRC:theory, heatEInWtrIM}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

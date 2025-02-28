@@ -27,4 +27,4 @@ Output-Values: Output \\({θ\_{1}}\\) and \\({θ\_{2}}\\) (from [IM:calOfAngle1]
 |\\({m\_{1}}\\)|Mass of the first object |\\({\text{kg}}\\)|
 |\\({m\_{2}}\\)|Mass of the second object|\\({\text{kg}}\\)|
 
-**<p align="center">Required Inputs following [FR:Input-Values](./SecFRs.md#inputValues)</p>**
+**<p align="center">Required Inputs</p>**

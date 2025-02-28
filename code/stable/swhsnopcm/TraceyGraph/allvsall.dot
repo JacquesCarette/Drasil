@@ -25,9 +25,9 @@ digraph allvsall {
 	findMass -> wVol;
 	findMass -> tankVol;
 	findMass -> theory:eBalanceOnWtrRC;
-	findMass -> inputInitVals;
+	findMass -> inputValues;
 	outputInputDerivVals -> tauW;
-	outputInputDerivVals -> inputInitVals;
+	outputInputDerivVals -> inputValues;
 	outputInputDerivVals -> findMass;
 	calcValues -> theory:eBalanceOnWtrRC;
 	calcValues -> heatEInWtrIM;
@@ -97,7 +97,7 @@ digraph allvsall {
 	{theory:eBalanceOnWtrRC, heatEInWtrIM}
 	}
 
-	inputInitVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputInitVals"];
+	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
 	findMass	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:findMass"];
 	checkWithPhysConsts	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:checkWithPhysConsts"];
 	outputInputDerivVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputInputDerivVals"];
@@ -111,7 +111,7 @@ digraph allvsall {
 
 	subgraph FR {
 	rank="same"
-	{inputInitVals, findMass, checkWithPhysConsts, outputInputDerivVals, calcValues, outputValues, correct, verifiable, understandable, reusable, maintainable}
+	{inputValues, findMass, checkWithPhysConsts, outputInputDerivVals, calcValues, outputValues, correct, verifiable, understandable, reusable, maintainable}
 	}
 
 	waterTempGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:waterTempGS"];

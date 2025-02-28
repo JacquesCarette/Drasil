@@ -2,10 +2,14 @@ name:                drasil-utils
 version:             0.1.1.0
 author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
 maintainer:          "Jacques Carette"
-synopsis:	     A framework for code and document generation for scientific software - Utils SubPackage
+synopsis:            A framework for code and document generation for scientific software - Utils SubPackage
 github:              JacquesCarette/Drasil
 homepage:            https://jacquescarette.github.io/Drasil/
 description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+language: Haskell2010
+default-extensions:
+- StrictData
 
 extra-source-files: []
 

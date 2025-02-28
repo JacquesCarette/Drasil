@@ -191,7 +191,6 @@ makeLenses ''ChunkDB
 --     * 'GenDefn's (for 'GendefMap'),
 --     * 'TheoryModel's (for 'TheoryModelMap'),
 --     * 'ConceptInstance's (for 'ConceptInstanceMap'),
---     * 'Section's (for 'SectionMap'),
 --     * 'LabelledContent's (for 'LabelledContentMap').
 cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =>
     [q] -> [t] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->

@@ -141,7 +141,7 @@ symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
    ++ [nw distance, nw algorithm] ++
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw symb ++ terms ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
-  ++ map unitWrapper [pascal, newton]) GB.dataDefs iMods [] tMods concIns section
+  ++ map unitWrapper [pascal, newton]) GB.dataDefs iMods [] tMods concIns []
   labCon allRefs
 
 -- | Holds all references and links used in the document.
@@ -160,9 +160,6 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols)
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
-
-section :: [Section]
-section = extractSection srs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

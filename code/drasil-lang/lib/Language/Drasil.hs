@@ -226,7 +226,7 @@ module Language.Drasil (
   -- Language.Drasil.Document
   , Document(..), ShowTableOfContents(..), DType(..), Section(..)
   , Contents(..), SecCons(..), ListType(..), ItemType(..), ListTuple
-  , LabelledContent(..), UnlabelledContent(..), HasCaption(..), extractSection
+  , LabelledContent(..), UnlabelledContent(..), HasCaption(..)
   , mkParagraph, mkRawLC, checkToC
   , llcc, ulcc
   , section, fig, figNoCap, figWithWidth, figNoCapWithWidth
@@ -314,7 +314,7 @@ import Language.Drasil.CodeExpr.Lang (CodeExpr)
 import Language.Drasil.CodeExpr.Class (CodeExprC(..))
 import Language.Drasil.Document (section, fig, figNoCap, figWithWidth, figNoCapWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
-  , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC, extractSection
+  , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC
   , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI
   , makeTabRef', makeFigRef', makeSecRef', makeEqnRef', makeURI')
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), DType(..)

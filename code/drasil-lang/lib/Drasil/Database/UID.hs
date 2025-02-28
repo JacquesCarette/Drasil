@@ -3,7 +3,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 -- | Unique Identifier used across Drasil.
-module Language.Drasil.UID (
+module Drasil.Database.UID (
     UID
   , HasUID(uid)
   , mkUid, nsUid, (+++), (+++.), (+++!)

@@ -10,7 +10,7 @@ import Language.Drasil.Label.Type (getAdd, prepend, LblType(..),
   Referable(..), HasRefAddress(..) )
 import Language.Drasil.Reference (Reference(Reference))
 import Language.Drasil.Sentence (Sentence(..))
-import Language.Drasil.UID (UID, HasUID(..), (+++.), mkUid, nsUid)
+import Drasil.Database.UID (UID, HasUID(..), (+++.), mkUid, nsUid)
 
 import Utils.Drasil (repUnd)
 

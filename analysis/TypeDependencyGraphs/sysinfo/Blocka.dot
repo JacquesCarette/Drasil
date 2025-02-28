@@ -1,6 +1,0 @@
-digraph blocka{
-Blocka	[shape=oval, color=darkviolet, label="Blocka"];
-Blocka -> a;
-Blocka -> SystemInformation;
-Blocka -> BibRef;
-}

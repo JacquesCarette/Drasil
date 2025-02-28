@@ -4409,12 +4409,6 @@ digraph alltypes {
 		SystemInformation -> Idea;
 		SystemInformation -> b;
 		}
-		subgraph blocka{
-		Blocka	[shape=oval, color=darkviolet, label="Blocka"];
-		Blocka -> a;
-		Blocka -> SystemInformation;
-		Blocka -> BibRef;
-		}
 		subgraph purpose{
 		Purpose	[shape=oval, color=red2, label="Purpose"];
 		Purpose -> Sentence;

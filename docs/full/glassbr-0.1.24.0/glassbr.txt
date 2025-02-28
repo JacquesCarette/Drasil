@@ -232,7 +232,6 @@ iMods :: [InstanceModel]
 pbIsSafe :: InstanceModel
 lrIsSafe :: InstanceModel
 instModIntro :: Sentence
-qDefns :: [Block SimpleQDef]
 
 module Drasil.GlassBR.Symbols
 symbolsForTable :: [QuantityDict]

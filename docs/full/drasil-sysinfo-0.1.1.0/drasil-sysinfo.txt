@@ -44,26 +44,20 @@ module SysInfo.Drasil.SystemInformation
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data SystemInformation
-[SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [f] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [Block SimpleQDef] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
-
--- | for listing <a>QDefinition</a>s in <a>SystemInformation</a>.
-data Block a
-Coupled :: a -> a -> [a] -> Block a
-Parallel :: a -> [a] -> Block a
-class HasSystemInformation c_a90t
-systemInformation :: HasSystemInformation c_a90t => Lens' c_a90t SystemInformation
-authors :: HasSystemInformation c_a90t => Lens' c_a90t People
-background :: HasSystemInformation c_a90t => Lens' c_a90t Background
-configFiles :: HasSystemInformation c_a90t => Lens' c_a90t [String]
-constants :: HasSystemInformation c_a90t => Lens' c_a90t [ConstQDef]
-datadefs :: HasSystemInformation c_a90t => Lens' c_a90t [DataDefinition]
-defSequence :: HasSystemInformation c_a90t => Lens' c_a90t [Block SimpleQDef]
-instModels :: HasSystemInformation c_a90t => Lens' c_a90t [InstanceModel]
-motivation :: HasSystemInformation c_a90t => Lens' c_a90t Motivation
-purpose :: HasSystemInformation c_a90t => Lens' c_a90t Purpose
-scope :: HasSystemInformation c_a90t => Lens' c_a90t Scope
-sysinfodb :: HasSystemInformation c_a90t => Lens' c_a90t ChunkDB
-usedinfodb :: HasSystemInformation c_a90t => Lens' c_a90t ChunkDB
+[SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [f] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
+class HasSystemInformation c_a8Vw
+systemInformation :: HasSystemInformation c_a8Vw => Lens' c_a8Vw SystemInformation
+authors :: HasSystemInformation c_a8Vw => Lens' c_a8Vw People
+background :: HasSystemInformation c_a8Vw => Lens' c_a8Vw Background
+configFiles :: HasSystemInformation c_a8Vw => Lens' c_a8Vw [String]
+constants :: HasSystemInformation c_a8Vw => Lens' c_a8Vw [ConstQDef]
+datadefs :: HasSystemInformation c_a8Vw => Lens' c_a8Vw [DataDefinition]
+instModels :: HasSystemInformation c_a8Vw => Lens' c_a8Vw [InstanceModel]
+motivation :: HasSystemInformation c_a8Vw => Lens' c_a8Vw Motivation
+purpose :: HasSystemInformation c_a8Vw => Lens' c_a8Vw Purpose
+scope :: HasSystemInformation c_a8Vw => Lens' c_a8Vw Scope
+sysinfodb :: HasSystemInformation c_a8Vw => Lens' c_a8Vw ChunkDB
+usedinfodb :: HasSystemInformation c_a8Vw => Lens' c_a8Vw ChunkDB
 
 -- | Helper for extracting a bibliography from the system information.
 citeDB :: SystemInformation -> BibRef
@@ -110,25 +104,20 @@ module SysInfo.Drasil
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data SystemInformation
-[SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [f] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [Block SimpleQDef] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
-
--- | for listing <a>QDefinition</a>s in <a>SystemInformation</a>.
-data Block a
-Parallel :: a -> [a] -> Block a
-class HasSystemInformation c_a90t
-systemInformation :: HasSystemInformation c_a90t => Lens' c_a90t SystemInformation
-authors :: HasSystemInformation c_a90t => Lens' c_a90t People
-background :: HasSystemInformation c_a90t => Lens' c_a90t Background
-configFiles :: HasSystemInformation c_a90t => Lens' c_a90t [String]
-constants :: HasSystemInformation c_a90t => Lens' c_a90t [ConstQDef]
-datadefs :: HasSystemInformation c_a90t => Lens' c_a90t [DataDefinition]
-defSequence :: HasSystemInformation c_a90t => Lens' c_a90t [Block SimpleQDef]
-instModels :: HasSystemInformation c_a90t => Lens' c_a90t [InstanceModel]
-motivation :: HasSystemInformation c_a90t => Lens' c_a90t Motivation
-purpose :: HasSystemInformation c_a90t => Lens' c_a90t Purpose
-scope :: HasSystemInformation c_a90t => Lens' c_a90t Scope
-sysinfodb :: HasSystemInformation c_a90t => Lens' c_a90t ChunkDB
-usedinfodb :: HasSystemInformation c_a90t => Lens' c_a90t ChunkDB
+[SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [f] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
+class HasSystemInformation c_a8Vw
+systemInformation :: HasSystemInformation c_a8Vw => Lens' c_a8Vw SystemInformation
+authors :: HasSystemInformation c_a8Vw => Lens' c_a8Vw People
+background :: HasSystemInformation c_a8Vw => Lens' c_a8Vw Background
+configFiles :: HasSystemInformation c_a8Vw => Lens' c_a8Vw [String]
+constants :: HasSystemInformation c_a8Vw => Lens' c_a8Vw [ConstQDef]
+datadefs :: HasSystemInformation c_a8Vw => Lens' c_a8Vw [DataDefinition]
+instModels :: HasSystemInformation c_a8Vw => Lens' c_a8Vw [InstanceModel]
+motivation :: HasSystemInformation c_a8Vw => Lens' c_a8Vw Motivation
+purpose :: HasSystemInformation c_a8Vw => Lens' c_a8Vw Purpose
+scope :: HasSystemInformation c_a8Vw => Lens' c_a8Vw Scope
+sysinfodb :: HasSystemInformation c_a8Vw => Lens' c_a8Vw ChunkDB
+usedinfodb :: HasSystemInformation c_a8Vw => Lens' c_a8Vw ChunkDB
 
 -- | Database for internal references. Contains citations and referrable
 --   concepts.

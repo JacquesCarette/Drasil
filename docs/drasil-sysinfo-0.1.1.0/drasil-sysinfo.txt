@@ -14,25 +14,20 @@ module SysInfo.Drasil
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data SystemInformation
-[SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [f] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [Block SimpleQDef] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
-
--- | for listing <a>QDefinition</a>s in <a>SystemInformation</a>.
-data Block a
-Parallel :: a -> [a] -> Block a
-class HasSystemInformation c_a94o
-systemInformation :: HasSystemInformation c_a94o => Lens' c_a94o SystemInformation
-authors :: HasSystemInformation c_a94o => Lens' c_a94o People
-background :: HasSystemInformation c_a94o => Lens' c_a94o Background
-configFiles :: HasSystemInformation c_a94o => Lens' c_a94o [String]
-constants :: HasSystemInformation c_a94o => Lens' c_a94o [ConstQDef]
-datadefs :: HasSystemInformation c_a94o => Lens' c_a94o [DataDefinition]
-defSequence :: HasSystemInformation c_a94o => Lens' c_a94o [Block SimpleQDef]
-instModels :: HasSystemInformation c_a94o => Lens' c_a94o [InstanceModel]
-motivation :: HasSystemInformation c_a94o => Lens' c_a94o Motivation
-purpose :: HasSystemInformation c_a94o => Lens' c_a94o Purpose
-scope :: HasSystemInformation c_a94o => Lens' c_a94o Scope
-sysinfodb :: HasSystemInformation c_a94o => Lens' c_a94o ChunkDB
-usedinfodb :: HasSystemInformation c_a94o => Lens' c_a94o ChunkDB
+[SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [f] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
+class HasSystemInformation c_a8Uk
+systemInformation :: HasSystemInformation c_a8Uk => Lens' c_a8Uk SystemInformation
+authors :: HasSystemInformation c_a8Uk => Lens' c_a8Uk People
+background :: HasSystemInformation c_a8Uk => Lens' c_a8Uk Background
+configFiles :: HasSystemInformation c_a8Uk => Lens' c_a8Uk [String]
+constants :: HasSystemInformation c_a8Uk => Lens' c_a8Uk [ConstQDef]
+datadefs :: HasSystemInformation c_a8Uk => Lens' c_a8Uk [DataDefinition]
+instModels :: HasSystemInformation c_a8Uk => Lens' c_a8Uk [InstanceModel]
+motivation :: HasSystemInformation c_a8Uk => Lens' c_a8Uk Motivation
+purpose :: HasSystemInformation c_a8Uk => Lens' c_a8Uk Purpose
+scope :: HasSystemInformation c_a8Uk => Lens' c_a8Uk Scope
+sysinfodb :: HasSystemInformation c_a8Uk => Lens' c_a8Uk ChunkDB
+usedinfodb :: HasSystemInformation c_a8Uk => Lens' c_a8Uk ChunkDB
 
 -- | Database for internal references. Contains citations and referrable
 --   concepts.

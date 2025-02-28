@@ -23,35 +23,34 @@
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Purpose
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[e]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[f]
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679118725"><span class="annot"><span class="annottext">[InstanceModel]
-</span><a href="#local-6989586621679118725"><span class="hs-identifier hs-var">ims</span></a></span></span><span> </span><span id="local-6989586621679118726"><span class="annot"><span class="annottext">[DataDefinition]
-</span><a href="#local-6989586621679118726"><span class="hs-identifier hs-var">dds</span></a></span></span><span> </span><span class="annot"><span class="annottext">[String]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679119227"><span class="annot"><span class="annottext">[InstanceModel]
+</span><a href="#local-6989586621679119227"><span class="hs-identifier hs-var">ims</span></a></span></span><span> </span><span id="local-6989586621679119228"><span class="annot"><span class="annottext">[DataDefinition]
+</span><a href="#local-6989586621679119228"><span class="hs-identifier hs-var">dds</span></a></span></span><span> </span><span class="annot"><span class="annottext">[String]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[h]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[i]
-</span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[Block SimpleQDef]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[j]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[ConstQDef]
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679118727"><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679118727"><span class="hs-identifier hs-var">chks</span></a></span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679119229"><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119229"><span class="hs-identifier hs-var">chks</span></a></span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">ReferenceDB
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span>
 </span><span id="line-17"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
 </span><span id="line-18"></span><span>    </span><span class="hs-comment">-- build a variable context (a map of UIDs to &quot;Space&quot;s [types])</span><span>
-</span><span id="line-19"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679118734"><span class="annot"><span class="annottext">cxt :: Map UID Space
-</span><a href="#local-6989586621679118734"><span class="hs-identifier hs-var hs-var">cxt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((QuantityDict, Int) -&gt; Space)
+</span><span id="line-19"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679119236"><span class="annot"><span class="annottext">cxt :: Map UID Space
+</span><a href="#local-6989586621679119236"><span class="hs-identifier hs-var hs-var">cxt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((QuantityDict, Int) -&gt; Space)
 -&gt; Map UID (QuantityDict, Int) -&gt; Map UID Space
 forall a b k. (a -&gt; b) -&gt; Map k a -&gt; Map k b
-</span><span class="hs-identifier hs-var">M.map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span id="local-6989586621679118736"><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679118736"><span class="hs-identifier hs-var">dict</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-identifier hs-var">M.map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span id="local-6989586621679119238"><span class="annot"><span class="annottext">QuantityDict
+</span><a href="#local-6989586621679119238"><span class="hs-identifier hs-var">dict</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679118736"><span class="hs-identifier hs-var">dict</span></a></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Getting Space QuantityDict Space -&gt; Space
+</span><a href="#local-6989586621679119238"><span class="hs-identifier hs-var">dict</span></a></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Getting Space QuantityDict Space -&gt; Space
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Space QuantityDict Space
 forall c. HasSpace c =&gt; Getter c Space
 Getter QuantityDict Space
 </span><span class="hs-identifier hs-var">typ</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB -&gt; Map UID (QuantityDict, Int)
 </span><span class="hs-identifier hs-var">symbolTable</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679118727"><span class="hs-identifier hs-var">chks</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679119229"><span class="hs-identifier hs-var">chks</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-20"></span><span>
 </span><span id="line-21"></span><span>    </span><span class="hs-comment">-- dump out the list of variables</span><span>
 </span><span id="line-22"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; IO ()
@@ -64,21 +63,21 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Map UID Space -&gt; [(UID, Space)]
 forall k a. Map k a -&gt; [(k, a)]
 </span><span class="hs-identifier hs-var">M.toList</span></span><span> </span><span class="annot"><span class="annottext">Map UID Space
-</span><a href="#local-6989586621679118734"><span class="hs-identifier hs-var">cxt</span></a></span><span>
+</span><a href="#local-6989586621679119236"><span class="hs-identifier hs-var">cxt</span></a></span><span>
 </span><span id="line-24"></span><span>
 </span><span id="line-25"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; IO ()
 </span><span class="hs-identifier hs-var">putStrLn</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;=====[ Start type checking ]=====&quot;</span></span><span>
 </span><span id="line-26"></span><span>    </span><span class="hs-keyword">let</span><span>
-</span><span id="line-27"></span><span>      </span><span id="local-6989586621679118632"><span class="annot"><a href="#local-6989586621679118741"><span class="hs-identifier hs-type">exprSpaceTups</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span> </span><span class="annot"><a href="#local-6989586621679118632"><span class="hs-identifier hs-type">t</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">RequiresChecking</span></span><span> </span><span class="annot"><a href="#local-6989586621679118632"><span class="hs-identifier hs-type">t</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Space</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679118632"><span class="hs-identifier hs-type">t</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Space</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span></span><span> </span><span>
-</span><span id="line-28"></span><span>      </span><span id="local-6989586621679118741"><span class="annot"><span class="annottext">exprSpaceTups :: forall t.
+</span><span id="line-27"></span><span>      </span><span id="local-6989586621679119134"><span class="annot"><a href="#local-6989586621679119243"><span class="hs-identifier hs-type">exprSpaceTups</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span> </span><span class="annot"><a href="#local-6989586621679119134"><span class="hs-identifier hs-type">t</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">RequiresChecking</span></span><span> </span><span class="annot"><a href="#local-6989586621679119134"><span class="hs-identifier hs-type">t</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Space</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679119134"><span class="hs-identifier hs-type">t</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Space</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span></span><span> </span><span>
+</span><span id="line-28"></span><span>      </span><span id="local-6989586621679119243"><span class="annot"><span class="annottext">exprSpaceTups :: forall t.
 (HasUID t, RequiresChecking t Expr Space) =&gt;
 [t] -&gt; [(UID, [(Expr, Space)])]
-</span><a href="#local-6989586621679118741"><span class="hs-identifier hs-var hs-var">exprSpaceTups</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(t -&gt; (UID, [(Expr, Space)])) -&gt; [t] -&gt; [(UID, [(Expr, Space)])]
+</span><a href="#local-6989586621679119243"><span class="hs-identifier hs-var hs-var">exprSpaceTups</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(t -&gt; (UID, [(Expr, Space)])) -&gt; [t] -&gt; [(UID, [(Expr, Space)])]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679118748"><span class="annot"><span class="annottext">t
-</span><a href="#local-6989586621679118748"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">t
-</span><a href="#local-6989586621679118748"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">t -&gt; Getting UID t UID -&gt; UID
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679119250"><span class="annot"><span class="annottext">t
+</span><a href="#local-6989586621679119250"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">t
+</span><a href="#local-6989586621679119250"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">t -&gt; Getting UID t UID -&gt; UID
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID t UID
 forall c. HasUID c =&gt; Getter c UID
@@ -86,41 +85,41 @@ Getter t UID
 </span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">t -&gt; [(Expr, Space)]
 forall c e t. RequiresChecking c e t =&gt; c -&gt; [(e, t)]
 </span><span class="hs-identifier hs-var">requiredChecks</span></span><span> </span><span class="annot"><span class="annottext">t
-</span><a href="#local-6989586621679118748"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679119250"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-29"></span><span>
 </span><span id="line-30"></span><span>    </span><span class="hs-comment">-- grab all type-check-able expressions (w.r.t. Space) from DDs and IMs</span><span>
-</span><span id="line-31"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679118759"><span class="annot"><span class="annottext">toChk :: [(UID, [(Expr, Space)])]
-</span><a href="#local-6989586621679118759"><span class="hs-identifier hs-var hs-var">toChk</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[InstanceModel] -&gt; [(UID, [(Expr, Space)])]
+</span><span id="line-31"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679119261"><span class="annot"><span class="annottext">toChk :: [(UID, [(Expr, Space)])]
+</span><a href="#local-6989586621679119261"><span class="hs-identifier hs-var hs-var">toChk</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[InstanceModel] -&gt; [(UID, [(Expr, Space)])]
 forall t.
 (HasUID t, RequiresChecking t Expr Space) =&gt;
 [t] -&gt; [(UID, [(Expr, Space)])]
-</span><a href="#local-6989586621679118741"><span class="hs-identifier hs-var">exprSpaceTups</span></a></span><span> </span><span class="annot"><span class="annottext">[InstanceModel]
-</span><a href="#local-6989586621679118725"><span class="hs-identifier hs-var">ims</span></a></span><span> </span><span class="annot"><span class="annottext">[(UID, [(Expr, Space)])]
+</span><a href="#local-6989586621679119243"><span class="hs-identifier hs-var">exprSpaceTups</span></a></span><span> </span><span class="annot"><span class="annottext">[InstanceModel]
+</span><a href="#local-6989586621679119227"><span class="hs-identifier hs-var">ims</span></a></span><span> </span><span class="annot"><span class="annottext">[(UID, [(Expr, Space)])]
 -&gt; [(UID, [(Expr, Space)])] -&gt; [(UID, [(Expr, Space)])]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[DataDefinition] -&gt; [(UID, [(Expr, Space)])]
 forall t.
 (HasUID t, RequiresChecking t Expr Space) =&gt;
 [t] -&gt; [(UID, [(Expr, Space)])]
-</span><a href="#local-6989586621679118741"><span class="hs-identifier hs-var">exprSpaceTups</span></a></span><span> </span><span class="annot"><span class="annottext">[DataDefinition]
-</span><a href="#local-6989586621679118726"><span class="hs-identifier hs-var">dds</span></a></span><span>
+</span><a href="#local-6989586621679119243"><span class="hs-identifier hs-var">exprSpaceTups</span></a></span><span> </span><span class="annot"><span class="annottext">[DataDefinition]
+</span><a href="#local-6989586621679119228"><span class="hs-identifier hs-var">dds</span></a></span><span>
 </span><span id="line-32"></span><span>
 </span><span id="line-33"></span><span>    </span><span class="hs-comment">-- split up theories by &quot;ones that contain things to type check&quot; vs &quot;not&quot;,</span><span>
 </span><span id="line-34"></span><span>    </span><span class="hs-comment">-- but in reverse</span><span>
-</span><span id="line-35"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679118761"><span class="annot"><span class="annottext">[(UID, [(Expr, Space)])]
-</span><a href="#local-6989586621679118761"><span class="hs-identifier hs-var">notChkd</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679118762"><span class="annot"><span class="annottext">[(UID, [(Expr, Space)])]
-</span><a href="#local-6989586621679118762"><span class="hs-identifier hs-var">chkd</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((UID, [(Expr, Space)]) -&gt; Bool)
+</span><span id="line-35"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679119263"><span class="annot"><span class="annottext">[(UID, [(Expr, Space)])]
+</span><a href="#local-6989586621679119263"><span class="hs-identifier hs-var">notChkd</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679119264"><span class="annot"><span class="annottext">[(UID, [(Expr, Space)])]
+</span><a href="#local-6989586621679119264"><span class="hs-identifier hs-var">chkd</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((UID, [(Expr, Space)]) -&gt; Bool)
 -&gt; [(UID, [(Expr, Space)])]
 -&gt; ([(UID, [(Expr, Space)])], [(UID, [(Expr, Space)])])
 forall a. (a -&gt; Bool) -&gt; [a] -&gt; ([a], [a])
 </span><span class="hs-identifier hs-var">partition</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID
-</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679118763"><span class="annot"><span class="annottext">[(Expr, Space)]
-</span><a href="#local-6989586621679118763"><span class="hs-identifier hs-var">exsps</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[(Expr, Space)] -&gt; Bool
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679119265"><span class="annot"><span class="annottext">[(Expr, Space)]
+</span><a href="#local-6989586621679119265"><span class="hs-identifier hs-var">exsps</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[(Expr, Space)] -&gt; Bool
 forall a. [a] -&gt; Bool
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
 </span><span class="hs-identifier hs-var">null</span></span><span> </span><span class="annot"><span class="annottext">[(Expr, Space)]
-</span><a href="#local-6989586621679118763"><span class="hs-identifier hs-var">exsps</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(UID, [(Expr, Space)])]
-</span><a href="#local-6989586621679118759"><span class="hs-identifier hs-var">toChk</span></a></span><span>
+</span><a href="#local-6989586621679119265"><span class="hs-identifier hs-var">exsps</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(UID, [(Expr, Space)])]
+</span><a href="#local-6989586621679119261"><span class="hs-identifier hs-var">toChk</span></a></span><span>
 </span><span id="line-36"></span><span>
 </span><span id="line-37"></span><span>    </span><span class="hs-comment">-- note that some theories didn't expose anything to type-check</span><span>
 </span><span id="line-38"></span><span>    </span><span class="annot"><span class="annottext">((UID, [(Expr, Space)]) -&gt; IO ())
@@ -129,8 +128,8 @@ forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
 (Foldable t, Monad m) =&gt;
 (a -&gt; m b) -&gt; t a -&gt; m ()
 </span><span class="hs-identifier hs-var">mapM_</span></span><span> </span><span>
-</span><span id="line-39"></span><span>      </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span id="local-6989586621679118766"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679118766"><span class="hs-identifier hs-var">t</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[(Expr, Space)]
+</span><span id="line-39"></span><span>      </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span id="local-6989586621679119268"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119268"><span class="hs-identifier hs-var">t</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[(Expr, Space)]
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">String -&gt; IO ()
 </span><span class="hs-identifier hs-var">putStrLn</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; IO ()) -&gt; String -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -140,16 +139,16 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; String
 forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679118766"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679119268"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;` does not expose any expressions to type check.&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-40"></span><span>      </span><span class="annot"><span class="annottext">[(UID, [(Expr, Space)])]
-</span><a href="#local-6989586621679118761"><span class="hs-identifier hs-var">notChkd</span></a></span><span>
+</span><a href="#local-6989586621679119263"><span class="hs-identifier hs-var">notChkd</span></a></span><span>
 </span><span id="line-41"></span><span>
 </span><span id="line-42"></span><span>    </span><span class="hs-comment">-- type check them</span><span>
-</span><span id="line-43"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679118772"><span class="annot"><span class="annottext">chkdd :: [(UID, [Either Space String])]
-</span><a href="#local-6989586621679118772"><span class="hs-identifier hs-var hs-var">chkdd</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((UID, [(Expr, Space)]) -&gt; (UID, [Either Space String]))
+</span><span id="line-43"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679119274"><span class="annot"><span class="annottext">chkdd :: [(UID, [Either Space String])]
+</span><a href="#local-6989586621679119274"><span class="hs-identifier hs-var hs-var">chkdd</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((UID, [(Expr, Space)]) -&gt; (UID, [Either Space String]))
 -&gt; [(UID, [(Expr, Space)])] -&gt; [(UID, [Either Space String])]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">([(Expr, Space)] -&gt; [Either Space String])
@@ -169,26 +168,26 @@ forall e t.
 Typed e t =&gt;
 TypingContext t -&gt; e -&gt; t -&gt; Either t String
 </span><span class="hs-identifier hs-var">check</span></span><span> </span><span class="annot"><span class="annottext">Map UID Space
-</span><a href="#local-6989586621679118734"><span class="hs-identifier hs-var">cxt</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(UID, [(Expr, Space)])]
-</span><a href="#local-6989586621679118762"><span class="hs-identifier hs-var">chkd</span></a></span><span>
+</span><a href="#local-6989586621679119236"><span class="hs-identifier hs-var">cxt</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(UID, [(Expr, Space)])]
+</span><a href="#local-6989586621679119264"><span class="hs-identifier hs-var">chkd</span></a></span><span>
 </span><span id="line-44"></span><span>
 </span><span id="line-45"></span><span>    </span><span class="hs-comment">-- format 'ok' messages and 'type error' messages, as applicable</span><span>
-</span><span id="line-46"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span class="annot"><a href="#local-6989586621679118775"><span class="hs-identifier hs-type">formattedChkd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Char</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Char</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Space</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">TypeError</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-47"></span><span>        </span><span id="local-6989586621679118775"><span class="annot"><span class="annottext">formattedChkd :: [Either String (String, [Either Space String])]
-</span><a href="#local-6989586621679118775"><span class="hs-identifier hs-var hs-var">formattedChkd</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((UID, [Either Space String])
+</span><span id="line-46"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span class="annot"><a href="#local-6989586621679119277"><span class="hs-identifier hs-type">formattedChkd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Char</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Char</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Space</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">TypeError</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-47"></span><span>        </span><span id="local-6989586621679119277"><span class="annot"><span class="annottext">formattedChkd :: [Either String (String, [Either Space String])]
+</span><a href="#local-6989586621679119277"><span class="hs-identifier hs-var hs-var">formattedChkd</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((UID, [Either Space String])
  -&gt; Either String (String, [Either Space String]))
 -&gt; [(UID, [Either Space String])]
 -&gt; [Either String (String, [Either Space String])]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span>
-</span><span id="line-48"></span><span>                          </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span id="local-6989586621679118777"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679118777"><span class="hs-identifier hs-var">t</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679118778"><span class="annot"><span class="annottext">[Either Space String]
-</span><a href="#local-6989586621679118778"><span class="hs-identifier hs-var">tcs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">(Either Space String -&gt; Bool) -&gt; [Either Space String] -&gt; Bool
+</span><span id="line-48"></span><span>                          </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span id="local-6989586621679119279"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119279"><span class="hs-identifier hs-var">t</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679119280"><span class="annot"><span class="annottext">[Either Space String]
+</span><a href="#local-6989586621679119280"><span class="hs-identifier hs-var">tcs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">(Either Space String -&gt; Bool) -&gt; [Either Space String] -&gt; Bool
 forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; Bool) -&gt; t a -&gt; Bool
 </span><span class="hs-identifier hs-var">any</span></span><span> </span><span class="annot"><span class="annottext">Either Space String -&gt; Bool
 forall a b. Either a b -&gt; Bool
 </span><span class="hs-identifier hs-var">isRight</span></span><span> </span><span class="annot"><span class="annottext">[Either Space String]
-</span><a href="#local-6989586621679118778"><span class="hs-identifier hs-var">tcs</span></a></span><span>
+</span><a href="#local-6989586621679119280"><span class="hs-identifier hs-var">tcs</span></a></span><span>
 </span><span id="line-49"></span><span>                            </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">(String, [Either Space String])
 -&gt; Either String (String, [Either Space String])
 forall a b. b -&gt; Either a b
@@ -198,7 +197,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; String
 forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679118777"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679119279"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;` exposes ill-typed expressions!&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(Either Space String -&gt; Bool)
@@ -207,7 +206,7 @@ forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="annot"><span class="annottext">Either Space String -&gt; Bool
 forall a b. Either a b -&gt; Bool
 </span><span class="hs-identifier hs-var">isRight</span></span><span> </span><span class="annot"><span class="annottext">[Either Space String]
-</span><a href="#local-6989586621679118778"><span class="hs-identifier hs-var">tcs</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679119280"><span class="hs-identifier hs-var">tcs</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-50"></span><span>                            </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">String -&gt; Either String (String, [Either Space String])
 forall a b. a -&gt; Either a b
 </span><span class="hs-identifier hs-var">Left</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Either String (String, [Either Space String]))
@@ -219,16 +218,16 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; String
 forall a. Show a =&gt; a -&gt; String
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679118777"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679119279"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;` OK!&quot;</span></span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-51"></span><span>                          </span><span class="annot"><span class="annottext">[(UID, [Either Space String])]
-</span><a href="#local-6989586621679118772"><span class="hs-identifier hs-var">chkdd</span></a></span><span>
+</span><a href="#local-6989586621679119274"><span class="hs-identifier hs-var">chkdd</span></a></span><span>
 </span><span id="line-52"></span><span>
-</span><span id="line-53"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679118781"><span class="annot"><span class="annottext">errConsumer :: String -&gt; IO ()
-</span><a href="#local-6989586621679118781"><span class="hs-identifier hs-var hs-var">errConsumer</span></a></span></span><span> </span><span id="local-6989586621679118782"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679118782"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span> </span><span>
+</span><span id="line-53"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679119283"><span class="annot"><span class="annottext">errConsumer :: String -&gt; IO ()
+</span><a href="#local-6989586621679119283"><span class="hs-identifier hs-var hs-var">errConsumer</span></a></span></span><span> </span><span id="local-6989586621679119284"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679119284"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span> </span><span>
 </span><span id="line-54"></span><span>          </span><span class="annot"><span class="annottext">String -&gt; IO ()
 </span><span class="hs-identifier hs-var">putStr</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;  - ERROR: &quot;</span></span><span>
@@ -238,7 +237,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 </span><span class="hs-identifier hs-var">temporaryIndent</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;  &quot;</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679118782"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><a href="#local-6989586621679119284"><span class="hs-identifier hs-var">s</span></a></span><span>
 </span><span id="line-56"></span><span>
 </span><span id="line-57"></span><span>    </span><span class="annot"><span class="annottext">(Either String (String, [Either Space String]) -&gt; IO ())
 -&gt; [Either String (String, [Either Space String])] -&gt; IO ()
@@ -253,24 +252,24 @@ forall a c b. (a -&gt; c) -&gt; (b -&gt; c) -&gt; Either a b -&gt; c
 </span><span class="hs-identifier hs-var">either</span></span><span>
 </span><span id="line-58"></span><span>            </span><span class="annot"><span class="annottext">String -&gt; IO ()
 </span><span class="hs-identifier hs-var">putStrLn</span></span><span>
-</span><span id="line-59"></span><span>            </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span id="local-6989586621679118785"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679118785"><span class="hs-identifier hs-var">tMsg</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679118786"><span class="annot"><span class="annottext">[Either Space String]
-</span><a href="#local-6989586621679118786"><span class="hs-identifier hs-var">tcs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-59"></span><span>            </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span id="local-6989586621679119287"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679119287"><span class="hs-identifier hs-var">tMsg</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679119288"><span class="annot"><span class="annottext">[Either Space String]
+</span><a href="#local-6989586621679119288"><span class="hs-identifier hs-var">tcs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
 </span><span id="line-60"></span><span>              </span><span class="annot"><span class="annottext">String -&gt; IO ()
 </span><span class="hs-identifier hs-var">putStrLn</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679118785"><span class="hs-identifier hs-var">tMsg</span></a></span><span>
+</span><a href="#local-6989586621679119287"><span class="hs-identifier hs-var">tMsg</span></a></span><span>
 </span><span id="line-61"></span><span>              </span><span class="annot"><span class="annottext">(String -&gt; IO ()) -&gt; [String] -&gt; IO ()
 forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
 (Foldable t, Monad m) =&gt;
 (a -&gt; m b) -&gt; t a -&gt; m ()
 </span><span class="hs-identifier hs-var">mapM_</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; IO ()
-</span><a href="#local-6989586621679118781"><span class="hs-identifier hs-var">errConsumer</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Either Space String] -&gt; [String]
+</span><a href="#local-6989586621679119283"><span class="hs-identifier hs-var">errConsumer</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Either Space String] -&gt; [String]
 forall a b. [Either a b] -&gt; [b]
 </span><span class="hs-identifier hs-var">rights</span></span><span> </span><span class="annot"><span class="annottext">[Either Space String]
-</span><a href="#local-6989586621679118786"><span class="hs-identifier hs-var">tcs</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679119288"><span class="hs-identifier hs-var">tcs</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-62"></span><span>            </span><span class="hs-special">)</span><span>
 </span><span id="line-63"></span><span>      </span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Either String (String, [Either Space String])]
-</span><a href="#local-6989586621679118775"><span class="hs-identifier hs-var">formattedChkd</span></a></span><span>
+</span><a href="#local-6989586621679119277"><span class="hs-identifier hs-var">formattedChkd</span></a></span><span>
 </span><span id="line-64"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; IO ()
 </span><span class="hs-identifier hs-var">putStrLn</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;=====[ Finished type checking ]=====&quot;</span></span><span>

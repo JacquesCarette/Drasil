@@ -1,6 +1,6 @@
 module SysInfo.Drasil (
  -- * System Information
-   SystemInformation(..), Block(Parallel)
+   SystemInformation(..)
  -- * Lenses
  , HasSystemInformation(..)
  -- * Reference Database

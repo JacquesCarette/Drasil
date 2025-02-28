@@ -146,7 +146,6 @@ si = SI {
   _configFiles = [],
   _inputs      = inputs,
   _outputs     = outputs,
-  _defSequence = [] :: [Block SimpleQDef],
   _constraints = map cnstrw constrained,
   _constants   = constants,
   _sysinfodb   = symbMap,

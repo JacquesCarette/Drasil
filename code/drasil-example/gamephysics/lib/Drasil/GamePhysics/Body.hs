@@ -1,12 +1,11 @@
 module Drasil.GamePhysics.Body where
 
 import Control.Lens ((^.))
-import Data.Maybe (mapMaybe)
 
 import Language.Drasil hiding (organization, section)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS
-import Theory.Drasil (qdEFromDD, output)
+import Theory.Drasil (output)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
@@ -117,14 +116,12 @@ si = SI {
   _configFiles = [],
   _inputs      = inputSymbols,
   _outputs     = outputSymbols, 
-  _defSequence = map (`Parallel` []) qDefs,
   _constraints = inputConstraints,
   _constants   = [],
   _sysinfodb   = symbMap,
   _usedinfodb  = usedDB,
    refdb       = refDB
 }
-  where qDefs = mapMaybe qdEFromDD dataDefs
 
 purp :: Sentence
 purp = foldlSent_ [S "simulate", getAcc twoD, phrase CP.rigidBody,

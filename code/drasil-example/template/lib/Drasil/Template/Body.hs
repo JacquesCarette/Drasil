@@ -100,7 +100,6 @@ si = SI {
   _configFiles = [],
   _inputs      = [] :: [QuantityDict],
   _outputs     = [] :: [QuantityDict],
-  _defSequence = [] :: [Block SimpleQDef],
   _constraints = [] :: [ConstrainedChunk],
   _constants   = [] :: [ConstQDef],
   _sysinfodb   = symbMap,

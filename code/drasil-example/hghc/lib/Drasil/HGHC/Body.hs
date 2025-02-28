@@ -39,7 +39,6 @@ si = SI {
   _configFiles = [],
   _inputs      = htInputs,
   _outputs     = htOutputs,
-  _defSequence = [] :: [Block SimpleQDef],
   _constraints = [] :: [ConstrainedChunk],
   _constants   = [],
   _sysinfodb   = symbMap,

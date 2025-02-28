@@ -3948,18 +3948,6 @@ mkRawLC :: RawContent -> Reference -> LabelledContent
 --   etc.), a list of subsections, and a shortname (<a>Reference</a>).
 section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
 
--- | Smart constructor for retrieving the contents (<a>Section</a>s) from a
---   <a>Document</a>.
-extractSection :: Document -> [Section]
-
--- | Smart constructor for retrieving the subsections (<a>Section</a>s)
---   within a <a>Section</a>.
-getSec :: Section -> [Section]
-
--- | Helper to retrieve subsections (<a>Section</a>s) from section contents
---   (<a>SecCons</a>).
-getSecCons :: SecCons -> [Section]
-
 -- | <a>Figure</a> smart constructor with a <a>Lbl</a> and a
 --   <a>Filepath</a>. Assumes 100% of page width as max width. Defaults to
 --   <a>WithCaption</a>.
@@ -8518,10 +8506,6 @@ UnlblC :: RawContent -> UnlabelledContent
 data HasCaption
 NoCaption :: HasCaption
 WithCaption :: HasCaption
-
--- | Smart constructor for retrieving the contents (<a>Section</a>s) from a
---   <a>Document</a>.
-extractSection :: Document -> [Section]
 
 -- | Smart constructor that wraps <a>UnlabelledContent</a> into
 --   <a>Contents</a>.

@@ -4112,10 +4112,6 @@ data HasCaption
 NoCaption :: HasCaption
 WithCaption :: HasCaption
 
--- | Smart constructor for retrieving the contents (<a>Section</a>s) from a
---   <a>Document</a>.
-extractSection :: Document -> [Section]
-
 -- | Smart constructor that wraps <a>UnlabelledContent</a> into
 --   <a>Contents</a>.
 mkParagraph :: Sentence -> Contents

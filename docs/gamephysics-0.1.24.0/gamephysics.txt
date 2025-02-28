@@ -218,7 +218,6 @@ mkSRS :: SRSDecl
 si :: SystemInformation
 purp :: Sentence
 concIns :: [ConceptInstance]
-section :: [Section]
 stdFields :: Fields
 refDB :: ReferenceDB
 units :: [UnitDefn]

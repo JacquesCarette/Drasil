@@ -262,7 +262,6 @@ concIns :: [ConceptInstance]
 labCon :: [LabelledContent]
 usedDB :: ChunkDB
 refDB :: ReferenceDB
-section :: [Section]
 stdFields :: Fields
 termsAndDescBullets :: Contents
 termsAndDescBulletsGlTySubSec :: [ItemType]

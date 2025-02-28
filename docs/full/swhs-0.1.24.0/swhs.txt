@@ -334,7 +334,6 @@ mkSRS :: SRSDecl
 tSymbIntro :: [TSIntro]
 insModel :: [InstanceModel]
 concIns :: [ConceptInstance]
-section :: [Section]
 stdFields :: Fields
 priorityNFReqs :: [ConceptChunk]
 introStart :: Sentence

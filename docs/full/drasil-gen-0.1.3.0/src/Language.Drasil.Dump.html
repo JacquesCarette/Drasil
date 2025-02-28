@@ -27,24 +27,24 @@
 </span><span id="line-27"></span><span class="hs-comment">--   host system.</span><span>
 </span><span id="line-28"></span><span class="annot"><a href="Language.Drasil.Dump.html#dumpEverything"><span class="hs-identifier hs-type">dumpEverything</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PrintingInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Dump.html#Path"><span class="hs-identifier hs-type">Path</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-29"></span><span id="dumpEverything"><span class="annot"><span class="annottext">dumpEverything :: SystemInformation -&gt; PrintingInformation -&gt; ChunkType -&gt; IO ()
-</span><a href="Language.Drasil.Dump.html#dumpEverything"><span class="hs-identifier hs-var hs-var">dumpEverything</span></a></span></span><span> </span><span id="local-6989586621679118984"><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679118984"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span id="local-6989586621679118985"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679118985"><span class="hs-identifier hs-var">pinfo</span></a></span></span><span> </span><span id="local-6989586621679118986"><span class="annot"><span class="annottext">ChunkType
-</span><a href="#local-6989586621679118986"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-30"></span><span>  </span><span id="local-6989586621679118987"><span class="annot"><span class="annottext">Maybe ChunkType
-</span><a href="#local-6989586621679118987"><span class="hs-identifier hs-var">maybeDebugging</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">ChunkType -&gt; IO (Maybe ChunkType)
+</span><a href="Language.Drasil.Dump.html#dumpEverything"><span class="hs-identifier hs-var hs-var">dumpEverything</span></a></span></span><span> </span><span id="local-6989586621679119051"><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119051"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span id="local-6989586621679119052"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679119052"><span class="hs-identifier hs-var">pinfo</span></a></span></span><span> </span><span id="local-6989586621679119053"><span class="annot"><span class="annottext">ChunkType
+</span><a href="#local-6989586621679119053"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-30"></span><span>  </span><span id="local-6989586621679119054"><span class="annot"><span class="annottext">Maybe ChunkType
+</span><a href="#local-6989586621679119054"><span class="hs-identifier hs-var">maybeDebugging</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">ChunkType -&gt; IO (Maybe ChunkType)
 </span><span class="hs-identifier hs-var">lookupEnv</span></span><span> </span><span class="annot"><span class="annottext">ChunkType
 </span><span class="hs-string">&quot;DEBUG_ENV&quot;</span></span><span>
 </span><span id="line-31"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Maybe ChunkType
-</span><a href="#local-6989586621679118987"><span class="hs-identifier hs-var">maybeDebugging</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><a href="#local-6989586621679119054"><span class="hs-identifier hs-var">maybeDebugging</span></a></span><span> </span><span class="hs-keyword">of</span><span>
 </span><span id="line-32"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
 </span><span class="hs-identifier">_</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span class="annot"><span class="annottext">ChunkType
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
 </span><span id="line-33"></span><span>      </span><span class="annot"><span class="annottext">SystemInformation -&gt; PrintingInformation -&gt; ChunkType -&gt; IO ()
 </span><a href="Language.Drasil.Dump.html#dumpEverything0"><span class="hs-identifier hs-var">dumpEverything0</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679118984"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679118985"><span class="hs-identifier hs-var">pinfo</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkType
-</span><a href="#local-6989586621679118986"><span class="hs-identifier hs-var">p</span></a></span><span>
+</span><a href="#local-6989586621679119051"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679119052"><span class="hs-identifier hs-var">pinfo</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkType
+</span><a href="#local-6989586621679119053"><span class="hs-identifier hs-var">p</span></a></span><span>
 </span><span id="line-34"></span><span>    </span><span class="annot"><span class="annottext">Maybe ChunkType
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">IO ()
 forall a. Monoid a =&gt; a
@@ -52,44 +52,44 @@ forall a. Monoid a =&gt; a
 </span><span id="line-35"></span><span>
 </span><span id="line-36"></span><span class="annot"><a href="Language.Drasil.Dump.html#dumpEverything0"><span class="hs-identifier hs-type">dumpEverything0</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PrintingInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Dump.html#Path"><span class="hs-identifier hs-type">Path</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-37"></span><span id="dumpEverything0"><span class="annot"><span class="annottext">dumpEverything0 :: SystemInformation -&gt; PrintingInformation -&gt; ChunkType -&gt; IO ()
-</span><a href="Language.Drasil.Dump.html#dumpEverything0"><span class="hs-identifier hs-var hs-var">dumpEverything0</span></a></span></span><span> </span><span id="local-6989586621679118989"><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679118989"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span id="local-6989586621679118990"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679118990"><span class="hs-identifier hs-var">pinfo</span></a></span></span><span> </span><span id="local-6989586621679118991"><span class="annot"><span class="annottext">ChunkType
-</span><a href="#local-6989586621679118991"><span class="hs-identifier hs-var">targetPath</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a href="Language.Drasil.Dump.html#dumpEverything0"><span class="hs-identifier hs-var hs-var">dumpEverything0</span></a></span></span><span> </span><span id="local-6989586621679119056"><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119056"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span id="local-6989586621679119057"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679119057"><span class="hs-identifier hs-var">pinfo</span></a></span></span><span> </span><span id="local-6989586621679119058"><span class="annot"><span class="annottext">ChunkType
+</span><a href="#local-6989586621679119058"><span class="hs-identifier hs-var">targetPath</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
 </span><span id="line-38"></span><span>  </span><span class="annot"><span class="annottext">Bool -&gt; ChunkType -&gt; IO ()
 </span><span class="hs-identifier hs-var">createDirectoryIfMissing</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="annot"><span class="annottext">ChunkType
-</span><a href="#local-6989586621679118991"><span class="hs-identifier hs-var">targetPath</span></a></span><span>
-</span><span id="line-39"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679118993"><span class="annot"><span class="annottext">chunkDb :: ChunkDB
-</span><a href="#local-6989586621679118993"><span class="hs-identifier hs-var hs-var">chunkDb</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; ChunkDB
+</span><a href="#local-6989586621679119058"><span class="hs-identifier hs-var">targetPath</span></a></span><span>
+</span><span id="line-39"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679119060"><span class="annot"><span class="annottext">chunkDb :: ChunkDB
+</span><a href="#local-6989586621679119060"><span class="hs-identifier hs-var hs-var">chunkDb</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; ChunkDB
 </span><span class="hs-identifier hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679118989"><span class="hs-identifier hs-var">si</span></a></span><span>
-</span><span id="line-40"></span><span>      </span><span id="local-6989586621679118994"><span class="annot"><span class="annottext">chunkDump :: DumpedChunkDB
-</span><a href="#local-6989586621679118994"><span class="hs-identifier hs-var hs-var">chunkDump</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; DumpedChunkDB
+</span><a href="#local-6989586621679119056"><span class="hs-identifier hs-var">si</span></a></span><span>
+</span><span id="line-40"></span><span>      </span><span id="local-6989586621679119061"><span class="annot"><span class="annottext">chunkDump :: DumpedChunkDB
+</span><a href="#local-6989586621679119061"><span class="hs-identifier hs-var hs-var">chunkDump</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; DumpedChunkDB
 </span><span class="hs-identifier hs-var">DB.dumpChunkDB</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679118993"><span class="hs-identifier hs-var">chunkDb</span></a></span><span>
-</span><span id="line-41"></span><span>      </span><span id="local-6989586621679118998"><span class="annot"><span class="annottext">invertedChunkDump :: Map UID [ChunkType]
-</span><a href="#local-6989586621679118998"><span class="hs-identifier hs-var hs-var">invertedChunkDump</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DumpedChunkDB -&gt; Map UID [ChunkType]
+</span><a href="#local-6989586621679119060"><span class="hs-identifier hs-var">chunkDb</span></a></span><span>
+</span><span id="line-41"></span><span>      </span><span id="local-6989586621679119065"><span class="annot"><span class="annottext">invertedChunkDump :: Map UID [ChunkType]
+</span><a href="#local-6989586621679119065"><span class="hs-identifier hs-var hs-var">invertedChunkDump</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DumpedChunkDB -&gt; Map UID [ChunkType]
 forall v k. Ord v =&gt; Map k [v] -&gt; Map v [k]
 </span><span class="hs-identifier hs-var">invert</span></span><span> </span><span class="annot"><span class="annottext">DumpedChunkDB
-</span><a href="#local-6989586621679118994"><span class="hs-identifier hs-var">chunkDump</span></a></span><span>
-</span><span id="line-42"></span><span>      </span><span id="local-6989586621679118999"><span class="annot"><span class="annottext">sharedUIDs :: Map UID [ChunkType]
-</span><a href="#local-6989586621679118999"><span class="hs-identifier hs-var hs-var">sharedUIDs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([ChunkType] -&gt; Bool) -&gt; Map UID [ChunkType] -&gt; Map UID [ChunkType]
+</span><a href="#local-6989586621679119061"><span class="hs-identifier hs-var">chunkDump</span></a></span><span>
+</span><span id="line-42"></span><span>      </span><span id="local-6989586621679119066"><span class="annot"><span class="annottext">sharedUIDs :: Map UID [ChunkType]
+</span><a href="#local-6989586621679119066"><span class="hs-identifier hs-var hs-var">sharedUIDs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([ChunkType] -&gt; Bool) -&gt; Map UID [ChunkType] -&gt; Map UID [ChunkType]
 forall a k. (a -&gt; Bool) -&gt; Map k a -&gt; Map k a
 </span><span class="hs-identifier hs-var">SM.filter</span></span><span> </span><span class="annot"><span class="annottext">[ChunkType] -&gt; Bool
 forall a. [a] -&gt; Bool
 </span><span class="hs-identifier hs-var">atLeast2</span></span><span> </span><span class="annot"><span class="annottext">Map UID [ChunkType]
-</span><a href="#local-6989586621679118998"><span class="hs-identifier hs-var">invertedChunkDump</span></a></span><span>
-</span><span id="line-43"></span><span>      </span><span id="local-6989586621679119003"><span class="annot"><span class="annottext">traceDump :: TraceMap
-</span><a href="#local-6989586621679119003"><span class="hs-identifier hs-var hs-var">traceDump</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679118993"><span class="hs-identifier hs-var">chunkDb</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Getting TraceMap ChunkDB TraceMap -&gt; TraceMap
+</span><a href="#local-6989586621679119065"><span class="hs-identifier hs-var">invertedChunkDump</span></a></span><span>
+</span><span id="line-43"></span><span>      </span><span id="local-6989586621679119070"><span class="annot"><span class="annottext">traceDump :: TraceMap
+</span><a href="#local-6989586621679119070"><span class="hs-identifier hs-var hs-var">traceDump</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119060"><span class="hs-identifier hs-var">chunkDb</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Getting TraceMap ChunkDB TraceMap -&gt; TraceMap
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting TraceMap ChunkDB TraceMap
 Lens' ChunkDB TraceMap
 </span><span class="hs-identifier hs-var">traceTable</span></span><span>
-</span><span id="line-44"></span><span>      </span><span id="local-6989586621679119005"><span class="annot"><span class="annottext">refByDump :: TraceMap
-</span><a href="#local-6989586621679119005"><span class="hs-identifier hs-var hs-var">refByDump</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679118993"><span class="hs-identifier hs-var">chunkDb</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Getting TraceMap ChunkDB TraceMap -&gt; TraceMap
+</span><span id="line-44"></span><span>      </span><span id="local-6989586621679119072"><span class="annot"><span class="annottext">refByDump :: TraceMap
+</span><a href="#local-6989586621679119072"><span class="hs-identifier hs-var hs-var">refByDump</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119060"><span class="hs-identifier hs-var">chunkDb</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Getting TraceMap ChunkDB TraceMap -&gt; TraceMap
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting TraceMap ChunkDB TraceMap
 Lens' ChunkDB TraceMap
@@ -98,96 +98,96 @@ Lens' ChunkDB TraceMap
 </span><span id="line-46"></span><span>  </span><span class="annot"><span class="annottext">DumpedChunkDB -&gt; ChunkType -&gt; IO ()
 forall a. ToJSON a =&gt; a -&gt; ChunkType -&gt; IO ()
 </span><a href="Language.Drasil.Dump.html#dumpTo"><span class="hs-identifier hs-var">dumpTo</span></a></span><span> </span><span class="annot"><span class="annottext">DumpedChunkDB
-</span><a href="#local-6989586621679118994"><span class="hs-identifier hs-var">chunkDump</span></a></span><span> </span><span class="annot"><span class="annottext">(ChunkType -&gt; IO ()) -&gt; ChunkType -&gt; IO ()
+</span><a href="#local-6989586621679119061"><span class="hs-identifier hs-var">chunkDump</span></a></span><span> </span><span class="annot"><span class="annottext">(ChunkType -&gt; IO ()) -&gt; ChunkType -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkType
-</span><a href="#local-6989586621679118991"><span class="hs-identifier hs-var">targetPath</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkType -&gt; ChunkType -&gt; ChunkType
+</span><a href="#local-6989586621679119058"><span class="hs-identifier hs-var">targetPath</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkType -&gt; ChunkType -&gt; ChunkType
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">ChunkType
 </span><span class="hs-string">&quot;seeds.json&quot;</span></span><span>
 </span><span id="line-47"></span><span>  </span><span class="annot"><span class="annottext">Map UID [ChunkType] -&gt; ChunkType -&gt; IO ()
 forall a. ToJSON a =&gt; a -&gt; ChunkType -&gt; IO ()
 </span><a href="Language.Drasil.Dump.html#dumpTo"><span class="hs-identifier hs-var">dumpTo</span></a></span><span> </span><span class="annot"><span class="annottext">Map UID [ChunkType]
-</span><a href="#local-6989586621679118998"><span class="hs-identifier hs-var">invertedChunkDump</span></a></span><span> </span><span class="annot"><span class="annottext">(ChunkType -&gt; IO ()) -&gt; ChunkType -&gt; IO ()
+</span><a href="#local-6989586621679119065"><span class="hs-identifier hs-var">invertedChunkDump</span></a></span><span> </span><span class="annot"><span class="annottext">(ChunkType -&gt; IO ()) -&gt; ChunkType -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkType
-</span><a href="#local-6989586621679118991"><span class="hs-identifier hs-var">targetPath</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkType -&gt; ChunkType -&gt; ChunkType
+</span><a href="#local-6989586621679119058"><span class="hs-identifier hs-var">targetPath</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkType -&gt; ChunkType -&gt; ChunkType
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">ChunkType
 </span><span class="hs-string">&quot;inverted_seeds.json&quot;</span></span><span>
 </span><span id="line-48"></span><span>  </span><span class="annot"><span class="annottext">Map UID [ChunkType] -&gt; ChunkType -&gt; IO ()
 forall a. ToJSON a =&gt; a -&gt; ChunkType -&gt; IO ()
 </span><a href="Language.Drasil.Dump.html#dumpTo"><span class="hs-identifier hs-var">dumpTo</span></a></span><span> </span><span class="annot"><span class="annottext">Map UID [ChunkType]
-</span><a href="#local-6989586621679118999"><span class="hs-identifier hs-var">sharedUIDs</span></a></span><span> </span><span class="annot"><span class="annottext">(ChunkType -&gt; IO ()) -&gt; ChunkType -&gt; IO ()
+</span><a href="#local-6989586621679119066"><span class="hs-identifier hs-var">sharedUIDs</span></a></span><span> </span><span class="annot"><span class="annottext">(ChunkType -&gt; IO ()) -&gt; ChunkType -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkType
-</span><a href="#local-6989586621679118991"><span class="hs-identifier hs-var">targetPath</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkType -&gt; ChunkType -&gt; ChunkType
+</span><a href="#local-6989586621679119058"><span class="hs-identifier hs-var">targetPath</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkType -&gt; ChunkType -&gt; ChunkType
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">ChunkType
 </span><span class="hs-string">&quot;problematic_seeds.json&quot;</span></span><span>
 </span><span id="line-49"></span><span>  </span><span class="annot"><span class="annottext">TraceMap -&gt; ChunkType -&gt; IO ()
 forall a. ToJSON a =&gt; a -&gt; ChunkType -&gt; IO ()
 </span><a href="Language.Drasil.Dump.html#dumpTo"><span class="hs-identifier hs-var">dumpTo</span></a></span><span> </span><span class="annot"><span class="annottext">TraceMap
-</span><a href="#local-6989586621679119003"><span class="hs-identifier hs-var">traceDump</span></a></span><span> </span><span class="annot"><span class="annottext">(ChunkType -&gt; IO ()) -&gt; ChunkType -&gt; IO ()
+</span><a href="#local-6989586621679119070"><span class="hs-identifier hs-var">traceDump</span></a></span><span> </span><span class="annot"><span class="annottext">(ChunkType -&gt; IO ()) -&gt; ChunkType -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkType
-</span><a href="#local-6989586621679118991"><span class="hs-identifier hs-var">targetPath</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkType -&gt; ChunkType -&gt; ChunkType
+</span><a href="#local-6989586621679119058"><span class="hs-identifier hs-var">targetPath</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkType -&gt; ChunkType -&gt; ChunkType
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">ChunkType
 </span><span class="hs-string">&quot;trace.json&quot;</span></span><span>
 </span><span id="line-50"></span><span>  </span><span class="annot"><span class="annottext">TraceMap -&gt; ChunkType -&gt; IO ()
 forall a. ToJSON a =&gt; a -&gt; ChunkType -&gt; IO ()
 </span><a href="Language.Drasil.Dump.html#dumpTo"><span class="hs-identifier hs-var">dumpTo</span></a></span><span> </span><span class="annot"><span class="annottext">TraceMap
-</span><a href="#local-6989586621679119005"><span class="hs-identifier hs-var">refByDump</span></a></span><span> </span><span class="annot"><span class="annottext">(ChunkType -&gt; IO ()) -&gt; ChunkType -&gt; IO ()
+</span><a href="#local-6989586621679119072"><span class="hs-identifier hs-var">refByDump</span></a></span><span> </span><span class="annot"><span class="annottext">(ChunkType -&gt; IO ()) -&gt; ChunkType -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkType
-</span><a href="#local-6989586621679118991"><span class="hs-identifier hs-var">targetPath</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkType -&gt; ChunkType -&gt; ChunkType
+</span><a href="#local-6989586621679119058"><span class="hs-identifier hs-var">targetPath</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkType -&gt; ChunkType -&gt; ChunkType
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">ChunkType
 </span><span class="hs-string">&quot;reverse_trace.json&quot;</span></span><span>
 </span><span id="line-51"></span><span>
 </span><span id="line-52"></span><span>  </span><span class="annot"><span class="annottext">PrintingInformation -&gt; ChunkType -&gt; IO ()
 </span><a href="Language.Drasil.Dump.html#dumpChunkTables"><span class="hs-identifier hs-var">dumpChunkTables</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679118990"><span class="hs-identifier hs-var">pinfo</span></a></span><span> </span><span class="annot"><span class="annottext">(ChunkType -&gt; IO ()) -&gt; ChunkType -&gt; IO ()
+</span><a href="#local-6989586621679119057"><span class="hs-identifier hs-var">pinfo</span></a></span><span> </span><span class="annot"><span class="annottext">(ChunkType -&gt; IO ()) -&gt; ChunkType -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkType
-</span><a href="#local-6989586621679118991"><span class="hs-identifier hs-var">targetPath</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkType -&gt; ChunkType -&gt; ChunkType
+</span><a href="#local-6989586621679119058"><span class="hs-identifier hs-var">targetPath</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkType -&gt; ChunkType -&gt; ChunkType
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">ChunkType
 </span><span class="hs-string">&quot;tables.txt&quot;</span></span><span>
 </span><span id="line-53"></span><span>
 </span><span id="line-54"></span><span class="hs-comment">-- FIXME: This is more of a general utility than it is drasil-database specific</span><span>
-</span><span id="line-55"></span><span id="local-6989586621679118917"><span class="annot"><a href="Language.Drasil.Dump.html#dumpTo"><span class="hs-identifier hs-type">dumpTo</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ToJSON</span></span><span> </span><span class="annot"><a href="#local-6989586621679118917"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679118917"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Dump.html#TargetFile"><span class="hs-identifier hs-type">TargetFile</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span></span><span>
+</span><span id="line-55"></span><span id="local-6989586621679118984"><span class="annot"><a href="Language.Drasil.Dump.html#dumpTo"><span class="hs-identifier hs-type">dumpTo</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ToJSON</span></span><span> </span><span class="annot"><a href="#local-6989586621679118984"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679118984"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Dump.html#TargetFile"><span class="hs-identifier hs-type">TargetFile</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span></span><span>
 </span><span id="line-56"></span><span id="dumpTo"><span class="annot"><span class="annottext">dumpTo :: forall a. ToJSON a =&gt; a -&gt; ChunkType -&gt; IO ()
-</span><a href="Language.Drasil.Dump.html#dumpTo"><span class="hs-identifier hs-var hs-var">dumpTo</span></a></span></span><span> </span><span id="local-6989586621679119012"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679119012"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span id="local-6989586621679119013"><span class="annot"><span class="annottext">ChunkType
-</span><a href="#local-6989586621679119013"><span class="hs-identifier hs-var">targetFile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-57"></span><span>  </span><span id="local-6989586621679119014"><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679119014"><span class="hs-identifier hs-var">trg</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">ChunkType -&gt; IOMode -&gt; IO Handle
+</span><a href="Language.Drasil.Dump.html#dumpTo"><span class="hs-identifier hs-var hs-var">dumpTo</span></a></span></span><span> </span><span id="local-6989586621679119079"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679119079"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span id="local-6989586621679119080"><span class="annot"><span class="annottext">ChunkType
+</span><a href="#local-6989586621679119080"><span class="hs-identifier hs-var">targetFile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-57"></span><span>  </span><span id="local-6989586621679119081"><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679119081"><span class="hs-identifier hs-var">trg</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">ChunkType -&gt; IOMode -&gt; IO Handle
 </span><span class="hs-identifier hs-var">openFile</span></span><span> </span><span class="annot"><span class="annottext">ChunkType
-</span><a href="#local-6989586621679119013"><span class="hs-identifier hs-var">targetFile</span></a></span><span> </span><span class="annot"><span class="annottext">IOMode
+</span><a href="#local-6989586621679119080"><span class="hs-identifier hs-var">targetFile</span></a></span><span> </span><span class="annot"><span class="annottext">IOMode
 </span><span class="hs-identifier hs-var">WriteMode</span></span><span>
 </span><span id="line-58"></span><span>  </span><span class="annot"><span class="annottext">Handle -&gt; ByteString -&gt; IO ()
 </span><span class="hs-identifier hs-var">LB.hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679119014"><span class="hs-identifier hs-var">trg</span></a></span><span> </span><span class="annot"><span class="annottext">(ByteString -&gt; IO ()) -&gt; ByteString -&gt; IO ()
+</span><a href="#local-6989586621679119081"><span class="hs-identifier hs-var">trg</span></a></span><span> </span><span class="annot"><span class="annottext">(ByteString -&gt; IO ()) -&gt; ByteString -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; ByteString
 forall a. ToJSON a =&gt; a -&gt; ByteString
 </span><span class="hs-identifier hs-var">encodePretty</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679119012"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><a href="#local-6989586621679119079"><span class="hs-identifier hs-var">d</span></a></span><span>
 </span><span id="line-59"></span><span>  </span><span class="annot"><span class="annottext">Handle -&gt; IO ()
 </span><span class="hs-identifier hs-var">hClose</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679119014"><span class="hs-identifier hs-var">trg</span></a></span><span>
+</span><a href="#local-6989586621679119081"><span class="hs-identifier hs-var">trg</span></a></span><span>
 </span><span id="line-60"></span><span>
 </span><span id="line-61"></span><span class="annot"><a href="Language.Drasil.Dump.html#dumpChunkTables"><span class="hs-identifier hs-type">dumpChunkTables</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PrintingInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Dump.html#TargetFile"><span class="hs-identifier hs-type">TargetFile</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-62"></span><span id="dumpChunkTables"><span class="annot"><span class="annottext">dumpChunkTables :: PrintingInformation -&gt; ChunkType -&gt; IO ()
-</span><a href="Language.Drasil.Dump.html#dumpChunkTables"><span class="hs-identifier hs-var hs-var">dumpChunkTables</span></a></span></span><span> </span><span id="local-6989586621679119019"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679119019"><span class="hs-identifier hs-var">pinfo</span></a></span></span><span> </span><span id="local-6989586621679119020"><span class="annot"><span class="annottext">ChunkType
-</span><a href="#local-6989586621679119020"><span class="hs-identifier hs-var">targetFile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-63"></span><span>  </span><span id="local-6989586621679119021"><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679119021"><span class="hs-identifier hs-var">trg</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">ChunkType -&gt; IOMode -&gt; IO Handle
+</span><a href="Language.Drasil.Dump.html#dumpChunkTables"><span class="hs-identifier hs-var hs-var">dumpChunkTables</span></a></span></span><span> </span><span id="local-6989586621679119086"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679119086"><span class="hs-identifier hs-var">pinfo</span></a></span></span><span> </span><span id="local-6989586621679119087"><span class="annot"><span class="annottext">ChunkType
+</span><a href="#local-6989586621679119087"><span class="hs-identifier hs-var">targetFile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-63"></span><span>  </span><span id="local-6989586621679119088"><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679119088"><span class="hs-identifier hs-var">trg</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">ChunkType -&gt; IOMode -&gt; IO Handle
 </span><span class="hs-identifier hs-var">openFile</span></span><span> </span><span class="annot"><span class="annottext">ChunkType
-</span><a href="#local-6989586621679119020"><span class="hs-identifier hs-var">targetFile</span></a></span><span> </span><span class="annot"><span class="annottext">IOMode
+</span><a href="#local-6989586621679119087"><span class="hs-identifier hs-var">targetFile</span></a></span><span> </span><span class="annot"><span class="annottext">IOMode
 </span><span class="hs-identifier hs-var">WriteMode</span></span><span>
 </span><span id="line-64"></span><span>  </span><span class="annot"><span class="annottext">(Doc -&gt; IO ()) -&gt; [Doc] -&gt; IO ()
 forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
@@ -195,15 +195,15 @@ forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
 (a -&gt; m b) -&gt; t a -&gt; m ()
 </span><span class="hs-identifier hs-var">mapM_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Handle -&gt; ChunkType -&gt; IO ()
 </span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679119021"><span class="hs-identifier hs-var">trg</span></a></span><span> </span><span class="annot"><span class="annottext">(ChunkType -&gt; IO ()) -&gt; (Doc -&gt; ChunkType) -&gt; Doc -&gt; IO ()
+</span><a href="#local-6989586621679119088"><span class="hs-identifier hs-var">trg</span></a></span><span> </span><span class="annot"><span class="annottext">(ChunkType -&gt; IO ()) -&gt; (Doc -&gt; ChunkType) -&gt; Doc -&gt; IO ()
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; ChunkType
 </span><span class="hs-identifier hs-var">render</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([Doc] -&gt; IO ()) -&gt; [Doc] -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; [Doc]
 </span><span class="hs-identifier hs-var">printAllDebugInfo</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679119019"><span class="hs-identifier hs-var">pinfo</span></a></span><span>
+</span><a href="#local-6989586621679119086"><span class="hs-identifier hs-var">pinfo</span></a></span><span>
 </span><span id="line-65"></span><span>  </span><span class="annot"><span class="annottext">Handle -&gt; IO ()
 </span><span class="hs-identifier hs-var">hClose</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679119021"><span class="hs-identifier hs-var">trg</span></a></span><span>
+</span><a href="#local-6989586621679119088"><span class="hs-identifier hs-var">trg</span></a></span><span>
 </span><span id="line-66"></span></pre></body></html>

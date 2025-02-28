@@ -15,19 +15,19 @@ module SysInfo.Drasil
 --   system to be used in artifact generation.
 data SystemInformation
 [SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [f] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
-class HasSystemInformation c_a8Uk
-systemInformation :: HasSystemInformation c_a8Uk => Lens' c_a8Uk SystemInformation
-authors :: HasSystemInformation c_a8Uk => Lens' c_a8Uk People
-background :: HasSystemInformation c_a8Uk => Lens' c_a8Uk Background
-configFiles :: HasSystemInformation c_a8Uk => Lens' c_a8Uk [String]
-constants :: HasSystemInformation c_a8Uk => Lens' c_a8Uk [ConstQDef]
-datadefs :: HasSystemInformation c_a8Uk => Lens' c_a8Uk [DataDefinition]
-instModels :: HasSystemInformation c_a8Uk => Lens' c_a8Uk [InstanceModel]
-motivation :: HasSystemInformation c_a8Uk => Lens' c_a8Uk Motivation
-purpose :: HasSystemInformation c_a8Uk => Lens' c_a8Uk Purpose
-scope :: HasSystemInformation c_a8Uk => Lens' c_a8Uk Scope
-sysinfodb :: HasSystemInformation c_a8Uk => Lens' c_a8Uk ChunkDB
-usedinfodb :: HasSystemInformation c_a8Uk => Lens' c_a8Uk ChunkDB
+class HasSystemInformation c_a92w
+systemInformation :: HasSystemInformation c_a92w => Lens' c_a92w SystemInformation
+authors :: HasSystemInformation c_a92w => Lens' c_a92w People
+background :: HasSystemInformation c_a92w => Lens' c_a92w Background
+configFiles :: HasSystemInformation c_a92w => Lens' c_a92w [String]
+constants :: HasSystemInformation c_a92w => Lens' c_a92w [ConstQDef]
+datadefs :: HasSystemInformation c_a92w => Lens' c_a92w [DataDefinition]
+instModels :: HasSystemInformation c_a92w => Lens' c_a92w [InstanceModel]
+motivation :: HasSystemInformation c_a92w => Lens' c_a92w Motivation
+purpose :: HasSystemInformation c_a92w => Lens' c_a92w Purpose
+scope :: HasSystemInformation c_a92w => Lens' c_a92w Scope
+sysinfodb :: HasSystemInformation c_a92w => Lens' c_a92w ChunkDB
+usedinfodb :: HasSystemInformation c_a92w => Lens' c_a92w ChunkDB
 
 -- | Database for internal references. Contains citations and referrable
 --   concepts.

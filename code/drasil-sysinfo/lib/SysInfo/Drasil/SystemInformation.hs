@@ -8,7 +8,7 @@
 module SysInfo.Drasil.SystemInformation (
   -- * System Information
   -- ** Types
-  SystemInformation(..), Block(..),
+  SystemInformation(..),
   -- ** Lenses
   HasSystemInformation(..),
   -- ** Lookup Functions
@@ -58,14 +58,12 @@ data SystemInformation where
   , _configFiles :: [String]
   , _inputs      :: [h]
   , _outputs     :: [i]
-  , _defSequence :: [Block SimpleQDef]
   , _constraints :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
   , _constants   :: [ConstQDef]
   , _sysinfodb   :: ChunkDB
   , _usedinfodb  :: ChunkDB
   , refdb        :: ReferenceDB
   } -> SystemInformation
-
 
 -- | Project Example purpose.
 type Purpose = [Sentence]
@@ -75,9 +73,6 @@ type Background = [Sentence]
 type Scope = [Sentence]
 -- | Project Example motivation.
 type Motivation = [Sentence]
-
--- | for listing 'QDefinition's in 'SystemInformation'.
-data Block a = Coupled a a [a] | Parallel a [a]
 
 -- | Helper for extracting a bibliography from the system information.
 citeDB :: SystemInformation -> BibRef

@@ -112,7 +112,6 @@ si = SI {
   _configFiles = [],
   _inputs = inputs,
   _outputs = outputs,
-  _defSequence = [] :: [Block SimpleQDef],
   _constraints = map cnstrw inpConstrained,
   _constants = pidConstants,
   _sysinfodb = symbMap,

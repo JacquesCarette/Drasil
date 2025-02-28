@@ -55,7 +55,6 @@ import Drasil.SWHS.Unitals (coilSAMax, deltaT, htFluxC, htFluxIn,
 
 import Drasil.SWHSNoPCM.Assumptions
 import Drasil.SWHSNoPCM.Changes (likelyChgs, unlikelyChgs)
-import Drasil.SWHSNoPCM.DataDefs (qDefs)
 import qualified Drasil.SWHSNoPCM.DataDefs as NoPCM (dataDefs)
 import Drasil.SWHSNoPCM.Definitions (srsSWHS, htTrans)
 import Drasil.SWHSNoPCM.GenDefs (genDefs)
@@ -189,7 +188,6 @@ si = SI {
   _configFiles = [],
   _inputs      = inputs ++ [qw watE], --inputs ++ outputs?
   _outputs     = map qw [tempW, watE],     --outputs
-  _defSequence = [(\x -> Parallel (head x) (tail x)) qDefs],
   _constraints = map cnstrw constrained ++ map cnstrw [tempW, watE], --constrained
   _constants   = piConst : specParamValList,
   _sysinfodb   = symbMap,

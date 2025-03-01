@@ -1111,10 +1111,9 @@ data () => SystemInformation
 --   <li><a>GenDefn</a>s (for <a>GendefMap</a>),</li>
 --   <li><a>TheoryModel</a>s (for <a>TheoryModelMap</a>),</li>
 --   <li><a>ConceptInstance</a>s (for <a>ConceptInstanceMap</a>),</li>
---   <li><a>Section</a>s (for <a>SectionMap</a>),</li>
 --   <li><a>LabelledContent</a>s (for <a>LabelledContentMap</a>).</li>
 --   </ul>
-cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) => [q] -> [t] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Section] -> [LabelledContent] -> [Reference] -> ChunkDB
+cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) => [q] -> [t] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [LabelledContent] -> [Reference] -> ChunkDB
 
 -- | Smart constructor for creating a reference database from a
 --   bibliography and concept instances.

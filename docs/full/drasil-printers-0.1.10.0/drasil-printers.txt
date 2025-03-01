@@ -1453,9 +1453,6 @@ mkTableIMod :: PrintingInformation -> Doc
 -- | Makes a table with all concept instances in the SRS.
 mkTableCI :: PrintingInformation -> Doc
 
--- | Makes a table with all sections in the SRS.
-mkTableSec :: PrintingInformation -> Doc
-
 -- | Makes a table with all labelled content in the SRS.
 mkTableLC :: PrintingInformation -> Doc
 

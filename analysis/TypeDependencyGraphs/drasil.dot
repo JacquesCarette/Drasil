@@ -1038,7 +1038,6 @@ digraph alltypes {
 		ChunkDB -> GendefMap;
 		ChunkDB -> TheoryModelMap;
 		ChunkDB -> ConceptInstanceMap;
-		ChunkDB -> SectionMap;
 		ChunkDB -> LabelledContentMap;
 		ChunkDB -> ReferenceMap;
 		}
@@ -1089,10 +1088,6 @@ digraph alltypes {
 		subgraph conceptinstancemap{
 		ConceptInstanceMap	[shape=oval, color=red2, label="ConceptInstanceMap"];
 		ConceptInstanceMap -> UMapConceptInstance;
-		}
-		subgraph sectionmap{
-		SectionMap	[shape=oval, color=red2, label="SectionMap"];
-		SectionMap -> UMapSection;
 		}
 		subgraph labelledcontentmap{
 		LabelledContentMap	[shape=oval, color=red2, label="LabelledContentMap"];

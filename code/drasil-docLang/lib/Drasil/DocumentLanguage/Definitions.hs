@@ -120,7 +120,6 @@ helpToRefField t si
   | Just _ <- lookupIndex t (s ^. gendefTable)          = refS $ gendefLookup      t (s ^. gendefTable)
   | Just _ <- lookupIndex t (s ^. theoryModelTable)     = refS $ theoryModelLookup t (s ^. theoryModelTable)
   | Just _ <- lookupIndex t (s ^. conceptinsTable)      = refS $ conceptinsLookup  t (s ^. conceptinsTable)
-  | Just _ <- lookupIndex t (s ^. sectionTable)         = refS $ sectionLookup     t (s ^. sectionTable)
   | Just _ <- lookupIndex t (s ^. labelledcontentTable) = refS $ labelledconLookup t (s ^. labelledcontentTable)
   | t `elem` map  (^. uid) (citeDB si) = EmptyS
   | otherwise = error $ show t ++ "Caught."

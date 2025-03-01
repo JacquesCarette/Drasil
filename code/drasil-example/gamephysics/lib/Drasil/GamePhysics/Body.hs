@@ -151,7 +151,7 @@ symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll) (nw gamePhysics :
   ++ [nw algorithm] ++ map nw derived ++ map nw fundamentals
   ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw defSymbols ++ srsDomains ++ map cw iMods) units dataDefs
-  iMods generalDefns tMods concIns [] [] allRefs
+  iMods generalDefns tMods concIns [] allRefs
 
   -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -159,7 +159,7 @@ allRefs = [externalLinkRef, pymunk] ++ offShelfSolRefs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)
-  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference])
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because

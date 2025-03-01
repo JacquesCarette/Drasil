@@ -1,7 +1,7 @@
 module Database.Drasil.Dump where
 
 import Language.Drasil (UID, HasUID(..))
-import Database.Drasil.ChunkDB (refTable, labelledcontentTable, sectionTable, 
+import Database.Drasil.ChunkDB (refTable, labelledcontentTable, 
   conceptinsTable, theoryModelTable, gendefTable, insmodelTable, dataDefnTable,
   unitTable, UMap, ChunkDB(termTable, symbolTable))
 
@@ -27,7 +27,6 @@ dumpChunkDB cdb =
     $ insert "generalDefinitions" (umapDump $ cdb ^. gendefTable)
     $ insert "theoryModels" (umapDump $ cdb ^. theoryModelTable)
     $ insert "conceptInstances" (umapDump $ cdb ^. conceptinsTable)
-    $ insert "sections" (umapDump $ cdb ^. sectionTable)
     $ insert "labelledContent" (umapDump $ cdb ^. labelledcontentTable)
     $ insert "references" (umapDump $ cdb ^. refTable)
       mempty

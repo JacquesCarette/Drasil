@@ -139,7 +139,7 @@ symbMap = cdb (map (^. output) iMods ++ map qw symbols)
    map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz] ++
    [nw algorithm] ++ map nw compcon ++ map nw educon ++ map nw prodtcon)
   (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs
-  iMods genDefns tMods concIns [] [] allRefs
+  iMods genDefns tMods concIns [] allRefs
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -147,7 +147,7 @@ allRefs = [externalLinkRef]
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw acronyms ++ map nw symbols) ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+  ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference])
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns

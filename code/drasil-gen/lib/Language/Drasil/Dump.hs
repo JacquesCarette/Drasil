@@ -2,7 +2,7 @@
 module Language.Drasil.Dump where
 
 import qualified Database.Drasil as DB
-import SysInfo.Drasil (SystemInformation(_sysinfodb), sysinfodb)
+import SysInfo.Drasil (SystemInformation, sysinfodb)
 
 import System.Directory
 import System.IO

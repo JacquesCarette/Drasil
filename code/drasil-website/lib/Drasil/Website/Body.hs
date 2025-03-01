@@ -108,7 +108,7 @@ symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, web, phsChgMtrl] ++
   heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce, 
   normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [game, physics, condition, glaSlab, intrslce,
   slope, safety, factor]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] 
-  [] [] [] $ allRefs fl
+  [] [] $ allRefs fl
 
 -- | Helper to get the system name as an 'IdeaDict' from 'SystemInformation'.
 getSysName :: SystemInformation -> IdeaDict
@@ -117,7 +117,7 @@ getSysName SI{_sys = nm} = nw nm
 -- | Empty database needed for 'si' to work.
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
-           ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+           ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference])
 
 -- | Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]

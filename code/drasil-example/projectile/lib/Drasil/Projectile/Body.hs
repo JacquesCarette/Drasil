@@ -176,7 +176,7 @@ symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
     [nw sciCompS] ++ unitalIdeas ++ map nw acronyms ++ map nw symbols ++ 
     map nw educon ++ map nw [metre, radian, second] ++ map nw compcon) 
   (cw pi_ : map cw constrained ++ srsDomains) (map unitWrapper [metre, radian, second]) 
-  dataDefs iMods genDefns tMods concIns [] [] allRefs
+  dataDefs iMods genDefns tMods concIns [] allRefs
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -184,7 +184,7 @@ allRefs = [externalLinkRef]
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms ++ map nw symbols)
-  (cw pi_ : srsDomains) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+  (cw pi_ : srsDomains) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference])
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

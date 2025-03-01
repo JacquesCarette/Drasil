@@ -209,7 +209,7 @@ symbMap = cdb symbolsAll (nw progName : map nw symbols ++ map nw acronyms ++ map
   ++ map nw physicalcon ++ map nw unitalChuncks ++ map nw [absTol, relTol]
   ++ [nw srsSWHS, nw algorithm, nw inValue, nw htTrans, nw materialProprty, nw phsChgMtrl])
   (map cw symbols ++ srsDomains) units NoPCM.dataDefs NoPCM.iMods genDefs
-  tMods concIns [] [] allRefs
+  tMods concIns [] allRefs
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -217,7 +217,7 @@ allRefs = [externalLinkRef, externalLinkRef']
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw symbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference])
 
 --------------------------
 --Section 2 : INTRODUCTION

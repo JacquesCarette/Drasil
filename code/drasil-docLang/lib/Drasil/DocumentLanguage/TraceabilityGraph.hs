@@ -101,7 +101,6 @@ checkUID t si
   | Just _ <- Map.lookupIndex t (s ^. gendefTable)          = t
   | Just _ <- Map.lookupIndex t (s ^. theoryModelTable)     = t
   | Just _ <- Map.lookupIndex t (s ^. conceptinsTable)      = t
-  | Just _ <- Map.lookupIndex t (s ^. sectionTable)         = t
   | Just _ <- Map.lookupIndex t (s ^. labelledcontentTable) = t
   | t `elem` map  (^. uid) (citeDB si) = mkUid ""
   | otherwise = error $ show t ++ "Caught."
@@ -115,7 +114,6 @@ checkUIDAbbrev si t
   | Just (x, _) <- Map.lookup t (s ^. gendefTable)          = abrv x
   | Just (x, _) <- Map.lookup t (s ^. theoryModelTable)     = abrv x
   | Just (x, _) <- Map.lookup t (s ^. conceptinsTable)      = fromMaybe "" $ getA $ defResolve s $ sDom $ cdom x
-  | Just _ <- Map.lookup t (s ^. sectionTable)              = show t -- shouldn't really reach these cases
   | Just _ <- Map.lookup t (s ^. labelledcontentTable)      = show t
   | t `elem` map  (^. uid) (citeDB si) = ""
   | otherwise = error $ show t ++ "Caught."
@@ -130,7 +128,6 @@ checkUIDRefAdd si t
   | Just (x, _) <- Map.lookup t (s ^. theoryModelTable)     = getAdd $ getRefAdd x
   -- Concept instances can range from likely changes to non-functional requirements, so use domain abbreviations for labelling in addition to the reference address.
   | Just (x, _) <- Map.lookup t (s ^. conceptinsTable)      = fromMaybe "" (getA $ defResolve s $ sDom $ cdom x) ++ ":" ++ getAdd (getRefAdd x)
-  | Just _ <- Map.lookup t (s ^. sectionTable)              = show t -- shouldn't really reach these cases
   | Just _ <- Map.lookup t (s ^. labelledcontentTable)      = show t
   | t `elem` map  (^. uid) (citeDB si) = ""
   | otherwise = error $ show t ++ "Caught."

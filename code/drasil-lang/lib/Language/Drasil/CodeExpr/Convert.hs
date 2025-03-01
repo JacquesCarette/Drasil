@@ -37,16 +37,16 @@ expr (LD.Set e es)             = Set e $ map expr es
 expr (E.Variable s e)          = Variable s $ expr e
 expr (LD.UnaryOp uo e)         = UnaryOp (uFunc uo) (expr e)
 expr (LD.UnaryOpB uo e)        = UnaryOpB (uFuncB uo) (expr e)
-expr (LD.UnaryOpVV uo e)       = UnaryOpVV (uFuncVV uo) (expr e)
-expr (LD.UnaryOpVN uo e)       = UnaryOpVN (uFuncVN uo) (expr e)
+expr (LD.UnaryOpCC uo e)       = UnaryOpCC (uFuncCC uo) (expr e)
+expr (LD.UnaryOpCN uo e)       = UnaryOpCN (uFuncCN uo) (expr e)
 expr (LD.ArithBinaryOp bo l r) = ArithBinaryOp (arithBinOp bo) (expr l) (expr r)
 expr (LD.BoolBinaryOp bo l r)  = BoolBinaryOp (boolBinOp bo) (expr l) (expr r)
 expr (LD.EqBinaryOp bo l r)    = EqBinaryOp (eqBinOp bo) (expr l) (expr r)
 expr (LD.LABinaryOp bo l r)    = LABinaryOp (laBinOp bo) (expr l) (expr r)
 expr (LD.OrdBinaryOp bo l r)   = OrdBinaryOp (ordBinOp bo) (expr l) (expr r)
-expr (LD.VVVBinaryOp bo l r)   = VVVBinaryOp (vvvBinOp bo) (expr l) (expr r)
-expr (LD.VVNBinaryOp bo l r)   = VVNBinaryOp (vvnBinOp bo) (expr l) (expr r)
-expr (LD.NVVBinaryOp bo l r)   = NVVBinaryOp (nvvBinOp bo) (expr l) (expr r)
+expr (LD.CCCBinaryOp bo l r)   = CCCBinaryOp (cccBinOp bo) (expr l) (expr r)
+expr (LD.CCNBinaryOp bo l r)   = CCNBinaryOp (ccnBinOp bo) (expr l) (expr r)
+expr (LD.NCCBinaryOp bo l r)   = NCCBinaryOp (nccBinOp bo) (expr l) (expr r)
 expr (LD.ESSBinaryOp bo l r)   = ESSBinaryOp (essBinOp bo) (expr l) (expr r)
 expr (LD.ESBBinaryOp bo l r)   = ESBBinaryOp (esbBinOp bo) (expr l) (expr r)
 expr (LD.Operator aao dd e)    = Operator (assocArithOp aao) (renderDomainDesc dd) (expr e)
@@ -93,16 +93,16 @@ ordBinOp LD.Gt  = Gt
 ordBinOp LD.LEq = LEq
 ordBinOp LD.GEq = GEq
 
-vvvBinOp :: LD.VVVBinOp -> VVVBinOp
-vvvBinOp LD.Cross = Cross
-vvvBinOp LD.VAdd = VAdd
-vvvBinOp LD.VSub = VSub
+cccBinOp :: LD.CCCBinOp -> CCCBinOp
+cccBinOp LD.Cross = Cross
+cccBinOp LD.CAdd = CAdd
+cccBinOp LD.CSub = CSub
 
-vvnBinOp :: LD.VVNBinOp -> VVNBinOp
-vvnBinOp LD.Dot = Dot
+ccnBinOp :: LD.CCNBinOp -> CCNBinOp
+ccnBinOp LD.Dot = Dot
 
-nvvBinOp :: LD.NVVBinOp -> NVVBinOp
-nvvBinOp LD.Scale = Scale
+nccBinOp :: LD.NCCBinOp -> NCCBinOp
+nccBinOp LD.Scale = Scale
 
 essBinOp :: LD.ESSBinOp -> ESSBinOp
 essBinOp LD.SAdd = SAdd
@@ -142,9 +142,9 @@ uFunc LD.Neg = Neg
 uFuncB :: LD.UFuncB -> UFuncB
 uFuncB LD.Not = Not
 
-uFuncVV :: LD.UFuncVV -> UFuncVV
-uFuncVV LD.NegV = NegV
+uFuncCC :: LD.UFuncCC -> UFuncCC
+uFuncCC LD.NegC = NegC
 
-uFuncVN :: LD.UFuncVN -> UFuncVN
-uFuncVN LD.Norm = Norm
-uFuncVN LD.Dim = Dim
+uFuncCN :: LD.UFuncCN -> UFuncCN
+uFuncCN LD.Norm = Norm
+uFuncCN LD.Dim = Dim

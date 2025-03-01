@@ -14,13 +14,16 @@ module Language.Drasil.Space (
   -- * Class
   HasSpace(..),
   -- * Functions
-  getActorName, getInnerSpace, mkFunction, isBasicNumSpace
+  getActorName, getInnerSpace, mkFunction, isBasicNumSpace,
+  Dimension(..), vect2D, vect3D, vect
 ) where
 
 import qualified Data.List.NonEmpty        as NE
 
 import           Control.Lens              (Getter)
 import           Language.Drasil.Symbol    (Symbol)
+import           Numeric.Natural           (Natural)
+
 
 -- FIXME: These need to be spaces and not just types.
 
@@ -28,22 +31,42 @@ import           Language.Drasil.Symbol    (Symbol)
 -- numerical spaces (such as the set of integers, rationals, etc.),
 -- a space for booleans, a space for characters, dimensional spaces (vectors, arrays, etc.),
 -- a space for Actors, discrete sets (both for numbers and strings), and a void space.
-data Space =
-    Integer
-  | Rational
-  | Real
-  | Natural
-  | Boolean
-  | Char
-  | String
-  | Vect Space -- TODO: Length for vectors?
-  | Set Space
-  | Matrix Int Int Space
-  | Array Space
-  | Actor String 
-  | Function (NE.NonEmpty Primitive) Primitive
-  | Void
+data Space where
+    Integer  :: Space
+    Rational :: Space
+    Real     :: Space
+    Natural  :: Space
+    Boolean  :: Space
+    Char     :: Space
+    String   :: Space
+  -- | Vect Space -- TODO: Length for vectors?
+    Set      :: Space -> Space
+    Matrix   :: Int -> Int -> Space -> Space
+    Array    :: Space -> Space
+    Actor    :: String -> Space
+    Function :: (NE.NonEmpty Primitive) -> Primitive -> Space
+    Void     :: Space
+  -- | Clifford algebra objects (Clifs) with a grade and a dimension
+    ClifS    :: Natural -> Dimension -> Space -> Space
   deriving (Eq, Show)
+
+vect2D :: Space -> Space
+vect2D s = ClifS 1 (Fixed 2) s
+
+vect3D :: Space -> Space
+vect3D s = ClifS 1 (Fixed 3) s
+
+vect :: Natural -> Space -> Space
+vect n s = ClifS 1 (Fixed n) s
+
+-- | The dimension of a clif
+data Dimension where
+  -- | Fixed dimension
+  Fixed :: Natural -> Dimension
+  -- | Variable dimension
+  VDim  :: String -> Dimension
+  deriving (Eq, Show)
+
 
 -- | HasSpace is anything which has a 'Space'.
 class HasSpace c where
@@ -87,8 +110,8 @@ getActorName _         = error "getActorName called on non-actor space"
 
 -- | Gets the inner 'Space' of a vector or set.
 getInnerSpace :: Space -> Space
-getInnerSpace (Vect s) = s
 getInnerSpace (Set s) = s
+getInnerSpace (ClifS _ _ s) = s
 getInnerSpace _        = error "getInnerSpace called on non-vector space"
 
 -- | Is this Space a basic numeric space?
@@ -101,9 +124,9 @@ isBasicNumSpace Boolean      = False
 isBasicNumSpace Char         = False
 isBasicNumSpace String       = False
 isBasicNumSpace Set {}       = False
-isBasicNumSpace Vect {}      = False
 isBasicNumSpace Matrix {}    = False
 isBasicNumSpace Array {}     = False
 isBasicNumSpace Actor {}     = False
 isBasicNumSpace Function {}  = False
 isBasicNumSpace Void         = False
+isBasicNumSpace ClifS {}     = False

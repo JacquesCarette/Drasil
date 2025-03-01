@@ -40,12 +40,12 @@ uFunc E.Neg    = Neg
 uFuncB :: E.UFuncB -> UFuncB
 uFuncB E.Not = Not
 
-uFuncVV :: E.UFuncVV -> UFuncVV
-uFuncVV E.NegV = NegV
+uFuncCC :: E.UFuncCC -> UFuncCC
+uFuncCC E.NegC = NegC
 
-uFuncVN :: E.UFuncVN -> UFuncVN
-uFuncVN E.Norm = Norm
-uFuncVN E.Dim  = Dim
+uFuncCN :: E.UFuncCN -> UFuncCN
+uFuncCN E.Norm = Norm
+uFuncCN E.Dim  = Dim
 
 arithBinOp :: E.ArithBinOp -> ArithBinOp
 arithBinOp E.Frac = Frac
@@ -70,16 +70,16 @@ ordBinOp E.Gt  = Gt
 ordBinOp E.LEq = LEq
 ordBinOp E.GEq = GEq
 
-vvvBinOp :: E.VVVBinOp -> VVVBinOp
-vvvBinOp E.Cross = Cross
-vvvBinOp E.VAdd = VAdd
-vvvBinOp E.VSub = VSub
+cccBinOp :: E.CCCBinOp -> CCCBinOp
+cccBinOp E.Cross = Cross
+cccBinOp E.CAdd = CAdd
+cccBinOp E.CSub = CSub
 
-vvnBinOp :: E.VVNBinOp -> VVNBinOp
-vvnBinOp E.Dot = Dot
+ccnBinOp :: E.CCNBinOp -> CCNBinOp
+ccnBinOp E.Dot = Dot
 
-nvvBinOp :: E.NVVBinOp -> NVVBinOp
-nvvBinOp E.Scale = Scale
+nccBinOp :: E.NCCBinOp -> NCCBinOp
+nccBinOp E.Scale = Scale
 
 essBinOp :: E.ESSBinOp -> ESSBinOp
 essBinOp E.SAdd = SAdd
@@ -101,16 +101,16 @@ expr (E.Set s e)             = Set s $ map expr e
 expr (E.Variable s e)        = Variable s $ expr e
 expr (E.UnaryOp u e)         = UnaryOp (uFunc u) (expr e)
 expr (E.UnaryOpB u e)        = UnaryOpB (uFuncB u) (expr e)
-expr (E.UnaryOpVV u e)       = UnaryOpVV (uFuncVV u) (expr e)
-expr (E.UnaryOpVN u e)       = UnaryOpVN (uFuncVN u) (expr e)
+expr (E.UnaryOpCC u e)       = UnaryOpCC (uFuncCC u) (expr e)
+expr (E.UnaryOpCN u e)       = UnaryOpCN (uFuncCN u) (expr e)
 expr (E.ArithBinaryOp a l r) = ArithBinaryOp (arithBinOp a) (expr l) (expr r)
 expr (E.BoolBinaryOp b l r)  = BoolBinaryOp (boolBinOp b) (expr l) (expr r)
 expr (E.EqBinaryOp e l r)    = EqBinaryOp (eqBinOp e) (expr l) (expr r)
 expr (E.LABinaryOp la l r)   = LABinaryOp (laBinOp la) (expr l) (expr r)
 expr (E.OrdBinaryOp o l r)   = OrdBinaryOp (ordBinOp o) (expr l) (expr r)
-expr (E.VVVBinaryOp v l r)   = VVVBinaryOp (vvvBinOp v) (expr l) (expr r)
-expr (E.VVNBinaryOp v l r)   = VVNBinaryOp (vvnBinOp v) (expr l) (expr r)
-expr (E.NVVBinaryOp v l r)   = NVVBinaryOp (nvvBinOp v) (expr l) (expr r)
+expr (E.CCCBinaryOp v l r)   = CCCBinaryOp (cccBinOp v) (expr l) (expr r)
+expr (E.CCNBinaryOp v l r)   = CCNBinaryOp (ccnBinOp v) (expr l) (expr r)
+expr (E.NCCBinaryOp v l r)   = NCCBinaryOp (nccBinOp v) (expr l) (expr r)
 expr (E.ESSBinaryOp o l r)   = ESSBinaryOp (essBinOp o) (expr l) (expr r)
 expr (E.ESBBinaryOp o l r)   = ESBBinaryOp (esbBinOp o) (expr l) (expr r)
 expr (E.Operator ao dd e)    = Operator (assocArithOper ao) (domainDesc dd) (expr e)

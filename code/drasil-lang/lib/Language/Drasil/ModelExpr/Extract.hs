@@ -5,7 +5,7 @@ import Data.Containers.ListUtils (nubOrd)
 
 import Language.Drasil.ModelExpr.Lang (ModelExpr(..))
 import Language.Drasil.Space (RealInterval(..))
-import Language.Drasil.UID (UID)
+import Drasil.Database.UID (UID)
 
 -- | Generic traverse of all expressions that could lead to names.
 meNames :: ModelExpr -> [UID]

@@ -30,7 +30,7 @@ import Language.Drasil.NounPhrase (cn,cn',NP)
 import Language.Drasil.Symbol (Symbol(Label))
 import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift), 
   compUSymb, fromUDefn, getUSymb, getDefn, UnitSymbol(BaseSI, DerivedSI, Defined))
-import Language.Drasil.UID (UID, HasUID(..), mkUid)
+import Drasil.Database.UID (UID, HasUID(..), mkUid)
 
 -- | For defining units.
 -- It has a 'ConceptChunk' (that defines what kind of unit it is),

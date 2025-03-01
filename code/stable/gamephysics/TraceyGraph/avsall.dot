@@ -20,17 +20,17 @@ digraph avsall {
 	potEnergy -> assumpDI;
 	momentOfInertia -> assumpOT;
 	newtonSLR -> assumpOD;
-	theory:impulseS -> assumpOT;
-	theory:impulseS -> assumpOD;
-	theory:impulseS -> assumpAD;
-	theory:impulseS -> assumpCT;
-	theory:accj -> assumpOT;
-	theory:accj -> assumpOD;
-	theory:accj -> assumpDI;
-	theory:accj -> assumpCAJI;
-	theory:angAccj -> assumpOT;
-	theory:angAccj -> assumpOD;
-	theory:angAccj -> assumpAD;
+	impulseS:theory -> assumpOT;
+	impulseS:theory -> assumpOD;
+	impulseS:theory -> assumpAD;
+	impulseS:theory -> assumpCT;
+	accj:theory -> assumpOT;
+	accj:theory -> assumpOD;
+	accj:theory -> assumpDI;
+	accj:theory -> assumpCAJI;
+	angAccj:theory -> assumpOT;
+	angAccj:theory -> assumpOD;
+	angAccj:theory -> assumpAD;
 	col2DIM -> assumpOT;
 	col2DIM -> assumpOD;
 	col2DIM -> assumpAD;
@@ -77,30 +77,30 @@ digraph avsall {
 	}
 
 	newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
-	theory:force1	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonThirdLawMot"];
-	theory:force	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:UniversalGravLaw"];
+	force1:theory	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonThirdLawMot"];
+	force:theory	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:UniversalGravLaw"];
 	newtonSLR	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawRotMot"];
 
 	subgraph TM {
 	rank="same"
-	{newtonSL, theory:force1, theory:force, newtonSLR}
+	{newtonSL, force1:theory, force:theory, newtonSLR}
 	}
 
-	theory:gravitationalAccel	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelGravity"];
-	theory:impulseS	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:impulse"];
+	gravitationalAccel:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelGravity"];
+	impulseS:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:impulse"];
 
 	subgraph GD {
 	rank="same"
-	{theory:gravitationalAccel, theory:impulseS}
+	{gravitationalAccel:theory, impulseS:theory}
 	}
 
-	theory:accj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:transMot"];
-	theory:angAccj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:rotMot"];
+	accj:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:transMot"];
+	angAccj:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:rotMot"];
 	col2DIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:col2D"];
 
 	subgraph IM {
 	rank="same"
-	{theory:accj, theory:angAccj, col2DIM}
+	{accj:theory, angAccj:theory, col2DIM}
 	}
 
 	simSpace	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:simSpace"];

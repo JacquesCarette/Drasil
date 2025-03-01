@@ -16,7 +16,7 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage)
-import Language.Drasil.UID (HasUID(uid))
+import Drasil.Database.UID (HasUID(uid))
 
 import Control.Lens ((^.), makeLenses, view)
 

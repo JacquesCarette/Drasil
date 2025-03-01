@@ -13,7 +13,7 @@ import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Chunk.NamedIdea(mkIdea,nw, nc)
 import Language.Drasil.NounPhrase (NP, pn)
 import Language.Drasil.ShortName (shortname')
-import Language.Drasil.UID (HasUID(uid))
+import Drasil.Database.UID (HasUID(uid))
 
 import Control.Lens ((^.))
 

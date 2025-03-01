@@ -33,7 +33,7 @@ import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space(..), HasSpace(..))
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Stages (Stage)
-import Language.Drasil.UID (UID, HasUID(..))
+import Drasil.Database.UID (UID, HasUID(..))
 import Language.Drasil.WellTyped (RequiresChecking(..))
 
 data QDefinition e where

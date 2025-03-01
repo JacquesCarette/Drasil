@@ -20,7 +20,7 @@ import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Uncertainty
-import Language.Drasil.UID (HasUID(..))
+import Drasil.Database.UID (HasUID(..))
 
 import Control.Lens ((^.), makeLenses, view)
 

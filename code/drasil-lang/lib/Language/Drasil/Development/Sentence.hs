@@ -17,7 +17,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea)
 import Language.Drasil.Sentence ((+:+), Sentence((:+:), S), sParen, sentenceTerm,
   sentencePlural, sentenceShort)
 import qualified Language.Drasil.NounPhrase as NP
-import Language.Drasil.UID (HasUID(..))
+import Drasil.Database.UID (HasUID(..))
 
 -- | Get short form (if it exists), else get term of an 'Idea'.
 short :: Idea c => c -> Sentence

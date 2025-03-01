@@ -8,7 +8,7 @@ import Language.Drasil.Expr.Lang (Completeness)
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal(..))
 import Language.Drasil.Space (Space, RealInterval, DiscreteDomainDesc)
-import Language.Drasil.UID (UID)
+import Drasil.Database.UID (UID)
 
 -- * Operators (mostly binary)
 

@@ -3,66 +3,66 @@ digraph allvsall {
 	wVol -> assumpVCN;
 	wVol -> tankVol;
 	meltFrac -> htFusion;
-	theory:consThermECS -> assumpTEO;
-	theory:sensHeat -> latentHtETM;
+	consThermECS:theory -> assumpTEO;
+	sensHeat:theory -> latentHtETM;
 	latentHtETM -> meltFrac;
 	nwtnCoolingTM -> assumpHTCC;
-	theory:rocTempSimpRC -> assumpCWTAT;
-	theory:rocTempSimpRC -> assumpTPCAV;
-	theory:rocTempSimpRC -> assumpDWPCoV;
-	theory:rocTempSimpRC -> assumpSHECov;
-	theory:rocTempSimpRC -> theory:consThermECS;
-	theory:rocTempSimpRC -> theory:rocTempSimpRC;
-	theory:htFluxC -> assumpLCCCW;
-	theory:htFluxC -> assumpTHCCoT;
-	theory:htFluxC -> nwtnCoolingTM;
-	theory:htFluxP -> assumpLCCWP;
-	theory:htFluxP -> nwtnCoolingTM;
-	theory:eBalanceOnWtrRC -> assumpCWTAT;
-	theory:eBalanceOnWtrRC -> assumpTPCAV;
-	theory:eBalanceOnWtrRC -> assumpTHCCoL;
-	theory:eBalanceOnWtrRC -> assumpCTNOD;
-	theory:eBalanceOnWtrRC -> assumpSITWP;
-	theory:eBalanceOnWtrRC -> assumpWAL;
-	theory:eBalanceOnWtrRC -> assumpPIT;
-	theory:eBalanceOnWtrRC -> assumpNIHGBWP;
-	theory:eBalanceOnWtrRC -> assumpAPT;
-	theory:eBalanceOnWtrRC -> tauW;
-	theory:eBalanceOnWtrRC -> eta;
-	theory:eBalanceOnWtrRC -> theory:rocTempSimpRC;
-	theory:eBalanceOnWtrRC -> theory:htFluxC;
-	theory:eBalanceOnWtrRC -> theory:htFluxP;
-	theory:eBalanceOnWtrRC -> theory:eBalanceOnWtrRC;
-	theory:eBalanceOnWtrRC -> theory:eBalanceOnPCMRC;
-	theory:eBalanceOnPCMRC -> assumpCWTAT;
-	theory:eBalanceOnPCMRC -> assumpTPCAV;
-	theory:eBalanceOnPCMRC -> assumpSITWP;
-	theory:eBalanceOnPCMRC -> assumpPIS;
-	theory:eBalanceOnPCMRC -> assumpNIHGBWP;
-	theory:eBalanceOnPCMRC -> assumpVCMPN;
-	theory:eBalanceOnPCMRC -> assumpNGSP;
-	theory:eBalanceOnPCMRC -> tauSP;
-	theory:eBalanceOnPCMRC -> tauLP;
-	theory:eBalanceOnPCMRC -> meltFrac;
-	theory:eBalanceOnPCMRC -> theory:rocTempSimpRC;
-	theory:eBalanceOnPCMRC -> theory:htFluxP;
-	theory:eBalanceOnPCMRC -> theory:eBalanceOnWtrRC;
-	theory:eBalanceOnPCMRC -> theory:heatEInPCMRC;
+	rocTempSimpRC:theory -> assumpCWTAT;
+	rocTempSimpRC:theory -> assumpTPCAV;
+	rocTempSimpRC:theory -> assumpDWPCoV;
+	rocTempSimpRC:theory -> assumpSHECov;
+	rocTempSimpRC:theory -> consThermECS:theory;
+	rocTempSimpRC:theory -> rocTempSimpRC:theory;
+	htFluxC:theory -> assumpLCCCW;
+	htFluxC:theory -> assumpTHCCoT;
+	htFluxC:theory -> nwtnCoolingTM;
+	htFluxP:theory -> assumpLCCWP;
+	htFluxP:theory -> nwtnCoolingTM;
+	eBalanceOnWtrRC:theory -> assumpCWTAT;
+	eBalanceOnWtrRC:theory -> assumpTPCAV;
+	eBalanceOnWtrRC:theory -> assumpTHCCoL;
+	eBalanceOnWtrRC:theory -> assumpCTNOD;
+	eBalanceOnWtrRC:theory -> assumpSITWP;
+	eBalanceOnWtrRC:theory -> assumpWAL;
+	eBalanceOnWtrRC:theory -> assumpPIT;
+	eBalanceOnWtrRC:theory -> assumpNIHGBWP;
+	eBalanceOnWtrRC:theory -> assumpAPT;
+	eBalanceOnWtrRC:theory -> tauW;
+	eBalanceOnWtrRC:theory -> eta;
+	eBalanceOnWtrRC:theory -> rocTempSimpRC:theory;
+	eBalanceOnWtrRC:theory -> htFluxC:theory;
+	eBalanceOnWtrRC:theory -> htFluxP:theory;
+	eBalanceOnWtrRC:theory -> eBalanceOnWtrRC:theory;
+	eBalanceOnWtrRC:theory -> eBalanceOnPCMRC:theory;
+	eBalanceOnPCMRC:theory -> assumpCWTAT;
+	eBalanceOnPCMRC:theory -> assumpTPCAV;
+	eBalanceOnPCMRC:theory -> assumpSITWP;
+	eBalanceOnPCMRC:theory -> assumpPIS;
+	eBalanceOnPCMRC:theory -> assumpNIHGBWP;
+	eBalanceOnPCMRC:theory -> assumpVCMPN;
+	eBalanceOnPCMRC:theory -> assumpNGSP;
+	eBalanceOnPCMRC:theory -> tauSP;
+	eBalanceOnPCMRC:theory -> tauLP;
+	eBalanceOnPCMRC:theory -> meltFrac;
+	eBalanceOnPCMRC:theory -> rocTempSimpRC:theory;
+	eBalanceOnPCMRC:theory -> htFluxP:theory;
+	eBalanceOnPCMRC:theory -> eBalanceOnWtrRC:theory;
+	eBalanceOnPCMRC:theory -> heatEInPCMRC:theory;
 	heatEInWtrIM -> assumpWAL;
 	heatEInWtrIM -> assumpAPT;
-	heatEInWtrIM -> theory:sensHeat;
-	theory:heatEInPCMRC -> assumpPIS;
-	theory:heatEInPCMRC -> assumpNGSP;
-	theory:heatEInPCMRC -> htFusion;
-	theory:heatEInPCMRC -> theory:sensHeat;
-	theory:heatEInPCMRC -> latentHtETM;
+	heatEInWtrIM -> sensHeat:theory;
+	heatEInPCMRC:theory -> assumpPIS;
+	heatEInPCMRC:theory -> assumpNGSP;
+	heatEInPCMRC:theory -> htFusion;
+	heatEInPCMRC:theory -> sensHeat:theory;
+	heatEInPCMRC:theory -> latentHtETM;
 	findMass -> wMass;
 	findMass -> wVol;
 	findMass -> tankVol;
-	findMass -> theory:eBalanceOnWtrRC;
-	findMass -> theory:eBalanceOnPCMRC;
+	findMass -> eBalanceOnWtrRC:theory;
+	findMass -> eBalanceOnPCMRC:theory;
 	findMass -> heatEInWtrIM;
-	findMass -> theory:heatEInPCMRC;
+	findMass -> heatEInPCMRC:theory;
 	findMass -> inputValues;
 	outputInputDerivVals -> tauW;
 	outputInputDerivVals -> eta;
@@ -70,16 +70,16 @@ digraph allvsall {
 	outputInputDerivVals -> tauLP;
 	outputInputDerivVals -> inputValues;
 	outputInputDerivVals -> findMass;
-	calcValues -> theory:eBalanceOnWtrRC;
-	calcValues -> theory:eBalanceOnPCMRC;
+	calcValues -> eBalanceOnWtrRC:theory;
+	calcValues -> eBalanceOnPCMRC:theory;
 	calcValues -> heatEInWtrIM;
-	calcValues -> theory:heatEInPCMRC;
-	calcPCMMeltBegin -> theory:eBalanceOnPCMRC;
-	calcPCMMeltEnd -> theory:eBalanceOnPCMRC;
-	outputValues -> theory:eBalanceOnWtrRC;
-	outputValues -> theory:eBalanceOnPCMRC;
+	calcValues -> heatEInPCMRC:theory;
+	calcPCMMeltBegin -> eBalanceOnPCMRC:theory;
+	calcPCMMeltEnd -> eBalanceOnPCMRC:theory;
+	outputValues -> eBalanceOnWtrRC:theory;
+	outputValues -> eBalanceOnPCMRC:theory;
 	outputValues -> heatEInWtrIM;
-	outputValues -> theory:heatEInPCMRC;
+	outputValues -> heatEInPCMRC:theory;
 	likeChgUTP -> assumpTPCAV;
 	likeChgTCVOD -> assumpTHCCoT;
 	likeChgTCVOL -> assumpTHCCoL;
@@ -89,11 +89,11 @@ digraph allvsall {
 	unlikeChgWPFS -> assumpWAL;
 	unlikeChgWPFS -> assumpNGSP;
 	unlikeChgNIHG -> assumpNIHGBWP;
-	unlikeChgNIHG -> theory:eBalanceOnWtrRC;
-	unlikeChgNIHG -> theory:eBalanceOnPCMRC;
+	unlikeChgNIHG -> eBalanceOnWtrRC:theory;
+	unlikeChgNIHG -> eBalanceOnPCMRC:theory;
 	unlikeChgNGS -> assumpNGSP;
-	unlikeChgNGS -> theory:eBalanceOnPCMRC;
-	unlikeChgNGS -> theory:heatEInPCMRC;
+	unlikeChgNGS -> eBalanceOnPCMRC:theory;
+	unlikeChgNGS -> heatEInPCMRC:theory;
 
 
 	assumpTEO	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpTEO"];
@@ -138,33 +138,33 @@ digraph allvsall {
 	{wMass, wVol, tankVol, tauW, eta, tauSP, tauLP, htFusion, meltFrac, aspectRatio}
 	}
 
-	theory:consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
-	theory:sensHeat	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
+	consThermECS:theory	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
+	sensHeat:theory	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
 	latentHtETM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:latentHtE"];
 	nwtnCoolingTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
 
 	subgraph TM {
 	rank="same"
-	{theory:consThermECS, theory:sensHeat, latentHtETM, nwtnCoolingTM}
+	{consThermECS:theory, sensHeat:theory, latentHtETM, nwtnCoolingTM}
 	}
 
-	theory:rocTempSimpRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];
-	theory:htFluxC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:htFluxWaterFromCoil"];
-	theory:htFluxP	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:htFluxPCMFromWater"];
+	rocTempSimpRC:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];
+	htFluxC:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:htFluxWaterFromCoil"];
+	htFluxP:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:htFluxPCMFromWater"];
 
 	subgraph GD {
 	rank="same"
-	{theory:rocTempSimpRC, theory:htFluxC, theory:htFluxP}
+	{rocTempSimpRC:theory, htFluxC:theory, htFluxP:theory}
 	}
 
-	theory:eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
-	theory:eBalanceOnPCMRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnPCM"];
+	eBalanceOnWtrRC:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
+	eBalanceOnPCMRC:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnPCM"];
 	heatEInWtrIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
-	theory:heatEInPCMRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInPCM"];
+	heatEInPCMRC:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInPCM"];
 
 	subgraph IM {
 	rank="same"
-	{theory:eBalanceOnWtrRC, theory:eBalanceOnPCMRC, heatEInWtrIM, theory:heatEInPCMRC}
+	{eBalanceOnWtrRC:theory, eBalanceOnPCMRC:theory, heatEInWtrIM, heatEInPCMRC:theory}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

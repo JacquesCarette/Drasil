@@ -1,8 +1,8 @@
 digraph allvsr {
 	outputValsAndKnownValues -> inputValues;
 	outputValsAndKnownValues -> sysSetValsFollowingAssumps;
-	checkGlassSafety -> theory:isSafePb;
-	checkGlassSafety -> theory:isSafeLR;
+	checkGlassSafety -> isSafePb:theory;
+	checkGlassSafety -> isSafeLR:theory;
 
 
 	assumpGT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpGT"];
@@ -32,28 +32,28 @@ digraph allvsr {
 	{minThick, loadDurFactor, glassTypeFac, stdOffDist, aR, eqTNTChar, demandq}
 	}
 
-	theory:isSafeProb	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeProb"];
-	theory:isSafeLoad	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeLoad"];
+	isSafeProb:theory	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeProb"];
+	isSafeLoad:theory	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeLoad"];
 
 	subgraph TM {
 	rank="same"
-	{theory:isSafeProb, theory:isSafeLoad}
+	{isSafeProb:theory, isSafeLoad:theory}
 	}
 
-	theory:riskFun	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:riskFun"];
-	theory:stressDistFac	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:stressDistFac"];
-	theory:nFL	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nFL"];
-	theory:dimlessLoad	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:dimlessLoad"];
-	theory:tolLoad	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:tolLoad"];
-	theory:sdfTol	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:sdfTol"];
-	theory:probBr	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:probOfBreak"];
-	theory:lResistance	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calofCapacity"];
-	theory:isSafePb	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafePb"];
-	theory:isSafeLR	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafeLR"];
+	riskFun:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:riskFun"];
+	stressDistFac:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:stressDistFac"];
+	nFL:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nFL"];
+	dimlessLoad:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:dimlessLoad"];
+	tolLoad:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:tolLoad"];
+	sdfTol:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:sdfTol"];
+	probBr:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:probOfBreak"];
+	lResistance:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calofCapacity"];
+	isSafePb:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafePb"];
+	isSafeLR:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafeLR"];
 
 	subgraph IM {
 	rank="same"
-	{theory:riskFun, theory:stressDistFac, theory:nFL, theory:dimlessLoad, theory:tolLoad, theory:sdfTol, theory:probBr, theory:lResistance, theory:isSafePb, theory:isSafeLR}
+	{riskFun:theory, stressDistFac:theory, nFL:theory, dimlessLoad:theory, tolLoad:theory, sdfTol:theory, probBr:theory, lResistance:theory, isSafePb:theory, isSafeLR:theory}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

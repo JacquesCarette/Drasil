@@ -55,7 +55,7 @@ import Language.Drasil.Uncertainty
 import Language.Drasil.Symbol
 import Language.Drasil.Sentence.Fold
 import qualified Language.Drasil.Sentence.Combinators as S (are, in_, is, toThe)
-import Language.Drasil.UID ( HasUID )
+import Drasil.Database.UID ( HasUID )
 import Language.Drasil.Label.Type
 
 import Control.Lens ((^.))

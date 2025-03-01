@@ -35,10 +35,10 @@ digraph allvsr {
 	{accelerationTM, velocityTM, newtonSL, newtonSLR}
 	}
 
-	theory:xVel	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityIX"];
-	theory:yVel	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityIY"];
-	theory:xScalAcc	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationIX"];
-	theory:yScalAcc	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationIY"];
+	xVel:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityIX"];
+	yVel:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityIY"];
+	xScalAcc:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationIX"];
+	yScalAcc:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationIY"];
 	hForceOnPendulum	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:hForceOnPendulum"];
 	vForceOnPendulum	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:vForceOnPendulum"];
 	angFrequencyGD	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:angFrequencyGD"];
@@ -46,7 +46,7 @@ digraph allvsr {
 
 	subgraph GD {
 	rank="same"
-	{theory:xVel, theory:yVel, theory:xScalAcc, theory:yScalAcc, hForceOnPendulum, vForceOnPendulum, angFrequencyGD, periodPendGD}
+	{xVel:theory, yVel:theory, xScalAcc:theory, yScalAcc:theory, hForceOnPendulum, vForceOnPendulum, angFrequencyGD, periodPendGD}
 	}
 
 	angularDisplacementIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngularDisplacement"];

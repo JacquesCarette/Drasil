@@ -2,7 +2,7 @@
 -- chunk database in order to render terms, symbols, and references properly.
 module Language.Drasil.Sentence.Extract(sdep, shortdep, lnames, lnames') where
 
-import Language.Drasil.UID (UID)
+import Drasil.Database.UID (UID)
 import Language.Drasil.Sentence(Sentence(..), SentenceStyle(..))
 import Language.Drasil.ModelExpr.Extract (meNames)
 

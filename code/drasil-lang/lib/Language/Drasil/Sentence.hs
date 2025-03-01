@@ -12,7 +12,7 @@ module Language.Drasil.Sentence (
   sentencePlural, sentenceShort,
   sentenceSymb, sentenceTerm) where
 
-import Language.Drasil.UID (HasUID(..), UID)
+import Drasil.Database.UID (HasUID(..), UID)
 import Language.Drasil.Symbol (HasSymbol, Symbol)
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.ExprClasses (Express(express))

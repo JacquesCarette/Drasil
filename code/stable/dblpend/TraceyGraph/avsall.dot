@@ -36,14 +36,14 @@ digraph avsall {
 	{accelerationTM, velocityTM, newtonSL}
 	}
 
-	theory:v_x1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityX1"];
-	theory:v_y1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityY1"];
-	theory:v_x2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityX2"];
-	theory:v_y2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityY2"];
-	theory:a_x1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationX1"];
-	theory:a_y1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationY1"];
-	theory:a_x2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationX2"];
-	theory:a_y2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationY2"];
+	v_x1:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityX1"];
+	v_y1:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityY1"];
+	v_x2:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityX2"];
+	v_y2:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityY2"];
+	a_x1:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationX1"];
+	a_y1:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationY1"];
+	a_x2:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationX2"];
+	a_y2:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationY2"];
 	xForce1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:xForce1"];
 	yForce1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:yForce1"];
 	xForce2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:xForce2"];
@@ -51,7 +51,7 @@ digraph avsall {
 
 	subgraph GD {
 	rank="same"
-	{theory:v_x1, theory:v_y1, theory:v_x2, theory:v_y2, theory:a_x1, theory:a_y1, theory:a_x2, theory:a_y2, xForce1, yForce1, xForce2, yForce2}
+	{v_x1:theory, v_y1:theory, v_x2:theory, v_y2:theory, a_x1:theory, a_y1:theory, a_x2:theory, a_y2:theory, xForce1, yForce1, xForce2, yForce2}
 	}
 
 	angleIM1	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngle1"];

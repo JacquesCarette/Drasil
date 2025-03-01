@@ -20,7 +20,7 @@ import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space(..), HasSpace(..))
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Stages (Stage)
-import Language.Drasil.UID (HasUID(..))
+import Drasil.Database.UID (HasUID(..))
 
 -- | Similar to a `DefinedQuantityDict`, UnitalChunks are concepts
 -- with quantities that must have a unit definition.

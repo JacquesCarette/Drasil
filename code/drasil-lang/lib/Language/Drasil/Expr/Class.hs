@@ -19,7 +19,7 @@ import Language.Drasil.Space (DomainDesc(..), RTopology(..), RealInterval, Space
 import qualified Language.Drasil.ModelExpr.Lang as M
 import qualified Language.Drasil.CodeExpr.Lang as C
 import Language.Drasil.Literal.Class (LiteralC(..))
-import Language.Drasil.UID (HasUID(..))
+import Drasil.Database.UID (HasUID(..))
 
 import Utils.Drasil (toColumn)
 

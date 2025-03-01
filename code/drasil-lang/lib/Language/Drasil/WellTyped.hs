@@ -4,7 +4,7 @@
 module Language.Drasil.WellTyped where
 
 import qualified Data.Map.Strict as M
-import Language.Drasil.UID (UID)
+import Drasil.Database.UID (UID)
 import Data.List (intercalate)
 
 -- TODO: Rather than using a flat String, it would be better to a

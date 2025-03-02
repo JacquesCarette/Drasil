@@ -1,37 +1,37 @@
 digraph allvsall {
 	wVol -> assumpVCN;
 	wVol -> tankVol;
-	consThermECS:theory -> assumpTEO;
-	sensHeat:theory -> assumpWAL;
+	theory:consThermECS -> assumpTEO;
+	theory:sensHeat -> assumpWAL;
 	nwtnCoolingTM -> assumpHTCC;
-	rocTempSimpRC:theory -> assumpCWTAT;
-	rocTempSimpRC:theory -> assumpDWCoW;
-	rocTempSimpRC:theory -> assumpSHECoW;
-	rocTempSimpRC:theory -> consThermECS:theory;
-	rocTempSimpRC:theory -> rocTempSimpRC:theory;
-	htFluxC:theory -> assumpLCCCW;
-	htFluxC:theory -> assumpTHCCoT;
-	htFluxC:theory -> nwtnCoolingTM;
-	eBalanceOnWtrRC:theory -> assumpWAL;
-	eBalanceOnWtrRC:theory -> assumpPIT;
-	eBalanceOnWtrRC:theory -> assumpNIHGBW;
-	eBalanceOnWtrRC:theory -> tauW;
-	eBalanceOnWtrRC:theory -> rocTempSimpRC:theory;
-	eBalanceOnWtrRC:theory -> htFluxC:theory;
+	theory:rocTempSimpRC -> assumpCWTAT;
+	theory:rocTempSimpRC -> assumpDWCoW;
+	theory:rocTempSimpRC -> assumpSHECoW;
+	theory:rocTempSimpRC -> theory:consThermECS;
+	theory:rocTempSimpRC -> theory:rocTempSimpRC;
+	theory:htFluxC -> assumpLCCCW;
+	theory:htFluxC -> assumpTHCCoT;
+	theory:htFluxC -> nwtnCoolingTM;
+	theory:eBalanceOnWtrRC -> assumpWAL;
+	theory:eBalanceOnWtrRC -> assumpPIT;
+	theory:eBalanceOnWtrRC -> assumpNIHGBW;
+	theory:eBalanceOnWtrRC -> tauW;
+	theory:eBalanceOnWtrRC -> theory:rocTempSimpRC;
+	theory:eBalanceOnWtrRC -> theory:htFluxC;
 	heatEInWtrIM -> assumpWAL;
 	heatEInWtrIM -> assumpAPT;
-	heatEInWtrIM -> sensHeat:theory;
+	heatEInWtrIM -> theory:sensHeat;
 	findMass -> wMass;
 	findMass -> wVol;
 	findMass -> tankVol;
-	findMass -> eBalanceOnWtrRC:theory;
+	findMass -> theory:eBalanceOnWtrRC;
 	findMass -> inputValues;
 	outputInputDerivVals -> tauW;
 	outputInputDerivVals -> inputValues;
 	outputInputDerivVals -> findMass;
-	calcValues -> eBalanceOnWtrRC:theory;
+	calcValues -> theory:eBalanceOnWtrRC;
 	calcValues -> heatEInWtrIM;
-	outputValues -> eBalanceOnWtrRC:theory;
+	outputValues -> theory:eBalanceOnWtrRC;
 	outputValues -> heatEInWtrIM;
 	likeChgTCVOD -> assumpTHCCoT;
 	likeChgTCVOL -> assumpTHCCoL;
@@ -39,7 +39,7 @@ digraph allvsall {
 	likeChgTLH -> assumpPIT;
 	unlikeChgWFS -> assumpWAL;
 	unlikeChgNIHG -> assumpNIHGBW;
-	unlikeChgNIHG -> eBalanceOnWtrRC:theory;
+	unlikeChgNIHG -> theory:eBalanceOnWtrRC;
 
 
 	assumpTEO	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpTEO"];
@@ -72,29 +72,29 @@ digraph allvsall {
 	{wMass, wVol, tankVol, tauW}
 	}
 
-	consThermECS:theory	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
-	sensHeat:theory	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
+	theory:consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
+	theory:sensHeat	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
 	nwtnCoolingTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
 
 	subgraph TM {
 	rank="same"
-	{consThermECS:theory, sensHeat:theory, nwtnCoolingTM}
+	{theory:consThermECS, theory:sensHeat, nwtnCoolingTM}
 	}
 
-	rocTempSimpRC:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];
-	htFluxC:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:htFluxWaterFromCoil"];
+	theory:rocTempSimpRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];
+	theory:htFluxC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:htFluxWaterFromCoil"];
 
 	subgraph GD {
 	rank="same"
-	{rocTempSimpRC:theory, htFluxC:theory}
+	{theory:rocTempSimpRC, theory:htFluxC}
 	}
 
-	eBalanceOnWtrRC:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
+	theory:eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
 	heatEInWtrIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
 
 	subgraph IM {
 	rank="same"
-	{eBalanceOnWtrRC:theory, heatEInWtrIM}
+	{theory:eBalanceOnWtrRC, heatEInWtrIM}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

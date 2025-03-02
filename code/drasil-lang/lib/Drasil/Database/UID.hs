@@ -38,7 +38,7 @@ instance ToJSONKey UID where
   toJSONKey = toJSONKeyText (pack . show)
 
 instance Show UID where
-  show u = intercalate ":" $ u ^. baseName : u ^. namespace
+  show u = intercalate ":" $ u ^. namespace ++ [u ^. baseName]
 
 -- | Smart constructor for 'UID's from raw 'String's.
 mkUid :: String -> UID

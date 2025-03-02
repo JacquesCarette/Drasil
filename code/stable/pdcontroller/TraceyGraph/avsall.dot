@@ -4,12 +4,12 @@ digraph avsall {
 	qdDerivativeControlFD -> unfilteredDerivative;
 	qdCtrlVarFD -> decoupled;
 	qdCtrlVarFD -> parallelEq;
-	tmSOSystemRC:theory -> pwrPlantTxFnx;
-	gdPowerPlantRC:theory -> externalDisturb;
-	gdPowerPlantRC:theory -> massSpring;
-	gdPowerPlantRC:theory -> dampingCoeffSpring;
-	gdPowerPlantRC:theory -> stiffnessCoeffSpring;
-	imPDRC:theory -> setPoint;
+	theory:tmSOSystemRC -> pwrPlantTxFnx;
+	theory:gdPowerPlantRC -> externalDisturb;
+	theory:gdPowerPlantRC -> massSpring;
+	theory:gdPowerPlantRC -> dampingCoeffSpring;
+	theory:gdPowerPlantRC -> stiffnessCoeffSpring;
+	theory:imPDRC -> setPoint;
 	likeChgPP -> massSpring;
 	likeChgPP -> dampingCoeffSpring;
 	likeChgPP -> stiffnessCoeffSpring;
@@ -42,27 +42,27 @@ digraph avsall {
 	{qdProcessErrorFD, qdPropControlFD, qdDerivativeControlFD, qdCtrlVarFD}
 	}
 
-	laplaceRC:theory	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:laplaceTransform"];
-	invLaplaceRC:theory	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:invLaplaceTransform"];
-	tmSOSystemRC:theory	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:tmSOSystem"];
+	theory:laplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:laplaceTransform"];
+	theory:invLaplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:invLaplaceTransform"];
+	theory:tmSOSystemRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:tmSOSystem"];
 
 	subgraph TM {
 	rank="same"
-	{laplaceRC:theory, invLaplaceRC:theory, tmSOSystemRC:theory}
+	{theory:laplaceRC, theory:invLaplaceRC, theory:tmSOSystemRC}
 	}
 
-	gdPowerPlantRC:theory	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:gdPowerPlant"];
+	theory:gdPowerPlantRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:gdPowerPlant"];
 
 	subgraph GD {
 	rank="same"
-	{gdPowerPlantRC:theory}
+	{theory:gdPowerPlantRC}
 	}
 
-	imPDRC:theory	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:pdEquationIM"];
+	theory:imPDRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:pdEquationIM"];
 
 	subgraph IM {
 	rank="same"
-	{imPDRC:theory}
+	{theory:imPDRC}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

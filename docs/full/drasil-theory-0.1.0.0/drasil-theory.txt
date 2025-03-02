@@ -67,7 +67,7 @@ data ConstraintSet e
 
 -- | Smart constructor for building ConstraintSets
 mkConstraintSet :: ConceptChunk -> NonEmpty e -> ConstraintSet e
-instance Language.Drasil.UID.HasUID (Theory.Drasil.ConstraintSet.ConstraintSet e)
+instance Drasil.Database.UID.HasUID (Theory.Drasil.ConstraintSet.ConstraintSet e)
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea (Theory.Drasil.ConstraintSet.ConstraintSet e)
 instance Language.Drasil.Chunk.NamedIdea.Idea (Theory.Drasil.ConstraintSet.ConstraintSet e)
 instance Language.Drasil.Classes.Definition (Theory.Drasil.ConstraintSet.ConstraintSet e)
@@ -133,7 +133,7 @@ ddMENoRefs :: ModelQDef -> Maybe Derivation -> String -> [Sentence] -> DataDefin
 -- | Extracts the 'QDefinition e' from a <a>DataDefinition</a>.
 qdFromDD :: DataDefinition -> Either SimpleQDef ModelQDef
 qdEFromDD :: DataDefinition -> Maybe SimpleQDef
-instance Language.Drasil.UID.HasUID Theory.Drasil.DataDefinition.DataDefinition
+instance Drasil.Database.UID.HasUID Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Chunk.NamedIdea.Idea Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Chunk.Quantity.DefinesQuantity Theory.Drasil.DataDefinition.DataDefinition
@@ -182,7 +182,7 @@ multiDefnGenQD :: MultiDefn e -> DefiningExpr e -> QDefinition e
 -- | Convert <a>MultiDefn</a>s into <a>QDefinition</a>s via a specific
 --   <a>DefiningExpr</a> (by <a>UID</a>).
 multiDefnGenQDByUID :: MultiDefn e -> UID -> QDefinition e
-instance Language.Drasil.UID.HasUID (Theory.Drasil.MultiDefn.MultiDefn e)
+instance Drasil.Database.UID.HasUID (Theory.Drasil.MultiDefn.MultiDefn e)
 instance Language.Drasil.Symbol.HasSymbol (Theory.Drasil.MultiDefn.MultiDefn e)
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea (Theory.Drasil.MultiDefn.MultiDefn e)
 instance Language.Drasil.Chunk.NamedIdea.Idea (Theory.Drasil.MultiDefn.MultiDefn e)
@@ -194,7 +194,7 @@ instance Language.Drasil.Classes.ConceptDomain (Theory.Drasil.MultiDefn.MultiDef
 instance Language.Drasil.WellTyped.RequiresChecking (Theory.Drasil.MultiDefn.MultiDefn Language.Drasil.Expr.Lang.Expr) Language.Drasil.Expr.Lang.Expr Language.Drasil.Space.Space
 instance Language.Drasil.ExprClasses.Express e => Language.Drasil.ExprClasses.Express (Theory.Drasil.MultiDefn.MultiDefn e)
 instance GHC.Classes.Eq (Theory.Drasil.MultiDefn.DefiningExpr e)
-instance Language.Drasil.UID.HasUID (Theory.Drasil.MultiDefn.DefiningExpr e)
+instance Drasil.Database.UID.HasUID (Theory.Drasil.MultiDefn.DefiningExpr e)
 instance Language.Drasil.Classes.ConceptDomain (Theory.Drasil.MultiDefn.DefiningExpr e)
 instance Language.Drasil.Classes.Definition (Theory.Drasil.MultiDefn.DefiningExpr e)
 
@@ -310,14 +310,14 @@ getterMk :: forall e a. Getter DifferentialModel a -> Getter RelationConcept a -
 -- | Extract a list of <a>QDefinition</a>s from a list of
 --   <a>ModelKinds</a>.
 getEqModQds :: [ModelKind e] -> [QDefinition e]
-instance Language.Drasil.UID.HasUID (Theory.Drasil.ModelKinds.ModelKinds e)
+instance Drasil.Database.UID.HasUID (Theory.Drasil.ModelKinds.ModelKinds e)
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea (Theory.Drasil.ModelKinds.ModelKinds e)
 instance Language.Drasil.Chunk.NamedIdea.Idea (Theory.Drasil.ModelKinds.ModelKinds e)
 instance Language.Drasil.Classes.Definition (Theory.Drasil.ModelKinds.ModelKinds e)
 instance Language.Drasil.Classes.ConceptDomain (Theory.Drasil.ModelKinds.ModelKinds e)
 instance Language.Drasil.ExprClasses.Express e => Language.Drasil.ExprClasses.Express (Theory.Drasil.ModelKinds.ModelKinds e)
 instance Language.Drasil.WellTyped.RequiresChecking (Theory.Drasil.ModelKinds.ModelKinds Language.Drasil.Expr.Lang.Expr) Language.Drasil.Expr.Lang.Expr Language.Drasil.Space.Space
-instance Language.Drasil.UID.HasUID (Theory.Drasil.ModelKinds.ModelKind e)
+instance Drasil.Database.UID.HasUID (Theory.Drasil.ModelKinds.ModelKind e)
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea (Theory.Drasil.ModelKinds.ModelKind e)
 instance Language.Drasil.Chunk.NamedIdea.Idea (Theory.Drasil.ModelKinds.ModelKind e)
 instance Language.Drasil.Classes.Definition (Theory.Drasil.ModelKinds.ModelKind e)
@@ -358,7 +358,7 @@ qwUC :: (Quantity q, MayHaveUnit q) => q -> Input
 
 -- | For building a quantity with a constraint.
 qwC :: (Quantity q, MayHaveUnit q) => q -> RealInterval Expr Expr -> Input
-instance Language.Drasil.UID.HasUID Theory.Drasil.InstanceModel.InstanceModel
+instance Drasil.Database.UID.HasUID Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Chunk.NamedIdea.Idea Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Classes.Definition Theory.Drasil.InstanceModel.InstanceModel
@@ -394,7 +394,7 @@ gdNoRefs :: IsUnit u => ModelKind ModelExpr -> Maybe u -> Maybe Derivation -> St
 -- | Grab all related <tt>QDefinitions</tt> from a list of general
 --   definitions.
 getEqModQdsFromGd :: [GenDefn] -> [ModelQDef]
-instance Language.Drasil.UID.HasUID Theory.Drasil.GenDefn.GenDefn
+instance Drasil.Database.UID.HasUID Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Chunk.NamedIdea.Idea Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Classes.Definition Theory.Drasil.GenDefn.GenDefn
@@ -453,7 +453,7 @@ tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind ModelExpr -> [q] -> [c
 -- | Constructor for theory models. Uses the shortname of the reference
 --   address.
 tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind ModelExpr -> [q] -> [c] -> [ModelQDef] -> [ModelExpr] -> [ModelQDef] -> String -> [Sentence] -> TheoryModel
-instance Language.Drasil.UID.HasUID Theory.Drasil.Theory.TheoryModel
+instance Drasil.Database.UID.HasUID Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Chunk.NamedIdea.Idea Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Classes.Definition Theory.Drasil.Theory.TheoryModel

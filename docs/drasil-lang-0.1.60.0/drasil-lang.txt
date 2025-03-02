@@ -824,8 +824,7 @@ lnames :: Sentence -> [UID]
 -- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
 lnames' :: [Sentence] -> [UID]
 
--- | Grabs the UID from something that has a UID and displays it as a
---   String.
+-- | Get something's <a>UID</a> as a <a>Value</a>.
 showUID :: HasUID a => a -> String
 
 module Language.Drasil.Expr.Development
@@ -2441,22 +2440,23 @@ class (HasSymbol c) => IsArgumentName c
 --   sure we are only using <a>UID</a>s where desired.
 data UID
 
--- | Smart constructor for making a <a>UID</a> from a <a>Value</a>.
+-- | Smart constructor for <a>UID</a>s from raw <a>Value</a>s.
 mkUid :: String -> UID
 
--- | Nest UID under a namespace
+-- | Nest a <a>UID</a> under a namespace.
 nsUid :: String -> UID -> UID
 
--- | Grabs the UID from something that has a UID and displays it as a
---   String.
+-- | Get something's <a>UID</a> as a <a>Value</a>.
 showUID :: HasUID a => a -> String
 
--- | For when we need to modify a UID. We first take the base chunk's UID
---   and then append a suffix to it.
+-- | Append a suffix to a thing with a <a>UID</a> and get the resulting
+--   <a>UID</a>.
 (+++) :: HasUID a => a -> String -> UID
 
--- | For when we need to append something to a UID.
+-- | Append a suffix to a <a>UID</a>.
 (+++.) :: UID -> String -> UID
+
+-- | Merge the <a>UID</a>s of two chunks through simple concatenation.
 (+++!) :: (HasUID a, HasUID b) => a -> b -> UID
 
 -- | <a>IdeaDict</a> constructor, takes a <a>String</a> for its <a>UID</a>

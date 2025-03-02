@@ -1,4 +1,10 @@
 digraph alltypes {
+	subgraph uid {
+		subgraph uid{
+		UID	[shape=oval, color=cyan3, label="UID"];
+		UID -> String;
+		}
+	}
 	subgraph core {
 		subgraph conceptchunk{
 		ConceptChunk	[shape=oval, color=cyan3, label="ConceptChunk"];
@@ -880,12 +886,6 @@ digraph alltypes {
 		PExpr	[shape=oval, color=red2, label="PExpr"];
 		PExpr -> ExprCrLiteralCr;
 		PExpr -> r;
-		}
-	}
-	subgraph uid {
-		subgraph uid{
-		UID	[shape=oval, color=cyan3, label="UID"];
-		UID -> String;
 		}
 	}
 	subgraph uncertainty {

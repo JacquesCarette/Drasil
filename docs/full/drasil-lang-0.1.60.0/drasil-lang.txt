@@ -10,6 +10,46 @@
 @version 0.1.60.0
 
 
+-- | Unique Identifier used across Drasil.
+module Drasil.Database.UID
+
+-- | A <tt>UID</tt> is a 'unique identifier' for things that we will put
+--   into our database of information. We use a newtype wrapper to make
+--   sure we are only using <a>UID</a>s where desired.
+data UID
+
+-- | The most basic item: having a unique identifier key, here a UID.
+class HasUID c
+
+-- | Provides a <i>unique</i> id for internal Drasil use.
+uid :: HasUID c => Getter c UID
+
+-- | Smart constructor for <a>UID</a>s from raw <a>Value</a>s.
+mkUid :: String -> UID
+
+-- | Nest a <a>UID</a> under a namespace.
+nsUid :: String -> UID -> UID
+
+-- | Append a suffix to a thing with a <a>UID</a> and get the resulting
+--   <a>UID</a>.
+(+++) :: HasUID a => a -> String -> UID
+
+-- | Append a suffix to a <a>UID</a>.
+(+++.) :: UID -> String -> UID
+
+-- | Merge the <a>UID</a>s of two chunks through simple concatenation.
+(+++!) :: (HasUID a, HasUID b) => a -> b -> UID
+
+-- | Get something's <a>UID</a> as a <a>Value</a>.
+showUID :: HasUID a => a -> String
+instance Data.Aeson.Types.ToJSON.ToJSON Drasil.Database.UID.UID
+instance Data.Aeson.Types.ToJSON.ToJSONKey Drasil.Database.UID.UID
+instance GHC.Show.Show Drasil.Database.UID.UID
+instance GHC.Generics.Generic Drasil.Database.UID.UID
+instance GHC.Classes.Ord Drasil.Database.UID.UID
+instance GHC.Classes.Eq Drasil.Database.UID.UID
+
+
 -- | Custom type for dates, in this case Month. This should, in time, be
 --   switched out in favour of a proper package designed to handle all the
 --   complexities of dates.
@@ -32,6 +72,69 @@ Dec :: Month
 instance GHC.Classes.Ord Language.Drasil.Data.Date.Month
 instance GHC.Classes.Eq Language.Drasil.Data.Date.Month
 instance GHC.Show.Show Language.Drasil.Data.Date.Month
+
+
+-- | Even though we do not have <tt>Label</tt>s per se, here we define the
+--   different ways of construction ways to mark labels.
+module Language.Drasil.Label.Type
+
+-- | Applying different pieces of information for a reference. An RP is a
+--   decorated internal reference. Citation is a citation. URI is for URLs
+--   and other external links.
+data LblType
+RP :: IRefProg -> String -> LblType
+Citation :: String -> LblType
+URI :: String -> LblType
+
+-- | Created for different forms of references. Used in <a>LblType</a>.
+data IRefProg
+
+-- | Deferred lookup; done later. Used for domains in a
+--   <tt>ConceptInstance</tt>.
+Deferred :: UID -> IRefProg
+
+-- | Lifts a <a>String</a> into a <tt>RefProg</tt>.
+RS :: String -> IRefProg
+
+-- | Concatenates with two subprograms.
+RConcat :: IRefProg -> IRefProg -> IRefProg
+
+-- | The <tt>Symbol</tt> to insert the <tt>ShortName</tt> directly.
+Name :: IRefProg
+
+-- | Members must have a reference address.
+class HasRefAddress b
+
+-- | Provides the ability to hold a reference address.
+getRefAdd :: HasRefAddress b => b -> LblType
+
+-- | Members of this class have the ability to be referenced.
+class (HasUID s, HasRefAddress s) => Referable s
+
+-- | The referencing address (what we're linking to). Only visible in the
+--   source (tex/html).
+refAdd :: Referable s => s -> String
+
+-- | Alternate form of reference.
+renderRef :: Referable s => s -> LblType
+
+-- | Retrieves the <a>String</a> contained in a <a>LblType</a>.
+getAdd :: LblType -> String
+
+-- | Constructor that gets the <a>Name</a> of an <a>IRefProg</a>.
+name :: IRefProg
+
+-- | Constructor that concatenates two subprograms.
+(+::+) :: IRefProg -> IRefProg -> IRefProg
+
+-- | Constructor for a <a>String</a> into an <a>IRefProg</a>.
+raw :: String -> IRefProg
+
+-- | Constructor to defer a <a>UID</a> lookup; done later.
+defer :: UID -> IRefProg
+
+-- | Prepends a <a>String</a> to an <a>IRefProg</a>.
+prepend :: String -> IRefProg
 
 
 -- | Defines types and functions to encode people, names, and naming
@@ -258,108 +361,6 @@ data Stage
 Equational :: Stage
 Implementation :: Stage
 instance GHC.Show.Show Language.Drasil.Stages.Stage
-
-
--- | Unique Identifier used across Drasil.
-module Language.Drasil.UID
-
--- | A <tt>UID</tt> is a 'unique identifier' for things that we will put
---   into our database of information. We use a newtype wrapper to make
---   sure we are only using <a>UID</a>s where desired.
-data UID
-
--- | The most basic item: having a unique identifier key, here a UID.
-class HasUID c
-
--- | Provides a <i>unique</i> id for internal Drasil use.
-uid :: HasUID c => Getter c UID
-
--- | Smart constructor for making a <a>UID</a> from a <a>Value</a>.
-mkUid :: String -> UID
-
--- | Nest UID under a namespace
-nsUid :: String -> UID -> UID
-
--- | For when we need to modify a UID. We first take the base chunk's UID
---   and then append a suffix to it.
-(+++) :: HasUID a => a -> String -> UID
-
--- | For when we need to append something to a UID.
-(+++.) :: UID -> String -> UID
-(+++!) :: (HasUID a, HasUID b) => a -> b -> UID
-
--- | Grabs the UID from something that has a UID and displays it as a
---   String.
-showUID :: HasUID a => a -> String
-instance Data.Aeson.Types.ToJSON.ToJSON Language.Drasil.UID.UID
-instance Data.Aeson.Types.ToJSON.ToJSONKey Language.Drasil.UID.UID
-instance GHC.Show.Show Language.Drasil.UID.UID
-instance GHC.Generics.Generic Language.Drasil.UID.UID
-instance GHC.Classes.Ord Language.Drasil.UID.UID
-instance GHC.Classes.Eq Language.Drasil.UID.UID
-
-
--- | Even though we do not have <tt>Label</tt>s per se, here we define the
---   different ways of construction ways to mark labels.
-module Language.Drasil.Label.Type
-
--- | Applying different pieces of information for a reference. An RP is a
---   decorated internal reference. Citation is a citation. URI is for URLs
---   and other external links.
-data LblType
-RP :: IRefProg -> String -> LblType
-Citation :: String -> LblType
-URI :: String -> LblType
-
--- | Created for different forms of references. Used in <a>LblType</a>.
-data IRefProg
-
--- | Deferred lookup; done later. Used for domains in a
---   <tt>ConceptInstance</tt>.
-Deferred :: UID -> IRefProg
-
--- | Lifts a <a>String</a> into a <tt>RefProg</tt>.
-RS :: String -> IRefProg
-
--- | Concatenates with two subprograms.
-RConcat :: IRefProg -> IRefProg -> IRefProg
-
--- | The <tt>Symbol</tt> to insert the <tt>ShortName</tt> directly.
-Name :: IRefProg
-
--- | Members must have a reference address.
-class HasRefAddress b
-
--- | Provides the ability to hold a reference address.
-getRefAdd :: HasRefAddress b => b -> LblType
-
--- | Members of this class have the ability to be referenced.
-class (HasUID s, HasRefAddress s) => Referable s
-
--- | The referencing address (what we're linking to). Only visible in the
---   source (tex/html).
-refAdd :: Referable s => s -> String
-
--- | Alternate form of reference.
-renderRef :: Referable s => s -> LblType
-
--- | Retrieves the <a>String</a> contained in a <a>LblType</a>.
-getAdd :: LblType -> String
-
--- | Constructor that gets the <a>Name</a> of an <a>IRefProg</a>.
-name :: IRefProg
-
--- | Constructor that concatenates two subprograms.
-(+::+) :: IRefProg -> IRefProg -> IRefProg
-
--- | Constructor for a <a>String</a> into an <a>IRefProg</a>.
-raw :: String -> IRefProg
-
--- | Constructor to defer a <a>UID</a> lookup; done later.
-defer :: UID -> IRefProg
-
--- | Prepends a <a>String</a> to an <a>IRefProg</a>.
-prepend :: String -> IRefProg
 
 
 -- | Defines uncertainty types and functions.
@@ -2410,7 +2411,7 @@ complexRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> RefInfo -> Sen
 --   <a>RefInfo</a>.
 namedComplexRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Sentence -> RefInfo -> Sentence
 instance GHC.Classes.Eq Language.Drasil.Reference.Reference
-instance Language.Drasil.UID.HasUID Language.Drasil.Reference.Reference
+instance Drasil.Database.UID.HasUID Language.Drasil.Reference.Reference
 instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Reference.Reference
 instance Language.Drasil.ShortName.HasShortName Language.Drasil.Reference.Reference
 
@@ -2522,7 +2523,7 @@ mkIdea :: String -> NP -> Maybe String -> IdeaDict
 --   <a>String</a>.
 mkIdeaUID :: UID -> NP -> Maybe String -> IdeaDict
 instance GHC.Classes.Eq Language.Drasil.Chunk.NamedIdea.IdeaDict
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.NamedIdea.IdeaDict
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.NamedIdea.IdeaDict
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.NamedIdea.IdeaDict
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.NamedIdea.IdeaDict
 
@@ -2750,8 +2751,7 @@ lnames :: Sentence -> [UID]
 -- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
 lnames' :: [Sentence] -> [UID]
 
--- | Grabs the UID from something that has a UID and displays it as a
---   String.
+-- | Get something's <a>UID</a> as a <a>Value</a>.
 showUID :: HasUID a => a -> String
 
 
@@ -2804,7 +2804,7 @@ dRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> DecRef
 --   reference information (<a>RefInfo</a>).
 dRefInfo :: (HasUID r, HasRefAddress r, HasShortName r) => r -> RefInfo -> DecRef
 instance GHC.Classes.Eq Language.Drasil.DecoratedReference.DecRef
-instance Language.Drasil.UID.HasUID Language.Drasil.DecoratedReference.DecRef
+instance Drasil.Database.UID.HasUID Language.Drasil.DecoratedReference.DecRef
 instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.DecoratedReference.DecRef
 instance Language.Drasil.ShortName.HasShortName Language.Drasil.DecoratedReference.DecRef
 
@@ -2944,7 +2944,7 @@ cTechReport :: People -> String -> String -> Int -> [CiteField] -> String -> Cit
 -- | Unpublished citation requires author, title, and note. Optional fields
 --   can be month and year. Implicitly uses the EntryID as the chunk id.
 cUnpublished :: People -> String -> String -> [CiteField] -> String -> Citation
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Citation.Citation
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Citation.Citation
 instance Language.Drasil.ShortName.HasShortName Language.Drasil.Chunk.Citation.Citation
 instance Language.Drasil.Data.Citation.HasFields Language.Drasil.Chunk.Citation.Citation
 instance Language.Drasil.Label.Type.Referable Language.Drasil.Chunk.Citation.Citation
@@ -3878,7 +3878,7 @@ prependLabel :: RawContent -> IRefProg
 instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.LabelledContent
 instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.UnlabelledContent
 instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.Contents
-instance Language.Drasil.UID.HasUID Language.Drasil.Document.Core.LabelledContent
+instance Drasil.Database.UID.HasUID Language.Drasil.Document.Core.LabelledContent
 instance GHC.Classes.Eq Language.Drasil.Document.Core.LabelledContent
 instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Document.Core.LabelledContent
 instance Language.Drasil.ShortName.HasShortName Language.Drasil.Document.Core.LabelledContent
@@ -4005,7 +4005,7 @@ makeEqnRef' :: UID -> Reference
 -- | Variants of <a>makeURI</a> that takes a <a>UID</a> instead of a
 --   <a>String</a>.
 makeURI' :: UID -> String -> ShortName -> Reference
-instance Language.Drasil.UID.HasUID Language.Drasil.Document.Section
+instance Drasil.Database.UID.HasUID Language.Drasil.Document.Section
 instance GHC.Classes.Eq Language.Drasil.Document.Section
 instance Language.Drasil.ShortName.HasShortName Language.Drasil.Document.Section
 instance Language.Drasil.Label.Type.Referable Language.Drasil.Document.Section
@@ -4770,7 +4770,7 @@ ConInst :: ConceptChunk -> String -> ShortName -> ConceptInstance
 --   than one.
 sDom :: [UID] -> UID
 instance GHC.Classes.Eq Language.Drasil.Chunk.Concept.Core.ConceptInstance
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Concept.Core.ConceptInstance
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Concept.Core.ConceptInstance
@@ -4779,7 +4779,7 @@ instance Language.Drasil.ShortName.HasShortName Language.Drasil.Chunk.Concept.Co
 instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance Language.Drasil.Label.Type.Referable Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance GHC.Classes.Eq Language.Drasil.Chunk.Concept.Core.ConceptChunk
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Concept.Core.ConceptChunk
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Concept.Core.ConceptChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Concept.Core.ConceptChunk
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Concept.Core.ConceptChunk
 instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Concept.Core.ConceptChunk
@@ -4954,7 +4954,7 @@ getCu :: UnitEquation -> [UID]
 --   them.
 compUnitDefn :: UnitDefn -> UnitDefn -> Ordering
 instance Language.Drasil.Classes.HasUnitSymbol Language.Drasil.Chunk.UnitDefn.UnitEquation
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.UnitDefn.UnitDefn
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.UnitDefn.UnitDefn
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.UnitDefn.UnitDefn
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.UnitDefn.UnitDefn
 instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.UnitDefn.UnitDefn
@@ -5027,7 +5027,7 @@ vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict
 -- | Creates a <a>QuantityDict</a> from a <a>UID</a>, term (<a>NP</a>),
 --   <a>Symbol</a>, <a>Space</a>, and unit (<a>UnitDefn</a>).
 vcUnit :: String -> NP -> Symbol -> Space -> UnitDefn -> QuantityDict
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Quantity.QuantityDict
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Quantity.QuantityDict
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Quantity.QuantityDict
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Quantity.QuantityDict
 instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Quantity.QuantityDict
@@ -5068,7 +5068,7 @@ unitary' :: IsUnit u => String -> NP -> (Stage -> Symbol) -> u -> Space -> Unita
 -- | Helper for getting the unit's <a>Symbol</a> from a chunk, as opposed
 --   to the symbols of the chunk itself.
 unit_symb :: Unitary c => c -> USymb
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Unitary.UnitaryChunk
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Unitary.UnitaryChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Unitary.UnitaryChunk
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Unitary.UnitaryChunk
 instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Unitary.UnitaryChunk
@@ -5091,7 +5091,7 @@ data RelationConcept
 -- | Create a <a>RelationConcept</a> from a given <tt>UID</tt>, term
 --   (<a>NP</a>), definition (<a>Sentence</a>), and <tt>Relation</tt>.
 makeRC :: Express e => String -> NP -> Sentence -> e -> RelationConcept
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Relation.RelationConcept
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Relation.RelationConcept
 instance GHC.Classes.Eq Language.Drasil.Chunk.Relation.RelationConcept
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Relation.RelationConcept
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Relation.RelationConcept
@@ -5137,7 +5137,7 @@ dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
 -- | Temporary projection constructor, not to be used outside
 --   <tt>drasil-lang</tt>.
 tempdqdWr' :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
 instance GHC.Classes.Eq Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
@@ -5187,7 +5187,7 @@ ucuc :: (Quantity c, Concept c, MayHaveUnit c) => c -> UnitDefn -> UnitalChunk
 
 -- | Constructs a UnitalChunk from a <a>Concept</a> with <tt>Units</tt>.
 ucw :: (Unitary c, Concept c, MayHaveUnit c) => c -> UnitalChunk
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Unital.UnitalChunk
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Unital.UnitalChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Unital.UnitalChunk
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Unital.UnitalChunk
 instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Unital.UnitalChunk
@@ -5459,7 +5459,7 @@ getAcc :: CI -> Sentence
 
 -- | Prepends the abbreviation from a <a>CommonIdea</a> to a <a>String</a>.
 prependAbrv :: CommonIdea c => c -> String -> String
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.CommonIdea.CI
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.CommonIdea.CI
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CommonIdea.CI
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CommonIdea.CI
 instance Language.Drasil.Classes.CommonIdea Language.Drasil.Chunk.CommonIdea.CI
@@ -5522,7 +5522,7 @@ CodeFC :: CodeChunk -> CodeFuncChunk
 [_ccf] :: CodeFuncChunk -> CodeChunk
 ccf :: Iso' CodeFuncChunk CodeChunk
 listToArray :: CodeVarChunk -> CodeVarChunk
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.CodeVar.CodeFuncChunk
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.CodeVar.CodeFuncChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CodeVar.CodeFuncChunk
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CodeVar.CodeFuncChunk
 instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.CodeVar.CodeFuncChunk
@@ -5531,7 +5531,7 @@ instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.CodeVar.CodeFunc
 instance Language.Drasil.Classes.Callable Language.Drasil.Chunk.CodeVar.CodeFuncChunk
 instance GHC.Classes.Eq Language.Drasil.Chunk.CodeVar.CodeFuncChunk
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.CodeVar.CodeFuncChunk
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.CodeVar.CodeVarChunk
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.CodeVar.CodeVarChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CodeVar.CodeVarChunk
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CodeVar.CodeVarChunk
 instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.CodeVar.CodeVarChunk
@@ -5539,7 +5539,7 @@ instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.CodeVar.CodeVarC
 instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.CodeVar.CodeVarChunk
 instance GHC.Classes.Eq Language.Drasil.Chunk.CodeVar.CodeVarChunk
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.CodeVar.CodeVarChunk
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.CodeVar.CodeChunk
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.CodeVar.CodeChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CodeVar.CodeChunk
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CodeVar.CodeChunk
 instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.CodeVar.CodeChunk
@@ -6108,7 +6108,7 @@ cuc' :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [Constrain
 -- | Similar to <a>cuc'</a>, but <a>Symbol</a> is dependent on
 --   <a>Stage</a>.
 cuc'' :: IsUnit u => String -> NP -> String -> (Stage -> Symbol) -> u -> Space -> [ConstraintE] -> Expr -> ConstrConcept
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Constrained.ConstrConcept
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Constrained.ConstrConcept
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Constrained.ConstrConcept
 instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Constrained.ConstrConcept
@@ -6121,7 +6121,7 @@ instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.Constrained.Co
 instance GHC.Classes.Eq Language.Drasil.Chunk.Constrained.ConstrConcept
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Constrained.ConstrConcept
 instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.Constrained.ConstrainedChunk
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Constrained.ConstrainedChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Constrained.ConstrainedChunk
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Constrained.ConstrainedChunk
 instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Constrained.ConstrainedChunk
@@ -6178,7 +6178,7 @@ uvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Expr -> Uncertainty -
 --   or an <a>UncertainChunk</a>.
 uncrtnw :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> UncertainChunk
 instance GHC.Classes.Eq Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertQ
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.UncertainQuantity.UncertQ
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.UncertainQuantity.UncertQ
 instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.UncertainQuantity.UncertQ
@@ -6191,7 +6191,7 @@ instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.UncertainQuant
 instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.UncertainQuantity.UncertQ
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.UncertainQuantity.UncertQ
 instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
 instance GHC.Classes.Eq Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
@@ -6253,7 +6253,7 @@ mkFuncDef' :: (HasUID f, HasSymbol f, HasSpace f, HasUID i, HasSymbol i, HasSpac
 -- | Create a <a>QDefinition</a> functions using a symbol, list of inputs,
 --   and a defining Expr
 mkFuncDefByQ :: (Quantity c, MayHaveUnit c, HasSpace c, Quantity i, HasSpace i) => c -> [i] -> e -> QDefinition e
-instance Language.Drasil.UID.HasUID (Language.Drasil.Chunk.Eq.QDefinition e)
+instance Drasil.Database.UID.HasUID (Language.Drasil.Chunk.Eq.QDefinition e)
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea (Language.Drasil.Chunk.Eq.QDefinition e)
 instance Language.Drasil.Chunk.NamedIdea.Idea (Language.Drasil.Chunk.Eq.QDefinition e)
 instance Language.Drasil.Chunk.Quantity.DefinesQuantity (Language.Drasil.Chunk.Eq.QDefinition e)
@@ -6360,7 +6360,7 @@ makeASingleDE :: UnitalChunk -> ConstrConcept -> LHS -> Expr -> String -> NP -> 
 -- | Form well-formatted ODE equations which the ODE solvers can solve.
 formEquations :: [[Expr]] -> [Unknown] -> [Expr] -> ConstrConcept -> [Expr]
 instance Language.Drasil.WellTyped.RequiresChecking Language.Drasil.Chunk.DifferentialModel.DifferentialModel Language.Drasil.Expr.Lang.Expr Language.Drasil.Space.Space
-instance Language.Drasil.UID.HasUID Language.Drasil.Chunk.DifferentialModel.DifferentialModel
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.DifferentialModel.DifferentialModel
 instance GHC.Classes.Eq Language.Drasil.Chunk.DifferentialModel.DifferentialModel
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.DifferentialModel.DifferentialModel
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.DifferentialModel.DifferentialModel
@@ -6836,22 +6836,23 @@ class (HasSymbol c) => IsArgumentName c
 --   sure we are only using <a>UID</a>s where desired.
 data UID
 
--- | Smart constructor for making a <a>UID</a> from a <a>Value</a>.
+-- | Smart constructor for <a>UID</a>s from raw <a>Value</a>s.
 mkUid :: String -> UID
 
--- | Nest UID under a namespace
+-- | Nest a <a>UID</a> under a namespace.
 nsUid :: String -> UID -> UID
 
--- | Grabs the UID from something that has a UID and displays it as a
---   String.
+-- | Get something's <a>UID</a> as a <a>Value</a>.
 showUID :: HasUID a => a -> String
 
--- | For when we need to modify a UID. We first take the base chunk's UID
---   and then append a suffix to it.
+-- | Append a suffix to a thing with a <a>UID</a> and get the resulting
+--   <a>UID</a>.
 (+++) :: HasUID a => a -> String -> UID
 
--- | For when we need to append something to a UID.
+-- | Append a suffix to a <a>UID</a>.
 (+++.) :: UID -> String -> UID
+
+-- | Merge the <a>UID</a>s of two chunks through simple concatenation.
 (+++!) :: (HasUID a, HasUID b) => a -> b -> UID
 
 -- | <a>IdeaDict</a> constructor, takes a <a>String</a> for its <a>UID</a>

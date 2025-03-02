@@ -14,7 +14,7 @@ import Language.Drasil.Classes (Express(..),
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.UID (HasUID(..))
+import Drasil.Database.UID (HasUID(..))
 
 -- | For a concept ('ConceptChunk') that also has a 'Relation' ('ModelExpr') attached.
 --

@@ -13,7 +13,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
  CommonIdea(abrv), ConceptDomain(cdom))
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence(S))
-import Language.Drasil.UID (UID, HasUID(uid))
+import Drasil.Database.UID (UID, HasUID(uid))
 
 import Utils.Drasil (repUnd)
 

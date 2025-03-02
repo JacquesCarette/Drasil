@@ -9,7 +9,7 @@ module Language.Drasil.Chunk.NamedIdea (
   nc, ncUID, nw, mkIdea, mkIdeaUID
 ) where
 
-import Language.Drasil.UID (mkUid, UID, HasUID(..))
+import Drasil.Database.UID (mkUid, UID, HasUID(..))
 import Control.Lens ((^.), makeLenses)
 
 import Language.Drasil.NounPhrase.Core ( NP )

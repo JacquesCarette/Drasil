@@ -8,7 +8,7 @@ import Prelude hiding (sqrt)
 import Language.Drasil.Expr.Lang (Completeness)
 import Language.Drasil.Literal.Lang (Literal(..))
 import Language.Drasil.Space (Space, DomainDesc, RealInterval)
-import Language.Drasil.UID (UID)
+import Drasil.Database.UID (UID)
 import Language.Drasil.Literal.Class (LiteralC(..))
 
 -- Binary functions

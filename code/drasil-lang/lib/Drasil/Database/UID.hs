@@ -46,7 +46,7 @@ mkUid s = UID { _namespace = [], _baseName = s }
 
 -- | Nest a 'UID' under a namespace.
 nsUid :: String -> UID -> UID
-nsUid ns = over namespace (ns:)
+nsUid ns = over namespace (++ [ns])
 
 -- | Append a suffix to a thing with a 'UID' and get the resulting 'UID'.
 (+++) :: HasUID a => a -> String -> UID

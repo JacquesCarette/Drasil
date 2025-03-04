@@ -14,6 +14,7 @@ import qualified Language.Drasil.Space as S
 import Language.Drasil.WellTyped
 import Data.Either (lefts, fromLeft)
 import qualified Data.Foldable as NE
+import Numeric.Natural (Natural)
 
 -- * Expression Types
 
@@ -47,15 +48,15 @@ data OrdBinOp = Lt | Gt | LEq | GEq
   deriving Eq
 
 -- | @Vector x Vector -> Vector@ binary operations (cross product, addition, subtraction).
-data VVVBinOp = Cross | VAdd | VSub
+data CCCBinOp = Cross | CAdd | CSub
   deriving Eq
 
 -- | @Vector x Vector -> Number@ binary operations (dot product).
-data VVNBinOp = Dot
+data CCNBinOp = Dot
   deriving Eq
 
 -- | @Number x Vector -> Vector@ binary operations (scaling).
-data NVVBinOp = Scale
+data NCCBinOp = Scale
   deriving Eq
 
 -- | Element + Set -> Set
@@ -86,12 +87,12 @@ data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
 data UFuncB = Not
   deriving Eq
 
--- | @Vector -> Vector@ operators.
-data UFuncVV = NegV
+-- | @Clif -> Clif@ operators.
+data UFuncCC = NegC
   deriving Eq
 
--- | @Vector -> Number@ operators.
-data UFuncVN = Norm | Dim
+-- | @Clif -> Number@ operators.
+data UFuncCN = Norm | Dim
   deriving Eq
 
 -- | For case expressions (either complete or incomplete).
@@ -129,10 +130,10 @@ data Expr where
   UnaryOp       :: UFunc -> Expr -> Expr
   -- | Unary operation for @Bool -> Bool@ operations.
   UnaryOpB      :: UFuncB -> Expr -> Expr
-  -- | Unary operation for @Vector -> Vector@ operations.
-  UnaryOpVV     :: UFuncVV -> Expr -> Expr
-  -- | Unary operation for @Vector -> Number@ operations.
-  UnaryOpVN     :: UFuncVN -> Expr -> Expr
+  -- | Unary operation for @Clif -> Clif@ operations.
+  UnaryOpCC     :: UFuncCC -> Expr -> Expr
+  -- | Unary operation for @Clif -> Clif@ operations.
+  UnaryOpCN     :: UFuncCN -> Expr -> Expr
 
   -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
   ArithBinaryOp :: ArithBinOp -> Expr -> Expr -> Expr
@@ -145,11 +146,11 @@ data Expr where
   -- | Binary operator for ordering expressions (less than, greater than, etc.).
   OrdBinaryOp   :: OrdBinOp -> Expr -> Expr -> Expr
   -- | Binary operator for @Vector x Vector -> Vector@ operations (cross product).
-  VVVBinaryOp   :: VVVBinOp -> Expr -> Expr -> Expr
+  CCCBinaryOp   :: CCCBinOp -> Expr -> Expr -> Expr
   -- | Binary operator for @Vector x Vector -> Number@ operations (dot product).
-  VVNBinaryOp   :: VVNBinOp -> Expr -> Expr -> Expr
+  CCNBinaryOp   :: CCNBinOp -> Expr -> Expr -> Expr
   -- | Binary operator for @Expr x Vector -> Vector@ operations (scaling).
-  NVVBinaryOp   :: NVVBinOp -> Expr -> Expr -> Expr
+  NCCBinaryOp   :: NCCBinOp -> Expr -> Expr -> Expr
   -- | Set operator for Element + Set -> Set
   ESSBinaryOp :: ESSBinOp -> Expr -> Expr -> Expr
   -- | Set operator for Element + Set -> Bool
@@ -160,6 +161,13 @@ data Expr where
   Operator :: AssocArithOper -> DiscreteDomainDesc Expr Expr -> Expr -> Expr
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
   RealI    :: UID -> RealInterval Expr Expr -> Expr
+  -- | A clif of arbitrary (0 or greater) grade with a given dimension
+  Clif     :: Natural -> S.Dimension -> Expr -> Expr
+
+-- | The basis in which to project clifs
+data Basis where
+  -- | ℝⁿ
+  Rn :: Natural -> Basis
 
 -- | Expressions are equal if their constructors and contents are equal.
 instance Eq Expr where
@@ -171,18 +179,19 @@ instance Eq Expr where
   Case a b            == Case c d            =   a == c && b == d
   UnaryOp a b         == UnaryOp c d         =   a == c && b == d
   UnaryOpB a b        == UnaryOpB c d        =   a == c && b == d
-  UnaryOpVV a b       == UnaryOpVV c d       =   a == c && b == d
-  UnaryOpVN a b       == UnaryOpVN c d       =   a == c && b == d
+  UnaryOpCC a b       == UnaryOpCC c d       =   a == c && b == d
+  UnaryOpCN a b       == UnaryOpCN c d       =   a == c && b == d
   ArithBinaryOp o a b == ArithBinaryOp p c d =   o == p && a == c && b == d
   BoolBinaryOp o a b  == BoolBinaryOp p c d  =   o == p && a == c && b == d
   EqBinaryOp o a b    == EqBinaryOp p c d    =   o == p && a == c && b == d
   OrdBinaryOp o a b   == OrdBinaryOp p c d   =   o == p && a == c && b == d
   LABinaryOp o a b    == LABinaryOp p c d    =   o == p && a == c && b == d
-  VVVBinaryOp o a b   == VVVBinaryOp p c d   =   o == p && a == c && b == d
-  VVNBinaryOp o a b   == VVNBinaryOp p c d   =   o == p && a == c && b == d
-  NVVBinaryOp o a b   == NVVBinaryOp p c d   =   o == p && a == c && b == d
+  CCCBinaryOp o a b   == CCCBinaryOp p c d   =   o == p && a == c && b == d
+  CCNBinaryOp o a b   == CCNBinaryOp p c d   =   o == p && a == c && b == d
+  NCCBinaryOp o a b   == NCCBinaryOp p c d   =   o == p && a == c && b == d
   ESSBinaryOp o a b   == ESSBinaryOp p c d   =   o == p && a == c && b == d
   ESBBinaryOp o a b   == ESBBinaryOp p c d   =   o == p && a == c && b == d
+  Clif m a b           == Clif n c d         =   m == n && a == c && b == d
   _                   == _                   =   False
 -- ^ TODO: This needs to add more equality checks
 
@@ -218,10 +227,10 @@ instance Eq Expr where
 class Pretty p where
   pretty :: p -> String
 
-instance Pretty VVVBinOp where
+instance Pretty CCCBinOp where
   pretty Cross = "cross product"
-  pretty VAdd  = "vector addition"
-  pretty VSub  = "vector subtraction"
+  pretty CAdd  = "clif addition"
+  pretty CSub  = "clif subtraction"
 
 instance LiteralC Expr where
   int = Lit . int
@@ -232,15 +241,18 @@ instance LiteralC Expr where
 
 
 -- helper function for typechecking to help reduce duplication
-vvvInfer :: TypingContext Space -> VVVBinOp -> Expr -> Expr -> Either Space TypeError
-vvvInfer ctx op l r = case (infer ctx l, infer ctx r) of
-    (Left lt@(S.Vect lsp), Left (S.Vect rsp)) ->
-      if lsp == rsp && S.isBasicNumSpace lsp then
-        if op == VSub && (lsp == S.Natural || rsp == S.Natural) then
-          Right $ "Vector subtraction expects both operands to be vectors of non-natural numbers. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
-        else Left lt
-      else Right $ "Vector " ++ pretty op ++ " expects both operands to be vectors of non-natural numbers. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
-    (Left lsp, Left rsp) -> Right $ "Vector operation " ++ pretty op ++ " expects vector operands. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
+-- TODO: refactor these if expressions so they're more readable (the else is too far from the if)
+cccInfer :: TypingContext Space -> CCCBinOp -> Expr -> Expr -> Either Space TypeError
+cccInfer ctx op l r = case (infer ctx l, infer ctx r) of
+    (Left lt@(S.ClifS lGr lD lsp), Left (S.ClifS dGr rD rsp)) ->
+      if lD == rD then -- The dimension in which the clif is embedded must match
+        if lsp == rsp && S.isBasicNumSpace lsp then
+          if op == CSub && (lsp == S.Natural || rsp == S.Natural) then
+            Right $ "Clif subtraction expects both operands to be clifs of non-natural numbers. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
+          else Left lt
+        else Right $ "Clif " ++ pretty op ++ " expects both operands to be clifs of non-natural numbers. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
+      else Right $ "Clif " ++ pretty op ++ " expects both Clifs to be of the same dimension. Received `" ++ show lD ++ "` and `" ++ show rD ++ "`."
+    (Left lsp, Left rsp) -> Right $ "Vector operation " ++ pretty op ++ " expects clif operands. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
     (_       , Right re) -> Right re
     (Right le, _       ) -> Right le
 
@@ -340,20 +352,23 @@ instance Typed Expr Space where
     Left sp        -> Right $ "¬ on non-boolean operand, " ++ show sp ++ "."
     x              -> x
 
-  infer cxt (UnaryOpVV NegV e) = case infer cxt e of
-    Left (S.Vect sp) -> if S.isBasicNumSpace sp && sp /= S.Natural
-      then Left $ S.Vect sp
-      else Right $ "Vector negation only applies to, non-natural, numbered vectors. Received `" ++ show sp ++ "`."
-    Left sp -> Right $ "Vector negation should only be applied to numeric vectors. Received `" ++ show sp ++ "`."
+  infer cxt (UnaryOpCC NegC e) = case infer cxt e of
+    Left c@(S.ClifS gr dim sp) -> if S.isBasicNumSpace sp && sp /= S.Natural
+      then Left c
+      else Right $ "Clif negation only applies to, non-natural, numbered clifs. Received `" ++ show sp ++ "`."
+    Left sp -> Right $ "Clif negation should only be applied to numeric clifs. Received `" ++ show sp ++ "`."
     x -> x
 
-  infer cxt (UnaryOpVN Norm e) = case infer cxt e of
-    Left (S.Vect S.Real) -> Left S.Real
+  -- TODO: support generalized clif norm
+  infer cxt (UnaryOpCN Norm e) = case infer cxt e of
+    Left (S.ClifS 1 dim S.Real) -> Left S.Real
+    Left (S.ClifS n dim S.Real) -> Right $ "Norm on non-Vector (grade 1) clifs currently not supported. Received grade " ++ show n ++ " clif."
     Left sp -> Right $ "Vector norm only applies to vectors of real numbers. Received `" ++ show sp ++ "`."
     x -> x
 
-  infer cxt (UnaryOpVN Dim e) = case infer cxt e of
-    Left (S.Vect _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
+  infer cxt (UnaryOpCN Dim e) = case infer cxt e of
+    Left (S.ClifS 1 _ _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
+    Left (S.ClifS n _ _) -> Right $ "Vector 'dim' only applies to vector (grade 1) clifs. Received grade " ++ show n ++ " clif."
     Left sp -> Right $ "Vector 'dim' only applies to vectors. Received `" ++ show sp ++ "`."
     x -> x
 
@@ -393,9 +408,11 @@ instance Typed Expr Space where
     (Right le, _) -> Right le
 
   infer cxt (LABinaryOp Index l n) = case (infer cxt l, infer cxt n) of
-    (Left (S.Vect lt), Left nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
+    (Left (S.ClifS 1 d lt), Left nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
       then Left lt
       else Right $ "List accessor not of type Integer nor Natural, but of type `" ++ show nt ++ "`"
+    (Left (S.ClifS n d lt), Left nt) ->
+      Right $ "List accessor not implemented for non-vector (grade 1) clifs. Received grade " ++ show n ++ " clif."
     (Left lt         , Left _)  -> Right $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
     (_               , Right e) -> Right e
     (Right e         , _      ) -> Right e
@@ -413,8 +430,8 @@ instance Typed Expr Space where
     (_, Right re) -> Right re
     (Right le, _) -> Right le
 
-  infer cxt (NVVBinaryOp Scale l r) = case (infer cxt l, infer cxt r) of
-    (Left lt, Left (S.Vect rsp)) -> if S.isBasicNumSpace lt && lt == rsp
+  infer cxt (NCCBinaryOp Scale l r) = case (infer cxt l, infer cxt r) of
+    (Left lt, Left (S.ClifS gr d rsp)) -> if S.isBasicNumSpace lt && lt == rsp
       then Left rsp
       else if lt /= rsp then
         Right $ "Vector scaling expects a scaling by the same kind as the vector's but found scaling by`" ++ show lt ++ "` over vectors of type `" ++ show rsp ++ "`."
@@ -424,7 +441,7 @@ instance Typed Expr Space where
     (_, Right rx) -> Right rx
     (Right lx, _) -> Right lx
 
-  infer cxt (VVVBinaryOp o l r) = vvvInfer cxt o l r
+  infer cxt (CCCBinaryOp o l r) = cccInfer cxt o l r
     {- case (infer cxt l, infer cxt r) of
     (Left lTy, Left rTy) -> if lTy == rTy && S.isBasicNumSpace lTy && lTy /= S.Natural
       then Left lTy
@@ -433,10 +450,13 @@ instance Typed Expr Space where
     (Right le, _       ) -> Right le
     -}
 
-  infer cxt (VVNBinaryOp Dot l r) = case (infer cxt l, infer cxt r) of
-    (Left lt@(S.Vect lsp), Left rt@(S.Vect rsp)) -> if lsp == rsp && S.isBasicNumSpace lsp
-      then Left lsp
-      else Right $ "Vector dot product expects same numeric vector types, but found `" ++ show lt ++ "` · `" ++ show rt ++ "`."
+  infer cxt (CCNBinaryOp Dot l r) = case (infer cxt l, infer cxt r) of
+    (Left lt@(S.ClifS lGr lD lsp), Left rt@(S.ClifS rGr rD rsp)) -> 
+      if lD == rD then
+        if lsp == rsp && S.isBasicNumSpace lsp
+        then Left lsp
+        else Right $ "Vector dot product expects same numeric vector types, but found `" ++ show lt ++ "` · `" ++ show rt ++ "`."
+      else Right $ "Clif dot product expects both Clifs to be of the same dimension. Received `" ++ show lD ++ "` and `" ++ show rD ++ "`."
     (Left lsp, Left rsp) -> Right $ "Vector dot product expects vector operands. Received `" ++ show lsp ++ "` · `" ++ show rsp ++ "`."
     (_, Right rx) -> Right rx
     (Right lx, _) -> Right lx

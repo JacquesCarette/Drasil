@@ -59,6 +59,9 @@ vect3D s = ClifS 1 (Fixed 3) s
 vect :: Natural -> Space -> Space
 vect n s = ClifS 1 (Fixed n) s
 
+vectND :: String -> Space -> Space
+vectND x = ClifS 1 (VDim x)
+
 -- | The dimension of a clif
 data Dimension where
   -- | Fixed dimension

@@ -270,7 +270,7 @@ module Language.Drasil (
 
   -- Language.Drasil.Space
   , Space(..)
-  , vect2D, vect3D, vect
+  , vect2D, vect3D, vect, vectND
   , RealInterval(..), Inclusive(..)
   , DomainDesc(..), RTopology(..), ContinuousDomainDesc, DiscreteDomainDesc
   , getActorName, getInnerSpace
@@ -379,7 +379,7 @@ import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
   , month)
 import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getSentSN, HasShortName(..))
-import Language.Drasil.Space (Space(..), vect2D, vect3D, vect, RealInterval(..), Inclusive(..),
+import Language.Drasil.Space (Space(..), vect2D, vect3D, vect, vectND, RealInterval(..), Inclusive(..),
   RTopology(..), DomainDesc(..), ContinuousDomainDesc, DiscreteDomainDesc,
   getActorName, getInnerSpace, HasSpace(..), mkFunction, Primitive)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+),

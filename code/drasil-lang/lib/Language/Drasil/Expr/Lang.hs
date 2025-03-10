@@ -48,7 +48,7 @@ data OrdBinOp = Lt | Gt | LEq | GEq
   deriving Eq
 
 -- | @Vector x Vector -> Vector@ binary operations (cross product, addition, subtraction).
-data CCCBinOp = Cross | CAdd | CSub
+data CCCBinOp = Cross | CAdd | CSub | WedgeProd | GeometricProd
   deriving Eq
 
 -- | @Vector x Vector -> Number@ binary operations (dot product).

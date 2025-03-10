@@ -34,15 +34,15 @@ data LABinOp = Index | IndexOf
 data OrdBinOp = Lt | Gt | LEq | GEq
   deriving Eq
 
--- | @Clif x Clif -> Clif@ binary operations (cross product, vector addition, subtraction).
-data CCCBinOp = Cross | CAdd | CSub
+-- | @Clif x Clif -> Clif@ binary operations (cross product, clif addition, subtraction).
+data CCCBinOp = Cross | CAdd | CSub | WedgeProd | GeometricProd
   deriving Eq
 
--- | @Vector x Vector -> Number@ binary operations (dot product).
+-- | @Clif x Clif -> Number@ binary operations (dot product).
 data CCNBinOp = Dot
   deriving Eq
 
--- | @Number x Vector -> Vector@ binary operations (scaling).
+-- | @Number x Clif -> Clif@ binary operations (scaling).
 data NCCBinOp = Scale
   deriving Eq
 
@@ -131,9 +131,9 @@ data ModelExpr where
   UnaryOp       :: UFunc -> ModelExpr -> ModelExpr
   -- | Unary operation for @Bool -> Bool@ operations.
   UnaryOpB      :: UFuncB -> ModelExpr -> ModelExpr
-  -- | Unary operation for @Vector -> Vector@ operations.
+  -- | Unary operation for @Clif -> Clif@ operations.
   UnaryOpCC     :: UFuncCC -> ModelExpr -> ModelExpr
-  -- | Unary operation for @Vector -> Number@ operations.
+  -- | Unary operation for @Clif -> Number@ operations.
   UnaryOpCN     :: UFuncCN -> ModelExpr -> ModelExpr
 
   -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
@@ -150,11 +150,11 @@ data ModelExpr where
   SpaceBinaryOp :: SpaceBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Statement-related binary operations.
   StatBinaryOp  :: StatBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-  -- | Binary operator for @Vector x Vector -> Vector@ operations (cross product).
+  -- | Binary operator for @Clif x Clif -> Clif@ operations (cross product).
   CCCBinaryOp   :: CCCBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-  -- | Binary operator for @Vector x Vector -> Number@ operations (dot product).
+  -- | Binary operator for @Clif x Clif -> Number@ operations (dot product).
   CCNBinaryOp   :: CCNBinOp -> ModelExpr -> ModelExpr -> ModelExpr
-  -- | Binary operator for @Number x Vector -> Vector@ operations (scaling).
+  -- | Binary operator for @Number x Clif -> Clif@ operations (scaling).
   NCCBinaryOp   :: NCCBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Set operator for Element + Set -> Set
   ESSBinaryOp :: ESSBinOp -> ModelExpr -> ModelExpr -> ModelExpr

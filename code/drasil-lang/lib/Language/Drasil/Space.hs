@@ -15,7 +15,7 @@ module Language.Drasil.Space (
   HasSpace(..),
   -- * Functions
   getActorName, getInnerSpace, mkFunction, isBasicNumSpace,
-  Dimension(..), vect2D, vect3D, vect
+  Dimension(..), vect2D, vect3D, vect, vectND
 ) where
 
 import qualified Data.List.NonEmpty        as NE

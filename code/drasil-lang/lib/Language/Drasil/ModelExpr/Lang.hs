@@ -79,7 +79,7 @@ data UFuncCC = NegC
   deriving Eq
 
 -- | @Clif -> Number@ operators.
-data UFuncCN = Norm | Dim
+data UFuncCN = Norm | Dim | Grade
   deriving Eq
 
 -- | Statements involving 2 arguments.

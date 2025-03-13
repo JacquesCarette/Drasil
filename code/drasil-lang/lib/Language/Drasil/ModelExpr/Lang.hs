@@ -4,6 +4,7 @@
 module Language.Drasil.ModelExpr.Lang where
 
 import Prelude hiding (sqrt)
+import Numeric.Natural
 
 import Language.Drasil.Expr.Lang (Completeness)
 import Language.Drasil.Literal.Lang (Literal(..))
@@ -46,6 +47,10 @@ data CCNBinOp = Dot
 data NCCBinOp = Scale
   deriving Eq
 
+-- | @Natural x Clif -> Clif@ binary operations (grade selection).
+data NatCCBinOp = GradeSelect
+  deriving Eq
+
 -- | Element + Set -> Set
 data ESSBinOp = SAdd | SRemove
   deriving Eq
@@ -78,7 +83,7 @@ data UFuncB = Not
 data UFuncCC = NegC
   deriving Eq
 
--- | @Clif -> Number@ operators.
+-- | @Clif -> Number@ operators (norm, dim, grade).
 data UFuncCN = Norm | Dim | Grade
   deriving Eq
 
@@ -156,6 +161,8 @@ data ModelExpr where
   CCNBinaryOp   :: CCNBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Binary operator for @Number x Clif -> Clif@ operations (scaling).
   NCCBinaryOp   :: NCCBinOp -> ModelExpr -> ModelExpr -> ModelExpr
+  -- | Binary operator for @Natural x Clif -> Clif@ operations (grade selection).
+  NatCCBinaryOp :: NatCCBinOp -> Natural -> ModelExpr -> ModelExpr
   -- | Set operator for Element + Set -> Set
   ESSBinaryOp :: ESSBinOp -> ModelExpr -> ModelExpr -> ModelExpr
   -- | Set operator for Element + Set -> Bool

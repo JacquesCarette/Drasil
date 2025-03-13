@@ -47,16 +47,20 @@ data LABinOp = Index | IndexOf
 data OrdBinOp = Lt | Gt | LEq | GEq
   deriving Eq
 
--- | @Vector x Vector -> Vector@ binary operations (cross product, addition, subtraction).
+-- | @Clif x Clif -> Clif@ binary operations (cross product, addition, subtraction).
 data CCCBinOp = Cross | CAdd | CSub | WedgeProd | GeometricProd
   deriving Eq
 
--- | @Vector x Vector -> Number@ binary operations (dot product).
+-- | @Clif x Clif -> Number@ binary operations (dot product).
 data CCNBinOp = Dot
   deriving Eq
 
--- | @Number x Vector -> Vector@ binary operations (scaling).
+-- | @Number x Clif -> Clif@ binary operations (scaling).
 data NCCBinOp = Scale
+  deriving Eq
+
+-- | @Natural x Clif -> Clif@ binary operations (grade selection).
+data NatCCBinOp = GradeSelect
   deriving Eq
 
 -- | Element + Set -> Set
@@ -91,7 +95,7 @@ data UFuncB = Not
 data UFuncCC = NegC
   deriving Eq
 
--- | @Clif -> Number@ operators.
+-- | @Clif -> Number@ operators (norm, dim, grade).
 data UFuncCN = Norm | Dim | Grade
   deriving Eq
 
@@ -145,12 +149,14 @@ data Expr where
   LABinaryOp    :: LABinOp -> Expr -> Expr -> Expr
   -- | Binary operator for ordering expressions (less than, greater than, etc.).
   OrdBinaryOp   :: OrdBinOp -> Expr -> Expr -> Expr
-  -- | Binary operator for @Vector x Vector -> Vector@ operations (cross product).
+  -- | Binary operator for @Clif x Clif -> Clif@ operations (cross product).
   CCCBinaryOp   :: CCCBinOp -> Expr -> Expr -> Expr
-  -- | Binary operator for @Vector x Vector -> Number@ operations (dot product).
+  -- | Binary operator for @Clif x Clif -> Number@ operations (dot product).
   CCNBinaryOp   :: CCNBinOp -> Expr -> Expr -> Expr
-  -- | Binary operator for @Expr x Vector -> Vector@ operations (scaling).
+  -- | Binary operator for @Expr x Clif -> Clif@ operations (scaling).
   NCCBinaryOp   :: NCCBinOp -> Expr -> Expr -> Expr
+  -- | Binary operator for @Natural x Clif -> Clif@ operations (grade selection).
+  NatCCBinaryOp :: NatCCBinOp -> Natural -> Expr -> Expr
   -- | Set operator for Element + Set -> Set
   ESSBinaryOp :: ESSBinOp -> Expr -> Expr -> Expr
   -- | Set operator for Element + Set -> Bool
@@ -440,6 +446,13 @@ instance Typed Expr Space where
     (Left _, Left rsp) -> Right $ "Vector scaling expects vector as second operand. Received `" ++ show rsp ++ "`."
     (_, Right rx) -> Right rx
     (Right lx, _) -> Right lx
+
+  -- If you select grade N of a Clif, you get a Clif of grade N
+  infer cxt (NatCCBinaryOp GradeSelect n c) = case infer cxt c of
+    Left (S.ClifS gr d sp) -> 
+      Left $ S.ClifS n d sp
+    Left rsp -> Right $ "Grade selection expects clif as second operand. Received `" ++ show rsp ++ "`."
+    Right x -> Right x
 
   infer cxt (CCCBinaryOp o l r) = cccInfer cxt o l r
     {- case (infer cxt l, infer cxt r) of

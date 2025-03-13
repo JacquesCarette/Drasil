@@ -3,6 +3,7 @@
 module Language.Drasil.CodeExpr.Lang where
 
 import Prelude hiding (sqrt)
+import Numeric.Natural
 
 import Language.Drasil.Expr.Lang (Completeness)
 import Language.Drasil.Literal.Class (LiteralC(..))
@@ -33,16 +34,20 @@ data LABinOp = Index | IndexOf
 data OrdBinOp = Lt | Gt | LEq | GEq
   deriving Eq
 
--- | @Vector x Vector -> Vector@ binary operations (cross product, vector addition, vector sub).
+-- | @Clif x Clif -> Clif@ binary operations (cross product, clif addition, clif sub, wedge product, geometric product).
 data CCCBinOp = Cross | CAdd | CSub | WedgeProd | GeometricProd
   deriving Eq
 
--- | @Vector x Vector -> Number@ binary operations (dot product).
+-- | @Clif x Clif -> Number@ binary operations (dot product).
 data CCNBinOp = Dot
   deriving Eq
 
--- | @Number x Vector -> Vector@ binary operations (scaling).
+-- | @Number x Clif -> Clif@ binary operations (scaling).
 data NCCBinOp = Scale
+  deriving Eq
+
+-- | @Natural x Clif -> Clif@ binary operations (grade selection).
+data NatCCBinOp = GradeSelect
   deriving Eq
 
 -- | Element + Set -> Set
@@ -76,7 +81,7 @@ data UFuncB = Not
 data UFuncCC = NegC
   deriving Eq
 
--- | @Clif -> Number@ operators.
+-- | @Clif -> Number@ operators (norm, dim, grade).
 data UFuncCN = Norm | Dim | Grade
   deriving Eq
 
@@ -128,9 +133,9 @@ data CodeExpr where
   UnaryOp       :: UFunc -> CodeExpr -> CodeExpr
   -- | Unary operation for @Bool -> Bool@ operations.
   UnaryOpB      :: UFuncB -> CodeExpr -> CodeExpr
-  -- | Unary operation for @Vector -> Vector@ operations.
+  -- | Unary operation for @Clif -> Clif@ operations.
   UnaryOpCC     :: UFuncCC -> CodeExpr -> CodeExpr
-  -- | Unary operation for @Vector -> Number@ operations.
+  -- | Unary operation for @Clif -> Number@ operations.
   UnaryOpCN     :: UFuncCN -> CodeExpr -> CodeExpr
 
   -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
@@ -149,6 +154,8 @@ data CodeExpr where
   CCNBinaryOp   :: CCNBinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Binary operator for @Number x Clif -> Clif@ operations (scaling).
   NCCBinaryOp   :: NCCBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+  -- | Binary operator for @Natural x Clif -> Clif@ operations (grade selection).
+  NatCCBinaryOp   :: NatCCBinOp -> Natural -> CodeExpr -> CodeExpr
   -- | Set operator for Set + Set -> Set
   ESSBinaryOp :: ESSBinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Set operator for Element + Set -> Bool

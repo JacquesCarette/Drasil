@@ -164,20 +164,23 @@ asOrderedList = map fst . sortOn snd . map snd . Map.toList
 -- | Our chunk databases. \Must contain all maps needed in an example.\
 -- In turn, these maps must contain every chunk definition or concept 
 -- used in its respective example, else an error is thrown.
-data ChunkDB = CDB { symbolTable           :: SymbolMap
-                   , termTable             :: TermMap 
-                   , defTable              :: ConceptMap
-                   , _unitTable            :: UnitMap
-                   , _traceTable           :: TraceMap
-                   , _refbyTable           :: RefbyMap
-                   , _dataDefnTable        :: DatadefnMap
-                   , _insmodelTable        :: InsModelMap
-                   , _gendefTable          :: GendefMap
-                   , _theoryModelTable     :: TheoryModelMap
-                   , _conceptinsTable      :: ConceptInstanceMap
-                   , _labelledcontentTable :: LabelledContentMap
-                   , _refTable             :: ReferenceMap
-                   } -- TODO: Expand and add more databases
+data ChunkDB = CDB {
+  -- CHUNKS
+    symbolTable           :: SymbolMap
+  , termTable             :: TermMap 
+  , defTable              :: ConceptMap
+  , _unitTable            :: UnitMap
+  , _dataDefnTable        :: DatadefnMap
+  , _insmodelTable        :: InsModelMap
+  , _gendefTable          :: GendefMap
+  , _theoryModelTable     :: TheoryModelMap
+  , _conceptinsTable      :: ConceptInstanceMap
+  , _labelledcontentTable :: LabelledContentMap
+  -- NOT CHUNKS
+  , _traceTable           :: TraceMap
+  , _refbyTable           :: RefbyMap
+  , _refTable             :: ReferenceMap
+  }
 makeLenses ''ChunkDB
 
 -- | Smart constructor for chunk databases. Takes in the following:
@@ -196,9 +199,24 @@ cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =>
     [q] -> [t] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
     [GenDefn] -> [TheoryModel] -> [ConceptInstance] ->
     [LabelledContent] -> [Reference] -> ChunkDB
-cdb s t c u d ins gd tm ci lc r = CDB (symbolMap s) (termMap t) (conceptMap c)
-  (unitMap u) Map.empty Map.empty (idMap d) (idMap ins) (idMap gd) (idMap tm)
-  (idMap ci) (idMap lc) (idMap r)
+cdb s t c u d ins gd tm ci lc r = 
+  CDB {
+    -- CHUNKS
+    symbolTable = symbolMap s,
+    termTable = termMap t,
+    defTable = conceptMap c,
+    _unitTable = unitMap u,
+    _dataDefnTable = idMap d,
+    _insmodelTable = idMap ins,
+    _gendefTable = idMap gd,
+    _theoryModelTable = idMap tm,
+    _conceptinsTable = idMap ci,
+    _labelledcontentTable = idMap lc,
+    -- NOT CHUNKS
+    _traceTable = Map.empty,
+    _refbyTable = Map.empty,
+    _refTable = idMap r
+  }
 
 -- | Gets the units of a 'Quantity' as 'UnitDefn's.
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]

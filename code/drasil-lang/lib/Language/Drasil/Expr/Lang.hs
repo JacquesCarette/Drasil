@@ -169,6 +169,19 @@ data Expr where
   RealI    :: UID -> RealInterval Expr Expr -> Expr
   -- | A clif of arbitrary (0 or greater) grade with a given dimension
   Clif     :: Natural -> S.Dimension -> Expr -> Expr
+  -- | Indexing into an expression (clifs only for now)
+  -- The list of indexes correspond to the index in each grade
+  -- SubSup determines if it is a superscript or a subscript
+  -- The Expression must be a clif with the right grade and where the indexes are ≤ the dimension
+  IndexC   :: [Index] -> SubSup -> Expr -> Expr
+
+-- | An index will use the same definition as dimension for now, renamed for clarity
+type Index = S.Dimension
+
+-- | Whether an index is a superscript or a subscript
+data SubSup = 
+  Super | Sub
+  deriving (Eq)
 
 -- | The basis in which to project clifs
 data Basis where
@@ -197,7 +210,8 @@ instance Eq Expr where
   NCCBinaryOp o a b   == NCCBinaryOp p c d   =   o == p && a == c && b == d
   ESSBinaryOp o a b   == ESSBinaryOp p c d   =   o == p && a == c && b == d
   ESBBinaryOp o a b   == ESBBinaryOp p c d   =   o == p && a == c && b == d
-  Clif m a b           == Clif n c d         =   m == n && a == c && b == d
+  Clif m a b          == Clif n c d          =   m == n && a == c && b == d
+  IndexC a b c        == IndexC d e f        =   a == d && b == e && c == f
   _                   == _                   =   False
 -- ^ TODO: This needs to add more equality checks
 
@@ -525,3 +539,23 @@ instance Typed Expr Space where
         (Right x, _      ) -> Right x
       riTy (S.UpTo (_, x)) = infer cxt x
       riTy (S.UpFrom (_, x)) = infer cxt x
+  
+  -- For a clif to be well-typed it must:
+  -- 1. Contain only basic numeric types inside it
+  -- 2. Have a dimension of at least the grade (a 0-dimensional vector makes no sense)
+  infer ctx (Clif g d e) = case infer ctx e of
+    Left t -> 
+      let
+        isValidDim =
+          case d of
+            -- If it's a fixed dimension, the grade must be ≤ the dimension
+            S.Fixed fD -> g <= fD
+            -- We don't know enough to say for sure
+            S.VDim _  -> True
+      in
+      if S.isBasicNumSpace t then
+        if isValidDim then
+          Left $ S.ClifS g d t
+        else Right $ "Dimension of clif (received " ++ show d ++ ") must be greater than or equal to dimension (received " ++ show d
+      else Right $ "Clifs must contain basic number spaces. Received " ++ show t
+    Right x -> Right x

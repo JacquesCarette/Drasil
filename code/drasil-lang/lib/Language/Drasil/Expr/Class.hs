@@ -178,13 +178,13 @@ class ExprC r where
   -- | Smart constructor for the exponential (base e) function.
   exp :: r -> r
   
-  -- | Smart constructor for calculating the dimension of a vector.
+  -- | Smart constructor for calculating the dimension of a vector (or general clif).
   dim :: r -> r
   
-  -- | Smart constructor for calculating the normal form of a vector.
+  -- | Smart constructor for calculating the normal form of a vector (or general clif).
   norm :: r -> r
   
-  -- | Smart constructor for negating vectors.
+  -- | Smart constructor for negating vectors (or general clifs).
   negVec :: r -> r
   
   -- | Smart constructor for applying logical negation to an expression.
@@ -718,10 +718,10 @@ instance ExprC C.CodeExpr where
   -- | Smart constructor to cross product two expressions.
   cross = C.CCCBinaryOp C.Cross
   
-  -- | Adding vectors
+  -- | Adding clifs
   cAdd  = C.CCCBinaryOp C.CAdd
 
-  -- | Subtracting vectors
+  -- | Subtracting clifs
   cSub  = C.CCCBinaryOp C.CSub
 
   -- | Smart constructor for case statements with a complete set of cases.

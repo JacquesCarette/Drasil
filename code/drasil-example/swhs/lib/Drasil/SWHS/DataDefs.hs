@@ -5,6 +5,8 @@ import Theory.Drasil (DataDefinition, ddE, ddENoRefs)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
+import Data.Drasil.Citations
+
 import Data.Drasil.Concepts.Documentation (value)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 
@@ -13,8 +15,9 @@ import Data.Drasil.Quantities.Physics (energy, pressure)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latentHeat)
 
+
 import Drasil.SWHS.Assumptions (assumpVCN)
-import Drasil.SWHS.References (bueche1986, koothoor2013, lightstone2012)
+import Drasil.SWHS.References (bueche1986, lightstone2012)
 import Drasil.SWHS.Unitals (aspectRatio, coilHTC, coilSA, diam, eta, htCapLP,
   htCapSP, htCapW, htFusion, latentEP, meltFrac, pcmHTC, pcmMass, pcmSA, pcmVol,
   tankLength, tankVol, tauLP, tauSP, tauW, wDensity, wMass, wVol)

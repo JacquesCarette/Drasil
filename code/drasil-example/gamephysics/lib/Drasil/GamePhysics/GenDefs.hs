@@ -16,6 +16,7 @@ import Drasil.GamePhysics.DataDefs (collisionAssump, rightHandAssump,
 import Data.Drasil.Concepts.Math as CM (line, cartesian)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Drasil.GamePhysics.TMods (newtonLUG)
+import Drasil.GamePhysics.References
 
 ----- General Models -----
 
@@ -77,11 +78,6 @@ accelGravityDesc = foldlSent [S "If one of the", plural QPP.mass `S.is` S "much 
 accelGravityExpr :: PExpr
 accelGravityExpr = neg ((sy QP.gravitationalConst $* sy mLarger $/
   square (sy dispNorm)) $* sy dVect)
-
-accelGravitySrc :: Reference
-accelGravitySrc = makeURI "accelGravitySrc" "https://en.wikipedia.org/wiki/Gravitational_acceleration" $
-  shortname' $ S "Definition" `S.of_` S "Gravitational Acceleration"
-
 accelGravityDeriv :: Derivation
 accelGravityDeriv = mkDerivName (phrase QP.gravitationalAccel)
                       (weave [accelGravityDerivSentences, map eS accelGravityDerivEqns])
@@ -159,7 +155,3 @@ impulseExpr = (neg (exactDbl 1 $+ sy QP.restitutionCoef) $* sy initRelVel $.
   square (sy normalLen) $+
   (square (sy perpLenA) $/ sy momtInertA) $+
   (square (sy perpLenB) $/ sy momtInertB))
-
-impulseSrc :: Reference
-impulseSrc = makeURI "impulseSrc" "http://www.chrishecker.com/images/e/e7/Gdmphys3.pdf" $
-  shortname' $ S "Impulse for Collision Ref"

@@ -32,7 +32,7 @@ import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce,
   shearRes, solidcon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Software.Products (prodtcon)
-import Data.Drasil.Theories.Physics (physicsTMs)
+import Data.Drasil.Theories.Physics (physicsTMs, weightSrc, hsPressureSrc)
 
 import Data.Drasil.People (brooks, henryFrankis)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
@@ -166,7 +166,7 @@ symbMap = cdb (map (^. output) SSP.iMods ++ map qw symbols) (map nw symbols
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef]
+allRefs = [externalLinkRef, weightSrc, hsPressureSrc]
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)

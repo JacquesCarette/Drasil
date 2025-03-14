@@ -1,6 +1,4 @@
-module Drasil.SWHS.References (citations, bueche1986, incroperaEtAl2007,
-  koothoor2013, lightstone2012, parnasClements1986, smithEtAl2007,
-  smithLai2005, smithKoothoor2016) where
+module Drasil.SWHS.References where
 
 import Language.Drasil
 
@@ -38,3 +36,21 @@ lightstone2012 = cMisc [
   year 2012,
   note "From Marilyn Lightstone's Personal Notes"]
   "lightstone2012"
+
+
+uriReferences :: [Reference]
+uriReferences = [consThemESrc, latHtESrc, sensHtESrc]
+
+consThemESrc :: Reference
+consThemESrc = makeURI "consThemESrc"
+  "http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm" $
+  shortname' $ S "Fourier Law of Heat Conduction and Heat Equation"
+
+latHtESrc :: Reference
+latHtESrc = makeURI "latHtESrc" "http://en.wikipedia.org/wiki/Latent_heat" $
+  shortname' $ S "Definition of Latent Heat"
+
+sensHtESrc :: Reference
+sensHtESrc = makeURI "sensHtESrc"
+  "http://en.wikipedia.org/wiki/Sensible_heat" $
+  shortname' $ S "Definition of Sensible Heat"

@@ -47,8 +47,9 @@ import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater)
 import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
-import Drasil.SWHS.References (citations)
-import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements, verifyEnergyOutput)
+import Drasil.SWHS.References (citations, uriReferences)
+import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements, 
+  verifyEnergyOutput)
 import Drasil.SWHS.TMods (tMods)
 import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
   htFluxC, htFluxP, inputs, inputConstraints, outputs, pcmE, pcmHTC, pcmSA,
@@ -118,11 +119,11 @@ symbMap = cdb (qw (heatEInPCM ^. output) : symbolsAll) -- heatEInPCM ?
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef]
+allRefs = [externalLinkRef] ++ uriReferences
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronymsFull)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference])
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns

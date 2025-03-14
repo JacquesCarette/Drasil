@@ -7,6 +7,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Control.Lens ((^.))
 
+import Data.Drasil.Citations
 import Data.Drasil.Concepts.Documentation (goal)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
@@ -18,7 +19,6 @@ import Drasil.SWHS.Concepts (water)
 import Drasil.SWHS.DataDefs (balanceDecayRate)
 import Drasil.SWHS.GenDefs (htFluxWaterFromCoil)
 import Drasil.SWHS.IMods (eBalanceOnWtrDerivDesc1, eBalanceOnWtrDerivDesc3, heatEInWtr)
-import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, htCapW, htFluxC, tauW, tempC,
   tempInit, tempW, timeFinal, wMass)
 

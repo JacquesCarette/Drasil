@@ -160,8 +160,6 @@ fillReferences dd si@SI{_sys = sys} = si2
     -- get refs from SRSDecl. Should include all section labels and labelled content.
     refsFromSRS = concatMap findAllRefs allSections
     -- get refs from the stuff already inside the chunk database
-    inRefs  = concatMap dRefToRef ddefs ++ concatMap dRefToRef gdefs ++
-                concatMap dRefToRef imods ++ concatMap dRefToRef tmods
     ddefs   = map (fst.snd) $ Map.assocs $ chkdb ^. dataDefnTable
     gdefs   = map (fst.snd) $ Map.assocs $ chkdb ^. gendefTable
     imods   = map (fst.snd) $ Map.assocs $ chkdb ^. insmodelTable
@@ -173,7 +171,7 @@ fillReferences dd si@SI{_sys = sys} = si2
     -- search the old reference table just in case the user wants to manually add in some references
     refs    = map (fst.snd) $ Map.assocs $ chkdb ^. refTable
     -- set new reference table in the chunk database
-    chkdb2 = set refTable (idMap $ nub $ refsFromSRS ++ inRefs
+    chkdb2 = set refTable (idMap $ nub $ refsFromSRS
       ++ map (ref.makeTabRef'.getTraceConfigUID) (traceMatStandard si) ++ secRefs -- secRefs can be removed once #946 is complete
       ++ traceyGraphGetRefs (programName sys) ++ map ref cites
       ++ map ref conins ++ map ref ddefs ++ map ref gdefs ++ map ref imods

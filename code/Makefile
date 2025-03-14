@@ -196,7 +196,7 @@ all: test test_website codegenTest_diff ##@Examples Run examples and test agains
 install: ##@Examples Install all example project binaries into your local binary path (see $(stack path) for local-bin-path).
 	stack install $(stackArgs)
 
-debug: test ##@Examples Run test target with better debugging tools.
+debug: glassbr_diff ##@Examples Run test target with better debugging tools.
 
 # Debugging individual examples
 $(DEBUG_EXAMPLES): %$(DEBUG_E_SUFFIX): %$(TEST_E_SUFFIX)

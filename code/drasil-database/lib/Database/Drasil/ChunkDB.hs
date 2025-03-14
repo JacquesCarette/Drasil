@@ -16,15 +16,16 @@ module Database.Drasil.ChunkDB (
   -- ** Constructors
   cdb, idMap, termMap, conceptMap, traceMap, generateRefbyMap, -- idMap, termMap for docLang
   -- ** Lookup Functions
+  uMapLookup,
   asOrderedList, collectUnits,
   termResolve, defResolve, symbResolve,
   traceLookup, refbyLookup,
   datadefnLookup, insmodelLookup, gendefLookup, theoryModelLookup,
-  conceptinsLookup, labelledconLookup, refResolve,
+  conceptinsLookup, labelledconLookup,
   -- ** Lenses
   unitTable, traceTable, refbyTable,
   dataDefnTable, insmodelTable, gendefTable, theoryModelTable,
-  conceptinsTable, labelledcontentTable, refTable
+  conceptinsTable, labelledcontentTable
 ) where
 
 import Language.Drasil
@@ -73,8 +74,6 @@ type TheoryModelMap = UMap TheoryModel
 type ConceptInstanceMap = UMap ConceptInstance
 -- | A map of all 'LabelledContent's.
 type LabelledContentMap = UMap LabelledContent
--- | A map of all 'Reference's.
-type ReferenceMap = UMap Reference
 
 -- | General chunk database map constructor. Creates a 'UMap' from a function that converts something with 'UID's into another type and a list of something with 'UID's.
 cdbMap :: HasUID a => (a -> b) -> [a] -> Map.Map UID (b, Int)
@@ -120,10 +119,6 @@ symbResolve m x = uMapLookup "Symbol" "SymbolMap" x $ symbolTable m
 -- | Looks up a 'UID' in the term table from the 'ChunkDB'. If nothing is found, an error is thrown.
 termResolve :: ChunkDB -> UID -> IdeaDict
 termResolve m x = uMapLookup "Term" "TermMap" x $ termTable m
-
--- | Looks up a 'UID' in the reference table from the 'ChunkDB'. If nothing is found, an error is thrown.
-refResolve :: UID -> ReferenceMap -> Reference
-refResolve = uMapLookup "Reference" "ReferenceMap"
 
 -- | Looks up a 'UID' in the unit table. If nothing is found, an error is thrown.
 unitLookup :: UID -> UnitMap -> UnitDefn
@@ -176,7 +171,6 @@ data ChunkDB = CDB { symbolTable           :: SymbolMap
                    , _theoryModelTable     :: TheoryModelMap
                    , _conceptinsTable      :: ConceptInstanceMap
                    , _labelledcontentTable :: LabelledContentMap
-                   , _refTable             :: ReferenceMap
                    } -- TODO: Expand and add more databases
 makeLenses ''ChunkDB
 
@@ -195,10 +189,10 @@ makeLenses ''ChunkDB
 cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =>
     [q] -> [t] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
     [GenDefn] -> [TheoryModel] -> [ConceptInstance] ->
-    [LabelledContent] -> [Reference] -> ChunkDB
-cdb s t c u d ins gd tm ci lc r = CDB (symbolMap s) (termMap t) (conceptMap c)
+    [LabelledContent] -> ChunkDB
+cdb s t c u d ins gd tm ci lc = CDB (symbolMap s) (termMap t) (conceptMap c)
   (unitMap u) Map.empty Map.empty (idMap d) (idMap ins) (idMap gd) (idMap tm)
-  (idMap ci) (idMap lc) (idMap r)
+  (idMap ci) (idMap lc)
 
 -- | Gets the units of a 'Quantity' as 'UnitDefn's.
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]

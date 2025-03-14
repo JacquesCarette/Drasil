@@ -64,64 +64,32 @@ import Data.Maybe (maybeToList)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- * Main Function
--- | Creates a document from a document description, a title combinator function, and system information.
-mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
+
+-- | Creates a document from a document description, a title combinator
+-- function, and system information.
+mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> (Document, [Reference])
 mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = docauthors} =
-  Document (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) docauthors) (findToC l) $
-  mkSections fullSI l where
+  (Document
+    (nw kind `comb` nw sys)
+    (foldlList Comma List $ map (S . name) docauthors)
+    (findToC l)
+    $ mkSections fullSI l,
+   references)
+  where
     fullSI = fillcdbSRS dd si
     l = mkDocDesc fullSI dd
+    references = fillReferences dd fullSI
 
 -- * Functions to Fill 'ChunkDB'
 
--- TODO: Move all of these "filler" functions to a new file?
--- TODO: Add in 'fillTermMap' once #2775 is complete.
--- | Assuming a given 'ChunkDB' with no traces and minimal/no references, fill in for rest of system information.
--- Currently fills in references, traceability matrix information and 'IdeaDict's.
+-- | Assuming a given 'ChunkDB' with no traces and minimal/no references, fill
+-- in for rest of system information. Currently fills in references,
+-- traceability matrix information and 'IdeaDict's.
 fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
-fillcdbSRS srsDec si = fillSecAndLC srsDec $ fillReferences srsDec $ fillTraceSI srsDec si
+fillcdbSRS srsDec si = fillSecAndLC srsDec $ fillTraceSI srsDec si
 
-{-Don't want to manually add concepts here, Drasil should do it automatically. Perhaps through traversal?
-fillConcepts :: SystemInformation -> SystemInformation
-fillConcepts si = si2
-  where
-    si2 = set sysinfodb chkdb2 si
-    chkdb = si ^. sysinfodb
-    tmtbl = termTable chkdb
-    chkdb2 = chkdb{termTable = termMap $ nub (map nw doccon ++ map nw doccon' ++ map nw softwarecon ++ map nw physicCon ++ map nw physicCon' ++ map nw physicalcon ++ map nw educon ++ map nw mathcon ++ map nw mathcon' ++ map nw compcon ++ map nw compcon' ++ map nw solidcon ++ map nw thermocon ++ (map (fst.snd) $ Map.assocs tmtbl))}
--}
-
-{- FIXME: See #2775
--- Fill in term map from all concepts and quantities.
-fillTermMap :: SystemInformation -> SystemInformation
-fillTermMap si = si2
-  where
-    -- Get current contents of si
-    chkdb = si ^. sysinfodb
-    -- extract everything that could possibly lead to an 'IdeaDict'
-    symbs    = map (fst.snd) $ Map.assocs $ symbolTable chkdb
-    trms     = map (fst.snd) $ Map.assocs $ termTable chkdb
-    concepts = map (fst.snd) $ Map.assocs $ defTable chkdb
-
-    -- TODO: Uncomment these when the second part of #2775 is resolved.
-    -- Some Definitions and models overwrite the term for a given UID.
-    -- We don't really want this behaviour, so it should be resolved by
-    -- changing some of the constructors for ModelKind found in drasil-theory
-
-    ddefs   = map (fst.snd) $ Map.assocs $ chkdb ^. dataDefnTable
-    gdefs   = map (fst.snd) $ Map.assocs $ chkdb ^. gendefTable
-    imods   = map (fst.snd) $ Map.assocs $ chkdb ^. insmodelTable
-    tmods   = map (fst.snd) $ Map.assocs $ chkdb ^. theoryModelTable
-    concIns = map (fst.snd) $ Map.assocs $ chkdb ^. conceptinsTable
-    -- fill in the appropriate chunkdb field
-    chkdb2 = chkdb {termTable = termMap $ nub $ map nw symbs ++ map nw trms
-      ++ map nw concepts ++ map nw concIns
-      ++ map nw ddefs ++ map nw gdefs ++ map nw imods ++ map nw tmods}
-    -- return the filled in system information
-    si2 = set sysinfodb chkdb2 si
-    -}
-
--- | Fill in the 'Section's and 'LabelledContent' maps of the 'ChunkDB' from the 'SRSDecl'.
+-- | Fill in the 'Section's and 'LabelledContent' maps of the 'ChunkDB' from the
+-- 'SRSDecl'.
 fillSecAndLC :: SRSDecl -> SystemInformation -> SystemInformation
 fillSecAndLC dd si = si2
   where
@@ -149,14 +117,14 @@ fillSecAndLC dd si = si2
     findLCSecCons _ = []
 
 -- | Takes in existing information from the Chunk database to construct a database of references.
-fillReferences :: SRSDecl -> SystemInformation -> SystemInformation
-fillReferences dd si@SI{_sys = sys} = si2
+fillReferences :: SRSDecl -> SystemInformation -> [Reference]
+fillReferences dd si@SI{_sys = sys} = references
   where
     -- get old chunk database + ref database
     chkdb = si ^. sysinfodb
     rfdb = refdb si
     -- convert SRSDecl into a list of sections (to easily get at all the references used in the SRS)
-    allSections = mkSections si $ mkDocDesc si dd
+    allSections = mkSections si $ mkDocDesc si dd -- FIXME: Huge waste of computation. All sections are calculated, only to be discarded shortly!!
     -- get refs from SRSDecl. Should include all section labels and labelled content.
     refsFromSRS = concatMap findAllRefs allSections
     -- get refs from the stuff already inside the chunk database
@@ -170,17 +138,12 @@ fillReferences dd si@SI{_sys = sys} = si2
     lblCon  = map (fst.snd) $ Map.assocs $ chkdb ^. labelledcontentTable
     cites   = citeDB si -- map (fst.snd) $ Map.assocs $ rfdb  ^. citationDB
     conins  = map (fst.snd) $ Map.assocs $ rfdb  ^. conceptDB
-    -- search the old reference table just in case the user wants to manually add in some references
-    refs    = map (fst.snd) $ Map.assocs $ chkdb ^. refTable
-    -- set new reference table in the chunk database
-    chkdb2 = set refTable (idMap $ nub $ refsFromSRS ++ inRefs
+
+    references = nub $ refsFromSRS ++ inRefs
       ++ map (ref.makeTabRef'.getTraceConfigUID) (traceMatStandard si) ++ secRefs -- secRefs can be removed once #946 is complete
       ++ traceyGraphGetRefs (programName sys) ++ map ref cites
       ++ map ref conins ++ map ref ddefs ++ map ref gdefs ++ map ref imods
       ++ map ref tmods ++ map ref concIns ++ map ref lblCon
-      ++ refs) chkdb
-    -- set new chunk database into system information
-    si2 = set sysinfodb chkdb2 si
 
 -- | Helper that gets references from definitions and models.
 dRefToRef :: HasDecRef a => a -> [Reference]

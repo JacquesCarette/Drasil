@@ -34,15 +34,15 @@ plainConfiguration = PC Scientific
 
 -- | Create expressions for a document in 'Doc' format.
 exprDoc :: ChunkDB -> Stage -> SingleLine -> L.Expr -> Doc
-exprDoc db st f e = pExprDoc f (expr e (PI db st plainConfiguration))
+exprDoc db st f e = pExprDoc f (expr e (PI db st plainConfiguration mempty))
 
 -- | Create code expressions for a document in 'Doc' format.
 codeExprDoc :: ChunkDB -> Stage -> SingleLine -> C.CodeExpr -> Doc
-codeExprDoc db st f e = pExprDoc f (codeExpr e (PI db st plainConfiguration))
+codeExprDoc db st f e = pExprDoc f (codeExpr e (PI db st plainConfiguration mempty))
 
 -- | Create sentences for a document in 'Doc' format.
 sentenceDoc :: ChunkDB -> Stage -> SingleLine -> Sentence -> Doc
-sentenceDoc db st f s = specDoc f (spec (PI db st plainConfiguration) s)
+sentenceDoc db st f s = specDoc f (spec (PI db st plainConfiguration mempty) s)
 
 -- | Create symbols for a document in 'Doc' format.
 symbolDoc :: Symbol -> Doc

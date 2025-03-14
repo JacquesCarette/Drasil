@@ -37,7 +37,6 @@ printAllDebugInfo pinfo = map
   , mkTableIMod
   , mkTableCI
   , mkTableLC
-  , mkTableRef
   , renderUsedUIDs . mkListShowUsedUIDs]
 
 -- * Helpers
@@ -92,7 +91,7 @@ openAbbreviation :: Idea a => PrintingInformation -> (String, a -> Doc)
 openAbbreviation _ = ("Abbreviation", text . fromMaybe "" . getA)
 
 openDefinition :: Definition a => PrintingInformation -> (String, a -> Doc)
-openDefinition pinfo = ("Definition", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) OneLine . view defn)
+openDefinition pinfo = ("Definition", const mempty)-- sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) OneLine . view defn)
 
 openUnitSymbol :: HasUnitSymbol a => PrintingInformation -> (String, a -> Doc)
 openUnitSymbol pinfo = ("Unit Symbol", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) OneLine . Sy . usymb)
@@ -201,14 +200,6 @@ mkTableLC pinfo = mkTableFromLenses
   "LabelledContent"
   [openShortName, openContentType]
 
--- | Makes a table with all references in the SRS.
-mkTableRef :: PrintingInformation -> Doc
-mkTableRef pinfo = mkTableFromLenses
-  pinfo
-  (view refTable)
-  "Reference"
-  [openRef, openShortName]
-
 -- | Chunks that depend on other chunks. An empty list means the chunks do not depend on anything.
 mkTableDepChunks :: PrintingInformation -> Doc
 mkTableDepChunks PI { _ckdb = db } = text
@@ -307,7 +298,6 @@ mkListShowUsedUIDs PI { _ckdb = db } = sortBy (compare `on` fst)
   ++ map
     (\x -> (fst x, ["LabelledContent"]))
     (Map.assocs $ db ^. labelledcontentTable)
-  ++ map (\x -> (fst x, ["Reference"])) (Map.assocs $ db ^. refTable)
 
 -- Currently Unused
 -- | Get all 'UID's from a database ('ChunkDB').
@@ -326,4 +316,3 @@ mkListAll db = nubOrd
   ++ map fst (Map.assocs $ db ^. theoryModelTable)
   ++ map fst (Map.assocs $ db ^. conceptinsTable)
   ++ map fst (Map.assocs $ db ^. labelledcontentTable)
-  ++ map fst (Map.assocs $ db ^. refTable)

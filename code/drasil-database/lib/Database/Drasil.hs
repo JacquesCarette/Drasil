@@ -6,15 +6,16 @@ module Database.Drasil (
   -- ** Constructors
   , cdb, idMap, termMap, conceptMap, traceMap, generateRefbyMap
   -- ** Lookup Functions
+  , uMapLookup
   , asOrderedList, collectUnits
   , termResolve, defResolve, symbResolve
   , traceLookup, refbyLookup
   , datadefnLookup, insmodelLookup, gendefLookup, theoryModelLookup
-  , conceptinsLookup, labelledconLookup, refResolve
+  , conceptinsLookup, labelledconLookup
   -- ** Lenses
   , unitTable, traceTable, refbyTable
   , dataDefnTable, insmodelTable, gendefTable, theoryModelTable
-  , conceptinsTable, labelledcontentTable, refTable
+  , conceptinsTable, labelledcontentTable
   -- ** Debugging Tools
   , dumpChunkDB, DumpedChunkDB
 ) where

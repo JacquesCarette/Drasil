@@ -147,8 +147,6 @@ genPackage unRepr = do
       as = map name (codeSpec g ^. authorsO)
       cfp = codeSpec g ^. configFilesO
       db = codeSpec g ^. sysinfodbO
-      -- prps = show $ sentenceDoc db Implementation OneLine
-      --   (foldlSent $ purpose $ codeSpec g)
       prps = show $ sentenceDoc db Implementation OneLine 
         (foldlSent $ codeSpec g ^. purpose)  
       bckgrnd = show $ sentenceDoc db Implementation OneLine

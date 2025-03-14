@@ -49,13 +49,14 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   sD, termsWithAccDefn, termsWithDefsOnly, terms)
 
 srs :: Document
-srs = mkDoc mkSRS (S.forGen titleize phrase) si
+renderedRefs :: [Reference]
+(srs, renderedRefs) = mkDoc mkSRS (S.forGen titleize phrase) si
 
 fullSI :: SystemInformation
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
-printSetting = piSys fullSI Equational defaultConfiguration
+printSetting = piSys fullSI Equational defaultConfiguration $ renderedRefs ++ [externalLinkRef]
 
 si :: SystemInformation
 si = SI {
@@ -142,11 +143,7 @@ symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw symb ++ terms ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) GB.dataDefs iMods [] tMods concIns
-  labCon allRefs
-
--- | Holds all references and links used in the document.
-allRefs :: [Reference]
-allRefs = [externalLinkRef]
+  labCon
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
@@ -156,7 +153,7 @@ labCon = funcReqsTables ++ [demandVsSDFig, dimlessloadVsARFig]
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference])
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] []
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns

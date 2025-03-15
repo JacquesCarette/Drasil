@@ -46,21 +46,21 @@ data Space where
     Actor    :: String -> Space
     Function :: (NE.NonEmpty Primitive) -> Primitive -> Space
     Void     :: Space
-  -- | Clifford algebra objects (Clifs) with a grade and a dimension
-    ClifS    :: Natural -> Dimension -> Space -> Space
+  -- | Clifford algebra objects (Clifs) with a dimension
+    ClifS    :: Dimension -> Space -> Space
   deriving (Eq, Show)
 
 vect2D :: Space -> Space
-vect2D s = ClifS 1 (Fixed 2) s
+vect2D s = ClifS (Fixed 2) s
 
 vect3D :: Space -> Space
-vect3D s = ClifS 1 (Fixed 3) s
+vect3D s = ClifS (Fixed 3) s
 
 vect :: Natural -> Space -> Space
-vect n s = ClifS 1 (Fixed n) s
+vect n s = ClifS (Fixed n) s
 
 vectND :: String -> Space -> Space
-vectND x = ClifS 1 (VDim x)
+vectND x = ClifS (VDim x)
 
 -- | The dimension of a clif
 data Dimension where
@@ -114,7 +114,7 @@ getActorName _         = error "getActorName called on non-actor space"
 -- | Gets the inner 'Space' of a vector or set.
 getInnerSpace :: Space -> Space
 getInnerSpace (Set s) = s
-getInnerSpace (ClifS _ _ s) = s
+getInnerSpace (ClifS _ s) = s
 getInnerSpace _        = error "getInnerSpace called on non-vector space"
 
 -- | Is this Space a basic numeric space?

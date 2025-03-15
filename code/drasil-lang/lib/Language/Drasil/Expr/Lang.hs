@@ -168,20 +168,26 @@ data Expr where
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
   RealI    :: UID -> RealInterval Expr Expr -> Expr
   -- | A clif of arbitrary (0 or greater) grade with a given dimension
+  -- | This is a homogeneous clif. It has a definite grade. 
+  --   It is embedded in the space of the given dimension, but contains only
+  --   components from the given natural grade. These can be wedged or multiplied
+  --   together to create bigger-graded things.
+  -- All Clifs are currently assumed to be embedded in a space defined by spacelike 
+  -- basis vectors (e.g. Euclidean space) for now.
   Clif     :: Natural -> S.Dimension -> Expr -> Expr
   -- | Indexing into an expression (clifs only for now)
   -- The list of indexes correspond to the index in each grade
   -- SubSup determines if it is a superscript or a subscript
   -- The Expression must be a clif with the right grade and where the indexes are ≤ the dimension
-  IndexC   :: [Index] -> SubSup -> Expr -> Expr
+--   IndexC   :: [Index] -> SubSup -> Expr -> Expr
 
--- | An index will use the same definition as dimension for now, renamed for clarity
-type Index = S.Dimension
+-- -- | An index will use the same definition as dimension for now, renamed for clarity
+-- type Index = S.Dimension
 
--- | Whether an index is a superscript or a subscript
-data SubSup = 
-  Super | Sub
-  deriving (Eq)
+-- -- | Whether an index is a superscript or a subscript
+-- data SubSup = 
+--   Super | Sub
+--   deriving (Eq)
 
 -- | The basis in which to project clifs
 data Basis where
@@ -211,7 +217,7 @@ instance Eq Expr where
   ESSBinaryOp o a b   == ESSBinaryOp p c d   =   o == p && a == c && b == d
   ESBBinaryOp o a b   == ESBBinaryOp p c d   =   o == p && a == c && b == d
   Clif m a b          == Clif n c d          =   m == n && a == c && b == d
-  IndexC a b c        == IndexC d e f        =   a == d && b == e && c == f
+  -- IndexC a b c        == IndexC d e f        =   a == d && b == e && c == f
   _                   == _                   =   False
 -- ^ TODO: This needs to add more equality checks
 
@@ -264,7 +270,7 @@ instance LiteralC Expr where
 -- TODO: refactor these if expressions so they're more readable (the else is too far from the if)
 cccInfer :: TypingContext Space -> CCCBinOp -> Expr -> Expr -> Either Space TypeError
 cccInfer ctx op l r = case (infer ctx l, infer ctx r) of
-    (Left lt@(S.ClifS lGr lD lsp), Left (S.ClifS dGr rD rsp)) ->
+    (Left lt@(S.ClifS lD lsp), Left (S.ClifS rD rsp)) ->
       if lD == rD then -- The dimension in which the clif is embedded must match
         if lsp == rsp && S.isBasicNumSpace lsp then
           if op == CSub && (lsp == S.Natural || rsp == S.Natural) then
@@ -373,7 +379,7 @@ instance Typed Expr Space where
     x              -> x
 
   infer cxt (UnaryOpCC NegC e) = case infer cxt e of
-    Left c@(S.ClifS gr dim sp) -> if S.isBasicNumSpace sp && sp /= S.Natural
+    Left c@(S.ClifS dim sp) -> if S.isBasicNumSpace sp && sp /= S.Natural
       then Left c
       else Right $ "Clif negation only applies to, non-natural, numbered clifs. Received `" ++ show sp ++ "`."
     Left sp -> Right $ "Clif negation should only be applied to numeric clifs. Received `" ++ show sp ++ "`."
@@ -381,14 +387,12 @@ instance Typed Expr Space where
 
   -- TODO: support generalized clif norm
   infer cxt (UnaryOpCN Norm e) = case infer cxt e of
-    Left (S.ClifS 1 dim S.Real) -> Left S.Real
-    Left (S.ClifS n dim S.Real) -> Right $ "Norm on non-Vector (grade 1) clifs currently not supported. Received grade " ++ show n ++ " clif."
-    Left sp -> Right $ "Vector norm only applies to vectors of real numbers. Received `" ++ show sp ++ "`."
+    Left (S.ClifS dim S.Real) -> Left S.Real
+    Left sp -> Right $ "Vector norm only applies to vectors (or clifs) of real numbers. Received `" ++ show sp ++ "`."
     x -> x
 
   infer cxt (UnaryOpCN Dim e) = case infer cxt e of
-    Left (S.ClifS 1 _ _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
-    Left (S.ClifS n _ _) -> Right $ "Vector 'dim' only applies to vector (grade 1) clifs. Received grade " ++ show n ++ " clif."
+    Left (S.ClifS _ _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
     Left sp -> Right $ "Vector 'dim' only applies to vectors. Received `" ++ show sp ++ "`."
     x -> x
 
@@ -428,11 +432,9 @@ instance Typed Expr Space where
     (Right le, _) -> Right le
 
   infer cxt (LABinaryOp Index l n) = case (infer cxt l, infer cxt n) of
-    (Left (S.ClifS 1 d lt), Left nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
+    (Left (S.ClifS d lt), Left nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
       then Left lt
       else Right $ "List accessor not of type Integer nor Natural, but of type `" ++ show nt ++ "`"
-    (Left (S.ClifS n d lt), Left nt) ->
-      Right $ "List accessor not implemented for non-vector (grade 1) clifs. Received grade " ++ show n ++ " clif."
     (Left lt         , Left _)  -> Right $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
     (_               , Right e) -> Right e
     (Right e         , _      ) -> Right e
@@ -451,7 +453,7 @@ instance Typed Expr Space where
     (Right le, _) -> Right le
 
   infer cxt (NCCBinaryOp Scale l r) = case (infer cxt l, infer cxt r) of
-    (Left lt, Left (S.ClifS gr d rsp)) -> if S.isBasicNumSpace lt && lt == rsp
+    (Left lt, Left (S.ClifS d rsp)) -> if S.isBasicNumSpace lt && lt == rsp
       then Left rsp
       else if lt /= rsp then
         Right $ "Vector scaling expects a scaling by the same kind as the vector's but found scaling by`" ++ show lt ++ "` over vectors of type `" ++ show rsp ++ "`."
@@ -463,8 +465,8 @@ instance Typed Expr Space where
 
   -- If you select grade N of a Clif, you get a Clif of grade N
   infer cxt (NatCCBinaryOp GradeSelect n c) = case infer cxt c of
-    Left (S.ClifS gr d sp) -> 
-      Left $ S.ClifS n d sp
+    Left (S.ClifS d sp) -> 
+      Left $ S.ClifS (S.Fixed n) sp
     Left rsp -> Right $ "Grade selection expects clif as second operand. Received `" ++ show rsp ++ "`."
     Right x -> Right x
 
@@ -478,7 +480,7 @@ instance Typed Expr Space where
     -}
 
   infer cxt (CCNBinaryOp Dot l r) = case (infer cxt l, infer cxt r) of
-    (Left lt@(S.ClifS lGr lD lsp), Left rt@(S.ClifS rGr rD rsp)) -> 
+    (Left lt@(S.ClifS lD lsp), Left rt@(S.ClifS rD rsp)) -> 
       if lD == rD then
         if lsp == rsp && S.isBasicNumSpace lsp
         then Left lsp
@@ -546,6 +548,7 @@ instance Typed Expr Space where
   infer ctx (Clif g d e) = case infer ctx e of
     Left t -> 
       let
+        -- Check the dimensions of a clif to ensure it makes sense
         isValidDim =
           case d of
             -- If it's a fixed dimension, the grade must be ≤ the dimension
@@ -553,9 +556,19 @@ instance Typed Expr Space where
             -- We don't know enough to say for sure
             S.VDim _  -> True
       in
+      -- `Clif`s must store a basic number space, not things like other clifs
       if S.isBasicNumSpace t then
         if isValidDim then
-          Left $ S.ClifS g d t
+          Left $ S.ClifS d t
         else Right $ "Dimension of clif (received " ++ show d ++ ") must be greater than or equal to dimension (received " ++ show d
       else Right $ "Clifs must contain basic number spaces. Received " ++ show t
     Right x -> Right x
+
+-- verify :: Bool -> Space -> TypeError -> Either TypeError Space
+-- verify b s t =
+--   if b then
+--     Right s
+--   else
+--     Left x
+
+-- inferAndVerify :: 

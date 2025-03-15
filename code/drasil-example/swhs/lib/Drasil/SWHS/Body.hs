@@ -119,7 +119,7 @@ symbMap = cdb (qw (heatEInPCM ^. output) : symbolsAll) -- heatEInPCM ?
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef] ++ uriReferences
+allRefs = externalLinkRef : uriReferences
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronymsFull)

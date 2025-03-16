@@ -119,7 +119,7 @@ class HasUnitSymbol u where
 class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u where
   -- | May have a unit definition.
   udefn :: u -> Maybe UDefn
-  -- | Holds units as a list of 'UID'.
+  -- | What Units is this Unit built upon?
   getUnits :: u -> [UID]
 
 -- Investigate (TODO): is this really needed?

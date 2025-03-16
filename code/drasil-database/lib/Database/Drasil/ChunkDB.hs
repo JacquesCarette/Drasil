@@ -104,7 +104,7 @@ idMap = cdbMap id
 traceMap :: [(UID, [UID])] -> TraceMap
 traceMap = Map.fromList
 
--- | Gets a unit if it exists, or Nothing.        
+-- | Find the unit of a symbol.        
 getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
 getUnitLup m c = getUnit $ symbResolve m (c ^. uid)
 
@@ -195,8 +195,8 @@ makeLenses ''ChunkDB
 --     * 'TheoryModel's (for 'TheoryModelMap'),
 --     * 'ConceptInstance's (for 'ConceptInstanceMap'),
 --     * 'LabelledContent's (for 'LabelledContentMap').
-cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =>
-    [q] -> [t] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
+cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c) =>
+    [q] -> [t] -> [c] -> [UnitDefn] -> [DataDefinition] -> [InstanceModel] ->
     [GenDefn] -> [TheoryModel] -> [ConceptInstance] ->
     [LabelledContent] -> [Reference] -> ChunkDB
 cdb s t c u d ins gd tm ci lc r = 
@@ -205,7 +205,7 @@ cdb s t c u d ins gd tm ci lc r =
     symbolTable = symbolMap s,
     termTable = termMap t,
     defTable = conceptMap c,
-    _unitTable = unitMap u,
+    _unitTable = idMap u,
     _dataDefnTable = idMap d,
     _insmodelTable = idMap ins,
     _gendefTable = idMap gd,
@@ -220,8 +220,13 @@ cdb s t c u d ins gd tm ci lc r =
 
 -- | Gets the units of a 'Quantity' as 'UnitDefn's.
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
-collectUnits m = map (unitWrapper . flip unitLookup (m ^. unitTable))
- . concatMap getUnits . mapMaybe (getUnitLup m)
+collectUnits _ _ = [] 
+  map (unitWrapper . flip unitLookup (m ^. unitTable)) . concatMap getUnits . mapMaybe (getUnitLup m)
+
+ -- gets the units of a list of quantities as a list of maybes
+ -- gets the list of dependency quantities
+ -- 
+
 
 -- | Trace a 'UID' to related 'UID's.
 traceLookup :: UID -> TraceMap -> [UID]

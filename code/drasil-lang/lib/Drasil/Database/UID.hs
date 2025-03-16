@@ -6,7 +6,7 @@
 module Drasil.Database.UID (
     UID
   , HasUID(uid)
-  , mkUid, nsUid, (+++), (+++.), (+++!)
+  , mkUid, nsUid, (+++), (+++.), (+++!), nest
   , showUID
 ) where
 
@@ -47,6 +47,9 @@ mkUid s = UID { _namespace = [], _baseName = s }
 -- | Nest a 'UID' under a namespace.
 nsUid :: String -> UID -> UID
 nsUid ns = over namespace (++ [ns])
+
+nest :: HasUID a => a -> String -> UID
+nest a ns = nsUid ns $ a ^. uid
 
 -- | Append a suffix to a thing with a 'UID' and get the resulting 'UID'.
 (+++) :: HasUID a => a -> String -> UID

@@ -7,7 +7,7 @@ import Theory.Drasil (GenDefn, gd, gdNoRefs, deModel', equationalModel')
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Data.Drasil.Citations
+import Data.Drasil.Citations (koothoor2013)
 
 import Data.Drasil.Concepts.Math (rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (lawConvCooling)

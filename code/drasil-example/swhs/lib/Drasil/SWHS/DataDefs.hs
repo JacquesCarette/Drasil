@@ -5,7 +5,7 @@ import Theory.Drasil (DataDefinition, ddE, ddENoRefs)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Data.Drasil.Citations
+import Data.Drasil.Citations (koothoor2013)
 
 import Data.Drasil.Concepts.Documentation (value)
 import Data.Drasil.Concepts.Thermodynamics (heat)

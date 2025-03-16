@@ -16,7 +16,7 @@ import Drasil.GamePhysics.DataDefs (collisionAssump, rightHandAssump,
 import Data.Drasil.Concepts.Math as CM (line, cartesian)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Drasil.GamePhysics.TMods (newtonLUG)
-import Drasil.GamePhysics.References
+import Drasil.GamePhysics.References (accelGravitySrc, impulseSrc)
 
 ----- General Models -----
 

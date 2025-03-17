@@ -10,10 +10,10 @@ digraph allvsall {
 	iyVel -> speed;
 	theory:projSpeed -> pointMass;
 	theory:projSpeed -> timeStartZero;
-	theory:projSpeed -> accelerationTM;
+	theory:projSpeed -> theory:accelerationTM;
 	theory:projPos -> pointMass;
 	theory:projPos -> timeStartZero;
-	theory:projPos -> velocityTM;
+	theory:projPos -> theory:velocityTM;
 	theory:projPos -> theory:projSpeed;
 	theory:velocity -> twoDMotion;
 	theory:velocity -> cartSyst;
@@ -85,12 +85,12 @@ digraph allvsall {
 	{speed, ixVel, iyVel}
 	}
 
-	accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];
-	velocityTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:velocity"];
+	theory:accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];
+	theory:velocityTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:velocity"];
 
 	subgraph TM {
 	rank="same"
-	{accelerationTM, velocityTM}
+	{theory:accelerationTM, theory:velocityTM}
 	}
 
 	theory:projSpeed	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectVel"];

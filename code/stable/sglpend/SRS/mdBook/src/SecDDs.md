@@ -51,7 +51,7 @@ This section collects and defines all the data needed to build the instance mode
 |Description|<ul><li>\\(f\\) is the frequency (\\({\text{Hz}}\\))</li><li>\\(T\\) is the period (\\({\text{s}}\\))</li></ul>                                 |
 |Notes      |<ul><li>\\(f\\) is the number of back and forth swings in one second</li></ul>                                                                  |
 |Source     |--                                                                                                                                              |
-|RefBy      |[GD:periodPend](./SecGDs.md#GD:periodPend), [DD:periodSHMDD](./SecDDs.md#DD:periodSHMDD), and [GD:angFrequencyGD](./SecGDs.md#GD:angFrequencyGD)|
+|RefBy      |[GD:periodPend](./SecGDs.md#GD:periodPend), [GD:angFrequencyGD](./SecGDs.md#GD:angFrequencyGD), and [DD:periodSHMDD](./SecDDs.md#DD:periodSHMDD)|
 
 <div align="center">
 

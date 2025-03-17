@@ -4,14 +4,14 @@ digraph refvsref {
 	theory:accj -> linearDisplacement;
 	theory:accj -> linearVelocity;
 	theory:accj -> linearAcceleration;
-	theory:accj -> newtonSL;
+	theory:accj -> theory:newtonSL;
 	theory:accj -> theory:gravitationalAccel;
 	theory:angAccj -> angularDisplacement;
 	theory:angAccj -> angularVelocity;
 	theory:angAccj -> angularAcceleration;
-	theory:angAccj -> newtonSLR;
-	col2DIM -> p_CM;
-	col2DIM -> theory:impulseS;
+	theory:angAccj -> theory:newtonSLR;
+	theory:col2DIM -> p_CM;
+	theory:col2DIM -> theory:impulseS;
 
 
 	p_CM	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ctrOfMass"];
@@ -35,14 +35,14 @@ digraph refvsref {
 	{p_CM, linearDisplacement, linearVelocity, linearAcceleration, angularDisplacement, angularVelocity, angularAcceleration, velocityB, torque, kEnergy, restitutionCoef, v_iAB, impulseV, potEnergy, momentOfInertia}
 	}
 
-	newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
+	theory:newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
 	theory:force1	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonThirdLawMot"];
 	theory:force	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:UniversalGravLaw"];
-	newtonSLR	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawRotMot"];
+	theory:newtonSLR	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawRotMot"];
 
 	subgraph TM {
 	rank="same"
-	{newtonSL, theory:force1, theory:force, newtonSLR}
+	{theory:newtonSL, theory:force1, theory:force, theory:newtonSLR}
 	}
 
 	theory:gravitationalAccel	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelGravity"];
@@ -55,11 +55,11 @@ digraph refvsref {
 
 	theory:accj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:transMot"];
 	theory:angAccj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:rotMot"];
-	col2DIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:col2D"];
+	theory:col2DIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:col2D"];
 
 	subgraph IM {
 	rank="same"
-	{theory:accj, theory:angAccj, col2DIM}
+	{theory:accj, theory:angAccj, theory:col2DIM}
 	}
 
 }

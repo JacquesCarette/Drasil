@@ -3,7 +3,7 @@ digraph allvsall {
 	wVol -> tankVol;
 	theory:consThermECS -> assumpTEO;
 	theory:sensHeat -> assumpWAL;
-	nwtnCoolingTM -> assumpHTCC;
+	theory:nwtnCoolingTM -> assumpHTCC;
 	theory:rocTempSimpRC -> assumpCWTAT;
 	theory:rocTempSimpRC -> assumpDWCoW;
 	theory:rocTempSimpRC -> assumpSHECoW;
@@ -11,16 +11,16 @@ digraph allvsall {
 	theory:rocTempSimpRC -> theory:rocTempSimpRC;
 	theory:htFluxC -> assumpLCCCW;
 	theory:htFluxC -> assumpTHCCoT;
-	theory:htFluxC -> nwtnCoolingTM;
+	theory:htFluxC -> theory:nwtnCoolingTM;
 	theory:eBalanceOnWtrRC -> assumpWAL;
 	theory:eBalanceOnWtrRC -> assumpPIT;
 	theory:eBalanceOnWtrRC -> assumpNIHGBW;
 	theory:eBalanceOnWtrRC -> tauW;
 	theory:eBalanceOnWtrRC -> theory:rocTempSimpRC;
 	theory:eBalanceOnWtrRC -> theory:htFluxC;
-	heatEInWtrIM -> assumpWAL;
-	heatEInWtrIM -> assumpAPT;
-	heatEInWtrIM -> theory:sensHeat;
+	theory:heatEInWtrIM -> assumpWAL;
+	theory:heatEInWtrIM -> assumpAPT;
+	theory:heatEInWtrIM -> theory:sensHeat;
 	findMass -> wMass;
 	findMass -> wVol;
 	findMass -> tankVol;
@@ -30,9 +30,9 @@ digraph allvsall {
 	outputInputDerivVals -> inputValues;
 	outputInputDerivVals -> findMass;
 	calcValues -> theory:eBalanceOnWtrRC;
-	calcValues -> heatEInWtrIM;
+	calcValues -> theory:heatEInWtrIM;
 	outputValues -> theory:eBalanceOnWtrRC;
-	outputValues -> heatEInWtrIM;
+	outputValues -> theory:heatEInWtrIM;
 	likeChgTCVOD -> assumpTHCCoT;
 	likeChgTCVOL -> assumpTHCCoL;
 	likeChgDT -> assumpCTNTD;
@@ -74,11 +74,11 @@ digraph allvsall {
 
 	theory:consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
 	theory:sensHeat	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
-	nwtnCoolingTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
+	theory:nwtnCoolingTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
 
 	subgraph TM {
 	rank="same"
-	{theory:consThermECS, theory:sensHeat, nwtnCoolingTM}
+	{theory:consThermECS, theory:sensHeat, theory:nwtnCoolingTM}
 	}
 
 	theory:rocTempSimpRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];
@@ -90,11 +90,11 @@ digraph allvsall {
 	}
 
 	theory:eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
-	heatEInWtrIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
+	theory:heatEInWtrIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
 
 	subgraph IM {
 	rank="same"
-	{theory:eBalanceOnWtrRC, heatEInWtrIM}
+	{theory:eBalanceOnWtrRC, theory:heatEInWtrIM}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

@@ -546,7 +546,7 @@ instance Typed Expr Space where
   -- 1. Contain only basic numeric types inside it
   -- 2. Have a dimension of at least the grade (a 0-dimensional vector makes no sense)
   infer ctx (Clif g d e) = case infer ctx e of
-    Left t -> 
+    Left S.Real -> 
       let
         -- Check the dimensions of a clif to ensure it makes sense
         isValidDim =
@@ -557,11 +557,12 @@ instance Typed Expr Space where
             S.VDim _  -> True
       in
       -- `Clif`s must store a basic number space, not things like other clifs
-      if S.isBasicNumSpace t then
+      -- if S.isBasicNumSpace t then
         if isValidDim then
-          Left $ S.ClifS d t
+          Left $ S.ClifS d S.Real
         else Right $ "Dimension of clif (received " ++ show d ++ ") must be greater than or equal to dimension (received " ++ show d
-      else Right $ "Clifs must contain basic number spaces. Received " ++ show t
+      -- else Right $ "Clifs must contain basic number spaces. Received " ++ show t
+    Left t -> Right $ "Clifs currently only support Real numbers. Received " ++ show t
     Right x -> Right x
 
 -- verify :: Bool -> Space -> TypeError -> Either TypeError Space

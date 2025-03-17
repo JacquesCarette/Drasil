@@ -50,17 +50,23 @@ data Space where
     ClifS    :: Dimension -> Space -> Space
   deriving (Eq, Show)
 
+-- TODO: check if non-real numbers in Clifs make any sense; allowing for now to avoid errors in offending examples
+-- as we figure out matrices
+checkClifSpace :: Space -> Bool
+checkClifSpace Real = True
+checkClifSpace _ = True --error $ "Non-real clif spaces unsupported"
+
 vect2D :: Space -> Space
-vect2D s = ClifS (Fixed 2) s
+vect2D s | checkClifSpace s = ClifS (Fixed 2) s
 
 vect3D :: Space -> Space
-vect3D s = ClifS (Fixed 3) s
+vect3D s | checkClifSpace s = ClifS (Fixed 3) s
 
 vect :: Natural -> Space -> Space
-vect n s = ClifS (Fixed n) s
+vect n s | checkClifSpace s = ClifS (Fixed n) s
 
 vectND :: String -> Space -> Space
-vectND x = ClifS (VDim x)
+vectND x s | checkClifSpace s = ClifS (VDim x) s
 
 -- | The dimension of a clif
 data Dimension where

@@ -19,7 +19,7 @@ digraph avsall {
 	potEnergy -> assumpOD;
 	potEnergy -> assumpDI;
 	momentOfInertia -> assumpOT;
-	newtonSLR -> assumpOD;
+	theory:newtonSLR -> assumpOD;
 	theory:impulseS -> assumpOT;
 	theory:impulseS -> assumpOD;
 	theory:impulseS -> assumpAD;
@@ -31,12 +31,12 @@ digraph avsall {
 	theory:angAccj -> assumpOT;
 	theory:angAccj -> assumpOD;
 	theory:angAccj -> assumpAD;
-	col2DIM -> assumpOT;
-	col2DIM -> assumpOD;
-	col2DIM -> assumpAD;
-	col2DIM -> assumpCT;
-	col2DIM -> assumpDI;
-	col2DIM -> assumpCAJI;
+	theory:col2DIM -> assumpOT;
+	theory:col2DIM -> assumpOD;
+	theory:col2DIM -> assumpAD;
+	theory:col2DIM -> assumpCT;
+	theory:col2DIM -> assumpDI;
+	theory:col2DIM -> assumpCAJI;
 	lcEC -> assumpCT;
 	lcID -> assumpDI;
 	lcIJC -> assumpCAJI;
@@ -76,14 +76,14 @@ digraph avsall {
 	{p_CM, linearDisplacement, linearVelocity, linearAcceleration, angularDisplacement, angularVelocity, angularAcceleration, velocityB, torque, kEnergy, restitutionCoef, v_iAB, impulseV, potEnergy, momentOfInertia}
 	}
 
-	newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
+	theory:newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
 	theory:force1	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonThirdLawMot"];
 	theory:force	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:UniversalGravLaw"];
-	newtonSLR	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawRotMot"];
+	theory:newtonSLR	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawRotMot"];
 
 	subgraph TM {
 	rank="same"
-	{newtonSL, theory:force1, theory:force, newtonSLR}
+	{theory:newtonSL, theory:force1, theory:force, theory:newtonSLR}
 	}
 
 	theory:gravitationalAccel	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelGravity"];
@@ -96,11 +96,11 @@ digraph avsall {
 
 	theory:accj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:transMot"];
 	theory:angAccj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:rotMot"];
-	col2DIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:col2D"];
+	theory:col2DIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:col2D"];
 
 	subgraph IM {
 	rank="same"
-	{theory:accj, theory:angAccj, col2DIM}
+	{theory:accj, theory:angAccj, theory:col2DIM}
 	}
 
 	simSpace	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:simSpace"];

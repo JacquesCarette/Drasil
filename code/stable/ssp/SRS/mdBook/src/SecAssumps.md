@@ -24,7 +24,7 @@ Soil-Layers-Isotropic: The soil mass is treated as if the effective cohesion and
 
 <div id="assumpINSFL"></div>
 
-Interslice-Norm-Shear-Forces-Linear: Following the assumption of Morgenstern and Price ([morgenstern1965](./SecReferences.md#morgenstern1965)), interslice normal forces and interslice shear forces have a proportional relationship, depending on a proportionality constant (\\(λ\\)) and a function (\\(\boldsymbol{f}\\)) describing variation depending on \\(x\\) position. (RefBy: [GD:normShrR](./SecGDs.md#GD:normShrR), [IM:fctSfty](./SecIMs.md#IM:fctSfty), [IM:nrmShrFor](./SecIMs.md#IM:nrmShrFor), and [UC:Normal-And-Shear-Linear-Only](./SecUCs.md#UC_normshearlinear).)
+Interslice-Norm-Shear-Forces-Linear: Following the assumption of Morgenstern and Price ([morgenstern1965](./SecReferences.md#morgenstern1965)), interslice normal forces and interslice shear forces have a proportional relationship, depending on a proportionality constant (\\(λ\\)) and a function (\\(\boldsymbol{f}\\)) describing variation depending on \\(x\\) position. (RefBy: [IM:nrmShrFor](./SecIMs.md#IM:nrmShrFor), [GD:normShrR](./SecGDs.md#GD:normShrR), [IM:fctSfty](./SecIMs.md#IM:fctSfty), and [UC:Normal-And-Shear-Linear-Only](./SecUCs.md#UC_normshearlinear).)
 
 <div id="assumpPSC"></div>
 
@@ -36,19 +36,19 @@ Effective-Norm-Stress-Large: The effective normal stress is large enough that th
 
 <div id="assumpSBSBISL"></div>
 
-Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice are approximated as straight lines. (RefBy: [GD:srfWtrF](./SecGDs.md#GD:srfWtrF), [GD:sliceWght](./SecGDs.md#GD:sliceWght), [GD:baseWtrF](./SecGDs.md#GD:baseWtrF), [TM:mcShrStrgth](./SecTMs.md#TM:mcShrStrgth), [DD:slcHeight](./SecDDs.md#DD:slcHeight), [DD:angleB](./SecDDs.md#DD:angleB), and [DD:angleA](./SecDDs.md#DD:angleA).)
+Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice are approximated as straight lines. (RefBy: [GD:srfWtrF](./SecGDs.md#GD:srfWtrF), [GD:sliceWght](./SecGDs.md#GD:sliceWght), [TM:mcShrStrgth](./SecTMs.md#TM:mcShrStrgth), [GD:baseWtrF](./SecGDs.md#GD:baseWtrF), [DD:slcHeight](./SecDDs.md#DD:slcHeight), [DD:angleB](./SecDDs.md#DD:angleB), and [DD:angleA](./SecDDs.md#DD:angleA).)
 
 <div id="assumpES"></div>
 
-Edge-Slices: The interslice forces at the 0th and \\(n\\)th interslice interfaces are zero. (RefBy: [IM:intsliceFs](./SecIMs.md#IM:intsliceFs), [IM:fctSfty](./SecIMs.md#IM:fctSfty), and [IM:nrmShrFor](./SecIMs.md#IM:nrmShrFor).)
+Edge-Slices: The interslice forces at the 0th and \\(n\\)th interslice interfaces are zero. (RefBy: [IM:nrmShrFor](./SecIMs.md#IM:nrmShrFor), [IM:intsliceFs](./SecIMs.md#IM:intsliceFs), and [IM:fctSfty](./SecIMs.md#IM:fctSfty).)
 
 <div id="assumpSF"></div>
 
-Seismic-Force: There is no seismic force acting on the slope. (RefBy: [IM:fctSfty](./SecIMs.md#IM:fctSfty), [IM:nrmShrFor](./SecIMs.md#IM:nrmShrFor), and [LC:Calculate-Seismic-Force](./SecLCs.md#LC_seismic).)
+Seismic-Force: There is no seismic force acting on the slope. (RefBy: [IM:nrmShrFor](./SecIMs.md#IM:nrmShrFor), [IM:fctSfty](./SecIMs.md#IM:fctSfty), and [LC:Calculate-Seismic-Force](./SecLCs.md#LC_seismic).)
 
 <div id="assumpSL"></div>
 
-Surface-Load: There is no imposed surface load, and therefore no external forces, acting on the slope. (RefBy: [IM:fctSfty](./SecIMs.md#IM:fctSfty), [IM:nrmShrFor](./SecIMs.md#IM:nrmShrFor), and [LC:Calculate-External-Force](./SecLCs.md#LC_external).)
+Surface-Load: There is no imposed surface load, and therefore no external forces, acting on the slope. (RefBy: [IM:nrmShrFor](./SecIMs.md#IM:nrmShrFor), [IM:fctSfty](./SecIMs.md#IM:fctSfty), and [LC:Calculate-External-Force](./SecLCs.md#LC_external).)
 
 <div id="assumpWIBE"></div>
 

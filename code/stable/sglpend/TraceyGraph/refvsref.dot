@@ -1,14 +1,14 @@
 digraph refvsref {
 	angularFrequency -> period;
 	period -> frequency;
-	angFrequencyGD -> frequency;
-	angFrequencyGD -> newtonSLR;
-	periodPendGD -> frequency;
-	periodPendGD -> angularFrequency;
-	periodPendGD -> period;
-	periodPendGD -> angFrequencyGD;
-	angularDisplacementIM -> newtonSLR;
-	angularDisplacementIM -> angFrequencyGD;
+	theory:angFrequencyGD -> frequency;
+	theory:angFrequencyGD -> theory:newtonSLR;
+	theory:periodPendGD -> frequency;
+	theory:periodPendGD -> angularFrequency;
+	theory:periodPendGD -> period;
+	theory:periodPendGD -> theory:angFrequencyGD;
+	theory:angularDisplacementIM -> theory:newtonSLR;
+	theory:angularDisplacementIM -> theory:angFrequencyGD;
 
 
 	ixPos	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionIX"];
@@ -22,35 +22,35 @@ digraph refvsref {
 	{ixPos, iyPos, frequency, angularFrequency, period}
 	}
 
-	accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];
-	velocityTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:velocity"];
-	newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
-	newtonSLR	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawRotMot"];
+	theory:accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];
+	theory:velocityTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:velocity"];
+	theory:newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
+	theory:newtonSLR	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawRotMot"];
 
 	subgraph TM {
 	rank="same"
-	{accelerationTM, velocityTM, newtonSL, newtonSLR}
+	{theory:accelerationTM, theory:velocityTM, theory:newtonSL, theory:newtonSLR}
 	}
 
 	theory:xVel	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityIX"];
 	theory:yVel	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityIY"];
 	theory:xScalAcc	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationIX"];
 	theory:yScalAcc	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationIY"];
-	hForceOnPendulum	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:hForceOnPendulum"];
-	vForceOnPendulum	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:vForceOnPendulum"];
-	angFrequencyGD	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:angFrequencyGD"];
-	periodPendGD	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:periodPend"];
+	theory:hForceOnPendulum	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:hForceOnPendulum"];
+	theory:vForceOnPendulum	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:vForceOnPendulum"];
+	theory:angFrequencyGD	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:angFrequencyGD"];
+	theory:periodPendGD	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:periodPend"];
 
 	subgraph GD {
 	rank="same"
-	{theory:xVel, theory:yVel, theory:xScalAcc, theory:yScalAcc, hForceOnPendulum, vForceOnPendulum, angFrequencyGD, periodPendGD}
+	{theory:xVel, theory:yVel, theory:xScalAcc, theory:yScalAcc, theory:hForceOnPendulum, theory:vForceOnPendulum, theory:angFrequencyGD, theory:periodPendGD}
 	}
 
-	angularDisplacementIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngularDisplacement"];
+	theory:angularDisplacementIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngularDisplacement"];
 
 	subgraph IM {
 	rank="same"
-	{angularDisplacementIM}
+	{theory:angularDisplacementIM}
 	}
 
 }

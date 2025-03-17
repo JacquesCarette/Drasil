@@ -1,12 +1,12 @@
 digraph refvsref {
 	wVol -> tankVol;
 	meltFrac -> htFusion;
-	theory:sensHeat -> latentHtETM;
-	latentHtETM -> meltFrac;
+	theory:sensHeat -> theory:latentHtETM;
+	theory:latentHtETM -> meltFrac;
 	theory:rocTempSimpRC -> theory:consThermECS;
 	theory:rocTempSimpRC -> theory:rocTempSimpRC;
-	theory:htFluxC -> nwtnCoolingTM;
-	theory:htFluxP -> nwtnCoolingTM;
+	theory:htFluxC -> theory:nwtnCoolingTM;
+	theory:htFluxP -> theory:nwtnCoolingTM;
 	theory:eBalanceOnWtrRC -> tauW;
 	theory:eBalanceOnWtrRC -> eta;
 	theory:eBalanceOnWtrRC -> theory:rocTempSimpRC;
@@ -21,10 +21,10 @@ digraph refvsref {
 	theory:eBalanceOnPCMRC -> theory:htFluxP;
 	theory:eBalanceOnPCMRC -> theory:eBalanceOnWtrRC;
 	theory:eBalanceOnPCMRC -> theory:heatEInPCMRC;
-	heatEInWtrIM -> theory:sensHeat;
+	theory:heatEInWtrIM -> theory:sensHeat;
 	theory:heatEInPCMRC -> htFusion;
 	theory:heatEInPCMRC -> theory:sensHeat;
-	theory:heatEInPCMRC -> latentHtETM;
+	theory:heatEInPCMRC -> theory:latentHtETM;
 
 
 	wMass	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterMass"];
@@ -45,12 +45,12 @@ digraph refvsref {
 
 	theory:consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
 	theory:sensHeat	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
-	latentHtETM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:latentHtE"];
-	nwtnCoolingTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
+	theory:latentHtETM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:latentHtE"];
+	theory:nwtnCoolingTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
 
 	subgraph TM {
 	rank="same"
-	{theory:consThermECS, theory:sensHeat, latentHtETM, nwtnCoolingTM}
+	{theory:consThermECS, theory:sensHeat, theory:latentHtETM, theory:nwtnCoolingTM}
 	}
 
 	theory:rocTempSimpRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];
@@ -64,12 +64,12 @@ digraph refvsref {
 
 	theory:eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
 	theory:eBalanceOnPCMRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnPCM"];
-	heatEInWtrIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
+	theory:heatEInWtrIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
 	theory:heatEInPCMRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInPCM"];
 
 	subgraph IM {
 	rank="same"
-	{theory:eBalanceOnWtrRC, theory:eBalanceOnPCMRC, heatEInWtrIM, theory:heatEInPCMRC}
+	{theory:eBalanceOnWtrRC, theory:eBalanceOnPCMRC, theory:heatEInWtrIM, theory:heatEInPCMRC}
 	}
 
 }

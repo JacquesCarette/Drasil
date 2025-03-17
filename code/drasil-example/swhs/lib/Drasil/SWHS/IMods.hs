@@ -10,6 +10,8 @@ import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import Control.Lens((^.))
 
+import Data.Drasil.Citations
+
 import Data.Drasil.Concepts.Documentation (assumption, condition, constraint,
   goal, input_, solution, output_)
 import Data.Drasil.Concepts.Math (change, equation, ode, rightSide, rOfChng, surArea)
@@ -27,7 +29,6 @@ import Drasil.SWHS.DataDefs (ddHtFusion, ddMeltFrac, balanceDecayRate,
 import Drasil.SWHS.Derivations
 import Drasil.SWHS.GenDefs (htFluxWaterFromCoil, htFluxPCMFromWater, rocTempSimp)
 import Drasil.SWHS.Goals (waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS)
-import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htFluxC, htFluxP, htCapLP,
   htCapSP, htCapW, htFusion, latentEP, meltFrac, pcmE, pcmHTC, pcmInitMltE,

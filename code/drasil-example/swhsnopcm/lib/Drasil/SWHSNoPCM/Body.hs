@@ -52,6 +52,7 @@ import Drasil.SWHS.Unitals (coilSAMax, deltaT, htFluxC, htFluxIn,
   htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW,
   tempEnv, tempW, thFluxVect, volHtGen, watE,
   wMass, wVol, unitalChuncks, absTol, relTol)
+import Drasil.SWHS.References (uriReferences)
 
 import Drasil.SWHSNoPCM.Assumptions
 import Drasil.SWHSNoPCM.Changes (likelyChgs, unlikelyChgs)
@@ -213,7 +214,7 @@ symbMap = cdb symbolsAll (nw progName : map nw symbols ++ map nw acronyms ++ map
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef, externalLinkRef']
+allRefs = [externalLinkRef, externalLinkRef'] ++ uriReferences
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw symbols ++ map nw acronyms)

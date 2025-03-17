@@ -100,11 +100,11 @@ fillSecAndLC dd si = si2
     chkdb2 = set labelledcontentTable (idMap $ nub $ existingLC ++ allLC) chkdb
     -- return the filled in system information
     si2 = set sysinfodb chkdb2 si
-    
+
     -- Helper and finder functions
     findAllSec :: Section -> [Section]
     findAllSec s@(Section _ cs _) = s : concatMap findAllSubSec cs
-    
+
     findAllSubSec :: SecCons -> [Section]
     findAllSubSec (Sub s) = findAllSec s
     findAllSubSec _ = []
@@ -114,7 +114,7 @@ fillSecAndLC dd si = si2
 
     findLCSecCons :: SecCons -> [LabelledContent]
     findLCSecCons (Sub s) = findAllLC s
-    findLCSecCons (Con (LlC lblcons)) = [lblcons]
+    findLCSecCons (Con (LlC lblcons@(LblC {_ctype = Figure {}}))) = [lblcons]
     findLCSecCons _ = []
 
 -- | Takes in existing information from the Chunk database to construct a database of references.
@@ -201,7 +201,7 @@ mkSections si dd = map doit dd
     doit (IntroSec is)        = mkIntroSec si is
     doit (StkhldrSec sts)     = mkStkhldrSec sts
     doit (SSDSec ss)          = mkSSDSec si ss
-    doit (AuxConstntSec acs)  = mkAuxConsSec acs 
+    doit (AuxConstntSec acs)  = mkAuxConsSec acs
     doit Bibliography         = mkBib (citeDB si)
     doit (GSDSec gs')         = mkGSDSec gs'
     doit (ReqrmntSec r)       = mkReqrmntSec r
@@ -238,10 +238,10 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
     -- error out because some of the symbols in tables are only `QuantityDict`s, and thus
     -- missing a `Concept`.
     mkSubRef SI {_quants = v, _sysinfodb = cdb} (TSymb con) =
-      SRS.tOfSymb 
+      SRS.tOfSymb
       [tsIntro con,
                 LlC $ table Equational (sortBySymbol
-                $ filter (`hasStageSymbol` Equational) 
+                $ filter (`hasStageSymbol` Equational)
                 (nub $ map qw v ++ ccss' (getDocDesc dd) (egetDocDesc dd) cdb))
                 atStart] []
     mkSubRef SI {_sysinfodb = cdb} (TSymb' f con) =
@@ -255,7 +255,7 @@ mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
 mkTSymb v f c = SRS.tOfSymb [tsIntro c,
   LlC $ table Equational
     (sortBy (compsy `on` eqSymb) $ filter (`hasStageSymbol` Equational) (nub v))
-    (lf f)] 
+    (lf f)]
     []
   where lf Term = atStart
         lf Defn = capSent . (^. defn)
@@ -319,7 +319,7 @@ mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSub
   where mkSubPD (TermsAndDefs sen concepts) = SSD.termDefnF sen concepts
         mkSubPD (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
         mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g) (length g)
-                
+
 
 -- | Helper for making the Solution Characteristics Specification section.
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
@@ -392,7 +392,7 @@ mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
   where
     trace = map (\(TraceConfig u _ desc cols rows) ->
       TM.generateTraceTableView u desc cols rows si) fProgs
-    fProgs = filter (\(TraceConfig _ _ _ cols rows) -> 
+    fProgs = filter (\(TraceConfig _ _ _ cols rows) ->
       not $ null (header (TM.layoutUIDs rows sidb) si)
          || null (header (TM.layoutUIDs cols sidb) si)) progs
     sidb = si ^. sysinfodb
@@ -405,7 +405,7 @@ header f = TM.traceMHeader (f . Map.keys . (^. refbyTable))
 
 -- | Helper for making the Off-the-Shelf Solutions section.
 mkOffShelfSolnSec :: OffShelfSolnsSec -> Section
-mkOffShelfSolnSec (OffShelfSolnsProg cs) = SRS.offShelfSol cs [] 
+mkOffShelfSolnSec (OffShelfSolnsProg cs) = SRS.offShelfSol cs []
 
 -- ** Auxiliary Constants
 

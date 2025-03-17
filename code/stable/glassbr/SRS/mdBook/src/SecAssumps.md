@@ -16,7 +16,7 @@ explainScenario: This system only considers the external explosion scenario for 
 
 <div id="assumpSV"></div>
 
-standardValues: The values provided in [Sec:Values of Auxiliary Constants](./SecAuxConstants.md#Sec:AuxConstants) are assumed for the duration of load (\\({t\_{\text{d}}}\\)), and the material properties of \\(m\\), \\(k\\), and \\(E\\). (RefBy: [IM:sdfTol](./SecIMs.md#IM:sdfTol), [IM:nFL](./SecIMs.md#IM:nFL), [IM:dimlessLoad](./SecIMs.md#IM:dimlessLoad), [LC:Variable-Values-of-m,k,E](./SecLCs.md#varValsOfmkE), [DD:loadDurFactor](./SecDDs.md#DD:loadDurFactor), and [A:ldfConstant](./SecAssumps.md#assumpLDFC).)
+standardValues: The values provided in [Sec:Values of Auxiliary Constants](./SecAuxConstants.md#Sec:AuxConstants) are assumed for the duration of load (\\({t\_{\text{d}}}\\)), and the material properties of \\(m\\), \\(k\\), and \\(E\\). (RefBy: [IM:sdfTol](./SecIMs.md#IM:sdfTol), [IM:nFL](./SecIMs.md#IM:nFL), [IM:dimlessLoad](./SecIMs.md#IM:dimlessLoad), [DD:loadDurFactor](./SecDDs.md#DD:loadDurFactor), [LC:Variable-Values-of-m,k,E](./SecLCs.md#varValsOfmkE), and [A:ldfConstant](./SecAssumps.md#assumpLDFC).)
 
 <div id="assumpGL"></div>
 
@@ -32,4 +32,4 @@ responseType: The response type considered in GlassBR is flexural. (RefBy: [LC:C
 
 <div id="assumpLDFC"></div>
 
-ldfConstant: With reference to [A:standardValues](./SecAssumps.md#assumpSV), the value of load duration factor (\\(\mathit{LDF}\\)) is a constant in GlassBR. (RefBy: [LC:Variable-Values-of-m,k,E](./SecLCs.md#varValsOfmkE) and [DD:loadDurFactor](./SecDDs.md#DD:loadDurFactor).)
+ldfConstant: With reference to [A:standardValues](./SecAssumps.md#assumpSV), the value of load duration factor (\\(\mathit{LDF}\\)) is a constant in GlassBR. (RefBy: [DD:loadDurFactor](./SecDDs.md#DD:loadDurFactor) and [LC:Variable-Values-of-m,k,E](./SecLCs.md#varValsOfmkE).)

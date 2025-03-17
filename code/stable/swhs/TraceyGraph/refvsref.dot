@@ -1,46 +1,46 @@
 digraph refvsref {
-	wVol -> tankVol;
-	meltFrac -> htFusion;
+	dataDefn:wVol -> dataDefn:tankVol;
+	dataDefn:meltFrac -> dataDefn:htFusion;
 	theory:sensHeat -> theory:latentHtETM;
-	theory:latentHtETM -> meltFrac;
+	theory:latentHtETM -> dataDefn:meltFrac;
 	theory:rocTempSimpRC -> theory:consThermECS;
 	theory:rocTempSimpRC -> theory:rocTempSimpRC;
 	theory:htFluxC -> theory:nwtnCoolingTM;
 	theory:htFluxP -> theory:nwtnCoolingTM;
-	theory:eBalanceOnWtrRC -> tauW;
-	theory:eBalanceOnWtrRC -> eta;
+	theory:eBalanceOnWtrRC -> dataDefn:tauW;
+	theory:eBalanceOnWtrRC -> dataDefn:eta;
 	theory:eBalanceOnWtrRC -> theory:rocTempSimpRC;
 	theory:eBalanceOnWtrRC -> theory:htFluxC;
 	theory:eBalanceOnWtrRC -> theory:htFluxP;
 	theory:eBalanceOnWtrRC -> theory:eBalanceOnWtrRC;
 	theory:eBalanceOnWtrRC -> theory:eBalanceOnPCMRC;
-	theory:eBalanceOnPCMRC -> tauSP;
-	theory:eBalanceOnPCMRC -> tauLP;
-	theory:eBalanceOnPCMRC -> meltFrac;
+	theory:eBalanceOnPCMRC -> dataDefn:tauSP;
+	theory:eBalanceOnPCMRC -> dataDefn:tauLP;
+	theory:eBalanceOnPCMRC -> dataDefn:meltFrac;
 	theory:eBalanceOnPCMRC -> theory:rocTempSimpRC;
 	theory:eBalanceOnPCMRC -> theory:htFluxP;
 	theory:eBalanceOnPCMRC -> theory:eBalanceOnWtrRC;
 	theory:eBalanceOnPCMRC -> theory:heatEInPCMRC;
 	theory:heatEInWtrIM -> theory:sensHeat;
-	theory:heatEInPCMRC -> htFusion;
+	theory:heatEInPCMRC -> dataDefn:htFusion;
 	theory:heatEInPCMRC -> theory:sensHeat;
 	theory:heatEInPCMRC -> theory:latentHtETM;
 
 
-	wMass	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterMass"];
-	wVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterVolume.pcm"];
-	tankVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:tankVolume"];
-	tauW	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceDecayRate"];
-	eta	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceDecayTime"];
-	tauSP	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceSolidPCM"];
-	tauLP	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceLiquidPCM"];
-	htFusion	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:htFusion"];
-	meltFrac	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:meltFrac"];
-	aspectRatio	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:aspectRatio"];
+	dataDefn:wMass	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterMass"];
+	dataDefn:wVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterVolume.pcm"];
+	dataDefn:tankVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:tankVolume"];
+	dataDefn:tauW	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceDecayRate"];
+	dataDefn:eta	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceDecayTime"];
+	dataDefn:tauSP	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceSolidPCM"];
+	dataDefn:tauLP	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceLiquidPCM"];
+	dataDefn:htFusion	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:htFusion"];
+	dataDefn:meltFrac	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:meltFrac"];
+	dataDefn:aspectRatio	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:aspectRatio"];
 
 	subgraph DD {
 	rank="same"
-	{wMass, wVol, tankVol, tauW, eta, tauSP, tauLP, htFusion, meltFrac, aspectRatio}
+	{dataDefn:wMass, dataDefn:wVol, dataDefn:tankVol, dataDefn:tauW, dataDefn:eta, dataDefn:tauSP, dataDefn:tauLP, dataDefn:htFusion, dataDefn:meltFrac, dataDefn:aspectRatio}
 	}
 
 	theory:consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];

@@ -191,15 +191,15 @@ makeLenses ''ChunkDB
 --     * 'TheoryModel's (for 'TheoryModelMap'),
 --     * 'ConceptInstance's (for 'ConceptInstanceMap'),
 --     * 'LabelledContent's (for 'LabelledContentMap').
-cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =>
-    [q] -> [t] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
+cdb :: (Quantity q, MayHaveUnit q, Concept c, IsUnit u) =>
+    [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
     [GenDefn] -> [TheoryModel] -> [ConceptInstance] ->
     [LabelledContent] -> [Reference] -> ChunkDB
 cdb s t c u d ins gd tm ci lc r = 
   CDB {
     -- CHUNKS
     symbolTable = symbolMap s,
-    termTable = termMap t,
+    termTable = termMap $ t ++ termsHACK,
     defTable = conceptMap c,
     _unitTable = unitMap u,
     _dataDefnTable = idMap d,
@@ -213,6 +213,8 @@ cdb s t c u d ins gd tm ci lc r =
     _refbyTable = Map.empty,
     _refTable = idMap r
   }
+  where
+    termsHACK = map nw d
 
 -- | Gets the units of a 'Quantity' as 'UnitDefn's.
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]

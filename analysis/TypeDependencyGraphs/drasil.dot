@@ -1031,14 +1031,14 @@ digraph alltypes {
 		ChunkDB -> TermMap;
 		ChunkDB -> ConceptMap;
 		ChunkDB -> UnitMap;
-		ChunkDB -> TraceMap;
-		ChunkDB -> RefbyMap;
 		ChunkDB -> DatadefnMap;
 		ChunkDB -> InsModelMap;
 		ChunkDB -> GendefMap;
 		ChunkDB -> TheoryModelMap;
 		ChunkDB -> ConceptInstanceMap;
 		ChunkDB -> LabelledContentMap;
+		ChunkDB -> TraceMap;
+		ChunkDB -> RefbyMap;
 		ChunkDB -> ReferenceMap;
 		}
 		subgraph umapa{

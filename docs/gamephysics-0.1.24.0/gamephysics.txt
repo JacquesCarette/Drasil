@@ -45,11 +45,13 @@ unlikelyChgs :: [ConceptInstance]
 
 module Drasil.GamePhysics.References
 chaslesWiki :: Citation
+jfBeucheIntro :: Citation
+parnas1978 :: Citation
+sciComp2013 :: Citation
 citations :: BibRef
-koothoor2013 :: Citation
-smithEtAl2007 :: Citation
-smithLai2005 :: Citation
-smithKoothoor2016 :: Citation
+uriReferences :: [Reference]
+accelGravitySrc :: Reference
+impulseSrc :: Reference
 
 module Drasil.GamePhysics.Requirements
 funcReqs :: [ConceptInstance]

@@ -17,7 +17,7 @@ module Database.Drasil
 --   turn, these maps must contain every chunk definition or concept used
 --   in its respective example, else an error is thrown.
 data ChunkDB
-CDB :: SymbolMap -> TermMap -> ConceptMap -> UnitMap -> TraceMap -> RefbyMap -> DatadefnMap -> InsModelMap -> GendefMap -> TheoryModelMap -> ConceptInstanceMap -> LabelledContentMap -> ReferenceMap -> ChunkDB
+CDB :: SymbolMap -> TermMap -> ConceptMap -> UnitMap -> DatadefnMap -> InsModelMap -> GendefMap -> TheoryModelMap -> ConceptInstanceMap -> LabelledContentMap -> TraceMap -> RefbyMap -> ReferenceMap -> ChunkDB
 
 -- | A reference map, used to hold a <a>UID</a> and where it is referenced
 --   (<a>UID</a>s).

@@ -36,12 +36,11 @@ module Drasil.SWHS.References
 citations :: BibRef
 bueche1986 :: Citation
 incroperaEtAl2007 :: Citation
-koothoor2013 :: Citation
 lightstone2012 :: Citation
-parnasClements1986 :: Citation
-smithEtAl2007 :: Citation
-smithLai2005 :: Citation
-smithKoothoor2016 :: Citation
+uriReferences :: [Reference]
+consThemESrc :: Reference
+latHtESrc :: Reference
+sensHtESrc :: Reference
 
 module Drasil.SWHS.Unitals
 symbols :: [DefinedQuantityDict]
@@ -266,6 +265,7 @@ nwtnCooling :: TheoryModel
 sensHtE :: TheoryModel
 sensHtETemplate :: PhaseChange -> Sentence -> TheoryModel
 tMods :: [TheoryModel]
+consThemESrc :: Reference
 
 module Drasil.SWHS.GenDefs
 genDefs :: [GenDefn]

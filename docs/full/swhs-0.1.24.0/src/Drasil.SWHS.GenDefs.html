@@ -7,39 +7,40 @@
 </span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span>
 </span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
 </span><span id="line-9"></span><span>
-</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">rOfChng</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">unit_</span></span><span class="hs-special">)</span><span>
-</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Thermodynamics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">lawConvCooling</span></span><span class="hs-special">)</span><span>
-</span><span id="line-12"></span><span>
-</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">uNormalVect</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">surface</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">gradient</span></span><span class="hs-special">)</span><span>
-</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.PhysicalProperties</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QPP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">vol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">density</span></span><span class="hs-special">)</span><span>
-</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">)</span><span>
-</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Thermodynamics</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QT</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">heatCapSpec</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">temp</span></span><span class="hs-special">)</span><span>
-</span><span id="line-17"></span><span>
-</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html"><span class="hs-identifier">Drasil.SWHS.Assumptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpCWTAT"><span class="hs-identifier">assumpCWTAT</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpLCCCW"><span class="hs-identifier">assumpLCCCW</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpLCCWP"><span class="hs-identifier">assumpLCCWP</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-19"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpTPCAV"><span class="hs-identifier">assumpTPCAV</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpDWPCoV"><span class="hs-identifier">assumpDWPCoV</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpSHECoV"><span class="hs-identifier">assumpSHECoV</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpTHCCoT"><span class="hs-identifier">assumpTHCCoT</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.Concepts.html"><span class="hs-identifier">Drasil.SWHS.Concepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.Concepts.html#coil"><span class="hs-identifier">coil</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Concepts.html#gaussDiv"><span class="hs-identifier">gaussDiv</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Concepts.html#phaseChangeMaterial"><span class="hs-identifier">phaseChangeMaterial</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.References.html"><span class="hs-identifier">Drasil.SWHS.References</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">koothoor2013</span></span><span class="hs-special">)</span><span>
-</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.TMods.html"><span class="hs-identifier">Drasil.SWHS.TMods</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.TMods.html#consThermE"><span class="hs-identifier">consThermE</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.TMods.html#nwtnCooling"><span class="hs-identifier">nwtnCooling</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-23"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html"><span class="hs-identifier">Drasil.SWHS.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.Unitals.html#coilHTC"><span class="hs-identifier">coilHTC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htFluxC"><span class="hs-identifier">htFluxC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htFluxIn"><span class="hs-identifier">htFluxIn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htFluxOut"><span class="hs-identifier">htFluxOut</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htFluxP"><span class="hs-identifier">htFluxP</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-24"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#inSA"><span class="hs-identifier">inSA</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#outSA"><span class="hs-identifier">outSA</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#pcmHTC"><span class="hs-identifier">pcmHTC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tempC"><span class="hs-identifier">tempC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tempPCM"><span class="hs-identifier">tempPCM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tempW"><span class="hs-identifier">tempW</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#thFluxVect"><span class="hs-identifier">thFluxVect</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#volHtGen"><span class="hs-identifier">volHtGen</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-25"></span><span>
-</span><span id="line-26"></span><span class="hs-comment">-------------------------</span><span>
-</span><span id="line-27"></span><span class="hs-comment">-- General Definitions --</span><span>
-</span><span id="line-28"></span><span class="hs-comment">-------------------------</span><span>
-</span><span id="line-29"></span><span>
-</span><span id="line-30"></span><span class="hs-comment">--FIXME: genDefs, nwtnCoolingGD, and rocTempSimpGD were added--</span><span>
-</span><span id="line-31"></span><span class="hs-comment">--since referencing implementation for RelationConcept hasn't--</span><span>
-</span><span id="line-32"></span><span class="hs-comment">--stabilized yet (since RelationConcept isn't an instance of --</span><span>
-</span><span id="line-33"></span><span class="hs-comment">--the Referable class.                                       --</span><span>
-</span><span id="line-34"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#genDefs"><span class="hs-identifier hs-type">genDefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span class="hs-special">]</span><span>
-</span><span id="line-35"></span><span id="genDefs"><span class="annot"><span class="annottext">genDefs :: [GenDefn]
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Citations</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">koothoor2013</span></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">rOfChng</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">unit_</span></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Thermodynamics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">lawConvCooling</span></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">uNormalVect</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">surface</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">gradient</span></span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.PhysicalProperties</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QPP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">vol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">density</span></span><span class="hs-special">)</span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">)</span><span>
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Thermodynamics</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QT</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">heatCapSpec</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">temp</span></span><span class="hs-special">)</span><span>
+</span><span id="line-19"></span><span>
+</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html"><span class="hs-identifier">Drasil.SWHS.Assumptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpCWTAT"><span class="hs-identifier">assumpCWTAT</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpLCCCW"><span class="hs-identifier">assumpLCCCW</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpLCCWP"><span class="hs-identifier">assumpLCCWP</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-21"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpTPCAV"><span class="hs-identifier">assumpTPCAV</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpDWPCoV"><span class="hs-identifier">assumpDWPCoV</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpSHECoV"><span class="hs-identifier">assumpSHECoV</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpTHCCoT"><span class="hs-identifier">assumpTHCCoT</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.Concepts.html"><span class="hs-identifier">Drasil.SWHS.Concepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.Concepts.html#coil"><span class="hs-identifier">coil</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Concepts.html#gaussDiv"><span class="hs-identifier">gaussDiv</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Concepts.html#phaseChangeMaterial"><span class="hs-identifier">phaseChangeMaterial</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-23"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.TMods.html"><span class="hs-identifier">Drasil.SWHS.TMods</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.TMods.html#consThermE"><span class="hs-identifier">consThermE</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.TMods.html#nwtnCooling"><span class="hs-identifier">nwtnCooling</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-24"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html"><span class="hs-identifier">Drasil.SWHS.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.Unitals.html#coilHTC"><span class="hs-identifier">coilHTC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htFluxC"><span class="hs-identifier">htFluxC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htFluxIn"><span class="hs-identifier">htFluxIn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htFluxOut"><span class="hs-identifier">htFluxOut</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htFluxP"><span class="hs-identifier">htFluxP</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-25"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#inSA"><span class="hs-identifier">inSA</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#outSA"><span class="hs-identifier">outSA</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#pcmHTC"><span class="hs-identifier">pcmHTC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tempC"><span class="hs-identifier">tempC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tempPCM"><span class="hs-identifier">tempPCM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tempW"><span class="hs-identifier">tempW</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#thFluxVect"><span class="hs-identifier">thFluxVect</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#volHtGen"><span class="hs-identifier">volHtGen</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-26"></span><span>
+</span><span id="line-27"></span><span class="hs-comment">-------------------------</span><span>
+</span><span id="line-28"></span><span class="hs-comment">-- General Definitions --</span><span>
+</span><span id="line-29"></span><span class="hs-comment">-------------------------</span><span>
+</span><span id="line-30"></span><span>
+</span><span id="line-31"></span><span class="hs-comment">--FIXME: genDefs, nwtnCoolingGD, and rocTempSimpGD were added--</span><span>
+</span><span id="line-32"></span><span class="hs-comment">--since referencing implementation for RelationConcept hasn't--</span><span>
+</span><span id="line-33"></span><span class="hs-comment">--stabilized yet (since RelationConcept isn't an instance of --</span><span>
+</span><span id="line-34"></span><span class="hs-comment">--the Referable class.                                       --</span><span>
+</span><span id="line-35"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#genDefs"><span class="hs-identifier hs-type">genDefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span class="hs-special">]</span><span>
+</span><span id="line-36"></span><span id="genDefs"><span class="annot"><span class="annottext">genDefs :: [GenDefn]
 </span><a href="Drasil.SWHS.GenDefs.html#genDefs"><span class="hs-identifier hs-var hs-var">genDefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">GenDefn
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempSimp"><span class="hs-identifier hs-var">rocTempSimp</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GenDefn
 </span><a href="Drasil.SWHS.GenDefs.html#htFluxWaterFromCoil"><span class="hs-identifier hs-var">htFluxWaterFromCoil</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GenDefn
 </span><a href="Drasil.SWHS.GenDefs.html#htFluxPCMFromWater"><span class="hs-identifier hs-var">htFluxPCMFromWater</span></a></span><span class="hs-special">]</span><span> </span><span>
-</span><span id="line-36"></span><span>
-</span><span id="line-37"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempSimp"><span class="hs-identifier hs-type">rocTempSimp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
-</span><span id="line-38"></span><span id="rocTempSimp"><span class="annot"><span class="annottext">rocTempSimp :: GenDefn
+</span><span id="line-37"></span><span>
+</span><span id="line-38"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempSimp"><span class="hs-identifier hs-type">rocTempSimp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
+</span><span id="line-39"></span><span id="rocTempSimp"><span class="annot"><span class="annottext">rocTempSimp :: GenDefn
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempSimp"><span class="hs-identifier hs-var hs-var">rocTempSimp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr
 -&gt; Maybe UnitDefn
 -&gt; Maybe Derivation
@@ -56,23 +57,23 @@ forall e. RelationConcept -&gt; ModelKind e
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempSimpRC"><span class="hs-identifier hs-var">rocTempSimpRC</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Maybe UnitDefn
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">)</span><span>
-</span><span id="line-39"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
+</span><span id="line-40"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(Derivation -&gt; Maybe Derivation) -&gt; Derivation -&gt; Maybe Derivation
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [ConceptInstance] -&gt; Derivation
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempSimpDeriv"><span class="hs-identifier hs-var">rocTempSimpDeriv</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivConsFlxSWHS"><span class="hs-identifier hs-var">rocTempDerivConsFlxSWHS</span></a></span><span>
-</span><span id="line-40"></span><span>   </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance
+</span><span id="line-41"></span><span>   </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SWHS.Assumptions.html#assumpCWTAT"><span class="hs-identifier hs-var">assumpCWTAT</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SWHS.Assumptions.html#assumpTPCAV"><span class="hs-identifier hs-var">assumpTPCAV</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SWHS.Assumptions.html#assumpDWPCoV"><span class="hs-identifier hs-var">assumpDWPCoV</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SWHS.Assumptions.html#assumpSHECoV"><span class="hs-identifier hs-var">assumpSHECoV</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-41"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-42"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;rocTempSimp&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-comment">{-Notes-}</span><span class="hs-special">]</span><span>
-</span><span id="line-42"></span><span>
-</span><span id="line-43"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempSimpRC"><span class="hs-identifier hs-type">rocTempSimpRC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">RelationConcept</span></span><span>
-</span><span id="line-44"></span><span id="rocTempSimpRC"><span class="annot"><span class="annottext">rocTempSimpRC :: RelationConcept
+</span><span id="line-43"></span><span>
+</span><span id="line-44"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempSimpRC"><span class="hs-identifier hs-type">rocTempSimpRC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">RelationConcept</span></span><span>
+</span><span id="line-45"></span><span id="rocTempSimpRC"><span class="annot"><span class="annottext">rocTempSimpRC :: RelationConcept
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempSimpRC"><span class="hs-identifier hs-var hs-var">rocTempSimpRC</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ModelExpr -&gt; RelationConcept
 forall e.
 Express e =&gt;
@@ -85,13 +86,13 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-string">&quot;Simplified rate &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-45"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-46"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;of change of temperature&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempSimpRel"><span class="hs-identifier hs-var">rocTempSimpRel</span></a></span><span>
-</span><span id="line-46"></span><span>
-</span><span id="line-47"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempSimpRel"><span class="hs-identifier hs-type">rocTempSimpRel</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
-</span><span id="line-48"></span><span id="rocTempSimpRel"><span class="annot"><span class="annottext">rocTempSimpRel :: ModelExpr
+</span><span id="line-47"></span><span>
+</span><span id="line-48"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempSimpRel"><span class="hs-identifier hs-type">rocTempSimpRel</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
+</span><span id="line-49"></span><span id="rocTempSimpRel"><span class="annot"><span class="annottext">rocTempSimpRel :: ModelExpr
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempSimpRel"><span class="hs-identifier hs-var hs-var">rocTempSimpRel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -105,7 +106,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">QT.heatCapSpec</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$*</span></span><span> </span><span>
-</span><span id="line-49"></span><span>  </span><span class="annot"><span class="annottext">ModelExpr -&gt; UnitalChunk -&gt; ModelExpr
+</span><span id="line-50"></span><span>  </span><span class="annot"><span class="annottext">ModelExpr -&gt; UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; ModelExpr -&gt; c -&gt; ModelExpr
 forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
@@ -128,7 +129,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.SWHS.Unitals.html#inSA"><span class="hs-identifier hs-var">inSA</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$-</span></span><span>
-</span><span id="line-50"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
+</span><span id="line-51"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -151,11 +152,11 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QPP.vol</span></span><span class="hs-special">)</span><span>
-</span><span id="line-51"></span><span>
-</span><span id="line-52"></span><span class="hs-comment">----</span><span>
-</span><span id="line-53"></span><span>
-</span><span id="line-54"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#htFluxWaterFromCoil"><span class="hs-identifier hs-type">htFluxWaterFromCoil</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
-</span><span id="line-55"></span><span id="htFluxWaterFromCoil"><span class="annot"><span class="annottext">htFluxWaterFromCoil :: GenDefn
+</span><span id="line-52"></span><span>
+</span><span id="line-53"></span><span class="hs-comment">----</span><span>
+</span><span id="line-54"></span><span>
+</span><span id="line-55"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#htFluxWaterFromCoil"><span class="hs-identifier hs-type">htFluxWaterFromCoil</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
+</span><span id="line-56"></span><span id="htFluxWaterFromCoil"><span class="annot"><span class="annottext">htFluxWaterFromCoil :: GenDefn
 </span><a href="Drasil.SWHS.GenDefs.html#htFluxWaterFromCoil"><span class="hs-identifier hs-var hs-var">htFluxWaterFromCoil</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr
 -&gt; Maybe UnitDefn
 -&gt; Maybe Derivation
@@ -181,14 +182,14 @@ forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><a href="Drasil.SWHS.Unitals.html#htFluxC"><span class="hs-identifier hs-var">htFluxC</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-56"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
+</span><span id="line-57"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; DecRef
 </span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Citation
 </span><span class="hs-identifier hs-var">koothoor2013</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;htFluxWaterFromCoil&quot;</span></span><span>
-</span><span id="line-57"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptInstance -&gt; ConceptChunk -&gt; Sentence
+</span><span id="line-58"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptInstance -&gt; ConceptChunk -&gt; Sentence
 </span><a href="Drasil.SWHS.GenDefs.html#newtonLawNote"><span class="hs-identifier hs-var">newtonLawNote</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#htFluxC"><span class="hs-identifier hs-var">htFluxC</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SWHS.Assumptions.html#assumpLCCCW"><span class="hs-identifier hs-var">assumpLCCCW</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -198,17 +199,17 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SWHS.Assumptions.html#assumpTHCCoT"><span class="hs-identifier hs-var">assumpTHCCoT</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-58"></span><span>
-</span><span id="line-59"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#htFluxWaterFromCoilQD"><span class="hs-identifier hs-type">htFluxWaterFromCoilQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelQDef</span></span><span>
-</span><span id="line-60"></span><span id="htFluxWaterFromCoilQD"><span class="annot"><span class="annottext">htFluxWaterFromCoilQD :: QDefinition ModelExpr
+</span><span id="line-59"></span><span>
+</span><span id="line-60"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#htFluxWaterFromCoilQD"><span class="hs-identifier hs-type">htFluxWaterFromCoilQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelQDef</span></span><span>
+</span><span id="line-61"></span><span id="htFluxWaterFromCoilQD"><span class="annot"><span class="annottext">htFluxWaterFromCoilQD :: QDefinition ModelExpr
 </span><a href="Drasil.SWHS.GenDefs.html#htFluxWaterFromCoilQD"><span class="hs-identifier hs-var hs-var">htFluxWaterFromCoilQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr -&gt; QDefinition ModelExpr
 forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#htFluxC"><span class="hs-identifier hs-var">htFluxC</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.SWHS.GenDefs.html#htFluxWaterFromCoilExpr"><span class="hs-identifier hs-var">htFluxWaterFromCoilExpr</span></a></span><span>
-</span><span id="line-61"></span><span>
-</span><span id="line-62"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#htFluxWaterFromCoilExpr"><span class="hs-identifier hs-type">htFluxWaterFromCoilExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
-</span><span id="line-63"></span><span id="htFluxWaterFromCoilExpr"><span class="annot"><span class="annottext">htFluxWaterFromCoilExpr :: ModelExpr
+</span><span id="line-62"></span><span>
+</span><span id="line-63"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#htFluxWaterFromCoilExpr"><span class="hs-identifier hs-type">htFluxWaterFromCoilExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
+</span><span id="line-64"></span><span id="htFluxWaterFromCoilExpr"><span class="annot"><span class="annottext">htFluxWaterFromCoilExpr :: ModelExpr
 </span><a href="Drasil.SWHS.GenDefs.html#htFluxWaterFromCoilExpr"><span class="hs-identifier hs-var hs-var">htFluxWaterFromCoilExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -228,12 +229,12 @@ f -&gt; a -&gt; r
 </span><span class="hs-identifier hs-var">apply1</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.SWHS.Unitals.html#tempW"><span class="hs-identifier hs-var">tempW</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span>
-</span><span id="line-64"></span><span>
-</span><span id="line-65"></span><span class="hs-comment">--Can't include info in description beyond definition of variables?</span><span>
-</span><span id="line-66"></span><span class="hs-comment">----</span><span>
-</span><span id="line-67"></span><span>
-</span><span id="line-68"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#htFluxPCMFromWater"><span class="hs-identifier hs-type">htFluxPCMFromWater</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
-</span><span id="line-69"></span><span id="htFluxPCMFromWater"><span class="annot"><span class="annottext">htFluxPCMFromWater :: GenDefn
+</span><span id="line-65"></span><span>
+</span><span id="line-66"></span><span class="hs-comment">--Can't include info in description beyond definition of variables?</span><span>
+</span><span id="line-67"></span><span class="hs-comment">----</span><span>
+</span><span id="line-68"></span><span>
+</span><span id="line-69"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#htFluxPCMFromWater"><span class="hs-identifier hs-type">htFluxPCMFromWater</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
+</span><span id="line-70"></span><span id="htFluxPCMFromWater"><span class="annot"><span class="annottext">htFluxPCMFromWater :: GenDefn
 </span><a href="Drasil.SWHS.GenDefs.html#htFluxPCMFromWater"><span class="hs-identifier hs-var hs-var">htFluxPCMFromWater</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr
 -&gt; Maybe UnitDefn
 -&gt; Maybe Derivation
@@ -259,29 +260,29 @@ forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><a href="Drasil.SWHS.Unitals.html#htFluxP"><span class="hs-identifier hs-var">htFluxP</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-70"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
+</span><span id="line-71"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; DecRef
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; DecRef
 </span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Citation
 </span><span class="hs-identifier hs-var">koothoor2013</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;htFluxPCMFromWater&quot;</span></span><span>
-</span><span id="line-71"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptInstance -&gt; ConceptChunk -&gt; Sentence
+</span><span id="line-72"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptInstance -&gt; ConceptChunk -&gt; Sentence
 </span><a href="Drasil.SWHS.GenDefs.html#newtonLawNote"><span class="hs-identifier hs-var">newtonLawNote</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#htFluxP"><span class="hs-identifier hs-var">htFluxP</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SWHS.Assumptions.html#assumpLCCWP"><span class="hs-identifier hs-var">assumpLCCWP</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.SWHS.Concepts.html#phaseChangeMaterial"><span class="hs-identifier hs-var">phaseChangeMaterial</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-72"></span><span>
-</span><span id="line-73"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#htFluxPCMFromWaterQD"><span class="hs-identifier hs-type">htFluxPCMFromWaterQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelQDef</span></span><span>
-</span><span id="line-74"></span><span id="htFluxPCMFromWaterQD"><span class="annot"><span class="annottext">htFluxPCMFromWaterQD :: QDefinition ModelExpr
+</span><span id="line-73"></span><span>
+</span><span id="line-74"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#htFluxPCMFromWaterQD"><span class="hs-identifier hs-type">htFluxPCMFromWaterQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelQDef</span></span><span>
+</span><span id="line-75"></span><span id="htFluxPCMFromWaterQD"><span class="annot"><span class="annottext">htFluxPCMFromWaterQD :: QDefinition ModelExpr
 </span><a href="Drasil.SWHS.GenDefs.html#htFluxPCMFromWaterQD"><span class="hs-identifier hs-var hs-var">htFluxPCMFromWaterQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr -&gt; QDefinition ModelExpr
 forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#htFluxP"><span class="hs-identifier hs-var">htFluxP</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.SWHS.GenDefs.html#htFluxPCMFromWaterExpr"><span class="hs-identifier hs-var">htFluxPCMFromWaterExpr</span></a></span><span>
-</span><span id="line-75"></span><span>
-</span><span id="line-76"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#htFluxPCMFromWaterExpr"><span class="hs-identifier hs-type">htFluxPCMFromWaterExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
-</span><span id="line-77"></span><span id="htFluxPCMFromWaterExpr"><span class="annot"><span class="annottext">htFluxPCMFromWaterExpr :: ModelExpr
+</span><span id="line-76"></span><span>
+</span><span id="line-77"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#htFluxPCMFromWaterExpr"><span class="hs-identifier hs-type">htFluxPCMFromWaterExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
+</span><span id="line-78"></span><span id="htFluxPCMFromWaterExpr"><span class="annot"><span class="annottext">htFluxPCMFromWaterExpr :: ModelExpr
 </span><a href="Drasil.SWHS.GenDefs.html#htFluxPCMFromWaterExpr"><span class="hs-identifier hs-var hs-var">htFluxPCMFromWaterExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -303,21 +304,21 @@ f -&gt; a -&gt; r
 </span><span class="hs-identifier hs-var">apply1</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.SWHS.Unitals.html#tempPCM"><span class="hs-identifier hs-var">tempPCM</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span>
-</span><span id="line-78"></span><span>
-</span><span id="line-79"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#newtonLawNote"><span class="hs-identifier hs-type">newtonLawNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-80"></span><span id="newtonLawNote"><span class="annot"><span class="annottext">newtonLawNote :: UnitalChunk -&gt; ConceptInstance -&gt; ConceptChunk -&gt; Sentence
-</span><a href="Drasil.SWHS.GenDefs.html#newtonLawNote"><span class="hs-identifier hs-var hs-var">newtonLawNote</span></a></span></span><span> </span><span id="local-6989586621679087681"><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679087681"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span id="local-6989586621679087682"><span class="annot"><span class="annottext">ConceptInstance
-</span><a href="#local-6989586621679087682"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679087683"><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679087683"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-79"></span><span>
+</span><span id="line-80"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#newtonLawNote"><span class="hs-identifier hs-type">newtonLawNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-81"></span><span id="newtonLawNote"><span class="annot"><span class="annottext">newtonLawNote :: UnitalChunk -&gt; ConceptInstance -&gt; ConceptChunk -&gt; Sentence
+</span><a href="Drasil.SWHS.GenDefs.html#newtonLawNote"><span class="hs-identifier hs-var hs-var">newtonLawNote</span></a></span></span><span> </span><span id="local-6989586621679087698"><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="#local-6989586621679087698"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span id="local-6989586621679087699"><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="#local-6989586621679087699"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679087700"><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="#local-6989586621679087700"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679087681"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679087698"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;found by assuming that&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-81"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+</span><span id="line-82"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">lawConvCooling</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -329,10 +330,10 @@ forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
-</span><a href="#local-6989586621679087682"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679087699"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;This law&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-82"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span id="line-83"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;defined&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -345,23 +346,23 @@ r -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;used on&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-83"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><span id="line-84"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">surface</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptChunk -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679087683"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-84"></span><span>
-</span><span id="line-85"></span><span class="hs-comment">------------------------------------</span><span>
-</span><span id="line-86"></span><span class="hs-comment">-- General Definitions Derivation --</span><span>
-</span><span id="line-87"></span><span class="hs-comment">------------------------------------</span><span>
-</span><span id="line-88"></span><span>
-</span><span id="line-89"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempSimpDeriv"><span class="hs-identifier hs-type">rocTempSimpDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
-</span><span id="line-90"></span><span id="rocTempSimpDeriv"><span class="annot"><span class="annottext">rocTempSimpDeriv :: Sentence -&gt; [ConceptInstance] -&gt; Derivation
-</span><a href="Drasil.SWHS.GenDefs.html#rocTempSimpDeriv"><span class="hs-identifier hs-var hs-var">rocTempSimpDeriv</span></a></span></span><span> </span><span id="local-6989586621679087694"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679087694"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679087695"><span class="annot"><span class="annottext">[ConceptInstance]
-</span><a href="#local-6989586621679087695"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
+</span><a href="#local-6989586621679087700"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-85"></span><span>
+</span><span id="line-86"></span><span class="hs-comment">------------------------------------</span><span>
+</span><span id="line-87"></span><span class="hs-comment">-- General Definitions Derivation --</span><span>
+</span><span id="line-88"></span><span class="hs-comment">------------------------------------</span><span>
+</span><span id="line-89"></span><span>
+</span><span id="line-90"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempSimpDeriv"><span class="hs-identifier hs-type">rocTempSimpDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
+</span><span id="line-91"></span><span id="rocTempSimpDeriv"><span class="annot"><span class="annottext">rocTempSimpDeriv :: Sentence -&gt; [ConceptInstance] -&gt; Derivation
+</span><a href="Drasil.SWHS.GenDefs.html#rocTempSimpDeriv"><span class="hs-identifier hs-var hs-var">rocTempSimpDeriv</span></a></span></span><span> </span><span id="local-6989586621679087711"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679087711"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679087712"><span class="annot"><span class="annottext">[ConceptInstance]
+</span><a href="#local-6989586621679087712"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
 </span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;simplified&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -372,36 +373,36 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">temp</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-91"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Sentence]] -&gt; [Sentence]
+</span><span id="line-92"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Sentence]] -&gt; [Sentence]
 forall a. [[a]] -&gt; [a]
 </span><span class="hs-identifier hs-var">weave</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence -&gt; [ConceptInstance] -&gt; [Sentence]
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempSimpDerivSent"><span class="hs-identifier hs-var">rocTempSimpDerivSent</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679087694"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
-</span><a href="#local-6989586621679087695"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; Sentence) -&gt; [ModelExpr] -&gt; [Sentence]
+</span><a href="#local-6989586621679087711"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
+</span><a href="#local-6989586621679087712"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; Sentence) -&gt; [ModelExpr] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempSimpDerivEqns"><span class="hs-identifier hs-var">rocTempSimpDerivEqns</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-92"></span><span>
-</span><span id="line-93"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempSimpDerivSent"><span class="hs-identifier hs-type">rocTempSimpDerivSent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-94"></span><span id="rocTempSimpDerivSent"><span class="annot"><span class="annottext">rocTempSimpDerivSent :: Sentence -&gt; [ConceptInstance] -&gt; [Sentence]
-</span><a href="Drasil.SWHS.GenDefs.html#rocTempSimpDerivSent"><span class="hs-identifier hs-var hs-var">rocTempSimpDerivSent</span></a></span></span><span> </span><span id="local-6989586621679087702"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679087702"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679087703"><span class="annot"><span class="annottext">[ConceptInstance]
-</span><a href="#local-6989586621679087703"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; Sentence) -&gt; [[Sentence]] -&gt; [Sentence]
+</span><span id="line-93"></span><span>
+</span><span id="line-94"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempSimpDerivSent"><span class="hs-identifier hs-type">rocTempSimpDerivSent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-95"></span><span id="rocTempSimpDerivSent"><span class="annot"><span class="annottext">rocTempSimpDerivSent :: Sentence -&gt; [ConceptInstance] -&gt; [Sentence]
+</span><a href="Drasil.SWHS.GenDefs.html#rocTempSimpDerivSent"><span class="hs-identifier hs-var hs-var">rocTempSimpDerivSent</span></a></span></span><span> </span><span id="local-6989586621679087719"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679087719"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679087720"><span class="annot"><span class="annottext">[ConceptInstance]
+</span><a href="#local-6989586621679087720"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; Sentence) -&gt; [[Sentence]] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSentCol</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivInteg"><span class="hs-identifier hs-var">rocTempDerivInteg</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivGauss"><span class="hs-identifier hs-var">rocTempDerivGauss</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-95"></span><span>  </span><span class="annot"><span class="annottext">[Sentence]
+</span><span id="line-96"></span><span>  </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivArbVol"><span class="hs-identifier hs-var">rocTempDerivArbVol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [ConceptInstance] -&gt; [Sentence]
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivConsFlx"><span class="hs-identifier hs-var">rocTempDerivConsFlx</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679087702"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
-</span><a href="#local-6989586621679087703"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="#local-6989586621679087719"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
+</span><a href="#local-6989586621679087720"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivDens"><span class="hs-identifier hs-var">rocTempDerivDens</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-96"></span><span>
-</span><span id="line-97"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivInteg"><span class="hs-identifier hs-type">rocTempDerivInteg</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-98"></span><span id="rocTempDerivInteg"><span class="annot"><span class="annottext">rocTempDerivInteg :: [Sentence]
+</span><span id="line-97"></span><span>
+</span><span id="line-98"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivInteg"><span class="hs-identifier hs-type">rocTempDerivInteg</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-99"></span><span id="rocTempDerivInteg"><span class="annot"><span class="annottext">rocTempDerivInteg :: [Sentence]
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivInteg"><span class="hs-identifier hs-var hs-var">rocTempDerivInteg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Integrating&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TheoryModel -&gt; Sentence
@@ -412,7 +413,7 @@ r -&gt; Sentence
 </span><a href="Drasil.SWHS.TMods.html#consThermE"><span class="hs-identifier hs-var">consThermE</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;over a&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-99"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><span id="line-100"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">vol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
@@ -423,9 +424,9 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;we have&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-100"></span><span>
-</span><span id="line-101"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivGauss"><span class="hs-identifier hs-type">rocTempDerivGauss</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-102"></span><span id="rocTempDerivGauss"><span class="annot"><span class="annottext">rocTempDerivGauss :: [Sentence]
+</span><span id="line-101"></span><span>
+</span><span id="line-102"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivGauss"><span class="hs-identifier hs-type">rocTempDerivGauss</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-103"></span><span id="rocTempDerivGauss"><span class="annot"><span class="annottext">rocTempDerivGauss :: [Sentence]
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivGauss"><span class="hs-identifier hs-var hs-var">rocTempDerivGauss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Applying&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
@@ -435,7 +436,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.toThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;first term over&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-103"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><span id="line-104"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">surface</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -450,7 +451,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;with&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-104"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><span id="line-105"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#thFluxVect"><span class="hs-identifier hs-var">thFluxVect</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -461,7 +462,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><a href="Drasil.SWHS.Unitals.html#thFluxVect"><span class="hs-identifier hs-var">thFluxVect</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;for the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-105"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><span id="line-106"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">surface</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -474,7 +475,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">unit_</span></span><span class="hs-special">,</span><span>
-</span><span id="line-106"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-107"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;outward&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -485,9 +486,9 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">surface</span></span><span class="hs-special">]</span><span>
-</span><span id="line-107"></span><span>
-</span><span id="line-108"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivArbVol"><span class="hs-identifier hs-type">rocTempDerivArbVol</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-109"></span><span id="rocTempDerivArbVol"><span class="annot"><span class="annottext">rocTempDerivArbVol :: [Sentence]
+</span><span id="line-108"></span><span>
+</span><span id="line-109"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivArbVol"><span class="hs-identifier hs-type">rocTempDerivArbVol</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-110"></span><span id="rocTempDerivArbVol"><span class="annot"><span class="annottext">rocTempDerivArbVol :: [Sentence]
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivArbVol"><span class="hs-identifier hs-var hs-var">rocTempDerivArbVol</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;We consider an arbitrary&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -495,7 +496,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">vol</span></span><span class="hs-special">,</span><span>
-</span><span id="line-110"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><span id="line-111"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
@@ -508,15 +509,15 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;can be written as&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-111"></span><span>
-</span><span id="line-112"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivConsFlx"><span class="hs-identifier hs-type">rocTempDerivConsFlx</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-113"></span><span id="rocTempDerivConsFlx"><span class="annot"><span class="annottext">rocTempDerivConsFlx :: Sentence -&gt; [ConceptInstance] -&gt; [Sentence]
-</span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivConsFlx"><span class="hs-identifier hs-var hs-var">rocTempDerivConsFlx</span></a></span></span><span> </span><span id="local-6989586621679087718"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679087718"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679087719"><span class="annot"><span class="annottext">[ConceptInstance]
-</span><a href="#local-6989586621679087719"><span class="hs-identifier hs-var">assumps</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-112"></span><span>
+</span><span id="line-113"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivConsFlx"><span class="hs-identifier hs-type">rocTempDerivConsFlx</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-114"></span><span id="rocTempDerivConsFlx"><span class="annot"><span class="annottext">rocTempDerivConsFlx :: Sentence -&gt; [ConceptInstance] -&gt; [Sentence]
+</span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivConsFlx"><span class="hs-identifier hs-var hs-var">rocTempDerivConsFlx</span></a></span></span><span> </span><span id="local-6989586621679087735"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679087735"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679087736"><span class="annot"><span class="annottext">[ConceptInstance]
+</span><a href="#local-6989586621679087736"><span class="hs-identifier hs-var">assumps</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Where&quot;</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-114"></span><span>  </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
+</span><span id="line-115"></span><span>  </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlList</span></span><span> </span><span class="annot"><span class="annottext">SepType
 </span><span class="hs-identifier hs-var">Comma</span></span><span> </span><span class="annot"><span class="annottext">FoldType
 </span><span class="hs-identifier hs-var">List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(UnitalChunk -&gt; Sentence) -&gt; [UnitalChunk] -&gt; [Sentence]
@@ -528,7 +529,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><a href="Drasil.SWHS.Unitals.html#htFluxOut"><span class="hs-identifier hs-var">htFluxOut</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#inSA"><span class="hs-identifier hs-var">inSA</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#outSA"><span class="hs-identifier hs-var">outSA</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-115"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-116"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;are explained in&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">GenDefn -&gt; Sentence
@@ -537,10 +538,10 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">GenDefn
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempSimp"><span class="hs-identifier hs-var">rocTempSimp</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679087718"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679087735"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Assuming&quot;</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-116"></span><span>  </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
+</span><span id="line-117"></span><span>  </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlList</span></span><span> </span><span class="annot"><span class="annottext">SepType
 </span><span class="hs-identifier hs-var">Comma</span></span><span> </span><span class="annot"><span class="annottext">FoldType
 </span><span class="hs-identifier hs-var">List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(UnitalChunk -&gt; Sentence) -&gt; [UnitalChunk] -&gt; [Sentence]
@@ -551,7 +552,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">density</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QT.heatCapSpec</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QT.temp</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-117"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-118"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;are constant over the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -560,7 +561,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;which is true in our case by&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-118"></span><span>  </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
+</span><span id="line-119"></span><span>  </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlList</span></span><span> </span><span class="annot"><span class="annottext">SepType
 </span><span class="hs-identifier hs-var">Comma</span></span><span> </span><span class="annot"><span class="annottext">FoldType
 </span><span class="hs-identifier hs-var">List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(ConceptInstance -&gt; Sentence) -&gt; [ConceptInstance] -&gt; [Sentence]
@@ -570,13 +571,13 @@ forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
-</span><a href="#local-6989586621679087719"><span class="hs-identifier hs-var">assumps</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679087736"><span class="hs-identifier hs-var">assumps</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;we have&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-119"></span><span>
-</span><span id="line-120"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivConsFlxSWHS"><span class="hs-identifier hs-type">rocTempDerivConsFlxSWHS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-121"></span><span id="rocTempDerivConsFlxSWHS"><span class="annot"><span class="annottext">rocTempDerivConsFlxSWHS :: Sentence
+</span><span id="line-120"></span><span>
+</span><span id="line-121"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivConsFlxSWHS"><span class="hs-identifier hs-type">rocTempDerivConsFlxSWHS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-122"></span><span id="rocTempDerivConsFlxSWHS"><span class="annot"><span class="annottext">rocTempDerivConsFlxSWHS :: Sentence
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivConsFlxSWHS"><span class="hs-identifier hs-var hs-var">rocTempDerivConsFlxSWHS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -584,13 +585,13 @@ r -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">surface</span></span><span class="hs-special">,</span><span>
-</span><span id="line-122"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-123"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;could be simplified because the thermal flux&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;assumed constant over&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-123"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><span id="line-124"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#inSA"><span class="hs-identifier hs-var">inSA</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -609,15 +610,15 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">surface</span></span><span class="hs-special">,</span><span>
-</span><span id="line-124"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-125"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Outward flux&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;considered positive&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-125"></span><span>
-</span><span id="line-126"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivDens"><span class="hs-identifier hs-type">rocTempDerivDens</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-127"></span><span id="rocTempDerivDens"><span class="annot"><span class="annottext">rocTempDerivDens :: [Sentence]
+</span><span id="line-126"></span><span>
+</span><span id="line-127"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivDens"><span class="hs-identifier hs-type">rocTempDerivDens</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-128"></span><span id="rocTempDerivDens"><span class="annot"><span class="annottext">rocTempDerivDens :: [Sentence]
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivDens"><span class="hs-identifier hs-var hs-var">rocTempDerivDens</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Using the fact that&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
@@ -632,7 +633,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">mass</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">:+:</span></span><span>
-</span><span id="line-128"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-129"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;/&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">:+:</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
@@ -644,13 +645,13 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-number">2</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;can be written as&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-129"></span><span>
-</span><span id="line-130"></span><span class="hs-comment">-- TODO: Move the below expressions to a new Expressions.hs file.</span><span>
-</span><span id="line-131"></span><span>
-</span><span id="line-132"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivIntegEq"><span class="hs-identifier hs-type">rocTempDerivIntegEq</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivGaussEq"><span class="hs-identifier hs-type">rocTempDerivGaussEq</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivArbVolEq"><span class="hs-identifier hs-type">rocTempDerivArbVolEq</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-133"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivConsFlxEq"><span class="hs-identifier hs-type">rocTempDerivConsFlxEq</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivDensEq"><span class="hs-identifier hs-type">rocTempDerivDensEq</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
-</span><span id="line-134"></span><span>
-</span><span id="line-135"></span><span id="rocTempDerivIntegEq"><span class="annot"><span class="annottext">rocTempDerivIntegEq :: ModelExpr
+</span><span id="line-130"></span><span>
+</span><span id="line-131"></span><span class="hs-comment">-- TODO: Move the below expressions to a new Expressions.hs file.</span><span>
+</span><span id="line-132"></span><span>
+</span><span id="line-133"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivIntegEq"><span class="hs-identifier hs-type">rocTempDerivIntegEq</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivGaussEq"><span class="hs-identifier hs-type">rocTempDerivGaussEq</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivArbVolEq"><span class="hs-identifier hs-type">rocTempDerivArbVolEq</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-134"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivConsFlxEq"><span class="hs-identifier hs-type">rocTempDerivConsFlxEq</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivDensEq"><span class="hs-identifier hs-type">rocTempDerivDensEq</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
+</span><span id="line-135"></span><span>
+</span><span id="line-136"></span><span id="rocTempDerivIntegEq"><span class="annot"><span class="annottext">rocTempDerivIntegEq :: ModelExpr
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivIntegEq"><span class="hs-identifier hs-var hs-var">rocTempDerivIntegEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">neg</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr
@@ -671,7 +672,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.SWHS.Unitals.html#thFluxVect"><span class="hs-identifier hs-var">thFluxVect</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$+</span></span><span>
-</span><span id="line-136"></span><span>  </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-137"></span><span>  </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr
 forall r. ModelExprC r =&gt; Symbol -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">intAll</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
@@ -683,7 +684,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.SWHS.Unitals.html#volHtGen"><span class="hs-identifier hs-var">volHtGen</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span>
-</span><span id="line-137"></span><span>  </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-138"></span><span>  </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr
 forall r. ModelExprC r =&gt; Symbol -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">intAll</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
@@ -693,7 +694,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">density</span></span><span>
-</span><span id="line-138"></span><span>  </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-139"></span><span>  </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
@@ -710,8 +711,8 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QT.temp</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span>
-</span><span id="line-139"></span><span>
-</span><span id="line-140"></span><span id="rocTempDerivGaussEq"><span class="annot"><span class="annottext">rocTempDerivGaussEq :: ModelExpr
+</span><span id="line-140"></span><span>
+</span><span id="line-141"></span><span id="rocTempDerivGaussEq"><span class="annot"><span class="annottext">rocTempDerivGaussEq :: ModelExpr
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivGaussEq"><span class="hs-identifier hs-var hs-var">rocTempDerivGaussEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">neg</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr
@@ -732,7 +733,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">uNormalVect</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$+</span></span><span>
-</span><span id="line-141"></span><span>  </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-142"></span><span>  </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr
 forall r. ModelExprC r =&gt; Symbol -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">intAll</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
@@ -744,13 +745,13 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.SWHS.Unitals.html#volHtGen"><span class="hs-identifier hs-var">volHtGen</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span> </span><span>
-</span><span id="line-142"></span><span>  </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-143"></span><span>  </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr
 forall r. ModelExprC r =&gt; Symbol -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">intAll</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">vol</span></span><span class="hs-special">)</span><span>
-</span><span id="line-143"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
+</span><span id="line-144"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -771,8 +772,8 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QT.temp</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span>
-</span><span id="line-144"></span><span>
-</span><span id="line-145"></span><span id="rocTempDerivArbVolEq"><span class="annot"><span class="annottext">rocTempDerivArbVolEq :: ModelExpr
+</span><span id="line-145"></span><span>
+</span><span id="line-146"></span><span id="rocTempDerivArbVolEq"><span class="annot"><span class="annottext">rocTempDerivArbVolEq :: ModelExpr
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivArbVolEq"><span class="hs-identifier hs-var hs-var">rocTempDerivArbVolEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -792,7 +793,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.SWHS.Unitals.html#htFluxOut"><span class="hs-identifier hs-var">htFluxOut</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$*</span></span><span> </span><span>
-</span><span id="line-146"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
+</span><span id="line-147"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -811,7 +812,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">vol</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span> </span><span>
-</span><span id="line-147"></span><span>  </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-148"></span><span>  </span><span class="annot"><span class="annottext">Symbol -&gt; ModelExpr -&gt; ModelExpr
 forall r. ModelExprC r =&gt; Symbol -&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">intAll</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
@@ -837,8 +838,8 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QT.temp</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span>
-</span><span id="line-148"></span><span>
-</span><span id="line-149"></span><span id="rocTempDerivConsFlxEq"><span class="annot"><span class="annottext">rocTempDerivConsFlxEq :: ModelExpr
+</span><span id="line-149"></span><span>
+</span><span id="line-150"></span><span id="rocTempDerivConsFlxEq"><span class="annot"><span class="annottext">rocTempDerivConsFlxEq :: ModelExpr
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivConsFlxEq"><span class="hs-identifier hs-var hs-var">rocTempDerivConsFlxEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -861,7 +862,7 @@ forall r. ExprC r =&gt; r -&gt; r -&gt; r
 forall c. (HasUID c, HasSymbol c) =&gt; ModelExpr -&gt; c -&gt; ModelExpr
 forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">deriv</span></span><span>
-</span><span id="line-150"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
+</span><span id="line-151"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -887,7 +888,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.SWHS.Unitals.html#htFluxOut"><span class="hs-identifier hs-var">htFluxOut</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$*</span></span><span> </span><span>
-</span><span id="line-151"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
+</span><span id="line-152"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -904,8 +905,8 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">vol</span></span><span class="hs-special">)</span><span>
-</span><span id="line-152"></span><span>
-</span><span id="line-153"></span><span id="rocTempDerivDensEq"><span class="annot"><span class="annottext">rocTempDerivDensEq :: ModelExpr
+</span><span id="line-153"></span><span>
+</span><span id="line-154"></span><span id="rocTempDerivDensEq"><span class="annot"><span class="annottext">rocTempDerivDensEq :: ModelExpr
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivDensEq"><span class="hs-identifier hs-var hs-var">rocTempDerivDensEq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -926,7 +927,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QT.temp</span></span><span class="hs-special">)</span><span>
-</span><span id="line-154"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span id="line-155"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
@@ -946,7 +947,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#htFluxOut"><span class="hs-identifier hs-var">htFluxOut</span></a></span><span>
-</span><span id="line-155"></span><span>  </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span id="line-156"></span><span>  </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
@@ -965,13 +966,13 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">vol</span></span><span class="hs-special">)</span><span>
-</span><span id="line-156"></span><span>
-</span><span id="line-157"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempSimpDerivEqns"><span class="hs-identifier hs-type">rocTempSimpDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span class="hs-special">]</span><span>
-</span><span id="line-158"></span><span id="rocTempSimpDerivEqns"><span class="annot"><span class="annottext">rocTempSimpDerivEqns :: [ModelExpr]
+</span><span id="line-157"></span><span>
+</span><span id="line-158"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempSimpDerivEqns"><span class="hs-identifier hs-type">rocTempSimpDerivEqns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span class="hs-special">]</span><span>
+</span><span id="line-159"></span><span id="rocTempSimpDerivEqns"><span class="annot"><span class="annottext">rocTempSimpDerivEqns :: [ModelExpr]
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempSimpDerivEqns"><span class="hs-identifier hs-var hs-var">rocTempSimpDerivEqns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivIntegEq"><span class="hs-identifier hs-var">rocTempDerivIntegEq</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivGaussEq"><span class="hs-identifier hs-var">rocTempDerivGaussEq</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivArbVolEq"><span class="hs-identifier hs-var">rocTempDerivArbVolEq</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivConsFlxEq"><span class="hs-identifier hs-var">rocTempDerivConsFlxEq</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-159"></span><span>  </span><span class="annot"><span class="annottext">ModelExpr
+</span><span id="line-160"></span><span>  </span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivDensEq"><span class="hs-identifier hs-var">rocTempDerivDensEq</span></a></span><span class="hs-special">]</span></pre></body></html>

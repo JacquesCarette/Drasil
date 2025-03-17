@@ -1,53 +1,51 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.SWHS.References</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.References.html#citations"><span class="hs-identifier">citations</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.References.html#bueche1986"><span class="hs-identifier">bueche1986</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.References.html#incroperaEtAl2007"><span class="hs-identifier">incroperaEtAl2007</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-2"></span><span>  </span><span class="annot"><span class="hs-identifier">koothoor2013</span></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.References.html#lightstone2012"><span class="hs-identifier">lightstone2012</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">parnasClements1986</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">smithEtAl2007</span></span><span class="hs-special">,</span><span>
-</span><span id="line-3"></span><span>  </span><span class="annot"><span class="hs-identifier">smithLai2005</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">smithKoothoor2016</span></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.SWHS.References</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
 </span><span id="line-4"></span><span>
-</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
-</span><span id="line-6"></span><span>
-</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.People</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">jBueche</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">fIncropera</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">dDewitt</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tBergman</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">aLavine</span></span><span class="hs-special">,</span><span>
-</span><span id="line-8"></span><span>  </span><span class="annot"><span class="hs-identifier">mLightstone</span></span><span class="hs-special">)</span><span>
-</span><span id="line-9"></span><span>
-</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Citations</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">koothoor2013</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">parnasClements1986</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-11"></span><span>  </span><span class="annot"><span class="hs-identifier">smithEtAl2007</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">smithLai2005</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">smithKoothoor2016</span></span><span class="hs-special">)</span><span>
-</span><span id="line-12"></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.People</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">jBueche</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">fIncropera</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">dDewitt</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tBergman</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">aLavine</span></span><span class="hs-special">,</span><span>
+</span><span id="line-6"></span><span>  </span><span class="annot"><span class="hs-identifier">mLightstone</span></span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Citations</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">koothoor2013</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">parnasClements1986</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-9"></span><span>  </span><span class="annot"><span class="hs-identifier">smithEtAl2007</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">smithLai2005</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">smithKoothoor2016</span></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span>
+</span><span id="line-11"></span><span class="hs-comment">----------------------------</span><span>
+</span><span id="line-12"></span><span class="hs-comment">-- Section 9 : References --</span><span>
 </span><span id="line-13"></span><span class="hs-comment">----------------------------</span><span>
-</span><span id="line-14"></span><span class="hs-comment">-- Section 9 : References --</span><span>
-</span><span id="line-15"></span><span class="hs-comment">----------------------------</span><span>
-</span><span id="line-16"></span><span class="annot"><a href="Drasil.SWHS.References.html#citations"><span class="hs-identifier hs-type">citations</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">BibRef</span></span><span>
-</span><span id="line-17"></span><span id="citations"><span class="annot"><span class="annottext">citations :: BibRef
+</span><span id="line-14"></span><span class="annot"><a href="Drasil.SWHS.References.html#citations"><span class="hs-identifier hs-type">citations</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">BibRef</span></span><span>
+</span><span id="line-15"></span><span id="citations"><span class="annot"><span class="annottext">citations :: BibRef
 </span><a href="Drasil.SWHS.References.html#citations"><span class="hs-identifier hs-var hs-var">citations</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation
 </span><a href="Drasil.SWHS.References.html#bueche1986"><span class="hs-identifier hs-var">bueche1986</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
 </span><a href="Drasil.SWHS.References.html#incroperaEtAl2007"><span class="hs-identifier hs-var">incroperaEtAl2007</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
 </span><span class="hs-identifier hs-var">koothoor2013</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
 </span><a href="Drasil.SWHS.References.html#lightstone2012"><span class="hs-identifier hs-var">lightstone2012</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-18"></span><span>             </span><span class="annot"><span class="annottext">Citation
+</span><span id="line-16"></span><span>             </span><span class="annot"><span class="annottext">Citation
 </span><span class="hs-identifier hs-var">parnasClements1986</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
 </span><span class="hs-identifier hs-var">smithEtAl2007</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
 </span><span class="hs-identifier hs-var">smithLai2005</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-19"></span><span>             </span><span class="annot"><span class="annottext">Citation
+</span><span id="line-17"></span><span>             </span><span class="annot"><span class="annottext">Citation
 </span><span class="hs-identifier hs-var">smithKoothoor2016</span></span><span class="hs-special">]</span><span>
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span class="annot"><a href="Drasil.SWHS.References.html#bueche1986"><span class="hs-identifier hs-type">bueche1986</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.References.html#incroperaEtAl2007"><span class="hs-identifier hs-type">incroperaEtAl2007</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.References.html#lightstone2012"><span class="hs-identifier hs-type">lightstone2012</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Citation</span></span><span>
 </span><span id="line-20"></span><span>
-</span><span id="line-21"></span><span class="annot"><a href="Drasil.SWHS.References.html#bueche1986"><span class="hs-identifier hs-type">bueche1986</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.References.html#incroperaEtAl2007"><span class="hs-identifier hs-type">incroperaEtAl2007</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.References.html#lightstone2012"><span class="hs-identifier hs-type">lightstone2012</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Citation</span></span><span>
-</span><span id="line-22"></span><span>
-</span><span id="line-23"></span><span id="bueche1986"><span class="annot"><span class="annottext">bueche1986 :: Citation
+</span><span id="line-21"></span><span id="bueche1986"><span class="annot"><span class="annottext">bueche1986 :: Citation
 </span><a href="Drasil.SWHS.References.html#bueche1986"><span class="hs-identifier hs-var hs-var">bueche1986</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">People
 -&gt; String -&gt; String -&gt; Int -&gt; [CiteField] -&gt; String -&gt; Citation
 </span><span class="hs-identifier hs-var">cBookA</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
 </span><span class="hs-identifier hs-var">jBueche</span></span><span class="hs-special">]</span><span>
-</span><span id="line-24"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-22"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Introduction to Physics for Scientists&quot;</span></span><span>
-</span><span id="line-25"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-23"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;McGraw Hill&quot;</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1986</span></span><span>
-</span><span id="line-26"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span id="line-24"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int -&gt; CiteField
 </span><span class="hs-identifier hs-var">edition</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">4</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; CiteField
 </span><span class="hs-identifier hs-var">address</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;New York City, New York&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-27"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-25"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;bueche1986&quot;</span></span><span>
-</span><span id="line-28"></span><span>
-</span><span id="line-29"></span><span id="incroperaEtAl2007"><span class="annot"><span class="annottext">incroperaEtAl2007 :: Citation
+</span><span id="line-26"></span><span>
+</span><span id="line-27"></span><span id="incroperaEtAl2007"><span class="annot"><span class="annottext">incroperaEtAl2007 :: Citation
 </span><a href="Drasil.SWHS.References.html#incroperaEtAl2007"><span class="hs-identifier hs-var hs-var">incroperaEtAl2007</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">People
 -&gt; String -&gt; String -&gt; Int -&gt; [CiteField] -&gt; String -&gt; Citation
 </span><span class="hs-identifier hs-var">cBookA</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
@@ -55,34 +53,89 @@
 </span><span class="hs-identifier hs-var">dDewitt</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
 </span><span class="hs-identifier hs-var">tBergman</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
 </span><span class="hs-identifier hs-var">aLavine</span></span><span class="hs-special">]</span><span>
-</span><span id="line-30"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Fundamentals of Heat and Mass Transfer&quot;</span></span><span>
-</span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-29"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;John Wiley and Sons&quot;</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">2007</span></span><span>
-</span><span id="line-32"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span id="line-30"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int -&gt; CiteField
 </span><span class="hs-identifier hs-var">edition</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">6</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; CiteField
 </span><span class="hs-identifier hs-var">address</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Hoboken, New Jersey&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-33"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;incroperaEtAl2007&quot;</span></span><span>
-</span><span id="line-34"></span><span>
-</span><span id="line-35"></span><span id="lightstone2012"><span class="annot"><span class="annottext">lightstone2012 :: Citation
+</span><span id="line-32"></span><span>
+</span><span id="line-33"></span><span id="lightstone2012"><span class="annot"><span class="annottext">lightstone2012 :: Citation
 </span><a href="Drasil.SWHS.References.html#lightstone2012"><span class="hs-identifier hs-var hs-var">lightstone2012</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CiteField] -&gt; String -&gt; Citation
 </span><span class="hs-identifier hs-var">cMisc</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-36"></span><span>  </span><span class="annot"><span class="annottext">People -&gt; CiteField
+</span><span id="line-34"></span><span>  </span><span class="annot"><span class="annottext">People -&gt; CiteField
 </span><span class="hs-identifier hs-var">author</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
 </span><span class="hs-identifier hs-var">mLightstone</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-37"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span id="line-35"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
 </span><span class="hs-identifier hs-var">title</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Derivation of tank/pcm model&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-38"></span><span>  </span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span id="line-36"></span><span>  </span><span class="annot"><span class="annottext">Int -&gt; CiteField
 </span><span class="hs-identifier hs-var">year</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">2012</span></span><span class="hs-special">,</span><span>
-</span><span id="line-39"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span id="line-37"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
 </span><span class="hs-identifier hs-var">note</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;From Marilyn Lightstone's Personal Notes&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-40"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-38"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;lightstone2012&quot;</span></span><span>
-</span><span id="line-41"></span></pre></body></html>
+</span><span id="line-39"></span><span>
+</span><span id="line-40"></span><span>
+</span><span id="line-41"></span><span class="annot"><a href="Drasil.SWHS.References.html#uriReferences"><span class="hs-identifier hs-type">uriReferences</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span>
+</span><span id="line-42"></span><span id="uriReferences"><span class="annot"><span class="annottext">uriReferences :: [Reference]
+</span><a href="Drasil.SWHS.References.html#uriReferences"><span class="hs-identifier hs-var hs-var">uriReferences</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.SWHS.References.html#consThemESrc"><span class="hs-identifier hs-var">consThemESrc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.SWHS.References.html#latHtESrc"><span class="hs-identifier hs-var">latHtESrc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.SWHS.References.html#sensHtESrc"><span class="hs-identifier hs-var">sensHtESrc</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-43"></span><span>
+</span><span id="line-44"></span><span class="annot"><a href="Drasil.SWHS.References.html#consThemESrc"><span class="hs-identifier hs-type">consThemESrc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
+</span><span id="line-45"></span><span id="consThemESrc"><span class="annot"><span class="annottext">consThemESrc :: Reference
+</span><a href="Drasil.SWHS.References.html#consThemESrc"><span class="hs-identifier hs-var hs-var">consThemESrc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; ShortName -&gt; Reference
+</span><span class="hs-identifier hs-var">makeURI</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;consThemESrc&quot;</span></span><span>
+</span><span id="line-46"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm&quot;</span></span><span> </span><span class="annot"><span class="annottext">(ShortName -&gt; Reference) -&gt; ShortName -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>
+</span><span id="line-47"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
+</span><span class="hs-identifier hs-var">shortname'</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; ShortName) -&gt; Sentence -&gt; ShortName
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Fourier Law of Heat Conduction and Heat Equation&quot;</span></span><span>
+</span><span id="line-48"></span><span>
+</span><span id="line-49"></span><span class="annot"><a href="Drasil.SWHS.References.html#latHtESrc"><span class="hs-identifier hs-type">latHtESrc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
+</span><span id="line-50"></span><span id="latHtESrc"><span class="annot"><span class="annottext">latHtESrc :: Reference
+</span><a href="Drasil.SWHS.References.html#latHtESrc"><span class="hs-identifier hs-var hs-var">latHtESrc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; ShortName -&gt; Reference
+</span><span class="hs-identifier hs-var">makeURI</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;latHtESrc&quot;</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;http://en.wikipedia.org/wiki/Latent_heat&quot;</span></span><span> </span><span class="annot"><span class="annottext">(ShortName -&gt; Reference) -&gt; ShortName -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>
+</span><span id="line-51"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
+</span><span class="hs-identifier hs-var">shortname'</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; ShortName) -&gt; Sentence -&gt; ShortName
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Definition of Latent Heat&quot;</span></span><span>
+</span><span id="line-52"></span><span>
+</span><span id="line-53"></span><span class="annot"><a href="Drasil.SWHS.References.html#sensHtESrc"><span class="hs-identifier hs-type">sensHtESrc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
+</span><span id="line-54"></span><span id="sensHtESrc"><span class="annot"><span class="annottext">sensHtESrc :: Reference
+</span><a href="Drasil.SWHS.References.html#sensHtESrc"><span class="hs-identifier hs-var hs-var">sensHtESrc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; ShortName -&gt; Reference
+</span><span class="hs-identifier hs-var">makeURI</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;sensHtESrc&quot;</span></span><span>
+</span><span id="line-55"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;http://en.wikipedia.org/wiki/Sensible_heat&quot;</span></span><span> </span><span class="annot"><span class="annottext">(ShortName -&gt; Reference) -&gt; ShortName -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>
+</span><span id="line-56"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
+</span><span class="hs-identifier hs-var">shortname'</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; ShortName) -&gt; Sentence -&gt; ShortName
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Definition of Sensible Heat&quot;</span></span><span>
+</span><span id="line-57"></span></pre></body></html>

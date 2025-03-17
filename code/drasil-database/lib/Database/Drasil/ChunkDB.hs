@@ -20,7 +20,7 @@ module Database.Drasil.ChunkDB (
   termResolve, defResolve, symbResolve,
   traceLookup, refbyLookup,
   datadefnLookup, insmodelLookup, gendefLookup, theoryModelLookup,
-  conceptinsLookup, labelledconLookup, refResolve,
+  conceptinsLookup, refResolve,
   -- ** Lenses
   unitTable, traceTable, refbyTable,
   dataDefnTable, insmodelTable, gendefTable, theoryModelTable,
@@ -153,10 +153,6 @@ theoryModelLookup = uMapLookup "TheoryModel" "TheoryModelMap"
 conceptinsLookup :: UID -> ConceptInstanceMap -> ConceptInstance
 conceptinsLookup = uMapLookup "ConceptInstance" "ConceptInstanceMap"
 
--- | Looks up a 'UID' in the labelled content table. If nothing is found, an error is thrown.
-labelledconLookup :: UID -> LabelledContentMap -> LabelledContent
-labelledconLookup = uMapLookup "LabelledContent" "LabelledContentMap"
-
 -- | Gets an ordered list of @a@ from any @a@ that is of type 'UMap'.
 asOrderedList :: UMap a -> [a]
 asOrderedList = map fst . sortOn snd . map snd . Map.toList
@@ -175,11 +171,11 @@ data ChunkDB = CDB {
   , _gendefTable          :: GendefMap
   , _theoryModelTable     :: TheoryModelMap
   , _conceptinsTable      :: ConceptInstanceMap
-  , _labelledcontentTable :: LabelledContentMap
   -- NOT CHUNKS
+  , _labelledcontentTable :: LabelledContentMap -- TODO: LabelledContent needs to be rebuilt. See JacquesCarette/Drasil#4023.
+  , _refTable             :: ReferenceMap -- TODO: References need to be rebuilt. See JacquesCarette/Drasil#4022.
   , _traceTable           :: TraceMap
   , _refbyTable           :: RefbyMap
-  , _refTable             :: ReferenceMap
   }
 makeLenses ''ChunkDB
 

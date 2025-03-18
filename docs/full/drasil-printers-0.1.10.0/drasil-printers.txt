@@ -1902,11 +1902,11 @@ makeBook :: Document -> PrintingInformation -> Doc
 --   location mdBook uses.
 makeRequirements :: PrintingInformation -> Doc
 
--- | Helper function to render the title <a>Sentence</a> as a <a>Doc</a>
+-- | Render a title <a>Sentence</a>.
 mkTitle :: PrintingInformation -> Sentence -> Doc
 
--- | Helper function to map the original filepaths of assets to the
---   location mdBook uses.
+-- | Map the original filepaths of assets to the location mdBook generator
+--   needs.
 assetMat :: PrintingInformation -> [[Filepath]]
 
 

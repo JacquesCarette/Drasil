@@ -10,7 +10,7 @@ ChunkDB -> GendefMap;
 ChunkDB -> TheoryModelMap;
 ChunkDB -> ConceptInstanceMap;
 ChunkDB -> LabelledContentMap;
+ChunkDB -> ReferenceMap;
 ChunkDB -> TraceMap;
 ChunkDB -> RefbyMap;
-ChunkDB -> ReferenceMap;
 }

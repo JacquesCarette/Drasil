@@ -1037,9 +1037,9 @@ digraph alltypes {
 		ChunkDB -> TheoryModelMap;
 		ChunkDB -> ConceptInstanceMap;
 		ChunkDB -> LabelledContentMap;
+		ChunkDB -> ReferenceMap;
 		ChunkDB -> TraceMap;
 		ChunkDB -> RefbyMap;
-		ChunkDB -> ReferenceMap;
 		}
 		subgraph umapa{
 		UMapa	[shape=oval, color=red2, label="UMapa"];

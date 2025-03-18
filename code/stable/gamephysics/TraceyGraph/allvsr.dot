@@ -14,25 +14,25 @@ digraph allvsr {
 	{assumpOT, assumpOD, assumpCST, assumpAD, assumpCT, assumpDI, assumpCAJI}
 	}
 
-	p_CM	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ctrOfMass"];
-	linearDisplacement	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:linDisp"];
-	linearVelocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:linVel"];
-	linearAcceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:linAcc"];
-	angularDisplacement	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angDisp"];
-	angularVelocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angVel"];
-	angularAcceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angAccel"];
-	velocityB	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:chaslesThm"];
-	torque	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:torque"];
-	kEnergy	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:kEnergy"];
-	restitutionCoef	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:coeffRestitution"];
-	v_iAB	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:reVeInColl"];
-	impulseV	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:impulseV"];
-	potEnergy	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:potEnergy"];
-	momentOfInertia	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:momentOfInertia"];
+	dataDefn:p_CM	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ctrOfMass"];
+	dataDefn:linearDisplacement	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:linDisp"];
+	dataDefn:linearVelocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:linVel"];
+	dataDefn:linearAcceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:linAcc"];
+	dataDefn:angularDisplacement	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angDisp"];
+	dataDefn:angularVelocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angVel"];
+	dataDefn:angularAcceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angAccel"];
+	dataDefn:velocityB	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:chaslesThm"];
+	dataDefn:torque	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:torque"];
+	dataDefn:kEnergy	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:kEnergy"];
+	dataDefn:restitutionCoef	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:coeffRestitution"];
+	dataDefn:v_iAB	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:reVeInColl"];
+	dataDefn:impulseV	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:impulseV"];
+	dataDefn:potEnergy	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:potEnergy"];
+	dataDefn:momentOfInertia	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:momentOfInertia"];
 
 	subgraph DD {
 	rank="same"
-	{p_CM, linearDisplacement, linearVelocity, linearAcceleration, angularDisplacement, angularVelocity, angularAcceleration, velocityB, torque, kEnergy, restitutionCoef, v_iAB, impulseV, potEnergy, momentOfInertia}
+	{dataDefn:p_CM, dataDefn:linearDisplacement, dataDefn:linearVelocity, dataDefn:linearAcceleration, dataDefn:angularDisplacement, dataDefn:angularVelocity, dataDefn:angularAcceleration, dataDefn:velocityB, dataDefn:torque, dataDefn:kEnergy, dataDefn:restitutionCoef, dataDefn:v_iAB, dataDefn:impulseV, dataDefn:potEnergy, dataDefn:momentOfInertia}
 	}
 
 	theory:newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];

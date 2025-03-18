@@ -1,22 +1,22 @@
 digraph refvsref {
-	wVol -> tankVol;
+	dataDefn:wVol -> dataDefn:tankVol;
 	theory:rocTempSimpRC -> theory:consThermECS;
 	theory:rocTempSimpRC -> theory:rocTempSimpRC;
 	theory:htFluxC -> theory:nwtnCoolingTM;
-	theory:eBalanceOnWtrRC -> tauW;
+	theory:eBalanceOnWtrRC -> dataDefn:tauW;
 	theory:eBalanceOnWtrRC -> theory:rocTempSimpRC;
 	theory:eBalanceOnWtrRC -> theory:htFluxC;
 	theory:heatEInWtrIM -> theory:sensHeat;
 
 
-	wMass	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterMass"];
-	wVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterVolume.nopcm"];
-	tankVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:tankVolume"];
-	tauW	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceDecayRate"];
+	dataDefn:wMass	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterMass"];
+	dataDefn:wVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterVolume.nopcm"];
+	dataDefn:tankVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:tankVolume"];
+	dataDefn:tauW	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceDecayRate"];
 
 	subgraph DD {
 	rank="same"
-	{wMass, wVol, tankVol, tauW}
+	{dataDefn:wMass, dataDefn:wVol, dataDefn:tankVol, dataDefn:tauW}
 	}
 
 	theory:consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];

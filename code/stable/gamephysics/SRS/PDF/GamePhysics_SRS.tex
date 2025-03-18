@@ -353,7 +353,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[coordinateSystemTy:\phantomsection\label{assumpCST}]{The library uses a Cartesian coordinate system.}
 \item[axesDefined:\phantomsection\label{assumpAD}]{The axes are defined using right-handed coordinate system. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:col2D]{IM:col2D}, and \hyperref[IM:rotMot]{IM:rotMot}.)}
 \item[collisionType:\phantomsection\label{assumpCT}]{All rigid bodies collisions are vertex-to-edge collisions. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:col2D]{IM:col2D}, and \hyperref[lcEC]{LC:Expanded-Collisions}.)}
-\item[dampingInvolvement:\phantomsection\label{assumpDI}]{There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: \hyperref[IM:col2D]{IM:col2D}, \hyperref[IM:transMot]{IM:transMot}, \hyperref[DD:potEnergy]{DD:potEnergy}, \hyperref[lcID]{LC:Include-Dampening}, and \hyperref[DD:kEnergy]{DD:kEnergy}.)}
+\item[dampingInvolvement:\phantomsection\label{assumpDI}]{There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: \hyperref[IM:col2D]{IM:col2D}, \hyperref[IM:transMot]{IM:transMot}, \hyperref[DD:potEnergy]{DD:potEnergy}, \hyperref[DD:kEnergy]{DD:kEnergy}, and \hyperref[lcID]{LC:Include-Dampening}.)}
 \item[constraintsAndJointsInvolvement:\phantomsection\label{assumpCAJI}]{There are no constraints and joints involved throughout the simulation. (RefBy: \hyperref[IM:col2D]{IM:col2D}, \hyperref[IM:transMot]{IM:transMot}, and \hyperref[lcIJC]{LC:Include-Joints-Constraints}.)}
 \end{description}
 \subsubsection{Theoretical Models}
@@ -913,7 +913,7 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{${\symbf{v}\text{(}t\text{)}_{\text{B}}}$ is the velocity at point B ($\frac{\text{m}}{\text{s}}$)}
+              \item{${\symbf{v}\text{(}t\text{)}_{\text{B}}}$ is the Chasles' theorem ($\frac{\text{m}}{\text{s}}$)}
               \item{${\symbf{v}\text{(}t\text{)}_{\text{O}}}$ is the velocity at point origin ($\frac{\text{m}}{\text{s}}$)}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
               \item{${\symbf{u}_{\text{O}\text{B}}}$ is the displacement vector between the origin and point B (${\text{m}}$)}

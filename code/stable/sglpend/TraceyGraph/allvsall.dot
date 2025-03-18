@@ -1,11 +1,11 @@
 digraph allvsall {
-	angularFrequency -> period;
-	period -> frequency;
-	theory:angFrequencyGD -> frequency;
+	dataDefn:angularFrequency -> dataDefn:period;
+	dataDefn:period -> dataDefn:frequency;
+	theory:angFrequencyGD -> dataDefn:frequency;
 	theory:angFrequencyGD -> theory:newtonSLR;
-	theory:periodPendGD -> frequency;
-	theory:periodPendGD -> angularFrequency;
-	theory:periodPendGD -> period;
+	theory:periodPendGD -> dataDefn:frequency;
+	theory:periodPendGD -> dataDefn:angularFrequency;
+	theory:periodPendGD -> dataDefn:period;
 	theory:periodPendGD -> theory:angFrequencyGD;
 	theory:angularDisplacementIM -> theory:newtonSLR;
 	theory:angularDisplacementIM -> theory:angFrequencyGD;
@@ -24,15 +24,15 @@ digraph allvsall {
 	{twoDMotion, cartSys, cartSysR, yAxisDir, startOrigin}
 	}
 
-	ixPos	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionIX"];
-	iyPos	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionIY"];
-	frequency	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:frequencyDD"];
-	angularFrequency	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angFrequencyDD"];
-	period	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:periodSHMDD"];
+	dataDefn:ixPos	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionIX"];
+	dataDefn:iyPos	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionIY"];
+	dataDefn:frequency	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:frequencyDD"];
+	dataDefn:angularFrequency	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angFrequencyDD"];
+	dataDefn:period	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:periodSHMDD"];
 
 	subgraph DD {
 	rank="same"
-	{ixPos, iyPos, frequency, angularFrequency, period}
+	{dataDefn:ixPos, dataDefn:iyPos, dataDefn:frequency, dataDefn:angularFrequency, dataDefn:period}
 	}
 
 	theory:accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];

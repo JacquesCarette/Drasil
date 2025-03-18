@@ -458,7 +458,7 @@
 <div id="assumpPIS"></div>
 <p>PCM-Initially-Solid: The simulation will start with the PCM in a solid state. (RefBy: <a href="./SecIMs.html#IM:heatEInPCM">IM:heatEInPCM</a> and <a href="./SecIMs.html#IM:eBalanceOnPCM">IM:eBalanceOnPCM</a>.)</p>
 <div id="assumpWAL"></div>
-<p>Water-Always-Liquid: The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. (RefBy: <a href="./SecIMs.html#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a>, <a href="./SecUCs.html#unlikeChgWPFS">UC:Water-PCM-Fixed-States</a>, and <a href="./SecIMs.html#IM:heatEInWtr">IM:heatEInWtr</a>.)</p>
+<p>Water-Always-Liquid: The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. (RefBy: <a href="./SecIMs.html#IM:heatEInWtr">IM:heatEInWtr</a>, <a href="./SecIMs.html#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a>, and <a href="./SecUCs.html#unlikeChgWPFS">UC:Water-PCM-Fixed-States</a>.)</p>
 <div id="assumpPIT"></div>
 <p>Perfect-Insulation-Tank: The tank is perfectly insulated so that there is no heat loss from the tank. (RefBy: <a href="./SecIMs.html#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a> and <a href="./SecLCs.html#likeChgTLH">LC:Tank-Lose-Heat</a>.)</p>
 <div id="assumpNIHGBWP"></div>
@@ -468,7 +468,7 @@
 <div id="assumpNGSP"></div>
 <p>No-Gaseous-State-PCM: The PCM is either in a liquid state or a solid state but not a gaseous state. (RefBy: <a href="./SecIMs.html#IM:heatEInPCM">IM:heatEInPCM</a>, <a href="./SecIMs.html#IM:eBalanceOnPCM">IM:eBalanceOnPCM</a>, <a href="./SecUCs.html#unlikeChgWPFS">UC:Water-PCM-Fixed-States</a>, and <a href="./SecUCs.html#unlikeChgNGS">UC:No-Gaseous-State</a>.)</p>
 <div id="assumpAPT"></div>
-<p>Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0\({{}^{\circ}\text{C}}\) and 100\({{}^{\circ}\text{C}}\), respectively. (RefBy: <a href="./SecIMs.html#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a> and <a href="./SecIMs.html#IM:heatEInWtr">IM:heatEInWtr</a>.)</p>
+<p>Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0\({{}^{\circ}\text{C}}\) and 100\({{}^{\circ}\text{C}}\), respectively. (RefBy: <a href="./SecIMs.html#IM:heatEInWtr">IM:heatEInWtr</a> and <a href="./SecIMs.html#IM:eBalanceOnWtr">IM:eBalanceOnWtr</a>.)</p>
 <div id="assumpVCN"></div>
 <p>Volume-Coil-Negligible: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible. (RefBy: <a href="./SecDDs.html#DD:waterVolume.pcm">DD:waterVolume_pcm</a>.)</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:TMs"><a class="header" href="#Sec:TMs">Theoretical Models</a></h1>
@@ -493,7 +493,7 @@
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(E\) is the sensible heat (\({\text{J}}\))</li><li>\({C^{\text{S}}}\) is the specific heat capacity of a solid (\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\))</li><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(ΔT\) is the change in temperature (\({{}^{\circ}\text{C}}\))</li><li>\({C^{\text{L}}}\) is the specific heat capacity of a liquid (\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\))</li><li>\({C^{\text{V}}}\) is the specific heat capacity of a vapour (\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\))</li><li>\(T\) is the temperature (\({{}^{\circ}\text{C}}\))</li><li>\({T_{\text{melt}}}\) is the melting point temperature (\({{}^{\circ}\text{C}}\))</li><li>\({T_{\text{boil}}}\) is the boiling point temperature (\({{}^{\circ}\text{C}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if \(T={T_{\text{boil}}}\) or \(T={T_{\text{melt}}}\). If this is the case, refer to <a href="./SecTMs.html#TM:latentHtE">TM:latentHtE</a>.</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="http://en.wikipedia.org/wiki/Sensible_heat">Definition of Sensible Heat</a></td></tr>
-<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:heatEInPCM">IM:heatEInPCM</a> and <a href="./SecIMs.html#IM:heatEInWtr">IM:heatEInWtr</a></td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:heatEInWtr">IM:heatEInWtr</a> and <a href="./SecIMs.html#IM:heatEInPCM">IM:heatEInPCM</a></td></tr>
 </tbody></table>
 </div><div align="center">
 <h2 id="TM:latentHtE"><a class="header" href="#TM:latentHtE">Latent heat energy</a></h2>
@@ -676,7 +676,7 @@
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(ϕ\) is the melt fraction (Unitless)</li><li>\({Q_{\text{P}}}\) is the latent heat energy added to PCM (\({\text{J}}\))</li><li>\({H_{\text{f}}}\) is the specific latent heat of fusion (\(\frac{\text{J}}{\text{kg}}\))</li><li>\({m_{\text{P}}}\) is the mass of phase change material (\({\text{kg}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The value of \(ϕ\) is constrained to \(0\leq{}ϕ\leq{}1\).</li><li><a href="./SecDDs.html#DD:htFusion">DD:htFusion</a></li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#koothoor2013">koothoor2013</a></td></tr>
-<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:eBalanceOnPCM">IM:eBalanceOnPCM</a> and <a href="./SecTMs.html#TM:latentHtE">TM:latentHtE</a></td></tr>
+<tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecTMs.html#TM:latentHtE">TM:latentHtE</a> and <a href="./SecIMs.html#IM:eBalanceOnPCM">IM:eBalanceOnPCM</a></td></tr>
 </tbody></table>
 </div><div align="center">
 <h2 id="DD:aspectRatio"><a class="header" href="#DD:aspectRatio">Aspect ratio</a></h2>

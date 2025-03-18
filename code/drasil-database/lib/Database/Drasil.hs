@@ -10,7 +10,7 @@ module Database.Drasil (
   , termResolve, defResolve, symbResolve
   , traceLookup, refbyLookup
   , datadefnLookup, insmodelLookup, gendefLookup, theoryModelLookup
-  , conceptinsLookup, labelledconLookup, refResolve
+  , conceptinsLookup, refResolve
   -- ** Lenses
   , unitTable, traceTable, refbyTable
   , dataDefnTable, insmodelTable, gendefTable, theoryModelTable

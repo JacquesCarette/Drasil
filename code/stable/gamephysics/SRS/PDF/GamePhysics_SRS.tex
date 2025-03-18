@@ -348,13 +348,13 @@ The instance models that govern GamePhysics are presented in the \hyperref[Sec:I
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
 \begin{description}[font=\normalfont]
-\item[objectTy:\phantomsection\label{assumpOT}]{All objects are rigid bodies. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:rotMot]{IM:rotMot}, \hyperref[IM:transMot]{IM:transMot}, \hyperref[DD:chaslesThm]{DD:chaslesThm}, \hyperref[DD:reVeInColl]{DD:reVeInColl}, \hyperref[DD:potEnergy]{DD:potEnergy}, \hyperref[DD:ctrOfMass]{DD:ctrOfMass}, \hyperref[DD:momentOfInertia]{DD:momentOfInertia}, \hyperref[DD:linVel]{DD:linVel}, \hyperref[DD:linDisp]{DD:linDisp}, \hyperref[DD:linAcc]{DD:linAcc}, \hyperref[DD:kEnergy]{DD:kEnergy}, \hyperref[DD:impulseV]{DD:impulseV}, \hyperref[IM:col2D]{IM:col2D}, \hyperref[DD:angVel]{DD:angVel}, \hyperref[DD:angDisp]{DD:angDisp}, and \hyperref[DD:angAccel]{DD:angAccel}.)}
-\item[objectDimension:\phantomsection\label{assumpOD}]{All objects are 2D. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:rotMot]{IM:rotMot}, \hyperref[IM:transMot]{IM:transMot}, \hyperref[DD:potEnergy]{DD:potEnergy}, \hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}, \hyperref[DD:kEnergy]{DD:kEnergy}, \hyperref[IM:col2D]{IM:col2D}, \hyperref[DD:angVel]{DD:angVel}, \hyperref[DD:angDisp]{DD:angDisp}, and \hyperref[DD:angAccel]{DD:angAccel}.)}
+\item[objectTy:\phantomsection\label{assumpOT}]{All objects are rigid bodies. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:col2D]{IM:col2D}, \hyperref[IM:rotMot]{IM:rotMot}, \hyperref[IM:transMot]{IM:transMot}, \hyperref[DD:chaslesThm]{DD:chaslesThm}, \hyperref[DD:reVeInColl]{DD:reVeInColl}, \hyperref[DD:potEnergy]{DD:potEnergy}, \hyperref[DD:ctrOfMass]{DD:ctrOfMass}, \hyperref[DD:momentOfInertia]{DD:momentOfInertia}, \hyperref[DD:linVel]{DD:linVel}, \hyperref[DD:linDisp]{DD:linDisp}, \hyperref[DD:linAcc]{DD:linAcc}, \hyperref[DD:kEnergy]{DD:kEnergy}, \hyperref[DD:impulseV]{DD:impulseV}, \hyperref[DD:angVel]{DD:angVel}, \hyperref[DD:angDisp]{DD:angDisp}, and \hyperref[DD:angAccel]{DD:angAccel}.)}
+\item[objectDimension:\phantomsection\label{assumpOD}]{All objects are 2D. (RefBy: \hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}, \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:col2D]{IM:col2D}, \hyperref[IM:rotMot]{IM:rotMot}, \hyperref[IM:transMot]{IM:transMot}, \hyperref[DD:potEnergy]{DD:potEnergy}, \hyperref[DD:kEnergy]{DD:kEnergy}, \hyperref[DD:angVel]{DD:angVel}, \hyperref[DD:angDisp]{DD:angDisp}, and \hyperref[DD:angAccel]{DD:angAccel}.)}
 \item[coordinateSystemTy:\phantomsection\label{assumpCST}]{The library uses a Cartesian coordinate system.}
-\item[axesDefined:\phantomsection\label{assumpAD}]{The axes are defined using right-handed coordinate system. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:rotMot]{IM:rotMot}, and \hyperref[IM:col2D]{IM:col2D}.)}
-\item[collisionType:\phantomsection\label{assumpCT}]{All rigid bodies collisions are vertex-to-edge collisions. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[lcEC]{LC:Expanded-Collisions}, and \hyperref[IM:col2D]{IM:col2D}.)}
-\item[dampingInvolvement:\phantomsection\label{assumpDI}]{There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: \hyperref[IM:transMot]{IM:transMot}, \hyperref[DD:potEnergy]{DD:potEnergy}, \hyperref[lcID]{LC:Include-Dampening}, \hyperref[DD:kEnergy]{DD:kEnergy}, and \hyperref[IM:col2D]{IM:col2D}.)}
-\item[constraintsAndJointsInvolvement:\phantomsection\label{assumpCAJI}]{There are no constraints and joints involved throughout the simulation. (RefBy: \hyperref[IM:transMot]{IM:transMot}, \hyperref[lcIJC]{LC:Include-Joints-Constraints}, and \hyperref[IM:col2D]{IM:col2D}.)}
+\item[axesDefined:\phantomsection\label{assumpAD}]{The axes are defined using right-handed coordinate system. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:col2D]{IM:col2D}, and \hyperref[IM:rotMot]{IM:rotMot}.)}
+\item[collisionType:\phantomsection\label{assumpCT}]{All rigid bodies collisions are vertex-to-edge collisions. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:col2D]{IM:col2D}, and \hyperref[lcEC]{LC:Expanded-Collisions}.)}
+\item[dampingInvolvement:\phantomsection\label{assumpDI}]{There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: \hyperref[IM:col2D]{IM:col2D}, \hyperref[IM:transMot]{IM:transMot}, \hyperref[DD:potEnergy]{DD:potEnergy}, \hyperref[lcID]{LC:Include-Dampening}, and \hyperref[DD:kEnergy]{DD:kEnergy}.)}
+\item[constraintsAndJointsInvolvement:\phantomsection\label{assumpCAJI}]{There are no constraints and joints involved throughout the simulation. (RefBy: \hyperref[IM:col2D]{IM:col2D}, \hyperref[IM:transMot]{IM:transMot}, and \hyperref[lcIJC]{LC:Include-Joints-Constraints}.)}
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -651,7 +651,7 @@ Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[IM:transMot]{IM:transMot} and \hyperref[IM:col2D]{IM:col2D}
+RefBy & \hyperref[IM:col2D]{IM:col2D} and \hyperref[IM:transMot]{IM:transMot}
         
 \\ \bottomrule
 \end{tabular}

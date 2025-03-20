@@ -167,14 +167,14 @@ data Expr where
   Operator :: AssocArithOper -> DiscreteDomainDesc Expr Expr -> Expr -> Expr
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
   RealI    :: UID -> RealInterval Expr Expr -> Expr
-  -- | A clif of arbitrary (0 or greater) grade with a given dimension
-  -- | This is a homogeneous clif. It has a definite grade. 
-  --   It is embedded in the space of the given dimension, but contains only
-  --   components from the given natural grade. These can be wedged or multiplied
-  --   together to create bigger-graded things.
+  -- | A clif of arbitrary dimension. The Maybe [Expr] determines the
+  --   components of the clif projected in a basis. If this is `Nothing`,
+  --   then the clif has not been projected into a particular basis. 
+  --   If this `isJust`, the number of components must be 2 ^ d where
+  --   d is the dimension of the clifford space.
   -- All Clifs are currently assumed to be embedded in a space defined by spacelike 
   -- basis vectors (e.g. Euclidean space) for now.
-  Clif     :: Natural -> S.Dimension -> Expr -> Expr
+  Clif     :: S.Dimension -> Maybe [Expr] -> Expr
   -- | Indexing into an expression (clifs only for now)
   -- The list of indexes correspond to the index in each grade
   -- SubSup determines if it is a superscript or a subscript
@@ -216,7 +216,7 @@ instance Eq Expr where
   NCCBinaryOp o a b   == NCCBinaryOp p c d   =   o == p && a == c && b == d
   ESSBinaryOp o a b   == ESSBinaryOp p c d   =   o == p && a == c && b == d
   ESBBinaryOp o a b   == ESBBinaryOp p c d   =   o == p && a == c && b == d
-  Clif m a b          == Clif n c d          =   m == n && a == c && b == d
+  Clif a b            == Clif c d            =             a == c && b == d
   -- IndexC a b c        == IndexC d e f        =   a == d && b == e && c == f
   _                   == _                   =   False
 -- ^ TODO: This needs to add more equality checks
@@ -545,25 +545,31 @@ instance Typed Expr Space where
   -- For a clif to be well-typed it must:
   -- 1. Contain only basic numeric types inside it
   -- 2. Have a dimension of at least the grade (a 0-dimensional vector makes no sense)
-  infer ctx (Clif g d e) = case infer ctx e of
-    Left S.Real -> 
-      let
-        -- Check the dimensions of a clif to ensure it makes sense
-        isValidDim =
-          case d of
-            -- If it's a fixed dimension, the grade must be ≤ the dimension
-            S.Fixed fD -> g <= fD
-            -- We don't know enough to say for sure
-            S.VDim _  -> True
-      in
-      -- `Clif`s must store a basic number space, not things like other clifs
-      -- if S.isBasicNumSpace t then
-        if isValidDim then
-          Left $ S.ClifS d S.Real
-        else Right $ "Dimension of clif (received " ++ show d ++ ") must be greater than or equal to dimension (received " ++ show d
-      -- else Right $ "Clifs must contain basic number spaces. Received " ++ show t
-    Left t -> Right $ "Clifs currently only support Real numbers. Received " ++ show t
-    Right x -> Right x
+  infer ctx (Clif d (Just es)) = 
+    case eitherLists (fmap (infer ctx) es) of
+      Left ts -> 
+        let
+          allReal = all (== S.Real) ts
+          -- Check the dimensions of a clif to ensure it makes sense
+          isValidDim =
+            case d of
+              -- If it's a fixed dimension, the number of expressions must be dimension ^ 2
+              S.Fixed fD -> length es == fromIntegral (2 ^ fD)
+              -- We don't know enough to say for sure
+              S.VDim _  -> True
+        in
+        -- `Clif`s must store a basic number space, not things like other clifs
+        -- if S.isBasicNumSpace t then
+          if isValidDim then
+            Left $ S.ClifS d S.Real
+          else Right $ "The number of components in a clif of dimension " ++ show d ++ " must be 2 ^ " ++ show d
+        -- else Right $ "Clifs must contain basic number spaces. Received " ++ show t
+      Left t -> Right $ "Clifs currently only support Real-numbered components. Received " ++ show t
+      Right x -> Right x
+
+  -- A clif with no explicit compile/"specification"-time expressions
+  infer ctx (Clif d Nothing) = 
+    Left $ S.ClifS d S.Real
 
 -- verify :: Bool -> Space -> TypeError -> Either TypeError Space
 -- verify b s t =
@@ -573,3 +579,12 @@ instance Typed Expr Space where
 --     Left x
 
 -- inferAndVerify :: 
+
+eitherLists :: [Either a b] -> Either [a] b
+eitherLists es =
+  eitherLists' (Left []) es
+  where
+    eitherLists' (Left ls) (Left l : es) =
+      eitherLists' (Left $ l : ls) es
+    eitherLists' _ (Right r : _) = Right r
+    eitherLists' ls [] = ls

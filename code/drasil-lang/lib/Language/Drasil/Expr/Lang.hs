@@ -192,6 +192,7 @@ data Expr where
 --   Super | Sub
 --   deriving (Eq)
 
+-- TODO: Move this -- where?
 -- | Basis Keys are represented by binary numbers (per Roefls, 2025)
 --   Basis elements are ordered by grade, then sorted lexiographically
 --   Y means basis vector is included

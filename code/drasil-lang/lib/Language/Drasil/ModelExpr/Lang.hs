@@ -6,8 +6,9 @@ module Language.Drasil.ModelExpr.Lang where
 import Prelude hiding (sqrt)
 import Numeric.Natural
 
-import Language.Drasil.Expr.Lang (Completeness)
+import Language.Drasil.Expr.Lang (Completeness, BasisBlades(..))
 import Language.Drasil.Literal.Lang (Literal(..))
+import qualified Language.Drasil.Space as S
 import Language.Drasil.Space (Space, DomainDesc, RealInterval)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Literal.Class (LiteralC(..))
@@ -177,6 +178,15 @@ data ModelExpr where
   
   -- | Universal quantification
   ForAll   :: UID -> Space -> ModelExpr -> ModelExpr
+
+  -- | A clif of arbitrary dimension. The Maybe [Expr] determines the
+  --   components of the clif projected in a basis. If this is `Nothing`,
+  --   then the clif has not been projected into a particular basis. 
+  --   If this `isJust`, the number of components must be 2 ^ d where
+  --   d is the dimension of the clifford space.
+  -- All Clifs are currently assumed to be embedded in a space defined by spacelike 
+  -- basis vectors (e.g. Euclidean space) for now.
+  Clif     :: S.Dimension -> BasisBlades ModelExpr -> ModelExpr
 
 -- | The variable type is just a renamed 'String'.
 type Variable = String

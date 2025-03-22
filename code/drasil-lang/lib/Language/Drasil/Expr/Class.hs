@@ -21,6 +21,9 @@ import qualified Language.Drasil.ModelExpr.Lang as M
 import qualified Language.Drasil.CodeExpr.Lang as C
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.UID (HasUID(..))
+import qualified Language.Drasil.Space         as S
+import           Numeric.Natural               (Natural)
+import qualified Data.Map                      as Map
 
 import Utils.Drasil (toColumn)
 
@@ -70,7 +73,7 @@ mkSet = set'
 
 -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
 vec2D :: ExprC r => r -> r -> r
-vec2D a b = matrix [[a],[b]]
+vec2D a b = vect [a, b]
 
 -- | Creates a diagonal two-by-two matrix. For example:
 --
@@ -236,7 +239,8 @@ class ExprC r where
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy :: (HasUID c, HasSymbol c) => c -> r
 
-  -- clif :: S.Dimension -> 
+  -- | Vectors with fixed components, of a given fixed dimension
+  vect :: [r] -> r
 
 instance ExprC Expr where
   lit = Lit
@@ -404,6 +408,23 @@ instance ExprC Expr where
   
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy x = C (x ^. uid)
+
+  -- | Vectors with known components
+  --   This will create a Clifford space with dimension equal to the length of the list
+  vect es = 
+    let
+      d = fromIntegral $ length es
+      vectComp n e = (vectorKey n d, e)
+    in
+      Clif (S.Fixed d) $ Map.fromList $ mapWithIndex vectComp es
+
+mapWithIndex :: (Natural -> a -> b) -> [a] -> [b]
+mapWithIndex f xs = 
+  mapWithIndex' 0 xs
+  where
+    mapWithIndex' _ [] = []
+    mapWithIndex' n (x:xs) =
+      f n x : mapWithIndex' (n+1) xs
   
 instance ExprC M.ModelExpr where
   lit = M.Lit
@@ -574,6 +595,16 @@ instance ExprC M.ModelExpr where
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy x = M.C (x ^. uid)
 
+  -- | Vectors with known components
+  --   This will create a Clifford space with dimension equal to the length of the list
+  --   TODO: does this have to change in ModelExpr?
+  vect es = 
+    let
+      d = fromIntegral $ length es
+      vectComp n e = (vectorKey n d, e)
+    in
+      M.Clif (S.Fixed d) $ Map.fromList $ mapWithIndex vectComp es
+
 instance ExprC C.CodeExpr where
   lit = C.Lit
 
@@ -743,3 +774,12 @@ instance ExprC C.CodeExpr where
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy x = C.C (x ^. uid)
 
+  -- | Vectors with known components
+  --   This will create a Clifford space with dimension equal to the length of the list
+  --   TODO: does this have to change in CodeExpr?
+  vect es = 
+    let
+      d = fromIntegral $ length es
+      vectComp n e = (vectorKey n d, e)
+    in
+      C.Clif (S.Fixed d) $ Map.fromList $ mapWithIndex vectComp es

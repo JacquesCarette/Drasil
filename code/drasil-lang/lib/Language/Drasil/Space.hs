@@ -15,7 +15,7 @@ module Language.Drasil.Space (
   HasSpace(..),
   -- * Functions
   getActorName, getInnerSpace, mkFunction, isBasicNumSpace,
-  Dimension(..), vect2D, vect3D, vect, vectND
+  Dimension(..), vect2DS, vect3DS, vectS, vectNDS
 ) where
 
 import qualified Data.List.NonEmpty        as NE
@@ -47,6 +47,7 @@ data Space where
     Function :: (NE.NonEmpty Primitive) -> Primitive -> Space
     Void     :: Space
   -- | Clifford algebra objects (Clifs) with a dimension
+  -- TODO: Can this be just called `Clif`, depsite shadowing the binding in `*Expr`, since we `import qualified Space as S` usually?
     ClifS    :: Dimension -> Space -> Space
   deriving (Eq, Show)
 
@@ -56,17 +57,17 @@ checkClifSpace :: Space -> Bool
 checkClifSpace Real = True
 checkClifSpace _ = True --error $ "Non-real clif spaces unsupported"
 
-vect2D :: Space -> Space
-vect2D s | checkClifSpace s = ClifS (Fixed 2) s
+vect2DS :: Space -> Space
+vect2DS s | checkClifSpace s = ClifS (Fixed 2) s
 
-vect3D :: Space -> Space
-vect3D s | checkClifSpace s = ClifS (Fixed 3) s
+vect3DS :: Space -> Space
+vect3DS s | checkClifSpace s = ClifS (Fixed 3) s
 
-vect :: Natural -> Space -> Space
-vect n s | checkClifSpace s = ClifS (Fixed n) s
+vectS :: Natural -> Space -> Space
+vectS n s | checkClifSpace s = ClifS (Fixed n) s
 
-vectND :: String -> Space -> Space
-vectND x s | checkClifSpace s = ClifS (VDim x) s
+vectNDS :: String -> Space -> Space
+vectNDS x s | checkClifSpace s = ClifS (VDim x) s
 
 -- | The dimension of a clif
 data Dimension where

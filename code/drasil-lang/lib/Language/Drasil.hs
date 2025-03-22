@@ -17,7 +17,7 @@ module Language.Drasil (
   , apply1, apply2
   , m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet
   , vScale, vAdd, vSub
-  , Completeness, Relation
+  , Completeness, Relation, BasisBlades
 
   -- ** Literals Language
   , Literal
@@ -269,8 +269,8 @@ module Language.Drasil (
   -- | Used for rendering mathematical symbols in Drasil.
 
   -- Language.Drasil.Space
-  , Space(..)
-  , vect2D, vect3D, vect, vectND
+  , Space(..), Dimension(..)
+  , vect2DS, vect3DS, vectS, vectNDS
   , RealInterval(..), Inclusive(..)
   , DomainDesc(..), RTopology(..), ContinuousDomainDesc, DiscreteDomainDesc
   , getActorName, getInnerSpace
@@ -309,7 +309,7 @@ import Language.Drasil.Expr.Class (ExprC(..),
   m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet,
   vScale, vAdd, vSub
   )
-import Language.Drasil.Expr.Lang (Expr, Completeness, Relation)
+import Language.Drasil.Expr.Lang (Expr, Completeness, Relation, BasisBlades)
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal)
 import Language.Drasil.ModelExpr.Class (ModelExprC(..))
@@ -379,7 +379,7 @@ import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
   , month)
 import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getSentSN, HasShortName(..))
-import Language.Drasil.Space (Space(..), vect2D, vect3D, vect, vectND, RealInterval(..), Inclusive(..),
+import Language.Drasil.Space (Space(..), vect2DS, vect3DS, vectS, vectNDS, Dimension(..), RealInterval(..), Inclusive(..),
   RTopology(..), DomainDesc(..), ContinuousDomainDesc, DiscreteDomainDesc,
   getActorName, getInnerSpace, HasSpace(..), mkFunction, Primitive)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+),

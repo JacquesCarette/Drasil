@@ -177,7 +177,7 @@ data Expr where
   --   d is the dimension of the clifford space.
   -- All Clifs are currently assumed to be embedded in a space defined by spacelike 
   -- basis vectors (e.g. Euclidean space) for now.
-  Clif     :: S.Dimension -> BasisBlades -> Expr
+  Clif     :: S.Dimension -> BasisBlades Expr -> Expr
   -- | Indexing into an expression (clifs only for now)
   -- The list of indexes correspond to the index in each grade
   -- SubSup determines if it is a superscript or a subscript
@@ -210,11 +210,11 @@ data BasisKey =
     Y BasisKey
   | N BasisKey
   | E
-  deriving (Eq, Show)
+  deriving (Eq, Ord, Show)
 
 -- | A mapping from basis blades to their expressions
-type BasisBlades =
-  Map BasisKey Expr
+type BasisBlades e =
+  Map BasisKey e
 
 -- | A scalar key. E.g., for d=2: `scalarKey 2 = N (N E)`
 scalarKey :: Natural -> BasisKey

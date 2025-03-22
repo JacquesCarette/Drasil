@@ -1,7 +1,8 @@
 -- | Defines types similar to those in "Drasil.Language", but better suited to printing.
 module Language.Drasil.Printing.AST where
 
-import Language.Drasil (Special)
+import Language.Drasil (Special, BasisBlades, Dimension)
+
 
 -- | Different types of links for referencing. May be internal, a citation, or external.
 -- A citation may also hold additional reference information.
@@ -45,6 +46,7 @@ data Expr = Dbl    Double
           | Div    Expr Expr -- ^ Fractions are a layout thing.
           | Sqrt   Expr      -- ^ Roots are also a layout thing. Just sqrt for now.
           | Spc    Spacing -- ^ Holds the 'Spacing'.
+          | Clif   Dimension (BasisBlades Expr)
           
 infixr 5 :+:
 

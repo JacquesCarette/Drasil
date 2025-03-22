@@ -5,9 +5,10 @@ module Language.Drasil.CodeExpr.Lang where
 import Prelude hiding (sqrt)
 import Numeric.Natural
 
-import Language.Drasil.Expr.Lang (Completeness)
+import Language.Drasil.Expr.Lang (Completeness, BasisBlades(..))
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal(..))
+import qualified Language.Drasil.Space as S
 import Language.Drasil.Space (Space, RealInterval, DiscreteDomainDesc)
 import Language.Drasil.UID (UID)
 
@@ -169,6 +170,8 @@ data CodeExpr where
   -- IsIn     :: Expr -> Space -> Expr
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
   RealI    :: UID -> RealInterval CodeExpr CodeExpr -> CodeExpr
+
+  Clif     :: S.Dimension -> BasisBlades CodeExpr -> CodeExpr
 
 instance LiteralC CodeExpr where
   str      = Lit . str

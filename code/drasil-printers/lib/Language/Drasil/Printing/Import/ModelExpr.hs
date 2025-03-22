@@ -15,6 +15,7 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb, 
 
 import Control.Lens ((^.))
 import Data.List (intersperse)
+import qualified Data.Map as Map
 
 import Language.Drasil.Printing.Import.Literal (literal)
 import Language.Drasil.Printing.Import.Space (space)
@@ -189,6 +190,9 @@ modelExpr (ForAll c s de)            sm = P.Row [
     P.MO P.ForAll, symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c, P.MO P.IsIn, space sm s,
     P.MO P.Dot, modelExpr de sm
   ]
+-- TODO: Fix this to be more specific to Clifs
+-- TODO: How do we control whether to print all the components or just a subset (e.g. only the vector components)?
+modelExpr (Clif d es)                sm = P.Mtx $ [map (`modelExpr` sm) $ Map.elems es]
 
 -- | Common method of converting associative operations into printable layout AST.
 assocExpr :: P.Ops -> Int -> [ModelExpr] -> PrintingInformation -> P.Expr

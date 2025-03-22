@@ -12,9 +12,12 @@ import           Language.Drasil.Space         (DiscreteDomainDesc,
 import qualified Language.Drasil.Space         as S
 import           Language.Drasil.UID           (UID)
 import           Language.Drasil.WellTyped
-import Data.Either (lefts, fromLeft)
+
+import           Data.Either                  (lefts, fromLeft)
 import qualified Data.Foldable as NE
-import Numeric.Natural (Natural)
+import           Numeric.Natural              (Natural)
+import           Data.Map                     (Map)
+import qualified Data.Map as Map
 
 -- * Expression Types
 
@@ -174,7 +177,7 @@ data Expr where
   --   d is the dimension of the clifford space.
   -- All Clifs are currently assumed to be embedded in a space defined by spacelike 
   -- basis vectors (e.g. Euclidean space) for now.
-  Clif     :: S.Dimension -> Maybe [Expr] -> Expr
+  Clif     :: S.Dimension -> BasisBlades -> Expr
   -- | Indexing into an expression (clifs only for now)
   -- The list of indexes correspond to the index in each grade
   -- SubSup determines if it is a superscript or a subscript
@@ -189,7 +192,52 @@ data Expr where
 --   Super | Sub
 --   deriving (Eq)
 
+-- | Basis Keys are represented by binary numbers (per Roefls, 2025)
+--   Basis elements are ordered by grade, then sorted lexiographically
+--   Y means basis vector is included
+--   N means basis vector is not included
+--   C is for concatenation
+--   E is for empty
+--   Example: in dimension 3, the basis vectors are e0, e1, and e2
+--    Here are some examples for `BasisKey`:
+--     - e0     : N (N (Y E))
+--     - e2     : Y (N (N E))
+--     - e1e2   : Y (Y (N E))
+--     - 1      : N (N (N E))
+--     - e0e1e2 : Y (Y (Y E))
+data BasisKey =
+    Y BasisKey
+  | N BasisKey
+  | E
+  deriving (Eq, Show)
+
+-- | A mapping from basis blades to their expressions
+type BasisBlades =
+  Map BasisKey Expr
+
+-- | A scalar key. E.g., for d=2: `scalarKey 2 = N (N E)`
+scalarKey :: Natural -> BasisKey
+scalarKey d = elemKey [] d
+
+-- | A vector key. E.g., for d=2, basis element e1: `vectorKey 1 2 = Y (N E)`
+vectorKey :: Natural -> Natural -> BasisKey
+vectorKey n d = elemKey [n] d
+
+-- | A bivector key. E.g., for d=3, basis element e0e1: `bivectorKey 0 1 3 = N (Y (Y E))`
+bivectorKey :: Natural -> Natural -> Natural -> BasisKey
+bivectorKey m n d = elemKey [m,n] d
+
+-- | Create a general element key. E.g. for d=4, e0e2e3: `elemKey [0,2,3] 4 = (Y (Y (N (Y E))))`
+--   This function does not care about the order of the list.
+elemKey :: Foldable t => t Natural -> Natural -> BasisKey
+elemKey ns 0 = E
+elemKey ns d 
+  | d - 1 `elem` ns = Y (elemKey ns $ d-1)
+  | otherwise   = N (elemKey ns $ d-1)
+
+
 -- | The basis in which to project clifs
+-- TODO: Generalize this to other cliff spaces
 data Basis where
   -- | ℝⁿ
   Rn :: Natural -> Basis
@@ -545,31 +593,30 @@ instance Typed Expr Space where
   -- For a clif to be well-typed it must:
   -- 1. Contain only basic numeric types inside it
   -- 2. Have a dimension of at least the grade (a 0-dimensional vector makes no sense)
-  infer ctx (Clif d (Just es)) = 
-    case eitherLists (fmap (infer ctx) es) of
-      Left ts -> 
-        let
-          allReal = all (== S.Real) ts
-          -- Check the dimensions of a clif to ensure it makes sense
-          isValidDim =
-            case d of
-              -- If it's a fixed dimension, the number of expressions must be dimension ^ 2
-              S.Fixed fD -> length es == fromIntegral (2 ^ fD)
-              -- We don't know enough to say for sure
-              S.VDim _  -> True
-        in
-        -- `Clif`s must store a basic number space, not things like other clifs
-        -- if S.isBasicNumSpace t then
-          if isValidDim then
-            Left $ S.ClifS d S.Real
-          else Right $ "The number of components in a clif of dimension " ++ show d ++ " must be 2 ^ " ++ show d
-        -- else Right $ "Clifs must contain basic number spaces. Received " ++ show t
-      Left t -> Right $ "Clifs currently only support Real-numbered components. Received " ++ show t
-      Right x -> Right x
-
-  -- A clif with no explicit compile/"specification"-time expressions
-  infer ctx (Clif d Nothing) = 
-    Left $ S.ClifS d S.Real
+  infer ctx (Clif d es) = 
+      -- A clif with no explicit compile/"specification"-time expressions in the components
+    if es == Map.empty then Left $ S.ClifS d S.Real
+    else
+      case eitherLists (fmap (infer ctx) $ Map.elems es) of
+        Left ts -> 
+          let
+            allReal = all (== S.Real) ts
+            -- Check the dimensions of a clif to ensure it makes sense
+            isValidDim =
+              case d of
+                -- If it's a fixed dimension, the number of expressions must be dimension ^ 2
+                S.Fixed fD -> length es == fromIntegral (2 ^ fD)
+                -- We don't know enough to say for sure
+                S.VDim _  -> True
+          in
+          -- `Clif`s must store a basic number space, not things like other clifs
+          -- if S.isBasicNumSpace t then
+            if isValidDim then
+              Left $ S.ClifS d S.Real
+            else Right $ "The number of components in a clif of dimension " ++ show d ++ " must be 2 ^ " ++ show d
+          -- else Right $ "Clifs must contain basic number spaces. Received " ++ show t
+        Left t -> Right $ "Clifs currently only support Real-numbered components. Received " ++ show t
+        Right x -> Right x
 
 -- verify :: Bool -> Space -> TypeError -> Either TypeError Space
 -- verify b s t =

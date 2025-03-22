@@ -236,6 +236,8 @@ class ExprC r where
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy :: (HasUID c, HasSymbol c) => c -> r
 
+  -- clif :: S.Dimension -> 
+
 instance ExprC Expr where
   lit = Lit
 

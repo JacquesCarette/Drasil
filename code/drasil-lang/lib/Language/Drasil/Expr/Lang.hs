@@ -228,8 +228,15 @@ vectorKey n d = elemKey [n] d
 bivectorKey :: Natural -> Natural -> Natural -> BasisKey
 bivectorKey m n d = elemKey [m,n] d
 
--- | Create a general element key. E.g. for d=4, e0e2e3: `elemKey [0,2,3] 4 = (Y (Y (N (Y E))))`
---   This function does not care about the order of the list.
+-- | A bivector key. E.g., for d=3, basis element e0e1: `bivectorKey 0 1 2 3 = Y (Y (Y E))`
+trivectorKey :: Natural -> Natural -> Natural -> Natural -> BasisKey
+trivectorKey m n p d = elemKey [m,n,p] d
+
+-- | Create a general element key. E.g. for d=4, basis element e0e2e3: `elemKey [0,2,3] 4 = (Y (Y (N (Y E))))`
+--   This function does not care about the order or cardinlaity of the objects in the Foldable 
+--   value. That is, it is treated as "set-like". Consider using Data.Set if you're interested 
+--   in enforcing these properties yourself.
+--   If you give it numbers that are "out of scope", i.e. n >= d, or duplicates, they will be ignored
 elemKey :: Foldable t => t Natural -> Natural -> BasisKey
 elemKey ns 0 = E
 elemKey ns d 

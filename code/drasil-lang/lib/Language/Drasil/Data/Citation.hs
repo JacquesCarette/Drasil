@@ -21,12 +21,11 @@ module Language.Drasil.Data.Citation (
   compareAuthYearTitle
 ) where
 
-import Control.Lens ((^.))
+import Control.Lens (Lens', (^.))
 import Data.Maybe (mapMaybe)
 
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.Data.Date (Month(..))
-import Control.Lens (Lens')
 
 -- | Fields used in citations.
 data CiteField = Address      String

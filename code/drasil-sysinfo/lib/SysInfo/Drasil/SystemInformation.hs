@@ -18,11 +18,9 @@ module SysInfo.Drasil.SystemInformation (
 
 import Language.Drasil
 import Theory.Drasil
-import Database.Drasil (ChunkDB, citationTable)
+import Database.Drasil (ChunkDB)
 
-import Control.Lens ((^.), makeClassy)
-import Data.List (sortBy)
-import qualified Data.Map as Map
+import Control.Lens (makeClassy)
 
 -- | Project Example purpose.
 type Purpose = [Sentence]

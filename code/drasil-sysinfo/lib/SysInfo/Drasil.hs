@@ -8,7 +8,7 @@ module SysInfo.Drasil (
   , citeDB
   -- ** Utility Helper Functions
   -- GetChunk
-  , ccss, ccss', combine, vars
+  , ccss, ccss', vars
 ) where
 
 import SysInfo.Drasil.GetChunk

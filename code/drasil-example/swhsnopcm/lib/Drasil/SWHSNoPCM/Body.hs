@@ -200,7 +200,7 @@ purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWHT)]
 
 refDB :: ReferenceDB
-refDB = rdb citations concIns
+refDB = rdb citations
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll (nw progName : map nw symbols ++ map nw acronyms ++ map nw thermocon

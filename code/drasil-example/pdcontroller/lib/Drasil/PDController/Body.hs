@@ -170,7 +170,7 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbolsAll)
   ([] :: [Reference])
 
 refDB :: ReferenceDB
-refDB = rdb citations conceptInstances
+refDB = rdb citations
 
 conceptInstances :: [ConceptInstance]
 conceptInstances = assumptions ++ goals ++ funcReqs ++ nonfuncReqs ++ likelyChgs

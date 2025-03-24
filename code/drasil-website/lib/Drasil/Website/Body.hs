@@ -90,7 +90,7 @@ si fl = SI {
     _constants   = [] :: [ConstQDef],
     _sysinfodb   = symbMap fl,
     _usedinfodb  = usedDB,
-    refdb        = rdb [] []
+    refdb        = rdb []
 }
 
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.

@@ -165,7 +165,7 @@ stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 refDB :: ReferenceDB
-refDB = rdb citations concIns
+refDB = rdb citations
 
 concIns :: [ConceptInstance]
 concIns = assumpDouble ++ goals ++ funcReqs ++ nonFuncReqs

@@ -150,7 +150,7 @@ usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw acronyms ++ map nw sym
   ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference])
 
 refDB :: ReferenceDB
-refDB = rdb citations concIns
+refDB = rdb citations
 
 concIns :: [ConceptInstance]
 concIns = assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs

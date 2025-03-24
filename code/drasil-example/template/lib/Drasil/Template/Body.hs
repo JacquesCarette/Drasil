@@ -122,7 +122,7 @@ usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
   ([] :: [LabelledContent]) ([] :: [Reference])
 
 refDB :: ReferenceDB
-refDB = rdb citations []
+refDB = rdb citations
 
 citations :: BibRef
 citations = [parnasClements1986, koothoor2013, smithEtAl2007, smithLai2005,

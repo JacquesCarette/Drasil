@@ -126,7 +126,7 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronymsFull)
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 refDB :: ReferenceDB
-refDB = rdb citations concIns
+refDB = rdb citations
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,

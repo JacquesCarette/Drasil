@@ -79,7 +79,7 @@ symbols :: [QuantityDict]
 symbols = [qw horiz_velo]
 
 refDB :: ReferenceDB
-refDB = rdb [] []
+refDB = rdb []
 
 projectileMotion :: CI
 projectileMotion = commonIdea "projectileMotion" (pn "Projectile Motion Lesson") "Projectile Motion" []

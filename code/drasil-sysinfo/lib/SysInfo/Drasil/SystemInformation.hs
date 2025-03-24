@@ -19,7 +19,7 @@ module SysInfo.Drasil.SystemInformation (
   -- ** Constructors
   rdb, simpleMap,
   -- ** Lenses
-  citationDB, conceptDB,
+  citationDB,
   ) where
 
 import Language.Drasil
@@ -27,8 +27,7 @@ import Theory.Drasil
 import Database.Drasil (ChunkDB)
 
 import Control.Lens ((^.), makeLenses, makeClassy)
-import Data.Function (on)
-import Data.List (groupBy, sortBy)
+import Data.List (sortBy)
 import Data.Maybe (mapMaybe)
 import qualified Data.Map as Map
 
@@ -135,17 +134,16 @@ type ConceptMap = RefMap ConceptInstance
 
 
 -- | Database for internal references. Contains citations and referrable concepts.
-data ReferenceDB = RDB -- organized in order of appearance in SmithEtAl template
+newtype ReferenceDB = RDB -- organized in order of appearance in SmithEtAl template
   { _citationDB :: BibMap
-  , _conceptDB :: ConceptMap
   }
 
 makeLenses ''ReferenceDB
 makeClassy ''SystemInformation
 
 -- | Smart constructor for creating a reference database from a bibliography and concept instances.
-rdb :: BibRef -> [ConceptInstance] -> ReferenceDB
-rdb citations con = RDB (bibMap citations) (conceptMap con)
+rdb :: BibRef -> ReferenceDB
+rdb = RDB . bibMap
 
 -- | Constructor that makes a 'RefMap' from things that have a 'UID'.
 simpleMap :: HasUID a => [a] -> RefMap a
@@ -159,20 +157,3 @@ bibMap cs = Map.fromList $ zip (map (^. uid) scs) (zip scs [1..])
         -- Sorting is necessary if using elems to pull all the citations
         -- (as it sorts them and would change the order).
         -- We can always change the sorting to whatever makes most sense
-
--- | Check if the 'UID's of two 'ConceptInstance's are the same.
-conGrp :: ConceptInstance -> ConceptInstance -> Bool
-conGrp a b = cdl a == cdl b where
-  cdl :: ConceptInstance -> UID
-  cdl = sDom . cdom
-
--- | Constructs a 'ConceptInstance' database from 'ConceptInstance's.
-conceptMap :: [ConceptInstance] -> ConceptMap
-conceptMap cs = Map.fromList $ zip (map (^. uid) (concat grp)) $ concatMap
-  (\x -> zip x [1..]) grp
-  where grp :: [[ConceptInstance]]
-        grp = groupBy conGrp $ sortBy uidSort cs
-
--- | Compare two things by their 'UID's.
-uidSort :: HasUID c => c -> c -> Ordering
-uidSort = compare `on` (^. uid)

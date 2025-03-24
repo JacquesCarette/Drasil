@@ -43,7 +43,7 @@ si = SI {
   _constants   = [],
   _sysinfodb   = symbMap,
   _usedinfodb  = usedDB,
-   refdb       = rdb [] [] -- FIXME?
+   refdb       = rdb []
 }
   
 mkSRS :: SRSDecl

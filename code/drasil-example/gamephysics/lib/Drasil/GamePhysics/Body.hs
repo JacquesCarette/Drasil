@@ -136,7 +136,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 --FIXME: Need to be able to print defn for gravitational constant.
 
 refDB :: ReferenceDB
-refDB = rdb citations concIns
+refDB = rdb citations
 
 --FIXME: All named ideas, not just acronyms.
 

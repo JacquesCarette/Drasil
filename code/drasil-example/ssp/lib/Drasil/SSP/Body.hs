@@ -173,7 +173,7 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference])
 
 refDB :: ReferenceDB
-refDB = rdb citations concIns
+refDB = rdb citations
 
 -- SECTION 1 --
 --automatically generated in mkSRS -

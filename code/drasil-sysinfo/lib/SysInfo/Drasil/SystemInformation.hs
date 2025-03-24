@@ -12,19 +12,19 @@ module SysInfo.Drasil.SystemInformation (
   -- ** Lenses
   HasSystemInformation(..),
   -- ** Lookup Functions
-  citeDB, citationsFromBibMap,
+  citeDB,
   -- * Reference Database
   -- ** Types
   ReferenceDB, RefMap, Purpose, Background, Scope, Motivation,
   -- ** Constructors
-  rdb, simpleMap,
+  rdb,
   -- ** Lenses
   citationDB,
   ) where
 
 import Language.Drasil
 import Theory.Drasil
-import Database.Drasil (ChunkDB)
+import Database.Drasil (ChunkDB, citationTable)
 
 import Control.Lens ((^.), makeLenses, makeClassy)
 import Data.List (sortBy)
@@ -61,7 +61,6 @@ data SystemInformation where
   , _constants   :: [ConstQDef]
   , _sysinfodb   :: ChunkDB
   , _usedinfodb  :: ChunkDB
-  , refdb        :: ReferenceDB
   } -> SystemInformation
 
 -- | Project Example purpose.
@@ -72,16 +71,6 @@ type Background = [Sentence]
 type Scope = [Sentence]
 -- | Project Example motivation.
 type Motivation = [Sentence]
-
--- | Helper for extracting a bibliography from the system information.
-citeDB :: SystemInformation -> BibRef
-citeDB si = citationsFromBibMap (_citationDB (refdb si))
-
--- | Create sorted citations from a bibliography.
-citationsFromBibMap :: BibMap -> [Citation]
-citationsFromBibMap bm = sortBy compareAuthYearTitle citations
-  where citations :: [Citation]
-        citations = map fst (Map.elems bm)
 
 -- | Orders two authors. If given two of the exact same authors, year, and title, returns an error.
 compareAuthYearTitle :: (HasFields c) => c -> c -> Ordering
@@ -129,9 +118,6 @@ type RefMap a = Map.Map UID (a, Int)
 
 -- | Citation Database (bibliography information).
 type BibMap = RefMap Citation
--- | ConceptInstance Database.
-type ConceptMap = RefMap ConceptInstance
-
 
 -- | Database for internal references. Contains citations and referrable concepts.
 newtype ReferenceDB = RDB -- organized in order of appearance in SmithEtAl template
@@ -141,19 +127,15 @@ newtype ReferenceDB = RDB -- organized in order of appearance in SmithEtAl templ
 makeLenses ''ReferenceDB
 makeClassy ''SystemInformation
 
+-- | Helper for extracting a bibliography from the system information.
+citeDB :: SystemInformation -> BibRef
+citeDB si = sortBy compareAuthYearTitle $ map fst $ Map.elems $ si ^. (sysinfodb . citationTable)
+
 -- | Smart constructor for creating a reference database from a bibliography and concept instances.
 rdb :: BibRef -> ReferenceDB
 rdb = RDB . bibMap
 
--- | Constructor that makes a 'RefMap' from things that have a 'UID'.
-simpleMap :: HasUID a => [a] -> RefMap a
-simpleMap xs = Map.fromList $ zip (map (^. uid) xs) (zip xs [1..])
-
 -- | Constructs a citation database from citations (sorted).
 bibMap :: [Citation] -> BibMap
-bibMap cs = Map.fromList $ zip (map (^. uid) scs) (zip scs [1..])
-  where scs :: [Citation]
-        scs = sortBy compareAuthYearTitle cs
-        -- Sorting is necessary if using elems to pull all the citations
-        -- (as it sorts them and would change the order).
-        -- We can always change the sorting to whatever makes most sense
+bibMap cs = Map.fromList $ zip (map (^. uid) cs) (zip cs [1..])
+

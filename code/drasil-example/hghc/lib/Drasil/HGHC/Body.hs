@@ -42,8 +42,7 @@ si = SI {
   _constraints = [] :: [ConstrainedChunk],
   _constants   = [],
   _sysinfodb   = symbMap,
-  _usedinfodb  = usedDB,
-   refdb       = rdb []
+  _usedinfodb  = usedDB
 }
   
 mkSRS :: SRSDecl
@@ -66,9 +65,9 @@ symbMap :: ChunkDB
 symbMap = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
   ++ [nw fp, nw nuclearPhys, nw hghc, nw degree] ++ map nw doccon' ++ map nw mathcon)
   ([] :: [ConceptChunk])-- FIXME: Fill in concepts
-  siUnits dataDefs [] [] [] [] [] []
+  siUnits dataDefs [] [] [] [] [] [] []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols)
            ([] :: [ConceptChunk]) ([] :: [UnitDefn])
-           [] [] [] [] [] [] ([] :: [Reference])
+           [] [] [] [] [] [] ([] :: [Reference]) []

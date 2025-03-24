@@ -86,8 +86,7 @@ si = SI {
   _constraints = constrained,
   _constants   = [],
   _sysinfodb   = symbMap,
-  _usedinfodb  = usedDB,
-   refdb       = refDB
+  _usedinfodb  = usedDB
 }
   
 mkSRS :: SRSDecl
@@ -162,7 +161,7 @@ symbMap = cdb (map (^. output) SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw units)
   (map cw SSP.iMods ++ map cw symbols ++ srsDomains) units SSP.dataDefs SSP.iMods
-  generalDefinitions tMods concIns labCon allRefs
+  generalDefinitions tMods concIns labCon allRefs citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -170,10 +169,7 @@ allRefs = [externalLinkRef, weightSrc, hsPressureSrc]
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference])
-
-refDB :: ReferenceDB
-refDB = rdb citations
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- SECTION 1 --
 --automatically generated in mkSRS -

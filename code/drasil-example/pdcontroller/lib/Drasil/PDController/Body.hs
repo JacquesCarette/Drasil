@@ -115,8 +115,8 @@ si = SI {
   _constraints = map cnstrw inpConstrained,
   _constants = pidConstants,
   _sysinfodb = symbMap,
-  _usedinfodb = usedDB,
-   refdb = refDB}
+  _usedinfodb = usedDB
+}
 
 purp :: Sentence
 purp = foldlSent_ [S "provide a model" `S.ofA` phrase pidC,
@@ -152,6 +152,7 @@ symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf
   conceptInstances
   ([] :: [LabelledContent])
   allRefs
+  citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -168,9 +169,7 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbolsAll)
   ([] :: [ConceptInstance])
   ([] :: [LabelledContent])
   ([] :: [Reference])
-
-refDB :: ReferenceDB
-refDB = rdb citations
+  []
 
 conceptInstances :: [ConceptInstance]
 conceptInstances = assumptions ++ goals ++ funcReqs ++ nonfuncReqs ++ likelyChgs

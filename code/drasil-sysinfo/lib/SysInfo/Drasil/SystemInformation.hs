@@ -15,11 +15,7 @@ module SysInfo.Drasil.SystemInformation (
   citeDB,
   -- * Reference Database
   -- ** Types
-  ReferenceDB, RefMap, Purpose, Background, Scope, Motivation,
-  -- ** Constructors
-  rdb,
-  -- ** Lenses
-  citationDB,
+  Purpose, Background, Scope, Motivation,
   ) where
 
 import Language.Drasil
@@ -109,33 +105,8 @@ getAuthorYearTitle c = (a, y, t)
     ts = mapMaybe justTitle fs
     t = if not (null ts) then head ts else error "No title found"
 
--- | Database for maintaining references.
--- The Int is that reference's number.
--- Maintains access to both num and chunk for easy reference swapping
--- between number and shortname/refname when necessary (or use of number
--- if no shortname exists).
-type RefMap a = Map.Map UID (a, Int)
-
--- | Citation Database (bibliography information).
-type BibMap = RefMap Citation
-
--- | Database for internal references. Contains citations and referrable concepts.
-newtype ReferenceDB = RDB -- organized in order of appearance in SmithEtAl template
-  { _citationDB :: BibMap
-  }
-
-makeLenses ''ReferenceDB
 makeClassy ''SystemInformation
 
 -- | Helper for extracting a bibliography from the system information.
 citeDB :: SystemInformation -> BibRef
 citeDB si = sortBy compareAuthYearTitle $ map fst $ Map.elems $ si ^. (sysinfodb . citationTable)
-
--- | Smart constructor for creating a reference database from a bibliography and concept instances.
-rdb :: BibRef -> ReferenceDB
-rdb = RDB . bibMap
-
--- | Constructs a citation database from citations (sorted).
-bibMap :: [Citation] -> BibMap
-bibMap cs = Map.fromList $ zip (map (^. uid) cs) (zip cs [1..])
-

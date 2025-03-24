@@ -4,8 +4,8 @@ module SysInfo.Drasil (
   -- * Lenses
   , HasSystemInformation(..)
   -- * Reference Database
-  , ReferenceDB, RefMap, Purpose, Background, Scope, Motivation
-  , citeDB, rdb, citationDB
+  , Purpose, Background, Scope, Motivation
+  , citeDB
 
   -- ** Utility Helper Functions
   -- GetChunk

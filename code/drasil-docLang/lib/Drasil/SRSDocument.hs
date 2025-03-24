@@ -4,8 +4,8 @@
 module Drasil.SRSDocument (
   -- * Chunk database types and functions
   -- | Imported from "Database.Drasil"
-  ChunkDB, ReferenceDB, SystemInformation(..),
-  cdb, rdb,
+  ChunkDB, SystemInformation(..),
+  cdb,
   -- * Printing Information needed to generate all documents
   -- | Imported from "Language.Drasil.Printers"
   PrintingInformation(..), defaultConfiguration, piSys,

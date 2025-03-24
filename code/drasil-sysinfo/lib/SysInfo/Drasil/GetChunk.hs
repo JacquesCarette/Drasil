@@ -1,6 +1,6 @@
 -- | Utilities to get grab certain chunks (from 'Expr', 'Sentence', etc) by 'UID' and
 -- dereference the chunk it refers to.
-module SysInfo.Drasil.GetChunk (ccss, ccss', combine, getIdeaDict, vars) where
+module SysInfo.Drasil.GetChunk (ccss, ccss', combine, getIdeaDict, vars, citeDB) where
 
 import Language.Drasil
 import Language.Drasil.Development
@@ -45,3 +45,7 @@ concpt' a m = map (defResolve m) $ meDep a
 -- | Gets a list of ideas ('IdeaDict') from a 'Sentence' in order to print.
 getIdeaDict :: Sentence -> ChunkDB -> [IdeaDict]
 getIdeaDict a m = map (termResolve m) $ shortdep a
+
+-- | Helper for extracting a bibliography from the system information.
+citeDB :: SystemInformation -> BibRef
+citeDB si = sortBy compareAuthYearTitle $ map fst $ Map.elems $ si ^. (sysinfodb . citationTable)

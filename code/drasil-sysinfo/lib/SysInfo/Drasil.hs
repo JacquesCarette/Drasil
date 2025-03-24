@@ -6,10 +6,9 @@ module SysInfo.Drasil (
   -- * Reference Database
   , Purpose, Background, Scope, Motivation
   , citeDB
-
   -- ** Utility Helper Functions
   -- GetChunk
-  , ccss, ccss', combine, getIdeaDict, vars
+  , ccss, ccss', combine, vars
 ) where
 
 import SysInfo.Drasil.GetChunk

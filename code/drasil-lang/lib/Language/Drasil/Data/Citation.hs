@@ -16,10 +16,15 @@ module Language.Drasil.Data.Citation (
   -- ** ['Int'] -> 'CiteField'
   pages,
   -- ** 'Month' -> 'CiteField'
-  month
+  month,
+  -- * Comparators
+  compareAuthYearTitle
 ) where
 
-import Language.Drasil.People (People)
+import Control.Lens ((^.))
+import Data.Maybe (mapMaybe)
+
+import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.Data.Date (Month(..))
 import Control.Lens (Lens')
 
@@ -112,3 +117,41 @@ pages = Pages
 -- | Smart field constructor for a 'CiteField'.
 month :: Month -> CiteField
 month = Month
+
+-- | Orders two authors. If given two of the exact same authors, year, and
+-- title, returns an error.
+compareAuthYearTitle :: HasFields c => c -> c -> Ordering
+compareAuthYearTitle c1 c2
+  | cp /= EQ  = cp
+  | y1 /= y2  = y1 `compare` y2
+  | otherwise = t1 `compare` t2
+  where
+    (a1, y1, t1) = getAuthorYearTitle c1
+    (a2, y2, t2) = getAuthorYearTitle c2
+
+    cp = comparePeople a1 a2
+
+-- | Search for the Author, Year, and Title of a Citation-like data type, and
+-- error out if it doesn't have them.
+getAuthorYearTitle :: HasFields c => c -> (People, Int, String)
+getAuthorYearTitle c = (a, y, t)
+  where
+    fs = c ^. getFields
+
+    justAuthor (Author x) = Just x
+    justAuthor _          = Nothing
+
+    as = mapMaybe justAuthor fs
+    a = if not (null as) then head as else error "No author found"
+
+    justYear (Year x) = Just x
+    justYear _        = Nothing
+
+    ys = mapMaybe justYear fs
+    y = if not (null ys) then head ys else error "No year found"
+
+    justTitle (Title x) = Just x
+    justTitle _         = Nothing
+
+    ts = mapMaybe justTitle fs
+    t = if not (null ts) then head ts else error "No title found"

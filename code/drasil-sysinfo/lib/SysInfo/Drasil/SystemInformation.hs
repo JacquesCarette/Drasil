@@ -11,8 +11,6 @@ module SysInfo.Drasil.SystemInformation (
   SystemInformation(..),
   -- ** Lenses
   HasSystemInformation(..),
-  -- ** Lookup Functions
-  citeDB,
   -- * Reference Database
   -- ** Types
   Purpose, Background, Scope, Motivation,
@@ -22,11 +20,18 @@ import Language.Drasil
 import Theory.Drasil
 import Database.Drasil (ChunkDB, citationTable)
 
-import Control.Lens ((^.), makeLenses, makeClassy)
+import Control.Lens ((^.), makeClassy)
 import Data.List (sortBy)
-import Data.Maybe (mapMaybe)
 import qualified Data.Map as Map
 
+-- | Project Example purpose.
+type Purpose = [Sentence]
+-- | Project Example background information, used in the 'What' section of README.
+type Background = [Sentence]
+-- | Project Example scope.
+type Scope = [Sentence]
+-- | Project Example motivation.
+type Motivation = [Sentence]
 
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artifact generation.
@@ -59,54 +64,4 @@ data SystemInformation where
   , _usedinfodb  :: ChunkDB
   } -> SystemInformation
 
--- | Project Example purpose.
-type Purpose = [Sentence]
--- | Project Example background information, used in the 'What' section of README.
-type Background = [Sentence]
--- | Project Example scope.
-type Scope = [Sentence]
--- | Project Example motivation.
-type Motivation = [Sentence]
-
--- | Orders two authors. If given two of the exact same authors, year, and title, returns an error.
-compareAuthYearTitle :: (HasFields c) => c -> c -> Ordering
-compareAuthYearTitle c1 c2
-  | cp /= EQ  = cp
-  | y1 /= y2  = y1 `compare` y2
-  | otherwise = t1 `compare` t2
-  where
-    (a1, y1, t1) = getAuthorYearTitle c1
-    (a2, y2, t2) = getAuthorYearTitle c2
-
-    cp = comparePeople a1 a2
-
--- | Search for the Author, Year, and Title of a Citation-like data type, and
--- error out if it doesn't have them.
-getAuthorYearTitle :: HasFields c => c -> (People, Int, String)
-getAuthorYearTitle c = (a, y, t)
-  where
-    fs = c ^. getFields
-
-    justAuthor (Author x) = Just x
-    justAuthor _          = Nothing
-
-    as = mapMaybe justAuthor fs
-    a = if not (null as) then head as else error "No author found"
-
-    justYear (Year x) = Just x
-    justYear _        = Nothing
-
-    ys = mapMaybe justYear fs
-    y = if not (null ys) then head ys else error "No year found"
-
-    justTitle (Title x) = Just x
-    justTitle _         = Nothing
-
-    ts = mapMaybe justTitle fs
-    t = if not (null ts) then head ts else error "No title found"
-
 makeClassy ''SystemInformation
-
--- | Helper for extracting a bibliography from the system information.
-citeDB :: SystemInformation -> BibRef
-citeDB si = sortBy compareAuthYearTitle $ map fst $ Map.elems $ si ^. (sysinfodb . citationTable)

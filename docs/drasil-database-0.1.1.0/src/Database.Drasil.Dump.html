@@ -12,7 +12,7 @@
 </span><span id="line-12"></span><span class="hs-keyword">type</span><span> </span><span id="ChunkType"><span class="annot"><a href="Database.Drasil.Dump.html#ChunkType"><span class="hs-identifier hs-var">ChunkType</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-13"></span><span class="hs-keyword">type</span><span> </span><span id="DumpedChunkDB"><span class="annot"><a href="Database.Drasil.Dump.html#DumpedChunkDB"><span class="hs-identifier hs-var">DumpedChunkDB</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Map</span></span><span> </span><span class="annot"><a href="Database.Drasil.Dump.html#ChunkType"><span class="hs-identifier hs-type">ChunkType</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span>
 </span><span id="line-14"></span><span>
-</span><span id="line-15"></span><span id="local-6989586621679064223"><span class="annot"><a href="Database.Drasil.Dump.html#umapDump"><span class="hs-identifier hs-type">umapDump</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span> </span><span class="annot"><a href="#local-6989586621679064223"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Database.Drasil.ChunkDB.html#UMap"><span class="hs-identifier hs-type">UMap</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679064223"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span></span><span>
+</span><span id="line-15"></span><span id="local-6989586621679064235"><span class="annot"><a href="Database.Drasil.Dump.html#umapDump"><span class="hs-identifier hs-type">umapDump</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span> </span><span class="annot"><a href="#local-6989586621679064235"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Database.Drasil.ChunkDB.html#UMap"><span class="hs-identifier hs-type">UMap</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679064235"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span></span><span>
 </span><span id="line-16"></span><span id="umapDump"><span class="annot"><span class="annottext">umapDump :: forall a. HasUID a =&gt; UMap a -&gt; [UID]
 </span><a href="Database.Drasil.Dump.html#umapDump"><span class="hs-identifier hs-var hs-var">umapDump</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((a, Int) -&gt; UID) -&gt; [(a, Int)] -&gt; [UID]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
@@ -33,8 +33,8 @@ forall k a. Map k a -&gt; [a]
 </span><span id="line-17"></span><span>
 </span><span id="line-18"></span><span class="annot"><a href="Database.Drasil.Dump.html#dumpChunkDB"><span class="hs-identifier hs-type">dumpChunkDB</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Database.Drasil.ChunkDB.html#ChunkDB"><span class="hs-identifier hs-type">ChunkDB</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Database.Drasil.Dump.html#DumpedChunkDB"><span class="hs-identifier hs-type">DumpedChunkDB</span></a></span><span>
 </span><span id="line-19"></span><span id="dumpChunkDB"><span class="annot"><span class="annottext">dumpChunkDB :: ChunkDB -&gt; Map ChunkType [UID]
-</span><a href="Database.Drasil.Dump.html#dumpChunkDB"><span class="hs-identifier hs-var hs-var">dumpChunkDB</span></a></span></span><span> </span><span id="local-6989586621679064310"><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679064310"><span class="hs-identifier hs-var">cdb</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><a href="Database.Drasil.Dump.html#dumpChunkDB"><span class="hs-identifier hs-var hs-var">dumpChunkDB</span></a></span></span><span> </span><span id="local-6989586621679064322"><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679064322"><span class="hs-identifier hs-var">cdb</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
 </span><span id="line-20"></span><span>      </span><span class="annot"><span class="annottext">ChunkType -&gt; [UID] -&gt; Map ChunkType [UID] -&gt; Map ChunkType [UID]
 forall k a. Ord k =&gt; k -&gt; a -&gt; Map k a -&gt; Map k a
 </span><span class="hs-identifier hs-var">insert</span></span><span> </span><span class="annot"><span class="annottext">ChunkType
@@ -44,7 +44,7 @@ forall a. HasUID a =&gt; UMap a -&gt; [UID]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; UMap QuantityDict
 </span><a href="Database.Drasil.ChunkDB.html#symbolTable"><span class="hs-identifier hs-var">symbolTable</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679064310"><span class="hs-identifier hs-var">cdb</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679064322"><span class="hs-identifier hs-var">cdb</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-21"></span><span>    </span><span class="annot"><span class="annottext">(Map ChunkType [UID] -&gt; Map ChunkType [UID])
 -&gt; Map ChunkType [UID] -&gt; Map ChunkType [UID]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -57,7 +57,7 @@ forall a. HasUID a =&gt; UMap a -&gt; [UID]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; UMap IdeaDict
 </span><a href="Database.Drasil.ChunkDB.html#termTable"><span class="hs-identifier hs-var">termTable</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679064310"><span class="hs-identifier hs-var">cdb</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679064322"><span class="hs-identifier hs-var">cdb</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-22"></span><span>    </span><span class="annot"><span class="annottext">(Map ChunkType [UID] -&gt; Map ChunkType [UID])
 -&gt; Map ChunkType [UID] -&gt; Map ChunkType [UID]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -69,7 +69,7 @@ forall a. HasUID a =&gt; UMap a -&gt; [UID]
 </span><a href="Database.Drasil.Dump.html#umapDump"><span class="hs-identifier hs-var">umapDump</span></a></span><span> </span><span class="annot"><span class="annottext">(UMap ConceptInstance -&gt; [UID]) -&gt; UMap ConceptInstance -&gt; [UID]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679064310"><span class="hs-identifier hs-var">cdb</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679064322"><span class="hs-identifier hs-var">cdb</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting (UMap ConceptInstance) ChunkDB (UMap ConceptInstance)
 -&gt; UMap ConceptInstance
 forall s a. s -&gt; Getting a s a -&gt; a
@@ -87,7 +87,7 @@ forall a. HasUID a =&gt; UMap a -&gt; [UID]
 </span><a href="Database.Drasil.Dump.html#umapDump"><span class="hs-identifier hs-var">umapDump</span></a></span><span> </span><span class="annot"><span class="annottext">(UMap UnitDefn -&gt; [UID]) -&gt; UMap UnitDefn -&gt; [UID]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679064310"><span class="hs-identifier hs-var">cdb</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679064322"><span class="hs-identifier hs-var">cdb</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting (UMap UnitDefn) ChunkDB (UMap UnitDefn) -&gt; UMap UnitDefn
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting (UMap UnitDefn) ChunkDB (UMap UnitDefn)
@@ -104,7 +104,7 @@ forall a. HasUID a =&gt; UMap a -&gt; [UID]
 </span><a href="Database.Drasil.Dump.html#umapDump"><span class="hs-identifier hs-var">umapDump</span></a></span><span> </span><span class="annot"><span class="annottext">(UMap DataDefinition -&gt; [UID]) -&gt; UMap DataDefinition -&gt; [UID]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679064310"><span class="hs-identifier hs-var">cdb</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679064322"><span class="hs-identifier hs-var">cdb</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting (UMap DataDefinition) ChunkDB (UMap DataDefinition)
 -&gt; UMap DataDefinition
 forall s a. s -&gt; Getting a s a -&gt; a
@@ -122,7 +122,7 @@ forall a. HasUID a =&gt; UMap a -&gt; [UID]
 </span><a href="Database.Drasil.Dump.html#umapDump"><span class="hs-identifier hs-var">umapDump</span></a></span><span> </span><span class="annot"><span class="annottext">(UMap InstanceModel -&gt; [UID]) -&gt; UMap InstanceModel -&gt; [UID]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679064310"><span class="hs-identifier hs-var">cdb</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679064322"><span class="hs-identifier hs-var">cdb</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting (UMap InstanceModel) ChunkDB (UMap InstanceModel)
 -&gt; UMap InstanceModel
 forall s a. s -&gt; Getting a s a -&gt; a
@@ -140,7 +140,7 @@ forall a. HasUID a =&gt; UMap a -&gt; [UID]
 </span><a href="Database.Drasil.Dump.html#umapDump"><span class="hs-identifier hs-var">umapDump</span></a></span><span> </span><span class="annot"><span class="annottext">(UMap GenDefn -&gt; [UID]) -&gt; UMap GenDefn -&gt; [UID]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679064310"><span class="hs-identifier hs-var">cdb</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679064322"><span class="hs-identifier hs-var">cdb</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting (UMap GenDefn) ChunkDB (UMap GenDefn) -&gt; UMap GenDefn
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting (UMap GenDefn) ChunkDB (UMap GenDefn)
@@ -157,7 +157,7 @@ forall a. HasUID a =&gt; UMap a -&gt; [UID]
 </span><a href="Database.Drasil.Dump.html#umapDump"><span class="hs-identifier hs-var">umapDump</span></a></span><span> </span><span class="annot"><span class="annottext">(UMap TheoryModel -&gt; [UID]) -&gt; UMap TheoryModel -&gt; [UID]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679064310"><span class="hs-identifier hs-var">cdb</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679064322"><span class="hs-identifier hs-var">cdb</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting (UMap TheoryModel) ChunkDB (UMap TheoryModel)
 -&gt; UMap TheoryModel
 forall s a. s -&gt; Getting a s a -&gt; a
@@ -175,7 +175,7 @@ forall a. HasUID a =&gt; UMap a -&gt; [UID]
 </span><a href="Database.Drasil.Dump.html#umapDump"><span class="hs-identifier hs-var">umapDump</span></a></span><span> </span><span class="annot"><span class="annottext">(UMap ConceptInstance -&gt; [UID]) -&gt; UMap ConceptInstance -&gt; [UID]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679064310"><span class="hs-identifier hs-var">cdb</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679064322"><span class="hs-identifier hs-var">cdb</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; Getting (UMap ConceptInstance) ChunkDB (UMap ConceptInstance)
 -&gt; UMap ConceptInstance
 forall s a. s -&gt; Getting a s a -&gt; a

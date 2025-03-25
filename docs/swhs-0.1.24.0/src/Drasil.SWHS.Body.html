@@ -231,10 +231,10 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 -&gt; [LabelledContent]
 -&gt; [Reference]
 -&gt; ChunkDB
-forall q t c u.
-(Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =&gt;
+forall q c u.
+(Quantity q, MayHaveUnit q, Concept c, IsUnit u) =&gt;
 [q]
--&gt; [t]
+-&gt; [IdeaDict]
 -&gt; [c]
 -&gt; [u]
 -&gt; [DataDefinition]
@@ -495,10 +495,10 @@ forall a. a -&gt; [a] -&gt; [a]
 -&gt; [LabelledContent]
 -&gt; [Reference]
 -&gt; ChunkDB
-forall q t c u.
-(Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =&gt;
+forall q c u.
+(Quantity q, MayHaveUnit q, Concept c, IsUnit u) =&gt;
 [q]
--&gt; [t]
+-&gt; [IdeaDict]
 -&gt; [c]
 -&gt; [u]
 -&gt; [DataDefinition]
@@ -2014,8 +2014,8 @@ a -&gt; UnitalChunk -&gt; CI -&gt; ConceptChunk -&gt; Contents
 </span><a href="Drasil.SWHS.Concepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">rightSide</span></span><span class="hs-special">]</span><span>
 </span><span id="line-532"></span><span>
-</span><span id="line-533"></span><span id="local-6989586621679088619"><span id="local-6989586621679088620"><span class="annot"><a href="Drasil.SWHS.Body.html#propCorSolDeriv1"><span class="hs-identifier hs-type">propCorSolDeriv1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679088619"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679088620"><span class="hs-identifier hs-type">h</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679088619"><span class="hs-identifier hs-type">b</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
-</span><span id="line-534"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679088620"><span class="hs-identifier hs-type">h</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span></span></span><span>
+</span><span id="line-533"></span><span id="local-6989586621679088621"><span id="local-6989586621679088622"><span class="annot"><a href="Drasil.SWHS.Body.html#propCorSolDeriv1"><span class="hs-identifier hs-type">propCorSolDeriv1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679088621"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679088622"><span class="hs-identifier hs-type">h</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679088621"><span class="hs-identifier hs-type">b</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><span id="line-534"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679088622"><span class="hs-identifier hs-type">h</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span></span></span><span>
 </span><span id="line-535"></span><span id="propCorSolDeriv1"><span class="annot"><span class="annottext">propCorSolDeriv1 :: forall b h.
 (NamedIdea b, NamedIdea h) =&gt;
 ConceptChunk
@@ -2228,7 +2228,7 @@ f -&gt; a -&gt; r
 </span><a href="Drasil.SWHS.Unitals.html#tempPCM"><span class="hs-identifier hs-var">tempPCM</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-554"></span><span>
-</span><span id="line-555"></span><span id="local-6989586621679088621"><span class="annot"><a href="Drasil.SWHS.Body.html#propCorSolDeriv3"><span class="hs-identifier hs-type">propCorSolDeriv3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679088621"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679088621"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span></span><span>
+</span><span id="line-555"></span><span id="local-6989586621679088623"><span class="annot"><a href="Drasil.SWHS.Body.html#propCorSolDeriv3"><span class="hs-identifier hs-type">propCorSolDeriv3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679088623"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679088623"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span></span><span>
 </span><span id="line-556"></span><span id="propCorSolDeriv3"><span class="annot"><span class="annottext">propCorSolDeriv3 :: forall a.
 NamedIdea a =&gt;
 a -&gt; UnitalChunk -&gt; CI -&gt; ConceptChunk -&gt; Contents

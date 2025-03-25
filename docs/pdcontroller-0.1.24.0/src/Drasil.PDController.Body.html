@@ -452,10 +452,10 @@ forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; CodeVarChunk
 -&gt; [LabelledContent]
 -&gt; [Reference]
 -&gt; ChunkDB
-forall q t c u.
-(Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =&gt;
+forall q c u.
+(Quantity q, MayHaveUnit q, Concept c, IsUnit u) =&gt;
 [q]
--&gt; [t]
+-&gt; [IdeaDict]
 -&gt; [c]
 -&gt; [u]
 -&gt; [DataDefinition]
@@ -627,10 +627,10 @@ forall u. IsUnit u =&gt; u -&gt; UnitDefn
 -&gt; [LabelledContent]
 -&gt; [Reference]
 -&gt; ChunkDB
-forall q t c u.
-(Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =&gt;
+forall q c u.
+(Quantity q, MayHaveUnit q, Concept c, IsUnit u) =&gt;
 [q]
--&gt; [t]
+-&gt; [IdeaDict]
 -&gt; [c]
 -&gt; [u]
 -&gt; [DataDefinition]

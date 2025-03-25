@@ -180,10 +180,10 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 -&gt; [LabelledContent]
 -&gt; [Reference]
 -&gt; ChunkDB
-forall q t c u.
-(Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =&gt;
+forall q c u.
+(Quantity q, MayHaveUnit q, Concept c, IsUnit u) =&gt;
 [q]
--&gt; [t]
+-&gt; [IdeaDict]
 -&gt; [c]
 -&gt; [u]
 -&gt; [DataDefinition]
@@ -270,10 +270,10 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 -&gt; [LabelledContent]
 -&gt; [Reference]
 -&gt; ChunkDB
-forall q t c u.
-(Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =&gt;
+forall q c u.
+(Quantity q, MayHaveUnit q, Concept c, IsUnit u) =&gt;
 [q]
--&gt; [t]
+-&gt; [IdeaDict]
 -&gt; [c]
 -&gt; [u]
 -&gt; [DataDefinition]

@@ -424,10 +424,10 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 -&gt; [LabelledContent]
 -&gt; [Reference]
 -&gt; ChunkDB
-forall q t c u.
-(Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =&gt;
+forall q c u.
+(Quantity q, MayHaveUnit q, Concept c, IsUnit u) =&gt;
 [q]
--&gt; [t]
+-&gt; [IdeaDict]
 -&gt; [c]
 -&gt; [u]
 -&gt; [DataDefinition]
@@ -661,10 +661,10 @@ forall a. [a] -&gt; [a] -&gt; [a]
 -&gt; [LabelledContent]
 -&gt; [Reference]
 -&gt; ChunkDB
-forall q t c u.
-(Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =&gt;
+forall q c u.
+(Quantity q, MayHaveUnit q, Concept c, IsUnit u) =&gt;
 [q]
--&gt; [t]
+-&gt; [IdeaDict]
 -&gt; [c]
 -&gt; [u]
 -&gt; [DataDefinition]
@@ -869,7 +869,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span id="line-202"></span><span>
 </span><span id="line-203"></span><span class="hs-comment">{--INTRODUCTION--}</span><span>
 </span><span id="line-204"></span><span>
-</span><span id="line-205"></span><span id="local-6989586621679086418"><span class="annot"><a href="Drasil.GlassBR.Body.html#startIntro"><span class="hs-identifier hs-type">startIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679086418"><span class="hs-identifier hs-type">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679086418"><span class="hs-identifier hs-type">n</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span><span>
+</span><span id="line-205"></span><span id="local-6989586621679086421"><span class="annot"><a href="Drasil.GlassBR.Body.html#startIntro"><span class="hs-identifier hs-type">startIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679086421"><span class="hs-identifier hs-type">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679086421"><span class="hs-identifier hs-type">n</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span><span>
 </span><span id="line-206"></span><span id="startIntro"><span class="annot"><span class="annottext">startIntro :: forall n. NamedIdea n =&gt; n -&gt; Sentence -&gt; CI -&gt; Sentence
 </span><a href="Drasil.GlassBR.Body.html#startIntro"><span class="hs-identifier hs-var hs-var">startIntro</span></a></span></span><span> </span><span id="local-6989586621679087040"><span class="annot"><span class="annottext">n
 </span><a href="#local-6989586621679087040"><span class="hs-identifier hs-var">prgm</span></a></span></span><span> </span><span class="annot"><span class="annottext">Sentence

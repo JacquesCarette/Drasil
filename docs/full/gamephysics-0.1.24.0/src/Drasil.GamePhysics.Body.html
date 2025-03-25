@@ -96,7 +96,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">intro</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RefTab
 </span><span class="hs-identifier hs-var">TUnits</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[TSIntro] -&gt; RefTab
 </span><span class="hs-identifier hs-var">tsymb</span></span><span> </span><span class="annot"><span class="annottext">[TSIntro]
-</span><a href="#local-6989586621679070838"><span class="hs-identifier hs-var">tableOfSymbols</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">RefTab
+</span><a href="#local-6989586621679070832"><span class="hs-identifier hs-var">tableOfSymbols</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">RefTab
 </span><span class="hs-identifier hs-var">TAandA</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-63"></span><span>  </span><span class="annot"><span class="annottext">IntroSec -&gt; DocSection
 </span><span class="hs-identifier hs-var">IntroSec</span></span><span> </span><span class="annot"><span class="annottext">(IntroSec -&gt; DocSection) -&gt; IntroSec -&gt; DocSection
@@ -294,8 +294,8 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="Drasil.GamePhysics.Concepts.html#gamePhysics"><span class="hs-identifier hs-var">gamePhysics</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-96"></span><span>    </span><span class="annot"><span class="annottext">DocSection
 </span><span class="hs-identifier hs-var">Bibliography</span></span><span class="hs-special">]</span><span>
-</span><span id="line-97"></span><span>      </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679070838"><span class="annot"><span class="annottext">tableOfSymbols :: [TSIntro]
-</span><a href="#local-6989586621679070838"><span class="hs-identifier hs-var hs-var">tableOfSymbols</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TSIntro
+</span><span id="line-97"></span><span>      </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679070832"><span class="annot"><span class="annottext">tableOfSymbols :: [TSIntro]
+</span><a href="#local-6989586621679070832"><span class="hs-identifier hs-var hs-var">tableOfSymbols</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TSIntro
 </span><span class="hs-identifier hs-var">TSPurpose</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[TConvention] -&gt; TSIntro
 </span><span class="hs-identifier hs-var">TypogConvention</span></span><span class="hs-special">[</span><span class="annot"><span class="annottext">Emphasis -&gt; TConvention
 </span><span class="hs-identifier hs-var">Vector</span></span><span> </span><span class="annot"><span class="annottext">Emphasis
@@ -325,42 +325,42 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-106"></span><span>  </span><span class="annot"><span class="annottext">_motivation :: [Sentence]
 </span><span class="hs-identifier hs-var">_motivation</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-107"></span><span>  </span><span class="annot"><span class="annottext">_scope :: [Sentence]
-</span><a href="#local-6989586621679070924"><span class="hs-identifier hs-var">_scope</span></a></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679070918"><span class="hs-identifier hs-var">_scope</span></a></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-108"></span><span>  </span><span class="hs-comment">-- FIXME: The _quants field should be filled in with all the symbols, however</span><span>
 </span><span id="line-109"></span><span>  </span><span class="hs-comment">-- #1658 is why this is empty, otherwise we end up with unused (and probably</span><span>
 </span><span id="line-110"></span><span>  </span><span class="hs-comment">-- should be removed) symbols. But that's for another time. This is &quot;fine&quot;</span><span>
 </span><span id="line-111"></span><span>  </span><span class="hs-comment">-- because _quants are only used relative to #1658.</span><span>
 </span><span id="line-112"></span><span>  </span><span class="annot"><span class="annottext">_quants :: [QuantityDict]
-</span><a href="#local-6989586621679070925"><span class="hs-identifier hs-var">_quants</span></a></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="hs-comment">-- map qw iMods ++ map qw symbolsAll,</span><span>
+</span><a href="#local-6989586621679070919"><span class="hs-identifier hs-var">_quants</span></a></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="hs-comment">-- map qw iMods ++ map qw symbolsAll,</span><span>
 </span><span id="line-113"></span><span>  </span><span class="annot"><span class="annottext">_concepts :: [DefinedQuantityDict]
-</span><a href="#local-6989586621679070926"><span class="hs-identifier hs-var">_concepts</span></a></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679070920"><span class="hs-identifier hs-var">_concepts</span></a></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-114"></span><span>  </span><span class="annot"><span class="annottext">_instModels :: [InstanceModel]
-</span><a href="#local-6989586621679070927"><span class="hs-identifier hs-var">_instModels</span></a></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[InstanceModel]
+</span><a href="#local-6989586621679070921"><span class="hs-identifier hs-var">_instModels</span></a></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[InstanceModel]
 </span><a href="Drasil.GamePhysics.IMods.html#iMods"><span class="hs-identifier hs-var">iMods</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-115"></span><span>  </span><span class="annot"><span class="annottext">_datadefs :: [DataDefinition]
-</span><a href="#local-6989586621679070928"><span class="hs-identifier hs-var">_datadefs</span></a></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DataDefinition]
+</span><a href="#local-6989586621679070922"><span class="hs-identifier hs-var">_datadefs</span></a></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DataDefinition]
 </span><a href="Drasil.GamePhysics.DataDefs.html#dataDefs"><span class="hs-identifier hs-var">dataDefs</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-116"></span><span>  </span><span class="annot"><span class="annottext">_configFiles :: [String]
-</span><a href="#local-6989586621679070929"><span class="hs-identifier hs-var">_configFiles</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679070923"><span class="hs-identifier hs-var">_configFiles</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-117"></span><span>  </span><span class="annot"><span class="annottext">_inputs :: [QuantityDict]
-</span><a href="#local-6989586621679070930"><span class="hs-identifier hs-var">_inputs</span></a></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><a href="#local-6989586621679070924"><span class="hs-identifier hs-var">_inputs</span></a></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.GamePhysics.Unitals.html#inputSymbols"><span class="hs-identifier hs-var">inputSymbols</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-118"></span><span>  </span><span class="annot"><span class="annottext">_outputs :: [QuantityDict]
-</span><a href="#local-6989586621679070931"><span class="hs-identifier hs-var">_outputs</span></a></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><a href="#local-6989586621679070925"><span class="hs-identifier hs-var">_outputs</span></a></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.GamePhysics.Unitals.html#outputSymbols"><span class="hs-identifier hs-var">outputSymbols</span></a></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-119"></span><span>  </span><span class="annot"><span class="annottext">_constraints :: [UncertQ]
-</span><a href="#local-6989586621679070932"><span class="hs-identifier hs-var">_constraints</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[UncertQ]
+</span><a href="#local-6989586621679070926"><span class="hs-identifier hs-var">_constraints</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[UncertQ]
 </span><a href="Drasil.GamePhysics.Unitals.html#inputConstraints"><span class="hs-identifier hs-var">inputConstraints</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-120"></span><span>  </span><span class="annot"><span class="annottext">_constants :: [ConstQDef]
-</span><a href="#local-6989586621679070933"><span class="hs-identifier hs-var">_constants</span></a></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679070927"><span class="hs-identifier hs-var">_constants</span></a></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-121"></span><span>  </span><span class="annot"><span class="annottext">_sysinfodb :: ChunkDB
-</span><a href="#local-6989586621679070934"><span class="hs-identifier hs-var">_sysinfodb</span></a></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679070928"><span class="hs-identifier hs-var">_sysinfodb</span></a></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
 </span><a href="Drasil.GamePhysics.Body.html#symbMap"><span class="hs-identifier hs-var">symbMap</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-122"></span><span>  </span><span class="annot"><span class="annottext">_usedinfodb :: ChunkDB
-</span><a href="#local-6989586621679070936"><span class="hs-identifier hs-var">_usedinfodb</span></a></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679070930"><span class="hs-identifier hs-var">_usedinfodb</span></a></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
 </span><a href="Drasil.GamePhysics.Body.html#usedDB"><span class="hs-identifier hs-var">usedDB</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-123"></span><span>   </span><span class="annot"><span class="annottext">refdb :: ReferenceDB
-</span><a href="#local-6989586621679070938"><span class="hs-identifier hs-var">refdb</span></a></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ReferenceDB
+</span><a href="#local-6989586621679070932"><span class="hs-identifier hs-var">refdb</span></a></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ReferenceDB
 </span><a href="Drasil.GamePhysics.Body.html#refDB"><span class="hs-identifier hs-var">refDB</span></a></span><span>
 </span><span id="line-124"></span><span class="hs-special">}</span><span>
 </span><span id="line-125"></span><span>
@@ -463,10 +463,10 @@ forall u. IsUnit u =&gt; u -&gt; UnitDefn
 -&gt; [LabelledContent]
 -&gt; [Reference]
 -&gt; ChunkDB
-forall q t c u.
-(Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =&gt;
+forall q c u.
+(Quantity q, MayHaveUnit q, Concept c, IsUnit u) =&gt;
 [q]
--&gt; [t]
+-&gt; [IdeaDict]
 -&gt; [c]
 -&gt; [u]
 -&gt; [DataDefinition]
@@ -676,10 +676,10 @@ forall a. [a] -&gt; [a] -&gt; [a]
 -&gt; [LabelledContent]
 -&gt; [Reference]
 -&gt; ChunkDB
-forall q t c u.
-(Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =&gt;
+forall q c u.
+(Quantity q, MayHaveUnit q, Concept c, IsUnit u) =&gt;
 [q]
--&gt; [t]
+-&gt; [IdeaDict]
 -&gt; [c]
 -&gt; [u]
 -&gt; [DataDefinition]

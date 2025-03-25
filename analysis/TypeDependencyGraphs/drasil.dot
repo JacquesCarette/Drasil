@@ -4449,6 +4449,7 @@ digraph alltypes {
 	subgraph datadefinition {
 		subgraph ddpkt{
 		DDPkt	[shape=oval, color=cyan3, label="DDPkt"];
+		DDPkt -> UID;
 		DDPkt -> ScopeType;
 		DDPkt -> DecRef;
 		DDPkt -> MaybeDerivation;

@@ -6,8 +6,8 @@ digraph allvsall {
 	constAccel -> neglectDrag;
 	constAccel -> freeFlight;
 	accelYGravity -> yAxisGravity;
-	ixVel -> speed;
-	iyVel -> speed;
+	dataDefn:ixVel -> dataDefn:speed;
+	dataDefn:iyVel -> dataDefn:speed;
 	theory:projSpeed -> pointMass;
 	theory:projSpeed -> timeStartZero;
 	theory:projSpeed -> theory:accelerationTM;
@@ -32,14 +32,14 @@ digraph allvsall {
 	theory:flightduration -> accelYGravity;
 	theory:flightduration -> timeStartZero;
 	theory:flightduration -> gravAccelValue;
-	theory:flightduration -> iyVel;
+	theory:flightduration -> dataDefn:iyVel;
 	theory:flightduration -> theory:position;
 	theory:landingposition -> yAxisGravity;
 	theory:landingposition -> launchOrigin;
 	theory:landingposition -> posXDirection;
 	theory:landingposition -> accelXZero;
 	theory:landingposition -> gravAccelValue;
-	theory:landingposition -> ixVel;
+	theory:landingposition -> dataDefn:ixVel;
 	theory:landingposition -> theory:position;
 	theory:landingposition -> theory:flightduration;
 	theory:offset -> posXDirection;
@@ -76,13 +76,13 @@ digraph allvsall {
 	{twoDMotion, cartSyst, yAxisGravity, launchOrigin, targetXAxis, posXDirection, constAccel, accelXZero, accelYGravity, neglectDrag, pointMass, freeFlight, neglectCurv, timeStartZero, gravAccelValue}
 	}
 
-	speed	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:vecMag"];
-	ixVel	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:speedIX"];
-	iyVel	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:speedIY"];
+	dataDefn:speed	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:vecMag"];
+	dataDefn:ixVel	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:speedIX"];
+	dataDefn:iyVel	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:speedIY"];
 
 	subgraph DD {
 	rank="same"
-	{speed, ixVel, iyVel}
+	{dataDefn:speed, dataDefn:ixVel, dataDefn:iyVel}
 	}
 
 	theory:accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];

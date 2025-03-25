@@ -1,27 +1,27 @@
 digraph refvsref {
-	qdProcessErrorFD -> theory:laplaceRC;
-	qdPropControlFD -> qdProcessErrorFD;
-	qdPropControlFD -> theory:laplaceRC;
-	qdDerivativeControlFD -> qdProcessErrorFD;
-	qdDerivativeControlFD -> theory:laplaceRC;
-	qdCtrlVarFD -> qdPropControlFD;
-	qdCtrlVarFD -> qdDerivativeControlFD;
+	dataDefn:qdProcessErrorFD -> theory:laplaceRC;
+	dataDefn:qdPropControlFD -> dataDefn:qdProcessErrorFD;
+	dataDefn:qdPropControlFD -> theory:laplaceRC;
+	dataDefn:qdDerivativeControlFD -> dataDefn:qdProcessErrorFD;
+	dataDefn:qdDerivativeControlFD -> theory:laplaceRC;
+	dataDefn:qdCtrlVarFD -> dataDefn:qdPropControlFD;
+	dataDefn:qdCtrlVarFD -> dataDefn:qdDerivativeControlFD;
 	theory:gdPowerPlantRC -> theory:laplaceRC;
 	theory:gdPowerPlantRC -> theory:tmSOSystemRC;
-	theory:imPDRC -> qdProcessErrorFD;
-	theory:imPDRC -> qdCtrlVarFD;
+	theory:imPDRC -> dataDefn:qdProcessErrorFD;
+	theory:imPDRC -> dataDefn:qdCtrlVarFD;
 	theory:imPDRC -> theory:invLaplaceRC;
 	theory:imPDRC -> theory:gdPowerPlantRC;
 
 
-	qdProcessErrorFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ddProcessError"];
-	qdPropControlFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ddPropCtrl"];
-	qdDerivativeControlFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ddDerivCtrl"];
-	qdCtrlVarFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ddCtrlVar"];
+	dataDefn:qdProcessErrorFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ddProcessError"];
+	dataDefn:qdPropControlFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ddPropCtrl"];
+	dataDefn:qdDerivativeControlFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ddDerivCtrl"];
+	dataDefn:qdCtrlVarFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ddCtrlVar"];
 
 	subgraph DD {
 	rank="same"
-	{qdProcessErrorFD, qdPropControlFD, qdDerivativeControlFD, qdCtrlVarFD}
+	{dataDefn:qdProcessErrorFD, dataDefn:qdPropControlFD, dataDefn:qdDerivativeControlFD, dataDefn:qdCtrlVarFD}
 	}
 
 	theory:laplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:laplaceTransform"];

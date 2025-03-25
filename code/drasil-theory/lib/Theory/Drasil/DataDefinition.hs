@@ -19,12 +19,13 @@ data ScopeType =
   | Global      -- ^ Visible everywhere.
 
 data DDPkt = DDPkt {
-  _pktST :: ScopeType,
-  _pktDR :: [DecRef],
-  _pktMD :: Maybe Derivation,
-  _pktSN :: ShortName,
-  _pktS  :: String,
-  _pktSS :: [Sentence]
+  _pktUID :: UID,
+  _pktST  :: ScopeType,
+  _pktDR  :: [DecRef],
+  _pktMD  :: Maybe Derivation,
+  _pktSN  :: ShortName,
+  _pktS   :: String,
+  _pktSS  :: [Sentence]
 }
 makeLenses ''DDPkt
 
@@ -65,7 +66,7 @@ ddPkt lpkt = lens g s
     s (DDME qd pkt) a' = DDME qd (pkt & lpkt .~ a')
 
 -- | Finds the 'UID' of a 'DataDefinition where'.
-instance HasUID             DataDefinition where uid = ddQDGetter uid uid
+instance HasUID             DataDefinition where uid = ddPkt pktUID
 -- | Finds the term ('NP') of the 'QDefinition' used to make the 'DataDefinition where'.
 instance NamedIdea          DataDefinition where term = ddQD term term
 -- | Finds the idea contained in the 'QDefinition' used to make the 'DataDefinition where'.
@@ -108,23 +109,26 @@ instance RequiresChecking DataDefinition Expr Space where
 
 -- * Constructors
 
+ddUid :: HasUID c => c -> UID
+ddUid = nsUid "dataDefn" . (^. uid)
+
 -- | Smart constructor for data definitions.
 ddE :: SimpleQDef -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
 ddE q []   _   _  = error $ "Source field of " ++ showUID q ++ " is empty"
-ddE q refs der sn = DDE q . DDPkt Global refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
+ddE q refs der sn = DDE q . DDPkt (ddUid q) Global refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Smart constructor for data definitions with no references.
 ddENoRefs :: SimpleQDef -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
-ddENoRefs q der sn = DDE q . DDPkt Global [] der (shortname' $ S sn) (prependAbrv dataDefn sn)
+ddENoRefs q der sn = DDE q . DDPkt (ddUid q) Global [] der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Smart constructor for data definitions.
 ddME :: ModelQDef -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
 ddME q []   _   _  = error $ "Source field of " ++ showUID q ++ " is empty"
-ddME q refs der sn = DDME q . DDPkt Global refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
+ddME q refs der sn = DDME q . DDPkt (ddUid q) Global refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Smart constructor for data definitions with no references.
 ddMENoRefs :: ModelQDef -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
-ddMENoRefs q der sn = DDME q . DDPkt Global [] der (shortname' $ S sn) (prependAbrv dataDefn sn)
+ddMENoRefs q der sn = DDME q . DDPkt (ddUid q) Global [] der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Extracts the 'QDefinition e' from a 'DataDefinition'.
 qdFromDD :: DataDefinition -> Either SimpleQDef ModelQDef

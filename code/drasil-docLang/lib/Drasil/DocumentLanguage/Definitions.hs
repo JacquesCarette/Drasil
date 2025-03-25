@@ -203,7 +203,7 @@ mkIMField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
 firstPair' :: InclUnits -> DataDefinition -> ListTuple
 firstPair' IgnoreUnits d  = (P $ eqSymb $ d ^. defLhs, Flat $ phrase d, Nothing)
 firstPair' IncludeUnits d =
-  (P $ eqSymb $ d ^. defLhs, Flat $ phrase d +:+ sParen (toSentenceUnitless $ d ^. defLhs), Nothing)
+  (P $ eqSymb $ d ^. defLhs, Flat $ phrase (d ^. defLhs) +:+ sParen (toSentenceUnitless $ d ^. defLhs), Nothing)
 
 -- | Creates the descriptions for each symbol in the relation/equation.
 descPairs :: (Quantity q, MayHaveUnit q) => InclUnits -> [q] -> [ListTuple]

@@ -123,27 +123,26 @@ fillReferences dd si@SI{_sys = sys} = si2
   where
     -- get old chunk database + ref database
     chkdb = si ^. sysinfodb
-    rfdb = refdb si
+    cites = citeDB si
     -- convert SRSDecl into a list of sections (to easily get at all the references used in the SRS)
     allSections = mkSections si $ mkDocDesc si dd
     -- get refs from SRSDecl. Should include all section labels and labelled content.
     refsFromSRS = concatMap findAllRefs allSections
     -- get refs from the stuff already inside the chunk database
-    ddefs   = map (fst.snd) $ Map.assocs $ chkdb ^. dataDefnTable
-    gdefs   = map (fst.snd) $ Map.assocs $ chkdb ^. gendefTable
-    imods   = map (fst.snd) $ Map.assocs $ chkdb ^. insmodelTable
-    tmods   = map (fst.snd) $ Map.assocs $ chkdb ^. theoryModelTable
-    concIns = map (fst.snd) $ Map.assocs $ chkdb ^. conceptinsTable
-    lblCon  = map (fst.snd) $ Map.assocs $ chkdb ^. labelledcontentTable
-    cites   = citeDB si -- map (fst.snd) $ Map.assocs $ rfdb  ^. citationDB
-    conins  = map (fst.snd) $ Map.assocs $ rfdb  ^. conceptDB
+    ddefs   = map fst $ Map.elems $ chkdb ^. dataDefnTable
+    gdefs   = map fst $ Map.elems $ chkdb ^. gendefTable
+    imods   = map fst $ Map.elems $ chkdb ^. insmodelTable
+    tmods   = map fst $ Map.elems $ chkdb ^. theoryModelTable
+    concIns = map fst $ Map.elems $ chkdb ^. conceptinsTable
+    lblCon  = map fst $ Map.elems $ chkdb ^. labelledcontentTable
     -- search the old reference table just in case the user wants to manually add in some references
-    refs    = map (fst.snd) $ Map.assocs $ chkdb ^. refTable
+    refs    = map fst $ Map.elems $ chkdb ^. refTable
     -- set new reference table in the chunk database
     chkdb2 = set refTable (idMap $ nub $ refsFromSRS
-      ++ map (ref.makeTabRef'.getTraceConfigUID) (traceMatStandard si) ++ secRefs -- secRefs can be removed once #946 is complete
+      ++ map (ref . makeTabRef' . getTraceConfigUID) (traceMatStandard si)
+      ++ secRefs -- secRefs can be removed once #946 is complete
       ++ traceyGraphGetRefs (programName sys) ++ map ref cites
-      ++ map ref conins ++ map ref ddefs ++ map ref gdefs ++ map ref imods
+      ++ map ref ddefs ++ map ref gdefs ++ map ref imods
       ++ map ref tmods ++ map ref concIns ++ map ref lblCon
       ++ refs) chkdb
     -- set new chunk database into system information

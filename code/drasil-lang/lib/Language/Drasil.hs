@@ -199,7 +199,7 @@ module Language.Drasil (
   -- Language.Drasil.Development.Sentence
   , introduceAbb, phrase, plural, phrasePoss, pluralPoss, atStart, atStart'
   , titleize, titleize', short
-  -- Language.Drasil.ShortName
+  -- Drasil.Language.ShortName
   , ShortName, shortname', getSentSN, HasShortName(..)
   -- Language.Drasil.Derivation
   , Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader
@@ -372,7 +372,7 @@ import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
   , pages
   , month)
 import Language.Drasil.NounPhrase
-import Language.Drasil.ShortName (ShortName, shortname', getSentSN, HasShortName(..))
+import Drasil.Language.ShortName (ShortName, shortname', getSentSN, HasShortName(..))
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..),
   RTopology(..), DomainDesc(..), ContinuousDomainDesc, DiscreteDomainDesc,
   getActorName, getInnerSpace, HasSpace(..), mkFunction, Primitive)

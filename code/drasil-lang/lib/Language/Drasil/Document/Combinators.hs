@@ -21,6 +21,7 @@ module Language.Drasil.Document.Combinators (
 
 import Drasil.Database.UID (HasUID)
 import Drasil.Language.Concept (ConceptChunk)
+import Drasil.Language.ShortName (HasShortName(..))
 
 import Language.Drasil.Chunk.Quantity (DefinesQuantity(defLhs))
 import Language.Drasil.Chunk.UnitDefn ( UnitDefn, MayHaveUnit(..) )
@@ -31,7 +32,6 @@ import Language.Drasil.Classes
       Concept,
       Definition(defn),
       NamedIdea(..) )
-import Language.Drasil.ShortName (HasShortName(..))
 import Language.Drasil.Development.Sentence
     ( short, atStart, titleize, phrase, plural )
 import Language.Drasil.Document ( Section )

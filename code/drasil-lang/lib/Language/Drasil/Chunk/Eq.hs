@@ -16,6 +16,7 @@ import Control.Lens ((^.), view, lens, Lens', to)
 
 import Drasil.Database.UID (UID, HasUID(..))
 import Drasil.Language.Idea (ncUID, mkIdea, nw)
+import Drasil.Language.Concept (cc')
 
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDefn)
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol)
@@ -23,7 +24,6 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity,
   ConceptDomain(cdom), Express(express))
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
-import Language.Drasil.Chunk.Concept (cc')
 import Language.Drasil.Chunk.Quantity (DefinesQuantity(defLhs), qw)
 
 import Language.Drasil.Expr.Lang (Expr)

@@ -1,9 +1,6 @@
-{-# LANGUAGE ConstraintKinds #-}
-
 -- | Defining all the classes which represent knowledge-about-knowledge.
 module Language.Drasil.Classes (
     -- * Classes
-    -- ** Chunks
     NamedIdea(term)
   , Idea(getA)
   , CommonIdea(abrv)
@@ -30,7 +27,9 @@ module Language.Drasil.Classes (
 import Language.Drasil.Symbol (HasSymbol)
 
 import Drasil.Database.UID (UID)
-import Drasil.Language.Idea (Idea(..), NamedIdea(..))
+import Drasil.Language.Idea (Idea, NamedIdea(..), Idea(..))
+import Drasil.Language.Concept (Definition,
+  ConceptDomain(..), Definition(..), Concept)
 
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.UnitLang (UDefn, USymb)
@@ -42,33 +41,11 @@ import Language.Drasil.Sentence (Sentence)
 import Control.Lens (Lens')
 
 -- TODO: conceptual typeclass?
--- TODO: I was thinking of splitting QDefinitions into Definitions with 2 type variables
---       Can we change this name from "Definition" to anything else? "NaturalDefinition"?
--- | Defines a chunk.
-class Definition c where
-  -- | Provides (a 'Lens' to) the definition for a chunk.
-  defn :: Lens' c Sentence
-
--- TODO: conceptual typeclass?
 -- Temporary hack to avoid loss of information
 -- | Records any additional notes needed to avoid losing information
 class HasAdditionalNotes c where
   -- | Provides a 'Lens' to the notes.
   getNotes :: Lens' c [Sentence]
-
--- TODO: `drasil-database`-related typeclass? UIDs should be  moved to `drasil-database` too.
--- | Some concepts have a domain (related information encoded in 'UID's to other chunks).
-class ConceptDomain c where
-  -- | Provides Getter for the concept domain tags for a chunk
-  cdom :: c -> [UID]
-  -- ^ /cdom/ should be exported for use by the
-  -- Drasil framework, but should not be exported beyond that.
-
--- TODO: conceptual type synonym?
--- | Concepts are 'Idea's with definitions and domains.
-type Concept c = (Idea c, Definition c, ConceptDomain c)
--- TODO: Would the below make this a bit better to work with?
---        type Concept = forall c. (Idea c, Definition c, ConceptDomain c) => c
 
 -- | CommonIdea is a 'NamedIdea' with the additional
 -- constraint that it __must__ have an abbreviation.

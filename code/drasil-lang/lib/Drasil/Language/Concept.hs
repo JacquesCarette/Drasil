@@ -1,7 +1,7 @@
 {-# Language TemplateHaskell #-}
 -- | Define concept-related chunks. A concept is usually something that has
 -- a term, definition, and comes from some domain of knowledge.
-module Language.Drasil.Chunk.Concept.Core(
+module Drasil.Language.Concept (
   -- * Concept-related Datatypes
   ConceptChunk(ConDict)
   , ConceptInstance(ConInst)

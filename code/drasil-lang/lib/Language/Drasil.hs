@@ -95,7 +95,6 @@ module Language.Drasil (
   -- *** Concepts
   -- Drasil.Language.Concept
   , ConceptChunk, ConceptInstance, sDom
-  -- Language.Drasil.Chunk.Concept
   , dcc, dccWDS, cc, cc', ccs, cw, cic
   -- Language.Drasil.Chunk.Relation
   , RelationConcept, makeRC
@@ -328,7 +327,7 @@ import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
 import Drasil.Database.UID
     (UID, HasUID(..), (+++), (+++.), (+++!), mkUid, nsUid, showUID)
 import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)
-import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
+import Language.Drasil.Classes (HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints),
   HasReasVal(reasVal), DefiningExpr(defnExpr), Quantity, Callable,
   IsArgumentName, Express(..))
@@ -346,8 +345,7 @@ import Language.Drasil.Chunk.CodeVar (CodeIdea(..), CodeChunk(..),
   CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..), obv, qc, ccf, ccv, 
   listToArray, programName, funcPrefix, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.CommonIdea
-import Language.Drasil.Chunk.Concept
-import Drasil.Language.Concept (sDom) -- exported for drasil-database FIXME: move to development package?
+import Drasil.Language.Concept
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Constraint (physRange, sfwrRange, physElem, sfwrElem, isSfwrC, isPhysC,
   Constraint(..), ConstraintE, ConstraintReason(..))

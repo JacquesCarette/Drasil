@@ -13,9 +13,6 @@ Citation.hs
 CommonIdea.hs
   - Defines `CI` data type
 
-Concept.hs
-  - Smart constructors for Concept directory
-
 Constrained.hs
   - Defines `ConstrainedChunk` and `ConstrConcept` data types
 

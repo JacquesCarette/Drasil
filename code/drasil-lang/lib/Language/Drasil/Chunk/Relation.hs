@@ -8,13 +8,14 @@ module Language.Drasil.Chunk.Relation (
 
 import Control.Lens (makeLenses, (^.), view)
 
-import Language.Drasil.Chunk.Concept (ConceptChunk, dccWDS)
+import Drasil.Database.UID (HasUID(..))
+import Drasil.Language.Concept (ConceptChunk, dccWDS)
+
 import Language.Drasil.Classes (Express(..),
   ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence)
-import Drasil.Database.UID (HasUID(..))
 
 -- | For a concept ('ConceptChunk') that also has a 'Relation' ('ModelExpr') attached.
 --

@@ -13,9 +13,9 @@ import Control.Lens (makeLenses, (^.), view, Lens')
 
 import Drasil.Database.UID (UID, HasUID(..))
 import Drasil.Language.Idea (IdeaDict, NamedIdea(..), Idea(..), nw, nc, mkIdea)
+import Drasil.Language.ShortName (HasShortName(..), ShortName, shortname')
 
 import Language.Drasil.NounPhrase (NP, pn)
-import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
 import Language.Drasil.Label.Type ((+::+), defer, name, raw,
   LblType(..), Referable(..), HasRefAddress(..))
 import Language.Drasil.Sentence (Sentence(S))

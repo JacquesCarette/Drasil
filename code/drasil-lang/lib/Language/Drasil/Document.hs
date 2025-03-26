@@ -2,7 +2,10 @@
 -- | Document Description Language.
 module Language.Drasil.Document where
 
-import Language.Drasil.ShortName (HasShortName(..), ShortName, shortname')
+import Control.Lens ((^.), makeLenses, view)
+
+import Drasil.Language.ShortName (HasShortName(..), ShortName, shortname')
+
 import Language.Drasil.Document.Core (UnlabelledContent(UnlblC),
   LabelledContent(LblC), HasCaption(..), RawContent(Figure, Paragraph),
   Contents(..), Lbl, Filepath, Author, Title, MaxWidthPercent )
@@ -14,7 +17,6 @@ import Drasil.Database.UID (UID, HasUID(..), (+++.), mkUid, nsUid)
 
 import Utils.Drasil (repUnd)
 
-import Control.Lens ((^.), makeLenses, view)
 
 -- * Section Types
 

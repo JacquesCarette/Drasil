@@ -1,5 +1,5 @@
 -- | Short names are used for displaying references.
-module Language.Drasil.ShortName where
+module Drasil.Language.ShortName where
 
 import Language.Drasil.Sentence
 

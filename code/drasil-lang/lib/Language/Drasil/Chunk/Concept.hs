@@ -1,4 +1,5 @@
--- | Contains functions to create the concept related chunk types found in "Language.Drasil.Chunk.Concept.Core".
+-- | Contains functions to create the concept related chunk types found in
+-- "Drasil.Language.Concept".
 module Language.Drasil.Chunk.Concept (
   -- * Concept Chunks
   -- ** From an idea ('IdeaDict')
@@ -8,10 +9,10 @@ module Language.Drasil.Chunk.Concept (
   ) where
 
 import Drasil.Database.UID (HasUID(..))
+import Drasil.Language.Concept (ConceptChunk(..), ConceptInstance(..))
 import Drasil.Language.Idea (mkIdea, nw, nc)
 
 import Language.Drasil.Classes (Idea, Definition(defn), ConceptDomain(cdom), Concept)
-import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict), ConceptInstance(ConInst))
 import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.NounPhrase (NP, pn)
 import Language.Drasil.ShortName (shortname')

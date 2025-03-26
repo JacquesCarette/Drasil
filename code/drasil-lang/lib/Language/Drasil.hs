@@ -93,7 +93,7 @@ module Language.Drasil (
   , CI, commonIdea, getAcc, commonIdeaWithDict, prependAbrv
 
   -- *** Concepts
-  -- Language.Drasil.Chunk.Concept.Core
+  -- Drasil.Language.Concept
   , ConceptChunk, ConceptInstance, sDom
   -- Language.Drasil.Chunk.Concept
   , dcc, dccWDS, cc, cc', ccs, cw, cic
@@ -347,7 +347,7 @@ import Language.Drasil.Chunk.CodeVar (CodeIdea(..), CodeChunk(..),
   listToArray, programName, funcPrefix, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
-import Language.Drasil.Chunk.Concept.Core (sDom) -- exported for drasil-database FIXME: move to development package?
+import Drasil.Language.Concept (sDom) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Constraint (physRange, sfwrRange, physElem, sfwrElem, isSfwrC, isPhysC,
   Constraint(..), ConstraintE, ConstraintReason(..))

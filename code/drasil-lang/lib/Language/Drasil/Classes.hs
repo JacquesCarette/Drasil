@@ -29,14 +29,15 @@ module Language.Drasil.Classes (
 -- also helps with cycles...
 import Language.Drasil.Symbol (HasSymbol)
 
-import Language.Drasil.Chunk.NamedIdea (Idea(..), NamedIdea(..))
+import Drasil.Database.UID (UID)
+import Drasil.Language.Idea (Idea(..), NamedIdea(..))
+
 import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.UnitLang (UDefn, USymb)
 import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.Space (HasSpace)
 import Language.Drasil.Sentence (Sentence)
-import Drasil.Database.UID (UID)
 
 import Control.Lens (Lens')
 

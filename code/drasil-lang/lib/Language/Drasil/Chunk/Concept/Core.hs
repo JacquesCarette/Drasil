@@ -7,16 +7,19 @@ module Language.Drasil.Chunk.Concept.Core(
   , ConceptInstance(ConInst)
   , sDom)
   where
+
+import Control.Lens (makeLenses, (^.), view)
+
+import Drasil.Database.UID (UID, HasUID(..))
+import Drasil.Language.Idea (IdeaDict)
+
 import Language.Drasil.ShortName (HasShortName(..), ShortName)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom))
-import Language.Drasil.Chunk.NamedIdea (IdeaDict)
 import Language.Drasil.Label.Type ((+::+), defer, name, raw,
   LblType(..), Referable(..), HasRefAddress(..))
 import Language.Drasil.Sentence (Sentence)
-import Drasil.Database.UID (UID, HasUID(..))
 
-import Control.Lens (makeLenses, (^.), view)
 
 -- | Check if something has one domain. Throws an error if there is more than one.
 sDom :: [UID] -> UID

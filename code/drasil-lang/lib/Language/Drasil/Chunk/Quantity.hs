@@ -11,16 +11,17 @@ module Language.Drasil.Chunk.Quantity (
 
 import Control.Lens (Getter, (^.), makeLenses, view)
 
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  Quantity, Express(..))
-import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw, mkIdea, nc, ncUID, mkIdeaUID)
+import Drasil.Database.UID (UID, HasUID(..))
+import Drasil.Language.Idea (IdeaDict, nw, mkIdea, nc, ncUID, mkIdeaUID,
+  NamedIdea(..), Idea(..))
+
+import Language.Drasil.Classes (Quantity, Express(..))
 import Language.Drasil.Chunk.UnitDefn(UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.Symbol
-import Drasil.Database.UID (UID, HasUID(..))
 
 -- | QuantityDict is a combination of an 'IdeaDict' with a quantity.
 -- Contains an 'IdeaDict', 'Space', a function from 

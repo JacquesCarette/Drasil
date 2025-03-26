@@ -7,13 +7,14 @@ module Language.Drasil.Chunk.Concept (
   ConceptInstance, cic
   ) where
 
+import Drasil.Database.UID (HasUID(..))
+import Drasil.Language.Idea (mkIdea, nw, nc)
+
 import Language.Drasil.Classes (Idea, Definition(defn), ConceptDomain(cdom), Concept)
 import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict), ConceptInstance(ConInst))
 import Language.Drasil.Sentence (Sentence(S))
-import Language.Drasil.Chunk.NamedIdea(mkIdea,nw, nc)
 import Language.Drasil.NounPhrase (NP, pn)
 import Language.Drasil.ShortName (shortname')
-import Drasil.Database.UID (HasUID(uid))
 
 import Control.Lens ((^.))
 

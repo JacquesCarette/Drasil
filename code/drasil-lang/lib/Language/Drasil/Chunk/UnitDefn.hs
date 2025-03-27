@@ -23,14 +23,15 @@ module Language.Drasil.Chunk.UnitDefn (
 import Control.Lens ((^.), makeLenses, view)
 import Control.Arrow (second)
 
-import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
+import Drasil.Database.UID (UID, HasUID(..), mkUid)
+import Drasil.Language.Concept (ConceptChunk, dcc, cc')
+
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit(udefn, getUnits))
 import Language.Drasil.NounPhrase (cn,cn',NP)
 import Language.Drasil.Symbol (Symbol(Label))
 import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift), 
   compUSymb, fromUDefn, getUSymb, getDefn, UnitSymbol(BaseSI, DerivedSI, Defined))
-import Drasil.Database.UID (UID, HasUID(..), mkUid)
 
 -- | For defining units.
 -- It has a 'ConceptChunk' (that defines what kind of unit it is),

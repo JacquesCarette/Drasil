@@ -35,8 +35,8 @@ module Language.Drasil.Chunk.Concept.NamedCombinators (
   compoundNCPS, compoundNCPSPP, compoundNCGenP,
   combineNINP, combineNPNI, combineNINI) where
 
-import Language.Drasil.Chunk.NamedIdea ( IdeaDict, ncUID )
-import Language.Drasil.Classes ( Idea, NamedIdea(..) )
+import Drasil.Language.Idea (IdeaDict, ncUID, NamedIdea(..), Idea)
+
 import Language.Drasil.Development.Sentence ( phrase, plural )
 import Language.Drasil.NounPhrase
     ( NP,

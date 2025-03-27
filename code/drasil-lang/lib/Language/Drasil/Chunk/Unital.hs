@@ -8,7 +8,9 @@ module Language.Drasil.Chunk.Unital (
 
 import Control.Lens (makeLenses, view, (^.))
 
-import Language.Drasil.Chunk.Concept (dccWDS,cw)
+import Drasil.Database.UID (HasUID(..))
+import Drasil.Language.Concept (dccWDS,cw)
+
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', tempdqdWr')
 import Language.Drasil.Chunk.Unitary (Unitary(..))
 import Language.Drasil.Symbol
@@ -20,7 +22,6 @@ import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space(..), HasSpace(..))
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Stages (Stage)
-import Drasil.Database.UID (HasUID(..))
 
 -- | Similar to a `DefinedQuantityDict`, UnitalChunks are concepts
 -- with quantities that must have a unit definition.

@@ -5,6 +5,9 @@ Let:
   * Yellow boxes represent typeclasses.
   * Turquoise boxes represent standalone chunks.
   * Red boxes represent chunks that “extend” others, reusing a `UID`.
+* For chunks, fields prefaced with a `^` mean the chunk somehow inherits
+  components from said field (presumably a chunk as well). Fields prefaced with
+  a `+` are standard fields the chunk.
 * Solid line arrows with an empty triangle head from `B` to `A` represent
   extension.
 * Dashed line arrows with an empty triangle head from `B` to `A` represent

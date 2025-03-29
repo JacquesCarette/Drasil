@@ -5,7 +5,6 @@ import Drasil.Database.UID (HasUID(..))
 import Language.Drasil.Symbol (HasSymbol)
 import Language.Drasil.Space (Space(Actor), HasSpace(..))
 import Language.Drasil.Chunk.CodeVar (CodeIdea, CodeVarChunk)
-import Language.Drasil.Expr.Class (ExprC(..))
 import Language.Drasil.CodeExpr.Lang (CodeExpr(FCall, New, Message, Field))
 
 import Control.Lens ( (^.) )
@@ -57,6 +56,5 @@ instance CodeExprC CodeExpr where
             "Actor space"
   
   -- | Similar to 'apply', but takes a relation to apply to 'FCall'.
-  applyWithNamedArgs f [] [] = sy f
   applyWithNamedArgs f ps ns = FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns) 
     (map snd ns))

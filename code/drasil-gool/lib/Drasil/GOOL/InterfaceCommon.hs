@@ -531,7 +531,7 @@ convType (Func ps r) = funcType (map convType ps) (convType r)
 convType Void = void
 convType InFile = infile
 convType OutFile = outfile
-convType (Object _) = error "Objects not supported"
+convType (Object n) = error $ "convType: Objects not supported (name: '" ++ n ++ "')"
 
 convScope :: (ScopeSym r) => ScopeData -> r (Scope r)
 convScope (SD {scopeTag = Global}) = global

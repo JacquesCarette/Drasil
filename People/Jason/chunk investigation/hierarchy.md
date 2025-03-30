@@ -53,3 +53,7 @@ classDiagram
     
 
 ```
+
+## Examples and Usage
+
+* [IdeaDict](./examples/IdeaDict.md)

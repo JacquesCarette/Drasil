@@ -127,3 +127,5 @@ more interactive version.
 ## Examples and Usage
 
 * [IdeaDict](./examples/IdeaDict.md)
+* [ConceptChunk](./examples/ConceptChunk.md)
+* [ConceptInstance](./examples/ConceptInstance.md)

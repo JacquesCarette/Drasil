@@ -77,7 +77,6 @@ si = SI {
   _motivation  = [],
   _scope       = [],
   _quants      = symbols,
-  _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = SSP.iMods,
   _datadefs    = SSP.dataDefs,
   _configFiles = [],

@@ -52,7 +52,6 @@ si = SI {
   _motivation  = [],
   _scope       = [],
   _quants      = [] :: [QuantityDict],
-  _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = [],
   _datadefs    = [],
   _configFiles = [],

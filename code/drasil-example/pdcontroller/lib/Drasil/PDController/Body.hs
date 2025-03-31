@@ -106,7 +106,6 @@ si = SI {
   _motivation  = [motivation],
   _scope       = [scope],
   _quants = symbolsAll,
-  _concepts = [] :: [DefinedQuantityDict],
   _datadefs = dataDefinitions,
   _instModels = instanceModels,
   _configFiles = [],

@@ -40,9 +40,11 @@ data SystemInformation where
 --There should be a way to remove redundant "Quantity" constraint.
 -- I'm thinking for getting concepts that are also quantities, we could
 -- use a lookup of some sort from their internal (Drasil) ids.
- SI :: (CommonIdea a, Idea a, Idea b,
-  Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f,
-  Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i,
+ SI :: (CommonIdea a, Idea a,
+  Idea b,
+  Quantity e, Eq e, MayHaveUnit e,
+  Quantity h, MayHaveUnit h,
+  Quantity i, MayHaveUnit i,
   HasUID j, Constrained j) => 
   { _sys         :: a
   , _kind        :: b
@@ -52,7 +54,6 @@ data SystemInformation where
   , _scope       :: Scope
   , _motivation  :: Motivation
   , _quants      :: [e]
-  , _concepts    :: [f]
   , _instModels  :: [InstanceModel]
   , _datadefs    :: [DataDefinition]
   , _configFiles :: [String]

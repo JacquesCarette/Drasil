@@ -177,7 +177,6 @@ si = SI {
   -- #1658 is resolved. Basically, _quants is used here, but 
   -- tau does not appear in the document and thus should not be displayed.
   _quants      = (map qw unconstrained ++ map qw symbolsAll) \\ [qw tau],
-  _concepts    = symbols,
   _instModels  = NoPCM.iMods,
   _datadefs    = NoPCM.dataDefs,
   _configFiles = [],

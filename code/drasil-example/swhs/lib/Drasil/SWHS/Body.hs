@@ -85,7 +85,6 @@ si = SI {
   _motivation  = [motivation],
   _scope       = [scope],
   _quants      = symbols,
-  _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = insModel,
   _datadefs    = SWHS.dataDefs,
   _configFiles = [],

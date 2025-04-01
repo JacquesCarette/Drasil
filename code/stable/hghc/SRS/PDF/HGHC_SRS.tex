@@ -56,17 +56,17 @@ The symbols used in this document are summarized in the \hyperref[Table:ToS]{Tab
 {colspec={l X[l] l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
-${h_{\text{b}}}$ & Initial coolant film conductance & --
+$h_{\text{b}}$ & Initial coolant film conductance & --
 \\
-${h_{\text{c}}}$ & Convective heat transfer coefficient between clad and coolant & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+$h_{\text{c}}$ & Convective heat transfer coefficient between clad and coolant & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
-${h_{\text{g}}}$ & Effective heat transfer coefficient between clad and fuel surface & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+$h_{\text{g}}$ & Effective heat transfer coefficient between clad and fuel surface & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
-${h_{\text{p}}}$ & Initial gap film conductance & --
+$h_{\text{p}}$ & Initial gap film conductance & --
 \\
-${k_{\text{c}}}$ & Clad conductivity & --
+$k_{\text{c}}$ & Clad conductivity & --
 \\
-${τ_{\text{c}}}$ & Clad thickness & --
+$τ_{\text{c}}$ & Clad thickness & --
 \label{Table:ToS}
 \end{longtblr}
 \section{Specific System Description}
@@ -100,21 +100,21 @@ This section collects and defines all the data needed to build the instance mode
 Label & Effective heat transfer coefficient between clad and fuel surface
         
 \\ \midrule
-Symbol & ${h_{\text{g}}}$
+Symbol & $h_{\text{g}}$
          
 \\ \midrule
 Units & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{h_{\text{g}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{p}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{p}}}}}
+           \resizeExpression{h_{\text{g}}=\frac{2\,k_{\text{c}}\,h_{\text{p}}}{2\,k_{\text{c}}+τ_{\text{c}}\,h_{\text{p}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{${h_{\text{g}}}$ is the effective heat transfer coefficient between clad and fuel surface ($\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$)}
-              \item{${k_{\text{c}}}$ is the clad conductivity (Unitless)}
-              \item{${h_{\text{p}}}$ is the initial gap film conductance (Unitless)}
-              \item{${τ_{\text{c}}}$ is the clad thickness (Unitless)}
+              \item{$h_{\text{g}}$ is the effective heat transfer coefficient between clad and fuel surface ($\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$)}
+              \item{$k_{\text{c}}$ is the clad conductivity (Unitless)}
+              \item{$h_{\text{p}}$ is the initial gap film conductance (Unitless)}
+              \item{$τ_{\text{c}}$ is the clad thickness (Unitless)}
               \end{symbDescription}
 \\ \bottomrule
 \end{tabular}
@@ -131,21 +131,21 @@ Description & \begin{symbDescription}
 Label & Convective heat transfer coefficient between clad and coolant
         
 \\ \midrule
-Symbol & ${h_{\text{c}}}$
+Symbol & $h_{\text{c}}$
          
 \\ \midrule
 Units & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{h_{\text{c}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{b}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{b}}}}}
+           \resizeExpression{h_{\text{c}}=\frac{2\,k_{\text{c}}\,h_{\text{b}}}{2\,k_{\text{c}}+τ_{\text{c}}\,h_{\text{b}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{${h_{\text{c}}}$ is the convective heat transfer coefficient between clad and coolant ($\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$)}
-              \item{${k_{\text{c}}}$ is the clad conductivity (Unitless)}
-              \item{${h_{\text{b}}}$ is the initial coolant film conductance (Unitless)}
-              \item{${τ_{\text{c}}}$ is the clad thickness (Unitless)}
+              \item{$h_{\text{c}}$ is the convective heat transfer coefficient between clad and coolant ($\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$)}
+              \item{$k_{\text{c}}$ is the clad conductivity (Unitless)}
+              \item{$h_{\text{b}}$ is the initial coolant film conductance (Unitless)}
+              \item{$τ_{\text{c}}$ is the clad thickness (Unitless)}
               \end{symbDescription}
 \\ \bottomrule
 \end{tabular}

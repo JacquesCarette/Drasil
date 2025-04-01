@@ -4,14 +4,14 @@ The [Data Constraints Table](./SecDataConstraints.md#Table:InDataConstraints) sh
 
 <div id="Table:InDataConstraints"></div>
 
-|Var                            |Physical Constraints                         |Software Constraints                                                               |Typical Value             |Uncert.     |
-|:------------------------------|:--------------------------------------------|:----------------------------------------------------------------------------------|:-------------------------|:-----------|
-|\\(a\\)                        |\\(a\gt{}0\land{}a\geq{}b\\)                 |\\({d\_{\text{min}}}\leq{}a\leq{}{d\_{\text{max}}}\\)                              |\\(1.5\\) \\({\text{m}}\\)|10\\(\\%\\) |
-|\\(\mathit{AR}\\)              |\\(\mathit{AR}\geq{}1\\)                     |\\(\mathit{AR}\leq{}{\mathit{AR}\_{\text{max}}}\\)                                 |\\(1.5\\)                 |10\\(\\%\\) |
-|\\(b\\)                        |\\(0\lt{}b\leq{}a\\)                         |\\({d\_{\text{min}}}\leq{}b\leq{}{d\_{\text{max}}}\\)                              |\\(1.2\\) \\({\text{m}}\\)|10\\(\\%\\) |
-|\\({P\_{\text{b}\text{tol}}}\\)|\\(0\leq{}{P\_{\text{b}\text{tol}}}\leq{}1\\)|--                                                                                 |\\(0.008\\)               |0.1\\(\\%\\)|
-|\\(\mathit{SD}\\)              |\\(\mathit{SD}\gt{}0\\)                      |\\({\mathit{SD}\_{\text{min}}}\leq{}\mathit{SD}\leq{}{\mathit{SD}\_{\text{max}}}\\)|\\(45\\) \\({\text{m}}\\) |10\\(\\%\\) |
-|\\(\mathit{TNT}\\)             |\\(\mathit{TNT}\gt{}0\\)                     |--                                                                                 |\\(1\\)                   |10\\(\\%\\) |
-|\\(w\\)                        |\\(w\gt{}0\\)                                |\\({w\_{\text{min}}}\leq{}w\leq{}{w\_{\text{max}}}\\)                              |\\(42\\) \\({\text{kg}}\\)|10\\(\\%\\) |
+|Var                          |Physical Constraints                       |Software Constraints                                                           |Typical Value             |Uncert.     |
+|:----------------------------|:------------------------------------------|:------------------------------------------------------------------------------|:-------------------------|:-----------|
+|\\(a\\)                      |\\(a\gt{}0\land{}a\geq{}b\\)               |\\(d\_{\text{min}}\leq{}a\leq{}d\_{\text{max}}\\)                              |\\(1.5\\) \\({\text{m}}\\)|10\\(\\%\\) |
+|\\(\mathit{AR}\\)            |\\(\mathit{AR}\geq{}1\\)                   |\\(\mathit{AR}\leq{}\mathit{AR}\_{\text{max}}\\)                               |\\(1.5\\)                 |10\\(\\%\\) |
+|\\(b\\)                      |\\(0\lt{}b\leq{}a\\)                       |\\(d\_{\text{min}}\leq{}b\leq{}d\_{\text{max}}\\)                              |\\(1.2\\) \\({\text{m}}\\)|10\\(\\%\\) |
+|\\(P\_{\text{b}\text{tol}}\\)|\\(0\leq{}P\_{\text{b}\text{tol}}\leq{}1\\)|--                                                                             |\\(0.008\\)               |0.1\\(\\%\\)|
+|\\(\mathit{SD}\\)            |\\(\mathit{SD}\gt{}0\\)                    |\\(\mathit{SD}\_{\text{min}}\leq{}\mathit{SD}\leq{}\mathit{SD}\_{\text{max}}\\)|\\(45\\) \\({\text{m}}\\) |10\\(\\%\\) |
+|\\(\mathit{TNT}\\)           |\\(\mathit{TNT}\gt{}0\\)                   |--                                                                             |\\(1\\)                   |10\\(\\%\\) |
+|\\(w\\)                      |\\(w\gt{}0\\)                              |\\(w\_{\text{min}}\leq{}w\leq{}w\_{\text{max}}\\)                              |\\(42\\) \\({\text{kg}}\\)|10\\(\\%\\) |
 
 **<p align="center">Input Data Constraints</p>**

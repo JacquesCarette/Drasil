@@ -69,9 +69,9 @@ The symbols used in this document are summarized in the \hyperref[Table:ToS]{Tab
 {colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
-${a_{\text{x}}}$ & $x$-component of acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+$a_{\text{x}}$ & $x$-component of acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-${a_{\text{y}}}$ & $y$-component of acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+$a_{\text{y}}$ & $y$-component of acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\symbf{a}\text{(}t\text{)}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
@@ -85,17 +85,17 @@ $\symbf{I}$ & Moment of inertia & $\text{kg}\text{m}^{2}$
 \\
 $\symbf{\hat{i}}$ & Unit vector & --
 \\
-${L_{\text{rod}}}$ & Length of the rod & ${\text{m}}$
+$L_{\text{rod}}$ & Length of the rod & ${\text{m}}$
 \\
 $m$ & Mass & ${\text{kg}}$
 \\
-${p_{\text{x}}}$ & $x$-component of position & ${\text{m}}$
+$p_{\text{x}}$ & $x$-component of position & ${\text{m}}$
 \\
-${{p_{\text{x}}}^{\text{i}}}$ & $x$-component of initial position & ${\text{m}}$
+$p^{\text{i}}_{\text{x}}$ & $x$-component of initial position & ${\text{m}}$
 \\
-${p_{\text{y}}}$ & $y$-component of position & ${\text{m}}$
+$p_{\text{y}}$ & $y$-component of position & ${\text{m}}$
 \\
-${{p_{\text{y}}}^{\text{i}}}$ & $y$-component of initial position & ${\text{m}}$
+$p^{\text{i}}_{\text{y}}$ & $y$-component of initial position & ${\text{m}}$
 \\
 $\symbf{p}\text{(}t\text{)}$ & Position & ${\text{m}}$
 \\
@@ -105,9 +105,9 @@ $\symbf{T}$ & Tension & ${\text{N}}$
 \\
 $t$ & Time & ${\text{s}}$
 \\
-${v_{\text{x}}}$ & $x$-component of velocity & $\frac{\text{m}}{\text{s}}$
+$v_{\text{x}}$ & $x$-component of velocity & $\frac{\text{m}}{\text{s}}$
 \\
-${v_{\text{y}}}$ & $y$-component of velocity & $\frac{\text{m}}{\text{s}}$
+$v_{\text{y}}$ & $y$-component of velocity & $\frac{\text{m}}{\text{s}}$
 \\
 $\symbf{v}\text{(}t\text{)}$ & Velocity & $\frac{\text{m}}{\text{s}}$
 \\
@@ -115,9 +115,9 @@ $α$ & Angular acceleration & $\frac{\text{rad}}{\text{s}^{2}}$
 \\
 $θ$ & Angular displacement & ${\text{rad}}$
 \\
-${θ_{i}}$ & Initial pendulum angle & ${\text{rad}}$
+$θ_{i}$ & Initial pendulum angle & ${\text{rad}}$
 \\
-${θ_{p}}$ & Displacement angle of the pendulum & ${\text{rad}}$
+$θ_{p}$ & Displacement angle of the pendulum & ${\text{rad}}$
 \\
 $π$ & Ratio of circumference to diameter for any circle & --
 \\
@@ -429,14 +429,14 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{v_{\text{x}}}=ω\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)}
+           \resizeExpression{v_{\text{x}}=ω\,L_{\text{rod}}\,\cos\left(θ_{p}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{${v_{\text{x}}}$ is the $x$-component of velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$v_{\text{x}}$ is the $x$-component of velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-              \item{${L_{\text{rod}}}$ is the length of the rod (${\text{m}}$)}
-              \item{${θ_{p}}$ is the displacement angle of the pendulum (${\text{rad}}$)}
+              \item{$L_{\text{rod}}$ is the length of the rod (${\text{m}}$)}
+              \item{$θ_{p}$ is the displacement angle of the pendulum (${\text{rad}}$)}
               \end{symbDescription}
 \\ \midrule
 Source & --
@@ -457,22 +457,22 @@ At a given point in time, velocity may be defined as
 We also know the horizontal position
 
 \begin{displaymath}
-\resizeExpression{{p_{\text{x}}}={L_{\text{rod}}}\,\sin\left({θ_{p}}\right)}
+\resizeExpression{p_{\text{x}}=L_{\text{rod}}\,\sin\left(θ_{p}\right)}
 \end{displaymath}
 Applying this,
 
 \begin{displaymath}
-\resizeExpression{{v_{\text{x}}}=\frac{\,d{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)}{\,dt}}
+\resizeExpression{v_{\text{x}}=\frac{\,dL_{\text{rod}}\,\sin\left(θ_{p}\right)}{\,dt}}
 \end{displaymath}
-${L_{\text{rod}}}$ is constant with respect to time, so
+$L_{\text{rod}}$ is constant with respect to time, so
 
 \begin{displaymath}
-\resizeExpression{{v_{\text{x}}}={L_{\text{rod}}}\,\frac{\,d\sin\left({θ_{p}}\right)}{\,dt}}
+\resizeExpression{v_{\text{x}}=L_{\text{rod}}\,\frac{\,d\sin\left(θ_{p}\right)}{\,dt}}
 \end{displaymath}
 Therefore, using the chain rule,
 
 \begin{displaymath}
-\resizeExpression{{v_{\text{x}}}=ω\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)}
+\resizeExpression{v_{\text{x}}=ω\,L_{\text{rod}}\,\cos\left(θ_{p}\right)}
 \end{displaymath}
 \medskip
 \noindent
@@ -489,14 +489,14 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{v_{\text{y}}}=ω\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)}
+           \resizeExpression{v_{\text{y}}=ω\,L_{\text{rod}}\,\sin\left(θ_{p}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{${v_{\text{y}}}$ is the $y$-component of velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$v_{\text{y}}$ is the $y$-component of velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-              \item{${L_{\text{rod}}}$ is the length of the rod (${\text{m}}$)}
-              \item{${θ_{p}}$ is the displacement angle of the pendulum (${\text{rad}}$)}
+              \item{$L_{\text{rod}}$ is the length of the rod (${\text{m}}$)}
+              \item{$θ_{p}$ is the displacement angle of the pendulum (${\text{rad}}$)}
               \end{symbDescription}
 \\ \midrule
 Source & --
@@ -517,22 +517,22 @@ At a given point in time, velocity may be defined as
 We also know the vertical position
 
 \begin{displaymath}
-\resizeExpression{{p_{\text{y}}}=-{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)}
+\resizeExpression{p_{\text{y}}=-L_{\text{rod}}\,\cos\left(θ_{p}\right)}
 \end{displaymath}
 Applying this,
 
 \begin{displaymath}
-\resizeExpression{{v_{\text{y}}}=-\left(\frac{\,d{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)}{\,dt}\right)}
+\resizeExpression{v_{\text{y}}=-\left(\frac{\,dL_{\text{rod}}\,\cos\left(θ_{p}\right)}{\,dt}\right)}
 \end{displaymath}
-${L_{\text{rod}}}$ is constant with respect to time, so
+$L_{\text{rod}}$ is constant with respect to time, so
 
 \begin{displaymath}
-\resizeExpression{{v_{\text{y}}}=-{L_{\text{rod}}}\,\frac{\,d\cos\left({θ_{p}}\right)}{\,dt}}
+\resizeExpression{v_{\text{y}}=-L_{\text{rod}}\,\frac{\,d\cos\left(θ_{p}\right)}{\,dt}}
 \end{displaymath}
 Therefore, using the chain rule,
 
 \begin{displaymath}
-\resizeExpression{{v_{\text{y}}}=ω\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)}
+\resizeExpression{v_{\text{y}}=ω\,L_{\text{rod}}\,\sin\left(θ_{p}\right)}
 \end{displaymath}
 \medskip
 \noindent
@@ -549,14 +549,14 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{a_{\text{x}}}=-ω^{2}\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)+α\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)}
+           \resizeExpression{a_{\text{x}}=-ω^{2}\,L_{\text{rod}}\,\sin\left(θ_{p}\right)+α\,L_{\text{rod}}\,\cos\left(θ_{p}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{${a_{\text{x}}}$ is the $x$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$a_{\text{x}}$ is the $x$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-              \item{${L_{\text{rod}}}$ is the length of the rod (${\text{m}}$)}
-              \item{${θ_{p}}$ is the displacement angle of the pendulum (${\text{rad}}$)}
+              \item{$L_{\text{rod}}$ is the length of the rod (${\text{m}}$)}
+              \item{$θ_{p}$ is the displacement angle of the pendulum (${\text{rad}}$)}
               \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule
@@ -578,22 +578,22 @@ Our acceleration is:
 Earlier, we found the horizontal velocity to be
 
 \begin{displaymath}
-\resizeExpression{{v_{\text{x}}}=ω\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)}
+\resizeExpression{v_{\text{x}}=ω\,L_{\text{rod}}\,\cos\left(θ_{p}\right)}
 \end{displaymath}
 Applying this to our equation for acceleration
 
 \begin{displaymath}
-\resizeExpression{{a_{\text{x}}}=\frac{\,dω\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)}{\,dt}}
+\resizeExpression{a_{\text{x}}=\frac{\,dω\,L_{\text{rod}}\,\cos\left(θ_{p}\right)}{\,dt}}
 \end{displaymath}
 By the product and chain rules, we find
 
 \begin{displaymath}
-\resizeExpression{{a_{\text{x}}}=\frac{\,dω}{\,dt}\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)-ω\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)\,\frac{\,d{θ_{p}}}{\,dt}}
+\resizeExpression{a_{\text{x}}=\frac{\,dω}{\,dt}\,L_{\text{rod}}\,\cos\left(θ_{p}\right)-ω\,L_{\text{rod}}\,\sin\left(θ_{p}\right)\,\frac{\,dθ_{p}}{\,dt}}
 \end{displaymath}
 Simplifying,
 
 \begin{displaymath}
-\resizeExpression{{a_{\text{x}}}=-ω^{2}\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)+α\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)}
+\resizeExpression{a_{\text{x}}=-ω^{2}\,L_{\text{rod}}\,\sin\left(θ_{p}\right)+α\,L_{\text{rod}}\,\cos\left(θ_{p}\right)}
 \end{displaymath}
 \medskip
 \noindent
@@ -610,14 +610,14 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{a_{\text{y}}}=ω^{2}\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)+α\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)}
+           \resizeExpression{a_{\text{y}}=ω^{2}\,L_{\text{rod}}\,\cos\left(θ_{p}\right)+α\,L_{\text{rod}}\,\sin\left(θ_{p}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{${a_{\text{y}}}$ is the $y$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$a_{\text{y}}$ is the $y$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-              \item{${L_{\text{rod}}}$ is the length of the rod (${\text{m}}$)}
-              \item{${θ_{p}}$ is the displacement angle of the pendulum (${\text{rad}}$)}
+              \item{$L_{\text{rod}}$ is the length of the rod (${\text{m}}$)}
+              \item{$θ_{p}$ is the displacement angle of the pendulum (${\text{rad}}$)}
               \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule
@@ -639,22 +639,22 @@ Our acceleration is:
 Earlier, we found the vertical velocity to be
 
 \begin{displaymath}
-\resizeExpression{{v_{\text{y}}}=ω\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)}
+\resizeExpression{v_{\text{y}}=ω\,L_{\text{rod}}\,\sin\left(θ_{p}\right)}
 \end{displaymath}
 Applying this to our equation for acceleration
 
 \begin{displaymath}
-\resizeExpression{{a_{\text{y}}}=\frac{\,dω\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)}{\,dt}}
+\resizeExpression{a_{\text{y}}=\frac{\,dω\,L_{\text{rod}}\,\sin\left(θ_{p}\right)}{\,dt}}
 \end{displaymath}
 By the product and chain rules, we find
 
 \begin{displaymath}
-\resizeExpression{{a_{\text{y}}}=\frac{\,dω}{\,dt}\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)+ω\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)\,\frac{\,d{θ_{p}}}{\,dt}}
+\resizeExpression{a_{\text{y}}=\frac{\,dω}{\,dt}\,L_{\text{rod}}\,\sin\left(θ_{p}\right)+ω\,L_{\text{rod}}\,\cos\left(θ_{p}\right)\,\frac{\,dθ_{p}}{\,dt}}
 \end{displaymath}
 Simplifying,
 
 \begin{displaymath}
-\resizeExpression{{a_{\text{y}}}=ω^{2}\,{L_{\text{rod}}}\,\cos\left({θ_{p}}\right)+α\,{L_{\text{rod}}}\,\sin\left({θ_{p}}\right)}
+\resizeExpression{a_{\text{y}}=ω^{2}\,L_{\text{rod}}\,\cos\left(θ_{p}\right)+α\,L_{\text{rod}}\,\sin\left(θ_{p}\right)}
 \end{displaymath}
 \medskip
 \noindent
@@ -671,15 +671,15 @@ Units & ${\text{N}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\symbf{F}=m\,{a_{\text{x}}}=-\symbf{T}\,\sin\left({θ_{p}}\right)}
+           \resizeExpression{\symbf{F}=m\,a_{\text{x}}=-\symbf{T}\,\sin\left(θ_{p}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{${a_{\text{x}}}$ is the $x$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$a_{\text{x}}$ is the $x$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$\symbf{T}$ is the tension (${\text{N}}$)}
-              \item{${θ_{p}}$ is the displacement angle of the pendulum (${\text{rad}}$)}
+              \item{$θ_{p}$ is the displacement angle of the pendulum (${\text{rad}}$)}
               \end{symbDescription}
 \\ \midrule
 Source & --
@@ -693,7 +693,7 @@ RefBy &
 \paragraph{Detailed derivation of force on the pendulum:}
 \label{GD:hForceOnPendulumDeriv}
 \begin{displaymath}
-\resizeExpression{\symbf{F}=m\,{a_{\text{x}}}=-\symbf{T}\,\sin\left({θ_{p}}\right)}
+\resizeExpression{\symbf{F}=m\,a_{\text{x}}=-\symbf{T}\,\sin\left(θ_{p}\right)}
 \end{displaymath}
 \medskip
 \noindent
@@ -710,15 +710,15 @@ Units & ${\text{N}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{\symbf{F}=m\,{a_{\text{y}}}=\symbf{T}\,\cos\left({θ_{p}}\right)-m\,\symbf{g}}
+           \resizeExpression{\symbf{F}=m\,a_{\text{y}}=\symbf{T}\,\cos\left(θ_{p}\right)-m\,\symbf{g}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
               \item{$\symbf{F}$ is the force (${\text{N}}$)}
               \item{$m$ is the mass (${\text{kg}}$)}
-              \item{${a_{\text{y}}}$ is the $y$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$a_{\text{y}}$ is the $y$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$\symbf{T}$ is the tension (${\text{N}}$)}
-              \item{${θ_{p}}$ is the displacement angle of the pendulum (${\text{rad}}$)}
+              \item{$θ_{p}$ is the displacement angle of the pendulum (${\text{rad}}$)}
               \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule
@@ -733,7 +733,7 @@ RefBy &
 \paragraph{Detailed derivation of force on the pendulum:}
 \label{GD:vForceOnPendulumDeriv}
 \begin{displaymath}
-\resizeExpression{\symbf{F}=m\,{a_{\text{y}}}=\symbf{T}\,\cos\left({θ_{p}}\right)-m\,\symbf{g}}
+\resizeExpression{\symbf{F}=m\,a_{\text{y}}=\symbf{T}\,\cos\left(θ_{p}\right)-m\,\symbf{g}}
 \end{displaymath}
 \medskip
 \noindent
@@ -750,13 +750,13 @@ Units & ${\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{Ω=\sqrt{\frac{\symbf{g}}{{L_{\text{rod}}}}}}
+           \resizeExpression{Ω=\sqrt{\frac{\symbf{g}}{L_{\text{rod}}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
               \item{$Ω$ is the angular frequency (${\text{s}}$)}
               \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-              \item{${L_{\text{rod}}}$ is the length of the rod (${\text{m}}$)}
+              \item{$L_{\text{rod}}$ is the length of the rod (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule
 Notes & The torque is defined in \hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot} and frequency is $f$ is defined in \hyperref[DD:frequencyDD]{DD:frequencyDD}.
@@ -773,40 +773,40 @@ RefBy & \hyperref[GD:periodPend]{GD:periodPend} and \hyperref[IM:calOfAngularDis
 
 \paragraph{Detailed derivation of the angular frequency of the pendulum:}
 \label{GD:angFrequencyGDDeriv}
-Consider the torque on a pendulum defined in \hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}. The force providing the restoring torque is the component of weight of the pendulum bob that acts along the arc length. The torque is the length of the string ${L_{\text{rod}}}$ multiplied by the component of the net force that is perpendicular to the radius of the arc. The minus sign indicates the torque acts in the opposite direction of the angular displacement:
+Consider the torque on a pendulum defined in \hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}. The force providing the restoring torque is the component of weight of the pendulum bob that acts along the arc length. The torque is the length of the string $L_{\text{rod}}$ multiplied by the component of the net force that is perpendicular to the radius of the arc. The minus sign indicates the torque acts in the opposite direction of the angular displacement:
 
 \begin{displaymath}
-\resizeExpression{\symbf{τ}=-{L_{\text{rod}}}\,m\,\symbf{g}\,\sin\left({θ_{p}}\right)}
+\resizeExpression{\symbf{τ}=-L_{\text{rod}}\,m\,\symbf{g}\,\sin\left(θ_{p}\right)}
 \end{displaymath}
 So then
 
 \begin{displaymath}
-\resizeExpression{\symbf{I}\,α=-{L_{\text{rod}}}\,m\,\symbf{g}\,\sin\left({θ_{p}}\right)}
+\resizeExpression{\symbf{I}\,α=-L_{\text{rod}}\,m\,\symbf{g}\,\sin\left(θ_{p}\right)}
 \end{displaymath}
 Therefore,
 
 \begin{displaymath}
-\resizeExpression{\symbf{I}\,\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}}\,m\,\symbf{g}\,\sin\left({θ_{p}}\right)}
+\resizeExpression{\symbf{I}\,\frac{\,d\frac{\,dθ_{p}}{\,dt}}{\,dt}=-L_{\text{rod}}\,m\,\symbf{g}\,\sin\left(θ_{p}\right)}
 \end{displaymath}
 Substituting for $\symbf{I}$
 
 \begin{displaymath}
-\resizeExpression{m\,{L_{\text{rod}}}^{2}\,\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}}\,m\,\symbf{g}\,\sin\left({θ_{p}}\right)}
+\resizeExpression{m\,L_{\text{rod}}^{2}\,\frac{\,d\frac{\,dθ_{p}}{\,dt}}{\,dt}=-L_{\text{rod}}\,m\,\symbf{g}\,\sin\left(θ_{p}\right)}
 \end{displaymath}
-Crossing out $m$ and ${L_{\text{rod}}}$ we have
+Crossing out $m$ and $L_{\text{rod}}$ we have
 
 \begin{displaymath}
-\resizeExpression{\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{\symbf{g}}{{L_{\text{rod}}}}\right)\,\sin\left({θ_{p}}\right)}
+\resizeExpression{\frac{\,d\frac{\,dθ_{p}}{\,dt}}{\,dt}=-\left(\frac{\symbf{g}}{L_{\text{rod}}}\right)\,\sin\left(θ_{p}\right)}
 \end{displaymath}
-For small angles, we approximate sin ${θ_{p}}$ to ${θ_{p}}$
+For small angles, we approximate sin $θ_{p}$ to $θ_{p}$
 
 \begin{displaymath}
-\resizeExpression{\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{\symbf{g}}{{L_{\text{rod}}}}\right)\,{θ_{p}}}
+\resizeExpression{\frac{\,d\frac{\,dθ_{p}}{\,dt}}{\,dt}=-\left(\frac{\symbf{g}}{L_{\text{rod}}}\right)\,θ_{p}}
 \end{displaymath}
 Because this equation, has the same form as the equation for simple harmonic motion the solution is easy to find.  The angular frequency
 
 \begin{displaymath}
-\resizeExpression{Ω=\sqrt{\frac{\symbf{g}}{{L_{\text{rod}}}}}}
+\resizeExpression{Ω=\sqrt{\frac{\symbf{g}}{L_{\text{rod}}}}}
 \end{displaymath}
 \medskip
 \noindent
@@ -823,13 +823,13 @@ Units & ${\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{T=2\,π\,\sqrt{\frac{{L_{\text{rod}}}}{\symbf{g}}}}
+           \resizeExpression{T=2\,π\,\sqrt{\frac{L_{\text{rod}}}{\symbf{g}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
               \item{$T$ is the period (${\text{s}}$)}
               \item{$π$ is the ratio of circumference to diameter for any circle (Unitless)}
-              \item{${L_{\text{rod}}}$ is the length of the rod (${\text{m}}$)}
+              \item{$L_{\text{rod}}$ is the length of the rod (${\text{m}}$)}
               \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule
@@ -849,12 +849,12 @@ RefBy &
 The period of the pendulum can be defined from the general definition for the equation of \hyperref[GD:angFrequencyGD]{angular frequency}
 
 \begin{displaymath}
-\resizeExpression{Ω=\sqrt{\frac{\symbf{g}}{{L_{\text{rod}}}}}}
+\resizeExpression{Ω=\sqrt{\frac{\symbf{g}}{L_{\text{rod}}}}}
 \end{displaymath}
 Therefore from the data definition of the equation for \hyperref[DD:angFrequencyDD]{angular frequency}, we have
 
 \begin{displaymath}
-\resizeExpression{T=2\,π\,\sqrt{\frac{{L_{\text{rod}}}}{\symbf{g}}}}
+\resizeExpression{T=2\,π\,\sqrt{\frac{L_{\text{rod}}}{\symbf{g}}}}
 \end{displaymath}
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
@@ -871,25 +871,25 @@ This section collects and defines all the data needed to build the instance mode
 Label & $x$-component of initial position
         
 \\ \midrule
-Symbol & ${{p_{\text{x}}}^{\text{i}}}$
+Symbol & $p^{\text{i}}_{\text{x}}$
          
 \\ \midrule
 Units & ${\text{m}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{{p_{\text{x}}}^{\text{i}}}={L_{\text{rod}}}\,\sin\left({θ_{i}}\right)}
+           \resizeExpression{p^{\text{i}}_{\text{x}}=L_{\text{rod}}\,\sin\left(θ_{i}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{${{p_{\text{x}}}^{\text{i}}}$ is the $x$-component of initial position (${\text{m}}$)}
-              \item{${L_{\text{rod}}}$ is the length of the rod (${\text{m}}$)}
-              \item{${θ_{i}}$ is the initial pendulum angle (${\text{rad}}$)}
+              \item{$p^{\text{i}}_{\text{x}}$ is the $x$-component of initial position (${\text{m}}$)}
+              \item{$L_{\text{rod}}$ is the length of the rod (${\text{m}}$)}
+              \item{$θ_{i}$ is the initial pendulum angle (${\text{rad}}$)}
               \end{symbDescription}
 \\ \midrule
-Notes & ${{p_{\text{x}}}^{\text{i}}}$ is the horizontal position
+Notes & $p^{\text{i}}_{\text{x}}$ is the horizontal position
         
-        ${{p_{\text{x}}}^{\text{i}}}$ is shown in \hyperref[Figure:sglpend]{Fig:sglpend}.
+        $p^{\text{i}}_{\text{x}}$ is shown in \hyperref[Figure:sglpend]{Fig:sglpend}.
         
 \\ \midrule
 Source & --
@@ -911,25 +911,25 @@ RefBy &
 Label & $y$-component of initial position
         
 \\ \midrule
-Symbol & ${{p_{\text{y}}}^{\text{i}}}$
+Symbol & $p^{\text{i}}_{\text{y}}$
          
 \\ \midrule
 Units & ${\text{m}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{{p_{\text{y}}}^{\text{i}}}=-{L_{\text{rod}}}\,\cos\left({θ_{i}}\right)}
+           \resizeExpression{p^{\text{i}}_{\text{y}}=-L_{\text{rod}}\,\cos\left(θ_{i}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{${{p_{\text{y}}}^{\text{i}}}$ is the $y$-component of initial position (${\text{m}}$)}
-              \item{${L_{\text{rod}}}$ is the length of the rod (${\text{m}}$)}
-              \item{${θ_{i}}$ is the initial pendulum angle (${\text{rad}}$)}
+              \item{$p^{\text{i}}_{\text{y}}$ is the $y$-component of initial position (${\text{m}}$)}
+              \item{$L_{\text{rod}}$ is the length of the rod (${\text{m}}$)}
+              \item{$θ_{i}$ is the initial pendulum angle (${\text{rad}}$)}
               \end{symbDescription}
 \\ \midrule
-Notes & ${{p_{\text{y}}}^{\text{i}}}$ is the vertical position
+Notes & $p^{\text{i}}_{\text{y}}$ is the vertical position
         
-        ${{p_{\text{y}}}^{\text{i}}}$ is shown in \hyperref[Figure:sglpend]{Fig:sglpend}.
+        $p^{\text{i}}_{\text{y}}$ is shown in \hyperref[Figure:sglpend]{Fig:sglpend}.
         
 \\ \midrule
 Source & --
@@ -1070,38 +1070,38 @@ This section transforms the problem defined in the \hyperref[Sec:ProbDesc]{probl
 Label & Calculation of angular displacement
         
 \\ \midrule
-Input & ${L_{\text{rod}}}$, ${θ_{i}}$, $\symbf{g}$
+Input & $L_{\text{rod}}$, $θ_{i}$, $\symbf{g}$
         
 \\ \midrule
-Output & ${θ_{p}}$
+Output & $θ_{p}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \resizeExpression{{L_{\text{rod}}}\gt{}0}
+                    \resizeExpression{L_{\text{rod}}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
-                    \resizeExpression{{θ_{i}}\gt{}0}
+                    \resizeExpression{θ_{i}\gt{}0}
                     \end{displaymath}
                     \begin{displaymath}
                     \resizeExpression{\symbf{g}\gt{}0}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & \begin{displaymath}
-                     \resizeExpression{{θ_{p}}\gt{}0}
+                     \resizeExpression{θ_{p}\gt{}0}
                      \end{displaymath}
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{θ_{p}}\left(t\right)={θ_{i}}\,\cos\left(Ω\,t\right)}
+           \resizeExpression{θ_{p}\left(t\right)=θ_{i}\,\cos\left(Ω\,t\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{${θ_{p}}$ is the displacement angle of the pendulum (${\text{rad}}$)}
+              \item{$θ_{p}$ is the displacement angle of the pendulum (${\text{rad}}$)}
               \item{$t$ is the time (${\text{s}}$)}
-              \item{${θ_{i}}$ is the initial pendulum angle (${\text{rad}}$)}
+              \item{$θ_{i}$ is the initial pendulum angle (${\text{rad}}$)}
               \item{$Ω$ is the angular frequency (${\text{s}}$)}
               \end{symbDescription}
 \\ \midrule
-Notes & The constraint ${θ_{i}}\gt{}0$ is required. The angular frequency is defined in \hyperref[GD:angFrequencyGD]{GD:angFrequencyGD}.
+Notes & The constraint $θ_{i}\gt{}0$ is required. The angular frequency is defined in \hyperref[GD:angFrequencyGD]{GD:angFrequencyGD}.
         
 \\ \midrule
 Source & --
@@ -1123,22 +1123,22 @@ When the pendulum is displaced to an initial angle and released, the pendulum sw
 Where $\symbf{τ}$ denotes the torque, $\symbf{I}$ denotes the moment of inertia and $α$ denotes the angular acceleration. This implies:
 
 \begin{displaymath}
-\resizeExpression{-m\,\symbf{g}\,\sin\left({θ_{p}}\right)\,{L_{\text{rod}}}=m\,{L_{\text{rod}}}^{2}\,\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}}
+\resizeExpression{-m\,\symbf{g}\,\sin\left(θ_{p}\right)\,L_{\text{rod}}=m\,L_{\text{rod}}^{2}\,\frac{\,d\frac{\,dθ_{p}}{\,dt}}{\,dt}}
 \end{displaymath}
 And rearranged as:
 
 \begin{displaymath}
-\resizeExpression{\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\symbf{g}}{{L_{\text{rod}}}}\,\sin\left({θ_{p}}\right)=0}
+\resizeExpression{\frac{\,d\frac{\,dθ_{p}}{\,dt}}{\,dt}+\frac{\symbf{g}}{L_{\text{rod}}}\,\sin\left(θ_{p}\right)=0}
 \end{displaymath}
-If the amplitude of angular displacement is small enough, we can approximate $\sin\left({θ_{p}}\right)={θ_{p}}$ for the purpose of a simple pendulum at very small angles. Then the equation of motion reduces to the equation of simple harmonic motion:
+If the amplitude of angular displacement is small enough, we can approximate $\sin\left(θ_{p}\right)=θ_{p}$ for the purpose of a simple pendulum at very small angles. Then the equation of motion reduces to the equation of simple harmonic motion:
 
 \begin{displaymath}
-\resizeExpression{\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\symbf{g}}{{L_{\text{rod}}}}\,{θ_{p}}=0}
+\resizeExpression{\frac{\,d\frac{\,dθ_{p}}{\,dt}}{\,dt}+\frac{\symbf{g}}{L_{\text{rod}}}\,θ_{p}=0}
 \end{displaymath}
 Thus the simple harmonic motion is:
 
 \begin{displaymath}
-\resizeExpression{{θ_{p}}\left(t\right)={θ_{i}}\,\cos\left(Ω\,t\right)}
+\resizeExpression{θ_{p}\left(t\right)=θ_{i}\,\cos\left(Ω\,t\right)}
 \end{displaymath}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
@@ -1149,9 +1149,9 @@ The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data co
 {colspec={l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Var} & \textbf{Physical Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
 \\
-${L_{\text{rod}}}$ & ${L_{\text{rod}}}\gt{}0$ & $44.2$ ${\text{m}}$ & 10$\%$
+$L_{\text{rod}}$ & $L_{\text{rod}}\gt{}0$ & $44.2$ ${\text{m}}$ & 10$\%$
 \\
-${θ_{i}}$ & ${θ_{i}}\gt{}0$ & $2.1$ ${\text{rad}}$ & 10$\%$
+$θ_{i}$ & $θ_{i}\gt{}0$ & $2.1$ ${\text{rad}}$ & 10$\%$
 \label{Table:InDataConstraints}
 \end{longtblr}
 \subsubsection{Properties of a Correct Solution}
@@ -1165,7 +1165,7 @@ The \hyperref[Table:OutDataConstraints]{Data Constraints Table} shows the data c
 \\
 $α$ & $α\gt{}0$
 \\
-${θ_{p}}$ & ${θ_{p}}\gt{}0$
+$θ_{p}$ & $θ_{p}\gt{}0$
 \label{Table:OutDataConstraints}
 \end{longtblr}
 \section{Requirements}
@@ -1179,23 +1179,23 @@ This section provides the functional requirements, the tasks and behaviours that
 \begin{description}[font=\normalfont]
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}.}
 \item[Verify-Input-Values:\phantomsection\label{verifyInptVals}]{Check the entered input values to ensure that they do not exceed the \hyperref[Sec:DataConstraints]{data constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
-\item[Calculate-Angular-Position-Of-Mass:\phantomsection\label{calcAngPos}]{Calculate the following values: $θ$ and ${θ_{p}}$ (from \hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}).}
-\item[Output-Values:\phantomsection\label{outputValues}]{Output ${L_{\text{rod}}}$ (from \hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}).}
+\item[Calculate-Angular-Position-Of-Mass:\phantomsection\label{calcAngPos}]{Calculate the following values: $θ$ and $θ_{p}$ (from \hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}).}
+\item[Output-Values:\phantomsection\label{outputValues}]{Output $L_{\text{rod}}$ (from \hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}).}
 \end{description}
 \begin{longtblr}
 [caption={Required Inputs}]
 {colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
-${L_{\text{rod}}}$ & Length of the rod & ${\text{m}}$
+$L_{\text{rod}}$ & Length of the rod & ${\text{m}}$
 \\
 $m$ & Mass & ${\text{kg}}$
 \\
 $α$ & Angular acceleration & $\frac{\text{rad}}{\text{s}^{2}}$
 \\
-${θ_{i}}$ & Initial pendulum angle & ${\text{rad}}$
+$θ_{i}$ & Initial pendulum angle & ${\text{rad}}$
 \\
-${θ_{p}}$ & Displacement angle of the pendulum & ${\text{rad}}$
+$θ_{p}$ & Displacement angle of the pendulum & ${\text{rad}}$
 \label{Table:ReqInputs}
 \end{longtblr}
 \subsection{Non-Functional Requirements}

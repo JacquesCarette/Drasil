@@ -4,9 +4,9 @@ The [Data Constraints Table](./SecDataConstraints.md#Table:InDataConstraints) sh
 
 <div id="Table:InDataConstraints"></div>
 
-|Var                    |Physical Constraints         |Typical Value               |Uncert.    |
-|:----------------------|:----------------------------|:---------------------------|:----------|
-|\\({L\_{\text{rod}}}\\)|\\({L\_{\text{rod}}}\gt{}0\\)|\\(44.2\\) \\({\text{m}}\\) |10\\(\\%\\)|
-|\\({θ\_{i}}\\)         |\\({θ\_{i}}\gt{}0\\)         |\\(2.1\\) \\({\text{rad}}\\)|10\\(\\%\\)|
+|Var                  |Physical Constraints       |Typical Value               |Uncert.    |
+|:--------------------|:--------------------------|:---------------------------|:----------|
+|\\(L\_{\text{rod}}\\)|\\(L\_{\text{rod}}\gt{}0\\)|\\(44.2\\) \\({\text{m}}\\) |10\\(\\%\\)|
+|\\(θ\_{i}\\)         |\\(θ\_{i}\gt{}0\\)         |\\(2.1\\) \\({\text{rad}}\\)|10\\(\\%\\)|
 
 **<p align="center">Input Data Constraints</p>**

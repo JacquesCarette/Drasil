@@ -4,8 +4,8 @@ The [Data Constraints Table](./SecCorSolProps.md#Table:OutDataConstraints) shows
 
 <div id="Table:OutDataConstraints"></div>
 
-|Var                  |Physical Constraints       |
-|:--------------------|:--------------------------|
-|\\({F\_{\text{S}}}\\)|\\({F\_{\text{S}}}\gt{}0\\)|
+|Var                |Physical Constraints     |
+|:------------------|:------------------------|
+|\\(F\_{\text{S}}\\)|\\(F\_{\text{S}}\gt{}0\\)|
 
 **<p align="center">Output Data Constraints</p>**

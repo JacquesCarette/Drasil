@@ -16,51 +16,51 @@ Check-Input-with-Physical_Constraints: Verify that the inputs satisfy the requir
 
 <div id="outputInputDerivVals"></div>
 
-Output-Input-Derived-Values: Output the input values and derived values in the following list: the values (from [FR:Input-Values](./SecFRs.md#inputValues)), the masses (from [FR:Find-Mass](./SecFRs.md#findMass)), \\({τ\_{\text{W}}}\\) (from [DD:balanceDecayRate](./SecDDs.md#DD:balanceDecayRate)), \\(η\\) (from [DD:balanceDecayTime](./SecDDs.md#DD:balanceDecayTime)), \\({{τ\_{\text{P}}}^{\text{S}}}\\) (from [DD:balanceSolidPCM](./SecDDs.md#DD:balanceSolidPCM)), and \\({{τ\_{\text{P}}}^{\text{L}}}\\) (from [DD:balanceLiquidPCM](./SecDDs.md#DD:balanceLiquidPCM)).
+Output-Input-Derived-Values: Output the input values and derived values in the following list: the values (from [FR:Input-Values](./SecFRs.md#inputValues)), the masses (from [FR:Find-Mass](./SecFRs.md#findMass)), \\(τ\_{\text{W}}\\) (from [DD:balanceDecayRate](./SecDDs.md#DD:balanceDecayRate)), \\(η\\) (from [DD:balanceDecayTime](./SecDDs.md#DD:balanceDecayTime)), \\(τ^{\text{S}}\_{\text{P}}\\) (from [DD:balanceSolidPCM](./SecDDs.md#DD:balanceSolidPCM)), and \\(τ^{\text{L}}\_{\text{P}}\\) (from [DD:balanceLiquidPCM](./SecDDs.md#DD:balanceLiquidPCM)).
 
 <div id="calcValues"></div>
 
-Calculate-Values: Calculate the following values: \\({T\_{\text{W}}}\\)(\\(t\\)) (from [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr)), \\({T\_{\text{P}}}\\)(\\(t\\)) (from [IM:eBalanceOnPCM](./SecIMs.md#IM:eBalanceOnPCM)), \\({E\_{\text{W}}}\\)(\\(t\\)) (from [IM:heatEInWtr](./SecIMs.md#IM:heatEInWtr)), and \\({E\_{\text{P}}}\\)(\\(t\\)) (from [IM:heatEInPCM](./SecIMs.md#IM:heatEInPCM)).
+Calculate-Values: Calculate the following values: \\(T\_{\text{W}}\\)(\\(t\\)) (from [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr)), \\(T\_{\text{P}}\\)(\\(t\\)) (from [IM:eBalanceOnPCM](./SecIMs.md#IM:eBalanceOnPCM)), \\(E\_{\text{W}}\\)(\\(t\\)) (from [IM:heatEInWtr](./SecIMs.md#IM:heatEInWtr)), and \\(E\_{\text{P}}\\)(\\(t\\)) (from [IM:heatEInPCM](./SecIMs.md#IM:heatEInPCM)).
 
 <div id="verifyEnergyOutput"></div>
 
-Verify-Energy-Output-Follow-Conservation-of-Energy: Verify that the energy outputs (\\({E\_{\text{W}}}\\)(\\(t\\)) and \\({E\_{\text{P}}}\\)(\\(t\\))) follow the law of conservation of energy, as outlined in [Properties of a Correct Solution](./SecCorSolProps.md#Sec:CorSolProps), with relative error no greater than \\({C\_{\text{tol}}}\\).
+Verify-Energy-Output-Follow-Conservation-of-Energy: Verify that the energy outputs (\\(E\_{\text{W}}\\)(\\(t\\)) and \\(E\_{\text{P}}\\)(\\(t\\))) follow the law of conservation of energy, as outlined in [Properties of a Correct Solution](./SecCorSolProps.md#Sec:CorSolProps), with relative error no greater than \\(C\_{\text{tol}}\\).
 
 <div id="calcPCMMeltBegin"></div>
 
-Calculate-PCM-Melt-Begin-Time: Calculate and output the time at which the PCM begins to melt \\({{t\_{\text{melt}}}^{\text{init}}}\\) (from [IM:eBalanceOnPCM](./SecIMs.md#IM:eBalanceOnPCM)).
+Calculate-PCM-Melt-Begin-Time: Calculate and output the time at which the PCM begins to melt \\(t^{\text{init}}\_{\text{melt}}\\) (from [IM:eBalanceOnPCM](./SecIMs.md#IM:eBalanceOnPCM)).
 
 <div id="calcPCMMeltEnd"></div>
 
-Calculate-PCM-Melt-End-Time: Calculate and output the time at which the PCM stops melting \\({{t\_{\text{melt}}}^{\text{final}}}\\) (from [IM:eBalanceOnPCM](./SecIMs.md#IM:eBalanceOnPCM)).
+Calculate-PCM-Melt-End-Time: Calculate and output the time at which the PCM stops melting \\(t^{\text{final}}\_{\text{melt}}\\) (from [IM:eBalanceOnPCM](./SecIMs.md#IM:eBalanceOnPCM)).
 
 <div id="outputValues"></div>
 
-Output-Values: Output \\({T\_{\text{W}}}\\)(\\(t\\)) (from [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr)), \\({T\_{\text{P}}}\\)(\\(t\\)) (from [IM:eBalanceOnPCM](./SecIMs.md#IM:eBalanceOnPCM)), \\({E\_{\text{W}}}\\)(\\(t\\)) (from [IM:heatEInWtr](./SecIMs.md#IM:heatEInWtr)), and \\({E\_{\text{P}}}\\)(\\(t\\)) (from [IM:heatEInPCM](./SecIMs.md#IM:heatEInPCM)).
+Output-Values: Output \\(T\_{\text{W}}\\)(\\(t\\)) (from [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr)), \\(T\_{\text{P}}\\)(\\(t\\)) (from [IM:eBalanceOnPCM](./SecIMs.md#IM:eBalanceOnPCM)), \\(E\_{\text{W}}\\)(\\(t\\)) (from [IM:heatEInWtr](./SecIMs.md#IM:heatEInWtr)), and \\(E\_{\text{P}}\\)(\\(t\\)) (from [IM:heatEInPCM](./SecIMs.md#IM:heatEInPCM)).
 
 <div id="Table:ReqInputs"></div>
 
-|Symbol                               |Description                                                |Units                                                |
-|:------------------------------------|:----------------------------------------------------------|:----------------------------------------------------|
-|\\({A\_{\text{C}}}\\)                |Heating coil surface area                                  |\\({\text{m}^{2}}\\)                                 |
-|\\({A\_{\text{P}}}\\)                |Phase change material surface area                         |\\({\text{m}^{2}}\\)                                 |
-|\\({A\_{\text{tol}}}\\)              |Absolute tolerance                                         |--                                                   |
-|\\({{C\_{\text{P}}}^{\text{L}}}\\)   |Specific heat capacity of PCM as a liquid                  |\\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\\)   |
-|\\({{C\_{\text{P}}}^{\text{S}}}\\)   |Specific heat capacity of PCM as a solid                   |\\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\\)   |
-|\\({C\_{\text{W}}}\\)                |Specific heat capacity of water                            |\\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\\)   |
-|\\(D\\)                              |Diameter of tank                                           |\\({\text{m}}\\)                                     |
-|\\({H\_{\text{f}}}\\)                |Specific latent heat of fusion                             |\\(\frac{\text{J}}{\text{kg}}\\)                     |
-|\\({h\_{\text{C}}}\\)                |Convective heat transfer coefficient between coil and water|\\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\\)|
-|\\({h\_{\text{P}}}\\)                |Convective heat transfer coefficient between PCM and water |\\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\\)|
-|\\(L\\)                              |Length of tank                                             |\\({\text{m}}\\)                                     |
-|\\({R\_{\text{tol}}}\\)              |Relative tolerance                                         |--                                                   |
-|\\({T\_{\text{C}}}\\)                |Temperature of the heating coil                            |\\({{}^{\circ}\text{C}}\\)                           |
-|\\({T\_{\text{init}}}\\)             |Initial temperature                                        |\\({{}^{\circ}\text{C}}\\)                           |
-|\\({{T\_{\text{melt}}}^{\text{P}}}\\)|Melting point temperature for PCM                          |\\({{}^{\circ}\text{C}}\\)                           |
-|\\({t\_{\text{final}}}\\)            |Final time                                                 |\\({\text{s}}\\)                                     |
-|\\({t\_{\text{step}}}\\)             |Time step for simulation                                   |\\({\text{s}}\\)                                     |
-|\\({V\_{\text{P}}}\\)                |Volume of PCM                                              |\\({\text{m}^{3}}\\)                                 |
-|\\({ρ\_{\text{P}}}\\)                |Density of PCM                                             |\\(\frac{\text{kg}}{\text{m}^{3}}\\)                 |
-|\\({ρ\_{\text{W}}}\\)                |Density of water                                           |\\(\frac{\text{kg}}{\text{m}^{3}}\\)                 |
+|Symbol                           |Description                                                |Units                                                |
+|:--------------------------------|:----------------------------------------------------------|:----------------------------------------------------|
+|\\(A\_{\text{C}}\\)              |Heating coil surface area                                  |\\({\text{m}^{2}}\\)                                 |
+|\\(A\_{\text{P}}\\)              |Phase change material surface area                         |\\({\text{m}^{2}}\\)                                 |
+|\\(A\_{\text{tol}}\\)            |Absolute tolerance                                         |--                                                   |
+|\\(C^{\text{L}}\_{\text{P}}\\)   |Specific heat capacity of PCM as a liquid                  |\\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\\)   |
+|\\(C^{\text{S}}\_{\text{P}}\\)   |Specific heat capacity of PCM as a solid                   |\\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\\)   |
+|\\(C\_{\text{W}}\\)              |Specific heat capacity of water                            |\\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\\)   |
+|\\(D\\)                          |Diameter of tank                                           |\\({\text{m}}\\)                                     |
+|\\(H\_{\text{f}}\\)              |Specific latent heat of fusion                             |\\(\frac{\text{J}}{\text{kg}}\\)                     |
+|\\(h\_{\text{C}}\\)              |Convective heat transfer coefficient between coil and water|\\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\\)|
+|\\(h\_{\text{P}}\\)              |Convective heat transfer coefficient between PCM and water |\\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\\)|
+|\\(L\\)                          |Length of tank                                             |\\({\text{m}}\\)                                     |
+|\\(R\_{\text{tol}}\\)            |Relative tolerance                                         |--                                                   |
+|\\(T\_{\text{C}}\\)              |Temperature of the heating coil                            |\\({{}^{\circ}\text{C}}\\)                           |
+|\\(T\_{\text{init}}\\)           |Initial temperature                                        |\\({{}^{\circ}\text{C}}\\)                           |
+|\\(T^{\text{P}}\_{\text{melt}}\\)|Melting point temperature for PCM                          |\\({{}^{\circ}\text{C}}\\)                           |
+|\\(t\_{\text{final}}\\)          |Final time                                                 |\\({\text{s}}\\)                                     |
+|\\(t\_{\text{step}}\\)           |Time step for simulation                                   |\\({\text{s}}\\)                                     |
+|\\(V\_{\text{P}}\\)              |Volume of PCM                                              |\\({\text{m}^{3}}\\)                                 |
+|\\(ρ\_{\text{P}}\\)              |Density of PCM                                             |\\(\frac{\text{kg}}{\text{m}^{3}}\\)                 |
+|\\(ρ\_{\text{W}}\\)              |Density of water                                           |\\(\frac{\text{kg}}{\text{m}^{3}}\\)                 |
 
 **<p align="center">Required Inputs</p>**

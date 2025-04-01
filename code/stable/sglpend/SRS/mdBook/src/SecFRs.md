@@ -12,20 +12,20 @@ Verify-Input-Values: Check the entered input values to ensure that they do not e
 
 <div id="calcAngPos"></div>
 
-Calculate-Angular-Position-Of-Mass: Calculate the following values: \\(θ\\) and \\({θ\_{p}}\\) (from [IM:calOfAngularDisplacement](./SecIMs.md#IM:calOfAngularDisplacement)).
+Calculate-Angular-Position-Of-Mass: Calculate the following values: \\(θ\\) and \\(θ\_{p}\\) (from [IM:calOfAngularDisplacement](./SecIMs.md#IM:calOfAngularDisplacement)).
 
 <div id="outputValues"></div>
 
-Output-Values: Output \\({L\_{\text{rod}}}\\) (from [IM:calOfAngularDisplacement](./SecIMs.md#IM:calOfAngularDisplacement)).
+Output-Values: Output \\(L\_{\text{rod}}\\) (from [IM:calOfAngularDisplacement](./SecIMs.md#IM:calOfAngularDisplacement)).
 
 <div id="Table:ReqInputs"></div>
 
-|Symbol                 |Description                       |Units                                |
-|:----------------------|:---------------------------------|:------------------------------------|
-|\\({L\_{\text{rod}}}\\)|Length of the rod                 |\\({\text{m}}\\)                     |
-|\\(m\\)                |Mass                              |\\({\text{kg}}\\)                    |
-|\\(α\\)                |Angular acceleration              |\\(\frac{\text{rad}}{\text{s}^{2}}\\)|
-|\\({θ\_{i}}\\)         |Initial pendulum angle            |\\({\text{rad}}\\)                   |
-|\\({θ\_{p}}\\)         |Displacement angle of the pendulum|\\({\text{rad}}\\)                   |
+|Symbol               |Description                       |Units                                |
+|:--------------------|:---------------------------------|:------------------------------------|
+|\\(L\_{\text{rod}}\\)|Length of the rod                 |\\({\text{m}}\\)                     |
+|\\(m\\)              |Mass                              |\\({\text{kg}}\\)                    |
+|\\(α\\)              |Angular acceleration              |\\(\frac{\text{rad}}{\text{s}^{2}}\\)|
+|\\(θ\_{i}\\)         |Initial pendulum angle            |\\({\text{rad}}\\)                   |
+|\\(θ\_{p}\\)         |Displacement angle of the pendulum|\\({\text{rad}}\\)                   |
 
 **<p align="center">Required Inputs</p>**

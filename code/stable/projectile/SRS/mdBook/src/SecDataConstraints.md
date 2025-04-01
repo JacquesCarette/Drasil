@@ -4,10 +4,10 @@ The [Data Constraints Table](./SecDataConstraints.md#Table:InDataConstraints) sh
 
 <div id="Table:InDataConstraints"></div>
 
-|Var                       |Physical Constraints            |Typical Value                            |Uncert.    |
-|:-------------------------|:-------------------------------|:----------------------------------------|:----------|
-|\\({p\_{\text{target}}}\\)|\\({p\_{\text{target}}}\gt{}0\\)|\\(1000\\) \\({\text{m}}\\)              |10\\(\\%\\)|
-|\\({v\_{\text{launch}}}\\)|\\({v\_{\text{launch}}}\gt{}0\\)|\\(100\\) \\(\frac{\text{m}}{\text{s}}\\)|10\\(\\%\\)|
-|\\(θ\\)                   |\\(0\lt{}θ\lt{}\frac{π}{2}\\)   |\\(\frac{π}{4}\\) \\({\text{rad}}\\)     |10\\(\\%\\)|
+|Var                     |Physical Constraints          |Typical Value                            |Uncert.    |
+|:-----------------------|:-----------------------------|:----------------------------------------|:----------|
+|\\(p\_{\text{target}}\\)|\\(p\_{\text{target}}\gt{}0\\)|\\(1000\\) \\({\text{m}}\\)              |10\\(\\%\\)|
+|\\(v\_{\text{launch}}\\)|\\(v\_{\text{launch}}\gt{}0\\)|\\(100\\) \\(\frac{\text{m}}{\text{s}}\\)|10\\(\\%\\)|
+|\\(θ\\)                 |\\(0\lt{}θ\lt{}\frac{π}{2}\\) |\\(\frac{π}{4}\\) \\({\text{rad}}\\)     |10\\(\\%\\)|
 
 **<p align="center">Input Data Constraints</p>**

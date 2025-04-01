@@ -4,9 +4,9 @@ The [Data Constraints Table](./SecCorSolProps.md#Table:OutDataConstraints) shows
 
 <div id="Table:OutDataConstraints"></div>
 
-|Var                  |Physical Constraints                                 |
-|:--------------------|:----------------------------------------------------|
-|\\({P\_{\text{b}}}\\)|\\(0\leq{}{P\_{\text{b}}}\leq{}1\\)                  |
-|\\(J\\)              |\\({J\_{\text{min}}}\leq{}J\leq{}{J\_{\text{max}}}\\)|
+|Var                |Physical Constraints                             |
+|:------------------|:------------------------------------------------|
+|\\(P\_{\text{b}}\\)|\\(0\leq{}P\_{\text{b}}\leq{}1\\)                |
+|\\(J\\)            |\\(J\_{\text{min}}\leq{}J\leq{}J\_{\text{max}}\\)|
 
 **<p align="center">Output Data Constraints</p>**

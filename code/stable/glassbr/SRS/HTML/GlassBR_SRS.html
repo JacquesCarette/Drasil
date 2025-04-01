@@ -892,7 +892,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathit{isSafeProb}={P_{\text{f}}}\lt{}{P_{\text{f}\text{tol}}}\]
+                        \[\mathit{isSafeProb}=P_{\text{f}}\lt{}P_{\text{f}\text{tol}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1084,7 +1084,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathit{LDF}=\left(\frac{{t_{\text{d}}}}{60}\right)^{\frac{m}{16}}\]
+                        \[\mathit{LDF}=\left(\frac{t_{\text{d}}}{60}\right)^{\frac{m}{16}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1206,7 +1206,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathit{SD}=\sqrt{{\mathit{SD}_{\text{x}}}^{2}+{\mathit{SD}_{\text{y}}}^{2}+{\mathit{SD}_{\text{z}}}^{2}}\]
+                        \[\mathit{SD}=\sqrt{\mathit{SD}_{\text{x}}^{2}+\mathit{SD}_{\text{y}}^{2}+\mathit{SD}_{\text{z}}^{2}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1316,7 +1316,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{w_{\mathit{TNT}}}=w\,\mathit{TNT}\]</td>
+                      <td>\[w_{\mathit{TNT}}=w\,\mathit{TNT}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1363,7 +1363,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[q=\mathit{interpY}\left(\text{``TSD.txt''},\mathit{SD},{w_{\mathit{TNT}}}\right)\]
+                        \[q=\mathit{interpY}\left(\text{``TSD.txt''},\mathit{SD},w_{\mathit{TNT}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1538,7 +1538,7 @@
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
-                      <td>\[{J_{\text{min}}}\leq{}J\leq{}{J_{\text{max}}}\]</td>
+                      <td>\[J_{\text{min}}\leq{}J\leq{}J_{\text{max}}\]</td>
                     </tr>
                     <tr>
                       <th>Equation</th>
@@ -1621,7 +1621,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathit{NFL}=\frac{{\hat{q}_{\text{tol}}}\,E\,h^{4}}{\left(a\,b\right)^{2}}\]
+                        \[\mathit{NFL}=\frac{\hat{q}_{\text{tol}}\,E\,h^{4}}{\left(a\,b\right)^{2}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1804,7 +1804,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\hat{q}_{\text{tol}}}=\mathit{interpY}\left(\text{``SDF.txt''},\mathit{AR},{J_{\text{tol}}}\right)\]
+                        \[\hat{q}_{\text{tol}}=\mathit{interpY}\left(\text{``SDF.txt''},\mathit{AR},J_{\text{tol}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1873,7 +1873,7 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        \[0\leq{}{P_{\text{b}\text{tol}}}\leq{}1\]
+                        \[0\leq{}P_{\text{b}\text{tol}}\leq{}1\]
                         \[a\gt{}0\]
                         \[0\lt{}b\leq{}a\]
                       </td>
@@ -1885,7 +1885,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right)\,\frac{\left(a\,b\right)^{m-1}}{k\,\left(E\,h^{2}\right)^{m}\,\mathit{LDF}}\right)\]
+                        \[J_{\text{tol}}=\ln\left(\ln\left(\frac{1}{1-P_{\text{b}\text{tol}}}\right)\,\frac{\left(a\,b\right)^{m-1}}{k\,\left(E\,h^{2}\right)^{m}\,\mathit{LDF}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1974,11 +1974,11 @@
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
-                      <td>\[0\leq{}{P_{\text{b}}}\leq{}1\]</td>
+                      <td>\[0\leq{}P_{\text{b}}\leq{}1\]</td>
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{P_{\text{b}}}=1-e^{-B}\]</td>
+                      <td>\[P_{\text{b}}=1-e^{-B}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -2107,8 +2107,8 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        \[0\leq{}{P_{\text{b}}}\leq{}1\]
-                        \[0\leq{}{P_{\text{b}\text{tol}}}\leq{}1\]
+                        \[0\leq{}P_{\text{b}}\leq{}1\]
+                        \[0\leq{}P_{\text{b}\text{tol}}\leq{}1\]
                       </td>
                     </tr>
                     <tr>
@@ -2118,7 +2118,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathit{isSafePb}={P_{\text{b}}}\lt{}{P_{\text{b}\text{tol}}}\]
+                        \[\mathit{isSafePb}=P_{\text{b}}\lt{}P_{\text{b}\text{tol}}\]
                       </td>
                     </tr>
                     <tr>

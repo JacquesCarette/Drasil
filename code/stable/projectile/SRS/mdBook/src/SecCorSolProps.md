@@ -4,10 +4,10 @@ The [Data Constraints Table](./SecCorSolProps.md#Table:OutDataConstraints) shows
 
 <div id="Table:OutDataConstraints"></div>
 
-|Var                       |Physical Constraints                                |
-|:-------------------------|:---------------------------------------------------|
-|\\({p\_{\text{land}}}\\)  |\\({p\_{\text{land}}}\gt{}0\\)                      |
-|\\({d\_{\text{offset}}}\\)|\\({d\_{\text{offset}}}\gt{}-{p\_{\text{target}}}\\)|
-|\\({t\_{\text{flight}}}\\)|\\({t\_{\text{flight}}}\gt{}0\\)                    |
+|Var                     |Physical Constraints                            |
+|:-----------------------|:-----------------------------------------------|
+|\\(p\_{\text{land}}\\)  |\\(p\_{\text{land}}\gt{}0\\)                    |
+|\\(d\_{\text{offset}}\\)|\\(d\_{\text{offset}}\gt{}-p\_{\text{target}}\\)|
+|\\(t\_{\text{flight}}\\)|\\(t\_{\text{flight}}\gt{}0\\)                  |
 
 **<p align="center">Output Data Constraints</p>**

@@ -15,10 +15,11 @@ symbol (Variable s) = P.Ident s
 symbol (Label    s) = P.Label s
 symbol (Integ    n) = P.Int (toInteger n)
 symbol (Special  s) = P.Spec s
---symbol (Greek g)    = P.Gr g
 symbol (Concat  sl) = P.Row $ map symbol sl
 symbol (Corners ul dl ur dr s)  =
   let
+    -- For the appended (sub/sup)scripts, wrap them in curly braces only if
+    -- there's is more than one symbol.
     mergeSymbols :: [Symbol] -> P.Expr
     mergeSymbols [s'] = symbol s'
     mergeSymbols ss   = P.Row $ map symbol ss 
@@ -28,7 +29,9 @@ symbol (Corners ul dl ur dr s)  =
     renderSubSup us [] x = [x, P.Sup $ mergeSymbols us]
     renderSubSup [] ds x = [x, P.Sub $ mergeSymbols ds]
     renderSubSup us ds x = [x, P.Sup $ mergeSymbols us, P.Sub $ mergeSymbols ds]
-   in P.Row $ renderSubSup ul dl (P.Label "") ++ renderSubSup ur dr (symbol s)
+
+    rendered = renderSubSup ul dl (P.Label "") ++ renderSubSup ur dr (symbol s)
+   in P.Row [P.Row rendered] -- Ensure the final rendered symbol is wrapped in curly braces by double-nesting in P.Row.
 symbol (Atop f s)               = sFormat f s
 symbol Empty                    = P.Row []
 

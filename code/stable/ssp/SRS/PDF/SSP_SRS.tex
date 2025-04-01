@@ -97,9 +97,9 @@ ${F_{\text{y}}}$ & $y$-coordinate of the Force: The force acting in the $y$-dire
 \\
 $\symbf{F}$ & Force: An interaction that tends to produce change in the motion of an object. & ${\text{N}}$
 \\
-${\symbf{F}^{\text{G}}_{\text{x}}}$ & Sums of the Interslice Normal Forces: The sums of the normal forces acting on each pair of adjacent interslice boundaries. & ${\text{N}}$
+${\symbf{F}_{\text{x}}^{\text{G}}}$ & Sums of the Interslice Normal Forces: The sums of the normal forces acting on each pair of adjacent interslice boundaries. & ${\text{N}}$
 \\
-${\symbf{F}^{\text{H}}_{\text{x}}}$ & Sums of the Interslice Normal Water Forces: The sums of the normal water forces acting on each pair of adjacent interslice boundaries. & ${\text{N}}$
+${\symbf{F}_{\text{x}}^{\text{H}}}$ & Sums of the Interslice Normal Water Forces: The sums of the normal water forces acting on each pair of adjacent interslice boundaries. & ${\text{N}}$
 \\
 $\symbf{f}$ & Interslice Normal to Shear Force Ratio Variation Function: A function of distance in the $x$-direction that describes the variation of the interslice normal to shear ratio. & --
 \\
@@ -185,13 +185,13 @@ $\symbf{X}$ & Interslice Shear Forces: The shear forces per meter in the $z$-dir
 \\
 $x$ & $x$-coordinate: The $x$-coordinate in the Cartesian coordinate system. & ${\text{m}}$
 \\
-${x^{\text{maxEtr}}_{\text{slip}}}$ & Maximum Entry $x$-coordinate: The maximum potential $x$-coordinate for the entry point of a slip surface. & ${\text{m}}$
+${x_{\text{slip}}^{\text{maxEtr}}}$ & Maximum Entry $x$-coordinate: The maximum potential $x$-coordinate for the entry point of a slip surface. & ${\text{m}}$
 \\
-${x^{\text{maxExt}}_{\text{slip}}}$ & Maximum Exit $x$-coordinate: The maximum potential $x$-coordinate for the exit point of a slip surface. & ${\text{m}}$
+${x_{\text{slip}}^{\text{maxExt}}}$ & Maximum Exit $x$-coordinate: The maximum potential $x$-coordinate for the exit point of a slip surface. & ${\text{m}}$
 \\
-${x^{\text{minEtr}}_{\text{slip}}}$ & Minimum Entry $x$-coordinate: The minimum potential $x$-coordinate for the entry point of a slip surface. & ${\text{m}}$
+${x_{\text{slip}}^{\text{minEtr}}}$ & Minimum Entry $x$-coordinate: The minimum potential $x$-coordinate for the entry point of a slip surface. & ${\text{m}}$
 \\
-${x^{\text{minExt}}_{\text{slip}}}$ & Minimum Exit $x$-coordinate: The minimum potential $x$-coordinate for the exit point of a slip surface. & ${\text{m}}$
+${x_{\text{slip}}^{\text{minExt}}}$ & Minimum Exit $x$-coordinate: The minimum potential $x$-coordinate for the exit point of a slip surface. & ${\text{m}}$
 \\
 ${\symbf{x}_{\text{cs}}}\text{,}{\symbf{y}_{\text{cs}}}$ & Critical Slip Surface Coordinates: The set of $x$-coordinates and $y$-coordinates that describe the vertices of the critical slip surface. & ${\text{m}}$
 \\
@@ -203,9 +203,9 @@ ${\symbf{x}_{\text{wt}}}$ & $x$-coordinates of the Water Table: X-positions of t
 \\
 $y$ & $y$-coordinate: The $y$-coordinate in the Cartesian coordinate system. & ${\text{m}}$
 \\
-${y^{\text{max}}_{\text{slip}}}$ & Maximum $y$-coordinate: The maximum potential $y$-coordinate of a point on a slip surface. & ${\text{m}}$
+${y_{\text{slip}}^{\text{max}}}$ & Maximum $y$-coordinate: The maximum potential $y$-coordinate of a point on a slip surface. & ${\text{m}}$
 \\
-${y^{\text{min}}_{\text{slip}}}$ & Minimum $y$-coordinate: The minimum potential $y$-coordinate of a point on a slip surface. & ${\text{m}}$
+${y_{\text{slip}}^{\text{min}}}$ & Minimum $y$-coordinate: The minimum potential $y$-coordinate of a point on a slip surface. & ${\text{m}}$
 \\
 ${\symbf{y}_{\text{slip}}}$ & $y$-coordinates of the Slip Surface: Heights of the slip surface. & ${\text{m}}$
 \\
@@ -1936,18 +1936,18 @@ RefBy & \hyperref[IM:intsliceFs]{IM:intsliceFs} and \hyperref[IM:fctSfty]{IM:fct
 Label & Sums of the interslice normal forces
         
 \\ \midrule
-Symbol & ${\symbf{F}^{\text{G}}_{\text{x}}}$
+Symbol & ${\symbf{F}_{\text{x}}^{\text{G}}}$
          
 \\ \midrule
 Units & ${\text{N}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{\symbf{F}^{\text{G}}_{\text{x}}}={\symbf{G}}_{i}+{\symbf{G}}_{i-1}}
+           \resizeExpression{{\symbf{F}_{\text{x}}^{\text{G}}}={\symbf{G}}_{i}+{\symbf{G}}_{i-1}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{${\symbf{F}^{\text{G}}_{\text{x}}}$ is the sums of the interslice normal forces (${\text{N}}$)}
+              \item{${\symbf{F}_{\text{x}}^{\text{G}}}$ is the sums of the interslice normal forces (${\text{N}}$)}
               \item{$\symbf{G}$ is the interslice normal forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$i$ is the index (Unitless)}
               \end{symbDescription}
@@ -1971,18 +1971,18 @@ RefBy &
 Label & Sums of the interslice normal water forces
         
 \\ \midrule
-Symbol & ${\symbf{F}^{\text{H}}_{\text{x}}}$
+Symbol & ${\symbf{F}_{\text{x}}^{\text{H}}}$
          
 \\ \midrule
 Units & ${\text{N}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{\symbf{F}^{\text{H}}_{\text{x}}}={\symbf{H}}_{i}+{\symbf{H}}_{i-1}}
+           \resizeExpression{{\symbf{F}_{\text{x}}^{\text{H}}}={\symbf{H}}_{i}+{\symbf{H}}_{i-1}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{${\symbf{F}^{\text{H}}_{\text{x}}}$ is the sums of the interslice normal water forces (${\text{N}}$)}
+              \item{${\symbf{F}_{\text{x}}^{\text{H}}}$ is the sums of the interslice normal water forces (${\text{N}}$)}
               \item{$\symbf{H}$ is the interslice normal water forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$i$ is the index (Unitless)}
               \end{symbDescription}
@@ -2304,7 +2304,7 @@ This equation can be simplified by applying assumptions \hyperref[assumpSF]{A:Se
 Taking the summation of all slices, and applying \hyperref[assumpES]{A:Edge-Slices} to set ${\symbf{G}}_{0}$, ${\symbf{G}}_{n}$, ${\symbf{H}}_{0}$, and ${\symbf{H}}_{n}$ equal to zero, a general equation for the proportionality constant $λ$ is developed in Equation (16), which combines \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, \hyperref[IM:nrmShrForNum]{IM:nrmShrForNum}, and \hyperref[IM:nrmShrForDen]{IM:nrmShrForDen}:
 
 \begin{displaymath}
-\resizeExpression{λ=\frac{\displaystyle\sum_{i=1}^{n}{{\symbf{b}}_{i}\,\left({\symbf{F}^{\text{G}}_{\text{x}}}+{\symbf{F}^{\text{H}}_{\text{x}}}\right)\,\tan\left({\symbf{α}}_{i}\right)+{\symbf{h}}_{i}\,-2\,{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)}}{\displaystyle\sum_{i=1}^{n}{{\symbf{b}}_{i}\,\left({\symbf{G}}_{i}\,{\symbf{f}}_{i}+{\symbf{G}}_{i-1}\,{\symbf{f}}_{i-1}\right)}}}
+\resizeExpression{λ=\frac{\displaystyle\sum_{i=1}^{n}{{\symbf{b}}_{i}\,\left({\symbf{F}_{\text{x}}^{\text{G}}}+{\symbf{F}_{\text{x}}^{\text{H}}}\right)\,\tan\left({\symbf{α}}_{i}\right)+{\symbf{h}}_{i}\,-2\,{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)}}{\displaystyle\sum_{i=1}^{n}{{\symbf{b}}_{i}\,\left({\symbf{G}}_{i}\,{\symbf{f}}_{i}+{\symbf{G}}_{i-1}\,{\symbf{f}}_{i-1}\right)}}}
 \end{displaymath}
 Equation (16) for $λ$ is a function of the unknown interslice normal forces $\symbf{G}$ (\hyperref[IM:intsliceFs]{IM:intsliceFs}) which itself depends on the unknown factor of safety ${F_{\text{S}}}$ (\hyperref[IM:fctSfty]{IM:fctSfty}).
 
@@ -2332,7 +2332,7 @@ Output Constraints &
 Equation & \begin{displaymath}
            \resizeExpression{{\symbf{C}_{\text{num},i}}=\begin{cases}
                                                         {\symbf{b}}_{1}\,\left({\symbf{G}}_{1}+{\symbf{H}}_{1}\right)\,\tan\left({\symbf{α}}_{1}\right), & i=1\\
-                                                        {\symbf{b}}_{i}\,\left({\symbf{F}^{\text{G}}_{\text{x}}}+{\symbf{F}^{\text{H}}_{\text{x}}}\right)\,\tan\left({\symbf{α}}_{i}\right)+\symbf{h}\,-2\,{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right), & 2\leq{}i\leq{}n-1\\
+                                                        {\symbf{b}}_{i}\,\left({\symbf{F}_{\text{x}}^{\text{G}}}+{\symbf{F}_{\text{x}}^{\text{H}}}\right)\,\tan\left({\symbf{α}}_{i}\right)+\symbf{h}\,-2\,{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right), & 2\leq{}i\leq{}n-1\\
                                                         {\symbf{b}}_{n}\,\left({\symbf{G}}_{n-1}+{\symbf{H}}_{n-1}\right)\,\tan\left({\symbf{α}}_{n-1}\right), & i=n
                                                         \end{cases}}
            \end{displaymath}
@@ -2344,8 +2344,8 @@ Description & \begin{symbDescription}
               \item{$\symbf{G}$ is the interslice normal forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\symbf{H}$ is the interslice normal water forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\symbf{α}$ is the base angles (${{}^{\circ}}$)}
-              \item{${\symbf{F}^{\text{G}}_{\text{x}}}$ is the sums of the interslice normal forces (${\text{N}}$)}
-              \item{${\symbf{F}^{\text{H}}_{\text{x}}}$ is the sums of the interslice normal water forces (${\text{N}}$)}
+              \item{${\symbf{F}_{\text{x}}^{\text{G}}}$ is the sums of the interslice normal forces (${\text{N}}$)}
+              \item{${\symbf{F}_{\text{x}}^{\text{H}}}$ is the sums of the interslice normal water forces (${\text{N}}$)}
               \item{$\symbf{h}$ is the $y$-direction heights of slices (${\text{m}}$)}
               \item{${\symbf{U}_{\text{g}}}$ is the surface hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\symbf{β}$ is the surface angles (${{}^{\circ}}$)}
@@ -2502,7 +2502,7 @@ Label & Critical slip surface identification
 Input & ${\symbf{x}_{\text{slope}}}$, ${\symbf{y}_{\text{slope}}}$, ${\symbf{x}_{\text{wt}}}$, ${\symbf{y}_{\text{wt}}}$, $c'$, $φ'$, ${γ_{\text{dry}}}$, ${γ_{\text{sat}}}$, ${γ_{w}}$, $\mathit{const\_f}$
         
 \\ \midrule
-Output & ${F^{\text{min}}_{\text{S}}}$
+Output & ${F_{\text{S}}^{\text{min}}}$
          
 \\ \midrule
 Input Constraints & 
@@ -2518,7 +2518,7 @@ Description & \begin{symbDescription}
               \item{${\symbf{y}_{\text{slope}}}$ is the $y$-coordinates of the slope (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule
-Notes & The minimization function must enforce the constraints on the critical slip surface expressed in \hyperref[assumpSSC]{A:Slip-Surface-Concave} and \hyperref[Sec:CorSolProps]{Sec:Properties of a Correct Solution}. The sizes of ${\symbf{x}_{\text{wt}}}$ and ${\symbf{y}_{\text{wt}}}$ must be equal and not 1. The sizes of ${\symbf{x}_{\text{slope}}}$ and ${\symbf{y}_{\text{slope}}}$ must be equal and at least 2. The first and last ${\symbf{x}_{\text{wt}}}$ values must be equal to the first and last ${\symbf{x}_{\text{slope}}}$ values. ${\symbf{x}_{\text{wt}}}$ and ${\symbf{x}_{\text{slope}}}$ values must be monotonically increasing. ${x^{\text{maxExt}}_{\text{slip}}}$, ${x^{\text{maxEtr}}_{\text{slip}}}$, ${x^{\text{minExt}}_{\text{slip}}}$, and ${x^{\text{minEtr}}_{\text{slip}}}$ must be between or equal to the minimum and maximum ${\symbf{x}_{\text{slope}}}$ values. ${y^{\text{max}}_{\text{slip}}}$ cannot be below the minimum ${\symbf{y}_{\text{slope}}}$ value. ${y^{\text{min}}_{\text{slip}}}$ cannot be above the maximum ${\symbf{y}_{\text{slope}}}$ value. All $x$ values of ${\symbf{x}_{\text{cs}}}\text{,}{\symbf{y}_{\text{cs}}}$ must be between ${x^{\text{minEtr}}_{\text{slip}}}$ and ${x^{\text{maxExt}}_{\text{slip}}}$. All $y$ values of ${\symbf{x}_{\text{cs}}}\text{,}{\symbf{y}_{\text{cs}}}$ must not be below ${y^{\text{min}}_{\text{slip}}}$. For any given vertex in ${\symbf{x}_{\text{cs}}}\text{,}{\symbf{y}_{\text{cs}}}$ the $y$ value must not exceed the ${\symbf{y}_{\text{slope}}}$ value corresponding to the same $x$ value. The first and last vertices in ${\symbf{x}_{\text{cs}}}\text{,}{\symbf{y}_{\text{cs}}}$ must each be equal to one of the vertices formed by ${\symbf{x}_{\text{slope}}}$ and ${\symbf{y}_{\text{slope}}}$. The slope between consecutive vertices must be always increasing as $x$ increases. The internal angle between consecutive vertices in ${\symbf{x}_{\text{cs}}}\text{,}{\symbf{y}_{\text{cs}}}$ must not be below 110 degrees.
+Notes & The minimization function must enforce the constraints on the critical slip surface expressed in \hyperref[assumpSSC]{A:Slip-Surface-Concave} and \hyperref[Sec:CorSolProps]{Sec:Properties of a Correct Solution}. The sizes of ${\symbf{x}_{\text{wt}}}$ and ${\symbf{y}_{\text{wt}}}$ must be equal and not 1. The sizes of ${\symbf{x}_{\text{slope}}}$ and ${\symbf{y}_{\text{slope}}}$ must be equal and at least 2. The first and last ${\symbf{x}_{\text{wt}}}$ values must be equal to the first and last ${\symbf{x}_{\text{slope}}}$ values. ${\symbf{x}_{\text{wt}}}$ and ${\symbf{x}_{\text{slope}}}$ values must be monotonically increasing. ${x_{\text{slip}}^{\text{maxExt}}}$, ${x_{\text{slip}}^{\text{maxEtr}}}$, ${x_{\text{slip}}^{\text{minExt}}}$, and ${x_{\text{slip}}^{\text{minEtr}}}$ must be between or equal to the minimum and maximum ${\symbf{x}_{\text{slope}}}$ values. ${y_{\text{slip}}^{\text{max}}}$ cannot be below the minimum ${\symbf{y}_{\text{slope}}}$ value. ${y_{\text{slip}}^{\text{min}}}$ cannot be above the maximum ${\symbf{y}_{\text{slope}}}$ value. All $x$ values of ${\symbf{x}_{\text{cs}}}\text{,}{\symbf{y}_{\text{cs}}}$ must be between ${x_{\text{slip}}^{\text{minEtr}}}$ and ${x_{\text{slip}}^{\text{maxExt}}}$. All $y$ values of ${\symbf{x}_{\text{cs}}}\text{,}{\symbf{y}_{\text{cs}}}$ must not be below ${y_{\text{slip}}^{\text{min}}}$. For any given vertex in ${\symbf{x}_{\text{cs}}}\text{,}{\symbf{y}_{\text{cs}}}$ the $y$ value must not exceed the ${\symbf{y}_{\text{slope}}}$ value corresponding to the same $x$ value. The first and last vertices in ${\symbf{x}_{\text{cs}}}\text{,}{\symbf{y}_{\text{cs}}}$ must each be equal to one of the vertices formed by ${\symbf{x}_{\text{slope}}}$ and ${\symbf{y}_{\text{slope}}}$. The slope between consecutive vertices must be always increasing as $x$ increases. The internal angle between consecutive vertices in ${\symbf{x}_{\text{cs}}}\text{,}{\symbf{y}_{\text{cs}}}$ must not be below 110 degrees.
         
 \\ \midrule
 Source & \cite{li2010}
@@ -2541,21 +2541,21 @@ The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data co
 \\
 $c'$ & $c'\gt{}0$ & $10000$ ${\text{Pa}}$ & 10$\%$
 \\
-${x^{\text{maxEtr}}_{\text{slip}}}$ & -- & $20$ ${\text{m}}$ & 10$\%$
+${x_{\text{slip}}^{\text{maxEtr}}}$ & -- & $20$ ${\text{m}}$ & 10$\%$
 \\
-${x^{\text{maxExt}}_{\text{slip}}}$ & -- & $100$ ${\text{m}}$ & 10$\%$
+${x_{\text{slip}}^{\text{maxExt}}}$ & -- & $100$ ${\text{m}}$ & 10$\%$
 \\
-${x^{\text{minEtr}}_{\text{slip}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
+${x_{\text{slip}}^{\text{minEtr}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
-${x^{\text{minExt}}_{\text{slip}}}$ & -- & $50$ ${\text{m}}$ & 10$\%$
+${x_{\text{slip}}^{\text{minExt}}}$ & -- & $50$ ${\text{m}}$ & 10$\%$
 \\
 ${\symbf{x}_{\text{slope}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
 ${\symbf{x}_{\text{wt}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
-${y^{\text{max}}_{\text{slip}}}$ & -- & $30$ ${\text{m}}$ & 10$\%$
+${y_{\text{slip}}^{\text{max}}}$ & -- & $30$ ${\text{m}}$ & 10$\%$
 \\
-${y^{\text{min}}_{\text{slip}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
+${y_{\text{slip}}^{\text{min}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
 ${\symbf{y}_{\text{slope}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
@@ -2613,21 +2613,21 @@ $c'$ & Effective cohesion & ${\text{Pa}}$
 \\
 $\mathit{const\_f}$ & Decision on f & --
 \\
-${x^{\text{maxEtr}}_{\text{slip}}}$ & Maximum entry $x$-coordinate & ${\text{m}}$
+${x_{\text{slip}}^{\text{maxEtr}}}$ & Maximum entry $x$-coordinate & ${\text{m}}$
 \\
-${x^{\text{maxExt}}_{\text{slip}}}$ & Maximum exit $x$-coordinate & ${\text{m}}$
+${x_{\text{slip}}^{\text{maxExt}}}$ & Maximum exit $x$-coordinate & ${\text{m}}$
 \\
-${x^{\text{minEtr}}_{\text{slip}}}$ & Minimum entry $x$-coordinate & ${\text{m}}$
+${x_{\text{slip}}^{\text{minEtr}}}$ & Minimum entry $x$-coordinate & ${\text{m}}$
 \\
-${x^{\text{minExt}}_{\text{slip}}}$ & Minimum exit $x$-coordinate & ${\text{m}}$
+${x_{\text{slip}}^{\text{minExt}}}$ & Minimum exit $x$-coordinate & ${\text{m}}$
 \\
 ${\symbf{x}_{\text{slope}}}$ & $x$-coordinates of the slope & ${\text{m}}$
 \\
 ${\symbf{x}_{\text{wt}}}$ & $x$-coordinates of the water table & ${\text{m}}$
 \\
-${y^{\text{max}}_{\text{slip}}}$ & Maximum $y$-coordinate & ${\text{m}}$
+${y_{\text{slip}}^{\text{max}}}$ & Maximum $y$-coordinate & ${\text{m}}$
 \\
-${y^{\text{min}}_{\text{slip}}}$ & Minimum $y$-coordinate & ${\text{m}}$
+${y_{\text{slip}}^{\text{min}}}$ & Minimum $y$-coordinate & ${\text{m}}$
 \\
 ${\symbf{y}_{\text{slope}}}$ & $y$-coordinates of the slope & ${\text{m}}$
 \\
@@ -2649,17 +2649,17 @@ $φ'$ & Effective angle of friction & ${{}^{\circ}}$
 \\
 $\mathit{const\_f}$ & decision on f
 \\
-${x^{\text{maxExt}}_{\text{slip}}}$ & maximum exit $x$-coordinate
+${x_{\text{slip}}^{\text{maxExt}}}$ & maximum exit $x$-coordinate
 \\
-${x^{\text{maxEtr}}_{\text{slip}}}$ & maximum entry $x$-coordinate
+${x_{\text{slip}}^{\text{maxEtr}}}$ & maximum entry $x$-coordinate
 \\
-${x^{\text{minExt}}_{\text{slip}}}$ & minimum exit $x$-coordinate
+${x_{\text{slip}}^{\text{minExt}}}$ & minimum exit $x$-coordinate
 \\
-${x^{\text{minEtr}}_{\text{slip}}}$ & minimum entry $x$-coordinate
+${x_{\text{slip}}^{\text{minEtr}}}$ & minimum entry $x$-coordinate
 \\
-${y^{\text{max}}_{\text{slip}}}$ & maximum $y$-coordinate
+${y_{\text{slip}}^{\text{max}}}$ & maximum $y$-coordinate
 \\
-${y^{\text{min}}_{\text{slip}}}$ & minimum $y$-coordinate
+${y_{\text{slip}}^{\text{min}}}$ & minimum $y$-coordinate
 \label{Table:inputsToOutputTable}
 \end{longtblr}
 \subsection{Non-Functional Requirements}

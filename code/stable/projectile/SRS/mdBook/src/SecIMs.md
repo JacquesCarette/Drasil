@@ -23,23 +23,23 @@ This section transforms the problem defined in the [problem description](./SecPr
 
 #### Detailed derivation of flight duration: {#IM:calOfLandingTimeDeriv}
 
-We know that \\({p^{\text{i}}\_{\text{y}}}=0\\) ([A:launchOrigin](./SecAssumps.md#launchOrigin)) and \\({a^{\text{c}}\_{\text{y}}}=-g\\) ([A:accelYGravity](./SecAssumps.md#accelYGravity)). Substituting these values into the y-direction of [GD:posVec](./SecGDs.md#GD:posVec) gives us:
+We know that \\({p\_{\text{y}}^{\text{i}}}=0\\) ([A:launchOrigin](./SecAssumps.md#launchOrigin)) and \\({a\_{\text{y}}^{\text{c}}}=-g\\) ([A:accelYGravity](./SecAssumps.md#accelYGravity)). Substituting these values into the y-direction of [GD:posVec](./SecGDs.md#GD:posVec) gives us:
 
-\\[{p\_{\text{y}}}={v^{\text{i}}\_{\text{y}}}\\,t-\frac{g\\,t^{2}}{2}\\]
+\\[{p\_{\text{y}}}={v\_{\text{y}}^{\text{i}}}\\,t-\frac{g\\,t^{2}}{2}\\]
 
 To find the time that the projectile lands, we want to find the \\(t\\) value (\\({t\_{\text{flight}}}\\)) where \\({p\_{\text{y}}}=0\\) (since the target is on the \\(x\\)-axis from [A:targetXAxis](./SecAssumps.md#targetXAxis)). From the equation above we get:
 
-\\[{v^{\text{i}}\_{\text{y}}}\\,{t\_{\text{flight}}}-\frac{g\\,{t\_{\text{flight}}}^{2}}{2}=0\\]
+\\[{v\_{\text{y}}^{\text{i}}}\\,{t\_{\text{flight}}}-\frac{g\\,{t\_{\text{flight}}}^{2}}{2}=0\\]
 
 Dividing by \\({t\_{\text{flight}}}\\) (with the constraint \\({t\_{\text{flight}}}\gt{}0\\)) gives us:
 
-\\[{v^{\text{i}}\_{\text{y}}}-\frac{g\\,{t\_{\text{flight}}}}{2}=0\\]
+\\[{v\_{\text{y}}^{\text{i}}}-\frac{g\\,{t\_{\text{flight}}}}{2}=0\\]
 
 Solving for \\({t\_{\text{flight}}}\\) gives us:
 
-\\[{t\_{\text{flight}}}=\frac{2\\,{v^{\text{i}}\_{\text{y}}}}{g}\\]
+\\[{t\_{\text{flight}}}=\frac{2\\,{v\_{\text{y}}^{\text{i}}}}{g}\\]
 
-From [DD:speedIY](./SecDDs.md#DD:speedIY) (with \\({v^{\text{i}}}={v\_{\text{launch}}}\\)) we can replace \\({v^{\text{i}}\_{\text{y}}}\\):
+From [DD:speedIY](./SecDDs.md#DD:speedIY) (with \\({v^{\text{i}}}={v\_{\text{launch}}}\\)) we can replace \\({v\_{\text{y}}^{\text{i}}}\\):
 
 \\[{t\_{\text{flight}}}=\frac{2\\,{v\_{\text{launch}}}\\,\sin\left(θ\right)}{g}\\]
 
@@ -64,15 +64,15 @@ From [DD:speedIY](./SecDDs.md#DD:speedIY) (with \\({v^{\text{i}}}={v\_{\text{lau
 
 #### Detailed derivation of landing position: {#IM:calOfLandingDistDeriv}
 
-We know that \\({p^{\text{i}}\_{\text{x}}}=0\\) ([A:launchOrigin](./SecAssumps.md#launchOrigin)) and \\({a^{\text{c}}\_{\text{x}}}=0\\) ([A:accelXZero](./SecAssumps.md#accelXZero)). Substituting these values into the x-direction of [GD:posVec](./SecGDs.md#GD:posVec) gives us:
+We know that \\({p\_{\text{x}}^{\text{i}}}=0\\) ([A:launchOrigin](./SecAssumps.md#launchOrigin)) and \\({a\_{\text{x}}^{\text{c}}}=0\\) ([A:accelXZero](./SecAssumps.md#accelXZero)). Substituting these values into the x-direction of [GD:posVec](./SecGDs.md#GD:posVec) gives us:
 
-\\[{p\_{\text{x}}}={v^{\text{i}}\_{\text{x}}}\\,t\\]
+\\[{p\_{\text{x}}}={v\_{\text{x}}^{\text{i}}}\\,t\\]
 
 To find the landing position, we want to find the \\({p\_{\text{x}}}\\) value (\\({p\_{\text{land}}}\\)) at flight duration (from [IM:calOfLandingTime](./SecIMs.md#IM:calOfLandingTime)):
 
-\\[{p\_{\text{land}}}=\frac{{v^{\text{i}}\_{\text{x}}}\cdot{}2\\,{v\_{\text{launch}}}\\,\sin\left(θ\right)}{g}\\]
+\\[{p\_{\text{land}}}=\frac{{v\_{\text{x}}^{\text{i}}}\cdot{}2\\,{v\_{\text{launch}}}\\,\sin\left(θ\right)}{g}\\]
 
-From [DD:speedIX](./SecDDs.md#DD:speedIX) (with \\({v^{\text{i}}}={v\_{\text{launch}}}\\)) we can replace \\({v^{\text{i}}\_{\text{x}}}\\):
+From [DD:speedIX](./SecDDs.md#DD:speedIX) (with \\({v^{\text{i}}}={v\_{\text{launch}}}\\)) we can replace \\({v\_{\text{x}}^{\text{i}}}\\):
 
 \\[{p\_{\text{land}}}=\frac{{v\_{\text{launch}}}\\,\cos\left(θ\right)\cdot{}2\\,{v\_{\text{launch}}}\\,\sin\left(θ\right)}{g}\\]
 

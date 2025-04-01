@@ -460,12 +460,12 @@
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>v</b>(t)<sup>AB</sup><sub>f</sub></em></td>
+                  <td><em><b>v</b>(t)<sub>f</sub><sup>AB</sup></em></td>
                   <td>Final Relative Velocity Between Rigid Bodies of A and B</td>
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>v</b>(t)<sup>AB</sup><sub>i</sub></em></td>
+                  <td><em><b>v</b>(t)<sub>i</sub><sup>AB</sup></em></td>
                   <td>Initial Relative Velocity Between Rigid Bodies of A and B</td>
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
@@ -1172,7 +1172,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[j=\frac{-\left(1+{C_{\text{R}}}\right)\,{\symbf{v}\text{(}t\text{)}^{\text{A}\text{B}}_{\text{i}}}\cdot{}\symbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right)\,\|\symbf{n}\|^{2}+\frac{\|{\symbf{u}_{\text{A}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{A}}}}+\frac{\|{\symbf{u}_{\text{B}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{B}}}}}\]
+                        \[j=\frac{-\left(1+{C_{\text{R}}}\right)\,{\symbf{v}\text{(}t\text{)}_{\text{i}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right)\,\|\symbf{n}\|^{2}+\frac{\|{\symbf{u}_{\text{A}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{A}}}}+\frac{\|{\symbf{u}_{\text{B}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{B}}}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1184,7 +1184,7 @@
                             <em>C<sub>R</sub></em> is the coefficient of restitution (Unitless)
                           </li>
                           <li>
-                            <em><b>v</b>(t)<sup>AB</sup><sub>i</sub></em> is the initial relative velocity between rigid bodies of A and B (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>v</b>(t)<sub>i</sub><sup>AB</sup></em> is the initial relative velocity between rigid bodies of A and B (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em><b>n</b></em> is the collision normal vector (<em>m</em>)
@@ -1845,7 +1845,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{C_{\text{R}}}=-\left(\frac{{\symbf{v}\text{(}t\text{)}^{\text{A}\text{B}}_{\text{f}}}\cdot{}\symbf{n}}{{\symbf{v}\text{(}t\text{)}^{\text{A}\text{B}}_{\text{i}}}\cdot{}\symbf{n}}\right)\]
+                        \[{C_{\text{R}}}=-\left(\frac{{\symbf{v}\text{(}t\text{)}_{\text{f}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}{{\symbf{v}\text{(}t\text{)}_{\text{i}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1856,13 +1856,13 @@
                             <em>C<sub>R</sub></em> is the coefficient of restitution (Unitless)
                           </li>
                           <li>
-                            <em><b>v</b>(t)<sup>AB</sup><sub>f</sub></em> is the final relative velocity between rigid bodies of A and B (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>v</b>(t)<sub>f</sub><sup>AB</sup></em> is the final relative velocity between rigid bodies of A and B (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em><b>n</b></em> is the collision normal vector (<em>m</em>)
                           </li>
                           <li>
-                            <em><b>v</b>(t)<sup>AB</sup><sub>i</sub></em> is the initial relative velocity between rigid bodies of A and B (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>v</b>(t)<sub>i</sub><sup>AB</sup></em> is the initial relative velocity between rigid bodies of A and B (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                         </ul>
                       </td>
@@ -1903,7 +1903,7 @@
                       <th>Symbol</th>
                       <td>
                         <p class="paragraph">
-                          <em><b>v</b>(t)<sup>AB</sup><sub>i</sub></em>
+                          <em><b>v</b>(t)<sub>i</sub><sup>AB</sup></em>
                         </p>
                       </td>
                     </tr>
@@ -1916,7 +1916,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\symbf{v}\text{(}t\text{)}^{\text{A}\text{B}}_{\text{i}}}={\symbf{v}\text{(}t\text{)}^{\text{A}\text{P}}}-{\symbf{v}\text{(}t\text{)}^{\text{B}\text{P}}}\]
+                        \[{\symbf{v}\text{(}t\text{)}_{\text{i}}^{\text{A}\text{B}}}={\symbf{v}\text{(}t\text{)}^{\text{A}\text{P}}}-{\symbf{v}\text{(}t\text{)}^{\text{B}\text{P}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1924,7 +1924,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>v</b>(t)<sup>AB</sup><sub>i</sub></em> is the initial relative velocity between rigid bodies of A and B (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>v</b>(t)<sub>i</sub><sup>AB</sup></em> is the initial relative velocity between rigid bodies of A and B (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em><b>v</b>(t)<sup>AP</sup></em> is the velocity of the point of collision P in body A (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
@@ -1939,7 +1939,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          In a collision, the velocity of a rigid body A colliding with another rigid body B relative to that body <em><b>v</b>(t)<sup>AB</sup><sub>i</sub></em> is the difference between the velocities of A and B at point P.
+                          In a collision, the velocity of a rigid body A colliding with another rigid body B relative to that body <em><b>v</b>(t)<sub>i</sub><sup>AB</sup></em> is the difference between the velocities of A and B at point P.
                         </p>
                         <p class="paragraph">
                           All bodies are assumed to be rigid (from <a href=#assumpOT>A:objectTy</a>).

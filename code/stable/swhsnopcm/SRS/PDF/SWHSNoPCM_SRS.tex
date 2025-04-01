@@ -71,7 +71,7 @@ The symbols used in this document are summarized in the \hyperref[Table:ToS]{Tab
 \\
 ${A_{\text{C}}}$ & Heating coil surface area & ${\text{m}^{2}}$
 \\
-${A^{\text{max}}_{\text{C}}}$ & Maximum surface area of coil & ${\text{m}^{2}}$
+${A_{\text{C}}^{\text{max}}}$ & Maximum surface area of coil & ${\text{m}^{2}}$
 \\
 ${A_{\text{in}}}$ & Surface area over which heat is transferred in & ${\text{m}^{2}}$
 \\
@@ -89,9 +89,9 @@ ${C^{\text{L}}}$ & Specific heat capacity of a liquid & $\frac{\text{J}}{\text{k
 \\
 ${C_{\text{W}}}$ & Specific heat capacity of water & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${C^{\text{max}}_{\text{W}}}$ & Maximum specific heat capacity of water & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${C_{\text{W}}^{\text{max}}}$ & Maximum specific heat capacity of water & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${C^{\text{min}}_{\text{W}}}$ & Minimum specific heat capacity of water & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${C_{\text{W}}^{\text{min}}}$ & Minimum specific heat capacity of water & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
 $D$ & Diameter of tank & ${\text{m}}$
 \\
@@ -105,9 +105,9 @@ $h$ & Convective heat transfer coefficient & $\frac{\text{W}}{\text{m}^{2}{}^{\c
 \\
 ${h_{\text{C}}}$ & Convective heat transfer coefficient between coil and water & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
-${h^{\text{max}}_{\text{C}}}$ & Maximum convective heat transfer coefficient between coil and water & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+${h_{\text{C}}^{\text{max}}}$ & Maximum convective heat transfer coefficient between coil and water & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
-${h^{\text{min}}_{\text{C}}}$ & Minimum convective heat transfer coefficient between coil and water & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+${h_{\text{C}}^{\text{min}}}$ & Minimum convective heat transfer coefficient between coil and water & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
 $L$ & Length of tank & ${\text{m}}$
 \\
@@ -151,7 +151,7 @@ $t$ & Time & ${\text{s}}$
 \\
 ${t_{\text{final}}}$ & Final time & ${\text{s}}$
 \\
-${t^{\text{max}}_{\text{final}}}$ & Maximum final time & ${\text{s}}$
+${t_{\text{final}}^{\text{max}}}$ & Maximum final time & ${\text{s}}$
 \\
 ${t_{\text{step}}}$ & Time step for simulation & ${\text{s}}$
 \\
@@ -167,9 +167,9 @@ $ρ$ & Density & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 ${ρ_{\text{W}}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${ρ^{\text{max}}_{\text{W}}}$ & Maximum density of water & $\frac{\text{kg}}{\text{m}^{3}}$
+${ρ_{\text{W}}^{\text{max}}}$ & Maximum density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${ρ^{\text{min}}_{\text{W}}}$ & Minimum density of water & $\frac{\text{kg}}{\text{m}^{3}}$
+${ρ_{\text{W}}^{\text{min}}}$ & Minimum density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 ${τ_{\text{W}}}$ & ODE parameter for water related to decay time & ${\text{s}}$
 \\
@@ -856,13 +856,13 @@ The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data co
 {colspec={l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
 \\
-${A_{\text{C}}}$ & ${A_{\text{C}}}\gt{}0$ & ${A_{\text{C}}}\leq{}{A^{\text{max}}_{\text{C}}}$ & $0.12$ ${\text{m}^{2}}$ & 10$\%$
+${A_{\text{C}}}$ & ${A_{\text{C}}}\gt{}0$ & ${A_{\text{C}}}\leq{}{A_{\text{C}}^{\text{max}}}$ & $0.12$ ${\text{m}^{2}}$ & 10$\%$
 \\
-${C_{\text{W}}}$ & ${C_{\text{W}}}\gt{}0$ & ${C^{\text{min}}_{\text{W}}}\lt{}{C_{\text{W}}}\lt{}{C^{\text{max}}_{\text{W}}}$ & $4186$ $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$ & 10$\%$
+${C_{\text{W}}}$ & ${C_{\text{W}}}\gt{}0$ & ${C_{\text{W}}^{\text{min}}}\lt{}{C_{\text{W}}}\lt{}{C_{\text{W}}^{\text{max}}}$ & $4186$ $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$ & 10$\%$
 \\
 $D$ & $D\gt{}0$ & ${\mathit{AR}_{\text{min}}}\leq{}D\leq{}{\mathit{AR}_{\text{max}}}$ & $0.412$ ${\text{m}}$ & 10$\%$
 \\
-${h_{\text{C}}}$ & ${h_{\text{C}}}\gt{}0$ & ${h^{\text{min}}_{\text{C}}}\leq{}{h_{\text{C}}}\leq{}{h^{\text{max}}_{\text{C}}}$ & $1000$ $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$ & 10$\%$
+${h_{\text{C}}}$ & ${h_{\text{C}}}\gt{}0$ & ${h_{\text{C}}^{\text{min}}}\leq{}{h_{\text{C}}}\leq{}{h_{\text{C}}^{\text{max}}}$ & $1000$ $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$ & 10$\%$
 \\
 $L$ & $L\gt{}0$ & ${L_{\text{min}}}\leq{}L\leq{}{L_{\text{max}}}$ & $1.5$ ${\text{m}}$ & 10$\%$
 \\
@@ -870,11 +870,11 @@ ${T_{\text{C}}}$ & $0\lt{}{T_{\text{C}}}\lt{}100$ & -- & $50$ ${{}^{\circ}\text{
 \\
 ${T_{\text{init}}}$ & $0\lt{}{T_{\text{init}}}\lt{}100$ & -- & $40$ ${{}^{\circ}\text{C}}$ & 10$\%$
 \\
-${t_{\text{final}}}$ & ${t_{\text{final}}}\gt{}0$ & ${t_{\text{final}}}\lt{}{t^{\text{max}}_{\text{final}}}$ & $50000$ ${\text{s}}$ & 10$\%$
+${t_{\text{final}}}$ & ${t_{\text{final}}}\gt{}0$ & ${t_{\text{final}}}\lt{}{t_{\text{final}}^{\text{max}}}$ & $50000$ ${\text{s}}$ & 10$\%$
 \\
 ${t_{\text{step}}}$ & $0\lt{}{t_{\text{step}}}\lt{}{t_{\text{final}}}$ & -- & $0.01$ ${\text{s}}$ & 10$\%$
 \\
-${ρ_{\text{W}}}$ & ${ρ_{\text{W}}}\gt{}0$ & ${ρ^{\text{min}}_{\text{W}}}\lt{}{ρ_{\text{W}}}\leq{}{ρ^{\text{max}}_{\text{W}}}$ & $1000$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
+${ρ_{\text{W}}}$ & ${ρ_{\text{W}}}\gt{}0$ & ${ρ_{\text{W}}^{\text{min}}}\lt{}{ρ_{\text{W}}}\leq{}{ρ_{\text{W}}^{\text{max}}}$ & $1000$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
 \label{Table:InDataConstraints}
 \end{longtblr}
 \subsubsection{Properties of a Correct Solution}
@@ -1183,29 +1183,29 @@ This section contains the standard values that are used for calculations in SWHS
 {colspec={l X[l] l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Value} & \textbf{Unit}
 \\
-${A^{\text{max}}_{\text{C}}}$ & maximum surface area of coil & $100000$ & ${\text{m}^{2}}$
+${A_{\text{C}}^{\text{max}}}$ & maximum surface area of coil & $100000$ & ${\text{m}^{2}}$
 \\
 ${\mathit{AR}_{\text{max}}}$ & maximum aspect ratio & $100$ & --
 \\
 ${\mathit{AR}_{\text{min}}}$ & minimum aspect ratio & $0.01$ & --
 \\
-${C^{\text{max}}_{\text{W}}}$ & maximum specific heat capacity of water & $4210$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${C_{\text{W}}^{\text{max}}}$ & maximum specific heat capacity of water & $4210$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${C^{\text{min}}_{\text{W}}}$ & minimum specific heat capacity of water & $4170$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${C_{\text{W}}^{\text{min}}}$ & minimum specific heat capacity of water & $4170$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${h^{\text{max}}_{\text{C}}}$ & maximum convective heat transfer coefficient between coil and water & $10000$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+${h_{\text{C}}^{\text{max}}}$ & maximum convective heat transfer coefficient between coil and water & $10000$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
-${h^{\text{min}}_{\text{C}}}$ & minimum convective heat transfer coefficient between coil and water & $10$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+${h_{\text{C}}^{\text{min}}}$ & minimum convective heat transfer coefficient between coil and water & $10$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
 ${L_{\text{max}}}$ & maximum length of tank & $50$ & ${\text{m}}$
 \\
 ${L_{\text{min}}}$ & minimum length of tank & $0.1$ & ${\text{m}}$
 \\
-${t^{\text{max}}_{\text{final}}}$ & maximum final time & $86400$ & ${\text{s}}$
+${t_{\text{final}}^{\text{max}}}$ & maximum final time & $86400$ & ${\text{s}}$
 \\
-${ρ^{\text{max}}_{\text{W}}}$ & maximum density of water & $1000$ & $\frac{\text{kg}}{\text{m}^{3}}$
+${ρ_{\text{W}}^{\text{max}}}$ & maximum density of water & $1000$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${ρ^{\text{min}}_{\text{W}}}$ & minimum density of water & $950$ & $\frac{\text{kg}}{\text{m}^{3}}$
+${ρ_{\text{W}}^{\text{min}}}$ & minimum density of water & $950$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \label{Table:TAuxConsts}
 \end{longtblr}
 \section{References}

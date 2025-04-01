@@ -71,7 +71,7 @@ The symbols used in this document are summarized in the \hyperref[Table:ToS]{Tab
 \\
 ${A_{\text{C}}}$ & Heating coil surface area & ${\text{m}^{2}}$
 \\
-${A^{\text{max}}_{\text{C}}}$ & Maximum surface area of coil & ${\text{m}^{2}}$
+${A_{\text{C}}^{\text{max}}}$ & Maximum surface area of coil & ${\text{m}^{2}}$
 \\
 ${A_{\text{in}}}$ & Surface area over which heat is transferred in & ${\text{m}^{2}}$
 \\
@@ -93,25 +93,25 @@ ${C^{\text{S}}}$ & Specific heat capacity of a solid & $\frac{\text{J}}{\text{kg
 \\
 ${C^{\text{V}}}$ & Specific heat capacity of a vapour & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${C^{\text{L}}_{\text{P}}}$ & Specific heat capacity of PCM as a liquid & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${C_{\text{P}}^{\text{L}}}$ & Specific heat capacity of PCM as a liquid & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${C^{\text{S}}_{\text{P}}}$ & Specific heat capacity of PCM as a solid & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${C_{\text{P}}^{\text{S}}}$ & Specific heat capacity of PCM as a solid & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${C^{\text{L}}_{\text{P}\text{max}}}$ & Maximum specific heat capacity of PCM as a liquid & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${C_{\text{P}\text{max}}^{\text{L}}}$ & Maximum specific heat capacity of PCM as a liquid & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${C^{\text{S}}_{\text{P}\text{max}}}$ & Maximum specific heat capacity of PCM as a solid & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${C_{\text{P}\text{max}}^{\text{S}}}$ & Maximum specific heat capacity of PCM as a solid & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${C^{\text{L}}_{\text{P}\text{min}}}$ & Minimum specific heat capacity of PCM as a liquid & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${C_{\text{P}\text{min}}^{\text{L}}}$ & Minimum specific heat capacity of PCM as a liquid & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${C^{\text{S}}_{\text{P}\text{min}}}$ & Minimum specific heat capacity of PCM as a solid & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${C_{\text{P}\text{min}}^{\text{S}}}$ & Minimum specific heat capacity of PCM as a solid & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
 ${C_{\text{tol}}}$ & Relative tolerance for conservation of energy & --
 \\
 ${C_{\text{W}}}$ & Specific heat capacity of water & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${C^{\text{max}}_{\text{W}}}$ & Maximum specific heat capacity of water & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${C_{\text{W}}^{\text{max}}}$ & Maximum specific heat capacity of water & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${C^{\text{min}}_{\text{W}}}$ & Minimum specific heat capacity of water & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${C_{\text{W}}^{\text{min}}}$ & Minimum specific heat capacity of water & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
 $D$ & Diameter of tank & ${\text{m}}$
 \\
@@ -119,7 +119,7 @@ $E$ & Sensible heat & ${\text{J}}$
 \\
 ${E_{\text{P}}}$ & Change in heat energy in the PCM & ${\text{J}}$
 \\
-${E^{\text{init}}_{\text{P}\text{melt}}}$ & Change in heat energy in the PCM at the instant when melting begins & ${\text{J}}$
+${E_{\text{P}\text{melt}}^{\text{init}}}$ & Change in heat energy in the PCM at the instant when melting begins & ${\text{J}}$
 \\
 ${E_{\text{W}}}$ & Change in heat energy in the water & ${\text{J}}$
 \\
@@ -135,17 +135,17 @@ $h$ & Convective heat transfer coefficient & $\frac{\text{W}}{\text{m}^{2}{}^{\c
 \\
 ${h_{\text{C}}}$ & Convective heat transfer coefficient between coil and water & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
-${h^{\text{max}}_{\text{C}}}$ & Maximum convective heat transfer coefficient between coil and water & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+${h_{\text{C}}^{\text{max}}}$ & Maximum convective heat transfer coefficient between coil and water & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
-${h^{\text{min}}_{\text{C}}}$ & Minimum convective heat transfer coefficient between coil and water & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+${h_{\text{C}}^{\text{min}}}$ & Minimum convective heat transfer coefficient between coil and water & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
 ${h_{\text{min}}}$ & Minimum thickness of a sheet of PCM & ${\text{m}}$
 \\
 ${h_{\text{P}}}$ & Convective heat transfer coefficient between PCM and water & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
-${h^{\text{max}}_{\text{P}}}$ & Maximum convective heat transfer coefficient between PCM and water & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+${h_{\text{P}}^{\text{max}}}$ & Maximum convective heat transfer coefficient between PCM and water & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
-${h^{\text{min}}_{\text{P}}}$ & Minimum convective heat transfer coefficient between PCM and water & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+${h_{\text{P}}^{\text{min}}}$ & Minimum convective heat transfer coefficient between PCM and water & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
 $L$ & Length of tank & ${\text{m}}$
 \\
@@ -195,7 +195,7 @@ ${T_{\text{init}}}$ & Initial temperature & ${{}^{\circ}\text{C}}$
 \\
 ${T_{\text{melt}}}$ & Melting point temperature & ${{}^{\circ}\text{C}}$
 \\
-${T^{\text{P}}_{\text{melt}}}$ & Melting point temperature for PCM & ${{}^{\circ}\text{C}}$
+${T_{\text{melt}}^{\text{P}}}$ & Melting point temperature for PCM & ${{}^{\circ}\text{C}}$
 \\
 ${T_{\text{P}}}$ & Temperature of the phase change material & ${{}^{\circ}\text{C}}$
 \\
@@ -205,11 +205,11 @@ $t$ & Time & ${\text{s}}$
 \\
 ${t_{\text{final}}}$ & Final time & ${\text{s}}$
 \\
-${t^{\text{max}}_{\text{final}}}$ & Maximum final time & ${\text{s}}$
+${t_{\text{final}}^{\text{max}}}$ & Maximum final time & ${\text{s}}$
 \\
-${t^{\text{final}}_{\text{melt}}}$ & Time at which melting of PCM ends & ${\text{s}}$
+${t_{\text{melt}}^{\text{final}}}$ & Time at which melting of PCM ends & ${\text{s}}$
 \\
-${t^{\text{init}}_{\text{melt}}}$ & Time at which melting of PCM begins & ${\text{s}}$
+${t_{\text{melt}}^{\text{init}}}$ & Time at which melting of PCM begins & ${\text{s}}$
 \\
 ${t_{\text{step}}}$ & Time step for simulation & ${\text{s}}$
 \\
@@ -229,21 +229,21 @@ $ρ$ & Density & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 ${ρ_{\text{P}}}$ & Density of PCM & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${ρ^{\text{max}}_{\text{P}}}$ & Maximum density of PCM & $\frac{\text{kg}}{\text{m}^{3}}$
+${ρ_{\text{P}}^{\text{max}}}$ & Maximum density of PCM & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${ρ^{\text{min}}_{\text{P}}}$ & Minimum density of PCM & $\frac{\text{kg}}{\text{m}^{3}}$
+${ρ_{\text{P}}^{\text{min}}}$ & Minimum density of PCM & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 ${ρ_{\text{W}}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${ρ^{\text{max}}_{\text{W}}}$ & Maximum density of water & $\frac{\text{kg}}{\text{m}^{3}}$
+${ρ_{\text{W}}^{\text{max}}}$ & Maximum density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${ρ^{\text{min}}_{\text{W}}}$ & Minimum density of water & $\frac{\text{kg}}{\text{m}^{3}}$
+${ρ_{\text{W}}^{\text{min}}}$ & Minimum density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 $τ$ & Dummy variable for integration over time & ${\text{s}}$
 \\
-${τ^{\text{L}}_{\text{P}}}$ & ODE parameter for liquid PCM & ${\text{s}}$
+${τ_{\text{P}}^{\text{L}}}$ & ODE parameter for liquid PCM & ${\text{s}}$
 \\
-${τ^{\text{S}}_{\text{P}}}$ & ODE parameter for solid PCM & ${\text{s}}$
+${τ_{\text{P}}^{\text{S}}}$ & ODE parameter for solid PCM & ${\text{s}}$
 \\
 ${τ_{\text{W}}}$ & ODE parameter for water related to decay time & ${\text{s}}$
 \\
@@ -949,20 +949,20 @@ RefBy & \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr} and \hyperref[outputInputD
 Label & ODE parameter for solid PCM
         
 \\ \midrule
-Symbol & ${τ^{\text{S}}_{\text{P}}}$
+Symbol & ${τ_{\text{P}}^{\text{S}}}$
          
 \\ \midrule
 Units & ${\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{τ^{\text{S}}_{\text{P}}}=\frac{{m_{\text{P}}}\,{C^{\text{S}}_{\text{P}}}}{{h_{\text{P}}}\,{A_{\text{P}}}}}
+           \resizeExpression{{τ_{\text{P}}^{\text{S}}}=\frac{{m_{\text{P}}}\,{C_{\text{P}}^{\text{S}}}}{{h_{\text{P}}}\,{A_{\text{P}}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{${τ^{\text{S}}_{\text{P}}}$ is the ODE parameter for solid PCM (${\text{s}}$)}
+              \item{${τ_{\text{P}}^{\text{S}}}$ is the ODE parameter for solid PCM (${\text{s}}$)}
               \item{${m_{\text{P}}}$ is the mass of phase change material (${\text{kg}}$)}
-              \item{${C^{\text{S}}_{\text{P}}}$ is the specific heat capacity of PCM as a solid ($\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$)}
+              \item{${C_{\text{P}}^{\text{S}}}$ is the specific heat capacity of PCM as a solid ($\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$)}
               \item{${h_{\text{P}}}$ is the convective heat transfer coefficient between PCM and water ($\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$)}
               \item{${A_{\text{P}}}$ is the phase change material surface area (${\text{m}^{2}}$)}
               \end{symbDescription}
@@ -987,20 +987,20 @@ RefBy & \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM} and \hyperref[outputInputD
 Label & ODE parameter for liquid PCM
         
 \\ \midrule
-Symbol & ${τ^{\text{L}}_{\text{P}}}$
+Symbol & ${τ_{\text{P}}^{\text{L}}}$
          
 \\ \midrule
 Units & ${\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{τ^{\text{L}}_{\text{P}}}=\frac{{m_{\text{P}}}\,{C^{\text{L}}_{\text{P}}}}{{h_{\text{P}}}\,{A_{\text{P}}}}}
+           \resizeExpression{{τ_{\text{P}}^{\text{L}}}=\frac{{m_{\text{P}}}\,{C_{\text{P}}^{\text{L}}}}{{h_{\text{P}}}\,{A_{\text{P}}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{${τ^{\text{L}}_{\text{P}}}$ is the ODE parameter for liquid PCM (${\text{s}}$)}
+              \item{${τ_{\text{P}}^{\text{L}}}$ is the ODE parameter for liquid PCM (${\text{s}}$)}
               \item{${m_{\text{P}}}$ is the mass of phase change material (${\text{kg}}$)}
-              \item{${C^{\text{L}}_{\text{P}}}$ is the specific heat capacity of PCM as a liquid ($\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$)}
+              \item{${C_{\text{P}}^{\text{L}}}$ is the specific heat capacity of PCM as a liquid ($\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$)}
               \item{${h_{\text{P}}}$ is the convective heat transfer coefficient between PCM and water ($\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$)}
               \item{${A_{\text{P}}}$ is the phase change material surface area (${\text{m}^{2}}$)}
               \end{symbDescription}
@@ -1242,45 +1242,45 @@ Finally, factoring out $\frac{1}{{τ_{\text{W}}}}$, we are left with the governi
 Label & Energy Balance on PCM to find temperature of PCM
         
 \\ \midrule
-Input & ${T^{\text{P}}_{\text{melt}}}$, ${t_{\text{final}}}$, ${T_{\text{init}}}$, ${A_{\text{P}}}$, ${h_{\text{P}}}$, ${m_{\text{P}}}$, ${C^{\text{S}}_{\text{P}}}$, ${C^{\text{L}}_{\text{P}}}$
+Input & ${T_{\text{melt}}^{\text{P}}}$, ${t_{\text{final}}}$, ${T_{\text{init}}}$, ${A_{\text{P}}}$, ${h_{\text{P}}}$, ${m_{\text{P}}}$, ${C_{\text{P}}^{\text{S}}}$, ${C_{\text{P}}^{\text{L}}}$
         
 \\ \midrule
 Output & ${T_{\text{P}}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \resizeExpression{{T^{\text{P}}_{\text{melt}}}\gt{}{T_{\text{init}}}}
+                    \resizeExpression{{T_{\text{melt}}^{\text{P}}}\gt{}{T_{\text{init}}}}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
            \resizeExpression{\frac{\,d{T_{\text{P}}}}{\,dt}=\begin{cases}
-                                                            \frac{1}{{τ^{\text{S}}_{\text{P}}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\lt{}{T^{\text{P}}_{\text{melt}}}\\
-                                                            \frac{1}{{τ^{\text{L}}_{\text{P}}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\gt{}{T^{\text{P}}_{\text{melt}}}\\
-                                                            0, & {T_{\text{P}}}={T^{\text{P}}_{\text{melt}}}\land{}0\lt{}ϕ\lt{}1
+                                                            \frac{1}{{τ_{\text{P}}^{\text{S}}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\lt{}{T_{\text{melt}}^{\text{P}}}\\
+                                                            \frac{1}{{τ_{\text{P}}^{\text{L}}}}\,\left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\gt{}{T_{\text{melt}}^{\text{P}}}\\
+                                                            0, & {T_{\text{P}}}={T_{\text{melt}}^{\text{P}}}\land{}0\lt{}ϕ\lt{}1
                                                             \end{cases}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
               \item{$t$ is the time (${\text{s}}$)}
               \item{${T_{\text{P}}}$ is the temperature of the phase change material (${{}^{\circ}\text{C}}$)}
-              \item{${τ^{\text{S}}_{\text{P}}}$ is the ODE parameter for solid PCM (${\text{s}}$)}
+              \item{${τ_{\text{P}}^{\text{S}}}$ is the ODE parameter for solid PCM (${\text{s}}$)}
               \item{${T_{\text{W}}}$ is the temperature of the water (${{}^{\circ}\text{C}}$)}
-              \item{${τ^{\text{L}}_{\text{P}}}$ is the ODE parameter for liquid PCM (${\text{s}}$)}
-              \item{${T^{\text{P}}_{\text{melt}}}$ is the melting point temperature for PCM (${{}^{\circ}\text{C}}$)}
+              \item{${τ_{\text{P}}^{\text{L}}}$ is the ODE parameter for liquid PCM (${\text{s}}$)}
+              \item{${T_{\text{melt}}^{\text{P}}}$ is the melting point temperature for PCM (${{}^{\circ}\text{C}}$)}
               \item{$ϕ$ is the melt fraction (Unitless)}
               \end{symbDescription}
 \\ \midrule
 Notes & ${T_{\text{W}}}$ is defined by \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}.
         
-        The input constraint ${T_{\text{init}}}\leq{}{T^{\text{P}}_{\text{melt}}}$ comes from \hyperref[assumpPIS]{A:PCM-Initially-Solid}.
+        The input constraint ${T_{\text{init}}}\leq{}{T_{\text{melt}}^{\text{P}}}$ comes from \hyperref[assumpPIS]{A:PCM-Initially-Solid}.
         
-        The temperature remains constant at ${T^{\text{P}}_{\text{melt}}}$, even with the heating (or cooling), until the phase change has occurred for all of the material; that is as long as $0\lt{}ϕ\lt{}1$. $ϕ$ (from \hyperref[DD:meltFrac]{DD:meltFrac}) is determined as part of the heat energy in the PCM, as given in (\hyperref[IM:heatEInPCM]{IM:heatEInPCM}).
+        The temperature remains constant at ${T_{\text{melt}}^{\text{P}}}$, even with the heating (or cooling), until the phase change has occurred for all of the material; that is as long as $0\lt{}ϕ\lt{}1$. $ϕ$ (from \hyperref[DD:meltFrac]{DD:meltFrac}) is determined as part of the heat energy in the PCM, as given in (\hyperref[IM:heatEInPCM]{IM:heatEInPCM}).
         
-        ${τ^{\text{S}}_{\text{P}}}$ is calculated in \hyperref[DD:balanceSolidPCM]{DD:balanceSolidPCM}.
+        ${τ_{\text{P}}^{\text{S}}}$ is calculated in \hyperref[DD:balanceSolidPCM]{DD:balanceSolidPCM}.
         
-        ${τ^{\text{L}}_{\text{P}}}$ is calculated in \hyperref[DD:balanceLiquidPCM]{DD:balanceLiquidPCM}.
+        ${τ_{\text{P}}^{\text{L}}}$ is calculated in \hyperref[DD:balanceLiquidPCM]{DD:balanceLiquidPCM}.
         
         The initial conditions for the ODE are ${T_{\text{W}}}\left(0\right)={T_{\text{P}}}\left(0\right)={T_{\text{init}}}$ following \hyperref[assumpSITWP]{A:Same-Initial-Temp-Water-PCM}.
         
@@ -1296,29 +1296,29 @@ RefBy & \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[unlikeChgNIHG]{
 
 \paragraph{Detailed derivation of the energy balance on the PCM during sensible heating phase:}
 \label{IM:eBalanceOnPCMDeriv}
-To find the rate of change of ${T_{\text{P}}}$, we look at the energy balance on the PCM. The volume being considered is the volume of PCM (${V_{\text{P}}}$). The derivation that follows is initially for the solid PCM. The mass of phase change material is ${m_{\text{P}}}$ and the specific heat capacity of PCM as a solid is ${C^{\text{S}}_{\text{P}}}$. The heat flux into the PCM from water is ${q_{\text{P}}}$ (\hyperref[GD:htFluxPCMFromWater]{GD:htFluxPCMFromWater}) over phase change material surface area ${A_{\text{P}}}$. The thermal flux is constant over ${A_{\text{P}}}$, since the temperature of the PCM is the same throughout its volume (\hyperref[assumpTPCAV]{A:Temp-PCM-Constant-Across-Volume}) and the water is fully mixed (\hyperref[assumpCWTAT]{A:Constant-Water-Temp-Across-Tank}). There is no heat flux output from the PCM. Assuming no volumetric heat generation per unit volume (\hyperref[assumpNIHGBWP]{A:No-Internal-Heat-Generation-By-Water-PCM}), $g=0$, the equation for \hyperref[GD:rocTempSimp]{GD:rocTempSimp} can be written as:
+To find the rate of change of ${T_{\text{P}}}$, we look at the energy balance on the PCM. The volume being considered is the volume of PCM (${V_{\text{P}}}$). The derivation that follows is initially for the solid PCM. The mass of phase change material is ${m_{\text{P}}}$ and the specific heat capacity of PCM as a solid is ${C_{\text{P}}^{\text{S}}}$. The heat flux into the PCM from water is ${q_{\text{P}}}$ (\hyperref[GD:htFluxPCMFromWater]{GD:htFluxPCMFromWater}) over phase change material surface area ${A_{\text{P}}}$. The thermal flux is constant over ${A_{\text{P}}}$, since the temperature of the PCM is the same throughout its volume (\hyperref[assumpTPCAV]{A:Temp-PCM-Constant-Across-Volume}) and the water is fully mixed (\hyperref[assumpCWTAT]{A:Constant-Water-Temp-Across-Tank}). There is no heat flux output from the PCM. Assuming no volumetric heat generation per unit volume (\hyperref[assumpNIHGBWP]{A:No-Internal-Heat-Generation-By-Water-PCM}), $g=0$, the equation for \hyperref[GD:rocTempSimp]{GD:rocTempSimp} can be written as:
 
 \begin{displaymath}
-\resizeExpression{{m_{\text{P}}}\,{C^{\text{S}}_{\text{P}}}\,\frac{\,d{T_{\text{P}}}}{\,dt}={q_{\text{P}}}\,{A_{\text{P}}}}
+\resizeExpression{{m_{\text{P}}}\,{C_{\text{P}}^{\text{S}}}\,\frac{\,d{T_{\text{P}}}}{\,dt}={q_{\text{P}}}\,{A_{\text{P}}}}
 \end{displaymath}
 Using \hyperref[GD:htFluxPCMFromWater]{GD:htFluxPCMFromWater} for ${q_{\text{P}}}$, this equation can be written as:
 
 \begin{displaymath}
-\resizeExpression{{m_{\text{P}}}\,{C^{\text{S}}_{\text{P}}}\,\frac{\,d{T_{\text{P}}}}{\,dt}={h_{\text{P}}}\,{A_{\text{P}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)}
+\resizeExpression{{m_{\text{P}}}\,{C_{\text{P}}^{\text{S}}}\,\frac{\,d{T_{\text{P}}}}{\,dt}={h_{\text{P}}}\,{A_{\text{P}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)}
 \end{displaymath}
-Dividing by ${m_{\text{P}}}$ ${C^{\text{S}}_{\text{P}}}$ we obtain:
+Dividing by ${m_{\text{P}}}$ ${C_{\text{P}}^{\text{S}}}$ we obtain:
 
 \begin{displaymath}
-\resizeExpression{\frac{\,d{T_{\text{P}}}}{\,dt}=\frac{{h_{\text{P}}}\,{A_{\text{P}}}}{{m_{\text{P}}}\,{C^{\text{S}}_{\text{P}}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)}
+\resizeExpression{\frac{\,d{T_{\text{P}}}}{\,dt}=\frac{{h_{\text{P}}}\,{A_{\text{P}}}}{{m_{\text{P}}}\,{C_{\text{P}}^{\text{S}}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)}
 \end{displaymath}
-By substituting ${τ^{\text{S}}_{\text{P}}}$ (from \hyperref[DD:balanceSolidPCM]{DD:balanceSolidPCM}), this can be written as:
+By substituting ${τ_{\text{P}}^{\text{S}}}$ (from \hyperref[DD:balanceSolidPCM]{DD:balanceSolidPCM}), this can be written as:
 
 \begin{displaymath}
-\resizeExpression{\frac{\,d{T_{\text{P}}}}{\,dt}=\frac{1}{{τ^{\text{S}}_{\text{P}}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)}
+\resizeExpression{\frac{\,d{T_{\text{P}}}}{\,dt}=\frac{1}{{τ_{\text{P}}^{\text{S}}}}\,\left({T_{\text{W}}}-{T_{\text{P}}}\right)}
 \end{displaymath}
-Equation (4) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that ${C^{\text{S}}_{\text{P}}}$ is replaced by ${C^{\text{L}}_{\text{P}}}$, and thus ${τ^{\text{S}}_{\text{P}}}$ is replaced by ${τ^{\text{L}}_{\text{P}}}$. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (\hyperref[assumpVCMPN]{A:Volume-Change-Melting-PCM-Negligible}).
+Equation (4) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that ${C_{\text{P}}^{\text{S}}}$ is replaced by ${C_{\text{P}}^{\text{L}}}$, and thus ${τ_{\text{P}}^{\text{S}}}$ is replaced by ${τ_{\text{P}}^{\text{L}}}$. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (\hyperref[assumpVCMPN]{A:Volume-Change-Melting-PCM-Negligible}).
 
-In the case where ${T_{\text{P}}}={T^{\text{P}}_{\text{melt}}}$ and not all of the PCM is melted, the temperature of the phase change material does not change. Therefore, d ${T_{\text{P}}}$ / d $t$ = 0.
+In the case where ${T_{\text{P}}}={T_{\text{melt}}^{\text{P}}}$ and not all of the PCM is melted, the temperature of the phase change material does not change. Therefore, d ${T_{\text{P}}}$ / d $t$ = 0.
 
 This derivation does not consider the boiling of the PCM, as the PCM is assumed to either be in a solid state or a liquid state (\hyperref[assumpNGSP]{A:No-Gaseous-State-PCM}).
 
@@ -1383,52 +1383,52 @@ RefBy & \hyperref[outputValues]{FR:Output-Values}, \hyperref[findMass]{FR:Find-M
 Label & Heat energy in the PCM
         
 \\ \midrule
-Input & ${T^{\text{P}}_{\text{melt}}}$, ${t_{\text{final}}}$, ${T_{\text{init}}}$, ${A_{\text{P}}}$, ${h_{\text{P}}}$, ${m_{\text{P}}}$, ${C^{\text{S}}_{\text{P}}}$, ${C^{\text{L}}_{\text{P}}}$, ${T_{\text{P}}}$, ${H_{\text{f}}}$, ${t^{\text{init}}_{\text{melt}}}$
+Input & ${T_{\text{melt}}^{\text{P}}}$, ${t_{\text{final}}}$, ${T_{\text{init}}}$, ${A_{\text{P}}}$, ${h_{\text{P}}}$, ${m_{\text{P}}}$, ${C_{\text{P}}^{\text{S}}}$, ${C_{\text{P}}^{\text{L}}}$, ${T_{\text{P}}}$, ${H_{\text{f}}}$, ${t_{\text{melt}}^{\text{init}}}$
         
 \\ \midrule
 Output & ${E_{\text{P}}}$
          
 \\ \midrule
 Input Constraints & \begin{displaymath}
-                    \resizeExpression{{T^{\text{P}}_{\text{melt}}}\gt{}{T_{\text{init}}}}
+                    \resizeExpression{{T_{\text{melt}}^{\text{P}}}\gt{}{T_{\text{init}}}}
                     \end{displaymath}
 \\ \midrule
 Output Constraints & 
 \\ \midrule
 Equation & \begin{displaymath}
            \resizeExpression{{E_{\text{P}}}=\begin{cases}
-                                            {C^{\text{S}}_{\text{P}}}\,{m_{\text{P}}}\,\left({T_{\text{P}}}\left(t\right)-{T_{\text{init}}}\right), & {T_{\text{P}}}\lt{}{T^{\text{P}}_{\text{melt}}}\\
-                                            {E^{\text{init}}_{\text{P}\text{melt}}}+{H_{\text{f}}}\,{m_{\text{P}}}+{C^{\text{L}}_{\text{P}}}\,{m_{\text{P}}}\,\left({T_{\text{P}}}\left(t\right)-{T^{\text{P}}_{\text{melt}}}\right), & {T_{\text{P}}}\gt{}{T^{\text{P}}_{\text{melt}}}\\
-                                            {E^{\text{init}}_{\text{P}\text{melt}}}+{Q_{\text{P}}}\left(t\right), & {T_{\text{P}}}={T^{\text{P}}_{\text{melt}}}\land{}0\lt{}ϕ\lt{}1
+                                            {C_{\text{P}}^{\text{S}}}\,{m_{\text{P}}}\,\left({T_{\text{P}}}\left(t\right)-{T_{\text{init}}}\right), & {T_{\text{P}}}\lt{}{T_{\text{melt}}^{\text{P}}}\\
+                                            {E_{\text{P}\text{melt}}^{\text{init}}}+{H_{\text{f}}}\,{m_{\text{P}}}+{C_{\text{P}}^{\text{L}}}\,{m_{\text{P}}}\,\left({T_{\text{P}}}\left(t\right)-{T_{\text{melt}}^{\text{P}}}\right), & {T_{\text{P}}}\gt{}{T_{\text{melt}}^{\text{P}}}\\
+                                            {E_{\text{P}\text{melt}}^{\text{init}}}+{Q_{\text{P}}}\left(t\right), & {T_{\text{P}}}={T_{\text{melt}}^{\text{P}}}\land{}0\lt{}ϕ\lt{}1
                                             \end{cases}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
               \item{${E_{\text{P}}}$ is the change in heat energy in the PCM (${\text{J}}$)}
-              \item{${C^{\text{S}}_{\text{P}}}$ is the specific heat capacity of PCM as a solid ($\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$)}
+              \item{${C_{\text{P}}^{\text{S}}}$ is the specific heat capacity of PCM as a solid ($\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$)}
               \item{${m_{\text{P}}}$ is the mass of phase change material (${\text{kg}}$)}
               \item{${T_{\text{P}}}$ is the temperature of the phase change material (${{}^{\circ}\text{C}}$)}
               \item{$t$ is the time (${\text{s}}$)}
               \item{${T_{\text{init}}}$ is the initial temperature (${{}^{\circ}\text{C}}$)}
-              \item{${E^{\text{init}}_{\text{P}\text{melt}}}$ is the change in heat energy in the PCM at the instant when melting begins (${\text{J}}$)}
+              \item{${E_{\text{P}\text{melt}}^{\text{init}}}$ is the change in heat energy in the PCM at the instant when melting begins (${\text{J}}$)}
               \item{${H_{\text{f}}}$ is the specific latent heat of fusion ($\frac{\text{J}}{\text{kg}}$)}
-              \item{${C^{\text{L}}_{\text{P}}}$ is the specific heat capacity of PCM as a liquid ($\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$)}
-              \item{${T^{\text{P}}_{\text{melt}}}$ is the melting point temperature for PCM (${{}^{\circ}\text{C}}$)}
+              \item{${C_{\text{P}}^{\text{L}}}$ is the specific heat capacity of PCM as a liquid ($\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$)}
+              \item{${T_{\text{melt}}^{\text{P}}}$ is the melting point temperature for PCM (${{}^{\circ}\text{C}}$)}
               \item{${Q_{\text{P}}}$ is the latent heat energy added to PCM (${\text{J}}$)}
               \item{$ϕ$ is the melt fraction (Unitless)}
               \end{symbDescription}
 \\ \midrule
 Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM:sensHtE} and \hyperref[TM:latentHtE]{TM:latentHtE}.
         
-        ${E_{\text{P}}}$ for the solid PCM is found using \hyperref[TM:sensHtE]{TM:sensHtE} for sensible heating, with the specific heat capacity of the solid PCM, ${C^{\text{S}}_{\text{P}}}$ ($\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$) and the change in the PCM temperature from the initial temperature (${{}^{\circ}\text{C}}$).
+        ${E_{\text{P}}}$ for the solid PCM is found using \hyperref[TM:sensHtE]{TM:sensHtE} for sensible heating, with the specific heat capacity of the solid PCM, ${C_{\text{P}}^{\text{S}}}$ ($\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$) and the change in the PCM temperature from the initial temperature (${{}^{\circ}\text{C}}$).
         
-        ${E_{\text{P}}}$ for the melted PCM (${T_{\text{P}}}\gt{}{E^{\text{init}}_{\text{P}\text{melt}}}$) is found using \hyperref[TM:sensHtE]{TM:sensHtE} for sensible heat of the liquid PCM plus the energy when melting starts, plus the energy required to melt all of the PCM.
+        ${E_{\text{P}}}$ for the melted PCM (${T_{\text{P}}}\gt{}{E_{\text{P}\text{melt}}^{\text{init}}}$) is found using \hyperref[TM:sensHtE]{TM:sensHtE} for sensible heat of the liquid PCM plus the energy when melting starts, plus the energy required to melt all of the PCM.
         
         The energy required to melt all of the PCM is ${H_{\text{f}}}\,{m_{\text{P}}}$ (${\text{J}}$) (from \hyperref[DD:htFusion]{DD:htFusion}).
         
-        The change in temperature is ${T_{\text{P}}}-{T^{\text{P}}_{\text{melt}}}$ (${{}^{\circ}\text{C}}$).
+        The change in temperature is ${T_{\text{P}}}-{T_{\text{melt}}^{\text{P}}}$ (${{}^{\circ}\text{C}}$).
         
-        ${E_{\text{P}}}$ during melting of the PCM is found using the energy required at the instant melting of the PCM begins, ${E^{\text{init}}_{\text{P}\text{melt}}}$ plus the latent heat energy added to the PCM, ${Q_{\text{P}}}$ (${\text{J}}$) since the time when melting began ${t^{\text{init}}_{\text{melt}}}$ (${\text{s}}$).
+        ${E_{\text{P}}}$ during melting of the PCM is found using the energy required at the instant melting of the PCM begins, ${E_{\text{P}\text{melt}}^{\text{init}}}$ plus the latent heat energy added to the PCM, ${Q_{\text{P}}}$ (${\text{J}}$) since the time when melting began ${t_{\text{melt}}^{\text{init}}}$ (${\text{s}}$).
         
         The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (\hyperref[assumpNGSP]{A:No-Gaseous-State-PCM}) (\hyperref[assumpPIS]{A:PCM-Initially-Solid}).
         
@@ -1451,23 +1451,23 @@ The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data co
 {colspec={l l X[l] l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
 \\
-${A_{\text{C}}}$ & ${A_{\text{C}}}\gt{}0$ & ${A_{\text{C}}}\leq{}{A^{\text{max}}_{\text{C}}}$ & $0.12$ ${\text{m}^{2}}$ & 10$\%$
+${A_{\text{C}}}$ & ${A_{\text{C}}}\gt{}0$ & ${A_{\text{C}}}\leq{}{A_{\text{C}}^{\text{max}}}$ & $0.12$ ${\text{m}^{2}}$ & 10$\%$
 \\
 ${A_{\text{P}}}$ & ${A_{\text{P}}}\gt{}0$ & ${V_{\text{P}}}\leq{}{A_{\text{P}}}\leq{}\frac{2}{{h_{\text{min}}}}\,{V_{\text{tank}}}$ & $1.2$ ${\text{m}^{2}}$ & 10$\%$
 \\
-${C^{\text{L}}_{\text{P}}}$ & ${C^{\text{L}}_{\text{P}}}\gt{}0$ & ${C^{\text{L}}_{\text{P}\text{min}}}\lt{}{C^{\text{L}}_{\text{P}}}\lt{}{C^{\text{L}}_{\text{P}\text{max}}}$ & $2270$ $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$ & 10$\%$
+${C_{\text{P}}^{\text{L}}}$ & ${C_{\text{P}}^{\text{L}}}\gt{}0$ & ${C_{\text{P}\text{min}}^{\text{L}}}\lt{}{C_{\text{P}}^{\text{L}}}\lt{}{C_{\text{P}\text{max}}^{\text{L}}}$ & $2270$ $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$ & 10$\%$
 \\
-${C^{\text{S}}_{\text{P}}}$ & ${C^{\text{S}}_{\text{P}}}\gt{}0$ & ${C^{\text{S}}_{\text{P}\text{min}}}\lt{}{C^{\text{S}}_{\text{P}}}\lt{}{C^{\text{S}}_{\text{P}\text{max}}}$ & $1760$ $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$ & 10$\%$
+${C_{\text{P}}^{\text{S}}}$ & ${C_{\text{P}}^{\text{S}}}\gt{}0$ & ${C_{\text{P}\text{min}}^{\text{S}}}\lt{}{C_{\text{P}}^{\text{S}}}\lt{}{C_{\text{P}\text{max}}^{\text{S}}}$ & $1760$ $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$ & 10$\%$
 \\
-${C_{\text{W}}}$ & ${C_{\text{W}}}\gt{}0$ & ${C^{\text{min}}_{\text{W}}}\lt{}{C_{\text{W}}}\lt{}{C^{\text{max}}_{\text{W}}}$ & $4186$ $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$ & 10$\%$
+${C_{\text{W}}}$ & ${C_{\text{W}}}\gt{}0$ & ${C_{\text{W}}^{\text{min}}}\lt{}{C_{\text{W}}}\lt{}{C_{\text{W}}^{\text{max}}}$ & $4186$ $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$ & 10$\%$
 \\
 $D$ & $D\gt{}0$ & ${\mathit{AR}_{\text{min}}}\leq{}D\leq{}{\mathit{AR}_{\text{max}}}$ & $0.412$ ${\text{m}}$ & 10$\%$
 \\
 ${H_{\text{f}}}$ & ${H_{\text{f}}}\gt{}0$ & ${H_{\text{f}\text{min}}}\lt{}{H_{\text{f}}}\lt{}{H_{\text{f}\text{max}}}$ & $211600$ $\frac{\text{J}}{\text{kg}}$ & 10$\%$
 \\
-${h_{\text{C}}}$ & ${h_{\text{C}}}\gt{}0$ & ${h^{\text{min}}_{\text{C}}}\leq{}{h_{\text{C}}}\leq{}{h^{\text{max}}_{\text{C}}}$ & $1000$ $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$ & 10$\%$
+${h_{\text{C}}}$ & ${h_{\text{C}}}\gt{}0$ & ${h_{\text{C}}^{\text{min}}}\leq{}{h_{\text{C}}}\leq{}{h_{\text{C}}^{\text{max}}}$ & $1000$ $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$ & 10$\%$
 \\
-${h_{\text{P}}}$ & ${h_{\text{P}}}\gt{}0$ & ${h^{\text{min}}_{\text{P}}}\leq{}{h_{\text{P}}}\leq{}{h^{\text{max}}_{\text{P}}}$ & $1000$ $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$ & 10$\%$
+${h_{\text{P}}}$ & ${h_{\text{P}}}\gt{}0$ & ${h_{\text{P}}^{\text{min}}}\leq{}{h_{\text{P}}}\leq{}{h_{\text{P}}^{\text{max}}}$ & $1000$ $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$ & 10$\%$
 \\
 $L$ & $L\gt{}0$ & ${L_{\text{min}}}\leq{}L\leq{}{L_{\text{max}}}$ & $1.5$ ${\text{m}}$ & 10$\%$
 \\
@@ -1475,17 +1475,17 @@ ${T_{\text{C}}}$ & $0\lt{}{T_{\text{C}}}\lt{}100$ & -- & $50$ ${{}^{\circ}\text{
 \\
 ${T_{\text{init}}}$ & $0\lt{}{T_{\text{init}}}\lt{}{T_{\text{melt}}}$ & -- & $40$ ${{}^{\circ}\text{C}}$ & 10$\%$
 \\
-${T^{\text{P}}_{\text{melt}}}$ & $0\lt{}{T^{\text{P}}_{\text{melt}}}\lt{}{T_{\text{C}}}$ & -- & $44.2$ ${{}^{\circ}\text{C}}$ & 10$\%$
+${T_{\text{melt}}^{\text{P}}}$ & $0\lt{}{T_{\text{melt}}^{\text{P}}}\lt{}{T_{\text{C}}}$ & -- & $44.2$ ${{}^{\circ}\text{C}}$ & 10$\%$
 \\
-${t_{\text{final}}}$ & ${t_{\text{final}}}\gt{}0$ & ${t_{\text{final}}}\lt{}{t^{\text{max}}_{\text{final}}}$ & $50000$ ${\text{s}}$ & 10$\%$
+${t_{\text{final}}}$ & ${t_{\text{final}}}\gt{}0$ & ${t_{\text{final}}}\lt{}{t_{\text{final}}^{\text{max}}}$ & $50000$ ${\text{s}}$ & 10$\%$
 \\
 ${t_{\text{step}}}$ & $0\lt{}{t_{\text{step}}}\lt{}{t_{\text{final}}}$ & -- & $0.01$ ${\text{s}}$ & 10$\%$
 \\
 ${V_{\text{P}}}$ & $0\lt{}{V_{\text{P}}}\lt{}{V_{\text{tank}}}$ & ${V_{\text{P}}}\geq{}\mathit{MINFRACT}\,{V_{\text{tank}}}$ & $0.05$ ${\text{m}^{3}}$ & 10$\%$
 \\
-${ρ_{\text{P}}}$ & ${ρ_{\text{P}}}\gt{}0$ & ${ρ^{\text{min}}_{\text{P}}}\lt{}{ρ_{\text{P}}}\lt{}{ρ^{\text{max}}_{\text{P}}}$ & $1007$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
+${ρ_{\text{P}}}$ & ${ρ_{\text{P}}}\gt{}0$ & ${ρ_{\text{P}}^{\text{min}}}\lt{}{ρ_{\text{P}}}\lt{}{ρ_{\text{P}}^{\text{max}}}$ & $1007$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
 \\
-${ρ_{\text{W}}}$ & ${ρ_{\text{W}}}\gt{}0$ & ${ρ^{\text{min}}_{\text{W}}}\lt{}{ρ_{\text{W}}}\leq{}{ρ^{\text{max}}_{\text{W}}}$ & $1000$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
+${ρ_{\text{W}}}$ & ${ρ_{\text{W}}}\gt{}0$ & ${ρ_{\text{W}}^{\text{min}}}\lt{}{ρ_{\text{W}}}\leq{}{ρ_{\text{W}}^{\text{max}}}$ & $1000$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
 \label{Table:InDataConstraints}
 \end{longtblr}
 \subsubsection{Properties of a Correct Solution}
@@ -1530,11 +1530,11 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}, which define the tank parameters, material properties, and initial conditions.}
 \item[Find-Mass:\phantomsection\label{findMass}]{Use the inputs in \hyperref[inputValues]{FR:Input-Values} to find the masses needed for \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{IM:heatEInWtr}, and \hyperref[IM:heatEInPCM]{IM:heatEInPCM}, using \hyperref[DD:waterMass]{DD:waterMass}, \hyperref[DD:waterVolume.pcm]{DD:waterVolume\_pcm}, and \hyperref[DD:tankVolume]{DD:tankVolume}.}
 \item[Check-Input-with-Physical\_Constraints:\phantomsection\label{checkWithPhysConsts}]{Verify that the inputs satisfy the required \hyperref[Sec:DataConstraints]{physical constraints}.}
-\item[Output-Input-Derived-Values:\phantomsection\label{outputInputDerivVals}]{Output the input values and derived values in the following list: the values (from \hyperref[inputValues]{FR:Input-Values}), the masses (from \hyperref[findMass]{FR:Find-Mass}), ${τ_{\text{W}}}$ (from \hyperref[DD:balanceDecayRate]{DD:balanceDecayRate}), $η$ (from \hyperref[DD:balanceDecayTime]{DD:balanceDecayTime}), ${τ^{\text{S}}_{\text{P}}}$ (from \hyperref[DD:balanceSolidPCM]{DD:balanceSolidPCM}), and ${τ^{\text{L}}_{\text{P}}}$ (from \hyperref[DD:balanceLiquidPCM]{DD:balanceLiquidPCM}).}
+\item[Output-Input-Derived-Values:\phantomsection\label{outputInputDerivVals}]{Output the input values and derived values in the following list: the values (from \hyperref[inputValues]{FR:Input-Values}), the masses (from \hyperref[findMass]{FR:Find-Mass}), ${τ_{\text{W}}}$ (from \hyperref[DD:balanceDecayRate]{DD:balanceDecayRate}), $η$ (from \hyperref[DD:balanceDecayTime]{DD:balanceDecayTime}), ${τ_{\text{P}}^{\text{S}}}$ (from \hyperref[DD:balanceSolidPCM]{DD:balanceSolidPCM}), and ${τ_{\text{P}}^{\text{L}}}$ (from \hyperref[DD:balanceLiquidPCM]{DD:balanceLiquidPCM}).}
 \item[Calculate-Values:\phantomsection\label{calcValues}]{Calculate the following values: ${T_{\text{W}}}$($t$) (from \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}), ${T_{\text{P}}}$($t$) (from \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}), ${E_{\text{W}}}$($t$) (from \hyperref[IM:heatEInWtr]{IM:heatEInWtr}), and ${E_{\text{P}}}$($t$) (from \hyperref[IM:heatEInPCM]{IM:heatEInPCM}).}
 \item[Verify-Energy-Output-Follow-Conservation-of-Energy:\phantomsection\label{verifyEnergyOutput}]{Verify that the energy outputs (${E_{\text{W}}}$($t$) and ${E_{\text{P}}}$($t$)) follow the law of conservation of energy, as outlined in \hyperref[Sec:CorSolProps]{Properties of a Correct Solution}, with relative error no greater than ${C_{\text{tol}}}$.}
-\item[Calculate-PCM-Melt-Begin-Time:\phantomsection\label{calcPCMMeltBegin}]{Calculate and output the time at which the PCM begins to melt ${t^{\text{init}}_{\text{melt}}}$ (from \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}).}
-\item[Calculate-PCM-Melt-End-Time:\phantomsection\label{calcPCMMeltEnd}]{Calculate and output the time at which the PCM stops melting ${t^{\text{final}}_{\text{melt}}}$ (from \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}).}
+\item[Calculate-PCM-Melt-Begin-Time:\phantomsection\label{calcPCMMeltBegin}]{Calculate and output the time at which the PCM begins to melt ${t_{\text{melt}}^{\text{init}}}$ (from \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}).}
+\item[Calculate-PCM-Melt-End-Time:\phantomsection\label{calcPCMMeltEnd}]{Calculate and output the time at which the PCM stops melting ${t_{\text{melt}}^{\text{final}}}$ (from \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}).}
 \item[Output-Values:\phantomsection\label{outputValues}]{Output ${T_{\text{W}}}$($t$) (from \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}), ${T_{\text{P}}}$($t$) (from \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}), ${E_{\text{W}}}$($t$) (from \hyperref[IM:heatEInWtr]{IM:heatEInWtr}), and ${E_{\text{P}}}$($t$) (from \hyperref[IM:heatEInPCM]{IM:heatEInPCM}).}
 \end{description}
 \begin{longtblr}
@@ -1548,9 +1548,9 @@ ${A_{\text{P}}}$ & Phase change material surface area & ${\text{m}^{2}}$
 \\
 ${A_{\text{tol}}}$ & Absolute tolerance & --
 \\
-${C^{\text{L}}_{\text{P}}}$ & Specific heat capacity of PCM as a liquid & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${C_{\text{P}}^{\text{L}}}$ & Specific heat capacity of PCM as a liquid & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${C^{\text{S}}_{\text{P}}}$ & Specific heat capacity of PCM as a solid & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${C_{\text{P}}^{\text{S}}}$ & Specific heat capacity of PCM as a solid & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
 ${C_{\text{W}}}$ & Specific heat capacity of water & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
@@ -1570,7 +1570,7 @@ ${T_{\text{C}}}$ & Temperature of the heating coil & ${{}^{\circ}\text{C}}$
 \\
 ${T_{\text{init}}}$ & Initial temperature & ${{}^{\circ}\text{C}}$
 \\
-${T^{\text{P}}_{\text{melt}}}$ & Melting point temperature for PCM & ${{}^{\circ}\text{C}}$
+${T_{\text{melt}}^{\text{P}}}$ & Melting point temperature for PCM & ${{}^{\circ}\text{C}}$
 \\
 ${t_{\text{final}}}$ & Final time & ${\text{s}}$
 \\
@@ -1904,37 +1904,37 @@ This section contains the standard values that are used for calculations in SWHS
 {colspec={l X[l] l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Value} & \textbf{Unit}
 \\
-${A^{\text{max}}_{\text{C}}}$ & maximum surface area of coil & $100000$ & ${\text{m}^{2}}$
+${A_{\text{C}}^{\text{max}}}$ & maximum surface area of coil & $100000$ & ${\text{m}^{2}}$
 \\
 ${\mathit{AR}_{\text{max}}}$ & maximum aspect ratio & $100$ & --
 \\
 ${\mathit{AR}_{\text{min}}}$ & minimum aspect ratio & $0.01$ & --
 \\
-${C^{\text{L}}_{\text{P}\text{max}}}$ & maximum specific heat capacity of PCM as a liquid & $5000$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${C_{\text{P}\text{max}}^{\text{L}}}$ & maximum specific heat capacity of PCM as a liquid & $5000$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${C^{\text{S}}_{\text{P}\text{max}}}$ & maximum specific heat capacity of PCM as a solid & $4000$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${C_{\text{P}\text{max}}^{\text{S}}}$ & maximum specific heat capacity of PCM as a solid & $4000$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${C^{\text{L}}_{\text{P}\text{min}}}$ & minimum specific heat capacity of PCM as a liquid & $100$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${C_{\text{P}\text{min}}^{\text{L}}}$ & minimum specific heat capacity of PCM as a liquid & $100$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${C^{\text{S}}_{\text{P}\text{min}}}$ & minimum specific heat capacity of PCM as a solid & $100$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${C_{\text{P}\text{min}}^{\text{S}}}$ & minimum specific heat capacity of PCM as a solid & $100$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
 ${C_{\text{tol}}}$ & relative tolerance for conservation of energy & $0.001\%$ & --
 \\
-${C^{\text{max}}_{\text{W}}}$ & maximum specific heat capacity of water & $4210$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${C_{\text{W}}^{\text{max}}}$ & maximum specific heat capacity of water & $4210$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${C^{\text{min}}_{\text{W}}}$ & minimum specific heat capacity of water & $4170$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${C_{\text{W}}^{\text{min}}}$ & minimum specific heat capacity of water & $4170$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
 ${H_{\text{f}\text{max}}}$ & maximum specific latent heat of fusion & $1000000$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
 ${H_{\text{f}\text{min}}}$ & minimum specific latent heat of fusion & $0$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${h^{\text{max}}_{\text{C}}}$ & maximum convective heat transfer coefficient between coil and water & $10000$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+${h_{\text{C}}^{\text{max}}}$ & maximum convective heat transfer coefficient between coil and water & $10000$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
-${h^{\text{min}}_{\text{C}}}$ & minimum convective heat transfer coefficient between coil and water & $10$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+${h_{\text{C}}^{\text{min}}}$ & minimum convective heat transfer coefficient between coil and water & $10$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
-${h^{\text{max}}_{\text{P}}}$ & maximum convective heat transfer coefficient between PCM and water & $10000$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+${h_{\text{P}}^{\text{max}}}$ & maximum convective heat transfer coefficient between PCM and water & $10000$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
-${h^{\text{min}}_{\text{P}}}$ & minimum convective heat transfer coefficient between PCM and water & $10$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+${h_{\text{P}}^{\text{min}}}$ & minimum convective heat transfer coefficient between PCM and water & $10$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
 ${L_{\text{max}}}$ & maximum length of tank & $50$ & ${\text{m}}$
 \\
@@ -1942,15 +1942,15 @@ ${L_{\text{min}}}$ & minimum length of tank & $0.1$ & ${\text{m}}$
 \\
 $\mathit{MINFRACT}$ & minimum fraction of the tank volume taken up by the PCM & $1.0\cdot{}10^{-6}$ & --
 \\
-${t^{\text{max}}_{\text{final}}}$ & maximum final time & $86400$ & ${\text{s}}$
+${t_{\text{final}}^{\text{max}}}$ & maximum final time & $86400$ & ${\text{s}}$
 \\
-${ρ^{\text{max}}_{\text{P}}}$ & maximum density of PCM & $20000$ & $\frac{\text{kg}}{\text{m}^{3}}$
+${ρ_{\text{P}}^{\text{max}}}$ & maximum density of PCM & $20000$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${ρ^{\text{min}}_{\text{P}}}$ & minimum density of PCM & $500$ & $\frac{\text{kg}}{\text{m}^{3}}$
+${ρ_{\text{P}}^{\text{min}}}$ & minimum density of PCM & $500$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${ρ^{\text{max}}_{\text{W}}}$ & maximum density of water & $1000$ & $\frac{\text{kg}}{\text{m}^{3}}$
+${ρ_{\text{W}}^{\text{max}}}$ & maximum density of water & $1000$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${ρ^{\text{min}}_{\text{W}}}$ & minimum density of water & $950$ & $\frac{\text{kg}}{\text{m}^{3}}$
+${ρ_{\text{W}}^{\text{min}}}$ & minimum density of water & $950$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \label{Table:TAuxConsts}
 \end{longtblr}
 \section{References}

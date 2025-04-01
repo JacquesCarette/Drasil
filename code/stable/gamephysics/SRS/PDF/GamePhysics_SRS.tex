@@ -179,9 +179,9 @@ ${\symbf{v}\text{(}t\text{)}_{\text{A}}}$ & Velocity at Point A & $\frac{\text{m
 \\
 ${\symbf{v}\text{(}t\text{)}_{\text{B}}}$ & Velocity at Point B & $\frac{\text{m}}{\text{s}}$
 \\
-${\symbf{v}\text{(}t\text{)}^{\text{A}\text{B}}_{\text{f}}}$ & Final Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
+${\symbf{v}\text{(}t\text{)}_{\text{f}}^{\text{A}\text{B}}}$ & Final Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
 \\
-${\symbf{v}\text{(}t\text{)}^{\text{A}\text{B}}_{\text{i}}}$ & Initial Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
+${\symbf{v}\text{(}t\text{)}_{\text{i}}^{\text{A}\text{B}}}$ & Initial Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
 \\
 ${\symbf{v}\text{(}t\text{)}_{j}}$ & Velocity of the J-Th Body & $\frac{\text{m}}{\text{s}}$
 \\
@@ -580,13 +580,13 @@ Units & $\text{N}\text{s}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{j=\frac{-\left(1+{C_{\text{R}}}\right)\,{\symbf{v}\text{(}t\text{)}^{\text{A}\text{B}}_{\text{i}}}\cdot{}\symbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right)\,\|\symbf{n}\|^{2}+\frac{\|{\symbf{u}_{\text{A}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{A}}}}+\frac{\|{\symbf{u}_{\text{B}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{B}}}}}}
+           \resizeExpression{j=\frac{-\left(1+{C_{\text{R}}}\right)\,{\symbf{v}\text{(}t\text{)}_{\text{i}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right)\,\|\symbf{n}\|^{2}+\frac{\|{\symbf{u}_{\text{A}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{A}}}}+\frac{\|{\symbf{u}_{\text{B}\text{P}}}\text{*}\symbf{n}\|^{2}}{{\symbf{I}_{\text{B}}}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
               \item{$j$ is the impulse (scalar) ($\text{N}\text{s}$)}
               \item{${C_{\text{R}}}$ is the coefficient of restitution (Unitless)}
-              \item{${\symbf{v}\text{(}t\text{)}^{\text{A}\text{B}}_{\text{i}}}$ is the initial relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
+              \item{${\symbf{v}\text{(}t\text{)}_{\text{i}}^{\text{A}\text{B}}}$ is the initial relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
               \item{$\symbf{n}$ is the collision normal vector (${\text{m}}$)}
               \item{${m_{\text{A}}}$ is the mass of rigid body A (${\text{kg}}$)}
               \item{${m_{\text{B}}}$ is the mass of rigid body B (${\text{kg}}$)}
@@ -1030,14 +1030,14 @@ Units & Unitless
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{C_{\text{R}}}=-\left(\frac{{\symbf{v}\text{(}t\text{)}^{\text{A}\text{B}}_{\text{f}}}\cdot{}\symbf{n}}{{\symbf{v}\text{(}t\text{)}^{\text{A}\text{B}}_{\text{i}}}\cdot{}\symbf{n}}\right)}
+           \resizeExpression{{C_{\text{R}}}=-\left(\frac{{\symbf{v}\text{(}t\text{)}_{\text{f}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}{{\symbf{v}\text{(}t\text{)}_{\text{i}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}\right)}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
               \item{${C_{\text{R}}}$ is the coefficient of restitution (Unitless)}
-              \item{${\symbf{v}\text{(}t\text{)}^{\text{A}\text{B}}_{\text{f}}}$ is the final relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
+              \item{${\symbf{v}\text{(}t\text{)}_{\text{f}}^{\text{A}\text{B}}}$ is the final relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
               \item{$\symbf{n}$ is the collision normal vector (${\text{m}}$)}
-              \item{${\symbf{v}\text{(}t\text{)}^{\text{A}\text{B}}_{\text{i}}}$ is the initial relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
+              \item{${\symbf{v}\text{(}t\text{)}_{\text{i}}^{\text{A}\text{B}}}$ is the initial relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule
 Notes & The coefficient of restitution ${C_{\text{R}}}$ determines the elasticity of a collision between two rigid bodies. ${C_{\text{R}}}=1$ results in an elastic collision, ${C_{\text{R}}}\lt{}1$ results in an inelastic collision, and ${C_{\text{R}}}=0$ results in a totally inelastic collision.
@@ -1062,23 +1062,23 @@ RefBy &
 Label & Initial Relative Velocity Between Rigid Bodies of A and B
         
 \\ \midrule
-Symbol & ${\symbf{v}\text{(}t\text{)}^{\text{A}\text{B}}_{\text{i}}}$
+Symbol & ${\symbf{v}\text{(}t\text{)}_{\text{i}}^{\text{A}\text{B}}}$
          
 \\ \midrule
 Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule
 Equation & \begin{displaymath}
-           \resizeExpression{{\symbf{v}\text{(}t\text{)}^{\text{A}\text{B}}_{\text{i}}}={\symbf{v}\text{(}t\text{)}^{\text{A}\text{P}}}-{\symbf{v}\text{(}t\text{)}^{\text{B}\text{P}}}}
+           \resizeExpression{{\symbf{v}\text{(}t\text{)}_{\text{i}}^{\text{A}\text{B}}}={\symbf{v}\text{(}t\text{)}^{\text{A}\text{P}}}-{\symbf{v}\text{(}t\text{)}^{\text{B}\text{P}}}}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{${\symbf{v}\text{(}t\text{)}^{\text{A}\text{B}}_{\text{i}}}$ is the initial relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
+              \item{${\symbf{v}\text{(}t\text{)}_{\text{i}}^{\text{A}\text{B}}}$ is the initial relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
               \item{${\symbf{v}\text{(}t\text{)}^{\text{A}\text{P}}}$ is the velocity of the point of collision P in body A ($\frac{\text{m}}{\text{s}}$)}
               \item{${\symbf{v}\text{(}t\text{)}^{\text{B}\text{P}}}$ is the velocity of the point of collision P in body B ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule
-Notes & In a collision, the velocity of a rigid body A colliding with another rigid body B relative to that body ${\symbf{v}\text{(}t\text{)}^{\text{A}\text{B}}_{\text{i}}}$ is the difference between the velocities of A and B at point P.
+Notes & In a collision, the velocity of a rigid body A colliding with another rigid body B relative to that body ${\symbf{v}\text{(}t\text{)}_{\text{i}}^{\text{A}\text{B}}}$ is the difference between the velocities of A and B at point P.
         
         All bodies are assumed to be rigid (from \hyperref[assumpOT]{A:objectTy}).
         

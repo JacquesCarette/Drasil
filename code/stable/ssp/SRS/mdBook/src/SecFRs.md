@@ -49,14 +49,14 @@ Write-Results-To-File: Provide the option of writing the output result data, as 
 |\\(\text{(x,y)}\\)                      |Cartesian position coordinates        |\\({\text{m}}\\)                   |
 |\\(c'\\)                                |Effective cohesion                    |\\({\text{Pa}}\\)                  |
 |\\(\mathit{const\_f}\\)                 |Decision on f                         |--                                 |
-|\\({x^{\text{maxEtr}}\_{\text{slip}}}\\)|Maximum entry \\(x\\)-coordinate      |\\({\text{m}}\\)                   |
-|\\({x^{\text{maxExt}}\_{\text{slip}}}\\)|Maximum exit \\(x\\)-coordinate       |\\({\text{m}}\\)                   |
-|\\({x^{\text{minEtr}}\_{\text{slip}}}\\)|Minimum entry \\(x\\)-coordinate      |\\({\text{m}}\\)                   |
-|\\({x^{\text{minExt}}\_{\text{slip}}}\\)|Minimum exit \\(x\\)-coordinate       |\\({\text{m}}\\)                   |
+|\\({x\_{\text{slip}}^{\text{maxEtr}}}\\)|Maximum entry \\(x\\)-coordinate      |\\({\text{m}}\\)                   |
+|\\({x\_{\text{slip}}^{\text{maxExt}}}\\)|Maximum exit \\(x\\)-coordinate       |\\({\text{m}}\\)                   |
+|\\({x\_{\text{slip}}^{\text{minEtr}}}\\)|Minimum entry \\(x\\)-coordinate      |\\({\text{m}}\\)                   |
+|\\({x\_{\text{slip}}^{\text{minExt}}}\\)|Minimum exit \\(x\\)-coordinate       |\\({\text{m}}\\)                   |
 |\\({\boldsymbol{x}\_{\text{slope}}}\\)  |\\(x\\)-coordinates of the slope      |\\({\text{m}}\\)                   |
 |\\({\boldsymbol{x}\_{\text{wt}}}\\)     |\\(x\\)-coordinates of the water table|\\({\text{m}}\\)                   |
-|\\({y^{\text{max}}\_{\text{slip}}}\\)   |Maximum \\(y\\)-coordinate            |\\({\text{m}}\\)                   |
-|\\({y^{\text{min}}\_{\text{slip}}}\\)   |Minimum \\(y\\)-coordinate            |\\({\text{m}}\\)                   |
+|\\({y\_{\text{slip}}^{\text{max}}}\\)   |Maximum \\(y\\)-coordinate            |\\({\text{m}}\\)                   |
+|\\({y\_{\text{slip}}^{\text{min}}}\\)   |Minimum \\(y\\)-coordinate            |\\({\text{m}}\\)                   |
 |\\({\boldsymbol{y}\_{\text{slope}}}\\)  |\\(y\\)-coordinates of the slope      |\\({\text{m}}\\)                   |
 |\\({\boldsymbol{y}\_{\text{wt}}}\\)     |\\(y\\)-coordinates of the water table|\\({\text{m}}\\)                   |
 |\\({γ\_{\text{dry}}}\\)                 |Soil dry unit weight                  |\\(\frac{\text{N}}{\text{m}^{3}}\\)|
@@ -71,11 +71,11 @@ Write-Results-To-File: Provide the option of writing the output result data, as 
 |Symbol                                  |Name                            |
 |:---------------------------------------|:-------------------------------|
 |\\(\mathit{const\_f}\\)                 |decision on f                   |
-|\\({x^{\text{maxExt}}\_{\text{slip}}}\\)|maximum exit \\(x\\)-coordinate |
-|\\({x^{\text{maxEtr}}\_{\text{slip}}}\\)|maximum entry \\(x\\)-coordinate|
-|\\({x^{\text{minExt}}\_{\text{slip}}}\\)|minimum exit \\(x\\)-coordinate |
-|\\({x^{\text{minEtr}}\_{\text{slip}}}\\)|minimum entry \\(x\\)-coordinate|
-|\\({y^{\text{max}}\_{\text{slip}}}\\)   |maximum \\(y\\)-coordinate      |
-|\\({y^{\text{min}}\_{\text{slip}}}\\)   |minimum \\(y\\)-coordinate      |
+|\\({x\_{\text{slip}}^{\text{maxExt}}}\\)|maximum exit \\(x\\)-coordinate |
+|\\({x\_{\text{slip}}^{\text{maxEtr}}}\\)|maximum entry \\(x\\)-coordinate|
+|\\({x\_{\text{slip}}^{\text{minExt}}}\\)|minimum exit \\(x\\)-coordinate |
+|\\({x\_{\text{slip}}^{\text{minEtr}}}\\)|minimum entry \\(x\\)-coordinate|
+|\\({y\_{\text{slip}}^{\text{max}}}\\)   |maximum \\(y\\)-coordinate      |
+|\\({y\_{\text{slip}}^{\text{min}}}\\)   |minimum \\(y\\)-coordinate      |
 
 **<p align="center">Inputs to be Returned as Output</p>**

@@ -17,9 +17,9 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\({L\_{\text{rod}}}\\)              |Length of the rod                                |\\({\text{m}}\\)                     |
 |\\(m\\)                              |Mass                                             |\\({\text{kg}}\\)                    |
 |\\({p\_{\text{x}}}\\)                |\\(x\\)-component of position                    |\\({\text{m}}\\)                     |
-|\\({p^{\text{i}}\_{\text{x}}}\\)     |\\(x\\)-component of initial position            |\\({\text{m}}\\)                     |
+|\\({p\_{\text{x}}^{\text{i}}}\\)     |\\(x\\)-component of initial position            |\\({\text{m}}\\)                     |
 |\\({p\_{\text{y}}}\\)                |\\(y\\)-component of position                    |\\({\text{m}}\\)                     |
-|\\({p^{\text{i}}\_{\text{y}}}\\)     |\\(y\\)-component of initial position            |\\({\text{m}}\\)                     |
+|\\({p\_{\text{y}}^{\text{i}}}\\)     |\\(y\\)-component of initial position            |\\({\text{m}}\\)                     |
 |\\(\boldsymbol{p}\text{(}t\text{)}\\)|Position                                         |\\({\text{m}}\\)                     |
 |\\(T\\)                              |Period                                           |\\({\text{s}}\\)                     |
 |\\(\boldsymbol{T}\\)                 |Tension                                          |\\({\text{N}}\\)                     |

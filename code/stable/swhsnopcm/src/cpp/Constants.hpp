@@ -14,14 +14,14 @@ class Constants {
         static const double pi;
         static const double L_min;
         static const double L_max;
-        static const double rho_W_min;
-        static const double rho_W_max;
-        static const double A_C_max;
-        static const double C_W_min;
-        static const double C_W_max;
-        static const double h_C_min;
-        static const double h_C_max;
-        static const double t_final_max;
+        static const double rho_Wmin;
+        static const double rho_Wmax;
+        static const double A_Cmax;
+        static const double C_Wmin;
+        static const double C_Wmax;
+        static const double h_Cmin;
+        static const double h_Cmax;
+        static const double t_finalmax;
         static const double AR_min;
         static const double AR_max;
         

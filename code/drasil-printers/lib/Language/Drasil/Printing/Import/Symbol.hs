@@ -15,15 +15,23 @@ symbol (Variable s) = P.Ident s
 symbol (Label    s) = P.Label s
 symbol (Integ    n) = P.Int (toInteger n)
 symbol (Special  s) = P.Spec s
---symbol (Greek g)    = P.Gr g
 symbol (Concat  sl) = P.Row $ map symbol sl
---
--- Handle the special cases first, then general case
-symbol (Corners [] [] [x] [] s) = P.Row [P.Row [symbol s, P.Sup $ symbol x]]
-symbol (Corners [] [] [] [x] s) = P.Row [P.Row [symbol s, P.Sub $ symbol x]]
-symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
-symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
-symbol Corners{}                = error "rendering of Corners (general)"
+symbol (Corners ul dl ur dr s)  =
+  let
+    -- For the appended (sub/sup)scripts, wrap them in curly braces only if
+    -- there's is more than one symbol.
+    mergeSymbols :: [Symbol] -> P.Expr
+    mergeSymbols [s'] = symbol s'
+    mergeSymbols ss   = P.Row $ map symbol ss 
+
+    renderSubSup :: [Symbol] -> [Symbol] -> P.Expr -> [P.Expr]
+    renderSubSup [] [] _ = []
+    renderSubSup us [] x = [x, P.Sup $ mergeSymbols us]
+    renderSubSup [] ds x = [x, P.Sub $ mergeSymbols ds]
+    renderSubSup us ds x = [x, P.Sub $ mergeSymbols ds, P.Sup $ mergeSymbols us]
+
+    rendered = renderSubSup ul dl (P.Label "") ++ renderSubSup ur dr (symbol s)
+   in P.Row [P.Row rendered] -- Ensure the final rendered symbol is wrapped in curly braces by double-nesting in P.Row.
 symbol (Atop f s)               = sFormat f s
 symbol Empty                    = P.Row []
 

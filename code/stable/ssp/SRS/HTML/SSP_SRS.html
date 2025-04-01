@@ -3485,7 +3485,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{{\symbf{F}_{\text{x}}}^{\text{G}}}={\symbf{G}}_{i}+{\symbf{G}}_{i-1}\]
+                        \[{\symbf{F}_{\text{x}}^{\text{G}}}={\symbf{G}}_{i}+{\symbf{G}}_{i-1}\]
                       </td>
                     </tr>
                     <tr>
@@ -3539,7 +3539,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{{\symbf{F}_{\text{x}}}^{\text{H}}}={\symbf{H}}_{i}+{\symbf{H}}_{i-1}\]
+                        \[{\symbf{F}_{\text{x}}^{\text{H}}}={\symbf{H}}_{i}+{\symbf{H}}_{i-1}\]
                       </td>
                     </tr>
                     <tr>
@@ -3965,7 +3965,7 @@
                     <p class="paragraph">
                       Taking the summation of all slices, and applying <a href=#assumpES>A:Edge-Slices</a> to set <em><b>G</b><sub>0</sub></em>, <em><b>G</b><sub>n</sub></em>, <em><b>H</b><sub>0</sub></em>, and <em><b>H</b><sub>n</sub></em> equal to zero, a general equation for the proportionality constant <em>λ</em> is developed in Equation (16), which combines <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, <a href=#IM:nrmShrForNum>IM:nrmShrForNum</a>, and <a href=#IM:nrmShrForDen>IM:nrmShrForDen</a>:
                     </p>
-                    \[λ=\frac{\displaystyle\sum_{i=1}^{n}{{\symbf{b}}_{i}\,\left({{\symbf{F}_{\text{x}}}^{\text{G}}}+{{\symbf{F}_{\text{x}}}^{\text{H}}}\right)\,\tan\left({\symbf{α}}_{i}\right)+{\symbf{h}}_{i}\,-2\,{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)}}{\displaystyle\sum_{i=1}^{n}{{\symbf{b}}_{i}\,\left({\symbf{G}}_{i}\,{\symbf{f}}_{i}+{\symbf{G}}_{i-1}\,{\symbf{f}}_{i-1}\right)}}\]
+                    \[λ=\frac{\displaystyle\sum_{i=1}^{n}{{\symbf{b}}_{i}\,\left({\symbf{F}_{\text{x}}^{\text{G}}}+{\symbf{F}_{\text{x}}^{\text{H}}}\right)\,\tan\left({\symbf{α}}_{i}\right)+{\symbf{h}}_{i}\,-2\,{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right)}}{\displaystyle\sum_{i=1}^{n}{{\symbf{b}}_{i}\,\left({\symbf{G}}_{i}\,{\symbf{f}}_{i}+{\symbf{G}}_{i-1}\,{\symbf{f}}_{i-1}\right)}}\]
                     <p class="paragraph">
                       Equation (16) for <em>λ</em> is a function of the unknown interslice normal forces <em><b>G</b></em> (<a href=#IM:intsliceFs>IM:intsliceFs</a>) which itself depends on the unknown factor of safety <em>F<sub>S</sub></em> (<a href=#IM:fctSfty>IM:fctSfty</a>).
                     </p>
@@ -4010,7 +4010,7 @@
                       <td>
                         \[{\symbf{C}_{\text{num},i}}=\begin{cases}
                                                      {\symbf{b}}_{1}\,\left({\symbf{G}}_{1}+{\symbf{H}}_{1}\right)\,\tan\left({\symbf{α}}_{1}\right), & i=1\\
-                                                     {\symbf{b}}_{i}\,\left({{\symbf{F}_{\text{x}}}^{\text{G}}}+{{\symbf{F}_{\text{x}}}^{\text{H}}}\right)\,\tan\left({\symbf{α}}_{i}\right)+\symbf{h}\,-2\,{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right), & 2\leq{}i\leq{}n-1\\
+                                                     {\symbf{b}}_{i}\,\left({\symbf{F}_{\text{x}}^{\text{G}}}+{\symbf{F}_{\text{x}}^{\text{H}}}\right)\,\tan\left({\symbf{α}}_{i}\right)+\symbf{h}\,-2\,{\symbf{U}_{\text{g},i}}\,\sin\left({\symbf{β}}_{i}\right), & 2\leq{}i\leq{}n-1\\
                                                      {\symbf{b}}_{n}\,\left({\symbf{G}}_{n-1}+{\symbf{H}}_{n-1}\right)\,\tan\left({\symbf{α}}_{n-1}\right), & i=n
                                                      \end{cases}\]
                       </td>

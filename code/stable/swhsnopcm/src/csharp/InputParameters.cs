@@ -84,50 +84,50 @@ public class InputParameters {
         \param E_W change in heat energy in the water: change in thermal energy within the water (J)
     */
     public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double E_W) {
-        if (!(A_C <= Constants.A_C_max)) {
+        if (!(A_C <= Constants.A_Cmax)) {
             Console.Write("Warning: ");
             Console.Write("A_C has value ");
             Console.Write(A_C);
             Console.Write(", but is suggested to be ");
             Console.Write("below ");
-            Console.Write(Constants.A_C_max);
-            Console.Write(" (A_C_max)");
+            Console.Write(Constants.A_Cmax);
+            Console.Write(" (A_Cmax)");
             Console.WriteLine(".");
         }
-        if (!(Constants.C_W_min < C_W && C_W < Constants.C_W_max)) {
+        if (!(Constants.C_Wmin < C_W && C_W < Constants.C_Wmax)) {
             Console.Write("Warning: ");
             Console.Write("C_W has value ");
             Console.Write(C_W);
             Console.Write(", but is suggested to be ");
             Console.Write("between ");
-            Console.Write(Constants.C_W_min);
-            Console.Write(" (C_W_min)");
+            Console.Write(Constants.C_Wmin);
+            Console.Write(" (C_Wmin)");
             Console.Write(" and ");
-            Console.Write(Constants.C_W_max);
-            Console.Write(" (C_W_max)");
+            Console.Write(Constants.C_Wmax);
+            Console.Write(" (C_Wmax)");
             Console.WriteLine(".");
         }
-        if (!(Constants.h_C_min <= h_C && h_C <= Constants.h_C_max)) {
+        if (!(Constants.h_Cmin <= h_C && h_C <= Constants.h_Cmax)) {
             Console.Write("Warning: ");
             Console.Write("h_C has value ");
             Console.Write(h_C);
             Console.Write(", but is suggested to be ");
             Console.Write("between ");
-            Console.Write(Constants.h_C_min);
-            Console.Write(" (h_C_min)");
+            Console.Write(Constants.h_Cmin);
+            Console.Write(" (h_Cmin)");
             Console.Write(" and ");
-            Console.Write(Constants.h_C_max);
-            Console.Write(" (h_C_max)");
+            Console.Write(Constants.h_Cmax);
+            Console.Write(" (h_Cmax)");
             Console.WriteLine(".");
         }
-        if (!(t_final < Constants.t_final_max)) {
+        if (!(t_final < Constants.t_finalmax)) {
             Console.Write("Warning: ");
             Console.Write("t_final has value ");
             Console.Write(t_final);
             Console.Write(", but is suggested to be ");
             Console.Write("below ");
-            Console.Write(Constants.t_final_max);
-            Console.Write(" (t_final_max)");
+            Console.Write(Constants.t_finalmax);
+            Console.Write(" (t_finalmax)");
             Console.WriteLine(".");
         }
         if (!(Constants.L_min <= L && L <= Constants.L_max)) {
@@ -143,17 +143,17 @@ public class InputParameters {
             Console.Write(" (L_max)");
             Console.WriteLine(".");
         }
-        if (!(Constants.rho_W_min < rho_W && rho_W <= Constants.rho_W_max)) {
+        if (!(Constants.rho_Wmin < rho_W && rho_W <= Constants.rho_Wmax)) {
             Console.Write("Warning: ");
             Console.Write("rho_W has value ");
             Console.Write(rho_W);
             Console.Write(", but is suggested to be ");
             Console.Write("between ");
-            Console.Write(Constants.rho_W_min);
-            Console.Write(" (rho_W_min)");
+            Console.Write(Constants.rho_Wmin);
+            Console.Write(" (rho_Wmin)");
             Console.Write(" and ");
-            Console.Write(Constants.rho_W_max);
-            Console.Write(" (rho_W_max)");
+            Console.Write(Constants.rho_Wmax);
+            Console.Write(" (rho_Wmax)");
             Console.WriteLine(".");
         }
         if (!(Constants.AR_min <= D && D <= Constants.AR_max)) {

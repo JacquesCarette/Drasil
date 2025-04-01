@@ -66,50 +66,50 @@ double derived_values(double D, double L) {
 }
 
 void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double E_W) {
-    if (!(A_C <= Constants::A_C_max)) {
+    if (!(A_C <= Constants::A_Cmax)) {
         std::cout << "Warning: ";
         std::cout << "A_C has value ";
         std::cout << A_C;
         std::cout << ", but is suggested to be ";
         std::cout << "below ";
-        std::cout << Constants::A_C_max;
-        std::cout << " (A_C_max)";
+        std::cout << Constants::A_Cmax;
+        std::cout << " (A_Cmax)";
         std::cout << "." << std::endl;
     }
-    if (!(Constants::C_W_min < C_W && C_W < Constants::C_W_max)) {
+    if (!(Constants::C_Wmin < C_W && C_W < Constants::C_Wmax)) {
         std::cout << "Warning: ";
         std::cout << "C_W has value ";
         std::cout << C_W;
         std::cout << ", but is suggested to be ";
         std::cout << "between ";
-        std::cout << Constants::C_W_min;
-        std::cout << " (C_W_min)";
+        std::cout << Constants::C_Wmin;
+        std::cout << " (C_Wmin)";
         std::cout << " and ";
-        std::cout << Constants::C_W_max;
-        std::cout << " (C_W_max)";
+        std::cout << Constants::C_Wmax;
+        std::cout << " (C_Wmax)";
         std::cout << "." << std::endl;
     }
-    if (!(Constants::h_C_min <= h_C && h_C <= Constants::h_C_max)) {
+    if (!(Constants::h_Cmin <= h_C && h_C <= Constants::h_Cmax)) {
         std::cout << "Warning: ";
         std::cout << "h_C has value ";
         std::cout << h_C;
         std::cout << ", but is suggested to be ";
         std::cout << "between ";
-        std::cout << Constants::h_C_min;
-        std::cout << " (h_C_min)";
+        std::cout << Constants::h_Cmin;
+        std::cout << " (h_Cmin)";
         std::cout << " and ";
-        std::cout << Constants::h_C_max;
-        std::cout << " (h_C_max)";
+        std::cout << Constants::h_Cmax;
+        std::cout << " (h_Cmax)";
         std::cout << "." << std::endl;
     }
-    if (!(t_final < Constants::t_final_max)) {
+    if (!(t_final < Constants::t_finalmax)) {
         std::cout << "Warning: ";
         std::cout << "t_final has value ";
         std::cout << t_final;
         std::cout << ", but is suggested to be ";
         std::cout << "below ";
-        std::cout << Constants::t_final_max;
-        std::cout << " (t_final_max)";
+        std::cout << Constants::t_finalmax;
+        std::cout << " (t_finalmax)";
         std::cout << "." << std::endl;
     }
     if (!(Constants::L_min <= L && L <= Constants::L_max)) {
@@ -125,17 +125,17 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << " (L_max)";
         std::cout << "." << std::endl;
     }
-    if (!(Constants::rho_W_min < rho_W && rho_W <= Constants::rho_W_max)) {
+    if (!(Constants::rho_Wmin < rho_W && rho_W <= Constants::rho_Wmax)) {
         std::cout << "Warning: ";
         std::cout << "rho_W has value ";
         std::cout << rho_W;
         std::cout << ", but is suggested to be ";
         std::cout << "between ";
-        std::cout << Constants::rho_W_min;
-        std::cout << " (rho_W_min)";
+        std::cout << Constants::rho_Wmin;
+        std::cout << " (rho_Wmin)";
         std::cout << " and ";
-        std::cout << Constants::rho_W_max;
-        std::cout << " (rho_W_max)";
+        std::cout << Constants::rho_Wmax;
+        std::cout << " (rho_Wmax)";
         std::cout << "." << std::endl;
     }
     if (!(Constants::AR_min <= D && D <= Constants::AR_max)) {

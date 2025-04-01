@@ -80,7 +80,6 @@ si fl = SI {
     _background  = [],
     _motivation  = [],
     _scope       = [],
-    _concepts    = [] :: [UnitalChunk],
     _instModels  = [],
     _datadefs    = [],
     _configFiles = [],

@@ -67,7 +67,6 @@ si = SI {
   _motivation  = [],
   _scope       = [scope],
   _quants      = symbolsForTable,
-  _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = iMods,
   _datadefs    = GB.dataDefs,
   _configFiles = configFp,

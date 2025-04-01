@@ -140,7 +140,6 @@ si = SI {
   _motivation  = [motivation],
   _scope       = [scope],
   _quants      = symbols,
-  _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = iMods,
   _datadefs    = dataDefs,
   _configFiles = [],

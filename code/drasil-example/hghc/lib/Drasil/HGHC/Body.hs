@@ -33,7 +33,6 @@ si = SI {
   _background  = [],
   _motivation  = [],
   _scope       = [],
-  _concepts    = [] :: [UnitalChunk],
   _instModels  = [], -- FIXME; empty _instModels
   _datadefs    = dataDefs,
   _configFiles = [],

@@ -12,15 +12,15 @@ digraph avsall {
 	{twoDMotion, cartSys, cartSysR, yAxisDir, startOrigin}
 	}
 
-	ixPos	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionIX"];
-	iyPos	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionIY"];
-	frequency	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:frequencyDD"];
-	angularFrequency	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angFrequencyDD"];
-	period	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:periodSHMDD"];
+	dataDefn:ixPos	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionIX"];
+	dataDefn:iyPos	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionIY"];
+	dataDefn:frequency	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:frequencyDD"];
+	dataDefn:angularFrequency	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angFrequencyDD"];
+	dataDefn:period	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:periodSHMDD"];
 
 	subgraph DD {
 	rank="same"
-	{ixPos, iyPos, frequency, angularFrequency, period}
+	{dataDefn:ixPos, dataDefn:iyPos, dataDefn:frequency, dataDefn:angularFrequency, dataDefn:period}
 	}
 
 	theory:accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];

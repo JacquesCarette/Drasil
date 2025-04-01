@@ -166,6 +166,7 @@ module Language.Drasil (
   , Month(..)
   -- Language.Drasil.Data.Citation; should be moved to Language.Drasil.Development
   , CiteField(..), HP(..), CitationKind(..)
+  , compareAuthYearTitle
     -- CiteFields smart constructors
       -- People -> CiteField
   , author, editor
@@ -370,9 +371,8 @@ import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
   , author, editor
   , address, bookTitle, howPublished, howPublishedU, institution, journal, note
   , organization, publisher, school, series, title, typeField
-  , chapter, edition, number, volume, year
-  , pages
-  , month)
+  , chapter, edition, number, volume, year, month, pages
+  , compareAuthYearTitle)
 import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getSentSN, HasShortName(..))
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..),

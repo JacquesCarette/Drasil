@@ -118,8 +118,7 @@ si = SI {
   _constraints = inputConstraints,
   _constants   = [],
   _sysinfodb   = symbMap,
-  _usedinfodb  = usedDB,
-   refdb       = refDB
+  _usedinfodb  = usedDB
 }
 
 purp :: Sentence
@@ -134,9 +133,6 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 --FIXME: Need to be able to print defn for gravitational constant.
 
-refDB :: ReferenceDB
-refDB = rdb citations concIns
-
 --FIXME: All named ideas, not just acronyms.
 
 units :: [UnitDefn] -- FIXME
@@ -150,7 +146,7 @@ symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll) (nw gamePhysics :
   ++ [nw algorithm] ++ map nw derived ++ map nw fundamentals
   ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw defSymbols ++ srsDomains ++ map cw iMods) units dataDefs
-  iMods generalDefns tMods concIns [] allRefs
+  iMods generalDefns tMods concIns [] allRefs citations
 
   -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -158,7 +154,7 @@ allRefs = [externalLinkRef, pymunk] ++ uriReferences ++ offShelfSolRefs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)
-  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference])
+  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because

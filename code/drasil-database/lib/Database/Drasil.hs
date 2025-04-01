@@ -12,7 +12,7 @@ module Database.Drasil (
   , datadefnLookup, insmodelLookup, gendefLookup, theoryModelLookup
   , conceptinsLookup, refResolve
   -- ** Lenses
-  , unitTable, traceTable, refbyTable
+  , unitTable, traceTable, refbyTable, citationTable
   , dataDefnTable, insmodelTable, gendefTable, theoryModelTable
   , conceptinsTable, labelledcontentTable, refTable
   -- ** Debugging Tools

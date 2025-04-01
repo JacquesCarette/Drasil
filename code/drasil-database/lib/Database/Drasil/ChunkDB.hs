@@ -22,7 +22,7 @@ module Database.Drasil.ChunkDB (
   datadefnLookup, insmodelLookup, gendefLookup, theoryModelLookup,
   conceptinsLookup, refResolve,
   -- ** Lenses
-  unitTable, traceTable, refbyTable,
+  unitTable, traceTable, refbyTable, citationTable,
   dataDefnTable, insmodelTable, gendefTable, theoryModelTable,
   conceptinsTable, labelledcontentTable, refTable
 ) where
@@ -75,6 +75,8 @@ type ConceptInstanceMap = UMap ConceptInstance
 type LabelledContentMap = UMap LabelledContent
 -- | A map of all 'Reference's.
 type ReferenceMap = UMap Reference
+-- | Citation map.
+type CitationMap = UMap Citation
 
 -- | General chunk database map constructor. Creates a 'UMap' from a function that converts something with 'UID's into another type and a list of something with 'UID's.
 cdbMap :: HasUID a => (a -> b) -> [a] -> Map.Map UID (b, Int)
@@ -171,6 +173,7 @@ data ChunkDB = CDB {
   , _gendefTable          :: GendefMap
   , _theoryModelTable     :: TheoryModelMap
   , _conceptinsTable      :: ConceptInstanceMap
+  , _citationTable        :: CitationMap
   -- NOT CHUNKS
   , _labelledcontentTable :: LabelledContentMap -- TODO: LabelledContent needs to be rebuilt. See JacquesCarette/Drasil#4023.
   , _refTable             :: ReferenceMap -- TODO: References need to be rebuilt. See JacquesCarette/Drasil#4022.
@@ -194,8 +197,8 @@ makeLenses ''ChunkDB
 cdb :: (Quantity q, MayHaveUnit q, Concept c, IsUnit u) =>
     [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
     [GenDefn] -> [TheoryModel] -> [ConceptInstance] ->
-    [LabelledContent] -> [Reference] -> ChunkDB
-cdb s t c u d ins gd tm ci lc r = 
+    [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
+cdb s t c u d ins gd tm ci lc r cits = 
   CDB {
     -- CHUNKS
     symbolTable = symbolMap s,
@@ -207,8 +210,9 @@ cdb s t c u d ins gd tm ci lc r =
     _gendefTable = idMap gd,
     _theoryModelTable = idMap tm,
     _conceptinsTable = idMap ci,
-    _labelledcontentTable = idMap lc,
+    _citationTable = idMap cits,
     -- NOT CHUNKS
+    _labelledcontentTable = idMap lc,
     _traceTable = Map.empty,
     _refbyTable = Map.empty,
     _refTable = idMap r

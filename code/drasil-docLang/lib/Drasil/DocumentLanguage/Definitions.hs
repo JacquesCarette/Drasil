@@ -10,7 +10,7 @@ module Drasil.DocumentLanguage.Definitions (
   -- * Helpers
   helperRefs, helpToRefField) where
 
-import Data.Map (lookupIndex)
+import Data.Map (member)
 import Data.List (nub)
 import Data.Maybe (mapMaybe)
 import Control.Lens ((^.))
@@ -115,12 +115,12 @@ helperRefs t s = foldlList Comma List $ map (`helpToRefField` s) $ nub $
 -- | Creates a reference as a 'Sentence' by finding if the 'UID' is in one of the possible data sets contained in the 'SystemInformation' database.
 helpToRefField :: UID -> SystemInformation -> Sentence
 helpToRefField t si
-  | Just _ <- lookupIndex t (s ^. dataDefnTable)        = refS $ datadefnLookup    t (s ^. dataDefnTable)
-  | Just _ <- lookupIndex t (s ^. insmodelTable)        = refS $ insmodelLookup    t (s ^. insmodelTable)
-  | Just _ <- lookupIndex t (s ^. gendefTable)          = refS $ gendefLookup      t (s ^. gendefTable)
-  | Just _ <- lookupIndex t (s ^. theoryModelTable)     = refS $ theoryModelLookup t (s ^. theoryModelTable)
-  | Just _ <- lookupIndex t (s ^. conceptinsTable)      = refS $ conceptinsLookup  t (s ^. conceptinsTable)
-  | t `elem` map  (^. uid) (citeDB si) = EmptyS
+  | member t (s ^. dataDefnTable)        = refS $ datadefnLookup    t (s ^. dataDefnTable)
+  | member t (s ^. insmodelTable)        = refS $ insmodelLookup    t (s ^. insmodelTable)
+  | member t (s ^. gendefTable)          = refS $ gendefLookup      t (s ^. gendefTable)
+  | member t (s ^. theoryModelTable)     = refS $ theoryModelLookup t (s ^. theoryModelTable)
+  | member t (s ^. conceptinsTable)      = refS $ conceptinsLookup  t (s ^. conceptinsTable)
+  | member t (s ^. citationTable)        = EmptyS
   | otherwise = error $ show t ++ "Caught."
   where s = _sysinfodb si
 

@@ -148,8 +148,7 @@ si = SI {
   _constraints = map cnstrw constrained,
   _constants   = constants,
   _sysinfodb   = symbMap,
-  _usedinfodb  = usedDB,
-   refdb       = refDB
+  _usedinfodb  = usedDB
 }
 
 purp :: Sentence
@@ -175,7 +174,7 @@ symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
     [nw sciCompS] ++ unitalIdeas ++ map nw acronyms ++ map nw symbols ++ 
     map nw educon ++ map nw [metre, radian, second] ++ map nw compcon) 
   (cw pi_ : map cw constrained ++ srsDomains) (map unitWrapper [metre, radian, second]) 
-  dataDefs iMods genDefns tMods concIns [] allRefs
+  dataDefs iMods genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -183,13 +182,10 @@ allRefs = [externalLinkRef]
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms ++ map nw symbols)
-  (cw pi_ : srsDomains) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference])
+  (cw pi_ : srsDomains) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
-
-refDB :: ReferenceDB
-refDB = rdb citations concIns
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs

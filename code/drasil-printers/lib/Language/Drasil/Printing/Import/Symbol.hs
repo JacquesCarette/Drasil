@@ -28,7 +28,7 @@ symbol (Corners ul dl ur dr s)  =
     renderSubSup [] [] _ = []
     renderSubSup us [] x = [x, P.Sup $ mergeSymbols us]
     renderSubSup [] ds x = [x, P.Sub $ mergeSymbols ds]
-    renderSubSup us ds x = [x, P.Sup $ mergeSymbols us, P.Sub $ mergeSymbols ds]
+    renderSubSup us ds x = [x, P.Sub $ mergeSymbols ds, P.Sup $ mergeSymbols us]
 
     rendered = renderSubSup ul dl (P.Label "") ++ renderSubSup ur dr (symbol s)
    in P.Row [P.Row rendered] -- Ensure the final rendered symbol is wrapped in curly braces by double-nesting in P.Row.

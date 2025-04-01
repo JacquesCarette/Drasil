@@ -9,6 +9,7 @@ ChunkDB -> InsModelMap;
 ChunkDB -> GendefMap;
 ChunkDB -> TheoryModelMap;
 ChunkDB -> ConceptInstanceMap;
+ChunkDB -> CitationMap;
 ChunkDB -> LabelledContentMap;
 ChunkDB -> ReferenceMap;
 ChunkDB -> TraceMap;

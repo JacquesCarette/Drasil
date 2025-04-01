@@ -1,4 +1,0 @@
-digraph referencedb{
-ReferenceDB	[shape=oval, color=cyan3, label="ReferenceDB"];
-ReferenceDB -> ConceptMap;
-}

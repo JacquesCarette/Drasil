@@ -221,7 +221,6 @@ si :: SystemInformation
 purp :: Sentence
 concIns :: [ConceptInstance]
 stdFields :: Fields
-refDB :: ReferenceDB
 units :: [UnitDefn]
 symbMap :: ChunkDB
 allRefs :: [Reference]

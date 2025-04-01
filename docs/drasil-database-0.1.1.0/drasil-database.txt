@@ -17,7 +17,7 @@ module Database.Drasil
 --   turn, these maps must contain every chunk definition or concept used
 --   in its respective example, else an error is thrown.
 data ChunkDB
-CDB :: SymbolMap -> TermMap -> ConceptMap -> UnitMap -> DatadefnMap -> InsModelMap -> GendefMap -> TheoryModelMap -> ConceptInstanceMap -> LabelledContentMap -> ReferenceMap -> TraceMap -> RefbyMap -> ChunkDB
+CDB :: SymbolMap -> TermMap -> ConceptMap -> UnitMap -> DatadefnMap -> InsModelMap -> GendefMap -> TheoryModelMap -> ConceptInstanceMap -> CitationMap -> LabelledContentMap -> ReferenceMap -> TraceMap -> RefbyMap -> ChunkDB
 
 -- | A reference map, used to hold a <a>UID</a> and where it is referenced
 --   (<a>UID</a>s).
@@ -48,7 +48,7 @@ type UMap a = Map UID (a, Int)
 --   <li><a>ConceptInstance</a>s (for <a>ConceptInstanceMap</a>),</li>
 --   <li><a>LabelledContent</a>s (for <a>LabelledContentMap</a>).</li>
 --   </ul>
-cdb :: (Quantity q, MayHaveUnit q, Concept c, IsUnit u) => [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [LabelledContent] -> [Reference] -> ChunkDB
+cdb :: (Quantity q, MayHaveUnit q, Concept c, IsUnit u) => [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
 
 -- | General smart constructor for making a <a>UMap</a> out of anything
 --   that has a <a>UID</a>.
@@ -117,6 +117,7 @@ refResolve :: UID -> ReferenceMap -> Reference
 unitTable :: Lens' ChunkDB UnitMap
 traceTable :: Lens' ChunkDB TraceMap
 refbyTable :: Lens' ChunkDB RefbyMap
+citationTable :: Lens' ChunkDB CitationMap
 dataDefnTable :: Lens' ChunkDB DatadefnMap
 insmodelTable :: Lens' ChunkDB InsModelMap
 gendefTable :: Lens' ChunkDB GendefMap

@@ -10,6 +10,43 @@
 @version 0.1.1.0
 
 
+-- | Define types and functions related to creating a system information
+--   database.
+module SysInfo.Drasil.SystemInformation
+
+-- | Data structure for holding all of the requisite information about a
+--   system to be used in artifact generation.
+data SystemInformation
+[SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> SystemInformation
+class HasSystemInformation c_a8fO
+systemInformation :: HasSystemInformation c_a8fO => Lens' c_a8fO SystemInformation
+authors :: HasSystemInformation c_a8fO => Lens' c_a8fO People
+background :: HasSystemInformation c_a8fO => Lens' c_a8fO Background
+configFiles :: HasSystemInformation c_a8fO => Lens' c_a8fO [String]
+constants :: HasSystemInformation c_a8fO => Lens' c_a8fO [ConstQDef]
+datadefs :: HasSystemInformation c_a8fO => Lens' c_a8fO [DataDefinition]
+instModels :: HasSystemInformation c_a8fO => Lens' c_a8fO [InstanceModel]
+motivation :: HasSystemInformation c_a8fO => Lens' c_a8fO Motivation
+purpose :: HasSystemInformation c_a8fO => Lens' c_a8fO Purpose
+scope :: HasSystemInformation c_a8fO => Lens' c_a8fO Scope
+sysinfodb :: HasSystemInformation c_a8fO => Lens' c_a8fO ChunkDB
+usedinfodb :: HasSystemInformation c_a8fO => Lens' c_a8fO ChunkDB
+
+-- | Project Example purpose.
+type Purpose = [Sentence]
+
+-- | Project Example background information, used in the <tt>What</tt>
+--   section of README.
+type Background = [Sentence]
+
+-- | Project Example scope.
+type Scope = [Sentence]
+
+-- | Project Example motivation.
+type Motivation = [Sentence]
+instance SysInfo.Drasil.SystemInformation.HasSystemInformation SysInfo.Drasil.SystemInformation.SystemInformation
+
+
 -- | Utilities to get grab certain chunks (from <a>Expr</a>,
 --   <a>Sentence</a>, etc) by <a>UID</a> and dereference the chunk it
 --   refers to.
@@ -28,106 +65,32 @@ ccss' :: [Sentence] -> [ModelExpr] -> ChunkDB -> [QuantityDict]
 --   list of <a>DefinedQuantityDict</a>s from a <a>Sentence</a>.
 combine :: Sentence -> ChunkDB -> [DefinedQuantityDict]
 
--- | Gets a list of ideas (<a>IdeaDict</a>) from a <a>Sentence</a> in order
---   to print.
-getIdeaDict :: Sentence -> ChunkDB -> [IdeaDict]
-
 -- | Gets a list of quantities (<a>QuantityDict</a>) from an equation in
 --   order to print.
 vars :: ModelExpr -> ChunkDB -> [QuantityDict]
 
-
--- | Define types and functions related to creating a system information
---   database.
-module SysInfo.Drasil.SystemInformation
-
--- | Data structure for holding all of the requisite information about a
---   system to be used in artifact generation.
-data SystemInformation
-[SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
-class HasSystemInformation c_a90A
-systemInformation :: HasSystemInformation c_a90A => Lens' c_a90A SystemInformation
-authors :: HasSystemInformation c_a90A => Lens' c_a90A People
-background :: HasSystemInformation c_a90A => Lens' c_a90A Background
-configFiles :: HasSystemInformation c_a90A => Lens' c_a90A [String]
-constants :: HasSystemInformation c_a90A => Lens' c_a90A [ConstQDef]
-datadefs :: HasSystemInformation c_a90A => Lens' c_a90A [DataDefinition]
-instModels :: HasSystemInformation c_a90A => Lens' c_a90A [InstanceModel]
-motivation :: HasSystemInformation c_a90A => Lens' c_a90A Motivation
-purpose :: HasSystemInformation c_a90A => Lens' c_a90A Purpose
-scope :: HasSystemInformation c_a90A => Lens' c_a90A Scope
-sysinfodb :: HasSystemInformation c_a90A => Lens' c_a90A ChunkDB
-usedinfodb :: HasSystemInformation c_a90A => Lens' c_a90A ChunkDB
-
 -- | Helper for extracting a bibliography from the system information.
 citeDB :: SystemInformation -> BibRef
-
--- | Create sorted citations from a bibliography.
-citationsFromBibMap :: BibMap -> [Citation]
-
--- | Database for internal references. Contains citations and referrable
---   concepts.
-data ReferenceDB
-
--- | Database for maintaining references. The Int is that reference's
---   number. Maintains access to both num and chunk for easy reference
---   swapping between number and shortname/refname when necessary (or use
---   of number if no shortname exists).
-type RefMap a = Map UID (a, Int)
-
--- | Project Example purpose.
-type Purpose = [Sentence]
-
--- | Project Example background information, used in the <tt>What</tt>
---   section of README.
-type Background = [Sentence]
-
--- | Project Example scope.
-type Scope = [Sentence]
-
--- | Project Example motivation.
-type Motivation = [Sentence]
-
--- | Smart constructor for creating a reference database from a
---   bibliography and concept instances.
-rdb :: BibRef -> [ConceptInstance] -> ReferenceDB
-
--- | Constructor that makes a <a>RefMap</a> from things that have a
---   <a>UID</a>.
-simpleMap :: HasUID a => [a] -> RefMap a
-citationDB :: Lens' ReferenceDB BibMap
-conceptDB :: Lens' ReferenceDB ConceptMap
-instance SysInfo.Drasil.SystemInformation.HasSystemInformation SysInfo.Drasil.SystemInformation.SystemInformation
 
 module SysInfo.Drasil
 
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data SystemInformation
-[SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
-class HasSystemInformation c_a90A
-systemInformation :: HasSystemInformation c_a90A => Lens' c_a90A SystemInformation
-authors :: HasSystemInformation c_a90A => Lens' c_a90A People
-background :: HasSystemInformation c_a90A => Lens' c_a90A Background
-configFiles :: HasSystemInformation c_a90A => Lens' c_a90A [String]
-constants :: HasSystemInformation c_a90A => Lens' c_a90A [ConstQDef]
-datadefs :: HasSystemInformation c_a90A => Lens' c_a90A [DataDefinition]
-instModels :: HasSystemInformation c_a90A => Lens' c_a90A [InstanceModel]
-motivation :: HasSystemInformation c_a90A => Lens' c_a90A Motivation
-purpose :: HasSystemInformation c_a90A => Lens' c_a90A Purpose
-scope :: HasSystemInformation c_a90A => Lens' c_a90A Scope
-sysinfodb :: HasSystemInformation c_a90A => Lens' c_a90A ChunkDB
-usedinfodb :: HasSystemInformation c_a90A => Lens' c_a90A ChunkDB
-
--- | Database for internal references. Contains citations and referrable
---   concepts.
-data ReferenceDB
-
--- | Database for maintaining references. The Int is that reference's
---   number. Maintains access to both num and chunk for easy reference
---   swapping between number and shortname/refname when necessary (or use
---   of number if no shortname exists).
-type RefMap a = Map UID (a, Int)
+[SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> SystemInformation
+class HasSystemInformation c_a8fO
+systemInformation :: HasSystemInformation c_a8fO => Lens' c_a8fO SystemInformation
+authors :: HasSystemInformation c_a8fO => Lens' c_a8fO People
+background :: HasSystemInformation c_a8fO => Lens' c_a8fO Background
+configFiles :: HasSystemInformation c_a8fO => Lens' c_a8fO [String]
+constants :: HasSystemInformation c_a8fO => Lens' c_a8fO [ConstQDef]
+datadefs :: HasSystemInformation c_a8fO => Lens' c_a8fO [DataDefinition]
+instModels :: HasSystemInformation c_a8fO => Lens' c_a8fO [InstanceModel]
+motivation :: HasSystemInformation c_a8fO => Lens' c_a8fO Motivation
+purpose :: HasSystemInformation c_a8fO => Lens' c_a8fO Purpose
+scope :: HasSystemInformation c_a8fO => Lens' c_a8fO Scope
+sysinfodb :: HasSystemInformation c_a8fO => Lens' c_a8fO ChunkDB
+usedinfodb :: HasSystemInformation c_a8fO => Lens' c_a8fO ChunkDB
 
 -- | Project Example purpose.
 type Purpose = [Sentence]
@@ -144,16 +107,6 @@ type Motivation = [Sentence]
 
 -- | Helper for extracting a bibliography from the system information.
 citeDB :: SystemInformation -> BibRef
-
--- | Smart constructor for creating a reference database from a
---   bibliography and concept instances.
-rdb :: BibRef -> [ConceptInstance] -> ReferenceDB
-
--- | Constructor that makes a <a>RefMap</a> from things that have a
---   <a>UID</a>.
-simpleMap :: HasUID a => [a] -> RefMap a
-citationDB :: Lens' ReferenceDB BibMap
-conceptDB :: Lens' ReferenceDB ConceptMap
 
 -- | Gets a list of defined quantities (<a>DefinedQuantityDict</a>s) from
 --   <a>Sentence</a>s and expressions that are contained in the database
@@ -163,14 +116,6 @@ ccss :: [Sentence] -> [ModelExpr] -> ChunkDB -> [DefinedQuantityDict]
 -- | Gets a list of quantities (<a>QuantityDict</a>s) from <a>Sentence</a>s
 --   and expressions that are contained in the database (<a>ChunkDB</a>).
 ccss' :: [Sentence] -> [ModelExpr] -> ChunkDB -> [QuantityDict]
-
--- | Combines the functions of <a>vars</a> and <a>concpt</a> to create a
---   list of <a>DefinedQuantityDict</a>s from a <a>Sentence</a>.
-combine :: Sentence -> ChunkDB -> [DefinedQuantityDict]
-
--- | Gets a list of ideas (<a>IdeaDict</a>) from a <a>Sentence</a> in order
---   to print.
-getIdeaDict :: Sentence -> ChunkDB -> [IdeaDict]
 
 -- | Gets a list of quantities (<a>QuantityDict</a>) from an equation in
 --   order to print.

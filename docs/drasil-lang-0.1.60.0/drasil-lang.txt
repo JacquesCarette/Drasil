@@ -3446,6 +3446,10 @@ Proceedings :: CitationKind
 TechReport :: CitationKind
 Unpublished :: CitationKind
 
+-- | Orders two authors. If given two of the exact same authors, year, and
+--   title, returns an error.
+compareAuthYearTitle :: HasFields c => c -> c -> Ordering
+
 -- | Smart field constructor for a <a>CiteField</a>.
 author :: People -> CiteField
 

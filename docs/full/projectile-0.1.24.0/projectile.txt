@@ -188,7 +188,6 @@ si :: SystemInformation
 symbMap :: ChunkDB
 usedDB :: ChunkDB
 symbols :: [QuantityDict]
-refDB :: ReferenceDB
 projectileMotion :: CI
 allRefs :: [Reference]
 

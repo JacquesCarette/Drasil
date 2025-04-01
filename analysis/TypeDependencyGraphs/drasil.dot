@@ -1036,6 +1036,7 @@ digraph alltypes {
 		ChunkDB -> GendefMap;
 		ChunkDB -> TheoryModelMap;
 		ChunkDB -> ConceptInstanceMap;
+		ChunkDB -> CitationMap;
 		ChunkDB -> LabelledContentMap;
 		ChunkDB -> ReferenceMap;
 		ChunkDB -> TraceMap;
@@ -1096,6 +1097,10 @@ digraph alltypes {
 		subgraph referencemap{
 		ReferenceMap	[shape=oval, color=red2, label="ReferenceMap"];
 		ReferenceMap -> UMapReference;
+		}
+		subgraph citationmap{
+		CitationMap	[shape=oval, color=red2, label="CitationMap"];
+		CitationMap -> UMapCitation;
 		}
 	}
 	subgraph dump {
@@ -4393,10 +4398,6 @@ digraph alltypes {
 	subgraph getcunkh {
 	}
 	subgraph syteminformations {
-		subgraph referencedb{
-		ReferenceDB	[shape=oval, color=cyan3, label="ReferenceDB"];
-		ReferenceDB -> ConceptMap;
-		}
 		subgraph systeminformation{
 		SystemInformation	[shape=oval, color=darkviolet, label="SystemInformation"];
 		SystemInformation -> CommonIdea;
@@ -4418,18 +4419,6 @@ digraph alltypes {
 		subgraph motivation{
 		Motivation	[shape=oval, color=red2, label="Motivation"];
 		Motivation -> Sentence;
-		}
-		subgraph refmapa{
-		RefMapa	[shape=oval, color=red2, label="RefMapa"];
-		RefMapa -> MapUIDaInt;
-		}
-		subgraph bibmap{
-		BibMap	[shape=oval, color=red2, label="BibMap"];
-		BibMap -> RefMapCitation;
-		}
-		subgraph conceptmap{
-		ConceptMap	[shape=oval, color=red2, label="ConceptMap"];
-		ConceptMap -> RefMapConceptInstance;
 		}
 	}
 	subgraph drails {

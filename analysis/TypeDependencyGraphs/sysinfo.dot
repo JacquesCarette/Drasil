@@ -1,10 +1,6 @@
 	subgraph getcunkh {
 	}
 	subgraph syteminformations {
-		subgraph referencedb{
-		ReferenceDB	[shape=oval, color=cyan3, label="ReferenceDB"];
-		ReferenceDB -> ConceptMap;
-		}
 		subgraph systeminformation{
 		SystemInformation	[shape=oval, color=darkviolet, label="SystemInformation"];
 		SystemInformation -> CommonIdea;
@@ -26,18 +22,6 @@
 		subgraph motivation{
 		Motivation	[shape=oval, color=red2, label="Motivation"];
 		Motivation -> Sentence;
-		}
-		subgraph refmapa{
-		RefMapa	[shape=oval, color=red2, label="RefMapa"];
-		RefMapa -> MapUIDaInt;
-		}
-		subgraph bibmap{
-		BibMap	[shape=oval, color=red2, label="BibMap"];
-		BibMap -> RefMapCitation;
-		}
-		subgraph conceptmap{
-		ConceptMap	[shape=oval, color=red2, label="ConceptMap"];
-		ConceptMap -> RefMapConceptInstance;
 		}
 	}
 	subgraph drails {

@@ -1,0 +1,4 @@
+digraph citationmap{
+CitationMap	[shape=oval, color=red2, label="CitationMap"];
+CitationMap -> UMapCitation;
+}

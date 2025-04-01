@@ -124,7 +124,6 @@ symbMap :: ChunkDB
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 usedDB :: ChunkDB
-refDB :: ReferenceDB
 concIns :: [ConceptInstance]
 physSystParts :: [Sentence]
 tMods :: [TheoryModel]

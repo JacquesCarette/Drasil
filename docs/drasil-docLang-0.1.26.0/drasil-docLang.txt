@@ -1090,14 +1090,10 @@ module Drasil.SRSDocument
 --   in its respective example, else an error is thrown.
 data () => ChunkDB
 
--- | Database for internal references. Contains citations and referrable
---   concepts.
-data () => ReferenceDB
-
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data () => SystemInformation
-[SI] :: forall a b e h i j. (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
+[SI] :: forall a b e h i j. (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> SystemInformation
 
 -- | Smart constructor for chunk databases. Takes in the following:
 --   
@@ -1113,11 +1109,7 @@ data () => SystemInformation
 --   <li><a>ConceptInstance</a>s (for <a>ConceptInstanceMap</a>),</li>
 --   <li><a>LabelledContent</a>s (for <a>LabelledContentMap</a>).</li>
 --   </ul>
-cdb :: (Quantity q, MayHaveUnit q, Concept c, IsUnit u) => [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [LabelledContent] -> [Reference] -> ChunkDB
-
--- | Smart constructor for creating a reference database from a
---   bibliography and concept instances.
-rdb :: BibRef -> [ConceptInstance] -> ReferenceDB
+cdb :: (Quantity q, MayHaveUnit q, Concept c, IsUnit u) => [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
 
 -- | Printing information contains a database, a stage, and a printing
 --   configuration.

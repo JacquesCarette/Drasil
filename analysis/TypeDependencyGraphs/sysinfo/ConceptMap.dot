@@ -1,4 +1,0 @@
-digraph conceptmap{
-ConceptMap	[shape=oval, color=red2, label="ConceptMap"];
-ConceptMap -> RefMapConceptInstance;
-}

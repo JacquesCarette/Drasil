@@ -329,7 +329,6 @@ symbMap :: ChunkDB
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 usedDB :: ChunkDB
-refDB :: ReferenceDB
 mkSRS :: SRSDecl
 tSymbIntro :: [TSIntro]
 insModel :: [InstanceModel]

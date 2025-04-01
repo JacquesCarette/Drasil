@@ -17,7 +17,6 @@ mkSRS :: SRSDecl
 si :: SystemInformation
 symbMap :: ChunkDB
 usedDB :: ChunkDB
-refDB :: ReferenceDB
 citations :: BibRef
 inConstraints :: [UncertQ]
 outConstraints :: [UncertQ]

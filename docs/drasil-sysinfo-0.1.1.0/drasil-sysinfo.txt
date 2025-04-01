@@ -14,30 +14,20 @@ module SysInfo.Drasil
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data SystemInformation
-[SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
-class HasSystemInformation c_a8Zs
-systemInformation :: HasSystemInformation c_a8Zs => Lens' c_a8Zs SystemInformation
-authors :: HasSystemInformation c_a8Zs => Lens' c_a8Zs People
-background :: HasSystemInformation c_a8Zs => Lens' c_a8Zs Background
-configFiles :: HasSystemInformation c_a8Zs => Lens' c_a8Zs [String]
-constants :: HasSystemInformation c_a8Zs => Lens' c_a8Zs [ConstQDef]
-datadefs :: HasSystemInformation c_a8Zs => Lens' c_a8Zs [DataDefinition]
-instModels :: HasSystemInformation c_a8Zs => Lens' c_a8Zs [InstanceModel]
-motivation :: HasSystemInformation c_a8Zs => Lens' c_a8Zs Motivation
-purpose :: HasSystemInformation c_a8Zs => Lens' c_a8Zs Purpose
-scope :: HasSystemInformation c_a8Zs => Lens' c_a8Zs Scope
-sysinfodb :: HasSystemInformation c_a8Zs => Lens' c_a8Zs ChunkDB
-usedinfodb :: HasSystemInformation c_a8Zs => Lens' c_a8Zs ChunkDB
-
--- | Database for internal references. Contains citations and referrable
---   concepts.
-data ReferenceDB
-
--- | Database for maintaining references. The Int is that reference's
---   number. Maintains access to both num and chunk for easy reference
---   swapping between number and shortname/refname when necessary (or use
---   of number if no shortname exists).
-type RefMap a = Map UID (a, Int)
+[SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> SystemInformation
+class HasSystemInformation c_a8eh
+systemInformation :: HasSystemInformation c_a8eh => Lens' c_a8eh SystemInformation
+authors :: HasSystemInformation c_a8eh => Lens' c_a8eh People
+background :: HasSystemInformation c_a8eh => Lens' c_a8eh Background
+configFiles :: HasSystemInformation c_a8eh => Lens' c_a8eh [String]
+constants :: HasSystemInformation c_a8eh => Lens' c_a8eh [ConstQDef]
+datadefs :: HasSystemInformation c_a8eh => Lens' c_a8eh [DataDefinition]
+instModels :: HasSystemInformation c_a8eh => Lens' c_a8eh [InstanceModel]
+motivation :: HasSystemInformation c_a8eh => Lens' c_a8eh Motivation
+purpose :: HasSystemInformation c_a8eh => Lens' c_a8eh Purpose
+scope :: HasSystemInformation c_a8eh => Lens' c_a8eh Scope
+sysinfodb :: HasSystemInformation c_a8eh => Lens' c_a8eh ChunkDB
+usedinfodb :: HasSystemInformation c_a8eh => Lens' c_a8eh ChunkDB
 
 -- | Project Example purpose.
 type Purpose = [Sentence]
@@ -55,16 +45,6 @@ type Motivation = [Sentence]
 -- | Helper for extracting a bibliography from the system information.
 citeDB :: SystemInformation -> BibRef
 
--- | Smart constructor for creating a reference database from a
---   bibliography and concept instances.
-rdb :: BibRef -> [ConceptInstance] -> ReferenceDB
-
--- | Constructor that makes a <a>RefMap</a> from things that have a
---   <a>UID</a>.
-simpleMap :: HasUID a => [a] -> RefMap a
-citationDB :: Lens' ReferenceDB BibMap
-conceptDB :: Lens' ReferenceDB ConceptMap
-
 -- | Gets a list of defined quantities (<a>DefinedQuantityDict</a>s) from
 --   <a>Sentence</a>s and expressions that are contained in the database
 --   (<a>ChunkDB</a>).
@@ -73,14 +53,6 @@ ccss :: [Sentence] -> [ModelExpr] -> ChunkDB -> [DefinedQuantityDict]
 -- | Gets a list of quantities (<a>QuantityDict</a>s) from <a>Sentence</a>s
 --   and expressions that are contained in the database (<a>ChunkDB</a>).
 ccss' :: [Sentence] -> [ModelExpr] -> ChunkDB -> [QuantityDict]
-
--- | Combines the functions of <a>vars</a> and <a>concpt</a> to create a
---   list of <a>DefinedQuantityDict</a>s from a <a>Sentence</a>.
-combine :: Sentence -> ChunkDB -> [DefinedQuantityDict]
-
--- | Gets a list of ideas (<a>IdeaDict</a>) from a <a>Sentence</a> in order
---   to print.
-getIdeaDict :: Sentence -> ChunkDB -> [IdeaDict]
 
 -- | Gets a list of quantities (<a>QuantityDict</a>) from an equation in
 --   order to print.

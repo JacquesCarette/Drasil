@@ -1,4 +1,3 @@
 digraph sysinfo{
 SystemInformation	[shape=oval, color=turquoise4, label="SystemInformation"];
-ReferenceDB	[shape=oval, color=turquoise4, label="ReferenceDB"];
 }

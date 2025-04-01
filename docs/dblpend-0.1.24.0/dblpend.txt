@@ -242,7 +242,6 @@ symbMap :: ChunkDB
 allRefs :: [Reference]
 usedDB :: ChunkDB
 stdFields :: Fields
-refDB :: ReferenceDB
 concIns :: [ConceptInstance]
 justification :: CI -> Sentence
 externalLinkRef :: Reference

@@ -2324,7 +2324,7 @@ data () => ReferenceDB
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data () => SystemInformation
-[SI] :: forall a b e f h i j. (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [f] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
+[SI] :: forall a b e h i j. (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
 
 -- | Smart constructor for chunk databases. Takes in the following:
 --   

@@ -10,7 +10,6 @@
 		SystemInformation -> CommonIdea;
 		SystemInformation -> a;
 		SystemInformation -> Idea;
-		SystemInformation -> b;
 		}
 		subgraph purpose{
 		Purpose	[shape=oval, color=red2, label="Purpose"];

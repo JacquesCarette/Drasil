@@ -3,5 +3,4 @@ SystemInformation	[shape=oval, color=darkviolet, label="SystemInformation"];
 SystemInformation -> CommonIdea;
 SystemInformation -> a;
 SystemInformation -> Idea;
-SystemInformation -> b;
 }

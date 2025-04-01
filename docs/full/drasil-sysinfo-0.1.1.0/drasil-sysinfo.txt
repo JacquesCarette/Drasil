@@ -44,20 +44,20 @@ module SysInfo.Drasil.SystemInformation
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data SystemInformation
-[SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [f] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
-class HasSystemInformation c_a949
-systemInformation :: HasSystemInformation c_a949 => Lens' c_a949 SystemInformation
-authors :: HasSystemInformation c_a949 => Lens' c_a949 People
-background :: HasSystemInformation c_a949 => Lens' c_a949 Background
-configFiles :: HasSystemInformation c_a949 => Lens' c_a949 [String]
-constants :: HasSystemInformation c_a949 => Lens' c_a949 [ConstQDef]
-datadefs :: HasSystemInformation c_a949 => Lens' c_a949 [DataDefinition]
-instModels :: HasSystemInformation c_a949 => Lens' c_a949 [InstanceModel]
-motivation :: HasSystemInformation c_a949 => Lens' c_a949 Motivation
-purpose :: HasSystemInformation c_a949 => Lens' c_a949 Purpose
-scope :: HasSystemInformation c_a949 => Lens' c_a949 Scope
-sysinfodb :: HasSystemInformation c_a949 => Lens' c_a949 ChunkDB
-usedinfodb :: HasSystemInformation c_a949 => Lens' c_a949 ChunkDB
+[SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
+class HasSystemInformation c_a90A
+systemInformation :: HasSystemInformation c_a90A => Lens' c_a90A SystemInformation
+authors :: HasSystemInformation c_a90A => Lens' c_a90A People
+background :: HasSystemInformation c_a90A => Lens' c_a90A Background
+configFiles :: HasSystemInformation c_a90A => Lens' c_a90A [String]
+constants :: HasSystemInformation c_a90A => Lens' c_a90A [ConstQDef]
+datadefs :: HasSystemInformation c_a90A => Lens' c_a90A [DataDefinition]
+instModels :: HasSystemInformation c_a90A => Lens' c_a90A [InstanceModel]
+motivation :: HasSystemInformation c_a90A => Lens' c_a90A Motivation
+purpose :: HasSystemInformation c_a90A => Lens' c_a90A Purpose
+scope :: HasSystemInformation c_a90A => Lens' c_a90A Scope
+sysinfodb :: HasSystemInformation c_a90A => Lens' c_a90A ChunkDB
+usedinfodb :: HasSystemInformation c_a90A => Lens' c_a90A ChunkDB
 
 -- | Helper for extracting a bibliography from the system information.
 citeDB :: SystemInformation -> BibRef
@@ -104,20 +104,20 @@ module SysInfo.Drasil
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data SystemInformation
-[SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [f] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
-class HasSystemInformation c_a949
-systemInformation :: HasSystemInformation c_a949 => Lens' c_a949 SystemInformation
-authors :: HasSystemInformation c_a949 => Lens' c_a949 People
-background :: HasSystemInformation c_a949 => Lens' c_a949 Background
-configFiles :: HasSystemInformation c_a949 => Lens' c_a949 [String]
-constants :: HasSystemInformation c_a949 => Lens' c_a949 [ConstQDef]
-datadefs :: HasSystemInformation c_a949 => Lens' c_a949 [DataDefinition]
-instModels :: HasSystemInformation c_a949 => Lens' c_a949 [InstanceModel]
-motivation :: HasSystemInformation c_a949 => Lens' c_a949 Motivation
-purpose :: HasSystemInformation c_a949 => Lens' c_a949 Purpose
-scope :: HasSystemInformation c_a949 => Lens' c_a949 Scope
-sysinfodb :: HasSystemInformation c_a949 => Lens' c_a949 ChunkDB
-usedinfodb :: HasSystemInformation c_a949 => Lens' c_a949 ChunkDB
+[SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> ReferenceDB -> SystemInformation
+class HasSystemInformation c_a90A
+systemInformation :: HasSystemInformation c_a90A => Lens' c_a90A SystemInformation
+authors :: HasSystemInformation c_a90A => Lens' c_a90A People
+background :: HasSystemInformation c_a90A => Lens' c_a90A Background
+configFiles :: HasSystemInformation c_a90A => Lens' c_a90A [String]
+constants :: HasSystemInformation c_a90A => Lens' c_a90A [ConstQDef]
+datadefs :: HasSystemInformation c_a90A => Lens' c_a90A [DataDefinition]
+instModels :: HasSystemInformation c_a90A => Lens' c_a90A [InstanceModel]
+motivation :: HasSystemInformation c_a90A => Lens' c_a90A Motivation
+purpose :: HasSystemInformation c_a90A => Lens' c_a90A Purpose
+scope :: HasSystemInformation c_a90A => Lens' c_a90A Scope
+sysinfodb :: HasSystemInformation c_a90A => Lens' c_a90A ChunkDB
+usedinfodb :: HasSystemInformation c_a90A => Lens' c_a90A ChunkDB
 
 -- | Database for internal references. Contains citations and referrable
 --   concepts.

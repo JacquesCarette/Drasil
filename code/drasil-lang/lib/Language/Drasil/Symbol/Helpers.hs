@@ -43,7 +43,9 @@ upperLeft b ul = Corners [ul] [] [] [] b
 -- | Helper for creating a symbol with a subscript to the right.
 -- Arguments: Base symbol, then subscripted symbol.
 sub :: Symbol -> Symbol -> Symbol
-sub b lr = Corners [] [] [] [lr] b
+-- sub b lr = Corners [] [] [] [lr] b
+sub (Corners ul dl ur dr b) s = Corners ul dl ur (dr ++ [s]) b
+sub b s                       = Corners [] [] [] [s] b
 
 -- | Helper for a common case of subscript, with a string
 -- Arguments: Base symbol, then subscript 'String'.
@@ -53,7 +55,8 @@ subStr sym substr = sub sym $ Label substr
 -- | Helper for creating a symbol with a superscript to the right.
 -- Arguments: Base symbol, then superscripted symbol.
 sup :: Symbol -> Symbol -> Symbol
-sup b ur = Corners [] [] [ur] [] b
+sup (Corners ul dl ur dr b) p = Corners ul dl (ur ++ [p]) dr b
+sup b p                       = Corners [] [] [p] [] b
 
 -- | Helper for creating a symbol with a hat ("^") atop it.
 hat :: Symbol -> Symbol

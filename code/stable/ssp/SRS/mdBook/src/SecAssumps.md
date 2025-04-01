@@ -4,7 +4,7 @@ This section simplifies the original problem and helps in developing the theoret
 
 <div id="assumpSSC"></div>
 
-Slip-Surface-Concave: The slip surface is concave with respect to the slope surface. The (\\(\boldsymbol{x}\_{\text{slip}}\\), \\(\boldsymbol{y}\_{\text{slip}}\\)) coordinates of a slip surface follow a concave up function. (RefBy: [IM:crtSlpId](./SecIMs.md#IM:crtSlpId).)
+Slip-Surface-Concave: The slip surface is concave with respect to the slope surface. The (\\({\boldsymbol{x}\_{\text{slip}}}\\), \\({\boldsymbol{y}\_{\text{slip}}}\\)) coordinates of a slip surface follow a concave up function. (RefBy: [IM:crtSlpId](./SecIMs.md#IM:crtSlpId).)
 
 <div id="assumpFOS"></div>
 

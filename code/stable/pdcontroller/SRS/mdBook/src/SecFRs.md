@@ -20,12 +20,12 @@ Output-Values: Output the Process Variable (from [IM:pdEquationIM](./SecIMs.md#I
 
 <div id="Table:ReqInputs"></div>
 
-|Symbol                |Description      |Units           |
-|:---------------------|:----------------|:---------------|
-|\\(K\_{\text{d}}\\)   |Derivative Gain  |--              |
-|\\(K\_{\text{p}}\\)   |Proportional Gain|--              |
-|\\(r\_{\text{t}}\\)   |Set-Point        |--              |
-|\\(t\_{\text{sim}}\\) |Simulation Time  |\\({\text{s}}\\)|
-|\\(t\_{\text{step}}\\)|Step Time        |\\({\text{s}}\\)|
+|Symbol                  |Description      |Units           |
+|:-----------------------|:----------------|:---------------|
+|\\({K\_{\text{d}}}\\)   |Derivative Gain  |--              |
+|\\({K\_{\text{p}}}\\)   |Proportional Gain|--              |
+|\\({r\_{\text{t}}}\\)   |Set-Point        |--              |
+|\\({t\_{\text{sim}}}\\) |Simulation Time  |\\({\text{s}}\\)|
+|\\({t\_{\text{step}}}\\)|Step Time        |\\({\text{s}}\\)|
 
 **<p align="center">Required Inputs</p>**

@@ -4,9 +4,9 @@ The [Data Constraints Table](./SecCorSolProps.md#Table:OutDataConstraints) shows
 
 <div id="Table:OutDataConstraints"></div>
 
-|Var                |Physical Constraints                                        |
-|:------------------|:-----------------------------------------------------------|
-|\\(T\_{\text{W}}\\)|\\(T\_{\text{init}}\leq{}T\_{\text{W}}\leq{}T\_{\text{C}}\\)|
-|\\(E\_{\text{W}}\\)|\\(E\_{\text{W}}\geq{}0\\)                                  |
+|Var                  |Physical Constraints                                              |
+|:--------------------|:-----------------------------------------------------------------|
+|\\({T\_{\text{W}}}\\)|\\({T\_{\text{init}}}\leq{}{T\_{\text{W}}}\leq{}{T\_{\text{C}}}\\)|
+|\\({E\_{\text{W}}}\\)|\\({E\_{\text{W}}}\geq{}0\\)                                      |
 
 **<p align="center">Output Data Constraints</p>**

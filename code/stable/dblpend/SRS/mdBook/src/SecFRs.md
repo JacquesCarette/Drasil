@@ -12,19 +12,19 @@ Verify-Input-Values: Check the entered input values to ensure that they do not e
 
 <div id="calcAng"></div>
 
-Calculate-Angle-Of-Rod: Calculate the following values: \\(θ\_{1}\\) and \\(θ\_{2}\\) (from [IM:calOfAngle1](./SecIMs.md#IM:calOfAngle1) and [IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2)).
+Calculate-Angle-Of-Rod: Calculate the following values: \\({θ\_{1}}\\) and \\({θ\_{2}}\\) (from [IM:calOfAngle1](./SecIMs.md#IM:calOfAngle1) and [IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2)).
 
 <div id="outputValues"></div>
 
-Output-Values: Output \\(θ\_{1}\\) and \\(θ\_{2}\\) (from [IM:calOfAngle1](./SecIMs.md#IM:calOfAngle1) and [IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2)).
+Output-Values: Output \\({θ\_{1}}\\) and \\({θ\_{2}}\\) (from [IM:calOfAngle1](./SecIMs.md#IM:calOfAngle1) and [IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2)).
 
 <div id="Table:ReqInputs"></div>
 
-|Symbol      |Description              |Units            |
-|:-----------|:------------------------|:----------------|
-|\\(L\_{1}\\)|Length of the first rod  |\\({\text{m}}\\) |
-|\\(L\_{2}\\)|Length of the second rod |\\({\text{m}}\\) |
-|\\(m\_{1}\\)|Mass of the first object |\\({\text{kg}}\\)|
-|\\(m\_{2}\\)|Mass of the second object|\\({\text{kg}}\\)|
+|Symbol        |Description              |Units            |
+|:-------------|:------------------------|:----------------|
+|\\({L\_{1}}\\)|Length of the first rod  |\\({\text{m}}\\) |
+|\\({L\_{2}}\\)|Length of the second rod |\\({\text{m}}\\) |
+|\\({m\_{1}}\\)|Mass of the first object |\\({\text{kg}}\\)|
+|\\({m\_{2}}\\)|Mass of the second object|\\({\text{kg}}\\)|
 
 **<p align="center">Required Inputs</p>**

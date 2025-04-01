@@ -4,12 +4,12 @@ The physical system of SWHSNoPCM, as shown in [Fig:Tank](./SecPhysSyst.md#Figure
 
 PS1: Tank containing water.
 
-PS2: Heating coil at bottom of tank. (\\(q\_{\text{C}}\\) represents the heat flux into the water from the coil.)
+PS2: Heating coil at bottom of tank. (\\({q\_{\text{C}}}\\) represents the heat flux into the water from the coil.)
 
 <div id="Figure:Tank" align="center" >
 
-![Solar water heating tank, with heat flux from heating coil of \\(q\_{\text{C}}\\)](./assets/TankWaterOnly.png)
+![Solar water heating tank, with heat flux from heating coil of \\({q\_{\text{C}}}\\)](./assets/TankWaterOnly.png)
 
-**Figure: Solar water heating tank, with heat flux from heating coil of \\(q\_{\text{C}}\\)**
+**Figure: Solar water heating tank, with heat flux from heating coil of \\({q\_{\text{C}}}\\)**
 
 </div>

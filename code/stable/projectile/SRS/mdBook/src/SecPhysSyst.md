@@ -4,7 +4,7 @@ The physical system of Projectile, as shown in [Fig:Launch](./SecPhysSyst.md#Fig
 
 PS1: The launcher.
 
-PS2: The projectile (with initial velocity \\(\boldsymbol{v}^{\text{i}}\\) and launch angle \\(θ\\)).
+PS2: The projectile (with initial velocity \\({\boldsymbol{v}^{\text{i}}}\\) and launch angle \\(θ\\)).
 
 PS3: The target.
 

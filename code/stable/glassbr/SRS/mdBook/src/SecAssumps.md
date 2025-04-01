@@ -16,7 +16,7 @@ explainScenario: This system only considers the external explosion scenario for 
 
 <div id="assumpSV"></div>
 
-standardValues: The values provided in [Sec:Values of Auxiliary Constants](./SecAuxConstants.md#Sec:AuxConstants) are assumed for the duration of load (\\(t\_{\text{d}}\\)), and the material properties of \\(m\\), \\(k\\), and \\(E\\). (RefBy: [IM:sdfTol](./SecIMs.md#IM:sdfTol), [IM:nFL](./SecIMs.md#IM:nFL), [IM:dimlessLoad](./SecIMs.md#IM:dimlessLoad), [DD:loadDurFactor](./SecDDs.md#DD:loadDurFactor), [LC:Variable-Values-of-m,k,E](./SecLCs.md#varValsOfmkE), and [A:ldfConstant](./SecAssumps.md#assumpLDFC).)
+standardValues: The values provided in [Sec:Values of Auxiliary Constants](./SecAuxConstants.md#Sec:AuxConstants) are assumed for the duration of load (\\({t\_{\text{d}}}\\)), and the material properties of \\(m\\), \\(k\\), and \\(E\\). (RefBy: [IM:sdfTol](./SecIMs.md#IM:sdfTol), [IM:nFL](./SecIMs.md#IM:nFL), [IM:dimlessLoad](./SecIMs.md#IM:dimlessLoad), [DD:loadDurFactor](./SecDDs.md#DD:loadDurFactor), [LC:Variable-Values-of-m,k,E](./SecLCs.md#varValsOfmkE), and [A:ldfConstant](./SecAssumps.md#assumpLDFC).)
 
 <div id="assumpGL"></div>
 

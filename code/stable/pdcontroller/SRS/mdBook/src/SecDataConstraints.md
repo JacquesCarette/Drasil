@@ -4,12 +4,12 @@ The [Data Constraints Table](./SecDataConstraints.md#Table:InDataConstraints) sh
 
 <div id="Table:InDataConstraints"></div>
 
-|Var                   |Physical Constraints                                          |Typical Value               |Uncert.    |
-|:---------------------|:-------------------------------------------------------------|:---------------------------|:----------|
-|\\(K\_{\text{d}}\\)   |\\(K\_{\text{d}}\geq{}0\\)                                    |\\(1\\)                     |10\\(\\%\\)|
-|\\(K\_{\text{p}}\\)   |\\(K\_{\text{p}}\gt{}0\\)                                     |\\(20\\)                    |10\\(\\%\\)|
-|\\(r\_{\text{t}}\\)   |\\(r\_{\text{t}}\gt{}0\\)                                     |\\(1\\)                     |10\\(\\%\\)|
-|\\(t\_{\text{sim}}\\) |\\(1\leq{}t\_{\text{sim}}\leq{}60\\)                          |\\(10\\) \\({\text{s}}\\)   |10\\(\\%\\)|
-|\\(t\_{\text{step}}\\)|\\(\frac{1}{1000}\leq{}t\_{\text{step}}\lt{}t\_{\text{sim}}\\)|\\(0.001\\) \\({\text{s}}\\)|10\\(\\%\\)|
+|Var                     |Physical Constraints                                              |Typical Value               |Uncert.    |
+|:-----------------------|:-----------------------------------------------------------------|:---------------------------|:----------|
+|\\({K\_{\text{d}}}\\)   |\\({K\_{\text{d}}}\geq{}0\\)                                      |\\(1\\)                     |10\\(\\%\\)|
+|\\({K\_{\text{p}}}\\)   |\\({K\_{\text{p}}}\gt{}0\\)                                       |\\(20\\)                    |10\\(\\%\\)|
+|\\({r\_{\text{t}}}\\)   |\\({r\_{\text{t}}}\gt{}0\\)                                       |\\(1\\)                     |10\\(\\%\\)|
+|\\({t\_{\text{sim}}}\\) |\\(1\leq{}{t\_{\text{sim}}}\leq{}60\\)                            |\\(10\\) \\({\text{s}}\\)   |10\\(\\%\\)|
+|\\({t\_{\text{step}}}\\)|\\(\frac{1}{1000}\leq{}{t\_{\text{step}}}\lt{}{t\_{\text{sim}}}\\)|\\(0.001\\) \\({\text{s}}\\)|10\\(\\%\\)|
 
 **<p align="center">Input Data Constraints</p>**

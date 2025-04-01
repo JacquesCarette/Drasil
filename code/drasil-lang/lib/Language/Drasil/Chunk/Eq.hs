@@ -13,15 +13,17 @@ module Language.Drasil.Chunk.Eq (
 ) where
 
 import Control.Lens ((^.), view, lens, Lens', to)
-import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDefn)
 
+import Drasil.Database.UID (UID, HasUID(..))
+import Drasil.Language.Idea (ncUID, mkIdea, nw)
+
+import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDefn)
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity,
   ConceptDomain(cdom), Express(express))
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
 import Language.Drasil.Chunk.Concept (cc')
-import Language.Drasil.Chunk.NamedIdea (ncUID, mkIdea, nw)
 import Language.Drasil.Chunk.Quantity (DefinesQuantity(defLhs), qw)
 
 import Language.Drasil.Expr.Lang (Expr)
@@ -33,7 +35,6 @@ import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space(..), HasSpace(..))
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Stages (Stage)
-import Drasil.Database.UID (UID, HasUID(..))
 import Language.Drasil.WellTyped (RequiresChecking(..))
 
 data QDefinition e where

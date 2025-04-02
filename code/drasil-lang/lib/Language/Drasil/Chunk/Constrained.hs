@@ -10,7 +10,9 @@ module Language.Drasil.Chunk.Constrained (
 
 import Control.Lens ((^.), makeLenses, view)
 
-import Language.Drasil.Chunk.Concept (cw, dcc)
+import Drasil.Database.UID (HasUID(..))
+import Drasil.Language.Concept (cw, dcc)
+
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', dqdWr)
 import Language.Drasil.Chunk.Quantity (QuantityDict, qw, vc)
 import Language.Drasil.Chunk.Unital (uc')
@@ -27,7 +29,6 @@ import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage)
-import Drasil.Database.UID (HasUID(..))
 
 -- | ConstrainedChunks are symbolic quantities ('QuantityDict')
 -- with 'Constraint's and maybe a typical value ('Maybe' 'Expr').

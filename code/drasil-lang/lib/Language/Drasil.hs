@@ -93,9 +93,8 @@ module Language.Drasil (
   , CI, commonIdea, getAcc, commonIdeaWithDict, prependAbrv
 
   -- *** Concepts
-  -- Language.Drasil.Chunk.Concept.Core
+  -- Drasil.Language.Concept
   , ConceptChunk, ConceptInstance, sDom
-  -- Language.Drasil.Chunk.Concept
   , dcc, dccWDS, cc, cc', ccs, cw, cic
   -- Language.Drasil.Chunk.Relation
   , RelationConcept, makeRC
@@ -201,7 +200,7 @@ module Language.Drasil (
   -- Language.Drasil.Development.Sentence
   , introduceAbb, phrase, plural, phrasePoss, pluralPoss, atStart, atStart'
   , titleize, titleize', short
-  -- Language.Drasil.ShortName
+  -- Drasil.Language.ShortName
   , ShortName, shortname', getSentSN, HasShortName(..)
   -- Language.Drasil.Derivation
   , Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader
@@ -329,7 +328,7 @@ import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
 import Drasil.Database.UID
     (UID, HasUID(..), (+++), (+++.), (+++!), mkUid, nsUid, showUID)
 import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)
-import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
+import Language.Drasil.Classes (HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints),
   HasReasVal(reasVal), DefiningExpr(defnExpr), Quantity, Callable,
   IsArgumentName, Express(..))
@@ -347,8 +346,7 @@ import Language.Drasil.Chunk.CodeVar (CodeIdea(..), CodeChunk(..),
   CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..), obv, qc, ccf, ccv, 
   listToArray, programName, funcPrefix, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.CommonIdea
-import Language.Drasil.Chunk.Concept
-import Language.Drasil.Chunk.Concept.Core (sDom) -- exported for drasil-database FIXME: move to development package?
+import Drasil.Language.Concept
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Constraint (physRange, sfwrRange, physElem, sfwrElem, isSfwrC, isPhysC,
   Constraint(..), ConstraintE, ConstraintReason(..))
@@ -356,7 +354,7 @@ import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
   fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', ec,
   mkFuncDef, mkFuncDef', mkFuncDefByQ)
-import Language.Drasil.Chunk.NamedIdea
+import Drasil.Language.Idea
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)
 import Language.Drasil.Chunk.DifferentialModel(DifferentialModel(..), ODESolverFormat(..),
@@ -374,7 +372,7 @@ import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
   , chapter, edition, number, volume, year, month, pages
   , compareAuthYearTitle)
 import Language.Drasil.NounPhrase
-import Language.Drasil.ShortName (ShortName, shortname', getSentSN, HasShortName(..))
+import Drasil.Language.ShortName (ShortName, shortname', getSentSN, HasShortName(..))
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..),
   RTopology(..), DomainDesc(..), ContinuousDomainDesc, DiscreteDomainDesc,
   getActorName, getInnerSpace, HasSpace(..), mkFunction, Primitive)

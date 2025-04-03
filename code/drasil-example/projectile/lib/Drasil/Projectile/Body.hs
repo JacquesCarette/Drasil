@@ -132,23 +132,146 @@ projectileTitle = commonIdea "projectileTitle" (pn "Projectile") "Projectile" []
 
 si :: SystemInformation
 si = SI {
-  _sys         = projectileTitle,
+  -- SystemInformation (SI) is a huge record that intimately couples many "core"
+  -- things to Projectile (I will number these things). SI was created for
+  -- operational purposes, but it's come to be something that contains many
+  -- intimately related things, which do make sense to be related somehow (not
+  -- necessarily by a record, but that's a different story). The question is
+  -- _how they're related_, and from that, we are likely to find a better design
+  -- for SI. I will number discussion points, not components of SI.
+
+  -- (1) I'm starting this with one large assumption (I'm noting this
+  -- retroactively): SI is our version of the the "root model" (our version of
+  -- MDE's Single Model Principle --
+  -- https://www.researchgate.net/publication/2843964_The_Single_Model_Principle).
+  -- The assumption here is that the SI is meant to be the root thing that we
+  -- operate on from the POV of the softifact generator.
+
+  -- (2) The first thing the SI contains is a "notice" -- that we are interested
+  -- in modelling a software computation problem, using standard/conventional
+  -- terminology. I say notice because we only carry `Doc.srs` (a CI/"common
+  -- idea," defining the acronym SRS and its long form). Considering the lesson
+  -- plan's SI only changes this to "notebook" and uses very few of the other SI
+  -- fields, I think its fair to say that this "notice" should be a data type
+  -- that includes a lot more of the fields from the SI, but I'm not sure what
+  -- yet! I believe that `Doc.srs` is also something more specific than just
+  -- "software requirements specification." I think it really means the
+  -- SmithEtAl SRS template in particular, because that brings about the
+  -- terminology we use in organizing scientific knowledge (e.g., Theory Model,
+  -- General Definition, etc. -- yes, some of this will change in the future,
+  -- but that's too into the weeds now). It also brings about/hooks in some of
+  -- our nonfunctional requirements: traceable, correct, and verifiable. Not
+  -- necessarily: reusable, understandable, maintainable, and portable.
   _kind        = Doc.srs,
-  _authors     = [samCrawford, brooks, spencerSmith],
-  _purpose     = [purp],
-  _background  = [background],
+
+  -- (3) Implicitly, (2) is saying that some sort of software problem will be
+  -- presented in the document. We don't necessarily capture this information
+  -- that we're presenting a software problem, so this is implicit.
+  
+  -- (4) The implicit software problem (2) is an "input-calculate-output
+  -- computational software problem." I'm not going to call this "Projectile,"
+  -- but something more precise (which we can retract later): a
+  -- "solution/calculation schematic," which is not necessarily about projectile
+  -- motion problem.
+
+  -- (5) Now, the solution can come from anywhere and/or nowhere, but we make a
+  -- choice: that if it comes from anywhere, it is grounded in science and
+  -- theory. This is arguably brought about as a restriction by the SRS
+  -- "notice."
+
+  -- (6) Before explaining what the "solution/calculation schematic" is, we need
+  -- to define the (calculation) problem. The problem has two components to it:
+  -- metainformation (containing background information about the problem,
+  -- sources for the problem, authorship, etc.) and a mathematical description
+  -- of the problem.
+
+  -- (7) The metainformation for the calculation problem begins with: a title,
+  -- authors, and rationale for why bothering with encoding this at all. Yes,
+  -- the title is metainformation.
+  _sys         = projectileTitle, -- the title (Projectile),
+  _authors     = [samCrawford, brooks, spencerSmith], -- the list of authors,
+  -- and a bit of explanation of why this is encoded at all (background and
+  -- motivation).
   _motivation  = [motivation],
-  _scope       = [scope],
-  _quants      = symbols,
-  _instModels  = iMods,
-  _datadefs    = dataDefs,
-  _configFiles = [],
-  _inputs      = inputs,
+  -- ^ "Projectile motion is a common problem in physics."
+  _background  = [background],
+  -- ^ "Common examples of projectile motion include ballistics problems
+  -- (missiles and bullets) and the flight of the balls in various sports
+  -- (baseball, golf, football, etc.)."
+
+  -- (8) I believe this metainformation brings about the "Characteristics of the
+  -- Intended Reader" into scope as well, bringing about what DSLs, terms,
+  -- theories, etc. are relevant to us and into scope. We don't explicitly have
+  -- this written down anywhere, but it brings about the swath of theory needed
+  -- to possibly discuss the mathematical description of the problem (e.g., what
+  -- is a position, what is 2D collision, what are our abstract objects of
+  -- interest [launcher/cannon, target, and projectile], kinematics equations,
+  -- etc.). Specifically, I believe that this brings about the "Theory Models"
+  -- in scope of the project.
+
+  -- (9) Now, the mathematical description explains a specific calculation
+  -- problem (knowns/unknowns) situated within the theory. Funny enough, this
+  -- mathematical description does not necessarily imply that a solution exists.
+  -- It only creates one arbitrarily! Hence, it contains 2 things (which appears
+  -- as 3 in the SI):
+  _purpose     = [purp], -- an English description of the knowns/unknowns problem, and
+  -- ^ "Predict whether a launched projectile hits its target."
+  _inputs      = inputs, -- (inputs, outputs), a designation of an unknown function: f(inputs) = outputs
   _outputs     = outputs,
-  _constraints = map cnstrw constrained,
-  _constants   = constants,
+
+  -- (10) Finally, we can return to the specific "solution/calculation
+  -- schematic." Here, we carve out a scope (assumptions) for which we can
+  -- define `f` (from (9)) using sound theory. This may mean a few things:
+  -- 
+  -- - That we're only looking to carve out a solution for a subset of the
+  --   inputs.
+  -- - That we need more inputs to possibly solve this. We don't do that in
+  --   Projectile, but we do this in GlassBR, where we wire in custom
+  --   handwritten code.
+  -- - That we will add extra outputs (e.g., because we have intermediate
+  --   variables of interest to users of the software).
+  -- 
+  -- Unfortunately, `_inputs` and `_outputs` are not divided into two lists each
+  -- (one containing purely the abstract problem inputs/outputs, and the other
+  -- containing the specific inputs/outputs the software solution schematic will
+  -- actually work with). However, if they were, they would be added to the
+  -- below items:
+  _scope       = [scope], -- An English summary of the other ("more mathematical") items.
+  -- ^ "The analysis of a 2D projectile motion problem with constant acceleration."
+  _constants   = constants, -- Constant variable assumptions.
+  _constraints = map cnstrw constrained, -- Variable input constraints.
+  _quants      = symbols, -- _All_ relevant variables (including immediate variables).
+  _datadefs    = dataDefs, -- "Let" bindings of variables (?).
+  
+  -- (11) The "Instance Models" collectively carry the calculation scheme, being
+  -- derived from theory models and general definitions. We extract `f` from the
+  -- instance models. Note: the calculation scheme may have "holes" that need to
+  -- be filled in by the code generator. For example, ODEs need choices to be
+  -- made about which method/library to use.
+  _instModels  = iMods,
+
+  -- (12) TODO: I believe we are commiting to "Naturalism"
+  -- (https://plato.stanford.edu/entries/philosophy-mathematics/#NatInd) with
+  -- our theories. What does this mean? That we don't care for pure formalism
+  -- and mathematics, but accept our best scientific theories as truth despite
+  -- being backed only by empirical evidence. 
+
+  -- (13) At this point, everything necessary for a software generator to be
+  -- defined and configured (to generate a solution for the Projectile problem)
+  -- is here and ready.
+
+  -- (14) `sysinfodb` and chunk UIDs is really a symptom of a greater issue:
+  -- that we're encoding chunks as individual Haskell data types rather than
+  -- operating on ASTs for our various languages.
   _sysinfodb   = symbMap,
-  _usedinfodb  = usedDB
+
+  -- (15) https://github.com/JacquesCarette/Drasil/issues/1661#issuecomment-1021450950
+  _usedinfodb  = usedDB,
+
+  -- (16) `configFiles` is only used for GlassBR. It contains a list of files
+  -- necessary for the software problem to run. I'm not actually sure why it's
+  -- put here rather than `CodeSpec`.
+  _configFiles = []
 }
 
 purp :: Sentence

@@ -28,4 +28,4 @@ Output-Values: Output \\({L\_{\text{rod}}}\\) (from [IM:calOfAngularDisplacement
 |\\({θ\_{i}}\\)         |Initial pendulum angle            |\\({\text{rad}}\\)                   |
 |\\({θ\_{p}}\\)         |Displacement angle of the pendulum|\\({\text{rad}}\\)                   |
 
-**<p align="center">Required Inputs following [FR:Input-Values](./SecFRs.md#inputValues)</p>**
+**<p align="center">Required Inputs</p>**

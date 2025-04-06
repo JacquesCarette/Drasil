@@ -12,7 +12,7 @@ module Language.Drasil.Reference (
 import Language.Drasil.Label.Type (LblType, HasRefAddress(..))
 import Language.Drasil.ShortName (HasShortName(..), ShortName)
 import Language.Drasil.Sentence (Sentence(Ref, EmptyS), RefInfo(..))
-import Language.Drasil.UID (UID, HasUID(..))
+import Drasil.Database.UID (UID, HasUID(..))
 
 import Control.Lens ((^.), makeLenses, Lens')
 

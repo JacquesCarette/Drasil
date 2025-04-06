@@ -1,16 +1,16 @@
 digraph allvsr {
-	findMass -> wMass;
-	findMass -> wVol;
-	findMass -> tankVol;
+	findMass -> dataDefn:wMass;
+	findMass -> dataDefn:wVol;
+	findMass -> dataDefn:tankVol;
 	findMass -> theory:eBalanceOnWtrRC;
-	findMass -> inputInitVals;
-	outputInputDerivVals -> tauW;
-	outputInputDerivVals -> inputInitVals;
+	findMass -> inputValues;
+	outputInputDerivVals -> dataDefn:tauW;
+	outputInputDerivVals -> inputValues;
 	outputInputDerivVals -> findMass;
 	calcValues -> theory:eBalanceOnWtrRC;
-	calcValues -> heatEInWtrIM;
+	calcValues -> theory:heatEInWtrIM;
 	outputValues -> theory:eBalanceOnWtrRC;
-	outputValues -> heatEInWtrIM;
+	outputValues -> theory:heatEInWtrIM;
 
 
 	assumpTEO	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpTEO"];
@@ -33,23 +33,23 @@ digraph allvsr {
 	{assumpTEO, assumpHTCC, assumpCWTAT, assumpDWCoW, assumpSHECoW, assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpCTNTD, assumpWAL, assumpPIT, assumpNIHGBW, assumpAPT, assumpVCN}
 	}
 
-	wMass	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterMass"];
-	wVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterVolume.nopcm"];
-	tankVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:tankVolume"];
-	tauW	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceDecayRate"];
+	dataDefn:wMass	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterMass"];
+	dataDefn:wVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterVolume.nopcm"];
+	dataDefn:tankVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:tankVolume"];
+	dataDefn:tauW	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceDecayRate"];
 
 	subgraph DD {
 	rank="same"
-	{wMass, wVol, tankVol, tauW}
+	{dataDefn:wMass, dataDefn:wVol, dataDefn:tankVol, dataDefn:tauW}
 	}
 
 	theory:consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
 	theory:sensHeat	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
-	nwtnCoolingTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
+	theory:nwtnCoolingTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
 
 	subgraph TM {
 	rank="same"
-	{theory:consThermECS, theory:sensHeat, nwtnCoolingTM}
+	{theory:consThermECS, theory:sensHeat, theory:nwtnCoolingTM}
 	}
 
 	theory:rocTempSimpRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];
@@ -61,14 +61,14 @@ digraph allvsr {
 	}
 
 	theory:eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
-	heatEInWtrIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
+	theory:heatEInWtrIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
 
 	subgraph IM {
 	rank="same"
-	{theory:eBalanceOnWtrRC, heatEInWtrIM}
+	{theory:eBalanceOnWtrRC, theory:heatEInWtrIM}
 	}
 
-	inputInitVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputInitVals"];
+	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
 	findMass	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:findMass"];
 	checkWithPhysConsts	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:checkWithPhysConsts"];
 	outputInputDerivVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputInputDerivVals"];
@@ -82,7 +82,7 @@ digraph allvsr {
 
 	subgraph FR {
 	rank="same"
-	{inputInitVals, findMass, checkWithPhysConsts, outputInputDerivVals, calcValues, outputValues, correct, verifiable, understandable, reusable, maintainable}
+	{inputValues, findMass, checkWithPhysConsts, outputInputDerivVals, calcValues, outputValues, correct, verifiable, understandable, reusable, maintainable}
 	}
 
 	waterTempGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:waterTempGS"];

@@ -74,52 +74,17 @@ mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = docauthors} =
 
 -- * Functions to Fill 'ChunkDB'
 
--- TODO: Move all of these "filler" functions to a new file?
--- TODO: Add in 'fillTermMap' once #2775 is complete.
--- | Assuming a given 'ChunkDB' with no traces and minimal/no references, fill in for rest of system information.
--- Currently fills in references, traceability matrix information and 'IdeaDict's.
+-- FIXME: None of these 'fill$x$InTheCDB' should exist here. Generating new
+-- chunks and inserting them into the ChunkDB is not an issue, but:
+-- - The traceability-stuff should be internal to ChunkDB.
+-- - The References and LabelledContent entirely need to be rebuilt. Some will
+--   be chunks that are manually written, others will not be chunks.
+
+-- | Assuming a given 'ChunkDB' with no traces and minimal/no references, fill
+-- in for rest of system information. Currently fills in references,
+-- traceability matrix information and 'IdeaDict's.
 fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
 fillcdbSRS srsDec si = fillSecAndLC srsDec $ fillReferences srsDec $ fillTraceSI srsDec si
-
-{-Don't want to manually add concepts here, Drasil should do it automatically. Perhaps through traversal?
-fillConcepts :: SystemInformation -> SystemInformation
-fillConcepts si = si2
-  where
-    si2 = set sysinfodb chkdb2 si
-    chkdb = si ^. sysinfodb
-    tmtbl = termTable chkdb
-    chkdb2 = chkdb{termTable = termMap $ nub (map nw doccon ++ map nw doccon' ++ map nw softwarecon ++ map nw physicCon ++ map nw physicCon' ++ map nw physicalcon ++ map nw educon ++ map nw mathcon ++ map nw mathcon' ++ map nw compcon ++ map nw compcon' ++ map nw solidcon ++ map nw thermocon ++ (map (fst.snd) $ Map.assocs tmtbl))}
--}
-
-{- FIXME: See #2775
--- Fill in term map from all concepts and quantities.
-fillTermMap :: SystemInformation -> SystemInformation
-fillTermMap si = si2
-  where
-    -- Get current contents of si
-    chkdb = si ^. sysinfodb
-    -- extract everything that could possibly lead to an 'IdeaDict'
-    symbs    = map (fst.snd) $ Map.assocs $ symbolTable chkdb
-    trms     = map (fst.snd) $ Map.assocs $ termTable chkdb
-    concepts = map (fst.snd) $ Map.assocs $ defTable chkdb
-
-    -- TODO: Uncomment these when the second part of #2775 is resolved.
-    -- Some Definitions and models overwrite the term for a given UID.
-    -- We don't really want this behaviour, so it should be resolved by
-    -- changing some of the constructors for ModelKind found in drasil-theory
-
-    ddefs   = map (fst.snd) $ Map.assocs $ chkdb ^. dataDefnTable
-    gdefs   = map (fst.snd) $ Map.assocs $ chkdb ^. gendefTable
-    imods   = map (fst.snd) $ Map.assocs $ chkdb ^. insmodelTable
-    tmods   = map (fst.snd) $ Map.assocs $ chkdb ^. theoryModelTable
-    concIns = map (fst.snd) $ Map.assocs $ chkdb ^. conceptinsTable
-    -- fill in the appropriate chunkdb field
-    chkdb2 = chkdb {termTable = termMap $ nub $ map nw symbs ++ map nw trms
-      ++ map nw concepts ++ map nw concIns
-      ++ map nw ddefs ++ map nw gdefs ++ map nw imods ++ map nw tmods}
-    -- return the filled in system information
-    si2 = set sysinfodb chkdb2 si
-    -}
 
 -- | Fill in the 'Section's and 'LabelledContent' maps of the 'ChunkDB' from the 'SRSDecl'.
 fillSecAndLC :: SRSDecl -> SystemInformation -> SystemInformation
@@ -128,26 +93,28 @@ fillSecAndLC dd si = si2
     -- Get current contents of si
     chkdb = si ^. sysinfodb
     -- extract sections and labelledcontent
-    allSections = concatMap findAllSec $ mkSections si $ mkDocDesc si dd
+    allSections = concatMap findAllSec $ mkSections si $ mkDocDesc si dd -- FIXME: `mkSections` on something particularly large that is immediately discarded is a sign that we're doing something wrong. That's in addition to `mkDocDesc`...
     allLC = concatMap findAllLC allSections
-    existingSections = map (fst.snd) $ Map.assocs $ chkdb ^. sectionTable
     existingLC = map (fst.snd) $ Map.assocs $ chkdb ^. labelledcontentTable
     -- fill in the appropriate chunkdb fields
-    chkdb2 = set labelledcontentTable (idMap $ nub $ existingLC ++ allLC)
-      $ set sectionTable (idMap $ nub $ existingSections ++ allSections) chkdb
+    chkdb2 = set labelledcontentTable (idMap $ nub $ existingLC ++ allLC) chkdb
     -- return the filled in system information
     si2 = set sysinfodb chkdb2 si
+
     -- Helper and finder functions
     findAllSec :: Section -> [Section]
     findAllSec s@(Section _ cs _) = s : concatMap findAllSubSec cs
+
     findAllSubSec :: SecCons -> [Section]
     findAllSubSec (Sub s) = findAllSec s
     findAllSubSec _ = []
+
     findAllLC :: Section -> [LabelledContent]
     findAllLC (Section _ cs _) = concatMap findLCSecCons cs
+
     findLCSecCons :: SecCons -> [LabelledContent]
     findLCSecCons (Sub s) = findAllLC s
-    findLCSecCons (Con (LlC lblcons)) = [lblcons]
+    findLCSecCons (Con (LlC lblcons@(LblC {_ctype = Figure {}}))) = [lblcons]
     findLCSecCons _ = []
 
 -- | Takes in existing information from the Chunk database to construct a database of references.
@@ -156,31 +123,27 @@ fillReferences dd si@SI{_sys = sys} = si2
   where
     -- get old chunk database + ref database
     chkdb = si ^. sysinfodb
-    rfdb = refdb si
+    cites = citeDB si
     -- convert SRSDecl into a list of sections (to easily get at all the references used in the SRS)
     allSections = mkSections si $ mkDocDesc si dd
     -- get refs from SRSDecl. Should include all section labels and labelled content.
     refsFromSRS = concatMap findAllRefs allSections
     -- get refs from the stuff already inside the chunk database
-    inRefs  = concatMap dRefToRef ddefs ++ concatMap dRefToRef gdefs ++
-                concatMap dRefToRef imods ++ concatMap dRefToRef tmods
-    ddefs   = map (fst.snd) $ Map.assocs $ chkdb ^. dataDefnTable
-    gdefs   = map (fst.snd) $ Map.assocs $ chkdb ^. gendefTable
-    imods   = map (fst.snd) $ Map.assocs $ chkdb ^. insmodelTable
-    tmods   = map (fst.snd) $ Map.assocs $ chkdb ^. theoryModelTable
-    concIns = map (fst.snd) $ Map.assocs $ chkdb ^. conceptinsTable
-    secs    = map (fst.snd) $ Map.assocs $ chkdb ^. sectionTable
-    lblCon  = map (fst.snd) $ Map.assocs $ chkdb ^. labelledcontentTable
-    cites   = citeDB si -- map (fst.snd) $ Map.assocs $ rfdb  ^. citationDB
-    conins  = map (fst.snd) $ Map.assocs $ rfdb  ^. conceptDB
+    ddefs   = map fst $ Map.elems $ chkdb ^. dataDefnTable
+    gdefs   = map fst $ Map.elems $ chkdb ^. gendefTable
+    imods   = map fst $ Map.elems $ chkdb ^. insmodelTable
+    tmods   = map fst $ Map.elems $ chkdb ^. theoryModelTable
+    concIns = map fst $ Map.elems $ chkdb ^. conceptinsTable
+    lblCon  = map fst $ Map.elems $ chkdb ^. labelledcontentTable
     -- search the old reference table just in case the user wants to manually add in some references
-    refs    = map (fst.snd) $ Map.assocs $ chkdb ^. refTable
+    refs    = map fst $ Map.elems $ chkdb ^. refTable
     -- set new reference table in the chunk database
-    chkdb2 = set refTable (idMap $ nub $ refsFromSRS ++ inRefs
-      ++ map (ref.makeTabRef'.getTraceConfigUID) (traceMatStandard si) ++ secRefs -- secRefs can be removed once #946 is complete
+    chkdb2 = set refTable (idMap $ nub $ refsFromSRS
+      ++ map (ref . makeTabRef' . getTraceConfigUID) (traceMatStandard si)
+      ++ secRefs -- secRefs can be removed once #946 is complete
       ++ traceyGraphGetRefs (programName sys) ++ map ref cites
-      ++ map ref conins ++ map ref ddefs ++ map ref gdefs ++ map ref imods
-      ++ map ref tmods ++ map ref concIns ++ map ref secs ++ map ref lblCon
+      ++ map ref ddefs ++ map ref gdefs ++ map ref imods
+      ++ map ref tmods ++ map ref concIns ++ map ref lblCon
       ++ refs) chkdb
     -- set new chunk database into system information
     si2 = set sysinfodb chkdb2 si
@@ -237,7 +200,7 @@ mkSections si dd = map doit dd
     doit (IntroSec is)        = mkIntroSec si is
     doit (StkhldrSec sts)     = mkStkhldrSec sts
     doit (SSDSec ss)          = mkSSDSec si ss
-    doit (AuxConstntSec acs)  = mkAuxConsSec acs 
+    doit (AuxConstntSec acs)  = mkAuxConsSec acs
     doit Bibliography         = mkBib (citeDB si)
     doit (GSDSec gs')         = mkGSDSec gs'
     doit (ReqrmntSec r)       = mkReqrmntSec r
@@ -274,10 +237,10 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
     -- error out because some of the symbols in tables are only `QuantityDict`s, and thus
     -- missing a `Concept`.
     mkSubRef SI {_quants = v, _sysinfodb = cdb} (TSymb con) =
-      SRS.tOfSymb 
+      SRS.tOfSymb
       [tsIntro con,
                 LlC $ table Equational (sortBySymbol
-                $ filter (`hasStageSymbol` Equational) 
+                $ filter (`hasStageSymbol` Equational)
                 (nub $ map qw v ++ ccss' (getDocDesc dd) (egetDocDesc dd) cdb))
                 atStart] []
     mkSubRef SI {_sysinfodb = cdb} (TSymb' f con) =
@@ -291,7 +254,7 @@ mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
 mkTSymb v f c = SRS.tOfSymb [tsIntro c,
   LlC $ table Equational
     (sortBy (compsy `on` eqSymb) $ filter (`hasStageSymbol` Equational) (nub v))
-    (lf f)] 
+    (lf f)]
     []
   where lf Term = atStart
         lf Defn = capSent . (^. defn)
@@ -355,7 +318,7 @@ mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSub
   where mkSubPD (TermsAndDefs sen concepts) = SSD.termDefnF sen concepts
         mkSubPD (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
         mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g) (length g)
-                
+
 
 -- | Helper for making the Solution Characteristics Specification section.
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
@@ -426,11 +389,12 @@ mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
   (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) fProgs)
   (map LlC trace) (programName sys) []
   where
-    trace = map (\(TraceConfig u _ desc cols rows) -> TM.generateTraceTableView
-      u desc cols rows si) fProgs
-    fProgs = filter (\(TraceConfig _ _ _ cols rows) -> not $ null 
-      (header (TM.layoutUIDs rows sidb) si) || null (header (TM.layoutUIDs cols sidb) si)) progs
-    sidb = _sysinfodb si
+    trace = map (\(TraceConfig u _ desc cols rows) ->
+      TM.generateTraceTableView u desc cols rows si) fProgs
+    fProgs = filter (\(TraceConfig _ _ _ cols rows) ->
+      not $ null (header (TM.layoutUIDs rows sidb) si)
+         || null (header (TM.layoutUIDs cols sidb) si)) progs
+    sidb = si ^. sysinfodb
 
 -- | Helper to get headers of rows and columns
 header :: ([UID] -> [UID]) -> SystemInformation -> [Sentence]
@@ -440,7 +404,7 @@ header f = TM.traceMHeader (f . Map.keys . (^. refbyTable))
 
 -- | Helper for making the Off-the-Shelf Solutions section.
 mkOffShelfSolnSec :: OffShelfSolnsSec -> Section
-mkOffShelfSolnSec (OffShelfSolnsProg cs) = SRS.offShelfSol cs [] 
+mkOffShelfSolnSec (OffShelfSolnsProg cs) = SRS.offShelfSol cs []
 
 -- ** Auxiliary Constants
 

@@ -33,18 +33,15 @@ si = SI {
   _background  = [],
   _motivation  = [],
   _scope       = [],
-  _concepts    = [] :: [UnitalChunk],
   _instModels  = [], -- FIXME; empty _instModels
   _datadefs    = dataDefs,
   _configFiles = [],
   _inputs      = htInputs,
   _outputs     = htOutputs,
-  _defSequence = [] :: [Block SimpleQDef],
   _constraints = [] :: [ConstrainedChunk],
   _constants   = [],
   _sysinfodb   = symbMap,
-  _usedinfodb  = usedDB,
-   refdb       = rdb [] [] -- FIXME?
+  _usedinfodb  = usedDB
 }
   
 mkSRS :: SRSDecl
@@ -72,4 +69,4 @@ symbMap = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols)
            ([] :: [ConceptChunk]) ([] :: [UnitDefn])
-           [] [] [] [] [] [] [] ([] :: [Reference])
+           [] [] [] [] [] [] ([] :: [Reference]) []

@@ -1,5 +1,4 @@
-module Drasil.GamePhysics.References (chaslesWiki, citations, koothoor2013,
-smithEtAl2007, smithLai2005, smithKoothoor2016) where
+module Drasil.GamePhysics.References where
 
 import Language.Drasil
 
@@ -9,6 +8,7 @@ import Data.Drasil.Citations (cartesianWiki, koothoor2013,
 import Data.Drasil.People (bWaugh, cTitus, dParnas, daAruliah, epWhite, gWilson,
   imMitchell, jBueche, kdHuff, mDavis, mdPlumblet, nChueHong, pWilson, rGuy, shdHaddock,
   wikiAuthors)
+import qualified Language.Drasil.Sentence.Combinators as S
 
 chaslesWiki, jfBeucheIntro, parnas1978, sciComp2013 :: Citation
 
@@ -43,3 +43,15 @@ sciComp2013 = cArticle
   "PLoS Biol" 2013
   [volume 12, number 1] "sciComp2013"
 
+
+uriReferences :: [Reference]
+uriReferences = [accelGravitySrc, impulseSrc]
+
+accelGravitySrc :: Reference
+accelGravitySrc = makeURI "accelGravitySrc" "https://en.wikipedia.org/wiki/Gravitational_acceleration" $
+  shortname' $ S "Definition" `S.of_` S "Gravitational Acceleration"
+
+
+impulseSrc :: Reference
+impulseSrc = makeURI "impulseSrc" "http://www.chrishecker.com/images/e/e7/Gdmphys3.pdf" $
+  shortname' $ S "Impulse for Collision Ref"

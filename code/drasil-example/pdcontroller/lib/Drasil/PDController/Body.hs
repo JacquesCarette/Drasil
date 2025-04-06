@@ -106,18 +106,16 @@ si = SI {
   _motivation  = [motivation],
   _scope       = [scope],
   _quants = symbolsAll,
-  _concepts = [] :: [DefinedQuantityDict],
   _datadefs = dataDefinitions,
   _instModels = instanceModels,
   _configFiles = [],
   _inputs = inputs,
   _outputs = outputs,
-  _defSequence = [] :: [Block SimpleQDef],
   _constraints = map cnstrw inpConstrained,
   _constants = pidConstants,
   _sysinfodb = symbMap,
-  _usedinfodb = usedDB,
-   refdb = refDB}
+  _usedinfodb = usedDB
+}
 
 purp :: Sentence
 purp = foldlSent_ [S "provide a model" `S.ofA` phrase pidC,
@@ -151,9 +149,9 @@ symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf
   genDefns
   theoreticalModels
   conceptInstances
-  ([] :: [Section])
   ([] :: [LabelledContent])
   allRefs
+  citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -168,12 +166,9 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbolsAll)
   ([] :: [GenDefn])
   ([] :: [TheoryModel])
   ([] :: [ConceptInstance])
-  ([] :: [Section])
   ([] :: [LabelledContent])
   ([] :: [Reference])
-
-refDB :: ReferenceDB
-refDB = rdb citations conceptInstances
+  []
 
 conceptInstances :: [ConceptInstance]
 conceptInstances = assumptions ++ goals ++ funcReqs ++ nonfuncReqs ++ likelyChgs

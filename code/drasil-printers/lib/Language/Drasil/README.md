@@ -1,7 +1,10 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: August 20, 2021
+Last updated: December 31, 2024
 --------------------------------------------------
+
+**Debug**
+  - Gathers all printing functions and creates the debugging tables from them
 
 **DOT**
   - Dot graph printers (for traceability graphs)
@@ -11,9 +14,6 @@ Last updated: August 20, 2021
 
 **JSON**
   - JSON renderer for jupyter notebook generation
-
-**Log**
-  - For printing debug files
 
 **Markdown**
   - For generating READMEs alongside GOOL code

@@ -4,7 +4,7 @@ module Language.Drasil.CodeExpr.Extract (
 ) where
 
 import Language.Drasil.Space (RealInterval(..))
-import Language.Drasil.UID (UID)
+import Drasil.Database.UID (UID)
 
 import Language.Drasil.CodeExpr.Lang (CodeExpr(..))
 

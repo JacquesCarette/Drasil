@@ -133,7 +133,7 @@ This section collects and defines all the data needed to build the instance mode
 |Equation   |\\[σ=\frac{{F\_{\text{n}}}}{A}\\]                                                                                                                                                                     |
 |Description|<ul><li>\\(σ\\) is the total normal stress (\\({\text{Pa}}\\))</li><li>\\({F\_{\text{n}}}\\) is the total normal force (\\({\text{N}}\\))</li><li>\\(A\\) is the area (\\({\text{m}^{2}}\\))</li></ul>|
 |Source     |[huston2008](./SecReferences.md#huston2008)                                                                                                                                                           |
-|RefBy      |[GD:resShr](./SecGDs.md#GD:resShr), [GD:effNormF](./SecGDs.md#GD:effNormF), and [TM:effStress](./SecTMs.md#TM:effStress)                                                                              |
+|RefBy      |[GD:resShr](./SecGDs.md#GD:resShr), [TM:effStress](./SecTMs.md#TM:effStress), and [GD:effNormF](./SecGDs.md#GD:effNormF)                                                                              |
 
 <div align="center">
 

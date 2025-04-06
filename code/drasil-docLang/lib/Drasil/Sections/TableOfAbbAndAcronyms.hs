@@ -9,6 +9,7 @@ import Control.Lens ((^.))
 import Data.List (sortBy)
 import Data.Function (on)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
+import Utils.Drasil (mkTable)
 
 -- | Helper function that gets the acronym out of an 'Idea'.
 select :: (Idea s) => [s] -> [(String, s)]

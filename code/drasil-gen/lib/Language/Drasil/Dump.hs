@@ -2,7 +2,7 @@
 module Language.Drasil.Dump where
 
 import qualified Database.Drasil as DB
-import SysInfo.Drasil (SystemInformation(_sysinfodb))
+import SysInfo.Drasil (SystemInformation, sysinfodb)
 
 import System.Directory
 import System.IO
@@ -12,7 +12,7 @@ import qualified Data.ByteString.Lazy.Char8 as LB
 import qualified Data.Map.Strict as SM
 
 import Utils.Drasil (invert, atLeast2)
-import Database.Drasil (traceTable, refbyTable)
+import Database.Drasil (traceTable, refbyTable, ChunkDB (termTable))
 import Control.Lens ((^.))
 import System.Environment (lookupEnv)
 
@@ -36,15 +36,17 @@ dumpEverything si pinfo p = do
 dumpEverything0 :: SystemInformation -> PrintingInformation -> Path -> IO ()
 dumpEverything0 si pinfo targetPath = do
   createDirectoryIfMissing True targetPath
-  let chunkDb = _sysinfodb si
+  let chunkDb = si ^. sysinfodb
       chunkDump = DB.dumpChunkDB chunkDb
       invertedChunkDump = invert chunkDump
-      sharedUIDs = SM.filter atLeast2 invertedChunkDump
+      (sharedUIDs, nonsharedUIDs) = SM.partition atLeast2 invertedChunkDump
       traceDump = chunkDb ^. traceTable
       refByDump = chunkDb ^. refbyTable
+      justTerms = SM.intersection nonsharedUIDs $ termTable chunkDb
 
   dumpTo chunkDump $ targetPath ++ "seeds.json"
   dumpTo invertedChunkDump $ targetPath ++ "inverted_seeds.json"
+  dumpTo justTerms $ targetPath ++ "uids_are_just_terms.json"
   dumpTo sharedUIDs $ targetPath ++ "problematic_seeds.json"
   dumpTo traceDump $ targetPath ++ "trace.json"
   dumpTo refByDump $ targetPath ++ "reverse_trace.json"

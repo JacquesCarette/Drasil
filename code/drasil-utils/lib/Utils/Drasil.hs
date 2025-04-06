@@ -13,13 +13,13 @@ module Utils.Drasil (
   -- | From "Utils.Drasil.Lists". General functions involving lists.
   atLeast2, replaceAll, subsetOf, nubSort, weave,
   foldle, foldle1,
-  toColumn,
+  toColumn, mkTable,
 
   -- * Maps
   invert,
 
   -- ** Strings
-  toPlainName,
+  toPlainName, repUnd,
 
   -- ** CSV
   makeCSV

@@ -40,7 +40,7 @@ Charging-Tank-No-Temp-Discharge: The model only accounts for charging the tank, 
 
 <div id="assumpWAL"></div>
 
-Water-Always-Liquid: The operating temperature range of the system is such that the material (water in this case) is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. (RefBy: [TM:sensHtE](./SecTMs.md#TM:sensHtE), [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr), [UC:Water-Fixed-States](./SecUCs.md#unlikeChgWFS), and [IM:heatEInWtr](./SecIMs.md#IM:heatEInWtr).)
+Water-Always-Liquid: The operating temperature range of the system is such that the material (water in this case) is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. (RefBy: [TM:sensHtE](./SecTMs.md#TM:sensHtE), [IM:heatEInWtr](./SecIMs.md#IM:heatEInWtr), [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr), and [UC:Water-Fixed-States](./SecUCs.md#unlikeChgWFS).)
 
 <div id="assumpPIT"></div>
 

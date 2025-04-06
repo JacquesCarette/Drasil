@@ -14,7 +14,7 @@ import Language.Drasil.Chunk.NamedIdea (IdeaDict)
 import Language.Drasil.Label.Type ((+::+), defer, name, raw,
   LblType(..), Referable(..), HasRefAddress(..))
 import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.UID (UID, HasUID(..))
+import Drasil.Database.UID (UID, HasUID(..))
 
 import Control.Lens (makeLenses, (^.), view)
 

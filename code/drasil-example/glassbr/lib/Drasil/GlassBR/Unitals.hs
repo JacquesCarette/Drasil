@@ -367,7 +367,7 @@ safeMessage   = dcc "safeMessage" (nounPhraseSP "safe")
   "For the given input parameters, the glass is considered safe."
 sD            = cc' stdOffDist
   (S "the distance from the glazing surface to the centroid of a hemispherical" +:+
-   S "high explosive charge. It is represented by the coordinates" +:+ sParen sdVectorSent)
+   S "high explosive charge")
 shortDurLoad  = dcc "shortDurLoad"       (nounPhraseSP "short duration load")
   "any load lasting 3 seconds or less"
 specA         = dcc "specA"       (nounPhraseSP "specifying authority")
@@ -396,9 +396,6 @@ constantLoadDur = mkQuantDef loadDur     $ exactDbl 3
 constantLoadSF  = mkQuantDef loadSF      $ exactDbl 1
 
 --Equations--
-
-sdVectorSent :: Sentence
-sdVectorSent = foldlsC (map ch sdVector)
 
 sdVector :: [UnitaryChunk]
 sdVector = [sdx, sdy, sdz]

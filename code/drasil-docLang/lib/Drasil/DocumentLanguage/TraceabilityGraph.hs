@@ -93,17 +93,17 @@ makeTGraph rowName rows cols = zip rowName [zipFTable' x cols | x <- rows]
   where
     zipFTable' content = filter (`elem` content)
 
--- | Checker for uids by finding if the 'UID' is in one of the possible data sets contained in the 'SystemInformation' database.
+-- | Checker for uids by finding if the 'UID' is in one of the possible data
+-- sets contained in the 'SystemInformation' database.
 checkUID :: UID -> SystemInformation -> UID
 checkUID t si
-  | Just _ <- Map.lookupIndex t (s ^. dataDefnTable)        = t
-  | Just _ <- Map.lookupIndex t (s ^. insmodelTable)        = t
-  | Just _ <- Map.lookupIndex t (s ^. gendefTable)          = t
-  | Just _ <- Map.lookupIndex t (s ^. theoryModelTable)     = t
-  | Just _ <- Map.lookupIndex t (s ^. conceptinsTable)      = t
-  | Just _ <- Map.lookupIndex t (s ^. sectionTable)         = t
-  | Just _ <- Map.lookupIndex t (s ^. labelledcontentTable) = t
-  | t `elem` map  (^. uid) (citeDB si) = mkUid ""
+  | Map.member t (s ^. dataDefnTable)        = t
+  | Map.member t (s ^. insmodelTable)        = t
+  | Map.member t (s ^. gendefTable)          = t
+  | Map.member t (s ^. theoryModelTable)     = t
+  | Map.member t (s ^. conceptinsTable)      = t
+  | Map.member t (s ^. labelledcontentTable) = t
+  | Map.member t (s ^. citationTable)        = t
   | otherwise = error $ show t ++ "Caught."
   where s = _sysinfodb si
 
@@ -115,9 +115,8 @@ checkUIDAbbrev si t
   | Just (x, _) <- Map.lookup t (s ^. gendefTable)          = abrv x
   | Just (x, _) <- Map.lookup t (s ^. theoryModelTable)     = abrv x
   | Just (x, _) <- Map.lookup t (s ^. conceptinsTable)      = fromMaybe "" $ getA $ defResolve s $ sDom $ cdom x
-  | Just _ <- Map.lookup t (s ^. sectionTable)              = show t -- shouldn't really reach these cases
-  | Just _ <- Map.lookup t (s ^. labelledcontentTable)      = show t
-  | t `elem` map  (^. uid) (citeDB si) = ""
+  | Map.member t (s ^. labelledcontentTable)                = show t
+  | Map.member t (s ^. citationTable)                       = ""
   | otherwise = error $ show t ++ "Caught."
   where s = _sysinfodb si
 
@@ -128,11 +127,9 @@ checkUIDRefAdd si t
   | Just (x, _) <- Map.lookup t (s ^. insmodelTable)        = getAdd $ getRefAdd x
   | Just (x, _) <- Map.lookup t (s ^. gendefTable)          = getAdd $ getRefAdd x
   | Just (x, _) <- Map.lookup t (s ^. theoryModelTable)     = getAdd $ getRefAdd x
-  -- Concept instances can range from likely changes to non-functional requirements, so use domain abbreviations for labelling in addition to the reference address.
   | Just (x, _) <- Map.lookup t (s ^. conceptinsTable)      = fromMaybe "" (getA $ defResolve s $ sDom $ cdom x) ++ ":" ++ getAdd (getRefAdd x)
-  | Just _ <- Map.lookup t (s ^. sectionTable)              = show t -- shouldn't really reach these cases
-  | Just _ <- Map.lookup t (s ^. labelledcontentTable)      = show t
-  | t `elem` map  (^. uid) (citeDB si) = ""
+  | Map.member t (s ^. labelledcontentTable)                = show t
+  | Map.member t (s ^. citationTable)                       = ""
   | otherwise = error $ show t ++ "Caught."
   where s = _sysinfodb si
 
@@ -167,8 +164,10 @@ traceGLst :: Contents
 traceGLst = UlC $ ulcc $ Enumeration $ Bullet $ map (, Nothing) folderList'
 
 -- | The Traceability Graph contents.
-traceGCon :: String -> [Contents]
-traceGCon ex = map LlC (zipWith (traceGraphLC ex) traceGFiles traceGUIDs) ++ [mkParagraph $ S "For convenience, the following graphs can be found at the links below:", traceGLst]
+traceGCon :: String -> [Contents] -- FIXME: HACK: We're generating "LlC"s of the traceability graphs multiple times... See DocumentLanguage.hs' mkTraceabilitySec for the other spot.
+traceGCon ex = map LlC (zipWith (traceGraphLC ex) traceGFiles traceGUIDs)
+            ++ [mkParagraph $ S "For convenience, the following graphs can be\
+               \ found at the links below:", traceGLst]
 
 -- | Generates traceability graphs as figures on an SRS document.
 traceGraphLC :: String -> FilePath -> UID -> LabelledContent

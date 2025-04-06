@@ -4,7 +4,7 @@ module Language.Drasil.Document.Core where
 
 import Language.Drasil.Chunk.Citation (BibRef)
 
-import Language.Drasil.UID (HasUID(..))
+import Drasil.Database.UID (HasUID(..))
 import Language.Drasil.ShortName (HasShortName(shortname))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
 import Language.Drasil.CodeExpr.Lang (CodeExpr)

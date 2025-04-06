@@ -36,7 +36,6 @@ printAllDebugInfo pinfo = map
   , mkTableTMod
   , mkTableIMod
   , mkTableCI
-  , mkTableSec
   , mkTableLC
   , mkTableRef
   , renderUsedUIDs . mkListShowUsedUIDs]
@@ -194,14 +193,6 @@ mkTableCI pinfo = mkTableFromLenses
   "ConceptInstance"
   [openTerm, openShortName]
 
--- | Makes a table with all sections in the SRS.
-mkTableSec :: PrintingInformation -> Doc
-mkTableSec pinfo = mkTableFromLenses
-  pinfo
-  (view sectionTable)
-  "Sections"
-  [openTitle, openShortName]
-
 -- | Makes a table with all labelled content in the SRS.
 mkTableLC :: PrintingInformation -> Doc
 mkTableLC pinfo = mkTableFromLenses
@@ -313,7 +304,6 @@ mkListShowUsedUIDs PI { _ckdb = db } = sortBy (compare `on` fst)
   ++ map
     (\x -> (fst x, ["ConceptInstance"]))
     (Map.assocs $ db ^. conceptinsTable)
-  ++ map (\x -> (fst x, ["Section"])) (Map.assocs $ db ^. sectionTable)
   ++ map
     (\x -> (fst x, ["LabelledContent"]))
     (Map.assocs $ db ^. labelledcontentTable)
@@ -335,6 +325,5 @@ mkListAll db = nubOrd
   ++ map fst (Map.assocs $ db ^. gendefTable)
   ++ map fst (Map.assocs $ db ^. theoryModelTable)
   ++ map fst (Map.assocs $ db ^. conceptinsTable)
-  ++ map fst (Map.assocs $ db ^. sectionTable)
   ++ map fst (Map.assocs $ db ^. labelledcontentTable)
   ++ map fst (Map.assocs $ db ^. refTable)

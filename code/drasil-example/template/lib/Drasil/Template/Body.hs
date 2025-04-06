@@ -94,18 +94,15 @@ si = SI {
   _motivation  = [],
   _scope       = [],
   _quants      = [] :: [QuantityDict],
-  _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = [] :: [InstanceModel],
   _datadefs    = [] :: [DataDefinition],
   _configFiles = [],
   _inputs      = [] :: [QuantityDict],
   _outputs     = [] :: [QuantityDict],
-  _defSequence = [] :: [Block SimpleQDef],
   _constraints = [] :: [ConstrainedChunk],
   _constants   = [] :: [ConstQDef],
   _sysinfodb   = symbMap,
-  _usedinfodb  = usedDB,
-   refdb       = refDB
+  _usedinfodb  = usedDB
 }
 
 symbMap :: ChunkDB
@@ -114,16 +111,13 @@ symbMap = cdb ([] :: [QuantityDict]) (nw progName : nw inValue : [nw errMsg,
   map nw prodtcon ++ map nw mathcon) srsDomains
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  ([] :: [Section]) ([] :: [LabelledContent]) ([] :: [Reference])
+  ([] :: [LabelledContent]) ([] :: [Reference]) citations
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  ([] :: [Section]) ([] :: [LabelledContent]) ([] :: [Reference])
-
-refDB :: ReferenceDB
-refDB = rdb citations []
+  ([] :: [LabelledContent]) ([] :: [Reference]) []
 
 citations :: BibRef
 citations = [parnasClements1986, koothoor2013, smithEtAl2007, smithLai2005,

@@ -56,7 +56,7 @@ PCM-Initially-Solid: The simulation will start with the PCM in a solid state. (R
 
 <div id="assumpWAL"></div>
 
-Water-Always-Liquid: The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. (RefBy: [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr), [UC:Water-PCM-Fixed-States](./SecUCs.md#unlikeChgWPFS), and [IM:heatEInWtr](./SecIMs.md#IM:heatEInWtr).)
+Water-Always-Liquid: The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. (RefBy: [IM:heatEInWtr](./SecIMs.md#IM:heatEInWtr), [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr), and [UC:Water-PCM-Fixed-States](./SecUCs.md#unlikeChgWPFS).)
 
 <div id="assumpPIT"></div>
 
@@ -76,7 +76,7 @@ No-Gaseous-State-PCM: The PCM is either in a liquid state or a solid state but n
 
 <div id="assumpAPT"></div>
 
-Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0\\({{}^{\circ}\text{C}}\\) and 100\\({{}^{\circ}\text{C}}\\), respectively. (RefBy: [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr) and [IM:heatEInWtr](./SecIMs.md#IM:heatEInWtr).)
+Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0\\({{}^{\circ}\text{C}}\\) and 100\\({{}^{\circ}\text{C}}\\), respectively. (RefBy: [IM:heatEInWtr](./SecIMs.md#IM:heatEInWtr) and [IM:eBalanceOnWtr](./SecIMs.md#IM:eBalanceOnWtr).)
 
 <div id="assumpVCN"></div>
 

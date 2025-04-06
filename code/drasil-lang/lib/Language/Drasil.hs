@@ -166,6 +166,7 @@ module Language.Drasil (
   , Month(..)
   -- Language.Drasil.Data.Citation; should be moved to Language.Drasil.Development
   , CiteField(..), HP(..), CitationKind(..)
+  , compareAuthYearTitle
     -- CiteFields smart constructors
       -- People -> CiteField
   , author, editor
@@ -226,7 +227,7 @@ module Language.Drasil (
   -- Language.Drasil.Document
   , Document(..), ShowTableOfContents(..), DType(..), Section(..)
   , Contents(..), SecCons(..), ListType(..), ItemType(..), ListTuple
-  , LabelledContent(..), UnlabelledContent(..), HasCaption(..), extractSection
+  , LabelledContent(..), UnlabelledContent(..), HasCaption(..)
   , mkParagraph, mkRawLC, checkToC
   , llcc, ulcc
   , section, fig, figNoCap, figWithWidth, figNoCapWithWidth
@@ -277,8 +278,6 @@ module Language.Drasil (
   , Decoration, Symbol
   -- Language.Drasil.UnitLang
   , USymb(US)
-  -- Language.Drasil.Misc
-  , mkTable
   -- Language.Drasil.Stages
   , Stage(Equational,Implementation)
   -- Language.Drasil.Symbol.Helpers
@@ -316,7 +315,7 @@ import Language.Drasil.CodeExpr.Lang (CodeExpr)
 import Language.Drasil.CodeExpr.Class (CodeExprC(..))
 import Language.Drasil.Document (section, fig, figNoCap, figWithWidth, figNoCapWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
-  , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC, extractSection
+  , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC
   , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI
   , makeTabRef', makeFigRef', makeSecRef', makeEqnRef', makeURI')
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), DType(..)
@@ -327,7 +326,7 @@ import Language.Drasil.Document.Contents (lbldExpr, unlbldExpr, unlbldCode
   , enumBullet, enumBulletU, enumSimple, enumSimpleU, mkEnumSimpleD)
 import Language.Drasil.Document.Combinators
 import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
-import Language.Drasil.UID
+import Drasil.Database.UID
     (UID, HasUID(..), (+++), (+++.), (+++!), mkUid, nsUid, showUID)
 import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)
 import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
@@ -372,9 +371,8 @@ import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
   , author, editor
   , address, bookTitle, howPublished, howPublishedU, institution, journal, note
   , organization, publisher, school, series, title, typeField
-  , chapter, edition, number, volume, year
-  , pages
-  , month)
+  , chapter, edition, number, volume, year, month, pages
+  , compareAuthYearTitle)
 import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getSentSN, HasShortName(..))
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..),
@@ -390,7 +388,6 @@ import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol,
   label, variable)
 import Language.Drasil.Synonyms (ConstQDef, SimpleQDef, ModelQDef, PExpr)
 import Language.Drasil.Stages (Stage(..))
-import Language.Drasil.Misc (mkTable)
 import Language.Drasil.People (People, Person, person, HasName(..),
   person', personWM, personWM', mononym, name, nameStr, rendPersLFM,
   rendPersLFM', rendPersLFM'', comparePeople)

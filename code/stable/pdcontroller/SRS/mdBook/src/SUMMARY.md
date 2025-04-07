@@ -1,4 +1,4 @@
-- [Software Requirements Specification for PD Controller](./title.md)
+- [Software Requirements Specification for Proportional Derivative Controller](./title.md)
 - [Table of Contents](./SecToC.md)
 - [Reference Material](./SecRefMat.md)
   - [Table of Units](./SecToU.md)

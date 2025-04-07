@@ -13,7 +13,7 @@
 The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:
 
 - User Responsibilities
-  - Provide initial conditions of the physical state of the motion and the input data related to the Projectile, ensuring no errors in the data entry.
+  - Provide initial conditions of the physical state of the motion and the input data related to the Projectile Motion Analysis, ensuring no errors in the data entry.
   - Ensure that consistent units are used for input variables.
   - Ensure required [software assumptions](./SecAssumps.md#Sec:Assumps) are appropriate for any particular problem input to the software.
 - Projectile Responsibilities

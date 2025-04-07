@@ -1,4 +1,4 @@
-- [Software Requirements Specification for HGHC](./title.md)
+- [Software Requirements Specification for HGHC Toy Example](./title.md)
 - [Table of Contents](./SecToC.md)
 - [Reference Material](./SecRefMat.md)
   - [Table of Units](./SecToU.md)

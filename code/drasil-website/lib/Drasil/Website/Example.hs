@@ -80,7 +80,7 @@ fullExList codePth srsDoxPth = Enumeration $ Bullet $ map (, Nothing) (allExampl
 allExampleList :: [Example] -> [ItemType]
 allExampleList = map (\x -> Nested (nameAndDesc x) $ Bullet $ map (, Nothing) (individualExList x))
   where
-    nameAndDesc E{sysInfoE = SI{_sys = sys, _purpose = purp}} = S (abrv sys) +:+ S " - To" +:+. head purp
+    nameAndDesc E{sysInfoE = SI{_sys = sys, _purpose = purp}} = phrase sys +:+ S " (" +:+ S (abrv sys) +:+ S ")" +:+ S " - To" +:+. head purp
 
 -- | Display the points for generated documents and call 'versionList' to display the code.
 individualExList :: Example -> [ItemType]

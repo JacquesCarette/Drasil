@@ -128,7 +128,7 @@ projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles"
   S "etc.")]
 
 projectileTitle :: CI
-projectileTitle = commonIdea "projectileTitle" (pn "Projectile") "Projectile" []
+projectileTitle = commonIdea "projectileTitle" (pn "Projectile Motion Analysis") "Projectile" []
 
 si :: SystemInformation
 si = SI {

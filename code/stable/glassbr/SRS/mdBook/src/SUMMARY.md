@@ -1,4 +1,4 @@
-- [Software Requirements Specification for GlassBR](./title.md)
+- [Software Requirements Specification for Glass-BR](./title.md)
 - [Table of Contents](./SecToC.md)
 - [Reference Material](./SecRefMat.md)
   - [Table of Units](./SecToU.md)

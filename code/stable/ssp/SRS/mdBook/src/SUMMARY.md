@@ -1,4 +1,4 @@
-- [Software Requirements Specification for Slope Stability analysis Program](./title.md)
+- [Software Requirements Specification for Slope Stability Analysis Program](./title.md)
 - [Table of Contents](./SecToC.md)
 - [Reference Material](./SecRefMat.md)
   - [Table of Units](./SecToU.md)

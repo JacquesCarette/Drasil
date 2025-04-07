@@ -2,7 +2,7 @@
 language = "en"
 multilingual = false
 src = "src"
-title = "Software Requirements Specification for PD Controller"
+title = "Software Requirements Specification for Proportional Derivative Controller"
 [output.html]
 smart-punctuation = true
 mathjax-support = true

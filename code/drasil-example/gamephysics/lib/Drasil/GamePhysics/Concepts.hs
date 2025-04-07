@@ -19,4 +19,4 @@ acronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt, inModel,
 
 centreMass, gamePhysics :: CI
 centreMass  = commonIdeaWithDict "centreMass"  (ctrOfMass ^. term) "CM" [physics]
-gamePhysics = commonIdeaWithDict "gamePhysics" (pn "GamePhysics") "GamePhysics" [physics]
+gamePhysics = commonIdeaWithDict "gamePhysics" (pn "2D Rigid Body Physics Library") "GamePhysics" [physics]

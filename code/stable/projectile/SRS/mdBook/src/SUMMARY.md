@@ -1,4 +1,4 @@
-- [Software Requirements Specification for Projectile](./title.md)
+- [Software Requirements Specification for Projectile Motion Analysis](./title.md)
 - [Table of Contents](./SecToC.md)
 - [Reference Material](./SecRefMat.md)
   - [Table of Units](./SecToU.md)

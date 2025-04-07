@@ -1,3 +1,3 @@
-# Software Requirements Specification for PD Controller {#}
+# Software Requirements Specification for Proportional Derivative Controller {#}
 
 Naveen Ganesh Muralidharan

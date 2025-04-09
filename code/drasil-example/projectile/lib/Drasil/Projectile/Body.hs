@@ -167,7 +167,7 @@ tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM]
 
 symbMap :: ChunkDB
-symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
+symbMap = cdb (qw pi_ : symbols)
   (nw projectileTitle : nw mass : nw inValue : [nw errMsg, nw program] ++
     map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
     map nw physicscon ++ map nw mathcon ++ [nw algorithm] ++ concepts ++ 
@@ -279,10 +279,10 @@ physSystParts = map (!.)
 -- Various gathered data that should be automated --
 ----------------------------------------------------
 symbols :: [QuantityDict]
-symbols = qw gravitationalAccelConst : unitalQuants ++ map qw constants ++
-  map qw [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
-  iyPos, ixVel, iyVel, position, scalarPos, projPos, projSpeed, time, velocity, xAccel,
-  xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel]
+symbols = unitalQuants 
+       ++ [tolQD]
+       ++ map qw [projPos, projSpeed]
+       ++ map qw physicscon
 
 constants :: [ConstQDef]
 constants = [gravitationalAccelConst, piConst, tol]

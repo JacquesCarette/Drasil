@@ -43,5 +43,8 @@ message :: QuantityDict
 message = vc "message" (nounPhraseSent (S "output message as a string")) lS String
 
 ---
+tolQD :: QuantityDict
+tolQD = vcSt "tol" (nounPhraseSP "hit tolerance") (autoStage vEpsilon) Real
+
 tol :: ConstQDef
-tol = mkQuantDef (vcSt "tol" (nounPhraseSP "hit tolerance") (autoStage vEpsilon) Real) (perc 2 2)
+tol = mkQuantDef tolQD (perc 2 2)

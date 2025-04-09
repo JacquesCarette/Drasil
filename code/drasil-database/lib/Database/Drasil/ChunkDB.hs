@@ -35,6 +35,7 @@ import Data.List (sortOn)
 import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Map as Map
 import Utils.Drasil (invert)
+import Debug.Trace (traceWith)
 
 -- | The misnomers below (for the following Map types) are not actually a bad thing. We want to ensure data can't
 -- be added to a map if it's not coming from a chunk, and there's no point confusing
@@ -84,7 +85,7 @@ cdbMap mn fn = Map.fromListWithKey (\k _ _ -> error $ "'" ++ show k ++ "' is ins
 
 -- | Smart constructor for a 'SymbolMap'.
 symbolMap :: (Quantity c, MayHaveUnit c) => [c] -> SymbolMap
-symbolMap = cdbMap "SymbolMap" qw
+symbolMap cs = cdbMap "SymbolMap" qw $ traceWith (show . map (^. uid)) cs
 
 -- | Smart constructor for a 'TermMap'.
 termMap :: (Idea c) => [c] -> TermMap
@@ -145,7 +146,7 @@ insmodelLookup = uMapLookup "InstanceModel" "InsModelMap"
 
 -- | Looks up a 'UID' in the general definition table. If nothing is found, an error is thrown.
 gendefLookup :: UID -> GendefMap -> GenDefn
-gendefLookup = uMapLookup "GenDefn" "GenDefnMap" 
+gendefLookup = uMapLookup "GenDefn" "GenDefnMap"
 
 -- | Looks up a 'UID' in the theory model table. If nothing is found, an error is thrown.
 theoryModelLookup :: UID -> TheoryModelMap -> TheoryModel
@@ -165,7 +166,7 @@ asOrderedList = map fst . sortOn snd . map snd . Map.toList
 data ChunkDB = CDB {
   -- CHUNKS
     symbolTable           :: SymbolMap
-  , termTable             :: TermMap 
+  , termTable             :: TermMap
   , defTable              :: ConceptMap
   , _unitTable            :: UnitMap
   , _dataDefnTable        :: DatadefnMap
@@ -198,7 +199,7 @@ cdb :: (Quantity q, MayHaveUnit q, Concept c, IsUnit u) =>
     [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
     [GenDefn] -> [TheoryModel] -> [ConceptInstance] ->
     [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
-cdb s t c u d ins gd tm ci lc r cits = 
+cdb s t c u d ins gd tm ci lc r cits =
   CDB {
     -- CHUNKS
     symbolTable = symbolMap s,

@@ -17,11 +17,11 @@ digraph allvsall {
 	cartSys	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSys"];
 	cartSysR	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSysR"];
 	yAxisDir	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:yAxisDir"];
-	startOrigin	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:startOrigin"];
+	startOrigin1x	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:startOrigin1x"];
 
 	subgraph A {
 	rank="same"
-	{twoDMotion, cartSys, cartSysR, yAxisDir, startOrigin}
+	{twoDMotion, cartSys, cartSysR, yAxisDir, startOrigin1x}
 	}
 
 	dataDefn:ixPos	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionIX"];

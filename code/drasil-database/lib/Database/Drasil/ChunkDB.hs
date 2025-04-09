@@ -79,28 +79,28 @@ type ReferenceMap = UMap Reference
 type CitationMap = UMap Citation
 
 -- | General chunk database map constructor. Creates a 'UMap' from a function that converts something with 'UID's into another type and a list of something with 'UID's.
-cdbMap :: HasUID a => (a -> b) -> [a] -> Map.Map UID (b, Int)
-cdbMap fn = Map.fromList . map (\(x,y) -> (x ^. uid, (fn x, y))) . flip zip [1..]
+cdbMap :: HasUID a => String -> (a -> b) -> [a] -> Map.Map UID (b, Int)
+cdbMap mn fn = Map.fromListWithKey (\k _ _ -> error $ "'" ++ show k ++ "' is inserted twice in '" ++ mn ++ "'!") . map (\(x,y) -> (x ^. uid, (fn x, y))) . flip zip [1..]
 
 -- | Smart constructor for a 'SymbolMap'.
 symbolMap :: (Quantity c, MayHaveUnit c) => [c] -> SymbolMap
-symbolMap = cdbMap qw
+symbolMap = cdbMap "SymbolMap" qw
 
 -- | Smart constructor for a 'TermMap'.
 termMap :: (Idea c) => [c] -> TermMap
-termMap = cdbMap nw
+termMap = cdbMap "TermMap" nw
 
 -- | Smart constructor for a 'ConceptMap'.
 conceptMap :: (Concept c) => [c] -> ConceptMap
-conceptMap = cdbMap cw
+conceptMap = cdbMap "ConceptMap" cw
 
 -- | Smart constructor for a 'UnitMap'.
 unitMap :: (IsUnit u) => [u] -> UnitMap
-unitMap = cdbMap unitWrapper
+unitMap = cdbMap "UnitMap" unitWrapper
 
 -- | General smart constructor for making a 'UMap' out of anything that has a 'UID'. 
-idMap :: HasUID a => [a] -> Map.Map UID (a, Int)
-idMap = cdbMap id
+idMap :: HasUID a => String -> [a] -> Map.Map UID (a, Int)
+idMap mn = cdbMap mn id
 
 -- | Smart constructor for a 'TraceMap' given a traceability matrix.
 traceMap :: [(UID, [UID])] -> TraceMap
@@ -205,17 +205,17 @@ cdb s t c u d ins gd tm ci lc r cits =
     termTable = termMap $ t ++ termsHACK,
     defTable = conceptMap c,
     _unitTable = unitMap u,
-    _dataDefnTable = idMap d,
-    _insmodelTable = idMap ins,
-    _gendefTable = idMap gd,
-    _theoryModelTable = idMap tm,
-    _conceptinsTable = idMap ci,
-    _citationTable = idMap cits,
+    _dataDefnTable = idMap "DataDefnMap" d,
+    _insmodelTable = idMap "InsModelMap" ins,
+    _gendefTable = idMap "GenDefnmap" gd,
+    _theoryModelTable = idMap "TheoryModelMap" tm,
+    _conceptinsTable = idMap "ConcInsMap" ci,
+    _citationTable = idMap "CiteMap" cits,
     -- NOT CHUNKS
-    _labelledcontentTable = idMap lc,
+    _labelledcontentTable = idMap "LLCMap" lc,
     _traceTable = Map.empty,
     _refbyTable = Map.empty,
-    _refTable = idMap r
+    _refTable = idMap "RefMap" r
   }
   where
     termsHACK = map nw d

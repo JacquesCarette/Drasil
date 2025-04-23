@@ -53,6 +53,9 @@ posVecExpr = vec2D
 landPosExpr :: PExpr
 landPosExpr = exactDbl 2 $* square (sy launSpeed) $* sin (sy launAngle) $* cos (sy launAngle) $/ sy gravitationalAccelConst
 
+finalPosExpr :: PExpr
+finalPosExpr = vAdd (sy initPos) (vScale (sy time) (sy vel)) -- p_f = p_i + t * v
+
 -- Helper expressions that represent the vectors of quantities as components
 positionXY, velocityXY, accelerationXY, constAccelXY :: PExpr
 positionXY     = sy position     $= vec2D (sy xPos)           (sy yPos)

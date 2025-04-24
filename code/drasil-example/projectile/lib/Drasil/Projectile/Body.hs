@@ -297,7 +297,7 @@ inputs :: [QuantityDict]
 inputs = map qw [launSpeed, launAngle, targPos]
 
 outputs :: [QuantityDict]
-outputs = [qw targPos]
+outputs = [message, qw offset, qw flightDur]
 
 unitalQuants :: [QuantityDict]
 unitalQuants = message : map qw constrained

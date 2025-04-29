@@ -165,7 +165,6 @@ asOrderedList = map fst . sortOn snd . map snd . Map.toList
 data ChunkDB = CDB {
   -- CHUNKS
     symbolTable           :: SymbolMap
-  , termTable             :: TermMap 
   , defTable              :: ConceptMap
   , _unitTable            :: UnitMap
   , _dataDefnTable        :: DatadefnMap
@@ -175,6 +174,7 @@ data ChunkDB = CDB {
   , _conceptinsTable      :: ConceptInstanceMap
   , _citationTable        :: CitationMap
   -- NOT CHUNKS
+  , termTable             :: TermMap 
   , _labelledcontentTable :: LabelledContentMap -- TODO: LabelledContent needs to be rebuilt. See JacquesCarette/Drasil#4023.
   , _refTable             :: ReferenceMap -- TODO: References need to be rebuilt. See JacquesCarette/Drasil#4022.
   , _traceTable           :: TraceMap
@@ -202,7 +202,6 @@ cdb s t c u d ins gd tm ci lc r cits =
   CDB {
     -- CHUNKS
     symbolTable = symbolMap s,
-    termTable = termMap $ t ++ termsHACK,
     defTable = conceptMap c,
     _unitTable = unitMap u,
     _dataDefnTable = idMap d,
@@ -212,6 +211,7 @@ cdb s t c u d ins gd tm ci lc r cits =
     _conceptinsTable = idMap ci,
     _citationTable = idMap cits,
     -- NOT CHUNKS
+    termTable = termMap $ t ++ termsHACK,
     _labelledcontentTable = idMap lc,
     _traceTable = Map.empty,
     _refbyTable = Map.empty,

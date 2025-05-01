@@ -3,7 +3,7 @@ module Database.Drasil.Dump where
 import Language.Drasil (UID, HasUID(..))
 import Database.Drasil.ChunkDB (conceptinsTable, theoryModelTable, gendefTable,
   insmodelTable, dataDefnTable, unitTable, citationTable, UMap,
-  ChunkDB(termTable, symbolTable))
+  ChunkDB(termTable, symbolTable, defTable))
 
 import Data.Map.Strict (Map, insert)
 import qualified Data.Map.Strict as SM
@@ -20,7 +20,7 @@ dumpChunkDB :: ChunkDB -> DumpedChunkDB
 dumpChunkDB cdb = 
       insert "symbols" (umapDump $ symbolTable cdb)
     $ insert "terms" (umapDump $ termTable cdb)
-    $ insert "concepts" (umapDump $ cdb ^. conceptinsTable)
+    $ insert "concepts" (umapDump $ defTable cdb)
     $ insert "units" (umapDump $ cdb ^. unitTable)
     $ insert "dataDefinitions" (umapDump $ cdb ^. dataDefnTable)
     $ insert "instanceModels" (umapDump $ cdb ^. insmodelTable)

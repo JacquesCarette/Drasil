@@ -79,16 +79,16 @@ forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span id="line-47"></span><span class="hs-comment">--     * Sets the QUIET field according to the given Verbosity.</span><span>
 </span><span id="line-48"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Doxygen.Import.html#makeDoxConfig"><span class="hs-identifier hs-type">makeDoxConfig</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Doxygen.Import.html#ProjName"><span class="hs-identifier hs-type">ProjName</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GOOLState</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Doxygen.Import.html#OptimizeChoice"><span class="hs-identifier hs-type">OptimizeChoice</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Verbosity"><span class="hs-identifier hs-type">Verbosity</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-49"></span><span id="makeDoxConfig"><span class="annot"><span class="annottext">makeDoxConfig :: String -&gt; GOOLState -&gt; Doc -&gt; Verbosity -&gt; Doc
-</span><a href="Language.Drasil.Code.Imperative.Doxygen.Import.html#makeDoxConfig"><span class="hs-identifier hs-var hs-var">makeDoxConfig</span></a></span></span><span> </span><span id="local-6989586621679350532"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679350532"><span class="hs-identifier hs-var">prog</span></a></span></span><span> </span><span id="local-6989586621679350533"><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679350533"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679350534"><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679350534"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span id="local-6989586621679350535"><span class="annot"><span class="annottext">Verbosity
-</span><a href="#local-6989586621679350535"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-50"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679350543"><span class="annot"><span class="annottext">fs :: [String]
-</span><a href="#local-6989586621679350543"><span class="hs-identifier hs-var hs-var">fs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [String]
+</span><a href="Language.Drasil.Code.Imperative.Doxygen.Import.html#makeDoxConfig"><span class="hs-identifier hs-var hs-var">makeDoxConfig</span></a></span></span><span> </span><span id="local-6989586621679350533"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679350533"><span class="hs-identifier hs-var">prog</span></a></span></span><span> </span><span id="local-6989586621679350534"><span class="annot"><span class="annottext">GOOLState
+</span><a href="#local-6989586621679350534"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679350535"><span class="annot"><span class="annottext">Doc
+</span><a href="#local-6989586621679350535"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span id="local-6989586621679350536"><span class="annot"><span class="annottext">Verbosity
+</span><a href="#local-6989586621679350536"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-50"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679350544"><span class="annot"><span class="annottext">fs :: [String]
+</span><a href="#local-6989586621679350544"><span class="hs-identifier hs-var hs-var">fs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [String]
 forall a. Eq a =&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">nub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679350533"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState -&gt; Getting [String] GOOLState [String] -&gt; [String]
+</span><a href="#local-6989586621679350534"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState -&gt; Getting [String] GOOLState [String] -&gt; [String]
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting [String] GOOLState [String]
 Lens' GOOLState [String]
@@ -97,7 +97,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Maybe String -&gt; [String]
 forall a. Maybe a -&gt; [a]
 </span><span class="hs-identifier hs-var">maybeToList</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">GOOLState
-</span><a href="#local-6989586621679350533"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState
+</span><a href="#local-6989586621679350534"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState
 -&gt; Getting (Maybe String) GOOLState (Maybe String) -&gt; Maybe String
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting (Maybe String) GOOLState (Maybe String)
@@ -208,7 +208,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-string">&quot;PROJECT_NAME           = \&quot;&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679350532"><span class="hs-identifier hs-var">prog</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679350533"><span class="hs-identifier hs-var">prog</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;\&quot;&quot;</span></span><span class="hs-special">,</span><span>
@@ -845,7 +845,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;OPTIMIZE_OUTPUT_JAVA   =&quot;</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;+&gt;</span></span><span> </span><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679350534"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679350535"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-330"></span><span>  </span><span class="annot"><span class="annottext">Doc
 </span><span class="hs-identifier hs-var">blank</span></span><span class="hs-special">,</span><span>
 </span><span id="line-331"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
@@ -2106,7 +2106,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-string">&quot;QUIET                  =&quot;</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;+&gt;</span></span><span> </span><span class="annot"><span class="annottext">Verbosity -&gt; Doc
 </span><a href="Language.Drasil.Code.Imperative.Doxygen.Import.html#verbosityToDoc"><span class="hs-identifier hs-var">verbosityToDoc</span></a></span><span> </span><span class="annot"><span class="annottext">Verbosity
-</span><a href="#local-6989586621679350535"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679350536"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-803"></span><span>  </span><span class="annot"><span class="annottext">Doc
 </span><span class="hs-identifier hs-var">blank</span></span><span class="hs-special">,</span><span>
 </span><span id="line-804"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
@@ -2296,7 +2296,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">intersperse</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot; &quot;</span></span><span> </span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679350543"><span class="hs-identifier hs-var">fs</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679350544"><span class="hs-identifier hs-var">fs</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-870"></span><span>  </span><span class="annot"><span class="annottext">Doc
 </span><span class="hs-identifier hs-var">blank</span></span><span class="hs-special">,</span><span>
 </span><span id="line-871"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc

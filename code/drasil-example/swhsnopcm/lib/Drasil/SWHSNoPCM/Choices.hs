@@ -8,7 +8,7 @@ import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
   ExtLib(..))
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg,
-  apacheODEPckg, odeintPckg)
+  apacheODEPckg, odeintPckg, jlODEPckg)
 import Drasil.SWHSNoPCM.Body (noPCMODEInfo, fullSI)
 
 code :: CodeSpec
@@ -17,13 +17,14 @@ code = codeSpec fullSI choices []
 
 choices :: Choices
 choices = defaultChoices {
-  lang = [Python, Cpp, CSharp, Java],
+  lang = [Python, Cpp, CSharp, Java, Julia],
   architecture = makeArchit Modular Program,
-  dataInfo = makeData Unbundled (Store Bundled) Const,
+  dataInfo = makeData Unbundled (Store Unbundled) Const,
   optFeats = makeOptFeats
     (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
     (makeLogConfig [] "log.txt")
     [SampleInput "../../datafiles/swhsnopcm/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Warning Warning,
-  extLibs = [Math (makeODE [noPCMODEInfo] [scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg])]
+  extLibs = [Math (makeODE [noPCMODEInfo] [scipyODEPckg, osloPckg,
+    apacheODEPckg, odeintPckg, jlODEPckg])]
 }

@@ -166,7 +166,7 @@ data ChunkDB = CDB {
   -- CHUNKS
     symbolTable           :: SymbolMap
   , termTable             :: TermMap 
-  , conceptChunkTable              :: ConceptMap
+  , conceptChunkTable     :: ConceptMap
   , _unitTable            :: UnitMap
   , _dataDefnTable        :: DatadefnMap
   , _insmodelTable        :: InsModelMap

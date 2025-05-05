@@ -4,7 +4,7 @@ module Language.Drasil.Code.Imperative.Comments (
 ) where
 
 import Language.Drasil
-import Database.Drasil (defTable)
+import Database.Drasil (conceptChunkTable)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, unitDoc)
@@ -29,7 +29,7 @@ getDefnDoc c = do
   g <- get
   let db = codeSpec g ^. sysinfodbO
   return $ maybe empty ((<+>) colon . sentenceDoc db Implementation OneLine .
-    (^. defn) . fst) (Map.lookup (codeChunk c ^. uid) $ defTable db)
+    (^. defn) . fst) (Map.lookup (codeChunk c ^. uid) $ conceptChunkTable db)
 
 -- | Gets a plain rendering of the unit of a chunk in parentheses,
 -- or empty if it has no unit.

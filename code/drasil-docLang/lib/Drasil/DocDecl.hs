@@ -105,7 +105,7 @@ data ReqsSub where
 -- * Functions
 
 -- | Creates the document description (translates 'SRSDecl' into a more usable form for generating documents).
-mkDocDesc :: SystemInformation -> SRSDecl -> DocDesc
+mkDocDesc :: System -> SRSDecl -> DocDesc
 mkDocDesc SI{_inputs = is, _sysinfodb = db} = map sec where
   sec :: DocSection -> DL.DocSection
   sec TableOfContents = DL.TableOfContents

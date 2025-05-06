@@ -18,19 +18,19 @@ module SysInfo.Drasil.SystemInformation
 --   system to be used in artifact generation.
 data SystemInformation
 [SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> SystemInformation
-class HasSystemInformation c_a8b2
-systemInformation :: HasSystemInformation c_a8b2 => Lens' c_a8b2 SystemInformation
-authors :: HasSystemInformation c_a8b2 => Lens' c_a8b2 People
-background :: HasSystemInformation c_a8b2 => Lens' c_a8b2 Background
-configFiles :: HasSystemInformation c_a8b2 => Lens' c_a8b2 [String]
-constants :: HasSystemInformation c_a8b2 => Lens' c_a8b2 [ConstQDef]
-datadefs :: HasSystemInformation c_a8b2 => Lens' c_a8b2 [DataDefinition]
-instModels :: HasSystemInformation c_a8b2 => Lens' c_a8b2 [InstanceModel]
-motivation :: HasSystemInformation c_a8b2 => Lens' c_a8b2 Motivation
-purpose :: HasSystemInformation c_a8b2 => Lens' c_a8b2 Purpose
-scope :: HasSystemInformation c_a8b2 => Lens' c_a8b2 Scope
-sysinfodb :: HasSystemInformation c_a8b2 => Lens' c_a8b2 ChunkDB
-usedinfodb :: HasSystemInformation c_a8b2 => Lens' c_a8b2 ChunkDB
+class HasSystemInformation c_a8fO
+systemInformation :: HasSystemInformation c_a8fO => Lens' c_a8fO SystemInformation
+authors :: HasSystemInformation c_a8fO => Lens' c_a8fO People
+background :: HasSystemInformation c_a8fO => Lens' c_a8fO Background
+configFiles :: HasSystemInformation c_a8fO => Lens' c_a8fO [String]
+constants :: HasSystemInformation c_a8fO => Lens' c_a8fO [ConstQDef]
+datadefs :: HasSystemInformation c_a8fO => Lens' c_a8fO [DataDefinition]
+instModels :: HasSystemInformation c_a8fO => Lens' c_a8fO [InstanceModel]
+motivation :: HasSystemInformation c_a8fO => Lens' c_a8fO Motivation
+purpose :: HasSystemInformation c_a8fO => Lens' c_a8fO Purpose
+scope :: HasSystemInformation c_a8fO => Lens' c_a8fO Scope
+sysinfodb :: HasSystemInformation c_a8fO => Lens' c_a8fO ChunkDB
+usedinfodb :: HasSystemInformation c_a8fO => Lens' c_a8fO ChunkDB
 
 -- | Project Example purpose.
 type Purpose = [Sentence]
@@ -78,19 +78,19 @@ module SysInfo.Drasil
 --   system to be used in artifact generation.
 data SystemInformation
 [SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> SystemInformation
-class HasSystemInformation c_a8b2
-systemInformation :: HasSystemInformation c_a8b2 => Lens' c_a8b2 SystemInformation
-authors :: HasSystemInformation c_a8b2 => Lens' c_a8b2 People
-background :: HasSystemInformation c_a8b2 => Lens' c_a8b2 Background
-configFiles :: HasSystemInformation c_a8b2 => Lens' c_a8b2 [String]
-constants :: HasSystemInformation c_a8b2 => Lens' c_a8b2 [ConstQDef]
-datadefs :: HasSystemInformation c_a8b2 => Lens' c_a8b2 [DataDefinition]
-instModels :: HasSystemInformation c_a8b2 => Lens' c_a8b2 [InstanceModel]
-motivation :: HasSystemInformation c_a8b2 => Lens' c_a8b2 Motivation
-purpose :: HasSystemInformation c_a8b2 => Lens' c_a8b2 Purpose
-scope :: HasSystemInformation c_a8b2 => Lens' c_a8b2 Scope
-sysinfodb :: HasSystemInformation c_a8b2 => Lens' c_a8b2 ChunkDB
-usedinfodb :: HasSystemInformation c_a8b2 => Lens' c_a8b2 ChunkDB
+class HasSystemInformation c_a8fO
+systemInformation :: HasSystemInformation c_a8fO => Lens' c_a8fO SystemInformation
+authors :: HasSystemInformation c_a8fO => Lens' c_a8fO People
+background :: HasSystemInformation c_a8fO => Lens' c_a8fO Background
+configFiles :: HasSystemInformation c_a8fO => Lens' c_a8fO [String]
+constants :: HasSystemInformation c_a8fO => Lens' c_a8fO [ConstQDef]
+datadefs :: HasSystemInformation c_a8fO => Lens' c_a8fO [DataDefinition]
+instModels :: HasSystemInformation c_a8fO => Lens' c_a8fO [InstanceModel]
+motivation :: HasSystemInformation c_a8fO => Lens' c_a8fO Motivation
+purpose :: HasSystemInformation c_a8fO => Lens' c_a8fO Purpose
+scope :: HasSystemInformation c_a8fO => Lens' c_a8fO Scope
+sysinfodb :: HasSystemInformation c_a8fO => Lens' c_a8fO ChunkDB
+usedinfodb :: HasSystemInformation c_a8fO => Lens' c_a8fO ChunkDB
 
 -- | Project Example purpose.
 type Purpose = [Sentence]

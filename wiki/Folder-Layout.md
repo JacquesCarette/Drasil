@@ -8,7 +8,7 @@ There are a lot of folders in Drasil, and it can be especially confusing to a fi
 | `drasil-code`      | Holds the language for types, classes, and functions related to generating code. |
 | `drasil-code-base` | Proxy package between `drasil-printers` and `drasil-code`, for the bits of code in `drasil-printers` that relies on bits of `drasil-code` (`CodeExpr` specifically). |
 | `drasil-data`      | Fundamental knowledge that is shareable amongst many pieces of software. Includes common concepts in mathematics, physics, and computer science. |
-| `drasil-database`  | Database aspects of information collection. Contains the `ChunkDB` and `SystemInformation` types which are central to document generation. |
+| `drasil-database`  | Database aspects of information collection. Contains the `ChunkDB` and `` types which are central to document generation. |
 | `drasil-docLang`   | Drasil language related to generated document structure. |
 | `drasil-example`   | Examples of Drasil use. Generates code, SRS documents, and Traceability Graphs. |
 | `drasil-gen`       | For generating all artifacts. |

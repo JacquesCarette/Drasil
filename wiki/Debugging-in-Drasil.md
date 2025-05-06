@@ -54,7 +54,7 @@ make test >& make.log
 Check for any warnings or errors in the logs; these are treated as errors in GitHub Actions. Just remember to delete the log file once you are finished with it!
 
 ### Using Generated Chunk Logs
-If a [chunk](Chunks) is not behaving as expected, try checking out the chunk logs (under `code/debug`) for the specific example. Specifically, keep an eye out for duplicate `UID`s attached to different terms or any other pieces of information. It may be a signal for a deeper problem. The first three tables contain traceability information from one chunk to the next, while the rest are listed from the fields of the `ChunkDB` type. `ChunkDB`s are usually stored in the `_sysinfodb` field of `SystemInformation`.
+If a [chunk](Chunks) is not behaving as expected, try checking out the chunk logs (under `code/debug`) for the specific example. Specifically, keep an eye out for duplicate `UID`s attached to different terms or any other pieces of information. It may be a signal for a deeper problem. The first three tables contain traceability information from one chunk to the next, while the rest are listed from the fields of the `ChunkDB` type. `ChunkDB`s are usually stored in the `_sysinfodb` field of `System`.
 
 # Example
 

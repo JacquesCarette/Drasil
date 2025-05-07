@@ -126,6 +126,8 @@ Please follow GitHub's official documentation on [generating a new SSH key](http
 
 Please follow GitHub's official documentation on [adding an SSH key to your account](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account) and [testing your connection](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection).
 
+Note that when adding an SSH key using Cygwin, GitHub's documentation uses `~/.ssh` as the path to the key you just generated, which is actually stored in `C:/Users/YOU/.ssh`. Make sure that you are working in the correct directory, as Cygwin has it's own path `/cygwin64/home/YOU` when using `~`.
+
 ##### Cloning `Drasil` locally
 
 To copy/clone `Drasil`'s software on your machine, please open up your terminal window, navigate to a directory you want Drasil placed in, and run `git clone git@github.com:JacquesCarette/Drasil.git`. Afterwards, a `Drasil` folder will appear in your working directory and you can work on it as you see fit.
@@ -224,6 +226,8 @@ Please download the binary related to your operating system from the [Official V
 <summary><h4>Windows</h4></summary>
 
 Please run the executable from the above download link and follow the on-screen steps. You will need to just accept their EULA. Please leave all of the options along the installation default.
+
+If you would like to use Cygwin in the integrated terminal of VSCode, navigate to settings `Manage (bottom left corner)>Settings` search for `terminal.integrated.profiles.windows`. Edit the `settings.json` from here, and add the code snippet found [at this stackoverflow answer](https://stackoverflow.com/a/70437350) and follow the instructions to open Cygwin.
 
 </details>
 

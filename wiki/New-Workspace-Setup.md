@@ -122,11 +122,11 @@ You can read more on GitHub's [About SSH](https://docs.github.com/en/github/auth
 
 Please follow GitHub's official documentation on [generating a new SSH key](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
 
+If you are using Cygwin, copy the SSH key from the default directory, navigate to `C:/cygwin64/home/YOU/.ssh` (you may need to create the .ssh folder) and paste it there. 
+
 ##### Registering your SSH key with GitHub
 
 Please follow GitHub's official documentation on [adding an SSH key to your account](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account) and [testing your connection](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection).
-
-Note that when adding an SSH key using Cygwin, GitHub's documentation uses `~/.ssh` as the path to the key you just generated, which is actually stored in `C:/Users/YOU/.ssh`. Make sure that you are working in the correct directory, as Cygwin has it's own path `/cygwin64/home/YOU` when using `~`.
 
 ##### Cloning `Drasil` locally
 

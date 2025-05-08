@@ -113,11 +113,11 @@ outputValuesDesc :: Sentence
 
 module Drasil.SglPend.Body
 srs :: Document
-fullSI :: SystemInformation
+fullSI :: System
 printSetting :: PrintingInformation
 mkSRS :: SRSDecl
 progName :: CI
-si :: SystemInformation
+si :: System
 purp :: Sentence
 symbMap :: ChunkDB
 

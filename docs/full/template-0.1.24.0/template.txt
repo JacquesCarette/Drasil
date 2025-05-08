@@ -11,10 +11,10 @@
 
 module Drasil.Template.Body
 srs :: Document
-fullSI :: SystemInformation
+fullSI :: System
 printSetting :: PrintingInformation
 mkSRS :: SRSDecl
-si :: SystemInformation
+si :: System
 symbMap :: ChunkDB
 usedDB :: ChunkDB
 citations :: BibRef

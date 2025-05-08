@@ -184,7 +184,7 @@ module Drasil.Projectile.Lesson.Body
 nb :: Document
 printSetting :: PrintingInformation
 mkNB :: LsnDecl
-si :: SystemInformation
+si :: System
 symbMap :: ChunkDB
 usedDB :: ChunkDB
 symbols :: [QuantityDict]
@@ -222,10 +222,10 @@ nonfuncReqs :: [ConceptInstance]
 
 module Drasil.Projectile.Body
 printSetting :: PrintingInformation
-si :: SystemInformation
+si :: System
 srs :: Document
 projectileTitle :: CI
-fullSI :: SystemInformation
+fullSI :: System
 
 module Drasil.Projectile.Choices
 genCodeWithChoices :: [Choices] -> IO ()

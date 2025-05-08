@@ -60,7 +60,7 @@ digraph alltypes {
 		LsnChapter -> Example;
 		LsnChapter -> Smmry;
 		LsnChapter -> Apndx;
-		LsnChapter -> SystemInformation;
+		LsnChapter -> System;
 		LsnChapter -> LsnDecl;
 		LsnChapter -> LsnDesc;
 		}
@@ -375,7 +375,7 @@ digraph alltypes {
 		ReqsSub -> Sentence;
 		ReqsSub -> LabelledContent;
 		ReqsSub -> ReqsSub;
-		ReqsSub -> SystemInformation;
+		ReqsSub -> System;
 		ReqsSub -> SRSDecl;
 		ReqsSub -> DocDesc;
 		}

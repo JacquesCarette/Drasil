@@ -1,0 +1,6 @@
+digraph system{
+System	[shape=oval, color=darkviolet, label="System"];
+System -> CommonIdea;
+System -> a;
+System -> Idea;
+}

@@ -38,7 +38,7 @@ lGap :: Symbol
 
 module Drasil.HGHC.Body
 srs :: Document
-si :: SystemInformation
+si :: System
 symbMap :: ChunkDB
 printSetting :: PrintingInformation
-fullSI :: SystemInformation
+fullSI :: System

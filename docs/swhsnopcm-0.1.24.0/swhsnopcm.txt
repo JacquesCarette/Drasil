@@ -77,11 +77,11 @@ tempInit :: UncertQ
 specParamValList :: [ConstQDef]
 
 module Drasil.SWHSNoPCM.Body
-si :: SystemInformation
+si :: System
 srs :: Document
 printSetting :: PrintingInformation
 noPCMODEInfo :: ODEInfo
-fullSI :: SystemInformation
+fullSI :: System
 
 module Drasil.SWHSNoPCM.Choices
 code :: CodeSpec

@@ -483,18 +483,17 @@ traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> String -> [Section]
 --   <a>GraphInfo</a>.
 traceGIntro :: [UID] -> [Sentence] -> [UnlabelledContent]
 
--- | Extracts traceability graph inforomation from filled-in
---   <a>SystemInformation</a>.
-mkGraphInfo :: SystemInformation -> GraphInfo
+-- | Extracts traceability graph inforomation from filled-in <a>System</a>.
+mkGraphInfo :: System -> GraphInfo
 
 -- | Gets the node family of a graph based on the given section and system
 --   information. Also applies a given colour to the node family.
-mkGraphNodes :: TraceViewCat -> SystemInformation -> String -> NodeFamily
+mkGraphNodes :: TraceViewCat -> System -> String -> NodeFamily
 
 -- | Creates the graph edges based on the relation of the first list of
 --   sections to the second. Also needs the system information. Return
 --   value is of the form (Section, [Dependencies]).
-mkGraphEdges :: [TraceViewCat] -> [TraceViewCat] -> SystemInformation -> [(UID, [UID])]
+mkGraphEdges :: [TraceViewCat] -> [TraceViewCat] -> System -> [(UID, [UID])]
 
 -- | Helper for making graph edges. Taken from Utils.Drasil's traceability
 --   matrix relation finder. But, instead of marking <a>X</a> on two
@@ -502,25 +501,25 @@ mkGraphEdges :: [TraceViewCat] -> [TraceViewCat] -> SystemInformation -> [(UID, 
 makeTGraph :: [UID] -> [[UID]] -> [UID] -> [(UID, [UID])]
 
 -- | Checker for uids by finding if the <a>UID</a> is in one of the
---   possible data sets contained in the <a>SystemInformation</a> database.
-checkUID :: UID -> SystemInformation -> UID
+--   possible data sets contained in the <a>System</a> database.
+checkUID :: UID -> System -> UID
 
 -- | Similar to <a>checkUID</a> but prepends domain for labelling.
-checkUIDAbbrev :: SystemInformation -> UID -> String
+checkUIDAbbrev :: System -> UID -> String
 
 -- | Similar to <a>checkUID</a> but gets reference addresses for display.
-checkUIDRefAdd :: SystemInformation -> UID -> String
+checkUIDRefAdd :: System -> UID -> String
 
 -- | Helper that finds the header of a traceability matrix. However, here
 --   we use this to get a list of <a>UID</a>s for a traceability graph
 --   instead.
-traceGHeader :: (ChunkDB -> [UID]) -> SystemInformation -> [UID]
+traceGHeader :: (ChunkDB -> [UID]) -> System -> [UID]
 
 -- | Helper that finds the headers of the traceability matrix rows.
 --   However, here we use this to get a list of <a>UID</a>s for a
 --   traceability graph instead. This is then used to create the graph
 --   edges.
-traceGRowHeader :: ([UID] -> [UID]) -> SystemInformation -> [UID]
+traceGRowHeader :: ([UID] -> [UID]) -> System -> [UID]
 
 -- | Helper that makes references of the form "<tt>reference</tt> shows the
 --   dependencies of <tt>something</tt>". Only takes a reference <a>UID</a>
@@ -860,16 +859,16 @@ TUPurpose :: TUIntro
 
 -- | Creates a document from a document description, a title combinator
 --   function, and system information.
-mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
+mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
 
 -- | Helper for filling in the traceability matrix and graph information
 --   into the system.
-fillTraceSI :: SRSDecl -> SystemInformation -> SystemInformation
+fillTraceSI :: SRSDecl -> System -> System
 
 -- | Assuming a given <a>ChunkDB</a> with no traces and minimal/no
 --   references, fill in for rest of system information. Currently fills in
 --   references, traceability matrix information and <a>IdeaDict</a>s.
-fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
+fillcdbSRS :: SRSDecl -> System -> System
 
 -- | Recursively find all references in a section (meant for getting at
 --   <a>LabelledContent</a>).
@@ -906,7 +905,7 @@ newtype Apndx
 ApndxProg :: [Contents] -> Apndx
 
 -- | Creates a notebook from a lesson description and system information.
-mkNb :: LsnDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
+mkNb :: LsnDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
 
 -- | Fields that should be displayed in definitions.
 data Field
@@ -944,11 +943,10 @@ Succinct :: Verbosity
 -- | Create a data definition using a list of fields, a database of
 --   symbols, and a <a>QDefinition</a> (called automatically by
 --   <tt>SCSSub</tt> program).
-ddefn :: Fields -> SystemInformation -> DataDefinition -> LabelledContent
+ddefn :: Fields -> System -> DataDefinition -> LabelledContent
 
--- | Extracts traceability graph inforomation from filled-in
---   <a>SystemInformation</a>.
-mkGraphInfo :: SystemInformation -> GraphInfo
+-- | Extracts traceability graph inforomation from filled-in <a>System</a>.
+mkGraphInfo :: System -> GraphInfo
 
 -- | Create references to traceability graphs given an example name.
 --   Primarily used for reference database in examples.
@@ -959,11 +957,11 @@ traceyGraphGetRefs :: String -> [Reference]
 --   
 --   Contains traceability matrix assumptions, other assumptions,
 --   refinement, and other requirements.
-traceMatStandard :: SystemInformation -> [TraceConfig]
+traceMatStandard :: System -> [TraceConfig]
 
--- | Records other requirements. Converts the <a>SystemInformation</a> into
---   a <a>TraceConfig</a>.
-traceMatOtherReq :: SystemInformation -> TraceConfig
+-- | Records other requirements. Converts the <a>System</a> into a
+--   <a>TraceConfig</a>.
+traceMatOtherReq :: System -> TraceConfig
 
 -- | Creates a traceability map from document sections.
 generateTraceMap :: [DocSection] -> TraceMap
@@ -1092,8 +1090,8 @@ data () => ChunkDB
 
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
-data () => SystemInformation
-[SI] :: forall a b e h i j. (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> SystemInformation
+data () => System
+[SI] :: forall a b e h i j. (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> System
 
 -- | Smart constructor for chunk databases. Takes in the following:
 --   
@@ -1124,7 +1122,7 @@ defaultConfiguration :: PrintingConfiguration
 
 -- | Builds a document's printing information based on the system
 --   information.
-piSys :: SystemInformation -> Stage -> PrintingConfiguration -> PrintingInformation
+piSys :: System -> Stage -> PrintingConfiguration -> PrintingInformation
 
 -- | A Software Requirements Specification Declaration is made up of all
 --   necessary sections (<a>DocSection</a>s).
@@ -1451,12 +1449,12 @@ Succinct :: Verbosity
 
 -- | Creates a document from a document description, a title combinator
 --   function, and system information.
-mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
+mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
 
 -- | Assuming a given <a>ChunkDB</a> with no traces and minimal/no
 --   references, fill in for rest of system information. Currently fills in
 --   references, traceability matrix information and <a>IdeaDict</a>s.
-fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
+fillcdbSRS :: SRSDecl -> System -> System
 
 -- | Default Reference Material section introduction.
 intro :: Contents
@@ -1466,7 +1464,7 @@ intro :: Contents
 --   
 --   Contains traceability matrix assumptions, other assumptions,
 --   refinement, and other requirements.
-traceMatStandard :: SystemInformation -> [TraceConfig]
+traceMatStandard :: System -> [TraceConfig]
 
 -- | Default is term and given introduction.
 --   

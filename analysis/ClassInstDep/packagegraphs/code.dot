@@ -149,7 +149,7 @@ Monad	[shape=oval, color=pink, label="Monad"];
 PackageSym	[shape=oval, color=pink, label="PackageSym"];
 AuxiliarySym	[shape=oval, color=pink, label="AuxiliarySym"];
 RenderChoices	[shape=oval, color=pink, label="RenderChoices"];
-HasSystemInformation	[shape=oval, color=pink, label="HasSystemInformation"];
+HasSystem	[shape=oval, color=pink, label="HasSystem"];
 HasOldCodeSpec	[shape=oval, color=pink, label="HasOldCodeSpec"];
 PackageSym	[shape=oval, color=magenta, label="PackageSym"];
 AuxiliarySym	[shape=oval, color=magenta, label="AuxiliarySym"];
@@ -228,6 +228,6 @@ Visibility -> RenderChoices;
 Logging -> RenderChoices;
 AuxFile -> RenderChoices;
 ConstraintBehaviour -> RenderChoices;
-CodeSpec -> HasSystemInformation;
+CodeSpec -> HasSystem;
 CodeSpec -> HasOldCodeSpec;
 }

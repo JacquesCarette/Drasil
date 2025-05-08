@@ -1675,10 +1675,10 @@ sysinfodbO :: HasOldCodeSpec c_ayVC => Lens' c_ayVC ChunkDB
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
 data CodeSpec
-CS :: SystemInformation -> OldCodeSpec -> CodeSpec
-[_sysInfo] :: CodeSpec -> SystemInformation
+CS :: System -> OldCodeSpec -> CodeSpec
+[_sysInfo] :: CodeSpec -> System
 [_oldCode] :: CodeSpec -> OldCodeSpec
-sysInfo :: Lens' CodeSpec SystemInformation
+sysInfo :: Lens' CodeSpec System
 oldCode :: Lens' CodeSpec OldCodeSpec
 
 -- | Converts a list of chunks that have <a>UID</a>s to a Map from
@@ -1691,18 +1691,16 @@ getODE :: [ExtLib] -> Maybe ODE
 -- | Maps ODE to their respective <a>CodeDefinition</a>.
 mapODE :: Maybe ODE -> [CodeDefinition]
 
--- | Creates a <a>CodeSpec</a> using the provided
---   <tt>SystemInformation</tt>, <a>Choices</a>, and <a>Mod</a>s. The
---   <a>CodeSpec</a> consists of the system information and a corresponding
---   <a>OldCodeSpec</a>.
-codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
+-- | Creates a <a>CodeSpec</a> using the provided <tt>System</tt>,
+--   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
+--   system information and a corresponding <a>OldCodeSpec</a>.
+codeSpec :: System -> Choices -> [Mod] -> CodeSpec
 
--- | Generates an <a>OldCodeSpec</a> from <tt>SystemInformation</tt>,
---   <a>Choices</a>, and a list of <a>Mod</a>s. This function extracts
---   various components (e.g., inputs, outputs, constraints, etc.) from
---   <tt>SystemInformation</tt> to populate the <a>OldCodeSpec</a>
---   structure.
-oldcodeSpec :: SystemInformation -> Choices -> [Mod] -> OldCodeSpec
+-- | Generates an <a>OldCodeSpec</a> from <tt>System</tt>, <a>Choices</a>,
+--   and a list of <a>Mod</a>s. This function extracts various components
+--   (e.g., inputs, outputs, constraints, etc.) from <tt>System</tt> to
+--   populate the <a>OldCodeSpec</a> structure.
+oldcodeSpec :: System -> Choices -> [Mod] -> OldCodeSpec
 
 -- | Convert a <a>Func</a> to an implementation-stage <a>QuantityDict</a>
 --   representing the function.
@@ -1732,7 +1730,7 @@ getConstraints :: HasUID c => ConstraintCEMap -> [c] -> [ConstraintCE]
 
 -- | Get a list of <a>CodeChunk</a>s from a constraint.
 constraintvars :: ConstraintCE -> ChunkDB -> [CodeChunk]
-instance SysInfo.Drasil.SystemInformation.HasSystemInformation Language.Drasil.CodeSpec.CodeSpec
+instance SysInfo.Drasil.SystemInformation.HasSystem Language.Drasil.CodeSpec.CodeSpec
 instance Language.Drasil.CodeSpec.HasOldCodeSpec Language.Drasil.CodeSpec.CodeSpec
 instance Language.Drasil.CodeSpec.HasOldCodeSpec Language.Drasil.CodeSpec.OldCodeSpec
 
@@ -2809,8 +2807,8 @@ defaultChoices :: Choices
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
 data CodeSpec
-CS :: SystemInformation -> OldCodeSpec -> CodeSpec
-[_sysInfo] :: CodeSpec -> SystemInformation
+CS :: System -> OldCodeSpec -> CodeSpec
+[_sysInfo] :: CodeSpec -> System
 [_oldCode] :: CodeSpec -> OldCodeSpec
 
 -- | Old Code specifications. Holds information needed to generate code.
@@ -2861,11 +2859,10 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 -- | The database of all chunks used in the problem.
 [_sysinfodb] :: OldCodeSpec -> ChunkDB
 
--- | Creates a <a>CodeSpec</a> using the provided
---   <tt>SystemInformation</tt>, <a>Choices</a>, and <a>Mod</a>s. The
---   <a>CodeSpec</a> consists of the system information and a corresponding
---   <a>OldCodeSpec</a>.
-codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
+-- | Creates a <a>CodeSpec</a> using the provided <tt>System</tt>,
+--   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
+--   system information and a corresponding <a>OldCodeSpec</a>.
+codeSpec :: System -> Choices -> [Mod] -> CodeSpec
 class HasOldCodeSpec c_ayVC
 oldCodeSpec :: HasOldCodeSpec c_ayVC => Lens' c_ayVC OldCodeSpec
 authorsO :: HasOldCodeSpec c_ayVC => Lens' c_ayVC People

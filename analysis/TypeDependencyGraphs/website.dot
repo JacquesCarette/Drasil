@@ -15,7 +15,7 @@ digraph alltypes {
 	subgraph caestudys {
 		subgraph casestudy{
 		CaseStudy	[shape=oval, color=cyan3, label="CaseStudy"];
-		CaseStudy -> SystemInformation;
+		CaseStudy -> System;
 		CaseStudy -> Sentence;
 		CaseStudy -> Choices;
 		}
@@ -29,7 +29,7 @@ digraph alltypes {
 	subgraph example {
 		subgraph example{
 		Example	[shape=oval, color=cyan3, label="Example"];
-		Example -> SystemInformation;
+		Example -> System;
 		Example -> Choices;
 		Example -> FilePath;
 		}

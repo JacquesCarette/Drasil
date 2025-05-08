@@ -7,7 +7,7 @@ LsnChapter -> CaseProb;
 LsnChapter -> Example;
 LsnChapter -> Smmry;
 LsnChapter -> Apndx;
-LsnChapter -> SystemInformation;
+LsnChapter -> System;
 LsnChapter -> LsnDecl;
 LsnChapter -> LsnDesc;
 }

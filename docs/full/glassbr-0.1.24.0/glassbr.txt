@@ -248,9 +248,9 @@ unlikelyChgs :: [ConceptInstance]
 
 module Drasil.GlassBR.Body
 srs :: Document
-fullSI :: SystemInformation
+fullSI :: System
 printSetting :: PrintingInformation
-si :: SystemInformation
+si :: System
 mkSRS :: SRSDecl
 purp :: Sentence
 background :: Sentence

@@ -1,6 +1,6 @@
 digraph example{
 Example	[shape=oval, color=cyan3, label="Example"];
-Example -> SystemInformation;
+Example -> System;
 Example -> Choices;
 Example -> FilePath;
 }

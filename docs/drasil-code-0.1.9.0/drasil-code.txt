@@ -296,8 +296,8 @@ defaultChoices :: Choices
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
 data CodeSpec
-CS :: SystemInformation -> OldCodeSpec -> CodeSpec
-[_sysInfo] :: CodeSpec -> SystemInformation
+CS :: System -> OldCodeSpec -> CodeSpec
+[_sysInfo] :: CodeSpec -> System
 [_oldCode] :: CodeSpec -> OldCodeSpec
 
 -- | Old Code specifications. Holds information needed to generate code.
@@ -348,11 +348,10 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 -- | The database of all chunks used in the problem.
 [_sysinfodb] :: OldCodeSpec -> ChunkDB
 
--- | Creates a <a>CodeSpec</a> using the provided
---   <tt>SystemInformation</tt>, <a>Choices</a>, and <a>Mod</a>s. The
---   <a>CodeSpec</a> consists of the system information and a corresponding
---   <a>OldCodeSpec</a>.
-codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
+-- | Creates a <a>CodeSpec</a> using the provided <tt>System</tt>,
+--   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
+--   system information and a corresponding <a>OldCodeSpec</a>.
+codeSpec :: System -> Choices -> [Mod] -> CodeSpec
 class HasOldCodeSpec c_ayT2
 oldCodeSpec :: HasOldCodeSpec c_ayT2 => Lens' c_ayT2 OldCodeSpec
 authorsO :: HasOldCodeSpec c_ayT2 => Lens' c_ayT2 People

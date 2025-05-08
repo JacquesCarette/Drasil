@@ -101,12 +101,12 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="Drasil.Website.Body.html#packages"><span class="hs-identifier hs-var hs-var">packages</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
 </span><span id="line-67"></span><span>    </span><span class="hs-special">}</span><span>
 </span><span id="line-68"></span><span>
-</span><span id="line-69"></span><span class="hs-comment">-- TODO: Should the website be using a ``SystemInformation''? This is primarily for the SmithEtAl template.</span><span>
+</span><span id="line-69"></span><span class="hs-comment">-- TODO: Should the website be using a ``System''? This is primarily for the SmithEtAl template.</span><span>
 </span><span id="line-70"></span><span class="hs-comment">--       It seems like the website is primarily that functions on a chunkdb.</span><span>
 </span><span id="line-71"></span><span>
 </span><span id="line-72"></span><span class="annot"><span class="hs-comment">-- | System information.</span></span><span>
-</span><span id="line-73"></span><span class="annot"><a href="Drasil.Website.Body.html#si"><span class="hs-identifier hs-type">si</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.Website.Body.html#FolderLocation"><span class="hs-identifier hs-type">FolderLocation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span>
-</span><span id="line-74"></span><span id="si"><span class="annot"><span class="annottext">si :: FolderLocation -&gt; SystemInformation
+</span><span id="line-73"></span><span class="annot"><a href="Drasil.Website.Body.html#si"><span class="hs-identifier hs-type">si</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.Website.Body.html#FolderLocation"><span class="hs-identifier hs-type">FolderLocation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span>
+</span><span id="line-74"></span><span id="si"><span class="annot"><span class="annottext">si :: FolderLocation -&gt; System
 </span><a href="Drasil.Website.Body.html#si"><span class="hs-identifier hs-var hs-var">si</span></a></span></span><span> </span><span id="local-6989586621679090674"><span class="annot"><span class="annottext">FolderLocation
 </span><a href="#local-6989586621679090674"><span class="hs-identifier hs-var">fl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SI</span></span><span> </span><span class="hs-special">{</span><span>
 </span><span id="line-75"></span><span>    </span><span class="annot"><span class="annottext">_sys :: CI
@@ -300,11 +300,10 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">phsChgMtrl</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span>
-</span><span id="line-105"></span><span>  </span><span class="annot"><span class="annottext">(SystemInformation -&gt; IdeaDict)
--&gt; [SystemInformation] -&gt; [IdeaDict]
+</span><span id="line-105"></span><span>  </span><span class="annot"><span class="annottext">(System -&gt; IdeaDict) -&gt; [System] -&gt; [IdeaDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; IdeaDict
-</span><a href="Drasil.Website.Body.html#getSysName"><span class="hs-identifier hs-var">getSysName</span></a></span><span> </span><span class="annot"><span class="annottext">[SystemInformation]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">System -&gt; IdeaDict
+</span><a href="Drasil.Website.Body.html#getSysName"><span class="hs-identifier hs-var">getSysName</span></a></span><span> </span><span class="annot"><span class="annottext">[System]
 </span><a href="Drasil.Website.Example.html#allExampleSI"><span class="hs-identifier hs-var">allExampleSI</span></a></span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; IdeaDict) -&gt; [ConceptChunk] -&gt; [IdeaDict]
@@ -356,9 +355,9 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><a href="Drasil.Website.Body.html#allRefs"><span class="hs-identifier hs-var">allRefs</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
 </span><a href="#local-6989586621679090716"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-110"></span><span>
-</span><span id="line-111"></span><span class="annot"><span class="hs-comment">-- | Helper to get the system name as an 'IdeaDict' from 'SystemInformation'.</span></span><span>
-</span><span id="line-112"></span><span class="annot"><a href="Drasil.Website.Body.html#getSysName"><span class="hs-identifier hs-type">getSysName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span>
-</span><span id="line-113"></span><span id="getSysName"><span class="annot"><span class="annottext">getSysName :: SystemInformation -&gt; IdeaDict
+</span><span id="line-111"></span><span class="annot"><span class="hs-comment">-- | Helper to get the system name as an 'IdeaDict' from 'System'.</span></span><span>
+</span><span id="line-112"></span><span class="annot"><a href="Drasil.Website.Body.html#getSysName"><span class="hs-identifier hs-type">getSysName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span>
+</span><span id="line-113"></span><span id="getSysName"><span class="annot"><span class="annottext">getSysName :: System -&gt; IdeaDict
 </span><a href="Drasil.Website.Body.html#getSysName"><span class="hs-identifier hs-var hs-var">getSysName</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">SI</span></span><span class="hs-special">{</span><span class="annot"><span class="annottext">_sys :: ()
 </span><span class="hs-identifier hs-var">_sys</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679090735"><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679090735"><span class="hs-identifier hs-var">nm</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; IdeaDict

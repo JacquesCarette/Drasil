@@ -838,7 +838,7 @@ digraph alltypes {
 		}
 		subgraph codespec{
 		CodeSpec	[shape=oval, color=cyan3, label="CodeSpec"];
-		CodeSpec -> SystemInformation;
+		CodeSpec -> System;
 		CodeSpec -> OldCodeSpec;
 		}
 		subgraph input{
@@ -1176,7 +1176,7 @@ digraph alltypes {
 		LsnChapter -> Example;
 		LsnChapter -> Smmry;
 		LsnChapter -> Apndx;
-		LsnChapter -> SystemInformation;
+		LsnChapter -> System;
 		LsnChapter -> LsnDecl;
 		LsnChapter -> LsnDesc;
 		}
@@ -1491,7 +1491,7 @@ digraph alltypes {
 		ReqsSub -> Sentence;
 		ReqsSub -> LabelledContent;
 		ReqsSub -> ReqsSub;
-		ReqsSub -> SystemInformation;
+		ReqsSub -> System;
 		ReqsSub -> SRSDecl;
 		ReqsSub -> DocDesc;
 		}
@@ -4398,11 +4398,11 @@ digraph alltypes {
 	subgraph getcunkh {
 	}
 	subgraph syteminformations {
-		subgraph systeminformation{
-		SystemInformation	[shape=oval, color=darkviolet, label="SystemInformation"];
-		SystemInformation -> CommonIdea;
-		SystemInformation -> a;
-		SystemInformation -> Idea;
+		subgraph system{
+		System	[shape=oval, color=darkviolet, label="System"];
+		System -> CommonIdea;
+		System -> a;
+		System -> Idea;
 		}
 		subgraph purpose{
 		Purpose	[shape=oval, color=red2, label="Purpose"];
@@ -4589,7 +4589,7 @@ digraph alltypes {
 	subgraph caestudys {
 		subgraph casestudy{
 		CaseStudy	[shape=oval, color=cyan3, label="CaseStudy"];
-		CaseStudy -> SystemInformation;
+		CaseStudy -> System;
 		CaseStudy -> Sentence;
 		CaseStudy -> Choices;
 		}
@@ -4603,7 +4603,7 @@ digraph alltypes {
 	subgraph example {
 		subgraph example{
 		Example	[shape=oval, color=cyan3, label="Example"];
-		Example -> SystemInformation;
+		Example -> System;
 		Example -> Choices;
 		Example -> FilePath;
 		}

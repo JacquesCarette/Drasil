@@ -1,6 +1,6 @@
 digraph casestudy{
 CaseStudy	[shape=oval, color=cyan3, label="CaseStudy"];
-CaseStudy -> SystemInformation;
+CaseStudy -> System;
 CaseStudy -> Sentence;
 CaseStudy -> Choices;
 }

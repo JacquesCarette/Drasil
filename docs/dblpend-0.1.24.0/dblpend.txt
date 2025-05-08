@@ -228,10 +228,10 @@ portable :: ConceptInstance
 
 module Drasil.DblPend.Body
 srs :: Document
-fullSI :: SystemInformation
+fullSI :: System
 printSetting :: PrintingInformation
 mkSRS :: SRSDecl
-si :: SystemInformation
+si :: System
 purp :: Sentence
 motivation :: Sentence
 background :: Sentence

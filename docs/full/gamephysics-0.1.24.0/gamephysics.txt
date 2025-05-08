@@ -213,11 +213,11 @@ instModIntro :: Sentence
 
 module Drasil.GamePhysics.Body
 srs :: Document
-fullSI :: SystemInformation
+fullSI :: System
 printSetting :: PrintingInformation
 resourcePath :: String
 mkSRS :: SRSDecl
-si :: SystemInformation
+si :: System
 purp :: Sentence
 concIns :: [ConceptInstance]
 stdFields :: Fields

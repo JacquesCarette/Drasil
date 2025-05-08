@@ -52,10 +52,7 @@
 </span><span id="line-48"></span><span>
 </span><span id="line-49"></span><span class="annot"><a href="Drasil.PDController.Body.html#srs"><span class="hs-identifier hs-type">srs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Document</span></span><span>
 </span><span id="line-50"></span><span id="srs"><span class="annot"><span class="annottext">srs :: Document
-</span><a href="Drasil.PDController.Body.html#srs"><span class="hs-identifier hs-var hs-var">srs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SRSDecl
--&gt; (IdeaDict -&gt; IdeaDict -&gt; Sentence)
--&gt; SystemInformation
--&gt; Document
+</span><a href="Drasil.PDController.Body.html#srs"><span class="hs-identifier hs-var hs-var">srs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SRSDecl -&gt; (IdeaDict -&gt; IdeaDict -&gt; Sentence) -&gt; System -&gt; Document
 </span><span class="hs-identifier hs-var">mkDoc</span></span><span> </span><span class="annot"><span class="annottext">SRSDecl
 </span><a href="Drasil.PDController.Body.html#mkSRS"><span class="hs-identifier hs-var">mkSRS</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(IdeaDict -&gt; Sentence)
 -&gt; (IdeaDict -&gt; Sentence) -&gt; IdeaDict -&gt; IdeaDict -&gt; Sentence
@@ -65,21 +62,20 @@ forall c d.
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">phrase</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><span class="hs-identifier hs-var">phrase</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="Drasil.PDController.Body.html#si"><span class="hs-identifier hs-var">si</span></a></span><span>
 </span><span id="line-51"></span><span>
-</span><span id="line-52"></span><span class="annot"><a href="Drasil.PDController.Body.html#fullSI"><span class="hs-identifier hs-type">fullSI</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span>
-</span><span id="line-53"></span><span id="fullSI"><span class="annot"><span class="annottext">fullSI :: SystemInformation
-</span><a href="Drasil.PDController.Body.html#fullSI"><span class="hs-identifier hs-var hs-var">fullSI</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SRSDecl -&gt; SystemInformation -&gt; SystemInformation
+</span><span id="line-52"></span><span class="annot"><a href="Drasil.PDController.Body.html#fullSI"><span class="hs-identifier hs-type">fullSI</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span>
+</span><span id="line-53"></span><span id="fullSI"><span class="annot"><span class="annottext">fullSI :: System
+</span><a href="Drasil.PDController.Body.html#fullSI"><span class="hs-identifier hs-var hs-var">fullSI</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SRSDecl -&gt; System -&gt; System
 </span><span class="hs-identifier hs-var">fillcdbSRS</span></span><span> </span><span class="annot"><span class="annottext">SRSDecl
-</span><a href="Drasil.PDController.Body.html#mkSRS"><span class="hs-identifier hs-var">mkSRS</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="Drasil.PDController.Body.html#mkSRS"><span class="hs-identifier hs-var">mkSRS</span></a></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="Drasil.PDController.Body.html#si"><span class="hs-identifier hs-var">si</span></a></span><span>
 </span><span id="line-54"></span><span>
 </span><span id="line-55"></span><span class="annot"><a href="Drasil.PDController.Body.html#printSetting"><span class="hs-identifier hs-type">printSetting</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PrintingInformation</span></span><span>
 </span><span id="line-56"></span><span id="printSetting"><span class="annot"><span class="annottext">printSetting :: PrintingInformation
-</span><a href="Drasil.PDController.Body.html#printSetting"><span class="hs-identifier hs-var hs-var">printSetting</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation
--&gt; Stage -&gt; PrintingConfiguration -&gt; PrintingInformation
-</span><span class="hs-identifier hs-var">piSys</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="Drasil.PDController.Body.html#printSetting"><span class="hs-identifier hs-var hs-var">printSetting</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">System -&gt; Stage -&gt; PrintingConfiguration -&gt; PrintingInformation
+</span><span class="hs-identifier hs-var">piSys</span></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="Drasil.PDController.Body.html#fullSI"><span class="hs-identifier hs-var">fullSI</span></a></span><span> </span><span class="annot"><span class="annottext">Stage
 </span><span class="hs-identifier hs-var">Equational</span></span><span> </span><span class="annot"><span class="annottext">PrintingConfiguration
 </span><span class="hs-identifier hs-var">defaultConfiguration</span></span><span>
@@ -272,13 +268,13 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">TraceabilityProg</span></span><span> </span><span class="annot"><span class="annottext">([TraceConfig] -&gt; TraceabilitySec)
 -&gt; [TraceConfig] -&gt; TraceabilitySec
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; [TraceConfig]
-</span><span class="hs-identifier hs-var">traceMatStandard</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">System -&gt; [TraceConfig]
+</span><span class="hs-identifier hs-var">traceMatStandard</span></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="Drasil.PDController.Body.html#si"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DocSection
 </span><span class="hs-identifier hs-var">Bibliography</span></span><span class="hs-special">]</span><span>
 </span><span id="line-98"></span><span>
-</span><span id="line-99"></span><span class="annot"><a href="Drasil.PDController.Body.html#si"><span class="hs-identifier hs-type">si</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span>
-</span><span id="line-100"></span><span id="si"><span class="annot"><span class="annottext">si :: SystemInformation
+</span><span id="line-99"></span><span class="annot"><a href="Drasil.PDController.Body.html#si"><span class="hs-identifier hs-type">si</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span>
+</span><span id="line-100"></span><span id="si"><span class="annot"><span class="annottext">si :: System
 </span><a href="Drasil.PDController.Body.html#si"><span class="hs-identifier hs-var hs-var">si</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SI</span></span><span> </span><span class="hs-special">{</span><span>
 </span><span id="line-101"></span><span>  </span><span class="annot"><span class="annottext">_sys :: CI
 </span><span class="hs-identifier hs-var">_sys</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI

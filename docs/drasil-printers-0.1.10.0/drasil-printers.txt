@@ -196,7 +196,7 @@ PI :: ChunkDB -> Stage -> PrintingConfiguration -> PrintingInformation
 
 -- | Builds a document's printing information based on the system
 --   information.
-piSys :: SystemInformation -> Stage -> PrintingConfiguration -> PrintingInformation
+piSys :: System -> Stage -> PrintingConfiguration -> PrintingInformation
 
 -- | Able to be printed.
 class HasPrintingOptions c

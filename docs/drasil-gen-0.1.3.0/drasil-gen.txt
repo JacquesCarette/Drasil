@@ -17,14 +17,14 @@ dumpTo :: ToJSON a => a -> TargetFile -> IO ()
 -- | For debugging purposes, if the system has a <tt>DEBUG_ENV</tt>
 --   environment variable set to anything, we can dump the chunk maps in a
 --   system to the host system.
-dumpEverything :: SystemInformation -> PrintingInformation -> Path -> IO ()
-typeCheckSI :: SystemInformation -> IO ()
+dumpEverything :: System -> PrintingInformation -> Path -> IO ()
+typeCheckSI :: System -> IO ()
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
 
 -- | Generates traceability graphs as .dot files.
-genDot :: SystemInformation -> IO ()
+genDot :: System -> IO ()
 
 -- | Calls the code generator.
 genCode :: Choices -> CodeSpec -> IO ()

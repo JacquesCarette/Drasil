@@ -1,11 +1,11 @@
 	subgraph getcunkh {
 	}
 	subgraph syteminformations {
-		subgraph systeminformation{
-		SystemInformation	[shape=oval, color=darkviolet, label="SystemInformation"];
-		SystemInformation -> CommonIdea;
-		SystemInformation -> a;
-		SystemInformation -> Idea;
+		subgraph system{
+		System	[shape=oval, color=darkviolet, label="System"];
+		System -> CommonIdea;
+		System -> a;
+		System -> Idea;
 		}
 		subgraph purpose{
 		Purpose	[shape=oval, color=red2, label="Purpose"];

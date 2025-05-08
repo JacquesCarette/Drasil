@@ -8,7 +8,7 @@
 </span><span id="line-8"></span><span>
 </span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Database.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">ChunkDB</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">defResolve</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">symbResolve</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">citationTable</span></span><span class="hs-special">)</span><span>
 </span><span id="line-10"></span><span>
-</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="SysInfo.Drasil.SystemInformation.html"><span class="hs-identifier">SysInfo.Drasil.SystemInformation</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="SysInfo.Drasil.SystemInformation.html#SystemInformation"><span class="hs-identifier">SystemInformation</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="SysInfo.Drasil.SystemInformation.html#sysinfodb"><span class="hs-identifier">sysinfodb</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="SysInfo.Drasil.SystemInformation.html"><span class="hs-identifier">SysInfo.Drasil.SystemInformation</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="SysInfo.Drasil.SystemInformation.html#System"><span class="hs-identifier">System</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="SysInfo.Drasil.SystemInformation.html#sysinfodb"><span class="hs-identifier">sysinfodb</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-12"></span><span>
 </span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(^.)</span></span><span class="hs-special">)</span><span>
 </span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">nub</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sortBy</span></span><span class="hs-special">)</span><span>
@@ -168,9 +168,9 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="#local-6989586621679065460"><span class="hs-identifier hs-var">a</span></a></span><span>
 </span><span id="line-48"></span><span>
 </span><span id="line-49"></span><span class="annot"><span class="hs-comment">-- | Helper for extracting a bibliography from the system information.</span></span><span>
-</span><span id="line-50"></span><span class="annot"><a href="SysInfo.Drasil.GetChunk.html#citeDB"><span class="hs-identifier hs-type">citeDB</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="SysInfo.Drasil.SystemInformation.html#SystemInformation"><span class="hs-identifier hs-type">SystemInformation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">BibRef</span></span><span>
-</span><span id="line-51"></span><span id="citeDB"><span class="annot"><span class="annottext">citeDB :: SystemInformation -&gt; BibRef
-</span><a href="SysInfo.Drasil.GetChunk.html#citeDB"><span class="hs-identifier hs-var hs-var">citeDB</span></a></span></span><span> </span><span id="local-6989586621679065462"><span class="annot"><span class="annottext">SystemInformation
+</span><span id="line-50"></span><span class="annot"><a href="SysInfo.Drasil.GetChunk.html#citeDB"><span class="hs-identifier hs-type">citeDB</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="SysInfo.Drasil.SystemInformation.html#System"><span class="hs-identifier hs-type">System</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">BibRef</span></span><span>
+</span><span id="line-51"></span><span id="citeDB"><span class="annot"><span class="annottext">citeDB :: System -&gt; BibRef
+</span><a href="SysInfo.Drasil.GetChunk.html#citeDB"><span class="hs-identifier hs-var hs-var">citeDB</span></a></span></span><span> </span><span id="local-6989586621679065462"><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679065462"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Citation -&gt; Citation -&gt; Ordering) -&gt; BibRef -&gt; BibRef
 forall a. (a -&gt; a -&gt; Ordering) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">sortBy</span></span><span> </span><span class="annot"><span class="annottext">Citation -&gt; Citation -&gt; Ordering
@@ -188,29 +188,23 @@ forall k a. Map k a -&gt; [a]
 </span><span class="hs-identifier hs-var">M.elems</span></span><span> </span><span class="annot"><span class="annottext">(Map UID (Citation, Int) -&gt; [(Citation, Int)])
 -&gt; Map UID (Citation, Int) -&gt; [(Citation, Int)]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
-</span><a href="#local-6989586621679065462"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">System
+</span><a href="#local-6989586621679065462"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="annottext">System
 -&gt; Getting
-     (Map UID (Citation, Int))
-     SystemInformation
-     (Map UID (Citation, Int))
+     (Map UID (Citation, Int)) System (Map UID (Citation, Int))
 -&gt; Map UID (Citation, Int)
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(ChunkDB -&gt; Const (Map UID (Citation, Int)) ChunkDB)
--&gt; SystemInformation
--&gt; Const (Map UID (Citation, Int)) SystemInformation
-forall c. HasSystemInformation c =&gt; Lens' c ChunkDB
-Lens' SystemInformation ChunkDB
+-&gt; System -&gt; Const (Map UID (Citation, Int)) System
+forall c. HasSystem c =&gt; Lens' c ChunkDB
+Lens' System ChunkDB
 </span><a href="SysInfo.Drasil.SystemInformation.html#sysinfodb"><span class="hs-identifier hs-var">sysinfodb</span></a></span><span> </span><span class="annot"><span class="annottext">((ChunkDB -&gt; Const (Map UID (Citation, Int)) ChunkDB)
- -&gt; SystemInformation
- -&gt; Const (Map UID (Citation, Int)) SystemInformation)
+ -&gt; System -&gt; Const (Map UID (Citation, Int)) System)
 -&gt; ((Map UID (Citation, Int)
      -&gt; Const (Map UID (Citation, Int)) (Map UID (Citation, Int)))
     -&gt; ChunkDB -&gt; Const (Map UID (Citation, Int)) ChunkDB)
 -&gt; Getting
-     (Map UID (Citation, Int))
-     SystemInformation
-     (Map UID (Citation, Int))
+     (Map UID (Citation, Int)) System (Map UID (Citation, Int))
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Map UID (Citation, Int)
  -&gt; Const (Map UID (Citation, Int)) (Map UID (Citation, Int)))

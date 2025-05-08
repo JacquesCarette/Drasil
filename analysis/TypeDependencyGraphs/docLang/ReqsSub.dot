@@ -3,7 +3,7 @@ ReqsSub	[shape=oval, color=darkviolet, label="ReqsSub"];
 ReqsSub -> Sentence;
 ReqsSub -> LabelledContent;
 ReqsSub -> ReqsSub;
-ReqsSub -> SystemInformation;
+ReqsSub -> System;
 ReqsSub -> SRSDecl;
 ReqsSub -> DocDesc;
 }

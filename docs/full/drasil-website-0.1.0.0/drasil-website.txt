@@ -190,11 +190,11 @@ module Drasil.Website.Example
 
 -- | Each Example gets placed in here.
 data Example
-E :: SystemInformation -> [Choices] -> FilePath -> FilePath -> Example
+E :: System -> [Choices] -> FilePath -> FilePath -> Example
 
 -- | Example system information. Used to get the system name and
 --   abbreviation.
-[sysInfoE] :: Example -> SystemInformation
+[sysInfoE] :: Example -> System
 
 -- | Some examples have generated code with specific choices. They may also
 --   have more than one set of choices, so we need a list.
@@ -207,7 +207,7 @@ E :: SystemInformation -> [Choices] -> FilePath -> FilePath -> Example
 [srsDoxPath] :: Example -> FilePath
 
 -- | Records example system information.
-allExampleSI :: [SystemInformation]
+allExampleSI :: [System]
 
 -- | Records example choices. The order of the list must match up with that
 --   in <a>allExampleSI</a>, or the Case Studies Table will be incorrect.
@@ -215,7 +215,7 @@ allExampleChoices :: [[Choices]]
 
 -- | Combine system info, description, choices, and file paths into one
 --   nice package.
-allExamples :: [SystemInformation] -> [[Choices]] -> FilePath -> FilePath -> [Example]
+allExamples :: [System] -> [[Choices]] -> FilePath -> FilePath -> [Example]
 
 -- | Calls <a>allExamples</a> on <a>allExampleSI</a>,
 --   <tt>allExampleDesc</tt>, and <a>allExampleChoices</a>. Can be
@@ -328,10 +328,10 @@ mkCaseTable :: RawContent
 -- | Holds individual case studies. System info may not be needed, but it
 --   is still nice to keep around for now.
 data CaseStudy
-CS :: SystemInformation -> Sentence -> Choices -> CaseStudy
+CS :: System -> Sentence -> Choices -> CaseStudy
 
 -- | Each case study needs a name, so use system information.
-[sysInfoCS] :: CaseStudy -> SystemInformation
+[sysInfoCS] :: CaseStudy -> System
 
 -- | A case study may have different program names for the same example
 --   (ex. Projectile).
@@ -553,7 +553,7 @@ Folder :: FilePath -> FilePath -> FilePath -> FilePath -> FilePath -> FilePath -
 [packages] :: FolderLocation -> [String]
 
 -- | System information.
-si :: FolderLocation -> SystemInformation
+si :: FolderLocation -> System
 
 -- | Puts all the sections in order. Basically the website version of the
 --   SRS declaration.
@@ -563,8 +563,8 @@ sections :: FolderLocation -> [Section]
 symbMap :: FolderLocation -> ChunkDB
 
 -- | Helper to get the system name as an <a>IdeaDict</a> from
---   <a>SystemInformation</a>.
-getSysName :: SystemInformation -> IdeaDict
+--   <a>System</a>.
+getSysName :: System -> IdeaDict
 
 -- | Empty database needed for <a>si</a> to work.
 usedDB :: ChunkDB

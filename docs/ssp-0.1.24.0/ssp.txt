@@ -394,7 +394,7 @@ unlikelyChgs :: [ConceptInstance]
 
 module Drasil.SSP.Body
 srs :: Document
-si :: SystemInformation
+si :: System
 symbMap :: ChunkDB
 printSetting :: PrintingInformation
-fullSI :: SystemInformation
+fullSI :: System

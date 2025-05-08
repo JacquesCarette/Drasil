@@ -1,5 +1,5 @@
 digraph codespec{
 CodeSpec	[shape=oval, color=cyan3, label="CodeSpec"];
-CodeSpec -> SystemInformation;
+CodeSpec -> System;
 CodeSpec -> OldCodeSpec;
 }

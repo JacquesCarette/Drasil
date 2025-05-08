@@ -255,9 +255,9 @@ pidODEInfo :: ODEInfo
 module Drasil.PDController.Body
 pidODEInfo :: ODEInfo
 printSetting :: PrintingInformation
-si :: SystemInformation
+si :: System
 srs :: Document
-fullSI :: SystemInformation
+fullSI :: System
 
 module Drasil.PDController.Choices
 codeSpecs :: CodeSpec

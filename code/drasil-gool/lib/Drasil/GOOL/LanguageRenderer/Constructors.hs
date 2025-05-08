@@ -201,7 +201,9 @@ numType v1' v2' = do
       numericType _ Float = t2
       numericType Double _ = t1
       numericType _ Double = t2
-      numericType _ _ = error "Numeric types required for numeric expression"
+      numericType t1' t2' = error $
+        "Numeric types required for numeric expression.\n" ++
+        "Received types: " ++ show t1' ++ " and " ++ show t2'
   toState $ numericType (getType t1) (getType t2)
 
 exprRender' :: (r (BinaryOp r) -> r (Value r) -> r (Value r) -> Doc) -> 

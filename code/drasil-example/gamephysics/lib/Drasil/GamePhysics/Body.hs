@@ -48,7 +48,7 @@ import Drasil.GamePhysics.GenDefs (generalDefns)
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize short) si
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
@@ -96,7 +96,7 @@ mkSRS = [TableOfContents,
     Bibliography]
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = gamePhysics,
   _kind        = Doc.srs,

@@ -4,7 +4,7 @@
 module Drasil.Website.Example where
 
 import Language.Drasil hiding (E)
-import SysInfo.Drasil (SystemInformation(..))
+import SysInfo.Drasil (System(..))
 import Language.Drasil.Code (Choices(..), Lang(..))
 import Data.Char (toLower)
 import Language.Drasil.Printers (Format(..))
@@ -39,7 +39,7 @@ import qualified Drasil.Projectile.Choices as Projectile (codedDirName, choiceCo
 -- | Each Example gets placed in here.
 data Example = E {
   -- | Example system information. Used to get the system name and abbreviation.
-  sysInfoE :: SystemInformation,
+  sysInfoE :: System,
   -- | Some examples have generated code with specific choices.
   -- They may also have more than one set of choices, so we need a list.
   choicesE :: [Choices],
@@ -51,7 +51,7 @@ data Example = E {
 -- TODO: Automate the gathering of system information, descriptions, and choices.
 
 -- | Records example system information.
-allExampleSI :: [SystemInformation]
+allExampleSI :: [System]
 allExampleSI = [DblPend.fullSI, GamePhysics.fullSI, GlassBR.fullSI, HGHC.fullSI, NoPCM.fullSI, PDController.fullSI, Projectile.fullSI, SglPend.fullSI, SSP.fullSI, SWHS.fullSI]
 
 -- To developer: Fill this list in when more examples can run code. The list
@@ -62,7 +62,7 @@ allExampleChoices :: [[Choices]]
 allExampleChoices = [[DblPend.choices], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.codeChoices], Projectile.choiceCombos, [], [], []]
 
 -- | Combine system info, description, choices, and file paths into one nice package.
-allExamples :: [SystemInformation] -> [[Choices]] -> FilePath -> FilePath -> [Example]
+allExamples :: [System] -> [[Choices]] -> FilePath -> FilePath -> [Example]
 allExamples si choi srsP doxP = zipWith (\x y -> E x y srsP doxP) si choi
 
 -- | Calls 'allExamples' on 'allExampleSI', 'allExampleDesc', and 'allExampleChoices'.

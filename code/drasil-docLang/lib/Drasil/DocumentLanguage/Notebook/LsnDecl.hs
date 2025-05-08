@@ -4,7 +4,7 @@ module Drasil.DocumentLanguage.Notebook.LsnDecl where
 import qualified Drasil.DocumentLanguage.Notebook.Core as NB (LsnDesc, LsnChapter(..), 
   Intro(..), LearnObj(..), Review(..), CaseProb(..), Example(..), Smmry(..), Apndx(..))
 
-import SysInfo.Drasil (SystemInformation)
+import SysInfo.Drasil (System)
 
 -- * Types
 
@@ -24,7 +24,7 @@ data LsnChapter = Intro NB.Intro
 -- * Functions
 
 -- | Creates the lesson description (translates 'LsnDecl' into a more usable form for generating documents).
-mkLsnDesc :: SystemInformation -> LsnDecl -> NB.LsnDesc
+mkLsnDesc :: System -> LsnDecl -> NB.LsnDesc
 mkLsnDesc _ = map sec where
   sec :: LsnChapter -> NB.LsnChapter
   sec (Intro i)     = NB.Intro i

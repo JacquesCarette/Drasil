@@ -42,7 +42,7 @@ mkNB = [
   BibSec
   ]
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = projectileMotion,
   _kind        = Doc.notebook,

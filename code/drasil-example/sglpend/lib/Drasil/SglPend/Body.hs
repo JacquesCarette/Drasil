@@ -49,7 +49,7 @@ import Drasil.SglPend.Requirements (funcReqs)
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
@@ -105,7 +105,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
 progName :: CI
 progName = commonIdeaWithDict "sglPendulum" (pn "Single Pendulum") "SglPend" [physics]
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = progName, 
   _kind        = Doc.srs,

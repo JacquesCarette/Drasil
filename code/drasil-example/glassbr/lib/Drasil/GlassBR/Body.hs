@@ -51,13 +51,13 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = glassBR,
   _kind        = Doc.srs,

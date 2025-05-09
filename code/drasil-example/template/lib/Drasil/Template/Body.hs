@@ -7,7 +7,7 @@ module Drasil.Template.Body where
 
 import Language.Drasil
 import Drasil.SRSDocument
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel, tmNoRefs, equationalModel')
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel, tmNoRefs, equationalModel', imNoDerivNoRefs)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import Data.Drasil.Concepts.Computation (inValue, algorithm)
@@ -22,6 +22,8 @@ import Data.Drasil.Citations
 import Drasil.DocumentLanguage.TraceabilityGraph
 import Drasil.DocLang (tunitNone)
 import Language.Drasil.ShortHands (cP, lP, cS, cD, cL, lL, lM, lS, lB, cA)
+import Data.Drasil.Constraints (gtZeroConstr)
+import Theory.Drasil (qwC, Theory ())
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -31,6 +33,9 @@ fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
+
+stdFields :: Fields
+stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -64,10 +69,10 @@ mkSRS = [TableOfContents,
       ] -- This adds a goals section and goals input is defined for the preample of the goal.
       , SSDSolChSpec $ SCSProg
         [ Assumptions
-        , TMs [] []
+        , TMs [] (Label : stdFields)
         , GDs [] [] HideDerivation
         , DDs [] [] HideDerivation
-        , IMs [] [] HideDerivation
+        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) HideDerivation
         , Constraints EmptyS ([] :: [UncertQ])
         , CorrSolnPpties ([] :: [UncertQ]) []
 
@@ -95,7 +100,7 @@ si = SI {
   _motivation  = [],
   _scope       = [],
   _quants      = [] :: [QuantityDict],
-  _instModels  = [] :: [InstanceModel],
+  _instModels  = instanceModels, -- Surprisingly, putting this here is not what triggers it to get rendered.
   _datadefs    = [] :: [DataDefinition],
   _configFiles = [],
   _inputs      = [] :: [QuantityDict],
@@ -106,13 +111,38 @@ si = SI {
   _usedinfodb  = usedDB
 }
 
+quantities :: [QuantityDict]
+quantities = [
+    equilibriumQ, priceQ, supplyQ, demandQ,  -- abstract variables
+    applePriceQ, linearSupplyQ, linearDemandQ, -- linear variables
+    mSQ, mDQ, bSQ, bDQ, equilibriumApplePriceLinearSDQ
+  ]
+
+instanceModels :: [InstanceModel]
+instanceModels = [equilibriumPriceLinearSDQIM]
+
+theoryModels :: [TheoryModel]
+theoryModels = [equilibriumTM]
+
+-- our theories are only rendered because they are added to this chunkDB, which is a problem.
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [QuantityDict]) (nw progName : nw inValue : [nw errMsg, 
-  nw program] ++ map nw doccon ++ map nw doccon' ++ [nw algorithm] ++ 
-  map nw prodtcon ++ map nw mathcon) srsDomains
-  ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
-  ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  ([] :: [LabelledContent]) ([] :: [Reference]) citations
+symbMap = cdb
+  quantities
+  ideaDicts
+  srsDomains
+  ([] :: [UnitDefn])
+  ([] :: [DataDefinition])
+  instanceModels
+  ([] :: [GenDefn])
+  theoryModels
+  ([] :: [ConceptInstance])
+  ([] :: [LabelledContent])
+  ([] :: [Reference])
+  citations
+  where
+    originalIdeaDicts = nw progName : nw inValue : [nw errMsg, nw program] ++ map nw doccon ++ map nw doccon' ++ [nw algorithm] ++ map nw prodtcon ++ map nw mathcon
+    addedIdeaDicts = map nw quantities
+    ideaDicts = originalIdeaDicts ++ addedIdeaDicts
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
@@ -176,7 +206,7 @@ priceQ = mkQuant'
   Nothing -- Abbreviation
 
 supply :: IdeaDict
-supply = nc "supply" $ cnIES "supply" 
+supply = nc "supply" $ cnIES "supply"
 
 supplyQ :: QuantityDict
 supplyQ = mkQuant'
@@ -188,7 +218,7 @@ supplyQ = mkQuant'
   Nothing -- Abbreviation
 
 demand :: IdeaDict
-demand = nc "demand" $ cnIES "demand" 
+demand = nc "demand" $ cnIES "demand"
 
 demandQ :: QuantityDict
 demandQ = mkQuant'
@@ -292,12 +322,20 @@ equilibriumApplePriceLinearSDQ = mkQuant'
   (autoStage $ sub lP $ label "A,Eq") -- Hack because of lack of support for symbol "corners" in Drasil.
   Nothing -- Abbreviation
 
-equilibriumPriceLinearSDQD :: QDefinition Expr
-equilibriumPriceLinearSDQD = mkQuantDef equilibriumApplePriceLinearSDQ $
+equilibriumApplePriceLinearSDQD :: QDefinition Expr
+equilibriumApplePriceLinearSDQD = mkQuantDef equilibriumApplePriceLinearSDQ $
   (sy bDQ $- sy bSQ) $/ (sy mSQ $- sy mDQ)
 
 equilibriumPriceLinearSDQIM :: InstanceModel
-equilibriumPriceLinearSDQIM = _
+equilibriumPriceLinearSDQIM = imNoDerivNoRefs
+  (equationalModel' equilibriumApplePriceLinearSDQD)
+  [] -- Inputs -- What are they? Why is this only here and not in the TM?
+  equilibriumApplePriceLinearSDQ -- Output -- not everything will have an output!
+  [UpFrom (Exc, int 0)] -- Output constraints: price > 0 -- why can't I put gtZerConstr
+  "equilibriumApplePriceIM"
+  [] -- Notes ([Sentence])
+
+
 
 {-------------------------------------------------------------------------------
 - Equilibrium (Physics)

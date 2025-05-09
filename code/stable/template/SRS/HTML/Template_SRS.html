@@ -122,7 +122,61 @@
           <div class="subsection">
             <h2>Table of Symbols</h2>
             <p class="paragraph">There are no symbols.</p>
-            <p class="paragraph"></p>
+            <div id="Table:ToS">
+              <table class="table">
+                <tr>
+                  <th>Symbol</th>
+                  <th>Description</th>
+                  <th>Units</th>
+                </tr>
+                <tr>
+                  <td><em>b<sub>D</sub></em></td>
+                  <td>bd</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>b<sub>S</sub></em></td>
+                  <td>bs</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>D</em></td>
+                  <td>Demand</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>inEquilibrium</em></td>
+                  <td>In equilibrium</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>m<sub>D</sub></em></td>
+                  <td>md</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>m<sub>S</sub></em></td>
+                  <td>ms</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>P</em></td>
+                  <td>Price</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>p<sub>A,Eq</sub></em></td>
+                  <td>Equilibrium apple price</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>S</em></td>
+                  <td>Supply</td>
+                  <td>--</td>
+                </tr>
+              </table>
+              <p class="caption">Table of Symbols</p>
+            </div>
           </div>
         </div>
         <div id="Sec:TAbbAcc">
@@ -249,7 +303,52 @@
             <div id="Sec:TMs">
               <div class="subsubsection">
                 <h3>Theoretical Models</h3>
-                <p class="paragraph">There are no theoretical models.</p>
+                <p class="paragraph">
+                  This section focuses on the general equations and laws that ProgName is based on.
+                </p>
+                <div id="TM:equilibriumTM">
+                  <table class="tdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>TM:equilibriumTM</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">In equilibrium</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[\text{inEquilibrium}=S\left(P\right)=D\left(P\right)\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>inEquilibrium</em> is the in equilibrium (Unitless)</li>
+                          <li><em>S</em> is the supply (Unitless)</li>
+                          <li><em>P</em> is the price (Unitless)</li>
+                          <li><em>D</em> is the demand (Unitless)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          Equilibrium occurs when the supply and demand curves intersect at current price.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"></p></td>
+                    </tr>
+                  </table>
+                </div>
               </div>
             </div>
             <div id="Sec:GDs">
@@ -267,7 +366,65 @@
             <div id="Sec:IMs">
               <div class="subsubsection">
                 <h3>Instance Models</h3>
-                <p class="paragraph">There are no instance models.</p>
+                <p class="paragraph">
+                  This section transforms the problem defined in the <a href=#Sec:ProbDesc>problem description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in the <a href=#Sec:DDs>data definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>theoretical models</a> and <a href=#Sec:GDs>general definitions</a>.
+                </p>
+                <div id="IM:equilibriumApplePriceIM">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:equilibriumApplePriceIM</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Equilibrium apple price</p></td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td><p class="paragraph"></p></td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>p<sub>A,Eq</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td>\[{p_{\text{A,Eq}}}\gt{}0\]</td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[{p_{\text{A,Eq}}}=\frac{{b_{D}}-{b_{S}}}{{m_{S}}-{m_{D}}}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>p<sub>A,Eq</sub></em> is the equilibrium apple price (Unitless)
+                          </li>
+                          <li><em>b<sub>D</sub></em> is the bd (Unitless)</li>
+                          <li><em>b<sub>S</sub></em> is the bs (Unitless)</li>
+                          <li><em>m<sub>S</sub></em> is the ms (Unitless)</li>
+                          <li><em>m<sub>D</sub></em> is the md (Unitless)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"></p></td>
+                    </tr>
+                  </table>
+                </div>
               </div>
             </div>
             <div id="Sec:DataConstraints">
@@ -324,8 +481,87 @@
       <div class="section">
         <h1>Traceability Matrices and Graphs</h1>
         <p class="paragraph">
-          There are no traceability matrices or traceability graphs.
+          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. <a href=#Table:TraceMatRefvsRef>Tab:TraceMatRefvsRef</a> shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other.
         </p>
+        <div id="Table:TraceMatRefvsRef">
+          <table class="table">
+            <tr>
+              <th></th>
+              <th><a href=#TM:equilibriumTM>TM:equilibriumTM</a></th>
+              <th>
+                <a href=#IM:equilibriumApplePriceIM>IM:equilibriumApplePriceIM</a>
+              </th>
+            </tr>
+            <tr>
+              <td><a href=#TM:equilibriumTM>TM:equilibriumTM</a></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <a href=#IM:equilibriumApplePriceIM>IM:equilibriumApplePriceIM</a>
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+          <p class="caption">
+            Traceability Matrix Showing the Connections Between Items and Other Sections
+          </p>
+        </div>
+        <p class="paragraph">
+          The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TraceGraphAvsA>Fig:TraceGraphAvsA</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. <a href=#Figure:TraceGraphAvsAll>Fig:TraceGraphAvsAll</a> shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
+        </p>
+        <div id="Figure:TraceGraphAvsA">
+          <figure>
+            <img src="../../../../traceygraphs/progname/avsa.svg" alt="TraceGraphAvsA" >
+            <figcaption>Figure: TraceGraphAvsA</figcaption>
+          </figure>
+        </div>
+        <div id="Figure:TraceGraphAvsAll">
+          <figure>
+            <img src="../../../../traceygraphs/progname/avsall.svg" alt="TraceGraphAvsAll" >
+            <figcaption>Figure: TraceGraphAvsAll</figcaption>
+          </figure>
+        </div>
+        <div id="Figure:TraceGraphRefvsRef">
+          <figure>
+            <img src="../../../../traceygraphs/progname/refvsref.svg" alt="TraceGraphRefvsRef" >
+            <figcaption>Figure: TraceGraphRefvsRef</figcaption>
+          </figure>
+        </div>
+        <div id="Figure:TraceGraphAllvsR">
+          <figure>
+            <img src="../../../../traceygraphs/progname/allvsr.svg" alt="TraceGraphAllvsR" >
+            <figcaption>Figure: TraceGraphAllvsR</figcaption>
+          </figure>
+        </div>
+        <div id="Figure:TraceGraphAllvsAll">
+          <figure>
+            <img src="../../../../traceygraphs/progname/allvsall.svg" alt="TraceGraphAllvsAll" >
+            <figcaption>Figure: TraceGraphAllvsAll</figcaption>
+          </figure>
+        </div>
+        <p class="paragraph">
+          For convenience, the following graphs can be found at the links below:
+        </p>
+        <ul class="list">
+          <li>
+            <a href="../../../../traceygraphs/progname/avsa.svg">TraceGraphAvsA</a>
+          </li>
+          <li>
+            <a href="../../../../traceygraphs/progname/avsall.svg">TraceGraphAvsAll</a>
+          </li>
+          <li>
+            <a href="../../../../traceygraphs/progname/refvsref.svg">TraceGraphRefvsRef</a>
+          </li>
+          <li>
+            <a href="../../../../traceygraphs/progname/allvsr.svg">TraceGraphAllvsR</a>
+          </li>
+          <li>
+            <a href="../../../../traceygraphs/progname/allvsall.svg">TraceGraphAllvsAll</a>
+          </li>
+        </ul>
       </div>
     </div>
     <div id="Sec:AuxConstants">

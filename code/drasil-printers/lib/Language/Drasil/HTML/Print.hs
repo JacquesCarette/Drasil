@@ -23,7 +23,7 @@ import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (articleTitle, author, ba, body, bold,
   caption, divTag, em, h, headTag, html, image, li, ol, pa,
   paragraph, reflink, reflinkInfo, reflinkURI, refwrap, sub, sup, table, td,
-  th, title, tr, ul, BibFormatter(..))
+  th, title, tr, ul, dl, dd, descWrap, BibFormatter(..))
 import Language.Drasil.HTML.CSS (linkCSS)
 
 import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
@@ -345,7 +345,7 @@ makeFigure r c f wp = refwrap r (image f c wp)
 
 -- | Renders assumptions, requirements, likely changes.
 makeRefList :: Doc -> Doc -> Doc
-makeRefList l a = li (refwrap l (bold l <> text ": " <> a))
+makeRefList l a = descWrap ["reference-label"] l (brackets $ bold l) $$ dd a
 
 ---------------------
 --HTML bibliography--
@@ -354,7 +354,7 @@ makeRefList l a = li (refwrap l (bold l <> text ": " <> a))
 
 -- | Makes a bilbliography for the document.
 makeBib :: BibRef -> Doc
-makeBib = ul ["hide-list-style"] . vcat .
+makeBib = dl ["reference-list"] . vcat .
   map (uncurry makeRefList . renderCite htmlBibFormatter)
 
 -- | HTML specific bib rendering functions

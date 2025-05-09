@@ -99,7 +99,7 @@ si = SI {
   _purpose     = [],
   _motivation  = [],
   _scope       = [],
-  _quants      = [] :: [QuantityDict],
+  _quants      = quantities, -- Odd: The Table of Symbols is mostly filled without this list!!!! Also, even though the table of symbols is being filled in, there is text "There are no symbols." placed above the table!
   _instModels  = instanceModels, -- Surprisingly, putting this here is not what triggers it to get rendered.
   _datadefs    = dataDefinitions, -- ^
   _configFiles = [],
@@ -183,6 +183,9 @@ authorName = person "Author" "Name"
 equilibrium :: IdeaDict
 equilibrium = nc "equilibrium" $ nounPhrase "equilibrium" "equilibria"
 
+-- There is a generic copy between economics and physics, but we won't bother
+-- with that.
+
 {-------------------------------------------------------------------------------
 - Equilibrium (Economics)
 -------------------------------------------------------------------------------}
@@ -196,7 +199,7 @@ equilibriumQ = mkQuant' -- A somewhat odd variant of `mkQuant` that re-orders ar
   (autoStage $ label "inEquilibrium")
   Nothing -- "abbreviation String"
 
-price :: IdeaDict
+price :: IdeaDict -- I guess making this is completely unnecessary because the QuantityDict will make its own.
 price = nc "price" $ cn "price"
 
 priceQ :: QuantityDict
@@ -261,7 +264,7 @@ applePriceQ = mkQuant'
 linearSupplyQ :: QuantityDict
 linearSupplyQ = mkQuant'
   "linearSupplyQuant"
-  (cnIES "linear supply")
+  (pn "price-dependant apple supply")
   Nothing -- UnitDefn
   (mkFunction [Real] Integer)
   (autoStage $ sub cS lL)
@@ -270,7 +273,7 @@ linearSupplyQ = mkQuant'
 linearDemandQ :: QuantityDict
 linearDemandQ = mkQuant'
   "linearDemandQuant"
-  (cnIES "linear demand")
+  (pn "price-dependant apple demand")
   Nothing -- UnitDefn
   (mkFunction [Real] Integer)
   (autoStage $ sub cD lL)
@@ -279,28 +282,28 @@ linearDemandQ = mkQuant'
 mSQ, mDQ, bSQ, bDQ :: QuantityDict
 mSQ = mkQuant'
   "ms"
-  (pn "ms") -- proper noun?
+  (pn "marginal apple supply by price") -- proper noun?
   Nothing -- UnitDefn
   Real -- Should be UNITS/DOLLAR
   (autoStage $ sub lM cS)
   Nothing -- Abbreviation
 mDQ = mkQuant'
   "md"
-  (pn "md") -- proper noun?
+  (pn "marginal apple demand by price") -- proper noun?
   Nothing -- UnitDefn
   Real -- Should be UNITS/DOLLAR
   (autoStage $ sub lM cD)
   Nothing -- Abbreviation
 bSQ = mkQuant'
   "bs"
-  (pn "bs") -- proper noun?
+  (pn "minimum supply of apples") -- proper noun?
   Nothing -- UnitDefn
   Real -- Should be UNITS
   (autoStage $ sub lB cS)
   Nothing -- Abbreviation
 bDQ = mkQuant'
   "bd"
-  (pn "bd") -- proper noun?
+  (pn "maximum demand of apples") -- proper noun?
   Nothing -- UnitDefn
   Real -- Should be UNITS
   (autoStage $ sub lB cD)
@@ -351,8 +354,6 @@ equilibriumPriceLinearSDQIM = imNoDerivNoRefs
   [UpFrom (Exc, int 0)] -- Output constraints: price > 0 -- why can't I put gtZerConstr
   "equilibriumApplePriceIM"
   [] -- Notes ([Sentence])
-
-
 
 {-------------------------------------------------------------------------------
 - Equilibrium (Physics)

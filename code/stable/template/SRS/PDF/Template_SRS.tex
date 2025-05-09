@@ -52,17 +52,17 @@ There are no symbols.
 {colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
-${b_{D}}$ & bd & --
+${b_{D}}$ & maximum demand of apples & --
 \\
-${b_{S}}$ & bs & --
+${b_{S}}$ & minimum supply of apples & --
 \\
 $D$ & Demand & --
 \\
 $\text{inEquilibrium}$ & In equilibrium & --
 \\
-${m_{D}}$ & md & --
+${m_{D}}$ & marginal apple demand by price & --
 \\
-${m_{S}}$ & ms & --
+${m_{S}}$ & marginal apple supply by price & --
 \\
 $P$ & Price & --
 \\
@@ -72,7 +72,7 @@ ${p_{\text{A,Eq}}}$ & Equilibrium apple price & --
 \\
 $S$ & Supply & --
 \\
-${S_{l}}$ & Linear supply & --
+${S_{l}}$ & price-dependant apple supply & --
 \label{Table:ToS}
 \end{longtblr}
 \subsection{Abbreviations and Acronyms}
@@ -202,7 +202,7 @@ This section collects and defines all the data needed to build the instance mode
 \phantomsection 
 \label{DD:linearDemandDD}
 \\ \midrule
-Label & Linear supply
+Label & price-dependant apple supply
         
 \\ \midrule
 Equation & \begin{displaymath}
@@ -210,10 +210,10 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
-              \item{${S_{l}}$ is the linear supply (Unitless)}
-              \item{${m_{S}}$ is the ms (Unitless)}
+              \item{${S_{l}}$ is the price-dependant apple supply (Unitless)}
+              \item{${m_{S}}$ is the marginal apple supply by price (Unitless)}
               \item{${p_{A}}$ is the apple price (Unitless)}
-              \item{${b_{S}}$ is the bs (Unitless)}
+              \item{${b_{S}}$ is the minimum supply of apples (Unitless)}
               \end{symbDescription}
 \\ \midrule
 Source & --
@@ -256,10 +256,10 @@ Equation & \begin{displaymath}
 \\ \midrule
 Description & \begin{symbDescription}
               \item{${p_{\text{A,Eq}}}$ is the equilibrium apple price (Unitless)}
-              \item{${b_{D}}$ is the bd (Unitless)}
-              \item{${b_{S}}$ is the bs (Unitless)}
-              \item{${m_{S}}$ is the ms (Unitless)}
-              \item{${m_{D}}$ is the md (Unitless)}
+              \item{${b_{D}}$ is the maximum demand of apples (Unitless)}
+              \item{${b_{S}}$ is the minimum supply of apples (Unitless)}
+              \item{${m_{S}}$ is the marginal apple supply by price (Unitless)}
+              \item{${m_{D}}$ is the marginal apple demand by price (Unitless)}
               \end{symbDescription}
 \\ \midrule
 Source & --

@@ -7,7 +7,7 @@ module Drasil.Template.Body where
 
 import Language.Drasil
 import Drasil.SRSDocument
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel, tmNoRefs, equationalModel', imNoDerivNoRefs)
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel, tmNoRefs, equationalModel', imNoDerivNoRefs, ddENoRefs)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import Data.Drasil.Concepts.Computation (inValue, algorithm)
@@ -23,7 +23,7 @@ import Drasil.DocumentLanguage.TraceabilityGraph
 import Drasil.DocLang (tunitNone)
 import Language.Drasil.ShortHands (cP, lP, cS, cD, cL, lL, lM, lS, lB, cA)
 import Data.Drasil.Constraints (gtZeroConstr)
-import Theory.Drasil (qwC, Theory ())
+import Theory.Drasil (qwC, Theory (), ddE)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -71,7 +71,7 @@ mkSRS = [TableOfContents,
         [ Assumptions
         , TMs [] (Label : stdFields)
         , GDs [] [] HideDerivation
-        , DDs [] [] HideDerivation
+        , DDs [] (Label : stdFields) HideDerivation
         , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) HideDerivation
         , Constraints EmptyS ([] :: [UncertQ])
         , CorrSolnPpties ([] :: [UncertQ]) []
@@ -101,7 +101,7 @@ si = SI {
   _scope       = [],
   _quants      = [] :: [QuantityDict],
   _instModels  = instanceModels, -- Surprisingly, putting this here is not what triggers it to get rendered.
-  _datadefs    = [] :: [DataDefinition],
+  _datadefs    = dataDefinitions, -- ^
   _configFiles = [],
   _inputs      = [] :: [QuantityDict],
   _outputs     = [] :: [QuantityDict],
@@ -118,6 +118,9 @@ quantities = [
     mSQ, mDQ, bSQ, bDQ, equilibriumApplePriceLinearSDQ
   ]
 
+dataDefinitions :: [DataDefinition]
+dataDefinitions = [linearSupplyDD, linearDemandDD]
+
 instanceModels :: [InstanceModel]
 instanceModels = [equilibriumPriceLinearSDQIM]
 
@@ -131,7 +134,7 @@ symbMap = cdb
   ideaDicts
   srsDomains
   ([] :: [UnitDefn])
-  ([] :: [DataDefinition])
+  dataDefinitions
   instanceModels
   ([] :: [GenDefn])
   theoryModels
@@ -310,8 +313,22 @@ linearSupplyQD = mkQuantDef linearSupplyQ $ sy mSQ $* sy applePriceQ $+ sy bSQ
 -- 'concrete' variables (i.e., problem-related variables, not the abstract ones
 -- imported from the hypothetical library that would contain equilibrium)
 
+linearSupplyDD :: DataDefinition
+linearSupplyDD = ddENoRefs
+  linearSupplyQD
+  Nothing -- Derivation
+  "linearSupplyDD" -- "ShortName"
+  [] -- Notes
+
 linearDemandQD :: QDefinition Expr
 linearDemandQD = mkQuantDef linearDemandQ $ sy mDQ $* sy applePriceQ $+ sy bDQ
+
+linearDemandDD :: DataDefinition
+linearDemandDD = ddENoRefs
+  linearSupplyQD
+  Nothing -- Derivation
+  "linearDemandDD" -- "ShortName"
+  [] -- Notes
 
 equilibriumApplePriceLinearSDQ :: QuantityDict
 equilibriumApplePriceLinearSDQ = mkQuant'

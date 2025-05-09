@@ -66,9 +66,13 @@ ${m_{S}}$ & ms & --
 \\
 $P$ & Price & --
 \\
+${p_{A}}$ & Apple price & --
+\\
 ${p_{\text{A,Eq}}}$ & Equilibrium apple price & --
 \\
 $S$ & Supply & --
+\\
+${S_{l}}$ & Linear supply & --
 \label{Table:ToS}
 \end{longtblr}
 \subsection{Abbreviations and Acronyms}
@@ -188,7 +192,37 @@ There are no general definitions.
 
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
-There are no data definitions.
+This section collects and defines all the data needed to build the instance models.
+
+\medskip
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:linearDemandDD}
+\phantomsection 
+\label{DD:linearDemandDD}
+\\ \midrule
+Label & Linear supply
+        
+\\ \midrule
+Equation & \begin{displaymath}
+           \resizeExpression{{S_{l}}={m_{S}}\,{p_{A}}+{b_{S}}}
+           \end{displaymath}
+\\ \midrule
+Description & \begin{symbDescription}
+              \item{${S_{l}}$ is the linear supply (Unitless)}
+              \item{${m_{S}}$ is the ms (Unitless)}
+              \item{${p_{A}}$ is the apple price (Unitless)}
+              \item{${b_{S}}$ is the bs (Unitless)}
+              \end{symbDescription}
+\\ \midrule
+Source & --
+         
+\\ \midrule
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
 
 \subsubsection{Instance Models}
 \label{Sec:IMs}
@@ -270,12 +304,14 @@ The purpose of the traceability matrices is to provide easy references on what h
 
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Items and Other Sections}]
-{colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[TM:equilibriumTM]{TM:equilibriumTM}} & \textbf{\hyperref[IM:equilibriumApplePriceIM]{IM:equilibriumApplePriceIM}}
+{colspec={l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{} & \textbf{\hyperref[DD:linearDemandDD]{DD:linearDemandDD}} & \textbf{\hyperref[TM:equilibriumTM]{TM:equilibriumTM}} & \textbf{\hyperref[IM:equilibriumApplePriceIM]{IM:equilibriumApplePriceIM}}
 \\
-\hyperref[TM:equilibriumTM]{TM:equilibriumTM} &  & 
+\hyperref[DD:linearDemandDD]{DD:linearDemandDD} &  &  & 
 \\
-\hyperref[IM:equilibriumApplePriceIM]{IM:equilibriumApplePriceIM} &  & 
+\hyperref[TM:equilibriumTM]{TM:equilibriumTM} &  &  & 
+\\
+\hyperref[IM:equilibriumApplePriceIM]{IM:equilibriumApplePriceIM} &  &  & 
 \label{Table:TraceMatRefvsRef}
 \end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.

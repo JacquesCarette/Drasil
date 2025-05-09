@@ -165,6 +165,11 @@
                   <td>--</td>
                 </tr>
                 <tr>
+                  <td><em>p<sub>A</sub></em></td>
+                  <td>Apple price</td>
+                  <td>--</td>
+                </tr>
+                <tr>
                   <td><em>p<sub>A,Eq</sub></em></td>
                   <td>Equilibrium apple price</td>
                   <td>--</td>
@@ -172,6 +177,11 @@
                 <tr>
                   <td><em>S</em></td>
                   <td>Supply</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>S<sub>l</sub></em></td>
+                  <td>Linear supply</td>
                   <td>--</td>
                 </tr>
               </table>
@@ -360,7 +370,44 @@
             <div id="Sec:DDs">
               <div class="subsubsection">
                 <h3>Data Definitions</h3>
-                <p class="paragraph">There are no data definitions.</p>
+                <p class="paragraph">
+                  This section collects and defines all the data needed to build the instance models.
+                </p>
+                <div id="DD:linearDemandDD">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:linearDemandDD</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Linear supply</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[{S_{l}}={m_{S}}\,{p_{A}}+{b_{S}}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>S<sub>l</sub></em> is the linear supply (Unitless)</li>
+                          <li><em>m<sub>S</sub></em> is the ms (Unitless)</li>
+                          <li><em>p<sub>A</sub></em> is the apple price (Unitless)</li>
+                          <li><em>b<sub>S</sub></em> is the bs (Unitless)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"></p></td>
+                    </tr>
+                  </table>
+                </div>
               </div>
             </div>
             <div id="Sec:IMs">
@@ -487,13 +534,21 @@
           <table class="table">
             <tr>
               <th></th>
+              <th><a href=#DD:linearDemandDD>DD:linearDemandDD</a></th>
               <th><a href=#TM:equilibriumTM>TM:equilibriumTM</a></th>
               <th>
                 <a href=#IM:equilibriumApplePriceIM>IM:equilibriumApplePriceIM</a>
               </th>
             </tr>
             <tr>
+              <td><a href=#DD:linearDemandDD>DD:linearDemandDD</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td><a href=#TM:equilibriumTM>TM:equilibriumTM</a></td>
+              <td></td>
               <td></td>
               <td></td>
             </tr>
@@ -501,6 +556,7 @@
               <td>
                 <a href=#IM:equilibriumApplePriceIM>IM:equilibriumApplePriceIM</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
             </tr>

@@ -4,10 +4,11 @@ The purpose of the traceability matrices is to provide easy references on what h
 
 <div id="Table:TraceMatRefvsRef"></div>
 
-|                                                                    |[TM:equilibriumTM](./SecTMs.md#TM:equilibriumTM)|[IM:equilibriumApplePriceIM](./SecIMs.md#IM:equilibriumApplePriceIM)|
-|:-------------------------------------------------------------------|:-----------------------------------------------|:-------------------------------------------------------------------|
-|[TM:equilibriumTM](./SecTMs.md#TM:equilibriumTM)                    |                                                |                                                                    |
-|[IM:equilibriumApplePriceIM](./SecIMs.md#IM:equilibriumApplePriceIM)|                                                |                                                                    |
+|                                                                    |[DD:linearDemandDD](./SecDDs.md#DD:linearDemandDD)|[TM:equilibriumTM](./SecTMs.md#TM:equilibriumTM)|[IM:equilibriumApplePriceIM](./SecIMs.md#IM:equilibriumApplePriceIM)|
+|:-------------------------------------------------------------------|:-------------------------------------------------|:-----------------------------------------------|:-------------------------------------------------------------------|
+|[DD:linearDemandDD](./SecDDs.md#DD:linearDemandDD)                  |                                                  |                                                |                                                                    |
+|[TM:equilibriumTM](./SecTMs.md#TM:equilibriumTM)                    |                                                  |                                                |                                                                    |
+|[IM:equilibriumApplePriceIM](./SecIMs.md#IM:equilibriumApplePriceIM)|                                                  |                                                |                                                                    |
 
 **<p align="center">Traceability Matrix Showing the Connections Between Items and Other Sections</p>**
 

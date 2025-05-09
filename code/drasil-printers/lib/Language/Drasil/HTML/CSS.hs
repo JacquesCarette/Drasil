@@ -133,8 +133,8 @@ makeCSS _ = vcat [
     ],
   vcat [
     text "dd {",
-    text " margin: 0;}"
-  ]
+    text "  margin: 0;}"
+    ]
   ]
 
 -- | Create the link to the necessary CSS file.

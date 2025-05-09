@@ -9,6 +9,7 @@ There are no symbols.
 |\\({b\_{D}}\\)            |maximum demand of apples      |--   |
 |\\({b\_{S}}\\)            |minimum supply of apples      |--   |
 |\\(D\\)                   |Demand                        |--   |
+|\\({D\_{l}}\\)            |price-dependant apple demand  |--   |
 |\\(\text{inEquilibrium}\\)|In equilibrium                |--   |
 |\\({m\_{D}}\\)            |marginal apple demand by price|--   |
 |\\({m\_{S}}\\)            |marginal apple supply by price|--   |

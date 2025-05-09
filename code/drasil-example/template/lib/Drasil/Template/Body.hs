@@ -7,7 +7,15 @@ module Drasil.Template.Body where
 
 import Language.Drasil
 import Drasil.SRSDocument
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel, tmNoRefs, equationalModel', imNoDerivNoRefs, ddENoRefs)
+import Theory.Drasil
+    ( DataDefinition,
+      GenDefn,
+      InstanceModel,
+      TheoryModel,
+      tmNoRefs,
+      equationalModel',
+      imNoDerivNoRefs,
+      ddENoRefs )
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import Data.Drasil.Concepts.Computation (inValue, algorithm)
@@ -21,9 +29,7 @@ import Data.Drasil.TheoryConcepts
 import Data.Drasil.Citations
 import Drasil.DocumentLanguage.TraceabilityGraph
 import Drasil.DocLang (tunitNone)
-import Language.Drasil.ShortHands (cP, lP, cS, cD, cL, lL, lM, lS, lB, cA)
-import Data.Drasil.Constraints (gtZeroConstr)
-import Theory.Drasil (qwC, Theory (), ddE)
+import Language.Drasil.ShortHands (cP, lP, cS, cD, lL, lM, lB, cA)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -114,7 +120,7 @@ si = SI {
 quantities :: [QuantityDict]
 quantities = [
     equilibriumQ, priceQ, supplyQ, demandQ,  -- abstract variables
-    applePriceQ, linearSupplyQ, linearDemandQ, -- linear variables
+    applePriceQ, linearSupplyQ, linearDemandQ, -- concrete variables
     mSQ, mDQ, bSQ, bDQ, equilibriumApplePriceLinearSDQ
   ]
 
@@ -214,12 +220,15 @@ priceQ = mkQuant'
 supply :: IdeaDict
 supply = nc "supply" $ cnIES "supply"
 
+supplyDemandFuncSpace :: Space
+supplyDemandFuncSpace = mkFunction [Real] Integer -- Real should be Dollar, output should be strictly non-negative integers (Z^+)
+
 supplyQ :: QuantityDict
 supplyQ = mkQuant'
   "supplyQuant"
   (cnIES "supply")
   Nothing -- UnitDefn -- Should units be a part of expressions? Supply is a function, so it doesn't have a unit. However, the output of the function should have a unit. The input of the function should have units as well.
-  (mkFunction [Real] Integer) -- Real should be Dollar, output should be Strictly non-negative Integer (Z^+)
+  supplyDemandFuncSpace
   (autoStage cS)
   Nothing -- Abbreviation
 
@@ -230,8 +239,8 @@ demandQ :: QuantityDict
 demandQ = mkQuant'
   "demandQuant"
   (cnIES "demand")
-  Nothing -- UnitDefn -- Should units be a part of expressions? Supply is a function, so it doesn't have a unit. However, the output of the function should have a unit.
-  (mkFunction [Real] Integer) -- Real should be Dollar, output should be Strictly non-negative Integer (Z^+)
+  Nothing -- UnitDefn
+  supplyDemandFuncSpace
   (autoStage cD)
   Nothing -- Abbreviation
 
@@ -310,7 +319,8 @@ bDQ = mkQuant'
   Nothing -- Abbreviation
 
 linearSupplyQD :: QDefinition Expr
-linearSupplyQD = mkQuantDef linearSupplyQ $ sy mSQ $* sy applePriceQ $+ sy bSQ
+-- TODO: Missing "Real -> Integer" truncation function for the below function
+linearSupplyQD = mkFuncDefByQ linearSupplyQ [applePriceQ] $ sy mSQ $* sy applePriceQ $+ sy bSQ
 -- ^ I'm deliberately choosing to use applePrice here because I want to use this
 -- in an instance model, which (I believe) should mean that there are only
 -- 'concrete' variables (i.e., problem-related variables, not the abstract ones
@@ -324,7 +334,7 @@ linearSupplyDD = ddENoRefs
   [] -- Notes
 
 linearDemandQD :: QDefinition Expr
-linearDemandQD = mkQuantDef linearDemandQ $ sy mDQ $* sy applePriceQ $+ sy bDQ
+linearDemandQD = mkFuncDefByQ linearDemandQ [applePriceQ] $ sy mDQ $* sy applePriceQ $+ sy bDQ
 
 linearDemandDD :: DataDefinition
 linearDemandDD = ddENoRefs

@@ -470,6 +470,9 @@ pa :: Doc -> Doc
 -- | Bring attention to element wrapper.
 ba :: Doc -> Doc
 
+-- | Description wrapper
+dd :: Doc -> Doc
+
 -- | Ordered list tag wrapper.
 ol :: [String] -> Doc -> Doc
 
@@ -478,6 +481,9 @@ ul :: [String] -> Doc -> Doc
 
 -- | Table tag wrapper.
 table :: [String] -> Doc -> Doc
+
+-- | Description list wrapper
+dl :: [String] -> Doc -> Doc
 
 -- | Image tag wrapper.
 img :: [(String, Doc)] -> Doc
@@ -523,6 +529,7 @@ wrapInside :: String -> [(String, Doc)] -> Doc
 
 -- | Helper for setting up captions.
 caption :: Doc -> Doc
+descWrap :: [String] -> Doc -> Doc -> Doc
 
 -- | Helper for wrapping divisions or sections.
 refwrap :: Doc -> Doc -> Doc

@@ -332,23 +332,50 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span id="line-125"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;padding: 0;}&quot;</span></span><span>
-</span><span id="line-126"></span><span>    </span><span class="hs-special">]</span><span> </span><span>
-</span><span id="line-127"></span><span>  </span><span class="hs-special">]</span><span>
-</span><span id="line-128"></span><span>
-</span><span id="line-129"></span><span class="annot"><span class="hs-comment">-- | Create the link to the necessary CSS file.</span></span><span>
-</span><span id="line-130"></span><span class="annot"><a href="Language.Drasil.HTML.CSS.html#linkCSS"><span class="hs-identifier hs-type">linkCSS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>  </span><span>
-</span><span id="line-131"></span><span id="linkCSS"><span class="annot"><span class="annottext">linkCSS :: String -&gt; Doc
-</span><a href="Language.Drasil.HTML.CSS.html#linkCSS"><span class="hs-identifier hs-var hs-var">linkCSS</span></a></span></span><span> </span><span id="local-6989586621679121008"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679121008"><span class="hs-identifier hs-var">fn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
-</span><span id="line-132"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span id="line-126"></span><span>    </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-127"></span><span>  </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-128"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;dl.reference-list {&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-129"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;  display: grid;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-130"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;  grid-template-columns: auto 1fr;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-131"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;  gap: 20px;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-132"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;  align-items: start;}&quot;</span></span><span>
+</span><span id="line-133"></span><span>    </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-134"></span><span>  </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-135"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;dd {&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-136"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;  margin: 0;}&quot;</span></span><span>
+</span><span id="line-137"></span><span>    </span><span class="hs-special">]</span><span>
+</span><span id="line-138"></span><span>  </span><span class="hs-special">]</span><span>
+</span><span id="line-139"></span><span>
+</span><span id="line-140"></span><span class="annot"><span class="hs-comment">-- | Create the link to the necessary CSS file.</span></span><span>
+</span><span id="line-141"></span><span class="annot"><a href="Language.Drasil.HTML.CSS.html#linkCSS"><span class="hs-identifier hs-type">linkCSS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>  </span><span>
+</span><span id="line-142"></span><span id="linkCSS"><span class="annot"><span class="annottext">linkCSS :: String -&gt; Doc
+</span><a href="Language.Drasil.HTML.CSS.html#linkCSS"><span class="hs-identifier hs-var hs-var">linkCSS</span></a></span></span><span> </span><span id="local-6989586621679121021"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679121021"><span class="hs-identifier hs-var">fn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-143"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Doc) -&gt; String -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&lt;link rel=\&quot;stylesheet\&quot; type=\&quot;text/css\&quot; href=\&quot;&quot;</span></span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679121008"><span class="hs-identifier hs-var">fn</span></a></span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679121021"><span class="hs-identifier hs-var">fn</span></a></span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;.css\&quot;&gt;&quot;</span></span><span>
-</span><span id="line-133"></span></pre></body></html>
+</span><span id="line-144"></span></pre></body></html>

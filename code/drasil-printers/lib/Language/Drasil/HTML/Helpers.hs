@@ -21,7 +21,7 @@ data BibFormatter = BibFormatter {
 }
 
 html, headTag, body, title, paragraph, code, tr, th, td, figure,
-  figcaption, li, pa, ba :: Doc -> Doc
+  figcaption, li, pa, ba, dd :: Doc -> Doc
 -- | HTML tag wrapper.
 html       = wrap "html" []
 -- | Head tag wrapper.
@@ -50,14 +50,18 @@ li         = wrap "li" []
 pa         = wrap "p" []
 -- | Bring attention to element wrapper.
 ba         = wrap "b" []
+-- | Description wrapper
+dd         = wrap "dd" []
 
-ol, ul, table :: [String] -> Doc -> Doc
+ol, ul, table, dl :: [String] -> Doc -> Doc
 -- | Ordered list tag wrapper.
 ol       = wrap "ol"
 -- | Unordered list tag wrapper.
 ul       = wrap "ul"
 -- | Table tag wrapper.
 table    = wrap "table"
+-- | Description list wrapper
+dl       = wrap "dl"
 
 img :: [(String, Doc)] -> Doc
 -- | Image tag wrapper.
@@ -121,6 +125,9 @@ wrapInside t p = text ("<" ++ t ++ " ") <> foldl1 (<>) (map foldStr p) <> text "
 -- | Helper for setting up captions. 
 caption :: Doc -> Doc
 caption = wrap "p" ["caption"]
+
+descWrap :: [String] -> Doc -> Doc -> Doc
+descWrap = flip (wrapGen Class "dt")
 
 -- | Helper for wrapping divisions or sections.
 refwrap :: Doc -> Doc -> Doc

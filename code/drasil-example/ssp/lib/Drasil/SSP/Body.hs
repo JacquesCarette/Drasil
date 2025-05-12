@@ -157,7 +157,7 @@ symbMap = cdb (map qw symbols) (map nw symbols
   ++ map nw defs ++ map nw defs' ++ map nw softwarecon ++ map nw physicCon 
   ++ map nw physicsTMs
   ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
-  ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
+  ++ map nw derived ++ map nw fundamentals ++ map nw educon
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw units)
   (map cw SSP.iMods ++ map cw symbols ++ srsDomains) units SSP.dataDefs SSP.iMods
   generalDefinitions tMods concIns labCon allRefs citations

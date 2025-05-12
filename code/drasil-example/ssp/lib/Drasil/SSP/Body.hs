@@ -152,8 +152,8 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 -- SYMBOL MAP HELPERS --
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) SSP.iMods ++ map qw symbols) (map nw symbols
-  ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw generalDefinitions ++ map nw SSP.iMods
+symbMap = cdb (map qw symbols) (map nw symbols
+  ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw generalDefinitions
   ++ map nw defs ++ map nw defs' ++ map nw softwarecon ++ map nw physicCon 
   ++ map nw physicsTMs
   ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon

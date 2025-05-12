@@ -37,7 +37,7 @@ doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body,
   procedure, prodUCTable, productUC, product_, project, procForAnls,
   propOfCorSol, property, prpsOfDoc, purpose, quantity, realtime, review,
   reference, refMat, reqInput, requirement_, response, result, reviewer,
-  safety, safetyReq, scenario, scope, scpOfReq, scpOfTheProjS, second_,
+  safety, safetyReq, scenario, scope, scpOfReq, scpOfTheProjS,
   section_, simulation, software, softwareConstraint, softwareDoc,
   softwareReq, softwareSys, softwareVAV, softwareVerif, solution,
   solutionCharSpec, solutionCharacteristic, summary, source, specific,
@@ -52,7 +52,7 @@ doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body,
 -- | Collects all documentation-related common ideas (like a concept, but with no definition).
 doccon' :: [CI]
 doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
-  likelyChg, learnObj, mg, mis, notApp, physSyst, requirement, srs, thModel, typUnc, unlikelyChg, notebook]
+  likelyChg, learnObj, mg, mis, notApp, physSyst, thModel, typUnc, unlikelyChg, notebook]
 
 assumption, desSpec, goalStmt, dataConst, likelyChg, learnObj, unlikelyChg, physSyst, requirement, 
   mg, mis, notApp, srs, typUnc, sec, notebook, refBy, refName :: CI

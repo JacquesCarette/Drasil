@@ -17,8 +17,8 @@ import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 ----Acronyms-----
 acronyms :: [CI]
-acronyms = [twoD, threeD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
-  physSyst, requirement, refBy, refName, srs, ssp, thModel, typUnc, unlikelyChg]
+acronyms = [twoD, threeD, dataDefn, genDefn, goalStmt, inModel, likelyChg,
+  physSyst, refBy, refName, srs, thModel, typUnc, unlikelyChg]
 
 ssp :: CI
 ssp = commonIdeaWithDict "ssp" (pn' "Slope Stability analysis Program") "SSP" [civilEng]
@@ -29,7 +29,7 @@ defs = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice,
   stabAnalysis, ssa]
 
 defs' :: [ConceptChunk]
-defs' = [slpSrf, crtSlpSrf, plnStrn, fsConcept, waterTable]
+defs' = [slpSrf, crtSlpSrf, plnStrn, waterTable]
 
 ----Other Common Phrases----
 soil, layer, material, intrslce, slip, slope, slice, stability,

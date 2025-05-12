@@ -130,7 +130,7 @@ descWrap :: [String] -> Doc -> Doc -> Doc
 descWrap = flip (wrapGen Class "dt")
 
 -- | Helper for wrapping divisions or sections.
--- Arguments: Wrapper element typeWrapper element type/tag (e.g., p, div, a), attribute value, body text
+-- Arguments: Wrapper element type/tag (e.g., p, div, a), attribute value, body text
 refwrap' :: String -> Doc -> Doc -> Doc
 refwrap' a = flip (wrapGen Id a) [""]
 

@@ -10,7 +10,6 @@ import Language.Drasil hiding (Expr)
 
 --import Language.Drasil.Document (Document, MaxWidthPercent)
 import Language.Drasil.Printing.AST (Expr, Spec)
-import Data.Maybe (fromMaybe)
 
 -- | Data type that carries functions that vary
 -- for bib printing
@@ -131,10 +130,11 @@ descWrap :: [String] -> Doc -> Doc -> Doc
 descWrap = flip (wrapGen Class "dt")
 
 -- | Helper for wrapping divisions or sections.
+-- | Arguments: Wrapper text, attribute value, body text
 refwrap' :: Maybe String -> Doc -> Doc -> Doc
 refwrap' a = flip (wrapGen Id tag) [""]
   where
-    tag = fromMaybe "div" a
+    tag = maybe "div" id a
 
 refwrap :: Doc -> Doc -> Doc
 refwrap = refwrap' Nothing

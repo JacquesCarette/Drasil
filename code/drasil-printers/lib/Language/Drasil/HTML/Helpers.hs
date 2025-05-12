@@ -10,6 +10,7 @@ import Language.Drasil hiding (Expr)
 
 --import Language.Drasil.Document (Document, MaxWidthPercent)
 import Language.Drasil.Printing.AST (Expr, Spec)
+import Data.Maybe (fromMaybe)
 
 -- | Data type that carries functions that vary
 -- for bib printing
@@ -92,7 +93,7 @@ wrap' a = wrapGen' hcat Class a empty
 -- | Helper for wrapping HTML tags.
 -- The fourth argument provides class names for the CSS.
 wrapGen' :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc
-wrapGen' sepf _ s _ [] = \x -> 
+wrapGen' sepf _ s _ [] = \x ->
   sepf [text $ "<" ++ s ++ ">", indent x, tagR s]
 wrapGen' sepf Class s _ ts = \x ->
   let val = text $ foldr1 (++) (intersperse " " ts)
@@ -107,7 +108,7 @@ wrapGen = wrapGen' cat
 
 -- | Helper for creating a left HTML tag with a single attribute.
 tagL :: String -> Variation -> Doc -> Doc
-tagL t a v = text ("<" ++ t ++ " " ++ show a ++ "=\"") <> v <> text "\">" 
+tagL t a v = text ("<" ++ t ++ " " ++ show a ++ "=\"") <> v <> text "\">"
 
 -- | Helper for creating a right HTML closing tag.
 tagR :: String -> Doc
@@ -130,8 +131,13 @@ descWrap :: [String] -> Doc -> Doc -> Doc
 descWrap = flip (wrapGen Class "dt")
 
 -- | Helper for wrapping divisions or sections.
+refwrap' :: Maybe String -> Doc -> Doc -> Doc
+refwrap' a = flip (wrapGen Id tag) [""]
+  where
+    tag = fromMaybe "div" a
+
 refwrap :: Doc -> Doc -> Doc
-refwrap = flip (wrapGen Id "div") [""]
+refwrap = refwrap' Nothing
 
 -- | Helper for setting up links to references.
 reflink :: String -> Doc -> Doc
@@ -147,7 +153,7 @@ reflinkURI rf txt = text ("<a href=\"" ++ rf ++ "\">") <> txt <> text "</a>"
 
 -- | Helper for setting up figures.
 image :: Doc -> Maybe Doc -> MaxWidthPercent -> Doc
-image f Nothing wp = 
+image f Nothing wp =
   figure $ vcat [img $ [("src", f), ("alt", text "")] ++ [("width", text $ show wp ++ "%") | wp /= 100]]
 image f (Just c) wp =
   figure $ vcat [img $ [("src", f), ("alt", c)] ++ [("width", text $ show wp ++ "%") | wp /= 100], figcaption $ text "Figure: " <> c]
@@ -193,7 +199,7 @@ indent = nest 2
 --                   (makeCases ps pExpr)
 
 -- | Build case expressions.
-makeCases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc                 
+makeCases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc
 makeCases [] _ = empty
 makeCases (p:ps) pExpr = spanTag [] (pExpr (fst p) <> text " , " <>
                           spanTag ["case"] (pExpr (snd p))) $$

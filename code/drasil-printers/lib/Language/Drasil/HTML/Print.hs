@@ -345,7 +345,7 @@ makeFigure r c f wp = refwrap r (image f c wp)
 
 -- | Renders assumptions, requirements, likely changes.
 makeRefList :: Doc -> Doc -> Doc
-makeRefList l a = refwrap' (Just "dt") l (brackets $ bold l) $$ dd a
+makeRefList l a = refwrap' "dt" l (brackets $ bold l) $$ dd a
 
 ---------------------
 --HTML bibliography--

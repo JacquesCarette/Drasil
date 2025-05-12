@@ -131,13 +131,11 @@ descWrap = flip (wrapGen Class "dt")
 
 -- | Helper for wrapping divisions or sections.
 -- | Arguments: Wrapper text, attribute value, body text
-refwrap' :: Maybe String -> Doc -> Doc -> Doc
-refwrap' a = flip (wrapGen Id tag) [""]
-  where
-    tag = maybe "div" id a
+refwrap' :: String -> Doc -> Doc -> Doc
+refwrap' a = flip (wrapGen Id a) [""]
 
 refwrap :: Doc -> Doc -> Doc
-refwrap = refwrap' Nothing
+refwrap = refwrap' "div"
 
 -- | Helper for setting up links to references.
 reflink :: String -> Doc -> Doc

@@ -18,7 +18,7 @@ import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 ----Acronyms-----
 acronyms :: [CI]
 acronyms = [twoD, threeD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
-  physSyst, refBy, refName, srs, ssp, thModel, typUnc, unlikelyChg]
+  physSyst, refBy, refName, srs, thModel, typUnc, unlikelyChg]
 
 ssp :: CI
 ssp = commonIdeaWithDict "ssp" (pn' "Slope Stability analysis Program") "SSP" [civilEng]

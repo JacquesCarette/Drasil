@@ -17,7 +17,7 @@ import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 ----Acronyms-----
 acronyms :: [CI]
-acronyms = [twoD, threeD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
+acronyms = [twoD, threeD, dataDefn, genDefn, goalStmt, inModel, likelyChg,
   physSyst, refBy, refName, srs, thModel, typUnc, unlikelyChg]
 
 ssp :: CI

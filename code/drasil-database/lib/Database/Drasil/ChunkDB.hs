@@ -35,7 +35,7 @@ import Data.List (sortOn)
 import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Map as Map
 import Utils.Drasil (invert)
-import Debug.Trace (traceWith)
+import Debug.Trace (traceWith, trace)
 
 -- | The misnomers below (for the following Map types) are not actually a bad thing. We want to ensure data can't
 -- be added to a map if it's not coming from a chunk, and there's no point confusing
@@ -81,7 +81,7 @@ type CitationMap = UMap Citation
 
 -- | General chunk database map constructor. Creates a 'UMap' from a function that converts something with 'UID's into another type and a list of something with 'UID's.
 cdbMap :: HasUID a => String -> (a -> b) -> [a] -> Map.Map UID (b, Int)
-cdbMap mn fn = Map.fromListWithKey (\k _ _ -> error $ "'" ++ show k ++ "' is inserted twice in '" ++ mn ++ "'!") . map (\(x,y) -> (x ^. uid, (fn x, y))) . flip zip [1..]
+cdbMap mn fn = Map.fromListWithKey (\k pv nv -> trace ("'" ++ show k ++ "' is inserted twice in '" ++ mn ++ "'!") nv) . map (\(x,y) -> (x ^. uid, (fn x, y))) . flip zip [1..]
 
 -- | Smart constructor for a 'SymbolMap'.
 symbolMap :: (Quantity c, MayHaveUnit c) => [c] -> SymbolMap

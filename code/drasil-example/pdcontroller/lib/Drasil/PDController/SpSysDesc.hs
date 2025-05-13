@@ -7,7 +7,7 @@ import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 -- Introduction of the Problem Description section derives from purpose in
--- SystemInformation (purp in Body.hs)
+-- System (purp in Body.hs)
 
 sysParts :: [Sentence]
 sysParts

@@ -8,7 +8,7 @@ import Language.Drasil.ModelExpr.Development (meDep)
 
 import Database.Drasil (ChunkDB, defResolve, symbResolve, citationTable)
 
-import SysInfo.Drasil.SystemInformation (SystemInformation, sysinfodb)
+import SysInfo.Drasil.SystemInformation (System, sysinfodb)
 
 import Control.Lens ((^.))
 import Data.List (nub, sortBy)
@@ -47,5 +47,5 @@ concpt' :: ModelExpr -> ChunkDB -> [ConceptChunk]
 concpt' a m = map (defResolve m) $ meDep a
 
 -- | Helper for extracting a bibliography from the system information.
-citeDB :: SystemInformation -> BibRef
+citeDB :: System -> BibRef
 citeDB si = sortBy compareAuthYearTitle $ map fst $ M.elems $ si ^. (sysinfodb . citationTable)

@@ -66,11 +66,11 @@ data FolderLocation = Folder {
   , packages :: [String]
     }
 
--- TODO: Should the website be using a ``SystemInformation''? This is primarily for the SmithEtAl template.
+-- TODO: Should the website be using a ``System''? This is primarily for the SmithEtAl template.
 --       It seems like the website is primarily that functions on a chunkdb.
 
 -- | System information.
-si :: FolderLocation -> SystemInformation
+si :: FolderLocation -> System
 si fl = SI {
     _sys         = webName,
     _kind        = web,
@@ -108,8 +108,8 @@ symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, web, phsChgMtrl] ++
   slope, safety, factor]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] 
   [] [] (allRefs fl) []
 
--- | Helper to get the system name as an 'IdeaDict' from 'SystemInformation'.
-getSysName :: SystemInformation -> IdeaDict
+-- | Helper to get the system name as an 'IdeaDict' from 'System'.
+getSysName :: System -> IdeaDict
 getSysName SI{_sys = nm} = nw nm 
 
 -- | Empty database needed for 'si' to work.

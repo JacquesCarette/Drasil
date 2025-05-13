@@ -141,7 +141,7 @@ mkTableOfTerms pinfo = mkTableFromLenses
 mkTableConcepts :: PrintingInformation -> Doc
 mkTableConcepts pinfo = mkTableFromLenses
   pinfo
-  defTable
+  conceptChunkTable
   "Concepts"
   [openTerm, openDefinition]
 
@@ -293,7 +293,7 @@ mkListShowUsedUIDs PI { _ckdb = db } = sortBy (compare `on` fst)
   $ Map.fromListWith (++)
   $ map (\x -> (fst x, ["QuantityDict"])) (Map.assocs $ symbolTable db)
   ++ map (\x -> (fst x, ["IdeaDict"])) (Map.assocs $ termTable db)
-  ++ map (\x -> (fst x, ["ConceptChunk"])) (Map.assocs $ defTable db)
+  ++ map (\x -> (fst x, ["ConceptChunk"])) (Map.assocs $ conceptChunkTable db)
   ++ map (\x -> (fst x, ["UnitDefn"])) (Map.assocs $ db ^. unitTable)
   ++ map (\x -> (fst x, ["DataDefinition"])) (Map.assocs $ db ^. dataDefnTable)
   ++ map (\x -> (fst x, ["InstanceModel"])) (Map.assocs $ db ^. insmodelTable)
@@ -316,7 +316,7 @@ mkListAll db = nubOrd
   $ sort
   $ map fst (Map.assocs $ symbolTable db)
   ++ map fst (Map.assocs $ termTable db)
-  ++ map fst (Map.assocs $ defTable db)
+  ++ map fst (Map.assocs $ conceptChunkTable db)
   ++ map fst (Map.assocs $ db ^. unitTable)
   ++ map fst (Map.assocs $ db ^. traceTable)
   ++ map fst (Map.assocs $ db ^. refbyTable)

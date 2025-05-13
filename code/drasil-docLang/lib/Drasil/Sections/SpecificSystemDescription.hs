@@ -38,7 +38,7 @@ import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
 import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
 import Data.Drasil.Concepts.Math (equation, parameter)
 import Data.Drasil.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
-import SysInfo.Drasil (SystemInformation)
+import SysInfo.Drasil (System)
 import Drasil.DocumentLanguage.Definitions (helperRefs)
 import qualified Drasil.DocLang.SRS as SRS
 
@@ -299,7 +299,7 @@ outputTableSent = foldlSent [S "The", namedRef (outDataConstTbl ([] :: [UncertQ]
 
 -- | Helper for making a 'ConceptInstance' with a reference to the system information.
 -- Used to find where a particular assumption is referenced.
-helperCI :: ConceptInstance -> SystemInformation -> ConceptInstance
+helperCI :: ConceptInstance -> System -> ConceptInstance
 helperCI a c = over defn (\x -> foldlSent_ [x, refby $ helperRefs a c]) a
   where
     refby EmptyS = EmptyS

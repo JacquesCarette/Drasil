@@ -7,7 +7,7 @@ import Language.Drasil hiding (None, new)
 import Language.Drasil.Display (Symbol(Variable))
 import Database.Drasil
 import qualified SysInfo.Drasil as SI
-import SysInfo.Drasil (HasSystemInformation(..))
+import SysInfo.Drasil (HasSystem(..))
 
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 
@@ -91,22 +91,22 @@ makeClassyFor "HasOldCodeSpec" "oldCodeSpec"
 
 -- | New Code Specification. Holds system information and a reference to `OldCodeSpec`.
 data CodeSpec = CS {
-  _sysInfo :: SI.SystemInformation,
+  _sysInfo :: SI.System,
   _oldCode :: OldCodeSpec
 }
 makeLenses ''CodeSpec
 
-instance HasSystemInformation CodeSpec where
-  systemInformation :: Lens' CodeSpec SI.SystemInformation
-  systemInformation = sysInfo
+instance HasSystem CodeSpec where
+  system :: Lens' CodeSpec SI.System
+  system = sysInfo
   background :: Lens' CodeSpec SI.Background
-  background = systemInformation . SI.background
+  background = system . SI.background
   purpose :: Lens' CodeSpec SI.Purpose
-  purpose = systemInformation . SI.purpose
+  purpose = system . SI.purpose
   scope :: Lens' CodeSpec SI.Scope
-  scope = systemInformation . SI.scope
+  scope = system . SI.scope
   motivation :: Lens' CodeSpec SI.Motivation
-  motivation = systemInformation . SI.motivation
+  motivation = system . SI.motivation
 
 instance HasOldCodeSpec CodeSpec where
   oldCodeSpec :: Lens' CodeSpec OldCodeSpec
@@ -166,18 +166,18 @@ mapODE :: Maybe ODE -> [CodeDefinition]
 mapODE Nothing = []
 mapODE (Just ode) = map odeDef $ odeInfo ode
 
--- | Creates a 'CodeSpec' using the provided 'SystemInformation', 'Choices', and 'Mod's.
+-- | Creates a 'CodeSpec' using the provided 'System', 'Choices', and 'Mod's.
 -- The 'CodeSpec' consists of the system information and a corresponding 'OldCodeSpec'.
-codeSpec :: SI.SystemInformation -> Choices -> [Mod] -> CodeSpec
+codeSpec :: SI.System -> Choices -> [Mod] -> CodeSpec
 codeSpec si chs ms = CS {
   _sysInfo = si,
   _oldCode = oldcodeSpec si chs ms
 }
 
--- | Generates an 'OldCodeSpec' from 'SystemInformation', 'Choices', and a list of 'Mod's.
+-- | Generates an 'OldCodeSpec' from 'System', 'Choices', and a list of 'Mod's.
 -- This function extracts various components (e.g., inputs, outputs, constraints, etc.)
--- from 'SystemInformation' to populate the 'OldCodeSpec' structure.
-oldcodeSpec :: SI.SystemInformation -> Choices -> [Mod] -> OldCodeSpec
+-- from 'System' to populate the 'OldCodeSpec' structure.
+oldcodeSpec :: SI.System -> Choices -> [Mod] -> OldCodeSpec
 oldcodeSpec SI.SI{ SI._sys = sys
                    , SI._authors = as
                    , SI._instModels = ims

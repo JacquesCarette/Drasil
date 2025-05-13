@@ -1,16 +1,16 @@
 {-# LANGUAGE GADTs, TemplateHaskell, RankNTypes #-}
 -- | Define types and functions related to creating a system information database.
 
--- Changes to SystemInformation should be reflected in the 'Creating Your Project 
+-- Changes to System should be reflected in the 'Creating Your Project 
 -- in Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
 
 module SysInfo.Drasil.SystemInformation (
   -- * System Information
   -- ** Types
-  SystemInformation(..),
+  System(..),
   -- ** Lenses
-  HasSystemInformation(..),
+  HasSystem(..),
   -- * Reference Database
   -- ** Types
   Purpose, Background, Scope, Motivation,
@@ -33,7 +33,7 @@ type Motivation = [Sentence]
 
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artifact generation.
-data SystemInformation where
+data System where
 --FIXME:
 --There should be a way to remove redundant "Quantity" constraint.
 -- I'm thinking for getting concepts that are also quantities, we could
@@ -61,6 +61,6 @@ data SystemInformation where
   , _constants   :: [ConstQDef]
   , _sysinfodb   :: ChunkDB
   , _usedinfodb  :: ChunkDB
-  } -> SystemInformation
+  } -> System
 
-makeClassy ''SystemInformation
+makeClassy ''System

@@ -48,7 +48,7 @@ mkCaseTable = Table headerRow (tableBody $ concatMap mkCaseStudy $ examples "" "
 -- but it is still nice to keep around for now.
 data CaseStudy = CS {
   -- | Each case study needs a name, so use system information. 
-  sysInfoCS :: SystemInformation,
+  sysInfoCS :: System,
   -- | A case study may have different program names for the same example (ex. Projectile).
   progName :: Sentence,
   -- | Each case study has code that is generated from a set of choices.

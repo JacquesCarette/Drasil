@@ -59,7 +59,7 @@ knowledge capture. This package also includes a language for symbols (`Symbol`) 
 
 - `drasil-utils` contains common utilities used by non-`drasil-lang` sub-packages.
 
-- `drasil-database` contains SystemInformation and a chunk database
+- `drasil-database` contains System and a chunk database
 structure (`ChunkDB`).
 
 - `drasil-docLang` contains a DSL describing the Software Requirement Specification (SRS) template. It includes a translation routine for converting to a Document DSL from `drasil-lang`.
@@ -102,7 +102,7 @@ gamePhysics = commonIdeaWithDict "gamePhysics" (pn "game physics library") "Game
 ```
 For more information, please see the [documentation](https://jacquescarette.github.io/Drasil/docs/full/drasil-lang-0.1.60.0/Language-Drasil.html#v:commonIdeaWithDict) for `commonIdeaWithDict`.
 
-6. In `Body.hs`, start constructing your chunk database (`ChunkDB`) in the `symbMap` function by adding your program name (e.g `nw  “your software name”`). Make sure the parameter you are adding here tallies with the value of the `_sys` record in defined in `si` in `Body.hs`. `si` holds all of your system's information as a `SystemInformation` record type.
+6. In `Body.hs`, start constructing your chunk database (`ChunkDB`) in the `symbMap` function by adding your program name (e.g `nw  “your software name”`). Make sure the parameter you are adding here tallies with the value of the `_sys` record in defined in `si` in `Body.hs`. `si` holds all of your system's information as a `System` record type.
 
 7. Now you are ready to start constructing your SRS.
 
@@ -110,14 +110,14 @@ For more information, please see the [documentation](https://jacquescarette.gith
 
 1. In your newly created project folder, open `Body.hs`. Modify the file to reflect your project name by replacing all instances of the word 'Template' with your project name. You can perform a find and replace operation to complete this.
 
-2. Go to the `si` (`SystemInformation`) section of the code in `Body.hs` and populate the following fields with your own functions: 
+2. Go to the `si` (`System`) section of the code in `Body.hs` and populate the following fields with your own functions: 
 ```Haskell
 _sys         = example --(will become the name of your software system e.g. dblpendulum)
 _authors     = [authorName] --(will become the same name you added to People.hs)
 ```
 For reference, the `si` data is used to hold global information about a system.
 ```Haskell
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = example,
   _kind        = Doc.srs,
@@ -803,7 +803,7 @@ mkSRS = [
   Bibliography
   ]
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = projectileTitle,
   _kind        = Doc.srs,
@@ -829,7 +829,7 @@ si = SI {
 
 1. Please refer to `NoPCM` or `GlassBR` to generate code for your project from Drasil.
 2. The `NoPCM` example can be referred to, if your project requires an ODE, otherwise, you can refer to the `GlassBR` example.
-3. Before you generate your code, ensure your `SystemInformation` structure is correct, particularly the inputs, outputs, relations, and constraints should be filled in and correct.
+3. Before you generate your code, ensure your `System` structure is correct, particularly the inputs, outputs, relations, and constraints should be filled in and correct.
 4. The Drasil code generator requires that you set design variabilities for your code. An overview of design variabilities can be found in Chapter 8 of this [document](https://macsphere.mcmaster.ca/handle/11375/25542).
 
 ## Modify `Main.hs`
@@ -851,7 +851,7 @@ import Language.Drasil.Code (relToQD, quantvar, listToArray)
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols, osloSymbols,
   arrayVecDepVar, apacheODESymbols, odeintSymbols)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
-  SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts,
+  System(SI), cdb, rdb, refdb, _authors, _purpose, _concepts,
   _constants, _constraints, _datadefs, _instModels, _configFiles, _defSequence,
   _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 ```

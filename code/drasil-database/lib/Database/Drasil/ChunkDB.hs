@@ -8,7 +8,7 @@ module Database.Drasil.ChunkDB (
   -- * Types
   -- ** 'ChunkDB'
   -- | Main database type
-  ChunkDB(CDB, symbolTable, termTable, defTable),
+  ChunkDB(CDB, symbolTable, termTable, conceptChunkTable),
   -- ** Maps
   -- | Exported for external use.
   RefbyMap, TraceMap, UMap,
@@ -99,7 +99,7 @@ conceptMap = cdbMap "ConceptMap" cw
 unitMap :: (IsUnit u) => [u] -> UnitMap
 unitMap = cdbMap "UnitMap" unitWrapper
 
--- | General smart constructor for making a 'UMap' out of anything that has a 'UID'. 
+-- | General smart constructor for making a 'UMap' out of anything that has a 'UID'.
 idMap :: HasUID a => String -> [a] -> Map.Map UID (a, Int)
 idMap mn = cdbMap mn id
 
@@ -107,7 +107,7 @@ idMap mn = cdbMap mn id
 traceMap :: [(UID, [UID])] -> TraceMap
 traceMap = Map.fromList
 
--- | Gets a unit if it exists, or Nothing.        
+-- | Gets a unit if it exists, or Nothing.
 getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
 getUnitLup m c = getUnit $ symbResolve m (c ^. uid)
 
@@ -134,7 +134,7 @@ unitLookup = uMapLookup "Unit" "UnitMap"
 
 -- | Looks up a 'UID' in the definition table from the 'ChunkDB'. If nothing is found, an error is thrown.
 defResolve :: ChunkDB -> UID -> ConceptChunk
-defResolve m x = uMapLookup "Concept" "ConceptMap" x $ defTable m
+defResolve m x = uMapLookup "Concept" "ConceptMap" x $ conceptChunkTable m
 
 -- | Looks up a 'UID' in the datadefinition table. If nothing is found, an error is thrown.
 datadefnLookup :: UID -> DatadefnMap -> DataDefinition
@@ -167,7 +167,7 @@ data ChunkDB = CDB {
   -- CHUNKS
     symbolTable           :: SymbolMap
   , termTable             :: TermMap
-  , defTable              :: ConceptMap
+  , conceptChunkTable     :: ConceptMap
   , _unitTable            :: UnitMap
   , _dataDefnTable        :: DatadefnMap
   , _insmodelTable        :: InsModelMap
@@ -185,7 +185,7 @@ makeLenses ''ChunkDB
 
 -- | Smart constructor for chunk databases. Takes in the following:
 --
---     * ['Quantity'] (for 'SymbolMap'), 
+--     * ['Quantity'] (for 'SymbolMap'),
 --     * 'NamedIdea's (for 'TermMap'),
 --     * 'Concept's (for 'ConceptMap'),
 --     * Units (something that 'IsUnit' for 'UnitMap'),
@@ -204,7 +204,7 @@ cdb s t c u d ins gd tm ci lc r cits =
     -- CHUNKS
     symbolTable = symbolMap s,
     termTable = termMap $ t ++ termsHACK,
-    defTable = conceptMap c,
+    conceptChunkTable = conceptMap c,
     _unitTable = unitMap u,
     _dataDefnTable = idMap "DataDefnMap" d,
     _insmodelTable = idMap "InsModelMap" ins,

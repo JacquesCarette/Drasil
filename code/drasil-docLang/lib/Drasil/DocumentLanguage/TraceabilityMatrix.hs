@@ -36,8 +36,8 @@ traceMIntro refs trailings = UlC $ ulcc $ Paragraph $ foldlSent [phrase purpose
         phrase component, S "that are marked with an", Quote (S "X"), 
         S "should be modified as well"] +:+ foldlSent_ (zipWith tableShows refs trailings)
 
--- | Generates a traceability table. Takes a 'UID' for the table, a description ('Sentence'), columns ('TraceViewCat'), rows ('TraceViewCat'), and 'SystemInformation'.
-generateTraceTableView :: UID -> Sentence -> [TraceViewCat] -> [TraceViewCat] -> SystemInformation -> LabelledContent
+-- | Generates a traceability table. Takes a 'UID' for the table, a description ('Sentence'), columns ('TraceViewCat'), rows ('TraceViewCat'), and 'System'.
+generateTraceTableView :: UID -> Sentence -> [TraceViewCat] -> [TraceViewCat] -> System -> LabelledContent
 generateTraceTableView u desc cols rows c = llcc (makeTabRef' u) $ Table 
   (EmptyS : traceMColHeader colf c) 
   (makeTMatrix (traceMRowHeader rowf c) (traceMColumns colf rowf cdb) $ traceMReferees colf cdb)
@@ -58,15 +58,15 @@ traceMReferrers :: ([UID] -> [UID]) -> ChunkDB -> [UID]
 traceMReferrers f = f . nubOrd . concat . Map.elems . (^. refbyTable)
 
 -- | Helper that finds the header of a traceability matrix.
-traceMHeader :: (ChunkDB -> [UID]) -> SystemInformation -> [Sentence]
+traceMHeader :: (ChunkDB -> [UID]) -> System -> [Sentence]
 traceMHeader f c = map (`helpToRefField` c) $ f $ _sysinfodb c
 
 -- | Helper that finds the headers of the traceability matrix columns.
-traceMColHeader :: ([UID] -> [UID]) -> SystemInformation -> [Sentence]
+traceMColHeader :: ([UID] -> [UID]) -> System -> [Sentence]
 traceMColHeader f = traceMHeader (traceMReferees f)
 
 -- | Helper that finds the headers of the traceability matrix rows.
-traceMRowHeader :: ([UID] -> [UID]) -> SystemInformation -> [Sentence]
+traceMRowHeader :: ([UID] -> [UID]) -> System -> [Sentence]
 traceMRowHeader f = traceMHeader (traceMReferrers f)
 
 -- | Helper that makes the columns of a traceability matrix.

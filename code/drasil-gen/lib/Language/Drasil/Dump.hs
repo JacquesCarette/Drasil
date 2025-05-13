@@ -2,7 +2,7 @@
 module Language.Drasil.Dump where
 
 import qualified Database.Drasil as DB
-import SysInfo.Drasil (SystemInformation, sysinfodb)
+import SysInfo.Drasil (System, sysinfodb)
 
 import System.Directory
 import System.IO
@@ -25,7 +25,7 @@ type TargetFile = String
 -- | For debugging purposes, if the system has a `DEBUG_ENV` environment
 --   variable set to anything, we can dump the chunk maps in a system to the
 --   host system.
-dumpEverything :: SystemInformation -> PrintingInformation -> Path -> IO ()
+dumpEverything :: System -> PrintingInformation -> Path -> IO ()
 dumpEverything si pinfo p = do
   maybeDebugging <- lookupEnv "DEBUG_ENV"
   case maybeDebugging of
@@ -33,7 +33,7 @@ dumpEverything si pinfo p = do
       dumpEverything0 si pinfo p
     _ -> mempty
 
-dumpEverything0 :: SystemInformation -> PrintingInformation -> Path -> IO ()
+dumpEverything0 :: System -> PrintingInformation -> Path -> IO ()
 dumpEverything0 si pinfo targetPath = do
   createDirectoryIfMissing True targetPath
   let chunkDb = si ^. sysinfodb

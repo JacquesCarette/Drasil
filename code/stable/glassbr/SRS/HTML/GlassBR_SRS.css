@@ -92,3 +92,10 @@ ul.hide-list-style {
 ul.hide-list-style-no-indent {
   list-style-type: none;
 padding: 0;}
+dl.reference-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+  align-items: start;}
+dd {
+  margin: 0;}

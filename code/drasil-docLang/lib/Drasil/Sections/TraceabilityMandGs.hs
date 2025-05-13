@@ -25,7 +25,7 @@ import Language.Drasil.Sentence.Combinators as S
 import Data.Foldable (foldl')
 
 -- | Makes a Traceability Table/Matrix that contains Items of Different Sections.
-generateTraceTable :: SystemInformation -> LabelledContent
+generateTraceTable :: System -> LabelledContent
 generateTraceTable = generateTraceTableView (mkUid "Tracey")
   (titleize' item +:+ S "of Different" +:+ titleize' section_) [tvEverything] [tvEverything]
 
@@ -87,8 +87,8 @@ traceMatRefinement = TraceConfig (mkUid "TraceMatRefvsRef") [plural Doc.dataDefn
   [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels]
   [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels]
 
--- | Records other requirements. Converts the 'SystemInformation' into a 'TraceConfig'.
-traceMatOtherReq :: SystemInformation -> TraceConfig
+-- | Records other requirements. Converts the 'System' into a 'TraceConfig'.
+traceMatOtherReq :: System -> TraceConfig
 traceMatOtherReq si = TraceConfig (mkUid "TraceMatAllvsR") [plural requirement
   `S.and_` pluralNP (goalStmt `NC.onThePP` Doc.dataDefn), plural Doc.thModel, 
   plural Doc.genDefn, plural Doc.inModel] (x titleize' +:+ S "and Other" +:+ 
@@ -106,6 +106,6 @@ traceMatOtherReq si = TraceConfig (mkUid "TraceMatAllvsR") [plural requirement
 
 
 -- | Contains traceability matrix assumptions, other assumptions, refinement, and other requirements.
-traceMatStandard :: SystemInformation -> [TraceConfig]
+traceMatStandard :: System -> [TraceConfig]
 traceMatStandard s = map ($ s) [const traceMatAssumpAssump, const traceMatAssumpOther, const traceMatRefinement,
   traceMatOtherReq]

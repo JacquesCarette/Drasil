@@ -7,20 +7,20 @@ import Drasil.DocumentLanguage.Notebook.Core (LsnDesc, LsnChapter(..),
 
 import Language.Drasil hiding (kind)
 
-import SysInfo.Drasil (SystemInformation(SI), _authors, _kind, _sys, citeDB)
+import SysInfo.Drasil (System(SI), _authors, _kind, _sys, citeDB)
 
 import qualified Drasil.DocLang.Notebook as Lsn (intro, learnObj, caseProb, example, 
   appendix, review, reference, summary)
 
 -- | Creates a notebook from a lesson description and system information.
-mkNb :: LsnDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
+mkNb :: LsnDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
 mkNb dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
   Notebook (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) $
   mkSections si l where
     l = mkLsnDesc si dd
 
 -- | Helper for creating the notebook sections.
-mkSections :: SystemInformation -> LsnDesc -> [Section]
+mkSections :: System -> LsnDesc -> [Section]
 mkSections si = map doit  
   where
     doit :: LsnChapter -> Section

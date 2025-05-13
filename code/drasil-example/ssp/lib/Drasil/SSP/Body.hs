@@ -154,8 +154,8 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 symbMap :: ChunkDB
 symbMap = cdb (map qw symbols) (map nw symbols
   ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw generalDefinitions
-  ++ map nw defs ++ map nw defs' ++ map nw softwarecon ++ map nw physicCon 
-  ++ map nw physicsTMs
+  ++ map nw defs ++ map nw defs' ++ map nw softwarecon
+  ++ map nw physicCon ++ map nw physicsTMs
   ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon
   ++ map nw derived ++ map nw fundamentals ++ map nw educon
   ++ map nw compcon ++ [nw algorithm, nw ssp])

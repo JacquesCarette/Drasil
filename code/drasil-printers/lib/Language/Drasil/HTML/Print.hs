@@ -22,8 +22,8 @@ import qualified Language.Drasil as L
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (articleTitle, author, ba, body, bold,
   caption, divTag, em, h, headTag, html, image, li, ol, pa,
-  paragraph, reflink, reflinkInfo, reflinkURI, refwrap, sub, sup, table, td,
-  th, title, tr, ul, dl, dd, descWrap, BibFormatter(..))
+  paragraph, reflink, reflinkInfo, reflinkURI, refwrap, refwrap', sub, sup, table, td,
+  th, title, tr, ul, dl, dd, BibFormatter(..))
 import Language.Drasil.HTML.CSS (linkCSS)
 
 import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
@@ -345,7 +345,7 @@ makeFigure r c f wp = refwrap r (image f c wp)
 
 -- | Renders assumptions, requirements, likely changes.
 makeRefList :: Doc -> Doc -> Doc
-makeRefList l a = descWrap ["reference-label"] l (brackets $ bold l) $$ dd a
+makeRefList l a = refwrap' "dt" l (brackets $ bold l) $$ dd a
 
 ---------------------
 --HTML bibliography--

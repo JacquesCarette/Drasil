@@ -14,6 +14,7 @@ If you are new to GitHub, a summer student, or want more in-depth instructions, 
   - [Issue Tracking](#issue-tracking)
   - [Coding Style](#coding-style)
   - [Workflow](#workflow)
+  - [Git Best Practices](#git-best-practices)
   - [Editing this Wiki](#editing-this-wiki)
   - [Important Notes (Windows Users read this!)](#important-notes-windows-users-read-this)
 - [In-Depth Guide to Drasil](#in-depth-guide-to-drasil)
@@ -84,6 +85,23 @@ This section will serve as a roadmap for the [Workflow](Workflow) article. Pleas
 In the [Workflow](Workflow) article, there is a section detailing the [GitHub Workflow](https://github.com/JacquesCarette/Drasil/wiki/Workflow#github-workflow) including branches, pull requests, and merging to `main`. There are also some notes about [Continuous Integration (CI)](https://github.com/JacquesCarette/Drasil/wiki/Workflow#continuous-integration-ci---github-actions--builds--tests) as a system for automating checks on GitHub to make sure Drasil compiles after any changes. In addition, the article details the process of [making changes](https://github.com/JacquesCarette/Drasil/wiki/Workflow#making-changes) to the Drasil repo, and [updating the stable folder](https://github.com/JacquesCarette/Drasil/wiki/Workflow#updating-stable-folder) to reflect any changes in generated artifacts. 
 
 Note: If changes are made that intentionally modify the generated documentation/code, it is imperative to [update the stable folder](https://github.com/JacquesCarette/Drasil/wiki/Workflow#updating-stable-folder) in order to prevent any CI errors.
+
+## Git Best Practices
+To maintain a clean, understandable project history and improve collaboration, please follow these guidelines when contributing code:
+- Structure commits thoughtfully
+  - Group related changes into the same commit making them easier to track. Ask yourself if the changes you are committing serve the same coherent purpose. If so, try to commit them all together.
+- Clear, concise commit messages
+  - When committing changes, avoid using `auto` commits and provide meaningful messages that assist reviewers in understanding what was changed and why. Ex.,
+    - Good:
+      1. Website: Fix typos in homepage text
+      2. README.md: Add a link to the Well-Understood paper
+    - Avoid:
+      1. Fix stuff
+      2. Update
+      3. more edits
+  - Of course, these messages should line up with what was actually changed
+- Avoid over-syncing with `main`
+  - Only sync your branch with `main` when there is a merge conflict showing in the pull request
 
 ## Editing this Wiki
 We do not use the same web-based workflow that most GitHub repositories follow. Rather, we carry a copy of our wiki _in_ our repo. Specifically, in the `./wiki/` folder. **To edit this wiki, please use the standard "commit and PR" workflow we follow, as with everything else in the repo.** The benefit of this approach is that we can review wiki changes through the PR workflow and tie them to tickets filed about the wiki.

@@ -531,7 +531,9 @@ wrapInside :: String -> [(String, Doc)] -> Doc
 caption :: Doc -> Doc
 descWrap :: [String] -> Doc -> Doc -> Doc
 
--- | Helper for wrapping divisions or sections.
+-- | Helper for wrapping divisions or sections. Arguments: Wrapper element
+--   type/tag (e.g., p, div, a), attribute value, body text
+refwrap' :: String -> Doc -> Doc -> Doc
 refwrap :: Doc -> Doc -> Doc
 
 -- | Helper for setting up links to references.

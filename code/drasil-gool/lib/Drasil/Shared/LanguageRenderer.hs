@@ -39,7 +39,7 @@ import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   VisibilityElim(..), ParamElim(..))
 import Drasil.GOOL.RendererClassesOO (OORenderSym)
 import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..))
-import Drasil.Shared.ATS (Terminator(..), FileData(..), fileD, updateFileMod, 
+import Drasil.Shared.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateMod, TypeData(..), VarData(..))
 import Drasil.Shared.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
 

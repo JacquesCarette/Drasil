@@ -12,7 +12,7 @@ import qualified Drasil.GOOL.InterfaceGOOL as IG (SFile, FSModule, SClass,
   CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   FileSym(..), ModuleSym(..), ClassSym(..), PermanenceSym(..), GetSet(..),
   StateVarSym(..), ObserverPattern(..), StrategyPattern(..))
-import Drasil.Shared.ATS (Binding)
+import Drasil.Shared.AST (Binding)
 import Drasil.Shared.State (FS, CS)
 
 import Text.PrettyPrint.HughesPJ (Doc)

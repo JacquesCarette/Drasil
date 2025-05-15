@@ -83,7 +83,7 @@ import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
   notifyObservers')
-import Drasil.Shared.ATS (Terminator(..), FileType(..), FileData(..), fileD, 
+import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
   td, ValData(..), vd, VarData(..), vard, CommonThunk, pureValue, vectorize,

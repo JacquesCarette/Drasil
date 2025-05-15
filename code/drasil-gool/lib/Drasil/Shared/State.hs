@@ -32,7 +32,7 @@ module Drasil.Shared.State (
   genVarNameIf, varNameAvailable, setVarScope, getVarScope
 ) where
 
-import Drasil.Shared.ATS (FileType(..), VisibilityTag(..), ScopeTag(..),
+import Drasil.Shared.AST (FileType(..), VisibilityTag(..), ScopeTag(..),
   ScopeData(..), sd, QualifiedName, qualName)
 import Drasil.Shared.CodeAnalysis (Exception, ExceptionType, printExc, hasLoc)
 import Drasil.Shared.CodeType (ClassName)

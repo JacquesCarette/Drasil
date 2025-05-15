@@ -88,7 +88,7 @@ import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float, doub
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists, 
   runStrategy, listSlice, stringListVals, stringListLists, forRange, 
   notifyObservers)
-import Drasil.Shared.ATS (Terminator(..), FileType(..), FileData(..), fileD, 
+import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd, 
   updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD, 
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 

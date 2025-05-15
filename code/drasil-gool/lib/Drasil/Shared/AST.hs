@@ -1,4 +1,4 @@
-module Drasil.Shared.ATS (Terminator(..), VisibilityTag(..), ScopeTag(..),
+module Drasil.Shared.AST (Terminator(..), VisibilityTag(..), ScopeTag(..),
   ScopeData(..), sd, QualifiedName, qualName, FileType(..), isSource,
   Binding(..), onBinding, BindData(bind, bindDoc), bd, FileData(filePath,
   fileMod), fileD, updateFileMod, FuncData(fType, funcDoc), fd, ModData(name,

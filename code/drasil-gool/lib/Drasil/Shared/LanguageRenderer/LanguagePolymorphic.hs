@@ -62,7 +62,7 @@ import qualified Drasil.GOOL.RendererClassesOO as S (RenderFile(fileFromData),
   RenderClass(intClass, commentedClass))
 import qualified Drasil.GOOL.RendererClassesOO as RC (ClassElim(..),
   ModuleElim(..))
-import Drasil.Shared.ATS (Binding(..), Terminator(..), isSource, ScopeTag(Local),
+import Drasil.Shared.AST (Binding(..), Terminator(..), isSource, ScopeTag(Local),
   ScopeData, sd)
 import Drasil.Shared.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode, 
   toState, onStateValue, on2StateValues, onStateList, getInnerType, getNestDegree,

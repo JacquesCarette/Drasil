@@ -36,7 +36,7 @@ import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType
 import Drasil.GProc.InterfaceProc (GSProgram, SFile, FSModule, ProcProg,
   ProgramSym(..), FileSym(..), ModuleSym(..))
 
-import Drasil.Shared.ATS (FileData(..), ModData(..), ProgData(..),
+import Drasil.Shared.AST (FileData(..), ModData(..), ProgData(..),
   VisibilityTag(..))
 
 import Drasil.Shared.CodeType (CodeType(..))

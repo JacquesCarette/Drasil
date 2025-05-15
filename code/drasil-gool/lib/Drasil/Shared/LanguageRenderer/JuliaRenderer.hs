@@ -73,7 +73,7 @@ import qualified Drasil.Shared.LanguageRenderer.AbstractProc as A (fileDoc,
   funcDecDef, function)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (increment1,
   decrement1, ifExists, stringListVals, stringListLists)
-import Drasil.Shared.ATS (Terminator(..), FileType(..), FileData(..), fileD,
+import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), ModData(..), md, updateMod, MethodData(..), mthd, OpData(..),
   ParamData(..), ProgData(..), TypeData(..), td, ValData(..), vd, VarData(..),
   vard, CommonThunk, progD, fd, pd, updateMthd, commonThunkDim, commonThunkElim,

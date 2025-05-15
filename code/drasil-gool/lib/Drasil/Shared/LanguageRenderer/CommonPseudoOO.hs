@@ -63,7 +63,7 @@ import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkStateVar, mkVal, mkVal)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic,
   call, initStmts, docFunc, docFuncRepr, docClass, docMod, smartAdd, smartSub)
-import Drasil.Shared.ATS (VisibilityTag(..), ScopeTag(Global), ScopeData, sd)
+import Drasil.Shared.AST (VisibilityTag(..), ScopeTag(Global), ScopeData, sd)
 import Drasil.Shared.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
   lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports,
   getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc,

@@ -21,7 +21,7 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   OOFunctionSym(..), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
   ObserverPattern(..), StrategyPattern(..))
 import Drasil.Shared.CodeType (CodeType(Void))
-import Drasil.Shared.ATS (VisibilityTag(..), qualName)
+import Drasil.Shared.AST (VisibilityTag(..), qualName)
 import Drasil.Shared.CodeAnalysis (ExceptionType(..))
 import Drasil.Shared.Helpers (toCode, toState)
 import Drasil.Shared.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,

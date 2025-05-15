@@ -56,7 +56,7 @@ import Drasil.GOOL.InterfaceGOOL (GSProgram, SFile, FSModule, SClass,
   selfAccess, ObserverPattern(..), initObserverList, addObserver,
   StrategyPattern(..), convTypeOO)
 
-import Drasil.Shared.ATS (FileData(..), ModData(..), ProgData(..),
+import Drasil.Shared.AST (FileData(..), ModData(..), ProgData(..),
   VisibilityTag(..))
 
 import Drasil.Shared.CodeType (CodeType(..))

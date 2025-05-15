@@ -18,7 +18,7 @@ import qualified Drasil.Shared.RendererClassesCommon as RCC (MethodElim(..),
 import Drasil.GProc.RendererClassesProc (ProcRenderSym)
 import qualified Drasil.GProc.RendererClassesProc as RCP (RenderFile(..),
   ModuleElim(..), RenderMod(..), ProcRenderMethod(intFunc))
-import Drasil.Shared.ATS (isSource)
+import Drasil.Shared.AST (isSource)
 import Drasil.Shared.Helpers (vibcat, toState, emptyIfEmpty, getInnerType,
   onStateValue)
 import Drasil.Shared.LanguageRenderer (addExt)

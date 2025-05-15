@@ -30,7 +30,7 @@ module Drasil.GOOL (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   swiftVersion
   ) where
 
-import Drasil.GOOL.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
+import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
   SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs, SharedProg,
   BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
   TypeElim(..), ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
@@ -56,20 +56,20 @@ import Drasil.GOOL.InterfaceGOOL (GSProgram, SFile, FSModule, SClass,
   selfAccess, ObserverPattern(..), initObserverList, addObserver,
   StrategyPattern(..), convTypeOO)
 
-import Drasil.GOOL.AST (FileData(..), ModData(..), ProgData(..),
+import Drasil.Shared.ATS (FileData(..), ModData(..), ProgData(..),
   VisibilityTag(..))
 
-import Drasil.GOOL.CodeType (CodeType(..))
+import Drasil.Shared.CodeType (CodeType(..))
 
-import Drasil.GOOL.State (GOOLState(..), lensMStoVS, headers, sources, mainMod, 
+import Drasil.Shared.State (GOOLState(..), lensMStoVS, headers, sources, mainMod, 
   initialState)
 
-import Drasil.GOOL.Helpers (onStateValue, onCodeList)
+import Drasil.Shared.Helpers (onStateValue, onCodeList)
 
 import Drasil.GOOL.CodeInfoOO (unCI)
 
-import Drasil.GOOL.LanguageRenderer.JavaRenderer (unJC, jName, jVersion)
-import Drasil.GOOL.LanguageRenderer.PythonRenderer (unPC, pyName, pyVersion)
-import Drasil.GOOL.LanguageRenderer.CSharpRenderer (unCSC, csName, csVersion)
-import Drasil.GOOL.LanguageRenderer.CppRenderer (unCPPC, cppName, cppVersion)
-import Drasil.GOOL.LanguageRenderer.SwiftRenderer (unSC, swiftName, swiftVersion)
+import Drasil.Shared.LanguageRenderer.JavaRenderer (unJC, jName, jVersion)
+import Drasil.Shared.LanguageRenderer.PythonRenderer (unPC, pyName, pyVersion)
+import Drasil.Shared.LanguageRenderer.CSharpRenderer (unCSC, csName, csVersion)
+import Drasil.Shared.LanguageRenderer.CppRenderer (unCPPC, cppName, cppVersion)
+import Drasil.Shared.LanguageRenderer.SwiftRenderer (unSC, swiftName, swiftVersion)

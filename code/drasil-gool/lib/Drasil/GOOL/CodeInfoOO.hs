@@ -3,7 +3,7 @@
 -- Performs code analysis on the GOOL code
 module Drasil.GOOL.CodeInfoOO (CodeInfoOO(..)) where
 
-import Drasil.GOOL.InterfaceCommon (MSBody, VSType, SValue, MSStatement, 
+import Drasil.Shared.InterfaceCommon (MSBody, VSType, SValue, MSStatement, 
   SMethod, SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
   VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
   MathConstant(..), VariableValue(..), CommandLineArgs(..),
@@ -20,11 +20,11 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   OOFunctionSym(..), GetSet(..), OODeclStatement(..), OOFuncAppStatement(..),
   ObserverPattern(..), StrategyPattern(..))
-import Drasil.GOOL.CodeType (CodeType(Void))
-import Drasil.GOOL.AST (VisibilityTag(..), qualName)
-import Drasil.GOOL.CodeAnalysis (ExceptionType(..))
-import Drasil.GOOL.Helpers (toCode, toState)
-import Drasil.GOOL.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
+import Drasil.Shared.CodeType (CodeType(Void))
+import Drasil.Shared.ATS (VisibilityTag(..), qualName)
+import Drasil.Shared.CodeAnalysis (ExceptionType(..))
+import Drasil.Shared.Helpers (toCode, toState)
+import Drasil.Shared.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   lensCStoMS, lensMStoVS, lensVStoFS, lensCStoFS, modifyReturn, 
   setClassName, getClassName, setModuleName, getModuleName, addClass, 
   updateClassMap, addException, updateMethodExcMap, updateCallMap, addCall, 

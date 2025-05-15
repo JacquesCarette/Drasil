@@ -1,35 +1,35 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | Language-polymorphic functions that are defined by GOOL code
-module Drasil.GOOL.LanguageRenderer.Macros (
+module Drasil.Shared.LanguageRenderer.Macros (
   ifExists, decrement1, increment, increment1, runStrategy, 
   listSlice, makeSetterVal, stringListVals, stringListLists, forRange, notifyObservers,
   notifyObservers'
 ) where
 
-import Drasil.GOOL.CodeType (CodeType(..))
-import Drasil.GOOL.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
+import Drasil.Shared.CodeType (CodeType(..))
+import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
   SVariable, SValue, MSStatement, bodyStatements, oneLiner, TypeElim(getType),
   VariableElim(..), listOf, ValueSym(valueType), 
   NumericExpression((#+), (#-), (#*), (#/)), Comparison(..),
   BooleanExpression((?&&), (?||)), at, StatementSym(multi),
   AssignStatement((&+=), (&-=), (&++)), (&=), convScope)
-import qualified Drasil.GOOL.InterfaceCommon as IC (BlockSym(block), 
+import qualified Drasil.Shared.InterfaceCommon as IC (BlockSym(block), 
   TypeSym(int, listInnerType), VariableSym(var), ScopeSym(..), Literal(litInt),
   VariableValue(valueOf), ValueExpression(notNull), List(listSize, listAppend,
   listAccess, intToIndex), StatementSym(valStmt, emptyStmt), AssignStatement(assign),
   DeclStatement(varDecDef, listDec),  ControlStatement(ifCond, for, forRange),
   ValueExpression(inlineIf))
 import Drasil.GOOL.InterfaceGOOL (($.), observerListName)
-import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, RenderValue(cast),
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderValue(cast),
   ValueElim(valueInt))
-import qualified Drasil.GOOL.RendererClassesCommon as S (
+import qualified Drasil.Shared.RendererClassesCommon as S (
   RenderStatement(stmt))
-import qualified Drasil.GOOL.RendererClassesCommon as RC (BodyElim(..),
+import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   StatementElim(statement))
 import Drasil.GOOL.RendererClassesOO (OORenderSym)
-import Drasil.GOOL.Helpers (toCode, onStateValue, on2StateValues)
-import Drasil.GOOL.State (MS, lensMStoVS, genVarName, genLoopIndex,
+import Drasil.Shared.Helpers (toCode, onStateValue, on2StateValues)
+import Drasil.Shared.State (MS, lensMStoVS, genVarName, genLoopIndex,
   genVarNameIf, getVarScope)
 
 import Data.Maybe (fromMaybe, isNothing)

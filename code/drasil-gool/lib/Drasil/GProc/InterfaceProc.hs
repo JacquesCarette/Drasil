@@ -7,9 +7,9 @@ module Drasil.GProc.InterfaceProc (
   ProcProg, ProgramSym(..), FileSym(..), ModuleSym(..)
   ) where
 
-import Drasil.GOOL.InterfaceCommon (Label, SMethod, SharedProg,
+import Drasil.Shared.InterfaceCommon (Label, SMethod, SharedProg,
   MethodSym)
-import Drasil.GOOL.State (GS, FS)
+import Drasil.Shared.State (GS, FS)
 
 class (SharedProg r, ProgramSym r
   ) => ProcProg r

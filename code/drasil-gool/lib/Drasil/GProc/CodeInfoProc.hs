@@ -3,7 +3,7 @@
 -- Performs code analysis on the GOOL code
 module Drasil.GProc.CodeInfoProc (CodeInfoProc(..)) where
 
-import Drasil.GOOL.InterfaceCommon (MSBody, SValue, MSStatement, SMethod,
+import Drasil.Shared.InterfaceCommon (MSBody, SValue, MSStatement, SMethod,
   SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
   ScopeSym(..), VariableSym(..), VariableElim(..), ValueSym(..), Argument(..),
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..),
@@ -16,11 +16,11 @@ import Drasil.GOOL.InterfaceCommon (MSBody, SValue, MSStatement, SMethod,
   ParameterSym(..), MethodSym(..))
 import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..), FileSym(..),
   ModuleSym(..))
-import Drasil.GOOL.CodeType (CodeType(Void))
-import Drasil.GOOL.AST (VisibilityTag(..), qualName)
-import Drasil.GOOL.CodeAnalysis (ExceptionType(..))
-import Drasil.GOOL.Helpers (toCode, toState)
-import Drasil.GOOL.State (GOOLState, VS, lensGStoFS, lensFStoMS, lensMStoVS,
+import Drasil.Shared.CodeType (CodeType(Void))
+import Drasil.Shared.ATS (VisibilityTag(..), qualName)
+import Drasil.Shared.CodeAnalysis (ExceptionType(..))
+import Drasil.Shared.Helpers (toCode, toState)
+import Drasil.Shared.State (GOOLState, VS, lensGStoFS, lensFStoMS, lensMStoVS,
   lensVStoFS, modifyReturn, setModuleName, getModuleName, updateClassMap,
   addException, updateMethodExcMap, updateCallMap, addCall, callMapTransClosure,
   updateMEMWithCalls)

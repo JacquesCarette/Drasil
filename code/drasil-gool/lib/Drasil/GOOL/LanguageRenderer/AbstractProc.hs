@@ -1,30 +1,30 @@
 {-# LANGUAGE PostfixOperators #-}
 
-module Drasil.GOOL.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
+module Drasil.Shared.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
   buildModule, docMod, modFromData, listInnerType, arrayElem, funcDecDef,
   function
 ) where
 
-import Drasil.GOOL.InterfaceCommon (Label, SMethod, MSBody, MSStatement, SValue,
+import Drasil.Shared.InterfaceCommon (Label, SMethod, MSBody, MSStatement, SValue,
   SVariable, MSParameter, VSType, VariableElim(variableName, variableType),
   VisibilitySym(..), getType, convType, ScopeSym(Scope))
-import qualified Drasil.GOOL.InterfaceCommon as IC (MethodSym(function),
+import qualified Drasil.Shared.InterfaceCommon as IC (MethodSym(function),
   List(intToIndex), ParameterSym(param))
 import Drasil.GProc.InterfaceProc (SFile, FSModule, FileSym (File),
   ModuleSym(Module))
-import qualified Drasil.GOOL.RendererClassesCommon as RCC (MethodElim(..),
+import qualified Drasil.Shared.RendererClassesCommon as RCC (MethodElim(..),
   BlockCommentSym(..), ValueElim(value), InternalVarElim(variable),
   MethodTypeSym(mType), ScopeElim(scopeData))
 import Drasil.GProc.RendererClassesProc (ProcRenderSym)
 import qualified Drasil.GProc.RendererClassesProc as RCP (RenderFile(..),
   ModuleElim(..), RenderMod(..), ProcRenderMethod(intFunc))
-import Drasil.GOOL.AST (isSource)
-import Drasil.GOOL.Helpers (vibcat, toState, emptyIfEmpty, getInnerType,
+import Drasil.Shared.ATS (isSource)
+import Drasil.Shared.Helpers (vibcat, toState, emptyIfEmpty, getInnerType,
   onStateValue)
-import Drasil.GOOL.LanguageRenderer (addExt)
-import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (modDoc')
-import Drasil.GOOL.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVar)
-import Drasil.GOOL.State (FS, lensFStoGS, lensFStoMS, lensMStoVS, getModuleName, 
+import Drasil.Shared.LanguageRenderer (addExt)
+import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (modDoc')
+import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVar)
+import Drasil.Shared.State (FS, lensFStoGS, lensFStoMS, lensMStoVS, getModuleName, 
   setModuleName, setMainMod, currFileType, currMain, addFile, useVarName,
   currParameters, setVarScope)
 

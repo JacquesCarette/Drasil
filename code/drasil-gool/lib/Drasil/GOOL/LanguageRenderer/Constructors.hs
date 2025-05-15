@@ -1,22 +1,22 @@
 -- | Generic constructors and smart constructors to be used in renderers
-module Drasil.GOOL.LanguageRenderer.Constructors (
+module Drasil.Shared.LanguageRenderer.Constructors (
   mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, 
   VSOp, mkOp, unOpPrec, compEqualPrec, compPrec, addPrec, multPrec, powerPrec, 
   andPrec, orPrec, inPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr, 
   binExpr', binExprNumDbl', typeBinExpr
 ) where
 
-import Drasil.GOOL.InterfaceCommon (VSType, MSStatement, SVariable, SValue,
+import Drasil.Shared.InterfaceCommon (VSType, MSStatement, SVariable, SValue,
   TypeSym(..), TypeElim(..), ValueSym(..))
-import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, VSUnOp, VSBinOp,
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, VSUnOp, VSBinOp,
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
   RenderValue(..), ValueElim(valuePrec), RenderStatement(..))
-import qualified Drasil.GOOL.RendererClassesCommon as RC (uOp, bOp, value)
-import Drasil.GOOL.LanguageRenderer (unOpDocD, unOpDocD', binOpDocD, binOpDocD')
-import Drasil.GOOL.AST (Terminator(..), Binding(..), OpData, od)
-import Drasil.GOOL.CodeType (CodeType(..))
-import Drasil.GOOL.Helpers (toCode, toState, on2StateValues)
-import Drasil.GOOL.State (VS)
+import qualified Drasil.Shared.RendererClassesCommon as RC (uOp, bOp, value)
+import Drasil.Shared.LanguageRenderer (unOpDocD, unOpDocD', binOpDocD, binOpDocD')
+import Drasil.Shared.ATS (Terminator(..), Binding(..), OpData, od)
+import Drasil.Shared.CodeType (CodeType(..))
+import Drasil.Shared.Helpers (toCode, toState, on2StateValues)
+import Drasil.Shared.State (VS)
 
 import Text.PrettyPrint.HughesPJ (Doc, parens, text)
 import Data.Composition ((.:))

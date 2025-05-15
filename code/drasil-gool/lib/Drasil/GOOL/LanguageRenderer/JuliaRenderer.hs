@@ -3,15 +3,15 @@
 {-# LANGUAGE DeriveFunctor #-}
 
 -- | The logic to render Julia code is contained in this module
-module Drasil.GOOL.LanguageRenderer.JuliaRenderer (
+module Drasil.Shared.LanguageRenderer.JuliaRenderer (
   -- * Julia Code Configuration -- defines syntax of all Julia code
   JuliaCode(..), jlName, jlVersion
 ) where
 
 import Utils.Drasil (indent)
 
-import Drasil.GOOL.CodeType (CodeType(..))
-import Drasil.GOOL.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
+import Drasil.Shared.CodeType (CodeType(..))
+import Drasil.Shared.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
   SVariable, MSStatement, MSBlock, SMethod, BodySym(..), BlockSym(..),
   TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
@@ -26,7 +26,7 @@ import Drasil.GOOL.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
 import Drasil.GProc.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
-import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
   RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
@@ -36,52 +36,52 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
-import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block,
+import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
 import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
 import qualified Drasil.GProc.RendererClassesProc as RC (module')
-import Drasil.GOOL.LanguageRenderer (printLabel, listSep, listSep',
+import Drasil.Shared.LanguageRenderer (printLabel, listSep, listSep',
   variableList, parameterList, forLabel, inLabel, tryLabel, catchLabel,
   valueList)
-import qualified Drasil.GOOL.LanguageRenderer as R (sqrt, abs, log10, log,
+import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log,
   exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
   addComments, blockCmt, docCmt, commentedMod, listSetFunc, commentedItem,
   break, continue, constDec', assign, subAssign, addAssign)
-import Drasil.GOOL.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
+import Drasil.Shared.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
   unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
   typeBinExpr, mkStmt, mkStmtNoEnd)
-import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
-import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
+import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
+import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   block, multiBlock, litChar, litDouble, litInt, litString, valueOf, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, call, funcAppMixedArgs, lambda,
   listAccess, listSet, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
   emptyStmt, print, comment, valStmt, returnStmt, param, docFunc, throw, arg,
   argsList, ifCond, smartAdd, local, var)
-import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (bool,
+import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (bool,
   boolRender, extVar, funcType, listDec, listDecDef, listAccessFunc,
   listSetFunc, notNull, extFuncAppMixedArgs, functionDoc, listSize, listAdd,
   listAppend, intToIndex', indexToInt', inOutFunc, docInOutFunc', forLoopError,
   varDecDef, openFileR', openFileW', openFileA', multiReturn, multiAssign,
   inOutCall, mainBody, argExists, forEach', litSet)
-import qualified Drasil.GOOL.LanguageRenderer.CLike as C (litTrue, litFalse,
+import qualified Drasil.Shared.LanguageRenderer.CLike as C (litTrue, litFalse,
   notOp, andOp, orOp, inlineIf, while)
-import qualified Drasil.GOOL.LanguageRenderer.AbstractProc as A (fileDoc,
+import qualified Drasil.Shared.LanguageRenderer.AbstractProc as A (fileDoc,
   fileFromData, buildModule, docMod, modFromData, listInnerType, arrayElem,
   funcDecDef, function)
-import qualified Drasil.GOOL.LanguageRenderer.Macros as M (increment1,
+import qualified Drasil.Shared.LanguageRenderer.Macros as M (increment1,
   decrement1, ifExists, stringListVals, stringListLists)
-import Drasil.GOOL.AST (Terminator(..), FileType(..), FileData(..), fileD,
+import Drasil.Shared.ATS (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), ModData(..), md, updateMod, MethodData(..), mthd, OpData(..),
   ParamData(..), ProgData(..), TypeData(..), td, ValData(..), vd, VarData(..),
   vard, CommonThunk, progD, fd, pd, updateMthd, commonThunkDim, commonThunkElim,
   vectorize, vectorize2, commonVecIndex, sumComponents, pureValue, ScopeTag(..),
   ScopeData(..), sd)
-import Drasil.GOOL.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
+import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
-import Drasil.GOOL.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
+import Drasil.Shared.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
   getModuleImports, addModuleImportVS, getLangImports, getLibImports,
   addLibImportVS, useVarName, getMainDoc, genLoopIndex, genVarNameIf,
   setVarScope, getVarScope)

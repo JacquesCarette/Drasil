@@ -4,15 +4,15 @@
 {-# LANGUAGE InstanceSigs #-}
 
 -- | The logic to render C++ code is contained in this module
-module Drasil.GOOL.LanguageRenderer.CppRenderer (
+module Drasil.Shared.LanguageRenderer.CppRenderer (
   -- * C++ Code Configuration -- defines syntax of all C++ code
   CppSrcCode(..), CppHdrCode(..), CppCode(..), unCPPC, cppName, cppVersion
 ) where
 
 import Utils.Drasil (blank, indent, indentList)
 
-import Drasil.GOOL.CodeType (CodeType(..))
-import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, VSType,
+import Drasil.Shared.CodeType (CodeType(..))
+import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs,
   BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), VisibilitySym(..), VariableElim(..),
@@ -32,7 +32,7 @@ import Drasil.GOOL.InterfaceGOOL (CSStateVar, OOProg, ProgramSym(..),
   OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
   OOMethodSym(..))
-import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
   RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
@@ -43,7 +43,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
   RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
   ScopeElim(..))
-import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block,
+import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
@@ -54,20 +54,20 @@ import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
 
 
-import Drasil.GOOL.LanguageRenderer (addExt, classDec, dot, blockCmtStart,
+import Drasil.Shared.LanguageRenderer (addExt, classDec, dot, blockCmtStart,
   blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, commentStart,
   returnLabel, elseIfLabel, tryLabel, catchLabel, throwLabel, array', constDec',
   listSep', argc, argv, constDec, mainFunc, containing, functionDox, valueList,
   parameterList, appendToBody, surroundBody, getterName, setterName)
-import qualified Drasil.GOOL.LanguageRenderer as R (this', this, sqrt, fabs,
+import qualified Drasil.Shared.LanguageRenderer as R (this', this, sqrt, fabs,
   log10, log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, multiStmt,
   body, param, stateVar, constVar, cast, castObj, static, dynamic, break,
   continue, private, public, blockCmt, docCmt, addComments, commentedMod,
   commentedItem)
-import Drasil.GOOL.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
+import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkVal, mkStateVar, mkVar, VSOp, mkOp, unOpPrec, powerPrec,
   unExpr, unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
-import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
+import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
@@ -79,30 +79,30 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, function,
   buildClass, implementingClass, commentedClass, modFromData, fileDoc,
   fileFromData, defaultOptSpace, local)
-import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
-import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
+import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
+import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, funcType, buildModule, litArray,
   call', listSizeFunc, listAccessFunc', containsInt, string, constDecDef, docInOutFunc,
   listSetFunc, extraClass, intToIndex, indexToInt, global, setMethodCall)
-import qualified Drasil.GOOL.LanguageRenderer.CLike as C (charRender, float,
+import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize,
   increment1, decrement1, varDec, setType, varDecDef, listDec, extObjDecNew, switch,
   for, while, intFunc, multiAssignError, multiReturnError, multiTypeError)
-import qualified Drasil.GOOL.LanguageRenderer.Macros as M (runStrategy,
+import qualified Drasil.Shared.LanguageRenderer.Macros as M (runStrategy,
   listSlice, stringListVals, stringListLists, forRange, notifyObservers)
-import Drasil.GOOL.AST (Terminator(..), VisibilityTag(..), Binding(..), onBinding,
+import Drasil.Shared.ATS (Terminator(..), VisibilityTag(..), Binding(..), onBinding,
   BindData(..), bd, FileType(..), FileData(..), fileD, FuncData(..), fd,
   ModData(..), md, updateMod, OpData(..), ParamData(..), pd, ProgData(..),
   progD, emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), vd,
   VarData(..), vard, CommonThunk, pureValue, vectorize, vectorize2,
   sumComponents, commonVecIndex, commonThunkElim, commonThunkDim, ScopeData)
-import Drasil.GOOL.Classes (Pair(..))
-import Drasil.GOOL.Helpers (angles, doubleQuotedText, hicat, vibcat,
+import Drasil.Shared.Classes (Pair(..))
+import Drasil.Shared.Helpers (angles, doubleQuotedText, hicat, vibcat,
   emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues,
   on2StateValues, on3CodeValues, on3StateValues, onCodeList, onStateList,
   on2StateLists, on2StateWrapped)
-import Drasil.GOOL.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
+import Drasil.Shared.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   lensCStoMS, lensCStoVS, lensMStoCS, lensCStoFS, lensMStoVS, lensVStoMS,
   modifyReturn, revFiles, addLangImport, addLangImportVS, getLangImports,
   getLibImports, addModuleImportVS, getModuleImports, addHeaderLangImport,

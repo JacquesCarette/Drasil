@@ -33,7 +33,7 @@ import Drasil.GOOL.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
   libFuncApp, exists, List(..), Set(..), listSlice, listIndexExists, at, ScopeSym(..),
   ParameterSym(..), MethodSym(..), VisibilitySym(..), convType)
-import Drasil.GOOL.InterfaceProc (GSProgram, SFile, FSModule, ProcProg,
+import Drasil.GProc.InterfaceProc (GSProgram, SFile, FSModule, ProcProg,
   ProgramSym(..), FileSym(..), ModuleSym(..))
 
 import Drasil.GOOL.AST (FileData(..), ModData(..), ProgData(..),
@@ -46,6 +46,6 @@ import Drasil.GOOL.State (GOOLState(..), lensMStoVS, headers, sources, mainMod,
 
 import Drasil.GOOL.Helpers (onStateValue, onCodeList)
 
-import Drasil.GOOL.CodeInfoProc (unCI)
+import Drasil.GProc.CodeInfoProc (unCI)
 
 import Drasil.GOOL.LanguageRenderer.JuliaRenderer (unJLC, jlName, jlVersion)

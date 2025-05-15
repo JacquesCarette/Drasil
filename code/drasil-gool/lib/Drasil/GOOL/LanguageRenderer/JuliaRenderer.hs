@@ -23,7 +23,7 @@ import Drasil.GOOL.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), VisibilitySym(..), ScopeSym(..), ParameterSym(..),
   MethodSym(..), (&=), switchAsIf, convScope)
-import Drasil.GOOL.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
+import Drasil.GProc.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
 import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
@@ -39,9 +39,9 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
 import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
-import Drasil.GOOL.RendererClassesProc (ProcRenderSym, RenderFile(..),
+import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
-import qualified Drasil.GOOL.RendererClassesProc as RC (module')
+import qualified Drasil.GProc.RendererClassesProc as RC (module')
 import Drasil.GOOL.LanguageRenderer (printLabel, listSep, listSep',
   variableList, parameterList, forLabel, inLabel, tryLabel, catchLabel,
   valueList)

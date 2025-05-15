@@ -10,13 +10,13 @@ import Drasil.GOOL.InterfaceCommon (Label, SMethod, MSBody, MSStatement, SValue,
   VisibilitySym(..), getType, convType, ScopeSym(Scope))
 import qualified Drasil.GOOL.InterfaceCommon as IC (MethodSym(function),
   List(intToIndex), ParameterSym(param))
-import Drasil.GOOL.InterfaceProc (SFile, FSModule, FileSym (File),
+import Drasil.GProc.InterfaceProc (SFile, FSModule, FileSym (File),
   ModuleSym(Module))
 import qualified Drasil.GOOL.RendererClassesCommon as RCC (MethodElim(..),
   BlockCommentSym(..), ValueElim(value), InternalVarElim(variable),
   MethodTypeSym(mType), ScopeElim(scopeData))
-import Drasil.GOOL.RendererClassesProc (ProcRenderSym)
-import qualified Drasil.GOOL.RendererClassesProc as RCP (RenderFile(..),
+import Drasil.GProc.RendererClassesProc (ProcRenderSym)
+import qualified Drasil.GProc.RendererClassesProc as RCP (RenderFile(..),
   ModuleElim(..), RenderMod(..), ProcRenderMethod(intFunc))
 import Drasil.GOOL.AST (isSource)
 import Drasil.GOOL.Helpers (vibcat, toState, emptyIfEmpty, getInnerType,

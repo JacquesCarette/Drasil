@@ -1,13 +1,13 @@
 {-# LANGUAGE TypeFamilies #-}
 
-module Drasil.GOOL.RendererClassesProc (
+module Drasil.GProc.RendererClassesProc (
   ProcRenderSym, RenderFile(..), RenderMod(..), ModuleElim(..),
   ProcRenderMethod(..)
 ) where
 
 import Drasil.GOOL.InterfaceCommon (Label, SMethod, MSParameter,
   MSBody, BlockSym(..), VisibilitySym(..))
-import qualified Drasil.GOOL.InterfaceProc as IP (SFile, FSModule, FileSym(..),
+import qualified Drasil.GProc.InterfaceProc as IP (SFile, FSModule, FileSym(..),
   ModuleSym(..))
 import Drasil.GOOL.State (FS)
 

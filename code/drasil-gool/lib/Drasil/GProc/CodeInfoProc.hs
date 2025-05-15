@@ -1,7 +1,7 @@
 {-# LANGUAGE TypeFamilies, Rank2Types #-}
 
 -- Performs code analysis on the GOOL code
-module Drasil.GOOL.CodeInfoProc (CodeInfoProc(..)) where
+module Drasil.GProc.CodeInfoProc (CodeInfoProc(..)) where
 
 import Drasil.GOOL.InterfaceCommon (MSBody, SValue, MSStatement, SMethod,
   SharedProg, BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
@@ -14,7 +14,7 @@ import Drasil.GOOL.InterfaceCommon (MSBody, SValue, MSStatement, SMethod,
   StringStatement(..), FunctionSym(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), VisibilitySym(..),
   ParameterSym(..), MethodSym(..))
-import Drasil.GOOL.InterfaceProc (ProcProg, ProgramSym(..), FileSym(..),
+import Drasil.GProc.InterfaceProc (ProcProg, ProgramSym(..), FileSym(..),
   ModuleSym(..))
 import Drasil.GOOL.CodeType (CodeType(Void))
 import Drasil.GOOL.AST (VisibilityTag(..), qualName)

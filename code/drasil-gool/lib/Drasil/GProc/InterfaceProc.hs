@@ -1,6 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
 
-module Drasil.GOOL.InterfaceProc (
+module Drasil.GProc.InterfaceProc (
   -- Types
   GSProgram, SFile, FSModule,
   -- Typeclasses

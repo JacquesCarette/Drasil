@@ -88,8 +88,11 @@ Note: If changes are made that intentionally modify the generated documentation/
 
 ## Git Best Practices
 To maintain a clean, understandable project history and improve collaboration, please follow these guidelines when contributing code:
-- Structure commits thoughtfully
+- Structure commits and pull requests thoughtfully
   - Group related changes into the same commit making them easier to track. Ask yourself if the changes you are committing serve the same coherent purpose. If so, try to commit them all together.
+  - Do not group unrelated items in a single pull request. Smaller pull requests are much more manageable and highly preferred
+  - Pull requests, unless trivial, should get at least 2 reviews before being merged
+  - Even if GitHub gives you permission to, do not merge your own pull requests
 - Clear, concise commit messages
   - When committing changes, avoid using `auto` commits and provide meaningful messages that assist reviewers in understanding what was changed and why. Ex.,
     - Good:

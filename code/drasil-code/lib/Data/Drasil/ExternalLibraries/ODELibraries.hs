@@ -11,9 +11,9 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
 ) where
 
 import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
-  QuantityDict, HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, Vect), implVar,
+  QuantityDict, HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, ClifS), implVar,
   implVarUID, implVarUID', qw, compoundPhrase, nounPhrase, nounPhraseSP, label,
-  sub, Idea(getA), NamedIdea(term), Stage(..), (+++))
+  sub, Idea(getA), NamedIdea(term), Stage(..), (+++), vectNDS)
 import Language.Drasil.Display (Symbol(Label, Concat))
 
 import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
@@ -443,7 +443,7 @@ odeint = externalLib [
       customObjArg [] "Class representing an ODE system" ode odeCtor
         (customClass [constructorInfo odeCtor [] [],
           methodInfoNoReturn odeOp "function representation of ODE system"
-            [unnamedParam (Vect Real), unnamedParam (Vect Real), lockedParam t]
+            [unnamedParam (vectNDS "n" Real), unnamedParam (vectNDS "n" Real), lockedParam t] -- TODO: what do we put here? We need specific dimensions now.
             [assignArrayIndex]]),
       -- Need to declare variable holding initial value because odeint will update this variable at each step
       preDefinedArg odeintCurrVals,
@@ -451,7 +451,7 @@ odeint = externalLib [
       customObjArg []
         "Class for populating a list during an ODE solution process"
         pop popCtor (customClass [
-          constructorInfo popCtor [unnamedParam (Vect Real)] [],
+          constructorInfo popCtor [unnamedParam (vectNDS "n" Real)] [], -- TODO: Same as above TODO
           methodInfoNoReturn popOp
             "appends solution point for current ODE solution step"
             [lockedParam y, lockedParam t] [appendCurrSol (sy y)]])]]
@@ -496,7 +496,7 @@ odeintCurrVals, rk, stepper, pop :: CodeVarChunk
 odeintCurrVals = quantvar $ implVar "currVals_odeint" (nounPhrase
   "vector holding ODE solution values for the current step"
   "vectors holding ODE solution values for the current step")
-  (Vect Real) (label "currVals")
+  (vectNDS "n" Real) (label "currVals") -- TODO: Same as above, what do we fill in here?
 rk = quantvar $ implVar "rk_odeint" (nounPhrase
   "stepper for solving ODE system using Runge-Kutta-Dopri5 method"
   "steppers for solving ODE system using Runge-Kutta-Dopri5 method")
@@ -555,7 +555,7 @@ t = quantvar $ implVar "t_ode" (nounPhrase
 y = quantvar $ implVar "y_ode" (nounPhrase
   "current dependent variable value in ODE solution"
   "current dependent variable value in ODE solution")
-  (Vect Real) (label "y")
+  (vectNDS "n" Real) (label "y") -- TODO: Same as above - what dimension do we use here?
 
 -- | ODE object constructor.
 odeCtor :: CodeFuncChunk
@@ -599,8 +599,8 @@ modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
     replaceDepVar (Matrix es)             = Matrix $ map (map replaceDepVar) es
     replaceDepVar (UnaryOp u e)           = UnaryOp u $ replaceDepVar e
     replaceDepVar (UnaryOpB u e)          = UnaryOpB u $ replaceDepVar e
-    replaceDepVar (UnaryOpVV u e)         = UnaryOpVV u $ replaceDepVar e
-    replaceDepVar (UnaryOpVN u e)         = UnaryOpVN u $ replaceDepVar e
+    replaceDepVar (UnaryOpCC u e)         = UnaryOpCC u $ replaceDepVar e
+    replaceDepVar (UnaryOpCN u e)         = UnaryOpCN u $ replaceDepVar e
     replaceDepVar (ArithBinaryOp b e1 e2) = ArithBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
     replaceDepVar (BoolBinaryOp b e1 e2)  = BoolBinaryOp b
@@ -611,9 +611,9 @@ modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
       (replaceDepVar e1) (replaceDepVar e2)
     replaceDepVar (OrdBinaryOp b e1 e2)   = OrdBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (VVNBinaryOp b e1 e2)   = VVNBinaryOp b
+    replaceDepVar (CCNBinaryOp b e1 e2)   = CCNBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (VVVBinaryOp b e1 e2)   = VVVBinaryOp b
+    replaceDepVar (CCCBinaryOp b e1 e2)   = CCCBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
     replaceDepVar (Operator ao dd e)      = Operator ao dd $ replaceDepVar e
     replaceDepVar e = e

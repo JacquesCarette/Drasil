@@ -115,7 +115,10 @@ To maintain a clean, understandable project history and improve collaboration, p
     3. `Expr` Evaluator: Fix evaluation of list of numbers (one was accidentally ignored)
     4. `Expr` Pretty Printer: Remove excessive parentheses around literals
   - It would be a good idea to squash (1) and (3) together, and also (2) and (4). These pairs of commits both work on the same piece of code, and could easily be part of the same commit with no confusion.
-  - This [blog post](https://dev.to/the_real_stacie/git-are-you-an-over-committer-squash-those-commits-2klk) contains useful information on how to squash commits
+  - These are some helpful resources related to commit squashing
+    - Lots of the information in this was gathered from a [comment by @balacij](https://github.com/JacquesCarette/Drasil/pull/4065#issuecomment-2885125379), more details about squashing commits can be found there
+    -  For a good example to understand the value of squashing [this comment](https://github.com/JacquesCarette/Drasil/pull/3705#issuecomment-2148869719) provides some good feedback in the context of a PR
+    - **Important:** This [blog post](https://dev.to/the_real_stacie/git-are-you-an-over-committer-squash-those-commits-2klk) contains useful information on how to squash commits
 
 ## Editing this Wiki
 We do not use the same web-based workflow that most GitHub repositories follow. Rather, we carry a copy of our wiki _in_ our repo. Specifically, in the `./wiki/` folder. **To edit this wiki, please use the standard "commit and PR" workflow we follow, as with everything else in the repo.** The benefit of this approach is that we can review wiki changes through the PR workflow and tie them to tickets filed about the wiki.

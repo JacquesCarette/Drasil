@@ -72,12 +72,13 @@ timeDerivEqns = D.timeDeriv ++ [express timeQD]
 ---
 landPosIM :: InstanceModel
 landPosIM = imNoRefs (equationalModelN (nounPhraseSP "calculation of landing position") landPosQD)
-  []
-  (qw landPos) []
+  [qwC launSpeed $ UpFrom (Exc, exactDbl 0),
+   qwC launAngle $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)]
+  (qw landPos) [UpFrom (Exc, exactDbl 0)]
   (Just landPosDeriv) "calOfLandingDist" [angleConstraintNote, gravitationalAccelConstNote, landPosConsNote]
-
+  
 landPosQD :: SimpleQDef
-landPosQD = mkQuantDef landPos $ vAdd (sy landPos) (sy landPos)
+landPosQD = mkQuantDef landPos E.landPosExpr
 
 landPosDeriv :: Derivation
 landPosDeriv = mkDerivName (phrase landPos) (weave [landPosDerivSents, map eS landPosDerivEqns])

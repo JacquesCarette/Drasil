@@ -18,6 +18,7 @@ import Control.Lens ((^.))
 import Language.Drasil
 import Database.Drasil
 import SysInfo.Drasil
+import Drasil.GetChunk
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(..),
   TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints), qdFromDD)
 

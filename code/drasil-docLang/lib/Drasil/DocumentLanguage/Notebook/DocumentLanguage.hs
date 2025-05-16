@@ -7,7 +7,8 @@ import Drasil.DocumentLanguage.Notebook.Core (LsnDesc, LsnChapter(..),
 
 import Language.Drasil hiding (kind)
 
-import SysInfo.Drasil (System(SI), _authors, _kind, _sys, citeDB)
+import SysInfo.Drasil (System(SI), _authors, _kind, _sys)
+import Drasil.GetChunk (citeDB)
 
 import qualified Drasil.DocLang.Notebook as Lsn (intro, learnObj, caseProb, example, 
   appendix, review, reference, summary)

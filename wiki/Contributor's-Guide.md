@@ -103,8 +103,19 @@ To maintain a clean, understandable project history and improve collaboration, p
       2. Update
       3. more edits
   - Of course, these messages should line up with what was actually changed
-- Avoid over-syncing with `main`
-  - Only sync your branch with `main` when there is a merge conflict showing in the pull request
+- Properly syncing with `main`
+  - Syncing with `main` regularly can be a very good thing due to the existance of stable artifacts checked into the repo, when done correctly
+    1. Avoid using `merge`, it results in many merge commits making the commit history very "noisy"
+    2. It's better to use `rebase` as the commit history is cleaner (no merge commits). Use this as much as you like
+  - Syncing with `main` is required when a merge conflict occurs in order for a PR to be accepted. It is also a particularly good idea to sync when a PR author notices someone merged a feature branch that alters `stable/`. This avoids CI errors that happen when `stable/` differs from the updated code.
+- Regarding squashing commits
+  - For PRs with long and/or "messy" commit histories, multiple commits should try to be squashed into a more consice set. This should be done especially in scenarios where you have a longer commit history that gradually works on the same piece of code. Ex., Let's say you have the following commits:
+    1. Create evaluator for `Expr`
+    2. Create pretty printer for `Expr`
+    3. `Expr` Evaluator: Fix evaluation of list of numbers (one was accidentally ignored)
+    4. `Expr` Pretty Printer: Remove excessive parentheses around literals
+  - It would be a good idea to squash (1) and (3) together, and also (2) and (4). These pairs of commits both work on the same piece of code, and could easily be part of the same commit with no confusion.
+  - This [blog post](https://dev.to/the_real_stacie/git-are-you-an-over-committer-squash-those-commits-2klk) contains useful information on how to squash commits
 
 ## Editing this Wiki
 We do not use the same web-based workflow that most GitHub repositories follow. Rather, we carry a copy of our wiki _in_ our repo. Specifically, in the `./wiki/` folder. **To edit this wiki, please use the standard "commit and PR" workflow we follow, as with everything else in the repo.** The benefit of this approach is that we can review wiki changes through the PR workflow and tie them to tickets filed about the wiki.

@@ -5,7 +5,7 @@ import Data.Containers.ListUtils (nubOrd)
 
 import Language.Drasil.ModelExpr.Lang (ModelExpr(..))
 import Language.Drasil.Space          (RealInterval(..))
-import Language.Drasil.UID            (UID)
+import Drasil.Database.UID            (UID)
 import Data.Map                       (Map)
 import qualified Data.Map       as Map
 

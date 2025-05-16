@@ -5,17 +5,16 @@
 -- | The Drasil Expression language
 module Language.Drasil.Expr.Lang where
 
-import           Language.Drasil.Literal.Class (LiteralC (..))
-import           Language.Drasil.Literal.Lang  (Literal (..))
-import           Language.Drasil.Space         (DiscreteDomainDesc,
-                                                RealInterval, Space)
-import qualified Language.Drasil.Space         as S
-import           Language.Drasil.UID           (UID)
-import           Language.Drasil.WellTyped
+import Drasil.Database.UID (UID)
 
-import           Data.Either                  (lefts, fromLeft)
-
+import Language.Drasil.Literal.Class (LiteralC (..))
+import Language.Drasil.Literal.Lang  (Literal (..))
+import Language.Drasil.Space         (DiscreteDomainDesc, RealInterval, Space)
+import qualified Language.Drasil.Space as S
+import Language.Drasil.WellTyped
+import Data.Either (lefts, fromLeft)
 import qualified Data.Foldable as NE
+
 import           Numeric.Natural              (Natural)
 import           Data.Map                     (Map)
 import qualified Data.Map as Map

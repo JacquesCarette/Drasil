@@ -1,0 +1,17 @@
+listAddFunc
+listAdd
+listAppend
+listSizeFunc
+listSize
+listAccessFunc
+listAccessFunc'
+listSetFunc
+litArray
+litSet
+litSetFunc
+listDecDef
+setDecDef
+setDec
+arrayType
+arrayDec
+arrayDecDef

@@ -36,6 +36,7 @@ launAngle = constrained'    (ucStaged C.launAngle (autoStage lTheta  ) Real radi
 launSpeed = constrained'    (uc       C.launSpeed (subStr lV "launch") Real velU  ) [gtZeroConstr] (exactDbl 100)
 offset    = constrainedNRV' (uc       C.offset    (subStr lD "offset") Real metre ) [physRange $ UpFrom (Exc, neg $ sy targPos)]
 targPos   = constrained'    (uc       C.targPos   (subStr lP "target") Real metre ) [gtZeroConstr] (exactDbl 1000)
+
 ---
 -- The output contains a message, as a string, so it needs to be a quantity
 message :: QuantityDict

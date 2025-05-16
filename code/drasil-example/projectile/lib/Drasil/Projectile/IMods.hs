@@ -76,7 +76,7 @@ landPosIM = imNoRefs (equationalModelN (nounPhraseSP "calculation of landing pos
    qwC launAngle $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)]
   (qw landPos) [UpFrom (Exc, exactDbl 0)]
   (Just landPosDeriv) "calOfLandingDist" [angleConstraintNote, gravitationalAccelConstNote, landPosConsNote]
-  
+
 landPosQD :: SimpleQDef
 landPosQD = mkQuantDef landPos E.landPosExpr
 

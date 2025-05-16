@@ -27,8 +27,8 @@ twoDMotion        = cic "twoDMotion"    twoDMotionDesc          "twoDMotion"    
 cartSys           = cic "cartSys"       cartSysDesc             "cartSys"       assumpDom
 cartSysR          = cic "cartSysR"      cartSysRDesc            "cartSysR"      assumpDom
 yAxisDir          = cic "yAxisDir"      yAxisDirDesc            "yAxisDir"      assumpDom
-startOriginSingle = cic "startOrigin"   startOriginDescSingle   "startOrigin"   assumpDom
-startOriginDouble = cic "startOrigin"   startOriginDescDouble   "startOrigin"   assumpDom
+startOriginSingle = cic "startOrigin1x" startOriginDescSingle   "startOrigin"   assumpDom
+startOriginDouble = cic "startOrigin2x" startOriginDescDouble   "startOrigin"   assumpDom
 firstPend         = cic "firstPend"     firstPendDesc           "firstPend"     assumpDom
 secondPend        = cic "secondPend"    secondPendDesc          "secondPend"    assumpDom
 

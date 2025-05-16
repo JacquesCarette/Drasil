@@ -4,7 +4,7 @@ module Drasil.DocumentLanguage.TraceabilityMatrix where
 
 import Language.Drasil
 import Database.Drasil hiding (cdb)
-import SysInfo.Drasil hiding (purpose)
+import System.Drasil hiding (purpose)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (purpose, component, dependency,
@@ -43,7 +43,7 @@ generateTraceTableView u desc cols rows c = llcc (makeTabRef' u) $ Table
   (makeTMatrix (traceMRowHeader rowf c) (traceMColumns colf rowf cdb) $ traceMReferees colf cdb)
   (showingCxnBw traceyMatrix desc) True
     where
-    cdb = _sysinfodb c
+    cdb = _systemdb c
     colf = layoutUIDs cols cdb
     rowf = layoutUIDs rows cdb
 
@@ -59,7 +59,7 @@ traceMReferrers f = f . nubOrd . concat . Map.elems . (^. refbyTable)
 
 -- | Helper that finds the header of a traceability matrix.
 traceMHeader :: (ChunkDB -> [UID]) -> System -> [Sentence]
-traceMHeader f c = map (`helpToRefField` c) $ f $ _sysinfodb c
+traceMHeader f c = map (`helpToRefField` c) $ f $ _systemdb c
 
 -- | Helper that finds the headers of the traceability matrix columns.
 traceMColHeader :: ([UID] -> [UID]) -> System -> [Sentence]

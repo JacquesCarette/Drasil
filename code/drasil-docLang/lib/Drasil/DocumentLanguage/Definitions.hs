@@ -17,7 +17,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil
 import Database.Drasil
-import SysInfo.Drasil
+import System.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(..),
   TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints), qdFromDD)
 
@@ -110,7 +110,7 @@ mkTMField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
 -- | Helper function to make a list of 'Sentence's from the current system information and something that has a 'UID'.
 helperRefs :: HasUID t => t -> System -> Sentence
 helperRefs t s = foldlList Comma List $ map (`helpToRefField` s) $ nub $
-  refbyLookup (t ^. uid) (_sysinfodb s ^. refbyTable)
+  refbyLookup (t ^. uid) (_systemdb s ^. refbyTable)
 
 -- | Creates a reference as a 'Sentence' by finding if the 'UID' is in one of the possible data sets contained in the 'System' database.
 helpToRefField :: UID -> System -> Sentence
@@ -122,7 +122,7 @@ helpToRefField t si
   | member t (s ^. conceptinsTable)      = refS $ conceptinsLookup  t (s ^. conceptinsTable)
   | member t (s ^. citationTable)        = EmptyS
   | otherwise = error $ show t ++ "Caught."
-  where s = _sysinfodb si
+  where s = _systemdb si
 
 -- | Helper that makes a list of 'Reference's into a 'Sentence'. Then wraps into 'Contents'.
 helperSources :: [DecRef] -> [Contents]
@@ -148,7 +148,7 @@ buildDescription :: Verbosity -> InclUnits -> ModelExpr -> System -> [Contents] 
   [Contents]
 buildDescription Succinct _ _ _ _ = []
 buildDescription Verbose u e m cs = (UlC . ulcc .
-  Enumeration . Definitions . descPairs u $ vars e $ _sysinfodb m) : cs
+  Enumeration . Definitions . descPairs u $ vars e $ _systemdb m) : cs
 
 -- | Similar to 'buildDescription' except it takes a 'DataDefinition' that is included as the 'firstPair'' in ['Contents'] (independent of verbosity).
 -- The 'Verbose' case also includes more details about the 'DataDefinition' expressions.
@@ -156,7 +156,7 @@ buildDDescription' :: Verbosity -> InclUnits -> DataDefinition -> System ->
   [Contents]
 buildDDescription' Succinct u d _ = [UlC . ulcc . Enumeration $ Definitions [firstPair' u d]]
 buildDDescription' Verbose  u d m = [UlC . ulcc . Enumeration $ Definitions $
-  firstPair' u d : descPairs u (flip vars (_sysinfodb m) $
+  firstPair' u d : descPairs u (flip vars (_systemdb m) $
   either (express . (^. defnExpr)) (^. defnExpr) (qdFromDD d))]
 
 -- | Create the fields for a general definition from a 'GenDefn' chunk.

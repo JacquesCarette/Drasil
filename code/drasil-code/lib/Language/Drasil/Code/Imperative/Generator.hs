@@ -40,7 +40,7 @@ import Drasil.GOOL (OOProg, VisibilityTag(..),
 import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
-import SysInfo.Drasil hiding (sysinfodb)
+import System.Drasil hiding (systemdb)
 
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing,
   getCurrentDirectory)
@@ -102,7 +102,7 @@ generator l dt sd chs spec = DrasilState {
         cdm = clsDefMap (spec ^. oldCodeSpec) chs modules'
         modules' = (spec ^. modsO) ++ concatMap (^. auxMods) els
         nonPrefChs = choicesSent chs
-        des = vcat . map (sentenceDoc (spec ^. sysinfodbO) Implementation OneLine) $
+        des = vcat . map (sentenceDoc (spec ^. systemdbO) Implementation OneLine) $
           (nonPrefChs ++ concLog ++ libLog)
 
 -- OO Versions --
@@ -146,7 +146,7 @@ genPackage unRepr = do
       m = makefile (libPaths g) (implType g) (commented g) s pd
       as = map name (codeSpec g ^. authorsO)
       cfp = codeSpec g ^. configFilesO
-      db = codeSpec g ^. sysinfodbO
+      db = codeSpec g ^. systemdbO
       -- prps = show $ sentenceDoc db Implementation OneLine
       --   (foldlSent $ purpose $ codeSpec g)
       prps = show $ sentenceDoc db Implementation OneLine 
@@ -183,7 +183,7 @@ genProgram = do
   g <- get
   ms <- chooseModules $ modular g
   let n = codeSpec g ^. pNameO 
-  let p = show $ sentenceDoc (codeSpec g ^. sysinfodbO) Implementation OneLine $ foldlSent $ codeSpec g ^. purpose
+  let p = show $ sentenceDoc (codeSpec g ^. systemdbO) Implementation OneLine $ foldlSent $ codeSpec g ^. purpose
   return $ OO.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice
@@ -260,7 +260,7 @@ genPackageProc unRepr = do
       m = makefile (libPaths g) (implType g) (commented g) s pd
       as = map name (codeSpec g ^. authorsO)
       cfp = codeSpec g ^. configFilesO
-      db = codeSpec g ^. sysinfodbO
+      db = codeSpec g ^. systemdbO
       prps = show $ sentenceDoc db Implementation OneLine
         (foldlSent $ codeSpec g ^. purpose)
       bckgrnd = show $ sentenceDoc db Implementation OneLine
@@ -295,7 +295,7 @@ genProgramProc = do
   g <- get
   ms <- chooseModulesProc $ modular g
   let n = codeSpec g ^. pNameO
-  let p = show $ sentenceDoc (codeSpec g ^. sysinfodbO) Implementation OneLine $ foldlSent $ codeSpec g ^. purpose
+  let p = show $ sentenceDoc (codeSpec g ^. systemdbO) Implementation OneLine $ foldlSent $ codeSpec g ^. purpose
   return $ Proc.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice

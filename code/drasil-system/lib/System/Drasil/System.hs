@@ -5,7 +5,7 @@
 -- in Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
 
-module SysInfo.Drasil.SystemInformation (
+module System.Drasil.System (
   -- * System Information
   -- ** Types
   System(..),
@@ -59,7 +59,7 @@ data System where
   , _outputs     :: [i]
   , _constraints :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
   , _constants   :: [ConstQDef]
-  , _sysinfodb   :: ChunkDB
+  , _systemdb   :: ChunkDB
   , _usedinfodb  :: ChunkDB
   } -> System
 

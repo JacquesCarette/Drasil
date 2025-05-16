@@ -92,7 +92,7 @@ si = SI {
   _outputs     = map qw outputs,
   _constraints = constrained,
   _constants   = specParamValList,
-  _sysinfodb   = symbMap,
+  _systemdb   = symbMap,
   _usedinfodb  = usedDB
 }
 

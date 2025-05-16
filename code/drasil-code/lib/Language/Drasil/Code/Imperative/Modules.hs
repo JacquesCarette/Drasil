@@ -412,7 +412,7 @@ printConstraint :: (OOProg r) => String -> ConstraintCE ->
   GenState [MSStatement r]
 printConstraint v c = do
   g <- get
-  let db = codeSpec g ^. sysinfodbO
+  let db = codeSpec g ^. systemdbO
       printConstraint' :: (OOProg r) => String -> ConstraintCE -> GenState
         [MSStatement r]
       printConstraint' _ (Range _ (Bounded (_, e1) (_, e2))) = do
@@ -478,7 +478,7 @@ genSampleInput = do
   g <- get
   dd <- genDataDesc
   if hasSampleInput (auxiliaries g) then return . Just $ sampleInput
-    (codeSpec g ^. sysinfodbO) dd (sampleData g) else return Nothing
+    (codeSpec g ^. systemdbO) dd (sampleData g) else return Nothing
 
 ----- CONSTANTS -----
 
@@ -961,7 +961,7 @@ printConstraintProc :: (SharedProg r) => ConstraintCE ->
   GenState [MSStatement r]
 printConstraintProc c = do
   g <- get
-  let db = codeSpec g ^. sysinfodbO
+  let db = codeSpec g ^. systemdbO
       printConstraint' :: (SharedProg r) => ConstraintCE -> GenState
         [MSStatement r]
       printConstraint' (Range _ (Bounded (_, e1) (_, e2))) = do

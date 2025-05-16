@@ -17,7 +17,12 @@ import Control.Lens ((^.))
 
 import Language.Drasil
 import Database.Drasil
+<<<<<<< HEAD
 import System.Drasil
+=======
+import System.Drasil
+import Drasil.GetChunk
+>>>>>>> 835dc19196 (Move GetChunk to appropriate location)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(..),
   TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints), qdFromDD)
 

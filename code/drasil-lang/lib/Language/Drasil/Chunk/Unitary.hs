@@ -15,7 +15,7 @@ import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn, unitWrapp
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.NounPhrase.Core (NP)
-import Language.Drasil.UID (HasUID(..))
+import Drasil.Database.UID (HasUID(..))
 
 import Control.Lens ((^.), makeLenses)
 

@@ -1,14 +1,18 @@
 -- | Utilities to get grab certain chunks (from 'Expr', 'Sentence', etc) by 'UID' and
 -- dereference the chunk it refers to.
-module SysInfo.Drasil.GetChunk (ccss, ccss', combine, getIdeaDict, vars) where
+module SysInfo.Drasil.GetChunk (ccss, ccss', combine, vars, citeDB) where
 
 import Language.Drasil
 import Language.Drasil.Development
 import Language.Drasil.ModelExpr.Development (meDep)
 
-import Database.Drasil (ChunkDB, defResolve, symbResolve, termResolve)
+import Database.Drasil (ChunkDB, defResolve, symbResolve, citationTable)
 
-import Data.List (nub)
+import SysInfo.Drasil.SystemInformation (System, sysinfodb)
+
+import Control.Lens ((^.))
+import Data.List (nub, sortBy)
+import qualified Data.Map as M
 
 -- | Gets a list of quantities ('QuantityDict') from an equation in order to print.
 vars :: ModelExpr -> ChunkDB -> [QuantityDict]
@@ -42,6 +46,6 @@ concpt a m = map (defResolve m) $ sdep a
 concpt' :: ModelExpr -> ChunkDB -> [ConceptChunk]
 concpt' a m = map (defResolve m) $ meDep a
 
--- | Gets a list of ideas ('IdeaDict') from a 'Sentence' in order to print.
-getIdeaDict :: Sentence -> ChunkDB -> [IdeaDict]
-getIdeaDict a m = map (termResolve m) $ shortdep a
+-- | Helper for extracting a bibliography from the system information.
+citeDB :: System -> BibRef
+citeDB si = sortBy compareAuthYearTitle $ map fst $ M.elems $ si ^. (sysinfodb . citationTable)

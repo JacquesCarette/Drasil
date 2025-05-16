@@ -1,9 +1,9 @@
 module Database.Drasil.Dump where
 
 import Language.Drasil (UID, HasUID(..))
-import Database.Drasil.ChunkDB (refTable, labelledcontentTable, sectionTable, 
-  conceptinsTable, theoryModelTable, gendefTable, insmodelTable, dataDefnTable,
-  unitTable, UMap, ChunkDB(termTable, symbolTable))
+import Database.Drasil.ChunkDB (conceptinsTable, theoryModelTable, gendefTable,
+  insmodelTable, dataDefnTable, unitTable, citationTable, UMap,
+  ChunkDB(termTable, symbolTable, conceptChunkTable))
 
 import Data.Map.Strict (Map, insert)
 import qualified Data.Map.Strict as SM
@@ -20,14 +20,12 @@ dumpChunkDB :: ChunkDB -> DumpedChunkDB
 dumpChunkDB cdb = 
       insert "symbols" (umapDump $ symbolTable cdb)
     $ insert "terms" (umapDump $ termTable cdb)
-    $ insert "concepts" (umapDump $ cdb ^. conceptinsTable)
+    $ insert "concepts" (umapDump $ conceptChunkTable cdb)
     $ insert "units" (umapDump $ cdb ^. unitTable)
     $ insert "dataDefinitions" (umapDump $ cdb ^. dataDefnTable)
     $ insert "instanceModels" (umapDump $ cdb ^. insmodelTable)
     $ insert "generalDefinitions" (umapDump $ cdb ^. gendefTable)
     $ insert "theoryModels" (umapDump $ cdb ^. theoryModelTable)
     $ insert "conceptInstances" (umapDump $ cdb ^. conceptinsTable)
-    $ insert "sections" (umapDump $ cdb ^. sectionTable)
-    $ insert "labelledContent" (umapDump $ cdb ^. labelledcontentTable)
-    $ insert "references" (umapDump $ cdb ^. refTable)
+    $ insert "citations" (umapDump $ cdb ^. citationTable)
       mempty

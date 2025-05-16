@@ -1,15 +1,14 @@
 module SysInfo.Drasil (
- -- * System Information
-   SystemInformation(..), Block(Parallel)
- -- * Lenses
- , HasSystemInformation(..)
- -- * Reference Database
- , ReferenceDB, RefMap, Purpose, Background, Scope, Motivation
- , citeDB, rdb, simpleMap, citationDB, conceptDB
-
+  -- * System Information
+    System(..)
+  -- * Lenses
+  , HasSystem(..)
+  -- * Reference Database
+  , Purpose, Background, Scope, Motivation
+  , citeDB
   -- ** Utility Helper Functions
   -- GetChunk
-  , ccss, ccss', combine, getIdeaDict, vars
+  , ccss, ccss', vars
 ) where
 
 import SysInfo.Drasil.GetChunk

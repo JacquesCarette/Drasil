@@ -49,7 +49,7 @@ import Drasil.SglPend.Requirements (funcReqs)
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
@@ -105,7 +105,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
 progName :: CI
 progName = commonIdeaWithDict "sglPendulum" (pn "Single Pendulum") "SglPend" [physics]
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = progName, 
   _kind        = Doc.srs,
@@ -115,18 +115,15 @@ si = SI {
   _scope       = [],
   _motivation  = [],
   _quants      = symbols,
-  _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = iMods,
   _datadefs    = dataDefs,
   _configFiles = [],
   _inputs      = inputs,
   _outputs     = outputs,
-  _defSequence = [] :: [Block SimpleQDef],
   _constraints = inConstraints,
   _constants   = [] :: [ConstQDef],
   _sysinfodb   = symbMap,
-  _usedinfodb  = usedDB,
-   refdb       = refDB
+  _usedinfodb  = usedDB
 }
 
 purp :: Sentence
@@ -140,7 +137,7 @@ symbMap = cdb (map (^. output) iMods ++ map qw symbols)
    map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz] ++
    [nw algorithm] ++ map nw compcon ++ map nw educon ++ map nw prodtcon)
   (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs
-  iMods genDefns tMods concIns [] [] allRefs
+  iMods genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -148,10 +145,7 @@ allRefs = [externalLinkRef]
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw acronyms ++ map nw symbols) ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
-
-refDB :: ReferenceDB
-refDB = rdb citations concIns
+  ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 concIns :: [ConceptInstance]
 concIns = assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs

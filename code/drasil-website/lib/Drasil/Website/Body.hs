@@ -66,11 +66,11 @@ data FolderLocation = Folder {
   , packages :: [String]
     }
 
--- TODO: Should the website be using a ``SystemInformation''? This is primarily for the SmithEtAl template.
+-- TODO: Should the website be using a ``System''? This is primarily for the SmithEtAl template.
 --       It seems like the website is primarily that functions on a chunkdb.
 
 -- | System information.
-si :: FolderLocation -> SystemInformation
+si :: FolderLocation -> System
 si fl = SI {
     _sys         = webName,
     _kind        = web,
@@ -80,19 +80,16 @@ si fl = SI {
     _background  = [],
     _motivation  = [],
     _scope       = [],
-    _concepts    = [] :: [UnitalChunk],
     _instModels  = [],
     _datadefs    = [],
     _configFiles = [],
     _inputs      = [] :: [QuantityDict],
     _outputs     = [] :: [QuantityDict],
-    _defSequence = [] :: [Block SimpleQDef],
     _constraints = [] :: [ConstrainedChunk],
     _constants   = [] :: [ConstQDef],
     _sysinfodb   = symbMap fl,
-    _usedinfodb  = usedDB,
-    refdb        = rdb [] []
-}
+    _usedinfodb  = usedDB
+  }
 
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.
 sections :: FolderLocation -> [Section]
@@ -109,16 +106,16 @@ symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, web, phsChgMtrl] ++
   heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce, 
   normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [game, physics, condition, glaSlab, intrslce,
   slope, safety, factor]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] 
-  [] [] [] $ allRefs fl
+  [] [] (allRefs fl) []
 
--- | Helper to get the system name as an 'IdeaDict' from 'SystemInformation'.
-getSysName :: SystemInformation -> IdeaDict
+-- | Helper to get the system name as an 'IdeaDict' from 'System'.
+getSysName :: System -> IdeaDict
 getSysName SI{_sys = nm} = nw nm 
 
 -- | Empty database needed for 'si' to work.
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
-           ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+           ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- | Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]

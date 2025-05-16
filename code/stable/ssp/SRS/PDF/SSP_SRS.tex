@@ -447,13 +447,13 @@ This section simplifies the original problem and helps in developing the theoret
 \item[Soil-Layer-Homogeneous:\phantomsection\label{assumpSLH}]{The soil mass is homogeneous, with consistent soil properties throughout. (RefBy: \hyperref[GD:sliceWght]{GD:sliceWght}, \hyperref[GD:resShr]{GD:resShr}, and \hyperref[LC_inhomogeneous]{LC:Calculate-Inhomogeneous-Soil-Layers}.)}
 \item[Soil-Properties:\phantomsection\label{assumpSP}]{The soil properties are independent of dry or saturated conditions, with the exception of unit weight. (RefBy: \hyperref[GD:resShr]{GD:resShr}.)}
 \item[Soil-Layers-Isotropic:\phantomsection\label{assumpSLI}]{The soil mass is treated as if the effective cohesion and effective angle of friction are isotropic properties. (RefBy: \hyperref[GD:resShr]{GD:resShr}.)}
-\item[Interslice-Norm-Shear-Forces-Linear:\phantomsection\label{assumpINSFL}]{Following the assumption of Morgenstern and Price (\cite{morgenstern1965}), interslice normal forces and interslice shear forces have a proportional relationship, depending on a proportionality constant ($λ$) and a function ($\symbf{f}$) describing variation depending on $x$ position. (RefBy: \hyperref[GD:normShrR]{GD:normShrR}, \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, and \hyperref[UC_normshearlinear]{UC:Normal-And-Shear-Linear-Only}.)}
+\item[Interslice-Norm-Shear-Forces-Linear:\phantomsection\label{assumpINSFL}]{Following the assumption of Morgenstern and Price (\cite{morgenstern1965}), interslice normal forces and interslice shear forces have a proportional relationship, depending on a proportionality constant ($λ$) and a function ($\symbf{f}$) describing variation depending on $x$ position. (RefBy: \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, \hyperref[GD:normShrR]{GD:normShrR}, \hyperref[IM:fctSfty]{IM:fctSfty}, and \hyperref[UC_normshearlinear]{UC:Normal-And-Shear-Linear-Only}.)}
 \item[Plane-Strain-Conditions:\phantomsection\label{assumpPSC}]{The slope and slip surface extends far into and out of the geometry ($z$ coordinate). This implies plane strain conditions, making 2D analysis appropriate. (RefBy: \hyperref[GD:srfWtrF]{GD:srfWtrF}, \hyperref[GD:sliceWght]{GD:sliceWght}, \hyperref[GD:resShr]{GD:resShr}, \hyperref[GD:effNormF]{GD:effNormF}, and \hyperref[GD:baseWtrF]{GD:baseWtrF}.)}
 \item[Effective-Norm-Stress-Large:\phantomsection\label{assumpENSL}]{The effective normal stress is large enough that the shear strength to effective normal stress relationship can be approximated as a linear relationship. (RefBy: \hyperref[TM:equilibrium]{TM:equilibrium} and \hyperref[UC_2donly]{UC:2D-Analysis-Only}.)}
-\item[Surface-Base-Slice-between-Interslice-Straight-Lines:\phantomsection\label{assumpSBSBISL}]{The surface and base of a slice are approximated as straight lines. (RefBy: \hyperref[GD:srfWtrF]{GD:srfWtrF}, \hyperref[GD:sliceWght]{GD:sliceWght}, \hyperref[GD:baseWtrF]{GD:baseWtrF}, \hyperref[TM:mcShrStrgth]{TM:mcShrStrgth}, \hyperref[DD:slcHeight]{DD:slcHeight}, \hyperref[DD:angleB]{DD:angleB}, and \hyperref[DD:angleA]{DD:angleA}.)}
-\item[Edge-Slices:\phantomsection\label{assumpES}]{The interslice forces at the 0th and $n$th interslice interfaces are zero. (RefBy: \hyperref[IM:intsliceFs]{IM:intsliceFs}, \hyperref[IM:fctSfty]{IM:fctSfty}, and \hyperref[IM:nrmShrFor]{IM:nrmShrFor}.)}
-\item[Seismic-Force:\phantomsection\label{assumpSF}]{There is no seismic force acting on the slope. (RefBy: \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, and \hyperref[LC_seismic]{LC:Calculate-Seismic-Force}.)}
-\item[Surface-Load:\phantomsection\label{assumpSL}]{There is no imposed surface load, and therefore no external forces, acting on the slope. (RefBy: \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, and \hyperref[LC_external]{LC:Calculate-External-Force}.)}
+\item[Surface-Base-Slice-between-Interslice-Straight-Lines:\phantomsection\label{assumpSBSBISL}]{The surface and base of a slice are approximated as straight lines. (RefBy: \hyperref[GD:srfWtrF]{GD:srfWtrF}, \hyperref[GD:sliceWght]{GD:sliceWght}, \hyperref[TM:mcShrStrgth]{TM:mcShrStrgth}, \hyperref[GD:baseWtrF]{GD:baseWtrF}, \hyperref[DD:slcHeight]{DD:slcHeight}, \hyperref[DD:angleB]{DD:angleB}, and \hyperref[DD:angleA]{DD:angleA}.)}
+\item[Edge-Slices:\phantomsection\label{assumpES}]{The interslice forces at the 0th and $n$th interslice interfaces are zero. (RefBy: \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, \hyperref[IM:intsliceFs]{IM:intsliceFs}, and \hyperref[IM:fctSfty]{IM:fctSfty}.)}
+\item[Seismic-Force:\phantomsection\label{assumpSF}]{There is no seismic force acting on the slope. (RefBy: \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, \hyperref[IM:fctSfty]{IM:fctSfty}, and \hyperref[LC_seismic]{LC:Calculate-Seismic-Force}.)}
+\item[Surface-Load:\phantomsection\label{assumpSL}]{There is no imposed surface load, and therefore no external forces, acting on the slope. (RefBy: \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, \hyperref[IM:fctSfty]{IM:fctSfty}, and \hyperref[LC_external]{LC:Calculate-External-Force}.)}
 \item[Water-Intersects-Base-Edge:\phantomsection\label{assumpWIBE}]{The water table only intersects the base of a slice at an edge of the slice. (RefBy: \hyperref[GD:sliceWght]{GD:sliceWght} and \hyperref[GD:baseWtrF]{GD:baseWtrF}.)}
 \item[Water-Intersects-Surface-Edge:\phantomsection\label{assumpWISE}]{The water table only intersects the slope surface at the edge of a slice. (RefBy: \hyperref[GD:srfWtrF]{GD:srfWtrF} and \hyperref[GD:sliceWght]{GD:sliceWght}.)}
 \item[Negligible-Effect-Surface-Slope-Seismic:\phantomsection\label{assumpNESSS}]{The effect of the slope of the surface of the soil on the seismic force is assumed to be negligible. (RefBy: \hyperref[GD:momentEql]{GD:momentEql}.)}
@@ -981,7 +981,7 @@ Notes & Mathematical representation of the primary assumption for the Morgenster
 Source & \cite{chen2005}
          
 \\ \midrule
-RefBy & \hyperref[IM:fctSfty]{IM:fctSfty} and \hyperref[IM:nrmShrFor]{IM:nrmShrFor}
+RefBy & \hyperref[IM:nrmShrFor]{IM:nrmShrFor} and \hyperref[IM:fctSfty]{IM:fctSfty}
         
 \\ \bottomrule
 \end{tabular}
@@ -1715,7 +1715,7 @@ Description & \begin{symbDescription}
 Source & \cite{huston2008}
          
 \\ \midrule
-RefBy & \hyperref[GD:resShr]{GD:resShr}, \hyperref[GD:effNormF]{GD:effNormF}, and \hyperref[TM:effStress]{TM:effStress}
+RefBy & \hyperref[GD:resShr]{GD:resShr}, \hyperref[TM:effStress]{TM:effStress}, and \hyperref[GD:effNormF]{GD:effNormF}
         
 \\ \bottomrule
 \end{tabular}
@@ -2118,7 +2118,7 @@ Notes & $\symbf{R}$ is defined in \hyperref[GD:resShearWO]{GD:resShearWO}, $\sym
 Source & \cite{chen2005} and \cite{karchewski2012}
          
 \\ \midrule
-RefBy & \hyperref[IM:intsliceFs]{IM:intsliceFs}, \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, \hyperref[displayShear]{FR:Display-Interslice-Shear-Forces}, \hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces}, \hyperref[displayFS]{FR:Display-Factor-of-Safety}, and \hyperref[determineCritSlip]{FR:Determine-Critical-Slip-Surface}
+RefBy & \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, \hyperref[IM:intsliceFs]{IM:intsliceFs}, \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[displayShear]{FR:Display-Interslice-Shear-Forces}, \hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces}, \hyperref[displayFS]{FR:Display-Factor-of-Safety}, and \hyperref[determineCritSlip]{FR:Determine-Critical-Slip-Surface}
         
 \\ \bottomrule
 \end{tabular}
@@ -2278,7 +2278,7 @@ Notes & ${\symbf{C}_{\text{num}}}$ is defined in \hyperref[IM:nrmShrForNum]{IM:n
 Source & \cite{chen2005} and \cite{karchewski2012}
          
 \\ \midrule
-RefBy & \hyperref[IM:nrmShrForNum]{IM:nrmShrForNum}, \hyperref[IM:nrmShrForDen]{IM:nrmShrForDen}, \hyperref[IM:intsliceFs]{IM:intsliceFs}, \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, \hyperref[displayShear]{FR:Display-Interslice-Shear-Forces}, \hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces}, \hyperref[displayFS]{FR:Display-Factor-of-Safety}, and \hyperref[determineCritSlip]{FR:Determine-Critical-Slip-Surface}
+RefBy & \hyperref[IM:nrmShrForNum]{IM:nrmShrForNum}, \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, \hyperref[IM:nrmShrForDen]{IM:nrmShrForDen}, \hyperref[IM:intsliceFs]{IM:intsliceFs}, \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[displayShear]{FR:Display-Interslice-Shear-Forces}, \hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces}, \hyperref[displayFS]{FR:Display-Factor-of-Safety}, and \hyperref[determineCritSlip]{FR:Determine-Critical-Slip-Surface}
         
 \\ \bottomrule
 \end{tabular}
@@ -2468,7 +2468,7 @@ Notes & $\symbf{T}$ is defined in \hyperref[GD:mobShearWO]{GD:mobShearWO}, $\sym
 Source & \cite{chen2005}
          
 \\ \midrule
-RefBy & \hyperref[IM:intsliceFs]{IM:intsliceFs}, \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, \hyperref[displayShear]{FR:Display-Interslice-Shear-Forces}, \hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces}, \hyperref[displayFS]{FR:Display-Factor-of-Safety}, and \hyperref[determineCritSlip]{FR:Determine-Critical-Slip-Surface}
+RefBy & \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, \hyperref[IM:intsliceFs]{IM:intsliceFs}, \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[displayShear]{FR:Display-Interslice-Shear-Forces}, \hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces}, \hyperref[displayFS]{FR:Display-Factor-of-Safety}, and \hyperref[determineCritSlip]{FR:Determine-Critical-Slip-Surface}
         
 \\ \bottomrule
 \end{tabular}
@@ -2603,7 +2603,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[Write-Results-To-File:\phantomsection\label{writeToFile}]{Provide the option of writing the output result data, as given in \hyperref[displayInput]{FR:Display-Input}, \hyperref[displayGraph]{FR:Display-Graph}, \hyperref[displayFS]{FR:Display-Factor-of-Safety}, \hyperref[displayNormal]{FR:Display-Interslice-Normal-Forces}, and \hyperref[displayShear]{FR:Display-Interslice-Shear-Forces}, to a file.}
 \end{description}
 \begin{longtblr}
-[caption={Required Inputs following \hyperref[readAndStore]{FR:Read-and-Store}}]
+[caption={Required Inputs}]
 {colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
@@ -2643,7 +2643,7 @@ $φ'$ & Effective angle of friction & ${{}^{\circ}}$
 \label{Table:ReqInputs}
 \end{longtblr}
 \begin{longtblr}
-[caption={Inputs to be Returned as Output following \hyperref[displayInput]{FR:Display-Input}}]
+[caption={Inputs to be Returned as Output}]
 {colspec={l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Name}
 \\

@@ -9,7 +9,7 @@ import Language.Drasil.Classes (CommonIdea(abrv), Quantity, Idea(getA), NamedIde
 import Language.Drasil.Chunk.Quantity (QuantityDict, implVar')
 import Language.Drasil.Space (HasSpace(..), Space(..))
 import Language.Drasil.Symbol (HasSymbol(symbol))
-import Language.Drasil.UID (HasUID(uid), (+++))
+import Drasil.Database.UID (HasUID(uid), (+++))
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Stages (Stage(..))
 

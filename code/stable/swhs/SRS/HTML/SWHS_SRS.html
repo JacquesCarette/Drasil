@@ -817,10 +817,8 @@
             </p>
             <div id="Figure:SysCon">
               <figure>
-                <img src="../../../../datafiles/swhs/SystemContextFigure.png" alt="<a href=#Figure:SysCon>Fig:SysCon</a>: System Context" >
-                <figcaption>
-                  Figure: <a href=#Figure:SysCon>Fig:SysCon</a>: System Context
-                </figcaption>
+                <img src="../../../../datafiles/swhs/SystemContextFigure.png" alt="System Context" >
+                <figcaption>Figure: System Context</figcaption>
               </figure>
             </div>
             <p class="paragraph">
@@ -1041,7 +1039,7 @@
                   </p>
                   <p>
                     <div id="assumpWAL">
-                      Water-Always-Liquid: The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. (RefBy: <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>, <a href=#unlikeChgWPFS>UC:Water-PCM-Fixed-States</a>, and <a href=#IM:heatEInWtr>IM:heatEInWtr</a>.)
+                      Water-Always-Liquid: The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. (RefBy: <a href=#IM:heatEInWtr>IM:heatEInWtr</a>, <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>, and <a href=#unlikeChgWPFS>UC:Water-PCM-Fixed-States</a>.)
                     </div>
                   </p>
                   <p>
@@ -1066,7 +1064,7 @@
                   </p>
                   <p>
                     <div id="assumpAPT">
-                      Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0<em>&deg;C</em> and 100<em>&deg;C</em>, respectively. (RefBy: <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a> and <a href=#IM:heatEInWtr>IM:heatEInWtr</a>.)
+                      Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0<em>&deg;C</em> and 100<em>&deg;C</em>, respectively. (RefBy: <a href=#IM:heatEInWtr>IM:heatEInWtr</a> and <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>.)
                     </div>
                   </p>
                   <p>
@@ -1214,7 +1212,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:heatEInPCM>IM:heatEInPCM</a> and <a href=#IM:heatEInWtr>IM:heatEInWtr</a>
+                          <a href=#IM:heatEInWtr>IM:heatEInWtr</a> and <a href=#IM:heatEInPCM>IM:heatEInPCM</a>
                         </p>
                       </td>
                     </tr>
@@ -2123,7 +2121,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a> and <a href=#TM:latentHtE>TM:latentHtE</a>
+                          <a href=#TM:latentHtE>TM:latentHtE</a> and <a href=#IM:eBalanceOnPCM>IM:eBalanceOnPCM</a>
                         </p>
                       </td>
                     </tr>
@@ -3083,9 +3081,7 @@
                   <td><em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em></td>
                 </tr>
               </table>
-              <p class="caption">
-                Required Inputs following <a href=#inputValues>FR:Input-Values</a>
-              </p>
+              <p class="caption">Required Inputs</p>
             </div>
           </div>
         </div>
@@ -6306,48 +6302,40 @@
     <div id="Sec:References">
       <div class="section">
         <h1>References</h1>
-        <ul class="hide-list-style">
-          <li>
-            <div id="bueche1986">
-              [1]: Bueche, J. Frederick. <em>Introduction to Physics for Scientists</em>. 4th. ed., New York City, New York: McGraw Hill, 1986. Print.
-            </div>
-          </li>
-          <li>
-            <div id="incroperaEtAl2007">
-              [2]: Incropera, F. P., Dewitt, D. P., Bergman, T. L., and Lavine, A. S. <em>Fundamentals of Heat and Mass Transfer</em>. 6th. ed., Hoboken, New Jersey: John Wiley and Sons, 2007. Print.
-            </div>
-          </li>
-          <li>
-            <div id="koothoor2013">
-              [3]: Koothoor, Nirmitha. <em>A Document Driven Approach to Certifying Scientific Computing Software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
-            </div>
-          </li>
-          <li>
-            <div id="lightstone2012">
-              [4]: Lightstone, Marilyn. <em>Derivation of tank/pcm model</em>. 2012. From Marilyn Lightstone's Personal Notes
-            </div>
-          </li>
-          <li>
-            <div id="parnasClements1986">
-              [5]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
-            </div>
-          </li>
-          <li>
-            <div id="smithKoothoor2016">
-              [6]: Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
-            </div>
-          </li>
-          <li>
-            <div id="smithLai2005">
-              [7]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
-            </div>
-          </li>
-          <li>
-            <div id="smithEtAl2007">
-              [8]: Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
-            </div>
-          </li>
-        </ul>
+        <dl class="reference-list">
+          <dt id="bueche1986">[<b>bueche1986</b>]</dt>
+          <dd>
+            Bueche, J. Frederick. <em>Introduction to Physics for Scientists</em>. 4th. ed., New York City, New York: McGraw Hill, 1986. Print.
+          </dd>
+          <dt id="incroperaEtAl2007">[<b>incroperaEtAl2007</b>]</dt>
+          <dd>
+            Incropera, F. P., Dewitt, D. P., Bergman, T. L., and Lavine, A. S. <em>Fundamentals of Heat and Mass Transfer</em>. 6th. ed., Hoboken, New Jersey: John Wiley and Sons, 2007. Print.
+          </dd>
+          <dt id="koothoor2013">[<b>koothoor2013</b>]</dt>
+          <dd>
+            Koothoor, Nirmitha. <em>A Document Driven Approach to Certifying Scientific Computing Software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
+          </dd>
+          <dt id="lightstone2012">[<b>lightstone2012</b>]</dt>
+          <dd>
+            Lightstone, Marilyn. <em>Derivation of tank/pcm model</em>. 2012. From Marilyn Lightstone's Personal Notes
+          </dd>
+          <dt id="parnasClements1986">[<b>parnasClements1986</b>]</dt>
+          <dd>
+            Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
+          </dd>
+          <dt id="smithKoothoor2016">[<b>smithKoothoor2016</b>]</dt>
+          <dd>
+            Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
+          </dd>
+          <dt id="smithLai2005">[<b>smithLai2005</b>]</dt>
+          <dd>
+            Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+          </dd>
+          <dt id="smithEtAl2007">[<b>smithEtAl2007</b>]</dt>
+          <dd>
+            Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
+          </dd>
+        </dl>
       </div>
     </div>
   </body>

@@ -10,7 +10,7 @@ import Language.Drasil.Expr.Lang (Completeness, BasisBlades(..))
 import Language.Drasil.Literal.Lang (Literal(..))
 import qualified Language.Drasil.Space as S
 import Language.Drasil.Space (Space, DomainDesc, RealInterval)
-import Language.Drasil.UID (UID)
+import Drasil.Database.UID (UID)
 import Language.Drasil.Literal.Class (LiteralC(..))
 
 -- Binary functions

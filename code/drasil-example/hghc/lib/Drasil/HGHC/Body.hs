@@ -17,13 +17,13 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 srs :: Document
 srs = mkDoc mkSRS S.forT si
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = hghc,
   _kind        = Doc.srs,
@@ -33,18 +33,15 @@ si = SI {
   _background  = [],
   _motivation  = [],
   _scope       = [],
-  _concepts    = [] :: [UnitalChunk],
   _instModels  = [], -- FIXME; empty _instModels
   _datadefs    = dataDefs,
   _configFiles = [],
   _inputs      = htInputs,
   _outputs     = htOutputs,
-  _defSequence = [] :: [Block SimpleQDef],
   _constraints = [] :: [ConstrainedChunk],
   _constants   = [],
   _sysinfodb   = symbMap,
-  _usedinfodb  = usedDB,
-   refdb       = rdb [] [] -- FIXME?
+  _usedinfodb  = usedDB
 }
   
 mkSRS :: SRSDecl
@@ -72,4 +69,4 @@ symbMap = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols)
            ([] :: [ConceptChunk]) ([] :: [UnitDefn])
-           [] [] [] [] [] [] [] ([] :: [Reference])
+           [] [] [] [] [] [] ([] :: [Reference]) []

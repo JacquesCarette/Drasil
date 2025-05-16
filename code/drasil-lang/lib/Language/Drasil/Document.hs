@@ -10,7 +10,7 @@ import Language.Drasil.Label.Type (getAdd, prepend, LblType(..),
   Referable(..), HasRefAddress(..) )
 import Language.Drasil.Reference (Reference(Reference))
 import Language.Drasil.Sentence (Sentence(..))
-import Language.Drasil.UID (UID, HasUID(..), (+++.), mkUid, nsUid)
+import Drasil.Database.UID (UID, HasUID(..), (+++.), mkUid, nsUid)
 
 import Utils.Drasil (repUnd)
 
@@ -118,20 +118,6 @@ mkRawLC x lb = llcc lb x
 -- (ie. paragraphs, tables, etc.), a list of subsections, and a shortname ('Reference').
 section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
 section title intro secs = Section title (map Con intro ++ map Sub secs)
-
--- | Smart constructor for retrieving the contents ('Section's) from a 'Document'.
-extractSection :: Document -> [Section]
-extractSection (Document _ _ _ sec) = concatMap getSec sec
-extractSection (Notebook _ _ sec)   = concatMap getSec sec
-
--- | Smart constructor for retrieving the subsections ('Section's) within a 'Section'.
-getSec :: Section -> [Section]
-getSec t@(Section _ sc _) = t : concatMap getSecCons sc
-
--- | Helper to retrieve subsections ('Section's) from section contents ('SecCons').
-getSecCons :: SecCons -> [Section]
-getSecCons (Sub sec) = getSec sec
-getSecCons (Con _)   = []
 
 -- | 'Figure' smart constructor with a 'Lbl' and a 'Filepath'. Assumes 100% of page width as max width. Defaults to 'WithCaption'.
 fig :: Lbl -> Filepath -> RawContent

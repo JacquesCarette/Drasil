@@ -8,7 +8,7 @@ module Database.Drasil.ChunkDB (
   -- * Types
   -- ** 'ChunkDB'
   -- | Main database type
-  ChunkDB(CDB, symbolTable, termTable, defTable),
+  ChunkDB(CDB, symbolTable, termTable, conceptChunkTable),
   -- ** Maps
   -- | Exported for external use.
   RefbyMap, TraceMap, UMap,
@@ -20,11 +20,11 @@ module Database.Drasil.ChunkDB (
   termResolve, defResolve, symbResolve,
   traceLookup, refbyLookup,
   datadefnLookup, insmodelLookup, gendefLookup, theoryModelLookup,
-  conceptinsLookup, sectionLookup, labelledconLookup, refResolve,
+  conceptinsLookup, refResolve,
   -- ** Lenses
-  unitTable, traceTable, refbyTable,
+  unitTable, traceTable, refbyTable, citationTable,
   dataDefnTable, insmodelTable, gendefTable, theoryModelTable,
-  conceptinsTable, sectionTable, labelledcontentTable, refTable
+  conceptinsTable, labelledcontentTable, refTable
 ) where
 
 import Language.Drasil
@@ -71,12 +71,12 @@ type GendefMap = UMap GenDefn
 type TheoryModelMap = UMap TheoryModel
 -- | Concept instance map. May hold similar information to a 'ConceptMap', but may also be referred to.
 type ConceptInstanceMap = UMap ConceptInstance
--- | A map of all the different 'Section's.
-type SectionMap = UMap Section
 -- | A map of all 'LabelledContent's.
 type LabelledContentMap = UMap LabelledContent
 -- | A map of all 'Reference's.
 type ReferenceMap = UMap Reference
+-- | Citation map.
+type CitationMap = UMap Citation
 
 -- | General chunk database map constructor. Creates a 'UMap' from a function that converts something with 'UID's into another type and a list of something with 'UID's.
 cdbMap :: HasUID a => (a -> b) -> [a] -> Map.Map UID (b, Int)
@@ -133,7 +133,7 @@ unitLookup = uMapLookup "Unit" "UnitMap"
 
 -- | Looks up a 'UID' in the definition table from the 'ChunkDB'. If nothing is found, an error is thrown.
 defResolve :: ChunkDB -> UID -> ConceptChunk
-defResolve m x = uMapLookup "Concept" "ConceptMap" x $ defTable m
+defResolve m x = uMapLookup "Concept" "ConceptMap" x $ conceptChunkTable m
 
 -- | Looks up a 'UID' in the datadefinition table. If nothing is found, an error is thrown.
 datadefnLookup :: UID -> DatadefnMap -> DataDefinition
@@ -155,14 +155,6 @@ theoryModelLookup = uMapLookup "TheoryModel" "TheoryModelMap"
 conceptinsLookup :: UID -> ConceptInstanceMap -> ConceptInstance
 conceptinsLookup = uMapLookup "ConceptInstance" "ConceptInstanceMap"
 
--- | Looks up a 'UID' in the section table. If nothing is found, an error is thrown.
-sectionLookup :: UID -> SectionMap -> Section
-sectionLookup = uMapLookup "Section" "SectionMap"
-
--- | Looks up a 'UID' in the labelled content table. If nothing is found, an error is thrown.
-labelledconLookup :: UID -> LabelledContentMap -> LabelledContent
-labelledconLookup = uMapLookup "LabelledContent" "LabelledContentMap"
-
 -- | Gets an ordered list of @a@ from any @a@ that is of type 'UMap'.
 asOrderedList :: UMap a -> [a]
 asOrderedList = map fst . sortOn snd . map snd . Map.toList
@@ -170,21 +162,24 @@ asOrderedList = map fst . sortOn snd . map snd . Map.toList
 -- | Our chunk databases. \Must contain all maps needed in an example.\
 -- In turn, these maps must contain every chunk definition or concept 
 -- used in its respective example, else an error is thrown.
-data ChunkDB = CDB { symbolTable           :: SymbolMap
-                   , termTable             :: TermMap 
-                   , defTable              :: ConceptMap
-                   , _unitTable            :: UnitMap
-                   , _traceTable           :: TraceMap
-                   , _refbyTable           :: RefbyMap
-                   , _dataDefnTable        :: DatadefnMap
-                   , _insmodelTable        :: InsModelMap
-                   , _gendefTable          :: GendefMap
-                   , _theoryModelTable     :: TheoryModelMap
-                   , _conceptinsTable      :: ConceptInstanceMap
-                   , _sectionTable         :: SectionMap
-                   , _labelledcontentTable :: LabelledContentMap
-                   , _refTable             :: ReferenceMap
-                   } -- TODO: Expand and add more databases
+data ChunkDB = CDB {
+  -- CHUNKS
+    symbolTable           :: SymbolMap
+  , termTable             :: TermMap 
+  , conceptChunkTable     :: ConceptMap
+  , _unitTable            :: UnitMap
+  , _dataDefnTable        :: DatadefnMap
+  , _insmodelTable        :: InsModelMap
+  , _gendefTable          :: GendefMap
+  , _theoryModelTable     :: TheoryModelMap
+  , _conceptinsTable      :: ConceptInstanceMap
+  , _citationTable        :: CitationMap
+  -- NOT CHUNKS
+  , _labelledcontentTable :: LabelledContentMap -- TODO: LabelledContent needs to be rebuilt. See JacquesCarette/Drasil#4023.
+  , _refTable             :: ReferenceMap -- TODO: References need to be rebuilt. See JacquesCarette/Drasil#4022.
+  , _traceTable           :: TraceMap
+  , _refbyTable           :: RefbyMap
+  }
 makeLenses ''ChunkDB
 
 -- | Smart constructor for chunk databases. Takes in the following:
@@ -198,15 +193,32 @@ makeLenses ''ChunkDB
 --     * 'GenDefn's (for 'GendefMap'),
 --     * 'TheoryModel's (for 'TheoryModelMap'),
 --     * 'ConceptInstance's (for 'ConceptInstanceMap'),
---     * 'Section's (for 'SectionMap'),
 --     * 'LabelledContent's (for 'LabelledContentMap').
-cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =>
-    [q] -> [t] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
-    [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Section] ->
-    [LabelledContent] -> [Reference] -> ChunkDB
-cdb s t c u d ins gd tm ci sect lc r = CDB (symbolMap s) (termMap t) (conceptMap c)
-  (unitMap u) Map.empty Map.empty (idMap d) (idMap ins) (idMap gd) (idMap tm)
-  (idMap ci) (idMap sect) (idMap lc) (idMap r)
+cdb :: (Quantity q, MayHaveUnit q, Concept c, IsUnit u) =>
+    [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
+    [GenDefn] -> [TheoryModel] -> [ConceptInstance] ->
+    [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
+cdb s t c u d ins gd tm ci lc r cits = 
+  CDB {
+    -- CHUNKS
+    symbolTable = symbolMap s,
+    termTable = termMap $ t ++ termsHACK,
+    conceptChunkTable = conceptMap c,
+    _unitTable = unitMap u,
+    _dataDefnTable = idMap d,
+    _insmodelTable = idMap ins,
+    _gendefTable = idMap gd,
+    _theoryModelTable = idMap tm,
+    _conceptinsTable = idMap ci,
+    _citationTable = idMap cits,
+    -- NOT CHUNKS
+    _labelledcontentTable = idMap lc,
+    _traceTable = Map.empty,
+    _refbyTable = Map.empty,
+    _refTable = idMap r
+  }
+  where
+    termsHACK = map nw d
 
 -- | Gets the units of a 'Quantity' as 'UnitDefn's.
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]

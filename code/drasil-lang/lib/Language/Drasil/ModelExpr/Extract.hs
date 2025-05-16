@@ -9,6 +9,7 @@ import Language.Drasil.UID            (UID)
 import Data.Map                       (Map)
 import qualified Data.Map       as Map
 
+
 -- | Generic traverse of all expressions that could lead to names.
 meNames :: ModelExpr -> [UID]
 meNames (AssocA _ l)          = concatMap meNames l

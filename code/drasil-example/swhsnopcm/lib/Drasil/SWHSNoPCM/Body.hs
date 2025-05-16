@@ -52,10 +52,10 @@ import Drasil.SWHS.Unitals (coilSAMax, deltaT, htFluxC, htFluxIn,
   htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW,
   tempEnv, tempW, thFluxVect, volHtGen, watE,
   wMass, wVol, unitalChuncks, absTol, relTol)
+import Drasil.SWHS.References (uriReferences)
 
 import Drasil.SWHSNoPCM.Assumptions
 import Drasil.SWHSNoPCM.Changes (likelyChgs, unlikelyChgs)
-import Drasil.SWHSNoPCM.DataDefs (qDefs)
 import qualified Drasil.SWHSNoPCM.DataDefs as NoPCM (dataDefs)
 import Drasil.SWHSNoPCM.Definitions (srsSWHS, htTrans)
 import Drasil.SWHSNoPCM.GenDefs (genDefs)
@@ -63,7 +63,7 @@ import Drasil.SWHSNoPCM.Goals (goals)
 import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr, instModIntro)
 import qualified Drasil.SWHSNoPCM.IMods as NoPCM (iMods)
 import Drasil.SWHSNoPCM.ODEs
-import Drasil.SWHSNoPCM.Requirements (funcReqs, inputInitValsTable)
+import Drasil.SWHSNoPCM.Requirements (funcReqs, inReqDesc)
 import Drasil.SWHSNoPCM.References (citations)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
   specParamValList)
@@ -71,7 +71,7 @@ import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
 srs :: Document
 srs = mkDoc mkSRS S.forT si
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
@@ -148,7 +148,7 @@ mkSRS = [TableOfContents,
       ]
     ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub' [inputInitValsTable],
+    FReqsSub inReqDesc [],
     NonFReqsSub
   ],
   LCsSec,
@@ -161,16 +161,10 @@ concIns :: [ConceptInstance]
 concIns = goals ++ funcReqs ++ nfRequirements ++ assumptions ++
  [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH] ++ unlikelyChgs
 
-labCon :: [LabelledContent]
-labCon = [inputInitValsTable]
-
-section :: [Section]
-section = extractSection srs
-
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = srsSWHS,
   _kind        = Doc.srs,
@@ -183,18 +177,15 @@ si = SI {
   -- #1658 is resolved. Basically, _quants is used here, but 
   -- tau does not appear in the document and thus should not be displayed.
   _quants      = (map qw unconstrained ++ map qw symbolsAll) \\ [qw tau],
-  _concepts    = symbols,
   _instModels  = NoPCM.iMods,
   _datadefs    = NoPCM.dataDefs,
   _configFiles = [],
   _inputs      = inputs ++ [qw watE], --inputs ++ outputs?
   _outputs     = map qw [tempW, watE],     --outputs
-  _defSequence = [(\x -> Parallel (head x) (tail x)) qDefs],
   _constraints = map cnstrw constrained ++ map cnstrw [tempW, watE], --constrained
   _constants   = piConst : specParamValList,
   _sysinfodb   = symbMap,
-  _usedinfodb  = usedDB,
-   refdb       = refDB
+  _usedinfodb  = usedDB
 }
 
 progName :: CI
@@ -206,9 +197,6 @@ progName = commonIdeaWithDict "swhsNoPCM"
 purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWHT)]
 
-refDB :: ReferenceDB
-refDB = rdb citations concIns
-
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll (nw progName : map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
@@ -217,15 +205,15 @@ symbMap = cdb symbolsAll (nw progName : map nw symbols ++ map nw acronyms ++ map
   ++ map nw physicalcon ++ map nw unitalChuncks ++ map nw [absTol, relTol]
   ++ [nw srsSWHS, nw algorithm, nw inValue, nw htTrans, nw materialProprty, nw phsChgMtrl])
   (map cw symbols ++ srsDomains) units NoPCM.dataDefs NoPCM.iMods genDefs
-  tMods concIns section labCon allRefs
+  tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef, externalLinkRef']
+allRefs = [externalLinkRef, externalLinkRef'] ++ uriReferences
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw symbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 --------------------------
 --Section 2 : INTRODUCTION
@@ -285,8 +273,8 @@ orgDocEnd = foldlSent_ [atStartNP (the inModel),
 ------------------------------
 
 sysCntxtFig :: LabelledContent
-sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
-  [refS sysCntxtFig +: EmptyS, titleize sysCont])
+sysCntxtFig = llcc (makeFigRef "SysCon") 
+  $ fig (titleize sysCont)
   $ resourcePath ++ "SystemContextFigure.png"
 
 ------------------------------------

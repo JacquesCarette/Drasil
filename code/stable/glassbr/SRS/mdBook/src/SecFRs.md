@@ -41,7 +41,7 @@ Output-Values: Output the values from the table for [Required Outputs](./SecFRs.
 |\\(\mathit{TNT}\\)             |TNT equivalent factor                                                                   |--               |
 |\\(w\\)                        |Charge weight                                                                           |\\({\text{kg}}\\)|
 
-**<p align="center">Required Inputs following [FR:Input-Values](./SecFRs.md#inputValues)</p>**
+**<p align="center">Required Inputs</p>**
 
 <div id="Table:ReqAssignments"></div>
 
@@ -58,7 +58,7 @@ Output-Values: Output the values from the table for [Required Outputs](./SecFRs.
 |\\(\mathit{SD}\\)    |Stand off distance            |[DD:standOffDist](./SecDDs.md#DD:standOffDist)  |\\({\text{m}}\\)                        |
 |\\({t\_{\text{d}}}\\)|Duration of load              |[A:standardValues](./SecAssumps.md#assumpSV)    |\\({\text{s}}\\)                        |
 
-**<p align="center">Required Assignments following [FR:System-Set-Values-Following-Assumptions](./SecFRs.md#sysSetValsFollowingAssumps)</p>**
+**<p align="center">Required Assignments</p>**
 
 <div id="Table:ReqOutputs"></div>
 
@@ -78,4 +78,4 @@ Output-Values: Output the values from the table for [Required Outputs](./SecFRs.
 |\\(\hat{q}\\)                |Dimensionless load                                    |[IM:dimlessLoad](./SecIMs.md#IM:dimlessLoad)    |--               |
 |\\({\hat{q}\_{\text{tol}}}\\)|Tolerable load                                        |[IM:tolLoad](./SecIMs.md#IM:tolLoad)            |--               |
 
-**<p align="center">Required Outputs following [FR:Output-Values](./SecFRs.md#outputValues)</p>**
+**<p align="center">Required Outputs</p>**

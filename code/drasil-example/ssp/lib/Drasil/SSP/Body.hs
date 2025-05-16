@@ -7,10 +7,9 @@ import Language.Drasil hiding (Verb, number, organization, section, variable)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
-import Theory.Drasil (qdEFromDD, output)
+import Theory.Drasil (output)
 
 import Prelude hiding (sin, cos, tan)
-import Data.Maybe (mapMaybe)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -33,7 +32,7 @@ import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce,
   shearRes, solidcon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Software.Products (prodtcon)
-import Data.Drasil.Theories.Physics (physicsTMs)
+import Data.Drasil.Theories.Physics (physicsTMs, weightSrc, hsPressureSrc)
 
 import Data.Drasil.People (brooks, henryFrankis)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
@@ -62,13 +61,13 @@ srs = mkDoc mkSRS S.forT si
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 resourcePath :: String
 resourcePath = "../../../../datafiles/ssp/"
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = ssp, 
   _kind        = Doc.srs, 
@@ -78,18 +77,15 @@ si = SI {
   _motivation  = [],
   _scope       = [],
   _quants      = symbols,
-  _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = SSP.iMods,
   _datadefs    = SSP.dataDefs,
   _configFiles = [],
   _inputs      = map qw inputs,
   _outputs     = map qw outputs,
-  _defSequence = [(\x -> Parallel (head x) (tail x)) $ mapMaybe qdEFromDD SSP.dataDefs],
   _constraints = constrained,
   _constants   = [],
   _sysinfodb   = symbMap,
-  _usedinfodb  = usedDB,
-   refdb       = refDB
+  _usedinfodb  = usedDB
 }
   
 mkSRS :: SRSDecl
@@ -148,9 +144,6 @@ units = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [ne
 concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs
 
-section :: [Section]
-section = extractSection srs
-
 labCon :: [LabelledContent]
 labCon = [figPhysSyst, figIndexConv, figForceActing] ++ funcReqTables
 
@@ -167,18 +160,15 @@ symbMap = cdb (map (^. output) SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw units)
   (map cw SSP.iMods ++ map cw symbols ++ srsDomains) units SSP.dataDefs SSP.iMods
-  generalDefinitions tMods concIns section labCon allRefs
+  generalDefinitions tMods concIns labCon allRefs citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef]
+allRefs = [externalLinkRef, weightSrc, hsPressureSrc]
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
-
-refDB :: ReferenceDB
-refDB = rdb citations concIns
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- SECTION 1 --
 --automatically generated in mkSRS -

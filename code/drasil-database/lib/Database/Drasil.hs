@@ -2,7 +2,7 @@
 module Database.Drasil (
   -- * Chunk Database
   -- ** Types
-  ChunkDB(symbolTable, termTable, defTable, CDB), RefbyMap, TraceMap, UMap
+  ChunkDB(symbolTable, termTable, conceptChunkTable, CDB), RefbyMap, TraceMap, UMap
   -- ** Constructors
   , cdb, idMap, termMap, conceptMap, traceMap, generateRefbyMap
   -- ** Lookup Functions
@@ -10,11 +10,11 @@ module Database.Drasil (
   , termResolve, defResolve, symbResolve
   , traceLookup, refbyLookup
   , datadefnLookup, insmodelLookup, gendefLookup, theoryModelLookup
-  , conceptinsLookup, sectionLookup, labelledconLookup, refResolve
+  , conceptinsLookup, refResolve
   -- ** Lenses
-  , unitTable, traceTable, refbyTable
+  , unitTable, traceTable, refbyTable, citationTable
   , dataDefnTable, insmodelTable, gendefTable, theoryModelTable
-  , conceptinsTable, sectionTable, labelledcontentTable, refTable
+  , conceptinsTable, labelledcontentTable, refTable
   -- ** Debugging Tools
   , dumpChunkDB, DumpedChunkDB
 ) where

@@ -64,7 +64,7 @@ Write-Results-To-File: Provide the option of writing the output result data, as 
 |\\({γ\_{w}}\\)                            |Unit weight of water                  |\\(\frac{\text{N}}{\text{m}^{3}}\\)|
 |\\(φ'\\)                                  |Effective angle of friction           |\\({{}^{\circ}}\\)                 |
 
-**<p align="center">Required Inputs following [FR:Read-and-Store](./SecFRs.md#readAndStore)</p>**
+**<p align="center">Required Inputs</p>**
 
 <div id="Table:inputsToOutputTable"></div>
 
@@ -78,4 +78,4 @@ Write-Results-To-File: Provide the option of writing the output result data, as 
 |\\({{y\_{\text{slip}}}^{\text{max}}}\\)   |maximum \\(y\\)-coordinate      |
 |\\({{y\_{\text{slip}}}^{\text{min}}}\\)   |minimum \\(y\\)-coordinate      |
 
-**<p align="center">Inputs to be Returned as Output following [FR:Display-Input](./SecFRs.md#displayInput)</p>**
+**<p align="center">Inputs to be Returned as Output</p>**

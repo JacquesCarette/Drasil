@@ -22,7 +22,7 @@ import Language.Drasil.Data.Citation (HasFields(..), CitationKind(..), CiteField
   year, school, journal, institution, note, publisher)
 import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Label.Type (LblType(Citation), Referable(..), HasRefAddress(..))
-import Language.Drasil.UID (UID, HasUID(..), showUID, mkUid)
+import Drasil.Database.UID (UID, HasUID(..), showUID, mkUid)
 
 import Control.Lens (makeLenses, Lens')
 

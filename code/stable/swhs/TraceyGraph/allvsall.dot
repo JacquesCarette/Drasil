@@ -1,12 +1,12 @@
 digraph allvsall {
 	assumpCTNOD -> assumpSITWP;
-	wVol -> assumpVCN;
-	wVol -> tankVol;
-	meltFrac -> htFusion;
+	dataDefn:wVol -> assumpVCN;
+	dataDefn:wVol -> dataDefn:tankVol;
+	dataDefn:meltFrac -> dataDefn:htFusion;
 	theory:consThermECS -> assumpTEO;
-	theory:sensHeat -> latentHtETM;
-	latentHtETM -> meltFrac;
-	nwtnCoolingTM -> assumpHTCC;
+	theory:sensHeat -> theory:latentHtETM;
+	theory:latentHtETM -> dataDefn:meltFrac;
+	theory:nwtnCoolingTM -> assumpHTCC;
 	theory:rocTempSimpRC -> assumpCWTAT;
 	theory:rocTempSimpRC -> assumpTPCAV;
 	theory:rocTempSimpRC -> assumpDWPCoV;
@@ -15,9 +15,9 @@ digraph allvsall {
 	theory:rocTempSimpRC -> theory:rocTempSimpRC;
 	theory:htFluxC -> assumpLCCCW;
 	theory:htFluxC -> assumpTHCCoT;
-	theory:htFluxC -> nwtnCoolingTM;
+	theory:htFluxC -> theory:nwtnCoolingTM;
 	theory:htFluxP -> assumpLCCWP;
-	theory:htFluxP -> nwtnCoolingTM;
+	theory:htFluxP -> theory:nwtnCoolingTM;
 	theory:eBalanceOnWtrRC -> assumpCWTAT;
 	theory:eBalanceOnWtrRC -> assumpTPCAV;
 	theory:eBalanceOnWtrRC -> assumpTHCCoL;
@@ -27,8 +27,8 @@ digraph allvsall {
 	theory:eBalanceOnWtrRC -> assumpPIT;
 	theory:eBalanceOnWtrRC -> assumpNIHGBWP;
 	theory:eBalanceOnWtrRC -> assumpAPT;
-	theory:eBalanceOnWtrRC -> tauW;
-	theory:eBalanceOnWtrRC -> eta;
+	theory:eBalanceOnWtrRC -> dataDefn:tauW;
+	theory:eBalanceOnWtrRC -> dataDefn:eta;
 	theory:eBalanceOnWtrRC -> theory:rocTempSimpRC;
 	theory:eBalanceOnWtrRC -> theory:htFluxC;
 	theory:eBalanceOnWtrRC -> theory:htFluxP;
@@ -41,44 +41,44 @@ digraph allvsall {
 	theory:eBalanceOnPCMRC -> assumpNIHGBWP;
 	theory:eBalanceOnPCMRC -> assumpVCMPN;
 	theory:eBalanceOnPCMRC -> assumpNGSP;
-	theory:eBalanceOnPCMRC -> tauSP;
-	theory:eBalanceOnPCMRC -> tauLP;
-	theory:eBalanceOnPCMRC -> meltFrac;
+	theory:eBalanceOnPCMRC -> dataDefn:tauSP;
+	theory:eBalanceOnPCMRC -> dataDefn:tauLP;
+	theory:eBalanceOnPCMRC -> dataDefn:meltFrac;
 	theory:eBalanceOnPCMRC -> theory:rocTempSimpRC;
 	theory:eBalanceOnPCMRC -> theory:htFluxP;
 	theory:eBalanceOnPCMRC -> theory:eBalanceOnWtrRC;
 	theory:eBalanceOnPCMRC -> theory:heatEInPCMRC;
-	heatEInWtrIM -> assumpWAL;
-	heatEInWtrIM -> assumpAPT;
-	heatEInWtrIM -> theory:sensHeat;
+	theory:heatEInWtrIM -> assumpWAL;
+	theory:heatEInWtrIM -> assumpAPT;
+	theory:heatEInWtrIM -> theory:sensHeat;
 	theory:heatEInPCMRC -> assumpPIS;
 	theory:heatEInPCMRC -> assumpNGSP;
-	theory:heatEInPCMRC -> htFusion;
+	theory:heatEInPCMRC -> dataDefn:htFusion;
 	theory:heatEInPCMRC -> theory:sensHeat;
-	theory:heatEInPCMRC -> latentHtETM;
-	findMass -> wMass;
-	findMass -> wVol;
-	findMass -> tankVol;
+	theory:heatEInPCMRC -> theory:latentHtETM;
+	findMass -> dataDefn:wMass;
+	findMass -> dataDefn:wVol;
+	findMass -> dataDefn:tankVol;
 	findMass -> theory:eBalanceOnWtrRC;
 	findMass -> theory:eBalanceOnPCMRC;
-	findMass -> heatEInWtrIM;
+	findMass -> theory:heatEInWtrIM;
 	findMass -> theory:heatEInPCMRC;
 	findMass -> inputValues;
-	outputInputDerivVals -> tauW;
-	outputInputDerivVals -> eta;
-	outputInputDerivVals -> tauSP;
-	outputInputDerivVals -> tauLP;
+	outputInputDerivVals -> dataDefn:tauW;
+	outputInputDerivVals -> dataDefn:eta;
+	outputInputDerivVals -> dataDefn:tauSP;
+	outputInputDerivVals -> dataDefn:tauLP;
 	outputInputDerivVals -> inputValues;
 	outputInputDerivVals -> findMass;
 	calcValues -> theory:eBalanceOnWtrRC;
 	calcValues -> theory:eBalanceOnPCMRC;
-	calcValues -> heatEInWtrIM;
+	calcValues -> theory:heatEInWtrIM;
 	calcValues -> theory:heatEInPCMRC;
 	calcPCMMeltBegin -> theory:eBalanceOnPCMRC;
 	calcPCMMeltEnd -> theory:eBalanceOnPCMRC;
 	outputValues -> theory:eBalanceOnWtrRC;
 	outputValues -> theory:eBalanceOnPCMRC;
-	outputValues -> heatEInWtrIM;
+	outputValues -> theory:heatEInWtrIM;
 	outputValues -> theory:heatEInPCMRC;
 	likeChgUTP -> assumpTPCAV;
 	likeChgTCVOD -> assumpTHCCoT;
@@ -122,30 +122,30 @@ digraph allvsall {
 	{assumpTEO, assumpHTCC, assumpCWTAT, assumpTPCAV, assumpDWPCoV, assumpSHECov, assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpLCCWP, assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL, assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT, assumpVCN}
 	}
 
-	wMass	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterMass"];
-	wVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterVolume.pcm"];
-	tankVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:tankVolume"];
-	tauW	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceDecayRate"];
-	eta	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceDecayTime"];
-	tauSP	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceSolidPCM"];
-	tauLP	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceLiquidPCM"];
-	htFusion	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:htFusion"];
-	meltFrac	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:meltFrac"];
-	aspectRatio	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:aspectRatio"];
+	dataDefn:wMass	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterMass"];
+	dataDefn:wVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterVolume.pcm"];
+	dataDefn:tankVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:tankVolume"];
+	dataDefn:tauW	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceDecayRate"];
+	dataDefn:eta	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceDecayTime"];
+	dataDefn:tauSP	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceSolidPCM"];
+	dataDefn:tauLP	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceLiquidPCM"];
+	dataDefn:htFusion	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:htFusion"];
+	dataDefn:meltFrac	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:meltFrac"];
+	dataDefn:aspectRatio	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:aspectRatio"];
 
 	subgraph DD {
 	rank="same"
-	{wMass, wVol, tankVol, tauW, eta, tauSP, tauLP, htFusion, meltFrac, aspectRatio}
+	{dataDefn:wMass, dataDefn:wVol, dataDefn:tankVol, dataDefn:tauW, dataDefn:eta, dataDefn:tauSP, dataDefn:tauLP, dataDefn:htFusion, dataDefn:meltFrac, dataDefn:aspectRatio}
 	}
 
 	theory:consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
 	theory:sensHeat	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
-	latentHtETM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:latentHtE"];
-	nwtnCoolingTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
+	theory:latentHtETM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:latentHtE"];
+	theory:nwtnCoolingTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
 
 	subgraph TM {
 	rank="same"
-	{theory:consThermECS, theory:sensHeat, latentHtETM, nwtnCoolingTM}
+	{theory:consThermECS, theory:sensHeat, theory:latentHtETM, theory:nwtnCoolingTM}
 	}
 
 	theory:rocTempSimpRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];
@@ -159,12 +159,12 @@ digraph allvsall {
 
 	theory:eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
 	theory:eBalanceOnPCMRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnPCM"];
-	heatEInWtrIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
+	theory:heatEInWtrIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
 	theory:heatEInPCMRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInPCM"];
 
 	subgraph IM {
 	rank="same"
-	{theory:eBalanceOnWtrRC, theory:eBalanceOnPCMRC, heatEInWtrIM, theory:heatEInPCMRC}
+	{theory:eBalanceOnWtrRC, theory:eBalanceOnPCMRC, theory:heatEInWtrIM, theory:heatEInPCMRC}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

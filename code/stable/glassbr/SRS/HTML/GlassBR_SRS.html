@@ -763,7 +763,7 @@
                     </ul>
                   </li>
                   <li>
-                    Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates (<em>SD<sub>x</sub></em>, <em>SD<sub>y</sub></em>, <em>SD<sub>z</sub></em>).
+                    Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge.
                   </li>
                   <li>
                     Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thicknesses and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.
@@ -847,7 +847,7 @@
                   </p>
                   <p>
                     <div id="assumpSV">
-                      standardValues: The values provided in <a href=#Sec:AuxConstants>Sec:Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. (RefBy: <a href=#IM:sdfTol>IM:sdfTol</a>, <a href=#IM:nFL>IM:nFL</a>, <a href=#IM:dimlessLoad>IM:dimlessLoad</a>, <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a>, <a href=#DD:loadDurFactor>DD:loadDurFactor</a>, and <a href=#assumpLDFC>A:ldfConstant</a>.)
+                      standardValues: The values provided in <a href=#Sec:AuxConstants>Sec:Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. (RefBy: <a href=#IM:sdfTol>IM:sdfTol</a>, <a href=#IM:nFL>IM:nFL</a>, <a href=#IM:dimlessLoad>IM:dimlessLoad</a>, <a href=#DD:loadDurFactor>DD:loadDurFactor</a>, <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a>, and <a href=#assumpLDFC>A:ldfConstant</a>.)
                     </div>
                   </p>
                   <p>
@@ -867,7 +867,7 @@
                   </p>
                   <p>
                     <div id="assumpLDFC">
-                      ldfConstant: With reference to <a href=#assumpSV>A:standardValues</a>, the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. (RefBy: <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a> and <a href=#DD:loadDurFactor>DD:loadDurFactor</a>.)
+                      ldfConstant: With reference to <a href=#assumpSV>A:standardValues</a>, the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. (RefBy: <a href=#DD:loadDurFactor>DD:loadDurFactor</a> and <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a>.)
                     </div>
                   </p>
                 </div>
@@ -2458,9 +2458,7 @@
                   <td><em>kg</em></td>
                 </tr>
               </table>
-              <p class="caption">
-                Required Inputs following <a href=#inputValues>FR:Input-Values</a>
-              </p>
+              <p class="caption">Required Inputs</p>
             </div>
             <div id="Table:ReqAssignments">
               <table class="table">
@@ -2531,9 +2529,7 @@
                   <td><em>s</em></td>
                 </tr>
               </table>
-              <p class="caption">
-                Required Assignments following <a href=#sysSetValsFollowingAssumps>FR:System-Set-Values-Following-Assumptions</a>
-              </p>
+              <p class="caption">Required Assignments</p>
             </div>
             <div id="Table:ReqOutputs">
               <table class="table">
@@ -2622,9 +2618,7 @@
                   <td>--</td>
                 </tr>
               </table>
-              <p class="caption">
-                Required Outputs following <a href=#outputValues>FR:Output-Values</a>
-              </p>
+              <p class="caption">Required Outputs</p>
             </div>
           </div>
         </div>
@@ -4392,58 +4386,48 @@
     <div id="Sec:References">
       <div class="section">
         <h1>References</h1>
-        <ul class="hide-list-style">
-          <li>
-            <div id="astm2009">
-              [1]: ASTM. <em>Standard Practice for Determining Load Resistance of Glass in Buildings</em>. <em>Standard E1300-09a</em>. ASTM International, 2009. <a href="https://www.astm.org">https://www.astm.org</a>.
-            </div>
-          </li>
-          <li>
-            <div id="astm2012">
-              [2]: ASTM. <em>Standard Specification for Heat-Strengthened and Fully Tempered Flat Glass</em>. West Conshohocken, PA: ASTM International, 2012. <a href="https://doi.org/10.1520/C1048-12E01">https://doi.org/10.1520/C1048-12E01</a>.
-            </div>
-          </li>
-          <li>
-            <div id="astm2016">
-              [3]: ASTM. <em>Standard specification for Flat Glass</em>. West Conshohocken, PA: ASTM International, 2016. <a href="https://doi.org/10.1520/C1036-16">https://doi.org/10.1520/C1036-16</a>.
-            </div>
-          </li>
-          <li>
-            <div id="beasonEtAl1998">
-              [4]: Beason, W. Lynn, Kohutek, Terry L., and Bracci, Joseph M. <em>Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts</em>. <em>ASCE Library</em>. February, 1998. <a href="https://doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)">https://doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)</a>.
-            </div>
-          </li>
-          <li>
-            <div id="campidelli">
-              [5]: Campidelli, Manuel. "Glass-BR Software for the design and risk assessment of glass facades subjected to blast loading."
-            </div>
-          </li>
-          <li>
-            <div id="koothoor2013">
-              [6]: Koothoor, Nirmitha. <em>A Document Driven Approach to Certifying Scientific Computing Software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
-            </div>
-          </li>
-          <li>
-            <div id="parnasClements1986">
-              [7]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
-            </div>
-          </li>
-          <li>
-            <div id="smithKoothoor2016">
-              [8]: Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
-            </div>
-          </li>
-          <li>
-            <div id="smithLai2005">
-              [9]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
-            </div>
-          </li>
-          <li>
-            <div id="smithEtAl2007">
-              [10]: Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
-            </div>
-          </li>
-        </ul>
+        <dl class="reference-list">
+          <dt id="astm2009">[<b>astm2009</b>]</dt>
+          <dd>
+            ASTM. <em>Standard Practice for Determining Load Resistance of Glass in Buildings</em>. <em>Standard E1300-09a</em>. ASTM International, 2009. <a href="https://www.astm.org">https://www.astm.org</a>.
+          </dd>
+          <dt id="astm2012">[<b>astm2012</b>]</dt>
+          <dd>
+            ASTM. <em>Standard Specification for Heat-Strengthened and Fully Tempered Flat Glass</em>. West Conshohocken, PA: ASTM International, 2012. <a href="https://doi.org/10.1520/C1048-12E01">https://doi.org/10.1520/C1048-12E01</a>.
+          </dd>
+          <dt id="astm2016">[<b>astm2016</b>]</dt>
+          <dd>
+            ASTM. <em>Standard specification for Flat Glass</em>. West Conshohocken, PA: ASTM International, 2016. <a href="https://doi.org/10.1520/C1036-16">https://doi.org/10.1520/C1036-16</a>.
+          </dd>
+          <dt id="beasonEtAl1998">[<b>beasonEtAl1998</b>]</dt>
+          <dd>
+            Beason, W. Lynn, Kohutek, Terry L., and Bracci, Joseph M. <em>Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts</em>. <em>ASCE Library</em>. February, 1998. <a href="https://doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)">https://doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)</a>.
+          </dd>
+          <dt id="campidelli">[<b>campidelli</b>]</dt>
+          <dd>
+            Campidelli, Manuel. "Glass-BR Software for the design and risk assessment of glass facades subjected to blast loading."
+          </dd>
+          <dt id="koothoor2013">[<b>koothoor2013</b>]</dt>
+          <dd>
+            Koothoor, Nirmitha. <em>A Document Driven Approach to Certifying Scientific Computing Software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
+          </dd>
+          <dt id="parnasClements1986">[<b>parnasClements1986</b>]</dt>
+          <dd>
+            Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
+          </dd>
+          <dt id="smithKoothoor2016">[<b>smithKoothoor2016</b>]</dt>
+          <dd>
+            Smith, W. Spencer and Koothoor, Nirmitha. "A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis." <em>Nuclear Engineering and Technology</em>, vol. 48, no. 2, April, 2016. <a href="http://www.sciencedirect.com/science/article/pii/S1738573315002582">http://www.sciencedirect.com/science/article/pii/S1738573315002582</a>. pp. 404&ndash;418.
+          </dd>
+          <dt id="smithLai2005">[<b>smithLai2005</b>]</dt>
+          <dd>
+            Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+          </dd>
+          <dt id="smithEtAl2007">[<b>smithEtAl2007</b>]</dt>
+          <dd>
+            Smith, W. Spencer, Lai, Lei, and Khedri, Ridha. "Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability." <em>Reliable Computing, Special Issue on Reliable Engineering Computation</em>, vol. 13, no. 1, February, 2007. <a href="https://doi.org/10.1007/s11155-006-9020-7">https://doi.org/10.1007/s11155-006-9020-7</a>. pp. 83&ndash;107.
+          </dd>
+        </dl>
       </div>
     </div>
     <div id="Sec:Appendix">

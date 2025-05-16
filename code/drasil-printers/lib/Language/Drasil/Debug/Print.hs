@@ -36,7 +36,6 @@ printAllDebugInfo pinfo = map
   , mkTableTMod
   , mkTableIMod
   , mkTableCI
-  , mkTableSec
   , mkTableLC
   , mkTableRef
   , renderUsedUIDs . mkListShowUsedUIDs]
@@ -142,7 +141,7 @@ mkTableOfTerms pinfo = mkTableFromLenses
 mkTableConcepts :: PrintingInformation -> Doc
 mkTableConcepts pinfo = mkTableFromLenses
   pinfo
-  defTable
+  conceptChunkTable
   "Concepts"
   [openTerm, openDefinition]
 
@@ -193,14 +192,6 @@ mkTableCI pinfo = mkTableFromLenses
   (view conceptinsTable)
   "ConceptInstance"
   [openTerm, openShortName]
-
--- | Makes a table with all sections in the SRS.
-mkTableSec :: PrintingInformation -> Doc
-mkTableSec pinfo = mkTableFromLenses
-  pinfo
-  (view sectionTable)
-  "Sections"
-  [openTitle, openShortName]
 
 -- | Makes a table with all labelled content in the SRS.
 mkTableLC :: PrintingInformation -> Doc
@@ -302,7 +293,7 @@ mkListShowUsedUIDs PI { _ckdb = db } = sortBy (compare `on` fst)
   $ Map.fromListWith (++)
   $ map (\x -> (fst x, ["QuantityDict"])) (Map.assocs $ symbolTable db)
   ++ map (\x -> (fst x, ["IdeaDict"])) (Map.assocs $ termTable db)
-  ++ map (\x -> (fst x, ["ConceptChunk"])) (Map.assocs $ defTable db)
+  ++ map (\x -> (fst x, ["ConceptChunk"])) (Map.assocs $ conceptChunkTable db)
   ++ map (\x -> (fst x, ["UnitDefn"])) (Map.assocs $ db ^. unitTable)
   ++ map (\x -> (fst x, ["DataDefinition"])) (Map.assocs $ db ^. dataDefnTable)
   ++ map (\x -> (fst x, ["InstanceModel"])) (Map.assocs $ db ^. insmodelTable)
@@ -313,7 +304,6 @@ mkListShowUsedUIDs PI { _ckdb = db } = sortBy (compare `on` fst)
   ++ map
     (\x -> (fst x, ["ConceptInstance"]))
     (Map.assocs $ db ^. conceptinsTable)
-  ++ map (\x -> (fst x, ["Section"])) (Map.assocs $ db ^. sectionTable)
   ++ map
     (\x -> (fst x, ["LabelledContent"]))
     (Map.assocs $ db ^. labelledcontentTable)
@@ -326,7 +316,7 @@ mkListAll db = nubOrd
   $ sort
   $ map fst (Map.assocs $ symbolTable db)
   ++ map fst (Map.assocs $ termTable db)
-  ++ map fst (Map.assocs $ defTable db)
+  ++ map fst (Map.assocs $ conceptChunkTable db)
   ++ map fst (Map.assocs $ db ^. unitTable)
   ++ map fst (Map.assocs $ db ^. traceTable)
   ++ map fst (Map.assocs $ db ^. refbyTable)
@@ -335,6 +325,5 @@ mkListAll db = nubOrd
   ++ map fst (Map.assocs $ db ^. gendefTable)
   ++ map fst (Map.assocs $ db ^. theoryModelTable)
   ++ map fst (Map.assocs $ db ^. conceptinsTable)
-  ++ map fst (Map.assocs $ db ^. sectionTable)
   ++ map fst (Map.assocs $ db ^. labelledcontentTable)
   ++ map fst (Map.assocs $ db ^. refTable)

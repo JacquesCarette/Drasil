@@ -47,8 +47,9 @@ import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater)
 import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
-import Drasil.SWHS.References (citations)
-import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements, verifyEnergyOutput)
+import Drasil.SWHS.References (citations, uriReferences)
+import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements, 
+  verifyEnergyOutput)
 import Drasil.SWHS.TMods (tMods)
 import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
   htFluxC, htFluxP, inputs, inputConstraints, outputs, pcmE, pcmHTC, pcmSA,
@@ -60,7 +61,7 @@ import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
 srs :: Document
 srs = mkDoc mkSRS S.forT si
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
@@ -74,7 +75,7 @@ units = map unitWrapper [metre, kilogram, second] ++
   map unitWrapper [centigrade, joule, watt]
 --Will there be a table of contents?
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = swhsPCM,
   _kind        = Doc.srs, 
@@ -84,18 +85,15 @@ si = SI {
   _motivation  = [motivation],
   _scope       = [scope],
   _quants      = symbols,
-  _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = insModel,
   _datadefs    = SWHS.dataDefs,
   _configFiles = [],
   _inputs      = inputs,
   _outputs     = map qw outputs,
-  _defSequence = [] :: [Block SimpleQDef],
   _constraints = constrained,
   _constants   = specParamValList,
   _sysinfodb   = symbMap,
-  _usedinfodb  = usedDB,
-   refdb       = refDB
+  _usedinfodb  = usedDB
 }
 
 purp :: Sentence
@@ -115,18 +113,15 @@ symbMap = cdb (qw (heatEInPCM ^. output) : symbolsAll) -- heatEInPCM ?
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
   ++ [nw swhsPCM, nw algorithm] ++ map nw compcon ++ [nw materialProprty])
   (cw heatEInPCM : map cw symbols ++ srsDomains ++ map cw specParamValList) -- FIXME: heatEInPCM?
-  (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs tMods concIns section [] allRefs
+  (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef]
+allRefs = externalLinkRef : uriReferences
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronymsFull)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
-
-refDB :: ReferenceDB
-refDB = rdb citations concIns
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] []
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -182,9 +177,6 @@ insModel = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
   ++ nfRequirements
-
-section :: [Section]
-section = extractSection srs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -314,8 +306,8 @@ sysCntxtDesc pro = foldlSP [refS sysCntxtFig, S "shows the" +:+.
   S "flow between the", phraseNP (system `andIts` environment)]
 
 sysCntxtFig :: LabelledContent
-sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
-  [refS sysCntxtFig +: EmptyS, titleize sysCont])
+sysCntxtFig = llcc (makeFigRef "SysCon") 
+  $ fig (titleize sysCont)
   $ resourcePath ++ "SystemContextFigure.png"
 
 sysCntxtRespIntro :: CI -> Contents

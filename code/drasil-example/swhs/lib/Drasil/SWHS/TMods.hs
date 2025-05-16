@@ -1,6 +1,6 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, latentHtE,
-  nwtnCooling, sensHtE, sensHtETemplate, tMods) where
+  nwtnCooling, sensHtE, sensHtETemplate, tMods, consThemESrc) where
 
 import qualified Data.List.NonEmpty as NE
 
@@ -27,7 +27,7 @@ import Data.Drasil.Quantities.Thermodynamics (boilPt, heatCapSpec,
 import Drasil.SWHS.Assumptions (assumpHTCC, assumpTEO)
 import Drasil.SWHS.Concepts (transient)
 import Drasil.SWHS.DataDefs (ddMeltFrac)
-import Drasil.SWHS.References (incroperaEtAl2007)
+import Drasil.SWHS.References
 import Drasil.SWHS.Unitals (deltaT, htCapL, htCapS, htCapV, htTransCoeff,
   meltFrac, tau, tempEnv, thFluxVect, volHtGen)
 
@@ -52,12 +52,6 @@ consThermECS = mkConstraintSet consCC rels
 consThermERel :: ModelExpr
 consThermERel = negVec (sy gradient) $. sy thFluxVect $+ sy volHtGen $=
   sy density $* sy heatCapSpec $* pderiv (sy temp) time
-
--- the second argument is a 'ShortName'...
-consThemESrc :: Reference
-consThemESrc = makeURI "consThemESrc"
-  "http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm" $
-  shortname' $ S "Fourier Law of Heat Conduction and Heat Equation"
 
 consThermENotes :: [Sentence]
 consThermENotes = map foldlSent [
@@ -91,11 +85,6 @@ sensHtEQD pc eqn desc = fromEqnSt'' "sensHeat" np desc (symbol sensHeat) (sensHe
   where np = nounPhraseSP ("Sensible heat energy" ++ case pc of
                                                        Liquid -> " (no state change)"
                                                        AllPhases -> "")
-
-sensHtESrc :: Reference
-sensHtESrc = makeURI "sensHtESrc"
-  "http://en.wikipedia.org/wiki/Sensible_heat" $
-  shortname' $ S "Definition of Sensible Heat"
 
 sensHtEEqn :: PhaseChange -> ModelExpr
 sensHtEEqn pChange = case pChange of
@@ -142,12 +131,6 @@ latentHtEFD = mkFuncDefByQ latentHeat [time] latentHtEExpr
 
 latentHtEExpr :: ModelExpr
 latentHtEExpr = defint (eqSymb tau) (exactDbl 0) (sy time) (deriv (apply1 latentHeat tau) tau)
-
--- Integrals need dTau at end
-
-latHtESrc :: Reference
-latHtESrc = makeURI "latHtESrc" "http://en.wikipedia.org/wiki/Latent_heat" $
-  shortname' $ S "Definition of Latent Heat"
 
 latentHtENotes :: [Sentence]
 latentHtENotes = map foldlSent [

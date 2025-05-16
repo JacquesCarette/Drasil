@@ -14,6 +14,7 @@ import           Language.Drasil.UID           (UID)
 import           Language.Drasil.WellTyped
 
 import           Data.Either                  (lefts, fromLeft)
+
 import qualified Data.Foldable as NE
 import           Numeric.Natural              (Natural)
 import           Data.Map                     (Map)

@@ -1,4 +1,4 @@
-module SysInfo.Drasil (
+module System.Drasil (
   -- * System Information
     System(..)
   -- * Lenses
@@ -11,5 +11,5 @@ module SysInfo.Drasil (
   , ccss, ccss', vars
 ) where
 
-import SysInfo.Drasil.GetChunk
-import SysInfo.Drasil.SystemInformation
+import System.Drasil.GetChunk
+import System.Drasil.System

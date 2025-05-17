@@ -9,7 +9,7 @@ import Data.Either (isRight, rights)
 import Control.Lens ((^.))
 import Data.Bifunctor (second)
 import Data.List (partition)
-import SysInfo.Drasil (System(SI))
+import System.Drasil (System(SI))
 
 typeCheckSI :: System -> IO ()
 typeCheckSI

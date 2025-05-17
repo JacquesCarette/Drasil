@@ -4,7 +4,7 @@ module Drasil.DocumentLanguage.Notebook.LsnDecl where
 import qualified Drasil.DocumentLanguage.Notebook.Core as NB (LsnDesc, LsnChapter(..), 
   Intro(..), LearnObj(..), Review(..), CaseProb(..), Example(..), Smmry(..), Apndx(..))
 
-import SysInfo.Drasil (System)
+import System.Drasil (System)
 
 -- * Types
 

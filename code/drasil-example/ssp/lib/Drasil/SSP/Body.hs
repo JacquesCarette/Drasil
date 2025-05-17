@@ -84,7 +84,7 @@ si = SI {
   _outputs     = map qw outputs,
   _constraints = constrained,
   _constants   = [],
-  _sysinfodb   = symbMap,
+  _systemdb   = symbMap,
   _usedinfodb  = usedDB
 }
   

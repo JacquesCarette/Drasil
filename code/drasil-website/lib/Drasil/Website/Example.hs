@@ -4,7 +4,7 @@
 module Drasil.Website.Example where
 
 import Language.Drasil hiding (E)
-import SysInfo.Drasil (System(..))
+import System.Drasil (System(..))
 import Language.Drasil.Code (Choices(..), Lang(..))
 import Data.Char (toLower)
 import Language.Drasil.Printers (Format(..))
@@ -39,7 +39,7 @@ import qualified Drasil.Projectile.Choices as Projectile (codedDirName, choiceCo
 -- | Each Example gets placed in here.
 data Example = E {
   -- | Example system information. Used to get the system name and abbreviation.
-  sysInfoE :: System,
+  systemE :: System,
   -- | Some examples have generated code with specific choices.
   -- They may also have more than one set of choices, so we need a list.
   choicesE :: [Choices],
@@ -80,18 +80,18 @@ fullExList codePth srsDoxPth = Enumeration $ Bullet $ map (, Nothing) (allExampl
 allExampleList :: [Example] -> [ItemType]
 allExampleList = map (\x -> Nested (nameAndDesc x) $ Bullet $ map (, Nothing) (individualExList x))
   where
-    nameAndDesc E{sysInfoE = SI{_sys = sys, _purpose = purp}} = S (abrv sys) +:+ S " - To" +:+. head purp
+    nameAndDesc E{systemE = SI{_sys = sys, _purpose = purp}} = S (abrv sys) +:+ S " - To" +:+. head purp
 
 -- | Display the points for generated documents and call 'versionList' to display the code.
 individualExList :: Example -> [ItemType]
 -- No choices mean no generated code, so we do not need to display generated code and thus do not call versionList.
-individualExList ex@E{sysInfoE = SI{_sys = sys}, choicesE = [], codePath = srsP} = 
+individualExList ex@E{systemE = SI{_sys = sys}, choicesE = [], codePath = srsP} = 
   [Flat $ namedRef (buildDrasilExSrcRef ex) (S "Drasil Source Code"),
   Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP HTML $ programName sys) (S "[HTML]") 
   +:+ namedRef (getSRSRef srsP TeX $ programName sys) (S "[PDF]") 
   +:+ namedRef (getSRSRef srsP MDBook $ programName sys) (S "[mdBook]")]
 -- Anything else means we need to display program information, so use versionList.
-individualExList ex@E{sysInfoE = SI{_sys = sys}, codePath = srsP} = 
+individualExList ex@E{systemE = SI{_sys = sys}, codePath = srsP} = 
   [Flat $ namedRef (buildDrasilExSrcRef ex) (S "Drasil Source Code"),
   Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP HTML $ programName sys) (S "[HTML]") 
   +:+ namedRef (getSRSRef srsP TeX $ programName sys) (S "[PDF]")
@@ -110,7 +110,7 @@ versionList :: (Example -> Lang -> String -> Reference) -> Example -> [ItemType]
 versionList _ E{choicesE = []} = [] -- If the choices are empty, then we don't do anything. This pattern should never
                                     -- match (this case should be caught in the function that calls this one),
                                     -- but it is here just to be extra careful.
-versionList getRef ex@E{sysInfoE = SI{_sys = sys}, choicesE = chcs} =
+versionList getRef ex@E{systemE = SI{_sys = sys}, choicesE = chcs} =
   map versionItem chcs 
   where
     -- Version item displays version name and appends the languages of generated code below.
@@ -175,7 +175,7 @@ getCodeRef :: Example -> Lang -> String -> Reference
 -- since that was checked in an earlier function.
 --
 -- Pattern matches so that examples that only have a single set of choices will be referenced one way.
-getCodeRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName = 
+getCodeRef ex@E{systemE=SI{_sys = sys}, choicesE = chcs} l verName = 
   makeURI refUID refURI refShortNm
   where
     -- Append system name and program language to ensure a unique id for each.
@@ -194,7 +194,7 @@ getCodeRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName =
 
 -- | Similar to 'getCodeRef', but builds the source code references
 buildDrasilExSrcRef :: Example -> Reference
-buildDrasilExSrcRef ex@E{sysInfoE=SI{_sys = sys}} = 
+buildDrasilExSrcRef ex@E{systemE=SI{_sys = sys}} = 
   makeURI refUID refURI refShortNm
   where
     refUID = "srcCodeRef" ++ sysName
@@ -205,7 +205,7 @@ buildDrasilExSrcRef ex@E{sysInfoE=SI{_sys = sys}} =
 
 -- | Similar to 'getCodeRef', but gets the doxygen references and uses 'getDoxRef' instead.
 getDoxRef :: Example -> Lang -> String -> Reference
-getDoxRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName = 
+getDoxRef ex@E{systemE=SI{_sys = sys}, choicesE = chcs} l verName = 
   makeURI refUID refURI refShortNm
   where
     refUID = "doxRef" ++ progName ++ programLang
@@ -264,4 +264,4 @@ getDoxRefDB ex = concatMap (\x -> map (\y -> getDoxRef ex y $ verName x) $ lang 
 
 -- | Helper to pull the system name (abbreviation) from an 'Example'.
 getAbrv :: Example -> String
-getAbrv E{sysInfoE = SI{_sys=sys}} = programName sys
+getAbrv E{systemE = SI{_sys=sys}} = programName sys

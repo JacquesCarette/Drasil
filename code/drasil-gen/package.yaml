@@ -30,7 +30,7 @@ dependencies:
 - drasil-metadata
 - drasil-lang
 - drasil-printers
-- drasil-sysinfo
+- drasil-system
 - drasil-utils
 - lens
 

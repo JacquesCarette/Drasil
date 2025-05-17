@@ -117,7 +117,7 @@ si = SI {
   _outputs     = outputSymbols, 
   _constraints = inputConstraints,
   _constants   = [],
-  _sysinfodb   = symbMap,
+  _systemdb   = symbMap,
   _usedinfodb  = usedDB
 }
 

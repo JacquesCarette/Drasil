@@ -113,7 +113,7 @@ si = SI {
   _outputs = outputs,
   _constraints = map cnstrw inpConstrained,
   _constants = pidConstants,
-  _sysinfodb = symbMap,
+  _systemdb = symbMap,
   _usedinfodb = usedDB
 }
 

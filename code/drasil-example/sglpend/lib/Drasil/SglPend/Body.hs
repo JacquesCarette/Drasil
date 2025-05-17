@@ -122,7 +122,7 @@ si = SI {
   _outputs     = outputs,
   _constraints = inConstraints,
   _constants   = [] :: [ConstQDef],
-  _sysinfodb   = symbMap,
+  _systemdb   = symbMap,
   _usedinfodb  = usedDB
 }
 

@@ -18,7 +18,7 @@ import Data.Drasil.Concepts.Documentation (assumption, assumpDom, chgProbDom,
   unlikelyChg)
 import qualified Data.Drasil.TheoryConcepts as Doc (genDefn, dataDefn, inModel, thModel)
 import Database.Drasil
-import SysInfo.Drasil
+import System.Drasil
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators as NC
 import Language.Drasil.Sentence.Combinators as S
@@ -94,8 +94,8 @@ traceMatOtherReq si = TraceConfig (mkUid "TraceMatAllvsR") [plural requirement
   plural Doc.genDefn, plural Doc.inModel] (x titleize' +:+ S "and Other" +:+ 
   titleize' item) [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs] 
   [tvGoals, tvReqs] where
-    x g = foldl' (\a (f,t) -> a `sC'` case traceMReferrers (flip f $ _sysinfodb si) $
-      _sysinfodb si of
+    x g = foldl' (\a (f,t) -> a `sC'` case traceMReferrers (flip f $ _systemdb si) $
+      _systemdb si of
       [] -> mempty
       _ -> g t) mempty [(tvReqs, requirement), (tvGoals, goalStmt)]
     sC' EmptyS b = b

@@ -184,7 +184,7 @@ si = SI {
   _outputs     = map qw [tempW, watE],     --outputs
   _constraints = map cnstrw constrained ++ map cnstrw [tempW, watE], --constrained
   _constants   = piConst : specParamValList,
-  _sysinfodb   = symbMap,
+  _systemdb   = symbMap,
   _usedinfodb  = usedDB
 }
 

@@ -5,7 +5,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil
-import SysInfo.Drasil
+import System.Drasil
 import Language.Drasil
 import Drasil.DocLang (findAllRefs)
 
@@ -87,7 +87,7 @@ si fl = SI {
     _outputs     = [] :: [QuantityDict],
     _constraints = [] :: [ConstrainedChunk],
     _constants   = [] :: [ConstQDef],
-    _sysinfodb   = symbMap fl,
+    _systemdb   = symbMap fl,
     _usedinfodb  = usedDB
   }
 

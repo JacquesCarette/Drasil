@@ -312,10 +312,10 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">_inputs</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.PDController.Unitals.html#inputs"><span class="hs-identifier hs-var">inputs</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-113"></span><span>  </span><span class="annot"><span class="annottext">_outputs :: [QuantityDict]
-</span><a href="#local-6989586621679065491"><span class="hs-identifier hs-var">_outputs</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><a href="#local-6989586621679064963"><span class="hs-identifier hs-var">_outputs</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.PDController.Unitals.html#outputs"><span class="hs-identifier hs-var">outputs</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-114"></span><span>  </span><span class="annot"><span class="annottext">_constraints :: [ConstrainedChunk]
-</span><a href="#local-6989586621679065492"><span class="hs-identifier hs-var">_constraints</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConstrConcept -&gt; ConstrainedChunk)
+</span><a href="#local-6989586621679064964"><span class="hs-identifier hs-var">_constraints</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConstrConcept -&gt; ConstrainedChunk)
 -&gt; [ConstrConcept] -&gt; [ConstrainedChunk]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; ConstrainedChunk
@@ -325,13 +325,13 @@ c -&gt; ConstrainedChunk
 </span><span class="hs-identifier hs-var">cnstrw</span></span><span> </span><span class="annot"><span class="annottext">[ConstrConcept]
 </span><a href="Drasil.PDController.Unitals.html#inpConstrained"><span class="hs-identifier hs-var">inpConstrained</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-115"></span><span>  </span><span class="annot"><span class="annottext">_constants :: [ConstQDef]
-</span><a href="#local-6989586621679065494"><span class="hs-identifier hs-var">_constants</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[ConstQDef]
+</span><a href="#local-6989586621679064966"><span class="hs-identifier hs-var">_constants</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[ConstQDef]
 </span><a href="Drasil.PDController.Unitals.html#pidConstants"><span class="hs-identifier hs-var">pidConstants</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-116"></span><span>  </span><span class="annot"><span class="annottext">_sysinfodb :: ChunkDB
-</span><a href="#local-6989586621679065495"><span class="hs-identifier hs-var">_sysinfodb</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><span id="line-116"></span><span>  </span><span class="annot"><span class="annottext">_systemdb :: ChunkDB
+</span><a href="#local-6989586621679064967"><span class="hs-identifier hs-var">_systemdb</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
 </span><a href="Drasil.PDController.Body.html#symbMap"><span class="hs-identifier hs-var">symbMap</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-117"></span><span>  </span><span class="annot"><span class="annottext">_usedinfodb :: ChunkDB
-</span><a href="#local-6989586621679065497"><span class="hs-identifier hs-var">_usedinfodb</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679064969"><span class="hs-identifier hs-var">_usedinfodb</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
 </span><a href="Drasil.PDController.Body.html#usedDB"><span class="hs-identifier hs-var">usedDB</span></a></span><span>
 </span><span id="line-118"></span><span class="hs-special">}</span><span>
 </span><span id="line-119"></span><span>

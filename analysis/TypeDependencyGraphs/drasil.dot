@@ -4397,7 +4397,7 @@ digraph alltypes {
 	}
 	subgraph getcunkh {
 	}
-	subgraph syteminformations {
+	subgraph sytems {
 		subgraph system{
 		System	[shape=oval, color=darkviolet, label="System"];
 		System -> CommonIdea;

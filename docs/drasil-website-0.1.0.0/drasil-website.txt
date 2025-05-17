@@ -194,7 +194,7 @@ E :: System -> [Choices] -> FilePath -> FilePath -> Example
 
 -- | Example system information. Used to get the system name and
 --   abbreviation.
-[sysInfoE] :: Example -> System
+[systemE] :: Example -> System
 
 -- | Some examples have generated code with specific choices. They may also
 --   have more than one set of choices, so we need a list.
@@ -331,7 +331,7 @@ data CaseStudy
 CS :: System -> Sentence -> Choices -> CaseStudy
 
 -- | Each case study needs a name, so use system information.
-[sysInfoCS] :: CaseStudy -> System
+[systemCS] :: CaseStudy -> System
 
 -- | A case study may have different program names for the same example
 --   (ex. Projectile).

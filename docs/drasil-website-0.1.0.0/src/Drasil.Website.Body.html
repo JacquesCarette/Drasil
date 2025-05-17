@@ -5,7 +5,7 @@
 </span><span id="line-5"></span><span>
 </span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Printers</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">PrintingInformation</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">defaultConfiguration</span></span><span class="hs-special">)</span><span>
 </span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Database.Drasil</span></span><span>
-</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">SysInfo.Drasil</span></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.Drasil</span></span><span>
 </span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
 </span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DocLang</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">findAllRefs</span></span><span class="hs-special">)</span><span>
 </span><span id="line-11"></span><span>
@@ -141,8 +141,8 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">_constraints</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstrainedChunk</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-89"></span><span>    </span><span class="annot"><span class="annottext">_constants :: [ConstQDef]
 </span><span class="hs-identifier hs-var">_constants</span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstQDef</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-90"></span><span>    </span><span class="annot"><span class="annottext">_sysinfodb :: ChunkDB
-</span><span class="hs-identifier hs-var">_sysinfodb</span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FolderLocation -&gt; ChunkDB
+</span><span id="line-90"></span><span>    </span><span class="annot"><span class="annottext">_systemdb :: ChunkDB
+</span><span class="hs-identifier hs-var">_systemdb</span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FolderLocation -&gt; ChunkDB
 </span><a href="Drasil.Website.Body.html#symbMap"><span class="hs-identifier hs-var">symbMap</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
 </span><a href="#local-6989586621679090678"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-91"></span><span>    </span><span class="annot"><span class="annottext">_usedinfodb :: ChunkDB

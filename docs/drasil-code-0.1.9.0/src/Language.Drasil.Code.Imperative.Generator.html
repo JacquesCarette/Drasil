@@ -40,7 +40,7 @@
 </span><span id="line-40"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.GOOL</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">OO</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">GSProgram</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">SFile</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ProgramSym</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">unCI</span></span><span class="hs-special">)</span><span>
 </span><span id="line-41"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.GProc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">ProcProg</span></span><span class="hs-special">)</span><span>
 </span><span id="line-42"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.GProc</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Proc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">GSProgram</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">SFile</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ProgramSym</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">unCI</span></span><span class="hs-special">)</span><span>
-</span><span id="line-43"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">SysInfo.Drasil</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">sysinfodb</span></span><span class="hs-special">)</span><span>
+</span><span id="line-43"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.Drasil</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">systemdb</span></span><span class="hs-special">)</span><span>
 </span><span id="line-44"></span><span>
 </span><span id="line-45"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.Directory</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">setCurrentDirectory</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">createDirectoryIfMissing</span></span><span class="hs-special">,</span><span>
 </span><span id="line-46"></span><span>  </span><span class="annot"><span class="hs-identifier">getCurrentDirectory</span></span><span class="hs-special">)</span><span>
@@ -366,7 +366,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting ChunkDB CodeSpec ChunkDB
 forall c. HasOldCodeSpec c =&gt; Lens' c ChunkDB
 Lens' CodeSpec ChunkDB
-</span><a href="Language.Drasil.CodeSpec.html#sysinfodbO"><span class="hs-identifier hs-var">sysinfodbO</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Stage
+</span><a href="Language.Drasil.CodeSpec.html#systemdbO"><span class="hs-identifier hs-var">systemdbO</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Stage
 </span><span class="hs-identifier hs-var">Implementation</span></span><span> </span><span class="annot"><span class="annottext">SingleLine
 </span><span class="hs-identifier hs-var">OneLine</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; Doc) -&gt; [Sentence] -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -595,7 +595,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting ChunkDB CodeSpec ChunkDB
 forall c. HasOldCodeSpec c =&gt; Lens' c ChunkDB
 Lens' CodeSpec ChunkDB
-</span><a href="Language.Drasil.CodeSpec.html#sysinfodbO"><span class="hs-identifier hs-var">sysinfodbO</span></a></span><span>
+</span><a href="Language.Drasil.CodeSpec.html#systemdbO"><span class="hs-identifier hs-var">systemdbO</span></a></span><span>
 </span><span id="line-150"></span><span>      </span><span class="hs-comment">-- prps = show $ sentenceDoc db Implementation OneLine</span><span>
 </span><span id="line-151"></span><span>      </span><span class="hs-comment">--   (foldlSent $ purpose $ codeSpec g)</span><span>
 </span><span id="line-152"></span><span>      </span><span id="local-6989586621679371761"><span class="annot"><span class="annottext">prps :: String
@@ -819,7 +819,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting ChunkDB CodeSpec ChunkDB
 forall c. HasOldCodeSpec c =&gt; Lens' c ChunkDB
 Lens' CodeSpec ChunkDB
-</span><a href="Language.Drasil.CodeSpec.html#sysinfodbO"><span class="hs-identifier hs-var">sysinfodbO</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Stage
+</span><a href="Language.Drasil.CodeSpec.html#systemdbO"><span class="hs-identifier hs-var">systemdbO</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Stage
 </span><span class="hs-identifier hs-var">Implementation</span></span><span> </span><span class="annot"><span class="annottext">SingleLine
 </span><span class="hs-identifier hs-var">OneLine</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Doc) -&gt; Sentence -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -1314,7 +1314,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting ChunkDB CodeSpec ChunkDB
 forall c. HasOldCodeSpec c =&gt; Lens' c ChunkDB
 Lens' CodeSpec ChunkDB
-</span><a href="Language.Drasil.CodeSpec.html#sysinfodbO"><span class="hs-identifier hs-var">sysinfodbO</span></a></span><span>
+</span><a href="Language.Drasil.CodeSpec.html#systemdbO"><span class="hs-identifier hs-var">systemdbO</span></a></span><span>
 </span><span id="line-264"></span><span>      </span><span id="local-6989586621679372165"><span class="annot"><span class="annottext">prps :: String
 </span><a href="#local-6989586621679372165"><span class="hs-identifier hs-var hs-var">prps</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; String
 forall a. Show a =&gt; a -&gt; String
@@ -1538,7 +1538,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting ChunkDB CodeSpec ChunkDB
 forall c. HasOldCodeSpec c =&gt; Lens' c ChunkDB
 Lens' CodeSpec ChunkDB
-</span><a href="Language.Drasil.CodeSpec.html#sysinfodbO"><span class="hs-identifier hs-var">sysinfodbO</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Stage
+</span><a href="Language.Drasil.CodeSpec.html#systemdbO"><span class="hs-identifier hs-var">systemdbO</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Stage
 </span><span class="hs-identifier hs-var">Implementation</span></span><span> </span><span class="annot"><span class="annottext">SingleLine
 </span><span class="hs-identifier hs-var">OneLine</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Doc) -&gt; Sentence -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b

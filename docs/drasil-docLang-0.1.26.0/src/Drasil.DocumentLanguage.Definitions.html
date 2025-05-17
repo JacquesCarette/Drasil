@@ -17,7 +17,7 @@
 </span><span id="line-17"></span><span>
 </span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
 </span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Database.Drasil</span></span><span>
-</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">SysInfo.Drasil</span></span><span>
+</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.Drasil</span></span><span>
 </span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">DataDefinition</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">GenDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">InstanceModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Theory</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-22"></span><span>  </span><span class="annot"><span class="hs-identifier">TheoryModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">HasInputs</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">inputs</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">HasOutput</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">output</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">out_constraints</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">qdFromDD</span></span><span class="hs-special">)</span><span>
 </span><span id="line-23"></span><span>
@@ -496,7 +496,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasUID c =&gt; Getter c UID
 Getter t UID
 </span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">System -&gt; ChunkDB
-</span><span class="hs-identifier hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">System
+</span><span class="hs-identifier hs-var">_systemdb</span></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679096129"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Getting RefbyMap ChunkDB RefbyMap -&gt; RefbyMap
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting RefbyMap ChunkDB RefbyMap
@@ -708,7 +708,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-string">&quot;Caught.&quot;</span></span><span>
 </span><span id="line-125"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679096139"><span class="annot"><span class="annottext">s :: ChunkDB
 </span><a href="#local-6989586621679096139"><span class="hs-identifier hs-var hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">System -&gt; ChunkDB
-</span><span class="hs-identifier hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">System
+</span><span class="hs-identifier hs-var">_systemdb</span></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679096138"><span class="hs-identifier hs-var">si</span></a></span><span>
 </span><span id="line-126"></span><span>
 </span><span id="line-127"></span><span class="annot"><span class="hs-comment">-- | Helper that makes a list of 'Reference's into a 'Sentence'. Then wraps into 'Contents'.</span></span><span>
@@ -1017,7 +1017,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="#local-6989586621679096194"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="annottext">(ChunkDB -&gt; [QuantityDict]) -&gt; ChunkDB -&gt; [QuantityDict]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">System -&gt; ChunkDB
-</span><span class="hs-identifier hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">System
+</span><span class="hs-identifier hs-var">_systemdb</span></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679096195"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Contents -&gt; [Contents] -&gt; [Contents]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Contents]
@@ -1082,7 +1082,7 @@ InclUnits -&gt; [q] -&gt; [ListTuple]
 forall a b c. (a -&gt; b -&gt; c) -&gt; b -&gt; a -&gt; c
 </span><span class="hs-identifier hs-var">flip</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ChunkDB -&gt; [QuantityDict]
 </span><span class="hs-identifier hs-var">vars</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">System -&gt; ChunkDB
-</span><span class="hs-identifier hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">System
+</span><span class="hs-identifier hs-var">_systemdb</span></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679096208"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; [QuantityDict]) -&gt; ModelExpr -&gt; [QuantityDict]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>

@@ -297,7 +297,7 @@ defaultChoices :: Choices
 --   <a>OldCodeSpec</a>.
 data CodeSpec
 CS :: System -> OldCodeSpec -> CodeSpec
-[_sysInfo] :: CodeSpec -> System
+[_system'] :: CodeSpec -> System
 [_oldCode] :: CodeSpec -> OldCodeSpec
 
 -- | Old Code specifications. Holds information needed to generate code.
@@ -346,7 +346,7 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 [_mods] :: OldCodeSpec -> [Mod]
 
 -- | The database of all chunks used in the problem.
-[_sysinfodb] :: OldCodeSpec -> ChunkDB
+[_systemdb] :: OldCodeSpec -> ChunkDB
 
 -- | Creates a <a>CodeSpec</a> using the provided <tt>System</tt>,
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
@@ -366,7 +366,7 @@ inputsO :: HasOldCodeSpec c_ayT6 => Lens' c_ayT6 [Input]
 modsO :: HasOldCodeSpec c_ayT6 => Lens' c_ayT6 [Mod]
 outputsO :: HasOldCodeSpec c_ayT6 => Lens' c_ayT6 [Output]
 pNameO :: HasOldCodeSpec c_ayT6 => Lens' c_ayT6 Name
-sysinfodbO :: HasOldCodeSpec c_ayT6 => Lens' c_ayT6 ChunkDB
+systemdbO :: HasOldCodeSpec c_ayT6 => Lens' c_ayT6 ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

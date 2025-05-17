@@ -1,0 +1,28 @@
+	subgraph getcunkh {
+	}
+	subgraph sytems {
+		subgraph system{
+		System	[shape=oval, color=darkviolet, label="System"];
+		System -> CommonIdea;
+		System -> a;
+		System -> Idea;
+		}
+		subgraph purpose{
+		Purpose	[shape=oval, color=red2, label="Purpose"];
+		Purpose -> Sentence;
+		}
+		subgraph background{
+		Background	[shape=oval, color=red2, label="Background"];
+		Background -> Sentence;
+		}
+		subgraph scope{
+		Scope	[shape=oval, color=red2, label="Scope"];
+		Scope -> Sentence;
+		}
+		subgraph motivation{
+		Motivation	[shape=oval, color=red2, label="Motivation"];
+		Motivation -> Sentence;
+		}
+	}
+	subgraph drails {
+	}

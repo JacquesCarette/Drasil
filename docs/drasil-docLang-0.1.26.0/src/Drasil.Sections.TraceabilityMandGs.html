@@ -18,7 +18,7 @@
 </span><span id="line-18"></span><span>  </span><span class="annot"><span class="hs-identifier">unlikelyChg</span></span><span class="hs-special">)</span><span>
 </span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.TheoryConcepts</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Doc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">genDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">dataDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">inModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">thModel</span></span><span class="hs-special">)</span><span>
 </span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Database.Drasil</span></span><span>
-</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">SysInfo.Drasil</span></span><span>
+</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.Drasil</span></span><span>
 </span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
 </span><span id="line-23"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">NC</span></span><span>
 </span><span id="line-24"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
@@ -354,12 +354,12 @@ forall a b c. (a -&gt; b -&gt; c) -&gt; b -&gt; a -&gt; c
 </span><a href="#local-6989586621679100826"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">(ChunkDB -&gt; [UID] -&gt; [UID]) -&gt; ChunkDB -&gt; [UID] -&gt; [UID]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">System -&gt; ChunkDB
-</span><span class="hs-identifier hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">System
+</span><span class="hs-identifier hs-var">_systemdb</span></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679100816"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(ChunkDB -&gt; [UID]) -&gt; ChunkDB -&gt; [UID]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
 </span><span id="line-98"></span><span>      </span><span class="annot"><span class="annottext">System -&gt; ChunkDB
-</span><span class="hs-identifier hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">System
+</span><span class="hs-identifier hs-var">_systemdb</span></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679100816"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="hs-keyword">of</span><span>
 </span><span id="line-99"></span><span>      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Sentence
 forall a. Monoid a =&gt; a

@@ -1655,30 +1655,30 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 [_mods] :: OldCodeSpec -> [Mod]
 
 -- | The database of all chunks used in the problem.
-[_sysinfodb] :: OldCodeSpec -> ChunkDB
-class HasOldCodeSpec c_ayVG
-oldCodeSpec :: HasOldCodeSpec c_ayVG => Lens' c_ayVG OldCodeSpec
-authorsO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG People
-cMapO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG [FilePath]
-constMapO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG ConstantMap
-constantsO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG [Const]
-derivedInputsO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG [Derived]
-execOrderO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG [Def]
-extInputsO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG [Input]
-inputsO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG [Input]
-modsO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG [Mod]
-outputsO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG [Output]
-pNameO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG Name
-sysinfodbO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG ChunkDB
+[_systemdb] :: OldCodeSpec -> ChunkDB
+class HasOldCodeSpec c_ayNa
+oldCodeSpec :: HasOldCodeSpec c_ayNa => Lens' c_ayNa OldCodeSpec
+authorsO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa People
+cMapO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa [FilePath]
+constMapO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa ConstantMap
+constantsO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa [Const]
+derivedInputsO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa [Derived]
+execOrderO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa [Def]
+extInputsO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa [Input]
+inputsO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa [Input]
+modsO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa [Mod]
+outputsO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa [Output]
+pNameO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa Name
+systemdbO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa ChunkDB
 
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
 data CodeSpec
 CS :: System -> OldCodeSpec -> CodeSpec
-[_sysInfo] :: CodeSpec -> System
+[_system'] :: CodeSpec -> System
 [_oldCode] :: CodeSpec -> OldCodeSpec
-sysInfo :: Lens' CodeSpec System
+system' :: Lens' CodeSpec System
 oldCode :: Lens' CodeSpec OldCodeSpec
 
 -- | Converts a list of chunks that have <a>UID</a>s to a Map from
@@ -1730,7 +1730,7 @@ getConstraints :: HasUID c => ConstraintCEMap -> [c] -> [ConstraintCE]
 
 -- | Get a list of <a>CodeChunk</a>s from a constraint.
 constraintvars :: ConstraintCE -> ChunkDB -> [CodeChunk]
-instance SysInfo.Drasil.SystemInformation.HasSystem Language.Drasil.CodeSpec.CodeSpec
+instance System.Drasil.System.HasSystem Language.Drasil.CodeSpec.CodeSpec
 instance Language.Drasil.CodeSpec.HasOldCodeSpec Language.Drasil.CodeSpec.CodeSpec
 instance Language.Drasil.CodeSpec.HasOldCodeSpec Language.Drasil.CodeSpec.OldCodeSpec
 
@@ -2808,7 +2808,7 @@ defaultChoices :: Choices
 --   <a>OldCodeSpec</a>.
 data CodeSpec
 CS :: System -> OldCodeSpec -> CodeSpec
-[_sysInfo] :: CodeSpec -> System
+[_system'] :: CodeSpec -> System
 [_oldCode] :: CodeSpec -> OldCodeSpec
 
 -- | Old Code specifications. Holds information needed to generate code.
@@ -2857,27 +2857,27 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 [_mods] :: OldCodeSpec -> [Mod]
 
 -- | The database of all chunks used in the problem.
-[_sysinfodb] :: OldCodeSpec -> ChunkDB
+[_systemdb] :: OldCodeSpec -> ChunkDB
 
 -- | Creates a <a>CodeSpec</a> using the provided <tt>System</tt>,
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> [Mod] -> CodeSpec
-class HasOldCodeSpec c_ayVG
-oldCodeSpec :: HasOldCodeSpec c_ayVG => Lens' c_ayVG OldCodeSpec
-authorsO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG People
-cMapO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG [FilePath]
-constMapO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG ConstantMap
-constantsO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG [Const]
-derivedInputsO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG [Derived]
-execOrderO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG [Def]
-extInputsO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG [Input]
-inputsO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG [Input]
-modsO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG [Mod]
-outputsO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG [Output]
-pNameO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG Name
-sysinfodbO :: HasOldCodeSpec c_ayVG => Lens' c_ayVG ChunkDB
+class HasOldCodeSpec c_ayNa
+oldCodeSpec :: HasOldCodeSpec c_ayNa => Lens' c_ayNa OldCodeSpec
+authorsO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa People
+cMapO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa [FilePath]
+constMapO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa ConstantMap
+constantsO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa [Const]
+derivedInputsO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa [Derived]
+execOrderO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa [Def]
+extInputsO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa [Input]
+inputsO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa [Input]
+modsO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa [Mod]
+outputsO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa [Output]
+pNameO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa Name
+systemdbO :: HasOldCodeSpec c_ayNa => Lens' c_ayNa ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

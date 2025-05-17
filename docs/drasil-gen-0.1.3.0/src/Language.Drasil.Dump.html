@@ -2,7 +2,7 @@
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Language.Drasil.Dump</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Database.Drasil</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">DB</span></span><span>
-</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">SysInfo.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">System</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sysinfodb</span></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">System</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">systemdb</span></span><span class="hs-special">)</span><span>
 </span><span id="line-6"></span><span>
 </span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.Directory</span></span><span>
 </span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.IO</span></span><span>
@@ -67,7 +67,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting ChunkDB System ChunkDB
 forall c. HasSystem c =&gt; Lens' c ChunkDB
 Lens' System ChunkDB
-</span><span class="hs-identifier hs-var">sysinfodb</span></span><span>
+</span><span class="hs-identifier hs-var">systemdb</span></span><span>
 </span><span id="line-40"></span><span>      </span><span id="local-6989586621679118995"><span class="annot"><span class="annottext">chunkDump :: DumpedChunkDB
 </span><a href="#local-6989586621679118995"><span class="hs-identifier hs-var hs-var">chunkDump</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; DumpedChunkDB
 </span><span class="hs-identifier hs-var">DB.dumpChunkDB</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB

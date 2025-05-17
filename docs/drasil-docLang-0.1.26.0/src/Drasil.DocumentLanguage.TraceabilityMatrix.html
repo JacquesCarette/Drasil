@@ -4,7 +4,7 @@
 </span><span id="line-4"></span><span>
 </span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
 </span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Database.Drasil</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">cdb</span></span><span class="hs-special">)</span><span>
-</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">SysInfo.Drasil</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">purpose</span></span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.Drasil</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">purpose</span></span><span class="hs-special">)</span><span>
 </span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
 </span><span id="line-9"></span><span>
 </span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">purpose</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">component</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-keyword">dependency</span></span><span class="hs-special">,</span><span>
@@ -151,7 +151,7 @@ forall c. NamedIdea c =&gt; c -&gt; Sentence -&gt; Sentence
 </span><span id="line-45"></span><span>    </span><span class="hs-keyword">where</span><span>
 </span><span id="line-46"></span><span>    </span><span id="local-6989586621679096478"><span class="annot"><span class="annottext">cdb :: ChunkDB
 </span><a href="#local-6989586621679096478"><span class="hs-identifier hs-var hs-var">cdb</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">System -&gt; ChunkDB
-</span><span class="hs-identifier hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">System
+</span><span class="hs-identifier hs-var">_systemdb</span></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679096467"><span class="hs-identifier hs-var">c</span></a></span><span>
 </span><span id="line-47"></span><span>    </span><span id="local-6989586621679096473"><span class="annot"><span class="annottext">colf :: [UID] -&gt; [UID]
 </span><a href="#local-6989586621679096473"><span class="hs-identifier hs-var hs-var">colf</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat] -&gt; ChunkDB -&gt; [UID] -&gt; [UID]
@@ -231,7 +231,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="#local-6989586621679096492"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">(ChunkDB -&gt; [UID]) -&gt; ChunkDB -&gt; [UID]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">System -&gt; ChunkDB
-</span><span class="hs-identifier hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">System
+</span><span class="hs-identifier hs-var">_systemdb</span></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="#local-6989586621679096493"><span class="hs-identifier hs-var">c</span></a></span><span>
 </span><span id="line-63"></span><span>
 </span><span id="line-64"></span><span class="annot"><span class="hs-comment">-- | Helper that finds the headers of the traceability matrix columns.</span></span><span>

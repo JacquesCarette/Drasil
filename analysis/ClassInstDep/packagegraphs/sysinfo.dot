@@ -1,3 +1,0 @@
-digraph sysinfo{
-System	[shape=oval, color=turquoise4, label="System"];
-}

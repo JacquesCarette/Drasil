@@ -4,7 +4,7 @@
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
 </span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Printers</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">PrintingInformation</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">defaultConfiguration</span></span><span class="hs-special">)</span><span>
 </span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Database.Drasil</span></span><span>
-</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">SysInfo.Drasil</span></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.Drasil</span></span><span>
 </span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
 </span><span id="line-9"></span><span>
 </span><span id="line-10"></span><span class="hs-comment">-- TODO: Add export parameters in a module</span><span>
@@ -117,8 +117,8 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">_constraints</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstrainedChunk</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-61"></span><span>  </span><span class="annot"><span class="annottext">_constants :: [ConstQDef]
 </span><span class="hs-identifier hs-var">_constants</span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstQDef</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-62"></span><span>  </span><span class="annot"><span class="annottext">_sysinfodb :: ChunkDB
-</span><span class="hs-identifier hs-var">_sysinfodb</span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><span id="line-62"></span><span>  </span><span class="annot"><span class="annottext">_systemdb :: ChunkDB
+</span><span class="hs-identifier hs-var">_systemdb</span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
 </span><a href="Drasil.Projectile.Lesson.Body.html#symbMap"><span class="hs-identifier hs-var">symbMap</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-63"></span><span>  </span><span class="annot"><span class="annottext">_usedinfodb :: ChunkDB
 </span><span class="hs-identifier hs-var">_usedinfodb</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB

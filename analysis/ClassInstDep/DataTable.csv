@@ -854,9 +854,9 @@ printers,lib/Language/Drasil/,Format.hs,DocType,	,	,	,	,	,	,	,	,	,	,	,YYYY,	,	,	
 	,	,	,Format,	,	,	,	,	,	,	,	,	,	,	,YYYY,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	
 printers,lib/Language/Drasil/,Printers.hs,	,	,	
 	
-sysinfo,lib/SysInfo/Drasil/,GetChunk.hs,	,	,	
-sysinfo,lib/SysInfo/Drasil/,SystemInformation.hs,System,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	
-sysinfo,lib/SysInfo/,Drasil.hs,	,	,	
+system,lib/System/Drasil/,GetChunk.hs,	,	,	
+system,lib/System/Drasil/,System.hs,System,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	
+system,lib/System/,Drasil.hs,	,	,	
 	
 theory,lib/Data/Drasil/,TheoryConcepts.hs,	,	,	
 theory,lib/Theory/Drasil/,Classes.hs,	,	,HasInputs

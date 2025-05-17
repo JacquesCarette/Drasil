@@ -3,7 +3,7 @@
 {-# HLINT ignore "Redundant return" #-}
 
 -- | Implementations defined here are valid for any language renderer.
-module Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (fileFromData,
+module Drasil.Shared.LanguageRenderer.LanguagePolymorphic (fileFromData,
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, 
   cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
   plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar,
@@ -21,8 +21,8 @@ module Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (fileFromData,
 
 import Utils.Drasil (indent)
 
-import Drasil.GOOL.CodeType (CodeType(..), ClassName)
-import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
+import Drasil.Shared.CodeType (CodeType(..), ClassName)
+import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
   VSType, SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs,
   MixedCall, MixedCtorCall, BodySym(Body), bodyStatements, oneLiner,
   BlockSym(Block), TypeSym(Type), TypeElim(getType, getTypeString),
@@ -31,7 +31,7 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
   sin, cos, tan), Comparison(..), funcApp, StatementSym(multi),
   AssignStatement((&++)), (&=), IOStatement(printStr, printStrLn, printFile,
   printFileStr, printFileStrLn), ifNoElse, ScopeSym(Scope), convType)
-import qualified Drasil.GOOL.InterfaceCommon as IC (TypeSym(int, double, char,
+import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(int, double, char,
   string, listType, arrayType, listInnerType, funcType, void), VariableSym(var),
   Literal(litInt, litFloat, litDouble, litString), VariableValue(valueOf),
   List(listSize, listAccess), StatementSym(valStmt), DeclStatement(varDecDef),
@@ -42,16 +42,16 @@ import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, Initializers,
   ($.), PermanenceSym(..), convTypeOO)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (OOVariableSym(objVarSelf),
   OOMethodSym(method), OOFunctionSym(func))
-import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, RenderType(..),
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderType(..),
   InternalVarElim(variableBind), RenderValue(valFromData),
   RenderFunction(funcFromData), FunctionElim(functionType),
   RenderStatement(stmtFromData), StatementElim(statementTerm),
   MethodTypeSym(mType), RenderParam(paramFromData), RenderMethod(commentedFunc),
   BlockCommentSym(..))
-import qualified Drasil.GOOL.RendererClassesCommon as S (RenderValue(call),
+import qualified Drasil.Shared.RendererClassesCommon as S (RenderValue(call),
   InternalListFunc (listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
   RenderStatement(stmt), InternalIOStmt(..))
-import qualified Drasil.GOOL.RendererClassesCommon as RC (BodyElim(..),
+import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   BlockElim(..), InternalVarElim(variable), ValueElim(value, valueInt),
   FunctionElim(..), StatementElim(statement), BlockCommentElim(..))
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(commentedMod),
@@ -62,21 +62,21 @@ import qualified Drasil.GOOL.RendererClassesOO as S (RenderFile(fileFromData),
   RenderClass(intClass, commentedClass))
 import qualified Drasil.GOOL.RendererClassesOO as RC (ClassElim(..),
   ModuleElim(..))
-import Drasil.GOOL.AST (Binding(..), Terminator(..), isSource, ScopeTag(Local),
+import Drasil.Shared.AST (Binding(..), Terminator(..), isSource, ScopeTag(Local),
   ScopeData, sd)
-import Drasil.GOOL.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode, 
+import Drasil.Shared.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode, 
   toState, onStateValue, on2StateValues, onStateList, getInnerType, getNestDegree,
   on2StateWrapped)
-import Drasil.GOOL.LanguageRenderer (dot, ifLabel, elseLabel, access, addExt, 
+import Drasil.Shared.LanguageRenderer (dot, ifLabel, elseLabel, access, addExt, 
   FuncDocRenderer, ClassDocRenderer, ModuleDocRenderer, getterName, setterName, 
   valueList, namedArgList)
-import qualified Drasil.GOOL.LanguageRenderer as R (file, block, assign, 
+import qualified Drasil.Shared.LanguageRenderer as R (file, block, assign, 
   addAssign, subAssign, return', comment, getTerm, var, objVar, arg, func, 
   objAccess, commentedItem)
-import Drasil.GOOL.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
+import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
   mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, VSOp, unOpPrec, 
   compEqualPrec, compPrec, addPrec, multPrec)
-import Drasil.GOOL.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS, 
+import Drasil.Shared.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS, 
   currMain, currFileType, addFile, setMainMod, setModuleName, getModuleName,
   addParameter, getParameters, useVarName)
 

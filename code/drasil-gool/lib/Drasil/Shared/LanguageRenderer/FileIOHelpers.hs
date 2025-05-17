@@ -1,0 +1,7 @@
+openFileR
+openFileW
+openFileA
+openFileR'
+openFileW'
+openFileA'
+discardFileLine

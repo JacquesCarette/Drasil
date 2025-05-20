@@ -3,7 +3,7 @@
 {-# LANGUAGE DeriveFunctor #-}
 
 -- | The logic to render Julia code is contained in this module
-module Drasil.Shared.LanguageRenderer.JuliaRenderer (
+module Drasil.GProc.LanguageRenderer.JuliaRenderer (
   -- * Julia Code Configuration -- defines syntax of all Julia code
   JuliaCode(..), jlName, jlVersion
 ) where

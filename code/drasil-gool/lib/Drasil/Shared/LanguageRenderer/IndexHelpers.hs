@@ -1,4 +1,4 @@
-intToIndex
-indexToInt
-intToIndex'
-indexToInt'
+-- intToIndex
+-- indexToInt
+-- intToIndex'
+-- indexToInt'

@@ -1,7 +1,7 @@
-openFileR
-openFileW
-openFileA
-openFileR'
-openFileW'
-openFileA'
-discardFileLine
+-- openFileR
+-- openFileW
+-- openFileA
+-- openFileR'
+-- openFileW'
+-- openFileA'
+-- discardFileLine

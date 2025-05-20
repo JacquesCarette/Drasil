@@ -2,7 +2,7 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The logic to render C# code is contained in this module
-module Drasil.Shared.LanguageRenderer.CSharpRenderer (
+module Drasil.GOOL.LanguageRenderer.CSharpRenderer (
   -- * C# Code Configuration -- defines syntax of all C# code
   CSharpCode(..), csName, csVersion
 ) where

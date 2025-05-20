@@ -24,12 +24,9 @@ import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
 import Database.Drasil hiding (cdb)
-<<<<<<< HEAD
-import System.Drasil
-=======
+
 import System.Drasil
 import Drasil.GetChunk
->>>>>>> 835dc19196 (Move GetChunk to appropriate location)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
 import Drasil.Sections.TableOfContents (toToC, findToC)

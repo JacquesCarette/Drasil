@@ -59,7 +59,7 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, call, funcAppMixedArgs, lambda,
   listAccess, listSet, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
   emptyStmt, print, comment, valStmt, returnStmt, param, docFunc, throw, arg,
-  argsList, ifCond, smartAdd, local, var)
+  argsList, ifCond, smartAdd, smartSub, local, var)
 import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (bool,
   boolRender, extVar, funcType, listDec, listDecDef, listAccessFunc,
   listSetFunc, notNull, extFuncAppMixedArgs, functionDoc, listSize, listAdd,
@@ -428,7 +428,7 @@ instance ThunkAssign JuliaCode where
     iName <- genLoopIndex
     let
       i = var iName int
-      dim = fmap pure $ t >>= commonThunkDim (fmap unJLC . (\l -> listSize l #- litInt 1) . fmap pure) . unJLC
+      dim = fmap pure $ t >>= commonThunkDim (fmap unJLC . listSize . fmap pure) . unJLC
       loopInit = zoom lensMStoVS (fmap unJLC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
       loopBody = zoom lensMStoVS (fmap unJLC t) >>= commonThunkElim
@@ -814,7 +814,7 @@ jlRange initv finalv stepv = do
   t <- listType int
   iv <- initv
   sv <- stepv
-  fv <- finalv
+  fv <- finalv `G.smartSub` litInt 1
   mkVal t (RC.value iv <> colon <> RC.value sv <> colon <> RC.value fv)
 
 jlSplit :: String

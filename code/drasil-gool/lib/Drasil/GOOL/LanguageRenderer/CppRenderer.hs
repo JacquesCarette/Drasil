@@ -4,7 +4,7 @@
 {-# LANGUAGE InstanceSigs #-}
 
 -- | The logic to render C++ code is contained in this module
-module Drasil.GOOL.LanguageRenderer.CSharpRenderer (
+module Drasil.GOOL.LanguageRenderer.CppRenderer (
   -- * C++ Code Configuration -- defines syntax of all C++ code
   CppSrcCode(..), CppHdrCode(..), CppCode(..), unCPPC, cppName, cppVersion
 ) where

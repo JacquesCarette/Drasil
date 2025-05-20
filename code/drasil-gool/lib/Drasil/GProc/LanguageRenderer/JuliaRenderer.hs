@@ -68,7 +68,7 @@ import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (bool,
   inOutCall, mainBody, argExists, forEach', litSet)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (litTrue, litFalse,
   notOp, andOp, orOp, inlineIf, while)
-import qualified Drasil.Shared.LanguageRenderer.AbstractProc as A (fileDoc,
+import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
   fileFromData, buildModule, docMod, modFromData, listInnerType, arrayElem,
   funcDecDef, function)
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (increment1,

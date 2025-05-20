@@ -9,37 +9,59 @@ module Drasil.Shared.LanguageRenderer.TypeHelpers (
   arrayType
 ) where
 
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, VSType)
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, typeFromData)
 import Text.PrettyPrint.HughesPJ (text)
+import Drasil.Shared.InterfaceCommon( VSType)
+import qualified Drasil.Shared.RendererClassesCommon as RC (type', variable)
+
+
 
 -- | Integer type
 int :: (CommonRenderSym r) => VSType r
-int = typeFromData Integer "int" (text "int")
+int = typeFromData Integer intRender (text intRender)
 
 -- | Double/float type
+doubleRender :: String
+doubleRender = "Double"
+
 double :: (CommonRenderSym r) => VSType r
-double = typeFromData Double "double" (text "double")
+double = typeFromData Double doubleRender (text doubleRender)
 
 -- | Float type
+floatRender :: String
+floatRender = "Float"
+
 float :: (CommonRenderSym r) => VSType r
-float = typeFromData Float "float" (text "float")
+float = typeFromData Float floatRender (text floatRender)
 
 -- | String type
 string :: (CommonRenderSym r) => VSType r
 string = typeFromData String "string" (text "string")
 
 -- | Alternate string type (if needed)
+stringRender' :: String
+stringRender' = "String"
+
 string' :: (CommonRenderSym r) => VSType r
-string' = typeFromData String "String" (text "String")
+string' = typeFromData String stringRender' (text stringRender')
 
 -- | Boolean type
+boolRender :: String
+boolRender = "Bool"
+
 bool :: (CommonRenderSym r) => VSType r
-bool = typeFromData Boolean "bool" (text "bool")
+bool = typeFromData Boolean boolRender (text boolRender)
 
 -- | Function type
 funcType :: (CommonRenderSym r) => [VSType r] -> VSType r -> VSType r
-funcType args ret = typeFromData (Function args ret) "func" (text "func")
+funcType ps' r' =  do
+  ps <- sequence ps'
+  r <- r'
+  typeFromData (Func (map getType ps) (getType r)) "" empty
 
 -- | Array type
 arrayType :: (CommonRenderSym r) => VSType r -> VSType r
-arrayType t = typeFromData (Array t) (show t ++ "[]") (text (show t ++ "[]"))
+arrayType t' = do
+  t <- t'
+  typeFromData (Array (getType t))
+    (getTypeString t ++ array) (RC.type' t <> brackets empty)

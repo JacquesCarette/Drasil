@@ -68,8 +68,8 @@ import Drasil.Shared.Helpers (onStateValue, onCodeList)
 
 import Drasil.GOOL.CodeInfoOO (unCI)
 
-import Drasil.Shared.LanguageRenderer.JavaRenderer (unJC, jName, jVersion)
-import Drasil.Shared.LanguageRenderer.PythonRenderer (unPC, pyName, pyVersion)
-import Drasil.Shared.LanguageRenderer.CSharpRenderer (unCSC, csName, csVersion)
-import Drasil.Shared.LanguageRenderer.CppRenderer (unCPPC, cppName, cppVersion)
-import Drasil.Shared.LanguageRenderer.SwiftRenderer (unSC, swiftName, swiftVersion)
+import Drasil.GOOL.LanguageRenderer.JavaRenderer (unJC, jName, jVersion)
+import Drasil.GOOL.LanguageRenderer.PythonRenderer (unPC, pyName, pyVersion)
+import Drasil.GOOL.LanguageRenderer.CSharpRenderer (unCSC, csName, csVersion)
+import Drasil.GOOL.LanguageRenderer.CppRenderer (unCPPC, cppName, cppVersion)
+import Drasil.GOOL.LanguageRenderer.SwiftRenderer (unSC, swiftName, swiftVersion)

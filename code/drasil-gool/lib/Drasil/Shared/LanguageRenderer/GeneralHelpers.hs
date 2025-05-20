@@ -1,3 +1,5 @@
+module Drasil.Shared.LanguageRenderer.GeneralHelpers where
+
 -- global
 -- self
 -- notNull

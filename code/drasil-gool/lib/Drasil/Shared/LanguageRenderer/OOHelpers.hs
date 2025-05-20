@@ -12,9 +12,9 @@ module Drasil.Shared.LanguageRenderer.OOHelpers (
   setMethodCall
 ) where
 
-import Drasil.Shared.InterfaceCommon (Label, MSParameter, Initializers, MSBody, SMethod, SVariable, VSType, Scope, MSStatement, variableName, variableType, variableBind)
-import Drasil.GOOL.InterfaceGOOL (OOTypeSym(obj), OOVariableSym(self, objVar), OOFunctionSym(..), SClass, CSStateVar, PermanenceSym(..))
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, RenderVariable(varFromData), ScopeElim(scopeData), MethodSym(function))
+import Drasil.Shared.InterfaceCommon (SValue, Label, MSParameter, MSBody, SMethod, SVariable, VSType, Scope, MSStatement, variableName, variableType, MethodSym(function))
+import Drasil.GOOL.InterfaceGOOL (Initializers, OOTypeSym(obj), OOVariableSym(self, objVar), OOFunctionSym(..), SClass, CSStateVar, PermanenceSym(..))
+import Drasil.Shared.RendererClassesCommon (variableBind, CommonRenderSym, RenderVariable(varFromData), ScopeElim(scopeData))
 import qualified Drasil.Shared.RendererClassesCommon as RC (type', variable)
 import Drasil.Shared.Helpers (toState, onStateValue)
 import Drasil.GOOL.RendererClassesOO (OORenderSym, OORenderMethod(intMethod), ParentSpec)
@@ -26,16 +26,20 @@ import Drasil.Shared.State (getClassName, currParameters, setClassName, lensCSto
 import Control.Monad (join)
 import Data.List (intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, (<+>), colon)
+import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
+  multiBody )
+import Drasil.Shared.State ( CS )
+import qualified Drasil.GOOL.InterfaceGOOL as RC (stateVar, method, visibility )
 
 -- | Helper to generate a constructor method for OO languages
 constructor :: (OORenderSym r) => Label -> [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
-constructor fName ps is b = getClassName >>= (\c -> intMethod False fName public dynamic (S.construct c) ps (S.multiBody [initStmts is, b]))
+constructor fName ps is b = getClassName >>= (\c -> intMethod False fName public dynamic (S.construct c) ps (G.multiBody [initStmts is, b]))
 
 -- | Helper to generate a class with inheritance and visibility
 intClass :: (OORenderSym r, Monad r) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) -> Label -> r (Visibility r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r] -> [SMethod r] -> CS (r Doc)
 intClass f n s i svrs cstrs mths = do
   modify (setClassName n)
-  svs <- onStateList (R.stateVarList . map RC.stateVar) svrs
+  svs <- onStateList (R.stateVarList . map S.stateVar) svrs
   ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) (cstrs ++ mths))
   return $ onCodeValue (\p -> f n p (RC.visibility s) svs ms) i
 

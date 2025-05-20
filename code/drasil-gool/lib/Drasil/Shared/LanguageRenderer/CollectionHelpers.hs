@@ -18,10 +18,13 @@ module Drasil.Shared.LanguageRenderer.CollectionHelpers (
   arrayDecDef
 ) where
 
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, SValue, VSFunction, VSType, MSStatement)
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym)
 import Text.PrettyPrint.HughesPJ (Doc)
-import Drasil.Shared.InterfaceCommon (SVariable)
+import Drasil.Shared.InterfaceCommon (SVariable, SValue, VSFunction, VSType, MSStatement)
 import qualified Drasil.Shared.InterfaceCommon as IC
+import qualified Drasil.Shared.RendererClassesCommon as RC (type', variable)
+
+
 
 -- | Add an element to a list (function)
 listAddFunc :: (CommonRenderSym r) => SValue r -> SValue r -> VSFunction r

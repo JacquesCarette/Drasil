@@ -11,7 +11,10 @@ module Drasil.Shared.LanguageRenderer.DocHelpers (
   docMod'
 ) where
 
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, OORenderSym, SMethod, SClass, SFile)
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, SMethod )
+import Drasil.GOOL.RendererClassesOO ( OORenderSym )
+import Drasil.Shared.InterfaceCommon ( SMethod )
+import Drasil.GOOL ( SClass, SFile )
 
 -- | Add documentation to a function
 doxFunc :: (CommonRenderSym r) => String -> [String] -> Maybe String -> SMethod r -> SMethod r

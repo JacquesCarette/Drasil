@@ -7,12 +7,26 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{unicode-math}
+\usepackage{tabularray}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{adjustbox}
+\usepackage{enumitem}
+\usepackage{graphics}
+\usepackage{svg}
+\usepackage{float}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
 \setmathfont{Latin Modern Math}
 \newcommand{\gt}{\ensuremath >}
 \newcommand{\lt}{\ensuremath <}
+\newlist{symbDescription}{description}{1}
+\setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
+\newcommand{\resizeExpression}[1]{
+  \adjustbox{max width=\linewidth}{$#1$}
+}
 \bibliography{bibfile}
 \title{Software Requirements Specification for ProgName}
 \author{Author Name}
@@ -33,7 +47,36 @@ There are no units.
 \label{Sec:ToS}
 There are no symbols.
 
-
+\begin{longtblr}
+[caption={Table of Symbols}]
+{colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{Symbol} & \textbf{Description} & \textbf{Units}
+\\
+${b_{D}}$ & maximum demand of apples & --
+\\
+${b_{S}}$ & minimum supply of apples & --
+\\
+$D$ & Demand & --
+\\
+${D_{l}}$ & price-dependant apple demand & --
+\\
+$\text{inEquilibrium}$ & In equilibrium & --
+\\
+${m_{D}}$ & marginal apple demand by price & --
+\\
+${m_{S}}$ & marginal apple supply by price & --
+\\
+$P$ & Price & --
+\\
+${p_{A}}$ & Apple price & --
+\\
+${p_{\text{A,Eq}}}$ & Equilibrium apple price & --
+\\
+$S$ & Supply & --
+\\
+${S_{l}}$ & price-dependant apple supply & --
+\label{Table:ToS}
+\end{longtblr}
 \subsection{Abbreviations and Acronyms}
 \label{Sec:TAbbAcc}
 There are no abbreviations and acronyms.
@@ -110,7 +153,40 @@ There are no assumptions.
 
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
-There are no theoretical models.
+This section focuses on the general equations and laws that ProgName is based on.
+
+\medskip
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{TM:equilibriumTM}
+\phantomsection 
+\label{TM:equilibriumTM}
+\\ \midrule
+Label & In equilibrium
+        
+\\ \midrule
+Equation & \begin{displaymath}
+           \resizeExpression{\text{inEquilibrium}=S\left(P\right)=D\left(P\right)}
+           \end{displaymath}
+\\ \midrule
+Description & \begin{symbDescription}
+              \item{$\text{inEquilibrium}$ is the in equilibrium (Unitless)}
+              \item{$S$ is the supply (Unitless)}
+              \item{$P$ is the price (Unitless)}
+              \item{$D$ is the demand (Unitless)}
+              \end{symbDescription}
+\\ \midrule
+Notes & Equilibrium occurs when the supply and demand curves intersect at current price.
+        
+\\ \midrule
+Source & --
+         
+\\ \midrule
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
 
 \subsubsection{General Definitions}
 \label{Sec:GDs}
@@ -118,11 +194,83 @@ There are no general definitions.
 
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
-There are no data definitions.
+This section collects and defines all the data needed to build the instance models.
+
+\medskip
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:linearDemandDD}
+\phantomsection 
+\label{DD:linearDemandDD}
+\\ \midrule
+Label & price-dependant apple supply
+        
+\\ \midrule
+Equation & \begin{displaymath}
+           \resizeExpression{{S_{l}}\left({p_{A}}\right)={m_{S}}\,{p_{A}}+{b_{S}}}
+           \end{displaymath}
+\\ \midrule
+Description & \begin{symbDescription}
+              \item{${S_{l}}$ is the price-dependant apple supply (Unitless)}
+              \item{${m_{S}}$ is the marginal apple supply by price (Unitless)}
+              \item{${p_{A}}$ is the apple price (Unitless)}
+              \item{${b_{S}}$ is the minimum supply of apples (Unitless)}
+              \end{symbDescription}
+\\ \midrule
+Source & --
+         
+\\ \midrule
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
 
 \subsubsection{Instance Models}
 \label{Sec:IMs}
-There are no instance models.
+This section transforms the problem defined in the \hyperref[Sec:ProbDesc]{problem description} into one which is expressed in mathematical terms. It uses concrete symbols defined in the \hyperref[Sec:DDs]{data definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{theoretical models} and \hyperref[Sec:GDs]{general definitions}.
+
+\medskip
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{IM:equilibriumApplePriceIM}
+\phantomsection 
+\label{IM:equilibriumApplePriceIM}
+\\ \midrule
+Label & Equilibrium apple price
+        
+\\ \midrule
+Input & 
+\\ \midrule
+Output & ${p_{\text{A,Eq}}}$
+         
+\\ \midrule
+Input Constraints & 
+\\ \midrule
+Output Constraints & \begin{displaymath}
+                     \resizeExpression{{p_{\text{A,Eq}}}\gt{}0}
+                     \end{displaymath}
+\\ \midrule
+Equation & \begin{displaymath}
+           \resizeExpression{{p_{\text{A,Eq}}}=\frac{{b_{D}}-{b_{S}}}{{m_{S}}-{m_{D}}}}
+           \end{displaymath}
+\\ \midrule
+Description & \begin{symbDescription}
+              \item{${p_{\text{A,Eq}}}$ is the equilibrium apple price (Unitless)}
+              \item{${b_{D}}$ is the maximum demand of apples (Unitless)}
+              \item{${b_{S}}$ is the minimum supply of apples (Unitless)}
+              \item{${m_{S}}$ is the marginal apple supply by price (Unitless)}
+              \item{${m_{D}}$ is the marginal apple demand by price (Unitless)}
+              \end{symbDescription}
+\\ \midrule
+Source & --
+         
+\\ \midrule
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
 
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
@@ -154,8 +302,66 @@ There are no unlikely changes.
 
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
-There are no traceability matrices or traceability graphs.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatRefvsRef]{Tab:TraceMatRefvsRef} shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other.
 
+\begin{longtblr}
+[caption={Traceability Matrix Showing the Connections Between Items and Other Sections}]
+{colspec={l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{} & \textbf{\hyperref[DD:linearDemandDD]{DD:linearDemandDD}} & \textbf{\hyperref[TM:equilibriumTM]{TM:equilibriumTM}} & \textbf{\hyperref[IM:equilibriumApplePriceIM]{IM:equilibriumApplePriceIM}}
+\\
+\hyperref[DD:linearDemandDD]{DD:linearDemandDD} &  &  & 
+\\
+\hyperref[TM:equilibriumTM]{TM:equilibriumTM} &  &  & 
+\\
+\hyperref[IM:equilibriumApplePriceIM]{IM:equilibriumApplePriceIM} &  &  & 
+\label{Table:TraceMatRefvsRef}
+\end{longtblr}
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
+
+\begin{figure}[H]
+\begin{center}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/progname/avsa}
+\caption{TraceGraphAvsA}
+\label{Figure:TraceGraphAvsA}
+\end{center}
+\end{figure}
+\begin{figure}[H]
+\begin{center}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/progname/avsall}
+\caption{TraceGraphAvsAll}
+\label{Figure:TraceGraphAvsAll}
+\end{center}
+\end{figure}
+\begin{figure}[H]
+\begin{center}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/progname/refvsref}
+\caption{TraceGraphRefvsRef}
+\label{Figure:TraceGraphRefvsRef}
+\end{center}
+\end{figure}
+\begin{figure}[H]
+\begin{center}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/progname/allvsr}
+\caption{TraceGraphAllvsR}
+\label{Figure:TraceGraphAllvsR}
+\end{center}
+\end{figure}
+\begin{figure}[H]
+\begin{center}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/progname/allvsall}
+\caption{TraceGraphAllvsAll}
+\label{Figure:TraceGraphAllvsAll}
+\end{center}
+\end{figure}
+For convenience, the following graphs can be found at the links below:
+
+\begin{itemize}
+\item{\hyperref{../../../../traceygraphs/progname/avsa.svg}{}{}{TraceGraphAvsA}}
+\item{\hyperref{../../../../traceygraphs/progname/avsall.svg}{}{}{TraceGraphAvsAll}}
+\item{\hyperref{../../../../traceygraphs/progname/refvsref.svg}{}{}{TraceGraphRefvsRef}}
+\item{\hyperref{../../../../traceygraphs/progname/allvsr.svg}{}{}{TraceGraphAllvsR}}
+\item{\hyperref{../../../../traceygraphs/progname/allvsall.svg}{}{}{TraceGraphAllvsAll}}
+\end{itemize}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}
 There are no auxiliary constants.

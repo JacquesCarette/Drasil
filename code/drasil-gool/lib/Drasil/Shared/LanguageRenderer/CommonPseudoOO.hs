@@ -24,7 +24,7 @@ import Utils.Drasil (indent, stringList)
 import Drasil.Shared.CodeType (CodeType(..))
 
 import Drasil.Shared.InterfaceCommon
-  ( Label, Library, MSBody, VSType, SVariable, SValue, MSStatement, MSParameter, SMethod,
+  ( private, public, Label, Library, MSBody, VSType, VSFunction, SVariable, SValue, Visibility, MSStatement, MSParameter, SMethod,
     MixedCall, TypeSym(infile, outfile, listInnerType), TypeElim(getType, getTypeString),
     VariableElim(variableName, variableType), ValueSym(valueType), ControlStatement(returnStmt),
     MethodSym(function), funcApp, ScopeSym(Scope), bodyStatements, oneLiner, (&=), Comparison(..) )
@@ -408,6 +408,13 @@ modDoc' desc as date m = m : [desc | not (null desc)] ++
 docField :: String -> String -> String
 docField ty info = docCommandInit ++ ty ++ docCommandSep ++ info
 
+-- | Generates Markdown/DocC style function doc comment.
+functionDoc :: FuncDocRenderer
+functionDoc desc params returns = [desc | not (null desc)]
+  ++ map (\(v, vDesc) -> docCommandInit ++ paramDoc ++ " " ++
+    v ++ docCommandSep ++ vDesc) params
+  ++ map ((docCommandInit ++ returnDoc ++ docCommandSep) ++) returns
+
 docCommandInit, docCommandSep, authorDoc, dateDoc,
   noteDoc, paramDoc, returnDoc :: String
 docCommandInit = "- "
@@ -423,3 +430,8 @@ fileOpen = "open"
 fileR = "r"
 fileW = "w"
 fileA = "a"
+
+openFileR', openFileW', openFileA' :: (CommonRenderSym r) => SValue r -> SValue r
+openFileR' n = funcApp fileOpen infile [n, IC.litString fileR]
+openFileW' n = funcApp fileOpen infile [n, IC.litString fileW]
+openFileA' n = funcApp fileOpen infile [n, IC.litString fileA]

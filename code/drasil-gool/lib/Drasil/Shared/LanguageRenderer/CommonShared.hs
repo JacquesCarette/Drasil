@@ -64,7 +64,6 @@ import Drasil.Shared.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
   lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports,
   getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc,
   useVarName, setVarScope)
-import Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
 
 
 import Prelude hiding (print,pi,(<>))
@@ -290,18 +289,6 @@ boolRender = "Bool"
 
 bool :: (CommonRenderSym r) => VSType r
 bool = typeFromData Boolean boolRender (text boolRender)
-
--- | Generates Markdown/DocC style function doc comment.
-functionDoc :: FuncDocRenderer
-functionDoc desc params returns = [desc | not (null desc)]
-  ++ map (\(v, vDesc) -> CP.docCommandInit ++ CP.paramDoc ++ " " ++
-    v ++ CP.docCommandSep ++ vDesc) params
-  ++ map ((CP.docCommandInit ++ CP.returnDoc ++ CP.docCommandSep) ++) returns
-
-openFileR', openFileW', openFileA' :: (CommonRenderSym r) => SValue r -> SValue r
-openFileR' n = funcApp CP.fileOpen infile [n, IC.litString fileR]
-openFileW' n = funcApp CP.fileOpen infile [n, IC.litString fileW]
-openFileA' n = funcApp CP.fileOpen infile [n, IC.litString fileA]
 
 argExists :: (CommonRenderSym r) => Integer -> SValue r
 argExists i = listSize IC.argsList ?> IC.litInt (fromIntegral $ i+1)

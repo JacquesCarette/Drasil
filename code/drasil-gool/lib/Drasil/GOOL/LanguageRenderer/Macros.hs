@@ -157,8 +157,8 @@ stringListLists lsts sl = do
       "Value passed to stringListLists must be a list of strings"
     listVals [] = loop
     listVals (List _:vs) = listVals vs
-    listVals _ = error
-      "All values passed to stringListLists must have list types"
+    listVals x = error $
+      "All values passed to stringListLists must have list types. Received " ++ show x
     loop = IC.forRange var_i (IC.litInt 0) (IC.listSize sl #/ numLists)
       (IC.litInt 1) (bodyStatements $ appendLists (map IC.valueOf lsts) 0)
     appendLists [] _ = []

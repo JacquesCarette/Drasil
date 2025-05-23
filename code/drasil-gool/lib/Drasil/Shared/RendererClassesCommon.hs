@@ -1,6 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
 
-module Drasil.GOOL.RendererClassesCommon (
+module Drasil.Shared.RendererClassesCommon (
   CommonRenderSym, ImportSym(..), ImportElim(..),
   RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..), RenderType(..),
   InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, BinaryOpSym(..),
@@ -13,7 +13,7 @@ module Drasil.GOOL.RendererClassesCommon (
   ScopeElim(..)
 ) where
 
-import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
+import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
   VSType, SVariable, SValue, MSStatement, MSParameter, SMethod, MixedCall,
   BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..),
@@ -23,9 +23,9 @@ import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, MSBlock, VSFunction,
   DeclStatement(..), IOStatement(..), StringStatement(..), FunctionSym(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..),
   VisibilitySym(..), ParameterSym(..), MethodSym(..), ScopeSym(..))
-import Drasil.GOOL.CodeType (CodeType)
-import Drasil.GOOL.AST (Binding, Terminator, VisibilityTag, ScopeData)
-import Drasil.GOOL.State (MS, VS)
+import Drasil.Shared.CodeType (CodeType)
+import Drasil.Shared.AST (Binding, Terminator, VisibilityTag, ScopeData)
+import Drasil.Shared.State (MS, VS)
 
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)

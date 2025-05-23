@@ -1,9 +1,0 @@
-forEach
-forEach'
-mainFunction
-mainBody
-multiAssign
-multiReturn
-inOutFunc
-inOutCall
-forLoopError

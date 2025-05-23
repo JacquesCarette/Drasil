@@ -2,7 +2,7 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The logic to render Swift code is contained in this module
-module Drasil.Shared.LanguageRenderer.SwiftRenderer (
+module Drasil.GOOL.LanguageRenderer.SwiftRenderer (
   -- * Swift Code Configuration -- defines syntax of all Swift code
   SwiftCode(..), swiftName, swiftVersion
 ) where

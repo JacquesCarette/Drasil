@@ -48,4 +48,4 @@ import Drasil.Shared.Helpers (onStateValue, onCodeList)
 
 import Drasil.GProc.CodeInfoProc (unCI)
 
-import Drasil.Shared.LanguageRenderer.JuliaRenderer (unJLC, jlName, jlVersion)
+import Drasil.GProc.LanguageRenderer.JuliaRenderer (unJLC, jlName, jlVersion)

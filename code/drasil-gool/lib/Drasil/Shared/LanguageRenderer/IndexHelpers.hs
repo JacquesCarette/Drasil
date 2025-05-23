@@ -1,4 +1,0 @@
-intToIndex
-indexToInt
-intToIndex'
-indexToInt'

@@ -1,6 +1,6 @@
 {-# LANGUAGE PostfixOperators #-}
 
-module Drasil.Shared.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
+module Drasil.GProc.LanguageRenderer.AbstractProc (fileDoc, fileFromData,
   buildModule, docMod, modFromData, listInnerType, arrayElem, funcDecDef,
   function
 ) where

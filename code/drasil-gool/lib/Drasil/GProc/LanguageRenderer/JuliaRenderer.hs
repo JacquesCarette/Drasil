@@ -60,7 +60,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   listAccess, listSet, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
   emptyStmt, print, comment, valStmt, returnStmt, param, docFunc, throw, arg,
   argsList, ifCond, smartAdd, local, var)
-import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (bool,
+import qualified Drasil.Shared.LanguageRenderer.CommonShared as CS (bool,
   boolRender, extVar, funcType, listDec, listDecDef, listAccessFunc,
   listSetFunc, notNull, extFuncAppMixedArgs, functionDoc, listSize, listAdd,
   listAppend, intToIndex', indexToInt', inOutFunc, docInOutFunc', forLoopError,
@@ -172,7 +172,7 @@ instance BlockElim JuliaCode where
 
 instance TypeSym JuliaCode where
   type Type JuliaCode = TypeData
-  bool = CP.bool
+  bool = CS.bool
   int = jlIntType
   float = jlFloatType
   double = jlDoubleType
@@ -184,7 +184,7 @@ instance TypeSym JuliaCode where
   setType = jlSetType
   arrayType = listType -- Treat arrays and lists the same, as in Python
   listInnerType = A.listInnerType
-  funcType = CP.funcType
+  funcType = CS.funcType
   void = jlVoidType
 
 instance TypeElim JuliaCode where
@@ -261,7 +261,7 @@ instance VariableSym JuliaCode where
   type Variable JuliaCode = VarData
   var = G.var
   constant = var
-  extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
+  extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
   arrayElem i = A.arrayElem (litInt i)
 
 instance VariableElim JuliaCode where
@@ -294,7 +294,7 @@ instance Literal JuliaCode where
   litString = G.litString
   litArray = litList
   litList = jlLitList
-  litSet = CP.litSet (text "Set" <>) (parens . brackets)
+  litSet = CS.litSet (text "Set" <>) (parens . brackets)
 
 instance MathConstant JuliaCode where
   pi :: SValue JuliaCode
@@ -306,7 +306,7 @@ instance VariableValue JuliaCode where
 instance CommandLineArgs JuliaCode where
   arg n = G.arg (litInt $ n+1) argsList
   argsList = G.argsList jlArgs
-  argExists = CP.argExists
+  argExists = CS.argExists
 
 instance NumericExpression JuliaCode where
   (#~) = unExpr' negateOp
@@ -359,14 +359,14 @@ instance ValueExpression JuliaCode where
   funcAppMixedArgs = G.funcAppMixedArgs
   extFuncAppMixedArgs l n t ps ns = do
     modify (addModuleImportVS l)
-    CP.extFuncAppMixedArgs l n t ps ns
+    CS.extFuncAppMixedArgs l n t ps ns
   libFuncAppMixedArgs l n t ps ns = do
     modify (addLibImportVS l)
-    CP.extFuncAppMixedArgs l n t ps ns
+    CS.extFuncAppMixedArgs l n t ps ns
 
   lambda = G.lambda jlLambda
 
-  notNull = CP.notNull jlNull
+  notNull = CS.notNull jlNull
 
 instance RenderValue JuliaCode where
   inputFunc = mkStateVal string (jlReadLine <> parens empty)
@@ -389,11 +389,11 @@ instance ValueElim JuliaCode where
   value = val . unJLC
 
 instance List JuliaCode where
-  intToIndex = CP.intToIndex'
-  indexToInt = CP.indexToInt'
-  listSize = CP.listSize
-  listAdd = CP.listAdd
-  listAppend = CP.listAppend
+  intToIndex = CS.intToIndex'
+  indexToInt = CS.indexToInt'
+  listSize = CS.listSize
+  listAdd = CS.listAdd
+  listAppend = CS.listAppend
   listAccess = G.listAccess
   listSet = G.listSet
   indexOf = jlIndexOf
@@ -417,8 +417,8 @@ instance InternalListFunc JuliaCode where
   listAppendFunc l v = do
     f <- funcApp jlListAppend void [l, v]
     funcFromData (RC.value f) void
-  listAccessFunc = CP.listAccessFunc
-  listSetFunc = CP.listSetFunc R.listSetFunc
+  listAccessFunc = CS.listAccessFunc
+  listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance ThunkSym JuliaCode where
   type Thunk JuliaCode = CommonThunk VS
@@ -461,13 +461,13 @@ instance FunctionElim JuliaCode where
   function = funcDoc . unJLC
 
 instance InternalAssignStmt JuliaCode where
-  multiAssign = CP.multiAssign id
+  multiAssign = CS.multiAssign id
 
 instance InternalIOStmt JuliaCode where
   printSt = jlPrint
 
 instance InternalControlStmt JuliaCode where
-  multiReturn = CP.multiReturn id
+  multiReturn = CS.multiReturn id
 
 instance RenderStatement JuliaCode where
   stmt = G.stmt
@@ -492,12 +492,12 @@ instance AssignStatement JuliaCode where
   (&--) = M.decrement1
 
 instance DeclStatement JuliaCode where
-  varDec v scp = CP.varDecDef v scp Nothing
-  varDecDef v scp e = CP.varDecDef v scp (Just e)
+  varDec v scp = CS.varDecDef v scp Nothing
+  varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = varDec
   setDecDef = varDecDef
-  listDec _ = CP.listDec
-  listDecDef = CP.listDecDef
+  listDec _ = CS.listDec
+  listDecDef = CS.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
   constDecDef = jlConstDecDef
@@ -518,9 +518,9 @@ instance IOStatement JuliaCode where
   discardInput = valStmt inputFunc
   getFileInput f = jlInput (readLine f)
   discardFileInput f = valStmt (readLine f)
-  openFileR f n = f &= CP.openFileR' n
-  openFileW f n = f &= CP.openFileW' n
-  openFileA f n = f &= CP.openFileA' n
+  openFileR f n = f &= CS.openFileR' n
+  openFileW f n = f &= CS.openFileW' n
+  openFileA f n = f &= CS.openFileA' n
   closeFile f = valStmt $ funcApp jlCloseFunc void [f]
   getFileInputLine = getFileInput
   discardFileLine = discardFileInput
@@ -535,8 +535,8 @@ instance FunctionSym JuliaCode where
   type Function JuliaCode = FuncData
 
 instance FuncAppStatement JuliaCode where
-  inOutCall = CP.inOutCall funcApp
-  extInOutCall m = CP.inOutCall (extFuncApp m)
+  inOutCall = CS.inOutCall funcApp
+  extInOutCall m = CS.inOutCall (extFuncApp m)
 
 instance CommentStatement JuliaCode where
   comment = G.comment jlCmtStart
@@ -549,9 +549,9 @@ instance ControlStatement JuliaCode where
   ifCond = G.ifCond id empty jlSpace elseIfLabel empty jlEnd
   switch = switchAsIf
   ifExists = M.ifExists
-  for _ _ _ _ = error $ CP.forLoopError jlName
+  for _ _ _ _ = error $ CS.forLoopError jlName
   forRange i initv finalv stepv = forEach i (jlRange initv finalv stepv)
-  forEach = CP.forEach' jlForEach
+  forEach = CS.forEach' jlForEach
   while = C.while id empty jlEnd
   tryCatch = G.tryCatch jlTryCatch
   assert condition errorMessage = do
@@ -596,11 +596,11 @@ instance MethodSym JuliaCode where
   type Method JuliaCode = MethodData
   docMain = mainFunction
   function = A.function
-  mainFunction = CP.mainBody
-  docFunc = G.docFunc CP.functionDoc
+  mainFunction = CS.mainBody
+  docFunc = G.docFunc CS.functionDoc
 
-  inOutFunc n s = CP.inOutFunc (function n s)
-  docInOutFunc n s = CP.docInOutFunc' CP.functionDoc (inOutFunc n s)
+  inOutFunc n s = CS.inOutFunc (function n s)
+  docInOutFunc n s = CS.docInOutFunc' CS.functionDoc (inOutFunc n s)
 
 instance RenderMethod JuliaCode where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m
@@ -1001,7 +1001,7 @@ jlInput inSrc v = v &= (v >>= jlInput' . getType . variableType)
   where jlInput' Integer = jlParse jlIntConc int inSrc
         jlInput' Float = jlParse jlFloatConc float inSrc
         jlInput' Double = jlParse jlDoubleConc double inSrc
-        jlInput' Boolean = jlParse CP.boolRender bool inSrc
+        jlInput' Boolean = jlParse CS.boolRender bool inSrc
         jlInput' String = inSrc
         jlInput' Char = jlParse jlCharConc char inSrc
         jlInput' _ = error "Attempt to read a value of unreadable type"

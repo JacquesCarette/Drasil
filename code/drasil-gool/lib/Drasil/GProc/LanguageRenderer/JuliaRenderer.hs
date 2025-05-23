@@ -60,7 +60,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   listAccess, listSet, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
   emptyStmt, print, comment, valStmt, returnStmt, param, docFunc, throw, arg,
   argsList, ifCond, smartAdd, local, var)
-import qualified Drasil.Shared.LanguageRenderer.CommonShared as CS (bool,
+import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CS (bool,
   boolRender, extVar, funcType, listDec, listDecDef, listAccessFunc,
   listSetFunc, notNull, extFuncAppMixedArgs, functionDoc, listSize, listAdd,
   listAppend, intToIndex', indexToInt', inOutFunc, docInOutFunc', forLoopError,

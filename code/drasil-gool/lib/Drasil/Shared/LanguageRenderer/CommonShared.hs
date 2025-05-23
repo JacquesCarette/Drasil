@@ -2,10 +2,8 @@ module Drasil.Shared.LanguageRenderer.CommonShared (
   bool, boolRender, extVar, funcType, 
   listDec, listDecDef, listAccessFunc, listSetFunc, listSize, listAdd, listAppend, litSet,
   intToIndex', indexToInt',
-  extFuncAppMixedArgs, functionDoc, inOutFunc, docInOutFunc', inOutCall, multiReturn, multiAssign,
-  openFileR', openFileW', openFileA', openFileR, openFileW, argExists,
-  notNull, forLoopError, varDecDef, mainBody, forEach', litArray, stateVar, setDecDef, setDec, funcDecDef,
-  fileR, fileOpen, fileW, fileA
+  extFuncAppMixedArgs, inOutFunc, docInOutFunc', inOutCall, multiReturn, multiAssign, openFileR, argExists,
+  notNull, forLoopError, varDecDef, mainBody, forEach', litArray, stateVar, setDecDef, setDec, funcDecDef
 ) where
 
 import Utils.Drasil (indent, stringList)

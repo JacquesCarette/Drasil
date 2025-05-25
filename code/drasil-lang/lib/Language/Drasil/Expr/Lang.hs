@@ -238,8 +238,8 @@ trivectorKey m n p = elemKey [m,n,p]
 --   in enforcing these properties yourself.
 --   If you give it numbers that are "out of scope", i.e. n >= d, or duplicates, they will be ignored
 elemKey :: Foldable t => t Natural -> Natural -> BasisKey
-elemKey ns 0 = E
-elemKey ns d 
+elemKey _  0 = E
+elemKey ns d
   | d - 1 `elem` ns = Y (elemKey ns $ d-1)
   | otherwise   = N (elemKey ns $ d-1)
 
@@ -348,11 +348,11 @@ instance Typed Expr Space where
   infer :: TypingContext Space -> Expr -> Either Space TypeError
   infer cxt (Lit lit) = infer cxt lit
 
-  infer cxt (AssocA _ (e:exs)) = 
+  infer cxt (AssocA _ (e:exs)) =
     case infer cxt e of
-      Left spaceValue | S.isBasicNumSpace spaceValue -> 
+      Left spaceValue | S.isBasicNumSpace spaceValue ->
           -- If the inferred type of e is a valid Space, call allOfType with spaceValue
-          allOfType cxt exs spaceValue spaceValue 
+          allOfType cxt exs spaceValue spaceValue
               "Associative arithmetic operation expects all operands to be of the same expected type."
       Left l ->
           -- Handle the case when sp is a Left value but spaceValue is invalid
@@ -366,11 +366,11 @@ instance Typed Expr Space where
   infer cxt (AssocB _ exs) = allOfType cxt exs S.Boolean S.Boolean
     $ "Associative boolean operation expects all operands to be of the same type (" ++ show S.Boolean ++ ")."
 
-  infer cxt (AssocC _ (e:exs)) = 
+  infer cxt (AssocC _ (e:exs)) =
     case infer cxt e of
-      Left spaceValue | spaceValue /= S.Void -> 
+      Left spaceValue | spaceValue /= S.Void ->
           -- If the inferred type of e is a valid Space, call allOfType with spaceValue
-          allOfType cxt exs spaceValue spaceValue 
+          allOfType cxt exs spaceValue spaceValue
               "Associative arithmetic operation expects all operands to be of the same expected type."
       Left l ->
           -- Handle the case when sp is a Left value but spaceValue is invalid
@@ -379,7 +379,7 @@ instance Typed Expr Space where
           -- If sp is a Right value containing a TypeError
           Right r
   infer _ (AssocC SUnion _) = Right "Associative addition requires at least one operand."
-    
+
   infer cxt (C uid) = inferFromContext cxt uid
 
   infer cxt (Variable _ n) = infer cxt n
@@ -437,7 +437,7 @@ instance Typed Expr Space where
     x              -> x
 
   infer cxt (UnaryOpCC NegC e) = case infer cxt e of
-    Left c@(S.ClifS dim sp) -> if S.isBasicNumSpace sp && sp /= S.Natural
+    Left c@(S.ClifS _ sp) -> if S.isBasicNumSpace sp && sp /= S.Natural
       then Left c
       else Right $ "Clif negation only applies to, non-natural, numbered clifs. Received `" ++ show sp ++ "`."
     Left sp -> Right $ "Clif negation should only be applied to numeric clifs. Received `" ++ show sp ++ "`."
@@ -445,13 +445,18 @@ instance Typed Expr Space where
 
   -- TODO: support generalized clif norm
   infer cxt (UnaryOpCN Norm e) = case infer cxt e of
-    Left (S.ClifS dim S.Real) -> Left S.Real
+    Left (S.ClifS _ S.Real) -> Left S.Real
     Left sp -> Right $ "Vector norm only applies to vectors (or clifs) of real numbers. Received `" ++ show sp ++ "`."
     x -> x
 
   infer cxt (UnaryOpCN Dim e) = case infer cxt e of
     Left (S.ClifS _ _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
     Left sp -> Right $ "Vector 'dim' only applies to vectors. Received `" ++ show sp ++ "`."
+    x -> x
+  
+  infer cxt (UnaryOpCN Grade e) = case infer cxt e of
+    Left (S.ClifS _ _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
+    Left sp -> Right $ "Vector 'grade' only applies to vectors. Received `" ++ show sp ++ "`."
     x -> x
 
   infer cxt (ArithBinaryOp Frac l r) = case (infer cxt l, infer cxt r) of
@@ -490,7 +495,7 @@ instance Typed Expr Space where
     (Right le, _) -> Right le
 
   infer cxt (LABinaryOp Index l n) = case (infer cxt l, infer cxt n) of
-    (Left (S.ClifS d lt), Left nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
+    (Left (S.ClifS _ lt), Left nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
       then Left lt
       else Right $ "List accessor not of type Integer nor Natural, but of type `" ++ show nt ++ "`"
     (Left lt         , Left _)  -> Right $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
@@ -511,7 +516,7 @@ instance Typed Expr Space where
     (Right le, _) -> Right le
 
   infer cxt (NCCBinaryOp Scale l r) = case (infer cxt l, infer cxt r) of
-    (Left lt, Left (S.ClifS d rsp)) -> if S.isBasicNumSpace lt && lt == rsp
+    (Left lt, Left (S.ClifS _ rsp)) -> if S.isBasicNumSpace lt && lt == rsp
       then Left rsp
       else if lt /= rsp then
         Right $ "Vector scaling expects a scaling by the same kind as the vector's but found scaling by`" ++ show lt ++ "` over vectors of type `" ++ show rsp ++ "`."
@@ -523,8 +528,7 @@ instance Typed Expr Space where
 
   -- If you select grade N of a Clif, you get a Clif of grade N
   infer cxt (NatCCBinaryOp GradeSelect n c) = case infer cxt c of
-    Left (S.ClifS d sp) -> 
-      Left $ S.ClifS (S.Fixed n) sp
+    Left (S.ClifS _ sp) -> Left $ S.ClifS (S.Fixed n) sp
     Left rsp -> Right $ "Grade selection expects clif as second operand. Received `" ++ show rsp ++ "`."
     Right x -> Right x
 
@@ -538,7 +542,7 @@ instance Typed Expr Space where
     -}
 
   infer cxt (CCNBinaryOp Dot l r) = case (infer cxt l, infer cxt r) of
-    (Left lt@(S.ClifS lD lsp), Left rt@(S.ClifS rD rsp)) -> 
+    (Left lt@(S.ClifS lD lsp), Left rt@(S.ClifS rD rsp)) ->
       if lD == rD then
         if lsp == rsp && S.isBasicNumSpace lsp
         then Left lsp
@@ -599,23 +603,22 @@ instance Typed Expr Space where
         (Right x, _      ) -> Right x
       riTy (S.UpTo (_, x)) = infer cxt x
       riTy (S.UpFrom (_, x)) = infer cxt x
-  
+
   -- For a clif to be well-typed it must:
   -- 1. Contain only basic numeric types inside it
   -- 2. Have a dimension of at least the grade (a 0-dimensional vector makes no sense)
-  infer ctx (Clif d es) = 
+  infer ctx (Clif d es) =
       -- A clif with no explicit compile/"specification"-time expressions in the components
     if es == Map.empty then Left $ S.ClifS d S.Real
     else
-      case eitherLists (fmap (infer ctx) $ Map.elems es) of
-        Left ts -> 
+      case eitherLists (infer ctx <$> Map.elems es) of
+        Left _ ->
           let
-            allReal = all (== S.Real) ts
             -- Check the dimensions of a clif to ensure it makes sense
             isValidDim =
               case d of
                 -- If it's a fixed dimension, the number of expressions must be dimension ^ 2
-                S.Fixed fD -> length es == fromIntegral (2 ^ fD)
+                S.Fixed fD -> length es == fromIntegral ((2 :: Integer) ^ fD)
                 -- We don't know enough to say for sure
                 S.VDim _  -> True
           in
@@ -625,23 +628,14 @@ instance Typed Expr Space where
               Left $ S.ClifS d S.Real
             else Right $ "The number of components in a clif of dimension " ++ show d ++ " must be 2 ^ " ++ show d
           -- else Right $ "Clifs must contain basic number spaces. Received " ++ show t
-        Left t -> Right $ "Clifs currently only support Real-numbered components. Received " ++ show t
         Right x -> Right x
 
--- verify :: Bool -> Space -> TypeError -> Either TypeError Space
--- verify b s t =
---   if b then
---     Right s
---   else
---     Left x
-
--- inferAndVerify :: 
 
 eitherLists :: [Either a b] -> Either [a] b
-eitherLists es =
-  eitherLists' (Left []) es
+eitherLists = eitherLists' (Left [])
   where
-    eitherLists' (Left ls) (Left l : es) =
-      eitherLists' (Left $ l : ls) es
+    eitherLists' :: Either [a] b -> [Either a b] -> Either [a] b
+    eitherLists' (Left ls) (Left l : es') = eitherLists' (Left $ l : ls) es'
     eitherLists' _ (Right r : _) = Right r
+    eitherLists' _ (Left _ : _) = error "eitherLists impl. non-exhaustive pattern: _ [Left, ...]"
     eitherLists' ls [] = ls

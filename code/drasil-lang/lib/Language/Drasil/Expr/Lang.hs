@@ -218,19 +218,19 @@ type BasisBlades e =
 
 -- | A scalar key. E.g., for d=2: `scalarKey 2 = N (N E)`
 scalarKey :: Natural -> BasisKey
-scalarKey d = elemKey [] d
+scalarKey = elemKey []
 
 -- | A vector key. E.g., for d=2, basis element e1: `vectorKey 1 2 = Y (N E)`
 vectorKey :: Natural -> Natural -> BasisKey
-vectorKey n d = elemKey [n] d
+vectorKey n = elemKey [n]
 
 -- | A bivector key. E.g., for d=3, basis element e0e1: `bivectorKey 0 1 3 = N (Y (Y E))`
 bivectorKey :: Natural -> Natural -> Natural -> BasisKey
-bivectorKey m n d = elemKey [m,n] d
+bivectorKey m n = elemKey [m,n]
 
 -- | A bivector key. E.g., for d=3, basis element e0e1: `bivectorKey 0 1 2 3 = Y (Y (Y E))`
 trivectorKey :: Natural -> Natural -> Natural -> Natural -> BasisKey
-trivectorKey m n p d = elemKey [m,n,p] d
+trivectorKey m n p = elemKey [m,n,p]
 
 -- | Create a general element key. E.g. for d=4, basis element e0e2e3: `elemKey [0,2,3] 4 = (Y (Y (N (Y E))))`
 --   This function does not care about the order or cardinlaity of the objects in the Foldable 
@@ -310,9 +310,11 @@ class Pretty p where
   pretty :: p -> String
 
 instance Pretty CCCBinOp where
-  pretty Cross = "cross product"
-  pretty CAdd  = "clif addition"
-  pretty CSub  = "clif subtraction"
+  pretty Cross         = "cross product"
+  pretty CAdd          = "clif addition"
+  pretty CSub          = "clif subtraction"
+  pretty WedgeProd     = "clif wedge"
+  pretty GeometricProd = "clif geometric product"
 
 instance LiteralC Expr where
   int = Lit . int

@@ -192,7 +192,7 @@ modelExpr (ForAll c s de)            sm = P.Row [
   ]
 -- TODO: Fix this to be more specific to Clifs
 -- TODO: How do we control whether to print all the components or just a subset (e.g. only the vector components)?
-modelExpr (Clif d es)                sm = P.Mtx [map (`modelExpr` sm) $ Map.elems es]
+modelExpr (Clif _ es)                sm = P.Mtx [map (`modelExpr` sm) $ Map.elems es]
 
 -- | Common method of converting associative operations into printable layout AST.
 assocExpr :: P.Ops -> Int -> [ModelExpr] -> PrintingInformation -> P.Expr

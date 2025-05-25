@@ -7,7 +7,7 @@ import Language.Drasil hiding (Data, Matrix, CodeVarChunk)
 import Language.Drasil.Code.DataDesc (DataDesc'(..), Data'(..), DataItem'(..),
   Delimiter, dataDesc, junk, list, singleton')
 import Language.Drasil.Chunk.Code (CodeVarChunk)
-import Language.Drasil.Expr.Development (Expr(Matrix, Clif)) -- TODO: remove Matrix entirely
+import Language.Drasil.Expr.Development (Expr(Matrix)) -- TODO: remove Matrix entirely
 
 import Control.Lens ((^.))
 import Data.List (intersperse, isPrefixOf, transpose)
@@ -101,10 +101,10 @@ splitAtFirst = splitAtFirst' []
 
 -- | Converts a list of 'String's to a Clif 'Expr' of a given 'Space'.
 strListAsExpr :: Space -> [String] -> Expr
-strListAsExpr (ClifS d s) ss = undefined -- TODO: fill this in
+strListAsExpr (ClifS _ _) _ = undefined -- TODO: fill this in
 strListAsExpr _ _ = error "strListsAsExpr called on non-vector space"
 
 -- | Converts a 2D list of 'String's to a Clif 'Expr' of a given 'Space'.
 strList2DAsExpr :: Space -> [[String]] -> Expr
-strList2DAsExpr (ClifS d0 (ClifS d1 s)) sss = undefined -- TODO: fill this in
+strList2DAsExpr (ClifS _ (ClifS _ _)) _ = undefined -- TODO: fill this in
 strList2DAsExpr _ _ = error "strLists2DAsExprs called on non-2D-vector space"

@@ -9,8 +9,7 @@ import Language.Drasil.Printing.PrintingInformation
   (PrintingInformation, ckdb, stg)
 
 import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
-import Language.Drasil.Printing.Import.Helpers
-  (lookupC, lookupT, lookupS, lookupP)
+import Language.Drasil.Printing.Import.Helpers (lookupC)
 import Language.Drasil.Printing.Import.Symbol (symbol, pUnit)
 
 import Control.Lens ((^.))
@@ -30,9 +29,9 @@ spec _ (Sy s)                   = P.E $ pUnit s
 spec _ Percent                  = P.E $ P.MO P.Perc
 spec _ (P s)                    = P.E $ symbol s
 spec sm (SyCh s)                = P.E $ symbol $ lookupC (sm ^. stg) (sm ^. ckdb) s
-spec sm (Ch TermStyle caps s)   = spec sm $ lookupT (sm ^. ckdb) s caps
-spec sm (Ch ShortStyle caps s)  = spec sm $ lookupS (sm ^. ckdb) s caps
-spec sm (Ch PluralTerm caps s)  = spec sm $ lookupP (sm ^. ckdb) s caps
+spec sm (Ch TermStyle caps s)   = P.Ch sm TermStyle caps s
+spec sm (Ch ShortStyle caps s)  = P.Ch sm ShortStyle caps s
+spec sm (Ch PluralTerm caps s)  = P.Ch sm PluralTerm caps s
 spec sm (Ref u EmptyS notes) =
   let reff = refResolve u (sm ^. ckdb . refTable) in
   case reff of 

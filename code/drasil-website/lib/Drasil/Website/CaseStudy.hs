@@ -5,7 +5,7 @@ module Drasil.Website.CaseStudy where
 
 import Language.Drasil hiding (E, Var)
 import Language.Drasil.Code hiding (CS)
-import SysInfo.Drasil
+import System.Drasil
 import Drasil.GOOL (CodeType(..))
 
 import Drasil.Website.Example (examples, Example(..))
@@ -48,7 +48,7 @@ mkCaseTable = Table headerRow (tableBody $ concatMap mkCaseStudy $ examples "" "
 -- but it is still nice to keep around for now.
 data CaseStudy = CS {
   -- | Each case study needs a name, so use system information. 
-  sysInfoCS :: System,
+  systemCS :: System,
   -- | A case study may have different program names for the same example (ex. Projectile).
   progName :: Sentence,
   -- | Each case study has code that is generated from a set of choices.
@@ -59,8 +59,8 @@ data CaseStudy = CS {
 -- so we take the naming scheme from there.
 mkCaseStudy :: Example -> [CaseStudy]
 mkCaseStudy E{choicesE = []} = []
-mkCaseStudy E{sysInfoE = si@SI{_sys = sys}, choicesE = [x]} = [CS{sysInfoCS = si, progName = S $ programName sys, choicesCS = x}]
-mkCaseStudy E{sysInfoE = si@SI{_sys = sys}, choicesE = xs} = map (\x -> CS{sysInfoCS = si, progName = S $ Projectile.codedDirName (programName sys) x, choicesCS = x}) xs
+mkCaseStudy E{systemE = si@SI{_sys = sys}, choicesE = [x]} = [CS{systemCS = si, progName = S $ programName sys, choicesCS = x}]
+mkCaseStudy E{systemE = si@SI{_sys = sys}, choicesE = xs} = map (\x -> CS{systemCS = si, progName = S $ Projectile.codedDirName (programName sys) x, choicesCS = x}) xs
 
 -- * Display 'CaseStudy' Information as a Table
 --

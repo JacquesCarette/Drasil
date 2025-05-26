@@ -74,7 +74,7 @@ si = SI {
   _outputs     = outputs,
   _constraints = constrained,
   _constants   = constants,
-  _sysinfodb   = symbMap,
+  _systemdb   = symbMap,
   _usedinfodb  = usedDB
 }
   --FIXME: All named ideas, not just acronyms.

@@ -40,7 +40,7 @@ si = SI {
   _outputs     = htOutputs,
   _constraints = [] :: [ConstrainedChunk],
   _constants   = [],
-  _sysinfodb   = symbMap,
+  _systemdb   = symbMap,
   _usedinfodb  = usedDB
 }
   

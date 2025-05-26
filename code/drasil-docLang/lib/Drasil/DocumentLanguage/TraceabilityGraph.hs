@@ -4,7 +4,7 @@ module Drasil.DocumentLanguage.TraceabilityGraph where
 
 import Language.Drasil
 import Database.Drasil hiding (cdb)
-import SysInfo.Drasil hiding (purpose)
+import System.Drasil hiding (purpose)
 import Control.Lens ((^.))
 import qualified Data.Map as Map
 import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat, traceMReferees, traceMReferrers,
@@ -74,7 +74,7 @@ mkGraphNodes entry si col = NF {nodeUIDs = nodeContents, nodeLabels = map (check
         checkNodeContents [] = ""
         checkNodeContents (x:_) = checkUIDAbbrev si x
         nodeContents = traceMReferees entryF cdb
-        cdb = _sysinfodb si
+        cdb = _systemdb si
         entryF = layoutUIDs [entry] cdb
 
 -- | Creates the graph edges based on the relation of the first list of sections to the second.
@@ -82,7 +82,7 @@ mkGraphNodes entry si col = NF {nodeUIDs = nodeContents, nodeLabels = map (check
 mkGraphEdges :: [TraceViewCat] -> [TraceViewCat] -> System -> [(UID, [UID])]
 mkGraphEdges cols rows si = makeTGraph (traceGRowHeader rowf si) (traceMColumns colf rowf cdb) $ traceMReferees colf cdb
     where
-        cdb = _sysinfodb si
+        cdb = _systemdb si
         colf = layoutUIDs cols cdb
         rowf = layoutUIDs rows cdb
 
@@ -105,7 +105,7 @@ checkUID t si
   | Map.member t (s ^. labelledcontentTable) = t
   | Map.member t (s ^. citationTable)        = t
   | otherwise = error $ show t ++ "Caught."
-  where s = _sysinfodb si
+  where s = _systemdb si
 
 -- | Similar to 'checkUID' but prepends domain for labelling.
 checkUIDAbbrev :: System -> UID -> String
@@ -118,7 +118,7 @@ checkUIDAbbrev si t
   | Map.member t (s ^. labelledcontentTable)                = show t
   | Map.member t (s ^. citationTable)                       = ""
   | otherwise = error $ show t ++ "Caught."
-  where s = _sysinfodb si
+  where s = _systemdb si
 
 -- | Similar to 'checkUID' but gets reference addresses for display.
 checkUIDRefAdd :: System -> UID -> String
@@ -131,12 +131,12 @@ checkUIDRefAdd si t
   | Map.member t (s ^. labelledcontentTable)                = show t
   | Map.member t (s ^. citationTable)                       = ""
   | otherwise = error $ show t ++ "Caught."
-  where s = _sysinfodb si
+  where s = _systemdb si
 
 -- | Helper that finds the header of a traceability matrix.
 -- However, here we use this to get a list of 'UID's for a traceability graph instead.
 traceGHeader :: (ChunkDB -> [UID]) -> System -> [UID]
-traceGHeader f c = map (`checkUID` c) $ f $ _sysinfodb c
+traceGHeader f c = map (`checkUID` c) $ f $ _systemdb c
 
 -- | Helper that finds the headers of the traceability matrix rows.
 -- However, here we use this to get a list of 'UID's for a traceability graph instead.

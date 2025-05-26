@@ -38,7 +38,7 @@ packages:
 - ../drasil-gool
 - ../drasil-lang
 - ../drasil-printers
-- ../drasil-sysinfo
+- ../drasil-system
 - ../drasil-theory
 - ../drasil-utils
 

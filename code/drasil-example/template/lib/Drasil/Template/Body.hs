@@ -101,7 +101,7 @@ si = SI {
   _outputs     = [] :: [QuantityDict],
   _constraints = [] :: [ConstrainedChunk],
   _constants   = [] :: [ConstQDef],
-  _sysinfodb   = symbMap,
+  _systemdb   = symbMap,
   _usedinfodb  = usedDB
 }
 

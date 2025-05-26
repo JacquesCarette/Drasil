@@ -75,12 +75,13 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   tryCatch, construct, param, method, getMethod, setMethod, initStmts,
   function, docFunc, buildClass, implementingClass, docClass, commentedClass,
   modFromData, fileDoc, fileFromData, defaultOptSpace, local)
+import qualified Drasil.Shared.LanguageRenderer.Common as CS
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (classVar,
   objVarSelf, intClass, buildModule, docMod', contains, bindingError, extFuncAppMixedArgs,
   notNull, listDecDef, destructorError, stateVarDef, constVar, litArray,
   listSetFunc, extraClass, listAccessFunc, doubleRender, double, openFileR,
   openFileW, self, multiAssign, multiReturn, listDec, funcDecDef,
-  inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', bool, float,
+  inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', float,
   stringRender', string', inherit, implements, functionDoc, intToIndex,
   indexToInt, forEach', global, setMethodCall)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (notOp, andOp, orOp,
@@ -201,7 +202,7 @@ instance BlockElim SwiftCode where
 
 instance TypeSym SwiftCode where
   type Type SwiftCode = TypeData
-  bool = CP.bool
+  bool = CS.bool
   int = swiftIntType
   float = CP.float
   double = CP.double

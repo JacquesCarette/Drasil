@@ -8,7 +8,7 @@ module Drasil.Shared.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   listDecDef, destructorError, stateVarDef, constVar, litArray, litSet, listSetFunc, litSetFunc,
   extraClass, listAccessFunc, doubleRender, double, openFileR, openFileW,
   stateVar, self, multiAssign, multiReturn, listDec, funcDecDef, inOutCall,
-  forLoopError, mainBody, inOutFunc, docInOutFunc', boolRender, bool,
+  forLoopError, mainBody, inOutFunc, docInOutFunc',
   floatRender, float, stringRender', string', inherit, implements, listSize, setDecDef, setDec,
   listAdd, listAppend, intToIndex, indexToInt, intToIndex', indexToInt',
   varDecDef, openFileR', openFileW', openFileA', argExists, global, setMethodCall
@@ -529,13 +529,6 @@ forEach' f i' v' b' = do
   v <- zoom lensMStoVS v'
   b <- b'
   mkStmtNoEnd (f i v b)
-
--- Swift and Julia --
-boolRender :: String
-boolRender = "Bool"
-
-bool :: (CommonRenderSym r) => VSType r
-bool = typeFromData Boolean boolRender (text boolRender)
 
 -- TODO: put docMod' back in Swift renderer, as it is no longer common.
 docMod' :: (OORenderSym r) => String -> String -> [String] -> String -> SFile r -> SFile r

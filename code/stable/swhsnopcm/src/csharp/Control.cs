@@ -13,6 +13,19 @@ public class Control {
     */
     public static void Main(string[] args) {
         string filename = args[0];
+        const double pi = 3.14159265;
+        const double L_min = 0.1;
+        const double L_max = 50.0;
+        const double rho_W_min = 950.0;
+        const double rho_W_max = 1000.0;
+        const double A_C_max = 100000.0;
+        const double C_W_min = 4170.0;
+        const double C_W_max = 4210.0;
+        const double h_C_min = 10.0;
+        const double h_C_max = 10000.0;
+        const double t_final_max = 86400.0;
+        const double AR_min = 1.0e-2;
+        const double AR_max = 100.0;
         double A_C;
         double C_W;
         double h_C;
@@ -28,8 +41,8 @@ public class Control {
         double E_W;
         double V_tank;
         InputParameters.get_input(filename, out A_C, out C_W, out h_C, out T_init, out t_final, out L, out T_C, out t_step, out rho_W, out D, out A_tol, out R_tol, out E_W);
-        V_tank = InputParameters.derived_values(D, L);
-        InputParameters.input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, E_W);
+        V_tank = InputParameters.derived_values(D, L, pi);
+        InputParameters.input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, E_W, A_C_max, C_W_min, C_W_max, h_C_min, h_C_max, t_final_max, L_min, L_max, rho_W_min, rho_W_max, AR_min, AR_max);
         double V_W = Calculations.func_V_W(V_tank);
         double m_W = Calculations.func_m_W(rho_W, V_W);
         double tau_W = Calculations.func_tau_W(C_W, h_C, A_C, m_W);

@@ -183,7 +183,7 @@ spanTag = wrap "span"
 
 -- | Span tag wrapper with a title attribute.
 spanTag' :: Doc -> Doc -> Doc
-spanTag' t = wrapGen Title "span" t [""]
+spanTag' t = wrapGen' hcat Title "span" t [""]
 -- | Indent the Document by 2 positions.
 indent :: Doc -> Doc
 indent = nest 2

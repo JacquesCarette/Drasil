@@ -12,6 +12,8 @@ import Drasil.Shared.LanguageRenderer.Constructors
 import Prelude hiding (print,pi,(<>))
 import Drasil.Shared.Helpers
 import Text.PrettyPrint.HughesPJ (text, empty, Doc)
+import Control.Lens.Zoom (zoom)
+import Drasil.Shared.State
 
 -- Swift and Julia --
 
@@ -50,3 +52,12 @@ listSetFunc f v idx setVal = join $ on2StateValues (\i toVal -> funcFromData
   (f (RC.value i) (RC.value toVal)) (onStateValue valueType v)) (intValue idx)
   setVal
 
+-- Python, Swift, and Julia --
+
+forEach' :: (CommonRenderSym r) => (r (Variable r) -> r (Value r) -> r (Body r) -> Doc)
+  -> SVariable r -> SValue r -> MSBody r -> MSStatement r
+forEach' f i' v' b' = do
+  i <- zoom lensMStoVS i'
+  v <- zoom lensMStoVS v'
+  b <- b'
+  mkStmtNoEnd (f i v b)

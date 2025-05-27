@@ -491,15 +491,6 @@ inherit n = toCode $ maybe empty ((colon <+>) . text) n
 implements :: (Monad r) => [Label] -> r ParentSpec
 implements is = toCode $ colon <+> text (intercalate listSep is)
 
--- Python, Swift, and Julia --
-
-forEach' :: (CommonRenderSym r) => (r (Variable r) -> r (Value r) -> r (Body r) -> Doc)
-  -> SVariable r -> SValue r -> MSBody r -> MSStatement r
-forEach' f i' v' b' = do
-  i <- zoom lensMStoVS i'
-  v <- zoom lensMStoVS v'
-  b <- b'
-  mkStmtNoEnd (f i v b)
 
 -- TODO: put docMod' back in Swift renderer, as it is no longer common.
 docMod' :: (OORenderSym r) => String -> String -> [String] -> String -> SFile r -> SFile r

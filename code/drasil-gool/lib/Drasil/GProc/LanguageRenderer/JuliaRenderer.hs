@@ -547,7 +547,7 @@ instance ControlStatement JuliaCode where
   ifExists = M.ifExists
   for _ _ _ _ = error $ CP.forLoopError jlName
   forRange i initv finalv stepv = forEach i (jlRange initv finalv stepv)
-  forEach = CP.forEach' jlForEach
+  forEach = CS.forEach' jlForEach
   while = C.while id empty jlEnd
   tryCatch = G.tryCatch jlTryCatch
   assert condition errorMessage = do

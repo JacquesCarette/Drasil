@@ -628,7 +628,7 @@ instance ControlStatement PythonCode where
 
   for _ _ _ _ = error $ CP.forLoopError pyName
   forRange i initv finalv stepv = forEach i (range initv finalv stepv)
-  forEach = CP.forEach' pyForEach
+  forEach = CS.forEach' pyForEach
   while v' b' = do 
     v <- zoom lensMStoVS v'
     b <- b'

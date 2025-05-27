@@ -82,7 +82,7 @@ import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (classVar,
   openFileW, self, multiAssign, multiReturn, listDec, funcDecDef,
   inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', float,
   stringRender', string', inherit, implements, functionDoc, intToIndex,
-  indexToInt, forEach', global, setMethodCall)
+  indexToInt, global, setMethodCall)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (notOp, andOp, orOp,
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs,
   listSize, varDecDef, setDecDef, extObjDecNew, switch, while)
@@ -658,7 +658,7 @@ instance ControlStatement SwiftCode where
 
   for _ _ _ _ = error $ CP.forLoopError swiftName
   forRange i initv finalv stepv = forEach i (swiftStrideFunc initv finalv stepv)
-  forEach = CP.forEach' swiftForEach
+  forEach = CS.forEach' swiftForEach
   while = C.while id bodyStart bodyEnd
 
   tryCatch = G.tryCatch swiftTryCatch

@@ -75,6 +75,7 @@ pExprDoc _ (Spc Thin) = space
 specDoc :: SingleLine -> Spec -> Doc
 specDoc f (E e) = pExprDoc f e
 specDoc _ (S s) = text s
+specDoc _ Ch {} = text "placeholder 2"
 specDoc _ (Sp s) = specialDoc s
 specDoc f (Ref (Cite2 n) r _) = specDoc f n <+> text ("Ref: " ++ r)
 specDoc f (Ref _ r s) = specDoc f s <+> text ("Ref: " ++ r) --may need to change?

@@ -12,7 +12,7 @@ import qualified Language.Drasil as L
 import Language.Drasil.Printing.Import (makeProject)
 import Language.Drasil.Printing.AST (ItemType(Flat, Nested),  
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, 
-  Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, E, (:+:)), Label, 
+  Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, E, Ch, (:+:)), Label, 
   LinkType(Internal, Cite2, External), OverSymb(Hat), Fonts(Emph, Bold), 
   Spacing(Thin), Fence(Abs), Ops(Perc, Mul))
 import Language.Drasil.Printing.Citation (BibRef)
@@ -106,6 +106,7 @@ printLO _ CodeBlock {}           = empty
 -- | Helper for rendering Specs into Markdown
 pSpec :: RefMap -> Spec -> Doc
 pSpec _ (E e)      = text "\\\\(" <> pExpr e <> text "\\\\)"
+pSpec _ Ch {} = text "placeholder 3" 
 pSpec rm (a :+: b) = pSpec rm a <> pSpec rm b
 pSpec _ HARDNL     = text "\n"
 pSpec rm (Ref Internal       r a) = reflink     rm r (pSpec rm a)

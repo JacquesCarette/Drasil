@@ -16,7 +16,7 @@ import qualified Language.Drasil.Display as LD
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
   ListType(Ordered, Unordered, Desc, Definitions, Simple), 
-  Spec(Quote, EmptyS, Ref, S, Sp, HARDNL, E, (:+:)), 
+  Spec(Quote, EmptyS, Ref, S, Ch, Sp, HARDNL, E, (:+:)), 
   Fence(Norm, Abs, Curly, Paren), Expr, 
   Ops(..), Spacing(Thin), Fonts(Emph, Bold), 
   Expr(..), OverSymb(Hat), Label,
@@ -229,6 +229,7 @@ makeTable lls@(h:tlines) r bool t = mkEnv "longtblr" ($+$) $
 specLength :: Spec -> Int
 specLength (E x)       = length $ filter (`notElem` dontCount) $ TP.render $ runPrint (pExpr x) Curr
 specLength (S x)       = length x
+specLength Ch {}      = 1
 specLength (a :+: b)   = specLength a + specLength b
 specLength (Sp _)      = 1
 specLength (Ref Internal r _) = length r
@@ -261,6 +262,7 @@ makeColumns ls = hpunctuate (text " & ") $ map spec ls
 needs :: Spec -> MathContext
 needs (a :+: b) = needs a `lub` needs b
 needs (S _)     = Text
+needs Ch {}    = Text
 needs (E _)     = Math
 needs (Sp _)    = Math
 needs HARDNL    = Text
@@ -282,6 +284,7 @@ spec (S s)  = either error (pure . text . concatMap escapeChars) $ L.checkValidS
     escapeChars '_' = "\\_"
     escapeChars '&' = "\\&"
     escapeChars c = [c]
+spec (Ch _ _ _ s) = pure $ text $ escapeIdentSymbols $ show s --placeholder
 spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = command0 "newline"
 spec (Ref Internal r sn) = snref r (spec sn)

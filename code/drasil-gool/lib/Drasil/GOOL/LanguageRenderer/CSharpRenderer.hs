@@ -456,8 +456,8 @@ instance InternalListFunc CSharpCode where
   listSizeFunc _ = funcFromData (R.func csListSize) int
   listAddFunc _ = CP.listAddFunc csListAdd
   listAppendFunc _ = G.listAppendFunc csListAppend
-  listAccessFunc = CP.listAccessFunc
-  listSetFunc = CP.listSetFunc R.listSetFunc
+  listAccessFunc = CS.listAccessFunc
+  listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance ThunkSym CSharpCode where
   type Thunk CSharpCode = CommonThunk VS

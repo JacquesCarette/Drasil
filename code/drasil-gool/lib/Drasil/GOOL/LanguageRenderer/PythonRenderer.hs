@@ -471,8 +471,8 @@ instance InternalListFunc PythonCode where
     funcFromData (RC.value f) int
   listAddFunc _ = CP.listAddFunc pyInsert
   listAppendFunc _ = G.listAppendFunc pyAppendFunc
-  listAccessFunc = CP.listAccessFunc
-  listSetFunc = CP.listSetFunc R.listSetFunc
+  listAccessFunc = CS.listAccessFunc
+  listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance ThunkSym PythonCode where
   type Thunk PythonCode = CommonThunk VS

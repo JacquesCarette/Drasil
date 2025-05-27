@@ -82,8 +82,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
-  call', listSizeFunc, listAccessFunc', containsInt, string, constDecDef, docInOutFunc,
-  listSetFunc, extraClass, intToIndex, indexToInt, global, setMethodCall)
+  call', listSizeFunc, listAccessFunc', containsInt, string, constDecDef, docInOutFunc, extraClass, intToIndex, indexToInt, global, setMethodCall)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize,
@@ -1408,7 +1407,7 @@ instance InternalListFunc CppSrcCode where
   listAddFunc = cppListAddFunc
   listAppendFunc _ = G.listAppendFunc cppListAppend
   listAccessFunc = CP.listAccessFunc' cppListAccess
-  listSetFunc = CP.listSetFunc cppListSetDoc
+  listSetFunc = CS.listSetFunc cppListSetDoc
 
 instance ThunkSym CppSrcCode where
   type Thunk CppSrcCode = CommonThunk VS

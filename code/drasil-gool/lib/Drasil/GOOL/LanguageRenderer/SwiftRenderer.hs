@@ -78,8 +78,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (classVar,
   objVarSelf, intClass, buildModule, docMod', contains, bindingError,
-  notNull, listDecDef, destructorError, stateVarDef, constVar, litArray,
-  listSetFunc, extraClass, listAccessFunc, doubleRender, double, openFileR,
+  notNull, listDecDef, destructorError, stateVarDef, constVar, litArray, extraClass, doubleRender, double, openFileR,
   openFileW, self, multiAssign, multiReturn, listDec, funcDecDef,
   inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', float,
   stringRender', string', inherit, implements, functionDoc, intToIndex,
@@ -480,8 +479,8 @@ instance InternalListFunc SwiftCode where
     f <- swiftListAddFunc i v
     funcFromData (R.func (RC.value f)) (pure $ valueType f)
   listAppendFunc _ = G.listAppendFunc swiftListAppend
-  listAccessFunc = CP.listAccessFunc
-  listSetFunc = CP.listSetFunc R.listSetFunc
+  listAccessFunc = CS.listAccessFunc
+  listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance ThunkSym SwiftCode where
   type Thunk SwiftCode = CommonThunk VS

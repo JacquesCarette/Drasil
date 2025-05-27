@@ -30,10 +30,7 @@ import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   MethodTypeSym(mType), RenderMethod(commentedFunc, mthdFromData),
   BlockCommentSym(..), ScopeElim(scopeData))
 
-import qualified Drasil.Shared.RendererClassesCommon as S (RenderBody(multiBody),
-  RenderValue(call), RenderStatement(stmt),
-  InternalAssignStmt(multiAssign), InternalControlStmt(multiReturn),
-  InternalListFunc(listSizeFunc, listAddFunc, listAppendFunc))
+import qualified Drasil.Shared.RendererClassesCommon as S 
 
 import qualified Drasil.Shared.RendererClassesCommon as RC (ImportElim(..),
   BodyElim(..), InternalTypeElim(..), InternalVarElim(variable), ValueElim(..),
@@ -42,8 +39,7 @@ import qualified Drasil.Shared.RendererClassesCommon as RC (ImportElim(..),
 import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2StateValues, onStateList)
 
-import Drasil.GOOL.RendererClassesOO (OORenderSym, OORenderMethod(intMethod),
-  ParentSpec)
+import Drasil.GOOL.RendererClassesOO 
 
 import qualified Drasil.GOOL.RendererClassesOO as S (OOMethodTypeSym(construct),
   OORenderMethod(intFunc), RenderClass(intClass, inherit),
@@ -371,17 +367,6 @@ litSetFunc s t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t)
 extraClass :: (OORenderSym r) =>  Label -> Maybe Label -> [CSStateVar r] ->
   [SMethod r] -> [SMethod r] -> SClass r
 extraClass n = S.intClass n public . S.inherit
-
--- Python, C#, Swift, and Julia --
-
-listAccessFunc :: (CommonRenderSym r) => VSType r -> SValue r -> VSFunction r
-listAccessFunc t v = intValue v >>= ((`funcFromData` t) . R.listAccessFunc)
-
-listSetFunc :: (CommonRenderSym r) => (Doc -> Doc -> Doc) -> SValue r -> SValue r ->
-  SValue r -> VSFunction r
-listSetFunc f v idx setVal = join $ on2StateValues (\i toVal -> funcFromData
-  (f (RC.value i) (RC.value toVal)) (onStateValue valueType v)) (intValue idx)
-  setVal
 
 
 -- Java, C#, and Swift --

@@ -413,8 +413,8 @@ instance InternalListFunc JuliaCode where
   listAppendFunc l v = do
     f <- funcApp jlListAppend void [l, v]
     funcFromData (RC.value f) void
-  listAccessFunc = CP.listAccessFunc
-  listSetFunc = CP.listSetFunc R.listSetFunc
+  listAccessFunc = CS.listAccessFunc
+  listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance ThunkSym JuliaCode where
   type Thunk JuliaCode = CommonThunk VS

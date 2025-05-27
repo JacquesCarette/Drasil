@@ -42,7 +42,7 @@ implies f = [S "and this implies that there are no", f]
 --(line 52 was added for assumption6)
 
 assumpOTDesc = allObject (plural CP.rigidBody)
-assumpODDesc = allObject (getAcc twoD)
+assumpODDesc = allObject (short twoD)
 assumpCSTDesc = [S "The library uses a", phrase CM.cartesian]
 assumpADDesc = [S "The axes are defined using", phrase CM.rightHand]
 assumpCTDesc = [S "All", plural CP.rigidBody, plural CP.collision,

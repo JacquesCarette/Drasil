@@ -444,7 +444,7 @@ instance GetSet PythonCode where
 instance List PythonCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
-  listSize = CP.listSize
+  listSize = CS.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend
   listAccess = G.listAccess

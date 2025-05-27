@@ -7,7 +7,7 @@ import Drasil.Shared.RendererClassesCommon (scopeData, CommonRenderSym, typeFrom
 import Control.Monad (join)
 import Drasil.Shared.LanguageRenderer
 import qualified Drasil.Shared.LanguageRenderer as R
-import qualified Drasil.Shared.RendererClassesCommon as RC (value)
+import qualified Drasil.Shared.RendererClassesCommon as RC (value, functionType, function)
 import Drasil.Shared.LanguageRenderer.Constructors 
 import Prelude hiding (print,pi,(<>))
 import Drasil.Shared.Helpers
@@ -16,6 +16,7 @@ import Control.Lens.Zoom (zoom)
 import Drasil.Shared.State
 import qualified Drasil.Shared.InterfaceCommon as IC
 import Control.Monad.State (modify)
+import qualified Drasil.Shared.RendererClassesCommon as S 
 
 
 
@@ -78,3 +79,12 @@ varDecDef v scp e = do
   where
     def Nothing = IC.emptyStmt
     def (Just d) = IC.assign v d
+
+
+-- Python, Julia, and MATLAB --
+
+-- | Call to get the size of a list in a language where this is not a method.
+listSize :: (CommonRenderSym r) => SValue r -> SValue r
+listSize l = do
+  f <- S.listSizeFunc l
+  mkVal (RC.functionType f) (RC.function f)

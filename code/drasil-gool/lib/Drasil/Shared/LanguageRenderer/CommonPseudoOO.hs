@@ -5,7 +5,7 @@ import Utils.Drasil (indent, stringList)
 
 import Drasil.Shared.CodeType (CodeType(..))
 
-import Drasil.Shared.InterfaceCommon (Label, Library, Body, MSBody, VSFunction,
+import Drasil.Shared.InterfaceCommon (listSize, Label, Library, Body, MSBody, VSFunction,
   VSType, Variable, SVariable, Value, SValue, MSStatement, MSParameter, SMethod,
   MixedCall, bodyStatements, oneLiner, TypeSym(infile, outfile, listInnerType),
   TypeElim(getType, getTypeString), VariableElim(variableName, variableType),
@@ -528,7 +528,6 @@ noteDoc = "Note"
 paramDoc = "Parameter"
 returnDoc = "Returns"
 
--- Python and Julia --
 
 -- | For declaring and optionally defining a variable in a language where
 --   declaring a variable before defining it is not required.
@@ -550,13 +549,6 @@ openFileA' n = funcApp fileOpen infile [n, IC.litString fileA]
 argExists :: (CommonRenderSym r) => Integer -> SValue r
 argExists i = listSize IC.argsList ?> IC.litInt (fromIntegral $ i+1)
 
--- Python, Julia, and MATLAB --
-
--- | Call to get the size of a list in a language where this is not a method.
-listSize :: (CommonRenderSym r) => SValue r -> SValue r
-listSize l = do
-  f <- S.listSizeFunc l
-  mkVal (RC.functionType f) (RC.function f)
 
 -- Julia and MATLAB --
 

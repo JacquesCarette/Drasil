@@ -387,7 +387,7 @@ instance ValueElim JuliaCode where
 instance List JuliaCode where
   intToIndex = CP.intToIndex'
   indexToInt = CP.indexToInt'
-  listSize = CP.listSize
+  listSize = CS.listSize
   listAdd = CP.listAdd
   listAppend = CP.listAppend
   listAccess = G.listAccess

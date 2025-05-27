@@ -180,7 +180,7 @@ instance TypeSym JuliaCode where
   setType = jlSetType
   arrayType = listType -- Treat arrays and lists the same, as in Python
   listInnerType = A.listInnerType
-  funcType = CP.funcType
+  funcType = CS.funcType
   void = jlVoidType
 
 instance TypeElim JuliaCode where

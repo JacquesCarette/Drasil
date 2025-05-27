@@ -81,7 +81,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   fileFromData, defaultOptSpace, local)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
-  constructor, doxFunc, doxClass, doxMod, funcType, buildModule, litArray,
+  constructor, doxFunc, doxClass, doxMod, buildModule, litArray,
   call', listSizeFunc, listAccessFunc', containsInt, string, constDecDef, docInOutFunc,
   listSetFunc, extraClass, intToIndex, indexToInt, global, setMethodCall)
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (charRender, float,
@@ -123,6 +123,9 @@ import Data.List (sort)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), hcat, brackets,
   braces, parens, empty, equals, vcat, lbrace, rbrace, colon, isEmpty, quotes, semi)
+
+import qualified Drasil.Shared.LanguageRenderer.Common as CS
+
 
 cppHdrExt, cppSrcExt :: String
 cppHdrExt = "hpp"
@@ -1135,7 +1138,7 @@ instance TypeSym CppSrcCode where
     C.setType cppSet t
   arrayType = cppArrayType
   listInnerType = G.listInnerType
-  funcType = CP.funcType
+  funcType = CS.funcType
   void = C.void
 
 instance OOTypeSym CppSrcCode where
@@ -1862,7 +1865,7 @@ instance TypeSym CppHdrCode where
     C.setType cppSet t
   arrayType = cppArrayType
   listInnerType = G.listInnerType
-  funcType = CP.funcType
+  funcType = CS.funcType
   void = C.void
 
 instance OOTypeSym CppHdrCode where

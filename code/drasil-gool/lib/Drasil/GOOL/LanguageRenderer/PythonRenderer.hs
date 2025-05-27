@@ -202,7 +202,7 @@ instance TypeSym PythonCode where
   setType t' = t' >>=(\t -> typeFromData (Set (getType t)) "" empty)
   arrayType = listType
   listInnerType = G.listInnerType
-  funcType = CP.funcType
+  funcType = CS.funcType
   void = typeFromData Void pyVoid (text pyVoid)
 
 instance OOTypeSym PythonCode where

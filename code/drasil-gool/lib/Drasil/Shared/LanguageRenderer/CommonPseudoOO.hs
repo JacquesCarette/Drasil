@@ -164,13 +164,6 @@ intClass f n s i svrs cstrs mths = do
   ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) (cstrs ++ mths))
   return $ onCodeValue (\p -> f n p (RC.visibility s) svs ms) i
 
--- Python, Java, C++, and Julia --
-
-funcType :: (CommonRenderSym r) => [VSType r] -> VSType r -> VSType r
-funcType ps' r' =  do
-  ps <- sequence ps'
-  r <- r'
-  typeFromData (Func (map getType ps) (getType r)) "" empty
 
 -- Python and C++ --
 

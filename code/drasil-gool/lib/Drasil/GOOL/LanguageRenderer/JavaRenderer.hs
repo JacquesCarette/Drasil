@@ -210,7 +210,7 @@ instance TypeSym JavaCode where
   setType = jSetType
   arrayType = CP.arrayType
   listInnerType = G.listInnerType
-  funcType = CP.funcType
+  funcType = CS.funcType
   void = C.void
 
 instance OOTypeSym JavaCode where

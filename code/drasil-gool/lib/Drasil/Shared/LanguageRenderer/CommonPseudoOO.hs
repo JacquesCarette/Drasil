@@ -308,10 +308,6 @@ docInOutFunc f desc is [] [both] b = docFuncRepr functionDox desc (map fst $
 docInOutFunc f desc is os bs b = docFuncRepr functionDox desc (map fst $ bs ++
   is ++ os) [] (f (map snd is) (map snd os) (map snd bs) b)
 
--- Python, Java, C#, Swift, and Julia --
-extFuncAppMixedArgs :: (CommonRenderSym r) => Library -> MixedCall r
-extFuncAppMixedArgs l = S.call (Just l) Nothing
-
 -- Python, Java, C#, and Swift --
 
 bindingError :: String -> String

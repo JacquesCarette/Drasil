@@ -3,7 +3,7 @@ module Drasil.Shared.LanguageRenderer.Common where
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon 
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, typeFromData)
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, typeFromData, call)
 import Drasil.Shared.LanguageRenderer
 import qualified Drasil.Shared.LanguageRenderer as R 
 import Drasil.Shared.LanguageRenderer.Constructors 
@@ -31,3 +31,7 @@ funcType ps' r' =  do
   ps <- sequence ps'
   r <- r'
   typeFromData (Func (map getType ps) (getType r)) "" empty
+
+-- Python, Java, C#, Swift, and Julia --
+extFuncAppMixedArgs :: (CommonRenderSym r) => Library -> MixedCall r
+extFuncAppMixedArgs l = call (Just l) Nothing

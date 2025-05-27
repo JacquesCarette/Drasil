@@ -77,7 +77,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   modFromData, fileDoc, fileFromData, defaultOptSpace, local)
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
 import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (classVar,
-  objVarSelf, intClass, buildModule, docMod', contains, bindingError, extFuncAppMixedArgs,
+  objVarSelf, intClass, buildModule, docMod', contains, bindingError,
   notNull, listDecDef, destructorError, stateVarDef, constVar, litArray,
   listSetFunc, extraClass, listAccessFunc, doubleRender, double, openFileR,
   openFileW, self, multiAssign, multiReturn, listDec, funcDecDef,
@@ -396,7 +396,7 @@ instance ValueExpression SwiftCode where
   inlineIf = C.inlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
-  extFuncAppMixedArgs = CP.extFuncAppMixedArgs
+  extFuncAppMixedArgs = CS.extFuncAppMixedArgs
   libFuncAppMixedArgs = C.libFuncAppMixedArgs
 
   lambda = G.lambda swiftLambda

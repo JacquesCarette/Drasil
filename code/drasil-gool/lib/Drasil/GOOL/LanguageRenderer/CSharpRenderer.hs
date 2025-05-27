@@ -378,7 +378,7 @@ instance ValueExpression CSharpCode where
   inlineIf = C.inlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
-  extFuncAppMixedArgs = CP.extFuncAppMixedArgs
+  extFuncAppMixedArgs = CS.extFuncAppMixedArgs
   libFuncAppMixedArgs = C.libFuncAppMixedArgs
 
   lambda = G.lambda csLambda

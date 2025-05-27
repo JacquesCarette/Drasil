@@ -395,7 +395,7 @@ instance ValueExpression JavaCode where
   extFuncAppMixedArgs l n t vs ns = do
     mem <- getMethodExcMap
     modify (maybe id addExceptions (Map.lookup (qualName l n) mem))
-    CP.extFuncAppMixedArgs l n t vs ns
+    CS.extFuncAppMixedArgs l n t vs ns
   libFuncAppMixedArgs = C.libFuncAppMixedArgs
 
   lambda = G.lambda jLambda

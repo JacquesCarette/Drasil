@@ -387,10 +387,10 @@ instance ValueExpression PythonCode where
   funcAppMixedArgs = G.funcAppMixedArgs
   extFuncAppMixedArgs l n t ps ns = do
     modify (addModuleImportVS l)
-    CP.extFuncAppMixedArgs l n t ps ns
+    CS.extFuncAppMixedArgs l n t ps ns
   libFuncAppMixedArgs l n t ps ns = do
     modify (addLibImportVS l)
-    CP.extFuncAppMixedArgs l n t ps ns
+    CS.extFuncAppMixedArgs l n t ps ns
 
   lambda = G.lambda pyLambda
 

@@ -27,6 +27,8 @@ import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished,
   Author, Address), Citation(Cite), BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
 import qualified Language.Drasil.Printing.Import as I
+import Language.Drasil.Printing.Import.Helpers
+  (lookupT, lookupS, lookupP)
 import Language.Drasil.Printing.Helpers hiding (br, paren, sq, sqbrac)
 import Language.Drasil.TeX.Helpers (author, bold, br, caption, center, centering,
   cite, command, command0, commandD, command2D, description, description', document, 
@@ -37,8 +39,10 @@ import Language.Drasil.TeX.Helpers (author, bold, br, caption, center, centering
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (%%), ($+$),
   hpunctuate, lub, runPrint, switch, toMath, toText, unPL, vcat, vpunctuate)
 import Language.Drasil.TeX.Preamble (genPreamble)
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb)
 import Data.Foldable (foldl')
+
+import Control.Lens ((^.))
 
 -- | Generates a LaTeX document.
 genTeX :: L.Document -> PrintingInformation -> TP.Doc
@@ -229,7 +233,9 @@ makeTable lls@(h:tlines) r bool t = mkEnv "longtblr" ($+$) $
 specLength :: Spec -> Int
 specLength (E x)       = length $ filter (`notElem` dontCount) $ TP.render $ runPrint (pExpr x) Curr
 specLength (S x)       = length x
-specLength Ch {}      = 1
+specLength (Ch sm L.TermStyle caps s) = specLength $ I.spec sm $ lookupT (sm ^. ckdb) s caps
+specLength (Ch sm L.ShortStyle caps s) = specLength $ I.spec sm $ lookupS (sm ^. ckdb) s caps
+specLength (Ch sm L.PluralTerm caps s) = specLength $ I.spec sm $ lookupP (sm ^. ckdb) s caps
 specLength (a :+: b)   = specLength a + specLength b
 specLength (Sp _)      = 1
 specLength (Ref Internal r _) = length r
@@ -284,7 +290,9 @@ spec (S s)  = either error (pure . text . concatMap escapeChars) $ L.checkValidS
     escapeChars '_' = "\\_"
     escapeChars '&' = "\\&"
     escapeChars c = [c]
-spec (Ch _ _ _ s) = pure $ text $ escapeIdentSymbols $ show s --placeholder
+spec (Ch sm L.TermStyle caps s) = spec $ I.spec sm $ lookupT (sm ^. ckdb) s caps 
+spec (Ch sm L.ShortStyle caps s) = spec $ I.spec sm $ lookupS (sm ^. ckdb) s caps 
+spec (Ch sm L.PluralTerm caps s) = spec $ I.spec sm $ lookupP (sm ^. ckdb) s caps 
 spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = command0 "newline"
 spec (Ref Internal r sn) = snref r (spec sn)

@@ -17,7 +17,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
 import Language.Drasil.Printing.Helpers (sqbrac, unders, hat)
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb)
 
 import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
@@ -29,6 +29,10 @@ import Language.Drasil.HTML.Print(renderCite, OpenClose(Open, Close), fence,
 import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat, codeformat,
  tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv, 
  markdownB, markdownB', markdownE, markdownE', markdownCell, codeCell)
+import qualified Language.Drasil.Printing.Import as L (spec)
+import Language.Drasil.Printing.Import.Helpers
+  (lookupT, lookupS, lookupP)
+import Control.Lens ((^.))
 
 -- | Generate a python notebook document (using json).
 -- build : build the SRS document in JSON format
@@ -125,7 +129,9 @@ pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr 
     invalid = ['<', '>']
     escapeChars '&' = "\\&"
     escapeChars c = [c]
-pSpec Ch {} = text "placeholder" -- TODO: handle Ch
+pSpec (Ch sm L.TermStyle caps s) = pSpec $ L.spec sm $ lookupT (sm ^. ckdb) s caps
+pSpec (Ch sm L.ShortStyle caps s) = pSpec $ L.spec sm $ lookupS (sm ^. ckdb) s caps
+pSpec (Ch sm L.PluralTerm caps s) = pSpec $ L.spec sm $ lookupP (sm ^. ckdb) s caps
 pSpec (Sp s)    = text $ unPH $ L.special s
 pSpec HARDNL    = empty
 pSpec (Ref Internal r a)      = reflink     r $ pSpec a

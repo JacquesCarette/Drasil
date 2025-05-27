@@ -3,7 +3,7 @@ module Drasil.Shared.LanguageRenderer.Common where
 
 import Drasil.Shared.CodeType (CodeType(..))
 import Drasil.Shared.InterfaceCommon 
-import Drasil.Shared.RendererClassesCommon (CommonRenderSym, typeFromData, call, RenderFunction(funcFromData))
+import Drasil.Shared.RendererClassesCommon (scopeData, CommonRenderSym, typeFromData, call, RenderFunction(funcFromData))
 import Control.Monad (join)
 import Drasil.Shared.LanguageRenderer
 import qualified Drasil.Shared.LanguageRenderer as R
@@ -14,6 +14,10 @@ import Drasil.Shared.Helpers
 import Text.PrettyPrint.HughesPJ (text, empty, Doc)
 import Control.Lens.Zoom (zoom)
 import Drasil.Shared.State
+import qualified Drasil.Shared.InterfaceCommon as IC
+import Control.Monad.State (modify)
+
+
 
 -- Swift and Julia --
 
@@ -61,3 +65,16 @@ forEach' f i' v' b' = do
   v <- zoom lensMStoVS v'
   b <- b'
   mkStmtNoEnd (f i v b)
+
+-- Python and Julia --
+
+varDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> Maybe (SValue r)
+  -> MSStatement r
+varDecDef v scp e = do
+  v' <- zoom lensMStoVS v
+  modify $ useVarName (variableName v')
+  modify $ setVarScope (variableName v') (scopeData scp)
+  def e
+  where
+    def Nothing = IC.emptyStmt
+    def (Just d) = IC.assign v d

@@ -488,8 +488,8 @@ instance AssignStatement JuliaCode where
   (&--) = M.decrement1
 
 instance DeclStatement JuliaCode where
-  varDec v scp = CP.varDecDef v scp Nothing
-  varDecDef v scp e = CP.varDecDef v scp (Just e)
+  varDec v scp = CS.varDecDef v scp Nothing
+  varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = varDec
   setDecDef = varDecDef
   listDec _ = CP.listDec

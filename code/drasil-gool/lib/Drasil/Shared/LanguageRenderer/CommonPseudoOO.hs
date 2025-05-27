@@ -534,16 +534,7 @@ returnDoc = "Returns"
 --   declaring a variable before defining it is not required.
 --   v is the variable to declare, and e is Nothing if we are not defining it,
 --   and (Just d) if d is the value we are defining it as.
-varDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> Maybe (SValue r)
-  -> MSStatement r
-varDecDef v scp e = do
-  v' <- zoom lensMStoVS v
-  modify $ useVarName (variableName v')
-  modify $ setVarScope (variableName v') (scopeData scp)
-  def e
-  where
-    def Nothing = IC.emptyStmt
-    def (Just d) = IC.assign v d
+
 
 fileOpen, fileR, fileW, fileA :: Label
 fileOpen = "open"

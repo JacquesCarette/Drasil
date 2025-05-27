@@ -64,7 +64,6 @@
   * [Promoting Drasil](Promoting-Drasil)
   * [Benefits of Drasil](Benefits-of-Drasil)
 * WIP Projects
-  * [Jason: Typed Exprs](Typed-Exprs)
   * [Sam: Chunk Investigation](Chunk-Investigation)
     * [Chunk Observations](Chunk-Observations)
       * [When to Use Maybe](When-to-Use-Maybe)

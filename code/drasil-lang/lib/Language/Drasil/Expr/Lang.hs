@@ -244,7 +244,10 @@ vvvInfer ctx op l r = case (infer ctx l, infer ctx r) of
     (_       , Right re) -> Right re
     (Right le, _       ) -> Right le
 
-
+-- | 'Expr' can be type-checked against 'Space'.
+-- 
+-- See <https://macsphere.mcmaster.ca/handle/11375/29574> for implementation
+-- details.
 instance Typed Expr Space where
   check :: TypingContext Space -> Expr -> Space -> Either Space TypeError
   check = typeCheckByInfer

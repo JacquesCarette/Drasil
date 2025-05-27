@@ -27,6 +27,11 @@ assocSanitize b (it@(AssocB c des):r)
   | otherwise = it : assocSanitize b r
 assocSanitize b (de:des) = de : assocSanitize b des
 
+-- | 'ModelExprC' is a tagless implementation of 'ModelExpr', intended to be an
+-- extension on 'ExprC'.
+-- 
+-- See <https://www.cas.mcmaster.ca/~carette/publications/APLAS.pdf> for
+-- information about "tagless" languages.
 class ModelExprC r where
   -- This also wants a symbol constraint.
   -- | Gets the derivative of an 'ModelExpr' with respect to a 'Symbol'.

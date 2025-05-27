@@ -87,6 +87,10 @@ rowVec a = matrix [a]
 columnVec :: ExprC r => [r] -> r
 columnVec a = matrix $ toColumn a
 
+-- | 'ExprC' is a tagless implementation of 'Expr'.
+-- 
+-- See <https://www.cas.mcmaster.ca/~carette/publications/APLAS.pdf> for
+-- information about "tagless" languages.
 class ExprC r where
   infixr 8 $^
   infixl 7 $/

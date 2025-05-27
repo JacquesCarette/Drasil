@@ -75,14 +75,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   buildClass, implementingClass, commentedClass, modFromData, fileDoc,
   fileFromData, defaultOptSpace, local)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
-import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int, 
-  constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
-  extFuncAppMixedArgs, indexOf, contains, listAddFunc, discardFileLine, intClass, 
-  funcType, arrayType, litSet, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, 
-  docMain, mainFunction, buildModule', bindingError, listDecDef, 
-  destructorError, stateVarDef, constVar, litArray, call', listSizeFunc, 
-  listAccessFunc', notNull, doubleRender, double, openFileR, openFileW, 
-  stateVar, floatRender, float, string', intToIndex, indexToInt, global, setMethodCall)
+import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP 
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -118,6 +111,8 @@ import qualified Data.Map as Map (lookup)
 import Data.List (nub, intercalate, sort)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty, 
   equals, vcat, lbrace, rbrace, braces, colon, quotes)
+
+import qualified Drasil.Shared.LanguageRenderer.Common as CS
 
 jExt :: String
 jExt = "java"
@@ -286,7 +281,7 @@ instance VariableSym JavaCode where
   type Variable JavaCode = VarData
   var         = G.var
   constant    = var
-  extVar      = CP.extVar
+  extVar      = CS.extVar
   arrayElem i = G.arrayElem (litInt i)
 
 instance OOVariableSym JavaCode where

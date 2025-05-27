@@ -72,14 +72,7 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   comment, throw, ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
   function, buildClass, implementingClass, commentedClass, modFromData, fileDoc,
   fileFromData, local)
-import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (int,
-  constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
-  extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
-  funcType, buildModule, bindingError, notNull, listDecDef, destructorError, 
-  stateVarDef, constVar, litArray, listSetFunc, extraClass, listAccessFunc, 
-  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
-  mainBody, inOutFunc, docInOutFunc', listSize, intToIndex, indexToInt,
-  varDecDef, openFileR', openFileW', openFileA', argExists, forEach', global, setMethodCall)
+import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP 
 import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
   notifyObservers')
@@ -108,6 +101,9 @@ import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, colon, brackets, isEmpty, quotes, comma, braces)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
+
+import qualified Drasil.Shared.LanguageRenderer.Common as CS
+
 
 pyExt :: String
 pyExt = "py"
@@ -277,7 +273,7 @@ instance VariableSym PythonCode where
   type Variable PythonCode = VarData
   var          = G.var
   constant n   = var $ toConstName n
-  extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
+  extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
   arrayElem i  = G.arrayElem (litInt i)
 
 instance OOVariableSym PythonCode where

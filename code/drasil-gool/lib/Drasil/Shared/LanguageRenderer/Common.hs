@@ -74,3 +74,9 @@ boolRender = "Bool"
 
 bool :: (CommonRenderSym r) => VSType r
 bool = typeFromData Boolean boolRender (text boolRender)
+
+
+-- Python, Java, C#, and Julia --
+
+extVar :: (CommonRenderSym r) => Label -> Label -> VSType r -> SVariable r
+extVar l n t = mkStateVar (l `access` n) t (R.extVar l n)

@@ -1,6 +1,6 @@
 -- | Utilities to get grab certain chunks (from 'Expr', 'Sentence', etc) by 'UID' and
 -- dereference the chunk it refers to.
-module System.Drasil.GetChunk (ccss, ccss', combine, vars, citeDB) where
+module Drasil.GetChunk (ccss, ccss', combine, vars, citeDB) where
 
 import Language.Drasil
 import Language.Drasil.Development
@@ -8,7 +8,7 @@ import Language.Drasil.ModelExpr.Development (meDep)
 
 import Database.Drasil (ChunkDB, defResolve, symbResolve, citationTable)
 
-import System.Drasil.System (System, systemdb)
+import System.Drasil (System, systemdb)
 
 import Control.Lens ((^.))
 import Data.List (nub, sortBy)

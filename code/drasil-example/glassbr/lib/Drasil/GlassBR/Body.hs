@@ -132,7 +132,7 @@ background = foldlSent_ [phrase explosion, S "in downtown areas are dangerous fr
   +:+ S "effect of falling glass"]
 
 symbMap :: ChunkDB
-symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
+symbMap = cdb thisSymbols (map nw thisSymbols ++ map nw con
   ++ map nw con' ++ map nw terms ++ map nw doccon ++ map nw doccon' ++ map nw educon
   ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon'
   ++ map nw softwarecon ++ map nw terms ++ [nw lateralLoad, nw materialProprty]

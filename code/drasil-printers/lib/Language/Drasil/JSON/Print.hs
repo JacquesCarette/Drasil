@@ -5,6 +5,8 @@ import Prelude hiding (print, (<>))
 import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 
+import Database.Drasil (ChunkDB)
+
 import qualified Language.Drasil as L
 
 import Language.Drasil.Format (DocType(Lesson))
@@ -128,9 +130,8 @@ pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr 
     invalid = ['<', '>']
     escapeChars '&' = "\\&"
     escapeChars c = [c]
-pSpec (Ch sm L.TermStyle  caps s) = pSpec $ L.spec sm $ lookupT (sm ^. ckdb) s caps
-pSpec (Ch sm L.ShortStyle caps s) = pSpec $ L.spec sm $ lookupS (sm ^. ckdb) s caps
-pSpec (Ch sm L.PluralTerm caps s) = pSpec $ L.spec sm $ lookupP (sm ^. ckdb) s caps
+pSpec (Ch sm st caps s) = pSpec $ L.spec sm $
+  (termStyleLookup st) (sm ^. ckdb) s caps
 pSpec (Sp s)    = text $ unPH $ L.special s
 pSpec HARDNL    = empty
 pSpec (Ref Internal r a)      = reflink     r $ pSpec a
@@ -294,6 +295,11 @@ pItem (Nested s l) _ = vcat [nbformat $ text "- " <> pSpec s, makeList l True]
 sItem :: ItemType -> Doc
 sItem (Flat s)     = pSpec s
 sItem (Nested s l) = vcat [pSpec s, makeList l False]
+
+termStyleLookup :: L.SentenceStyle -> ChunkDB -> L.UID -> L.TermCapitalization -> L.Sentence
+termStyleLookup L.PluralTerm = lookupP
+termStyleLookup L.ShortStyle = lookupS
+termStyleLookup L.TermStyle  = lookupT
 
 -- | Renders figures in HTML
 makeFigure :: Doc -> Maybe Doc -> Doc -> L.MaxWidthPercent -> Doc

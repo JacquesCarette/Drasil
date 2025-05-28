@@ -19,8 +19,8 @@ import Data.Drasil.Concepts.Education (mechanics)
 physicCon :: [ConceptChunk]
 physicCon = [acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity,
   cohesion, collision, compression, constAccel, constAccelV, damping, dampingCoeff,
-  displacement, distance, elasticity, energy, fSpeed, fVel, fbd,
-  friction, gravity, gravitationalAccel, gravitationalConst, gravitationalMagnitude, 
+  displacement, distance, elasticity, energy, fSpeed, fVel, fbd, force,
+  friction, gravity, gravitationalAccel, gravitationalConst, gravitationalMagnitude, height, 
   iPos, iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, ixSpeed, iySpeed, iyPos, 
   iyVel, joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy,
   momentOfInertia, position, potEnergy, pressure, restitutionCoef, rectilinear,

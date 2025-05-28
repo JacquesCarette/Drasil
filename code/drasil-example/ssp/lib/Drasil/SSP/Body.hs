@@ -61,13 +61,13 @@ srs = mkDoc mkSRS S.forT si
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 resourcePath :: String
 resourcePath = "../../../../datafiles/ssp/"
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = ssp, 
   _kind        = Doc.srs, 
@@ -84,7 +84,7 @@ si = SI {
   _outputs     = map qw outputs,
   _constraints = constrained,
   _constants   = [],
-  _sysinfodb   = symbMap,
+  _systemdb   = symbMap,
   _usedinfodb  = usedDB
 }
   

@@ -25,7 +25,7 @@ import Drasil.DocLang (tunitNone)
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
@@ -84,7 +84,7 @@ mkSRS = [TableOfContents,
      AuxConsProg progName [],
   Bibliography]
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = progName,
   _kind        = Doc.srs,
@@ -101,7 +101,7 @@ si = SI {
   _outputs     = [] :: [QuantityDict],
   _constraints = [] :: [ConstrainedChunk],
   _constants   = [] :: [ConstQDef],
-  _sysinfodb   = symbMap,
+  _systemdb   = symbMap,
   _usedinfodb  = usedDB
 }
 

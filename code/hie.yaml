@@ -123,8 +123,8 @@ cradle:
     - path: "drasil-printers/lib"
       component: "drasil-printers:lib"
 
-    - path: "drasil-sysinfo/lib"
-      component: "drasil-sysinfo:lib"
+    - path: "drasil-system/lib"
+      component: "drasil-system:lib"
 
     - path: "drasil-theory/lib"
       component: "drasil-theory:lib"

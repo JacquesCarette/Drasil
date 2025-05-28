@@ -24,7 +24,7 @@ import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
 import Database.Drasil hiding (cdb)
-import SysInfo.Drasil
+import System.Drasil
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
 import Drasil.Sections.TableOfContents (toToC, findToC)
@@ -65,7 +65,7 @@ import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- * Main Function
 -- | Creates a document from a document description, a title combinator function, and system information.
-mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
+mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
 mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = docauthors} =
   Document (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) docauthors) (findToC l) $
   mkSections fullSI l where
@@ -83,15 +83,15 @@ mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = docauthors} =
 -- | Assuming a given 'ChunkDB' with no traces and minimal/no references, fill
 -- in for rest of system information. Currently fills in references,
 -- traceability matrix information and 'IdeaDict's.
-fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
+fillcdbSRS :: SRSDecl -> System -> System
 fillcdbSRS srsDec si = fillSecAndLC srsDec $ fillReferences srsDec $ fillTraceSI srsDec si
 
 -- | Fill in the 'Section's and 'LabelledContent' maps of the 'ChunkDB' from the 'SRSDecl'.
-fillSecAndLC :: SRSDecl -> SystemInformation -> SystemInformation
+fillSecAndLC :: SRSDecl -> System -> System
 fillSecAndLC dd si = si2
   where
     -- Get current contents of si
-    chkdb = si ^. sysinfodb
+    chkdb = si ^. systemdb
     -- extract sections and labelledcontent
     allSections = concatMap findAllSec $ mkSections si $ mkDocDesc si dd -- FIXME: `mkSections` on something particularly large that is immediately discarded is a sign that we're doing something wrong. That's in addition to `mkDocDesc`...
     allLC = concatMap findAllLC allSections
@@ -99,7 +99,7 @@ fillSecAndLC dd si = si2
     -- fill in the appropriate chunkdb fields
     chkdb2 = set labelledcontentTable (idMap "LLCMap" $ nub $ existingLC ++ allLC) chkdb
     -- return the filled in system information
-    si2 = set sysinfodb chkdb2 si
+    si2 = set systemdb chkdb2 si
 
     -- Helper and finder functions
     findAllSec :: Section -> [Section]
@@ -118,11 +118,11 @@ fillSecAndLC dd si = si2
     findLCSecCons _ = []
 
 -- | Takes in existing information from the Chunk database to construct a database of references.
-fillReferences :: SRSDecl -> SystemInformation -> SystemInformation
+fillReferences :: SRSDecl -> System -> System
 fillReferences dd si@SI{_sys = sys} = si2
   where
     -- get old chunk database + ref database
-    chkdb = si ^. sysinfodb
+    chkdb = si ^. systemdb
     cites = citeDB si
     -- convert SRSDecl into a list of sections (to easily get at all the references used in the SRS)
     allSections = mkSections si $ mkDocDesc si dd
@@ -146,7 +146,7 @@ fillReferences dd si@SI{_sys = sys} = si2
       ++ map ref tmods ++ map ref concIns ++ map ref lblCon
       ++ refs) chkdb
     -- set new chunk database into system information
-    si2 = set sysinfodb chkdb2 si
+    si2 = set systemdb chkdb2 si
 
 -- | Helper that gets references from definitions and models.
 dRefToRef :: HasDecRef a => a -> [Reference]
@@ -162,24 +162,24 @@ findAllRefs (Section _ cs r) = r: concatMap findRefSecCons cs
     findRefSecCons _ = []
 
 -- | Helper for filling in the traceability matrix and graph information into the system.
-fillTraceSI :: SRSDecl -> SystemInformation -> SystemInformation
+fillTraceSI :: SRSDecl -> System -> System
 fillTraceSI dd si = fillTraceMaps l $ fillReqs l si
   where
     l = mkDocDesc si dd
 
 -- | Fills in the traceabiliy matrix and graphs section of the system information using the document description.
-fillTraceMaps :: DocDesc -> SystemInformation -> SystemInformation
-fillTraceMaps dd si@SI{_sysinfodb = db} = si {_sysinfodb =
+fillTraceMaps :: DocDesc -> System -> System
+fillTraceMaps dd si@SI{_systemdb = db} = si {_systemdb =
   set refbyTable (generateRefbyMap tdb) $ set traceTable tdb db} where
   tdb = generateTraceMap dd
 
 -- | Fills in the requirements section of the system information using the document description.
-fillReqs :: DocDesc -> SystemInformation -> SystemInformation
+fillReqs :: DocDesc -> System -> System
 fillReqs [] si = si
-fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_sysinfodb = db} = genReqs x
+fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_systemdb = db} = genReqs x
   where
     genReqs [] = si
-    genReqs (FReqsSub c _:_) = si {_sysinfodb = set conceptinsTable newCI db} where
+    genReqs (FReqsSub c _:_) = si { _systemdb = set conceptinsTable newCI db} where
         newCI = idMap "ConcInsMap" $ nub $ c ++ map fst (sortOn snd $ map snd $ Map.toList $ db ^. conceptinsTable)
     genReqs (_:xs) = genReqs xs
 fillReqs (_:xs) si = fillReqs xs si
@@ -191,7 +191,7 @@ extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) 
 -- * Section Creator Functions
 
 -- | Helper for creating the different document sections.
-mkSections :: SystemInformation -> DocDesc -> [Section]
+mkSections :: System -> DocDesc -> [Section]
 mkSections si dd = map doit dd
   where
     doit :: DocSection -> Section
@@ -222,12 +222,12 @@ mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothi
 
 -- | Helper for creating the reference section and subsections.
 -- Includes Table of Symbols, Units and Abbreviations and Acronyms.
-mkRefSec :: SystemInformation -> DocDesc -> RefSec -> Section
+mkRefSec :: System -> DocDesc -> RefSec -> Section
 mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
   where
-    mkSubRef :: SystemInformation -> RefTab -> Section
+    mkSubRef :: System -> RefTab -> Section
     mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI tOfUnitSIName
-    mkSubRef SI {_sysinfodb = db} (TUnits' con f) =
+    mkSubRef SI {_systemdb = db} (TUnits' con f) =
         SRS.tOfUnit [tuIntro con, LlC $ f (nub $ sortBy compUnitDefn $ extractUnits dd db)] []
     -- FIXME: _quants = v should be removed from this binding and symbols should
     -- be acquired solely through document traversal, however #1658. If we do
@@ -236,14 +236,14 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
     -- in ExtractDocDesc, then the passes which extract `DefinedQuantityDict`s will
     -- error out because some of the symbols in tables are only `QuantityDict`s, and thus
     -- missing a `Concept`.
-    mkSubRef SI {_quants = v, _sysinfodb = cdb} (TSymb con) =
+    mkSubRef SI {_quants = v, _systemdb = cdb} (TSymb con) =
       SRS.tOfSymb
       [tsIntro con,
                 LlC $ table Equational (sortBySymbol
                 $ filter (`hasStageSymbol` Equational)
                 (nub $ map qw v ++ ccss' (getDocDesc dd) (egetDocDesc dd) cdb))
                 atStart] []
-    mkSubRef SI {_sysinfodb = cdb} (TSymb' f con) =
+    mkSubRef SI {_systemdb = cdb} (TSymb' f con) =
       mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
     mkSubRef SI {_usedinfodb = db} TAandA =
       SRS.tOfAbbAcc [LlC $ tableAbbAccGen $ nub $ map fst $ Map.elems $ termTable db] []
@@ -268,11 +268,11 @@ mkTSymb v f c = SRS.tOfSymb [tsIntro c,
 -- ** Introduction
 
 -- | Makes the Introduction section into a 'Section'.
-mkIntroSec :: SystemInformation -> IntroSec -> Section
+mkIntroSec :: System -> IntroSec -> Section
 mkIntroSec si (IntroProg probIntro progDefn l) =
   Intro.introductionSection probIntro progDefn $ map (mkSubIntro si) l
   where
-    mkSubIntro :: SystemInformation -> IntroSub -> Section
+    mkSubIntro :: System -> IntroSub -> Section
     mkSubIntro _ (IPurpose intro) = Intro.purposeOfDoc intro
     mkSubIntro _ (IScope main) = Intro.scopeOfRequirements main
     mkSubIntro SI {_sys = sys} (IChar assumed topic asset) =
@@ -304,16 +304,16 @@ mkGSDSec (GSDProg l) = SRS.genSysDes [GSD.genSysIntro] $ map mkSubs l
 -- ** Specific System Description
 
 -- | Helper for making the Specific System Description section.
-mkSSDSec :: SystemInformation -> SSDSec -> Section
+mkSSDSec :: System -> SSDSec -> Section
 mkSSDSec si (SSDProg l) =
   SSD.specSysDescr $ map (mkSubSSD si) l
   where
-    mkSubSSD :: SystemInformation -> SSDSub -> Section
+    mkSubSSD :: System -> SSDSub -> Section
     mkSubSSD sysi (SSDProblem pd)    = mkSSDProb sysi pd
     mkSubSSD sysi (SSDSolChSpec scs) = mkSolChSpec sysi scs
 
 -- | Helper for making the Specific System Description Problem section.
-mkSSDProb :: SystemInformation -> ProblemDescription -> Section
+mkSSDProb :: System -> ProblemDescription -> Section
 mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSubPD subPD)
   where mkSubPD (TermsAndDefs sen concepts) = SSD.termDefnF sen concepts
         mkSubPD (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
@@ -321,12 +321,12 @@ mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSub
 
 
 -- | Helper for making the Solution Characteristics Specification section.
-mkSolChSpec :: SystemInformation -> SolChSpec -> Section
+mkSolChSpec :: System -> SolChSpec -> Section
 mkSolChSpec si (SCSProg l) =
   SRS.solCharSpec [SSD.solutionCharSpecIntro (siSys si) SSD.imStub] $
     map (mkSubSCS si) l
   where
-    mkSubSCS :: SystemInformation -> SCSSub -> Section
+    mkSubSCS :: System -> SCSSub -> Section
     mkSubSCS si' (TMs intro fields ts) =
       SSD.thModF (siSys si') $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
     mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
@@ -349,7 +349,7 @@ mkSolChSpec si (SCSProg l) =
       SSD.assumpF $ mkEnumSimpleD $ map (`SSD.helperCI` si') ci
     mkSubSCS _ (Constraints end cs)  = SSD.datConF end cs
     mkSubSCS _ (CorrSolnPpties c cs) = SSD.propCorSolF c cs
-    siSys :: SystemInformation -> IdeaDict
+    siSys :: System -> IdeaDict
     siSys SI {_sys = sys} = nw sys
 
 -- ** Requirements
@@ -384,7 +384,7 @@ introChgs xs _ = foldlSP [S "This", phrase Doc.section_, S "lists the",
 -- ** Traceability
 
 -- | Helper for making the Traceability Matrices and Graphs section.
-mkTraceabilitySec :: TraceabilitySec -> SystemInformation -> Section
+mkTraceabilitySec :: TraceabilitySec -> System -> Section
 mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
   (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) fProgs)
   (map LlC trace) (programName sys) []
@@ -394,10 +394,10 @@ mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
     fProgs = filter (\(TraceConfig _ _ _ cols rows) ->
       not $ null (header (TM.layoutUIDs rows sidb) si)
          || null (header (TM.layoutUIDs cols sidb) si)) progs
-    sidb = si ^. sysinfodb
+    sidb = si ^. systemdb
 
 -- | Helper to get headers of rows and columns
-header :: ([UID] -> [UID]) -> SystemInformation -> [Sentence]
+header :: ([UID] -> [UID]) -> System -> [Sentence]
 header f = TM.traceMHeader (f . Map.keys . (^. refbyTable))
 
 -- ** Off the Shelf Solutions

@@ -4,7 +4,7 @@ module Drasil.DocumentLanguage.TraceabilityGraph where
 
 import Language.Drasil
 import Database.Drasil hiding (cdb)
-import SysInfo.Drasil hiding (purpose)
+import System.Drasil hiding (purpose)
 import Control.Lens ((^.))
 import qualified Data.Map as Map
 import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat, traceMReferees, traceMReferrers,
@@ -44,8 +44,8 @@ traceGIntro refs trailings = [ulcc $ Paragraph $ foldlSent
         S "is changed, the", plural component, S "that it points to should also be changed"] +:+
         foldlSent_ (zipWith graphShows refs trailings)]
 
--- | Extracts traceability graph inforomation from filled-in 'SystemInformation'.
-mkGraphInfo :: SystemInformation -> GraphInfo
+-- | Extracts traceability graph inforomation from filled-in 'System'.
+mkGraphInfo :: System -> GraphInfo
 mkGraphInfo si = GI {
     assumpNF = mkGraphNodes tvAssumps si "mistyrose"
     , ddNF     = mkGraphNodes tvDataDefns si "paleturquoise1"
@@ -67,22 +67,22 @@ mkGraphInfo si = GI {
 
 -- | Gets the node family of a graph based on the given section
 -- and system information. Also applies a given colour to the node family.
-mkGraphNodes :: TraceViewCat -> SystemInformation -> String -> NodeFamily
+mkGraphNodes :: TraceViewCat -> System -> String -> NodeFamily
 mkGraphNodes entry si col = NF {nodeUIDs = nodeContents, nodeLabels = map (checkUIDRefAdd si) nodeContents, nfLabel = checkNodeContents nodeContents, nfColour = col}
     where
         checkNodeContents :: [UID] -> String
         checkNodeContents [] = ""
         checkNodeContents (x:_) = checkUIDAbbrev si x
         nodeContents = traceMReferees entryF cdb
-        cdb = _sysinfodb si
+        cdb = _systemdb si
         entryF = layoutUIDs [entry] cdb
 
 -- | Creates the graph edges based on the relation of the first list of sections to the second.
 -- Also needs the system information. Return value is of the form (Section, [Dependencies]).
-mkGraphEdges :: [TraceViewCat] -> [TraceViewCat] -> SystemInformation -> [(UID, [UID])]
+mkGraphEdges :: [TraceViewCat] -> [TraceViewCat] -> System -> [(UID, [UID])]
 mkGraphEdges cols rows si = makeTGraph (traceGRowHeader rowf si) (traceMColumns colf rowf cdb) $ traceMReferees colf cdb
     where
-        cdb = _sysinfodb si
+        cdb = _systemdb si
         colf = layoutUIDs cols cdb
         rowf = layoutUIDs rows cdb
 
@@ -94,8 +94,8 @@ makeTGraph rowName rows cols = zip rowName [zipFTable' x cols | x <- rows]
     zipFTable' content = filter (`elem` content)
 
 -- | Checker for uids by finding if the 'UID' is in one of the possible data
--- sets contained in the 'SystemInformation' database.
-checkUID :: UID -> SystemInformation -> UID
+-- sets contained in the 'System' database.
+checkUID :: UID -> System -> UID
 checkUID t si
   | Map.member t (s ^. dataDefnTable)        = t
   | Map.member t (s ^. insmodelTable)        = t
@@ -105,10 +105,10 @@ checkUID t si
   | Map.member t (s ^. labelledcontentTable) = t
   | Map.member t (s ^. citationTable)        = t
   | otherwise = error $ show t ++ "Caught."
-  where s = _sysinfodb si
+  where s = _systemdb si
 
 -- | Similar to 'checkUID' but prepends domain for labelling.
-checkUIDAbbrev :: SystemInformation -> UID -> String
+checkUIDAbbrev :: System -> UID -> String
 checkUIDAbbrev si t
   | Just (x, _) <- Map.lookup t (s ^. dataDefnTable)        = abrv x
   | Just (x, _) <- Map.lookup t (s ^. insmodelTable)        = abrv x
@@ -118,10 +118,10 @@ checkUIDAbbrev si t
   | Map.member t (s ^. labelledcontentTable)                = show t
   | Map.member t (s ^. citationTable)                       = ""
   | otherwise = error $ show t ++ "Caught."
-  where s = _sysinfodb si
+  where s = _systemdb si
 
 -- | Similar to 'checkUID' but gets reference addresses for display.
-checkUIDRefAdd :: SystemInformation -> UID -> String
+checkUIDRefAdd :: System -> UID -> String
 checkUIDRefAdd si t
   | Just (x, _) <- Map.lookup t (s ^. dataDefnTable)        = getAdd $ getRefAdd x
   | Just (x, _) <- Map.lookup t (s ^. insmodelTable)        = getAdd $ getRefAdd x
@@ -131,17 +131,17 @@ checkUIDRefAdd si t
   | Map.member t (s ^. labelledcontentTable)                = show t
   | Map.member t (s ^. citationTable)                       = ""
   | otherwise = error $ show t ++ "Caught."
-  where s = _sysinfodb si
+  where s = _systemdb si
 
 -- | Helper that finds the header of a traceability matrix.
 -- However, here we use this to get a list of 'UID's for a traceability graph instead.
-traceGHeader :: (ChunkDB -> [UID]) -> SystemInformation -> [UID]
-traceGHeader f c = map (`checkUID` c) $ f $ _sysinfodb c
+traceGHeader :: (ChunkDB -> [UID]) -> System -> [UID]
+traceGHeader f c = map (`checkUID` c) $ f $ _systemdb c
 
 -- | Helper that finds the headers of the traceability matrix rows.
 -- However, here we use this to get a list of 'UID's for a traceability graph instead.
 -- This is then used to create the graph edges.
-traceGRowHeader :: ([UID] -> [UID]) -> SystemInformation -> [UID]
+traceGRowHeader :: ([UID] -> [UID]) -> System -> [UID]
 traceGRowHeader f = traceGHeader (traceMReferrers f)
 
 -- FIXME: Should take a Reference instead of just a Reference UID

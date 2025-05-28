@@ -49,7 +49,7 @@ naveen = person "Naveen Ganesh" "Muralidharan"
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
@@ -96,7 +96,7 @@ mkSRS
      ReqrmntSec $ ReqsProg [FReqsSub EmptyS [], NonFReqsSub], LCsSec,
      TraceabilitySec $ TraceabilityProg $ traceMatStandard si, Bibliography]
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys = pdControllerApp,
   _kind = Doc.srs,
@@ -113,7 +113,7 @@ si = SI {
   _outputs = outputs,
   _constraints = map cnstrw inpConstrained,
   _constants = pidConstants,
-  _sysinfodb = symbMap,
+  _systemdb = symbMap,
   _usedinfodb = usedDB
 }
 

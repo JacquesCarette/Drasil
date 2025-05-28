@@ -17,7 +17,7 @@ import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
 import Drasil.Sections.Requirements (fullReqs, fullTables)
 
 import Database.Drasil
-import SysInfo.Drasil
+import System.Drasil
 import Language.Drasil hiding (sec)
 
 import Data.Drasil.Concepts.Documentation (assumpDom, funcReqDom, goalStmtDom,
@@ -105,8 +105,8 @@ data ReqsSub where
 -- * Functions
 
 -- | Creates the document description (translates 'SRSDecl' into a more usable form for generating documents).
-mkDocDesc :: SystemInformation -> SRSDecl -> DocDesc
-mkDocDesc SI{_inputs = is, _sysinfodb = db} = map sec where
+mkDocDesc :: System -> SRSDecl -> DocDesc
+mkDocDesc SI{_inputs = is, _systemdb = db} = map sec where
   sec :: DocSection -> DL.DocSection
   sec TableOfContents = DL.TableOfContents
   sec (RefSec r) = DL.RefSec r

@@ -51,7 +51,7 @@ import Drasil.DblPend.ODEs (dblPenODEInfo)
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
@@ -104,7 +104,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
   Bibliography                -- Adds reference section
   ]
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = progName, 
   _kind        = Doc.srs,
@@ -121,7 +121,7 @@ si = SI {
   _outputs     = outputs,
   _constraints = inConstraints,
   _constants   = constants,
-  _sysinfodb   = symbMap,
+  _systemdb   = symbMap,
   _usedinfodb  = usedDB
 }
 

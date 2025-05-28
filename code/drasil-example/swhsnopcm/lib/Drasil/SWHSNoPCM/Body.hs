@@ -71,7 +71,7 @@ import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
 srs :: Document
 srs = mkDoc mkSRS S.forT si
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
@@ -164,7 +164,7 @@ concIns = goals ++ funcReqs ++ nfRequirements ++ assumptions ++
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = srsSWHS,
   _kind        = Doc.srs,
@@ -184,7 +184,7 @@ si = SI {
   _outputs     = map qw [tempW, watE],     --outputs
   _constraints = map cnstrw constrained ++ map cnstrw [tempW, watE], --constrained
   _constants   = piConst : specParamValList,
-  _sysinfodb   = symbMap,
+  _systemdb   = symbMap,
   _usedinfodb  = usedDB
 }
 

@@ -17,13 +17,13 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 srs :: Document
 srs = mkDoc mkSRS S.forT si
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = hghc,
   _kind        = Doc.srs,
@@ -40,7 +40,7 @@ si = SI {
   _outputs     = htOutputs,
   _constraints = [] :: [ConstrainedChunk],
   _constants   = [],
-  _sysinfodb   = symbMap,
+  _systemdb   = symbMap,
   _usedinfodb  = usedDB
 }
   

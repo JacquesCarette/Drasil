@@ -50,7 +50,7 @@ import Theory.Drasil (TheoryModel)
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
@@ -130,7 +130,7 @@ projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles"
 projectileTitle :: CI
 projectileTitle = commonIdea "projectileTitle" (pn "Projectile") "Projectile" []
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = projectileTitle,
   _kind        = Doc.srs,
@@ -147,7 +147,7 @@ si = SI {
   _outputs     = outputs,
   _constraints = map cnstrw constrained,
   _constants   = constants,
-  _sysinfodb   = symbMap,
+  _systemdb   = symbMap,
   _usedinfodb  = usedDB
 }
 

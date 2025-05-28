@@ -8,7 +8,7 @@ module Database.Drasil.ChunkDB (
   -- * Types
   -- ** 'ChunkDB'
   -- | Main database type
-  ChunkDB(CDB, symbolTable, termTable, defTable),
+  ChunkDB(CDB, symbolTable, termTable, conceptChunkTable),
   -- ** Maps
   -- | Exported for external use.
   RefbyMap, TraceMap, UMap,
@@ -134,7 +134,7 @@ unitLookup = uMapLookup "Unit" "UnitMap"
 
 -- | Looks up a 'UID' in the definition table from the 'ChunkDB'. If nothing is found, an error is thrown.
 defResolve :: ChunkDB -> UID -> ConceptChunk
-defResolve m x = uMapLookup "Concept" "ConceptMap" x $ defTable m
+defResolve m x = uMapLookup "Concept" "ConceptMap" x $ conceptChunkTable m
 
 -- | Looks up a 'UID' in the datadefinition table. If nothing is found, an error is thrown.
 datadefnLookup :: UID -> DatadefnMap -> DataDefinition
@@ -166,8 +166,8 @@ asOrderedList = map fst . sortOn snd . map snd . Map.toList
 data ChunkDB = CDB {
   -- CHUNKS
     symbolTable           :: SymbolMap
-  , termTable             :: TermMap
-  , defTable              :: ConceptMap
+  , termTable             :: TermMap 
+  , conceptChunkTable     :: ConceptMap
   , _unitTable            :: UnitMap
   , _dataDefnTable        :: DatadefnMap
   , _insmodelTable        :: InsModelMap
@@ -204,7 +204,7 @@ cdb s t c u d ins gd tm ci lc r cits =
     -- CHUNKS
     symbolTable = symbolMap s,
     termTable = termMap $ t ++ termsHACK,
-    defTable = conceptMap c,
+    conceptChunkTable = conceptMap c,
     _unitTable = unitMap u,
     _dataDefnTable = idMap "DataDefnMap" d,
     _insmodelTable = idMap "InsModelMap" ins,

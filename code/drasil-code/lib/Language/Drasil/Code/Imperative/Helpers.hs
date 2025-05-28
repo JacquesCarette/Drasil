@@ -18,7 +18,7 @@ liftS = fmap (: [])
 
 -- | Gets the 'QuantityDict' corresponding to a 'UID'.
 lookupC :: DrasilState -> UID -> QuantityDict
-lookupC g = symbResolve (codeSpec g ^. sysinfodbO)
+lookupC g = symbResolve (codeSpec g ^. systemdbO)
 
 -- | Converts a 'ScopeType' to a 'Scope'
 convScope :: (SharedProg r) => ScopeType -> r (Scope r)

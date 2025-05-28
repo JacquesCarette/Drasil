@@ -99,12 +99,12 @@ Here is the full detail of the `Choices` data type
 the `codeSpec` is “code specification” stores the information needed by the code generator about the scientific problem being solved, in a format that is useful to the generator. 
 
 ```haskell
-codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
+codeSpec :: System -> Choices -> [Mod] -> CodeSpec
 ```
 
-The codeSpec takes SystemInformation, Choices, [Mod] as parameters and returns the CodeSpec type.
+The codeSpec takes System, Choices, [Mod] as parameters and returns the CodeSpec type.
 
-##### SystemInformation
+##### System
 the giant system information collects a multitude of pieces of information, whenever we need it, we extract the information from the system information.
 
 ##### Mod

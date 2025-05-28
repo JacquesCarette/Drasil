@@ -47,7 +47,7 @@ inputs = map dqdWr inputsWUncrtn -- :: [UncertQ]
 
 **Issue:** The `dqdWr` function (and likely other related functions) creates a new `DefinedQuantityDict` instead of simply accessing the existing one within the passed object, if applicable (for example, `ConstrConcept`, `UncertQ`, and `UnitalChunk` all contain a DQD within them at some level). Is this undesired behaviour, or a more efficient way of doing this?
 
-**Issue:** The quantities shown here should be built automatically, instead of having to be built manually here. Some investigation would need to be conducted to find out where this should be done (in `SystemInformation` maybe?).
+**Issue:** The quantities shown here should be built automatically, instead of having to be built manually here. Some investigation would need to be conducted to find out where this should be done (in `System` maybe?).
 
 In every one of these cases, its use is to combine quantities of different types into one list of `DefinedQuantityDict`s.
 

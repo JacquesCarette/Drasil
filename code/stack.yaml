@@ -45,7 +45,7 @@ packages:
 - drasil-build
 - drasil-code
 - drasil-codeLang
-- drasil-sysinfo
+- drasil-system
 - drasil-theory
 - drasil-database
 - drasil-printers

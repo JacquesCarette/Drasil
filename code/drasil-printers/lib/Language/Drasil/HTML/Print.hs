@@ -28,7 +28,7 @@ import Language.Drasil.HTML.CSS (linkCSS)
 
 import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
 import Language.Drasil.Printing.Import (makeDocument)
-import Language.Drasil.Printing.AST (Spec (Ch), ItemType(Flat, Nested),
+import Language.Drasil.Printing.AST (Spec(Ch), ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, Fence(Curly, Paren, Abs, Norm),
   Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)),
   Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label,
@@ -39,8 +39,7 @@ import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title,
   Citation(Cite), BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..), Tags)
 import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sufxPrint)
-import Language.Drasil.Printing.Import.Helpers
-  (lookupT, lookupS, lookupP)
+import Language.Drasil.Printing.Import.Helpers (lookupP, lookupS, lookupT)
 import qualified Language.Drasil.Printing.Import.Sentence as L (spec)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb)
 

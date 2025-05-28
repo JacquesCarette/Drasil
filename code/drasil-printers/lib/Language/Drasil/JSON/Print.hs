@@ -30,8 +30,7 @@ import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat, co
  tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv, 
  markdownB, markdownB', markdownE, markdownE', markdownCell, codeCell)
 import qualified Language.Drasil.Printing.Import as L (spec)
-import Language.Drasil.Printing.Import.Helpers
-  (lookupT, lookupS, lookupP)
+import Language.Drasil.Printing.Import.Helpers (lookupP, lookupS, lookupT)
 import Control.Lens ((^.))
 
 -- | Generate a python notebook document (using json).
@@ -129,7 +128,7 @@ pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr 
     invalid = ['<', '>']
     escapeChars '&' = "\\&"
     escapeChars c = [c]
-pSpec (Ch sm L.TermStyle caps s) = pSpec $ L.spec sm $ lookupT (sm ^. ckdb) s caps
+pSpec (Ch sm L.TermStyle  caps s) = pSpec $ L.spec sm $ lookupT (sm ^. ckdb) s caps
 pSpec (Ch sm L.ShortStyle caps s) = pSpec $ L.spec sm $ lookupS (sm ^. ckdb) s caps
 pSpec (Ch sm L.PluralTerm caps s) = pSpec $ L.spec sm $ lookupP (sm ^. ckdb) s caps
 pSpec (Sp s)    = text $ unPH $ L.special s

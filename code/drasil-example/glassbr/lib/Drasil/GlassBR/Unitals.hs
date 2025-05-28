@@ -123,8 +123,9 @@ glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)
 outputs :: [QuantityDict]
 outputs = map qw [isSafePb, isSafeLR] ++ [qw probBr, qw stressDistFac]
 
+-- | Symbols uniquely relevant to theory models.
 tmSymbols :: [QuantityDict]
-tmSymbols = map qw [probFail, pbTolfail] ++ map qw [isSafeProb, isSafeLoad]
+tmSymbols = map qw [probFail, pbTolfail]
 
 probBr, probFail, pbTolfail, stressDistFac :: ConstrainedChunk
 probBr = cvc "probBr" (nounPhraseSP "probability of breakage")

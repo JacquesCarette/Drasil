@@ -5,8 +5,6 @@ import Prelude hiding (print, (<>))
 import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 
-import Database.Drasil (ChunkDB)
-
 import qualified Language.Drasil as L
 
 import Language.Drasil.Format (DocType(Lesson))
@@ -25,14 +23,15 @@ import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (th, bold, reflinkInfo)
-import Language.Drasil.HTML.Print(renderCite, OpenClose(Open, Close), fence,
+import Language.Drasil.HTML.Print (renderCite, OpenClose(Open, Close), fence,
   htmlBibFormatter)
 
 import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat, codeformat,
  tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv, 
  markdownB, markdownB', markdownE, markdownE', markdownCell, codeCell)
 import qualified Language.Drasil.Printing.Import as L (spec)
-import Language.Drasil.Printing.Import.Helpers (lookupP, lookupS, lookupT)
+import Language.Drasil.Printing.Import.Helpers (termStyleLookup)
+
 import Control.Lens ((^.))
 
 -- | Generate a python notebook document (using json).
@@ -131,7 +130,7 @@ pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr 
     escapeChars '&' = "\\&"
     escapeChars c = [c]
 pSpec (Ch sm st caps s) = pSpec $ L.spec sm $
-  (termStyleLookup st) (sm ^. ckdb) s caps
+  termStyleLookup st (sm ^. ckdb) s caps
 pSpec (Sp s)    = text $ unPH $ L.special s
 pSpec HARDNL    = empty
 pSpec (Ref Internal r a)      = reflink     r $ pSpec a
@@ -295,11 +294,6 @@ pItem (Nested s l) _ = vcat [nbformat $ text "- " <> pSpec s, makeList l True]
 sItem :: ItemType -> Doc
 sItem (Flat s)     = pSpec s
 sItem (Nested s l) = vcat [pSpec s, makeList l False]
-
-termStyleLookup :: L.SentenceStyle -> ChunkDB -> L.UID -> L.TermCapitalization -> L.Sentence
-termStyleLookup L.PluralTerm = lookupP
-termStyleLookup L.ShortStyle = lookupS
-termStyleLookup L.TermStyle  = lookupT
 
 -- | Renders figures in HTML
 makeFigure :: Doc -> Maybe Doc -> Doc -> L.MaxWidthPercent -> Doc

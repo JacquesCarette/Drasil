@@ -10,7 +10,7 @@ import Data.List.Utils (replace)
 import qualified Language.Drasil as L
 import qualified Language.Drasil.Printing.Import.Sentence as L (spec)
 import Language.Drasil.Printing.Import (makeProject)
-import Language.Drasil.Printing.Import.Helpers (lookupP, lookupS, lookupT)
+import Language.Drasil.Printing.Import.Helpers (termStyleLookup)
 import Language.Drasil.Printing.AST (ItemType(Flat, Nested),  
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, 
   Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, E, Ch, (:+:)), Label, 
@@ -108,9 +108,7 @@ printLO _ CodeBlock {}           = empty
 -- | Helper for rendering Specs into Markdown
 pSpec :: RefMap -> Spec -> Doc
 pSpec _ (E e)      = text "\\\\(" <> pExpr e <> text "\\\\)"
-pSpec rm (Ch sm L.TermStyle  caps s) = pSpec rm $ L.spec sm $ lookupT (sm ^. ckdb) s caps
-pSpec rm (Ch sm L.ShortStyle caps s) = pSpec rm $ L.spec sm $ lookupS (sm ^. ckdb) s caps
-pSpec rm (Ch sm L.PluralTerm caps s) = pSpec rm $ L.spec sm $ lookupP (sm ^. ckdb) s caps
+pSpec rm (Ch sm st caps s) = pSpec rm $ L.spec sm $ termStyleLookup st (sm ^. ckdb) s caps
 pSpec rm (a :+: b) = pSpec rm a <> pSpec rm b
 pSpec _ HARDNL     = text "\n"
 pSpec rm (Ref Internal       r a) = reflink     rm r (pSpec rm a)

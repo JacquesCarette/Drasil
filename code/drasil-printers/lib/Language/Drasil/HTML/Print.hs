@@ -39,7 +39,7 @@ import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title,
   Citation(Cite), BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..), Tags)
 import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sufxPrint)
-import Language.Drasil.Printing.Import.Helpers (lookupP, lookupS, lookupT)
+import Language.Drasil.Printing.Import.Helpers (termStyleLookup, lookupS)
 import qualified Language.Drasil.Printing.Import.Sentence as L (spec)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb)
 
@@ -146,10 +146,9 @@ pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr 
     invalid = ['<', '>']
     escapeChars '&' = "\\&"
     escapeChars c = [c]
-pSpec (Ch sm L.TermStyle caps s) = pSpec $ L.spec sm $ lookupT (sm ^. ckdb) s caps
 pSpec (Ch sm L.ShortStyle caps s) = spanTag' (pSpec (Ch sm L.TermStyle caps s))
   (pSpec $ L.spec sm $ lookupS (sm ^. ckdb) s caps)
-pSpec (Ch sm L.PluralTerm caps s) = pSpec $ L.spec sm $ lookupP (sm ^. ckdb) s caps
+pSpec (Ch sm st caps s) = pSpec $ L.spec sm $ termStyleLookup st (sm ^. ckdb) s caps
 pSpec (Sp s)    = text $ unPH $ L.special s
 pSpec HARDNL    = text "<br />"
 pSpec (Ref Internal r a)       = reflink     r $ pSpec a

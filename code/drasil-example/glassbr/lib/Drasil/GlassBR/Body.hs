@@ -1,6 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.GlassBR.Body where
 
+import Data.List ((\\))
 import Control.Lens ((^.))
 import Language.Drasil hiding (organization, section, variable)
 import Drasil.SRSDocument
@@ -133,7 +134,7 @@ background = foldlSent_ [phrase explosion, S "in downtown areas are dangerous fr
 
 symbMap :: ChunkDB
 symbMap = cdb thisSymbols (map nw thisSymbols ++ map nw con
-  ++ map nw con' ++ map nw terms ++ map nw doccon ++ map nw doccon' ++ map nw educon
+  ++ map nw con' ++ (map nw terms \\ map nw thisSymbols) ++ map nw doccon ++ map nw doccon' ++ map nw educon
   ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon'
   ++ map nw softwarecon ++ [nw lateralLoad, nw materialProprty]
    ++ [nw distance, nw algorithm] ++

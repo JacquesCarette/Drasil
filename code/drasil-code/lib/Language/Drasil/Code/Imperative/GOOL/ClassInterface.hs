@@ -16,6 +16,7 @@ import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
 import Drasil.GOOL (ProgData, GOOLState)
 
 import Text.PrettyPrint.HughesPJ (Doc)
+import Language.Drasil.Printers (PrintingInformation)
 
 -- | Members of this class must have all the information necessary for
 -- the 'AuxiliarySym' in addition to information necessary to create a package.
@@ -31,7 +32,7 @@ class AuxiliarySym r where
   type AuxHelper r
   doxConfig :: String -> GOOLState -> Verbosity -> r (Auxiliary r)
   readMe ::  ReadMeInfo -> r (Auxiliary r)
-  sampleInput :: ChunkDB -> DataDesc -> [Expr] -> r (Auxiliary r)
+  sampleInput :: PrintingInformation ->ChunkDB -> DataDesc -> [Expr] -> r (Auxiliary r)
 
   optimizeDox :: r (AuxHelper r)
 

@@ -23,6 +23,7 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (doxConfigName,
 
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(Auxiliary, AuxHelper, auxHelperDoc, auxFromData))
 import Language.Drasil.Code.Imperative.ReadMe.Import (ReadMeInfo(..))
+import Language.Drasil.Printers (PrintingInformation)
   
 -- | Defines a Doxygen configuration file.
 doxConfig :: (AuxiliarySym r) => r (AuxHelper r) -> String ->
@@ -35,9 +36,9 @@ readMe :: (AuxiliarySym r) => ReadMeInfo -> r (Auxiliary r)
 readMe rmi= auxFromData readMeName (makeReadMe rmi)
 
 -- | Defines a sample input file.
-sampleInput :: (AuxiliarySym r) => ChunkDB -> DataDesc -> [Expr] ->
+sampleInput :: (AuxiliarySym r) => PrintingInformation -> ChunkDB -> DataDesc -> [Expr] ->
   r (Auxiliary r)
-sampleInput db d sd = auxFromData sampleInputName (makeInputFile db d sd)
+sampleInput sm db d sd = auxFromData sampleInputName (makeInputFile sm db d sd)
 
 -- | Defines a Makefile.
 makefile :: (AuxiliarySym r) => Maybe BuildConfig -> Maybe Runnable ->

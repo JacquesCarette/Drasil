@@ -53,8 +53,8 @@ genTeX L.Notebook{} _ = TP.empty
 buildStd :: PrintingInformation -> L.ShowTableOfContents -> Document -> D
 buildStd sm toC (Document t a c) =
   genPreamble c %%
-  title (spec t) %%
-  author (spec a) %%
+  title (spec sm t) %%
+  author (spec sm a) %%
   case toC of 
     L.ToC -> document (maketitle %% maketoc %% newpage %% print sm c) -- includes ToC generation
     _ -> document (maketitle %% newpage %% print sm c) -- omits ToC generation
@@ -62,20 +62,20 @@ buildStd sm toC (Document t a c) =
 -- clean until here; lo needs its sub-functions fixed first though
 -- | Helper for converting layout objects into a more printable form.
 lo :: LayoutObj -> PrintingInformation -> D
-lo (Header d t l)         _ = sec d (spec t) %% label (spec l)
+lo (Header d t l)        sm = sec d (spec sm t) %% label (spec sm l)
 lo (HDiv _ con _)        sm = print sm con -- FIXME ignoring 2 arguments?
-lo (Paragraph contents)   _ = toText $ newline (spec contents)
-lo (EqnBlock contents)    _ = makeEquation contents
-lo (Table _ rows r bl t)  _ = toText $ makeTable rows (spec r) bl (spec t)
-lo (Definition _ ssPs l) sm = toText $ makeDefn sm ssPs $ spec l
-lo (List l)               _ = toText $ makeList l
-lo (Figure r c f wp)      _ = toText $ makeFigure (spec r) (maybe empty spec c) f wp
+lo (Paragraph contents)  sm = toText $ newline (spec sm contents)
+lo (EqnBlock contents)   sm = makeEquation sm contents
+lo (Table _ rows r bl t) sm = toText $ makeTable sm rows (spec sm r) bl (spec sm t)
+lo (Definition _ ssPs l) sm = toText $ makeDefn sm ssPs $ spec sm l
+lo (List l)              sm = toText $ makeList sm l
+lo (Figure r c f wp)     sm = toText $ makeFigure (spec sm r) (maybe empty (spec sm) c) f wp
 lo (Bib bib)             sm = toText $ makeBib sm bib
-lo (Graph ps w h c l)    _  = toText $ makeGraph
-  (map (bimap spec spec) ps)
+lo (Graph ps w h c l)    sm = toText $ makeGraph
+  (map (bimap (spec sm) (spec sm)) ps)
   (pure $ text $ maybe "" (\x -> "text width = " ++ show x ++ "em ,") w)
   (pure $ text $ maybe "" (\x -> "minimum height = " ++ show x ++ "em, ") h)
-  (spec c) (spec l)
+  (spec sm c) (spec sm l)
 lo (Cell _) _               = empty
 lo (CodeBlock _) _          = empty
 
@@ -211,53 +211,53 @@ cases e catf esc f = catf esc (map _case e)
 
 -- | Prints a table. Takes in data for the table, a label,
 -- a boolean that determines if the caption is shown, and a caption.
-makeTable :: [[Spec]] -> D -> Bool -> D -> D
-makeTable [] _ _ _ = error "Completely empty table (not even header)"
-makeTable [_] _ _ _ = empty -- table with no actual contents... don't error
-makeTable lls@(h:tlines) r bool t = mkEnv "longtblr" ($+$) $
+makeTable :: PrintingInformation -> [[Spec]] -> D -> Bool -> D -> D
+makeTable _  [] _ _ _ = error "Completely empty table (not even header)"
+makeTable _  [_] _ _ _ = empty -- table with no actual contents... don't error
+makeTable sm lls@(h:tlines) r bool t = mkEnv "longtblr" ($+$) $
   (if bool then sq $ pure (text "caption=") <> br t else empty)
   %% br (pure (text "colspec=") <> br (pure $ text $ unwords $ anyBig lls)
     <> pure (text ", rowhead=1, hline{1,Z}=\\heavyrulewidth, hline{2}=\\lightrulewidth"))
-  %% makeHeaders h
-  %% makeRows tlines
+  %% makeHeaders sm h
+  %% makeRows sm tlines
   %% label r
   where
     descr True  = "X[l]"
     descr False = "l"
     --returns "X[l]" for columns with long fields
     anyBig = map (descr . longColumn) . transpose
-    longColumn = any (\x -> specLength x > 50)
+    longColumn = any (\x -> specLength sm x > 50)
 
 -- | Determines the length of a 'Spec'.
-specLength :: Spec -> Int
-specLength (E x)       = length $ filter (`notElem` dontCount) $ TP.render $ runPrint (pExpr x) Curr
-specLength (S x)       = length x
-specLength (Ch sm st caps s) = specLength $ I.spec sm $ termStyleLookup st (sm ^. ckdb) s caps
-specLength (a :+: b)   = specLength a + specLength b
-specLength (Sp _)      = 1
-specLength (Ref Internal r _) = length r
-specLength (Ref (Cite2 n)   r i ) = length r + specLength i + specLength n --may need to change?
-specLength (Ref External _ t) = specLength t
-specLength EmptyS      = 0
-specLength (Quote q)   = 4 + specLength q
-specLength HARDNL      = 0
+specLength :: PrintingInformation -> Spec -> Int
+specLength _  (E x)       = length $ filter (`notElem` dontCount) $ TP.render $ runPrint (pExpr x) Curr
+specLength _  (S x)       = length x
+specLength sm (Ch st caps s) = specLength sm $ I.spec sm $ termStyleLookup st (sm ^. ckdb) s caps
+specLength sm (a :+: b)   = specLength sm a + specLength sm b
+specLength _  (Sp _)      = 1
+specLength _  (Ref Internal r _) = length r
+specLength sm (Ref (Cite2 n)   r i ) = length r + specLength sm i + specLength sm n --may need to change?
+specLength sm (Ref External _ t) = specLength sm t
+specLength _  EmptyS      = 0
+specLength sm (Quote q)   = 4 + specLength sm q
+specLength _  HARDNL      = 0
 
 -- | Invalid characters, not included in an expression.
 dontCount :: String
 dontCount = "\\/[]{}()_^$:"
 
 -- | Creates the header for a table.
-makeHeaders :: [Spec] -> D
-makeHeaders ls = hpunctuate (text " & ") (map (bold . spec) ls) %% pure dbs
+makeHeaders :: PrintingInformation -> [Spec] -> D
+makeHeaders sm ls = hpunctuate (text " & ") (map (bold . spec sm) ls) %% pure dbs
 
 -- | Create rows for a table with a single line break between them.
-makeRows :: [[Spec]] -> D
-makeRows [] = mempty
-makeRows lls = foldr1 ((%%) . (%% pure dbs)) $ map makeColumns lls
+makeRows :: PrintingInformation -> [[Spec]] -> D
+makeRows _  [] = mempty
+makeRows sm lls = foldr1 ((%%) . (%% pure dbs)) $ map (makeColumns sm) lls
 
 -- | Creates the columns for a table.
-makeColumns :: [Spec] -> D
-makeColumns ls = hpunctuate (text " & ") $ map spec ls
+makeColumns :: PrintingInformation -> [Spec] -> D
+makeColumns sm ls = hpunctuate (text " & ") $ map (spec sm) ls
 
 ------------------ Spec -----------------------------------
 
@@ -274,30 +274,30 @@ needs EmptyS    = Text
 needs (Quote _) = Text
 
 -- | Prints all 'Spec's.
-spec :: Spec -> D
-spec a@(s :+: t) = s' <> t'
+spec :: PrintingInformation -> Spec -> D
+spec sm a@(s :+: t) = s' <> t'
   where
     ctx = const $ needs a
-    s' = switch ctx $ spec s
-    t' = switch ctx $ spec t
-spec (E ex) = toMath $ pExpr ex
-spec (S s)  = either error (pure . text . concatMap escapeChars) $ L.checkValidStr s invalid
+    s' = switch ctx $ spec sm s
+    t' = switch ctx $ spec sm t
+spec _  (E ex) = toMath $ pExpr ex
+spec _  (S s)  = either error (pure . text . concatMap escapeChars) $ L.checkValidStr s invalid
   where
     invalid = ['&', '#', '$', '%', '&', '~', '^', '\\', '{', '}']
     escapeChars '_' = "\\_"
     escapeChars '&' = "\\&"
     escapeChars c = [c]
-spec (Ch sm st caps s) = spec $ I.spec sm $ termStyleLookup st (sm ^. ckdb) s caps 
-spec (Sp s) = pure $ text $ unPL $ L.special s
-spec HARDNL = command0 "newline"
-spec (Ref Internal r sn) = snref r (spec sn)
-spec (Ref (Cite2 n) r _) = cite r (info n)
+spec sm  (Ch st caps s) = spec sm $ I.spec sm $ termStyleLookup st (sm ^. ckdb) s caps 
+spec _  (Sp s) = pure $ text $ unPL $ L.special s
+spec _  HARDNL = command0 "newline"
+spec sm  (Ref Internal r sn) = snref r (spec sm sn)
+spec sm  (Ref (Cite2 n) r _) = cite r (info sm n)
   where
-    info EmptyS = Nothing
-    info x      = Just (spec x)
-spec (Ref External r sn) = externalref r (spec sn)
-spec EmptyS              = empty
-spec (Quote q)           = quote $ spec q
+    info _ EmptyS = Nothing
+    info a x      = Just (spec a x)
+spec sm (Ref External r sn) = externalref r (spec sm sn)
+spec _  EmptyS              = empty
+spec sm (Quote q)           = quote $ spec sm q
 
 -- | Determines the needed context of a symbol.
 symbolNeeds :: LD.Symbol -> MathContext
@@ -366,8 +366,8 @@ makeDRows sm ls      = foldl1 (%%) $ map (\(f, d) ->
 -----------------------------------------------------------------
 
 -- | Prints an equation.
-makeEquation :: Spec -> D
-makeEquation contents = toEqn $ spec contents
+makeEquation :: PrintingInformation -> Spec -> D
+makeEquation sm contents = toEqn $ spec sm contents
 
   --TODO: Add auto-generated labels -> Need to be able to ensure labeling based
   --  on chunk (i.e. "eq:h_g" for h_g = ...
@@ -380,45 +380,45 @@ makeEquation contents = toEqn $ spec contents
 -- empty lists here isn't quite wrong (though there should probably be
 -- a warning higher up), so don't generate bad latex.
 -- | Prints a list. LaTeX doesn't like empty lists, so those are rendered as 'empty'.
-makeList :: ListType -> D
-makeList (Simple []   )      = empty
-makeList (Desc []   )        = empty
-makeList (Unordered []   )   = empty
-makeList (Ordered []   )     = empty
-makeList (Definitions []   ) = empty
-makeList (Simple items)      = description' $ vcat $ simItem items
-makeList (Desc items)        = description  $ vcat $ simItem items
-makeList (Unordered items)   = itemize      $ vcat $ map plItem items
-makeList (Ordered items)     = enumerate    $ vcat $ map plItem items
-makeList (Definitions items) = symbDescription $ vcat $ defItem items
+makeList :: PrintingInformation -> ListType -> D
+makeList _  (Simple []   )      = empty
+makeList _  (Desc []   )        = empty
+makeList _  (Unordered []   )   = empty
+makeList _  (Ordered []   )     = empty
+makeList _  (Definitions []   ) = empty
+makeList sm (Simple items)      = description' $ vcat $ simItem sm items
+makeList sm (Desc items)        = description  $ vcat $ simItem sm items
+makeList sm (Unordered items)   = itemize      $ vcat $ map (plItem sm) items
+makeList sm (Ordered items)     = enumerate    $ vcat $ map (plItem sm) items
+makeList sm (Definitions items) = symbDescription $ vcat $ defItem sm items
 
 -- | Helper that renders items in 'makeList'.
-plItem :: (ItemType,Maybe Label) -> D
-plItem (i, l) = mlref l <> pItem i
+plItem :: PrintingInformation -> (ItemType,Maybe Label) -> D
+plItem sm (i, l) = mlref sm l <> pItem sm i
 
 -- | Helper that renders the 'Spec' part of labels in 'mlref'.
-lspec :: Spec -> D  -- FIXME: Should be option rolled in to spec
-lspec (S s) = pure $ text s
-lspec r = spec r
+lspec :: PrintingInformation -> Spec -> D  -- FIXME: Should be option rolled in to spec
+lspec _  (S s) = pure $ text s
+lspec sm r = spec sm r
 
 -- | Helper that renders labels in 'plItem'. 
-mlref :: Maybe Label -> D
-mlref = maybe empty $ (<>) (command0 "phantomsection") . label . lspec
+mlref :: PrintingInformation -> Maybe Label -> D
+mlref sm = maybe empty $ (<>) (command0 "phantomsection") . label . lspec sm
 
 -- | Helper that renders items in 'plItem'.
-pItem :: ItemType -> D
-pItem (Flat s) = item $ spec s
-pItem (Nested t s) = vcat [item $ spec t, makeList s]
+pItem :: PrintingInformation -> ItemType -> D
+pItem sm (Flat s) = item $ spec sm s
+pItem sm (Nested t s) = vcat [item $ spec sm t, makeList sm s]
 
 -- | Helper that renders simple and descriptive items in 'makeList'.
-simItem :: [(Spec,ItemType,Maybe Label)] -> [D]
-simItem = map (\(x,y,l) -> item' (spec (x :+: S ":") <> mlref l) $ sp_item y)
-  where sp_item (Flat s) = spec s
-        sp_item (Nested t s) = vcat [spec t, makeList s]
+simItem :: PrintingInformation -> [(Spec,ItemType,Maybe Label)] -> [D]
+simItem sm = map (\(x,y,l) -> item' (spec sm (x :+: S ":") <> mlref sm l) $ sp_item y)
+  where sp_item (Flat s) = spec sm s
+        sp_item (Nested t s) = vcat [spec sm t, makeList sm s]
 
 -- | Helper that renders definitions in 'makeList'.
-defItem :: [(Spec, ItemType,Maybe Label)] -> [D]
-defItem = map (\(x,y,l) -> item $ mlref l <> spec (x :+: S " is the " :+: d_item y))
+defItem :: PrintingInformation -> [(Spec, ItemType,Maybe Label)] -> [D]
+defItem sm = map (\(x,y,l) -> item $ mlref sm l <> spec sm (x :+: S " is the " :+: d_item y))
   where d_item (Flat s) = s
         d_item (Nested _ _) = error "Cannot use sublists in definitions"
 -----------------------------------------------------------------
@@ -495,28 +495,28 @@ showT L.Unpublished   = "@unpublished"
 
 -- | Renders different citation fields.
 showBibTeX :: PrintingInformation -> CiteField -> D
-showBibTeX  _ (Address      s) = showField "address" s
-showBibTeX sm (Author       p) = showField "author" (rendPeople sm p)
-showBibTeX  _ (BookTitle    b) = showField "booktitle" b
-showBibTeX  _ (Chapter      c) = showField "chapter" (wrapS c)
-showBibTeX  _ (Edition      e) = showField "edition" (wrapS e)
-showBibTeX sm (Editor       e) = showField "editor" (rendPeople sm e)
-showBibTeX  _ (Institution  i) = showField "institution" i
-showBibTeX  _ (Journal      j) = showField "journal" j
-showBibTeX  _ (Month        m) = showFieldRaw "month" (bibTeXMonth m)
-showBibTeX  _ (Note         n) = showField "note" n
-showBibTeX  _ (Number       n) = showField "number" (wrapS n)
-showBibTeX  _ (Organization o) = showField "organization" o
-showBibTeX sm (Pages        p) = showField "pages" (I.spec sm $ L.foldNums "--" p)
-showBibTeX  _ (Publisher    p) = showField "publisher" p
-showBibTeX  _ (School       s) = showField "school" s
-showBibTeX  _ (Series       s) = showField "series" s
-showBibTeX  _ (Title        t) = showField "title" t
-showBibTeX  _ (Type         t) = showField "type" t
-showBibTeX  _ (Volume       v) = showField "volume" (wrapS v)
-showBibTeX  _ (Year         y) = showField "year" (wrapS y)
-showBibTeX  _ (HowPublished (URL  u)) = showFieldCom "url" "howpublished" u
-showBibTeX  _ (HowPublished (Verb v)) = showField "howpublished" v
+showBibTeX sm (Address      s) = showField sm    "address" s
+showBibTeX sm (Author       p) = showField sm    "author" (rendPeople sm p)
+showBibTeX sm (BookTitle    b) = showField sm    "booktitle" b
+showBibTeX sm (Chapter      c) = showField sm    "chapter" (wrapS c)
+showBibTeX sm (Edition      e) = showField sm    "edition" (wrapS e)
+showBibTeX sm (Editor       e) = showField sm    "editor" (rendPeople sm e)
+showBibTeX sm (Institution  i) = showField sm    "institution" i
+showBibTeX sm (Journal      j) = showField sm    "journal" j
+showBibTeX sm (Month        m) = showFieldRaw sm "month" (bibTeXMonth m)
+showBibTeX sm (Note         n) = showField sm    "note" n
+showBibTeX sm (Number       n) = showField sm    "number" (wrapS n)
+showBibTeX sm (Organization o) = showField sm    "organization" o
+showBibTeX sm (Pages        p) = showField sm    "pages" (I.spec sm $ L.foldNums "--" p)
+showBibTeX sm (Publisher    p) = showField sm    "publisher" p
+showBibTeX sm (School       s) = showField sm    "school" s
+showBibTeX sm (Series       s) = showField sm    "series" s
+showBibTeX sm (Title        t) = showField sm    "title" t
+showBibTeX sm (Type         t) = showField sm    "type" t
+showBibTeX sm (Volume       v) = showField sm    "volume" (wrapS v)
+showBibTeX sm (Year         y) = showField sm    "year" (wrapS y)
+showBibTeX sm (HowPublished (URL  u)) = showFieldCom sm "url" "howpublished" u
+showBibTeX sm (HowPublished (Verb v)) = showField sm "howpublished" v
 
 --showBibTeX sm (Author p@(Person {_convention=Mono}:_)) = showField "author"
   -- (LS.spec sm (rendPeople p)) :+: S ",\n" :+:
@@ -527,22 +527,22 @@ showBibTeX  _ (HowPublished (Verb v)) = showField "howpublished" v
 data FieldWrap = Braces | NoDelimiters | Command String
 
 -- | Helper that renders citation fields with a wrapper.
-wrapField :: FieldWrap -> String -> Spec -> D
-wrapField fw f s = pure (text (f ++ "=")) <> resolve fw (spec s)
+wrapField :: PrintingInformation -> FieldWrap -> String -> Spec -> D
+wrapField sm fw f s = pure (text (f ++ "=")) <> resolve fw (spec sm s)
   where
     resolve Braces       = br
     resolve NoDelimiters = id
     resolve (Command st) = br . commandD st
 
-showField, showFieldRaw :: String -> Spec -> D
+showField, showFieldRaw :: PrintingInformation -> String -> Spec -> D
 -- | Helper that renders citation fields wrapped with braces.
-showField    = wrapField Braces
+showField sm    = wrapField sm Braces
 -- | Helper that renders citation fields with no delimiters.
-showFieldRaw = wrapField NoDelimiters
+showFieldRaw sm = wrapField sm NoDelimiters
 
 -- | Helper that renders citation fields with a command.
-showFieldCom   :: String -> String -> Spec -> D
-showFieldCom s = wrapField (Command s)
+showFieldCom   :: PrintingInformation -> String -> String -> Spec -> D
+showFieldCom sm s = wrapField sm (Command s)
 
 -- | Helper that renders people for citations.
 rendPeople :: PrintingInformation -> L.People -> Spec

@@ -53,7 +53,7 @@ data OpenClose = Open | Close
 
 -- | Generate an HTML document from a Drasil 'Document'.
 genHTML :: PrintingInformation -> String -> L.Document -> Doc
-genHTML sm fn doc = build fn (makeDocument sm doc)
+genHTML sm fn doc = build sm fn (makeDocument sm doc)
 --         ^^ -- should really be of type Filename, but that's not in scope
 
 -- TODO: Use our JSON printer here to create this code snippet.
@@ -77,14 +77,14 @@ mathJaxScript =
 
 -- HTML printer doesn't need to know if there is a table of contents or not.
 -- | Build the HTML Document, called by 'genHTML'.
-build :: String -> Document -> Doc
-build fn (Document t a c) =
+build :: PrintingInformation -> String -> Document -> Doc
+build sm fn (Document t a c) =
   text "<!DOCTYPE html>" $$
-  html (headTag (linkCSS fn $$ title (titleSpec t) $$
+  html (headTag (linkCSS fn $$ title (titleSpec sm t) $$
   text "<meta charset=\"utf-8\">" $$
   mathJaxScript) $$
-  body (articleTitle (pSpec t) $$ author (pSpec a)
-  $$ print c
+  body (articleTitle (pSpec sm t) $$ author (pSpec sm a)
+  $$ print sm c
   ))
 
 -- | Helper for rendering a 'D' from Latex print.
@@ -92,71 +92,73 @@ printMath :: D -> Doc
 printMath = (`runPrint` Math)
 
 -- | Helper for rendering layout objects ('LayoutObj's) into HTML.
-printLO :: LayoutObj -> Doc
+printLO :: PrintingInformation -> LayoutObj -> Doc
 -- FIXME: could be hacky
-printLO (HDiv ["equation"] layoutObs EmptyS)  = vcat (map printLO layoutObs)
+printLO sm (HDiv ["equation"] layoutObs EmptyS)  = vcat (map (printLO sm) layoutObs)
 -- Creates delimeters to be used for mathjax displayed equations
 -- Latex print sets up a \begin{displaymath} environment instead of this
-printLO (EqnBlock contents)    = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
+printLO sm (EqnBlock contents)    = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec sm contents
   where
     toMathHelper (PL g) = PL (\_ -> g Math)
     mjDelimDisp d = text "\\[" <> d <> text "\\]"
 -- Non-mathjax
 -- printLO (EqnBlock contents) = pSpec contents
-printLO (HDiv ts layoutObs EmptyS)  = divTag ts (vcat (map printLO layoutObs))
-printLO (HDiv ts layoutObs l)  = refwrap (pSpec l) $
-                                 divTag ts (vcat (map printLO layoutObs))
-printLO (Paragraph contents)   = paragraph $ pSpec contents
-printLO (Table ts rows r b t)  = makeTable ts rows (pSpec r) b (pSpec t)
-printLO (Definition dt ssPs l) = makeDefn dt ssPs (pSpec l)
-printLO (Header n contents _)  = h (n + 1) $ pSpec contents -- FIXME
-printLO (List t)               = makeList t
-printLO (Figure r c f wp)      = makeFigure (pSpec r) (fmap pSpec c) (text f) wp
-printLO (Bib bib)              = makeBib bib
-printLO Graph{}                = empty -- FIXME
-printLO Cell{}                 = empty
-printLO CodeBlock{}            = empty
+printLO sm (HDiv ts layoutObs EmptyS)  = divTag ts 
+                                      (vcat (map (printLO sm) layoutObs))
+printLO sm (HDiv ts layoutObs l)      = refwrap (pSpec sm l) $
+                                      divTag ts (vcat (map (printLO sm) layoutObs))
+printLO sm (Paragraph contents)       = paragraph $ pSpec sm contents
+printLO sm (Table ts rows r b t)      = makeTable sm ts rows (pSpec sm r) b (pSpec sm t)
+printLO sm (Definition dt ssPs l)     = makeDefn sm dt ssPs (pSpec sm l)
+printLO sm (Header n contents _)      = h (n + 1) $ pSpec sm contents -- FIXME
+printLO sm (List t)                    = makeList sm t
+printLO sm (Figure r c f wp)          = makeFigure 
+                                      (pSpec sm r) (fmap (pSpec sm) c) (text f) wp
+printLO sm (Bib bib)                   = makeBib sm bib
+printLO _ Graph{}                     = empty -- FIXME
+printLO _ Cell{}                      = empty
+printLO _ CodeBlock{}                 = empty
 
 
 -- | Called by build, uses 'printLO' to render the layout
 -- objects in 'Doc' format.
-print :: [LayoutObj] -> Doc
-print = foldr (($$) . printLO) empty
+print :: PrintingInformation -> [LayoutObj] -> Doc
+print sm = foldr (($$) . printLO sm) empty
 
 -----------------------------------------------------------------
 --------------------BEGIN SPEC PRINTING--------------------------
 -----------------------------------------------------------------
 -- | Renders the title of the document. Different than body rendering
 -- because newline can't be rendered in an HTML title.
-titleSpec :: Spec -> Doc
-titleSpec (a :+: b) = titleSpec a <> titleSpec b
-titleSpec HARDNL    = empty
-titleSpec s         = pSpec s
+titleSpec :: PrintingInformation -> Spec -> Doc
+titleSpec sm (a :+: b) = titleSpec sm a <> titleSpec sm b
+titleSpec _  HARDNL    = empty
+titleSpec sm s         = pSpec sm s
 
 -- | Renders the Sentences ('Spec's) in the HTML body (called by 'printLO').
-pSpec :: Spec -> Doc
+pSpec :: PrintingInformation -> Spec -> Doc
 -- Non-mathjax
-pSpec (E e)  = em $ pExpr e
+pSpec _ (E e)  = em $ pExpr e
 -- Latex based math for expressions and units
 -- pSpec (E e)     = printMath $ toMath $ TeX.pExpr e
 -- pSpec (Sy s)    = printMath $ TeX.pUnit s
-pSpec (a :+: b) = pSpec a <> pSpec b
-pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr s invalid
+pSpec sm (a :+: b) = pSpec sm a <> pSpec sm b
+pSpec _  (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr s invalid
   where
     invalid = ['<', '>']
     escapeChars '&' = "\\&"
     escapeChars c = [c]
-pSpec (Ch sm L.ShortStyle caps s) = spanTag' (pSpec (Ch sm L.TermStyle caps s))
-  (pSpec $ L.spec sm $ lookupS (sm ^. ckdb) s caps)
-pSpec (Ch sm st caps s) = pSpec $ L.spec sm $ termStyleLookup st (sm ^. ckdb) s caps
-pSpec (Sp s)    = text $ unPH $ L.special s
-pSpec HARDNL    = text "<br />"
-pSpec (Ref Internal r a)       = reflink     r $ pSpec a
-pSpec (Ref (Cite2 EmptyS) r a) = reflink     r $ pSpec a -- no difference for citations?
-pSpec (Ref (Cite2 n)   r a)    = reflinkInfo r (pSpec a) (pSpec n) -- no difference for citations?
-pSpec (Ref External r a)       = reflinkURI  r $ pSpec a
-pSpec EmptyS    = text "" -- Expected in the output
-pSpec (Quote q) = doubleQuotes $ pSpec q
+pSpec sm (Ch L.ShortStyle caps s) = spanTag' (pSpec sm (Ch L.TermStyle caps s))
+  (pSpec sm $ L.spec sm $ lookupS (sm ^. ckdb) s caps)
+pSpec sm (Ch st caps s) = pSpec sm $ L.spec sm $ termStyleLookup st (sm ^. ckdb) s caps
+pSpec _  (Sp s)    = text $ unPH $ L.special s
+pSpec _  HARDNL    = text "<br />"
+pSpec sm (Ref Internal r a)       = reflink     r $ pSpec sm a
+pSpec sm (Ref (Cite2 EmptyS) r a) = reflink     r $ pSpec sm a -- no difference for citations?
+pSpec sm (Ref (Cite2 n)   r a)    = reflinkInfo r (pSpec sm a) (pSpec sm n) -- no difference for citations?
+pSpec sm (Ref External r a)       = reflinkURI  r $ pSpec sm a
+pSpec _  EmptyS    = text "" -- Expected in the output
+pSpec sm (Quote q) = doubleQuotes $ pSpec sm q
 --pSpec (Acc Grave c) = text $ '&' : c : "grave;" --Only works on vowels.
 --pSpec (Acc Acute c) = text $ '&' : c : "acute;" --Only works on vowels.
 
@@ -278,70 +280,70 @@ fence _     Norm  = "||"
 -----------------------------------------------------------------
 
 -- | Renders an HTML table, called by 'printLO'.
-makeTable :: Tags -> [[Spec]] -> Doc -> Bool -> Doc -> Doc
-makeTable _ [] _ _ _       = error "No table to print (see PrintHTML)"
-makeTable ts (l:lls) r b t = refwrap r (table ts (
-    tr (makeHeaderCols l) $$ makeRows lls) $$ if b then caption t else empty)
+makeTable :: PrintingInformation -> Tags -> [[Spec]] -> Doc -> Bool -> Doc -> Doc
+makeTable _ _ [] _ _ _       = error "No table to print (see PrintHTML)"
+makeTable sm ts (l:lls) r b t = refwrap r (table ts (
+    tr (makeHeaderCols sm l) $$ makeRows sm lls) $$ if b then caption t else empty)
 
 -- | Helper for creating table rows.
-makeRows :: [[Spec]] -> Doc
-makeRows = foldr (($$) . tr . makeColumns) empty
+makeRows :: PrintingInformation -> [[Spec]] -> Doc
+makeRows sm = foldr (($$) . tr . makeColumns sm) empty
 
-makeColumns, makeHeaderCols :: [Spec] -> Doc
+makeColumns, makeHeaderCols :: PrintingInformation -> [Spec] -> Doc
 -- | Helper for creating table header row (each of the column header cells).
-makeHeaderCols = vcat . map (th . pSpec)
+makeHeaderCols sm = vcat . map (th . pSpec sm)
 
 -- | Helper for creating table columns.
-makeColumns = vcat . map (td . pSpec)
+makeColumns sm = vcat . map (td . pSpec sm)
 
 -----------------------------------------------------------------
 ------------------BEGIN DEFINITION PRINTING----------------------
 -----------------------------------------------------------------
 
 -- | Renders definition tables (Data, General, Theory, etc.).
-makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
-makeDefn _ [] _  = error "L.Empty definition"
-makeDefn dt ps l = refwrap l $ table [dtag dt]
-  (tr (th (text "Refname") $$ td (bold l)) $$ makeDRows ps)
+makeDefn :: PrintingInformation -> L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
+makeDefn _ _ [] _   = error "L.Empty definition"
+makeDefn sm dt ps l = refwrap l $ table [dtag dt]
+  (tr (th (text "Refname") $$ td (bold l)) $$ makeDRows sm ps)
   where dtag L.General  = "gdefn"
         dtag L.Instance = "idefn"
         dtag L.Theory   = "tdefn"
         dtag L.Data     = "ddefn"
 
 -- | Helper for making the definition table rows.
-makeDRows :: [(String,[LayoutObj])] -> Doc
-makeDRows []         = error "No fields to create defn table"
-makeDRows [(f,d)] = tr (th (text f) $$ td (vcat $ map printLO d))
-makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ map printLO d)) $$ makeDRows ps
+makeDRows :: PrintingInformation -> [(String,[LayoutObj])] -> Doc
+makeDRows _  []         = error "No fields to create defn table"
+makeDRows sm [(f,d)] = tr (th (text f) $$ td (vcat $ map (printLO sm) d))
+makeDRows sm ((f,d):ps) = tr (th (text f) $$ td (vcat $ map (printLO sm) d)) $$ makeDRows sm ps
 
 -----------------------------------------------------------------
 ------------------BEGIN LIST PRINTING----------------------------
 -----------------------------------------------------------------
 
 -- | Renders lists in HTML.
-makeList :: ListType -> Doc -- FIXME: ref id's should be folded into the li
-makeList (Simple items) = divTag ["list"] $
-  vcat $ map (\(b,e,l) -> pa $ mlref l $ pSpec b <> text ": "
-  <> pItem e) items
-makeList (Desc items)   = divTag ["list"] $
-  vcat $ map (\(b,e,l) -> pa $ mlref l $ ba $ pSpec b
-  <> text ": " <> pItem e) items
-makeList (Ordered items) = ol ["list"] (vcat $ map
-  (li . \(i,l) -> mlref l $ pItem i) items)
-makeList (Unordered items) = ul ["list"] (vcat $ map
-  (li . \(i,l) -> mlref l $ pItem i) items)
-makeList (Definitions items) = ul ["hide-list-style-no-indent"] $
-  vcat $ map (\(b,e,l) -> li $ mlref l $ pSpec b <> text " is the"
-  <+> pItem e) items
+makeList :: PrintingInformation -> ListType -> Doc -- FIXME: ref id's should be folded into the li
+makeList sm (Simple items) = divTag ["list"] $
+  vcat $ map (\(b,e,l) -> pa $ mlref sm l $ pSpec sm b <> text ": "
+  <> pItem sm e) items
+makeList sm (Desc items)   = divTag ["list"] $
+  vcat $ map (\(b,e,l) -> pa $ mlref sm l $ ba $ pSpec sm b
+  <> text ": " <> pItem sm e) items
+makeList sm (Ordered items) = ol ["list"] (vcat $ map
+  (li . \(i,l) -> mlref sm l $ pItem sm i) items)
+makeList sm (Unordered items) = ul ["list"] (vcat $ map
+  (li . \(i,l) -> mlref sm l $ pItem sm i) items)
+makeList sm (Definitions items) = ul ["hide-list-style-no-indent"] $
+  vcat $ map (\(b,e,l) -> li $ mlref sm l $ pSpec sm b <> text " is the"
+  <+> pItem sm e) items
 
 -- | Helper for setting up references.
-mlref :: Maybe Label -> Doc -> Doc
-mlref = maybe id $ refwrap . pSpec
+mlref :: PrintingInformation -> Maybe Label -> Doc -> Doc
+mlref sm = maybe id $ refwrap . pSpec sm
 
 -- | Helper for rendering list items.
-pItem :: ItemType -> Doc
-pItem (Flat s)     = pSpec s
-pItem (Nested s l) = vcat [pSpec s, makeList l]
+pItem :: PrintingInformation -> ItemType -> Doc
+pItem sm (Flat s)     = pSpec sm s
+pItem sm (Nested s l) = vcat [pSpec sm s, makeList sm l]
 
 -----------------------------------------------------------------
 ------------------BEGIN FIGURE PRINTING--------------------------
@@ -360,15 +362,15 @@ makeRefList l a = refwrap' "dt" l (brackets $ bold l) $$ dd a
 -- **THE MAIN FUNCTION**
 
 -- | Makes a bilbliography for the document.
-makeBib :: BibRef -> Doc
-makeBib = dl ["reference-list"] . vcat .
-  map (uncurry makeRefList . renderCite htmlBibFormatter)
+makeBib :: PrintingInformation -> BibRef -> Doc
+makeBib sm = dl ["reference-list"] . vcat .
+  map (uncurry makeRefList . renderCite (htmlBibFormatter sm))
 
 -- | HTML specific bib rendering functions
-htmlBibFormatter :: BibFormatter
-htmlBibFormatter = BibFormatter {
+htmlBibFormatter :: PrintingInformation -> BibFormatter
+htmlBibFormatter sm = BibFormatter {
   emph = em,
-  spec = pSpec
+  spec = pSpec sm
 }
 
 -- | For when we add other things to reference like website, newspaper

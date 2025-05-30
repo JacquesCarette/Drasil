@@ -295,7 +295,6 @@ This section simplifies the original problem and helps in developing the theoret
 \item[cartSys:\phantomsection\label{cartSys}]{A Cartesian coordinate system is used.}
 \item[cartSysR:\phantomsection\label{cartSysR}]{The Cartesian coordinate system is right-handed where positive $x$-axis and $y$-axis point right up.}
 \item[yAxisDir:\phantomsection\label{yAxisDir}]{The direction of the $y$-axis is directed opposite to gravity.}
-\item[startOrigin:\phantomsection\label{startOrigin1x}]{The pendulum is attached to the origin.}
 \item[startOrigin:\phantomsection\label{startOrigin2x}]{The first rod is attached to the origin.}
 \item[firstPend:\phantomsection\label{firstPend}]{The first rod has two sides. One side attaches to the origin. Another side attaches to the first object.}
 \item[secondPend:\phantomsection\label{secondPend}]{The second rod has two sides. One side attaches to the first object. Another side attaches to the second object.}
@@ -1555,90 +1554,88 @@ The purpose of the traceability matrices is to provide easy references on what h
 
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions}]
-{colspec={l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}} & \textbf{\hyperref[startOrigin1x]{A:startOrigin}} & \textbf{\hyperref[startOrigin2x]{A:startOrigin}} & \textbf{\hyperref[firstPend]{A:firstPend}} & \textbf{\hyperref[secondPend]{A:secondPend}}
+{colspec={l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}} & \textbf{\hyperref[startOrigin2x]{A:startOrigin}} & \textbf{\hyperref[firstPend]{A:firstPend}} & \textbf{\hyperref[secondPend]{A:secondPend}}
 \\
-\hyperref[twoDMotion]{A:twoDMotion} &  &  &  &  &  &  &  & 
+\hyperref[twoDMotion]{A:twoDMotion} &  &  &  &  &  &  & 
 \\
-\hyperref[cartSys]{A:cartSys} &  &  &  &  &  &  &  & 
+\hyperref[cartSys]{A:cartSys} &  &  &  &  &  &  & 
 \\
-\hyperref[cartSysR]{A:cartSysR} &  &  &  &  &  &  &  & 
+\hyperref[cartSysR]{A:cartSysR} &  &  &  &  &  &  & 
 \\
-\hyperref[yAxisDir]{A:yAxisDir} &  &  &  &  &  &  &  & 
+\hyperref[yAxisDir]{A:yAxisDir} &  &  &  &  &  &  & 
 \\
-\hyperref[startOrigin1x]{A:startOrigin} &  &  &  &  &  &  &  & 
+\hyperref[startOrigin2x]{A:startOrigin} &  &  &  &  &  &  & 
 \\
-\hyperref[startOrigin2x]{A:startOrigin} &  &  &  &  &  &  &  & 
+\hyperref[firstPend]{A:firstPend} &  &  &  &  &  &  & 
 \\
-\hyperref[firstPend]{A:firstPend} &  &  &  &  &  &  &  & 
-\\
-\hyperref[secondPend]{A:secondPend} &  &  &  &  &  &  &  & 
+\hyperref[secondPend]{A:secondPend} &  &  &  &  &  &  & 
 \label{Table:TraceMatAvsA}
 \end{longtblr}
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Assumptions and Other Items}]
-{colspec={l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}} & \textbf{\hyperref[startOrigin1x]{A:startOrigin}} & \textbf{\hyperref[startOrigin2x]{A:startOrigin}} & \textbf{\hyperref[firstPend]{A:firstPend}} & \textbf{\hyperref[secondPend]{A:secondPend}}
+{colspec={l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}} & \textbf{\hyperref[startOrigin2x]{A:startOrigin}} & \textbf{\hyperref[firstPend]{A:firstPend}} & \textbf{\hyperref[secondPend]{A:secondPend}}
 \\
-\hyperref[DD:positionGDD]{DD:positionGDD} &  &  &  &  &  &  &  & 
+\hyperref[DD:positionGDD]{DD:positionGDD} &  &  &  &  &  &  & 
 \\
-\hyperref[DD:positionXDD1]{DD:positionXDD1} &  &  &  &  &  &  &  & 
+\hyperref[DD:positionXDD1]{DD:positionXDD1} &  &  &  &  &  &  & 
 \\
-\hyperref[DD:positionYDD1]{DD:positionYDD1} &  &  &  &  &  &  &  & 
+\hyperref[DD:positionYDD1]{DD:positionYDD1} &  &  &  &  &  &  & 
 \\
-\hyperref[DD:positionXDD2]{DD:positionXDD2} &  &  &  &  &  &  &  & 
+\hyperref[DD:positionXDD2]{DD:positionXDD2} &  &  &  &  &  &  & 
 \\
-\hyperref[DD:positionYDD2]{DD:positionYDD2} &  &  &  &  &  &  &  & 
+\hyperref[DD:positionYDD2]{DD:positionYDD2} &  &  &  &  &  &  & 
 \\
-\hyperref[DD:accelerationGDD]{DD:accelerationGDD} &  &  &  &  &  &  &  & 
+\hyperref[DD:accelerationGDD]{DD:accelerationGDD} &  &  &  &  &  &  & 
 \\
-\hyperref[DD:forceGDD]{DD:forceGDD} &  &  &  &  &  &  &  & 
+\hyperref[DD:forceGDD]{DD:forceGDD} &  &  &  &  &  &  & 
 \\
-\hyperref[TM:acceleration]{TM:acceleration} &  &  &  &  &  &  &  & 
+\hyperref[TM:acceleration]{TM:acceleration} &  &  &  &  &  &  & 
 \\
-\hyperref[TM:velocity]{TM:velocity} &  &  &  &  &  &  &  & 
+\hyperref[TM:velocity]{TM:velocity} &  &  &  &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot} &  &  &  &  &  &  &  & 
+\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot} &  &  &  &  &  &  & 
 \\
-\hyperref[GD:velocityX1]{GD:velocityX1} &  &  &  &  &  &  &  & 
+\hyperref[GD:velocityX1]{GD:velocityX1} &  &  &  &  &  &  & 
 \\
-\hyperref[GD:velocityY1]{GD:velocityY1} &  &  &  &  &  &  &  & 
+\hyperref[GD:velocityY1]{GD:velocityY1} &  &  &  &  &  &  & 
 \\
-\hyperref[GD:velocityX2]{GD:velocityX2} &  &  &  &  &  &  &  & 
+\hyperref[GD:velocityX2]{GD:velocityX2} &  &  &  &  &  &  & 
 \\
-\hyperref[GD:velocityY2]{GD:velocityY2} &  &  &  &  &  &  &  & 
+\hyperref[GD:velocityY2]{GD:velocityY2} &  &  &  &  &  &  & 
 \\
-\hyperref[GD:accelerationX1]{GD:accelerationX1} &  &  &  &  &  &  &  & 
+\hyperref[GD:accelerationX1]{GD:accelerationX1} &  &  &  &  &  &  & 
 \\
-\hyperref[GD:accelerationY1]{GD:accelerationY1} &  &  &  &  &  &  &  & 
+\hyperref[GD:accelerationY1]{GD:accelerationY1} &  &  &  &  &  &  & 
 \\
-\hyperref[GD:accelerationX2]{GD:accelerationX2} &  &  &  &  &  &  &  & 
+\hyperref[GD:accelerationX2]{GD:accelerationX2} &  &  &  &  &  &  & 
 \\
-\hyperref[GD:accelerationY2]{GD:accelerationY2} &  &  &  &  &  &  &  & 
+\hyperref[GD:accelerationY2]{GD:accelerationY2} &  &  &  &  &  &  & 
 \\
-\hyperref[GD:xForce1]{GD:xForce1} &  &  &  &  &  &  &  & 
+\hyperref[GD:xForce1]{GD:xForce1} &  &  &  &  &  &  & 
 \\
-\hyperref[GD:yForce1]{GD:yForce1} &  &  &  &  &  &  &  & 
+\hyperref[GD:yForce1]{GD:yForce1} &  &  &  &  &  &  & 
 \\
-\hyperref[GD:xForce2]{GD:xForce2} &  &  &  &  &  &  &  & 
+\hyperref[GD:xForce2]{GD:xForce2} &  &  &  &  &  &  & 
 \\
-\hyperref[GD:yForce2]{GD:yForce2} &  &  &  &  &  &  &  & 
+\hyperref[GD:yForce2]{GD:yForce2} &  &  &  &  &  &  & 
 \\
-\hyperref[IM:calOfAngle1]{IM:calOfAngle1} &  &  &  &  &  &  &  & 
+\hyperref[IM:calOfAngle1]{IM:calOfAngle1} &  &  &  &  &  &  & 
 \\
-\hyperref[IM:calOfAngle2]{IM:calOfAngle2} &  &  &  &  &  &  &  & 
+\hyperref[IM:calOfAngle2]{IM:calOfAngle2} &  &  &  &  &  &  & 
 \\
-\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  & 
+\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  & 
 \\
-\hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  & 
+\hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  &  &  &  & 
 \\
-\hyperref[calcAng]{FR:Calculate-Angle-Of-Rod} &  &  &  &  &  &  &  & 
+\hyperref[calcAng]{FR:Calculate-Angle-Of-Rod} &  &  &  &  &  &  & 
 \\
-\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  & 
 \\
-\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  & 
+\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  & 
 \\
-\hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  & 
+\hyperref[portable]{NFR:Portability} &  &  &  &  &  &  & 
 \label{Table:TraceMatAvsAll}
 \end{longtblr}
 \begin{longtblr}

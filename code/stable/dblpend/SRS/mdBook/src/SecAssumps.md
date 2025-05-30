@@ -18,10 +18,6 @@ cartSysR: The Cartesian coordinate system is right-handed where positive \\(x\\)
 
 yAxisDir: The direction of the \\(y\\)-axis is directed opposite to gravity.
 
-<div id="startOrigin1x"></div>
-
-startOrigin: The pendulum is attached to the origin.
-
 <div id="startOrigin2x"></div>
 
 startOrigin: The first rod is attached to the origin.

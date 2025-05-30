@@ -1,6 +1,6 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPend.Assumptions (twoDMotion, cartSys, cartSysR,
-  yAxisDir, startOriginSingle, startOriginDouble, firstPend, secondPend, assumpSingle, assumpDouble) where
+  yAxisDir, startOriginDouble, firstPend, secondPend, assumpBasic, assumpDouble) where
     
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -8,26 +8,22 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (assumpDom) 
 import Data.Drasil.Concepts.Math (cartesian, xAxis, yAxis, direction, origin, positive)
-import Data.Drasil.Concepts.Physics (gravity, twoD, pendulum)
+import Data.Drasil.Concepts.Physics (gravity, twoD)
 import Drasil.DblPend.Concepts (pendMotion, firstRod, secondRod, firstObject, secondObject)
 
 assumpBasic :: [ConceptInstance]
 assumpBasic = [twoDMotion, cartSys, cartSysR, yAxisDir]
 
-assumpSingle :: [ConceptInstance]
-assumpSingle = assumpBasic ++ [startOriginSingle]
-
 assumpDouble :: [ConceptInstance]
-assumpDouble = assumpSingle ++ [startOriginDouble, firstPend, secondPend]
+assumpDouble = assumpBasic ++ [startOriginDouble, firstPend, secondPend]
 
-twoDMotion, cartSys, cartSysR, yAxisDir, startOriginSingle, startOriginDouble,
+twoDMotion, cartSys, cartSysR, yAxisDir, startOriginDouble,
   firstPend, secondPend:: ConceptInstance 
 
 twoDMotion        = cic "twoDMotion"    twoDMotionDesc          "twoDMotion"    assumpDom
 cartSys           = cic "cartSys"       cartSysDesc             "cartSys"       assumpDom
 cartSysR          = cic "cartSysR"      cartSysRDesc            "cartSysR"      assumpDom
 yAxisDir          = cic "yAxisDir"      yAxisDirDesc            "yAxisDir"      assumpDom
-startOriginSingle = cic "startOrigin1x" startOriginDescSingle   "startOrigin"   assumpDom
 startOriginDouble = cic "startOrigin2x" startOriginDescDouble   "startOrigin"   assumpDom
 firstPend         = cic "firstPend"     firstPendDesc           "firstPend"     assumpDom
 secondPend        = cic "secondPend"    secondPendDesc          "secondPend"    assumpDom
@@ -47,9 +43,6 @@ yAxisDirDesc = atStartNP (direction `the_ofThe` yAxis) `S.is` S "directed opposi
 
 startOriginDescDouble :: Sentence
 startOriginDescDouble = atStartNP (the firstRod) `S.is` S "attached" `S.toThe` (phrase origin !.)
-
-startOriginDescSingle :: Sentence
-startOriginDescSingle = atStartNP (the pendulum) `S.is` S "attached" `S.toThe` (phrase origin !.)
 
 firstPendDesc :: Sentence
 firstPendDesc = foldlSent[

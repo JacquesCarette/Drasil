@@ -9,14 +9,13 @@ digraph allvsr {
 	cartSys	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSys"];
 	cartSysR	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSysR"];
 	yAxisDir	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:yAxisDir"];
-	startOrigin1x	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:startOrigin1x"];
 	startOrigin2x	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:startOrigin2x"];
 	firstPend	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:firstPend"];
 	secondPend	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:secondPend"];
 
 	subgraph A {
 	rank="same"
-	{twoDMotion, cartSys, cartSysR, yAxisDir, startOrigin1x, startOrigin2x, firstPend, secondPend}
+	{twoDMotion, cartSys, cartSysR, yAxisDir, startOrigin2x, firstPend, secondPend}
 	}
 
 	dataDefn:velocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionGDD"];

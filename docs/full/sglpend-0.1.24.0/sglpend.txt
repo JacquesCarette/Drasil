@@ -9,6 +9,9 @@
 @package sglpend
 @version 0.1.24.0
 
+module Drasil.SglPend.Assumptions
+assumpSingle :: [ConceptInstance]
+
 module Drasil.SglPend.Figures
 figMotion :: LabelledContent
 sysCtxFig1 :: LabelledContent

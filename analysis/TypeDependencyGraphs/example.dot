@@ -199,6 +199,8 @@ digraph alltypes {
 	}
 	subgraph main {
 	}
+	subgraph asumptionss {
+	}
 	subgraph body {
 	}
 	subgraph datadefs {

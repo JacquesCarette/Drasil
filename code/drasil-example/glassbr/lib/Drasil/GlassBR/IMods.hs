@@ -25,7 +25,7 @@ iMods = [risk, strDisFac, nonFL, dimLL, tolPre, tolStrDisFac, probOfBreak,
 
 symb :: [UnitalChunk]
 symb = [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram,
-  ucuc standOffDist metre, demand] -- this is temporary
+  ucuc standOffDist metre] -- this is temporary
 -- ++
  -- [dqdQd (qw calofDemand) demandq]
 

@@ -35,6 +35,7 @@ import Data.List (sortOn)
 import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Map as Map
 import Utils.Drasil (invert)
+import Debug.Trace (traceWith, trace)
 
 -- | The misnomers below (for the following Map types) are not actually a bad thing. We want to ensure data can't
 -- be added to a map if it's not coming from a chunk, and there's no point confusing
@@ -79,28 +80,28 @@ type ReferenceMap = UMap Reference
 type CitationMap = UMap Citation
 
 -- | General chunk database map constructor. Creates a 'UMap' from a function that converts something with 'UID's into another type and a list of something with 'UID's.
-cdbMap :: HasUID a => (a -> b) -> [a] -> Map.Map UID (b, Int)
-cdbMap fn = Map.fromList . map (\(x,y) -> (x ^. uid, (fn x, y))) . flip zip [1..]
+cdbMap :: HasUID a => String -> (a -> b) -> [a] -> Map.Map UID (b, Int)
+cdbMap mn fn = Map.fromListWithKey (\k pv nv -> trace ("'" ++ show k ++ "' is inserted twice in '" ++ mn ++ "'!") nv) . map (\(x,y) -> (x ^. uid, (fn x, y))) . flip zip [1..]
 
 -- | Smart constructor for a 'SymbolMap'.
 symbolMap :: (Quantity c, MayHaveUnit c) => [c] -> SymbolMap
-symbolMap = cdbMap qw
+symbolMap cs = cdbMap "SymbolMap" qw $ traceWith (show . map (^. uid)) cs
 
 -- | Smart constructor for a 'TermMap'.
 termMap :: (Idea c) => [c] -> TermMap
-termMap = cdbMap nw
+termMap = cdbMap "TermMap" nw
 
 -- | Smart constructor for a 'ConceptMap'.
 conceptMap :: (Concept c) => [c] -> ConceptMap
-conceptMap = cdbMap cw
+conceptMap = cdbMap "ConceptMap" cw
 
 -- | Smart constructor for a 'UnitMap'.
 unitMap :: (IsUnit u) => [u] -> UnitMap
-unitMap = cdbMap unitWrapper
+unitMap = cdbMap "UnitMap" unitWrapper
 
 -- | General smart constructor for making a 'UMap' out of anything that has a 'UID'. 
-idMap :: HasUID a => [a] -> Map.Map UID (a, Int)
-idMap = cdbMap id
+idMap :: HasUID a => String -> [a] -> Map.Map UID (a, Int)
+idMap mn = cdbMap mn id
 
 -- | Smart constructor for a 'TraceMap' given a traceability matrix.
 traceMap :: [(UID, [UID])] -> TraceMap
@@ -145,7 +146,7 @@ insmodelLookup = uMapLookup "InstanceModel" "InsModelMap"
 
 -- | Looks up a 'UID' in the general definition table. If nothing is found, an error is thrown.
 gendefLookup :: UID -> GendefMap -> GenDefn
-gendefLookup = uMapLookup "GenDefn" "GenDefnMap" 
+gendefLookup = uMapLookup "GenDefn" "GenDefnMap"
 
 -- | Looks up a 'UID' in the theory model table. If nothing is found, an error is thrown.
 theoryModelLookup :: UID -> TheoryModelMap -> TheoryModel
@@ -198,24 +199,24 @@ cdb :: (Quantity q, MayHaveUnit q, Concept c, IsUnit u) =>
     [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
     [GenDefn] -> [TheoryModel] -> [ConceptInstance] ->
     [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
-cdb s t c u d ins gd tm ci lc r cits = 
+cdb s t c u d ins gd tm ci lc r cits =
   CDB {
     -- CHUNKS
     symbolTable = symbolMap s,
     termTable = termMap $ t ++ termsHACK,
     conceptChunkTable = conceptMap c,
     _unitTable = unitMap u,
-    _dataDefnTable = idMap d,
-    _insmodelTable = idMap ins,
-    _gendefTable = idMap gd,
-    _theoryModelTable = idMap tm,
-    _conceptinsTable = idMap ci,
-    _citationTable = idMap cits,
+    _dataDefnTable = idMap "DataDefnMap" d,
+    _insmodelTable = idMap "InsModelMap" ins,
+    _gendefTable = idMap "GenDefnmap" gd,
+    _theoryModelTable = idMap "TheoryModelMap" tm,
+    _conceptinsTable = idMap "ConcInsMap" ci,
+    _citationTable = idMap "CiteMap" cits,
     -- NOT CHUNKS
-    _labelledcontentTable = idMap lc,
+    _labelledcontentTable = idMap "LLCMap" lc,
     _traceTable = Map.empty,
     _refbyTable = Map.empty,
-    _refTable = idMap r
+    _refTable = idMap "RefMap" r
   }
   where
     termsHACK = map nw d

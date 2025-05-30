@@ -42,7 +42,7 @@ implies f = [S "and this implies that there are no", f]
 --(line 52 was added for assumption6)
 
 assumpOTDesc = allObject (plural CP.rigidBody)
-assumpODDesc = allObject (getAcc twoD)
+assumpODDesc = allObject (short twoD)
 assumpCSTDesc = [S "The library uses a", phrase CM.cartesian]
 assumpADDesc = [S "The axes are defined using", phrase CM.rightHand]
 assumpCTDesc = [S "All", plural CP.rigidBody, plural CP.collision,
@@ -51,7 +51,7 @@ assumpCTDesc = [S "All", plural CP.rigidBody, plural CP.collision,
 assumpDIDesc = thereNo [phrase CP.damping] ++ implies (phrase CP.friction +:+ plural CP.force)
 assumpCAJIDesc = thereNo [plural CM.constraint, plural CP.joint]
 
-{-assumptions_list = enumSimple 1 (getAcc assumption) $ map (foldlSent) 
+{-assumptions_list = enumSimple 1 (short assumption) $ map (foldlSent) 
   [assumpOTDesc, assumpODDesc, assumpCSTDesc, assumpADDesc, assumpCTDesc, 
   assumpDIDesc, assumpCAJIDesc]-}
 

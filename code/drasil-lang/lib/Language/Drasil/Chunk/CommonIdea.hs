@@ -6,13 +6,12 @@ module Language.Drasil.Chunk.CommonIdea (
   -- * Constructors
   commonIdea, commonIdeaWithDict,
   -- * Functions
-  getAcc, prependAbrv) where
+  prependAbrv) where
 
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nc)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
  CommonIdea(abrv), ConceptDomain(cdom))
 import Language.Drasil.NounPhrase.Core (NP)
-import Language.Drasil.Sentence (Sentence(S))
 import Drasil.Database.UID (UID, HasUID(uid))
 
 import Utils.Drasil (repUnd)
@@ -48,9 +47,6 @@ commonIdea s np = CI (nc s np)
 commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
 commonIdeaWithDict x y z = commonIdea x y z . map (^.uid)
 
--- | Get abbreviation in 'Sentence' form from a 'CI'.
-getAcc :: CI -> Sentence
-getAcc = S . abrv
 
 -- | Prepends the abbreviation from a 'CommonIdea' to a 'String'.
 prependAbrv :: CommonIdea c => c -> String -> String

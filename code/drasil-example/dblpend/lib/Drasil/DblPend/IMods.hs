@@ -56,7 +56,7 @@ angleIM_1 = imNoRefs angleMK_1
    qwUC pendDisAngle_2]
   (qw pendDisAngle_1) []
   Nothing "calOfAngle1" [foldlSent [ch pendDisAngle_1 `S.is`
-      S "calculated by solving the", getAcc ode, S "here together with the initial",
+      S "calculated by solving the", short ode, S "here together with the initial",
       plural condition `S.and_` refS angleIM_2]]
 
 angleMK_1 :: ModelKind Expr
@@ -77,7 +77,7 @@ angleIM_2 = imNoRefs angleMK_2
    qwUC pendDisAngle_2]
   (qw pendDisAngle_2) []
   (Just angleDeriv_2) "calOfAngle2" [foldlSent [ch pendDisAngle_2 `S.is`
-      S "calculated by solving the", getAcc ode, S "here together with the initial",
+      S "calculated by solving the", short ode, S "here together with the initial",
       plural condition `S.and_` refS angleIM_1]]
 
 angleMK_2 :: ModelKind Expr

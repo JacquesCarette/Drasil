@@ -122,7 +122,7 @@ ftGlass = glassTypeHelper fullyT
 hsGlass = glassTypeHelper heatS
 
 glassTypeHelper :: CI -> Sentence
-glassTypeHelper t = getAcc t `S.is` phrase t +:+. phrase glass
+glassTypeHelper t = short t `S.is` phrase t +:+. phrase glass
 
 calofDemandDesc :: Sentence
 calofDemandDesc =

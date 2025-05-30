@@ -35,7 +35,7 @@ rectVelGD = gd (equationalModel' rectVelQD) (getUnit projSpeed) (Just rectVelDer
 
 rectVelQD :: ModelQDef
 rectVelQD = mkQuantDef' projSpeed (nounPhraseSent $ foldlSent_ 
-            [atStart rectilinear, sParen $ getAcc oneD, phrase velocity,
+            [atStart rectilinear, sParen $ short oneD, phrase velocity,
              S "as a function" `S.of_` phraseNP (time `for` QP.constAccel)])
             E.speed'
 
@@ -59,7 +59,7 @@ rectPosGD = gd (equationalModel' rectPosQD) (getUnit projPos) (Just rectPosDeriv
 
 rectPosQD :: ModelQDef
 rectPosQD = mkQuantDef' projPos (nounPhraseSent $ foldlSent_ 
-            [atStart rectilinear, sParen $ getAcc oneD, phrase position,
+            [atStart rectilinear, sParen $ short oneD, phrase position,
              S "as a function" `S.of_` phraseNP (time `for` QP.constAccel)])
             E.scalarPos'
 
@@ -84,7 +84,7 @@ velVecGD = gdNoRefs (equationalModel' velVecQD) (getUnit velocity)
 velVecQD :: ModelQDef
 velVecQD = mkQuantDef' velocity (nounPhraseSent $ foldlSent_ 
            [atStart velocity, S "vector as a function" `S.of_` phrase time `S.for`
-            getAcc twoD, S "motion under", phrase QP.constAccel]) E.velVecExpr
+            short twoD, S "motion under", phrase QP.constAccel]) E.velVecExpr
 
 velVecDeriv :: Derivation
 velVecDeriv = mkDerivName (phrase velocity +:+ phrase vector) [velVecDerivSent, 
@@ -101,7 +101,7 @@ posVecGD = gdNoRefs (equationalModel' posVecQD) (getUnit position)
 posVecQD :: ModelQDef
 posVecQD = mkQuantDef' position (nounPhraseSent $ foldlSent_ 
   [atStart position, S "vector as a function" `S.of_` phrase time `S.for`
-   getAcc twoD, S "motion under", phrase QP.constAccel])
+   short twoD, S "motion under", phrase QP.constAccel])
   E.posVecExpr
 
 posVecDeriv :: Derivation

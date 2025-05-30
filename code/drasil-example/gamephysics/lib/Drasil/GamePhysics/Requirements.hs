@@ -46,7 +46,7 @@ requirementTemplate a b x z = foldlSent [S "Determine the", a `S.and_` b,
 
 -- | with added constraint
 requirementS :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence -> Sentence
-requirementS a b = requirementTemplate (plural a) (plural b) (getAcc twoD
+requirementS a b = requirementTemplate (plural a) (plural b) (short twoD
   +:+ plural CP.rigidBody)
 
 -- | without added constraint

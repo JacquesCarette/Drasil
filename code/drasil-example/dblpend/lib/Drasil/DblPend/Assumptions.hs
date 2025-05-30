@@ -29,7 +29,7 @@ firstPend         = cic "firstPend"     firstPendDesc           "firstPend"     
 secondPend        = cic "secondPend"    secondPendDesc          "secondPend"    assumpDom
 
 twoDMotionDesc :: Sentence
-twoDMotionDesc = atStartNP (the pendMotion) `S.is` phrase twoD +:+. sParen (getAcc twoD)
+twoDMotionDesc = atStartNP (the pendMotion) `S.is` phrase twoD +:+. sParen (short twoD)
 
 cartSysDesc :: Sentence
 cartSysDesc = atStartNP (a_ cartesian) `S.is` (S "used" !.)

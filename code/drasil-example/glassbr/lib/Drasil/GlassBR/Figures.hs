@@ -37,12 +37,12 @@ traceAssumpsOthersFig = llcc (makeFigRef "TraceyAssumpsOthers") $ fig (showingCx
   (resourcePath ++ "ATrace.png")
 
 demandVsSDFig = llcc (makeFigRef "demandVSsod") $ fig ((demandq ^. defn) +:+
-  sParen (ch demand) `S.versus` atStart sD +:+ sParen (getAcc stdOffDist)
+  sParen (ch demand) `S.versus` atStart sD +:+ sParen (short stdOffDist)
   `S.versus` atStart charWeight +:+ sParen (ch charWeight))
   (resourcePath ++ "ASTM_F2248-09.png")
 
 dimlessloadVsARFig = llcc (makeFigRef "dimlessloadVSaspect") $ fig (S "Non dimensional" +:+
   phrase lateralLoad +:+ sParen (ch dimlessLoad)
-  `S.versus` titleize aspectRatio +:+ sParen (getAcc aR)
+  `S.versus` titleize aspectRatio +:+ sParen (short aR)
   `S.versus` atStart stressDistFac +:+ sParen (ch stressDistFac))
   (resourcePath ++ "ASTM_F2248-09_BeasonEtAl.png")

@@ -21,7 +21,7 @@ likelyChangesStmt1, likelyChangesStmt2, likelyChangesStmt3,
   likelyChangesStmt4 :: Sentence
 
 --these statements look like they could be parametrized
-likelyChangesStmt1 = (S "internal" +:+ getAcc CM.ode :+:
+likelyChangesStmt1 = (S "internal" +:+ short CM.ode :+:
   S "-solving" +:+ phrase algorithm +:+ S "used by the" +:+
   phrase library) `maybeChanged` S "in the future"
 

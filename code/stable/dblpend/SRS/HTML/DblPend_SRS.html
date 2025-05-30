@@ -431,16 +431,16 @@
           A pendulum consists of mass attached to the end of a rod and its moving curve is highly sensitive to initial conditions. Therefore, it is useful to have a program to simulate the motion of the pendulum to exhibit its chaotic characteristics. The document describes the program called Double Pendulum , which is based on the original, manually created version of <a href="https://github.com/Zhang-Zhi-ZZ/CAS741Project/tree/master/Double%20Pendulum">Double Pendulum</a>.
         </p>
         <p class="paragraph">
-          The following section provides an overview of the Software Requirements Specification (SRS) for Double Pendulum. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+          The following section provides an overview of the Software Requirements Specification (<span title="software requirements specification">SRS</span>) for Double Pendulum. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
         <div id="Sec:DocPurpose">
           <div class="subsection">
             <h2>Purpose of Document</h2>
             <p class="paragraph">
-              The primary purpose of this document is to record the requirements of DblPend. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of DblPend. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+              The primary purpose of this document is to record the requirements of <span title="Double Pendulum">DblPend</span>. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of <span title="Double Pendulum">DblPend</span>. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this <span title="software requirements specification">SRS</span> will remain abstract, describing what problem is being solved, but not how to solve it.
             </p>
             <p class="paragraph">
-              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
+              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the <span title="software requirements specification">SRS</span> fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
             </p>
           </div>
         </div>
@@ -448,7 +448,7 @@
           <div class="subsection">
             <h2>Scope of Requirements</h2>
             <p class="paragraph">
-              The scope of the requirements includes the analysis of a two-dimensional (2D) pendulum motion problem with various initial conditions.
+              The scope of the requirements includes the analysis of a two-dimensional (<span title="two-dimensional">2D</span>) pendulum motion problem with various initial conditions.
             </p>
           </div>
         </div>
@@ -456,7 +456,7 @@
           <div class="subsection">
             <h2>Characteristics of Intended Reader</h2>
             <p class="paragraph">
-              Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, and ordinary differential equations. The users of DblPend can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
+              Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, and ordinary differential equations. The users of <span title="Double Pendulum">DblPend</span> can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
             </p>
           </div>
         </div>
@@ -464,7 +464,7 @@
           <div class="subsection">
             <h2>Organization of Document</h2>
             <p class="paragraph">
-              The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
+              The organization of this document follows the template for an <span title="software requirements specification">SRS</span> for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
             </p>
             <p class="paragraph">
               The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>.
@@ -483,7 +483,7 @@
           <div class="subsection">
             <h2>System Context</h2>
             <p class="paragraph">
-              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (DblPend). Arrows are used to show the data flow between the system and its environment.
+              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (<span title="Double Pendulum">DblPend</span>). Arrows are used to show the data flow between the system and its environment.
             </p>
             <div id="Figure:sysCtxDiag">
               <figure>
@@ -508,7 +508,7 @@
                 </ul>
               </li>
               <li>
-                DblPend Responsibilities
+                <span title="Double Pendulum">DblPend</span> Responsibilities
                 <ul class="list">
                   <li>
                     Detect data type mismatch, such as a string of characters input instead of a floating point number.
@@ -527,7 +527,7 @@
           <div class="subsection">
             <h2>User Characteristics</h2>
             <p class="paragraph">
-              The end user of DblPend should have an understanding of high school physics, high school calculus and ordinary differential equations.
+              The end user of <span title="Double Pendulum">DblPend</span> should have an understanding of high school physics, high school calculus and ordinary differential equations.
             </p>
           </div>
         </div>
@@ -571,17 +571,21 @@
               <div class="subsubsection">
                 <h3>Physical System Description</h3>
                 <p class="paragraph">
-                  The physical system of DblPend, as shown in <a href=#Figure:dblpend>Fig:dblpend</a>, includes the following elements:
+                  The physical system of <span title="Double Pendulum">DblPend</span>, as shown in <a href=#Figure:dblpend>Fig:dblpend</a>, includes the following elements:
                 </p>
                 <div class="list">
                   <p>
-                    PS1: The first rod (with length of the first rod <em>L<sub>1</sub></em>).
+                    <span title="physical system description">PS</span>1: The first rod (with length of the first rod <em>L<sub>1</sub></em>).
                   </p>
                   <p>
-                    PS2: The second rod (with length of the second rod <em>L<sub>2</sub></em>).
+                    <span title="physical system description">PS</span>2: The second rod (with length of the second rod <em>L<sub>2</sub></em>).
                   </p>
-                  <p>PS3: The first object.</p>
-                  <p>PS4: The second object.</p>
+                  <p>
+                    <span title="physical system description">PS</span>3: The first object.
+                  </p>
+                  <p>
+                    <span title="physical system description">PS</span>4: The second object.
+                  </p>
                 </div>
                 <div id="Figure:dblpend">
                   <figure>
@@ -612,7 +616,7 @@
           <div class="subsection">
             <h2>Solution Characteristics Specification</h2>
             <p class="paragraph">
-              The instance models that govern DblPend are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+              The instance models that govern <span title="Double Pendulum">DblPend</span> are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
             </p>
             <div id="Sec:Assumps">
               <div class="subsubsection">
@@ -623,7 +627,7 @@
                 <div class="list">
                   <p>
                     <div id="twoDMotion">
-                      twoDMotion: The pendulum motion is two-dimensional (2D).
+                      twoDMotion: The pendulum motion is two-dimensional (<span title="two-dimensional">2D</span>).
                     </div>
                   </p>
                   <p>
@@ -663,7 +667,7 @@
               <div class="subsubsection">
                 <h3>Theoretical Models</h3>
                 <p class="paragraph">
-                  This section focuses on the general equations and laws that DblPend is based on.
+                  This section focuses on the general equations and laws that <span title="Double Pendulum">DblPend</span> is based on.
                 </p>
                 <div id="TM:acceleration">
                   <table class="tdefn">
@@ -2201,7 +2205,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>θ<sub>1</sub></em> is calculated by solving the ODE here together with the initial conditions and <a href=#IM:calOfAngle2>IM:calOfAngle2</a>.
+                          <em>θ<sub>1</sub></em> is calculated by solving the <span title="ordinary differential equation">ODE</span> here together with the initial conditions and <a href=#IM:calOfAngle2>IM:calOfAngle2</a>.
                         </p>
                       </td>
                     </tr>
@@ -2303,7 +2307,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>θ<sub>2</sub></em> is calculated by solving the ODE here together with the initial conditions and <a href=#IM:calOfAngle1>IM:calOfAngle1</a>.
+                          <em>θ<sub>2</sub></em> is calculated by solving the <span title="ordinary differential equation">ODE</span> here together with the initial conditions and <a href=#IM:calOfAngle1>IM:calOfAngle1</a>.
                         </p>
                       </td>
                     </tr>
@@ -2365,7 +2369,7 @@
                       <th>Var</th>
                       <th>Physical Constraints</th>
                       <th>Typical Value</th>
-                      <th>Uncert.</th>
+                      <th><span title="typical uncertainty">Uncert.</span></th>
                     </tr>
                     <tr>
                       <td><em>L<sub>1</sub></em></td>

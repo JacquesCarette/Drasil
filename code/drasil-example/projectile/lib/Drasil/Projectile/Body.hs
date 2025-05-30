@@ -113,7 +113,7 @@ justification = foldlSent [atStart projectile, phrase motion, S "is a common" +:
   S ", which is based" `S.onThe` S "original, manually created version of" +:+
   namedRef externalLinkRef (S "Projectile")]
 scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)),
-  sParen (getAcc twoD), phraseNP (combineNINI projectile motion), phrase problem, 
+  sParen (short twoD), phraseNP (combineNINI projectile motion), phrase problem, 
   S "with", phrase constAccel]
 
 externalLinkRef :: Reference

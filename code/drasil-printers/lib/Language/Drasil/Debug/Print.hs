@@ -80,7 +80,7 @@ mkTableFromLenses pin@PI { _ckdb = db } tableLens ttle hsNEs =
     nestNum = 30
 
 openTerm :: NamedIdea a => PrintingInformation -> (String, a -> Doc)
-openTerm pinfo = ("Term", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) MultiLine . phraseNP . view term)
+openTerm pinfo = ("Term", sentenceDoc pinfo (pinfo ^. ckdb) (pinfo ^. stg) MultiLine . phraseNP . view term)
 
 openSymbol :: HasSymbol a =>PrintingInformation -> (String, a -> Doc)
 openSymbol pinfo = ("Symbol", symbolDoc . flip L.symbol (pinfo ^. stg))
@@ -92,16 +92,16 @@ openAbbreviation :: Idea a => PrintingInformation -> (String, a -> Doc)
 openAbbreviation _ = ("Abbreviation", text . fromMaybe "" . getA)
 
 openDefinition :: Definition a => PrintingInformation -> (String, a -> Doc)
-openDefinition pinfo = ("Definition", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) OneLine . view defn)
+openDefinition pinfo = ("Definition", sentenceDoc pinfo (pinfo ^. ckdb) (pinfo ^. stg) OneLine . view defn)
 
 openUnitSymbol :: HasUnitSymbol a => PrintingInformation -> (String, a -> Doc)
-openUnitSymbol pinfo = ("Unit Symbol", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) OneLine . Sy . usymb)
+openUnitSymbol pinfo = ("Unit Symbol", sentenceDoc pinfo (pinfo ^. ckdb) (pinfo ^. stg) OneLine . Sy . usymb)
 
 openShortName :: HasShortName a => PrintingInformation -> (String, a -> Doc)
-openShortName pinfo = ("Short Name", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) OneLine . getSentSN . shortname)
+openShortName pinfo = ("Short Name", sentenceDoc pinfo (pinfo ^. ckdb) (pinfo ^. stg) OneLine . getSentSN . shortname)
 
 openTitle :: PrintingInformation -> (String, Section -> Doc)
-openTitle pinfo = ("Title", sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) MultiLine . tle)
+openTitle pinfo = ("Title", sentenceDoc pinfo (pinfo ^. ckdb) (pinfo ^. stg) MultiLine . tle)
 
 cntntToStr :: RawContent -> String
 cntntToStr Table {} = "Table"

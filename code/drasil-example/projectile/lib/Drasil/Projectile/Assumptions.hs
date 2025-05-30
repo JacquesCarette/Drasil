@@ -43,7 +43,7 @@ timeStartZero   = cic "timeStartZero"   timeStartZeroDesc   "timeStartZero"   as
 gravAccelValue  = cic "gravAccelValue"  gravAccelValueDesc  "gravAccelValue"  assumpDom
 
 twoDMotionDesc :: Sentence
-twoDMotionDesc = atStartNP (NP.the (projMotion `is` twoD)) +:+. sParen (getAcc twoD)
+twoDMotionDesc = atStartNP (NP.the (projMotion `is` twoD)) +:+. sParen (short twoD)
 
 cartSystDesc :: Sentence
 cartSystDesc = atStartNP (a_ cartesian) `S.is` S "used" +:+. fromSource neglectCurv

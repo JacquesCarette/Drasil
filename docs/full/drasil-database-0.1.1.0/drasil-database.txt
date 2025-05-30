@@ -38,7 +38,7 @@ type UMap a = Map UID (a, Int)
 --   
 --   <ul>
 --   <li>[<a>Quantity</a>] (for <a>SymbolMap</a>),</li>
---   <li><a>NamedIdea</a>s (for <a>TermMap</a>),</li>
+--   <li><tt>NamedIdea</tt>s (for <a>TermMap</a>),</li>
 --   <li><a>Concept</a>s (for <a>ConceptMap</a>),</li>
 --   <li>Units (something that <a>IsUnit</a> for <a>UnitMap</a>),</li>
 --   <li><a>DataDefinition</a>s (for <a>DatadefnMap</a>),</li>
@@ -52,7 +52,7 @@ cdb :: (Quantity q, MayHaveUnit q, Concept c, IsUnit u) => [q] -> [IdeaDict] -> 
 
 -- | General smart constructor for making a <a>UMap</a> out of anything
 --   that has a <a>UID</a>.
-idMap :: HasUID a => [a] -> Map UID (a, Int)
+idMap :: HasUID a => String -> [a] -> Map UID (a, Int)
 
 -- | Smart constructor for a <a>TermMap</a>.
 termMap :: Idea c => [c] -> TermMap
@@ -161,7 +161,7 @@ type UMap a = Map UID (a, Int)
 --   
 --   <ul>
 --   <li>[<a>Quantity</a>] (for <a>SymbolMap</a>),</li>
---   <li><a>NamedIdea</a>s (for <a>TermMap</a>),</li>
+--   <li><tt>NamedIdea</tt>s (for <a>TermMap</a>),</li>
 --   <li><a>Concept</a>s (for <a>ConceptMap</a>),</li>
 --   <li>Units (something that <a>IsUnit</a> for <a>UnitMap</a>),</li>
 --   <li><a>DataDefinition</a>s (for <a>DatadefnMap</a>),</li>
@@ -175,7 +175,7 @@ cdb :: (Quantity q, MayHaveUnit q, Concept c, IsUnit u) => [q] -> [IdeaDict] -> 
 
 -- | General smart constructor for making a <a>UMap</a> out of anything
 --   that has a <a>UID</a>.
-idMap :: HasUID a => [a] -> Map UID (a, Int)
+idMap :: HasUID a => String -> [a] -> Map UID (a, Int)
 
 -- | Smart constructor for a <a>TermMap</a>.
 termMap :: Idea c => [c] -> TermMap

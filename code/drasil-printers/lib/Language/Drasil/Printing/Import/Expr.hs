@@ -7,8 +7,8 @@ import Language.Drasil hiding (neg, sec, symbol, isIn, Matrix, Set)
 import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),
   AssocBoolOper(..), BoolBinOp(..), EqBinOp(..), Expr(..),
-  LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVN(..), UFuncVV(..),
-  VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..), AssocConcatOper(..), eprec, precA, precB, precC)
+  LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncCN(..), UFuncCC(..),
+  CCNBinOp(..), CCCBinOp(..), NCCBinOp(..), ESSBinOp(..), ESBBinOp(..), AssocConcatOper(..), eprec, precA, precB, precC)
 import Language.Drasil.Literal.Development (Literal(..))
 
 import qualified Language.Drasil.Printing.AST as P
@@ -45,7 +45,7 @@ neg' (AssocA Mul _)       = True
 neg' (LABinaryOp Index _ _) = True
 neg' (UnaryOp _ _)          = True
 neg' (UnaryOpB _ _)         = True
-neg' (UnaryOpVV _ _)        = True
+neg' (UnaryOpCC _ _)        = True
 neg' (C _)                  = True
 neg' _                      = False
 
@@ -138,11 +138,11 @@ expr (UnaryOp Arctan u)       sm = mkCall sm P.Arctan u
 expr (UnaryOp Exp u)          sm = P.Row [P.MO P.Exp, P.Sup $ expr u sm]
 expr (UnaryOp Abs u)          sm = P.Fenced P.Abs P.Abs $ expr u sm
 expr (UnaryOpB Not u)         sm = P.Row [P.MO P.Not, expr u sm]
-expr (UnaryOpVN Norm u)       sm = P.Fenced P.Norm P.Norm $ expr u sm
-expr (UnaryOpVN Dim u)        sm = mkCall sm P.Dim u
+expr (UnaryOpCN Norm u)       sm = P.Fenced P.Norm P.Norm $ expr u sm
+expr (UnaryOpCN Dim u)        sm = mkCall sm P.Dim u
 expr (UnaryOp Sqrt u)         sm = P.Sqrt $ expr u sm
 expr (UnaryOp Neg u)          sm = neg sm u
-expr (UnaryOpVV NegV u)       sm = neg sm u
+expr (UnaryOpCC NegC u)       sm = neg sm u
 expr (ArithBinaryOp Frac a b) sm = P.Div (expr a sm) (expr b sm)
 expr (ArithBinaryOp Pow a b)  sm = pow sm a b
 expr (ArithBinaryOp Subt a b) sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
@@ -156,11 +156,11 @@ expr (OrdBinaryOp Lt a b)     sm = mkBOp sm P.Lt a b
 expr (OrdBinaryOp Gt a b)     sm = mkBOp sm P.Gt a b
 expr (OrdBinaryOp LEq a b)    sm = mkBOp sm P.LEq a b
 expr (OrdBinaryOp GEq a b)    sm = mkBOp sm P.GEq a b
-expr (VVVBinaryOp Cross a b)  sm = mkBOp sm P.Cross a b
-expr (VVVBinaryOp VAdd a b)   sm = mkBOp sm P.VAdd a b
-expr (VVVBinaryOp VSub a b)   sm = mkBOp sm P.VSub a b
-expr (VVNBinaryOp Dot a b)    sm = mkBOp sm P.Dot a b
-expr (NVVBinaryOp Scale a b)  sm = mkBOp sm P.Scale a b
+expr (CCCBinaryOp Cross a b)  sm = mkBOp sm P.Cross a b
+expr (CCCBinaryOp CAdd a b)   sm = mkBOp sm P.CAdd a b
+expr (CCCBinaryOp CSub a b)   sm = mkBOp sm P.CSub a b
+expr (CCNBinaryOp Dot a b)    sm = mkBOp sm P.Dot a b
+expr (NCCBinaryOp Scale a b)  sm = mkBOp sm P.Scale a b
 expr (ESSBinaryOp SAdd a b)   sm = mkBOp sm P.SAdd a b
 expr (ESSBinaryOp SRemove a b)    sm = mkBOp sm P.SRemove a b
 expr (ESBBinaryOp SContains a b)  sm = mkBOp sm P.SContains a b

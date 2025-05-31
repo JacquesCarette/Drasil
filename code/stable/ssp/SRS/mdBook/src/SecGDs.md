@@ -243,7 +243,7 @@ The base hydrostatic force and slice weight both act in the direction of the poi
 
 Under the influence of gravity, and assuming a 2D Cartesian coordinate system with down as positive, an object has an acceleration vector of:
 
-\\[\boldsymbol{a}\text{(}t\text{)}=\begin{bmatrix}0\\\\\boldsymbol{g}\\,\boldsymbol{\hat{j}}\end{bmatrix}\\]
+\\[\boldsymbol{a}\text{(}t\text{)}=\begin{bmatrix}\boldsymbol{g}\\,\boldsymbol{\hat{j}} & 0\end{bmatrix}\\]
 
 Since there is only one non-zero vector component, the scalar value \\(W\\) will be used for the weight. In this scenario, Newton's second law of motion from [TM:NewtonSecLawMot](./SecTMs.md#TM:NewtonSecLawMot) can be expressed as:
 

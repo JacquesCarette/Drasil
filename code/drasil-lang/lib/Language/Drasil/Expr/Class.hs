@@ -5,7 +5,8 @@ module Language.Drasil.Expr.Class (
   square, half,
   oneHalf, oneThird,
   apply1, apply2,
-  m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet
+  m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet,
+  vScale, vAdd, vSub
 ) where
 
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
@@ -20,6 +21,9 @@ import qualified Language.Drasil.ModelExpr.Lang as M
 import qualified Language.Drasil.CodeExpr.Lang as C
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Drasil.Database.UID (HasUID(..))
+import qualified Language.Drasil.Space         as S
+import           Numeric.Natural               (Natural)
+import qualified Data.Map                      as Map
 
 import Utils.Drasil (toColumn)
 
@@ -69,7 +73,7 @@ mkSet = set'
 
 -- | Create a 2D vector (a matrix with two rows, one column). First argument is placed above the second.
 vec2D :: ExprC r => r -> r -> r
-vec2D a b = matrix [[a],[b]]
+vec2D a b = vect [a, b]
 
 -- | Creates a diagonal two-by-two matrix. For example:
 --
@@ -86,6 +90,18 @@ rowVec a = matrix [a]
 -- | Create a column vector
 columnVec :: ExprC r => [r] -> r
 columnVec a = matrix $ toColumn a
+
+-- | Alias for `cScale`
+vScale :: (ExprC r) => r -> r -> r
+vScale = cScale
+
+-- | Alias for `cAdd`
+vAdd :: (ExprC r) => r -> r -> r
+vAdd = cAdd
+
+-- | Alias for `cSub`
+vSub :: (ExprC r) => r -> r -> r
+vSub = cSub
 
 class ExprC r where
   infixr 8 $^
@@ -165,13 +181,13 @@ class ExprC r where
   -- | Smart constructor for the exponential (base e) function.
   exp :: r -> r
   
-  -- | Smart constructor for calculating the dimension of a vector.
+  -- | Smart constructor for calculating the dimension of a vector (or general clif).
   dim :: r -> r
   
-  -- | Smart constructor for calculating the normal form of a vector.
+  -- | Smart constructor for calculating the normal form of a vector (or general clif).
   norm :: r -> r
   
-  -- | Smart constructor for negating vectors.
+  -- | Smart constructor for negating vectors (or general clifs).
   negVec :: r -> r
   
   -- | Smart constructor for applying logical negation to an expression.
@@ -195,14 +211,14 @@ class ExprC r where
   -- | Smart constructor to cross product two expressions.
   cross :: r -> r -> r
   
-  -- | Smart constructor for vector scaling
-  vScale :: r -> r -> r
+  -- | Smart constructor for clif scaling
+  cScale :: r -> r -> r
 
-  -- | Vector Addition
-  vAdd :: r -> r -> r
+  -- | Smart constructor for clif addition 
+  cAdd :: r -> r -> r
 
-  -- | Vector Subtraction
-  vSub :: r -> r -> r
+  -- | Smart constructor for clif subtraction
+  cSub :: r -> r -> r
 
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase :: [(r, r)] -> r
@@ -223,6 +239,9 @@ class ExprC r where
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy :: (HasUID c, HasSymbol c) => c -> r
 
+  -- | Vectors with fixed components, of a given fixed dimension
+  vect :: [r] -> r
+
 instance ExprC Expr where
   lit = Lit
 
@@ -242,7 +261,7 @@ instance ExprC Expr where
   ($>=) = OrdBinaryOp GEq
   
   -- | Smart constructor for the dot product of two equations.
-  ($.) = VVNBinaryOp Dot
+  ($.) = CCNBinaryOp Dot
   
   -- | Add two expressions.
   ($+) (Lit (Int 0)) r = r
@@ -332,16 +351,17 @@ instance ExprC Expr where
   -- | Smart constructor for the exponential (base e) function.
   exp = UnaryOp Exp
   
-  -- | Smart constructor for calculating the dimension of a vector.
-  dim = UnaryOpVN Dim
+  -- | Smart constructor for calculating the dimension of a clif.
+  dim = UnaryOpCN Dim
   
-  -- | Smart constructor for calculating the normal form of a vector.
-  norm = UnaryOpVN Norm
+  -- | Smart constructor for calculating the normal form of a clif.
+  norm = UnaryOpCN Norm
   
   -- | Smart constructor for negating vectors.
-  negVec = UnaryOpVV NegV
+  negVec = UnaryOpCC NegC
+  
   -- | And more general scaling
-  vScale = NVVBinaryOp Scale
+  cScale = NCCBinaryOp Scale
   
   -- | Smart constructor for applying logical negation to an expression.
   not_ = UnaryOpB Not
@@ -367,11 +387,11 @@ instance ExprC Expr where
   euclidean = sqrt . foldr1 ($+) . map square
   
   -- | Smart constructor to cross product two expressions.
-  cross = VVVBinaryOp Cross
+  cross = CCCBinaryOp Cross
   -- | Adding vectors
-  vAdd  = VVVBinaryOp VAdd
+  cAdd  = CCCBinaryOp CAdd
   -- | Subtracting vectors
-  vSub  = VVVBinaryOp VSub
+  cSub  = CCCBinaryOp CSub
   
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = Case Complete
@@ -388,6 +408,23 @@ instance ExprC Expr where
   
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy x = C (x ^. uid)
+
+  -- | Vectors with known components
+  --   This will create a Clifford space with dimension equal to the length of the list
+  vect es = 
+    let
+      d = fromIntegral $ length es
+      vectComp n e = (vectorKey n d, e)
+    in
+      Clif (S.Fixed d) $ Map.fromList $ mapWithIndex vectComp es
+
+mapWithIndex :: (Natural -> a -> b) -> [a] -> [b]
+mapWithIndex f xs = 
+  mapWithIndex' 0 xs
+  where
+    mapWithIndex' _ [] = []
+    mapWithIndex' n (x:xs) =
+      f n x : mapWithIndex' (n+1) xs
   
 instance ExprC M.ModelExpr where
   lit = M.Lit
@@ -408,7 +445,7 @@ instance ExprC M.ModelExpr where
   ($>=) = M.OrdBinaryOp M.GEq
 
   -- | Smart constructor for the dot product of two equations.
-  ($.) = M.VVNBinaryOp M.Dot
+  ($.) = M.CCNBinaryOp M.Dot
 
   -- | Add two expressions.
   ($+) (M.Lit (Int 0)) r = r
@@ -497,16 +534,17 @@ instance ExprC M.ModelExpr where
   -- | Smart constructor for the exponential (base e) function.
   exp = M.UnaryOp M.Exp
 
-  -- | Smart constructor for calculating the dimension of a vector.
-  dim = M.UnaryOpVN M.Dim
+  -- | Smart constructor for calculating the dimension of a clif.
+  dim = M.UnaryOpCN M.Dim
 
-  -- | Smart constructor for calculating the normal form of a vector.
-  norm = M.UnaryOpVN M.Norm
+  -- | Smart constructor for calculating the normal form of a clif.
+  norm = M.UnaryOpCN M.Norm
 
   -- | Smart constructor for negating vectors.
-  negVec = M.UnaryOpVV M.NegV
+  negVec = M.UnaryOpCC M.NegC
+
   -- | More general scaling
-  vScale = M.NVVBinaryOp M.Scale
+  cScale = M.NCCBinaryOp M.Scale
 
   -- | Smart constructor for applying logical negation to an expression.
   not_ = M.UnaryOpB M.Not
@@ -533,12 +571,12 @@ instance ExprC M.ModelExpr where
   euclidean = sqrt . foldr1 ($+) . map square
 
   -- | Smart constructor to cross product two expressions.
-  cross = M.VVVBinaryOp M.Cross
+  cross = M.CCCBinaryOp M.Cross
 
   -- | Adding vectors
-  vAdd  = M.VVVBinaryOp M.VAdd
+  cAdd  = M.CCCBinaryOp M.CAdd
   -- | Subtracting vectors
-  vSub  = M.VVVBinaryOp M.VSub
+  cSub  = M.CCCBinaryOp M.CSub
   
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = M.Case Complete
@@ -556,6 +594,16 @@ instance ExprC M.ModelExpr where
   -- Note how |sy| 'enforces' having a symbol
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy x = M.C (x ^. uid)
+
+  -- | Vectors with known components
+  --   This will create a Clifford space with dimension equal to the length of the list
+  --   TODO: does this have to change in ModelExpr?
+  vect es = 
+    let
+      d = fromIntegral $ length es
+      vectComp n e = (vectorKey n d, e)
+    in
+      M.Clif (S.Fixed d) $ Map.fromList $ mapWithIndex vectComp es
 
 instance ExprC C.CodeExpr where
   lit = C.Lit
@@ -576,7 +624,7 @@ instance ExprC C.CodeExpr where
   ($>=) = C.OrdBinaryOp C.GEq
   
   -- | Smart constructor for the dot product of two equations.
-  ($.) = C.VVNBinaryOp C.Dot
+  ($.) = C.CCNBinaryOp C.Dot
   
   -- | Add two expressions.
   ($+) (C.Lit (Int 0)) r = r
@@ -667,15 +715,16 @@ instance ExprC C.CodeExpr where
   exp = C.UnaryOp C.Exp
   
   -- | Smart constructor for calculating the dimension of a vector.
-  dim = C.UnaryOpVN C.Dim
+  dim = C.UnaryOpCN C.Dim
   
   -- | Smart constructor for calculating the normal form of a vector.
-  norm = C.UnaryOpVN C.Norm
+  norm = C.UnaryOpCN C.Norm
   
   -- | Smart constructor for negating vectors.
-  negVec = C.UnaryOpVV C.NegV
+  negVec = C.UnaryOpCC C.NegC
+
   -- | And more general scaling
-  vScale = C.NVVBinaryOp C.Scale
+  cScale = C.NCCBinaryOp C.Scale
   
   -- | Smart constructor for applying logical negation to an expression.
   not_ = C.UnaryOpB C.Not
@@ -700,12 +749,13 @@ instance ExprC C.CodeExpr where
   euclidean = sqrt . foldr1 ($+) . map square
   
   -- | Smart constructor to cross product two expressions.
-  cross = C.VVVBinaryOp C.Cross
+  cross = C.CCCBinaryOp C.Cross
   
-  -- | Adding vectors
-  vAdd  = C.VVVBinaryOp C.VAdd
-  -- | Subtracting vectors
-  vSub  = C.VVVBinaryOp C.VSub
+  -- | Adding clifs
+  cAdd  = C.CCCBinaryOp C.CAdd
+
+  -- | Subtracting clifs
+  cSub  = C.CCCBinaryOp C.CSub
 
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = C.Case Complete
@@ -724,3 +774,12 @@ instance ExprC C.CodeExpr where
   -- | Create an 'Expr' from a 'Symbol'ic Chunk.
   sy x = C.C (x ^. uid)
 
+  -- | Vectors with known components
+  --   This will create a Clifford space with dimension equal to the length of the list
+  --   TODO: does this have to change in CodeExpr?
+  vect es = 
+    let
+      d = fromIntegral $ length es
+      vectComp n e = (vectorKey n d, e)
+    in
+      C.Clif (S.Fixed d) $ Map.fromList $ mapWithIndex vectComp es

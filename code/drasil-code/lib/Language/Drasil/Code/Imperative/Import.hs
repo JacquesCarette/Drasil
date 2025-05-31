@@ -15,8 +15,8 @@ import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&), in')
 import qualified Language.Drasil.CodeExpr.Development as S (CodeExpr(..))
 import Language.Drasil.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
   AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..), BoolBinOp(..), EqBinOp(..),
-  LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
-  VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..))
+  LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncCC(..), UFuncCN(..),
+  CCNBinOp(..), CCCBinOp(..), NCCBinOp(..), ESSBinOp(..), ESBBinOp(..))
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, fAppProc,
@@ -337,8 +337,8 @@ convExpr (Field o f) = do
   return $ valueOf v
 convExpr (UnaryOp o u)    = fmap (unop o) (convExpr u)
 convExpr (UnaryOpB o u)   = fmap (unopB o) (convExpr u)
-convExpr (UnaryOpVV o u)  = fmap (unopVV o) (convExpr u)
-convExpr (UnaryOpVN o u)  = fmap (unopVN o) (convExpr u)
+convExpr (UnaryOpCC o u)  = fmap (unopCC o) (convExpr u)
+convExpr (UnaryOpCN o u)  = fmap (unopCN o) (convExpr u)
 convExpr (ArithBinaryOp Frac (Lit (Int a)) (Lit (Int b))) = do -- hack to deal with integer division
   sm <- spaceCodeType Rational
   let getLiteral Double = litDouble (fromIntegral a) #/ litDouble (fromIntegral b)
@@ -350,9 +350,9 @@ convExpr (BoolBinaryOp o a b)  = liftM2 (boolBfunc o) (convExpr a) (convExpr b)
 convExpr (LABinaryOp o a b)    = liftM2 (laBfunc o) (convExpr a) (convExpr b)
 convExpr (EqBinaryOp o a b)    = liftM2 (eqBfunc o) (convExpr a) (convExpr b)
 convExpr (OrdBinaryOp o a b)   = liftM2 (ordBfunc o) (convExpr a) (convExpr b)
-convExpr (VVVBinaryOp o a b)   = liftM2 (vecVecVecBfunc o) (convExpr a) (convExpr b)
-convExpr (VVNBinaryOp o a b)   = liftM2 (vecVecNumBfunc o) (convExpr a) (convExpr b)
-convExpr (NVVBinaryOp o a b)   = liftM2 (numVecVecBfunc o) (convExpr a) (convExpr b)
+convExpr (CCCBinaryOp o a b)   = liftM2 (clfClfClfBfunc o) (convExpr a) (convExpr b)
+convExpr (CCNBinaryOp o a b)   = liftM2 (clfClfNumBfunc o) (convExpr a) (convExpr b)
+convExpr (NCCBinaryOp o a b)   = liftM2 (numClfClfBfunc o) (convExpr a) (convExpr b)
 convExpr (ESSBinaryOp o a b)   = liftM2 (elementSetSetBfunc o) (convExpr a) (convExpr b)
 convExpr (ESBBinaryOp o a b)   = liftM2 (elementSetBoolBfunc o) (convExpr a) (convExpr b)
 convExpr (Case c l)            = doit l -- FIXME this is sub-optimal
@@ -447,13 +447,13 @@ unopB :: (SharedProg r) => UFuncB -> (SValue r -> SValue r)
 unopB Not = (?!)
 
 -- | Similar to 'unop', but for vectors.
-unopVN :: (SharedProg r) => UFuncVN -> (SValue r -> SValue r)
-unopVN Dim = listSize
-unopVN Norm = error "unop: Norm not implemented" -- TODO
+unopCN :: (SharedProg r) => UFuncCN -> (SValue r -> SValue r)
+unopCN Dim = listSize
+unopCN Norm = error "unop: Norm not implemented" -- TODO
 
 -- | Similar to 'unop', but for vectors.
-unopVV :: (SharedProg r) => UFuncVV -> (SValue r -> SValue r)
-unopVV NegV = error "unop: Negation on Vectors not implemented" -- TODO
+unopCC :: (SharedProg r) => UFuncCC -> (SValue r -> SValue r)
+unopCC NegC = error "unop: Negation on Clifs not implemented" -- TODO
 
 -- Maps an 'ArithBinOp' to it's corresponding GOOL binary function.
 arithBfunc :: (SharedProg r) => ArithBinOp -> (SValue r -> SValue r -> SValue r)
@@ -483,19 +483,19 @@ ordBfunc Lt  = (?<)
 ordBfunc LEq = (?<=)
 ordBfunc GEq = (?>=)
 
--- Maps a 'VVVBinOp' to it's corresponding GOOL binary function.
-vecVecVecBfunc :: VVVBinOp -> (SValue r -> SValue r -> SValue r)
-vecVecVecBfunc Cross = error "bfunc: Cross not implemented"
-vecVecVecBfunc VAdd = error "bfunc: Vector addition not implemented"
-vecVecVecBfunc VSub = error "bfunc: Vector subtraction not implemented"
+-- Maps a 'CCCBinOp' to it's corresponding GOOL binary function.
+clfClfClfBfunc :: CCCBinOp -> (SValue r -> SValue r -> SValue r)
+clfClfClfBfunc Cross = error "bfunc: Cross not implemented"
+clfClfClfBfunc CAdd = error "bfunc: Clif addition not implemented"
+clfClfClfBfunc CSub = error "bfunc: Clif subtraction not implemented"
 
--- Maps a 'VVNBinOp' to it's corresponding GOOL binary function.
-vecVecNumBfunc :: VVNBinOp -> (SValue r -> SValue r -> SValue r)
-vecVecNumBfunc Dot = error "convExpr DotProduct"
+-- Maps a 'CCNBinOp' to it's corresponding GOOL binary function.
+clfClfNumBfunc :: CCNBinOp -> (SValue r -> SValue r -> SValue r)
+clfClfNumBfunc Dot = error "convExpr DotProduct"
 
--- Maps a 'NVVBinOp' to it's corresponding GOOL binary function.
-numVecVecBfunc :: NVVBinOp -> (SValue r -> SValue r -> SValue r)
-numVecVecBfunc Scale = error "convExpr Scaling of Vectors"
+-- Maps a 'NCCBinOp' to it's corresponding GOOL binary function.
+numClfClfBfunc :: NCCBinOp -> (SValue r -> SValue r -> SValue r)
+numClfClfBfunc Scale = error "convExpr Scaling of Vectors"
 
 -- Maps a 'ESSBinOp' to its corresponding GOOL binary function.
 elementSetSetBfunc :: (SharedProg r) => ESSBinOp -> (SValue r -> SValue r -> SValue r)
@@ -1038,8 +1038,8 @@ convExprProc (Message {}) = error "convExprProc: Procedural renderers do not sup
 convExprProc (Field _ _) = error "convExprProc: Procedural renderers do not support object field access"
 convExprProc (UnaryOp o u)    = fmap (unop o) (convExprProc u)
 convExprProc (UnaryOpB o u)   = fmap (unopB o) (convExprProc u)
-convExprProc (UnaryOpVV o u)  = fmap (unopVV o) (convExprProc u)
-convExprProc (UnaryOpVN o u)  = fmap (unopVN o) (convExprProc u)
+convExprProc (UnaryOpCC o u)  = fmap (unopCC o) (convExprProc u)
+convExprProc (UnaryOpCN o u)  = fmap (unopCN o) (convExprProc u)
 convExprProc (ArithBinaryOp Frac (Lit (Int a)) (Lit (Int b))) = do -- hack to deal with integer division
   sm <- spaceCodeType Rational
   let getLiteral Double = litDouble (fromIntegral a) #/ litDouble (fromIntegral b)
@@ -1051,9 +1051,9 @@ convExprProc (BoolBinaryOp o a b)  = liftM2 (boolBfunc o) (convExprProc a) (conv
 convExprProc (LABinaryOp o a b)    = liftM2 (laBfunc o) (convExprProc a) (convExprProc b)
 convExprProc (EqBinaryOp o a b)    = liftM2 (eqBfunc o) (convExprProc a) (convExprProc b)
 convExprProc (OrdBinaryOp o a b)   = liftM2 (ordBfunc o) (convExprProc a) (convExprProc b)
-convExprProc (VVVBinaryOp o a b)   = liftM2 (vecVecVecBfunc o) (convExprProc a) (convExprProc b)
-convExprProc (VVNBinaryOp o a b)   = liftM2 (vecVecNumBfunc o) (convExprProc a) (convExprProc b)
-convExprProc (NVVBinaryOp o a b)   = liftM2 (numVecVecBfunc o) (convExprProc a) (convExprProc b)
+convExprProc (CCCBinaryOp o a b)   = liftM2 (clfClfClfBfunc o) (convExprProc a) (convExprProc b)
+convExprProc (CCNBinaryOp o a b)   = liftM2 (clfClfNumBfunc o) (convExprProc a) (convExprProc b)
+convExprProc (NCCBinaryOp o a b)   = liftM2 (numClfClfBfunc o) (convExprProc a) (convExprProc b)
 convExprProc (ESSBinaryOp o a b)   = liftM2 (elementSetSetBfunc o) (convExprProc a) (convExprProc b)
 convExprProc (ESBBinaryOp o a b)   = liftM2 (elementSetBoolBfunc o) (convExprProc a) (convExprProc b)
 convExprProc (Case c l)            = doit l -- FIXME this is sub-optimal

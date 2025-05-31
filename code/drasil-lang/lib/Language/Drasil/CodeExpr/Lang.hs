@@ -3,10 +3,12 @@
 module Language.Drasil.CodeExpr.Lang where
 
 import Prelude hiding (sqrt)
+import Numeric.Natural
 
-import Language.Drasil.Expr.Lang (Completeness)
+import Language.Drasil.Expr.Lang (Completeness, BasisBlades(..))
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal(..))
+import qualified Language.Drasil.Space as S
 import Language.Drasil.Space (Space, RealInterval, DiscreteDomainDesc)
 import Drasil.Database.UID (UID)
 
@@ -33,16 +35,20 @@ data LABinOp = Index | IndexOf
 data OrdBinOp = Lt | Gt | LEq | GEq
   deriving Eq
 
--- | @Vector x Vector -> Vector@ binary operations (cross product, vector addition, vector sub).
-data VVVBinOp = Cross | VAdd | VSub
+-- | @Clif x Clif -> Clif@ binary operations (cross product, clif addition, clif sub, wedge product, geometric product).
+data CCCBinOp = Cross | CAdd | CSub | WedgeProd | GeometricProd
   deriving Eq
 
--- | @Vector x Vector -> Number@ binary operations (dot product).
-data VVNBinOp = Dot
+-- | @Clif x Clif -> Number@ binary operations (dot product).
+data CCNBinOp = Dot
   deriving Eq
 
--- | @Number x Vector -> Vector@ binary operations (scaling).
-data NVVBinOp = Scale
+-- | @Number x Clif -> Clif@ binary operations (scaling).
+data NCCBinOp = Scale
+  deriving Eq
+
+-- | @Natural x Clif -> Clif@ binary operations (grade selection).
+data NatCCBinOp = GradeSelect
   deriving Eq
 
 -- | Element + Set -> Set
@@ -72,12 +78,12 @@ data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
 data UFuncB = Not
   deriving Eq
 
--- | @Vector -> Vector@ operators.
-data UFuncVV = NegV
+-- | @Clif -> Clif@ operators.
+data UFuncCC = NegC
   deriving Eq
 
--- | @Vector -> Number@ operators.
-data UFuncVN = Norm | Dim
+-- | @Clif -> Number@ operators (norm, dim, grade).
+data UFuncCN = Norm | Dim | Grade
   deriving Eq
 
 -- * CodeExpr
@@ -128,10 +134,10 @@ data CodeExpr where
   UnaryOp       :: UFunc -> CodeExpr -> CodeExpr
   -- | Unary operation for @Bool -> Bool@ operations.
   UnaryOpB      :: UFuncB -> CodeExpr -> CodeExpr
-  -- | Unary operation for @Vector -> Vector@ operations.
-  UnaryOpVV     :: UFuncVV -> CodeExpr -> CodeExpr
-  -- | Unary operation for @Vector -> Number@ operations.
-  UnaryOpVN     :: UFuncVN -> CodeExpr -> CodeExpr
+  -- | Unary operation for @Clif -> Clif@ operations.
+  UnaryOpCC     :: UFuncCC -> CodeExpr -> CodeExpr
+  -- | Unary operation for @Clif -> Number@ operations.
+  UnaryOpCN     :: UFuncCN -> CodeExpr -> CodeExpr
 
   -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
   ArithBinaryOp :: ArithBinOp -> CodeExpr -> CodeExpr -> CodeExpr
@@ -143,12 +149,14 @@ data CodeExpr where
   LABinaryOp    :: LABinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Binary operator for ordering expressions (less than, greater than, etc.).
   OrdBinaryOp   :: OrdBinOp -> CodeExpr -> CodeExpr -> CodeExpr
-  -- | Binary operator for @Vector x Vector -> Vector@ operations (cross product).
-  VVVBinaryOp   :: VVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
-  -- | Binary operator for @Vector x Vector -> Number@ operations (dot product).
-  VVNBinaryOp   :: VVNBinOp -> CodeExpr -> CodeExpr -> CodeExpr
-  -- | Binary operator for @Number x Vector -> Vector@ operations (scaling).
-  NVVBinaryOp   :: NVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+  -- | Binary operator for @Clif x Clif -> Clif@ operations (cross product).
+  CCCBinaryOp   :: CCCBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+  -- | Binary operator for @Clif x Clif -> Number@ operations (dot product).
+  CCNBinaryOp   :: CCNBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+  -- | Binary operator for @Number x Clif -> Clif@ operations (scaling).
+  NCCBinaryOp   :: NCCBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+  -- | Binary operator for @Natural x Clif -> Clif@ operations (grade selection).
+  NatCCBinaryOp   :: NatCCBinOp -> Natural -> CodeExpr -> CodeExpr
   -- | Set operator for Set + Set -> Set
   ESSBinaryOp :: ESSBinOp -> CodeExpr -> CodeExpr -> CodeExpr
   -- | Set operator for Element + Set -> Bool
@@ -162,6 +170,8 @@ data CodeExpr where
   -- IsIn     :: Expr -> Space -> Expr
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
   RealI    :: UID -> RealInterval CodeExpr CodeExpr -> CodeExpr
+
+  Clif     :: S.Dimension -> BasisBlades CodeExpr -> CodeExpr
 
 instance LiteralC CodeExpr where
   str      = Lit . str

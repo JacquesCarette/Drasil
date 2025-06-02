@@ -134,11 +134,11 @@ background = foldlSent_ [phrase explosion, S "in downtown areas are dangerous fr
 
 symbMap :: ChunkDB
 symbMap = cdb thisSymbols (map nw thisSymbols ++ nw glassBR
-  : map nw con' ++ (map nw terms \\ map nw thisSymbols) ++ map nw doccon ++ map nw doccon' ++ map nw educon
-  ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon'
-  ++ map nw softwarecon ++ map nw terms ++ [nw lateralLoad, nw materialProprty]
-   ++ [nw distance, nw algorithm] ++
-  map nw fundamentals ++ map nw derived ++ map nw physicalcon)
+  : map nw con' ++ (map nw terms \\ map nw thisSymbols) ++ map nw doccon
+  ++ map nw doccon' ++ map nw educon ++ [nw sciCompS] ++ map nw compcon
+  ++ map nw mathcon ++ map nw mathcon' ++ map nw softwarecon ++ map nw terms
+  ++ [nw lateralLoad, nw materialProprty] ++ [nw distance, nw algorithm]
+  ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw symb ++ terms ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) GB.dataDefs iMods [] tMods concIns
   labCon allRefs citations

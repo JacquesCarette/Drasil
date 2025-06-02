@@ -12,6 +12,7 @@ import Language.Drasil.Chunk.NamedIdea (IdeaDict, nc)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
  CommonIdea(abrv), ConceptDomain(cdom))
 import Language.Drasil.NounPhrase.Core (NP)
+import Language.Drasil.Sentence (Sentence(S))
 import Drasil.Database.UID (UID, HasUID(uid))
 
 import Utils.Drasil (repUnd)

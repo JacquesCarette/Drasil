@@ -36,7 +36,7 @@ makeRequirements sm = makeCSV $ ["Original", "Copy"] : assetMat sm
 
 -- | Render a title 'Sentence'.
 mkTitle :: PrintingInformation -> Sentence -> Doc
-mkTitle sm t = text "\"" <> pSpec sm empty (spec sm t) <> text "\""
+mkTitle sm t = text "\"" <> pSpec empty (spec sm t) <> text "\""
 
 -- | Map the original filepaths of assets to the location mdBook generator
 -- needs.

@@ -44,8 +44,8 @@ codeExprDoc :: ChunkDB -> Stage -> SingleLine -> C.CodeExpr -> Doc
 codeExprDoc db st f e = pExprDoc f (codeExpr e (PI db st plainConfiguration))
 
 -- | Create sentences for a document in 'Doc' format.
-sentenceDoc :: PrintingInformation -> ChunkDB -> Stage -> SingleLine -> Sentence -> Doc
-sentenceDoc sm db st f s = specDoc sm f (spec (PI db st plainConfiguration) s)
+sentenceDoc :: ChunkDB -> Stage -> SingleLine -> Sentence -> Doc
+sentenceDoc db st f s = specDoc f (spec (PI db st plainConfiguration) s)
 
 -- | Create symbols for a document in 'Doc' format.
 symbolDoc :: Symbol -> Doc
@@ -75,18 +75,18 @@ pExprDoc f (Sqrt e) = text "sqrt" <> parens (pExprDoc f e)
 pExprDoc _ (Spc Thin) = space
 
 -- | Helper for printing sentences ('Spec's) in 'Doc' format.
-specDoc :: PrintingInformation -> SingleLine -> Spec -> Doc
-specDoc _  f (E e) = pExprDoc f e
-specDoc _  _ (S s) = text s
-specDoc sm f  (Ch st caps s) = specDoc sm f $ L.spec sm $ termStyleLookup st (sm ^. ckdb) s caps
-specDoc _  _ (Sp s) = specialDoc s
-specDoc sm f  (Ref (Cite2 n) r _) = specDoc sm f n <+> text ("Ref: " ++ r)
-specDoc sm f  (Ref _ r s) = specDoc sm f s <+> text ("Ref: " ++ r) --may need to change?
-specDoc sm f  (s1 :+: s2) = specDoc sm f s1 <> specDoc sm f s2
-specDoc _  _ EmptyS = empty
-specDoc sm f  (Quote s) = doubleQuotes $ specDoc sm f s
-specDoc _ MultiLine HARDNL = text "\n"
-specDoc _ OneLine HARDNL = error "HARDNL encountered in attempt to format linearly"
+specDoc :: SingleLine -> Spec -> Doc
+specDoc f (E e) = pExprDoc f e
+specDoc _ (S s) = text s
+specDoc f (Ch sm st caps s) = specDoc f $ L.spec sm $ termStyleLookup st (sm ^. ckdb) s caps
+specDoc _ (Sp s) = specialDoc s
+specDoc f (Ref (Cite2 n) r _) = specDoc f n <+> text ("Ref: " ++ r)
+specDoc f (Ref _ r s) = specDoc f s <+> text ("Ref: " ++ r) --may need to change?
+specDoc f (s1 :+: s2) = specDoc f s1 <> specDoc f s2
+specDoc _ EmptyS = empty
+specDoc f (Quote s) = doubleQuotes $ specDoc f s
+specDoc MultiLine HARDNL = text "\n"
+specDoc OneLine HARDNL = error "HARDNL encountered in attempt to format linearly"
 
 -- | Helper for printing units in 'Doc' format.
 unitDoc :: SingleLine -> USymb -> Doc

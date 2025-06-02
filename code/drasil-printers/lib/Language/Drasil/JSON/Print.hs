@@ -38,30 +38,30 @@ import Control.Lens ((^.))
 -- build : build the SRS document in JSON format
 -- build': build the general Jupyter Notbook document
 genJupyter :: PrintingInformation -> DocType -> L.Document -> Doc
-genJupyter sm Lesson doc = build  sm (makeDocument sm doc)
-genJupyter sm _      doc = build' sm (makeDocument sm doc)
+genJupyter sm Lesson doc = build  (makeDocument sm doc)
+genJupyter sm _      doc = build' (makeDocument sm doc)
 
 -- | Build the JSON Document, called by genJSON
-build :: PrintingInformation -> Document -> Doc
-build sm (Document t a c) = 
+build :: Document -> Doc
+build (Document t a c) = 
   markdownB $$
-  nbformat (text "# "  <> pSpec sm t) $$
-  nbformat (text "## " <> pSpec sm a) $$
+  nbformat (text "# " <> pSpec t) $$
+  nbformat (text "## " <> pSpec a) $$
   markdownE $$
-  print' sm c $$
+  print' c $$
   markdownB' $$
   markdownE' $$
   makeMetadata $$
   text "}" 
 
-build' :: PrintingInformation -> Document -> Doc
-build' sm (Document t a c) = 
+build' :: Document -> Doc
+build' (Document t a c) = 
   markdownB $$
-  nbformat (text "# "  <> pSpec sm t) $$
-  nbformat (text "## " <> pSpec sm a) $$
+  nbformat (text "# " <> pSpec t) $$
+  nbformat (text "## " <> pSpec a) $$
   markdownE $$
   markdownB' $$ 
-  print sm c $$
+  print c $$
   markdownE' $$
   makeMetadata $$
   text "}" 
@@ -72,72 +72,72 @@ printMath = (`runPrint` Math)
 
 -- | Helper for rendering LayoutObjects into JSON
 -- printLO is used for generating SRS
-printLO :: PrintingInformation -> LayoutObj -> Doc
-printLO sm (Header n contents l)            = nbformat empty $$ nbformat (h (n + 1) <> pSpec sm contents) $$ refID (pSpec sm l)
-printLO sm (Cell layoutObs)                 = markdownCell $ vcat (map (printLO sm) layoutObs)
-printLO sm (HDiv _ layoutObs _)             = vcat (map (printLO sm) layoutObs)
-printLO sm (Paragraph contents)             = nbformat empty $$ nbformat (stripnewLine (show(pSpec sm contents)))
-printLO sm (EqnBlock contents)              = nbformat mathEqn
+printLO :: LayoutObj -> Doc
+printLO (Header n contents l)            = nbformat empty $$ nbformat (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
+printLO (Cell layoutObs)                 = markdownCell $ vcat (map printLO layoutObs)
+printLO (HDiv _ layoutObs _)             = vcat (map printLO layoutObs)
+printLO (Paragraph contents)             = nbformat empty $$ nbformat (stripnewLine (show(pSpec contents)))
+printLO (EqnBlock contents)              = nbformat mathEqn
   where
     toMathHelper (PL g) = PL (\_ -> g Math)
     mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$" 
-    mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec sm contents
-printLO sm (Table _ rows r _ _)            = nbformat empty $$ makeTable sm rows (pSpec sm r)
-printLO sm (Definition dt ssPs l)          = nbformat (text "<br>") $$ makeDefn sm dt ssPs (pSpec sm l)
-printLO sm (List t)                        = nbformat empty $$ makeList sm t False
-printLO sm (Figure r c f wp)               = makeFigure (pSpec sm r) (fmap (pSpec sm) c) (text f) wp
-printLO sm (Bib bib)                       = makeBib sm bib
-printLO _  Graph{}                         = empty 
-printLO _  CodeBlock {}                    = empty
+    mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
+printLO (Table _ rows r _ _)            = nbformat empty $$ makeTable rows (pSpec r)
+printLO (Definition dt ssPs l)          = nbformat (text "<br>") $$ makeDefn dt ssPs (pSpec l)
+printLO (List t)                        = nbformat empty $$ makeList t False
+printLO (Figure r c f wp)               = makeFigure (pSpec r) (fmap pSpec c) (text f) wp
+printLO (Bib bib)                       = makeBib bib
+printLO Graph{}                         = empty 
+printLO CodeBlock {}                    = empty
 
 -- printLO' is used for generating general notebook (lesson plans)
-printLO' :: PrintingInformation -> LayoutObj -> Doc
-printLO' sm (HDiv ["equation"] layoutObs _)  = markdownCell $ vcat (map (printLO' sm) layoutObs)
-printLO' sm (Header n contents l)            = markdownCell $ nbformat (h (n + 1) <> pSpec sm contents) $$ refID (pSpec sm l)
-printLO' sm (Cell layoutObs)                 = vcat (map (printLO' sm) layoutObs)
-printLO' _  HDiv {}                          = empty
-printLO' sm (Paragraph contents)             = markdownCell $ nbformat (stripnewLine (show(pSpec sm contents)))
-printLO' sm (EqnBlock contents)              = nbformat mathEqn
+printLO' :: LayoutObj -> Doc
+printLO' (HDiv ["equation"] layoutObs _)  = markdownCell $ vcat (map printLO' layoutObs)
+printLO' (Header n contents l)            = markdownCell $ nbformat (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
+printLO' (Cell layoutObs)                 = vcat (map printLO' layoutObs)
+printLO' HDiv {}                          = empty
+printLO' (Paragraph contents)             = markdownCell $ nbformat (stripnewLine (show(pSpec contents)))
+printLO' (EqnBlock contents)              = nbformat mathEqn
   where
     toMathHelper (PL g) = PL (\_ -> g Math)
     mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$" 
-    mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec sm contents
-printLO' sm (Table _ rows r _ _)            = markdownCell $ makeTable sm rows (pSpec sm r)
-printLO' _  Definition {}                   = empty
-printLO' sm (List t)                        = markdownCell $ makeList sm t False
-printLO' sm (Figure r c f wp)               = markdownCell $ makeFigure (pSpec sm r) (fmap (pSpec sm) c) (text f) wp
-printLO' sm (Bib bib)                       = markdownCell $ makeBib sm bib
-printLO' _  Graph{}                         = empty 
-printLO' _  (CodeBlock contents)            = codeCell $ codeformat $ cSpec contents
+    mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
+printLO' (Table _ rows r _ _)            = markdownCell $ makeTable rows (pSpec r)
+printLO' Definition {}                   = empty
+printLO' (List t)                        = markdownCell $ makeList t False
+printLO' (Figure r c f wp)               = markdownCell $ makeFigure (pSpec r) (fmap pSpec c) (text f) wp
+printLO' (Bib bib)                       = markdownCell $ makeBib bib
+printLO' Graph{}                         = empty 
+printLO' (CodeBlock contents)            = codeCell $ codeformat $ cSpec contents
 
 
 -- | Called by build, uses 'printLO' to render the layout
 -- objects in Doc format.
-print :: PrintingInformation -> [LayoutObj] -> Doc
-print sm = foldr (($$) . printLO sm) empty
+print :: [LayoutObj] -> Doc
+print = foldr (($$) . printLO) empty
 
 -- | Called by build', uses 'printLO'' to render the layout
 -- objects in Doc format.
-print' :: PrintingInformation -> [LayoutObj] -> Doc
-print' sm = foldr (($$) . printLO' sm) empty
+print' :: [LayoutObj] -> Doc
+print' = foldr (($$) . printLO') empty
 
-pSpec :: PrintingInformation -> Spec -> Doc
-pSpec _  (E e)  = text "$" <> pExpr e <> text "$" -- symbols used
-pSpec sm (a :+: b) = pSpec sm a <> pSpec sm b
-pSpec _  (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr s invalid
+pSpec :: Spec -> Doc
+pSpec (E e)  = text "$" <> pExpr e <> text "$" -- symbols used
+pSpec (a :+: b) = pSpec a <> pSpec b
+pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr s invalid
   where
     invalid = ['<', '>']
     escapeChars '&' = "\\&"
     escapeChars c = [c]
-pSpec sm (Ch st caps s) =  pSpec sm $ L.spec sm $
+pSpec (Ch sm st caps s) = pSpec $ L.spec sm $
   termStyleLookup st (sm ^. ckdb) s caps
-pSpec _  (Sp s)    = text $ unPH $ L.special s
-pSpec _  HARDNL    = empty
-pSpec sm (Ref Internal r a)      = reflink     r $ pSpec sm a
-pSpec sm (Ref (Cite2 n)   r a)    = reflinkInfo r (pSpec sm a) (pSpec sm n)
-pSpec sm (Ref External r a)      = reflinkURI  r $ pSpec sm a
-pSpec _  EmptyS    = text "" -- Expected in the output
-pSpec sm (Quote q) = doubleQuotes $ pSpec sm q
+pSpec (Sp s)    = text $ unPH $ L.special s
+pSpec HARDNL    = empty
+pSpec (Ref Internal r a)      = reflink     r $ pSpec a
+pSpec (Ref (Cite2 n)   r a)    = reflinkInfo r (pSpec a) (pSpec n)
+pSpec (Ref External r a)      = reflinkURI  r $ pSpec a
+pSpec EmptyS    = text "" -- Expected in the output
+pSpec (Quote q) = doubleQuotes $ pSpec q
 
 cSpec :: Spec -> Doc
 cSpec (E e)  = pExpr e 
@@ -227,23 +227,23 @@ pOps SContains  = " in "
 pOps SUnion     = " and "
 
 -- | Renders Markdown table, called by 'printLO'
-makeTable :: PrintingInformation -> [[Spec]] -> Doc -> Doc
-makeTable _  [] _      = error "No table to print"
-makeTable sm (l:lls) r = refID r $$ nbformat empty $$ (makeHeaderCols sm l $$ makeRows sm lls) $$ nbformat empty
+makeTable :: [[Spec]] -> Doc -> Doc
+makeTable [] _      = error "No table to print"
+makeTable (l:lls) r = refID r $$ nbformat empty $$ (makeHeaderCols l $$ makeRows lls) $$ nbformat empty
 
 -- | Helper for creating table rows
-makeRows ::PrintingInformation -> [[Spec]] -> Doc
-makeRows sm = foldr (($$) . makeColumns sm) empty
+makeRows :: [[Spec]] -> Doc
+makeRows = foldr (($$) . makeColumns) empty
 
 -- | makeHeaderCols: Helper for creating table header row (each of the column header cells)
 -- | makeColumns: Helper for creating table columns
-makeHeaderCols, makeColumns :: PrintingInformation -> [Spec] -> Doc
-makeHeaderCols sm l = nbformat (text header) $$ nbformat (text $ genMDtable ++ "|")
-  where header = show(text "|" <> hcat(punctuate (text "|") (map (pSpec sm) l)) <> text "|")        
+makeHeaderCols, makeColumns :: [Spec] -> Doc
+makeHeaderCols l = nbformat (text header) $$ nbformat (text $ genMDtable ++ "|")
+  where header = show(text "|" <> hcat(punctuate (text "|") (map pSpec l)) <> text "|")        
         c = count '|' header
         genMDtable = concat (replicate (c-1) "|:--- ")
 
-makeColumns sm ls = nbformat (text "|" <> hcat(punctuate (text "|") (map (pSpec sm) ls)) <> text "|")
+makeColumns ls = nbformat (text "|" <> hcat(punctuate (text "|") (map pSpec ls)) <> text "|")
 
 count :: Char -> String -> Int
 count _ [] = 0
@@ -252,49 +252,48 @@ count c (x:xs)
   | otherwise = count c xs
 
 -- | Renders definition tables (Data, General, Theory, etc.)
-makeDefn :: PrintingInformation -> L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
-makeDefn _  _ [] _  = error "L.Empty definition"
-makeDefn sm dt ps l = refID l $$ table [dtag dt]
-  (tr (nbformat (th (text "Refname")) $$ td (nbformat(bold l))) $$ makeDRows sm ps)
+makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
+makeDefn _ [] _  = error "L.Empty definition"
+makeDefn dt ps l = refID l $$ table [dtag dt]
+  (tr (nbformat (th (text "Refname")) $$ td (nbformat(bold l))) $$ makeDRows ps)
   where dtag L.General  = "gdefn"
         dtag L.Instance = "idefn"
         dtag L.Theory   = "tdefn"
         dtag L.Data     = "ddefn"
 
 -- | Helper for making the definition table rows
-makeDRows :: PrintingInformation -> [(String,[LayoutObj])] -> Doc
-makeDRows _  []         = error "No fields to create defn table"
-makeDRows sm [(f,d)]    = tr (nbformat (th (text f)) $$ td (vcat $ map (printLO sm) d))
-makeDRows sm ((f,d):ps) = tr (nbformat (th (text f)) $$ td (vcat $ map (printLO sm) d)) $$ makeDRows sm ps
+makeDRows :: [(String,[LayoutObj])] -> Doc
+makeDRows []         = error "No fields to create defn table"
+makeDRows [(f,d)]    = tr (nbformat (th (text f)) $$ td (vcat $ map printLO d))
+makeDRows ((f,d):ps) = tr (nbformat (th (text f)) $$ td (vcat $ map printLO d)) $$ makeDRows ps
 
 
 -- | Renders lists
-makeList :: PrintingInformation -> ListType -> Bool -> Doc -- FIXME: ref id's should be folded into the li
-makeList sm (Simple items) _      = vcat $ 
-  map (\(b,e,l) -> mlref sm l $ nbformat (pSpec sm b <> text ": " <> sItem sm e) $$ nbformat empty) items
-makeList sm (Desc items) bl       = vcat $ 
-  map (\(b,e,l) -> pa $ mlref sm l $ ba $ pSpec sm b <> text ": " <> pItem sm e bl) items
-makeList sm (Ordered items) bl    = vcat $ map (\(i,l) -> mlref sm l $ pItem sm i bl) items
-makeList sm (Unordered items) bl  = vcat $ map (\(i,l) -> mlref sm l $ pItem sm i bl) items
+makeList :: ListType -> Bool -> Doc -- FIXME: ref id's should be folded into the li
+makeList (Simple items) _      = vcat $ 
+  map (\(b,e,l) -> mlref l $ nbformat (pSpec b <> text ": " <> sItem e) $$ nbformat empty) items
+makeList (Desc items) bl       = vcat $ 
+  map (\(b,e,l) -> pa $ mlref l $ ba $ pSpec b <> text ": " <> pItem e bl) items
+makeList (Ordered items) bl    = vcat $ map (\(i,l) -> mlref l $ pItem i bl) items
+makeList (Unordered items) bl  = vcat $ map (\(i,l) -> mlref l $ pItem i bl) items
 --makeList (Definitions items) _ = ul ["hide-list-style-no-indent"] $ vcat $ 
   --map (\(b,e,l) -> li $ mlref l $ quote(pSpec b <> text " is the" <+> sItem e)) items
-makeList sm (Definitions items) _ = vcat $ map (\(b,e,l) -> 
-  nbformat $ li $ mlref sm l $ pSpec sm b <> text " is the" <+> sItem sm e) items
+makeList (Definitions items) _ = vcat $ map (\(b,e,l) -> nbformat $ li $ mlref l $ pSpec b <> text " is the" <+> sItem e) items
 
 -- | Helper for setting up references
-mlref :: PrintingInformation -> Maybe Label -> Doc -> Doc
-mlref sm = maybe id $ refwrap . pSpec sm
+mlref :: Maybe Label -> Doc -> Doc
+mlref = maybe id $ refwrap . pSpec
 
 -- | Helper for rendering list items
-pItem :: PrintingInformation -> ItemType ->  Bool -> Doc
-pItem sm (Flat s)     b = nbformat $ (if b then text " - " else text "- ") <> pSpec sm s
-pItem sm (Nested s l) _ = vcat [nbformat $ text "- " <> pSpec sm s, makeList sm l True]
+pItem :: ItemType ->  Bool -> Doc
+pItem (Flat s)     b = nbformat $ (if b then text " - " else text "- ") <> pSpec s
+pItem (Nested s l) _ = vcat [nbformat $ text "- " <> pSpec s, makeList l True]
   --where listIndent = strBreak "\"" (show $ makeList l)
 --indent <> text "\"- " <> pSpec s <> text "\\n\","
 
-sItem :: PrintingInformation -> ItemType -> Doc
-sItem sm (Flat s)     = pSpec sm s
-sItem sm (Nested s l) = vcat [pSpec sm s, makeList sm l False]
+sItem :: ItemType -> Doc
+sItem (Flat s)     = pSpec s
+sItem (Nested s l) = vcat [pSpec s, makeList l False]
 
 -- | Renders figures in HTML
 makeFigure :: Doc -> Maybe Doc -> Doc -> L.MaxWidthPercent -> Doc
@@ -304,7 +303,7 @@ makeFigure r c f wp = refID r $$ image f c wp
 makeRefList :: Doc -> Doc -> Doc -> Doc
 makeRefList a l i = refID l $$ nbformat (i <> text ": " <> a)
 
-makeBib :: PrintingInformation -> BibRef -> Doc
-makeBib sm = vcat .
+makeBib :: BibRef -> Doc
+makeBib = vcat .
   zipWith (curry (\(x,(y,z)) -> makeRefList z y x))
-  [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map (renderCite (htmlBibFormatter sm))
+  [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map (renderCite htmlBibFormatter)

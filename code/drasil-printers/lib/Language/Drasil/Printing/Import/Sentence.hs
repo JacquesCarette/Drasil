@@ -29,7 +29,7 @@ spec _ (Sy s)                   = P.E $ pUnit s
 spec _ Percent                  = P.E $ P.MO P.Perc
 spec _ (P s)                    = P.E $ symbol s
 spec sm (SyCh s)                = P.E $ symbol $ lookupC (sm ^. stg) (sm ^. ckdb) s
-spec _ (Ch st caps s)          = P.Ch st caps s
+spec sm (Ch st caps s)          = P.Ch sm st caps s
 spec sm (Ref u EmptyS notes)    =
   let reff = refResolve u (sm ^. ckdb . refTable) in
   case reff of 

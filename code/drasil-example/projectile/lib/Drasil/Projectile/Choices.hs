@@ -16,24 +16,22 @@ import Data.Drasil.Quantities.Math (piConst)
 import Drasil.Projectile.Body (fullSI)
 import System.Drasil (System(SI, _sys))
 
-import Language.Drasil.Printers (PrintingInformation)
-
 import Data.List (intercalate)
 import System.Directory (createDirectoryIfMissing, getCurrentDirectory, 
   setCurrentDirectory)
 import Data.Char (toLower)
 
-genCodeWithChoices :: PrintingInformation -> [Choices] -> IO ()
-genCodeWithChoices _ [] = return ()
-genCodeWithChoices sm (c:cs) = let dir = map toLower $ codedDirName (getSysName fullSI) c
-                                   getSysName SI{_sys = sysName} = programName sysName
+genCodeWithChoices :: [Choices] -> IO ()
+genCodeWithChoices [] = return ()
+genCodeWithChoices (c:cs) = let dir = map toLower $ codedDirName (getSysName fullSI) c
+                                getSysName SI{_sys = sysName} = programName sysName
   in do
     workingDir <- getCurrentDirectory
     createDirectoryIfMissing False dir
     setCurrentDirectory dir
-    genCode sm c (codeSpec fullSI c [])
+    genCode c (codeSpec fullSI c [])
     setCurrentDirectory workingDir
-    genCodeWithChoices sm cs
+    genCodeWithChoices cs
 
 codedDirName :: String -> Choices -> String
 codedDirName n Choices {

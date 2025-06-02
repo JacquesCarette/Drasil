@@ -156,8 +156,8 @@ genDot si = do
     setCurrentDirectory workingDir
 
 -- | Calls the code generator.
-genCode :: PrintingInformation -> Choices -> CodeSpec -> IO ()
-genCode sm chs spec = do
+genCode :: Choices -> CodeSpec -> IO ()
+genCode chs spec = do
   workingDir <- getCurrentDirectory
   time <- getCurrentTime
   sampData <- maybe (return []) (\sd -> readWithDataDesc sd $ sampleInputDD
@@ -170,10 +170,10 @@ genCode sm chs spec = do
       genLangCode Cpp = genCall Cpp unCPPC unCPPP
       genLangCode Swift = genCall Swift unSC unSP
       genLangCode Julia = genCallProc Julia unJLC unJLP
-      genCall lng unProgRepr unPackRepr = generateCode sm lng unProgRepr
-        unPackRepr $ generator sm lng (showGregorian $ utctDay time) sampData chs spec
-      genCallProc lng unProgRepr unPackRepr = generateCodeProc sm lng unProgRepr
-        unPackRepr $ generator sm lng (showGregorian $ utctDay time) sampData chs spec
+      genCall lng unProgRepr unPackRepr = generateCode lng unProgRepr
+        unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec
+      genCallProc lng unProgRepr unPackRepr = generateCodeProc lng unProgRepr
+        unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec
   mapM_ genLangCode (lang chs)
   setCurrentDirectory workingDir
 

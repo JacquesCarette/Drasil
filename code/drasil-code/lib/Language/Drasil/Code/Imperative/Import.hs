@@ -39,7 +39,7 @@ import Language.Drasil.Literal.Development
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
   Mod(..), Name, Description, StateVariable(..), fstdecl)
 import qualified Language.Drasil.Mod as M (Class(..))
-import Language.Drasil.Printers (showHasSymbImpl, PrintingInformation)
+import Language.Drasil.Printers (showHasSymbImpl)
 
 import Drasil.GOOL (Label, MSBody, MSBlock, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs,
@@ -206,62 +206,62 @@ mkParam p = do
         paramFunc Val = param
 
 -- | Generates a public function.
-publicFunc :: (OOProg r) => PrintingInformation -> Label -> VSType r -> Description ->
+publicFunc :: (OOProg r) => Label -> VSType r -> Description ->
   [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
-publicFunc sm n t desc ps r b = do
+publicFunc n t desc ps r b = do
   modify (\st -> st {currentScope = Local})
-  genMethod sm (function n public t) n desc ps r b
+  genMethod (function n public t) n desc ps r b
 
 -- | Generates a public method.
-publicMethod :: (OOProg r) => PrintingInformation -> Label -> VSType r -> Description ->
+publicMethod :: (OOProg r) => Label -> VSType r -> Description ->
   [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
-publicMethod sm n t = do
-  genMethod sm (method n public dynamic t) n
+publicMethod n t = do
+  genMethod (method n public dynamic t) n
 
 -- | Generates a private method.
-privateMethod :: (OOProg r) => PrintingInformation -> Label -> VSType r -> Description ->
+privateMethod :: (OOProg r) => Label -> VSType r -> Description ->
   [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
-privateMethod sm n t = do
-  genMethod sm (method n private dynamic t) n
+privateMethod n t = do
+  genMethod (method n private dynamic t) n
 
 -- | Generates a public function, defined by its inputs and outputs.
-publicInOutFunc :: (OOProg r) => PrintingInformation -> Label -> Description -> [CodeVarChunk] ->
+publicInOutFunc :: (OOProg r) => Label -> Description -> [CodeVarChunk] ->
   [CodeVarChunk] -> [MSBlock r] -> GenState (SMethod r)
-publicInOutFunc sm n = genInOutFunc sm (inOutFunc n public) (docInOutFunc n public) n
+publicInOutFunc n = genInOutFunc (inOutFunc n public) (docInOutFunc n public) n
 
 -- | Generates a private method, defined by its inputs and outputs.
-privateInOutMethod :: (OOProg r) => PrintingInformation -> Label -> Description -> [CodeVarChunk] ->
+privateInOutMethod :: (OOProg r) => Label -> Description -> [CodeVarChunk] ->
   [CodeVarChunk] -> [MSBlock r] -> GenState (SMethod r)
-privateInOutMethod sm n = genInOutFunc sm (inOutMethod n private dynamic) (docInOutMethod n private dynamic) n
+privateInOutMethod n = genInOutFunc (inOutMethod n private dynamic) (docInOutMethod n private dynamic) n
 
 -- | Generates a constructor.
-genConstructor :: (OOProg r) => PrintingInformation -> Label -> Description -> [ParameterChunk] ->
+genConstructor :: (OOProg r) => Label -> Description -> [ParameterChunk] ->
   [MSBlock r] -> GenState (SMethod r)
-genConstructor sm n desc p = do
-  genMethod sm nonInitConstructor n desc p Nothing
+genConstructor n desc p = do
+  genMethod nonInitConstructor n desc p Nothing
 
 -- | Generates a constructor that includes initialization of variables.
-genInitConstructor :: (OOProg r) => PrintingInformation -> Label -> Description -> [ParameterChunk]
+genInitConstructor :: (OOProg r) => Label -> Description -> [ParameterChunk]
   -> Initializers r -> [MSBlock r] -> GenState (SMethod r)
-genInitConstructor sm n desc p is = genMethod sm (`constructor` is) n desc p
+genInitConstructor n desc p is = genMethod (`constructor` is) n desc p
   Nothing
 
 -- | Generates a function or method using the passed GOOL constructor. Other
 -- parameters are the method's name, description, list of parameters,
 -- description of what is returned (if applicable), and body.
-genMethod :: (OOProg r) => PrintingInformation -> ([MSParameter r] -> MSBody r -> SMethod r) ->
+genMethod :: (OOProg r) => ([MSParameter r] -> MSBody r -> SMethod r) ->
   Label -> Description -> [ParameterChunk] -> Maybe Description -> [MSBlock r]
   -> GenState (SMethod r)
-genMethod sm f n desc p r b = do
+genMethod f n desc p r b = do
   g <- get
   vars <- mapM (mkVar . quantvar) p
   ps <- mapM mkParam p
   bod <- logBody n vars b
   let fn = f ps bod
-  pComms <- mapM (getComment sm) p
+  pComms <- mapM getComment p
   return $ if CommentFunc `elem` commented g
     then docFunc desc pComms r fn else fn
 
@@ -269,13 +269,13 @@ genMethod sm f n desc p r b = do
 -- Parameters are: the GOOL constructor to use, the equivalent GOOL constructor
 -- for a documented function/method, the visibility, permanence, name, description,
 -- list of inputs, list of outputs, and body.
-genInOutFunc :: (OOProg r) => PrintingInformation -> ([SVariable r] -> [SVariable r] ->
+genInOutFunc :: (OOProg r) => ([SVariable r] -> [SVariable r] ->
     [SVariable r] -> MSBody r -> SMethod r) ->
   (String -> [(String, SVariable r)] -> [(String, SVariable r)] ->
     [(String, SVariable r)] -> MSBody r -> SMethod r)
   -> Label -> Description -> [CodeVarChunk] -> [CodeVarChunk] ->
   [MSBlock r] -> GenState (SMethod r)
-genInOutFunc sm f docf n desc ins' outs' b = do
+genInOutFunc f docf n desc ins' outs' b = do
   g <- get
   modify (\st -> st {currentScope = Local})
   let ins = ins' \\ outs'
@@ -285,9 +285,9 @@ genInOutFunc sm f docf n desc ins' outs' b = do
   outVs <- mapM mkVar outs
   bothVs <- mapM mkVar both
   bod <- logBody n (bothVs ++ inVs) b
-  pComms <- mapM (getComment sm) ins
-  oComms <- mapM (getComment sm) outs
-  bComms <- mapM (getComment sm) both
+  pComms <- mapM getComment ins
+  oComms <- mapM getComment outs
+  bComms <- mapM getComment both
   return $ if CommentFunc `elem` commented g
     then docf desc (zip pComms inVs) (zip oComms outVs) (zip
     bComms bothVs) bod else f inVs outVs bothVs bod
@@ -509,44 +509,44 @@ elementSetBoolBfunc SContains = S.contains
 -- medium hacks --
 
 -- | Converts a 'Mod' to GOOL.
-genModDef :: (OOProg r) => PrintingInformation -> Mod -> GenState (OO.SFile r)
-genModDef sm (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
-  Just . genFunc sm (publicFunc sm) []) fs)
+genModDef :: (OOProg r) => Mod -> GenState (OO.SFile r)
+genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
+  Just . genFunc publicFunc []) fs)
   (case cs of [] -> []
-              (cl:cls) -> fmap Just (genClass sm primaryClass cl) :
-                map (fmap Just . genClass sm auxClass) cls)
+              (cl:cls) -> fmap Just (genClass primaryClass cl) :
+                map (fmap Just . genClass auxClass) cls)
 
 -- | Converts a 'Mod'\'s functions to GOOL.
-genModFuncs :: (OOProg r) => PrintingInformation -> Mod -> [GenState (SMethod r)]
-genModFuncs sm (Mod _ _ _ _ fs) = map (genFunc sm (publicFunc sm) []) fs
+genModFuncs :: (OOProg r) => Mod -> [GenState (SMethod r)]
+genModFuncs (Mod _ _ _ _ fs) = map (genFunc publicFunc []) fs
 
 -- | Converts a 'Mod'\'s classes to GOOL.
-genModClasses :: (OOProg r) => PrintingInformation -> Mod -> [GenState (SClass r)]
-genModClasses sm (Mod _ _ _ cs _) = map (genClass sm auxClass) cs
+genModClasses :: (OOProg r) => Mod -> [GenState (SClass r)]
+genModClasses (Mod _ _ _ cs _) = map (genClass auxClass) cs
 
 -- | Converts a Class (from the Mod AST) to GOOL.
 -- The class generator to use is passed as a parameter.
-genClass :: (OOProg r) => PrintingInformation -> (Name -> Maybe Name -> Description -> [CSStateVar r]
+genClass :: (OOProg r) => (Name -> Maybe Name -> Description -> [CSStateVar r]
   -> GenState [SMethod r] -> GenState [SMethod r] -> GenState (SClass r)) ->
   M.Class -> GenState (SClass r)
-genClass sm f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
-                                                    svar Priv = privDVar
+genClass f (M.ClassDef n i desc svs cs ms) = let svar Pub = pubDVar
+                                                 svar Priv = privDVar
   in do
   modify (\st -> st {currentScope = Local})
   svrs <- mapM (\(SV s v) -> fmap (svar s . var (codeName v) .
                 convTypeOO) (codeType v)) svs
-  f n i desc svrs (mapM (genFunc sm (publicMethod sm) svs) cs)
-                  (mapM (genFunc sm (publicMethod sm) svs) ms)
+  f n i desc svrs (mapM (genFunc publicMethod svs) cs)
+                  (mapM (genFunc publicMethod svs) ms)
 
 -- | Converts a 'Func' (from the Mod AST) to GOOL.
 -- The function generator to use is passed as a parameter. Automatically adds
 -- variable declaration statements for any undeclared variables. For methods,
 -- the list of StateVariables is needed so they can be included in the list of
 -- declared variables.
-genFunc :: (OOProg r) => PrintingInformation -> (Name -> VSType r -> Description -> [ParameterChunk]
+genFunc :: (OOProg r) => (Name -> VSType r -> Description -> [ParameterChunk]
   -> Maybe Description -> [MSBlock r] -> GenState (SMethod r)) ->
   [StateVariable] -> Func -> GenState (SMethod r)
-genFunc _ f svs (FDef (FuncDef n desc parms o rd s)) = do
+genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
   g <- get
   modify (\st -> st {currentScope = Local})
   stmts <- mapM convStmt s
@@ -554,7 +554,7 @@ genFunc _ f svs (FDef (FuncDef n desc parms o rd s)) = do
     \\ (map quantvar parms ++ map stVar svs))
   t <- spaceCodeType o
   f n (convTypeOO t) desc parms rd [block $ map (`varDec` local) vars, block stmts]
-genFunc sm _ svs (FDef (CtorDef n desc parms i s)) = do
+genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
   g <- get
   modify (\st -> st {currentScope = Local})
   inits <- mapM (convExpr . snd) i
@@ -563,11 +563,11 @@ genFunc sm _ svs (FDef (CtorDef n desc parms i s)) = do
   stmts <- mapM convStmt s
   vars <- mapM mkVar (fstdecl (codeSpec g ^. systemdbO) s
     \\ (map quantvar parms ++ map stVar svs))
-  genInitConstructor sm n desc parms (zip initvars inits)
+  genInitConstructor n desc parms (zip initvars inits)
     [block $ map (`varDec` local) vars, block stmts]
-genFunc sm _ _ (FData (FuncData n desc ddef)) = do
+genFunc _ _ (FData (FuncData n desc ddef)) = do
   modify (\st -> st {currentScope = Local})
-  genDataFunc sm n desc ddef
+  genDataFunc n desc ddef
 
 -- | Converts a 'FuncStmt' to a GOOL Statement.
 convStmt :: (OOProg r) => FuncStmt -> GenState (MSStatement r)
@@ -675,12 +675,12 @@ convStmt (FAppend a b) = do
 
 -- | Generates a function that reads a file whose format is based on the passed
 -- 'DataDesc'.
-genDataFunc :: (OOProg r) => PrintingInformation -> Name -> Description -> DataDesc ->
+genDataFunc :: (OOProg r) => Name -> Description -> DataDesc ->
   GenState (SMethod r)
-genDataFunc sm nameTitle desc ddef = do
+genDataFunc nameTitle desc ddef = do
   let parms = getInputs ddef
   bod <- readData ddef
-  publicFunc sm nameTitle void desc (map pcAuto $ quantvar inFileName : parms)
+  publicFunc nameTitle void desc (map pcAuto $ quantvar inFileName : parms)
     Nothing bod
 
 -- this is really ugly!!
@@ -852,10 +852,10 @@ mkVarProc v = do
   toGOOLVar (v ^. obv)
 
 -- | Converts a 'Mod' to GOOL.
-genModDefProc :: (ProcProg r) => PrintingInformation -> Mod -> GenState (Proc.SFile r)
-genModDefProc sm (Mod n desc is cs fs) = case cs of
+genModDefProc :: (ProcProg r) => Mod -> GenState (Proc.SFile r)
+genModDefProc (Mod n desc is cs fs) = case cs of
   [] -> genModuleWithImportsProc n desc is
-          (map (fmap Just . genFuncProc sm (publicFuncProc sm) []) fs)
+          (map (fmap Just . genFuncProc publicFuncProc []) fs)
   _  -> error "genModDefProc: Procedural renderers do not support classes"
 
 -- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
@@ -867,34 +867,34 @@ mkParamProc p = do
         paramFunc Val = param
 
 -- | Generates a public function.
-publicFuncProc :: (SharedProg r) => PrintingInformation -> Label -> VSType r -> Description ->
+publicFuncProc :: (SharedProg r) => Label -> VSType r -> Description ->
   [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
-publicFuncProc sm n t desc ps r b = do
+publicFuncProc n t desc ps r b = do
   modify (\st -> st {currentScope = Local})
-  genMethodProc sm (function n public t) n desc ps r b
+  genMethodProc (function n public t) n desc ps r b
 
 -- | Generates a private function.
-privateFuncProc :: (SharedProg r) => PrintingInformation -> Label -> 
-  VSType r -> Description -> [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
+privateFuncProc :: (SharedProg r) => Label -> VSType r -> Description ->
+  [ParameterChunk] -> Maybe Description -> [MSBlock r] ->
   GenState (SMethod r)
-privateFuncProc sm n t desc ps r b = do
+privateFuncProc n t desc ps r b = do
   modify (\st -> st {currentScope = Local})
-  genMethodProc sm (function n private t) n desc ps r b
+  genMethodProc (function n private t) n desc ps r b
 
 -- | Generates a function or method using the passed GOOL constructor. Other
 -- parameters are the method's name, description, list of parameters,
 -- description of what is returned (if applicable), and body.
-genMethodProc :: (SharedProg r) => PrintingInformation -> ([MSParameter r] ->
-  MSBody r -> SMethod r) -> Label -> Description -> [ParameterChunk] -> 
-  Maybe Description -> [MSBlock r] -> GenState (SMethod r)
-genMethodProc sm f n desc p r b = do
+genMethodProc :: (SharedProg r) => ([MSParameter r] -> MSBody r -> SMethod r) ->
+  Label -> Description -> [ParameterChunk] -> Maybe Description -> [MSBlock r]
+  -> GenState (SMethod r)
+genMethodProc f n desc p r b = do
   g <- get
   vars <- mapM (mkVarProc . quantvar) p
   ps <- mapM mkParamProc p
   bod <- logBody n vars b
   let fn = f ps bod
-  pComms <- mapM (getComment sm) p
+  pComms <- mapM getComment p
   return $ if CommentFunc `elem` commented g
     then docFunc desc pComms r fn else fn
 
@@ -903,10 +903,10 @@ genMethodProc sm f n desc p r b = do
 -- variable declaration statements for any undeclared variables. For methods,
 -- the list of StateVariables is needed so they can be included in the list of
 -- declared variables.
-genFuncProc :: (SharedProg r) => PrintingInformation -> (Name -> VSType r ->
-  Description -> [ParameterChunk] -> Maybe Description -> [MSBlock r] -> 
-  GenState (SMethod r)) -> [StateVariable] -> Func -> GenState (SMethod r)
-genFuncProc _  f svs (FDef (FuncDef n desc parms o rd s)) = do
+genFuncProc :: (SharedProg r) => (Name -> VSType r -> Description -> [ParameterChunk]
+  -> Maybe Description -> [MSBlock r] -> GenState (SMethod r)) ->
+  [StateVariable] -> Func -> GenState (SMethod r)
+genFuncProc f svs (FDef (FuncDef n desc parms o rd s)) = do
   g <- get
   modify (\st -> st {currentScope = Local})
   stmts <- mapM convStmtProc s
@@ -914,12 +914,12 @@ genFuncProc _  f svs (FDef (FuncDef n desc parms o rd s)) = do
     \\ (map quantvar parms ++ map stVar svs))
   t <- spaceCodeType o
   f n (convType t) desc parms rd [block $ map (`varDec` local) vars, block stmts]
-genFuncProc _  _ _ (FDef (CtorDef {})) = error "genFuncProc: Procedural renderers do not support constructors"
-genFuncProc sm _ _ (FData (FuncData n desc ddef)) = genDataFuncProc sm n desc ddef
+genFuncProc _ _ (FDef (CtorDef {})) = error "genFuncProc: Procedural renderers do not support constructors"
+genFuncProc _ _ (FData (FuncData n desc ddef)) = genDataFuncProc n desc ddef
 
 -- | Converts a 'Mod'\'s functions to GOOL.
-genModFuncsProc :: (SharedProg r) => PrintingInformation -> Mod -> [GenState (SMethod r)]
-genModFuncsProc sm (Mod _ _ _ _ fs) = map (genFuncProc sm (publicFuncProc sm) []) fs
+genModFuncsProc :: (SharedProg r) => Mod -> [GenState (SMethod r)]
+genModFuncsProc (Mod _ _ _ _ fs) = map (genFuncProc publicFuncProc []) fs
 
 -- this is really ugly!!
 -- | Read from a data description into a 'MSBlock' of 'MSStatement's.
@@ -1212,35 +1212,35 @@ convStmtProc (FAppend a b) = do
 
 -- | Generates a function that reads a file whose format is based on the passed
 -- 'DataDesc'.
-genDataFuncProc :: (SharedProg r) => PrintingInformation -> Name -> Description -> DataDesc ->
+genDataFuncProc :: (SharedProg r) => Name -> Description -> DataDesc ->
   GenState (SMethod r)
-genDataFuncProc sm nameTitle desc ddef = do
+genDataFuncProc nameTitle desc ddef = do
   let parms = getInputs ddef
   bod <- readDataProc ddef
-  publicFuncProc sm nameTitle void desc (map pcAuto $ quantvar inFileName : parms)
+  publicFuncProc nameTitle void desc (map pcAuto $ quantvar inFileName : parms)
     Nothing bod
 
 -- | Generates a public function, defined by its inputs and outputs.
-publicInOutFuncProc :: (SharedProg r) => PrintingInformation -> Label -> Description -> [CodeVarChunk] ->
+publicInOutFuncProc :: (SharedProg r) => Label -> Description -> [CodeVarChunk] ->
   [CodeVarChunk] -> [MSBlock r] -> GenState (SMethod r)
-publicInOutFuncProc sm n = genInOutFuncProc sm (inOutFunc n public) (docInOutFunc n public) n
+publicInOutFuncProc n = genInOutFuncProc (inOutFunc n public) (docInOutFunc n public) n
 
 -- | Generates a private function, defined by its inputs and outputs.
-privateInOutFuncProc :: (SharedProg r) => PrintingInformation -> Label -> Description -> [CodeVarChunk] ->
+privateInOutFuncProc :: (SharedProg r) => Label -> Description -> [CodeVarChunk] ->
   [CodeVarChunk] -> [MSBlock r] -> GenState (SMethod r)
-privateInOutFuncProc sm n = genInOutFuncProc sm (inOutFunc n private) (docInOutFunc n private) n
+privateInOutFuncProc n = genInOutFuncProc (inOutFunc n private) (docInOutFunc n private) n
 
 -- | Generates a function or method defined by its inputs and outputs.
 -- Parameters are: the GOOL constructor to use, the equivalent GOOL constructor
 -- for a documented function/method, the visibility, permanence, name, description,
 -- list of inputs, list of outputs, and body.
-genInOutFuncProc :: (SharedProg r) => PrintingInformation -> ([SVariable r] ->
-  [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r) ->
+genInOutFuncProc :: (SharedProg r) => ([SVariable r] -> [SVariable r] ->
+    [SVariable r] -> MSBody r -> SMethod r) ->
   (String -> [(String, SVariable r)] -> [(String, SVariable r)] ->
     [(String, SVariable r)] -> MSBody r -> SMethod r)
   -> Label -> Description -> [CodeVarChunk] -> [CodeVarChunk] ->
   [MSBlock r] -> GenState (SMethod r)
-genInOutFuncProc sm f docf n desc ins' outs' b = do
+genInOutFuncProc f docf n desc ins' outs' b = do
   g <- get
   modify (\st -> st {currentScope = Local})
   let ins = ins' \\ outs'
@@ -1250,9 +1250,9 @@ genInOutFuncProc sm f docf n desc ins' outs' b = do
   outVs <- mapM mkVarProc outs
   bothVs <- mapM mkVarProc both
   bod <- logBody n (bothVs ++ inVs) b
-  pComms <- mapM (getComment sm) ins
-  oComms <- mapM (getComment sm) outs
-  bComms <- mapM (getComment sm) both
+  pComms <- mapM getComment ins
+  oComms <- mapM getComment outs
+  bComms <- mapM getComment both
   return $ if CommentFunc `elem` commented g
     then docf desc (zip pComms inVs) (zip oComms outVs) (zip
     bComms bothVs) bod else f inVs outVs bothVs bod

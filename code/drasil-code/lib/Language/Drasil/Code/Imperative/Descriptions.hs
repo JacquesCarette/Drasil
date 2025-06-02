@@ -17,7 +17,7 @@ import Language.Drasil.Choices (ImplementationType(..), Structure(..),
   InternalConcept(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Mod (Description)
-import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, PrintingInformation)
+import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
 
 import Data.Map (member)
 import qualified Data.Map as Map (filter, lookup, null)
@@ -34,13 +34,13 @@ modDesc = fmap ((++) "Provides " . stringList)
 -- | Returns description of what is contained in the module that is generated
 -- when the user chooses an Unmodular design. Module is described as either a
 -- program or library, depending on the user's choice of implementation type.
-unmodularDesc :: PrintingInformation -> GenState Description
-unmodularDesc sm = do
+unmodularDesc :: GenState Description
+unmodularDesc = do
   g <- get
   let spec = codeSpec g
       implTypeStr Program = "program"
       implTypeStr Library = "library"
-  return $ show $ sentenceDoc sm (spec ^. systemdbO) Implementation OneLine $ capSent $
+  return $ show $ sentenceDoc (spec ^. systemdbO) Implementation OneLine $ capSent $
     foldlSent ([S "a", S (implTypeStr (implType g)), S "to"] ++ codeSpec g ^. purpose)
 
 -- | Returns description of what is contained in the Input Parameters module.

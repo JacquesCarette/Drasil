@@ -13,5 +13,5 @@ main = do
   dumpEverything fullSI printSetting ".drasil/"
   typeCheckSI fullSI
   gen (DocSpec (docChoices SRS [HTML, TeX, Jupyter, MDBook]) "PDController_SRS") srs printSetting
-  genCode printSetting codeChoices codeSpecs
+  genCode codeChoices codeSpecs
   genDot fullSI

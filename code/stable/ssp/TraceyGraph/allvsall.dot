@@ -1,11 +1,11 @@
 digraph allvsall {
-	dataDefn:alpha_i -> assumpSBSBISL;
-	dataDefn:beta_i -> assumpSBSBISL;
+	dataDefn:alpha_i -> instance:assumpSBSBISL;
+	dataDefn:beta_i -> instance:assumpSBSBISL;
 	dataDefn:l_bi -> dataDefn:alpha_i;
 	dataDefn:l_bi -> dataDefn:b_i;
 	dataDefn:l_si -> dataDefn:beta_i;
 	dataDefn:l_si -> dataDefn:b_i;
-	dataDefn:h_i -> assumpSBSBISL;
+	dataDefn:h_i -> instance:assumpSBSBISL;
 	dataDefn:h_i -> dataDefn:hR;
 	dataDefn:h_i -> dataDefn:hL;
 	dataDefn:Phi -> dataDefn:alpha_i;
@@ -13,8 +13,8 @@ digraph allvsall {
 	dataDefn:Psi -> dataDefn:alpha_i;
 	dataDefn:Psi -> dataDefn:f_i;
 	dataDefn:Psi -> dataDefn:Phi;
-	theory:equilibriumCS -> assumpENSL;
-	theory:mcShrSrgth -> assumpSBSBISL;
+	theory:equilibriumCS -> instance:assumpENSL;
+	theory:mcShrSrgth -> instance:assumpSBSBISL;
 	theory:effectiveStressTM -> dataDefn:sigma;
 	theory:normForcEq -> dataDefn:alpha_i;
 	theory:normForcEq -> dataDefn:beta_i;
@@ -26,19 +26,19 @@ digraph allvsall {
 	theory:bsShrFEq -> theory:equilibriumCS;
 	theory:bsShrFEq -> theory:sliceWght;
 	theory:bsShrFEq -> theory:srfWtrF;
-	theory:resShr -> assumpSLH;
-	theory:resShr -> assumpSP;
-	theory:resShr -> assumpSLI;
-	theory:resShr -> assumpPSC;
+	theory:resShr -> instance:assumpSLH;
+	theory:resShr -> instance:assumpSP;
+	theory:resShr -> instance:assumpSLI;
+	theory:resShr -> instance:assumpPSC;
 	theory:resShr -> dataDefn:l_bi;
 	theory:resShr -> dataDefn:sigma;
 	theory:resShr -> dataDefn:tau;
 	theory:resShr -> theory:mcShrSrgth;
-	theory:mobShr -> assumpFOS;
+	theory:mobShr -> instance:assumpFOS;
 	theory:mobShr -> dataDefn:l_bi;
 	theory:mobShr -> theory:factOfSafetyTM;
 	theory:mobShr -> theory:resShr;
-	theory:effNormF -> assumpPSC;
+	theory:effNormF -> instance:assumpPSC;
 	theory:effNormF -> dataDefn:sigma;
 	theory:effNormF -> theory:effectiveStressTM;
 	theory:effNormF -> theory:baseWtrF;
@@ -54,10 +54,10 @@ digraph allvsall {
 	theory:mobShearWO -> dataDefn:beta_i;
 	theory:mobShearWO -> theory:sliceWght;
 	theory:mobShearWO -> theory:srfWtrF;
-	theory:X_i -> assumpINSFL;
+	theory:X_i -> instance:assumpINSFL;
 	theory:X_i -> dataDefn:f_i;
-	theory:momentEql -> assumpNESSS;
-	theory:momentEql -> assumpHFSM;
+	theory:momentEql -> instance:assumpNESSS;
+	theory:momentEql -> instance:assumpHFSM;
 	theory:momentEql -> dataDefn:alpha_i;
 	theory:momentEql -> dataDefn:beta_i;
 	theory:momentEql -> dataDefn:b_i;
@@ -68,31 +68,31 @@ digraph allvsall {
 	theory:momentEql -> theory:sliceWght;
 	theory:momentEql -> theory:srfWtrF;
 	theory:weight -> theory:newtonSL;
-	theory:sliceWght -> assumpSLH;
-	theory:sliceWght -> assumpPSC;
-	theory:sliceWght -> assumpSBSBISL;
-	theory:sliceWght -> assumpWIBE;
-	theory:sliceWght -> assumpWISE;
+	theory:sliceWght -> instance:assumpSLH;
+	theory:sliceWght -> instance:assumpPSC;
+	theory:sliceWght -> instance:assumpSBSBISL;
+	theory:sliceWght -> instance:assumpWIBE;
+	theory:sliceWght -> instance:assumpWISE;
 	theory:sliceWght -> dataDefn:b_i;
 	theory:sliceWght -> theory:weight;
-	theory:baseWtrF -> assumpPSC;
-	theory:baseWtrF -> assumpSBSBISL;
-	theory:baseWtrF -> assumpWIBE;
-	theory:baseWtrF -> assumpHFSM;
+	theory:baseWtrF -> instance:assumpPSC;
+	theory:baseWtrF -> instance:assumpSBSBISL;
+	theory:baseWtrF -> instance:assumpWIBE;
+	theory:baseWtrF -> instance:assumpHFSM;
 	theory:baseWtrF -> dataDefn:l_bi;
 	theory:baseWtrF -> theory:pressure;
 	theory:baseWtrF -> theory:baseWtrF;
-	theory:srfWtrF -> assumpPSC;
-	theory:srfWtrF -> assumpSBSBISL;
-	theory:srfWtrF -> assumpWISE;
-	theory:srfWtrF -> assumpHFSM;
+	theory:srfWtrF -> instance:assumpPSC;
+	theory:srfWtrF -> instance:assumpSBSBISL;
+	theory:srfWtrF -> instance:assumpWISE;
+	theory:srfWtrF -> instance:assumpHFSM;
 	theory:srfWtrF -> dataDefn:l_si;
 	theory:srfWtrF -> theory:pressure;
 	theory:srfWtrF -> theory:srfWtrF;
-	theory:FS -> assumpINSFL;
-	theory:FS -> assumpES;
-	theory:FS -> assumpSF;
-	theory:FS -> assumpSL;
+	theory:FS -> instance:assumpINSFL;
+	theory:FS -> instance:assumpES;
+	theory:FS -> instance:assumpSF;
+	theory:FS -> instance:assumpSL;
 	theory:FS -> dataDefn:Phi;
 	theory:FS -> dataDefn:Psi;
 	theory:FS -> theory:normForcEq;
@@ -104,10 +104,10 @@ digraph allvsall {
 	theory:FS -> theory:FS;
 	theory:FS -> theory:nrmShrForIM;
 	theory:FS -> theory:intsliceFsRC;
-	theory:nrmShrForIM -> assumpINSFL;
-	theory:nrmShrForIM -> assumpES;
-	theory:nrmShrForIM -> assumpSF;
-	theory:nrmShrForIM -> assumpSL;
+	theory:nrmShrForIM -> instance:assumpINSFL;
+	theory:nrmShrForIM -> instance:assumpES;
+	theory:nrmShrForIM -> instance:assumpSF;
+	theory:nrmShrForIM -> instance:assumpSL;
 	theory:nrmShrForIM -> theory:X_i;
 	theory:nrmShrForIM -> theory:momentEql;
 	theory:nrmShrForIM -> theory:FS;
@@ -125,7 +125,7 @@ digraph allvsall {
 	theory:nrmShrForDenRC -> dataDefn:b_i;
 	theory:nrmShrForDenRC -> dataDefn:f_i;
 	theory:nrmShrForDenRC -> theory:nrmShrForIM;
-	theory:intsliceFsRC -> assumpES;
+	theory:intsliceFsRC -> instance:assumpES;
 	theory:intsliceFsRC -> dataDefn:Phi;
 	theory:intsliceFsRC -> dataDefn:Psi;
 	theory:intsliceFsRC -> theory:resShearWO;
@@ -133,53 +133,53 @@ digraph allvsall {
 	theory:intsliceFsRC -> theory:FS;
 	theory:intsliceFsRC -> theory:nrmShrForIM;
 	theory:intsliceFsRC -> theory:intsliceFsRC;
-	theory:crtSlpIdIM -> assumpSSC;
-	determineCritSlip -> theory:FS;
-	determineCritSlip -> theory:nrmShrForIM;
-	determineCritSlip -> theory:intsliceFsRC;
-	determineCritSlip -> theory:crtSlpIdIM;
-	displayGraph -> theory:crtSlpIdIM;
-	displayFS -> theory:FS;
-	displayFS -> theory:nrmShrForIM;
-	displayFS -> theory:intsliceFsRC;
-	displayNormal -> theory:FS;
-	displayNormal -> theory:nrmShrForIM;
-	displayNormal -> theory:intsliceFsRC;
-	displayShear -> theory:FS;
-	displayShear -> theory:nrmShrForIM;
-	displayShear -> theory:intsliceFsRC;
-	writeToFile -> displayInput;
-	writeToFile -> displayGraph;
-	writeToFile -> displayFS;
-	writeToFile -> displayNormal;
-	writeToFile -> displayShear;
-	LC_inhomogeneous -> assumpSLH;
-	LC_seismic -> assumpSF;
-	LC_external -> assumpSL;
-	UC_normshearlinear -> assumpINSFL;
-	UC_2donly -> assumpENSL;
+	theory:crtSlpIdIM -> instance:assumpSSC;
+	instance:determineCritSlip -> theory:FS;
+	instance:determineCritSlip -> theory:nrmShrForIM;
+	instance:determineCritSlip -> theory:intsliceFsRC;
+	instance:determineCritSlip -> theory:crtSlpIdIM;
+	instance:displayGraph -> theory:crtSlpIdIM;
+	instance:displayFS -> theory:FS;
+	instance:displayFS -> theory:nrmShrForIM;
+	instance:displayFS -> theory:intsliceFsRC;
+	instance:displayNormal -> theory:FS;
+	instance:displayNormal -> theory:nrmShrForIM;
+	instance:displayNormal -> theory:intsliceFsRC;
+	instance:displayShear -> theory:FS;
+	instance:displayShear -> theory:nrmShrForIM;
+	instance:displayShear -> theory:intsliceFsRC;
+	instance:writeToFile -> instance:displayInput;
+	instance:writeToFile -> instance:displayGraph;
+	instance:writeToFile -> instance:displayFS;
+	instance:writeToFile -> instance:displayNormal;
+	instance:writeToFile -> instance:displayShear;
+	instance:LC_inhomogeneous -> instance:assumpSLH;
+	instance:LC_seismic -> instance:assumpSF;
+	instance:LC_external -> instance:assumpSL;
+	instance:UC_normshearlinear -> instance:assumpINSFL;
+	instance:UC_2donly -> instance:assumpENSL;
 
 
-	assumpSSC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSSC"];
-	assumpFOS	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpFOS"];
-	assumpSLH	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSLH"];
-	assumpSP	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSP"];
-	assumpSLI	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSLI"];
-	assumpINSFL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpINSFL"];
-	assumpPSC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpPSC"];
-	assumpENSL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpENSL"];
-	assumpSBSBISL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSBSBISL"];
-	assumpES	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpES"];
-	assumpSF	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSF"];
-	assumpSL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSL"];
-	assumpWIBE	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpWIBE"];
-	assumpWISE	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpWISE"];
-	assumpNESSS	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpNESSS"];
-	assumpHFSM	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpHFSM"];
+	instance:assumpSSC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSSC"];
+	instance:assumpFOS	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpFOS"];
+	instance:assumpSLH	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSLH"];
+	instance:assumpSP	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSP"];
+	instance:assumpSLI	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSLI"];
+	instance:assumpINSFL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpINSFL"];
+	instance:assumpPSC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpPSC"];
+	instance:assumpENSL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpENSL"];
+	instance:assumpSBSBISL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSBSBISL"];
+	instance:assumpES	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpES"];
+	instance:assumpSF	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSF"];
+	instance:assumpSL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSL"];
+	instance:assumpWIBE	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpWIBE"];
+	instance:assumpWISE	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpWISE"];
+	instance:assumpNESSS	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpNESSS"];
+	instance:assumpHFSM	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpHFSM"];
 
 	subgraph A {
 	rank="same"
-	{assumpSSC, assumpFOS, assumpSLH, assumpSP, assumpSLI, assumpINSFL, assumpPSC, assumpENSL, assumpSBSBISL, assumpES, assumpSF, assumpSL, assumpWIBE, assumpWISE, assumpNESSS, assumpHFSM}
+	{instance:assumpSSC, instance:assumpFOS, instance:assumpSLH, instance:assumpSP, instance:assumpSLI, instance:assumpINSFL, instance:assumpPSC, instance:assumpENSL, instance:assumpSBSBISL, instance:assumpES, instance:assumpSF, instance:assumpSL, instance:assumpWIBE, instance:assumpWISE, instance:assumpNESSS, instance:assumpHFSM}
 	}
 
 	dataDefn:H_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:intersliceWtrF"];
@@ -248,44 +248,44 @@ digraph allvsall {
 	{theory:FS, theory:nrmShrForIM, theory:nrmShrForNumRC, theory:nrmShrForDenRC, theory:intsliceFsRC, theory:crtSlpIdIM}
 	}
 
-	readAndStore	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:readAndStore"];
-	verifyInput	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInput"];
-	determineCritSlip	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:determineCritSlip"];
-	verifyOutput	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyOutput"];
-	displayInput	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:displayInput"];
-	displayGraph	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:displayGraph"];
-	displayFS	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:displayFS"];
-	displayNormal	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:displayNormal"];
-	displayShear	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:displayShear"];
-	writeToFile	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:writeToFile"];
-	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
-	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandable"];
-	reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:reusable"];
-	maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainable"];
+	instance:readAndStore	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:readAndStore"];
+	instance:verifyInput	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInput"];
+	instance:determineCritSlip	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:determineCritSlip"];
+	instance:verifyOutput	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyOutput"];
+	instance:displayInput	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:displayInput"];
+	instance:displayGraph	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:displayGraph"];
+	instance:displayFS	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:displayFS"];
+	instance:displayNormal	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:displayNormal"];
+	instance:displayShear	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:displayShear"];
+	instance:writeToFile	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:writeToFile"];
+	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
+	instance:understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandable"];
+	instance:reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:reusable"];
+	instance:maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainable"];
 
 	subgraph FR {
 	rank="same"
-	{readAndStore, verifyInput, determineCritSlip, verifyOutput, displayInput, displayGraph, displayFS, displayNormal, displayShear, writeToFile, correct, understandable, reusable, maintainable}
+	{instance:readAndStore, instance:verifyInput, instance:determineCritSlip, instance:verifyOutput, instance:displayInput, instance:displayGraph, instance:displayFS, instance:displayNormal, instance:displayShear, instance:writeToFile, instance:correct, instance:understandable, instance:reusable, instance:maintainable}
 	}
 
-	identifyCritAndFS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:identifyCritAndFS"];
-	determineNormalF	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:determineNormalF"];
-	determineShearF	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:determineShearF"];
+	instance:identifyCritAndFS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:identifyCritAndFS"];
+	instance:determineNormalF	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:determineNormalF"];
+	instance:determineShearF	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:determineShearF"];
 
 	subgraph GS {
 	rank="same"
-	{identifyCritAndFS, determineNormalF, determineShearF}
+	{instance:identifyCritAndFS, instance:determineNormalF, instance:determineShearF}
 	}
 
-	LC_inhomogeneous	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:LC_inhomogeneous"];
-	LC_seismic	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:LC_seismic"];
-	LC_external	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:LC_external"];
-	UC_normshearlinear	[shape=box, color=black, style=filled, fillcolor=lavender, label="UC:UC_normshearlinear"];
-	UC_2donly	[shape=box, color=black, style=filled, fillcolor=lavender, label="UC:UC_2donly"];
+	instance:LC_inhomogeneous	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:LC_inhomogeneous"];
+	instance:LC_seismic	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:LC_seismic"];
+	instance:LC_external	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:LC_external"];
+	instance:UC_normshearlinear	[shape=box, color=black, style=filled, fillcolor=lavender, label="UC:UC_normshearlinear"];
+	instance:UC_2donly	[shape=box, color=black, style=filled, fillcolor=lavender, label="UC:UC_2donly"];
 
 	subgraph LC {
 	rank="same"
-	{LC_inhomogeneous, LC_seismic, LC_external, UC_normshearlinear, UC_2donly}
+	{instance:LC_inhomogeneous, instance:LC_seismic, instance:LC_external, instance:UC_normshearlinear, instance:UC_2donly}
 	}
 
 }

@@ -1,17 +1,17 @@
 digraph allvsr {
 
 
-	assumpOT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpOT"];
-	assumpOD	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpOD"];
-	assumpCST	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpCST"];
-	assumpAD	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpAD"];
-	assumpCT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpCT"];
-	assumpDI	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpDI"];
-	assumpCAJI	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpCAJI"];
+	instance:assumpOT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpOT"];
+	instance:assumpOD	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpOD"];
+	instance:assumpCST	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpCST"];
+	instance:assumpAD	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpAD"];
+	instance:assumpCT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpCT"];
+	instance:assumpDI	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpDI"];
+	instance:assumpCAJI	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpCAJI"];
 
 	subgraph A {
 	rank="same"
-	{assumpOT, assumpOD, assumpCST, assumpAD, assumpCT, assumpDI, assumpCAJI}
+	{instance:assumpOT, instance:assumpOD, instance:assumpCST, instance:assumpAD, instance:assumpCT, instance:assumpDI, instance:assumpCAJI}
 	}
 
 	dataDefn:p_CM	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ctrOfMass"];
@@ -62,31 +62,31 @@ digraph allvsr {
 	{theory:accj, theory:angAccj, theory:col2DIM}
 	}
 
-	simSpace	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:simSpace"];
-	inputInitialConds	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputInitialConds"];
-	inputSurfaceProps	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputSurfaceProps"];
-	verifyPhysCons	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyPhysCons"];
-	calcTransOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcTransOverTime"];
-	calcRotOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcRotOverTime"];
-	deterColls	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:deterColls"];
-	deterCollRespOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:deterCollRespOverTime"];
-	performance	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:performance"];
-	correctness	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correctness"];
-	usability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:usability"];
-	understandability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandability"];
-	maintainability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainability"];
+	instance:simSpace	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:simSpace"];
+	instance:inputInitialConds	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputInitialConds"];
+	instance:inputSurfaceProps	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputSurfaceProps"];
+	instance:verifyPhysCons	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyPhysCons"];
+	instance:calcTransOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcTransOverTime"];
+	instance:calcRotOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcRotOverTime"];
+	instance:deterColls	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:deterColls"];
+	instance:deterCollRespOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:deterCollRespOverTime"];
+	instance:performance	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:performance"];
+	instance:correctness	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correctness"];
+	instance:usability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:usability"];
+	instance:understandability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandability"];
+	instance:maintainability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainability"];
 
 	subgraph FR {
 	rank="same"
-	{simSpace, inputInitialConds, inputSurfaceProps, verifyPhysCons, calcTransOverTime, calcRotOverTime, deterColls, deterCollRespOverTime, performance, correctness, usability, understandability, maintainability}
+	{instance:simSpace, instance:inputInitialConds, instance:inputSurfaceProps, instance:verifyPhysCons, instance:calcTransOverTime, instance:calcRotOverTime, instance:deterColls, instance:deterCollRespOverTime, instance:performance, instance:correctness, instance:usability, instance:understandability, instance:maintainability}
 	}
 
-	linearGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:linearGS"];
-	angularGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:angularGS"];
+	instance:linearGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:linearGS"];
+	instance:angularGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:angularGS"];
 
 	subgraph GS {
 	rank="same"
-	{linearGS, angularGS}
+	{instance:linearGS, instance:angularGS}
 	}
 
 }

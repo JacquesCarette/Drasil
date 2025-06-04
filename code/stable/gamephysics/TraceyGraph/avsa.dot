@@ -1,17 +1,17 @@
 digraph avsa {
 
 
-	assumpOT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpOT"];
-	assumpOD	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpOD"];
-	assumpCST	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpCST"];
-	assumpAD	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpAD"];
-	assumpCT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpCT"];
-	assumpDI	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpDI"];
-	assumpCAJI	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpCAJI"];
+	instance:assumpOT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpOT"];
+	instance:assumpOD	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpOD"];
+	instance:assumpCST	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpCST"];
+	instance:assumpAD	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpAD"];
+	instance:assumpCT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpCT"];
+	instance:assumpDI	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpDI"];
+	instance:assumpCAJI	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpCAJI"];
 
 	subgraph A {
 	rank="same"
-	{assumpOT, assumpOD, assumpCST, assumpAD, assumpCT, assumpDI, assumpCAJI}
+	{instance:assumpOT, instance:assumpOD, instance:assumpCST, instance:assumpAD, instance:assumpCT, instance:assumpDI, instance:assumpCAJI}
 	}
 
 }

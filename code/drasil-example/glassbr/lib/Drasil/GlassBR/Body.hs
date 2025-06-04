@@ -44,9 +44,9 @@ import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfunc
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
-  constrained, inputDataConstraints, inputs, outputs, specParamVals, glassTy,
+  constrained, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
-  sD, termsWithAccDefn, termsWithDefsOnly, terms)
+  sD, termsWithAccDefn, termsWithDefsOnly, terms, dataConstraints)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -107,7 +107,7 @@ mkSRS = [TableOfContents,
         , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) HideDerivation
-        , Constraints auxSpecSent inputDataConstraints
+        , Constraints auxSpecSent dataConstraints
         , CorrSolnPpties [probBr, stressDistFac] []
         ]
       ],
@@ -132,10 +132,10 @@ background = foldlSent_ [phrase explosion, S "in downtown areas are dangerous fr
   +:+ S "effect of falling glass"]
 
 symbMap :: ChunkDB
-symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
+symbMap = cdb thisSymbols (map nw acronyms ++ nw glassBR : map nw thisSymbols
   ++ map nw con' ++ map nw terms ++ map nw doccon ++ map nw doccon' ++ map nw educon
   ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon'
-  ++ map nw softwarecon ++ map nw terms ++ [nw lateralLoad, nw materialProprty]
+  ++ map nw softwarecon ++ [nw lateralLoad, nw materialProprty]
    ++ [nw distance, nw algorithm] ++
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw symb ++ terms ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]

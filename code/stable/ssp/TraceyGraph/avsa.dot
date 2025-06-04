@@ -1,26 +1,26 @@
 digraph avsa {
 
 
-	assumpSSC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSSC"];
-	assumpFOS	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpFOS"];
-	assumpSLH	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSLH"];
-	assumpSP	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSP"];
-	assumpSLI	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSLI"];
-	assumpINSFL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpINSFL"];
-	assumpPSC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpPSC"];
-	assumpENSL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpENSL"];
-	assumpSBSBISL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSBSBISL"];
-	assumpES	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpES"];
-	assumpSF	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSF"];
-	assumpSL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSL"];
-	assumpWIBE	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpWIBE"];
-	assumpWISE	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpWISE"];
-	assumpNESSS	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpNESSS"];
-	assumpHFSM	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpHFSM"];
+	instance:assumpSSC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSSC"];
+	instance:assumpFOS	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpFOS"];
+	instance:assumpSLH	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSLH"];
+	instance:assumpSP	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSP"];
+	instance:assumpSLI	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSLI"];
+	instance:assumpINSFL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpINSFL"];
+	instance:assumpPSC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpPSC"];
+	instance:assumpENSL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpENSL"];
+	instance:assumpSBSBISL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSBSBISL"];
+	instance:assumpES	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpES"];
+	instance:assumpSF	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSF"];
+	instance:assumpSL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSL"];
+	instance:assumpWIBE	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpWIBE"];
+	instance:assumpWISE	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpWISE"];
+	instance:assumpNESSS	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpNESSS"];
+	instance:assumpHFSM	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpHFSM"];
 
 	subgraph A {
 	rank="same"
-	{assumpSSC, assumpFOS, assumpSLH, assumpSP, assumpSLI, assumpINSFL, assumpPSC, assumpENSL, assumpSBSBISL, assumpES, assumpSF, assumpSL, assumpWIBE, assumpWISE, assumpNESSS, assumpHFSM}
+	{instance:assumpSSC, instance:assumpFOS, instance:assumpSLH, instance:assumpSP, instance:assumpSLI, instance:assumpINSFL, instance:assumpPSC, instance:assumpENSL, instance:assumpSBSBISL, instance:assumpES, instance:assumpSF, instance:assumpSL, instance:assumpWIBE, instance:assumpWISE, instance:assumpNESSS, instance:assumpHFSM}
 	}
 
 }

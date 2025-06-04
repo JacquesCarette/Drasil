@@ -1,21 +1,21 @@
 digraph allvsr {
-	calcAng -> theory:angleIM1;
-	calcAng -> theory:angleIM2;
-	outputValues -> theory:angleIM1;
-	outputValues -> theory:angleIM2;
+	instance:calcAng -> theory:angleIM1;
+	instance:calcAng -> theory:angleIM2;
+	instance:outputValues -> theory:angleIM1;
+	instance:outputValues -> theory:angleIM2;
 
 
-	twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
-	cartSys	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSys"];
-	cartSysR	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSysR"];
-	yAxisDir	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:yAxisDir"];
-	startOrigin2x	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:startOrigin2x"];
-	firstPend	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:firstPend"];
-	secondPend	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:secondPend"];
+	instance:twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
+	instance:cartSys	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSys"];
+	instance:cartSysR	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSysR"];
+	instance:yAxisDir	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:yAxisDir"];
+	instance:startOrigin2x	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:startOrigin2x"];
+	instance:firstPend	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:firstPend"];
+	instance:secondPend	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:secondPend"];
 
 	subgraph A {
 	rank="same"
-	{twoDMotion, cartSys, cartSysR, yAxisDir, startOrigin2x, firstPend, secondPend}
+	{instance:twoDMotion, instance:cartSys, instance:cartSysR, instance:yAxisDir, instance:startOrigin2x, instance:firstPend, instance:secondPend}
 	}
 
 	dataDefn:velocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionGDD"];
@@ -66,23 +66,23 @@ digraph allvsr {
 	{theory:angleIM1, theory:angleIM2}
 	}
 
-	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
-	verifyInptVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInptVals"];
-	calcAng	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcAng"];
-	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
-	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
-	portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
+	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
+	instance:verifyInptVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInptVals"];
+	instance:calcAng	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcAng"];
+	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
+	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
+	instance:portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
 
 	subgraph FR {
 	rank="same"
-	{inputValues, verifyInptVals, calcAng, outputValues, correct, portable}
+	{instance:inputValues, instance:verifyInptVals, instance:calcAng, instance:outputValues, instance:correct, instance:portable}
 	}
 
-	motionMass	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:motionMass"];
+	instance:motionMass	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:motionMass"];
 
 	subgraph GS {
 	rank="same"
-	{motionMass}
+	{instance:motionMass}
 	}
 
 }

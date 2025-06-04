@@ -456,7 +456,6 @@ structural :: IdeaDict
 mechanics :: IdeaDict
 undergraduate :: IdeaDict
 highSchool :: IdeaDict
-physical_ :: IdeaDict
 chemistry :: IdeaDict
 undergradDegree :: IdeaDict
 scndYrCalculus :: IdeaDict

@@ -71,6 +71,8 @@ inputDataConstraints :: [UncertainChunk]
 derivedInputDataConstraints :: [UncertainChunk]
 dataConstraints :: [UncertainChunk]
 outputs :: [QuantityDict]
+
+-- | Symbols uniquely relevant to theory models.
 tmSymbols :: [QuantityDict]
 probBr :: ConstrainedChunk
 probFail :: ConstrainedChunk

@@ -21,28 +21,28 @@ siUnits = map unitWrapper fundamentals ++ map unitWrapper derived
 -- * Fundamental SI Units
 
 metre, kilogram, second, kelvin, mole, ampere, candela :: UnitDefn
-metre    = fund "metre"    "length"               "m"
-kilogram = fund "kilogram" "mass"                 "kg"
-second   = fund "second"   "time"                 "s"
-kelvin   = fund "kelvin"   "temperature"          "K"
-mole     = fund "mole"     "amount of substance"  "mol"
-ampere   = fund "ampere"   "electric current"     "A"
-candela  = fund "candela"  "luminous intensity"   "cd"
+metre    = fund "unit:metre"    "length"               "m"
+kilogram = fund "unit:kilogram" "mass"                 "kg"
+second   = fund "unit:second"   "time"                 "s"
+kelvin   = fund "unit:kelvin"   "temperature"          "K"
+mole     = fund "unit:mole"     "amount of substance"  "mol"
+ampere   = fund "unit:ampere"   "electric current"     "A"
+candela  = fund "unit:candela"  "luminous intensity"   "cd"
 
 -- * Commonly Defined Units
 
 degree :: UnitDefn --FIXME: define degree in terms of radians and pi
 -- degree = UD (dcc "degree" (cn' "degree") "angle") (BaseSI (US [(Special Circle,1)])) ["degree"]
-degree = fund' "degree" "angle" (Special Circle)
+degree = fund' "unit:degree" "angle" (Special Circle)
 
 -- Some of these units are easiest to define via others less common names, 
 -- which we define first.
 s_2 :: UnitDefn
-s_2 = newUnit "seconds squared" $ second ^: 2
+s_2 = newUnit "unt:seconds squared" $ second ^: 2
 
 m_2, m_3 :: UnitDefn
-m_2 = newUnit "square metres"   $ metre ^: 2
-m_3 = newUnit "cubic metres"    $ metre ^: 3
+m_2 = newUnit "unit:square metres"   $ metre ^: 2
+m_3 = newUnit "unit:cubic metres"    $ metre ^: 3
 
 -- And now for the ones with 'common' names
 
@@ -50,91 +50,91 @@ becquerel, calorie, centigrade, coulomb, farad, gray, henry, hertz, joule,
   katal, kilopascal, kilowatt, litre, lumen, lux,  millimetre, newton, ohm,
   pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber :: UnitDefn
 
-becquerel = derCUC' "becquerel" 
+becquerel = derCUC' "unit:becquerel" 
   "becquerel" "activity" (label "Bq") --of a Radionuclide
   (second ^: (-1))
   
-calorie = derUC "calorie" 
+calorie = derUC "unit:calorie" 
   "calorie" "energy" (label "cal") (scale 4.184 joule)
 
-centigrade = derUC "centigrade" 
+centigrade = derUC "unit:centigrade" 
   "centigrade" "temperature" (Concat [Special Circle, label "C"])
   (shift 273.15 kelvin)
 
-coulomb = derCUC' "coulomb" 
+coulomb = derCUC' "unit:coulomb" 
   "coulomb" "electric charge" (label "C") (ampere *: second)
 
-farad = derCUC' "farad" 
+farad = derCUC' "unit:farad" 
   "farad" "capacitance" (label "F") (coulomb /: volt)
 
-gray = derCUC' "gray" 
+gray = derCUC' "unit:gray" 
   "gray" "absorbed dose" (label "Gy") (joule /: kilogram)
   
-henry = derCUC'' "henry" 
+henry = derCUC'' "unit:henry" 
   (cnIES "henry") "inductance" (label "H") (weber /: ampere)
   
-hertz = derCUC "hertz" 
+hertz = derCUC "unit:hertz" 
   "hertz" "frequency" (label "Hz") (second ^: (-1))
 
-joule = derCUC' "joule" 
+joule = derCUC' "unit:joule" 
   "joule" "energy" (label "J") 
  (kilogram *$ (m_2 *$ (second ^: (-2))))
 
-katal = derCUC' "katal" 
+katal = derCUC' "unit:katal" 
   "katal" "catalytic activity" (label "kat") (mole /: second)
 
-kilopascal = derUC' "kilopascal" 
+kilopascal = derUC' "unit:kilopascal" 
   "kilopascal" "pressure"
   (Concat [label "k", label "Pa"]) (scale 1000 pascal)
 
-kilowatt = derUC' "kilowatt" 
+kilowatt = derUC' "unit:kilowatt" 
   "kilowatt" "power" (Concat [label "k", label "W"]) (scale 1000 watt)
   
-litre = derUC' "litre"
+litre = derUC' "unit:litre"
   "litre" "volume" (label "L") (scale (1/1000) m_3)
 
-lumen = derCUC' "lumen" 
+lumen = derCUC' "unit:lumen" 
   "lumen" "luminous flux" (label "lm") (candela *: steradian)
 
-lux = derCUC "lux" 
+lux = derCUC "unit:lux" 
   "lux" "illuminance" (label "lx") (lumen /: m_2)
 
-millimetre = derUC' "millimetre"
+millimetre = derUC' "unit:millimetre"
   "millimetre" "length" (label "mm") (scale 0.0001 metre)
 
-newton = derCUC' "newton"
+newton = derCUC' "unit:newton"
   "newton" "force" (label "N") (kilogram *$ (second ^: (-2)))
   
-ohm = derCUC' "ohm"
+ohm = derCUC' "unit:ohm"
   "ohm" "resistance" cOmega (volt /: ampere)
   
-pascal = derCUC' "pascal" 
+pascal = derCUC' "unit:pascal" 
   "pascal" "pressure" (label "Pa")
   (kilogram /$ (metre *$ (second ^: 2)))
   
-radian = derCUC' "radian" 
+radian = derCUC' "unit:radian" 
   "radian" "angle" (label "rad") (metre /: metre)
             
-siemens = derCUC "siemens" 
+siemens = derCUC "unit:siemens" 
   "siemens" "conductance" (label "S") (ohm ^: (-1))
   
-sievert = derCUC' "sievert" 
+sievert = derCUC' "unit:sievert" 
   "sievert" "dose equivalent" (label "Sv")
   (joule /: kilogram)
             
-steradian = derCUC' "steradian" 
+steradian = derCUC' "unit:steradian" 
   "steradian" "solid angle" (label "sr") (m_2 /: m_2 )
   
-tesla = derCUC "tesla"
+tesla = derCUC "unit:tesla"
   "tesla" "magnetic flux density" (label "T") (weber /: m_2)
 
-volt = derCUC' "volt" 
+volt = derCUC' "unit:volt" 
   "volt" "voltage" (label "V") (watt /: ampere)
 
-watt = derCUC' "watt" "watt" "power" (label "W")
+watt = derCUC' "unit:watt" "watt" "power" (label "W")
   (kilogram *$ (m_2 *$ (second ^: (-3))))
           
-weber = derCUC' "weber"
+weber = derCUC' "unit:weber"
   "weber" "magnetic flux" (label "Wb") (volt *: second)
   
 specificE :: UnitDefn

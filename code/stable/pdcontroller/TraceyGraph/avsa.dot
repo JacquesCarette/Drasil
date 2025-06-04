@@ -7,7 +7,7 @@ digraph avsa {
 
 	pwrPlant	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:pwrPlant"];
 	decoupled	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:decoupled"];
-	setPoint	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:setPoint"];
+	setPointConstant	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:setPointConstant"];
 	externalDisturb	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:externalDisturb"];
 	initialValue	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:initialValue"];
 	parallelEq	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:parallelEq"];
@@ -19,7 +19,7 @@ digraph avsa {
 
 	subgraph A {
 	rank="same"
-	{pwrPlant, decoupled, setPoint, externalDisturb, initialValue, parallelEq, unfilteredDerivative, pwrPlantTxFnx, massSpring, dampingCoeffSpring, stiffnessCoeffSpring}
+	{pwrPlant, decoupled, setPointConstant, externalDisturb, initialValue, parallelEq, unfilteredDerivative, pwrPlantTxFnx, massSpring, dampingCoeffSpring, stiffnessCoeffSpring}
 	}
 
 }

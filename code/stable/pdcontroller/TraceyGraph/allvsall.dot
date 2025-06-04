@@ -3,7 +3,7 @@ digraph allvsall {
 	massSpring -> pwrPlant;
 	dampingCoeffSpring -> pwrPlant;
 	stiffnessCoeffSpring -> pwrPlant;
-	dataDefn:qdProcessErrorFD -> setPoint;
+	dataDefn:qdProcessErrorFD -> setPointConstant;
 	dataDefn:qdProcessErrorFD -> initialValue;
 	dataDefn:qdProcessErrorFD -> theory:laplaceRC;
 	dataDefn:qdPropControlFD -> dataDefn:qdProcessErrorFD;
@@ -22,7 +22,7 @@ digraph allvsall {
 	theory:gdPowerPlantRC -> stiffnessCoeffSpring;
 	theory:gdPowerPlantRC -> theory:laplaceRC;
 	theory:gdPowerPlantRC -> theory:tmSOSystemRC;
-	theory:imPDRC -> setPoint;
+	theory:imPDRC -> setPointConstant;
 	theory:imPDRC -> dataDefn:qdProcessErrorFD;
 	theory:imPDRC -> dataDefn:qdCtrlVarFD;
 	theory:imPDRC -> theory:invLaplaceRC;
@@ -36,7 +36,7 @@ digraph allvsall {
 
 	pwrPlant	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:pwrPlant"];
 	decoupled	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:decoupled"];
-	setPoint	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:setPoint"];
+	setPointConstant	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:setPointConstant"];
 	externalDisturb	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:externalDisturb"];
 	initialValue	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:initialValue"];
 	parallelEq	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:parallelEq"];
@@ -48,7 +48,7 @@ digraph allvsall {
 
 	subgraph A {
 	rank="same"
-	{pwrPlant, decoupled, setPoint, externalDisturb, initialValue, parallelEq, unfilteredDerivative, pwrPlantTxFnx, massSpring, dampingCoeffSpring, stiffnessCoeffSpring}
+	{pwrPlant, decoupled, setPointConstant, externalDisturb, initialValue, parallelEq, unfilteredDerivative, pwrPlantTxFnx, massSpring, dampingCoeffSpring, stiffnessCoeffSpring}
 	}
 
 	dataDefn:qdProcessErrorFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ddProcessError"];

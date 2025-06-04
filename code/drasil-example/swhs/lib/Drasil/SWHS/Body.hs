@@ -61,7 +61,7 @@ import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
 srs :: Document
 srs = mkDoc mkSRS S.forT si
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
@@ -75,7 +75,7 @@ units = map unitWrapper [metre, kilogram, second] ++
   map unitWrapper [centigrade, joule, watt]
 --Will there be a table of contents?
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = swhsPCM,
   _kind        = Doc.srs, 
@@ -92,7 +92,7 @@ si = SI {
   _outputs     = map qw outputs,
   _constraints = constrained,
   _constants   = specParamValList,
-  _sysinfodb   = symbMap,
+  _systemdb   = symbMap,
   _usedinfodb  = usedDB
 }
 

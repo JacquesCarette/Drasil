@@ -1,8 +1,8 @@
-module SysInfo.Drasil (
+module System.Drasil (
   -- * System Information
-    SystemInformation(..)
+    System(..)
   -- * Lenses
-  , HasSystemInformation(..)
+  , HasSystem(..)
   -- * Reference Database
   , Purpose, Background, Scope, Motivation
   , citeDB
@@ -11,5 +11,5 @@ module SysInfo.Drasil (
   , ccss, ccss', vars
 ) where
 
-import SysInfo.Drasil.GetChunk
-import SysInfo.Drasil.SystemInformation
+import System.Drasil.GetChunk
+import System.Drasil.System

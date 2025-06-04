@@ -27,7 +27,6 @@ import Data.Drasil.TheoryConcepts (inModel)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Data.Drasil.Quantities.Physics (physicscon)
 
-import Drasil.DblPend.Assumptions (assumpSingle)
 import Drasil.DblPend.Body (justification, externalLinkRef, charsOfReader,
   sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms,
   userCharacteristicsIntro)
@@ -37,7 +36,7 @@ import Drasil.DblPend.Requirements (nonFuncReqs)
 import Drasil.DblPend.Unitals (acronyms)
 import Drasil.DblPend.References (citations)
 
-
+import Drasil.SglPend.Assumptions (assumpSingle)
 import Drasil.SglPend.Figures (figMotion, sysCtxFig1)
 import Drasil.SglPend.Goals (goals, goalsInputs)
 import Drasil.SglPend.DataDefs (dataDefs)
@@ -49,7 +48,7 @@ import Drasil.SglPend.Requirements (funcReqs)
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
@@ -105,7 +104,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
 progName :: CI
 progName = commonIdeaWithDict "sglPendulum" (pn "Single Pendulum") "SglPend" [physics]
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = progName, 
   _kind        = Doc.srs,
@@ -122,7 +121,7 @@ si = SI {
   _outputs     = outputs,
   _constraints = inConstraints,
   _constants   = [] :: [ConstQDef],
-  _sysinfodb   = symbMap,
+  _systemdb   = symbMap,
   _usedinfodb  = usedDB
 }
 

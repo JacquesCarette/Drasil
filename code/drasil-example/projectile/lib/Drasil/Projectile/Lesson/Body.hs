@@ -4,7 +4,7 @@ import Data.List (nub)
 import Language.Drasil
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil
-import SysInfo.Drasil
+import System.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 
 -- TODO: Add export parameters in a module
@@ -42,7 +42,7 @@ mkNB = [
   BibSec
   ]
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = projectileMotion,
   _kind        = Doc.notebook,
@@ -59,7 +59,7 @@ si = SI {
   _outputs     = [] :: [QuantityDict],
   _constraints = [] :: [ConstrainedChunk],
   _constants   = [] :: [ConstQDef],
-  _sysinfodb   = symbMap,
+  _systemdb   = symbMap,
   _usedinfodb  = usedDB
 }
 

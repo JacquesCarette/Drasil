@@ -48,7 +48,7 @@ If you would like to install more *nix tools through Cygwin, you can use the [cy
 The rest of the steps in this guide will assume that you are using Cygwin as your preferred Windows terminal. Git Bash is also very safe to use, but you will need to download [util-linux-ng](https://gnuwin32.sourceforge.net/packages/util-linux-ng.htm), which includes various system utilities (one of our scripts uses `rev`), and add its **bin/** to your PATH.
 
 ##### Unicode Support (Important)
-Unfortunately, it seems that Cygwin, Git Bash, and Windows still have issues with UTF-8 encoding, resulting in odd errors in development and empty characters appearing in the Cygwin/Git Bash shell windows. To resolve this issue, each time you open up Cygwin/Git Bash, you will need to run `chcp.com 65001` or `chcp 65001` so as to change the encoding of the terminal to UTF-8.
+Unfortunately, it seems that Cygwin, Git Bash, and Windows still have issues with UTF-8 encoding, resulting in odd errors in development and empty characters appearing in the Cygwin/Git Bash shell windows. To resolve this issue, follow the steps outlined [here](https://stackoverflow.com/a/57134096). Open a fresh terminal window and run `chcp.com` or `chcp` and check that the active code page is `65001`. If that does not resolve the issue, you can also edit the `.bashrc` file(found either at `C:/Users/YOU/cygwin64/home/YOU` for Cygwin or `C:/Users/YOU` for Git Bash) and add the following to end: `chcp.com 65001 > /dev/null` or `chcp.com 65001 > /dev/null`. This simply runs the required command each time the terminal is opened. If you choose not to do either of these, then each time you open up Cygwin/Git Bash, you will need to run `chcp.com 65001` or `chcp 65001` so as to change the encoding of the terminal to UTF-8.
 
 ##### 7-Zip
 If you are using Git Bash you will need [7-Zip](https://www.7-zip.org/). Download and run the installer from their website.
@@ -121,6 +121,8 @@ You can read more on GitHub's [About SSH](https://docs.github.com/en/github/auth
 ##### Creating an SSH key
 
 Please follow GitHub's official documentation on [generating a new SSH key](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
+
+If you are using Cygwin, copy the SSH key from the default directory (commonly `C:/Users/YOU/.ssh`), navigate to `C:/cygwin64/home/YOU/.ssh` (you may need to create the .ssh folder) and paste it there. 
 
 ##### Registering your SSH key with GitHub
 
@@ -224,6 +226,8 @@ Please download the binary related to your operating system from the [Official V
 <summary><h4>Windows</h4></summary>
 
 Please run the executable from the above download link and follow the on-screen steps. You will need to just accept their EULA. Please leave all of the options along the installation default.
+
+If you would like to use Cygwin in the integrated terminal of VSCode, navigate to settings `Manage (bottom left corner)>Settings` search for `terminal.integrated.profiles.windows`. Edit the `settings.json` from here, and add the code snippet found at [this stackoverflow answer](https://stackoverflow.com/a/70437350) and follow the instructions to open Cygwin.
 
 </details>
 

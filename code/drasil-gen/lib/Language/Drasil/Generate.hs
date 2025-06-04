@@ -23,7 +23,7 @@ import Data.Time.Calendar (showGregorian)
 import Build.Drasil (genMake)
 import Language.Drasil
 import Drasil.DocLang (mkGraphInfo)
-import SysInfo.Drasil (SystemInformation)
+import System.Drasil (System)
 import Language.Drasil.Printers (DocType(SRS, Website, Lesson), makeCSS, genHTML, 
   genTeX, Format(TeX, HTML, Jupyter, MDBook), genJupyter, genMDBook, 
   PrintingInformation, outputDot, makeBook, makeRequirements)
@@ -148,7 +148,7 @@ writeDoc' s MDBook doc = genMDBook s doc
 writeDoc' _ _      _   = srsFormatError
 
 -- | Generates traceability graphs as .dot files.
-genDot :: SystemInformation -> IO ()
+genDot :: System -> IO ()
 genDot si = do
     workingDir <- getCurrentDirectory
     let gi = mkGraphInfo si

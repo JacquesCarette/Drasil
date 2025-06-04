@@ -323,7 +323,7 @@ convExpr (New c x ns) = convCall c x ns (\m _ -> ctorCall m)
   (\m _ -> libNewObjMixedArgs m)
 convExpr (Message a m x ns) = do
   g <- get
-  let info = codeSpec g ^. sysinfodbO
+  let info = codeSpec g ^. systemdbO
       objCd = quantvar (symbResolve info a)
   o <- mkVal objCd
   convCall m x ns
@@ -390,7 +390,7 @@ convCall :: (OOProg r) => UID -> [CodeExpr] -> [(UID, CodeExpr)] ->
   -> NamedArgs r -> SValue r) -> GenState (SValue r)
 convCall c x ns f libf = do
   g <- get
-  let info = codeSpec g ^. sysinfodbO
+  let info = codeSpec g ^. systemdbO
       mem = eMap g
       lem = libEMap g
       funcCd = quantfunc (symbResolve info c)
@@ -550,7 +550,7 @@ genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
   g <- get
   modify (\st -> st {currentScope = Local})
   stmts <- mapM convStmt s
-  vars <- mapM mkVar (fstdecl (codeSpec g ^. sysinfodbO) s
+  vars <- mapM mkVar (fstdecl (codeSpec g ^. systemdbO) s
     \\ (map quantvar parms ++ map stVar svs))
   t <- spaceCodeType o
   f n (convTypeOO t) desc parms rd [block $ map (`varDec` local) vars, block stmts]
@@ -561,7 +561,7 @@ genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
   initvars <- mapM ((\iv -> fmap (var (codeName iv) . convTypeOO)
     (codeType iv)) . fst) i
   stmts <- mapM convStmt s
-  vars <- mapM mkVar (fstdecl (codeSpec g ^. sysinfodbO) s
+  vars <- mapM mkVar (fstdecl (codeSpec g ^. systemdbO) s
     \\ (map quantvar parms ++ map stVar svs))
   genInitConstructor n desc parms (zip initvars inits)
     [block $ map (`varDec` local) vars, block stmts]
@@ -910,7 +910,7 @@ genFuncProc f svs (FDef (FuncDef n desc parms o rd s)) = do
   g <- get
   modify (\st -> st {currentScope = Local})
   stmts <- mapM convStmtProc s
-  vars <- mapM mkVarProc (fstdecl (codeSpec g ^. sysinfodbO) s
+  vars <- mapM mkVarProc (fstdecl (codeSpec g ^. systemdbO) s
     \\ (map quantvar parms ++ map stVar svs))
   t <- spaceCodeType o
   f n (convType t) desc parms rd [block $ map (`varDec` local) vars, block stmts]
@@ -1091,7 +1091,7 @@ convCallProc :: (SharedProg r) => UID -> [CodeExpr] -> [(UID, CodeExpr)] ->
   -> NamedArgs r -> SValue r) -> GenState (SValue r)
 convCallProc c x ns f libf = do
   g <- get
-  let info = codeSpec g ^. sysinfodbO
+  let info = codeSpec g ^. systemdbO
       mem = eMap g
       lem = libEMap g
       funcCd = quantfunc (symbResolve info c)

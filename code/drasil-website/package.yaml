@@ -25,7 +25,7 @@ dependencies:
 - drasil-gen
 - drasil-lang
 - drasil-printers
-- drasil-sysinfo
+- drasil-system
 - drasil-theory
 - drasil-utils
 - sglpend

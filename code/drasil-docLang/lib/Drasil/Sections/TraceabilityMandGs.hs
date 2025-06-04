@@ -18,14 +18,14 @@ import Data.Drasil.Concepts.Documentation (assumption, assumpDom, chgProbDom,
   unlikelyChg)
 import qualified Data.Drasil.TheoryConcepts as Doc (genDefn, dataDefn, inModel, thModel)
 import Database.Drasil
-import SysInfo.Drasil
+import System.Drasil
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators as NC
 import Language.Drasil.Sentence.Combinators as S
 import Data.Foldable (foldl')
 
 -- | Makes a Traceability Table/Matrix that contains Items of Different Sections.
-generateTraceTable :: SystemInformation -> LabelledContent
+generateTraceTable :: System -> LabelledContent
 generateTraceTable = generateTraceTableView (mkUid "Tracey")
   (titleize' item +:+ S "of Different" +:+ titleize' section_) [tvEverything] [tvEverything]
 
@@ -87,15 +87,15 @@ traceMatRefinement = TraceConfig (mkUid "TraceMatRefvsRef") [plural Doc.dataDefn
   [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels]
   [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels]
 
--- | Records other requirements. Converts the 'SystemInformation' into a 'TraceConfig'.
-traceMatOtherReq :: SystemInformation -> TraceConfig
+-- | Records other requirements. Converts the 'System' into a 'TraceConfig'.
+traceMatOtherReq :: System -> TraceConfig
 traceMatOtherReq si = TraceConfig (mkUid "TraceMatAllvsR") [plural requirement
   `S.and_` pluralNP (goalStmt `NC.onThePP` Doc.dataDefn), plural Doc.thModel, 
   plural Doc.genDefn, plural Doc.inModel] (x titleize' +:+ S "and Other" +:+ 
   titleize' item) [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs] 
   [tvGoals, tvReqs] where
-    x g = foldl' (\a (f,t) -> a `sC'` case traceMReferrers (flip f $ _sysinfodb si) $
-      _sysinfodb si of
+    x g = foldl' (\a (f,t) -> a `sC'` case traceMReferrers (flip f $ _systemdb si) $
+      _systemdb si of
       [] -> mempty
       _ -> g t) mempty [(tvReqs, requirement), (tvGoals, goalStmt)]
     sC' EmptyS b = b
@@ -106,6 +106,6 @@ traceMatOtherReq si = TraceConfig (mkUid "TraceMatAllvsR") [plural requirement
 
 
 -- | Contains traceability matrix assumptions, other assumptions, refinement, and other requirements.
-traceMatStandard :: SystemInformation -> [TraceConfig]
+traceMatStandard :: System -> [TraceConfig]
 traceMatStandard s = map ($ s) [const traceMatAssumpAssump, const traceMatAssumpOther, const traceMatRefinement,
   traceMatOtherReq]

@@ -83,7 +83,7 @@
 </g>
 <!-- dataDefn&#45;&gt;instance -->
 <g id="edge5" class="edge">
-<title>dataDefn:qdProcessErrorFD&#45;&gt;instance:setPoint</title>
+<title>dataDefn:qdProcessErrorFD&#45;&gt;instance:setPointConstant</title>
 <path fill="none" stroke="black" d="M169.3,-22.79C203.24,-28.33 243.91,-41.43 265.68,-72 274.96,-85.03 274.79,-94.85 265.68,-108 241.85,-142.38 208.02,-116.82 177.71,-137.33"/>
 <polygon fill="black" stroke="black" points="175.13,-134.92 169.68,-144 179.61,-140.3 175.13,-134.92"/>
 </g>
@@ -185,7 +185,7 @@
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge24" class="edge">
-<title>theory:imPDRC&#45;&gt;instance:setPoint</title>
+<title>theory:imPDRC&#45;&gt;instance:setPointConstant</title>
 <path fill="none" stroke="black" d="M149.94,-108.09C163.2,-115.84 174.77,-125.39 174.24,-134.92"/>
 <polygon fill="black" stroke="black" points="171.04,-133.49 169.68,-144 177.3,-136.64 171.04,-133.49"/>
 </g>

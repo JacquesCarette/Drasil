@@ -8,20 +8,18 @@ import Data.List (transpose)
 import Data.List.Utils (replace)
 
 import qualified Language.Drasil as L
-import qualified Language.Drasil.Printing.Import.Sentence as L (spec)
 import Language.Drasil.Printing.Import (makeProject)
-import Language.Drasil.Printing.Import.Helpers (termStyleLookup)
-import Language.Drasil.Printing.AST (ItemType(Flat, Nested),  
-  ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, 
-  Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, E, Ch, (:+:)), Label, 
-  LinkType(Internal, Cite2, External), OverSymb(Hat), Fonts(Emph, Bold), 
+import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
+  ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,
+  Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, E, (:+:), Tooltip), Label,
+  LinkType(Internal, Cite2, External), OverSymb(Hat), Fonts(Emph, Bold),
   Spacing(Thin), Fence(Abs), Ops(Perc, Mul))
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Project(Project), 
   LayoutObj(..), Filename, RefMap, File(File))
 import Language.Drasil.Printing.Helpers (sqbrac, pipe, bslash, unders, 
   hat, hyph, dot, ($^$), vsep)
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 import qualified Language.Drasil.TeX.Print as TeX (pExpr, fence, OpenClose(..),
   pMatrix, cases)
@@ -34,7 +32,6 @@ import Language.Drasil.TeX.Helpers(commandD, command2D, mkEnv)
 import Language.Drasil.Markdown.Helpers (heading, image, li, reflink,
   reflinkURI, reflinkInfo, caption, bold, ul, docLength, divTag, centeredDiv, 
   em, h, h', centeredDivId)
-import Control.Lens ((^.))
 
 -----------------------------------------------------------------
 ------------------------- mdBook SRS ----------------------------
@@ -108,7 +105,7 @@ printLO _ CodeBlock {}           = empty
 -- | Helper for rendering Specs into Markdown
 pSpec :: RefMap -> Spec -> Doc
 pSpec _ (E e)      = text "\\\\(" <> pExpr e <> text "\\\\)"
-pSpec rm (Ch sm st caps s) = pSpec rm $ L.spec sm $ termStyleLookup st (sm ^. ckdb) s caps
+pSpec rm (Tooltip _ s) = pSpec rm s
 pSpec rm (a :+: b) = pSpec rm a <> pSpec rm b
 pSpec _ HARDNL     = text "\n"
 pSpec rm (Ref Internal       r a) = reflink     rm r (pSpec rm a)

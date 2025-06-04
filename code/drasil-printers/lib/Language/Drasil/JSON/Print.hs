@@ -10,14 +10,14 @@ import qualified Language.Drasil as L
 import Language.Drasil.Format (DocType(Lesson))
 
 import Language.Drasil.Printing.Import (makeDocument)
-import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),  
-  ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, 
-  Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, Ch, E, (:+:)),
+import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Flat, Nested),
+  ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,
+  Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)),
   Fonts(Bold), OverSymb(Hat), Label, LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
 import Language.Drasil.Printing.Helpers (sqbrac, unders, hat)
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
@@ -29,10 +29,6 @@ import Language.Drasil.HTML.Print (renderCite, OpenClose(Open, Close), fence,
 import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat, codeformat,
  tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI, mkDiv, 
  markdownB, markdownB', markdownE, markdownE', markdownCell, codeCell)
-import qualified Language.Drasil.Printing.Import as L (spec)
-import Language.Drasil.Printing.Import.Helpers (termStyleLookup)
-
-import Control.Lens ((^.))
 
 -- | Generate a python notebook document (using json).
 -- build : build the SRS document in JSON format
@@ -129,8 +125,7 @@ pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr 
     invalid = ['<', '>']
     escapeChars '&' = "\\&"
     escapeChars c = [c]
-pSpec (Ch sm st caps s) = pSpec $ L.spec sm $
-  termStyleLookup st (sm ^. ckdb) s caps
+pSpec (Tooltip _ s) = pSpec s
 pSpec (Sp s)    = text $ unPH $ L.special s
 pSpec HARDNL    = empty
 pSpec (Ref Internal r a)      = reflink     r $ pSpec a

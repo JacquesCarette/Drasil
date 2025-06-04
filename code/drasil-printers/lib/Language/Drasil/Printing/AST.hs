@@ -1,8 +1,7 @@
 -- | Defines types similar to those in "Drasil.Language", but better suited to printing.
 module Language.Drasil.Printing.AST where
 
-import Language.Drasil (Special, SentenceStyle, TermCapitalization, UID)
-import Language.Drasil.Printing.PrintingInformation(PrintingInformation)
+import Language.Drasil (Special)
 
 -- | Different types of links for referencing. May be internal, a citation, or external.
 -- A citation may also hold additional reference information.
@@ -51,8 +50,8 @@ infixr 5 :+:
 
 -- | Redefine the 'Sentence' type from Language.Drasil to be more suitable to printing.
 data Spec = E Expr                   -- ^ Holds an expression.
-          | S String                 -- ^ Holds a string.
-          | Ch PrintingInformation SentenceStyle TermCapitalization UID                 
+          | S String                 -- ^ Holds a string.  
+          | Tooltip Spec Spec        -- ^ Holds a tooltip and a short form.
           | Spec :+: Spec            -- ^ Concatenation.
           | Sp Special               -- ^ Special characters.
           | Ref LinkType String Spec -- ^ Holds the actual reference of form 'LinkType', reference address, and display name

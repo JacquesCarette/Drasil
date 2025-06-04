@@ -28,9 +28,9 @@ import Language.Drasil.HTML.CSS (linkCSS)
 
 import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
 import Language.Drasil.Printing.Import (makeDocument)
-import Language.Drasil.Printing.AST (Spec(Ch), ItemType(Flat, Nested),
+import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, Fence(Curly, Paren, Abs, Norm),
-  Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)),
+  Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:), Tooltip),
   Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label,
   LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author, 
@@ -39,14 +39,10 @@ import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title,
   Citation(Cite), BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..), Tags)
 import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sufxPrint)
-import Language.Drasil.Printing.Import.Helpers (termStyleLookup, lookupS)
-import qualified Language.Drasil.Printing.Import.Sentence as L (spec)
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 import qualified Language.Drasil.TeX.Print as TeX (pExpr, spec)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
-
-import Control.Lens ((^.))
 
 -- | Referring to 'fence' (for parenthesis and brackeds). Either opened or closed.
 data OpenClose = Open | Close
@@ -146,9 +142,7 @@ pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr 
     invalid = ['<', '>']
     escapeChars '&' = "\\&"
     escapeChars c = [c]
-pSpec (Ch sm L.ShortStyle caps s) = spanTag' (pSpec (Ch sm L.TermStyle caps s))
-  (pSpec $ L.spec sm $ lookupS (sm ^. ckdb) s caps)
-pSpec (Ch sm st caps s) = pSpec $ L.spec sm $ termStyleLookup st (sm ^. ckdb) s caps
+pSpec (Tooltip t s) = spanTag' (pSpec t) (pSpec s)
 pSpec (Sp s)    = text $ unPH $ L.special s
 pSpec HARDNL    = text "<br />"
 pSpec (Ref Internal r a)       = reflink     r $ pSpec a

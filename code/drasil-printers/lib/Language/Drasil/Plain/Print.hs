@@ -10,14 +10,12 @@ module Language.Drasil.Plain.Print (
 import Database.Drasil (ChunkDB)
 import Language.Drasil (Sentence, Special(..), Stage(..), Symbol, USymb(..))
 import qualified Language.Drasil as L (Expr, HasSymbol(..))
-import qualified Language.Drasil.Printing.Import.Sentence as L (spec)
-import Language.Drasil.Printing.Import.Helpers (termStyleLookup)
 import qualified Language.Drasil.CodeExpr.Development as C (CodeExpr)
 import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..), 
   OverSymb(..), Fonts(..), Spacing(..), LinkType(..))
 import Language.Drasil.Printing.Import (expr, codeExpr, spec, symbol)
 import Language.Drasil.Printing.PrintingInformation (PrintingConfiguration(..),
-  PrintingInformation(..), Notation(Scientific), ckdb)
+  PrintingInformation(..), Notation(Scientific))
 
 import Utils.Drasil (toPlainName)
 
@@ -26,7 +24,6 @@ import Data.List (partition)
 import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), brackets, comma, double, 
   doubleQuotes, empty, hcat, hsep, integer, parens, punctuate, space, text, 
   vcat, render)
-import Control.Lens ((^.))
 
 -- | Data is either linear or not.
 data SingleLine = OneLine | MultiLine
@@ -78,7 +75,7 @@ pExprDoc _ (Spc Thin) = space
 specDoc :: SingleLine -> Spec -> Doc
 specDoc f (E e) = pExprDoc f e
 specDoc _ (S s) = text s
-specDoc f (Ch sm st caps s) = specDoc f $ L.spec sm $ termStyleLookup st (sm ^. ckdb) s caps
+specDoc f (Tooltip _ s) = specDoc f s
 specDoc _ (Sp s) = specialDoc s
 specDoc f (Ref (Cite2 n) r _) = specDoc f n <+> text ("Ref: " ++ r)
 specDoc f (Ref _ r s) = specDoc f s <+> text ("Ref: " ++ r) --may need to change?

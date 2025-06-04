@@ -3,8 +3,7 @@ module Language.Drasil.Printing.Import.Helpers where
 
 import Language.Drasil (Stage(..), codeSymb, eqSymb, Idea(..),
   NamedIdea(..), NounPhrase(..), Sentence(S), Symbol, UID,
-  TermCapitalization(..), titleizeNP, titleizeNP', atStartNP, atStartNP', NP,
-  SentenceStyle(PluralTerm, TermStyle, ShortStyle))
+  TermCapitalization(..), titleizeNP, titleizeNP', atStartNP, atStartNP', NP)
 import Database.Drasil (ChunkDB, symbResolve, termResolve)
 
 import qualified Language.Drasil.Printing.AST as P
@@ -71,11 +70,6 @@ lookupS sm c sCap = maybe (resolveCapT sCap $ l ^. term) S $ getA l >>= capHelpe
 -- | Look up the plural form of a term given a chunk database and a 'UID' associated with the term.
 lookupP :: ChunkDB -> UID -> TermCapitalization -> Sentence
 lookupP sm c pCap = resolveCapP pCap $ termResolve sm c ^. term
-
-termStyleLookup :: SentenceStyle -> ChunkDB -> UID -> TermCapitalization -> Sentence
-termStyleLookup PluralTerm = lookupP
-termStyleLookup ShortStyle = lookupS
-termStyleLookup TermStyle  = lookupT
 
 -- | Helper to get the proper function for capitalizing a 'NP' based on its 'TermCapitalization'. Singular case.
 resolveCapT :: TermCapitalization -> (NP -> Sentence)

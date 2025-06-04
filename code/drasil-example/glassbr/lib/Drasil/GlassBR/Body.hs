@@ -153,7 +153,7 @@ labCon :: [LabelledContent]
 labCon = funcReqsTables ++ [demandVsSDFig, dimlessloadVsARFig]
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols)
+usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms)
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 stdFields :: Fields

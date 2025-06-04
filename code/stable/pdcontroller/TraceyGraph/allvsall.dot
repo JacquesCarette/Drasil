@@ -98,11 +98,11 @@ digraph allvsall {
 	{inputValues, verifyInputs, calculateValues, outputValues, portable, security, maintainability, verifiability}
 	}
 
-	processVariable	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:processVariable"];
+	calculateProcessVariable	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:calculateProcessVariable"];
 
 	subgraph GS {
 	rank="same"
-	{processVariable}
+	{calculateProcessVariable}
 	}
 
 	likeChgPP	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:likeChgPP"];

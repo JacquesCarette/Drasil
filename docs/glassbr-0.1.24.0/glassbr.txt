@@ -63,11 +63,13 @@ nomThick :: ConstrainedChunk
 glassTypeCon :: ConstrConcept
 inputs :: [QuantityDict]
 inputsWUnitsUncrtn :: [UncertQ]
-derivedInsWUnitsUncrtn :: [UncertQ]
 inputsWUncrtn :: [UncertainChunk]
-derivedInsWUncrtn :: [UncertQ]
 inputsNoUncrtn :: [ConstrainedChunk]
+derivedInsWUnitsUncrtn :: [UncertQ]
+derivedInsWUncrtn :: [UncertQ]
 inputDataConstraints :: [UncertainChunk]
+derivedInputDataConstraints :: [UncertainChunk]
+dataConstraints :: [UncertainChunk]
 outputs :: [QuantityDict]
 tmSymbols :: [QuantityDict]
 probBr :: ConstrainedChunk

@@ -16,89 +16,89 @@
 </span><span id="line-16"></span><span id="makeReadMe"><span class="annot"><span class="annottext">makeReadMe :: ReadMeInfo -&gt; Doc
 </span><a href="Language.Drasil.Code.Imperative.WriteReadMe.html#makeReadMe"><span class="hs-identifier hs-var hs-var">makeReadMe</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#ReadMeInfo"><span class="hs-identifier hs-type">ReadMeInfo</span></a></span><span> </span><span class="hs-special">{</span><span>
 </span><span id="line-17"></span><span>        </span><span class="annot"><span class="annottext">langName :: ReadMeInfo -&gt; LangAbbrev
-</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#langName"><span class="hs-identifier hs-var">langName</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347571"><span class="annot"><span class="annottext">LangAbbrev
-</span><a href="#local-6989586621679347571"><span class="hs-identifier hs-var">progLang</span></a></span></span><span class="hs-special">,</span><span>
+</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#langName"><span class="hs-identifier hs-var">langName</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347573"><span class="annot"><span class="annottext">LangAbbrev
+</span><a href="#local-6989586621679347573"><span class="hs-identifier hs-var">progLang</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-18"></span><span>        </span><span class="annot"><span class="annottext">langVersion :: ReadMeInfo -&gt; LangAbbrev
-</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#langVersion"><span class="hs-identifier hs-var">langVersion</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347573"><span class="annot"><span class="annottext">LangAbbrev
-</span><a href="#local-6989586621679347573"><span class="hs-identifier hs-var">progLangVers</span></a></span></span><span class="hs-special">,</span><span>
+</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#langVersion"><span class="hs-identifier hs-var">langVersion</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347575"><span class="annot"><span class="annottext">LangAbbrev
+</span><a href="#local-6989586621679347575"><span class="hs-identifier hs-var">progLangVers</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-19"></span><span>        </span><span class="annot"><span class="annottext">invalidOS :: ReadMeInfo -&gt; Maybe LangAbbrev
-</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#invalidOS"><span class="hs-identifier hs-var">invalidOS</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347575"><span class="annot"><span class="annottext">Maybe LangAbbrev
-</span><a href="#local-6989586621679347575"><span class="hs-identifier hs-var">unsupportedOSs</span></a></span></span><span class="hs-special">,</span><span>
+</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#invalidOS"><span class="hs-identifier hs-var">invalidOS</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347577"><span class="annot"><span class="annottext">Maybe LangAbbrev
+</span><a href="#local-6989586621679347577"><span class="hs-identifier hs-var">unsupportedOSs</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-20"></span><span>        </span><span class="annot"><span class="annottext">implementType :: ReadMeInfo -&gt; ImplementationType
-</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#implementType"><span class="hs-identifier hs-var">implementType</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347577"><span class="annot"><span class="annottext">ImplementationType
-</span><a href="#local-6989586621679347577"><span class="hs-identifier hs-var">imptype</span></a></span></span><span class="hs-special">,</span><span>
+</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#implementType"><span class="hs-identifier hs-var">implementType</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347579"><span class="annot"><span class="annottext">ImplementationType
+</span><a href="#local-6989586621679347579"><span class="hs-identifier hs-var">imptype</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-21"></span><span>        </span><span class="annot"><span class="annottext">extLibNV :: ReadMeInfo -&gt; [(LangAbbrev, LangAbbrev)]
-</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#extLibNV"><span class="hs-identifier hs-var">extLibNV</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347579"><span class="annot"><span class="annottext">[(LangAbbrev, LangAbbrev)]
-</span><a href="#local-6989586621679347579"><span class="hs-identifier hs-var">extLibns</span></a></span></span><span class="hs-special">,</span><span>
+</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#extLibNV"><span class="hs-identifier hs-var">extLibNV</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347581"><span class="annot"><span class="annottext">[(LangAbbrev, LangAbbrev)]
+</span><a href="#local-6989586621679347581"><span class="hs-identifier hs-var">extLibns</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-22"></span><span>        </span><span class="annot"><span class="annottext">extLibFP :: ReadMeInfo -&gt; [LangAbbrev]
-</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#extLibFP"><span class="hs-identifier hs-var">extLibFP</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347581"><span class="annot"><span class="annottext">[LangAbbrev]
-</span><a href="#local-6989586621679347581"><span class="hs-identifier hs-var">extLibfp</span></a></span></span><span class="hs-special">,</span><span>
+</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#extLibFP"><span class="hs-identifier hs-var">extLibFP</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347583"><span class="annot"><span class="annottext">[LangAbbrev]
+</span><a href="#local-6989586621679347583"><span class="hs-identifier hs-var">extLibfp</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-23"></span><span>        </span><span class="annot"><span class="annottext">contributors :: ReadMeInfo -&gt; [LangAbbrev]
-</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#contributors"><span class="hs-identifier hs-var">contributors</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347583"><span class="annot"><span class="annottext">[LangAbbrev]
-</span><a href="#local-6989586621679347583"><span class="hs-identifier hs-var">auths</span></a></span></span><span class="hs-special">,</span><span>
+</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#contributors"><span class="hs-identifier hs-var">contributors</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347585"><span class="annot"><span class="annottext">[LangAbbrev]
+</span><a href="#local-6989586621679347585"><span class="hs-identifier hs-var">auths</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-24"></span><span>        </span><span class="annot"><span class="annottext">configFP :: ReadMeInfo -&gt; [LangAbbrev]
-</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#configFP"><span class="hs-identifier hs-var">configFP</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347585"><span class="annot"><span class="annottext">[LangAbbrev]
-</span><a href="#local-6989586621679347585"><span class="hs-identifier hs-var">configFPs</span></a></span></span><span class="hs-special">,</span><span>
+</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#configFP"><span class="hs-identifier hs-var">configFP</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347587"><span class="annot"><span class="annottext">[LangAbbrev]
+</span><a href="#local-6989586621679347587"><span class="hs-identifier hs-var">configFPs</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-25"></span><span>        </span><span class="annot"><span class="annottext">caseName :: ReadMeInfo -&gt; LangAbbrev
-</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#caseName"><span class="hs-identifier hs-var">caseName</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347587"><span class="annot"><span class="annottext">LangAbbrev
-</span><a href="#local-6989586621679347587"><span class="hs-identifier hs-var">name</span></a></span></span><span class="hs-special">,</span><span>
+</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#caseName"><span class="hs-identifier hs-var">caseName</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347589"><span class="annot"><span class="annottext">LangAbbrev
+</span><a href="#local-6989586621679347589"><span class="hs-identifier hs-var">name</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-26"></span><span>        </span><span class="annot"><span class="annottext">examplePurpose :: ReadMeInfo -&gt; LangAbbrev
-</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#examplePurpose"><span class="hs-identifier hs-var">examplePurpose</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347589"><span class="annot"><span class="annottext">LangAbbrev
-</span><a href="#local-6989586621679347589"><span class="hs-identifier hs-var">purp</span></a></span></span><span class="hs-special">,</span><span>
+</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#examplePurpose"><span class="hs-identifier hs-var">examplePurpose</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347591"><span class="annot"><span class="annottext">LangAbbrev
+</span><a href="#local-6989586621679347591"><span class="hs-identifier hs-var">purp</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-27"></span><span>        </span><span class="annot"><span class="annottext">exampleDescr :: ReadMeInfo -&gt; LangAbbrev
-</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#exampleDescr"><span class="hs-identifier hs-var">exampleDescr</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347591"><span class="annot"><span class="annottext">LangAbbrev
-</span><a href="#local-6989586621679347591"><span class="hs-identifier hs-var">descr</span></a></span></span><span class="hs-special">,</span><span>
+</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#exampleDescr"><span class="hs-identifier hs-var">exampleDescr</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347593"><span class="annot"><span class="annottext">LangAbbrev
+</span><a href="#local-6989586621679347593"><span class="hs-identifier hs-var">descr</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-28"></span><span>        </span><span class="annot"><span class="annottext">exampleMotivation :: ReadMeInfo -&gt; LangAbbrev
-</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#exampleMotivation"><span class="hs-identifier hs-var">exampleMotivation</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347593"><span class="annot"><span class="annottext">LangAbbrev
-</span><a href="#local-6989586621679347593"><span class="hs-identifier hs-var">motiv</span></a></span></span><span class="hs-special">,</span><span>
+</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#exampleMotivation"><span class="hs-identifier hs-var">exampleMotivation</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347595"><span class="annot"><span class="annottext">LangAbbrev
+</span><a href="#local-6989586621679347595"><span class="hs-identifier hs-var">motiv</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-29"></span><span>        </span><span class="annot"><span class="annottext">exampleScope :: ReadMeInfo -&gt; LangAbbrev
-</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#exampleScope"><span class="hs-identifier hs-var">exampleScope</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347595"><span class="annot"><span class="annottext">LangAbbrev
-</span><a href="#local-6989586621679347595"><span class="hs-identifier hs-var">sc</span></a></span></span><span class="hs-special">,</span><span>
+</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#exampleScope"><span class="hs-identifier hs-var">exampleScope</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347597"><span class="annot"><span class="annottext">LangAbbrev
+</span><a href="#local-6989586621679347597"><span class="hs-identifier hs-var">sc</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-30"></span><span>        </span><span class="annot"><span class="annottext">folderNum :: ReadMeInfo -&gt; Int
-</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#folderNum"><span class="hs-identifier hs-var">folderNum</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347597"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679347597"><span class="hs-identifier hs-var">number</span></a></span></span><span class="hs-special">,</span><span>
+</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#folderNum"><span class="hs-identifier hs-var">folderNum</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347599"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679347599"><span class="hs-identifier hs-var">number</span></a></span></span><span class="hs-special">,</span><span>
 </span><span id="line-31"></span><span>        </span><span class="annot"><span class="annottext">inputOutput :: ReadMeInfo -&gt; (LangAbbrev, LangAbbrev)
-</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#inputOutput"><span class="hs-identifier hs-var">inputOutput</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347599"><span class="annot"><span class="annottext">(LangAbbrev, LangAbbrev)
-</span><a href="#local-6989586621679347599"><span class="hs-identifier hs-var">inoutf</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#inputOutput"><span class="hs-identifier hs-var">inputOutput</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679347601"><span class="annot"><span class="annottext">(LangAbbrev, LangAbbrev)
+</span><a href="#local-6989586621679347601"><span class="hs-identifier hs-var">inoutf</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-32"></span><span>    </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
 </span><span class="hs-identifier hs-var">makeMd</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">LangAbbrev
 -&gt; [LangAbbrev] -&gt; Maybe LangAbbrev -&gt; Maybe LangAbbrev -&gt; Doc
 </span><span class="hs-identifier hs-var">introInfo</span></span><span> </span><span class="annot"><span class="annottext">LangAbbrev
-</span><a href="#local-6989586621679347587"><span class="hs-identifier hs-var">name</span></a></span><span> </span><span class="annot"><span class="annottext">[LangAbbrev]
-</span><a href="#local-6989586621679347583"><span class="hs-identifier hs-var">auths</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">LangAbbrev -&gt; Maybe LangAbbrev
+</span><a href="#local-6989586621679347589"><span class="hs-identifier hs-var">name</span></a></span><span> </span><span class="annot"><span class="annottext">[LangAbbrev]
+</span><a href="#local-6989586621679347585"><span class="hs-identifier hs-var">auths</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">LangAbbrev -&gt; Maybe LangAbbrev
 </span><a href="Language.Drasil.Code.Imperative.WriteReadMe.html#fieldEmptySTR"><span class="hs-identifier hs-var">fieldEmptySTR</span></a></span><span> </span><span class="annot"><span class="annottext">LangAbbrev
-</span><a href="#local-6989586621679347593"><span class="hs-identifier hs-var">motiv</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679347595"><span class="hs-identifier hs-var">motiv</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-33"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">LangAbbrev -&gt; Maybe LangAbbrev
 </span><a href="Language.Drasil.Code.Imperative.WriteReadMe.html#fieldEmptySTR"><span class="hs-identifier hs-var">fieldEmptySTR</span></a></span><span> </span><span class="annot"><span class="annottext">LangAbbrev
-</span><a href="#local-6989586621679347589"><span class="hs-identifier hs-var">purp</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679347591"><span class="hs-identifier hs-var">purp</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-34"></span><span>    </span><span class="annot"><span class="annottext">Maybe LangAbbrev -&gt; Maybe LangAbbrev -&gt; Doc
 </span><span class="hs-identifier hs-var">whatInfo</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">LangAbbrev -&gt; Maybe LangAbbrev
 </span><a href="Language.Drasil.Code.Imperative.WriteReadMe.html#fieldEmptySTR"><span class="hs-identifier hs-var">fieldEmptySTR</span></a></span><span> </span><span class="annot"><span class="annottext">LangAbbrev
-</span><a href="#local-6989586621679347591"><span class="hs-identifier hs-var">descr</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">LangAbbrev -&gt; Maybe LangAbbrev
+</span><a href="#local-6989586621679347593"><span class="hs-identifier hs-var">descr</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">LangAbbrev -&gt; Maybe LangAbbrev
 </span><a href="Language.Drasil.Code.Imperative.WriteReadMe.html#fieldEmptySTR"><span class="hs-identifier hs-var">fieldEmptySTR</span></a></span><span> </span><span class="annot"><span class="annottext">LangAbbrev
-</span><a href="#local-6989586621679347595"><span class="hs-identifier hs-var">sc</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679347597"><span class="hs-identifier hs-var">sc</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-35"></span><span>    </span><span class="annot"><span class="annottext">ImplementationType
 -&gt; [LangAbbrev] -&gt; LangAbbrev -&gt; (LangAbbrev, LangAbbrev) -&gt; Doc
 </span><a href="Language.Drasil.Code.Imperative.WriteReadMe.html#makeInstr"><span class="hs-identifier hs-var">makeInstr</span></a></span><span> </span><span class="annot"><span class="annottext">ImplementationType
-</span><a href="#local-6989586621679347577"><span class="hs-identifier hs-var">imptype</span></a></span><span> </span><span class="annot"><span class="annottext">[LangAbbrev]
-</span><a href="#local-6989586621679347585"><span class="hs-identifier hs-var">configFPs</span></a></span><span> </span><span class="annot"><span class="annottext">LangAbbrev
-</span><a href="#local-6989586621679347587"><span class="hs-identifier hs-var">name</span></a></span><span> </span><span class="annot"><span class="annottext">(LangAbbrev, LangAbbrev)
-</span><a href="#local-6989586621679347599"><span class="hs-identifier hs-var">inoutf</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679347579"><span class="hs-identifier hs-var">imptype</span></a></span><span> </span><span class="annot"><span class="annottext">[LangAbbrev]
+</span><a href="#local-6989586621679347587"><span class="hs-identifier hs-var">configFPs</span></a></span><span> </span><span class="annot"><span class="annottext">LangAbbrev
+</span><a href="#local-6989586621679347589"><span class="hs-identifier hs-var">name</span></a></span><span> </span><span class="annot"><span class="annottext">(LangAbbrev, LangAbbrev)
+</span><a href="#local-6989586621679347601"><span class="hs-identifier hs-var">inoutf</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-36"></span><span>    </span><span class="annot"><span class="annottext">LangAbbrev -&gt; LangAbbrev -&gt; Doc
 </span><span class="hs-identifier hs-var">verInfo</span></span><span> </span><span class="annot"><span class="annottext">LangAbbrev
-</span><a href="#local-6989586621679347571"><span class="hs-identifier hs-var">progLang</span></a></span><span> </span><span class="annot"><span class="annottext">LangAbbrev
-</span><a href="#local-6989586621679347573"><span class="hs-identifier hs-var">progLangVers</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679347573"><span class="hs-identifier hs-var">progLang</span></a></span><span> </span><span class="annot"><span class="annottext">LangAbbrev
+</span><a href="#local-6989586621679347575"><span class="hs-identifier hs-var">progLangVers</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-37"></span><span>    </span><span class="annot"><span class="annottext">Maybe LangAbbrev -&gt; Doc
 </span><span class="hs-identifier hs-var">unsupOS</span></span><span> </span><span class="annot"><span class="annottext">Maybe LangAbbrev
-</span><a href="#local-6989586621679347575"><span class="hs-identifier hs-var">unsupportedOSs</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679347577"><span class="hs-identifier hs-var">unsupportedOSs</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-38"></span><span>    </span><span class="annot"><span class="annottext">[(LangAbbrev, LangAbbrev)] -&gt; [LangAbbrev] -&gt; Doc
 </span><span class="hs-identifier hs-var">extLibSec</span></span><span> </span><span class="annot"><span class="annottext">[(LangAbbrev, LangAbbrev)]
-</span><a href="#local-6989586621679347579"><span class="hs-identifier hs-var">extLibns</span></a></span><span> </span><span class="annot"><span class="annottext">[LangAbbrev]
-</span><a href="#local-6989586621679347581"><span class="hs-identifier hs-var">extLibfp</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679347581"><span class="hs-identifier hs-var">extLibns</span></a></span><span> </span><span class="annot"><span class="annottext">[LangAbbrev]
+</span><a href="#local-6989586621679347583"><span class="hs-identifier hs-var">extLibfp</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-39"></span><span>    </span><span class="annot"><span class="annottext">Int -&gt; [LangAbbrev] -&gt; Doc
 </span><span class="hs-identifier hs-var">endNote</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679347597"><span class="hs-identifier hs-var">number</span></a></span><span> </span><span class="annot"><span class="annottext">[LangAbbrev]
-</span><a href="#local-6989586621679347583"><span class="hs-identifier hs-var">auths</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-comment">-- add date information to end note for license</span><span>
+</span><a href="#local-6989586621679347599"><span class="hs-identifier hs-var">number</span></a></span><span> </span><span class="annot"><span class="annottext">[LangAbbrev]
+</span><a href="#local-6989586621679347585"><span class="hs-identifier hs-var">auths</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-comment">-- add date information to end note for license</span><span>
 </span><span id="line-40"></span><span>
 </span><span id="line-41"></span><span class="annot"><span class="hs-comment">-- | Helper for encoding the type of program (either library or controller-based) in a README file.</span></span><span>
 </span><span id="line-42"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteReadMe.html#makeInstr"><span class="hs-identifier hs-type">makeInstr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#ImplementationType"><span class="hs-identifier hs-type">ImplementationType</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
@@ -111,14 +111,14 @@
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc
 </span><span class="hs-identifier hs-var">empty</span></span><span>
 </span><span id="line-44"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.WriteReadMe.html#makeInstr"><span class="hs-identifier hs-var">makeInstr</span></a></span><span> </span><span class="annot"><span class="annottext">ImplementationType
-</span><a href="Language.Drasil.Choices.html#Program"><span class="hs-identifier hs-var">Program</span></a></span><span> </span><span id="local-6989586621679347605"><span class="annot"><span class="annottext">[LangAbbrev]
-</span><a href="#local-6989586621679347605"><span class="hs-identifier hs-var">cfp</span></a></span></span><span> </span><span id="local-6989586621679347606"><span class="annot"><span class="annottext">LangAbbrev
-</span><a href="#local-6989586621679347606"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679347607"><span class="annot"><span class="annottext">(LangAbbrev, LangAbbrev)
-</span><a href="#local-6989586621679347607"><span class="hs-identifier hs-var">inOutf</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[LangAbbrev] -&gt; LangAbbrev -&gt; (LangAbbrev, LangAbbrev) -&gt; Doc
+</span><a href="Language.Drasil.Choices.html#Program"><span class="hs-identifier hs-var">Program</span></a></span><span> </span><span id="local-6989586621679347607"><span class="annot"><span class="annottext">[LangAbbrev]
+</span><a href="#local-6989586621679347607"><span class="hs-identifier hs-var">cfp</span></a></span></span><span> </span><span id="local-6989586621679347608"><span class="annot"><span class="annottext">LangAbbrev
+</span><a href="#local-6989586621679347608"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679347609"><span class="annot"><span class="annottext">(LangAbbrev, LangAbbrev)
+</span><a href="#local-6989586621679347609"><span class="hs-identifier hs-var">inOutf</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[LangAbbrev] -&gt; LangAbbrev -&gt; (LangAbbrev, LangAbbrev) -&gt; Doc
 </span><span class="hs-identifier hs-var">instDoc</span></span><span> </span><span class="annot"><span class="annottext">[LangAbbrev]
-</span><a href="#local-6989586621679347605"><span class="hs-identifier hs-var">cfp</span></a></span><span> </span><span class="annot"><span class="annottext">LangAbbrev
-</span><a href="#local-6989586621679347606"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">(LangAbbrev, LangAbbrev)
-</span><a href="#local-6989586621679347607"><span class="hs-identifier hs-var">inOutf</span></a></span><span>
+</span><a href="#local-6989586621679347607"><span class="hs-identifier hs-var">cfp</span></a></span><span> </span><span class="annot"><span class="annottext">LangAbbrev
+</span><a href="#local-6989586621679347608"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">(LangAbbrev, LangAbbrev)
+</span><a href="#local-6989586621679347609"><span class="hs-identifier hs-var">inOutf</span></a></span><span>
 </span><span id="line-45"></span><span>
 </span><span id="line-46"></span><span class="hs-comment">-- |Helper that checks if the field is empty; allowing optional content</span><span>
 </span><span id="line-47"></span><span class="hs-comment">-- rendering in a README file</span><span>

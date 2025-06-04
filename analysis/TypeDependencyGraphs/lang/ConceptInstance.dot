@@ -1,5 +1,6 @@
 digraph conceptinstance{
 ConceptInstance	[shape=oval, color=cyan3, label="ConceptInstance"];
+ConceptInstance -> UID;
 ConceptInstance -> ConceptChunk;
 ConceptInstance -> String;
 ConceptInstance -> ShortName;

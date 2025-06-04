@@ -38,7 +38,7 @@ degree = fund' "unit:degree" "angle" (Special Circle)
 -- Some of these units are easiest to define via others less common names, 
 -- which we define first.
 s_2 :: UnitDefn
-s_2 = newUnit "unt:seconds squared" $ second ^: 2
+s_2 = newUnit "unit:seconds squared" $ second ^: 2
 
 m_2, m_3 :: UnitDefn
 m_2 = newUnit "unit:square metres"   $ metre ^: 2

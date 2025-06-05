@@ -235,7 +235,7 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 {-Quantities-}
 
 unitless :: [QuantityDict]
-unitless = [riskFun, isSafeProb, isSafeLoad,
+unitless = [riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad,
   sdfTol, dimlessLoad, tolLoad, lDurFac] ++ map qw [gTF, loadSF]
 
 interps :: [QuantityDict]

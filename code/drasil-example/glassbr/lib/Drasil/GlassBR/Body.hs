@@ -33,7 +33,7 @@ import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamenta
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab, glassBR, 
-  ptOfExplsn, con, con', glass)
+  ptOfExplsn, con', glass)
 import Drasil.GlassBR.DataDefs (configFp)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.Figures

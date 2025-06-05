@@ -14,7 +14,7 @@
 </span><span id="line-14"></span><span>
 </span><span id="line-15"></span><span class="annot"><span class="hs-comment">-- | Arithmetic operators (fractional, power, and subtraction).</span></span><span>
 </span><span id="line-16"></span><span class="hs-keyword">data</span><span> </span><span id="ArithBinOp"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#ArithBinOp"><span class="hs-identifier hs-var">ArithBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Frac"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Frac"><span class="hs-identifier hs-var">Frac</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Pow"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Pow"><span class="hs-identifier hs-var">Pow</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Subt"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Subt"><span class="hs-identifier hs-var">Subt</span></a></span></span><span>
-</span><span id="line-17"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423636"><span id="local-6989586621679423638"><span class="annot"><span class="annottext">ArithBinOp -&gt; ArithBinOp -&gt; Bool
+</span><span id="line-17"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423502"><span id="local-6989586621679423504"><span class="annot"><span class="annottext">ArithBinOp -&gt; ArithBinOp -&gt; Bool
 (ArithBinOp -&gt; ArithBinOp -&gt; Bool)
 -&gt; (ArithBinOp -&gt; ArithBinOp -&gt; Bool) -&gt; Eq ArithBinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -26,7 +26,7 @@ $c/= :: ArithBinOp -&gt; ArithBinOp -&gt; Bool
 </span><span id="line-18"></span><span>
 </span><span id="line-19"></span><span class="annot"><span class="hs-comment">-- | Equality operators (equal or not equal).</span></span><span>
 </span><span id="line-20"></span><span class="hs-keyword">data</span><span> </span><span id="EqBinOp"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#EqBinOp"><span class="hs-identifier hs-var">EqBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Eq"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Eq"><span class="hs-identifier hs-var">Eq</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="NEq"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#NEq"><span class="hs-identifier hs-var">NEq</span></a></span></span><span>
-</span><span id="line-21"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423645"><span id="local-6989586621679423647"><span class="annot"><span class="annottext">EqBinOp -&gt; EqBinOp -&gt; Bool
+</span><span id="line-21"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423511"><span id="local-6989586621679423513"><span class="annot"><span class="annottext">EqBinOp -&gt; EqBinOp -&gt; Bool
 (EqBinOp -&gt; EqBinOp -&gt; Bool)
 -&gt; (EqBinOp -&gt; EqBinOp -&gt; Bool) -&gt; Eq EqBinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -39,7 +39,7 @@ $c/= :: EqBinOp -&gt; EqBinOp -&gt; Bool
 </span><span id="line-23"></span><span class="hs-comment">-- | Conditional and Biconditional operators (Expressions can imply</span><span>
 </span><span id="line-24"></span><span class="hs-comment">-- one another, or exist if and only if another expression exists).</span><span>
 </span><span id="line-25"></span><span class="hs-keyword">data</span><span> </span><span id="BoolBinOp"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#BoolBinOp"><span class="hs-identifier hs-var">BoolBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Impl"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Impl"><span class="hs-identifier hs-var">Impl</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Iff"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Iff"><span class="hs-identifier hs-var">Iff</span></a></span></span><span>
-</span><span id="line-26"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423653"><span id="local-6989586621679423655"><span class="annot"><span class="annottext">BoolBinOp -&gt; BoolBinOp -&gt; Bool
+</span><span id="line-26"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423519"><span id="local-6989586621679423521"><span class="annot"><span class="annottext">BoolBinOp -&gt; BoolBinOp -&gt; Bool
 (BoolBinOp -&gt; BoolBinOp -&gt; Bool)
 -&gt; (BoolBinOp -&gt; BoolBinOp -&gt; Bool) -&gt; Eq BoolBinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -51,7 +51,7 @@ $c/= :: BoolBinOp -&gt; BoolBinOp -&gt; Bool
 </span><span id="line-27"></span><span>
 </span><span id="line-28"></span><span class="annot"><span class="hs-comment">-- | Index operator.</span></span><span>
 </span><span id="line-29"></span><span class="hs-keyword">data</span><span> </span><span id="LABinOp"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#LABinOp"><span class="hs-identifier hs-var">LABinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Index"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Index"><span class="hs-identifier hs-var">Index</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="IndexOf"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#IndexOf"><span class="hs-identifier hs-var">IndexOf</span></a></span></span><span>
-</span><span id="line-30"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423661"><span id="local-6989586621679423663"><span class="annot"><span class="annottext">LABinOp -&gt; LABinOp -&gt; Bool
+</span><span id="line-30"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423527"><span id="local-6989586621679423529"><span class="annot"><span class="annottext">LABinOp -&gt; LABinOp -&gt; Bool
 (LABinOp -&gt; LABinOp -&gt; Bool)
 -&gt; (LABinOp -&gt; LABinOp -&gt; Bool) -&gt; Eq LABinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -63,7 +63,7 @@ $c/= :: LABinOp -&gt; LABinOp -&gt; Bool
 </span><span id="line-31"></span><span>
 </span><span id="line-32"></span><span class="annot"><span class="hs-comment">-- | Ordered binary operators (less than, greater than, less than or equal to, greater than or equal to).</span></span><span>
 </span><span id="line-33"></span><span class="hs-keyword">data</span><span> </span><span id="OrdBinOp"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#OrdBinOp"><span class="hs-identifier hs-var">OrdBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Lt"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Lt"><span class="hs-identifier hs-var">Lt</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Gt"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Gt"><span class="hs-identifier hs-var">Gt</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="LEq"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#LEq"><span class="hs-identifier hs-var">LEq</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="GEq"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#GEq"><span class="hs-identifier hs-var">GEq</span></a></span></span><span>
-</span><span id="line-34"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423671"><span id="local-6989586621679423673"><span class="annot"><span class="annottext">OrdBinOp -&gt; OrdBinOp -&gt; Bool
+</span><span id="line-34"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423537"><span id="local-6989586621679423539"><span class="annot"><span class="annottext">OrdBinOp -&gt; OrdBinOp -&gt; Bool
 (OrdBinOp -&gt; OrdBinOp -&gt; Bool)
 -&gt; (OrdBinOp -&gt; OrdBinOp -&gt; Bool) -&gt; Eq OrdBinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -75,7 +75,7 @@ $c/= :: OrdBinOp -&gt; OrdBinOp -&gt; Bool
 </span><span id="line-35"></span><span>
 </span><span id="line-36"></span><span class="annot"><span class="hs-comment">-- | @Vector x Vector -&gt; Vector@ binary operations (cross product, vector addition, vector sub).</span></span><span>
 </span><span id="line-37"></span><span class="hs-keyword">data</span><span> </span><span id="VVVBinOp"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#VVVBinOp"><span class="hs-identifier hs-var">VVVBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Cross"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Cross"><span class="hs-identifier hs-var">Cross</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="VAdd"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#VAdd"><span class="hs-identifier hs-var">VAdd</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="VSub"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#VSub"><span class="hs-identifier hs-var">VSub</span></a></span></span><span>
-</span><span id="line-38"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423680"><span id="local-6989586621679423682"><span class="annot"><span class="annottext">VVVBinOp -&gt; VVVBinOp -&gt; Bool
+</span><span id="line-38"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423546"><span id="local-6989586621679423548"><span class="annot"><span class="annottext">VVVBinOp -&gt; VVVBinOp -&gt; Bool
 (VVVBinOp -&gt; VVVBinOp -&gt; Bool)
 -&gt; (VVVBinOp -&gt; VVVBinOp -&gt; Bool) -&gt; Eq VVVBinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -87,7 +87,7 @@ $c/= :: VVVBinOp -&gt; VVVBinOp -&gt; Bool
 </span><span id="line-39"></span><span>
 </span><span id="line-40"></span><span class="annot"><span class="hs-comment">-- | @Vector x Vector -&gt; Number@ binary operations (dot product).</span></span><span>
 </span><span id="line-41"></span><span class="hs-keyword">data</span><span> </span><span id="VVNBinOp"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#VVNBinOp"><span class="hs-identifier hs-var">VVNBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Dot"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Dot"><span class="hs-identifier hs-var">Dot</span></a></span></span><span>
-</span><span id="line-42"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423687"><span id="local-6989586621679423689"><span class="annot"><span class="annottext">VVNBinOp -&gt; VVNBinOp -&gt; Bool
+</span><span id="line-42"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423553"><span id="local-6989586621679423555"><span class="annot"><span class="annottext">VVNBinOp -&gt; VVNBinOp -&gt; Bool
 (VVNBinOp -&gt; VVNBinOp -&gt; Bool)
 -&gt; (VVNBinOp -&gt; VVNBinOp -&gt; Bool) -&gt; Eq VVNBinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -99,7 +99,7 @@ $c/= :: VVNBinOp -&gt; VVNBinOp -&gt; Bool
 </span><span id="line-43"></span><span>
 </span><span id="line-44"></span><span class="annot"><span class="hs-comment">-- | @Number x Vector -&gt; Vector@ binary operations (scaling).</span></span><span>
 </span><span id="line-45"></span><span class="hs-keyword">data</span><span> </span><span id="NVVBinOp"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#NVVBinOp"><span class="hs-identifier hs-var">NVVBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Scale"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Scale"><span class="hs-identifier hs-var">Scale</span></a></span></span><span>
-</span><span id="line-46"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423694"><span id="local-6989586621679423696"><span class="annot"><span class="annottext">NVVBinOp -&gt; NVVBinOp -&gt; Bool
+</span><span id="line-46"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423560"><span id="local-6989586621679423562"><span class="annot"><span class="annottext">NVVBinOp -&gt; NVVBinOp -&gt; Bool
 (NVVBinOp -&gt; NVVBinOp -&gt; Bool)
 -&gt; (NVVBinOp -&gt; NVVBinOp -&gt; Bool) -&gt; Eq NVVBinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -111,7 +111,7 @@ $c/= :: NVVBinOp -&gt; NVVBinOp -&gt; Bool
 </span><span id="line-47"></span><span>
 </span><span id="line-48"></span><span class="annot"><span class="hs-comment">-- | Element + Set -&gt; Set</span></span><span>
 </span><span id="line-49"></span><span class="hs-keyword">data</span><span> </span><span id="ESSBinOp"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#ESSBinOp"><span class="hs-identifier hs-var">ESSBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="SAdd"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#SAdd"><span class="hs-identifier hs-var">SAdd</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="SRemove"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#SRemove"><span class="hs-identifier hs-var">SRemove</span></a></span></span><span>
-</span><span id="line-50"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423702"><span id="local-6989586621679423704"><span class="annot"><span class="annottext">ESSBinOp -&gt; ESSBinOp -&gt; Bool
+</span><span id="line-50"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423568"><span id="local-6989586621679423570"><span class="annot"><span class="annottext">ESSBinOp -&gt; ESSBinOp -&gt; Bool
 (ESSBinOp -&gt; ESSBinOp -&gt; Bool)
 -&gt; (ESSBinOp -&gt; ESSBinOp -&gt; Bool) -&gt; Eq ESSBinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -123,7 +123,7 @@ $c/= :: ESSBinOp -&gt; ESSBinOp -&gt; Bool
 </span><span id="line-51"></span><span>
 </span><span id="line-52"></span><span class="annot"><span class="hs-comment">-- | Element + Set -&gt; Bool</span></span><span>
 </span><span id="line-53"></span><span class="hs-keyword">data</span><span> </span><span id="ESBBinOp"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#ESBBinOp"><span class="hs-identifier hs-var">ESBBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="SContains"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#SContains"><span class="hs-identifier hs-var">SContains</span></a></span></span><span>
-</span><span id="line-54"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423709"><span id="local-6989586621679423711"><span class="annot"><span class="annottext">ESBBinOp -&gt; ESBBinOp -&gt; Bool
+</span><span id="line-54"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423575"><span id="local-6989586621679423577"><span class="annot"><span class="annottext">ESBBinOp -&gt; ESBBinOp -&gt; Bool
 (ESBBinOp -&gt; ESBBinOp -&gt; Bool)
 -&gt; (ESBBinOp -&gt; ESBBinOp -&gt; Bool) -&gt; Eq ESBBinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -134,7 +134,7 @@ $c/= :: ESBBinOp -&gt; ESBBinOp -&gt; Bool
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span>
 </span><span id="line-55"></span><span>
 </span><span id="line-56"></span><span class="hs-keyword">data</span><span> </span><span id="AssocConcatOper"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#AssocConcatOper"><span class="hs-identifier hs-var">AssocConcatOper</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="SUnion"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#SUnion"><span class="hs-identifier hs-var">SUnion</span></a></span></span><span>
-</span><span id="line-57"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423716"><span id="local-6989586621679423718"><span class="annot"><span class="annottext">AssocConcatOper -&gt; AssocConcatOper -&gt; Bool
+</span><span id="line-57"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423582"><span id="local-6989586621679423584"><span class="annot"><span class="annottext">AssocConcatOper -&gt; AssocConcatOper -&gt; Bool
 (AssocConcatOper -&gt; AssocConcatOper -&gt; Bool)
 -&gt; (AssocConcatOper -&gt; AssocConcatOper -&gt; Bool)
 -&gt; Eq AssocConcatOper
@@ -146,7 +146,7 @@ $c/= :: AssocConcatOper -&gt; AssocConcatOper -&gt; Bool
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span>
 </span><span id="line-58"></span><span class="annot"><span class="hs-comment">-- | Associative operators (adding and multiplication). Also specifies whether it is for integers or for real numbers.</span></span><span>
 </span><span id="line-59"></span><span class="hs-keyword">data</span><span> </span><span id="AssocArithOper"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#AssocArithOper"><span class="hs-identifier hs-var">AssocArithOper</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Add"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Add"><span class="hs-identifier hs-var">Add</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Mul"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Mul"><span class="hs-identifier hs-var">Mul</span></a></span></span><span>
-</span><span id="line-60"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423724"><span id="local-6989586621679423726"><span class="annot"><span class="annottext">AssocArithOper -&gt; AssocArithOper -&gt; Bool
+</span><span id="line-60"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423590"><span id="local-6989586621679423592"><span class="annot"><span class="annottext">AssocArithOper -&gt; AssocArithOper -&gt; Bool
 (AssocArithOper -&gt; AssocArithOper -&gt; Bool)
 -&gt; (AssocArithOper -&gt; AssocArithOper -&gt; Bool) -&gt; Eq AssocArithOper
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -158,7 +158,7 @@ $c/= :: AssocArithOper -&gt; AssocArithOper -&gt; Bool
 </span><span id="line-61"></span><span>
 </span><span id="line-62"></span><span class="annot"><span class="hs-comment">-- | Associative boolean operators (and, or).</span></span><span>
 </span><span id="line-63"></span><span class="hs-keyword">data</span><span> </span><span id="AssocBoolOper"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#AssocBoolOper"><span class="hs-identifier hs-var">AssocBoolOper</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="And"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#And"><span class="hs-identifier hs-var">And</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Or"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Or"><span class="hs-identifier hs-var">Or</span></a></span></span><span>
-</span><span id="line-64"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423732"><span id="local-6989586621679423734"><span class="annot"><span class="annottext">AssocBoolOper -&gt; AssocBoolOper -&gt; Bool
+</span><span id="line-64"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423598"><span id="local-6989586621679423600"><span class="annot"><span class="annottext">AssocBoolOper -&gt; AssocBoolOper -&gt; Bool
 (AssocBoolOper -&gt; AssocBoolOper -&gt; Bool)
 -&gt; (AssocBoolOper -&gt; AssocBoolOper -&gt; Bool) -&gt; Eq AssocBoolOper
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -171,7 +171,7 @@ $c/= :: AssocBoolOper -&gt; AssocBoolOper -&gt; Bool
 </span><span id="line-66"></span><span class="annot"><span class="hs-comment">-- | Unary functions (abs, log, ln, sin, etc.).</span></span><span>
 </span><span id="line-67"></span><span class="hs-keyword">data</span><span> </span><span id="UFunc"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#UFunc"><span class="hs-identifier hs-var">UFunc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Abs"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Abs"><span class="hs-identifier hs-var">Abs</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Log"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Log"><span class="hs-identifier hs-var">Log</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Ln"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Ln"><span class="hs-identifier hs-var">Ln</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Sin"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Sin"><span class="hs-identifier hs-var">Sin</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Cos"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Cos"><span class="hs-identifier hs-var">Cos</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Tan"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Tan"><span class="hs-identifier hs-var">Tan</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Sec"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Sec"><span class="hs-identifier hs-var">Sec</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Csc"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Csc"><span class="hs-identifier hs-var">Csc</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Cot"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Cot"><span class="hs-identifier hs-var">Cot</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Arcsin"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Arcsin"><span class="hs-identifier hs-var">Arcsin</span></a></span></span><span>
 </span><span id="line-68"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="Arccos"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Arccos"><span class="hs-identifier hs-var">Arccos</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Arctan"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Arctan"><span class="hs-identifier hs-var">Arctan</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Exp"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Exp"><span class="hs-identifier hs-var">Exp</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Sqrt"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Sqrt"><span class="hs-identifier hs-var">Sqrt</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Neg"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Neg"><span class="hs-identifier hs-var">Neg</span></a></span></span><span>
-</span><span id="line-69"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423753"><span id="local-6989586621679423755"><span class="annot"><span class="annottext">UFunc -&gt; UFunc -&gt; Bool
+</span><span id="line-69"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423619"><span id="local-6989586621679423621"><span class="annot"><span class="annottext">UFunc -&gt; UFunc -&gt; Bool
 (UFunc -&gt; UFunc -&gt; Bool) -&gt; (UFunc -&gt; UFunc -&gt; Bool) -&gt; Eq UFunc
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
 $c== :: UFunc -&gt; UFunc -&gt; Bool
@@ -182,7 +182,7 @@ $c/= :: UFunc -&gt; UFunc -&gt; Bool
 </span><span id="line-70"></span><span>
 </span><span id="line-71"></span><span class="annot"><span class="hs-comment">-- | @Bool -&gt; Bool@ operators.</span></span><span>
 </span><span id="line-72"></span><span class="hs-keyword">data</span><span> </span><span id="UFuncB"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#UFuncB"><span class="hs-identifier hs-var">UFuncB</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Not"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Not"><span class="hs-identifier hs-var">Not</span></a></span></span><span>
-</span><span id="line-73"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423760"><span id="local-6989586621679423762"><span class="annot"><span class="annottext">UFuncB -&gt; UFuncB -&gt; Bool
+</span><span id="line-73"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423626"><span id="local-6989586621679423628"><span class="annot"><span class="annottext">UFuncB -&gt; UFuncB -&gt; Bool
 (UFuncB -&gt; UFuncB -&gt; Bool)
 -&gt; (UFuncB -&gt; UFuncB -&gt; Bool) -&gt; Eq UFuncB
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -194,7 +194,7 @@ $c/= :: UFuncB -&gt; UFuncB -&gt; Bool
 </span><span id="line-74"></span><span>
 </span><span id="line-75"></span><span class="annot"><span class="hs-comment">-- | @Vector -&gt; Vector@ operators.</span></span><span>
 </span><span id="line-76"></span><span class="hs-keyword">data</span><span> </span><span id="UFuncVV"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#UFuncVV"><span class="hs-identifier hs-var">UFuncVV</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="NegV"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#NegV"><span class="hs-identifier hs-var">NegV</span></a></span></span><span>
-</span><span id="line-77"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423767"><span id="local-6989586621679423769"><span class="annot"><span class="annottext">UFuncVV -&gt; UFuncVV -&gt; Bool
+</span><span id="line-77"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423633"><span id="local-6989586621679423635"><span class="annot"><span class="annottext">UFuncVV -&gt; UFuncVV -&gt; Bool
 (UFuncVV -&gt; UFuncVV -&gt; Bool)
 -&gt; (UFuncVV -&gt; UFuncVV -&gt; Bool) -&gt; Eq UFuncVV
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -206,7 +206,7 @@ $c/= :: UFuncVV -&gt; UFuncVV -&gt; Bool
 </span><span id="line-78"></span><span>
 </span><span id="line-79"></span><span class="annot"><span class="hs-comment">-- | @Vector -&gt; Number@ operators.</span></span><span>
 </span><span id="line-80"></span><span class="hs-keyword">data</span><span> </span><span id="UFuncVN"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#UFuncVN"><span class="hs-identifier hs-var">UFuncVN</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Norm"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Norm"><span class="hs-identifier hs-var">Norm</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Dim"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#Dim"><span class="hs-identifier hs-var">Dim</span></a></span></span><span>
-</span><span id="line-81"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423775"><span id="local-6989586621679423777"><span class="annot"><span class="annottext">UFuncVN -&gt; UFuncVN -&gt; Bool
+</span><span id="line-81"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679423641"><span id="local-6989586621679423643"><span class="annot"><span class="annottext">UFuncVN -&gt; UFuncVN -&gt; Bool
 (UFuncVN -&gt; UFuncVN -&gt; Bool)
 -&gt; (UFuncVN -&gt; UFuncVN -&gt; Bool) -&gt; Eq UFuncVN
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -300,45 +300,45 @@ $c/= :: UFuncVN -&gt; UFuncVN -&gt; Bool
 </span><span id="line-164"></span><span>  </span><span id="RealI"><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#RealI"><span class="hs-identifier hs-var">RealI</span></a></span></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.Database.UID.html#UID"><span class="hs-identifier hs-type">UID</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Space.html#RealInterval"><span class="hs-identifier hs-type">RealInterval</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#CodeExpr"><span class="hs-identifier hs-type">CodeExpr</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#CodeExpr"><span class="hs-identifier hs-type">CodeExpr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#CodeExpr"><span class="hs-identifier hs-type">CodeExpr</span></a></span><span>
 </span><span id="line-165"></span><span>
 </span><span id="line-166"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Literal.Class.html#LiteralC"><span class="hs-identifier hs-type">LiteralC</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.CodeExpr.Lang.html#CodeExpr"><span class="hs-identifier hs-type">CodeExpr</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-167"></span><span>  </span><span id="local-6989586621679423818"><span class="annot"><span class="annottext">str :: String -&gt; CodeExpr
-</span><a href="#local-6989586621679423818"><span class="hs-identifier hs-var hs-var hs-var hs-var">str</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Literal -&gt; CodeExpr
+</span><span id="line-167"></span><span>  </span><span id="local-6989586621679423684"><span class="annot"><span class="annottext">str :: String -&gt; CodeExpr
+</span><a href="#local-6989586621679423684"><span class="hs-identifier hs-var hs-var hs-var hs-var">str</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Literal -&gt; CodeExpr
 </span><a href="Language.Drasil.CodeExpr.Lang.html#Lit"><span class="hs-identifier hs-var">Lit</span></a></span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; CodeExpr) -&gt; (String -&gt; Literal) -&gt; String -&gt; CodeExpr
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Literal
 forall r. LiteralC r =&gt; String -&gt; r
 </span><a href="Language.Drasil.Literal.Class.html#str"><span class="hs-identifier hs-var">str</span></a></span><span>
-</span><span id="line-168"></span><span>  </span><span id="local-6989586621679423822"><span class="annot"><span class="annottext">int :: Integer -&gt; CodeExpr
-</span><a href="#local-6989586621679423822"><span class="hs-identifier hs-var hs-var hs-var hs-var">int</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Literal -&gt; CodeExpr
+</span><span id="line-168"></span><span>  </span><span id="local-6989586621679423688"><span class="annot"><span class="annottext">int :: Integer -&gt; CodeExpr
+</span><a href="#local-6989586621679423688"><span class="hs-identifier hs-var hs-var hs-var hs-var">int</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Literal -&gt; CodeExpr
 </span><a href="Language.Drasil.CodeExpr.Lang.html#Lit"><span class="hs-identifier hs-var">Lit</span></a></span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; CodeExpr)
 -&gt; (Integer -&gt; Literal) -&gt; Integer -&gt; CodeExpr
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><a href="Language.Drasil.Literal.Class.html#int"><span class="hs-identifier hs-var">int</span></a></span><span>
-</span><span id="line-169"></span><span>  </span><span id="local-6989586621679423825"><span class="annot"><span class="annottext">dbl :: Double -&gt; CodeExpr
-</span><a href="#local-6989586621679423825"><span class="hs-identifier hs-var hs-var hs-var hs-var">dbl</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Literal -&gt; CodeExpr
+</span><span id="line-169"></span><span>  </span><span id="local-6989586621679423691"><span class="annot"><span class="annottext">dbl :: Double -&gt; CodeExpr
+</span><a href="#local-6989586621679423691"><span class="hs-identifier hs-var hs-var hs-var hs-var">dbl</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Literal -&gt; CodeExpr
 </span><a href="Language.Drasil.CodeExpr.Lang.html#Lit"><span class="hs-identifier hs-var">Lit</span></a></span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; CodeExpr) -&gt; (Double -&gt; Literal) -&gt; Double -&gt; CodeExpr
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Double -&gt; Literal
 forall r. LiteralC r =&gt; Double -&gt; r
 </span><a href="Language.Drasil.Literal.Class.html#dbl"><span class="hs-identifier hs-var">dbl</span></a></span><span>
-</span><span id="line-170"></span><span>  </span><span id="local-6989586621679423828"><span class="annot"><span class="annottext">exactDbl :: Integer -&gt; CodeExpr
-</span><a href="#local-6989586621679423828"><span class="hs-identifier hs-var hs-var hs-var hs-var">exactDbl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Literal -&gt; CodeExpr
+</span><span id="line-170"></span><span>  </span><span id="local-6989586621679423694"><span class="annot"><span class="annottext">exactDbl :: Integer -&gt; CodeExpr
+</span><a href="#local-6989586621679423694"><span class="hs-identifier hs-var hs-var hs-var hs-var">exactDbl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Literal -&gt; CodeExpr
 </span><a href="Language.Drasil.CodeExpr.Lang.html#Lit"><span class="hs-identifier hs-var">Lit</span></a></span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; CodeExpr)
 -&gt; (Integer -&gt; Literal) -&gt; Integer -&gt; CodeExpr
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><a href="Language.Drasil.Literal.Class.html#exactDbl"><span class="hs-identifier hs-var">exactDbl</span></a></span><span>
-</span><span id="line-171"></span><span>  </span><span id="local-6989586621679423831"><span class="annot"><span class="annottext">perc :: Integer -&gt; Integer -&gt; CodeExpr
-</span><a href="#local-6989586621679423831"><span class="hs-identifier hs-var hs-var hs-var hs-var">perc</span></a></span></span><span> </span><span id="local-6989586621679423833"><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679423833"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679423834"><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679423834"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Literal -&gt; CodeExpr
+</span><span id="line-171"></span><span>  </span><span id="local-6989586621679423697"><span class="annot"><span class="annottext">perc :: Integer -&gt; Integer -&gt; CodeExpr
+</span><a href="#local-6989586621679423697"><span class="hs-identifier hs-var hs-var hs-var hs-var">perc</span></a></span></span><span> </span><span id="local-6989586621679423699"><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679423699"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679423700"><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679423700"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Literal -&gt; CodeExpr
 </span><a href="Language.Drasil.CodeExpr.Lang.html#Lit"><span class="hs-identifier hs-var">Lit</span></a></span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; CodeExpr) -&gt; Literal -&gt; CodeExpr
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Literal
 forall r. LiteralC r =&gt; Integer -&gt; Integer -&gt; r
 </span><a href="Language.Drasil.Literal.Class.html#perc"><span class="hs-identifier hs-var">perc</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679423833"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679423834"><span class="hs-identifier hs-var">r</span></a></span><span>
+</span><a href="#local-6989586621679423699"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679423700"><span class="hs-identifier hs-var">r</span></a></span><span>
 </span><span id="line-172"></span></pre></body></html>

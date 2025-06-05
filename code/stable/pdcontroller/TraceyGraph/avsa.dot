@@ -7,7 +7,7 @@ digraph avsa {
 
 	instance:pwrPlant	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:pwrPlant"];
 	instance:decoupled	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:decoupled"];
-	instance:setPoint	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:setPoint"];
+	instance:setPointConstant	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:setPointConstant"];
 	instance:externalDisturb	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:externalDisturb"];
 	instance:initialValue	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:initialValue"];
 	instance:parallelEq	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:parallelEq"];
@@ -19,7 +19,7 @@ digraph avsa {
 
 	subgraph A {
 	rank="same"
-	{instance:pwrPlant, instance:decoupled, instance:setPoint, instance:externalDisturb, instance:initialValue, instance:parallelEq, instance:unfilteredDerivative, instance:pwrPlantTxFnx, instance:massSpring, instance:dampingCoeffSpring, instance:stiffnessCoeffSpring}
+	{instance:pwrPlant, instance:decoupled, instance:setPointConstant, instance:externalDisturb, instance:initialValue, instance:parallelEq, instance:unfilteredDerivative, instance:pwrPlantTxFnx, instance:massSpring, instance:dampingCoeffSpring, instance:stiffnessCoeffSpring}
 	}
 
 }

@@ -32,13 +32,14 @@ import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamenta
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
-import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab, glassBR, 
+import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab, 
   ptOfExplsn, con', glass)
 import Drasil.GlassBR.DataDefs (configFp)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.Figures
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
+import Drasil.GlassBR.MetaConcepts (progName)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations)
 import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
@@ -59,7 +60,7 @@ printSetting = piSys fullSI Equational defaultConfiguration
 
 si :: System
 si = SI {
-  _sys         = glassBR,
+  _sys         = progName,
   _kind        = Doc.srs,
   _authors     = [nikitha, spencerSmith],
   _purpose     = [purp],
@@ -83,23 +84,23 @@ mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
   IntroSec $
-    IntroProg (startIntro software blstRskInvWGlassSlab glassBR)
-      (short glassBR)
-    [IPurpose $ purpDoc glassBR Verbose,
+    IntroProg (startIntro software blstRskInvWGlassSlab progName)
+      (short progName)
+    [IPurpose $ purpDoc progName Verbose,
      IScope scope,
      IChar [] (undIR ++ appStanddIR) [],
      IOrgSec Doc.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
   StkhldrSec $
     StkhldrProg
-      [Client glassBR $ phraseNP (a_ company)
+      [Client progName $ phraseNP (a_ company)
         +:+. S "named Entuitive" +:+ S "It is developed by Dr." +:+ S (name mCampidelli),
-      Cstmr glassBR],
+      Cstmr progName],
   GSDSec $ GSDProg [SysCntxt [sysCtxIntro, LlC sysCtxFig, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] [] ],
   SSDSec $
     SSDProg
       [SSDProblem $ PDProg purp [termsAndDesc]
-        [ PhySysDesc glassBR physSystParts physSystFig []
+        [ PhySysDesc progName physSystParts physSystFig []
         , Goals goalInputs],
        SSDSolChSpec $ SCSProg
         [ Assumptions
@@ -118,7 +119,7 @@ mkSRS = [TableOfContents,
   LCsSec,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
-  AuxConstntSec $ AuxConsProg glassBR auxiliaryConstants,
+  AuxConstntSec $ AuxConsProg progName auxiliaryConstants,
   Bibliography,
   AppndxSec $ AppndxProg [appdxIntro, LlC demandVsSDFig, LlC dimlessloadVsARFig]]
 
@@ -132,7 +133,7 @@ background = foldlSent_ [phrase explosion, S "in downtown areas are dangerous fr
   +:+ S "effect of falling glass"]
 
 symbMap :: ChunkDB
-symbMap = cdb thisSymbols (map nw acronyms ++ nw glassBR : map nw thisSymbols
+symbMap = cdb thisSymbols (map nw acronyms ++ nw progName : map nw thisSymbols
   ++ map nw con' ++ map nw terms ++ map nw doccon ++ map nw doccon' ++ map nw educon
   ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon'
   ++ map nw softwarecon ++ [nw lateralLoad, nw materialProprty]
@@ -253,7 +254,7 @@ sysCtxIntro = foldlSP
   [refS sysCtxFig +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
    `sC` phraseNP (the user), S "in this case. A rectangle represents the",
-   phrase softwareSys, S "itself", (sParen (short glassBR) !.),
+   phrase softwareSys, S "itself", (sParen (short progName) !.),
    S "Arrows are used to show the data flow between the" +:+ phraseNP (system
    `andIts` environment)]
 
@@ -282,7 +283,7 @@ sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +
   
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
-  short glassBR +:+ S "Responsibilities"]
+  short progName +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $

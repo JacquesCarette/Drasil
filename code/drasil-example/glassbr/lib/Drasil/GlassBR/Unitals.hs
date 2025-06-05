@@ -31,8 +31,9 @@ modElas = uc' "modElas" (nounPhraseSP "modulus of elasticity of glass")
 {--}
 
 constrained :: [ConstrainedChunk]
-constrained = map cnstrw inputDataConstraints ++
-  [cnstrw probBr, cnstrw probFail, cnstrw stressDistFac, cnstrw nomThick, cnstrw glassTypeCon]
+constrained = map cnstrw dataConstraints ++ [nomThick, cnstrw glassTypeCon]
+ -- map cnstrw inputDataConstraints ++ map cnstrw derivedInputDataConstraints -- ++
+  -- [cnstrw probBr, cnstrw probFail, cnstrw stressDistFac, cnstrw nomThick, cnstrw glassTypeCon]
 
 plateLen, plateWidth, aspectRatio, charWeight, standOffDist :: UncertQ
 pbTol, tNT :: UncertainChunk
@@ -49,26 +50,33 @@ inputs = map qw inputsWUnitsUncrtn ++ map qw inputsWUncrtn ++
 inputsWUnitsUncrtn :: [UncertQ]
 inputsWUnitsUncrtn = [plateLen, plateWidth, charWeight]
 
---derived inputs with units and uncertainties
-derivedInsWUnitsUncrtn :: [UncertQ]
-derivedInsWUnitsUncrtn = [standOffDist]
-
 --inputs with uncertainties and no units
 inputsWUncrtn :: [UncertainChunk]
 inputsWUncrtn = [pbTol, tNT]
-
---derived inputs with uncertainties and no units
-derivedInsWUncrtn :: [UncertQ]
-derivedInsWUncrtn = [aspectRatio]
 
 --inputs with no uncertainties
 inputsNoUncrtn :: [ConstrainedChunk]
 inputsNoUncrtn = [cnstrw glassTypeCon, nomThick]
 
+--derived inputs with units and uncertainties
+derivedInsWUnitsUncrtn :: [UncertQ]
+derivedInsWUnitsUncrtn = [standOffDist]
+
+--derived inputs with uncertainties and no units
+derivedInsWUncrtn :: [UncertQ]
+derivedInsWUncrtn = [aspectRatio]
+
 inputDataConstraints :: [UncertainChunk]
 inputDataConstraints = map uncrtnw inputsWUnitsUncrtn ++
-  map uncrtnw inputsWUncrtn ++ map uncrtnw derivedInsWUnitsUncrtn ++
-  map uncrtnw derivedInsWUncrtn
+  map uncrtnw inputsWUncrtn
+
+derivedInputDataConstraints :: [UncertainChunk]
+derivedInputDataConstraints = map uncrtnw derivedInsWUnitsUncrtn
+  ++ map uncrtnw derivedInsWUncrtn
+
+dataConstraints :: [UncertainChunk]
+dataConstraints = inputDataConstraints ++ derivedInputDataConstraints
+
 
 plateLen = uqcND "plateLen" (nounPhraseSP "plate length (long dimension)")
   lA metre Real
@@ -115,8 +123,9 @@ glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)
 outputs :: [QuantityDict]
 outputs = map qw [isSafePb, isSafeLR] ++ [qw probBr, qw stressDistFac]
 
+-- | Symbols uniquely relevant to theory models.
 tmSymbols :: [QuantityDict]
-tmSymbols = map qw [probFail, pbTolfail] ++ map qw [isSafeProb, isSafeLoad]
+tmSymbols = map qw [probFail, pbTolfail]
 
 probBr, probFail, pbTolfail, stressDistFac :: ConstrainedChunk
 probBr = cvc "probBr" (nounPhraseSP "probability of breakage")

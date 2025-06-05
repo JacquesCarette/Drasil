@@ -20,7 +20,6 @@ import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Concepts.Physics (physicCon, physicCon', motion, pendulum)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
 import Data.Drasil.Concepts.Software (program, errMsg)
-import Data.Drasil.Domains (physics)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Theories.Physics (newtonSLR)
 import Data.Drasil.TheoryConcepts (inModel)
@@ -41,6 +40,7 @@ import Drasil.SglPend.Figures (figMotion, sysCtxFig1)
 import Drasil.SglPend.Goals (goals, goalsInputs)
 import Drasil.SglPend.DataDefs (dataDefs)
 import Drasil.SglPend.IMods (iMods)
+import Drasil.SglPend.MetaConcepts (progName)
 import Drasil.SglPend.GenDefs (genDefns)
 import Drasil.SglPend.Unitals (inputs, outputs, inConstraints, outConstraints, symbols)
 import Drasil.SglPend.Requirements (funcReqs)
@@ -100,9 +100,6 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
      AuxConsProg progName [],  -- Adds Auxilliary constraint section
   Bibliography                    -- Adds reference section
   ]
-
-progName :: CI
-progName = commonIdeaWithDict "sglPendulum" (pn "Single Pendulum") "SglPend" [physics]
 
 si :: System
 si = SI {

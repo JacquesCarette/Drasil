@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.Concepts (centreMass, threeD, twoD, gamePhysics, acronyms) where
+module Drasil.GamePhysics.Concepts (centreMass, threeD, twoD, acronyms) where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, likelyChg,
@@ -17,6 +17,5 @@ acronyms :: [CI]
 acronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt, inModel,
   likelyChg, ode, requirement, refBy, refName, srs, thModel, threeD, twoD, typUnc, unlikelyChg]
 
-centreMass, gamePhysics :: CI
+centreMass :: CI
 centreMass  = commonIdeaWithDict "centreMass"  (ctrOfMass ^. term) "CM" [physics]
-gamePhysics = commonIdeaWithDict "gamePhysics" (pn "GamePhysics") "GamePhysics" [physics]

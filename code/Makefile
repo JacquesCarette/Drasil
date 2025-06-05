@@ -168,14 +168,7 @@ stackArgs += --ghc-options="$(GHCFLAGS)"
 # When running 'stack exec', the following stack arguments should be passed.
 STACK_EXEC_ARGS = --no-nix-pure
 
-# Debugging changes the arguments passed to 'stack exec' slightly.
-setup_debug_vars:
-	$(eval stackArgs += $(PROFALL))
-	$(eval STACK_EXEC_ARGS += $(PROFEXEC))
-	$(eval export DEBUG_ENV = 1)
-
 STACK_EXEC = stack exec $(STACK_EXEC_ARGS)
-
 
 # Output amount control
 NOISY ?= no
@@ -193,9 +186,16 @@ BATCHTERM=dumb
 # Default `make` will just run examples and test them against stable. See `test`
 # target for more details.
 all: test test_website codegenTest_diff ##@Examples Run examples and test against stable.
+#^ Must be the first target, otherwise it won't be run by default.
 
 install: ##@Examples Install all example project binaries into your local binary path (see $(stack path) for local-bin-path).
 	stack install $(stackArgs)
+
+# Debugging changes the arguments passed to 'stack exec' slightly.
+setup_debug_vars:
+	$(eval stackArgs += $(PROFALL))
+	$(eval STACK_EXEC_ARGS += $(PROFEXEC))
+	$(eval export DEBUG_ENV = 1)
 
 debug: setup_debug_vars test ##@Examples Run test target with better debugging tools.
 

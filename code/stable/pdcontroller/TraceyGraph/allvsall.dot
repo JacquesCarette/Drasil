@@ -3,7 +3,7 @@ digraph allvsall {
 	instance:massSpring -> instance:pwrPlant;
 	instance:dampingCoeffSpring -> instance:pwrPlant;
 	instance:stiffnessCoeffSpring -> instance:pwrPlant;
-	dataDefn:qdProcessErrorFD -> instance:setPoint;
+	dataDefn:qdProcessErrorFD -> instance:setPointConstant;
 	dataDefn:qdProcessErrorFD -> instance:initialValue;
 	dataDefn:qdProcessErrorFD -> theory:laplaceRC;
 	dataDefn:qdPropControlFD -> dataDefn:qdProcessErrorFD;
@@ -22,7 +22,7 @@ digraph allvsall {
 	theory:gdPowerPlantRC -> instance:stiffnessCoeffSpring;
 	theory:gdPowerPlantRC -> theory:laplaceRC;
 	theory:gdPowerPlantRC -> theory:tmSOSystemRC;
-	theory:imPDRC -> instance:setPoint;
+	theory:imPDRC -> instance:setPointConstant;
 	theory:imPDRC -> dataDefn:qdProcessErrorFD;
 	theory:imPDRC -> dataDefn:qdCtrlVarFD;
 	theory:imPDRC -> theory:invLaplaceRC;
@@ -36,7 +36,7 @@ digraph allvsall {
 
 	instance:pwrPlant	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:pwrPlant"];
 	instance:decoupled	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:decoupled"];
-	instance:setPoint	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:setPoint"];
+	instance:setPointConstant	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:setPointConstant"];
 	instance:externalDisturb	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:externalDisturb"];
 	instance:initialValue	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:initialValue"];
 	instance:parallelEq	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:parallelEq"];
@@ -48,7 +48,7 @@ digraph allvsall {
 
 	subgraph A {
 	rank="same"
-	{instance:pwrPlant, instance:decoupled, instance:setPoint, instance:externalDisturb, instance:initialValue, instance:parallelEq, instance:unfilteredDerivative, instance:pwrPlantTxFnx, instance:massSpring, instance:dampingCoeffSpring, instance:stiffnessCoeffSpring}
+	{instance:pwrPlant, instance:decoupled, instance:setPointConstant, instance:externalDisturb, instance:initialValue, instance:parallelEq, instance:unfilteredDerivative, instance:pwrPlantTxFnx, instance:massSpring, instance:dampingCoeffSpring, instance:stiffnessCoeffSpring}
 	}
 
 	dataDefn:qdProcessErrorFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ddProcessError"];
@@ -98,11 +98,11 @@ digraph allvsall {
 	{instance:inputValues, instance:verifyInputs, instance:calculateValues, instance:outputValues, instance:portable, instance:security, instance:maintainability, instance:verifiability}
 	}
 
-	instance:processVariable	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:processVariable"];
+	instance:calculateProcessVariable	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:calculateProcessVariable"];
 
 	subgraph GS {
 	rank="same"
-	{instance:processVariable}
+	{instance:calculateProcessVariable}
 	}
 
 	instance:likeChgPP	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:likeChgPP"];

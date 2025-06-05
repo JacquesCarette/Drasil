@@ -24,7 +24,6 @@ iGlass :: CI
 lGlass :: CI
 lResistance :: CI
 lShareFac :: CI
-glassBR :: CI
 stdOffDist :: CI
 nFL :: CI
 beam :: IdeaDict
@@ -37,6 +36,9 @@ plane :: IdeaDict
 glass :: IdeaDict
 ptOfExplsn :: IdeaDict
 responseTy :: IdeaDict
+
+module Drasil.GlassBR.MetaConcepts
+progName :: CI
 
 module Drasil.GlassBR.References
 astm2009 :: Citation

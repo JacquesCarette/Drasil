@@ -11,7 +11,6 @@
 
 module Drasil.PDController.Concepts
 acronyms :: [CI]
-pdControllerApp :: CI
 pdControllerCI :: CI
 proportionalCI :: CI
 derivativeCI :: CI
@@ -93,6 +92,9 @@ externalLinkRef :: Reference
 scope :: Sentence
 introUserChar1 :: [Sentence]
 introUserChar2 :: [Sentence]
+
+module Drasil.PDController.MetaConcepts
+progName :: CI
 
 module Drasil.PDController.References
 citations :: BibRef

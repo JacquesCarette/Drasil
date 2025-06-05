@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.SWHSNoPCM.MetaConcepts</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHSNoPCM.MetaConcepts.html#progName"><span class="hs-identifier">progName</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Domains</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">materialEng</span></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span>
+</span><span id="line-6"></span><span class="annot"><a href="Drasil.SWHSNoPCM.MetaConcepts.html#progName"><span class="hs-identifier hs-type">progName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span>
+</span><span id="line-7"></span><span id="progName"><span class="annot"><span class="annottext">progName :: CI
+</span><a href="Drasil.SWHSNoPCM.MetaConcepts.html#progName"><span class="hs-identifier hs-var hs-var">progName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [IdeaDict] -&gt; CI
+</span><span class="hs-identifier hs-var">commonIdeaWithDict</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;swhsNoPCM&quot;</span></span><span> </span><span>
+</span><span id="line-8"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; String -&gt; CapitalizationRule -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhrase'</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;solar water heating system with no phase change material&quot;</span></span><span>
+</span><span id="line-9"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;solar water heating systems with no phase change material&quot;</span></span><span> </span><span class="annot"><span class="annottext">(CapitalizationRule -&gt; NP) -&gt; CapitalizationRule -&gt; NP
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; CapitalizationRule
+</span><span class="hs-identifier hs-var">Replace</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; CapitalizationRule) -&gt; Sentence -&gt; CapitalizationRule
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>
+</span><span id="line-10"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Solar Water Heating System with no Phase Change Material&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;SWHSNoPCM&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
+</span><span class="hs-identifier hs-var">materialEng</span></span><span class="hs-special">]</span></pre></body></html>

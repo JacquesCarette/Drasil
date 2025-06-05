@@ -28,13 +28,15 @@ htTransCladCool :: SimpleQDef
 htTransCladFuel :: SimpleQDef
 htTransCladCoolDD :: DataDefinition
 htTransCladFuelDD :: DataDefinition
-hghc :: CI
 nuclearPhys :: IdeaDict
 fp :: IdeaDict
 lCoolant :: Symbol
 lClad :: Symbol
 lEffective :: Symbol
 lGap :: Symbol
+
+module Drasil.HGHC.MetaConcepts
+progName :: CI
 
 module Drasil.HGHC.Body
 srs :: Document

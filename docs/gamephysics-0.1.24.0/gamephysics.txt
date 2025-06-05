@@ -15,7 +15,6 @@ module Drasil.GamePhysics.Concepts
 centreMass :: CI
 threeD :: CI
 twoD :: CI
-gamePhysics :: CI
 acronyms :: [CI]
 
 module Drasil.GamePhysics.Assumptions
@@ -42,6 +41,9 @@ assumptionsListA :: [[Sentence]]
 module Drasil.GamePhysics.Changes
 likelyChgs :: [ConceptInstance]
 unlikelyChgs :: [ConceptInstance]
+
+module Drasil.GamePhysics.MetaConcepts
+progName :: CI
 
 module Drasil.GamePhysics.References
 chaslesWiki :: Citation

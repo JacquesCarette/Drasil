@@ -267,44 +267,35 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span id="line-65"></span><span>
 </span><span id="line-66"></span><span class="hs-comment">---</span><span>
 </span><span id="line-67"></span><span>
-</span><span id="line-68"></span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#hghc"><span class="hs-identifier hs-type">hghc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span>
-</span><span id="line-69"></span><span id="hghc"><span class="annot"><span class="annottext">hghc :: CI
-</span><a href="Drasil.HGHC.HeatTransfer.html#hghc"><span class="hs-identifier hs-var hs-var">hghc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [UID] -&gt; CI
-</span><span class="hs-identifier hs-var">commonIdea</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;hghc&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
-</span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;HGHC&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;HGHC&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-70"></span><span>
-</span><span id="line-71"></span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#nuclearPhys"><span class="hs-identifier hs-type">nuclearPhys</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#fp"><span class="hs-identifier hs-type">fp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span>
-</span><span id="line-72"></span><span id="nuclearPhys"><span class="annot"><span class="annottext">nuclearPhys :: IdeaDict
+</span><span id="line-68"></span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#nuclearPhys"><span class="hs-identifier hs-type">nuclearPhys</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#fp"><span class="hs-identifier hs-type">fp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span>
+</span><span id="line-69"></span><span id="nuclearPhys"><span class="annot"><span class="annottext">nuclearPhys :: IdeaDict
 </span><a href="Drasil.HGHC.HeatTransfer.html#nuclearPhys"><span class="hs-identifier hs-var hs-var">nuclearPhys</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;nuclearPhys&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;nuclear physics&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-73"></span><span id="fp"><span class="annot"><span class="annottext">fp :: IdeaDict
+</span><span id="line-70"></span><span id="fp"><span class="annot"><span class="annottext">fp :: IdeaDict
 </span><a href="Drasil.HGHC.HeatTransfer.html#fp"><span class="hs-identifier hs-var hs-var">fp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;fp&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;FP&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-74"></span><span>
-</span><span id="line-75"></span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#lCoolant"><span class="hs-identifier hs-type">lCoolant</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#lClad"><span class="hs-identifier hs-type">lClad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#lEffective"><span class="hs-identifier hs-type">lEffective</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#lGap"><span class="hs-identifier hs-type">lGap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Symbol</span></span><span>
-</span><span id="line-76"></span><span id="lCoolant"><span class="annot"><span class="annottext">lCoolant :: Symbol
+</span><span id="line-71"></span><span>
+</span><span id="line-72"></span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#lCoolant"><span class="hs-identifier hs-type">lCoolant</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#lClad"><span class="hs-identifier hs-type">lClad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#lEffective"><span class="hs-identifier hs-type">lEffective</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#lGap"><span class="hs-identifier hs-type">lGap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Symbol</span></span><span>
+</span><span id="line-73"></span><span id="lCoolant"><span class="annot"><span class="annottext">lCoolant :: Symbol
 </span><a href="Drasil.HGHC.HeatTransfer.html#lCoolant"><span class="hs-identifier hs-var hs-var">lCoolant</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;b&quot;</span></span><span>
-</span><span id="line-77"></span><span id="lClad"><span class="annot"><span class="annottext">lClad :: Symbol
+</span><span id="line-74"></span><span id="lClad"><span class="annot"><span class="annottext">lClad :: Symbol
 </span><a href="Drasil.HGHC.HeatTransfer.html#lClad"><span class="hs-identifier hs-var hs-var">lClad</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;c&quot;</span></span><span>
-</span><span id="line-78"></span><span id="lEffective"><span class="annot"><span class="annottext">lEffective :: Symbol
+</span><span id="line-75"></span><span id="lEffective"><span class="annot"><span class="annottext">lEffective :: Symbol
 </span><a href="Drasil.HGHC.HeatTransfer.html#lEffective"><span class="hs-identifier hs-var hs-var">lEffective</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;g&quot;</span></span><span>
-</span><span id="line-79"></span><span id="lGap"><span class="annot"><span class="annottext">lGap :: Symbol
+</span><span id="line-76"></span><span id="lGap"><span class="annot"><span class="annottext">lGap :: Symbol
 </span><a href="Drasil.HGHC.HeatTransfer.html#lGap"><span class="hs-identifier hs-var hs-var">lGap</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;p&quot;</span></span><span>
-</span><span id="line-80"></span></pre></body></html>
+</span><span id="line-77"></span></pre></body></html>

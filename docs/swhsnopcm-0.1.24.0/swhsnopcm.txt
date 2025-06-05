@@ -58,6 +58,9 @@ module Drasil.SWHSNoPCM.Changes
 likelyChgs :: [ConceptInstance]
 unlikelyChgs :: [ConceptInstance]
 
+module Drasil.SWHSNoPCM.MetaConcepts
+progName :: CI
+
 module Drasil.SWHSNoPCM.ODEs
 noPCMODEOpts :: ODEOptions
 noPCMODEInfo :: ODEInfo

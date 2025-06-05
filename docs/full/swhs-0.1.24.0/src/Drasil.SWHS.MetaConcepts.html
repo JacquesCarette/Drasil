@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.SWHS.MetaConcepts</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Domains</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">materialEng</span></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.Concepts.html"><span class="hs-identifier">Drasil.SWHS.Concepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier">phsChgMtrl</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span>
+</span><span id="line-7"></span><span class="annot"><a href="Drasil.SWHS.MetaConcepts.html#progName"><span class="hs-identifier hs-type">progName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span>
+</span><span id="line-8"></span><span id="progName"><span class="annot"><span class="annottext">progName :: CI
+</span><a href="Drasil.SWHS.MetaConcepts.html#progName"><span class="hs-identifier hs-var hs-var">progName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [IdeaDict] -&gt; CI
+</span><span class="hs-identifier hs-var">commonIdeaWithDict</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;swhsName&quot;</span></span><span>   </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhrase</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;solar water heating system&quot;</span></span><span>
+</span><span id="line-9"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;solar water heating systems&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;SWHS&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
+</span><span class="hs-identifier hs-var">materialEng</span></span><span class="hs-special">]</span><span>
+</span><span id="line-10"></span><span>
+</span><span id="line-11"></span><span class="annot"><a href="Drasil.SWHS.MetaConcepts.html#progName%27"><span class="hs-identifier hs-type">progName'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span>
+</span><span id="line-12"></span><span class="hs-comment">-- Nounphrase'' hack to get nounPhraseSP words to accept</span><span>
+</span><span id="line-13"></span><span class="hs-comment">-- nounPhrases instead of strings</span><span>
+</span><span id="line-14"></span><span class="hs-comment">-- Another capitalization hack.</span><span>
+</span><span id="line-15"></span><span id="progName%27"><span class="annot"><span class="annottext">progName' :: CI
+</span><a href="Drasil.SWHS.MetaConcepts.html#progName%27"><span class="hs-identifier hs-var hs-var">progName'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [UID] -&gt; CI
+</span><span class="hs-identifier hs-var">commonIdea</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;swhsPCM&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence
+-&gt; Sentence -&gt; CapitalizationRule -&gt; CapitalizationRule -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhrase''</span></span><span>
+</span><span id="line-16"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;solar water heating systems&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;incorporating&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall c. Idea c =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-17"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;solar water heating systems&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;incorporating&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall c. Idea c =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-18"></span><span>  </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><span class="hs-identifier hs-var">CapFirst</span></span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><span class="hs-identifier hs-var">CapWords</span></span><span class="hs-special">)</span><span>
+</span><span id="line-19"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;SWHS&quot;</span></span><span>
+</span><span id="line-20"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span></pre></body></html>

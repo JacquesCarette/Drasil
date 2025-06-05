@@ -29,7 +29,6 @@ firstObject :: IdeaDict
 secondObject :: IdeaDict
 defs :: [ConceptChunk]
 arcLen :: ConceptChunk
-progName :: CI
 
 module Drasil.DblPend.Assumptions
 twoDMotion :: ConceptInstance
@@ -49,6 +48,9 @@ sysCtxFig1 :: LabelledContent
 module Drasil.DblPend.Goals
 goals :: [ConceptInstance]
 goalsInputs :: [Sentence]
+
+module Drasil.DblPend.MetaConcepts
+progName :: CI
 
 module Drasil.DblPend.References
 citations :: BibRef

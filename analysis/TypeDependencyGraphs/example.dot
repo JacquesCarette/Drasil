@@ -23,6 +23,8 @@ digraph alltypes {
 	}
 	subgraph imods {
 	}
+	subgraph metaconcepts {
+	}
 	subgraph odes {
 	}
 	subgraph references {
@@ -61,6 +63,8 @@ digraph alltypes {
 	}
 	subgraph imods {
 	}
+	subgraph metaconcepts {
+	}
 	subgraph references {
 	}
 	subgraph requirements {
@@ -88,6 +92,8 @@ digraph alltypes {
 	subgraph goals {
 	}
 	subgraph imods {
+	}
+	subgraph metaconcepts {
 	}
 	subgraph moduledefs {
 	}
@@ -119,6 +125,8 @@ digraph alltypes {
 	}
 	subgraph heattranfers {
 	}
+	subgraph metaconcepts {
+	}
 	subgraph main {
 	}
 	subgraph asumptionss {
@@ -140,6 +148,8 @@ digraph alltypes {
 	subgraph imodel {
 	}
 	subgraph introsection {
+	}
+	subgraph metaconcepts {
 	}
 	subgraph odes {
 	}
@@ -191,6 +201,8 @@ digraph alltypes {
 	}
 	subgraph imods {
 	}
+	subgraph metaconcepts {
+	}
 	subgraph references {
 	}
 	subgraph requirements {
@@ -216,6 +228,8 @@ digraph alltypes {
 	subgraph goals {
 	}
 	subgraph imods {
+	}
+	subgraph metaconcepts {
 	}
 	subgraph requirements {
 	}
@@ -244,6 +258,8 @@ digraph alltypes {
 	subgraph goals {
 	}
 	subgraph imods {
+	}
+	subgraph metaconcepts {
 	}
 	subgraph references {
 	}
@@ -274,6 +290,8 @@ digraph alltypes {
 	subgraph goals {
 	}
 	subgraph imods {
+	}
+	subgraph metaconcepts {
 	}
 	subgraph references {
 	}
@@ -310,6 +328,8 @@ digraph alltypes {
 	subgraph goals {
 	}
 	subgraph imods {
+	}
+	subgraph metaconcepts {
 	}
 	subgraph odes {
 	}

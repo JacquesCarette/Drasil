@@ -75,6 +75,9 @@ learnObjList :: [Sentence]
 assumpResp :: [Sentence]
 solveResp :: [Sentence]
 
+module Drasil.Projectile.MetaConcepts
+progName :: CI
+
 module Drasil.Projectile.References
 citations :: BibRef
 
@@ -224,7 +227,6 @@ module Drasil.Projectile.Body
 printSetting :: PrintingInformation
 si :: System
 srs :: Document
-projectileTitle :: CI
 fullSI :: System
 
 module Drasil.Projectile.Choices

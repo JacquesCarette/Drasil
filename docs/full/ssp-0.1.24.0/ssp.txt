@@ -13,7 +13,6 @@ module Drasil.SSP.Choices
 
 module Drasil.SSP.Defs
 acronyms :: [CI]
-ssp :: CI
 defs :: [IdeaDict]
 defs' :: [ConceptChunk]
 soil :: IdeaDict
@@ -45,6 +44,9 @@ factorOfSafety :: NP
 module Drasil.SSP.Figures
 figForceActing :: LabelledContent
 resourcePath :: String
+
+module Drasil.SSP.MetaConcepts
+progName :: CI
 
 module Drasil.SSP.References
 citations :: BibRef

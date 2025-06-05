@@ -20,6 +20,9 @@ module Drasil.SglPend.Goals
 goals :: [ConceptInstance]
 goalsInputs :: [Sentence]
 
+module Drasil.SglPend.MetaConcepts
+progName :: CI
+
 module Drasil.SglPend.Unitals
 symbols :: [QuantityDict]
 inputs :: [QuantityDict]
@@ -119,7 +122,6 @@ srs :: Document
 fullSI :: System
 printSetting :: PrintingInformation
 mkSRS :: SRSDecl
-progName :: CI
 si :: System
 purp :: Sentence
 symbMap :: ChunkDB

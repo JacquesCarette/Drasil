@@ -16,8 +16,6 @@ con :: [ConceptChunk]
 acronyms :: [CI]
 acronymsFull :: [CI]
 phsChgMtrl :: CI
-progName :: CI
-full :: IdeaDict
 charging :: ConceptChunk
 coil :: ConceptChunk
 discharging :: ConceptChunk
@@ -31,6 +29,10 @@ water :: ConceptChunk
 sWHT :: ConceptChunk
 tankParam :: ConceptChunk
 swhsPCM :: CI
+
+module Drasil.SWHS.MetaConcepts
+progName :: CI
+progName' :: CI
 
 module Drasil.SWHS.References
 citations :: BibRef

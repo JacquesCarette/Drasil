@@ -11,7 +11,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (olu)
-import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz)
+import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz, fundamentals)
 import Data.Drasil.Concepts.Computation (compcon, inValue, algorithm)
 import Data.Drasil.Concepts.Documentation (srsDomains, doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
@@ -127,13 +127,16 @@ purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pen
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map qw symbols)
-  (nw newtonSLR : nw progName : nw mass : nw len : nw kilogram : nw inValue : nw newton : nw degree : nw radian
-    : nw unitVect : nw unitVectj : [nw errMsg, nw program] ++ map nw symbols ++
-   map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw physicCon' ++
-   map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz] ++
-   [nw algorithm] ++ map nw compcon ++ map nw educon ++ map nw prodtcon)
-  (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs
-  iMods genDefns tMods concIns [] allRefs citations
+  (nw newtonSLR : nw progName : nw mass : nw len : nw kilogram : nw inValue
+   : nw newton : nw degree : nw radian : nw unitVect : nw unitVectj
+   : [nw errMsg, nw program] ++ map nw symbols ++ map nw doccon
+   ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon'
+   ++ map nw physicCon' ++ map nw physicscon ++ concepts ++ map nw physicalcon
+   ++ map nw acronyms ++ map nw symbols ++ map nw fundamentals ++ map nw [metre, hertz] 
+   ++ [nw algorithm] ++ map nw compcon ++ map nw educon ++ map nw prodtcon)
+   (map cw iMods ++ srsDomains) (map unitWrapper 
+   [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs iMods
+   genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

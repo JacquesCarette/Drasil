@@ -27,7 +27,6 @@ import Data.Drasil.TheoryConcepts (inModel)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Data.Drasil.Quantities.Physics (physicscon)
 
-import Drasil.DblPend.Assumptions (assumpSingle)
 import Drasil.DblPend.Body (justification, externalLinkRef, charsOfReader,
   sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms,
   userCharacteristicsIntro)
@@ -37,7 +36,7 @@ import Drasil.DblPend.Requirements (nonFuncReqs)
 import Drasil.DblPend.Unitals (acronyms)
 import Drasil.DblPend.References (citations)
 
-
+import Drasil.SglPend.Assumptions (assumpSingle)
 import Drasil.SglPend.Figures (figMotion, sysCtxFig1)
 import Drasil.SglPend.Goals (goals, goalsInputs)
 import Drasil.SglPend.DataDefs (dataDefs)

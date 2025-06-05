@@ -1,35 +1,35 @@
 digraph avsall {
-	dataDefn:qdProcessErrorFD -> setPoint;
-	dataDefn:qdProcessErrorFD -> initialValue;
-	dataDefn:qdDerivativeControlFD -> unfilteredDerivative;
-	dataDefn:qdCtrlVarFD -> decoupled;
-	dataDefn:qdCtrlVarFD -> parallelEq;
-	theory:tmSOSystemRC -> pwrPlantTxFnx;
-	theory:gdPowerPlantRC -> externalDisturb;
-	theory:gdPowerPlantRC -> massSpring;
-	theory:gdPowerPlantRC -> dampingCoeffSpring;
-	theory:gdPowerPlantRC -> stiffnessCoeffSpring;
-	theory:imPDRC -> setPoint;
-	likeChgPP -> massSpring;
-	likeChgPP -> dampingCoeffSpring;
-	likeChgPP -> stiffnessCoeffSpring;
+	dataDefn:qdProcessErrorFD -> instance:setPointConstant;
+	dataDefn:qdProcessErrorFD -> instance:initialValue;
+	dataDefn:qdDerivativeControlFD -> instance:unfilteredDerivative;
+	dataDefn:qdCtrlVarFD -> instance:decoupled;
+	dataDefn:qdCtrlVarFD -> instance:parallelEq;
+	theory:tmSOSystemRC -> instance:pwrPlantTxFnx;
+	theory:gdPowerPlantRC -> instance:externalDisturb;
+	theory:gdPowerPlantRC -> instance:massSpring;
+	theory:gdPowerPlantRC -> instance:dampingCoeffSpring;
+	theory:gdPowerPlantRC -> instance:stiffnessCoeffSpring;
+	theory:imPDRC -> instance:setPointConstant;
+	instance:likeChgPP -> instance:massSpring;
+	instance:likeChgPP -> instance:dampingCoeffSpring;
+	instance:likeChgPP -> instance:stiffnessCoeffSpring;
 
 
-	pwrPlant	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:pwrPlant"];
-	decoupled	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:decoupled"];
-	setPoint	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:setPoint"];
-	externalDisturb	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:externalDisturb"];
-	initialValue	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:initialValue"];
-	parallelEq	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:parallelEq"];
-	unfilteredDerivative	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:unfilteredDerivative"];
-	pwrPlantTxFnx	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:pwrPlantTxFnx"];
-	massSpring	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:massSpring"];
-	dampingCoeffSpring	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:dampingCoeffSpring"];
-	stiffnessCoeffSpring	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:stiffnessCoeffSpring"];
+	instance:pwrPlant	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:pwrPlant"];
+	instance:decoupled	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:decoupled"];
+	instance:setPointConstant	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:setPointConstant"];
+	instance:externalDisturb	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:externalDisturb"];
+	instance:initialValue	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:initialValue"];
+	instance:parallelEq	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:parallelEq"];
+	instance:unfilteredDerivative	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:unfilteredDerivative"];
+	instance:pwrPlantTxFnx	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:pwrPlantTxFnx"];
+	instance:massSpring	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:massSpring"];
+	instance:dampingCoeffSpring	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:dampingCoeffSpring"];
+	instance:stiffnessCoeffSpring	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:stiffnessCoeffSpring"];
 
 	subgraph A {
 	rank="same"
-	{pwrPlant, decoupled, setPoint, externalDisturb, initialValue, parallelEq, unfilteredDerivative, pwrPlantTxFnx, massSpring, dampingCoeffSpring, stiffnessCoeffSpring}
+	{instance:pwrPlant, instance:decoupled, instance:setPointConstant, instance:externalDisturb, instance:initialValue, instance:parallelEq, instance:unfilteredDerivative, instance:pwrPlantTxFnx, instance:massSpring, instance:dampingCoeffSpring, instance:stiffnessCoeffSpring}
 	}
 
 	dataDefn:qdProcessErrorFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ddProcessError"];
@@ -65,25 +65,25 @@ digraph avsall {
 	{theory:imPDRC}
 	}
 
-	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
-	verifyInputs	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInputs"];
-	calculateValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calculateValues"];
-	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
-	portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
-	security	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:security"];
-	maintainability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainability"];
-	verifiability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiability"];
+	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
+	instance:verifyInputs	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInputs"];
+	instance:calculateValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calculateValues"];
+	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
+	instance:portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
+	instance:security	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:security"];
+	instance:maintainability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainability"];
+	instance:verifiability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiability"];
 
 	subgraph FR {
 	rank="same"
-	{inputValues, verifyInputs, calculateValues, outputValues, portable, security, maintainability, verifiability}
+	{instance:inputValues, instance:verifyInputs, instance:calculateValues, instance:outputValues, instance:portable, instance:security, instance:maintainability, instance:verifiability}
 	}
 
-	likeChgPP	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:likeChgPP"];
+	instance:likeChgPP	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:likeChgPP"];
 
 	subgraph LC {
 	rank="same"
-	{likeChgPP}
+	{instance:likeChgPP}
 	}
 
 }

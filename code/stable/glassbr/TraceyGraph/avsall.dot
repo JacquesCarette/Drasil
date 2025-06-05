@@ -1,30 +1,30 @@
 digraph avsall {
-	dataDefn:loadDurFactor -> assumpSV;
-	dataDefn:loadDurFactor -> assumpLDFC;
-	theory:nFL -> assumpSV;
-	theory:dimlessLoad -> assumpSV;
-	theory:sdfTol -> assumpSV;
-	calcInternalBlastRisk -> assumpES;
-	varValsOfmkE -> assumpSV;
-	varValsOfmkE -> assumpLDFC;
-	accMoreThanSingleLite -> assumpGL;
-	accMoreBoundaryConditions -> assumpBC;
-	considerMoreThanFlexGlass -> assumpRT;
-	accAlteredGlass -> assumpGC;
+	dataDefn:loadDurFactor -> instance:assumpSV;
+	dataDefn:loadDurFactor -> instance:assumpLDFC;
+	theory:nFL -> instance:assumpSV;
+	theory:dimlessLoad -> instance:assumpSV;
+	theory:sdfTol -> instance:assumpSV;
+	instance:calcInternalBlastRisk -> instance:assumpES;
+	instance:varValsOfmkE -> instance:assumpSV;
+	instance:varValsOfmkE -> instance:assumpLDFC;
+	instance:accMoreThanSingleLite -> instance:assumpGL;
+	instance:accMoreBoundaryConditions -> instance:assumpBC;
+	instance:considerMoreThanFlexGlass -> instance:assumpRT;
+	instance:accAlteredGlass -> instance:assumpGC;
 
 
-	assumpGT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpGT"];
-	assumpGC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpGC"];
-	assumpES	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpES"];
-	assumpSV	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSV"];
-	assumpGL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpGL"];
-	assumpBC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpBC"];
-	assumpRT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpRT"];
-	assumpLDFC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpLDFC"];
+	instance:assumpGT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpGT"];
+	instance:assumpGC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpGC"];
+	instance:assumpES	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpES"];
+	instance:assumpSV	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSV"];
+	instance:assumpGL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpGL"];
+	instance:assumpBC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpBC"];
+	instance:assumpRT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpRT"];
+	instance:assumpLDFC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpLDFC"];
 
 	subgraph A {
 	rank="same"
-	{assumpGT, assumpGC, assumpES, assumpSV, assumpGL, assumpBC, assumpRT, assumpLDFC}
+	{instance:assumpGT, instance:assumpGC, instance:assumpES, instance:assumpSV, instance:assumpGL, instance:assumpBC, instance:assumpRT, instance:assumpLDFC}
 	}
 
 	dataDefn:minThick	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:minThick"];
@@ -64,35 +64,35 @@ digraph avsall {
 	{theory:riskFun, theory:stressDistFac, theory:nFL, theory:dimlessLoad, theory:tolLoad, theory:sdfTol, theory:probBr, theory:lResistance, theory:isSafePb, theory:isSafeLR}
 	}
 
-	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
-	sysSetValsFollowingAssumps	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:sysSetValsFollowingAssumps"];
-	checkInputWithDataCons	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:checkInputWithDataCons"];
-	outputValsAndKnownValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValsAndKnownValues"];
-	checkGlassSafety	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:checkGlassSafety"];
-	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
-	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
-	verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiable"];
-	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandable"];
-	reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:reusable"];
-	maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainable"];
-	portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
+	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
+	instance:sysSetValsFollowingAssumps	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:sysSetValsFollowingAssumps"];
+	instance:checkInputWithDataCons	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:checkInputWithDataCons"];
+	instance:outputValsAndKnownValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValsAndKnownValues"];
+	instance:checkGlassSafety	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:checkGlassSafety"];
+	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
+	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
+	instance:verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiable"];
+	instance:understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandable"];
+	instance:reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:reusable"];
+	instance:maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainable"];
+	instance:portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
 
 	subgraph FR {
 	rank="same"
-	{inputValues, sysSetValsFollowingAssumps, checkInputWithDataCons, outputValsAndKnownValues, checkGlassSafety, outputValues, correct, verifiable, understandable, reusable, maintainable, portable}
+	{instance:inputValues, instance:sysSetValsFollowingAssumps, instance:checkInputWithDataCons, instance:outputValsAndKnownValues, instance:checkGlassSafety, instance:outputValues, instance:correct, instance:verifiable, instance:understandable, instance:reusable, instance:maintainable, instance:portable}
 	}
 
-	calcInternalBlastRisk	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:calcInternalBlastRisk"];
-	varValsOfmkE	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:varValsOfmkE"];
-	accMoreThanSingleLite	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:accMoreThanSingleLite"];
-	accMoreBoundaryConditions	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:accMoreBoundaryConditions"];
-	considerMoreThanFlexGlass	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:considerMoreThanFlexGlass"];
-	predictWithstandOfCertDeg	[shape=box, color=black, style=filled, fillcolor=lavender, label="UC:predictWithstandOfCertDeg"];
-	accAlteredGlass	[shape=box, color=black, style=filled, fillcolor=lavender, label="UC:accAlteredGlass"];
+	instance:calcInternalBlastRisk	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:calcInternalBlastRisk"];
+	instance:varValsOfmkE	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:varValsOfmkE"];
+	instance:accMoreThanSingleLite	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:accMoreThanSingleLite"];
+	instance:accMoreBoundaryConditions	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:accMoreBoundaryConditions"];
+	instance:considerMoreThanFlexGlass	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:considerMoreThanFlexGlass"];
+	instance:predictWithstandOfCertDeg	[shape=box, color=black, style=filled, fillcolor=lavender, label="UC:predictWithstandOfCertDeg"];
+	instance:accAlteredGlass	[shape=box, color=black, style=filled, fillcolor=lavender, label="UC:accAlteredGlass"];
 
 	subgraph LC {
 	rank="same"
-	{calcInternalBlastRisk, varValsOfmkE, accMoreThanSingleLite, accMoreBoundaryConditions, considerMoreThanFlexGlass, predictWithstandOfCertDeg, accAlteredGlass}
+	{instance:calcInternalBlastRisk, instance:varValsOfmkE, instance:accMoreThanSingleLite, instance:accMoreBoundaryConditions, instance:considerMoreThanFlexGlass, instance:predictWithstandOfCertDeg, instance:accAlteredGlass}
 	}
 
 }

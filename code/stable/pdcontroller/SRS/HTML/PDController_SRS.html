@@ -575,7 +575,7 @@
                 </p>
                 <div class="list">
                   <p>
-                    <div id="processVariable">
+                    <div id="calculateProcessVariable">
                       Process-Variable: Calculate the output of the Power Plant (Process Variable) over time.
                     </div>
                   </p>
@@ -608,7 +608,7 @@
                     </div>
                   </p>
                   <p>
-                    <div id="setPoint">
+                    <div id="setPointConstant">
                       Set-Point: The Set-Point is constant throughout the simulation. (RefBy: <a href=#IM:pdEquationIM>IM:pdEquationIM</a> and <a href=#DD:ddProcessError>DD:ddProcessError</a>.)
                     </div>
                   </p>
@@ -938,7 +938,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The Process Error is the difference between the Set-Point and Process Variable. The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>). The Set-Point is assumed to be constant throughout the simulation (from <a href=#setPoint>A:Set-Point</a>). The initial value of the Process Variable is assumed to be zero (from <a href=#initialValue>A:Initial Value</a>).
+                          The Process Error is the difference between the Set-Point and Process Variable. The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>). The Set-Point is assumed to be constant throughout the simulation (from <a href=#setPointConstant>A:Set-Point</a>). The initial value of the Process Variable is assumed to be zero (from <a href=#initialValue>A:Initial Value</a>).
                         </p>
                       </td>
                     </tr>
@@ -1249,7 +1249,7 @@
                     </p>
                     \[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{y_{\text{t}}}-{K_{\text{d}}}\,\frac{\,d{r_{\text{t}}}}{\,dt}-{r_{\text{t}}}\,{K_{\text{p}}}=0\]
                     <p class="paragraph">
-                      The Set-Point <em>r<sub>t</sub></em> is a step function and a constant (from <a href=#setPoint>A:Set-Point</a>). Therefore the differential of the set point is zero. Hence the equation reduces to
+                      The Set-Point <em>r<sub>t</sub></em> is a step function and a constant (from <a href=#setPointConstant>A:Set-Point</a>). Therefore the differential of the set point is zero. Hence the equation reduces to
                     </p>
                     \[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right)\,\frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right)\,{y_{\text{t}}}-{r_{\text{t}}}\,{K_{\text{p}}}=0\]
                   </div>
@@ -1443,7 +1443,7 @@
               <th></th>
               <th><a href=#pwrPlant>A:Power plant</a></th>
               <th><a href=#decoupled>A:Decoupled equation</a></th>
-              <th><a href=#setPoint>A:Set-Point</a></th>
+              <th><a href=#setPointConstant>A:Set-Point</a></th>
               <th><a href=#externalDisturb>A:External disturbance</a></th>
               <th><a href=#initialValue>A:Initial Value</a></th>
               <th><a href=#parallelEq>A:Parallel Equation</a></th>
@@ -1486,7 +1486,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#setPoint>A:Set-Point</a></td>
+              <td><a href=#setPointConstant>A:Set-Point</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1626,7 +1626,7 @@
               <th></th>
               <th><a href=#pwrPlant>A:Power plant</a></th>
               <th><a href=#decoupled>A:Decoupled equation</a></th>
-              <th><a href=#setPoint>A:Set-Point</a></th>
+              <th><a href=#setPointConstant>A:Set-Point</a></th>
               <th><a href=#externalDisturb>A:External disturbance</a></th>
               <th><a href=#initialValue>A:Initial Value</a></th>
               <th><a href=#parallelEq>A:Parallel Equation</a></th>
@@ -2047,7 +2047,7 @@
               <th><a href=#verifiability>NFR:Verifiability</a></th>
             </tr>
             <tr>
-              <td><a href=#processVariable>GS:Process-Variable</a></td>
+              <td><a href=#calculateProcessVariable>GS:Process-Variable</a></td>
               <td></td>
               <td></td>
               <td></td>

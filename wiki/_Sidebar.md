@@ -71,7 +71,6 @@
       * [How Should We Handle Abbreviations?](How-Should-We-Handle-Abbreviations?)
     * [DefinedQuantityDict](DefinedQuantityDict)
     * [Concept Chunk (and Related Chunks)](Concept-Chunk-(and-Related-Chunks))
-    * [UnitalChunk](UnitalChunk)
   * [Refined Theories Version of Drasil](Refined-Theories-version-of-Drasil)
   * [Idealized Process](Idealized-Process)
   * [Chunk Redesign 2024](Chunk-Redesign-2024)

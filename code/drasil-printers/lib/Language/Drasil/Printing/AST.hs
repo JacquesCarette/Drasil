@@ -51,7 +51,7 @@ infixr 5 :+:
 -- | Redefine the 'Sentence' type from Language.Drasil to be more suitable to printing.
 data Spec = E Expr                   -- ^ Holds an expression.
           | S String                 -- ^ Holds a string.  
-          | Tooltip Spec Spec        -- ^ Holds a tooltip and a short form.
+          | Tooltip Spec Spec        -- ^ Tooltip (1) supplements body (2) with optionally displayable content, e.g., on hover for HTML.
           | Spec :+: Spec            -- ^ Concatenation.
           | Sp Special               -- ^ Special characters.
           | Ref LinkType String Spec -- ^ Holds the actual reference of form 'LinkType', reference address, and display name

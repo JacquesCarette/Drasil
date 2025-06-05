@@ -47,7 +47,9 @@ import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
-  sD, termsWithAccDefn, termsWithDefsOnly, terms, dataConstraints)
+  sD, termsWithAccDefn, termsWithDefsOnly, terms, dataConstraints, lDurFac,
+  isSafeProb, dimlessLoad, isSafeLoad, tolLoad, unitless, riskFun, isSafePb,
+  sdfTol, isSafeLR)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -133,13 +135,15 @@ background = foldlSent_ [phrase explosion, S "in downtown areas are dangerous fr
   +:+ S "effect of falling glass"]
 
 symbMap :: ChunkDB
-symbMap = cdb thisSymbols (map nw acronyms ++ nw progName : map nw thisSymbols
-  ++ map nw con' ++ map nw terms ++ map nw doccon ++ map nw doccon' ++ map nw educon
-  ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon'
-  ++ map nw softwarecon ++ [nw lateralLoad, nw materialProprty]
-   ++ [nw distance, nw algorithm] ++
-  map nw fundamentals ++ map nw derived ++ map nw physicalcon)
-  (map cw symb ++ terms ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
+symbMap = cdb (unitless ++ thisSymbols) (nw progName : map nw thisSymbols
+  ++ map nw con' ++ map nw [riskFun, isSafeProb, isSafeLoad,
+  sdfTol, dimlessLoad, tolLoad, lDurFac] ++ map nw terms ++ map nw doccon
+  ++ map nw doccon' ++ map nw educon ++ [nw sciCompS] ++ map nw compcon
+  ++ map nw mathcon ++ map nw mathcon' ++ map nw softwarecon
+  ++ [nw lateralLoad, nw materialProprty] ++ [nw distance, nw algorithm]
+  ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon)
+  (map cw symb ++ terms ++ Doc.srsDomains)
+  (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) GB.dataDefs iMods [] tMods concIns
   labCon allRefs citations
 

@@ -372,8 +372,12 @@ data Spec
 -- | Holds an expression.
 E :: Expr -> Spec
 
--- | Holds a String.
+-- | Holds a string.
 S :: String -> Spec
+
+-- | Tooltip (1) supplements body (2) with optionally displayable content,
+--   e.g., on hover for HTML.
+Tooltip :: Spec -> Spec -> Spec
 
 -- | Concatenation.
 (:+:) :: Spec -> Spec -> Spec
@@ -496,6 +500,7 @@ data Variation
 Class :: Variation
 Id :: Variation
 Align :: Variation
+Title :: Variation
 
 -- | General <a>Class</a> wrapper function and formats the document space
 --   with <a>cat</a>.
@@ -571,6 +576,9 @@ divTag :: [String] -> Doc -> Doc
 
 -- | Span tag wrapper.
 spanTag :: [String] -> Doc -> Doc
+
+-- | Span tag wrapper with a title attribute.
+spanTag' :: Doc -> Doc -> Doc
 
 -- | Indent the Document by 2 positions.
 indent :: Doc -> Doc

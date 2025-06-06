@@ -90,6 +90,8 @@ sdMax :: ConstQDef
 stressDistFacMin :: ConstQDef
 stressDistFacMax :: ConstQDef
 sdMin :: ConstQDef
+unitarySymbols :: [UnitaryChunk]
+unitalSymbols :: [UnitalChunk]
 symbols :: [UnitaryChunk]
 minThick :: UnitaryChunk
 sflawParamK :: UnitaryChunk
@@ -188,8 +190,10 @@ interpY :: Func
 interpZ :: Func
 
 module Drasil.GlassBR.Symbols
-symbolsForTable :: [QuantityDict]
+symbolsForSymbolTable :: [QuantityDict]
+symbolsForTermTable :: [QuantityDict]
 thisSymbols :: [QuantityDict]
+thisTerms :: [QuantityDict]
 
 module Drasil.GlassBR.Goals
 goals :: [ConceptInstance]

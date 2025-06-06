@@ -161,8 +161,10 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;projSpeed&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;1D speed&quot;</span></span><span class="hs-special">)</span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
-</span><span class="hs-identifier hs-var">getAcc</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-string">&quot;1D speed&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-43"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall c. Idea c =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">oneD</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -179,13 +181,15 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">acceleration</span></span><span class="hs-special">)</span><span>
-</span><span id="line-43"></span><span id="projPos"><span class="annot"><span class="annottext">projPos :: ConceptChunk
+</span><span id="line-44"></span><span id="projPos"><span class="annot"><span class="annottext">projPos :: ConceptChunk
 </span><a href="Drasil.Projectile.Concepts.html#projPos"><span class="hs-identifier hs-var hs-var">projPos</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;projPos&quot;</span></span><span>   </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;1D position&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
-</span><span class="hs-identifier hs-var">getAcc</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-string">&quot;1D position&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-45"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall c. Idea c =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">oneD</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -202,14 +206,14 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">speed</span></span><span class="hs-special">)</span><span>
-</span><span id="line-44"></span><span>
-</span><span id="line-45"></span><span class="annot"><a href="Drasil.Projectile.Concepts.html#landPos"><span class="hs-identifier hs-type">landPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#launAngle"><span class="hs-identifier hs-type">launAngle</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#launSpeed"><span class="hs-identifier hs-type">launSpeed</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#offset"><span class="hs-identifier hs-type">offset</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#targPos"><span class="hs-identifier hs-type">targPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#flightDur"><span class="hs-identifier hs-type">flightDur</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
-</span><span id="line-46"></span><span id="landPos"><span class="annot"><span class="annottext">landPos :: ConceptChunk
+</span><span id="line-46"></span><span>
+</span><span id="line-47"></span><span class="annot"><a href="Drasil.Projectile.Concepts.html#landPos"><span class="hs-identifier hs-type">landPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#launAngle"><span class="hs-identifier hs-type">launAngle</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#launSpeed"><span class="hs-identifier hs-type">launSpeed</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#offset"><span class="hs-identifier hs-type">offset</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#targPos"><span class="hs-identifier hs-type">targPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#flightDur"><span class="hs-identifier hs-type">flightDur</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-48"></span><span id="landPos"><span class="annot"><span class="annottext">landPos :: ConceptChunk
 </span><a href="Drasil.Projectile.Concepts.html#landPos"><span class="hs-identifier hs-var hs-var">landPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence -&gt; ConceptChunk
 forall c. Idea c =&gt; c -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">cc'</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.Projectile.Concepts.html#landingPosNC"><span class="hs-identifier hs-var">landingPosNC</span></a></span><span>
-</span><span id="line-47"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-49"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
@@ -221,7 +225,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.Projectile.Concepts.html#launcher"><span class="hs-identifier hs-var">launcher</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.toThe`</span></span><span>
-</span><span id="line-48"></span><span>            </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-50"></span><span>            </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;final&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -230,13 +234,13 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.Projectile.Concepts.html#projectile"><span class="hs-identifier hs-var">projectile</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-49"></span><span>
-</span><span id="line-50"></span><span id="launAngle"><span class="annot"><span class="annottext">launAngle :: ConceptChunk
+</span><span id="line-51"></span><span>
+</span><span id="line-52"></span><span id="launAngle"><span class="annot"><span class="annottext">launAngle :: ConceptChunk
 </span><a href="Drasil.Projectile.Concepts.html#launAngle"><span class="hs-identifier hs-var hs-var">launAngle</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence -&gt; ConceptChunk
 forall c. Idea c =&gt; c -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">cc'</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.Projectile.Concepts.html#launchAngleNC"><span class="hs-identifier hs-var">launchAngleNC</span></a></span><span>
-</span><span id="line-51"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-53"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
@@ -251,7 +255,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;a straight line&quot;</span></span><span>
-</span><span id="line-52"></span><span>             </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span id="line-54"></span><span>             </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.fromThe`</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
@@ -259,8 +263,8 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`toThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.Projectile.Concepts.html#target"><span class="hs-identifier hs-var">target</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-53"></span><span>
-</span><span id="line-54"></span><span id="launSpeed"><span class="annot"><span class="annottext">launSpeed :: ConceptChunk
+</span><span id="line-55"></span><span>
+</span><span id="line-56"></span><span id="launSpeed"><span class="annot"><span class="annottext">launSpeed :: ConceptChunk
 </span><a href="Drasil.Projectile.Concepts.html#launSpeed"><span class="hs-identifier hs-var hs-var">launSpeed</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence -&gt; ConceptChunk
 forall c. Idea c =&gt; c -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">cc'</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
@@ -274,7 +278,7 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;when launched&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-55"></span><span id="offset"><span class="annot"><span class="annottext">offset :: ConceptChunk
+</span><span id="line-57"></span><span id="offset"><span class="annot"><span class="annottext">offset :: ConceptChunk
 </span><a href="Drasil.Projectile.Concepts.html#offset"><span class="hs-identifier hs-var hs-var">offset</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence -&gt; ConceptChunk
 forall c. Idea c =&gt; c -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">cc'</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
@@ -288,7 +292,7 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`andThe`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.Projectile.Concepts.html#landingPosNC"><span class="hs-identifier hs-var">landingPosNC</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-56"></span><span id="targPos"><span class="annot"><span class="annottext">targPos :: ConceptChunk
+</span><span id="line-58"></span><span id="targPos"><span class="annot"><span class="annottext">targPos :: ConceptChunk
 </span><a href="Drasil.Projectile.Concepts.html#targPos"><span class="hs-identifier hs-var hs-var">targPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence -&gt; ConceptChunk
 forall c. Idea c =&gt; c -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">cc'</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
@@ -305,7 +309,7 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`toThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.Projectile.Concepts.html#target"><span class="hs-identifier hs-var">target</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-57"></span><span id="flightDur"><span class="annot"><span class="annottext">flightDur :: ConceptChunk
+</span><span id="line-59"></span><span id="flightDur"><span class="annot"><span class="annottext">flightDur :: ConceptChunk
 </span><a href="Drasil.Projectile.Concepts.html#flightDur"><span class="hs-identifier hs-var hs-var">flightDur</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence -&gt; ConceptChunk
 forall c. Idea c =&gt; c -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">cc'</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
@@ -323,5 +327,5 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><a href="Drasil.Projectile.Concepts.html#projectile"><span class="hs-identifier hs-var">projectile</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;lands&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-58"></span><span>
-</span><span id="line-59"></span></pre></body></html>
+</span><span id="line-60"></span><span>
+</span><span id="line-61"></span></pre></body></html>

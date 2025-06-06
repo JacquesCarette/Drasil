@@ -5458,9 +5458,6 @@ commonIdea :: String -> NP -> String -> [UID] -> CI
 --   (often a domain).
 commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
 
--- | Get abbreviation in <a>Sentence</a> form from a <a>CI</a>.
-getAcc :: CI -> Sentence
-
 -- | Prepends the abbreviation from a <a>CommonIdea</a> to a <a>String</a>.
 prependAbrv :: CommonIdea c => c -> String -> String
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.CommonIdea.CI
@@ -6955,9 +6952,6 @@ data CI
 --   a term (<a>NP</a>), an abbreviation (<a>String</a>), and a domain
 --   ([<a>UID</a>]).
 commonIdea :: String -> NP -> String -> [UID] -> CI
-
--- | Get abbreviation in <a>Sentence</a> form from a <a>CI</a>.
-getAcc :: CI -> Sentence
 
 -- | Similar to <a>commonIdea</a>, but takes a list of <a>IdeaDict</a>
 --   (often a domain).

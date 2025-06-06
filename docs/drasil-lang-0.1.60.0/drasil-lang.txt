@@ -2556,9 +2556,6 @@ data CI
 --   ([<a>UID</a>]).
 commonIdea :: String -> NP -> String -> [UID] -> CI
 
--- | Get abbreviation in <a>Sentence</a> form from a <a>CI</a>.
-getAcc :: CI -> Sentence
-
 -- | Similar to <a>commonIdea</a>, but takes a list of <a>IdeaDict</a>
 --   (often a domain).
 commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI

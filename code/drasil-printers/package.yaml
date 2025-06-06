@@ -24,7 +24,7 @@ dependencies:
 - drasil-data
 - drasil-database
 - drasil-lang
-- drasil-sysinfo
+- drasil-system
 - drasil-theory
 - drasil-utils
 - split

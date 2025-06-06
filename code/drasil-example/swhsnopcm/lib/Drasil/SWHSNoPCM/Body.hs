@@ -34,7 +34,6 @@ import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
 import Data.Drasil.Software.Products (prodtcon)
-import Data.Drasil.Domains (materialEng)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
 
@@ -61,6 +60,7 @@ import Drasil.SWHSNoPCM.Definitions (srsSWHS, htTrans)
 import Drasil.SWHSNoPCM.GenDefs (genDefs)
 import Drasil.SWHSNoPCM.Goals (goals)
 import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr, instModIntro)
+import Drasil.SWHSNoPCM.MetaConcepts (progName)
 import qualified Drasil.SWHSNoPCM.IMods as NoPCM (iMods)
 import Drasil.SWHSNoPCM.ODEs
 import Drasil.SWHSNoPCM.Requirements (funcReqs, inReqDesc)
@@ -184,15 +184,9 @@ si = SI {
   _outputs     = map qw [tempW, watE],     --outputs
   _constraints = map cnstrw constrained ++ map cnstrw [tempW, watE], --constrained
   _constants   = piConst : specParamValList,
-  _sysinfodb   = symbMap,
+  _systemdb   = symbMap,
   _usedinfodb  = usedDB
 }
-
-progName :: CI
-progName = commonIdeaWithDict "swhsNoPCM" 
-  (nounPhrase' "solar water heating system with no phase change material"
-  "solar water heating systems with no phase change material" $ Replace $
-  S "Solar Water Heating System with no Phase Change Material") "SWHSNoPCM" [materialEng]
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWHT)]

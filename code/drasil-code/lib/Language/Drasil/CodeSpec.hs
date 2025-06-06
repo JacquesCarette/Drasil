@@ -6,8 +6,8 @@ module Language.Drasil.CodeSpec where
 import Language.Drasil hiding (None, new)
 import Language.Drasil.Display (Symbol(Variable))
 import Database.Drasil
-import qualified SysInfo.Drasil as SI
-import SysInfo.Drasil (HasSystem(..))
+import qualified System.Drasil as SI
+import System.Drasil (HasSystem(..))
 
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 
@@ -70,7 +70,7 @@ data OldCodeSpec = OldCodeSpec {
   -- automatically define.
   _mods :: [Mod],  -- medium hack
   -- | The database of all chunks used in the problem.
-  _sysinfodb :: ChunkDB
+  _systemdb :: ChunkDB
   }
 
 makeClassyFor "HasOldCodeSpec" "oldCodeSpec"
@@ -86,19 +86,19 @@ makeClassyFor "HasOldCodeSpec" "oldCodeSpec"
     , ("_constants", "constantsO")
     , ("_constMap", "constMapO")
     , ("_mods", "modsO")
-    , ("_sysinfodb", "sysinfodbO")
+    , ("_systemdb", "systemdbO")
     ] ''OldCodeSpec
 
 -- | New Code Specification. Holds system information and a reference to `OldCodeSpec`.
 data CodeSpec = CS {
-  _sysInfo :: SI.System,
+  _system' :: SI.System,
   _oldCode :: OldCodeSpec
 }
 makeLenses ''CodeSpec
 
 instance HasSystem CodeSpec where
   system :: Lens' CodeSpec SI.System
-  system = sysInfo
+  system = system'
   background :: Lens' CodeSpec SI.Background
   background = system . SI.background
   purpose :: Lens' CodeSpec SI.Purpose
@@ -148,8 +148,8 @@ instance HasOldCodeSpec CodeSpec where
   modsO :: Lens' CodeSpec [Mod]
   modsO = oldCode . modsO
 
-  sysinfodbO :: Lens' CodeSpec ChunkDB
-  sysinfodbO = oldCode . sysinfodbO
+  systemdbO :: Lens' CodeSpec ChunkDB
+  systemdbO = oldCode . systemdbO
 
 -- | Converts a list of chunks that have 'UID's to a Map from 'UID' to the associated chunk.
 assocToMap :: HasUID a => [a] -> Map.Map UID a
@@ -170,7 +170,7 @@ mapODE (Just ode) = map odeDef $ odeInfo ode
 -- The 'CodeSpec' consists of the system information and a corresponding 'OldCodeSpec'.
 codeSpec :: SI.System -> Choices -> [Mod] -> CodeSpec
 codeSpec si chs ms = CS {
-  _sysInfo = si,
+  _system' = si,
   _oldCode = oldcodeSpec si chs ms
 }
 
@@ -187,7 +187,7 @@ oldcodeSpec SI.SI{ SI._sys = sys
                    , SI._outputs = outs
                    , SI._constraints = cs
                    , SI._constants = cnsts
-                   , SI._sysinfodb = db } chs ms =
+                   , SI._systemdb = db } chs ms =
   let n = programName sys
       inputs' = map quantvar ins
       const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
@@ -213,7 +213,7 @@ oldcodeSpec SI.SI{ SI._sys = sys
         _constants = const',
         _constMap = assocToMap const',
         _mods = ms,
-        _sysinfodb = db
+        _systemdb = db
       } 
 
 

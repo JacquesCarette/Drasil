@@ -15,7 +15,7 @@ idglass      = mkIdea  "glass"          (cn' "Glass")                 Nothing
 {--}
 con :: [CI]
 con = [annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
-  lResistance, lShareFac, glassBR, stdOffDist, nFL]
+  lResistance, lShareFac, stdOffDist, nFL]
 
 con' :: [IdeaDict]
 con' = [beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
@@ -29,7 +29,7 @@ acronyms = [assumption, annealed, aR, dataDefn, fullyT, goalStmt,
   refBy, refName, stdOffDist, srs, thModel, typUnc, unlikelyChg]
 
 annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
-  lResistance, lShareFac, glassBR, stdOffDist, nFL :: CI
+  lResistance, lShareFac, stdOffDist, nFL :: CI
 
 --FIXME: Add compound nounphrases
 
@@ -42,7 +42,6 @@ iGlass        = commonIdeaWithDict "iGlass"        (nounPhraseSP "insulating gla
 lGlass        = commonIdeaWithDict "lGlass"        (nounPhraseSP "laminated glass")         "LG"       [idglass]
 lResistance   = commonIdeaWithDict "lResistance"   (nounPhraseSP "load resistance")         "LR"       [idglass]
 lShareFac     = commonIdeaWithDict "lShareFac"     (nounPhraseSP "load share factor")       "LSF"      [idglass]
-glassBR       = commonIdeaWithDict "glassBR"       (pn "GlassBR")                           "GlassBR"  [idglass]
 stdOffDist    = commonIdeaWithDict "stdOffDist"    (nounPhraseSP "stand off distance")      "SD"       [idglass]
 loadDurFactor = commonIdeaWithDict "loadDurFactor" (nounPhraseSP "load duration factor")    "LDF"      [idglass]
 nFL           = commonIdeaWithDict "nFL"           (nounPhraseSP "non-factored load")       "NFL"      [idglass]

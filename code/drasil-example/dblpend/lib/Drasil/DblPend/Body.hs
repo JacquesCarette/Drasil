@@ -13,7 +13,7 @@ import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (dong)
-import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz)
+import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz, fundamentals)
 import Data.Drasil.Concepts.Computation (inDatum, compcon, inValue, algorithm)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
@@ -33,11 +33,12 @@ import Data.Drasil.TheoryConcepts (inModel)
 
 import Drasil.DblPend.Figures (figMotion, sysCtxFig1)
 import Drasil.DblPend.Assumptions (assumpDouble)
-import Drasil.DblPend.Concepts (rod, concepts, pendMotion, progName, firstRod, secondRod, firstObject, secondObject)
+import Drasil.DblPend.Concepts (rod, concepts, pendMotion, firstRod, secondRod, firstObject, secondObject)
 import Drasil.DblPend.Goals (goals, goalsInputs)
 import Drasil.DblPend.DataDefs (dataDefs)
 import Drasil.DblPend.IMods (iMods)
 import Drasil.DblPend.GenDefs (genDefns)
+import Drasil.DblPend.MetaConcepts (progName)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms, pendDisAngle, constants)
 import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs)
@@ -121,7 +122,7 @@ si = SI {
   _outputs     = outputs,
   _constraints = inConstraints,
   _constants   = constants,
-  _sysinfodb   = symbMap,
+  _systemdb   = symbMap,
   _usedinfodb  = usedDB
 }
 
@@ -143,13 +144,16 @@ symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ od
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll)
-  (nw newtonSLR : nw progName : nw mass : nw len : nw kilogram : nw inValue : nw newton : nw degree : nw radian
-    : nw unitVect : nw unitVectj : [nw errMsg, nw program] ++ map nw symbols ++
-   map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw physicCon' ++
-   map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz] ++
-   [nw algorithm] ++ map nw compcon ++ map nw educon ++ map nw prodtcon)
-  (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz])
-  dataDefs iMods genDefns tMods concIns [] allRefs citations
+  (nw newtonSLR : nw progName : nw mass : nw len : nw kilogram : nw inValue
+   : nw newton : nw degree : nw radian : nw unitVect : nw unitVectj
+   : [nw errMsg, nw program] ++ map nw symbols ++ map nw doccon
+   ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon'
+   ++ map nw physicCon' ++ map nw physicscon ++ concepts ++ map nw physicalcon
+   ++ map nw acronyms ++ map nw symbols ++ map nw fundamentals
+   ++ map nw [metre, hertz] ++ [nw algorithm] ++ map nw compcon
+   ++ map nw educon ++ map nw prodtcon) srsDomains
+   (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz])
+   dataDefs iMods genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -193,7 +197,7 @@ externalLinkRef = makeURI "DblPendSRSLink"
 ---------------------------------
 scope :: Sentence
 scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)), 
-  sParen (getAcc twoD), phrase pendMotion, phrase problem,
+  sParen (short twoD), phrase pendMotion, phrase problem,
                    S "with various initial conditions"]
 
 ----------------------------------------------

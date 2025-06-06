@@ -10,6 +10,10 @@ language: Haskell2010
 default-extensions:
 - StrictData
 
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+
 extra-source-files: []
 
 dependencies:
@@ -25,7 +29,7 @@ dependencies:
 - drasil-gen
 - drasil-lang
 - drasil-printers
-- drasil-sysinfo
+- drasil-system
 - drasil-theory
 - drasil-utils
 - sglpend
@@ -51,8 +55,6 @@ executables:
     main: Main
     source-dirs: app
     ghc-options:
-    - -Wall
-    - -Wredundant-constraints
     - -threaded
     - -O2
     dependencies:

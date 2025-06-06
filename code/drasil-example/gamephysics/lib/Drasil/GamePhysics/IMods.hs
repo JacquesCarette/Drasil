@@ -57,7 +57,7 @@ transMotDesc = foldlSent [S "The above", phrase equation, S "expresses the total
   foldlList Comma List (map refS [linDispDD, linVelDD, linAccDD])]
 transMotOutputs = foldlSent [atStartNP (output_ `the_ofThe` inModel),
  S "will be the functions" `S.of_` phraseNP (position `and_` velocity),
- S "over time that satisfy the", getAcc ode `S.for` phraseNP (the acceleration) `sC`
+ S "over time that satisfy the", short ode `S.for` phraseNP (the acceleration) `sC`
  S "with the given initial", (plural condition `S.for` phraseNP (position `and_`
  velocity) !.), atStartNP (the motion), S "is translational" `sC` S "so the",
  phraseNP (position `and_` velocity), S "functions are for the",

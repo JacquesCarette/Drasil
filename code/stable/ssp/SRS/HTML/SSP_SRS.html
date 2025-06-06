@@ -896,16 +896,16 @@
           A slope of geological mass, composed of soil and rock and sometimes water, is subject to the influence of gravity on the mass. This can cause instability in the form of soil or rock movement. The effects of soil or rock movement can range from inconvenient to seriously hazardous, resulting in significant life and economic losses. Slope stability is of interest both when analysing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of its relative stability known as the factor of safety..
         </p>
         <p class="paragraph">
-          The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability analysis Program (SSP) based on the original, manually created version of <a href="https://github.com/smiths/caseStudies/blob/master/CaseStudies/ssp">SSP</a>. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+          The following section provides an overview of the Software Requirements Specification (<span title="software requirements specification">SRS</span>) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability analysis Program (<span title="Slope Stability analysis Program">SSP</span>) based on the original, manually created version of <a href="https://github.com/smiths/caseStudies/blob/master/CaseStudies/ssp">SSP</a>. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
         <div id="Sec:DocPurpose">
           <div class="subsection">
             <h2>Purpose of Document</h2>
             <p class="paragraph">
-              The primary purpose of this document is to record the requirements of SSP. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of SSP. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+              The primary purpose of this document is to record the requirements of <span title="Slope Stability analysis Program">SSP</span>. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of <span title="Slope Stability analysis Program">SSP</span>. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this <span title="software requirements specification">SRS</span> will remain abstract, describing what problem is being solved, but not how to solve it.
             </p>
             <p class="paragraph">
-              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
+              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the <span title="software requirements specification">SRS</span> fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
             </p>
           </div>
         </div>
@@ -913,7 +913,7 @@
           <div class="subsection">
             <h2>Scope of Requirements</h2>
             <p class="paragraph">
-              The scope of the requirements includes stability analysis of a two-dimensional (2D) soil mass, composed of a single homogeneous layer with constant material properties. The soil mass is assumed to extend infinitely in the third dimension. The analysis will be at an instant in time; factors that may change the soil properties over time will not be considered.
+              The scope of the requirements includes stability analysis of a two-dimensional (<span title="two-dimensional">2D</span>) soil mass, composed of a single homogeneous layer with constant material properties. The soil mass is assumed to extend infinitely in the third dimension. The analysis will be at an instant in time; factors that may change the soil properties over time will not be considered.
             </p>
           </div>
         </div>
@@ -921,7 +921,7 @@
           <div class="subsection">
             <h2>Characteristics of Intended Reader</h2>
             <p class="paragraph">
-              Reviewers of this documentation should have an understanding of undergraduate level 4 physics and undergraduate level 2 or higher solid mechanics. It would be an asset to understand soil mechanics. The users of SSP can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
+              Reviewers of this documentation should have an understanding of undergraduate level 4 physics and undergraduate level 2 or higher solid mechanics. It would be an asset to understand soil mechanics. The users of <span title="Slope Stability analysis Program">SSP</span> can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
             </p>
           </div>
         </div>
@@ -929,7 +929,7 @@
           <div class="subsection">
             <h2>Organization of Document</h2>
             <p class="paragraph">
-              The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
+              The organization of this document follows the template for an <span title="software requirements specification">SRS</span> for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
             </p>
             <p class="paragraph">
               The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>. The instance models provide the set of algebraic equations that must be solved.
@@ -948,7 +948,7 @@
           <div class="subsection">
             <h2>System Context</h2>
             <p class="paragraph">
-              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software. A rectangle represents the software system itself (SSP). Arrows are used to show the data flow between the system and its environment.
+              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software. A rectangle represents the software system itself (<span title="Slope Stability analysis Program">SSP</span>). Arrows are used to show the data flow between the system and its environment.
             </p>
             <div id="Figure:sysCtxDiag">
               <figure>
@@ -964,7 +964,7 @@
                 User Responsibilities
                 <ul class="list">
                   <li>
-                    Provide the input data related to the soil layer(s) and water table (if applicable), ensuring conformation to input data format required by SSP
+                    Provide the input data related to the soil layer(s) and water table (if applicable), ensuring conformation to input data format required by <span title="Slope Stability analysis Program">SSP</span>
                   </li>
                   <li>Ensure that consistent units are used for input variables</li>
                   <li>
@@ -973,7 +973,7 @@
                 </ul>
               </li>
               <li>
-                SSP Responsibilities
+                <span title="Slope Stability analysis Program">SSP</span> Responsibilities
                 <ul class="list">
                   <li>
                     Detect data type mismatch, such as a string of characters input instead of a floating point number
@@ -997,7 +997,7 @@
           <div class="subsection">
             <h2>User Characteristics</h2>
             <p class="paragraph">
-              The end user of SSP should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties, specifically effective cohesion, effective angle of friction, and unit weight.
+              The end user of <span title="Slope Stability analysis Program">SSP</span> should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties, specifically effective cohesion, effective angle of friction, and unit weight.
             </p>
           </div>
         </div>
@@ -1079,17 +1079,21 @@
               <div class="subsubsection">
                 <h3>Physical System Description</h3>
                 <p class="paragraph">
-                  The physical system of SSP, as shown in <a href=#Figure:PhysicalSystem>Fig:PhysicalSystem</a>, includes the following elements:
+                  The physical system of <span title="Slope Stability analysis Program">SSP</span>, as shown in <a href=#Figure:PhysicalSystem>Fig:PhysicalSystem</a>, includes the following elements:
                 </p>
                 <div class="list">
-                  <p>PS1: A slope comprised of one soil layer.</p>
-                  <p>PS2: A water table, which may or may not exist.</p>
+                  <p>
+                    <span title="physical system description">PS</span>1: A slope comprised of one soil layer.
+                  </p>
+                  <p>
+                    <span title="physical system description">PS</span>2: A water table, which may or may not exist.
+                  </p>
                 </div>
                 <div id="Figure:PhysicalSystem">
                   <figure>
-                    <img src="../../../../datafiles/ssp/PhysSyst.png" alt="An example slope for analysis by SSP, where the dashed line represents the water table" >
+                    <img src="../../../../datafiles/ssp/PhysSyst.png" alt="An example slope for analysis by <span title="Slope Stability analysis Program">SSP</span>, where the dashed line represents the water table" >
                     <figcaption>
-                      Figure: An example slope for analysis by SSP, where the dashed line represents the water table
+                      Figure: An example slope for analysis by <span title="Slope Stability analysis Program">SSP</span>, where the dashed line represents the water table
                     </figcaption>
                   </figure>
                 </div>
@@ -1148,7 +1152,7 @@
           <div class="subsection">
             <h2>Solution Characteristics Specification</h2>
             <p class="paragraph">
-              The instance models that govern SSP are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+              The instance models that govern <span title="Slope Stability analysis Program">SSP</span> are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
             </p>
             <div id="Sec:Assumps">
               <div class="subsubsection">
@@ -1189,7 +1193,7 @@
                   </p>
                   <p>
                     <div id="assumpPSC">
-                      Plane-Strain-Conditions: The slope and slip surface extends far into and out of the geometry (<em>z</em> coordinate). This implies plane strain conditions, making 2D analysis appropriate. (RefBy: <a href=#GD:srfWtrF>GD:srfWtrF</a>, <a href=#GD:sliceWght>GD:sliceWght</a>, <a href=#GD:resShr>GD:resShr</a>, <a href=#GD:effNormF>GD:effNormF</a>, and <a href=#GD:baseWtrF>GD:baseWtrF</a>.)
+                      Plane-Strain-Conditions: The slope and slip surface extends far into and out of the geometry (<em>z</em> coordinate). This implies plane strain conditions, making <span title="two-dimensional">2D</span> analysis appropriate. (RefBy: <a href=#GD:srfWtrF>GD:srfWtrF</a>, <a href=#GD:sliceWght>GD:sliceWght</a>, <a href=#GD:resShr>GD:resShr</a>, <a href=#GD:effNormF>GD:effNormF</a>, and <a href=#GD:baseWtrF>GD:baseWtrF</a>.)
                     </div>
                   </p>
                   <p>
@@ -1244,7 +1248,7 @@
               <div class="subsubsection">
                 <h3>Theoretical Models</h3>
                 <p class="paragraph">
-                  This section focuses on the general equations and laws that SSP is based on.
+                  This section focuses on the general equations and laws that <span title="Slope Stability analysis Program">SSP</span> is based on.
                 </p>
                 <div id="TM:factOfSafety">
                   <table class="tdefn">
@@ -2284,7 +2288,7 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of weight:</h4>
                     <p class="paragraph">
-                      Under the influence of gravity, and assuming a 2D Cartesian coordinate system with down as positive, an object has an acceleration vector of:
+                      Under the influence of gravity, and assuming a <span title="two-dimensional">2D</span> Cartesian coordinate system with down as positive, an object has an acceleration vector of:
                     </p>
                     \[\symbf{a}\text{(}t\text{)}=\begin{bmatrix}
                                                  0\\
@@ -4365,7 +4369,7 @@
                       <th>Var</th>
                       <th>Physical Constraints</th>
                       <th>Typical Value</th>
-                      <th>Uncert.</th>
+                      <th><span title="typical uncertainty">Uncert.</span></th>
                     </tr>
                     <tr>
                       <td><em>c&prime;</em></td>
@@ -4529,7 +4533,7 @@
               </p>
               <p>
                 <div id="displayGraph">
-                  Display-Graph: Display the critical slip surface of the 2D slope, as determined from <a href=#IM:crtSlpId>IM:crtSlpId</a>, graphically.
+                  Display-Graph: Display the critical slip surface of the <span title="two-dimensional">2D</span> slope, as determined from <a href=#IM:crtSlpId>IM:crtSlpId</a>, graphically.
                 </div>
               </p>
               <p>
@@ -4756,7 +4760,7 @@
           </p>
           <p>
             <div id="UC_2donly">
-              2D-Analysis-Only: <a href=#assumpENSL>A:Effective-Norm-Stress-Large</a> allows for 2D analysis with these models only because stress along the <em>z</em>-direction is zero. These models do not take into account stress in the <em>z</em>-direction, and therefore cannot be used without manipulation to attempt three-dimensional analysis.
+              2D-Analysis-Only: <a href=#assumpENSL>A:Effective-Norm-Stress-Large</a> allows for <span title="two-dimensional">2D</span> analysis with these models only because stress along the <em>z</em>-direction is zero. These models do not take into account stress in the <em>z</em>-direction, and therefore cannot be used without manipulation to attempt three-dimensional analysis.
             </div>
           </p>
         </div>

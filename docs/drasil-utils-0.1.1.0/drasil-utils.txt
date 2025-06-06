@@ -13,6 +13,15 @@
 -- | Gather Drasil's utility functions and re-export for easy use.
 module Utils.Drasil
 
+-- | Creates a directory if it does not already exist (optionally with all
+--   missing parent directories).
+--   
+--   Implementation uses doesPathExist to check if the directory exists
+--   rather than createDirectoryIfMissing True, which would create the
+--   directory regardless of whether it exists or not, potentially leading
+--   to an error that appears in `make debug` logs.
+createDirIfMissing :: Bool -> FilePath -> IO ()
+
 -- | Creates a blank document with no text.
 blank :: Doc
 

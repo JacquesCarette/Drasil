@@ -1,6 +1,8 @@
 digraph alltypes {
 	subgraph csv {
 	}
+	subgraph directory {
+	}
 	subgraph document {
 		subgraph separator{
 		Separator	[shape=oval, color=red2, label="Separator"];

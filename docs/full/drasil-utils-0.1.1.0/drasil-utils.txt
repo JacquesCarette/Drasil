@@ -16,6 +16,17 @@ module Utils.Drasil.CSV
 -- | Creates a CSV file as a <a>Doc</a> from a <a>String</a> matrix.
 makeCSV :: [[String]] -> Doc
 
+module Utils.Drasil.Directory
+
+-- | Creates a directory if it does not already exist (optionally with all
+--   missing parent directories).
+--   
+--   Implementation uses doesPathExist to check if the directory exists
+--   rather than createDirectoryIfMissing True, which would create the
+--   directory regardless of whether it exists or not, potentially leading
+--   to an error that appears in `make debug` logs.
+createDirIfMissing :: Bool -> FilePath -> IO ()
+
 
 -- | Common <a>Doc</a>-related functions for writting printers with a
 --   little more clarity.
@@ -119,6 +130,15 @@ repUnd :: String -> String
 
 -- | Gather Drasil's utility functions and re-export for easy use.
 module Utils.Drasil
+
+-- | Creates a directory if it does not already exist (optionally with all
+--   missing parent directories).
+--   
+--   Implementation uses doesPathExist to check if the directory exists
+--   rather than createDirectoryIfMissing True, which would create the
+--   directory regardless of whether it exists or not, potentially leading
+--   to an error that appears in `make debug` logs.
+createDirIfMissing :: Bool -> FilePath -> IO ()
 
 -- | Creates a blank document with no text.
 blank :: Doc

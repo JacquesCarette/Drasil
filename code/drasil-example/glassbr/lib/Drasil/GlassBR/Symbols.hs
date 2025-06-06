@@ -4,14 +4,14 @@ import Language.Drasil (QuantityDict, qw)
 import Language.Drasil.Code (Mod(Mod), asVC)
 
 import Drasil.GlassBR.ModuleDefs (allMods, implVars)
-import Drasil.GlassBR.Unitals (inputs, outputs, specParamVals, symbols,
+import Drasil.GlassBR.Unitals (inputs, outputs, specParamVals,
   symbolsWithDefns, unitless, tmSymbols, interps, derivedInputDataConstraints)
 
 import Data.List ((\\))
 
 symbolsForTable :: [QuantityDict]
 symbolsForTable = inputs ++ outputs ++ tmSymbols ++ map qw specParamVals ++ 
-  map qw symbolsWithDefns ++ map qw symbols ++ map qw derivedInputDataConstraints ++ interps
+  map qw symbolsWithDefns ++ map qw derivedInputDataConstraints ++ interps
 
   -- include all module functions as symbols
 thisSymbols :: [QuantityDict]

@@ -33,7 +33,7 @@ import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamenta
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab, 
-  ptOfExplsn, con, con', glass)
+  ptOfExplsn, con', glass)
 import Drasil.GlassBR.DataDefs (configFp)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.Figures
@@ -199,14 +199,14 @@ priorityNFReqs = [correctness, verifiability, understandability,
 {--INTRODUCTION--}
 
 startIntro :: (NamedIdea n) => n -> Sentence -> CI -> Sentence
-startIntro prgm _ progName = foldlSent [
+startIntro prgm _ sysName = foldlSent [
   atStart' explosion, S "in downtown areas are dangerous" `S.fromThe` phrase blast +:+ 
   S "itself" `S.and_` S "also potentially from the secondary" +:+ 
   S "effect of falling glass. Therefore" `sC` phrase prgm `S.is` S "needed to" +:+. 
   purp, S "For example" `sC` S "we might wish to know whether a pane of",
   phrase glass, S "fails from a gas main", phrase explosion `S.or_` 
   S "from a small fertilizer truck bomb." +:+
-  S "The document describes the program called", short progName,
+  S "The document describes the program called", short sysName,
   S ", which is based" `S.onThe` S "original" `sC` S "manually created version of" +:+
   namedRef externalLinkRef (S "GlassBR")]
 

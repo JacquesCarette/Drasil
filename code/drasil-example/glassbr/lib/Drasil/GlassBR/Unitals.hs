@@ -190,9 +190,14 @@ stressDistFacMax = mkQuantDef (vc "stressDistFacMax" (nounPhraseSP "maximum valu
   (subMax (eqSymb stressDistFac)) Real) (exactDbl 32)
 {--}
 
+unitarySymbols :: [UnitaryChunk]
+unitarySymbols = [minThick, sflawParamK, sflawParamM, loadDur]
+
+unitalSymbols :: [UnitalChunk]
+unitalSymbols = [demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight]
+
 symbols :: [UnitaryChunk]
-symbols = [minThick, sflawParamK, sflawParamM, loadDur] ++
-  map mkUnitary [demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight]
+symbols = unitarySymbols ++ map mkUnitary unitalSymbols
 
 minThick, sflawParamK, sflawParamM, sdx, sdy, sdz, loadDur :: UnitaryChunk
 

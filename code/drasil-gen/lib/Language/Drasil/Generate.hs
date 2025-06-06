@@ -15,8 +15,7 @@ module Language.Drasil.Generate (
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
 import Prelude hiding (id)
-import System.Directory (createDirectoryIfMissing, getCurrentDirectory,
-  setCurrentDirectory)
+import System.Directory (getCurrentDirectory, setCurrentDirectory)
 import Data.Time.Clock (getCurrentTime, utctDay)
 import Data.Time.Calendar (showGregorian)
 
@@ -38,6 +37,8 @@ import Language.Drasil.Dump
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC)
 import Drasil.GProc (unJLC)
 import Control.Lens ((^.))
+
+import Utils.Drasil (createDirIfMissing)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
@@ -75,7 +76,7 @@ srsFormatError = error "We can only write TeX/HTML/JSON/MDBook (for now)."
 -- document information and printing information. Then generates the document file.
 prntDoc' :: DocType -> String -> String -> Format -> Document -> PrintingInformation -> IO ()
 prntDoc' _ dt' _ MDBook body' sm = do
-  createDirectoryIfMissing True dir
+  createDirIfMissing True dir
   mapM_ writeDocToFile con
   where 
     con = writeDoc' sm MDBook body'
@@ -85,7 +86,7 @@ prntDoc' _ dt' _ MDBook body' sm = do
       hPutStrLn outh $ render d
       hClose outh
 prntDoc' dt dt' fn format body' sm = do
-  createDirectoryIfMissing True dt'
+  createDirIfMissing True dt'
   outh <- openFile (dt' ++ "/" ++ fn ++ getExt format) WriteMode
   hPutStrLn outh $ render $ writeDoc sm dt format fn body'
   hClose outh
@@ -162,7 +163,7 @@ genCode chs spec = do
   time <- getCurrentTime
   sampData <- maybe (return []) (\sd -> readWithDataDesc sd $ sampleInputDD
     (spec ^. extInputsO)) (getSampleData chs)
-  createDirectoryIfMissing False "src"
+  createDirIfMissing False "src"
   setCurrentDirectory "src"
   let genLangCode Java = genCall Java unJC unJP
       genLangCode Python = genCall Python unPC unPP

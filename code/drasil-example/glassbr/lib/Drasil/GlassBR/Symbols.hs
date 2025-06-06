@@ -4,16 +4,24 @@ import Language.Drasil (QuantityDict, qw)
 import Language.Drasil.Code (Mod(Mod), asVC)
 
 import Drasil.GlassBR.ModuleDefs (allMods, implVars)
-import Drasil.GlassBR.Unitals (inputs, outputs, specParamVals,
+import Drasil.GlassBR.Unitals (inputs, outputs, specParamVals, symbols,
   symbolsWithDefns, unitless, tmSymbols, interps, derivedInputDataConstraints)
 
 import Data.List ((\\))
 
-symbolsForTable :: [QuantityDict]
-symbolsForTable = inputs ++ outputs ++ tmSymbols ++ map qw specParamVals ++ 
-  map qw symbolsWithDefns ++ map qw derivedInputDataConstraints ++ interps
+symbolsForSymbolTable :: [QuantityDict]
+symbolsForSymbolTable = symbolsForTermTable ++ map qw symbols ++
+  unitless ++ map qw derivedInputDataConstraints
+
+symbolsForTermTable :: [QuantityDict]
+symbolsForTermTable = inputs ++ outputs ++ tmSymbols ++ map qw specParamVals ++ 
+  map qw symbolsWithDefns ++ interps
 
   -- include all module functions as symbols
 thisSymbols :: [QuantityDict]
 thisSymbols = (map asVC (concatMap (\(Mod _ _ _ _ l) -> l) allMods)
-  \\ symbolsForTable) ++ map qw implVars ++ symbolsForTable
+  \\ symbolsForSymbolTable) ++ map qw implVars ++ symbolsForSymbolTable
+  
+thisTerms :: [QuantityDict]
+thisTerms = (map asVC (concatMap (\(Mod _ _ _ _ l) -> l) allMods)
+  \\ symbolsForTermTable) ++ map qw implVars ++ symbolsForTermTable

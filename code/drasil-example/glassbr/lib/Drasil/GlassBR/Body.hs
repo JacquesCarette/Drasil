@@ -42,13 +42,13 @@ import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
 import Drasil.GlassBR.MetaConcepts (progName)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations)
 import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs)
-import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
+import Drasil.GlassBR.Symbols (symbolsForSymbolTable, thisSymbols, thisTerms)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
   sD, termsWithAccDefn, termsWithDefsOnly, terms, dataConstraints, lDurFac,
-  isSafeProb, dimlessLoad, isSafeLoad, tolLoad, unitless, riskFun, sdfTol, symbols, unitarySymbols)
+  isSafeProb, dimlessLoad, isSafeLoad, tolLoad, unitless, riskFun, sdfTol, symbols, unitarySymbols, derivedInputDataConstraints)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -68,7 +68,7 @@ si = SI {
   _background  = [background],
   _motivation  = [],
   _scope       = [scope],
-  _quants      = symbolsForTable,
+  _quants      = symbolsForSymbolTable,
   _instModels  = iMods,
   _datadefs    = GB.dataDefs,
   _configFiles = configFp,
@@ -134,8 +134,8 @@ background = foldlSent_ [phrase explosion, S "in downtown areas are dangerous fr
   +:+ S "effect of falling glass"]
 
 symbMap :: ChunkDB
-symbMap = cdb (unitless ++ map qw thisSymbols ++ map qw symbols) 
-  (nw progName : map nw thisSymbols ++ map nw unitarySymbols ++ map nw con'
+symbMap = cdb (map qw thisSymbols) 
+  (nw progName : map nw thisTerms ++ map nw unitarySymbols ++ map nw con'
   ++ map nw [riskFun, isSafeProb, isSafeLoad, sdfTol, dimlessLoad, tolLoad,
   lDurFac] ++ map nw terms ++ map nw doccon ++ map nw doccon' ++ map nw educon
   ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon'

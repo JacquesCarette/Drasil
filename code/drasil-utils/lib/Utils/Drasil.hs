@@ -1,5 +1,9 @@
 -- | Gather Drasil's utility functions and re-export for easy use.
 module Utils.Drasil (
+  -- * Directory
+  -- | From "Utils.Drasil.Directory".
+  createDirIfMissing,
+
   -- * Documents
   -- | From "Utils.Drasil.Document".
   blank, indent, indentList, filterEmpty, listToDoc,
@@ -25,6 +29,7 @@ module Utils.Drasil (
   makeCSV
 ) where
 
+import Utils.Drasil.Directory
 import Utils.Drasil.Document
 import Utils.Drasil.English
 import Utils.Drasil.Lists

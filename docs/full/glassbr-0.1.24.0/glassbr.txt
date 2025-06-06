@@ -187,6 +187,10 @@ implVars :: [QuantityDict]
 interpY :: Func
 interpZ :: Func
 
+module Drasil.GlassBR.Symbols
+symbolsForTable :: [QuantityDict]
+thisSymbols :: [QuantityDict]
+
 module Drasil.GlassBR.Goals
 goals :: [ConceptInstance]
 willBreakGS :: ConceptInstance
@@ -237,10 +241,6 @@ iMods :: [InstanceModel]
 pbIsSafe :: InstanceModel
 lrIsSafe :: InstanceModel
 instModIntro :: Sentence
-
-module Drasil.GlassBR.Symbols
-symbolsForTable :: [QuantityDict]
-thisSymbols :: [QuantityDict]
 
 module Drasil.GlassBR.Requirements
 funcReqs :: [ConceptInstance]

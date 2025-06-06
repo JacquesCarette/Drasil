@@ -315,10 +315,10 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span id="line-78"></span><span class="hs-comment">--FIXME: &quot;A&quot; is not being capitalized when it should be.</span><span>
 </span><span id="line-79"></span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#forceParam"><span class="hs-identifier hs-type">forceParam</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#massParam"><span class="hs-identifier hs-type">massParam</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#timeParam"><span class="hs-identifier hs-type">timeParam</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Symbol</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span>
 </span><span id="line-80"></span><span id="forceParam"><span class="annot"><span class="annottext">forceParam :: String -&gt; String -&gt; Symbol -&gt; UnitalChunk
-</span><a href="Drasil.GamePhysics.Unitals.html#forceParam"><span class="hs-identifier hs-var hs-var">forceParam</span></a></span></span><span> </span><span id="local-6989586621679067248"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067248"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679067249"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067249"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span id="local-6989586621679067250"><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067250"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#forceParam"><span class="hs-identifier hs-var hs-var">forceParam</span></a></span></span><span> </span><span id="local-6989586621679067266"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679067266"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679067267"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679067267"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span id="local-6989586621679067268"><span class="annot"><span class="annottext">Symbol
+</span><a href="#local-6989586621679067268"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
@@ -328,14 +328,14 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-string">&quot;force&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067248"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><a href="#local-6989586621679067266"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; NP) -&gt; String -&gt; NP
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;force exerted by the &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067249"><span class="hs-identifier hs-var">w</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679067267"><span class="hs-identifier hs-var">w</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span>
 </span><span id="line-82"></span><span>  </span><span class="annot"><span class="annottext">String
@@ -348,15 +348,15 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.force</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067250"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><a href="#local-6989586621679067268"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">newton</span></span><span>
 </span><span id="line-84"></span><span>
 </span><span id="line-85"></span><span id="massParam"><span class="annot"><span class="annottext">massParam :: String -&gt; String -&gt; Symbol -&gt; UnitalChunk
-</span><a href="Drasil.GamePhysics.Unitals.html#massParam"><span class="hs-identifier hs-var hs-var">massParam</span></a></span></span><span> </span><span id="local-6989586621679067258"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067258"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679067259"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067259"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span id="local-6989586621679067260"><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067260"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#massParam"><span class="hs-identifier hs-var hs-var">massParam</span></a></span></span><span> </span><span id="local-6989586621679067276"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679067276"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679067277"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679067277"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span id="local-6989586621679067278"><span class="annot"><span class="annottext">Symbol
+</span><a href="#local-6989586621679067278"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
@@ -366,14 +366,14 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-string">&quot;mass&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067258"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><a href="#local-6989586621679067276"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; NP) -&gt; String -&gt; NP
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;mass of the &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067259"><span class="hs-identifier hs-var">w</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679067277"><span class="hs-identifier hs-var">w</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot; body&quot;</span></span><span class="hs-special">)</span><span> </span><span>
@@ -385,15 +385,15 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QPP.mass</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067260"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><a href="#local-6989586621679067278"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">kilogram</span></span><span>
 </span><span id="line-88"></span><span>
 </span><span id="line-89"></span><span id="timeParam"><span class="annot"><span class="annottext">timeParam :: String -&gt; String -&gt; Symbol -&gt; UnitalChunk
-</span><a href="Drasil.GamePhysics.Unitals.html#timeParam"><span class="hs-identifier hs-var hs-var">timeParam</span></a></span></span><span> </span><span id="local-6989586621679067261"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067261"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679067262"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067262"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span id="local-6989586621679067263"><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067263"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#timeParam"><span class="hs-identifier hs-var hs-var">timeParam</span></a></span></span><span> </span><span id="local-6989586621679067279"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679067279"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679067280"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679067280"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span id="local-6989586621679067281"><span class="annot"><span class="annottext">Symbol
+</span><a href="#local-6989586621679067281"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
@@ -403,14 +403,14 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-string">&quot;time&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067261"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><a href="#local-6989586621679067279"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; NP) -&gt; String -&gt; NP
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;time at a point in &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067262"><span class="hs-identifier hs-var">w</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679067280"><span class="hs-identifier hs-var">w</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot; body &quot;</span></span><span class="hs-special">)</span><span> </span><span>
@@ -422,17 +422,17 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.time</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067263"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><a href="#local-6989586621679067281"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">second</span></span><span>
 </span><span id="line-92"></span><span>
 </span><span id="line-93"></span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#contParam"><span class="hs-identifier hs-type">contParam</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Symbol</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Symbol</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span>
 </span><span id="line-94"></span><span id="contParam"><span class="annot"><span class="annottext">contParam :: String -&gt; String -&gt; Symbol -&gt; Symbol -&gt; UnitalChunk
-</span><a href="Drasil.GamePhysics.Unitals.html#contParam"><span class="hs-identifier hs-var hs-var">contParam</span></a></span></span><span> </span><span id="local-6989586621679067265"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067265"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679067266"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067266"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679067267"><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067267"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span id="local-6989586621679067268"><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067268"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#contParam"><span class="hs-identifier hs-var hs-var">contParam</span></a></span></span><span> </span><span id="local-6989586621679067283"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679067283"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679067284"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679067284"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679067285"><span class="annot"><span class="annottext">Symbol
+</span><a href="#local-6989586621679067285"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span id="local-6989586621679067286"><span class="annot"><span class="annottext">Symbol
+</span><a href="#local-6989586621679067286"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
@@ -442,11 +442,11 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-string">&quot;r_&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067265"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679067283"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067266"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679067269"><span class="hs-identifier hs-var">contdispN</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><a href="#local-6989586621679067284"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679067287"><span class="hs-identifier hs-var">contdispN</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.displacement</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
@@ -456,12 +456,12 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.displacement</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
 </span><span class="hs-identifier hs-var">Concat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067267"><span class="hs-identifier hs-var">w</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067268"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><a href="#local-6989586621679067285"><span class="hs-identifier hs-var">w</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="#local-6989586621679067286"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">metre</span></span><span>
-</span><span id="line-97"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679067269"><span class="annot"><span class="annottext">contdispN :: NP
-</span><a href="#local-6989586621679067269"><span class="hs-identifier hs-var hs-var">contdispN</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-97"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679067287"><span class="annot"><span class="annottext">contdispN :: NP
+</span><a href="#local-6989586621679067287"><span class="hs-identifier hs-var hs-var">contdispN</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; NP) -&gt; String -&gt; NP
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -469,20 +469,20 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-98"></span><span>                         </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067265"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679067283"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot; and contact point &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067266"><span class="hs-identifier hs-var">m</span></a></span><span>
+</span><a href="#local-6989586621679067284"><span class="hs-identifier hs-var">m</span></a></span><span>
 </span><span id="line-99"></span><span>
 </span><span id="line-100"></span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#angParam"><span class="hs-identifier hs-type">angParam</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#momtParam"><span class="hs-identifier hs-type">momtParam</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#perpParam"><span class="hs-identifier hs-type">perpParam</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#rigidParam"><span class="hs-identifier hs-type">rigidParam</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#velBodyParam"><span class="hs-identifier hs-type">velBodyParam</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#velParam"><span class="hs-identifier hs-type">velParam</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Symbol</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span>
 </span><span id="line-101"></span><span>
 </span><span id="line-102"></span><span id="angParam"><span class="annot"><span class="annottext">angParam :: String -&gt; Symbol -&gt; UnitalChunk
-</span><a href="Drasil.GamePhysics.Unitals.html#angParam"><span class="hs-identifier hs-var hs-var">angParam</span></a></span></span><span> </span><span id="local-6989586621679067277"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067277"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679067278"><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067278"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#angParam"><span class="hs-identifier hs-var hs-var">angParam</span></a></span></span><span> </span><span id="local-6989586621679067295"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679067295"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679067296"><span class="annot"><span class="annottext">Symbol
+</span><a href="#local-6989586621679067296"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
@@ -492,13 +492,13 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-string">&quot;angular velocity&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067277"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
+</span><a href="#local-6989586621679067295"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
 </span><span class="hs-identifier hs-var">compoundPhrase'</span></span><span>
 </span><span id="line-104"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; NP) -&gt; String -&gt; NP
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067277"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679067295"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot; body's&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
@@ -516,14 +516,14 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.angularVelocity</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067278"><span class="hs-identifier hs-var">w</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><a href="#local-6989586621679067296"><span class="hs-identifier hs-var">w</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">angVelU</span></span><span>
 </span><span id="line-106"></span><span>
 </span><span id="line-107"></span><span id="momtParam"><span class="annot"><span class="annottext">momtParam :: String -&gt; Symbol -&gt; UnitalChunk
-</span><a href="Drasil.GamePhysics.Unitals.html#momtParam"><span class="hs-identifier hs-var hs-var">momtParam</span></a></span></span><span> </span><span id="local-6989586621679067281"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067281"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679067282"><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067282"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#momtParam"><span class="hs-identifier hs-var hs-var">momtParam</span></a></span></span><span> </span><span id="local-6989586621679067299"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679067299"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679067300"><span class="annot"><span class="annottext">Symbol
+</span><a href="#local-6989586621679067300"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
@@ -533,7 +533,7 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-string">&quot;momentOfInertia&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067281"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
+</span><a href="#local-6989586621679067299"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
 </span><span class="hs-identifier hs-var">compoundPhrase'</span></span><span>
 </span><span id="line-109"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.momentOfInertia</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Getting NP UnitalChunk NP -&gt; NP
@@ -548,7 +548,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-string">&quot;of rigid body &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067281"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679067299"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-110"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -557,14 +557,14 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.momentOfInertia</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067282"><span class="hs-identifier hs-var">w</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><a href="#local-6989586621679067300"><span class="hs-identifier hs-var">w</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">momtInertU</span></span><span>
 </span><span id="line-111"></span><span>
 </span><span id="line-112"></span><span id="perpParam"><span class="annot"><span class="annottext">perpParam :: String -&gt; Symbol -&gt; UnitalChunk
-</span><a href="Drasil.GamePhysics.Unitals.html#perpParam"><span class="hs-identifier hs-var hs-var">perpParam</span></a></span></span><span> </span><span id="local-6989586621679067283"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067283"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679067284"><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067284"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#perpParam"><span class="hs-identifier hs-var hs-var">perpParam</span></a></span></span><span> </span><span id="local-6989586621679067301"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679067301"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679067302"><span class="annot"><span class="annottext">Symbol
+</span><a href="#local-6989586621679067302"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
@@ -574,7 +574,7 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-string">&quot;|| r_A&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067283"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679067301"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot; x n ||&quot;</span></span><span class="hs-special">)</span><span> </span><span>
@@ -591,7 +591,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-string">&quot;to the contact displacement vector of rigid body &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067283"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span>
+</span><a href="#local-6989586621679067301"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-116"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
@@ -601,7 +601,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
 </span><span class="hs-identifier hs-var">Concat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067284"><span class="hs-identifier hs-var">w</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><a href="#local-6989586621679067302"><span class="hs-identifier hs-var">w</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;*&quot;</span></span><span class="hs-special">,</span><span> </span><span class="hs-comment">--should be x for cross</span><span>
 </span><span id="line-117"></span><span>  </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Symbol
@@ -612,9 +612,9 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">metre</span></span><span>
 </span><span id="line-118"></span><span>
 </span><span id="line-119"></span><span id="rigidParam"><span class="annot"><span class="annottext">rigidParam :: String -&gt; Symbol -&gt; UnitalChunk
-</span><a href="Drasil.GamePhysics.Unitals.html#rigidParam"><span class="hs-identifier hs-var hs-var">rigidParam</span></a></span></span><span> </span><span id="local-6989586621679067288"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067288"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679067289"><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067289"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#rigidParam"><span class="hs-identifier hs-var hs-var">rigidParam</span></a></span></span><span> </span><span id="local-6989586621679067306"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679067306"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679067307"><span class="annot"><span class="annottext">Symbol
+</span><a href="#local-6989586621679067307"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
@@ -624,7 +624,7 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-string">&quot;rig_mass&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067288"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
+</span><a href="#local-6989586621679067306"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
 </span><span class="hs-identifier hs-var">compoundPhrase'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QPP.mass</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Getting NP UnitalChunk NP -&gt; NP
 forall s a. s -&gt; Getting a s a -&gt; a
@@ -639,7 +639,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-string">&quot;of rigid body &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067288"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><a href="#local-6989586621679067306"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QPP.mass</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
@@ -647,14 +647,14 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QPP.mass</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067289"><span class="hs-identifier hs-var">w</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><a href="#local-6989586621679067307"><span class="hs-identifier hs-var">w</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">kilogram</span></span><span>
 </span><span id="line-122"></span><span>
 </span><span id="line-123"></span><span id="velBodyParam"><span class="annot"><span class="annottext">velBodyParam :: String -&gt; Symbol -&gt; UnitalChunk
-</span><a href="Drasil.GamePhysics.Unitals.html#velBodyParam"><span class="hs-identifier hs-var hs-var">velBodyParam</span></a></span></span><span> </span><span id="local-6989586621679067290"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067290"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679067291"><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067291"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#velBodyParam"><span class="hs-identifier hs-var hs-var">velBodyParam</span></a></span></span><span> </span><span id="local-6989586621679067308"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679067308"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679067309"><span class="annot"><span class="annottext">Symbol
+</span><a href="#local-6989586621679067309"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
@@ -664,7 +664,7 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-string">&quot;velocity&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067290"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
+</span><a href="#local-6989586621679067308"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
 </span><span class="hs-identifier hs-var">compoundPhrase'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.velocity</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Getting NP UnitalChunk NP -&gt; NP
 forall s a. s -&gt; Getting a s a -&gt; a
@@ -679,7 +679,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-string">&quot;of the  &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067290"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679067308"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot; body&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
@@ -690,14 +690,14 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.velocity</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067291"><span class="hs-identifier hs-var">w</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><a href="#local-6989586621679067309"><span class="hs-identifier hs-var">w</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">velU</span></span><span>
 </span><span id="line-126"></span><span>
 </span><span id="line-127"></span><span id="velParam"><span class="annot"><span class="annottext">velParam :: String -&gt; Symbol -&gt; UnitalChunk
-</span><a href="Drasil.GamePhysics.Unitals.html#velParam"><span class="hs-identifier hs-var hs-var">velParam</span></a></span></span><span> </span><span id="local-6989586621679067292"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067292"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679067293"><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067293"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#velParam"><span class="hs-identifier hs-var hs-var">velParam</span></a></span></span><span> </span><span id="local-6989586621679067310"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679067310"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679067311"><span class="annot"><span class="annottext">Symbol
+</span><a href="#local-6989586621679067311"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall c u.
 (Concept c, IsUnit u) =&gt;
 c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
@@ -707,7 +707,7 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-string">&quot;velocity&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067292"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
+</span><a href="#local-6989586621679067310"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
 </span><span class="hs-identifier hs-var">compoundPhrase'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.velocity</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Getting NP UnitalChunk NP -&gt; NP
 forall s a. s -&gt; Getting a s a -&gt; a
@@ -722,7 +722,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-string">&quot;at point &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679067292"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><a href="#local-6989586621679067310"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.velocity</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
@@ -730,7 +730,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.velocity</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679067293"><span class="hs-identifier hs-var">w</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><a href="#local-6989586621679067311"><span class="hs-identifier hs-var">w</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">velU</span></span><span>
 </span><span id="line-130"></span><span>

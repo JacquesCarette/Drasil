@@ -40,9 +40,9 @@ cartesian   = dccWDS "cartesian" (pn' "Cartesian coordinate system") $ S "a coor
                                                                   fromSource cartesianWiki
 centre       = dcc "centre"       (cn' "centre")                  "the middle point of an object"
 change       = dcc "change"       (cn' "change")                  "Difference between relative start and end states of an object"
-component    = dcc "component"    (nounPhrase "component" "components") ("The scalar quantity defining the contribution " ++
+component    = dcc "mathComponent"    (nounPhrase "component" "components") ("The scalar quantity defining the contribution " ++
                                                                   "of a vector in one of the coordinate directions")
-constraint   = dcc "constraint"   (cn' "constraint")              "A condition that the solution must satisfy"
+constraint   = dcc "mathConstraint" (cn' "constraint")              "A condition that the solution must satisfy"
 diameter     = dcc "diameter"     (cn' "diameter")                ("Any straight line segment that passes through the center of the circle" ++
                                                                   "and whose endpoints lie on the circle.")
 direction    = dcc "direction"    (cn' "direction")               "'which way' a vector points, extending from the tail to the tip"

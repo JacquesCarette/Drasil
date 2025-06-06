@@ -33,7 +33,7 @@ import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamenta
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab, 
-  ptOfExplsn, con, con', glass)
+  ptOfExplsn, con', glass)
 import Drasil.GlassBR.DataDefs (configFp)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.Figures
@@ -47,7 +47,8 @@ import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
-  sD, termsWithAccDefn, termsWithDefsOnly, terms, dataConstraints)
+  sD, termsWithAccDefn, termsWithDefsOnly, terms, dataConstraints, lDurFac,
+  isSafeProb, dimlessLoad, isSafeLoad, tolLoad, unitless, riskFun, sdfTol)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -133,13 +134,15 @@ background = foldlSent_ [phrase explosion, S "in downtown areas are dangerous fr
   +:+ S "effect of falling glass"]
 
 symbMap :: ChunkDB
-symbMap = cdb thisSymbols (nw progName : map nw thisSymbols
-  ++ map nw con' ++ map nw terms ++ map nw doccon ++ map nw doccon' ++ map nw educon
-  ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon'
-  ++ map nw softwarecon ++ [nw lateralLoad, nw materialProprty]
-   ++ [nw distance, nw algorithm] ++
-  map nw fundamentals ++ map nw derived ++ map nw physicalcon)
-  (map cw symb ++ terms ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
+symbMap = cdb (unitless ++ thisSymbols) (nw progName : map nw thisSymbols
+  ++ map nw con' ++ map nw [riskFun, isSafeProb, isSafeLoad,
+  sdfTol, dimlessLoad, tolLoad, lDurFac] ++ map nw terms ++ map nw doccon
+  ++ map nw doccon' ++ map nw educon ++ [nw sciCompS] ++ map nw compcon
+  ++ map nw mathcon ++ map nw mathcon' ++ map nw softwarecon
+  ++ [nw lateralLoad, nw materialProprty] ++ [nw distance, nw algorithm]
+  ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon)
+  (map cw symb ++ terms ++ Doc.srsDomains)
+  (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) GB.dataDefs iMods [] tMods concIns
   labCon allRefs citations
 
@@ -154,7 +157,7 @@ labCon :: [LabelledContent]
 labCon = funcReqsTables ++ [demandVsSDFig, dimlessloadVsARFig]
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols)
+usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms)
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 stdFields :: Fields
@@ -199,14 +202,14 @@ priorityNFReqs = [correctness, verifiability, understandability,
 {--INTRODUCTION--}
 
 startIntro :: (NamedIdea n) => n -> Sentence -> CI -> Sentence
-startIntro prgm _ progName = foldlSent [
+startIntro prgm _ sysName = foldlSent [
   atStart' explosion, S "in downtown areas are dangerous" `S.fromThe` phrase blast +:+ 
   S "itself" `S.and_` S "also potentially from the secondary" +:+ 
   S "effect of falling glass. Therefore" `sC` phrase prgm `S.is` S "needed to" +:+. 
   purp, S "For example" `sC` S "we might wish to know whether a pane of",
   phrase glass, S "fails from a gas main", phrase explosion `S.or_` 
   S "from a small fertilizer truck bomb." +:+
-  S "The document describes the program called", short progName,
+  S "The document describes the program called", short sysName,
   S ", which is based" `S.onThe` S "original" `sC` S "manually created version of" +:+
   namedRef externalLinkRef (S "GlassBR")]
 

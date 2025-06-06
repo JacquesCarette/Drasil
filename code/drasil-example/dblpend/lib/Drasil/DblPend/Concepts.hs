@@ -1,7 +1,6 @@
 module Drasil.DblPend.Concepts where
 
 import Language.Drasil
-import Data.Drasil.Domains (physics)
 import Data.Drasil.Concepts.Documentation (first, second_, object)
 import Data.Drasil.Theories.Physics (newtonSLRQD)
 import Language.Drasil.Chunk.Concept.NamedCombinators (compoundNC)

@@ -100,20 +100,20 @@ slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, xMaxEtrSlip,
 slopeDist = uq (constrained' (uc' "x_slope,i"
   (nounPhraseSent $ plural xCoord `S.of_` S "the slope")
   (plural xCoord `S.of_` S "points on the soil slope")
-  (sub (vec lX) lSlope) (Vect Real) metre) [] (exactDbl 0)) defaultUncrt
+  (sub (vec lX) lSlope) (vectNDS "n" Real) metre) [] (exactDbl 0)) defaultUncrt
 
 slopeHght = uq (constrained' (uc' "y_slope,i"
   (nounPhraseSent $ plural yCoord `S.of_` S "the slope")
   (plural yCoord `S.of_` S "points on the soil slope")
-  (sub (vec lY) lSlope) (Vect Real) metre) [] (exactDbl 0)) defaultUncrt
+  (sub (vec lY) lSlope) (vectNDS "n" Real) metre) [] (exactDbl 0)) defaultUncrt
 
 waterDist = uqc "x_wt,i" (nounPhraseSent $ plural xCoord `S.of_` S "the water table")
   "x-positions of the water table"
-  (sub (vec lX) lWatTab) metre (Vect Real) [] (exactDbl 0) defaultUncrt
+  (sub (vec lX) lWatTab) metre (vectNDS "n" Real) [] (exactDbl 0) defaultUncrt
 
 waterHght = uqc "y_wt,i" (nounPhraseSent $ plural yCoord `S.of_` S "the water table")
   "heights of the water table"
-  (sub (vec lY) lWatTab) metre (Vect Real) [] (exactDbl 0) defaultUncrt
+  (sub (vec lY) lWatTab) metre (vectNDS "n" Real) [] (exactDbl 0) defaultUncrt
 
 xMaxExtSlip = uq (constrained' (uc' "x_slip^maxExt"
   (nounPhraseSent $ S "maximum exit" +:+ phrase xCoord)
@@ -225,15 +225,15 @@ accel, genericMass, genericF, genericA, genericM, genericV, genericW,
 intNormForce = uc' "G_i" (cn "interslice normal forces")
   (S "the forces per meter" `S.inThe` phrase zDir +:+
    S "exerted between each pair" `S.of_` S "adjacent slices")
-  (vec cG) (Vect Real) forcePerMeterU
+  (vec cG) (vectNDS "n" Real) forcePerMeterU
 
 slipHght = uc' "y_slip,i" (nounPhraseSent $ plural yCoord `S.ofThe` S "slip surface")
   (S "heights of the slip surface")
-  (sub (vec lY) lSlip) (Vect Real) metre
+  (sub (vec lY) lSlip) (vectNDS "n" Real) metre
 
 slipDist = uc' "x_slip,i" (nounPhraseSent $ plural xCoord `S.ofThe` S "slip surface")
   (plural xCoord `S.of_` S "points on the slip surface")
-  (sub (vec lX) lSlip) (Vect Real) metre
+  (sub (vec lX) lSlip) (vectNDS "n" Real) metre
 
 xi = uc' "x_i" (nounPhraseSent $ phrase xCoord)
   (phraseNP (NP.the (xCoord `inThe` cartesian))) lX Real metre
@@ -279,79 +279,79 @@ shrResI = uc' "shrRes" (cn "resistive shear forces")
 shearFNoIntsl = uc' "T_i" (cn ("mobilized shear forces " ++ wiif)) 
   (pluralNP (the mobilizedShear) +:+ S "per meter" +:+ S wiif `S.inThe`
    phrase zDir `S.for` S "each slice")
-  (vec cT) (Vect Real) forcePerMeterU
+  (vec cT) (vectNDS "n" Real) forcePerMeterU
 
 shearRNoIntsl = uc' "R_i" (cn ("resistive shear forces " ++ wiif))
   (pluralNP (the resistiveShear) +:+ S "per meter" +:+ S wiif `S.inThe`
    phrase zDir `S.for` S "each slice")
-  (vec cR) (Vect Real) forcePerMeterU
+  (vec cR) (vectNDS "n" Real) forcePerMeterU
 
 slcWght = uc' "W_i" (cn "weights")
   (S "the downward force per meter" `S.inThe` phrase zDir +:+
    S "on each slice caused by" +:+ phrase gravity)
-  (vec cW) (Vect Real) forcePerMeterU
+  (vec cW) (vectNDS "n" Real) forcePerMeterU
 
 watrForce = uc' "H_i" (cn "interslice normal water forces") 
   (S "the normal water forces per meter" `S.inThe` phrase zDir +:+
    S "exerted" `S.inThe` phrase xDir +:+ S "between each pair" `S.of_` S "adjacent slices")
-  (vec cH) (Vect Real) forcePerMeterU
+  (vec cH) (vectNDS "n" Real) forcePerMeterU
 
 intShrForce = uc' "X_i" (cn "interslice shear forces") 
   (S "the shear forces per meter" `S.inThe` phrase zDir +:+ S "exerted between adjacent slices")
-  (vec cX) (Vect Real)forcePerMeterU
+  (vec cX) (vectNDS "n" Real)forcePerMeterU
 
 baseHydroForce = uc' "U_b,i" (cn "base hydrostatic forces")
   (S "the forces per meter" `S.inThe` phrase zDir +:+ S "from water pressure within each slice")
-  (sub (vec cU) lBase) (Vect Real) forcePerMeterU
+  (sub (vec cU) lBase) (vectNDS "n" Real) forcePerMeterU
 
 surfHydroForce = uc' "U_t,i" (cn "surface hydrostatic forces")
   (S "the forces per meter" `S.inThe` phrase zDir +:+ S "from water pressure acting" +:+
    S "into each slice from standing water" `S.onThe` S "slope surface")
-  (sub (vec cU) lSurface) (Vect Real) forcePerMeterU
+  (sub (vec cU) lSurface) (vectNDS "n" Real) forcePerMeterU
 
 totNrmForce = uc' "N_i" (cn "normal forces")
   (S "the total reactive forces per meter" `S.inThe` phrase zDir +:+
    S "for each slice" `S.ofA` S "soil surface subject to a body resting on it")
-  (vec cN) (Vect Real) forcePerMeterU
+  (vec cN) (vectNDS "n" Real) forcePerMeterU
 
 nrmFSubWat = uc' "N'_i" (cn "effective normal forces")
   (S "the forces per meter" `S.inThe` phrase zDir `S.for` S "each slice" `S.ofA` S "soil surface" `sC`
    S "subtracting pore water reactive force from total reactive force") 
-  (vec (prime $ variable "N")) (Vect Real) forcePerMeterU
+  (vec (prime $ variable "N")) (vectNDS "n" Real) forcePerMeterU
 
 surfLoad = uc' "Q_i" (cn "external forces") 
   (S "the forces per meter" `S.inThe` phrase zDir +:+
    S "acting into the surface from the midpoint" `S.of_` S "each slice")
-  (vec cQ) (Vect Real) forcePerMeterU
+  (vec cQ) (vectNDS "n" Real) forcePerMeterU
 
 baseAngle = uc' "alpha_i" (cn "base angles")
   (S "the angles between the base" `S.of_` S "each slice and the horizontal")
-  (vec lAlpha) (Vect Real) degree
+  (vec lAlpha) (vectNDS "n" Real) degree
 
 surfAngle = uc' "beta_i" (cn "surface angles")
   (S "the angles between the surface" `S.of_` S "each slice and the horizontal")
-  (vec lBeta) (Vect Real) degree
+  (vec lBeta) (vectNDS "n" Real) degree
 
 impLoadAngle = uc' "omega_i" (cn "imposed load angles")
   (S "the angles between the external force acting into the surface" `S.of_` S "each slice and the vertical")
-  (vec lOmega) (Vect Real) degree
+  (vec lOmega) (vectNDS "n" Real) degree
 
 baseWthX = uc' "b_i" (cn "base width of slices")
   (S "the width" `S.of_` S "each slice" `S.inThe` phrase xDir)
-  (vec lB) (Vect Real) metre
+  (vec lB) (vectNDS "n" Real) metre
 
 baseLngth = uc' "l_b,i" (cn "total base lengths of slices") 
   (S "the lengths of each slice in the direction parallel to the slope of the base")
-  (sub (vec cL) lB) (Vect Real) metre
+  (sub (vec cL) lB) (vectNDS "n" Real) metre
 
 surfLngth = uc' "l_s,i" (cn "surface lengths of slices")
   (S "the lengths" `S.of_` S "each slice" `S.inThe` S "direction parallel" `S.toThe` S "slope" `S.ofThe` S "surface")
-  (sub (vec cL) lS) (Vect Real) metre
+  (sub (vec cL) lS) (vectNDS "n" Real) metre
 
 midpntHght = uc' "h_i" (nounPhraseSent $ phrase yDir +:+ S "heights" `S.of_` S "slices")
   (S "the heights" `S.inThe` phrase yDir +:+ S "from the base" `S.of_` S "each slice" `S.toThe`
    S "slope surface" `sC` S "at the" +:+ phrase xDir +:+ S "midpoint" `S.ofThe` S "slice")
-  (vec lH) (Vect Real) metre
+  (vec lH) (vectNDS "n" Real) metre
 
 porePressure = uc' "u" (cn "pore pressure")
   (S "the pressure that comes from water within the soil") lU Real pascal
@@ -370,12 +370,12 @@ sliceHghtW = uc' "h_z,w,i" (cn "heights of the water table")
 nrmShearNum = uc' "C_num,i" (cn "proportionality constant numerator")
   (S $ "values for each slice that sum together to form the numerator of the " ++
   "interslice normal to shear force proportionality constant")
-  (sub (vec cC) lNum) (Vect Real) newton
+  (sub (vec cC) lNum) (vectNDS "n" Real) newton
   
 nrmShearDen = uc' "C_den,i" (cn "proportionality constant denominator")
   (S $ "values for each slice that sum together to form the denominator of the " ++
   "interslice normal to shear force proportionality constant")
-  (sub (vec cC) lDen) (Vect Real) newton
+  (sub (vec cC) lDen) (vectNDS "n" Real) newton
 
 fx = uc' "fx" (nounPhraseSent $ phrase xCoord `S.ofThe` S "force")
   (S "the force acting" `S.inThe` phrase xDir) (subX cF) Real newton
@@ -399,11 +399,11 @@ watForceSum = uc' "F_x^H" (cn "sums of the interslice normal water forces")
 
 sliceHghtRight = uc' "h^R" (cn "heights of the right side of slices") 
   (S "the heights" `S.ofThe` S "right side" `S.of_` S "each slice" `sC` S "assuming slice surfaces have negative slope")
-  (sup (vec lH) lRight) (Vect Real) metre
+  (sup (vec lH) lRight) (vectNDS "n" Real) metre
 
 sliceHghtLeft = uc' "h^L" (cn "heights of the left side of slices") 
   (S "the heights" `S.ofThe` S "left side" `S.of_` S "each slice" `sC` S "assuming slice surfaces have negative slope")
-  (sup (vec lH) lLeft) (Vect Real) metre
+  (sup (vec lH) lLeft) (vectNDS "n" Real) metre
 
 totNormStress = uc' "sigma" (cn' "total normal stress")
   (S "the total force per area acting" `S.onThe` S "soil mass") lSigma Real pascal
@@ -477,13 +477,13 @@ mobShrC = dqd' (dcc "Psi"
   (nounPhraseSP "second function for incorporating interslice forces into shear force")
   ("the function for converting mobile shear " ++ wiif ++
    ", to a calculation considering the interslice forces"))
-  (const (vec cPsi)) (Vect Real) Nothing
+  (const (vec cPsi)) (vectNDS "n" Real) Nothing
 
 shrResC = dqd' (dcc "Phi"
   (nounPhraseSP "first function for incorporating interslice forces into shear force")
   ("the function for converting resistive shear " ++ wiif ++
    ", to a calculation considering the interslice forces"))
-  (const (vec cPhi)) (Vect Real) Nothing
+  (const (vec cPhi)) (vectNDS "n" Real) Nothing
 
 --------------------
 -- Index Function --

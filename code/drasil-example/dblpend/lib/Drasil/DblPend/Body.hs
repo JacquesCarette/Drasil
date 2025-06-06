@@ -145,7 +145,7 @@ symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ od
 ideaDicts :: [IdeaDict]
 ideaDicts = 
   -- Actual IdeaDicts
-  inValue : map nw doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
+  inValue : doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
   -- CIs
   nw progName : map nw acronyms ++ map nw doccon' ++ map nw mathcon' ++ map nw physicCon' ++
   -- ConceptChunks

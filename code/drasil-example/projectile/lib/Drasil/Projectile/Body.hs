@@ -172,22 +172,22 @@ ideaDicts =
   nw progName : nw inValue : map nw doccon' ++ map nw physicCon' ++
   map nw acronyms ++
   -- ConceptChunks
-  nw mass : nw errMsg : nw program : nw algorithm : map nw physicCon ++ map nw mathcon ++
-  -- UnitDefns
-  map nw [metre, radian, second] ++
+  map nw [mass, errMsg, program, algorithm] ++ map nw physicCon ++ map nw mathcon ++
   -- QuantityDicts
   map nw symbols ++
   -- UnitalChunks
-  map nw physicscon
+  map nw physicscon ++
+  -- UnitDefns
+  map nw [metre, radian, second]
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
-tableOfAbbrvsIdeaDicts = 
+tableOfAbbrvsIdeaDicts =
+  -- CIs
+  map nw acronyms ++
   -- DefinedQuantityDicts
   nw pi_ :
   -- QuantityDicts
-  map nw symbols ++
-  -- CIs
-  map nw acronyms
+  map nw symbols
 
 symbMap :: ChunkDB
 symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols) ideaDicts

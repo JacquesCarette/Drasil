@@ -131,17 +131,17 @@ ideaDicts =
   inValue : doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
   -- CIs
   nw progName : map nw doccon' ++ map nw mathcon' ++ map nw physicCon' ++
-    map nw acronyms ++
+  map nw acronyms ++
   -- ConceptChunks
-  nw mass : nw len : nw errMsg : nw program : nw algorithm : map nw physicCon ++
-    map nw physicalcon ++ map nw mathcon ++
+  map nw [mass, len, errMsg, program, algorithm] ++ map nw physicCon ++
+  map nw physicalcon ++ map nw mathcon ++
   -- QuantityDicts
   map nw symbols ++
   -- TheoryModels
   nw newtonSLR : 
   -- UnitDefns
-  map nw [kilogram, newton, degree, radian, metre, hertz] ++
-    map nw fundamentals ++
+  map nw [newton, degree, radian, hertz] ++
+  map nw fundamentals ++
   -- DefinedQuantityDict
   nw unitVect : nw unitVectj :
   -- UnitalChunks

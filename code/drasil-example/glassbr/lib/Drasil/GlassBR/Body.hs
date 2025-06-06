@@ -143,17 +143,17 @@ ideaDicts =
   map nw [distance, algorithm] ++ map nw terms ++ map nw mathcon ++ 
   map nw softwarecon ++ map nw physicalcon ++
   -- QuantityDicts
-  map nw thisTerms ++ map nw [riskFun, isSafeProb, isSafeLoad, sdfTol,
-    dimlessLoad, tolLoad, lDurFac] ++ map nw unitarySymbols ++
+  map nw thisTerms ++ map nw unitarySymbols ++
+  map nw [riskFun, isSafeProb, isSafeLoad, sdfTol, dimlessLoad, tolLoad, lDurFac] ++
   -- UnitDefns
   map nw fundamentals ++ map nw derived
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =
-  -- QuantityDicts
-  map nw thisSymbols ++
   -- CIs
-  map nw acronyms
+  map nw acronyms ++
+  -- QuantityDicts
+  map nw thisSymbols
 
 symbMap :: ChunkDB
 symbMap = cdb thisSymbols ideaDicts

@@ -49,7 +49,7 @@ import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
 import Drasil.SWHS.MetaConcepts (progName, progName')
 import Drasil.SWHS.References (citations, uriReferences)
-import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements, 
+import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements,
   verifyEnergyOutput)
 import Drasil.SWHS.TMods (tMods)
 import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
@@ -72,14 +72,14 @@ resourcePath :: String
 resourcePath = "../../../../datafiles/swhs/"
 
 units :: [UnitDefn]
-units = map unitWrapper [metre, kilogram, second] ++ 
+units = map unitWrapper [metre, kilogram, second] ++
   map unitWrapper [centigrade, joule, watt]
 --Will there be a table of contents?
 
 si :: System
 si = SI {
   _sys         = progName',
-  _kind        = Doc.srs, 
+  _kind        = Doc.srs,
   _authors     = [thulasi, brooks, spencerSmith],
   _purpose     = [purp],
   _background  = [],
@@ -105,25 +105,50 @@ motivation :: Sentence
 motivation = foldlSent_ [S "the demand" `S.is` S "high for renewable", pluralNP (enerSrc `and_PS`
   energy), S "storage technology"]
 
+ideaDicts :: [IdeaDict]
+ideaDicts =
+  -- Actual IdeaDicts
+  materialProprty : prodtcon ++ doccon ++ educon ++ compcon ++
+  -- CIs
+  map nw [progName', progName] ++ map nw acronymsFull ++ map nw doccon' ++
+  map nw mathcon' ++ 
+  -- ConceptChunks
+  nw algorithm : map nw thermocon ++ map nw softwarecon ++ map nw physicCon ++
+  map nw mathcon ++ map nw physicalcon ++ map nw con ++
+  -- DefinedQuantityDicts
+  map nw symbols ++
+  -- UnitalChunks
+  map nw physicscon ++ map nw unitalChuncks ++
+  -- UncertainChunks
+  map nw [absTol, relTol] ++
+  -- InstanceModels
+  nw heatEInPCM :
+  -- ConstQDefs
+  map nw specParamValList ++
+  -- UnitDefns
+  map nw units ++ map nw fundamentals ++ map nw derived ++ map nw [m_2, m_3]
+
 symbMap :: ChunkDB
 symbMap = cdb (qw (heatEInPCM ^. output) : symbolsAll) -- heatEInPCM ?
-  (nw heatEInPCM : map nw symbols ++ nw progName : map nw acronymsFull
-  ++ map nw thermocon ++ map nw units ++ map nw [m_2, m_3] ++ map nw [absTol, relTol]
-  ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
-  ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
-  ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
-  ++ [nw progName', nw algorithm] ++ map nw compcon ++ [nw materialProprty])
+  ideaDicts
   (cw heatEInPCM : map cw symbols ++ srsDomains ++ map cw specParamValList) -- FIXME: heatEInPCM?
   (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs tMods concIns [] allRefs citations
+
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts =
+  -- CIs
+  nw progName : map nw acronymsFull ++
+  -- DefinedQuantityDicts
+  -- DefinedQuantityDicts
+  map nw symbols
+
+usedDB :: ChunkDB
+usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] []
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = externalLinkRef : uriReferences
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ nw progName
- : map nw acronymsFull)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] []
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -144,7 +169,7 @@ mkSRS = [TableOfContents,
     , SystCons [] []
     ],
   SSDSec $
-    SSDProg 
+    SSDProg
       [ SSDProblem $ PDProg purp []
         [ TermsAndDefs Nothing terms
         , PhySysDesc progName physSystParts figTank []
@@ -220,7 +245,7 @@ introEnd progSent pro = foldlSent_ [(progSent !.), S "The developed",
   -- SSP has same style sentence here
 
 externalLinkRef :: Reference
-externalLinkRef = makeURI "SWHS_SRSLink" 
+externalLinkRef = makeURI "SWHS_SRSLink"
   "https://github.com/smiths/swhs/tree/master"
   (shortname' $ S "SWHS_SRSLink")
 
@@ -268,11 +293,11 @@ charReaderDE = plural de +:+ S "from level 1 and 2" +:+ phrase calculus
 -- 2.4 : Organization of Document --
 ------------------------------------
 orgDocEnd :: Sentence
-orgDocEnd = foldlSent_ [atStartNP' (the inModel), 
-  S "to be solved" `S.are` S "referred to as" +:+. 
+orgDocEnd = foldlSent_ [atStartNP' (the inModel),
+  S "to be solved" `S.are` S "referred to as" +:+.
   foldlList Comma List (map refS iMods), S "The", plural inModel,
-  S "provide the", plural ode, sParen (short ode :+: S "s") `S.and_` 
-  S "algebraic", plural equation, S "that", phrase model, 
+  S "provide the", plural ode, sParen (short ode :+: S "s") `S.and_`
+  S "algebraic", plural equation, S "that", phrase model,
   (phraseNP (the progName') !.), short progName, S "solves these", short ode :+: S "s"]
 
 -- This paragraph is mostly general (besides program name and number of IMs),
@@ -308,7 +333,7 @@ sysCntxtDesc pro = foldlSP [refS sysCntxtFig, S "shows the" +:+.
   S "flow between the", phraseNP (system `andIts` environment)]
 
 sysCntxtFig :: LabelledContent
-sysCntxtFig = llcc (makeFigRef "SysCon") 
+sysCntxtFig = llcc (makeFigRef "SysCon")
   $ fig (titleize sysCont)
   $ resourcePath ++ "SystemContextFigure.png"
 
@@ -493,7 +518,7 @@ dataContFooter = foldlSent_ $ map foldlSent [
 
   [sParen (S "**"), atStartNP (the constraint), S "on the maximum", phrase time,
   S "at the end" `S.ofThe` S "simulation" `S.is` S "the total number of seconds" `S.in_` S "one day"]
-  
+
   ]
 ------------------------------
 -- Data Constraint: Table 1 --
@@ -558,11 +583,11 @@ propCorSolDeriv3 epcm en pcmat wa =
 propCorSolDeriv4 :: Contents
 propCorSolDeriv4 = unlbldExpr
   (sy pcmE $= defint (eqSymb time) (exactDbl 0) (sy time)
-  (sy pcmHTC $* sy pcmSA $* (apply1 tempW time $- 
+  (sy pcmHTC $* sy pcmSA $* (apply1 tempW time $-
   apply1 tempPCM time)))
 
 propCorSolDeriv5 :: ConceptChunk -> CI -> CI -> Contents
-propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)" 
+propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)"
   `S.and_` S "(FIXME: Equation 8) can be used as", Quote (S "sanity") +:+
   S "checks to gain confidence in any", phrase solution,
   S "computed by" +:+. short pro, S "The relative",

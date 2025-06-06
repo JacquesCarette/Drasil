@@ -42,10 +42,11 @@ import Drasil.SSP.Changes (likelyChgs, unlikelyChgs)
 import qualified Drasil.SSP.DataDefs as SSP (dataDefs)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, defs, defs', effFandS, factor, fsConcept,
   intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf, soil,
-  soilLyr, soilMechanics, soilPrpty, ssa, ssp, stabAnalysis, waterTable)
+  soilLyr, soilMechanics, soilPrpty, ssa, stabAnalysis, waterTable)
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (goals)
 import Drasil.SSP.IMods (instModIntro)
+import Drasil.SSP.MetaConcepts (progName)
 import qualified Drasil.SSP.IMods as SSP (iMods)
 import Drasil.SSP.References (citations, morgenstern1965)
 import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs)
@@ -69,7 +70,7 @@ resourcePath = "../../../../datafiles/ssp/"
 
 si :: System
 si = SI {
-  _sys         = ssp, 
+  _sys         = progName, 
   _kind        = Doc.srs, 
   _authors     = [henryFrankis, brooks],
   _purpose     = [purp],
@@ -93,7 +94,7 @@ mkSRS = [TableOfContents,
   RefSec $ RefProg intro
   [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA],
   IntroSec $ IntroProg startIntro kSent
-    [ IPurpose $ purpDoc ssp Verbose
+    [ IPurpose $ purpDoc progName Verbose
     , IScope scope
     , IChar []
         [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,
@@ -110,7 +111,7 @@ mkSRS = [TableOfContents,
     SSDProg
       [ SSDProblem $ PDProg purp []
         [ TermsAndDefs Nothing terms
-        , PhySysDesc ssp physSystParts figPhysSyst physSystContents 
+        , PhySysDesc progName physSystParts figPhysSyst physSystContents 
         , Goals goalsInputs]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
@@ -129,7 +130,7 @@ mkSRS = [TableOfContents,
   LCsSec,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
-  AuxConstntSec $ AuxConsProg ssp [],
+  AuxConstntSec $ AuxConsProg progName [],
   Bibliography]
 
 purp :: Sentence
@@ -158,7 +159,7 @@ symbMap = cdb (map (^. output) SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw physicsTMs
   ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
-  ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw units)
+  ++ map nw compcon ++ [nw algorithm, nw progName] ++ map nw units)
   (map cw SSP.iMods ++ map cw symbols ++ srsDomains) units SSP.dataDefs SSP.iMods
   generalDefinitions tMods concIns labCon allRefs citations
 
@@ -167,7 +168,8 @@ allRefs :: [Reference]
 allRefs = [externalLinkRef, weightSrc, hsPressureSrc]
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
+usedDB = cdb ([] :: [QuantityDict]) (map nw symbols
+ ++ nw progName : map nw acronyms)
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- SECTION 1 --
@@ -204,7 +206,7 @@ startIntro = foldlSent [atStartNP (a_ slope), S "of geological",
   S "most likely to experience", phrase slip `S.and_`
   S "an index" `S.of_` S "its relative stability known as the" +:+. phrase fs]
 
-kSent = keySent ssa ssp
+kSent = keySent ssa progName
 
 keySent :: (Idea a, Idea b) => a -> b -> Sentence
 keySent probType pname = foldlSent_ [(phraseNP (NP.a_ (combineNINI probType problem)) !.),
@@ -225,7 +227,7 @@ externalLinkRef = makeURI "SSP"
 -- SECTION 2.2 --
 -- Scope of Requirements automatically generated in IScope
 scope :: Sentence
-scope = foldlSent_ [phraseNP (stabAnalysis `ofA` twoD), sParen (getAcc twoD),
+scope = foldlSent_ [phraseNP (stabAnalysis `ofA` twoD), sParen (short twoD),
   phraseNP (combineNINI soil mass) `sC` S "composed of a single homogeneous", phrase layer,
   S "with" +:+. pluralNP (combineNINI constant mtrlPrpty), atStartNP (NP.the (combineNINI soil mass))
   `S.is` S "assumed to extend infinitely in the third" +:+.
@@ -249,7 +251,7 @@ sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
   [refS sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+. phrase software, S "A rectangle represents the",
-   phrase softwareSys, S "itself" +:+. sParen (short ssp),
+   phrase softwareSys, S "itself" +:+. sParen (short progName),
    S "Arrows are used to show the data flow between the" +:+ phraseNP (system
    `andIts` environment)]
    
@@ -265,7 +267,7 @@ sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide" +:+ phraseNP (the input_) +:+ S "data related to" +:+
   phraseNP (the soilLyr) :+: S "(s) and water table (if applicable)" `sC`
   S "ensuring conformation to" +:+ phrase input_ +:+ S "data format" +:+
-  S "required by" +:+ short ssp,
+  S "required by" +:+ short progName,
   S "Ensure that consistent units are used for" +:+ pluralNP (combineNINI input_ variable),
   S "Ensure required" +:+ namedRef (SRS.assumpt [] []) (pluralNP (combineNINI software assumption)) 
   +:+ S "are" +:+ S "appropriate for the" +:+ phrase problem +:+ S "to which the" +:+ 
@@ -284,7 +286,7 @@ sysCtxSysResp = [S "Detect data" +:+ phrase type_ +:+ S "mismatch, such as" +:+
   
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
-  short ssp +:+ S "Responsibilities"]
+  short progName +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
@@ -295,7 +297,7 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 -- userContraints intro below
 
 userCharIntro :: Contents
-userCharIntro = userChar ssp [S "Calculus", titleize Doc.physics]
+userCharIntro = userChar progName [S "Calculus", titleize Doc.physics]
   [phrase soil, plural mtrlPrpty] [phrase effCohesion, phrase fricAngle, 
   S "unit weight"]
 
@@ -343,7 +345,7 @@ physSystParts = map foldlSent [
 figPhysSyst :: LabelledContent
 figPhysSyst = llcc (makeFigRef "PhysicalSystem") $
   fig (foldlSent_ [S "An example", phraseNP (slope `for` analysis),
-  S "by", short ssp `sC` S "where the dashed line represents the",
+  S "by", short progName `sC` S "where the dashed line represents the",
   phrase waterTable]) (resourcePath ++ "PhysSyst.png")
 
 physSystContents :: [Contents]

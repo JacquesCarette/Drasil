@@ -1,32 +1,32 @@
 digraph allvsr {
-	calcValues -> theory:flightduration;
-	calcValues -> theory:landingposition;
-	calcValues -> theory:offset;
-	calcValues -> theory:message;
-	outputValues -> theory:flightduration;
-	outputValues -> theory:offset;
-	outputValues -> theory:message;
+	instance:calcValues -> theory:flightduration;
+	instance:calcValues -> theory:landingposition;
+	instance:calcValues -> theory:offset;
+	instance:calcValues -> theory:message;
+	instance:outputValues -> theory:flightduration;
+	instance:outputValues -> theory:offset;
+	instance:outputValues -> theory:message;
 
 
-	twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
-	cartSyst	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSyst"];
-	yAxisGravity	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:yAxisGravity"];
-	launchOrigin	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:launchOrigin"];
-	targetXAxis	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:targetXAxis"];
-	posXDirection	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:posXDirection"];
-	constAccel	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:constAccel"];
-	accelXZero	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:accelXZero"];
-	accelYGravity	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:accelYGravity"];
-	neglectDrag	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:neglectDrag"];
-	pointMass	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:pointMass"];
-	freeFlight	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:freeFlight"];
-	neglectCurv	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:neglectCurv"];
-	timeStartZero	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:timeStartZero"];
-	gravAccelValue	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:gravAccelValue"];
+	instance:twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
+	instance:cartSyst	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSyst"];
+	instance:yAxisGravity	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:yAxisGravity"];
+	instance:launchOrigin	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:launchOrigin"];
+	instance:targetXAxis	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:targetXAxis"];
+	instance:posXDirection	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:posXDirection"];
+	instance:constAccel	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:constAccel"];
+	instance:accelXZero	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:accelXZero"];
+	instance:accelYGravity	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:accelYGravity"];
+	instance:neglectDrag	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:neglectDrag"];
+	instance:pointMass	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:pointMass"];
+	instance:freeFlight	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:freeFlight"];
+	instance:neglectCurv	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:neglectCurv"];
+	instance:timeStartZero	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:timeStartZero"];
+	instance:gravAccelValue	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:gravAccelValue"];
 
 	subgraph A {
 	rank="same"
-	{twoDMotion, cartSyst, yAxisGravity, launchOrigin, targetXAxis, posXDirection, constAccel, accelXZero, accelYGravity, neglectDrag, pointMass, freeFlight, neglectCurv, timeStartZero, gravAccelValue}
+	{instance:twoDMotion, instance:cartSyst, instance:yAxisGravity, instance:launchOrigin, instance:targetXAxis, instance:posXDirection, instance:constAccel, instance:accelXZero, instance:accelYGravity, instance:neglectDrag, instance:pointMass, instance:freeFlight, instance:neglectCurv, instance:timeStartZero, instance:gravAccelValue}
 	}
 
 	dataDefn:speed	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:vecMag"];
@@ -66,27 +66,27 @@ digraph allvsr {
 	{theory:flightduration, theory:landingposition, theory:offset, theory:message}
 	}
 
-	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
-	verifyInVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInVals"];
-	calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcValues"];
-	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
-	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
-	verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiable"];
-	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandable"];
-	reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:reusable"];
-	maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainable"];
-	portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
+	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
+	instance:verifyInVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInVals"];
+	instance:calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcValues"];
+	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
+	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
+	instance:verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiable"];
+	instance:understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandable"];
+	instance:reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:reusable"];
+	instance:maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainable"];
+	instance:portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
 
 	subgraph FR {
 	rank="same"
-	{inputValues, verifyInVals, calcValues, outputValues, correct, verifiable, understandable, reusable, maintainable, portable}
+	{instance:inputValues, instance:verifyInVals, instance:calcValues, instance:outputValues, instance:correct, instance:verifiable, instance:understandable, instance:reusable, instance:maintainable, instance:portable}
 	}
 
-	targetHit	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:targetHit"];
+	instance:targetHit	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:targetHit"];
 
 	subgraph GS {
 	rank="same"
-	{targetHit}
+	{instance:targetHit}
 	}
 
 }

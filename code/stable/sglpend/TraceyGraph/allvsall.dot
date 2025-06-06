@@ -9,19 +9,19 @@ digraph allvsall {
 	theory:periodPendGD -> theory:angFrequencyGD;
 	theory:angularDisplacementIM -> theory:newtonSLR;
 	theory:angularDisplacementIM -> theory:angFrequencyGD;
-	calcAngPos -> theory:angularDisplacementIM;
-	outputValues -> theory:angularDisplacementIM;
+	instance:calcAngPos -> theory:angularDisplacementIM;
+	instance:outputValues -> theory:angularDisplacementIM;
 
 
-	twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
-	cartSys	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSys"];
-	cartSysR	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSysR"];
-	yAxisDir	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:yAxisDir"];
-	startOrigin	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:startOrigin"];
+	instance:startOrigin1x	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:startOrigin1x"];
+	instance:twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
+	instance:cartSys	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSys"];
+	instance:cartSysR	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSysR"];
+	instance:yAxisDir	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:yAxisDir"];
 
 	subgraph A {
 	rank="same"
-	{twoDMotion, cartSys, cartSysR, yAxisDir, startOrigin}
+	{instance:startOrigin1x, instance:twoDMotion, instance:cartSys, instance:cartSysR, instance:yAxisDir}
 	}
 
 	dataDefn:ixPos	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionIX"];
@@ -66,23 +66,23 @@ digraph allvsall {
 	{theory:angularDisplacementIM}
 	}
 
-	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
-	verifyInptVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInptVals"];
-	calcAngPos	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcAngPos"];
-	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
-	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
-	portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
+	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
+	instance:verifyInptVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInptVals"];
+	instance:calcAngPos	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcAngPos"];
+	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
+	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
+	instance:portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
 
 	subgraph FR {
 	rank="same"
-	{inputValues, verifyInptVals, calcAngPos, outputValues, correct, portable}
+	{instance:inputValues, instance:verifyInptVals, instance:calcAngPos, instance:outputValues, instance:correct, instance:portable}
 	}
 
-	motionMass	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:motionMass"];
+	instance:motionMass	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:motionMass"];
 
 	subgraph GS {
 	rank="same"
-	{motionMass}
+	{instance:motionMass}
 	}
 
 }

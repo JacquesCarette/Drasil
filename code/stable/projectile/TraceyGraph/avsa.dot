@@ -1,32 +1,32 @@
 digraph avsa {
-	cartSyst -> neglectCurv;
-	targetXAxis -> neglectCurv;
-	constAccel -> accelXZero;
-	constAccel -> accelYGravity;
-	constAccel -> neglectDrag;
-	constAccel -> freeFlight;
-	accelYGravity -> yAxisGravity;
+	instance:cartSyst -> instance:neglectCurv;
+	instance:targetXAxis -> instance:neglectCurv;
+	instance:constAccel -> instance:accelXZero;
+	instance:constAccel -> instance:accelYGravity;
+	instance:constAccel -> instance:neglectDrag;
+	instance:constAccel -> instance:freeFlight;
+	instance:accelYGravity -> instance:yAxisGravity;
 
 
-	twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
-	cartSyst	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSyst"];
-	yAxisGravity	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:yAxisGravity"];
-	launchOrigin	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:launchOrigin"];
-	targetXAxis	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:targetXAxis"];
-	posXDirection	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:posXDirection"];
-	constAccel	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:constAccel"];
-	accelXZero	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:accelXZero"];
-	accelYGravity	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:accelYGravity"];
-	neglectDrag	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:neglectDrag"];
-	pointMass	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:pointMass"];
-	freeFlight	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:freeFlight"];
-	neglectCurv	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:neglectCurv"];
-	timeStartZero	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:timeStartZero"];
-	gravAccelValue	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:gravAccelValue"];
+	instance:twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
+	instance:cartSyst	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSyst"];
+	instance:yAxisGravity	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:yAxisGravity"];
+	instance:launchOrigin	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:launchOrigin"];
+	instance:targetXAxis	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:targetXAxis"];
+	instance:posXDirection	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:posXDirection"];
+	instance:constAccel	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:constAccel"];
+	instance:accelXZero	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:accelXZero"];
+	instance:accelYGravity	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:accelYGravity"];
+	instance:neglectDrag	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:neglectDrag"];
+	instance:pointMass	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:pointMass"];
+	instance:freeFlight	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:freeFlight"];
+	instance:neglectCurv	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:neglectCurv"];
+	instance:timeStartZero	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:timeStartZero"];
+	instance:gravAccelValue	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:gravAccelValue"];
 
 	subgraph A {
 	rank="same"
-	{twoDMotion, cartSyst, yAxisGravity, launchOrigin, targetXAxis, posXDirection, constAccel, accelXZero, accelYGravity, neglectDrag, pointMass, freeFlight, neglectCurv, timeStartZero, gravAccelValue}
+	{instance:twoDMotion, instance:cartSyst, instance:yAxisGravity, instance:launchOrigin, instance:targetXAxis, instance:posXDirection, instance:constAccel, instance:accelXZero, instance:accelYGravity, instance:neglectDrag, instance:pointMass, instance:freeFlight, instance:neglectCurv, instance:timeStartZero, instance:gravAccelValue}
 	}
 
 }

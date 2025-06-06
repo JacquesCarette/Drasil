@@ -99,7 +99,7 @@ fillSecAndLC dd si = si2
     allLC = concatMap findAllLC allSections
     existingLC = map (fst.snd) $ Map.assocs $ chkdb ^. labelledcontentTable
     -- fill in the appropriate chunkdb fields
-    chkdb2 = set labelledcontentTable (idMap $ nub $ existingLC ++ allLC) chkdb
+    chkdb2 = set labelledcontentTable (idMap "LLCMap" $ nub $ existingLC ++ allLC) chkdb
     -- return the filled in system information
     si2 = set systemdb chkdb2 si
 
@@ -140,7 +140,7 @@ fillReferences dd si@SI{_sys = sys} = si2
     -- search the old reference table just in case the user wants to manually add in some references
     refs    = map fst $ Map.elems $ chkdb ^. refTable
     -- set new reference table in the chunk database
-    chkdb2 = set refTable (idMap $ nub $ refsFromSRS
+    chkdb2 = set refTable (idMap "RefMap" $ nub $ refsFromSRS
       ++ map (ref . makeTabRef' . getTraceConfigUID) (traceMatStandard si)
       ++ secRefs -- secRefs can be removed once #946 is complete
       ++ traceyGraphGetRefs (programName sys) ++ map ref cites
@@ -182,7 +182,7 @@ fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_systemdb = db} = genReqs x
   where
     genReqs [] = si
     genReqs (FReqsSub c _:_) = si {_systemdb = set conceptinsTable newCI db} where
-        newCI = idMap $ nub $ c ++ map fst (sortOn snd $ map snd $ Map.toList $ db ^. conceptinsTable)
+        newCI = idMap "ConcInsMap" $ nub $ c ++ map fst (sortOn snd $ map snd $ Map.toList $ db ^. conceptinsTable)
     genReqs (_:xs) = genReqs xs
 fillReqs (_:xs) si = fillReqs xs si
 

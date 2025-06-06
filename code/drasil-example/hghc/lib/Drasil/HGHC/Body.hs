@@ -4,8 +4,9 @@ import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to
 import Drasil.SRSDocument
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Drasil.HGHC.HeatTransfer (fp, hghc, dataDefs, htInputs, htOutputs, 
+import Drasil.HGHC.HeatTransfer (fp, dataDefs, htInputs, htOutputs, 
     nuclearPhys, symbols)
+import Drasil.HGHC.MetaConcepts (progName)
 
 import Data.Drasil.SI_Units (siUnits, fundamentals, derived, degree)
 import Data.Drasil.People (spencerSmith)
@@ -25,7 +26,7 @@ printSetting = piSys fullSI Equational defaultConfiguration
 
 si :: System
 si = SI {
-  _sys         = hghc,
+  _sys         = progName,
   _kind        = Doc.srs,
   _authors     = [spencerSmith],
   _quants      = symbols,
@@ -62,7 +63,7 @@ purp = foldlSent [S "describe", phrase CT.heatTrans, S "coefficients related to 
 
 symbMap :: ChunkDB
 symbMap = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
-  ++ [nw fp, nw nuclearPhys, nw hghc, nw degree] ++ map nw doccon' ++ map nw mathcon)
+  ++ [nw fp, nw nuclearPhys, nw progName, nw degree] ++ map nw doccon' ++ map nw mathcon)
   ([] :: [ConceptChunk])-- FIXME: Fill in concepts
   siUnits dataDefs [] [] [] [] [] [] []
 

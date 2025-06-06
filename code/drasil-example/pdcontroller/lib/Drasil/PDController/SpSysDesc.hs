@@ -31,7 +31,7 @@ goals = [sysProcessVariable]
 
 sysProcessVariable :: ConceptInstance
 sysProcessVariable
-  = cic "processVariable"
+  = cic "calculateProcessVariable"
       (foldlSent
          [S "Calculate the output of the", phrase powerPlant,
             sParen (phrase processVariable),

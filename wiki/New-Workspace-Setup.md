@@ -122,6 +122,8 @@ You can read more on GitHub's [About SSH](https://docs.github.com/en/github/auth
 
 Please follow GitHub's official documentation on [generating a new SSH key](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
 
+If you are using Cygwin, copy the SSH key from the default directory (commonly `C:/Users/YOU/.ssh`), navigate to `C:/cygwin64/home/YOU/.ssh` (you may need to create the .ssh folder) and paste it there. 
+
 ##### Registering your SSH key with GitHub
 
 Please follow GitHub's official documentation on [adding an SSH key to your account](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account) and [testing your connection](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection).
@@ -224,6 +226,8 @@ Please download the binary related to your operating system from the [Official V
 <summary><h4>Windows</h4></summary>
 
 Please run the executable from the above download link and follow the on-screen steps. You will need to just accept their EULA. Please leave all of the options along the installation default.
+
+If you would like to use Cygwin in the integrated terminal of VSCode, navigate to settings `Manage (bottom left corner)>Settings` search for `terminal.integrated.profiles.windows`. Edit the `settings.json` from here, and add the code snippet found at [this stackoverflow answer](https://stackoverflow.com/a/70437350) and follow the instructions to open Cygwin.
 
 </details>
 

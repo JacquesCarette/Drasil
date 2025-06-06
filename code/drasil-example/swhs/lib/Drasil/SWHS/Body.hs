@@ -41,12 +41,13 @@ import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, coil, con, phaseChangeMaterial,
-  phsChgMtrl, progName, sWHT, swhsPCM, tank, tankPCM, transient, water)
+  phsChgMtrl, sWHT, tank, tankPCM, transient, water)
 import qualified Drasil.SWHS.DataDefs as SWHS (dataDefs)
 import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater)
 import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
+import Drasil.SWHS.MetaConcepts (progName, progName')
 import Drasil.SWHS.References (citations, uriReferences)
 import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements, 
   verifyEnergyOutput)
@@ -77,7 +78,7 @@ units = map unitWrapper [metre, kilogram, second] ++
 
 si :: System
 si = SI {
-  _sys         = swhsPCM,
+  _sys         = progName',
   _kind        = Doc.srs, 
   _authors     = [thulasi, brooks, spencerSmith],
   _purpose     = [purp],
@@ -106,12 +107,12 @@ motivation = foldlSent_ [S "the demand" `S.is` S "high for renewable", pluralNP 
 
 symbMap :: ChunkDB
 symbMap = cdb (qw (heatEInPCM ^. output) : symbolsAll) -- heatEInPCM ?
-  (nw heatEInPCM : map nw symbols ++ map nw acronymsFull
+  (nw heatEInPCM : map nw symbols ++ nw progName : map nw acronymsFull
   ++ map nw thermocon ++ map nw units ++ map nw [m_2, m_3] ++ map nw [absTol, relTol]
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
-  ++ [nw swhsPCM, nw algorithm] ++ map nw compcon ++ [nw materialProprty])
+  ++ [nw progName', nw algorithm] ++ map nw compcon ++ [nw materialProprty])
   (cw heatEInPCM : map cw symbols ++ srsDomains ++ map cw specParamValList) -- FIXME: heatEInPCM?
   (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs tMods concIns [] allRefs citations
 
@@ -120,7 +121,8 @@ allRefs :: [Reference]
 allRefs = externalLinkRef : uriReferences
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronymsFull)
+usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ nw progName
+ : map nw acronymsFull)
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] []
 
 mkSRS :: SRSDecl
@@ -130,7 +132,7 @@ mkSRS = [TableOfContents,
     tsymb'' tSymbIntro $ TermExcept [uNormalVect],
     TAandA],
   IntroSec $
-    IntroProg (introStart +:+ introStartSWHS) (introEnd (plural swhsPCM) progName)
+    IntroProg (introStart +:+ introStartSWHS) (introEnd (plural progName') progName)
     [IPurpose $ purpDoc progName Verbose,
      IScope scope,
      IChar [] charsOfReader [],
@@ -204,7 +206,7 @@ introStartSWHS :: Sentence
 introStartSWHS = foldlSent [capSent $ pluralNP $ progName ^. term, S "incorporating",
   phrase phsChgMtrl, sParen (short phsChgMtrl), S "use a renewable",
   phrase enerSrc `S.and_` S "provide a novel way of storing" +:+. phrase energy,
-  atStart swhsPCM, S "improve over the traditional", plural progName,
+  atStart progName', S "improve over the traditional", plural progName,
   S "because of their smaller size. The smaller size" `S.is` S "possible because" `S.ofThe` S "ability" `S.of_`
   short phsChgMtrl, S "to store", phrase thermalEnergy, S "as", phrase latentHeat `sC`
   S "which allows higher", phrase thermalEnergy, S "storage capacity per",
@@ -271,7 +273,7 @@ orgDocEnd = foldlSent_ [atStartNP' (the inModel),
   foldlList Comma List (map refS iMods), S "The", plural inModel,
   S "provide the", plural ode, sParen (short ode :+: S "s") `S.and_` 
   S "algebraic", plural equation, S "that", phrase model, 
-  (phraseNP (the swhsPCM) !.), short progName, S "solves these", short ode :+: S "s"]
+  (phraseNP (the progName') !.), short progName, S "solves these", short ode :+: S "s"]
 
 -- This paragraph is mostly general (besides program name and number of IMs),
 -- but there are some differences between the examples that I'm not sure how to

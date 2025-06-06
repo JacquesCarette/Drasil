@@ -34,10 +34,11 @@ import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
 import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
-import Drasil.GamePhysics.Concepts (gamePhysics, acronyms, threeD, twoD)
+import Drasil.GamePhysics.Concepts (acronyms, threeD, twoD)
 import Drasil.GamePhysics.DataDefs (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iMods, instModIntro)
+import Drasil.GamePhysics.MetaConcepts (progName)
 import Drasil.GamePhysics.References (citations, uriReferences)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, pymunk)
 import Drasil.GamePhysics.TMods (tMods)
@@ -60,8 +61,8 @@ resourcePath = "../../../../datafiles/gamephysics/"
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
-  IntroSec $ IntroProg para1_introduction_intro (short gamePhysics)
-  [IPurpose $ purpDoc gamePhysics Verbose,
+  IntroSec $ IntroProg para1_introduction_intro (short progName)
+  [IPurpose $ purpDoc progName Verbose,
    IScope scope,
    IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
    IOrgSec inModel (SRS.inModel [] []) EmptyS],
@@ -92,13 +93,13 @@ mkSRS = [TableOfContents,
     UCsSec,
     OffShelfSolnsSec $ OffShelfSolnsProg offShelfSols,
     TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
-    AuxConstntSec $ AuxConsProg gamePhysics [],
+    AuxConstntSec $ AuxConsProg progName [],
     Bibliography]
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
 
 si :: System
 si = SI {
-  _sys         = gamePhysics,
+  _sys         = progName,
   _kind        = Doc.srs,
   _authors     = [alex, luthfi, olu],
   _purpose     = [purp],
@@ -122,7 +123,7 @@ si = SI {
 }
 
 purp :: Sentence
-purp = foldlSent_ [S "simulate", getAcc twoD, phrase CP.rigidBody,
+purp = foldlSent_ [S "simulate", short twoD, phrase CP.rigidBody,
   phrase Doc.physics, S "for use in", phrase game, S "development"]
 
 concIns :: [ConceptInstance]
@@ -139,7 +140,7 @@ units :: [UnitDefn] -- FIXME
 units = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [newton, radian]
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll) (nw gamePhysics :
+symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll) (nw progName :
   map nw symbolsAll ++ map nw acronyms ++ map nw prodtcon ++ map nw generalDefns
   ++ map nw iMods ++ map (nw . (^. output)) iMods ++ map nw softwarecon
   ++ map nw doccon ++ map nw doccon' ++ map nw CP.physicCon ++ map nw educon
@@ -196,7 +197,7 @@ externalLinkRef = makeURI "GamePhysicsSRSLink"
 -- 2.2 : Scope of Requirements --
 ---------------------------------
 scope :: Sentence
-scope = foldlSent_ [phraseNP (the physicalSim) `S.of_` getAcc twoD,
+scope = foldlSent_ [phraseNP (the physicalSim) `S.of_` short twoD,
   plural CP.rigidBody, S "acted on by", plural QP.force]
 
 --scope_of_requirements_intro_p2 = EmptyS
@@ -224,7 +225,7 @@ sysCtxIntro = foldlSP
   [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
    S "A circle represents an entity external" `S.toThe` phrase software
    `sC` phraseNP (the user), S "in this case. A rectangle represents the",
-   phrase softwareSys, S "itself", sParen (short gamePhysics) +:+. EmptyS,
+   phrase softwareSys, S "itself", sParen (short progName) +:+. EmptyS,
    S "Arrows are used to show the data flow between the", phraseNP (system
    `andIts` environment)]
 
@@ -263,7 +264,7 @@ sysCtxSysResp = [S "Determine if the" +:+ pluralNP (input_ `and_PS`
 
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
-  short gamePhysics +:+ S "Responsibilities"]
+  short progName +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
@@ -275,7 +276,7 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 
 userCharacteristicsIntro :: Contents
 userCharacteristicsIntro = foldlSP
-  [S "The", phrase endUser `S.of_` short gamePhysics,
+  [S "The", phrase endUser `S.of_` short progName,
   S "should have an understanding of", phrase frstYr, S "programming",
   plural concept `S.and_` S "an understanding of", phrase highSchoolPhysics]
 
@@ -413,14 +414,14 @@ offShelfSolsIntro, offShelfSols2DList,
 offShelfSolsIntro = mkParagraph $ foldlSentCol 
   [S "As mentioned" `S.inThe` namedRef (SRS.probDesc [] []) (phrase problemDescription) `sC`
   S "there already exist free", phrase openSource, phrase game +:+.
-  plural physLib, S "Similar", getAcc twoD, plural physLib, S "are"]
+  plural physLib, S "Similar", short twoD, plural physLib, S "are"]
 
 offShelfSols2DList = enumBulletU [
   namedRef box2D (S "Box2D"),
   namedRef napePhysicsEngine (S"Nape Physics Engine")]
 
 offShelfSolsMid = mkParagraph $ foldl (+:+) EmptyS [S "Free", phrase openSource,
-  getAcc threeD, phrase game, plural physLib, S "include:"]
+  short threeD, phrase game, plural physLib, S "include:"]
 
 offShelfSols3DList = enumBulletU [
   namedRef bullet (S "Bullet"),

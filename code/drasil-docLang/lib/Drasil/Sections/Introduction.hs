@@ -84,7 +84,7 @@ overviewParagraph programDefinition = foldlSP [S "The following", phrase section
 -- | Constructor for Purpose of Document section that each example controls.
 purpDocPara1 :: CI -> Sentence 
 purpDocPara1 proName = foldlSent [S "The primary purpose of this", phrase document, S "is to",
-  S "record the", plural requirement, S "of" +:+. getAcc proName, 
+  S "record the", plural requirement, S "of" +:+. short proName, 
   atStart' goal `sC` plural assumption `sC` plural thModel `sC` 
   plural definition `sC` S "and other", phrase model, S "derivation",
   phrase information, S "are specified" `sC` S "allowing the reader to fully",
@@ -176,6 +176,6 @@ orgIntro bottom bottomSec trailingSentence = [foldlSP [
 orgOfDocIntro :: Sentence
 orgOfDocIntro = foldlSent 
   [atStartNP (the Doc.organization), S "of this", phrase document, 
-  S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
+  S "follows the", phrase template, S "for an", short Doc.srs, S "for", 
   phrase sciCompS, S "proposed by", foldlList Comma List $ 
     map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]

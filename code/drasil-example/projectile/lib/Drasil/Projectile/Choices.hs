@@ -17,9 +17,9 @@ import Drasil.Projectile.Body (fullSI)
 import System.Drasil (System(SI, _sys))
 
 import Data.List (intercalate)
-import System.Directory (createDirectoryIfMissing, getCurrentDirectory, 
-  setCurrentDirectory)
+import System.Directory (getCurrentDirectory, setCurrentDirectory)
 import Data.Char (toLower)
+import Utils.Drasil (createDirIfMissing)
 
 genCodeWithChoices :: [Choices] -> IO ()
 genCodeWithChoices [] = return ()
@@ -27,7 +27,7 @@ genCodeWithChoices (c:cs) = let dir = map toLower $ codedDirName (getSysName ful
                                 getSysName SI{_sys = sysName} = programName sysName
   in do
     workingDir <- getCurrentDirectory
-    createDirectoryIfMissing False dir
+    createDirIfMissing False dir
     setCurrentDirectory dir
     genCode c (codeSpec fullSI c [])
     setCurrentDirectory workingDir

@@ -10,7 +10,7 @@ Power plant: The Power Plant and the Sensor are coupled as a single unit. (RefBy
 
 Decoupled equation: The decoupled form of the PD Controller equation used in this simulation. (RefBy: [DD:ddCtrlVar](./SecDDs.md#DD:ddCtrlVar).)
 
-<div id="setPoint"></div>
+<div id="setPointConstant"></div>
 
 Set-Point: The Set-Point is constant throughout the simulation. (RefBy: [IM:pdEquationIM](./SecIMs.md#IM:pdEquationIM) and [DD:ddProcessError](./SecDDs.md#DD:ddProcessError).)
 

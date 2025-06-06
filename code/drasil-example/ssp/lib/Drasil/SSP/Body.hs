@@ -227,7 +227,7 @@ externalLinkRef = makeURI "SSP"
 -- SECTION 2.2 --
 -- Scope of Requirements automatically generated in IScope
 scope :: Sentence
-scope = foldlSent_ [phraseNP (stabAnalysis `ofA` twoD), sParen (getAcc twoD),
+scope = foldlSent_ [phraseNP (stabAnalysis `ofA` twoD), sParen (short twoD),
   phraseNP (combineNINI soil mass) `sC` S "composed of a single homogeneous", phrase layer,
   S "with" +:+. pluralNP (combineNINI constant mtrlPrpty), atStartNP (NP.the (combineNINI soil mass))
   `S.is` S "assumed to extend infinitely in the third" +:+.

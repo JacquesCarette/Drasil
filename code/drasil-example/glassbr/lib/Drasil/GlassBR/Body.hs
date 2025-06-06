@@ -32,8 +32,8 @@ import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamenta
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
-import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab, 
-  ptOfExplsn, con, con', glass)
+import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab,
+  ptOfExplsn, con', glass, con)
 import Drasil.GlassBR.DataDefs (configFp)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.Figures
@@ -42,12 +42,13 @@ import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
 import Drasil.GlassBR.MetaConcepts (progName)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations)
 import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs)
-import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
+import Drasil.GlassBR.Symbols (symbolsForSymbolTable, thisSymbols, thisTerms)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
-  sD, termsWithAccDefn, termsWithDefsOnly, terms, dataConstraints)
+  sD, termsWithAccDefn, termsWithDefsOnly, terms, dataConstraints, lDurFac,
+  isSafeProb, dimlessLoad, isSafeLoad, tolLoad, riskFun, sdfTol, unitarySymbols)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -67,7 +68,7 @@ si = SI {
   _background  = [background],
   _motivation  = [],
   _scope       = [scope],
-  _quants      = symbolsForTable,
+  _quants      = symbolsForSymbolTable,
   _instModels  = iMods,
   _datadefs    = GB.dataDefs,
   _configFiles = configFp,
@@ -137,12 +138,13 @@ ideaDicts =
   -- IdeaDicts
   [sciCompS, lateralLoad, materialProprty] ++ con' ++ doccon ++ educon ++ compcon ++
   -- CIs
-  nw progName : map nw doccon' ++ map nw mathcon' ++
+  nw progName : map nw doccon' ++ map nw mathcon' ++ map nw con ++
   -- ConceptChunks
   map nw [distance, algorithm] ++ map nw terms ++ map nw mathcon ++ 
   map nw softwarecon ++ map nw physicalcon ++
   -- QuantityDicts
-  map nw thisSymbols ++
+  map nw thisTerms ++ map nw [riskFun, isSafeProb, isSafeLoad, sdfTol,
+    dimlessLoad, tolLoad, lDurFac] ++ map nw unitarySymbols ++
   -- UnitDefns
   map nw fundamentals ++ map nw derived
 
@@ -215,14 +217,14 @@ priorityNFReqs = [correctness, verifiability, understandability,
 {--INTRODUCTION--}
 
 startIntro :: (NamedIdea n) => n -> Sentence -> CI -> Sentence
-startIntro prgm _ progName = foldlSent [
+startIntro prgm _ sysName = foldlSent [
   atStart' explosion, S "in downtown areas are dangerous" `S.fromThe` phrase blast +:+ 
   S "itself" `S.and_` S "also potentially from the secondary" +:+ 
   S "effect of falling glass. Therefore" `sC` phrase prgm `S.is` S "needed to" +:+. 
   purp, S "For example" `sC` S "we might wish to know whether a pane of",
   phrase glass, S "fails from a gas main", phrase explosion `S.or_` 
   S "from a small fertilizer truck bomb." +:+
-  S "The document describes the program called", short progName,
+  S "The document describes the program called", short sysName,
   S ", which is based" `S.onThe` S "original" `sC` S "manually created version of" +:+
   namedRef externalLinkRef (S "GlassBR")]
 

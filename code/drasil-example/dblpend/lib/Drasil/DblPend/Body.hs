@@ -216,7 +216,7 @@ externalLinkRef = makeURI "DblPendSRSLink"
 ---------------------------------
 scope :: Sentence
 scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)), 
-  sParen (getAcc twoD), phrase pendMotion, phrase problem,
+  sParen (short twoD), phrase pendMotion, phrase problem,
                    S "with various initial conditions"]
 
 ----------------------------------------------

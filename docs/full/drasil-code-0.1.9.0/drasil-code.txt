@@ -1656,21 +1656,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | The database of all chunks used in the problem.
 [_systemdb] :: OldCodeSpec -> ChunkDB
-class HasOldCodeSpec c_aySM
-oldCodeSpec :: HasOldCodeSpec c_aySM => Lens' c_aySM OldCodeSpec
-authorsO :: HasOldCodeSpec c_aySM => Lens' c_aySM People
-cMapO :: HasOldCodeSpec c_aySM => Lens' c_aySM ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aySM => Lens' c_aySM [FilePath]
-constMapO :: HasOldCodeSpec c_aySM => Lens' c_aySM ConstantMap
-constantsO :: HasOldCodeSpec c_aySM => Lens' c_aySM [Const]
-derivedInputsO :: HasOldCodeSpec c_aySM => Lens' c_aySM [Derived]
-execOrderO :: HasOldCodeSpec c_aySM => Lens' c_aySM [Def]
-extInputsO :: HasOldCodeSpec c_aySM => Lens' c_aySM [Input]
-inputsO :: HasOldCodeSpec c_aySM => Lens' c_aySM [Input]
-modsO :: HasOldCodeSpec c_aySM => Lens' c_aySM [Mod]
-outputsO :: HasOldCodeSpec c_aySM => Lens' c_aySM [Output]
-pNameO :: HasOldCodeSpec c_aySM => Lens' c_aySM Name
-systemdbO :: HasOldCodeSpec c_aySM => Lens' c_aySM ChunkDB
+class HasOldCodeSpec c_aySL
+oldCodeSpec :: HasOldCodeSpec c_aySL => Lens' c_aySL OldCodeSpec
+authorsO :: HasOldCodeSpec c_aySL => Lens' c_aySL People
+cMapO :: HasOldCodeSpec c_aySL => Lens' c_aySL ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aySL => Lens' c_aySL [FilePath]
+constMapO :: HasOldCodeSpec c_aySL => Lens' c_aySL ConstantMap
+constantsO :: HasOldCodeSpec c_aySL => Lens' c_aySL [Const]
+derivedInputsO :: HasOldCodeSpec c_aySL => Lens' c_aySL [Derived]
+execOrderO :: HasOldCodeSpec c_aySL => Lens' c_aySL [Def]
+extInputsO :: HasOldCodeSpec c_aySL => Lens' c_aySL [Input]
+inputsO :: HasOldCodeSpec c_aySL => Lens' c_aySL [Input]
+modsO :: HasOldCodeSpec c_aySL => Lens' c_aySL [Mod]
+outputsO :: HasOldCodeSpec c_aySL => Lens' c_aySL [Output]
+pNameO :: HasOldCodeSpec c_aySL => Lens' c_aySL Name
+systemdbO :: HasOldCodeSpec c_aySL => Lens' c_aySL ChunkDB
 
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
@@ -2863,21 +2863,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> [Mod] -> CodeSpec
-class HasOldCodeSpec c_aySM
-oldCodeSpec :: HasOldCodeSpec c_aySM => Lens' c_aySM OldCodeSpec
-authorsO :: HasOldCodeSpec c_aySM => Lens' c_aySM People
-cMapO :: HasOldCodeSpec c_aySM => Lens' c_aySM ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_aySM => Lens' c_aySM [FilePath]
-constMapO :: HasOldCodeSpec c_aySM => Lens' c_aySM ConstantMap
-constantsO :: HasOldCodeSpec c_aySM => Lens' c_aySM [Const]
-derivedInputsO :: HasOldCodeSpec c_aySM => Lens' c_aySM [Derived]
-execOrderO :: HasOldCodeSpec c_aySM => Lens' c_aySM [Def]
-extInputsO :: HasOldCodeSpec c_aySM => Lens' c_aySM [Input]
-inputsO :: HasOldCodeSpec c_aySM => Lens' c_aySM [Input]
-modsO :: HasOldCodeSpec c_aySM => Lens' c_aySM [Mod]
-outputsO :: HasOldCodeSpec c_aySM => Lens' c_aySM [Output]
-pNameO :: HasOldCodeSpec c_aySM => Lens' c_aySM Name
-systemdbO :: HasOldCodeSpec c_aySM => Lens' c_aySM ChunkDB
+class HasOldCodeSpec c_aySL
+oldCodeSpec :: HasOldCodeSpec c_aySL => Lens' c_aySL OldCodeSpec
+authorsO :: HasOldCodeSpec c_aySL => Lens' c_aySL People
+cMapO :: HasOldCodeSpec c_aySL => Lens' c_aySL ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_aySL => Lens' c_aySL [FilePath]
+constMapO :: HasOldCodeSpec c_aySL => Lens' c_aySL ConstantMap
+constantsO :: HasOldCodeSpec c_aySL => Lens' c_aySL [Const]
+derivedInputsO :: HasOldCodeSpec c_aySL => Lens' c_aySL [Derived]
+execOrderO :: HasOldCodeSpec c_aySL => Lens' c_aySL [Def]
+extInputsO :: HasOldCodeSpec c_aySL => Lens' c_aySL [Input]
+inputsO :: HasOldCodeSpec c_aySL => Lens' c_aySL [Input]
+modsO :: HasOldCodeSpec c_aySL => Lens' c_aySL [Mod]
+outputsO :: HasOldCodeSpec c_aySL => Lens' c_aySL [Output]
+pNameO :: HasOldCodeSpec c_aySL => Lens' c_aySL Name
+systemdbO :: HasOldCodeSpec c_aySL => Lens' c_aySL ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID

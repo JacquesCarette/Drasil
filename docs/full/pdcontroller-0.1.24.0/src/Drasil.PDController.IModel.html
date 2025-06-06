@@ -129,9 +129,9 @@ forall a. a -&gt; Maybe a
 </span><span id="line-39"></span><span>      </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-var">opProcessVariable</span></a></span><span>
 </span><span id="line-40"></span><span>      </span><span class="annot"><span class="annottext">LHS
-</span><a href="#local-6989586621679064917"><span class="hs-identifier hs-var">lhs</span></a></span><span>
+</span><a href="#local-6989586621679064922"><span class="hs-identifier hs-var">lhs</span></a></span><span>
 </span><span id="line-41"></span><span>      </span><span class="annot"><span class="annottext">Expr
-</span><a href="#local-6989586621679064918"><span class="hs-identifier hs-var">rhs</span></a></span><span>
+</span><a href="#local-6989586621679064923"><span class="hs-identifier hs-var">rhs</span></a></span><span>
 </span><span id="line-42"></span><span>      </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;imPDRC&quot;</span></span><span>
 </span><span id="line-43"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -139,8 +139,8 @@ forall a. a -&gt; Maybe a
 </span><span class="hs-string">&quot;Computation of the Process Variable as a function of time&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-44"></span><span>      </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span>
-</span><span id="line-45"></span><span>      </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679064917"><span class="annot"><span class="annottext">lhs :: LHS
-</span><a href="#local-6989586621679064917"><span class="hs-identifier hs-var hs-var">lhs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span id="line-45"></span><span>      </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679064922"><span class="annot"><span class="annottext">lhs :: LHS
+</span><a href="#local-6989586621679064922"><span class="hs-identifier hs-var hs-var">lhs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
@@ -178,8 +178,8 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-var">opProcessVariable</span></a></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Integer -&gt; Integer
 </span><span class="hs-operator hs-var">$^^</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-48"></span><span>            </span><span id="local-6989586621679064918"><span class="annot"><span class="annottext">rhs :: Expr
-</span><a href="#local-6989586621679064918"><span class="hs-identifier hs-var hs-var">rhs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
+</span><span id="line-48"></span><span>            </span><span id="local-6989586621679064923"><span class="annot"><span class="annottext">rhs :: Expr
+</span><a href="#local-6989586621679064923"><span class="hs-identifier hs-var hs-var">rhs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict

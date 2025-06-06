@@ -26,64 +26,64 @@
 </span><span id="line-26"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.PrettyPrint.HughesPJ</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Doc</span></span><span class="hs-special">)</span><span>
 </span><span id="line-27"></span><span>
 </span><span id="line-28"></span><span class="annot"><span class="hs-comment">-- | Holds a C# project.</span></span><span>
-</span><span id="line-29"></span><span class="hs-keyword">newtype</span><span> </span><span id="CSharpProject"><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSharpProject"><span class="hs-identifier hs-var">CSharpProject</span></a></span></span><span> </span><span id="local-6989586621679351623"><span class="annot"><a href="#local-6989586621679351623"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="CSP"><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSP"><span class="hs-identifier hs-var">CSP</span></a></span></span><span> </span><span class="hs-special">{</span><span id="unCSP"><span class="annot"><span class="annottext">forall a. CSharpProject a -&gt; a
-</span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#unCSP"><span class="hs-identifier hs-var hs-var">unCSP</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="#local-6989586621679351623"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">}</span><span>
+</span><span id="line-29"></span><span class="hs-keyword">newtype</span><span> </span><span id="CSharpProject"><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSharpProject"><span class="hs-identifier hs-var">CSharpProject</span></a></span></span><span> </span><span id="local-6989586621679351622"><span class="annot"><a href="#local-6989586621679351622"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="CSP"><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSP"><span class="hs-identifier hs-var">CSP</span></a></span></span><span> </span><span class="hs-special">{</span><span id="unCSP"><span class="annot"><span class="annottext">forall a. CSharpProject a -&gt; a
+</span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#unCSP"><span class="hs-identifier hs-var hs-var">unCSP</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="#local-6989586621679351622"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">}</span><span>
 </span><span id="line-30"></span><span>
-</span><span id="line-31"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679351726"><span class="annot"><span class="hs-identifier hs-type">Functor</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSharpProject"><span class="hs-identifier hs-type">CSharpProject</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-32"></span><span>  </span><span id="local-6989586621679351730"><span class="annot"><span class="annottext">fmap :: forall a b. (a -&gt; b) -&gt; CSharpProject a -&gt; CSharpProject b
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">fmap</span></span></span><span> </span><span id="local-6989586621679351731"><span class="annot"><span class="annottext">a -&gt; b
-</span><a href="#local-6989586621679351731"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSP"><span class="hs-identifier hs-type">CSP</span></a></span><span> </span><span id="local-6989586621679351732"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679351732"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">b -&gt; CSharpProject b
+</span><span id="line-31"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679351725"><span class="annot"><span class="hs-identifier hs-type">Functor</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSharpProject"><span class="hs-identifier hs-type">CSharpProject</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-32"></span><span>  </span><span id="local-6989586621679351729"><span class="annot"><span class="annottext">fmap :: forall a b. (a -&gt; b) -&gt; CSharpProject a -&gt; CSharpProject b
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">fmap</span></span></span><span> </span><span id="local-6989586621679351730"><span class="annot"><span class="annottext">a -&gt; b
+</span><a href="#local-6989586621679351730"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSP"><span class="hs-identifier hs-type">CSP</span></a></span><span> </span><span id="local-6989586621679351731"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679351731"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">b -&gt; CSharpProject b
 forall a. a -&gt; CSharpProject a
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSP"><span class="hs-identifier hs-var">CSP</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; b
-</span><a href="#local-6989586621679351731"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679351732"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679351730"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679351731"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-33"></span><span>
-</span><span id="line-34"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679351738"><span id="local-6989586621679351742"><span id="local-6989586621679351745"><span class="annot"><span class="hs-identifier hs-type">Applicative</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSharpProject"><span class="hs-identifier hs-type">CSharpProject</span></a></span></span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-35"></span><span>  </span><span id="local-6989586621679351748"><span class="annot"><span class="annottext">pure :: forall a. a -&gt; CSharpProject a
+</span><span id="line-34"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679351737"><span id="local-6989586621679351741"><span id="local-6989586621679351744"><span class="annot"><span class="hs-identifier hs-type">Applicative</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSharpProject"><span class="hs-identifier hs-type">CSharpProject</span></a></span></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-35"></span><span>  </span><span id="local-6989586621679351747"><span class="annot"><span class="annottext">pure :: forall a. a -&gt; CSharpProject a
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">pure</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; CSharpProject a
 forall a. a -&gt; CSharpProject a
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSP"><span class="hs-identifier hs-var">CSP</span></a></span><span>
-</span><span id="line-36"></span><span>  </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSP"><span class="hs-identifier hs-type">CSP</span></a></span><span> </span><span id="local-6989586621679351749"><span class="annot"><span class="annottext">a -&gt; b
-</span><a href="#local-6989586621679351749"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679351750"><span class="annot"><span class="annottext">&lt;*&gt; :: forall a b.
+</span><span id="line-36"></span><span>  </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSP"><span class="hs-identifier hs-type">CSP</span></a></span><span> </span><span id="local-6989586621679351748"><span class="annot"><span class="annottext">a -&gt; b
+</span><a href="#local-6989586621679351748"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679351749"><span class="annot"><span class="annottext">&lt;*&gt; :: forall a b.
 CSharpProject (a -&gt; b) -&gt; CSharpProject a -&gt; CSharpProject b
-</span><span class="hs-operator hs-var hs-var hs-var hs-var">&lt;*&gt;</span></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSP"><span class="hs-identifier hs-type">CSP</span></a></span><span> </span><span id="local-6989586621679351751"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679351751"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">b -&gt; CSharpProject b
+</span><span class="hs-operator hs-var hs-var hs-var hs-var">&lt;*&gt;</span></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSP"><span class="hs-identifier hs-type">CSP</span></a></span><span> </span><span id="local-6989586621679351750"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679351750"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">b -&gt; CSharpProject b
 forall a. a -&gt; CSharpProject a
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSP"><span class="hs-identifier hs-var">CSP</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; b
-</span><a href="#local-6989586621679351749"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679351751"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679351748"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679351750"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-37"></span><span>
-</span><span id="line-38"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679351756"><span id="local-6989586621679351760"><span class="annot"><span class="hs-identifier hs-type">Monad</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSharpProject"><span class="hs-identifier hs-type">CSharpProject</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-39"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSP"><span class="hs-identifier hs-type">CSP</span></a></span><span> </span><span id="local-6989586621679351763"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679351763"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679351764"><span class="annot"><span class="annottext">&gt;&gt;= :: forall a b.
+</span><span id="line-38"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679351755"><span id="local-6989586621679351759"><span class="annot"><span class="hs-identifier hs-type">Monad</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSharpProject"><span class="hs-identifier hs-type">CSharpProject</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-39"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSP"><span class="hs-identifier hs-type">CSP</span></a></span><span> </span><span id="local-6989586621679351762"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679351762"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679351763"><span class="annot"><span class="annottext">&gt;&gt;= :: forall a b.
 CSharpProject a -&gt; (a -&gt; CSharpProject b) -&gt; CSharpProject b
-</span><span class="hs-operator hs-var hs-var hs-var hs-var">&gt;&gt;=</span></span></span><span> </span><span id="local-6989586621679351765"><span class="annot"><span class="annottext">a -&gt; CSharpProject b
-</span><a href="#local-6989586621679351765"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; CSharpProject b
-</span><a href="#local-6989586621679351765"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679351763"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span class="hs-operator hs-var hs-var hs-var hs-var">&gt;&gt;=</span></span></span><span> </span><span id="local-6989586621679351764"><span class="annot"><span class="annottext">a -&gt; CSharpProject b
+</span><a href="#local-6989586621679351764"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; CSharpProject b
+</span><a href="#local-6989586621679351764"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679351762"><span class="hs-identifier hs-var">x</span></a></span><span>
 </span><span id="line-40"></span><span>
 </span><span id="line-41"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#PackageSym"><span class="hs-identifier hs-type">PackageSym</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSharpProject"><span class="hs-identifier hs-type">CSharpProject</span></a></span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-42"></span><span>  </span><span class="hs-keyword">type</span><span> </span><span id="Package"><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#Package"><span class="hs-identifier hs-var">Package</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSharpProject"><span class="hs-identifier hs-type">CSharpProject</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#PackData"><span class="hs-identifier hs-type">PackData</span></a></span><span>
-</span><span id="line-43"></span><span>  </span><span id="local-6989586621679351773"><span class="annot"><span class="annottext">package :: ProgData
+</span><span id="line-43"></span><span>  </span><span id="local-6989586621679351772"><span class="annot"><span class="annottext">package :: ProgData
 -&gt; [CSharpProject (Auxiliary CSharpProject)]
 -&gt; CSharpProject (Package CSharpProject)
-</span><a href="#local-6989586621679351773"><span class="hs-identifier hs-var hs-var hs-var hs-var">package</span></a></span></span><span> </span><span id="local-6989586621679351775"><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679351775"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([AuxData] -&gt; PackData)
+</span><a href="#local-6989586621679351772"><span class="hs-identifier hs-var hs-var hs-var hs-var">package</span></a></span></span><span> </span><span id="local-6989586621679351774"><span class="annot"><span class="annottext">ProgData
+</span><a href="#local-6989586621679351774"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([AuxData] -&gt; PackData)
 -&gt; [CSharpProject AuxData] -&gt; CSharpProject PackData
 forall (m :: * -&gt; *) a b. Monad m =&gt; ([a] -&gt; b) -&gt; [m a] -&gt; m b
 </span><span class="hs-identifier hs-var">onCodeList</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ProgData -&gt; [AuxData] -&gt; PackData
 </span><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#packD"><span class="hs-identifier hs-var">packD</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679351775"><span class="hs-identifier hs-var">p</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679351774"><span class="hs-identifier hs-var">p</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-44"></span><span>
 </span><span id="line-45"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#AuxiliarySym"><span class="hs-identifier hs-type">AuxiliarySym</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSharpProject"><span class="hs-identifier hs-type">CSharpProject</span></a></span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-46"></span><span>  </span><span class="hs-keyword">type</span><span> </span><span id="Auxiliary"><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#Auxiliary"><span class="hs-identifier hs-var">Auxiliary</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSharpProject"><span class="hs-identifier hs-type">CSharpProject</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#AuxData"><span class="hs-identifier hs-type">AuxData</span></a></span><span>
 </span><span id="line-47"></span><span>  </span><span class="hs-keyword">type</span><span> </span><span id="AuxHelper"><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#AuxHelper"><span class="hs-identifier hs-var">AuxHelper</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#CSharpProject"><span class="hs-identifier hs-type">CSharpProject</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
-</span><span id="line-48"></span><span>  </span><span id="local-6989586621679351786"><span class="annot"><span class="annottext">doxConfig :: String
+</span><span id="line-48"></span><span>  </span><span id="local-6989586621679351785"><span class="annot"><span class="annottext">doxConfig :: String
 -&gt; GOOLState
 -&gt; Verbosity
 -&gt; CSharpProject (Auxiliary CSharpProject)
-</span><a href="#local-6989586621679351786"><span class="hs-identifier hs-var hs-var hs-var hs-var">doxConfig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CSharpProject (AuxHelper CSharpProject)
+</span><a href="#local-6989586621679351785"><span class="hs-identifier hs-var hs-var hs-var hs-var">doxConfig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CSharpProject (AuxHelper CSharpProject)
 -&gt; String
 -&gt; GOOLState
 -&gt; Verbosity
@@ -95,44 +95,44 @@ r (AuxHelper r)
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic.html#doxConfig"><span class="hs-identifier hs-var">G.doxConfig</span></a></span><span> </span><span class="annot"><span class="annottext">CSharpProject (AuxHelper CSharpProject)
 forall (r :: * -&gt; *). AuxiliarySym r =&gt; r (AuxHelper r)
 </span><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#optimizeDox"><span class="hs-identifier hs-var">optimizeDox</span></a></span><span>
-</span><span id="line-49"></span><span>  </span><span id="local-6989586621679351790"><span class="annot"><span class="annottext">readMe :: ReadMeInfo -&gt; CSharpProject (Auxiliary CSharpProject)
-</span><a href="#local-6989586621679351790"><span class="hs-identifier hs-var hs-var hs-var hs-var">readMe</span></a></span></span><span> </span><span id="local-6989586621679351792"><span class="annot"><span class="annottext">ReadMeInfo
-</span><a href="#local-6989586621679351792"><span class="hs-identifier hs-var">rmi</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-49"></span><span>  </span><span id="local-6989586621679351789"><span class="annot"><span class="annottext">readMe :: ReadMeInfo -&gt; CSharpProject (Auxiliary CSharpProject)
+</span><a href="#local-6989586621679351789"><span class="hs-identifier hs-var hs-var hs-var hs-var">readMe</span></a></span></span><span> </span><span id="local-6989586621679351791"><span class="annot"><span class="annottext">ReadMeInfo
+</span><a href="#local-6989586621679351791"><span class="hs-identifier hs-var">rmi</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-50"></span><span>    </span><span class="annot"><span class="annottext">ReadMeInfo -&gt; CSharpProject (Auxiliary CSharpProject)
 forall (r :: * -&gt; *).
 AuxiliarySym r =&gt;
 ReadMeInfo -&gt; r (Auxiliary r)
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic.html#readMe"><span class="hs-identifier hs-var">G.readMe</span></a></span><span> </span><span class="annot"><span class="annottext">ReadMeInfo
-</span><a href="#local-6989586621679351792"><span class="hs-identifier hs-var">rmi</span></a></span><span> </span><span class="hs-special">{</span><span>
+</span><a href="#local-6989586621679351791"><span class="hs-identifier hs-var">rmi</span></a></span><span> </span><span class="hs-special">{</span><span>
 </span><span id="line-51"></span><span>        </span><span class="annot"><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#langName"><span class="hs-identifier hs-var">langName</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">csName</span></span><span class="hs-special">,</span><span>
 </span><span id="line-52"></span><span>        </span><span class="annot"><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#langVersion"><span class="hs-identifier hs-var">langVersion</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">csVersion</span></span><span class="hs-special">,</span><span>
 </span><span id="line-53"></span><span>        </span><span class="annot"><a href="Language.Drasil.Code.Imperative.ReadMe.Import.html#invalidOS"><span class="hs-identifier hs-var">invalidOS</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><span class="hs-string">&quot;All OS's except Windows&quot;</span></span><span class="hs-special">}</span><span>
-</span><span id="line-54"></span><span>  </span><span id="local-6989586621679351797"><span class="annot"><span class="annottext">sampleInput :: ChunkDB
+</span><span id="line-54"></span><span>  </span><span id="local-6989586621679351796"><span class="annot"><span class="annottext">sampleInput :: ChunkDB
 -&gt; DataDesc -&gt; [Expr] -&gt; CSharpProject (Auxiliary CSharpProject)
-</span><a href="#local-6989586621679351797"><span class="hs-identifier hs-var hs-var hs-var hs-var">sampleInput</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679351796"><span class="hs-identifier hs-var hs-var hs-var hs-var">sampleInput</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
 -&gt; DataDesc -&gt; [Expr] -&gt; CSharpProject (Auxiliary CSharpProject)
 forall (r :: * -&gt; *).
 AuxiliarySym r =&gt;
 ChunkDB -&gt; DataDesc -&gt; [Expr] -&gt; r (Auxiliary r)
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic.html#sampleInput"><span class="hs-identifier hs-var">G.sampleInput</span></a></span><span>
 </span><span id="line-55"></span><span>
-</span><span id="line-56"></span><span>  </span><span id="local-6989586621679351800"><span class="annot"><span class="annottext">optimizeDox :: CSharpProject (AuxHelper CSharpProject)
+</span><span id="line-56"></span><span>  </span><span id="local-6989586621679351799"><span class="annot"><span class="annottext">optimizeDox :: CSharpProject (AuxHelper CSharpProject)
 </span><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#optimizeDox"><span class="hs-identifier hs-var hs-var hs-var hs-var">optimizeDox</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; CSharpProject Doc
 forall a. a -&gt; CSharpProject a
 forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
 </span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">Doc
 </span><a href="Language.Drasil.Code.Imperative.Doxygen.Import.html#no"><span class="hs-identifier hs-var">no</span></a></span><span>
 </span><span id="line-57"></span><span>
-</span><span id="line-58"></span><span>  </span><span id="local-6989586621679351802"><span class="annot"><span class="annottext">makefile :: [String]
+</span><span id="line-58"></span><span>  </span><span id="local-6989586621679351801"><span class="annot"><span class="annottext">makefile :: [String]
 -&gt; ImplementationType
 -&gt; [Comments]
 -&gt; GOOLState
 -&gt; ProgData
 -&gt; CSharpProject (Auxiliary CSharpProject)
-</span><a href="#local-6989586621679351802"><span class="hs-identifier hs-var hs-var hs-var hs-var">makefile</span></a></span></span><span> </span><span id="local-6989586621679351804"><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679351804"><span class="hs-identifier hs-var">fs</span></a></span></span><span> </span><span id="local-6989586621679351805"><span class="annot"><span class="annottext">ImplementationType
-</span><a href="#local-6989586621679351805"><span class="hs-identifier hs-var">it</span></a></span></span><span> </span><span id="local-6989586621679351806"><span class="annot"><span class="annottext">[Comments]
-</span><a href="#local-6989586621679351806"><span class="hs-identifier hs-var">cms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe BuildConfig
+</span><a href="#local-6989586621679351801"><span class="hs-identifier hs-var hs-var hs-var hs-var">makefile</span></a></span></span><span> </span><span id="local-6989586621679351803"><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679351803"><span class="hs-identifier hs-var">fs</span></a></span></span><span> </span><span id="local-6989586621679351804"><span class="annot"><span class="annottext">ImplementationType
+</span><a href="#local-6989586621679351804"><span class="hs-identifier hs-var">it</span></a></span></span><span> </span><span id="local-6989586621679351805"><span class="annot"><span class="annottext">[Comments]
+</span><a href="#local-6989586621679351805"><span class="hs-identifier hs-var">cms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe BuildConfig
 -&gt; Maybe Runnable
 -&gt; Maybe DocConfig
 -&gt; GOOLState
@@ -148,25 +148,25 @@ Maybe BuildConfig
 -&gt; r (Auxiliary r)
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic.html#makefile"><span class="hs-identifier hs-var">G.makefile</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[String] -&gt; ImplementationType -&gt; Maybe BuildConfig
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#csBuildConfig"><span class="hs-identifier hs-var">csBuildConfig</span></a></span><span> </span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679351804"><span class="hs-identifier hs-var">fs</span></a></span><span> </span><span class="annot"><span class="annottext">ImplementationType
-</span><a href="#local-6989586621679351805"><span class="hs-identifier hs-var">it</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679351803"><span class="hs-identifier hs-var">fs</span></a></span><span> </span><span class="annot"><span class="annottext">ImplementationType
+</span><a href="#local-6989586621679351804"><span class="hs-identifier hs-var">it</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-59"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ImplementationType -&gt; Maybe Runnable -&gt; Maybe Runnable
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic.html#noRunIfLib"><span class="hs-identifier hs-var">G.noRunIfLib</span></a></span><span> </span><span class="annot"><span class="annottext">ImplementationType
-</span><a href="#local-6989586621679351805"><span class="hs-identifier hs-var">it</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Runnable
+</span><a href="#local-6989586621679351804"><span class="hs-identifier hs-var">it</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Runnable
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#csRunnable"><span class="hs-identifier hs-var">csRunnable</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Comments] -&gt; DocConfig -&gt; Maybe DocConfig
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic.html#docIfEnabled"><span class="hs-identifier hs-var">G.docIfEnabled</span></a></span><span> </span><span class="annot"><span class="annottext">[Comments]
-</span><a href="#local-6989586621679351806"><span class="hs-identifier hs-var">cms</span></a></span><span> </span><span class="annot"><span class="annottext">DocConfig
+</span><a href="#local-6989586621679351805"><span class="hs-identifier hs-var">cms</span></a></span><span> </span><span class="annot"><span class="annottext">DocConfig
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic.html#doxDocConfig"><span class="hs-identifier hs-var">G.doxDocConfig</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-60"></span><span>
-</span><span id="line-61"></span><span>  </span><span id="local-6989586621679351809"><span class="annot"><span class="annottext">auxHelperDoc :: CSharpProject (AuxHelper CSharpProject) -&gt; Doc
-</span><a href="#local-6989586621679351809"><span class="hs-identifier hs-var hs-var hs-var hs-var">auxHelperDoc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CSharpProject Doc -&gt; Doc
+</span><span id="line-61"></span><span>  </span><span id="local-6989586621679351808"><span class="annot"><span class="annottext">auxHelperDoc :: CSharpProject (AuxHelper CSharpProject) -&gt; Doc
+</span><a href="#local-6989586621679351808"><span class="hs-identifier hs-var hs-var hs-var hs-var">auxHelperDoc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CSharpProject Doc -&gt; Doc
 CSharpProject (AuxHelper CSharpProject) -&gt; Doc
 forall a. CSharpProject a -&gt; a
 </span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#unCSP"><span class="hs-identifier hs-var">unCSP</span></a></span><span>
-</span><span id="line-62"></span><span>  </span><span id="local-6989586621679351812"><span class="annot"><span class="annottext">auxFromData :: String -&gt; Doc -&gt; CSharpProject (Auxiliary CSharpProject)
-</span><a href="#local-6989586621679351812"><span class="hs-identifier hs-var hs-var hs-var hs-var">auxFromData</span></a></span></span><span> </span><span id="local-6989586621679351814"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679351814"><span class="hs-identifier hs-var">fp</span></a></span></span><span> </span><span id="local-6989586621679351815"><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679351815"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AuxData -&gt; CSharpProject AuxData
+</span><span id="line-62"></span><span>  </span><span id="local-6989586621679351811"><span class="annot"><span class="annottext">auxFromData :: String -&gt; Doc -&gt; CSharpProject (Auxiliary CSharpProject)
+</span><a href="#local-6989586621679351811"><span class="hs-identifier hs-var hs-var hs-var hs-var">auxFromData</span></a></span></span><span> </span><span id="local-6989586621679351813"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679351813"><span class="hs-identifier hs-var">fp</span></a></span></span><span> </span><span id="local-6989586621679351814"><span class="annot"><span class="annottext">Doc
+</span><a href="#local-6989586621679351814"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AuxData -&gt; CSharpProject AuxData
 forall a. a -&gt; CSharpProject a
 forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
 </span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">(AuxData -&gt; CSharpProject AuxData)
@@ -174,19 +174,19 @@ forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc -&gt; AuxData
 </span><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#ad"><span class="hs-identifier hs-var">ad</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679351814"><span class="hs-identifier hs-var">fp</span></a></span><span> </span><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679351815"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><a href="#local-6989586621679351813"><span class="hs-identifier hs-var">fp</span></a></span><span> </span><span class="annot"><span class="annottext">Doc
+</span><a href="#local-6989586621679351814"><span class="hs-identifier hs-var">d</span></a></span><span>
 </span><span id="line-63"></span><span>
 </span><span id="line-64"></span><span class="annot"><span class="hs-comment">-- | Create a build configuration for C# files. Takes in 'FilePath's and the type of implementation.</span></span><span>
 </span><span id="line-65"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#csBuildConfig"><span class="hs-identifier hs-type">csBuildConfig</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#ImplementationType"><span class="hs-identifier hs-type">ImplementationType</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Build.AST.html#BuildConfig"><span class="hs-identifier hs-type">BuildConfig</span></a></span><span>
 </span><span id="line-66"></span><span id="csBuildConfig"><span class="annot"><span class="annottext">csBuildConfig :: [String] -&gt; ImplementationType -&gt; Maybe BuildConfig
-</span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#csBuildConfig"><span class="hs-identifier hs-var hs-var">csBuildConfig</span></a></span></span><span> </span><span id="local-6989586621679351817"><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679351817"><span class="hs-identifier hs-var">fs</span></a></span></span><span> </span><span id="local-6989586621679351818"><span class="annot"><span class="annottext">ImplementationType
-</span><a href="#local-6989586621679351818"><span class="hs-identifier hs-var">it</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([CommandFragment] -&gt; CommandFragment -&gt; [[CommandFragment]])
+</span><a href="Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer.html#csBuildConfig"><span class="hs-identifier hs-var hs-var">csBuildConfig</span></a></span></span><span> </span><span id="local-6989586621679351816"><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679351816"><span class="hs-identifier hs-var">fs</span></a></span></span><span> </span><span id="local-6989586621679351817"><span class="annot"><span class="annottext">ImplementationType
+</span><a href="#local-6989586621679351817"><span class="hs-identifier hs-var">it</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([CommandFragment] -&gt; CommandFragment -&gt; [[CommandFragment]])
 -&gt; BuildName -&gt; Maybe BuildConfig
-</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#buildAll"><span class="hs-identifier hs-var">buildAll</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679351819"><span class="annot"><span class="annottext">[CommandFragment]
-</span><a href="#local-6989586621679351819"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679351820"><span class="annot"><span class="annottext">CommandFragment
-</span><a href="#local-6989586621679351820"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; CommandFragment
+</span><a href="Language.Drasil.Code.Imperative.Build.AST.html#buildAll"><span class="hs-identifier hs-var">buildAll</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679351818"><span class="annot"><span class="annottext">[CommandFragment]
+</span><a href="#local-6989586621679351818"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679351819"><span class="annot"><span class="annottext">CommandFragment
+</span><a href="#local-6989586621679351819"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; CommandFragment
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#osClassDefault"><span class="hs-identifier hs-var">osClassDefault</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;CSC&quot;</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;csc&quot;</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -194,15 +194,15 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-67"></span><span>  </span><span class="annot"><span class="annottext">CommandFragment -&gt; [CommandFragment] -&gt; [CommandFragment]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">ImplementationType -&gt; [CommandFragment]
-</span><a href="#local-6989586621679351821"><span class="hs-identifier hs-var">target</span></a></span><span> </span><span class="annot"><span class="annottext">ImplementationType
-</span><a href="#local-6989586621679351818"><span class="hs-identifier hs-var">it</span></a></span><span> </span><span class="annot"><span class="annottext">[CommandFragment] -&gt; [CommandFragment] -&gt; [CommandFragment]
+</span><a href="#local-6989586621679351820"><span class="hs-identifier hs-var">target</span></a></span><span> </span><span class="annot"><span class="annottext">ImplementationType
+</span><a href="#local-6989586621679351817"><span class="hs-identifier hs-var">it</span></a></span><span> </span><span class="annot"><span class="annottext">[CommandFragment] -&gt; [CommandFragment] -&gt; [CommandFragment]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; CommandFragment
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#asFragment"><span class="hs-identifier hs-var">asFragment</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;-out:&quot;</span></span><span> </span><span class="annot"><span class="annottext">CommandFragment -&gt; CommandFragment -&gt; CommandFragment
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">P.&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">CommandFragment
-</span><a href="#local-6989586621679351820"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[CommandFragment] -&gt; [CommandFragment] -&gt; [CommandFragment]
+</span><a href="#local-6989586621679351819"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[CommandFragment] -&gt; [CommandFragment] -&gt; [CommandFragment]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; CommandFragment) -&gt; [String] -&gt; [CommandFragment]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
@@ -212,25 +212,25 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;-r:&quot;</span></span><span> </span><span class="hs-operator">++</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679351817"><span class="hs-identifier hs-var">fs</span></a></span><span>
+</span><a href="#local-6989586621679351816"><span class="hs-identifier hs-var">fs</span></a></span><span>
 </span><span id="line-68"></span><span>  </span><span class="annot"><span class="annottext">[CommandFragment] -&gt; [CommandFragment] -&gt; [CommandFragment]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[CommandFragment]
-</span><a href="#local-6989586621679351819"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ImplementationType -&gt; BuildName
-</span><a href="#local-6989586621679351823"><span class="hs-identifier hs-var">outName</span></a></span><span> </span><span class="annot"><span class="annottext">ImplementationType
-</span><a href="#local-6989586621679351818"><span class="hs-identifier hs-var">it</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-69"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679351821"><span class="annot"><span class="annottext">target :: ImplementationType -&gt; [CommandFragment]
-</span><a href="#local-6989586621679351821"><span class="hs-identifier hs-var hs-var">target</span></a></span></span><span> </span><span class="annot"><span class="annottext">ImplementationType
+</span><a href="#local-6989586621679351818"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ImplementationType -&gt; BuildName
+</span><a href="#local-6989586621679351822"><span class="hs-identifier hs-var">outName</span></a></span><span> </span><span class="annot"><span class="annottext">ImplementationType
+</span><a href="#local-6989586621679351817"><span class="hs-identifier hs-var">it</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-69"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679351820"><span class="annot"><span class="annottext">target :: ImplementationType -&gt; [CommandFragment]
+</span><a href="#local-6989586621679351820"><span class="hs-identifier hs-var hs-var">target</span></a></span></span><span> </span><span class="annot"><span class="annottext">ImplementationType
 </span><a href="Language.Drasil.Choices.html#Library"><span class="hs-identifier hs-var">Library</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; CommandFragment
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#asFragment"><span class="hs-identifier hs-var">asFragment</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;-t:library&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-70"></span><span>        </span><span class="annot"><a href="#local-6989586621679351821"><span class="hs-identifier hs-var">target</span></a></span><span> </span><span class="annot"><span class="annottext">ImplementationType
+</span><span id="line-70"></span><span>        </span><span class="annot"><a href="#local-6989586621679351820"><span class="hs-identifier hs-var">target</span></a></span><span> </span><span class="annot"><span class="annottext">ImplementationType
 </span><a href="Language.Drasil.Choices.html#Program"><span class="hs-identifier hs-var">Program</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-71"></span><span>        </span><span id="local-6989586621679351823"><span class="annot"><span class="annottext">outName :: ImplementationType -&gt; BuildName
-</span><a href="#local-6989586621679351823"><span class="hs-identifier hs-var hs-var">outName</span></a></span></span><span> </span><span class="annot"><span class="annottext">ImplementationType
+</span><span id="line-71"></span><span>        </span><span id="local-6989586621679351822"><span class="annot"><span class="annottext">outName :: ImplementationType -&gt; BuildName
+</span><a href="#local-6989586621679351822"><span class="hs-identifier hs-var hs-var">outName</span></a></span></span><span> </span><span class="annot"><span class="annottext">ImplementationType
 </span><a href="Language.Drasil.Choices.html#Library"><span class="hs-identifier hs-var">Library</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">BuildName
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#sharedLibrary"><span class="hs-identifier hs-var">sharedLibrary</span></a></span><span>
-</span><span id="line-72"></span><span>        </span><span class="annot"><a href="#local-6989586621679351823"><span class="hs-identifier hs-var">outName</span></a></span><span> </span><span class="annot"><span class="annottext">ImplementationType
+</span><span id="line-72"></span><span>        </span><span class="annot"><a href="#local-6989586621679351822"><span class="hs-identifier hs-var">outName</span></a></span><span> </span><span class="annot"><span class="annottext">ImplementationType
 </span><a href="Language.Drasil.Choices.html#Program"><span class="hs-identifier hs-var">Program</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">BuildName
 </span><a href="Language.Drasil.Code.Imperative.Build.AST.html#executable"><span class="hs-identifier hs-var">executable</span></a></span><span>
 </span><span id="line-73"></span><span>

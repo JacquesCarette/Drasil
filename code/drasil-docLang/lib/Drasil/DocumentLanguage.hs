@@ -410,7 +410,7 @@ mkOffShelfSolnSec (OffShelfSolnsProg cs) = SRS.offShelfSol cs []
 
 -- | Helper for making the Values of Auxiliary Constants section.
 mkAuxConsSec :: AuxConstntSec -> Section
-mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortBySymbol listOfCons
+mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortByLhsSymbol listOfCons
 
 -- ** References
 

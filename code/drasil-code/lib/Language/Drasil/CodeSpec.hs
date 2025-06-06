@@ -193,13 +193,13 @@ oldcodeSpec SI.SI{ SI._sys = sys
       const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
         cnsts)
       derived = map qtov $ getDerivedInputs ddefs inputs' const' db
-      rels = (map qtoc (getEqModQdsFromIm ims ++ mapMaybe qdEFromDD ddefs) \\ derived)
+      rels = (map qtoc (getEqModQdsFromIm ims ++ mapMaybe qdEFromDD ddefs)) \\ derived
         ++ mapODE (getODE $ extLibs chs)
       -- TODO: When we have better DEModels, we should be deriving our ODE information
       --       directly from the instance models (ims) instead of directly from the choices.
       outs' = map quantvar outs
       allInputs = nub $ inputs' ++ map quantvar derived
-      exOrder = getExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
+      exOrder = getExecOrder rels (allInputs ++ map (quantvar . (^. defLhs)) cnsts) outs' db
   in OldCodeSpec {
         _pName = n,
         _authors = as,

@@ -15,9 +15,11 @@ import Language.Drasil.WellTyped
 import Data.Either (lefts, fromLeft)
 import qualified Data.Foldable as NE
 
-import           Numeric.Natural              (Natural)
-import           Data.Map                     (Map)
+import Numeric.Natural (Natural)
+import Data.Map.Ordered (OrderedMap)
+
 import qualified Data.Map as Map
+import qualified Data.Map.Ordered as OM
 
 -- * Expression Types
 
@@ -213,8 +215,7 @@ data BasisKey =
   deriving (Eq, Ord, Show)
 
 -- | A mapping from basis blades to their expressions
-type BasisBlades e =
-  Map BasisKey e
+type BasisBlades e = OrderedMap BasisKey e
 
 -- | A scalar key. E.g., for d=2: `scalarKey 2 = N (N E)`
 scalarKey :: Natural -> BasisKey
@@ -609,16 +610,16 @@ instance Typed Expr Space where
   -- 2. Have a dimension of at least the grade (a 0-dimensional vector makes no sense)
   infer ctx (Clif d es) =
       -- A clif with no explicit compile/"specification"-time expressions in the components
-    if es == Map.empty then Left $ S.ClifS d S.Real
+    if OM.null es then Left $ S.ClifS d S.Real
     else
-      case eitherLists (infer ctx <$> Map.elems es) of
+      case eitherLists (infer ctx <$> OM.elems es) of
         Left _ ->
           let
             -- Check the dimensions of a clif to ensure it makes sense
             isValidDim =
               case d of
                 -- If it's a fixed dimension, the number of expressions must be dimension ^ 2
-                S.Fixed fD -> length es == fromIntegral ((2 :: Integer) ^ fD)
+                S.Fixed fD -> OM.size es == fromIntegral ((2 :: Integer) ^ fD)
                 -- We don't know enough to say for sure
                 S.VDim _  -> True
           in

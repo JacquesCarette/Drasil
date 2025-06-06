@@ -6,8 +6,7 @@ import Data.Containers.ListUtils (nubOrd)
 import Language.Drasil.ModelExpr.Lang (ModelExpr(..))
 import Language.Drasil.Space          (RealInterval(..))
 import Drasil.Database.UID            (UID)
-import Data.Map                       (Map)
-import qualified Data.Map       as Map
+import qualified Data.Map.Ordered as OM
 
 
 -- | Generic traverse of all expressions that could lead to names.
@@ -44,7 +43,7 @@ meNames (Set _ a)             = concatMap meNames a
 meNames (Variable _ e)        = meNames e
 meNames (RealI c b)           = c : meNamesRI b
 meNames (ForAll _ _ de)       = meNames de
-meNames (Clif _ es)           = concatMap meNames $ Map.elems es
+meNames (Clif _ es)           = concatMap meNames $ OM.elems es
 
 -- | Generic traversal of everything that could come from an interval to names (similar to 'meNames').
 meNamesRI :: RealInterval ModelExpr ModelExpr -> [UID]

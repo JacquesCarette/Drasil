@@ -142,7 +142,7 @@ units = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [new
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- Actual IdeaDicts
-  map nw doccon ++ educon ++ prodtcon ++
+  doccon ++ educon ++ prodtcon ++
   -- CIs
   nw progName : map nw acronyms ++ map nw doccon' ++ map nw CM.mathcon' ++
   -- ConceptChunks

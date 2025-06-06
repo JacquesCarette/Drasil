@@ -114,8 +114,14 @@ mkQDefSt u n s symb sp Nothing   e = fromEqnSt' u n s symb sp e
 
 -- | Used to help make 'QDefinition's when 'UID', term, and 'Symbol' come from the same source.
 mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
-mkQuantDef c = mkQDefSt (c ^. uid) (c ^. term) EmptyS (symbol c) (c ^. typ) (getUnit c)
+mkQuantDef c = mkQDefSt (c ^. uid) (c ^. term) EmptyS (symbol c) (c ^. typ) (getUnit c) -- FIXME: Always EmptyS description? Seems dubious?
 
+{-
+  DefinedQuantityDict seems like a wart. It seems like it's only necessary when
+  we want to assert that a quantity has an English interpretation along with a
+  mathematical one (i.e., a variable).
+-}
+ 
 -- FIXME: See #2788.
 -- | Used to help make 'QDefinition's when 'UID' and 'Symbol' come from the same source, with the term separate.
 mkQuantDef' :: (Quantity c, MayHaveUnit c) => c -> NP -> e -> QDefinition e

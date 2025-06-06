@@ -5,7 +5,7 @@ import Language.Drasil.Code (Mod(Mod), asVC)
 
 import Drasil.GlassBR.ModuleDefs (allMods, implVars)
 import Drasil.GlassBR.Unitals (inputs, outputs, specParamVals, symbols,
-  symbolsWithDefns, tmSymbols, interps, derivedInputDataConstraints)
+  symbolsWithDefns, tmSymbols, interps, derivedInputDataConstraints, unitless)
 
 import Data.List ((\\))
 

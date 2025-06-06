@@ -16,7 +16,7 @@ import Drasil.Website.Example (exampleSec, exampleRefs, allExampleSI)
 import Drasil.Website.Documentation (docsSec, docRefs)
 import Drasil.Website.Analysis (analysisSec, analysisRefs)
 import Drasil.Website.GettingStarted (gettingStartedSec)
-import Data.Drasil.Concepts.Physics (pendulum, motion, rigidBody)
+import Data.Drasil.Concepts.Physics (pendulum, motion, rigidBody, twoD)
 import Data.Drasil.Concepts.Documentation (game, physics, condition, safety)
 import Drasil.GlassBR.Unitals (blast)
 import Drasil.GlassBR.Concepts (glaSlab)
@@ -101,7 +101,7 @@ sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspac
 
 -- | Needed for references and terms to work.
 symbMap :: FolderLocation -> ChunkDB
-symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, web, phsChgMtrl] ++ 
+symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, web, phsChgMtrl, twoD] ++ 
   map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast, 
   heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce, 
   normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [game, physics, condition, glaSlab, intrslce,

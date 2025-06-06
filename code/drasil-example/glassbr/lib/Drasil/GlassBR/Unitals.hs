@@ -336,10 +336,10 @@ glassWL       = dcc "glassWL"     (nounPhraseSP "glass weight load")
 glBreakage    = dcc "glBreakage"  (nounPhraseSP "glass breakage")
   "the fracture or breakage of any lite or ply in monolithic, laminated, or insulating glass"
 glTyFac       = cc' glassTypeFac
-  (foldlSent_ [S "a multiplying factor for adjusting the", getAcc lResistance,
+  (foldlSent_ [S "a multiplying factor for adjusting the", short lResistance,
   S "of different glass type, that is,", foldlList Comma Options glassTypeAbbrs
-  `sC` S "in monolithic glass" `sC` getAcc lGlass, sParen (titleize lGlass) `sC`
-   S "or", getAcc iGlass, sParen (titleize iGlass), S "constructions"])
+  `sC` S "in monolithic glass" `sC` short lGlass, sParen (titleize lGlass) `sC`
+   S "or", short iGlass, sParen (titleize iGlass), S "constructions"])
 hStrengthGl   = cc' heatS
   (foldlSent_ [S "a flat, monolithic, glass lite of uniform thickness that has",
   S "been subjected to a special heat treatment process where the residual",
@@ -358,14 +358,14 @@ loadResis     = cc' lResistance
 loadShareFac  = cc' lShareFac
   (foldlSent_ [S "a multiplying factor derived from the load sharing between the",
   S "double glazing, of equal or different thicknesses and types (including the",
-  S "layered behaviour of", getAcc lGlass, S "under long duration",
-  S "loads), in a sealed", getAcc iGlass, S "unit"])
+  S "layered behaviour of", short lGlass, S "under long duration",
+  S "loads), in a sealed", short iGlass, S "unit"])
 longDurLoad   = dcc "longDurLoad"        (nounPhraseSP "long duration load")
   "any load lasting approximately 30 days"
 nonFactoredL  = cc' nFL
   (foldlSent_ [S "three second duration uniform load associated with a",
   S "probability of breakage less than or equal to 8", plural lite,
-  S "per 1000 for monolithic", getAcc annealed, S "glass"])
+  S "per 1000 for monolithic", short annealed, S "glass"])
 notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
   "For the given input parameters, the glass is NOT considered safe."
 probBreak     = cc' probBr
@@ -429,7 +429,7 @@ glassTypeFactors :: [Integer]
 glassTypeFactors = map fst glassType
 
 glassTypeAbbrs :: [Sentence]
-glassTypeAbbrs = map (getAcc . snd) glassType
+glassTypeAbbrs = map (short . snd) glassType
 
 type GlassType = [(Integer, CI)]         --[(Factor, Term)]
 type GlassThickness = [(Double, Double)] --[(Nominal, Actual)]

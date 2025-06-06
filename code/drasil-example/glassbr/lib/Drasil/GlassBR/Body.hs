@@ -48,7 +48,7 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
   sD, termsWithAccDefn, termsWithDefsOnly, terms, dataConstraints, lDurFac,
-  isSafeProb, dimlessLoad, isSafeLoad, tolLoad, unitless, riskFun, sdfTol, symbols, unitarySymbols, derivedInputDataConstraints)
+  isSafeProb, dimlessLoad, isSafeLoad, tolLoad, riskFun, sdfTol, unitarySymbols)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si

@@ -11,6 +11,10 @@ language: Haskell2010
 default-extensions:
 - StrictData
 
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+
 extra-source-files: []
 
 dependencies:
@@ -42,10 +46,8 @@ library:
 executables:
   gamephysics:
     main: Main
-    source-dirs: app 
+    source-dirs: app
     ghc-options:
-    - -Wall
-    - -Wredundant-constraints
     - -threaded
     - -O2
     dependencies:

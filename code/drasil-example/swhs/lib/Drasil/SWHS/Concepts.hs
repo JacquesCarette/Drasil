@@ -3,7 +3,6 @@ module Drasil.SWHS.Concepts where --all of this file is exported
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt,
   likelyChg, physSyst, requirement, refBy, refName, srs, typUnc, unlikelyChg)

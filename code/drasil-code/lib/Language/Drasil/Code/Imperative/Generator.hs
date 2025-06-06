@@ -42,8 +42,9 @@ import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
 import System.Drasil hiding (systemdb)
 
-import System.Directory (setCurrentDirectory, createDirectoryIfMissing,
-  getCurrentDirectory)
+import Utils.Drasil (createDirIfMissing)
+
+import System.Directory (setCurrentDirectory, getCurrentDirectory)
 import Control.Lens ((^.))
 import Control.Monad.State (get, evalState, runState)
 import qualified Data.Set as Set (fromList)
@@ -115,7 +116,7 @@ generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang ->
   PackData) -> DrasilState -> IO ()
 generateCode l unReprProg unReprPack g = do
   workingDir <- getCurrentDirectory
-  createDirectoryIfMissing False (getDir l)
+  createDirIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
   let (pckg, ds) = runState (genPackage unReprProg) g
       baseAux = [ad "designLog.txt" (ds ^. designLog) | not $ isEmpty $
@@ -224,6 +225,7 @@ genModules = do
   return $ mn : inp ++ con ++ cal : out ++ moddef
 
 -- Procedural Versions --
+
 -- | Generates a package with the given 'DrasilState'. The passed
 -- un-representation functions determine which target language the package will
 -- be generated in.
@@ -232,7 +234,7 @@ generateCodeProc :: (ProcProg progRepr, PackageSym packRepr) => Lang ->
   PackData) -> DrasilState -> IO ()
 generateCodeProc l unReprProg unReprPack g = do
   workingDir <- getCurrentDirectory
-  createDirectoryIfMissing False (getDir l)
+  createDirIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
   let (pckg, ds) = runState (genPackageProc unReprProg) g
       baseAux = [ad "designLog.txt" (ds ^. designLog) | not $ isEmpty $

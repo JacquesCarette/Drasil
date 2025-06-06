@@ -130,7 +130,20 @@ symbResolve m x = uMapLookup "Symbol" "SymbolMap" x $ symbolTable m
 
 -- | Looks up a 'UID' in the term table from the 'ChunkDB'. If nothing is found, an error is thrown.
 termResolve :: ChunkDB -> UID -> IdeaDict
-termResolve m x = uMapLookup "Term" "TermMap" x $ termTable m
+termResolve m x -- = uMapLookup "Term" "TermMap" x $ termTable m
+  | (Just (t, _)) <- Map.lookup x (termTable m) = t
+  -- SUPER HACK: The extras below allow any 'DataDefinition' or 'QuantityDict'
+  -- or ... to have their terms auto-extracted and used. Generates a fake
+  -- `IdeaDict`.
+  | (Just (t, _)) <- Map.lookup x (symbolTable m) = nw t
+  | (Just (t, _)) <- Map.lookup x (conceptChunkTable m) = nw t
+  | (Just (t, _)) <- Map.lookup x (_unitTable m) = nw t
+  | (Just (t, _)) <- Map.lookup x (_dataDefnTable m) = nw t
+  | (Just (t, _)) <- Map.lookup x (_insmodelTable m) = nw t
+  | (Just (t, _)) <- Map.lookup x (_gendefTable m) = nw t
+  | (Just (t, _)) <- Map.lookup x (_theoryModelTable m) = nw t
+  | (Just (t, _)) <- Map.lookup x (_conceptinsTable m) = nw t
+  | otherwise = error $ "Term: " ++ show x ++ " not found in TermMap"
 
 -- | Looks up a 'UID' in the reference table from the 'ChunkDB'. If nothing is found, an error is thrown.
 refResolve :: UID -> ReferenceMap -> Reference

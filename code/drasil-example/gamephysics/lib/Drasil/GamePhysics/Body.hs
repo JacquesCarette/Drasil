@@ -156,6 +156,13 @@ ideaDicts =
   -- QuantityDicts
   map nw symbolsAll ++ map (nw . (^. output)) iMods
 
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts =
+  -- QuantityDicts
+  map nw symbolsAll ++
+  -- CIs
+  map nw acronyms
+
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll) ideaDicts
   (map cw defSymbols ++ srsDomains ++ map cw iMods) units dataDefs
@@ -166,7 +173,7 @@ allRefs :: [Reference]
 allRefs = [externalLinkRef, pymunk] ++ uriReferences ++ offShelfSolRefs
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)
+usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of

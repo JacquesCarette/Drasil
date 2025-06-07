@@ -1,5 +1,7 @@
 module Drasil.HGHC.HeatTransfer where --whole file is used
 
+import Control.Lens ((^.))
+
 import Language.Drasil
 import Language.Drasil.ShortHands
 import Theory.Drasil (DataDefinition, ddENoRefs)
@@ -22,7 +24,7 @@ htVars = [cladThick, coolFilmCond, gapFilmCond, cladCond]
 
 htInputs, htOutputs :: [QuantityDict]
 htInputs = map qw htVars
-htOutputs = map qw qDefs
+htOutputs = map (^. defLhs) qDefs
 
 cladThick, coolFilmCond, gapFilmCond, cladCond :: QuantityDict
 cladThick    = vc "cladThick"    (cn''' "clad thickness")

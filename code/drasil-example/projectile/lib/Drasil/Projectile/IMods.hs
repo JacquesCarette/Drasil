@@ -2,6 +2,8 @@ module Drasil.Projectile.IMods (iMods, landPosIM, messageIM, offsetIM, timeIM) w
 
 import Prelude hiding (cos, sin)
 
+import Control.Lens ((^.))
+
 import Language.Drasil
 import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, qwC, equationalModelN)
 import Utils.Drasil (weave)
@@ -14,7 +16,7 @@ import Data.Drasil.Concepts.Documentation (value)
 import Data.Drasil.Concepts.Math (constraint, equation, xAxis)
 
 import Data.Drasil.Quantities.Math (pi_)
-import Data.Drasil.Quantities.Physics (gravitationalAccelConst, iSpeed, ixPos,
+import Data.Drasil.Quantities.Physics (gravitationalMagnitude, iSpeed, ixPos,
   ixVel, iyPos, iyVel, time, xConstAccel, xPos, yConstAccel, yPos)
 
 import Drasil.Projectile.Assumptions (accelXZero, accelYGravity, gravAccelValue,
@@ -134,7 +136,7 @@ angleConstraintNote = foldlSent [atStartNP (the constraint),
   refS posXDirection `S.and_` refS yAxisGravity `sC`
   S "and is shown" `S.in_` refS figLaunch]
 
-gravitationalAccelConstNote = ch gravitationalAccelConst `S.is`
+gravitationalAccelConstNote = ch gravitationalMagnitude `S.is`
   S "defined in" +:+. refS gravAccelValue
 
 landAndTargPosConsNote = atStartNP' (the constraint) +:+
@@ -156,4 +158,4 @@ targPosConsNote = atStartNP (the constraint) +:+
 timeConsNote = atStartNP (the constraint) +:+
   eS (sy flightDur $> exactDbl 0) `S.is` S "from" +:+. refS timeStartZero
 
-tolNote = ch tol `S.is` S "defined in" +:+. refS (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]))
+tolNote = ch (tol ^. defLhs) `S.is` S "defined in" +:+. refS (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]))

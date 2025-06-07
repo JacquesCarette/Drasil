@@ -121,8 +121,6 @@ ideaDicts =
   map nw physicscon ++ map nw unitalChuncks ++
   -- UncertainChunks
   map nw [absTol, relTol] ++
-  -- InstanceModels
-  nw heatEInPCM :
   -- ConstQDefs
   map nw specParamValList ++
   -- UnitDefns

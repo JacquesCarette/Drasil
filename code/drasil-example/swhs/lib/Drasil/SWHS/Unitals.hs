@@ -26,8 +26,8 @@ symbols :: [DefinedQuantityDict]
 symbols = pi_ : map dqdWr units ++ map dqdWr unitless ++ map dqdWr constrained
 
 symbolsAll :: [QuantityDict]
-symbolsAll = map qw symbols ++ map qw specParamValList ++
-  map qw [htFusionMin, htFusionMax, coilSAMax] ++
+symbolsAll = map qw symbols ++ map (^. defLhs) specParamValList ++
+  map (^. defLhs) [htFusionMin, htFusionMax, coilSAMax] ++
   map qw [absTol, relTol]
 
 -- Symbols with Units --
@@ -264,13 +264,13 @@ tempPCM, tempW, watE, pcmE :: ConstrConcept
 tankLength = uqc "tankLength" (nounPhraseSP "length of tank")
   "the length of the tank" cL metre Real
   [gtZeroConstr,
-  sfwrRange $ Bounded (Inc, sy tankLengthMin) (Inc, sy tankLengthMax)] (dbl 1.5)
+  sfwrRange $ Bounded (Inc, sy $ tankLengthMin ^. defLhs) (Inc, sy $ tankLengthMax ^. defLhs)] (dbl 1.5)
   defaultUncrt
 
 -- Constraint 2
 diam = uqc "diam" (nounPhraseSP "diameter of tank")
   "the diameter of the tank" cD metre Real
-  [gtZeroConstr, sfwrRange $ Bounded (Inc, sy arMin) (Inc, sy arMax)]
+  [gtZeroConstr, sfwrRange $ Bounded (Inc, sy $ arMin ^. defLhs) (Inc, sy $ arMax ^. defLhs)]
   (dbl 0.412) defaultUncrt
 
 -- Constraint 3
@@ -299,7 +299,7 @@ pcmSA = uqc "pcmSA"
 pcmDensity = uq (cuc'' "pcmDensity" (nounPhraseSP "density of PCM")
   "Mass per unit volume of the phase change material"
   (autoStage $ sub (eqSymb density) lPCM) densityU Real
-  [gtZeroConstr, sfwrRange $ Bounded (Exc, sy pcmDensityMin) (Exc, sy pcmDensityMax)]
+  [gtZeroConstr, sfwrRange $ Bounded (Exc, sy $ pcmDensityMin ^. defLhs) (Exc, sy $ pcmDensityMax ^. defLhs)]
   (exactDbl 1007)) defaultUncrt
 
 -- Constraint 6
@@ -316,7 +316,7 @@ htCapSP = uqc "htCapSP"
   "given unit mass of solid phase change material by a given amount")
   (sup (sub (eqSymb heatCapSpec) lPCM) lSolid) UT.heatCapSpec Real
   [gtZeroConstr,
-  sfwrRange $ Bounded (Exc, sy htCapSPMin) (Exc, sy htCapSPMax)]
+  sfwrRange $ Bounded (Exc, sy $ htCapSPMin ^. defLhs) (Exc, sy $ htCapSPMax ^. defLhs)]
   (exactDbl 1760) defaultUncrt
 
 -- Constraint 8
@@ -326,7 +326,7 @@ htCapLP = uqc "htCapLP"
   "given unit mass of liquid phase change material by a given amount")
   (sup (sub (eqSymb heatCapSpec) lPCM) lLiquid) UT.heatCapSpec Real
   [gtZeroConstr,
-  sfwrRange $ Bounded (Exc, sy htCapLPMin) (Exc, sy htCapLPMax )]
+  sfwrRange $ Bounded (Exc, sy $ htCapLPMin ^. defLhs) (Exc, sy $ htCapLPMax ^. defLhs)]
   (exactDbl 2270) defaultUncrt
 
 --Constraint 9
@@ -334,7 +334,7 @@ htFusion = uqc "htFusion" (nounPhraseSP "specific latent heat of fusion")
   "amount of thermal energy required to completely melt a unit mass of a substance"
   (sub cH lFusion) specificE Real
   [gtZeroConstr,
-  sfwrRange $ Bounded (Exc, sy htFusionMin) (Exc, sy htFusionMax)] (exactDbl 211600) defaultUncrt
+  sfwrRange $ Bounded (Exc, sy $ htFusionMin ^. defLhs) (Exc, sy $ htFusionMax ^. defLhs)] (exactDbl 211600) defaultUncrt
 
 -- Constraint 10
 -- The "S "heating coil" " should be replaced by "phrase coil",
@@ -344,7 +344,7 @@ coilSA = uqc "coilSA"
   (nounPhrase'' (phrase surArea) (phrase surArea) CapFirst CapWords))
   "area covered by the outermost layer of the coil" (sub cA lCoil) m_2 Real
   [gtZeroConstr,
-  sfwrRange $ UpTo (Inc, sy coilSAMax)] (dbl 0.12) defaultUncrt
+  sfwrRange $ UpTo (Inc, sy $ coilSAMax ^. defLhs)] (dbl 0.12) defaultUncrt
 
 -- Constraint 11
 tempC = uqc "tempC" (nounPhraseSP "temperature of the heating coil")
@@ -355,7 +355,7 @@ tempC = uqc "tempC" (nounPhraseSP "temperature of the heating coil")
 -- Constraint 12
 wDensity = uq (cuc'' "wDensity" (density `of_` water)
   "mass per unit volume of water" (autoStage $ sub (eqSymb density) lWater) densityU Real
-  [gtZeroConstr, sfwrRange $ Bounded (Exc, sy wDensityMin) (Inc, sy wDensityMax)]
+  [gtZeroConstr, sfwrRange $ Bounded (Exc, sy $ wDensityMin ^. defLhs) (Inc, sy $ wDensityMax ^. defLhs)]
   (exactDbl 1000)) defaultUncrt
 
 -- Constraint 13
@@ -364,7 +364,7 @@ htCapW = uqc "htCapW" (heatCapSpec `of_` water)
    "temperature of a given unit mass of water by a given amount")
   (sub (eqSymb heatCapSpec) lWater) UT.heatCapSpec Real
   [gtZeroConstr,
-  sfwrRange $ Bounded (Exc, sy htCapWMin) (Exc, sy htCapWMax)] (exactDbl 4186) defaultUncrt
+  sfwrRange $ Bounded (Exc, sy $ htCapWMin ^. defLhs) (Exc, sy $ htCapWMax ^. defLhs)] (exactDbl 4186) defaultUncrt
   
 -- Constraint 14
 coilHTC = uqc "coilHTC" (nounPhraseSP
@@ -374,7 +374,7 @@ coilHTC = uqc "coilHTC" (nounPhraseSP
   (sub (eqSymb htTransCoeff) lCoil)
   UT.heatTransferCoef Real
   [gtZeroConstr,
-  sfwrRange $ Bounded (Inc, sy coilHTCMin) (Inc, sy coilHTCMax)] (exactDbl 1000) defaultUncrt
+  sfwrRange $ Bounded (Inc, sy $ coilHTCMin ^. defLhs) (Inc, sy $ coilHTCMax ^. defLhs)] (exactDbl 1000) defaultUncrt
 
 -- Constraint 15
 pcmHTC = uqc "pcmHTC"
@@ -383,7 +383,7 @@ pcmHTC = uqc "pcmHTC"
    "the thermal flux from the phase change material to the surrounding water")
   (sub lH lPCM) UT.heatTransferCoef Real
   [gtZeroConstr,
-  sfwrRange $ Bounded (Inc, sy pcmHTCMin) (Inc, sy pcmHTCMax)] (exactDbl 1000) defaultUncrt
+  sfwrRange $ Bounded (Inc, sy $ pcmHTCMin ^. defLhs) (Inc, sy $ pcmHTCMax ^. defLhs)] (exactDbl 1000) defaultUncrt
   
 -- Constraint 16
 tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
@@ -397,7 +397,7 @@ timeFinal = uqc "timeFinal" (nounPhraseSP "final time")
    "simulation to its conclusion") (sub (eqSymb time) 
   lFinal) second Real
   [gtZeroConstr,
-  sfwrRange $ UpTo (Exc, sy timeFinalMax)] (exactDbl 50000) defaultUncrt
+  sfwrRange $ UpTo (Exc, sy $ timeFinalMax ^. defLhs)] (exactDbl 50000) defaultUncrt
 
 timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
   ("the finite discretization of time used in the numerical method " ++

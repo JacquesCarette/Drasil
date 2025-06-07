@@ -1,5 +1,7 @@
 module Drasil.DblPend.Unitals where
 
+import Control.Lens ((^.))
+
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
@@ -23,7 +25,7 @@ import Data.Drasil.Quantities.Physics (gravitationalAccelConst)
 
 
 symbols:: [QuantityDict]
-symbols = map qw unitalChunks ++ map qw unitless ++ [qw pendDisAngle] ++ map qw constants
+symbols = map qw unitalChunks ++ map qw unitless ++ [qw pendDisAngle] ++ map (^. defLhs) constants
 
 acronyms :: [CI]
 acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,

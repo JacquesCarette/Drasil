@@ -1,5 +1,7 @@
 module Drasil.Projectile.Body (printSetting, si, srs, fullSI) where
 
+import Control.Lens ((^.))
+
 import Language.Drasil
 import Drasil.SRSDocument
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -22,7 +24,7 @@ import Data.Drasil.Concepts.Software (errMsg, program)
 import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.Quantities.Math (pi_, piConst)
-import Data.Drasil.Quantities.Physics (acceleration, constAccel,
+import Data.Drasil.Quantities.Physics (acceleration, constAccel, gravitationalMagnitude,
   gravitationalAccelConst, iPos, iSpeed, iVel, ixPos, iyPos, ixVel, iyVel,
   position, scalarPos, time, velocity, xAccel, xConstAccel, xPos,
   xVel, yAccel, yConstAccel, yPos, yVel, physicscon)
@@ -277,7 +279,7 @@ physSystParts = map (!.)
 -- Various gathered data that should be automated --
 ----------------------------------------------------
 symbols :: [QuantityDict]
-symbols = qw gravitationalAccelConst : unitalQuants ++ map qw constants ++
+symbols = qw gravitationalMagnitude : unitalQuants ++ map (^. defLhs) constants ++
   map qw [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
   iyPos, ixVel, iyVel, position, scalarPos, projPos, projSpeed, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel]

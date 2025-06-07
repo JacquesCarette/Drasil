@@ -237,6 +237,8 @@ purp :: Sentence
 motivation :: Sentence
 background :: Sentence
 symbolsAll :: [QuantityDict]
+ideaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
 symbMap :: ChunkDB
 
 -- | Holds all references and links used in the document.

@@ -264,13 +264,15 @@ si :: System
 mkSRS :: SRSDecl
 purp :: Sentence
 background :: Sentence
+ideaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
 symbMap :: ChunkDB
+usedDB :: ChunkDB
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 concIns :: [ConceptInstance]
 labCon :: [LabelledContent]
-usedDB :: ChunkDB
 stdFields :: Fields
 termsAndDescBullets :: Contents
 termsAndDescBulletsGlTySubSec :: [ItemType]

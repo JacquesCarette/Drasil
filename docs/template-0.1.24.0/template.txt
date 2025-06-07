@@ -15,6 +15,7 @@ fullSI :: System
 printSetting :: PrintingInformation
 mkSRS :: SRSDecl
 si :: System
+ideaDicts :: [IdeaDict]
 symbMap :: ChunkDB
 usedDB :: ChunkDB
 citations :: BibRef

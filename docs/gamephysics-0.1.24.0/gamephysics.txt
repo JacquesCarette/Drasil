@@ -224,6 +224,8 @@ purp :: Sentence
 concIns :: [ConceptInstance]
 stdFields :: Fields
 units :: [UnitDefn]
+ideaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
 symbMap :: ChunkDB
 allRefs :: [Reference]
 usedDB :: ChunkDB

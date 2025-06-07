@@ -124,6 +124,8 @@ printSetting :: PrintingInformation
 mkSRS :: SRSDecl
 si :: System
 purp :: Sentence
+ideaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
 symbMap :: ChunkDB
 
 -- | Holds all references and links used in the document.

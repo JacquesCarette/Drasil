@@ -326,11 +326,13 @@ units :: [UnitDefn]
 si :: System
 purp :: Sentence
 motivation :: Sentence
+ideaDicts :: [IdeaDict]
 symbMap :: ChunkDB
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+usedDB :: ChunkDB
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-usedDB :: ChunkDB
 mkSRS :: SRSDecl
 tSymbIntro :: [TSIntro]
 insModel :: [InstanceModel]

@@ -137,8 +137,6 @@ ideaDicts =
   map nw physicalcon ++ map nw mathcon ++
   -- QuantityDicts
   map nw symbols ++
-  -- TheoryModels
-  nw newtonSLR : 
   -- UnitDefns
   map nw [newton, degree, radian, hertz] ++
   map nw fundamentals ++

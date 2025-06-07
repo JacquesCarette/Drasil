@@ -1,14 +1,13 @@
 -- | Printing helpers.
 module Language.Drasil.Printing.Import.Helpers where
 
-import Language.Drasil (Stage(..), codeSymb, eqSymb, Idea(..),
-  NamedIdea(..), NounPhrase(..), Sentence(S), Symbol, UID,
-  TermCapitalization(..), titleizeNP, titleizeNP', atStartNP, atStartNP', NP)
-import Database.Drasil (ChunkDB, symbResolve, termResolve)
+import Language.Drasil (Stage(..), codeSymb, eqSymb, NounPhrase(..), Sentence(S),
+  Symbol, UID, TermCapitalization(..), titleizeNP, titleizeNP',
+  atStartNP, atStartNP', NP)
+import Database.Drasil (ChunkDB, symbResolve, termResolve', longForm, shortForm)
 
 import qualified Language.Drasil.Printing.AST as P
 
-import Control.Lens ((^.))
 import Data.Char (toUpper)
 
 -- * Expr-related
@@ -60,16 +59,16 @@ lookupC Implementation sm c = codeSymb $ symbResolve sm c
 
 -- | Look up a term given a chunk database and a 'UID' associated with the term. Also specifies capitalization
 lookupT :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupT sm c tCap = resolveCapT tCap $ termResolve sm c ^. term
+lookupT sm c tCap = resolveCapT tCap $ longForm $ termResolve' sm c
 
 -- | Look up the acronym/abbreviation of a term. Otherwise returns the singular form of a term. Takes a chunk database and a 'UID' associated with the term.
 lookupS :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupS sm c sCap = maybe (resolveCapT sCap $ l ^. term) S $ getA l >>= capHelper sCap
-  where l = termResolve sm c
+lookupS sm c sCap = maybe (resolveCapT sCap $ longForm l) S $ shortForm l >>= capHelper sCap
+  where l = termResolve' sm c
 
 -- | Look up the plural form of a term given a chunk database and a 'UID' associated with the term.
 lookupP :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupP sm c pCap = resolveCapP pCap $ termResolve sm c ^. term
+lookupP sm c pCap = resolveCapP pCap $ longForm $ termResolve' sm c
 
 -- | Helper to get the proper function for capitalizing a 'NP' based on its 'TermCapitalization'. Singular case.
 resolveCapT :: TermCapitalization -> (NP -> Sentence)

@@ -46,32 +46,6 @@ type Scope = [Sentence]
 type Motivation = [Sentence]
 instance System.Drasil.System.HasSystem System.Drasil.System.System
 
-
--- | Utilities to get grab certain chunks (from <a>Expr</a>,
---   <a>Sentence</a>, etc) by <a>UID</a> and dereference the chunk it
---   refers to.
-module System.Drasil.GetChunk
-
--- | Gets a list of defined quantities (<a>DefinedQuantityDict</a>s) from
---   <a>Sentence</a>s and expressions that are contained in the database
---   (<a>ChunkDB</a>).
-ccss :: [Sentence] -> [ModelExpr] -> ChunkDB -> [DefinedQuantityDict]
-
--- | Gets a list of quantities (<a>QuantityDict</a>s) from <a>Sentence</a>s
---   and expressions that are contained in the database (<a>ChunkDB</a>).
-ccss' :: [Sentence] -> [ModelExpr] -> ChunkDB -> [QuantityDict]
-
--- | Combines the functions of <a>vars</a> and <a>concpt</a> to create a
---   list of <a>DefinedQuantityDict</a>s from a <a>Sentence</a>.
-combine :: Sentence -> ChunkDB -> [DefinedQuantityDict]
-
--- | Gets a list of quantities (<a>QuantityDict</a>) from an equation in
---   order to print.
-vars :: ModelExpr -> ChunkDB -> [QuantityDict]
-
--- | Helper for extracting a bibliography from the system information.
-citeDB :: System -> BibRef
-
 module System.Drasil
 
 -- | Data structure for holding all of the requisite information about a
@@ -104,19 +78,3 @@ type Scope = [Sentence]
 
 -- | Project Example motivation.
 type Motivation = [Sentence]
-
--- | Helper for extracting a bibliography from the system information.
-citeDB :: System -> BibRef
-
--- | Gets a list of defined quantities (<a>DefinedQuantityDict</a>s) from
---   <a>Sentence</a>s and expressions that are contained in the database
---   (<a>ChunkDB</a>).
-ccss :: [Sentence] -> [ModelExpr] -> ChunkDB -> [DefinedQuantityDict]
-
--- | Gets a list of quantities (<a>QuantityDict</a>s) from <a>Sentence</a>s
---   and expressions that are contained in the database (<a>ChunkDB</a>).
-ccss' :: [Sentence] -> [ModelExpr] -> ChunkDB -> [QuantityDict]
-
--- | Gets a list of quantities (<a>QuantityDict</a>) from an equation in
---   order to print.
-vars :: ModelExpr -> ChunkDB -> [QuantityDict]

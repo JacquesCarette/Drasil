@@ -1514,6 +1514,8 @@ digraph alltypes {
 	}
 	subgraph extractdocdecs {
 	}
+	subgraph getcunkhs {
+	}
 	subgraph srsdocument {
 	}
 	subgraph tracetable {
@@ -4417,8 +4419,6 @@ digraph alltypes {
 		}
 	}
 	subgraph printers {
-	}
-	subgraph getcunkh {
 	}
 	subgraph sytems {
 		subgraph system{

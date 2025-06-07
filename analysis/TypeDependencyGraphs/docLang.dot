@@ -398,6 +398,8 @@ digraph alltypes {
 	}
 	subgraph extractdocdecs {
 	}
+	subgraph getcunkhs {
+	}
 	subgraph srsdocument {
 	}
 	subgraph tracetable {

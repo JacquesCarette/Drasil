@@ -246,6 +246,7 @@ docLang,lib/Drasil/,DocDecl.hs,DocSection,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,
 docLang,lib/Drasil/,DocLang.hs,	,	,	
 docLang,lib/Drasil/,DocumentLanguage.hs,	,	,	
 docLang,lib/Drasil/,ExtractDocDesc.hs,	,	,	
+docLang,lib/Drasil/,GetChunks.hs,	,	,	
 docLang,lib/Drasil/,SRSDocument.hs,	,	,	
 docLang,lib/Drasil/,TraceTable.hs,	,	,	
 	
@@ -865,7 +866,6 @@ printers,lib/Language/Drasil/,Format.hs,DocType,	,	,	,	,	,	,	,	,	,	,	,YYYY,	,	,	
 	,	,	,Format,	,	,	,	,	,	,	,	,	,	,	,YYYY,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	
 printers,lib/Language/Drasil/,Printers.hs,	,	,	
 	
-system,lib/System/Drasil/,GetChunk.hs,	,	,	
 system,lib/System/Drasil/,System.hs,System,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	
 system,lib/System/,Drasil.hs,	,	,	
 	

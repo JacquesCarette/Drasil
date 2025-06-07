@@ -1,5 +1,3 @@
-	subgraph getcunkh {
-	}
 	subgraph sytems {
 		subgraph system{
 		System	[shape=oval, color=darkviolet, label="System"];

@@ -519,13 +519,6 @@ Apndx :: Apndx -> LsnChapter
 mkLsnDesc :: System -> LsnDecl -> LsnDesc
 
 
--- | Document language for lesson plan notebooks.
-module Drasil.DocumentLanguage.Notebook.DocumentLanguage
-
--- | Creates a notebook from a lesson description and system information.
-mkNb :: LsnDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
-
-
 -- | Helpers for dealing with formatting of Units
 module Drasil.DocumentLanguage.Units
 
@@ -535,6 +528,39 @@ toSentence :: MayHaveUnit u => u -> Sentence
 
 -- | Similar to <a>toSentence</a>, except default value is "Unitless".
 toSentenceUnitless :: MayHaveUnit u => u -> Sentence
+
+
+-- | Utilities to get grab certain chunks (from <a>Expr</a>,
+--   <a>Sentence</a>, etc) by <a>UID</a> and dereference the chunk it
+--   refers to.
+module Drasil.GetChunks
+
+-- | Gets a list of defined quantities (<a>DefinedQuantityDict</a>s) from
+--   <a>Sentence</a>s and expressions that are contained in the database
+--   (<a>ChunkDB</a>).
+ccss :: [Sentence] -> [ModelExpr] -> ChunkDB -> [DefinedQuantityDict]
+
+-- | Gets a list of quantities (<a>QuantityDict</a>s) from <a>Sentence</a>s
+--   and expressions that are contained in the database (<a>ChunkDB</a>).
+ccss' :: [Sentence] -> [ModelExpr] -> ChunkDB -> [QuantityDict]
+
+-- | Combines the functions of <a>vars</a> and <a>concpt</a> to create a
+--   list of <a>DefinedQuantityDict</a>s from a <a>Sentence</a>.
+combine :: Sentence -> ChunkDB -> [DefinedQuantityDict]
+
+-- | Gets a list of quantities (<a>QuantityDict</a>) from an equation in
+--   order to print.
+vars :: ModelExpr -> ChunkDB -> [QuantityDict]
+
+-- | Extract bibliography entries for a system.
+citeDB :: System -> BibRef
+
+
+-- | Document language for lesson plan notebooks.
+module Drasil.DocumentLanguage.Notebook.DocumentLanguage
+
+-- | Creates a notebook from a lesson description and system information.
+mkNb :: LsnDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
 
 
 -- | Defines helper functions for creating subsections within the Solution

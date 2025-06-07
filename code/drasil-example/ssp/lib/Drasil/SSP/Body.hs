@@ -32,7 +32,7 @@ import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce,
   shearRes, solidcon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Software.Products (prodtcon)
-import Data.Drasil.Theories.Physics (physicsTMs, weightSrc, hsPressureSrc)
+import Data.Drasil.Theories.Physics (weightSrc, hsPressureSrc)
 
 import Data.Drasil.People (brooks, henryFrankis)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
@@ -161,12 +161,6 @@ ideaDicts =
   map nw mathcon ++ map nw solidcon ++ map nw physicalcon ++
   -- DefinedQuantityDicts
   map nw symbols ++
-  -- GeneralDefinitions
-  map nw generalDefinitions ++
-  -- InstanceModels
-  map nw iMods ++
-  -- TheoryModels
-  map nw physicsTMs ++
   -- UnitDefns
   map nw derived ++ map nw fundamentals ++ map nw units
 

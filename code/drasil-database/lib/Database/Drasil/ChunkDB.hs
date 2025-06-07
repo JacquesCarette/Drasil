@@ -9,6 +9,7 @@ module Database.Drasil.ChunkDB (
   -- ** 'ChunkDB'
   -- | Main database type
   ChunkDB(CDB, symbolTable, termTable, conceptChunkTable),
+  TermAbbr(..),
   -- ** Maps
   -- | Exported for external use.
   RefbyMap, TraceMap, UMap,
@@ -17,7 +18,7 @@ module Database.Drasil.ChunkDB (
   cdb, idMap, termMap, conceptMap, traceMap, generateRefbyMap, -- idMap, termMap for docLang
   -- ** Lookup Functions
   asOrderedList, collectUnits,
-  termResolve, defResolve, symbResolve,
+  termResolve, termResolve', defResolve, symbResolve,
   traceLookup, refbyLookup,
   datadefnLookup, insmodelLookup, gendefLookup, theoryModelLookup,
   conceptinsLookup, refResolve,
@@ -27,10 +28,10 @@ module Database.Drasil.ChunkDB (
   conceptinsTable, labelledcontentTable, refTable
 ) where
 
-import Language.Drasil (HasUID(..), UID, Quantity, MayHaveUnit(..), Idea,
+import Language.Drasil (HasUID(..), UID, Quantity, MayHaveUnit(..), Idea (..),
   QuantityDict, IdeaDict, Concept, ConceptChunk, IsUnit(..), UnitDefn,
   Reference, ConceptInstance, LabelledContent, Citation,
-  qw, nw, cw, unitWrapper)
+  qw, nw, cw, unitWrapper, NP, NamedIdea(..))
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Control.Lens ((^.), makeLenses)
@@ -128,9 +129,27 @@ uMapLookup tys ms u t = getFM $ Map.lookup u t
 symbResolve :: ChunkDB -> UID -> QuantityDict
 symbResolve m x = uMapLookup "Symbol" "SymbolMap" x $ symbolTable m
 
--- | Looks up a 'UID' in the term table from the 'ChunkDB'. If nothing is found, an error is thrown.
-termResolve :: ChunkDB -> UID -> IdeaDict
-termResolve m x = uMapLookup "Term" "TermMap" x $ termTable m
+data TermAbbr = TermAbbr { longForm :: NP, shortForm :: Maybe String }
+
+-- | Search for _any_ chunk that is an instance of 'Idea' and process its "term"
+-- and abbreviation.
+termResolve :: (NP -> Maybe String -> c) -> ChunkDB -> UID -> c
+termResolve f db trg
+  | (Just (c, _)) <- Map.lookup trg (termTable db) = go c
+  | (Just (c, _)) <- Map.lookup trg (symbolTable db)       = go c
+  | (Just (c, _)) <- Map.lookup trg (conceptChunkTable db) = go c
+  | (Just (c, _)) <- Map.lookup trg (_unitTable db)        = go c
+  | (Just (c, _)) <- Map.lookup trg (_dataDefnTable db)    = go c
+  | (Just (c, _)) <- Map.lookup trg (_insmodelTable db)    = go c
+  | (Just (c, _)) <- Map.lookup trg (_gendefTable db)      = go c
+  | (Just (c, _)) <- Map.lookup trg (_theoryModelTable db) = go c
+  | (Just (c, _)) <- Map.lookup trg (_conceptinsTable db)  = go c
+  | otherwise = error $ "Term: " ++ show trg ++ " not found in TermMap"
+  where go c = f (c ^. term) (getA c)
+
+-- | Find a chunks "term" and abbreviation, if it exists.
+termResolve' :: ChunkDB -> UID -> TermAbbr
+termResolve' = termResolve TermAbbr
 
 -- | Looks up a 'UID' in the reference table from the 'ChunkDB'. If nothing is found, an error is thrown.
 refResolve :: UID -> ReferenceMap -> Reference

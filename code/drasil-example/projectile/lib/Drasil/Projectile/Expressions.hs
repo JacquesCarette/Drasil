@@ -11,7 +11,7 @@ import Control.Lens ((^.))
 import Language.Drasil
 import qualified Data.Drasil.Quantities.Physics as QP (iSpeed,
   constAccel, xConstAccel, yConstAccel, ixPos, iyPos)
-import Data.Drasil.Quantities.Physics (gravitationalAccel, gravitationalMagnitude,
+import Data.Drasil.Quantities.Physics (gravitationalMagnitude,
   ixVel, iyVel, xPos, yPos, time, iPos, scalarPos, xVel, yVel, xAccel, yAccel, position, 
   velocity, acceleration, constAccelV, speed)
 import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, tol, landPos, offset)

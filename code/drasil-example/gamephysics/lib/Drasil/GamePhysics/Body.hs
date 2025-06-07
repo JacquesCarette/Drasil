@@ -139,13 +139,32 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 units :: [UnitDefn] -- FIXME
 units = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [newton, radian]
 
+ideaDicts :: [IdeaDict]
+ideaDicts =
+  -- Actual IdeaDicts
+  doccon ++ educon ++ prodtcon ++
+  -- CIs
+  nw progName : map nw acronyms ++ map nw doccon' ++ map nw CM.mathcon' ++
+  -- ConceptChunks
+  nw algorithm : map nw softwarecon ++ map nw CP.physicCon ++ map nw CM.mathcon ++
+  -- UnitDefns
+  map nw derived ++ map nw fundamentals ++
+  -- GenDefns
+  map nw generalDefns ++
+  -- InstanceModels
+  map nw iMods ++
+  -- QuantityDicts
+  map nw symbolsAll ++ map (nw . (^. output)) iMods
+
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts =
+  -- QuantityDicts
+  map nw symbolsAll ++
+  -- CIs
+  map nw acronyms
+
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll) (nw progName :
-  map nw symbolsAll ++ map nw acronyms ++ map nw prodtcon ++ map nw generalDefns
-  ++ map nw iMods ++ map (nw . (^. output)) iMods ++ map nw softwarecon
-  ++ map nw doccon ++ map nw doccon' ++ map nw CP.physicCon ++ map nw educon
-  ++ [nw algorithm] ++ map nw derived ++ map nw fundamentals
-  ++ map nw CM.mathcon ++ map nw CM.mathcon')
+symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll) ideaDicts
   (map cw defSymbols ++ srsDomains ++ map cw iMods) units dataDefs
   iMods generalDefns tMods concIns [] allRefs citations
 
@@ -154,7 +173,7 @@ allRefs :: [Reference]
 allRefs = [externalLinkRef, pymunk] ++ uriReferences ++ offShelfSolRefs
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)
+usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of

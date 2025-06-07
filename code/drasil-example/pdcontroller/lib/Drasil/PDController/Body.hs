@@ -136,12 +136,24 @@ symbolsAll = symbols ++ map qw pidDqdConstants ++ map qw pidConstants
   ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
   ++ map qw [listToArray $ quantvar opProcessVariable, arrayVecDepVar pidODEInfo]
 
+ideaDicts :: [IdeaDict]
+ideaDicts =
+  -- Actual IdeaDicts
+  sciCompS : concepts ++ doccon ++
+  -- CIs
+  nw progName : map nw acronyms ++ map nw mathcon' ++ map nw doccon' ++
+  -- ConceptChunks
+  map nw physicalcon ++ map nw mathcon ++ map nw [linear, program, angular] ++
+  -- QuantityDicts
+  map nw symbols ++map nw symbols ++
+  -- UnitalChunks
+  map nw physicscon ++
+  -- UnitDefns
+  map nw [second, kilogram]
+
 symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf])
-  (nw progName : [nw program, nw angular, nw linear] ++ [nw sciCompS]
-  ++ map nw doccon ++ map nw doccon' ++ concepts ++ map nw mathcon
-  ++ map nw mathcon' ++ map nw [second, kilogram] ++ map nw symbols 
-  ++ map nw physicscon ++ map nw acronyms ++ map nw physicalcon)
+  ideaDicts
   (map cw inpConstrained ++ srsDomains)
   (map unitWrapper [second, kilogram])
   dataDefinitions
@@ -157,8 +169,15 @@ symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
 
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts =
+  -- CIs
+  map nw acronyms ++
+  -- QuantityDicts
+  map nw symbolsAll
+
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbolsAll)
+usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
   ([] :: [ConceptChunk])
   ([] :: [UnitDefn])
   ([] :: [DataDefinition])

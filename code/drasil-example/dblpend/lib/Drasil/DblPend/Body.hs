@@ -142,25 +142,44 @@ symbolsAll :: [QuantityDict]
 symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
   ++ map qw [listToArray $ quantvar pendDisAngle, arrayVecDepVar dblPenODEInfo]
 
+ideaDicts :: [IdeaDict]
+ideaDicts = 
+  -- Actual IdeaDicts
+  inValue : doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
+  -- CIs
+  nw progName : map nw acronyms ++ map nw doccon' ++ map nw mathcon' ++ map nw physicCon' ++
+  -- ConceptChunks
+  map nw [algorithm, len, mass, errMsg, program] ++ map nw physicCon ++ map nw mathcon ++ map nw physicalcon ++
+  -- UnitDefns
+  map nw [kilogram, newton, degree, radian, metre, hertz] ++ map nw fundamentals ++
+  -- TheoryModels
+  nw newtonSLR :
+  -- DefinedQuantityDicts
+  map nw [unitVect, unitVectj] ++
+  -- QuantityDicts
+  map nw symbols ++ 
+  -- UnitalChunks
+  map nw physicscon
+
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts =
+  -- QuantityDicts
+  map nw symbols ++
+  -- CIs
+  nw progName : map nw acronyms
+
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll)
-  (nw newtonSLR : nw progName : nw mass : nw len : nw kilogram : nw inValue
-   : nw newton : nw degree : nw radian : nw unitVect : nw unitVectj
-   : [nw errMsg, nw program] ++ map nw symbols ++ map nw doccon
-   ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon'
-   ++ map nw physicCon' ++ map nw physicscon ++ concepts ++ map nw physicalcon
-   ++ map nw acronyms ++ map nw symbols ++ map nw fundamentals
-   ++ map nw [metre, hertz] ++ [nw algorithm] ++ map nw compcon
-   ++ map nw educon ++ map nw prodtcon) srsDomains
-   (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz])
-   dataDefs iMods genDefns tMods concIns [] allRefs citations
+  ideaDicts srsDomains
+  (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz])
+  dataDefs iMods genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw acronyms ++ map nw symbols) ([] :: [ConceptChunk])
+usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 stdFields :: Fields
@@ -197,7 +216,7 @@ externalLinkRef = makeURI "DblPendSRSLink"
 ---------------------------------
 scope :: Sentence
 scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)), 
-  sParen (getAcc twoD), phrase pendMotion, phrase problem,
+  sParen (short twoD), phrase pendMotion, phrase problem,
                    S "with various initial conditions"]
 
 ----------------------------------------------

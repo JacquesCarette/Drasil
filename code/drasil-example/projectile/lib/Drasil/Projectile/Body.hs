@@ -114,7 +114,7 @@ justification = foldlSent [atStart projectile, phrase motion, S "is a common" +:
   S ", which is based" `S.onThe` S "original, manually created version of" +:+
   namedRef externalLinkRef (S "Projectile")]
 scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)),
-  sParen (getAcc twoD), phraseNP (combineNINI projectile motion), phrase problem, 
+  sParen (short twoD), phraseNP (combineNINI projectile motion), phrase problem, 
   S "with", phrase constAccel]
 
 externalLinkRef :: Reference
@@ -164,13 +164,33 @@ background = foldlSent_ [S "Common examples of", phrase projectile, phrase motio
 tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM]
 
+ideaDicts :: [IdeaDict]
+ideaDicts =
+  -- Actual IdeaDicts
+  sciCompS : doccon ++ educon ++ compcon ++ concepts ++ unitalIdeas ++
+  -- CIs
+  nw progName : nw inValue : map nw doccon' ++ map nw physicCon' ++
+  map nw acronyms ++
+  -- ConceptChunks
+  map nw [mass, errMsg, program, algorithm] ++ map nw physicCon ++ map nw mathcon ++
+  -- QuantityDicts
+  map nw symbols ++
+  -- UnitalChunks
+  map nw physicscon ++
+  -- UnitDefns
+  map nw [metre, radian, second]
+
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts =
+  -- CIs
+  map nw acronyms ++
+  -- DefinedQuantityDicts
+  nw pi_ :
+  -- QuantityDicts
+  map nw symbols
+
 symbMap :: ChunkDB
-symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
-  (nw progName : nw mass : nw inValue : [nw errMsg, nw program] ++
-    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
-    map nw physicscon ++ map nw mathcon ++ [nw algorithm] ++ concepts ++ 
-    [nw sciCompS] ++ unitalIdeas ++ map nw acronyms ++ map nw symbols ++ 
-    map nw educon ++ map nw [metre, radian, second] ++ map nw compcon) 
+symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols) ideaDicts
   (cw pi_ : map cw constrained ++ srsDomains) (map unitWrapper [metre, radian, second]) 
   dataDefs iMods genDefns tMods concIns [] allRefs citations
 
@@ -179,7 +199,7 @@ allRefs :: [Reference]
 allRefs = [externalLinkRef]
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms ++ map nw symbols)
+usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
   (cw pi_ : srsDomains) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 stdFields :: Fields

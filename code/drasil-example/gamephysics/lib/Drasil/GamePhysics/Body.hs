@@ -123,7 +123,7 @@ si = SI {
 }
 
 purp :: Sentence
-purp = foldlSent_ [S "simulate", getAcc twoD, phrase CP.rigidBody,
+purp = foldlSent_ [S "simulate", short twoD, phrase CP.rigidBody,
   phrase Doc.physics, S "for use in", phrase game, S "development"]
 
 concIns :: [ConceptInstance]
@@ -139,13 +139,32 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 units :: [UnitDefn] -- FIXME
 units = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [newton, radian]
 
+ideaDicts :: [IdeaDict]
+ideaDicts =
+  -- Actual IdeaDicts
+  doccon ++ educon ++ prodtcon ++
+  -- CIs
+  nw progName : map nw acronyms ++ map nw doccon' ++ map nw CM.mathcon' ++
+  -- ConceptChunks
+  nw algorithm : map nw softwarecon ++ map nw CP.physicCon ++ map nw CM.mathcon ++
+  -- UnitDefns
+  map nw derived ++ map nw fundamentals ++
+  -- GenDefns
+  map nw generalDefns ++
+  -- InstanceModels
+  map nw iMods ++
+  -- QuantityDicts
+  map nw symbolsAll ++ map (nw . (^. output)) iMods
+
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts =
+  -- QuantityDicts
+  map nw symbolsAll ++
+  -- CIs
+  map nw acronyms
+
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll) (nw progName :
-  map nw symbolsAll ++ map nw acronyms ++ map nw prodtcon ++ map nw generalDefns
-  ++ map nw iMods ++ map (nw . (^. output)) iMods ++ map nw softwarecon
-  ++ map nw doccon ++ map nw doccon' ++ map nw CP.physicCon ++ map nw educon
-  ++ [nw algorithm] ++ map nw derived ++ map nw fundamentals
-  ++ map nw CM.mathcon ++ map nw CM.mathcon')
+symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll) ideaDicts
   (map cw defSymbols ++ srsDomains ++ map cw iMods) units dataDefs
   iMods generalDefns tMods concIns [] allRefs citations
 
@@ -154,7 +173,7 @@ allRefs :: [Reference]
 allRefs = [externalLinkRef, pymunk] ++ uriReferences ++ offShelfSolRefs
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)
+usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
@@ -197,7 +216,7 @@ externalLinkRef = makeURI "GamePhysicsSRSLink"
 -- 2.2 : Scope of Requirements --
 ---------------------------------
 scope :: Sentence
-scope = foldlSent_ [phraseNP (the physicalSim) `S.of_` getAcc twoD,
+scope = foldlSent_ [phraseNP (the physicalSim) `S.of_` short twoD,
   plural CP.rigidBody, S "acted on by", plural QP.force]
 
 --scope_of_requirements_intro_p2 = EmptyS
@@ -414,14 +433,14 @@ offShelfSolsIntro, offShelfSols2DList,
 offShelfSolsIntro = mkParagraph $ foldlSentCol 
   [S "As mentioned" `S.inThe` namedRef (SRS.probDesc [] []) (phrase problemDescription) `sC`
   S "there already exist free", phrase openSource, phrase game +:+.
-  plural physLib, S "Similar", getAcc twoD, plural physLib, S "are"]
+  plural physLib, S "Similar", short twoD, plural physLib, S "are"]
 
 offShelfSols2DList = enumBulletU [
   namedRef box2D (S "Box2D"),
   namedRef napePhysicsEngine (S"Nape Physics Engine")]
 
 offShelfSolsMid = mkParagraph $ foldl (+:+) EmptyS [S "Free", phrase openSource,
-  getAcc threeD, phrase game, plural physLib, S "include:"]
+  short threeD, phrase game, plural physLib, S "include:"]
 
 offShelfSols3DList = enumBulletU [
   namedRef bullet (S "Bullet"),

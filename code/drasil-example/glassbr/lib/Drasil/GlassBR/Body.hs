@@ -32,8 +32,8 @@ import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamenta
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
-import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab, 
-  ptOfExplsn, con', glass)
+import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab,
+  ptOfExplsn, con', glass, con)
 import Drasil.GlassBR.DataDefs (configFp)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.Figures
@@ -42,13 +42,13 @@ import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
 import Drasil.GlassBR.MetaConcepts (progName)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations)
 import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs)
-import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
+import Drasil.GlassBR.Symbols (symbolsForSymbolTable, thisSymbols, thisTerms)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
   sD, termsWithAccDefn, termsWithDefsOnly, terms, dataConstraints, lDurFac,
-  isSafeProb, dimlessLoad, isSafeLoad, tolLoad, unitless, riskFun, sdfTol)
+  isSafeProb, dimlessLoad, isSafeLoad, tolLoad, riskFun, sdfTol, unitarySymbols)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -68,7 +68,7 @@ si = SI {
   _background  = [background],
   _motivation  = [],
   _scope       = [scope],
-  _quants      = symbolsForTable,
+  _quants      = symbolsForSymbolTable,
   _instModels  = iMods,
   _datadefs    = GB.dataDefs,
   _configFiles = configFp,
@@ -133,18 +133,37 @@ background = foldlSent_ [phrase explosion, S "in downtown areas are dangerous fr
   phrase blast +:+ S "itself" `S.and_` S "also potentially from the secondary" 
   +:+ S "effect of falling glass"]
 
+ideaDicts :: [IdeaDict]
+ideaDicts =
+  -- IdeaDicts
+  [sciCompS, lateralLoad, materialProprty] ++ con' ++ doccon ++ educon ++ compcon ++
+  -- CIs
+  nw progName : map nw doccon' ++ map nw mathcon' ++ map nw con ++
+  -- ConceptChunks
+  map nw [distance, algorithm] ++ map nw terms ++ map nw mathcon ++ 
+  map nw softwarecon ++ map nw physicalcon ++
+  -- QuantityDicts
+  map nw thisTerms ++ map nw unitarySymbols ++
+  map nw [riskFun, isSafeProb, isSafeLoad, sdfTol, dimlessLoad, tolLoad, lDurFac] ++
+  -- UnitDefns
+  map nw fundamentals ++ map nw derived
+
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts =
+  -- CIs
+  map nw acronyms ++
+  -- QuantityDicts
+  map nw thisSymbols
+
 symbMap :: ChunkDB
-symbMap = cdb (unitless ++ thisSymbols) (nw progName : map nw thisSymbols
-  ++ map nw con' ++ map nw [riskFun, isSafeProb, isSafeLoad,
-  sdfTol, dimlessLoad, tolLoad, lDurFac] ++ map nw terms ++ map nw doccon
-  ++ map nw doccon' ++ map nw educon ++ [nw sciCompS] ++ map nw compcon
-  ++ map nw mathcon ++ map nw mathcon' ++ map nw softwarecon
-  ++ [nw lateralLoad, nw materialProprty] ++ [nw distance, nw algorithm]
-  ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon)
-  (map cw symb ++ terms ++ Doc.srsDomains)
-  (map unitWrapper [metre, second, kilogram]
+symbMap = cdb thisSymbols ideaDicts
+  (map cw symb ++ terms ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) GB.dataDefs iMods [] tMods concIns
   labCon allRefs citations
+
+usedDB :: ChunkDB
+usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -155,10 +174,6 @@ concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonf
 
 labCon :: [LabelledContent]
 labCon = funcReqsTables ++ [demandVsSDFig, dimlessloadVsARFig]
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

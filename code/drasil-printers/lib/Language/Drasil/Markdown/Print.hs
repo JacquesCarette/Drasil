@@ -8,12 +8,11 @@ import Data.List (transpose)
 import Data.List.Utils (replace)
 
 import qualified Language.Drasil as L
-
 import Language.Drasil.Printing.Import (makeProject)
-import Language.Drasil.Printing.AST (ItemType(Flat, Nested),  
-  ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, 
-  Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, E, (:+:)), Label, 
-  LinkType(Internal, Cite2, External), OverSymb(Hat), Fonts(Emph, Bold), 
+import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
+  ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr,
+  Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, E, (:+:), Tooltip), Label,
+  LinkType(Internal, Cite2, External), OverSymb(Hat), Fonts(Emph, Bold),
   Spacing(Thin), Fence(Abs), Ops(Perc, Mul))
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Project(Project), 
@@ -106,6 +105,7 @@ printLO _ CodeBlock {}           = empty
 -- | Helper for rendering Specs into Markdown
 pSpec :: RefMap -> Spec -> Doc
 pSpec _ (E e)      = text "\\\\(" <> pExpr e <> text "\\\\)"
+pSpec rm (Tooltip _ s) = pSpec rm s
 pSpec rm (a :+: b) = pSpec rm a <> pSpec rm b
 pSpec _ HARDNL     = text "\n"
 pSpec rm (Ref Internal       r a) = reflink     rm r (pSpec rm a)

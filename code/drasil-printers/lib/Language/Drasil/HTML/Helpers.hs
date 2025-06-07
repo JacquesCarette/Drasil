@@ -6,7 +6,7 @@ import Text.PrettyPrint (Doc, text, empty, ($$), (<>), (<+>), vcat, hcat, nest,
   cat, hcat)
 import Data.List (intersperse)
 
-import Language.Drasil hiding (Expr)
+import Language.Drasil hiding (Expr, Title)
 
 --import Language.Drasil.Document (Document, MaxWidthPercent)
 import Language.Drasil.Printing.AST (Expr, Spec)
@@ -74,12 +74,13 @@ h n       | n < 1 = error "Illegal header (too small)"
           | otherwise = wrap ("h" ++ show n) []
 
 -- | HTML attribute selector.
-data Variation = Class | Id | Align deriving Eq
+data Variation = Class | Id | Align | Title deriving Eq
 
 instance Show Variation where
   show Class = "class"
   show Id    = "id"
   show Align = "align"
+  show Title = "title"
 
 -- | General 'Class' wrapper function and formats the document space with 'cat'.
 wrap :: String -> [String] -> Doc -> Doc
@@ -180,6 +181,9 @@ divTag = wrap "div"
 spanTag :: [String] -> Doc -> Doc
 spanTag = wrap "span"
 
+-- | Span tag wrapper with a title attribute.
+spanTag' :: Doc -> Doc -> Doc
+spanTag' t = wrapGen' hcat Title "span" t [""]
 -- | Indent the Document by 2 positions.
 indent :: Doc -> Doc
 indent = nest 2

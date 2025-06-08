@@ -1,3 +1,4 @@
 digraph database{
+TermAbbr	[shape=oval, color=turquoise4, label="TermAbbr"];
 ChunkDB	[shape=oval, color=turquoise4, label="ChunkDB"];
 }

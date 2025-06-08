@@ -2350,7 +2350,7 @@ data () => System
 --   
 --   <ul>
 --   <li>[<a>Quantity</a>] (for <a>SymbolMap</a>),</li>
---   <li><tt>NamedIdea</tt>s (for <a>TermMap</a>),</li>
+--   <li><a>NamedIdea</a>s (for <a>TermMap</a>),</li>
 --   <li><a>Concept</a>s (for <a>ConceptMap</a>),</li>
 --   <li>Units (something that <a>IsUnit</a> for <a>UnitMap</a>),</li>
 --   <li><a>DataDefinition</a>s (for <a>DatadefnMap</a>),</li>

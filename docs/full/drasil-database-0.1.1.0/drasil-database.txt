@@ -18,6 +18,10 @@ module Database.Drasil.ChunkDB
 --   in its respective example, else an error is thrown.
 data ChunkDB
 CDB :: SymbolMap -> TermMap -> ConceptMap -> UnitMap -> DatadefnMap -> InsModelMap -> GendefMap -> TheoryModelMap -> ConceptInstanceMap -> CitationMap -> LabelledContentMap -> ReferenceMap -> TraceMap -> RefbyMap -> ChunkDB
+data TermAbbr
+TermAbbr :: NP -> Maybe String -> TermAbbr
+[longForm] :: TermAbbr -> NP
+[shortForm] :: TermAbbr -> Maybe String
 
 -- | A reference map, used to hold a <a>UID</a> and where it is referenced
 --   (<a>UID</a>s).
@@ -38,7 +42,7 @@ type UMap a = Map UID (a, Int)
 --   
 --   <ul>
 --   <li>[<a>Quantity</a>] (for <a>SymbolMap</a>),</li>
---   <li><tt>NamedIdea</tt>s (for <a>TermMap</a>),</li>
+--   <li><a>NamedIdea</a>s (for <a>TermMap</a>),</li>
 --   <li><a>Concept</a>s (for <a>ConceptMap</a>),</li>
 --   <li>Units (something that <a>IsUnit</a> for <a>UnitMap</a>),</li>
 --   <li><a>DataDefinition</a>s (for <a>DatadefnMap</a>),</li>
@@ -73,9 +77,12 @@ asOrderedList :: UMap a -> [a]
 -- | Gets the units of a <a>Quantity</a> as <a>UnitDefn</a>s.
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
 
--- | Looks up a <a>UID</a> in the term table from the <a>ChunkDB</a>. If
---   nothing is found, an error is thrown.
-termResolve :: ChunkDB -> UID -> IdeaDict
+-- | Search for _any_ chunk that is an instance of <a>Idea</a> and process
+--   its "term" and abbreviation.
+termResolve :: (NP -> Maybe String -> c) -> ChunkDB -> UID -> c
+
+-- | Find a chunks "term" and abbreviation, if it exists.
+termResolve' :: ChunkDB -> UID -> TermAbbr
 
 -- | Looks up a <a>UID</a> in the definition table from the <a>ChunkDB</a>.
 --   If nothing is found, an error is thrown.
@@ -156,12 +163,16 @@ type TraceMap = Map UID [UID]
 --   for. One is for symbols + their units, and the others are for what
 --   they state.
 type UMap a = Map UID (a, Int)
+data TermAbbr
+TermAbbr :: NP -> Maybe String -> TermAbbr
+[longForm] :: TermAbbr -> NP
+[shortForm] :: TermAbbr -> Maybe String
 
 -- | Smart constructor for chunk databases. Takes in the following:
 --   
 --   <ul>
 --   <li>[<a>Quantity</a>] (for <a>SymbolMap</a>),</li>
---   <li><tt>NamedIdea</tt>s (for <a>TermMap</a>),</li>
+--   <li><a>NamedIdea</a>s (for <a>TermMap</a>),</li>
 --   <li><a>Concept</a>s (for <a>ConceptMap</a>),</li>
 --   <li>Units (something that <a>IsUnit</a> for <a>UnitMap</a>),</li>
 --   <li><a>DataDefinition</a>s (for <a>DatadefnMap</a>),</li>
@@ -196,9 +207,12 @@ asOrderedList :: UMap a -> [a]
 -- | Gets the units of a <a>Quantity</a> as <a>UnitDefn</a>s.
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
 
--- | Looks up a <a>UID</a> in the term table from the <a>ChunkDB</a>. If
---   nothing is found, an error is thrown.
-termResolve :: ChunkDB -> UID -> IdeaDict
+-- | Search for _any_ chunk that is an instance of <a>Idea</a> and process
+--   its "term" and abbreviation.
+termResolve :: (NP -> Maybe String -> c) -> ChunkDB -> UID -> c
+
+-- | Find a chunks "term" and abbreviation, if it exists.
+termResolve' :: ChunkDB -> UID -> TermAbbr
 
 -- | Looks up a <a>UID</a> in the definition table from the <a>ChunkDB</a>.
 --   If nothing is found, an error is thrown.

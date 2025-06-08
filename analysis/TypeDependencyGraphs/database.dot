@@ -1,5 +1,10 @@
 digraph alltypes {
 	subgraph cunkdbh {
+		subgraph termabbr{
+		TermAbbr	[shape=oval, color=cyan3, label="TermAbbr"];
+		TermAbbr -> NP;
+		TermAbbr -> MaybeString;
+		}
 		subgraph chunkdb{
 		ChunkDB	[shape=oval, color=cyan3, label="ChunkDB"];
 		ChunkDB -> SymbolMap;

@@ -4,7 +4,7 @@ Last updated: December 31, 2024
 --------------------------------------------------
 
 **Debug**
-  - Gathers all printing functions and creates the debugging tables from them
+  - Utilities for dumping all chunks in a ChunkDB to plaintext.
 
 **DOT**
   - Dot graph printers (for traceability graphs)

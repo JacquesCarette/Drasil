@@ -4,7 +4,8 @@ Last updated: December, 2024
 --------------------------------------------------
 
 LanguageStructure.hs
-  - Contains the comment types for Drasil. 
+  - Contains a `Comment` type (alias of `String`), representing "comments" as in
+    code.
 
 README.md
   - This file

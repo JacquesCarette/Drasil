@@ -28,4 +28,4 @@ Output-Values: Output the Process Variable (from [IM:pdEquationIM](./SecIMs.md#I
 |\\({t\_{\text{sim}}}\\) |Simulation Time  |\\({\text{s}}\\)|
 |\\({t\_{\text{step}}}\\)|Step Time        |\\({\text{s}}\\)|
 
-**<p align="center">Required Inputs following [FR:Input-Values](./SecFRs.md#inputValues)</p>**
+**<p align="center">Required Inputs</p>**

@@ -25,7 +25,7 @@ import Drasil.DocLang (tunitNone)
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
@@ -84,7 +84,7 @@ mkSRS = [TableOfContents,
      AuxConsProg progName [],
   Bibliography]
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = progName,
   _kind        = Doc.srs,
@@ -94,36 +94,37 @@ si = SI {
   _motivation  = [],
   _scope       = [],
   _quants      = [] :: [QuantityDict],
-  _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = [] :: [InstanceModel],
   _datadefs    = [] :: [DataDefinition],
   _configFiles = [],
   _inputs      = [] :: [QuantityDict],
   _outputs     = [] :: [QuantityDict],
-  _defSequence = [] :: [Block SimpleQDef],
   _constraints = [] :: [ConstrainedChunk],
   _constants   = [] :: [ConstQDef],
-  _sysinfodb   = symbMap,
-  _usedinfodb  = usedDB,
-   refdb       = refDB
+  _systemdb   = symbMap,
+  _usedinfodb  = usedDB
 }
 
+ideaDicts :: [IdeaDict]
+ideaDicts =
+  -- Actual IdeaDicts
+  doccon ++ prodtcon ++ [inValue] ++
+  -- CIs
+  nw progName : map nw doccon' ++
+  -- ConceptChunks
+  map nw [errMsg, algorithm, program] ++ map nw mathcon
+
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [QuantityDict]) (nw progName : nw inValue : [nw errMsg, 
-  nw program] ++ map nw doccon ++ map nw doccon' ++ [nw algorithm] ++ 
-  map nw prodtcon ++ map nw mathcon) srsDomains
+symbMap = cdb ([] :: [QuantityDict]) ideaDicts srsDomains
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  ([] :: [Section]) ([] :: [LabelledContent]) ([] :: [Reference])
+  ([] :: [LabelledContent]) ([] :: [Reference]) citations
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  ([] :: [Section]) ([] :: [LabelledContent]) ([] :: [Reference])
-
-refDB :: ReferenceDB
-refDB = rdb citations []
+  ([] :: [LabelledContent]) ([] :: [Reference]) []
 
 citations :: BibRef
 citations = [parnasClements1986, koothoor2013, smithEtAl2007, smithLai2005,

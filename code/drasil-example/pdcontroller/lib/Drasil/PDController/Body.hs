@@ -24,10 +24,10 @@ import Data.Drasil.Quantities.Math (posInf, negInf)
 
 import Drasil.PDController.Assumptions (assumptions)
 import Drasil.PDController.Changes (likelyChgs)
-import Drasil.PDController.Concepts (acronyms, pdControllerApp,
-  pidC, concepts, defs)
+import Drasil.PDController.Concepts (acronyms, pidC, concepts, defs)
 import Drasil.PDController.DataDefs (dataDefinitions)
 import Drasil.PDController.GenDefs (genDefns)
+import Drasil.PDController.MetaConcepts (progName)
 import Drasil.PDController.GenSysDesc
        (gsdSysContextFig, gsdSysContextList, gsdSysContextP1, gsdSysContextP2,
         gsduserCharacteristics)
@@ -49,7 +49,7 @@ naveen = person "Naveen Ganesh" "Muralidharan"
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
@@ -60,7 +60,7 @@ mkSRS
   = [TableOfContents,
     RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
      IntroSec $
-       IntroProg introPara (phrase pdControllerApp)
+       IntroProg introPara (phrase progName)
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
           IOrgSec IDict.dataDefn (SRS.inModel [] [])
@@ -80,7 +80,7 @@ mkSRS
          [SSDProblem $
             PDProg purp []
               [TermsAndDefs Nothing defs,
-               PhySysDesc pdControllerApp sysParts sysFigure [],
+               PhySysDesc progName sysParts sysFigure [],
                Goals sysGoalInput],
           SSDSolChSpec $
             SCSProg
@@ -96,9 +96,9 @@ mkSRS
      ReqrmntSec $ ReqsProg [FReqsSub EmptyS [], NonFReqsSub], LCsSec,
      TraceabilitySec $ TraceabilityProg $ traceMatStandard si, Bibliography]
 
-si :: SystemInformation
+si :: System
 si = SI {
-  _sys = pdControllerApp,
+  _sys = progName,
   _kind = Doc.srs,
   _authors = [naveen],
   _purpose = [purp],
@@ -106,18 +106,16 @@ si = SI {
   _motivation  = [motivation],
   _scope       = [scope],
   _quants = symbolsAll,
-  _concepts = [] :: [DefinedQuantityDict],
   _datadefs = dataDefinitions,
   _instModels = instanceModels,
   _configFiles = [],
   _inputs = inputs,
   _outputs = outputs,
-  _defSequence = [] :: [Block SimpleQDef],
   _constraints = map cnstrw inpConstrained,
   _constants = pidConstants,
-  _sysinfodb = symbMap,
-  _usedinfodb = usedDB,
-   refdb = refDB}
+  _systemdb = symbMap,
+  _usedinfodb = usedDB
+}
 
 purp :: Sentence
 purp = foldlSent_ [S "provide a model" `S.ofA` phrase pidC,
@@ -138,12 +136,24 @@ symbolsAll = symbols ++ map qw pidDqdConstants ++ map qw pidConstants
   ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
   ++ map qw [listToArray $ quantvar opProcessVariable, arrayVecDepVar pidODEInfo]
 
+ideaDicts :: [IdeaDict]
+ideaDicts =
+  -- Actual IdeaDicts
+  sciCompS : concepts ++ doccon ++
+  -- CIs
+  nw progName : map nw acronyms ++ map nw mathcon' ++ map nw doccon' ++
+  -- ConceptChunks
+  map nw physicalcon ++ map nw mathcon ++ map nw [linear, program, angular] ++
+  -- QuantityDicts
+  map nw symbols ++map nw symbols ++
+  -- UnitalChunks
+  map nw physicscon ++
+  -- UnitDefns
+  map nw [second, kilogram]
+
 symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf])
-  (nw pdControllerApp : [nw program, nw angular, nw linear] ++ [nw sciCompS]
-  ++ map nw doccon ++ map nw doccon' ++ concepts ++ map nw mathcon
-  ++ map nw mathcon' ++ map nw [second, kilogram] ++ map nw symbols 
-  ++ map nw physicscon ++ map nw acronyms ++ map nw physicalcon)
+  ideaDicts
   (map cw inpConstrained ++ srsDomains)
   (map unitWrapper [second, kilogram])
   dataDefinitions
@@ -151,16 +161,23 @@ symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf
   genDefns
   theoreticalModels
   conceptInstances
-  ([] :: [Section])
   ([] :: [LabelledContent])
   allRefs
+  citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
 
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts =
+  -- CIs
+  map nw acronyms ++
+  -- QuantityDicts
+  map nw symbolsAll
+
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbolsAll)
+usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
   ([] :: [ConceptChunk])
   ([] :: [UnitDefn])
   ([] :: [DataDefinition])
@@ -168,12 +185,9 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbolsAll)
   ([] :: [GenDefn])
   ([] :: [TheoryModel])
   ([] :: [ConceptInstance])
-  ([] :: [Section])
   ([] :: [LabelledContent])
   ([] :: [Reference])
-
-refDB :: ReferenceDB
-refDB = rdb citations conceptInstances
+  []
 
 conceptInstances :: [ConceptInstance]
 conceptInstances = assumptions ++ goals ++ funcReqs ++ nonfuncReqs ++ likelyChgs

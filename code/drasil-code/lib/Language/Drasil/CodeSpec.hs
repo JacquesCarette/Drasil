@@ -6,8 +6,8 @@ module Language.Drasil.CodeSpec where
 import Language.Drasil hiding (None, new)
 import Language.Drasil.Display (Symbol(Variable))
 import Database.Drasil
-import qualified SysInfo.Drasil as SI
-import SysInfo.Drasil (HasSystemInformation(..))
+import qualified System.Drasil as SI
+import System.Drasil (HasSystem(..))
 
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 
@@ -70,7 +70,7 @@ data OldCodeSpec = OldCodeSpec {
   -- automatically define.
   _mods :: [Mod],  -- medium hack
   -- | The database of all chunks used in the problem.
-  _sysinfodb :: ChunkDB
+  _systemdb :: ChunkDB
   }
 
 makeClassyFor "HasOldCodeSpec" "oldCodeSpec"
@@ -86,27 +86,27 @@ makeClassyFor "HasOldCodeSpec" "oldCodeSpec"
     , ("_constants", "constantsO")
     , ("_constMap", "constMapO")
     , ("_mods", "modsO")
-    , ("_sysinfodb", "sysinfodbO")
+    , ("_systemdb", "systemdbO")
     ] ''OldCodeSpec
 
 -- | New Code Specification. Holds system information and a reference to `OldCodeSpec`.
 data CodeSpec = CS {
-  _sysInfo :: SI.SystemInformation,
+  _system' :: SI.System,
   _oldCode :: OldCodeSpec
 }
 makeLenses ''CodeSpec
 
-instance HasSystemInformation CodeSpec where
-  systemInformation :: Lens' CodeSpec SI.SystemInformation
-  systemInformation = sysInfo
+instance HasSystem CodeSpec where
+  system :: Lens' CodeSpec SI.System
+  system = system'
   background :: Lens' CodeSpec SI.Background
-  background = systemInformation . SI.background
+  background = system . SI.background
   purpose :: Lens' CodeSpec SI.Purpose
-  purpose = systemInformation . SI.purpose
+  purpose = system . SI.purpose
   scope :: Lens' CodeSpec SI.Scope
-  scope = systemInformation . SI.scope
+  scope = system . SI.scope
   motivation :: Lens' CodeSpec SI.Motivation
-  motivation = systemInformation . SI.motivation
+  motivation = system . SI.motivation
 
 instance HasOldCodeSpec CodeSpec where
   oldCodeSpec :: Lens' CodeSpec OldCodeSpec
@@ -148,8 +148,8 @@ instance HasOldCodeSpec CodeSpec where
   modsO :: Lens' CodeSpec [Mod]
   modsO = oldCode . modsO
 
-  sysinfodbO :: Lens' CodeSpec ChunkDB
-  sysinfodbO = oldCode . sysinfodbO
+  systemdbO :: Lens' CodeSpec ChunkDB
+  systemdbO = oldCode . systemdbO
 
 -- | Converts a list of chunks that have 'UID's to a Map from 'UID' to the associated chunk.
 assocToMap :: HasUID a => [a] -> Map.Map UID a
@@ -166,18 +166,18 @@ mapODE :: Maybe ODE -> [CodeDefinition]
 mapODE Nothing = []
 mapODE (Just ode) = map odeDef $ odeInfo ode
 
--- | Creates a 'CodeSpec' using the provided 'SystemInformation', 'Choices', and 'Mod's.
+-- | Creates a 'CodeSpec' using the provided 'System', 'Choices', and 'Mod's.
 -- The 'CodeSpec' consists of the system information and a corresponding 'OldCodeSpec'.
-codeSpec :: SI.SystemInformation -> Choices -> [Mod] -> CodeSpec
+codeSpec :: SI.System -> Choices -> [Mod] -> CodeSpec
 codeSpec si chs ms = CS {
-  _sysInfo = si,
+  _system' = si,
   _oldCode = oldcodeSpec si chs ms
 }
 
--- | Generates an 'OldCodeSpec' from 'SystemInformation', 'Choices', and a list of 'Mod's.
+-- | Generates an 'OldCodeSpec' from 'System', 'Choices', and a list of 'Mod's.
 -- This function extracts various components (e.g., inputs, outputs, constraints, etc.)
--- from 'SystemInformation' to populate the 'OldCodeSpec' structure.
-oldcodeSpec :: SI.SystemInformation -> Choices -> [Mod] -> OldCodeSpec
+-- from 'System' to populate the 'OldCodeSpec' structure.
+oldcodeSpec :: SI.System -> Choices -> [Mod] -> OldCodeSpec
 oldcodeSpec SI.SI{ SI._sys = sys
                    , SI._authors = as
                    , SI._instModels = ims
@@ -187,7 +187,7 @@ oldcodeSpec SI.SI{ SI._sys = sys
                    , SI._outputs = outs
                    , SI._constraints = cs
                    , SI._constants = cnsts
-                   , SI._sysinfodb = db } chs ms =
+                   , SI._systemdb = db } chs ms =
   let n = programName sys
       inputs' = map quantvar ins
       const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
@@ -213,7 +213,7 @@ oldcodeSpec SI.SI{ SI._sys = sys
         _constants = const',
         _constMap = assocToMap const',
         _mods = ms,
-        _sysinfodb = db
+        _systemdb = db
       } 
 
 

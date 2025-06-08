@@ -21,16 +21,16 @@ import qualified Language.Drasil as L
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (articleTitle, author, ba, body, bold,
-  caption, divTag, em, h, headTag, html, image, li, ol, pa,
-  paragraph, reflink, reflinkInfo, reflinkURI, refwrap, sub, sup, table, td,
-  th, title, tr, ul, BibFormatter(..))
+  caption, divTag, spanTag', em, h, headTag, html, image, li, ol, pa,
+  paragraph, reflink, reflinkInfo, reflinkURI, refwrap, refwrap', sub, sup, table, td,
+  th, title, tr, ul, dl, dd, BibFormatter(..))
 import Language.Drasil.HTML.CSS (linkCSS)
 
 import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
 import Language.Drasil.Printing.Import (makeDocument)
-import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),  
+import Language.Drasil.Printing.AST (ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, Fence(Curly, Paren, Abs, Norm),
-  Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)),
+  Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:), Tooltip),
   Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label,
   LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author, 
@@ -38,7 +38,7 @@ import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title,
   Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb), 
   Citation(Cite), BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..), Tags)
-import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac, sufxPrint)
+import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sufxPrint)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 import qualified Language.Drasil.TeX.Print as TeX (pExpr, spec)
@@ -142,6 +142,7 @@ pSpec (S s)     = either error (text . concatMap escapeChars) $ L.checkValidStr 
     invalid = ['<', '>']
     escapeChars '&' = "\\&"
     escapeChars c = [c]
+pSpec (Tooltip t s) = spanTag' (pSpec t) (pSpec s)
 pSpec (Sp s)    = text $ unPH $ L.special s
 pSpec HARDNL    = text "<br />"
 pSpec (Ref Internal r a)       = reflink     r $ pSpec a
@@ -344,8 +345,8 @@ makeFigure :: Doc -> Maybe Doc -> Doc -> L.MaxWidthPercent -> Doc
 makeFigure r c f wp = refwrap r (image f c wp)
 
 -- | Renders assumptions, requirements, likely changes.
-makeRefList :: Doc -> Doc -> Doc -> Doc
-makeRefList a l i = li (refwrap l (i <> text ": " <> a))
+makeRefList :: Doc -> Doc -> Doc
+makeRefList l a = refwrap' "dt" l (brackets $ bold l) $$ dd a
 
 ---------------------
 --HTML bibliography--
@@ -354,9 +355,8 @@ makeRefList a l i = li (refwrap l (i <> text ": " <> a))
 
 -- | Makes a bilbliography for the document.
 makeBib :: BibRef -> Doc
-makeBib = ul ["hide-list-style"] . vcat .
-  zipWith (curry (\(x,(y,z)) -> makeRefList z y x))
-  [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map (renderCite htmlBibFormatter)
+makeBib = dl ["reference-list"] . vcat .
+  map (uncurry makeRefList . renderCite htmlBibFormatter)
 
 -- | HTML specific bib rendering functions
 htmlBibFormatter :: BibFormatter

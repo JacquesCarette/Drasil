@@ -8,6 +8,8 @@ import Drasil.DocLang (mkInputPropsTable, mkMaintainableNFR, mkCorrectNFR,
   mkUnderstandableNFR, mkReusableNFR)
 import Drasil.DocLang.SRS (datCon, propCorSol) 
 
+import Utils.Drasil (mkTable)
+
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (datum, funcReqDom, input_, name_,
   output_, physicalConstraint, symbol_, user, value, propOfCorSol)
@@ -90,7 +92,7 @@ usingIMs = foldlList Comma List $ map refS [fctSfty, nrmShrFor, intsliceFs]
 
 ------------------
 inputDataTable :: LabelledContent
-inputDataTable = mkInputPropsTable (dqdWr coords : map dqdWr inputs) readAndStore
+inputDataTable = mkInputPropsTable (dqdWr coords : map dqdWr inputs)
   --FIXME: this has to be seperate since coords is a different type
 
 inputsToOutput :: [DefinedQuantityDict]
@@ -100,8 +102,7 @@ inputsToOutput = constF : map dqdWr [xMaxExtSlip, xMaxEtrSlip, xMinExtSlip,
 inputsToOutputTable :: LabelledContent
 inputsToOutputTable = llcc (makeTabRef "inputsToOutputTable") $
   Table [titleize symbol_, titleize name_] (mkTable [ch, phrase] inputsToOutput)
-  (atStart' input_ +:+ S "to be Returned as" +:+ titleize output_ `follows`
-    displayInput) True
+  (atStart' input_ +:+ S "to be Returned as" +:+ titleize output_) True
 
 {-Nonfunctional Requirements-}
 nonFuncReqs :: [ConceptInstance]

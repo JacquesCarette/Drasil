@@ -9,6 +9,7 @@ import Data.Drasil.Concepts.Documentation (value, description, symbol_, tAuxCons
 import qualified Data.Drasil.Concepts.Math as CM (unit_)
 import Control.Lens ((^.))
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
+import Utils.Drasil (mkTable)
 
 -- | Gets the auxiliary constant values given an introductory 'Idea' and a 'QDefinition'.
 valsOfAuxConstantsF :: Idea a => a -> [ConstQDef] -> Section

@@ -1,5 +1,4 @@
-module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro,
-  qDefns) where
+module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro) where
 
 import Control.Lens ((^.))
 import Prelude hiding (exp)
@@ -8,14 +7,13 @@ import Theory.Drasil (InstanceModel, imNoDeriv, qwC, qwUC, equationalModelN,
   output)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
-import Drasil.SRSDocument (Block (Parallel))
 
 import Data.Drasil.Citations (campidelli)
 import Data.Drasil.Concepts.Documentation (goal, user, datum)
 import Data.Drasil.SI_Units
 
 import Drasil.GlassBR.DataDefs (aGrtrThanB, arRef, calofDemand, glaTyFac,
-  glaTyFacQD, gtfRef, hFromtQD, hRef, loadDF, stdVals)
+  gtfRef, hRef, loadDF, stdVals)
 import Drasil.GlassBR.Figures (dimlessloadVsARFig)
 import Drasil.GlassBR.Goals (willBreakGS)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
@@ -27,14 +25,9 @@ iMods = [risk, strDisFac, nonFL, dimLL, tolPre, tolStrDisFac, probOfBreak,
 
 symb :: [UnitalChunk]
 symb = [ucuc plateLen metre, ucuc plateWidth metre, ucuc charWeight kilogram,
-  ucuc standOffDist metre, demand] -- this is temporary
+  ucuc standOffDist metre] -- this is temporary
 -- ++
  -- [dqdQd (qw calofDemand) demandq]
-
-qDefns :: [Block SimpleQDef]
-qDefns = Parallel hFromtQD [glaTyFacQD] : --can be calculated on their own
-  map (`Parallel` []) [dimLLQD, strDisFacQD, riskQD, tolStrDisFacQD, tolPreQD,
-    nonFLQD]
 
 abInputConstraints :: [(QuantityDict, Maybe (RealInterval Expr Expr))]
 abInputConstraints = [qwC plateLen   $ UpFrom  (Exc, exactDbl 0),

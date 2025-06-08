@@ -7,6 +7,10 @@ github:              JacquesCarette/Drasil
 homepage:            https://jacquescarette.github.io/Drasil/
 description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 
+language: Haskell2010
+default-extensions:
+- StrictData
+
 extra-source-files: []
 
 dependencies:
@@ -26,7 +30,7 @@ dependencies:
 - drasil-metadata
 - drasil-lang
 - drasil-printers
-- drasil-sysinfo
+- drasil-system
 - drasil-utils
 - lens
 

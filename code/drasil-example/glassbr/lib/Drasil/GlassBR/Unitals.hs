@@ -31,8 +31,9 @@ modElas = uc' "modElas" (nounPhraseSP "modulus of elasticity of glass")
 {--}
 
 constrained :: [ConstrainedChunk]
-constrained = map cnstrw inputDataConstraints ++
-  [cnstrw probBr, cnstrw probFail, cnstrw stressDistFac, cnstrw nomThick, cnstrw glassTypeCon]
+constrained = map cnstrw dataConstraints ++ [nomThick, cnstrw glassTypeCon]
+ -- map cnstrw inputDataConstraints ++ map cnstrw derivedInputDataConstraints -- ++
+  -- [cnstrw probBr, cnstrw probFail, cnstrw stressDistFac, cnstrw nomThick, cnstrw glassTypeCon]
 
 plateLen, plateWidth, aspectRatio, charWeight, standOffDist :: UncertQ
 pbTol, tNT :: UncertainChunk
@@ -49,26 +50,33 @@ inputs = map qw inputsWUnitsUncrtn ++ map qw inputsWUncrtn ++
 inputsWUnitsUncrtn :: [UncertQ]
 inputsWUnitsUncrtn = [plateLen, plateWidth, charWeight]
 
---derived inputs with units and uncertainties
-derivedInsWUnitsUncrtn :: [UncertQ]
-derivedInsWUnitsUncrtn = [standOffDist]
-
 --inputs with uncertainties and no units
 inputsWUncrtn :: [UncertainChunk]
 inputsWUncrtn = [pbTol, tNT]
-
---derived inputs with uncertainties and no units
-derivedInsWUncrtn :: [UncertQ]
-derivedInsWUncrtn = [aspectRatio]
 
 --inputs with no uncertainties
 inputsNoUncrtn :: [ConstrainedChunk]
 inputsNoUncrtn = [cnstrw glassTypeCon, nomThick]
 
+--derived inputs with units and uncertainties
+derivedInsWUnitsUncrtn :: [UncertQ]
+derivedInsWUnitsUncrtn = [standOffDist]
+
+--derived inputs with uncertainties and no units
+derivedInsWUncrtn :: [UncertQ]
+derivedInsWUncrtn = [aspectRatio]
+
 inputDataConstraints :: [UncertainChunk]
 inputDataConstraints = map uncrtnw inputsWUnitsUncrtn ++
-  map uncrtnw inputsWUncrtn ++ map uncrtnw derivedInsWUnitsUncrtn ++
-  map uncrtnw derivedInsWUncrtn
+  map uncrtnw inputsWUncrtn
+
+derivedInputDataConstraints :: [UncertainChunk]
+derivedInputDataConstraints = map uncrtnw derivedInsWUnitsUncrtn
+  ++ map uncrtnw derivedInsWUncrtn
+
+dataConstraints :: [UncertainChunk]
+dataConstraints = inputDataConstraints ++ derivedInputDataConstraints
+
 
 plateLen = uqcND "plateLen" (nounPhraseSP "plate length (long dimension)")
   lA metre Real
@@ -115,8 +123,9 @@ glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)
 outputs :: [QuantityDict]
 outputs = map qw [isSafePb, isSafeLR] ++ [qw probBr, qw stressDistFac]
 
+-- | Symbols uniquely relevant to theory models.
 tmSymbols :: [QuantityDict]
-tmSymbols = map qw [probFail, pbTolfail] ++ map qw [isSafeProb, isSafeLoad]
+tmSymbols = map qw [probFail, pbTolfail]
 
 probBr, probFail, pbTolfail, stressDistFac :: ConstrainedChunk
 probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
@@ -181,9 +190,14 @@ stressDistFacMax = mkQuantDef (vc "stressDistFacMax" (nounPhraseSP "maximum valu
   (subMax (eqSymb stressDistFac)) Real) (exactDbl 32)
 {--}
 
+unitarySymbols :: [UnitaryChunk]
+unitarySymbols = [minThick, sflawParamK, sflawParamM, loadDur]
+
+unitalSymbols :: [UnitalChunk]
+unitalSymbols = [demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight]
+
 symbols :: [UnitaryChunk]
-symbols = [minThick, sflawParamK, sflawParamM, loadDur] ++
-  map mkUnitary [demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight]
+symbols = unitarySymbols ++ map mkUnitary unitalSymbols
 
 minThick, sflawParamK, sflawParamM, sdx, sdy, sdz, loadDur :: UnitaryChunk
 
@@ -327,10 +341,10 @@ glassWL       = dcc "glassWL"     (nounPhraseSP "glass weight load")
 glBreakage    = dcc "glBreakage"  (nounPhraseSP "glass breakage")
   "the fracture or breakage of any lite or ply in monolithic, laminated, or insulating glass"
 glTyFac       = cc' glassTypeFac
-  (foldlSent_ [S "a multiplying factor for adjusting the", getAcc lResistance,
+  (foldlSent_ [S "a multiplying factor for adjusting the", short lResistance,
   S "of different glass type, that is,", foldlList Comma Options glassTypeAbbrs
-  `sC` S "in monolithic glass" `sC` getAcc lGlass, sParen (titleize lGlass) `sC`
-   S "or", getAcc iGlass, sParen (titleize iGlass), S "constructions"])
+  `sC` S "in monolithic glass" `sC` short lGlass, sParen (titleize lGlass) `sC`
+   S "or", short iGlass, sParen (titleize iGlass), S "constructions"])
 hStrengthGl   = cc' heatS
   (foldlSent_ [S "a flat, monolithic, glass lite of uniform thickness that has",
   S "been subjected to a special heat treatment process where the residual",
@@ -349,14 +363,14 @@ loadResis     = cc' lResistance
 loadShareFac  = cc' lShareFac
   (foldlSent_ [S "a multiplying factor derived from the load sharing between the",
   S "double glazing, of equal or different thicknesses and types (including the",
-  S "layered behaviour of", getAcc lGlass, S "under long duration",
-  S "loads), in a sealed", getAcc iGlass, S "unit"])
+  S "layered behaviour of", short lGlass, S "under long duration",
+  S "loads), in a sealed", short iGlass, S "unit"])
 longDurLoad   = dcc "longDurLoad"        (nounPhraseSP "long duration load")
   "any load lasting approximately 30 days"
 nonFactoredL  = cc' nFL
   (foldlSent_ [S "three second duration uniform load associated with a",
   S "probability of breakage less than or equal to 8", plural lite,
-  S "per 1000 for monolithic", getAcc annealed, S "glass"])
+  S "per 1000 for monolithic", short annealed, S "glass"])
 notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
   "For the given input parameters, the glass is NOT considered safe."
 probBreak     = cc' probBr
@@ -367,7 +381,7 @@ safeMessage   = dcc "safeMessage" (nounPhraseSP "safe")
   "For the given input parameters, the glass is considered safe."
 sD            = cc' stdOffDist
   (S "the distance from the glazing surface to the centroid of a hemispherical" +:+
-   S "high explosive charge. It is represented by the coordinates" +:+ sParen sdVectorSent)
+   S "high explosive charge")
 shortDurLoad  = dcc "shortDurLoad"       (nounPhraseSP "short duration load")
   "any load lasting 3 seconds or less"
 specA         = dcc "specA"       (nounPhraseSP "specifying authority")
@@ -397,9 +411,6 @@ constantLoadSF  = mkQuantDef loadSF      $ exactDbl 1
 
 --Equations--
 
-sdVectorSent :: Sentence
-sdVectorSent = foldlsC (map ch sdVector)
-
 sdVector :: [UnitaryChunk]
 sdVector = [sdx, sdy, sdz]
 
@@ -423,7 +434,7 @@ glassTypeFactors :: [Integer]
 glassTypeFactors = map fst glassType
 
 glassTypeAbbrs :: [Sentence]
-glassTypeAbbrs = map (getAcc . snd) glassType
+glassTypeAbbrs = map (short . snd) glassType
 
 type GlassType = [(Integer, CI)]         --[(Factor, Term)]
 type GlassThickness = [(Double, Double)] --[(Nominal, Actual)]

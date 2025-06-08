@@ -295,7 +295,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[cartSys:\phantomsection\label{cartSys}]{A Cartesian coordinate system is used.}
 \item[cartSysR:\phantomsection\label{cartSysR}]{The Cartesian coordinate system is right-handed where positive $x$-axis and $y$-axis point right up.}
 \item[yAxisDir:\phantomsection\label{yAxisDir}]{The direction of the $y$-axis is directed opposite to gravity.}
-\item[startOrigin:\phantomsection\label{startOrigin}]{The first rod is attached to the origin.}
+\item[startOrigin:\phantomsection\label{startOrigin2x}]{The first rod is attached to the origin.}
 \item[firstPend:\phantomsection\label{firstPend}]{The first rod has two sides. One side attaches to the origin. Another side attaches to the first object.}
 \item[secondPend:\phantomsection\label{secondPend}]{The second rod has two sides. One side attaches to the first object. Another side attaches to the second object.}
 \end{description}
@@ -1372,7 +1372,7 @@ Notes & ${θ_{1}}$ is calculated by solving the ODE here together with the initi
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[outputValues]{FR:Output-Values}, \hyperref[calcAng]{FR:Calculate-Angle-Of-Rod}, and \hyperref[IM:calOfAngle2]{IM:calOfAngle2}
+RefBy & \hyperref[IM:calOfAngle2]{IM:calOfAngle2}, \hyperref[outputValues]{FR:Output-Values}, and \hyperref[calcAng]{FR:Calculate-Angle-Of-Rod}
         
 \\ \bottomrule
 \end{tabular}
@@ -1433,7 +1433,7 @@ Notes & ${θ_{2}}$ is calculated by solving the ODE here together with the initi
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[outputValues]{FR:Output-Values}, \hyperref[calcAng]{FR:Calculate-Angle-Of-Rod}, \hyperref[IM:calOfAngle2]{IM:calOfAngle2}, and \hyperref[IM:calOfAngle1]{IM:calOfAngle1}
+RefBy & \hyperref[IM:calOfAngle2]{IM:calOfAngle2}, \hyperref[IM:calOfAngle1]{IM:calOfAngle1}, \hyperref[outputValues]{FR:Output-Values}, and \hyperref[calcAng]{FR:Calculate-Angle-Of-Rod}
         
 \\ \bottomrule
 \end{tabular}
@@ -1527,7 +1527,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[Output-Values:\phantomsection\label{outputValues}]{Output ${θ_{1}}$ and ${θ_{2}}$ (from \hyperref[IM:calOfAngle1]{IM:calOfAngle1} and \hyperref[IM:calOfAngle2]{IM:calOfAngle2}).}
 \end{description}
 \begin{longtblr}
-[caption={Required Inputs following \hyperref[inputValues]{FR:Input-Values}}]
+[caption={Required Inputs}]
 {colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
@@ -1555,7 +1555,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions}]
 {colspec={l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}} & \textbf{\hyperref[startOrigin]{A:startOrigin}} & \textbf{\hyperref[firstPend]{A:firstPend}} & \textbf{\hyperref[secondPend]{A:secondPend}}
+\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}} & \textbf{\hyperref[startOrigin2x]{A:startOrigin}} & \textbf{\hyperref[firstPend]{A:firstPend}} & \textbf{\hyperref[secondPend]{A:secondPend}}
 \\
 \hyperref[twoDMotion]{A:twoDMotion} &  &  &  &  &  &  & 
 \\
@@ -1565,7 +1565,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[yAxisDir]{A:yAxisDir} &  &  &  &  &  &  & 
 \\
-\hyperref[startOrigin]{A:startOrigin} &  &  &  &  &  &  & 
+\hyperref[startOrigin2x]{A:startOrigin} &  &  &  &  &  &  & 
 \\
 \hyperref[firstPend]{A:firstPend} &  &  &  &  &  &  & 
 \\
@@ -1575,7 +1575,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Assumptions and Other Items}]
 {colspec={l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}} & \textbf{\hyperref[startOrigin]{A:startOrigin}} & \textbf{\hyperref[firstPend]{A:firstPend}} & \textbf{\hyperref[secondPend]{A:secondPend}}
+\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}} & \textbf{\hyperref[startOrigin2x]{A:startOrigin}} & \textbf{\hyperref[firstPend]{A:firstPend}} & \textbf{\hyperref[secondPend]{A:secondPend}}
 \\
 \hyperref[DD:positionGDD]{DD:positionGDD} &  &  &  &  &  &  & 
 \\

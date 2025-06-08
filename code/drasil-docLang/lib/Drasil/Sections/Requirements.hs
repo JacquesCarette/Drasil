@@ -5,14 +5,14 @@ module Drasil.Sections.Requirements (
   -- * Functional Requirements
   fReqF,
   -- ** Input Requirements
-  fullReqs, fullTables, inReq, inTable,
+  fullReqs, fullTables, inReq,
   mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
   -- * Non-functional Requirements
   nfReqF, mkMaintainableNFR, mkPortableNFR, mkCorrectNFR, mkVerifiableNFR, 
   mkUnderstandableNFR, mkReusableNFR, mkSecurityNFR
   ) where
 
-import Utils.Drasil (stringList)
+import Utils.Drasil (stringList, mkTable)
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -41,18 +41,12 @@ reqF = SRS.require [reqIntro]
 -- For listing input requirements.
 fullReqs :: (Quantity i, MayHaveUnit i) => [i] -> Sentence -> [ConceptInstance] -> [ConceptInstance]
 fullReqs [] _ _ = []
-fullReqs i d r = nub $ inReq (inReqDesc (inTable i) d) : r-- ++ [outReq (outReqDesc outTable)]
+fullReqs i d r = nub $ inReq (inReqDesc (mkInputPropsTable i) d) : r-- ++ [outReq (outReqDesc outTable)]
 
 -- | Prepends given LabelledContent to an input-value table.
 fullTables :: (Quantity i, MayHaveUnit i) => [i] -> [LabelledContent] -> [LabelledContent]
 fullTables [] _ = []
-fullTables i t = inTable i : t
-
--- | Creates a generalized input-value table for the Requirements section.
-inTable :: (Quantity i, MayHaveUnit i) => [i] -> LabelledContent
-inTable i = mkInputPropsTable i (inReq EmptyS) -- passes empty Sentence to make stub of inReq
---outTable    = mkValsSourceTable o "ReqOutputs" (S "Required" +:+ titleize' output_ `follows` (outReq EmptyS))
-                                                -- passes empty Sentence to make stub of outReq
+fullTables i t = mkInputPropsTable i : t
 
 -- | Creates a Sentence from a Referable and possible description. Output is of the form
 -- "Inputs the values from @reference@, which define @description@". If no description is given,
@@ -156,13 +150,13 @@ mkSecurityNFR refAddress lbl = cic refAddress (foldlSent [
   ]) lbl nonFuncReqDom
 
 -- | Creates an Input Data Table for use in the Functional Requirments section. Takes a list of wrapped variables and something that is 'Referable'.
-mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => 
-                          [i] -> r -> LabelledContent
-mkInputPropsTable []        _   = llcc reqInputsRef $ Paragraph EmptyS
-mkInputPropsTable reqInputs req = llcc reqInputsRef $ 
+mkInputPropsTable :: (Quantity i, MayHaveUnit i) => 
+                          [i] -> LabelledContent
+mkInputPropsTable []        = llcc reqInputsRef $ Paragraph EmptyS
+mkInputPropsTable reqInputs = llcc reqInputsRef $ 
   Table [atStart symbol_, atStart description, atStart' unit_]
   (mkTable [ch, atStart, toSentence] $ sortBySymbol reqInputs)
-  (titleize' reqInput `follows` req) True
+  (titleize' reqInput) True
 
 -- | Reference for the Required Inputs table.
 reqInputsRef :: Reference

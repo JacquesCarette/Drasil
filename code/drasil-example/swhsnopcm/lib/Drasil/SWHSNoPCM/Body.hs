@@ -34,7 +34,6 @@ import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
 import Data.Drasil.Software.Products (prodtcon)
-import Data.Drasil.Domains (materialEng)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
 
@@ -42,7 +41,7 @@ import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
 import Drasil.SWHS.Body (charsOfReader, dataContMid, motivation,
-  introStart, externalLinkRef, physSyst1, physSyst2, sysCntxtDesc, 
+  introStart, externalLinkRef, physSyst1, physSyst2, sysCntxtDesc,
   systContRespBullets, sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, sWHT, tank, transient, water, con, phsChgMtrl)
@@ -52,18 +51,19 @@ import Drasil.SWHS.Unitals (coilSAMax, deltaT, htFluxC, htFluxIn,
   htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW,
   tempEnv, tempW, thFluxVect, volHtGen, watE,
   wMass, wVol, unitalChuncks, absTol, relTol)
+import Drasil.SWHS.References (uriReferences)
 
 import Drasil.SWHSNoPCM.Assumptions
 import Drasil.SWHSNoPCM.Changes (likelyChgs, unlikelyChgs)
-import Drasil.SWHSNoPCM.DataDefs (qDefs)
 import qualified Drasil.SWHSNoPCM.DataDefs as NoPCM (dataDefs)
 import Drasil.SWHSNoPCM.Definitions (srsSWHS, htTrans)
 import Drasil.SWHSNoPCM.GenDefs (genDefs)
 import Drasil.SWHSNoPCM.Goals (goals)
 import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr, instModIntro)
+import Drasil.SWHSNoPCM.MetaConcepts (progName)
 import qualified Drasil.SWHSNoPCM.IMods as NoPCM (iMods)
 import Drasil.SWHSNoPCM.ODEs
-import Drasil.SWHSNoPCM.Requirements (funcReqs, inputInitValsTable)
+import Drasil.SWHSNoPCM.Requirements (funcReqs, inReqDesc)
 import Drasil.SWHSNoPCM.References (citations)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
   specParamValList)
@@ -71,7 +71,7 @@ import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
 srs :: Document
 srs = mkDoc mkSRS S.forT si
 
-fullSI :: SystemInformation
+fullSI :: System
 fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
@@ -148,7 +148,7 @@ mkSRS = [TableOfContents,
       ]
     ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub' [inputInitValsTable],
+    FReqsSub inReqDesc [],
     NonFReqsSub
   ],
   LCsSec,
@@ -161,16 +161,10 @@ concIns :: [ConceptInstance]
 concIns = goals ++ funcReqs ++ nfRequirements ++ assumptions ++
  [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH] ++ unlikelyChgs
 
-labCon :: [LabelledContent]
-labCon = [inputInitValsTable]
-
-section :: [Section]
-section = extractSection srs
-
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
-si :: SystemInformation
+si :: System
 si = SI {
   _sys         = srsSWHS,
   _kind        = Doc.srs,
@@ -183,49 +177,60 @@ si = SI {
   -- #1658 is resolved. Basically, _quants is used here, but 
   -- tau does not appear in the document and thus should not be displayed.
   _quants      = (map qw unconstrained ++ map qw symbolsAll) \\ [qw tau],
-  _concepts    = symbols,
   _instModels  = NoPCM.iMods,
   _datadefs    = NoPCM.dataDefs,
   _configFiles = [],
   _inputs      = inputs ++ [qw watE], --inputs ++ outputs?
   _outputs     = map qw [tempW, watE],     --outputs
-  _defSequence = [(\x -> Parallel (head x) (tail x)) qDefs],
   _constraints = map cnstrw constrained ++ map cnstrw [tempW, watE], --constrained
   _constants   = piConst : specParamValList,
-  _sysinfodb   = symbMap,
-  _usedinfodb  = usedDB,
-   refdb       = refDB
+  _systemdb   = symbMap,
+  _usedinfodb  = usedDB
 }
-
-progName :: CI
-progName = commonIdeaWithDict "swhsNoPCM" 
-  (nounPhrase' "solar water heating system with no phase change material"
-  "solar water heating systems with no phase change material" $ Replace $
-  S "Solar Water Heating System with no Phase Change Material") "SWHSNoPCM" [materialEng]
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWHT)]
 
-refDB :: ReferenceDB
-refDB = rdb citations concIns
+ideaDicts :: [IdeaDict]
+ideaDicts =
+  -- Actual IdeaDicts
+  [inValue, htTrans, materialProprty] ++ prodtcon ++ doccon ++ educon ++
+  -- CIs
+  map nw [srsSWHS, progName, phsChgMtrl] ++ map nw acronyms ++ map nw doccon' ++
+  map nw physicCon' ++ map nw mathcon' ++
+  -- ConceptChunks
+  nw algorithm : map nw softwarecon ++ map nw thermocon ++ map nw con ++
+  map nw physicCon ++ map nw mathcon ++ map nw physicalcon ++
+  -- DefinedQuantityDicts
+  map nw symbols ++
+  -- UnitalChunks
+  map nw physicscon ++ map nw unitalChuncks ++
+  -- UncertainChunks
+  map nw [absTol, relTol] ++
+  -- ConstQDefs
+  map nw specParamValList ++
+  -- UnitDefns
+  map nw fundamentals ++ map nw derived
 
 symbMap :: ChunkDB
-symbMap = cdb symbolsAll (nw progName : map nw symbols ++ map nw acronyms ++ map nw thermocon
-  ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
-  ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
-  ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived
-  ++ map nw physicalcon ++ map nw unitalChuncks ++ map nw [absTol, relTol]
-  ++ [nw srsSWHS, nw algorithm, nw inValue, nw htTrans, nw materialProprty, nw phsChgMtrl])
+symbMap = cdb symbolsAll ideaDicts
   (map cw symbols ++ srsDomains) units NoPCM.dataDefs NoPCM.iMods genDefs
-  tMods concIns section labCon allRefs
+  tMods concIns [] allRefs citations
+
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts =
+  -- CIs
+  nw progName : map nw acronyms ++
+  -- DefinedQuantityDicts
+  map nw symbols
+
+usedDB :: ChunkDB
+usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-allRefs = [externalLinkRef, externalLinkRef']
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw symbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+allRefs = [externalLinkRef, externalLinkRef'] ++ uriReferences
 
 --------------------------
 --Section 2 : INTRODUCTION
@@ -241,8 +246,8 @@ introEnd progSent pro = foldlSent_ [progSent +:+ S "The developed program",
   S "based on the original" `sC` S "manually created version" `S.of_` namedRef externalLinkRef' (S "SWHSNoPCM")]
 
 externalLinkRef' :: Reference
-externalLinkRef' = makeURI "SWHSNoPCM_SRSLink" 
-  "https://github.com/smiths/caseStudies/blob/master/CaseStudies/noPCM" 
+externalLinkRef' = makeURI "SWHSNoPCM_SRSLink"
+  "https://github.com/smiths/caseStudies/blob/master/CaseStudies/noPCM"
   (shortname' $ S "SWHSNoPCM_SRSLink")
 
 -----------------------------------
@@ -285,8 +290,8 @@ orgDocEnd = foldlSent_ [atStartNP (the inModel),
 ------------------------------
 
 sysCntxtFig :: LabelledContent
-sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
-  [refS sysCntxtFig +: EmptyS, titleize sysCont])
+sysCntxtFig = llcc (makeFigRef "SysCon")
+  $ fig (titleize sysCont)
   $ resourcePath ++ "SystemContextFigure.png"
 
 ------------------------------------

@@ -36,7 +36,7 @@ import Language.Drasil.Expr.Lang (Expr)
 import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.Space (HasSpace)
 import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.UID (UID)
+import Drasil.Database.UID (UID)
 
 import Control.Lens (Lens')
 

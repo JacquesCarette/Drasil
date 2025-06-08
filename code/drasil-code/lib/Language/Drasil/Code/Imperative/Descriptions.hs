@@ -24,7 +24,7 @@ import qualified Data.Map as Map (filter, lookup, null)
 import Data.Maybe (mapMaybe)
 import Control.Lens ((^.))
 import Control.Monad.State (get)
-import SysInfo.Drasil hiding (sysinfodb)
+import System.Drasil hiding (systemdb)
 
 -- | Returns a module description based on a list of descriptions of what is
 -- contained in the module.
@@ -40,7 +40,7 @@ unmodularDesc = do
   let spec = codeSpec g
       implTypeStr Program = "program"
       implTypeStr Library = "library"
-  return $ show $ sentenceDoc (spec ^. sysinfodbO) Implementation OneLine $ capSent $
+  return $ show $ sentenceDoc (spec ^. systemdbO) Implementation OneLine $ capSent $
     foldlSent ([S "a", S (implTypeStr (implType g)), S "to"] ++ codeSpec g ^. purpose)
 
 -- | Returns description of what is contained in the Input Parameters module.

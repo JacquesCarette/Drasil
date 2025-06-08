@@ -112,7 +112,7 @@ ALL_EXPANDED_TARGETS = $(foreach P, $(PACKAGE_GEN_TARGET), $($(P)_PACKAGES)) $(f
 #-------------------------------#
 
 # make variables/configuration
-DIFF = diff --strip-trailing-cr -r -X ../.gitignore
+DIFF = diff --strip-trailing-cr -r -X ../.gitignore --exclude='*.prof' --exclude='.drasil' # Excludes are to ignore the data the 'debug'-related targets generate.
 LOG_SUFFIX = _log.log
 MIN_STACK_VER = 2.3.1  # Match stack.yaml see PR #2142 for more info.
 CACHED_MSV_FILE = .drasil-min-stack-ver
@@ -156,8 +156,8 @@ WEBSITE_FOLDER = $(WEBSITE_FOLDER_NAME)/HTML/
 FULL ?= 0
 
 # GHC debug options
-PROFALL = --profile
-PROFEXEC = --profile --rts-options '-xc -P'
+PROFALL := --profile
+PROFEXEC := --profile --rts-options '-xc -P'
 
 # GHC build options
 GHCTHREADS ?= 2
@@ -166,8 +166,9 @@ override GHCFLAGS += -Wall -j$(GHCTHREADS)
 override stackArgs += --ghc-options="$(GHCFLAGS)"
 
 # When running 'stack exec', the following stack arguments should be passed.
-STACK_EXEC_ARGS := --no-nix-pure
-STACK_EXEC := stack exec $(STACK_EXEC_ARGS)
+STACK_EXEC_ARGS = --no-nix-pure
+
+STACK_EXEC = stack exec $(STACK_EXEC_ARGS)
 
 # Output amount control
 NOISY ?= no
@@ -185,17 +186,21 @@ BATCHTERM=dumb
 # Default `make` will just run examples and test them against stable. See `test`
 # target for more details.
 all: test test_website codegenTest_diff ##@Examples Run examples and test against stable.
+#^ Must be the first target, otherwise it won't be run by default.
 
 install: ##@Examples Install all example project binaries into your local binary path (see $(stack path) for local-bin-path).
 	stack install $(stackArgs)
 
-%debug: stackArgs += $(PROFALL)
-%debug: STACK_EXEC += $(PROFEXEC)
-%debug: export DEBUG_ENV=1
-debug: test ##@Examples Run test target with better debugging tools.
+# Debugging changes the arguments passed to 'stack exec' slightly.
+setup_debug_vars:
+	$(eval override stackArgs += $(PROFALL))
+	$(eval STACK_EXEC_ARGS += $(PROFEXEC))
+	$(eval export DEBUG_ENV = 1)
+
+debug: setup_debug_vars test ##@Examples Run test target with better debugging tools.
 
 # Debugging individual examples
-$(DEBUG_EXAMPLES): %$(DEBUG_E_SUFFIX): %$(TEST_E_SUFFIX)
+$(DEBUG_EXAMPLES): %$(DEBUG_E_SUFFIX): setup_debug_vars %$(TEST_E_SUFFIX)
 
 pr_ready: all stan hlint ##@General Check if your current work is ready to for a PR via `all` and `hlint` and stan.
 	@echo "Your build/ and stable/ match, and your code currently passes HLint tests."
@@ -599,4 +604,4 @@ help_packages: ##@Help Lists all packages.
 		echo "  $$package"; \
 	done
 
-.PHONY: help clean clean_artifacts cleanArtifacts gool code deps hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all install examples tracegraphs doxygen shellcheck mdbook_build $(GOOLTEST) $(ALL_EXPANDED_TARGETS)
+.PHONY: help setup_debug_vars clean clean_artifacts cleanArtifacts gool code deps hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all install examples tracegraphs doxygen shellcheck mdbook_build $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

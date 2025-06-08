@@ -2,6 +2,10 @@
 
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
+<div id="startOrigin1x"></div>
+
+startOrigin: The pendulum is attached to the origin.
+
 <div id="twoDMotion"></div>
 
 twoDMotion: The pendulum motion is two-dimensional (2D).
@@ -17,7 +21,3 @@ cartSysR: The Cartesian coordinate system is right-handed where positive \\(x\\)
 <div id="yAxisDir"></div>
 
 yAxisDir: The direction of the \\(y\\)-axis is directed opposite to gravity.
-
-<div id="startOrigin"></div>
-
-startOrigin: The pendulum is attached to the origin.

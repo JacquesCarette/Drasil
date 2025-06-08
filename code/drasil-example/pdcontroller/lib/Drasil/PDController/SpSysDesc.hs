@@ -7,7 +7,7 @@ import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 -- Introduction of the Problem Description section derives from purpose in
--- SystemInformation (purp in Body.hs)
+-- System (purp in Body.hs)
 
 sysParts :: [Sentence]
 sysParts
@@ -31,7 +31,7 @@ goals = [sysProcessVariable]
 
 sysProcessVariable :: ConceptInstance
 sysProcessVariable
-  = cic "processVariable"
+  = cic "calculateProcessVariable"
       (foldlSent
          [S "Calculate the output of the", phrase powerPlant,
             sParen (phrase processVariable),

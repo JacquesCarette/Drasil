@@ -36,7 +36,7 @@ doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body,
   plan, practice, priority, problem, problemDescription, problemIntro,
   procedure, prodUCTable, productUC, product_, project, procForAnls,
   propOfCorSol, property, prpsOfDoc, purpose, quantity, realtime, review,
-  reference, refMat, reqInput, requirement_, response, result, reviewer,
+  reference, refMat, reqInput, response, result, reviewer,
   safety, safetyReq, scenario, scope, scpOfReq, scpOfTheProjS, second_,
   section_, simulation, software, softwareConstraint, softwareDoc,
   softwareReq, softwareSys, softwareVAV, softwareVerif, solution,
@@ -100,7 +100,7 @@ abbreviation, acronym, analysis, appendix, aspect, body, characteristic, class_,
   loss, label, library, limitation, literacy, material_, mainIdea, message, method_, module_,
   model, name_, nonfunctional, object, offShelf, open, organization, output_,
   physics, physical, plan, practice, priority, problem, procedure, product_, project,
-  property, purpose, quantity, realtime, review, reference, requirement_, response, 
+  property, purpose, quantity, realtime, review, reference, response, 
   result, reviewer, safety, scope, scpOfTheProjS, second_, section_, scenario,
   source, simulation, software, solution, summary, specific, specification, stakeholder,
   standard, statement, symbol_, system, table_, task, template, term_, terminology,
@@ -198,7 +198,6 @@ quantity        = nc "quantity"       (cnIES  "quantity"           ) --general e
 realtime        = nc "real-time"      (cn'    "real-time"          )
 review          = nc "review"         (cn'    "review"             )
 reference       = nc "reference"      (cn'    "reference"          )
-requirement_    = nc "requirement"    (cn'    "requirement"        ) --FIXME: Eventually only have one requirement
 response        = nc "response"       (cn'    "response"           )
 result          = nc "result"         (cn'    "result"             )
 reviewer        = nc "reviewer"       (cn'    "reviewer"           )
@@ -285,13 +284,13 @@ coordinateSystem             = compoundNC coordinate system
 datumConstraint              = compoundNCPP datum constraint
 designDoc                    = compoundNC design document
 fullForm                     = compoundNC full form
-functionalRequirement        = compoundNC functional requirement_
+functionalRequirement        = compoundNC functional requirement
 generalSystemDescription     = compoundNC general systemdescription
 moduleInterface              = compoundNC module_ interface
 indPRCase                    = compoundNC individual productUC
 --inDatumConstraint            = compoundNC input_ datumConstraint -- may be used later, but they break stable for now
 --outDatumConstraint           = compoundNC output_ datumConstraint 
-nonfunctionalRequirement     = compoundNC nonfunctional requirement_
+nonfunctionalRequirement     = compoundNC nonfunctional requirement
 offShelfSolution             = compoundNC offShelf solution
 physicalConstraint           = compoundNC physical constraint
 physicalProperty             = compoundNC physical property
@@ -301,10 +300,10 @@ problemDescription           = compoundNC problem description
 problemIntro                 = compoundNC problem introduction
 prodUCTable                  = compoundNC productUC table_
 productUC                    = compoundNC product_ useCase
-safetyReq                    = compoundNC safety requirement_
+safetyReq                    = compoundNC safety requirement
 softwareConstraint           = compoundNC software constraint
 softwareDoc                  = compoundNC software documentation
-softwareReq                  = compoundNCPP software requirement_
+softwareReq                  = compoundNCPP software requirement
 softwareSys                  = compoundNC software system
 softwareVAV                  = compoundNC software vav
 softwareVerif                = compoundNC software verification

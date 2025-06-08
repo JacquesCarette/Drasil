@@ -13,7 +13,7 @@ import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Chunk.NamedIdea(mkIdea,nw, nc)
 import Language.Drasil.NounPhrase (NP, pn)
 import Language.Drasil.ShortName (shortname')
-import Drasil.Database.UID (HasUID(uid))
+import Drasil.Database.UID (HasUID(uid), nsUid)
 
 import Control.Lens ((^.))
 
@@ -50,4 +50,5 @@ cw c = ConDict (nw c) (c ^. defn) (cdom c)
 -- Reference Address ('String'), a definition ('Sentence'), 
 -- a short name ('String'), and a domain (for explicit tagging).
 cic :: Concept c => String -> Sentence -> String -> c -> ConceptInstance
-cic u d sn dom = ConInst (ccs (nc u $ pn sn) d [dom]) u $ shortname' (S sn)
+cic u d sn dom = ConInst (nsUid "instance" $ icc ^. uid) icc u $ shortname' (S sn)
+  where icc = ccs (nc u $ pn sn) d [dom]

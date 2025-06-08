@@ -65,7 +65,7 @@ getDerivedIns = do
   g <- get
   let s = codeSpec g
       dvals = s ^. derivedInputsO
-      reqdVals = concatMap (flip codevars (s ^. sysinfodbO) . (^. codeExpr)) dvals
+      reqdVals = concatMap (flip codevars (s ^. systemdbO) . (^. codeExpr)) dvals
   dvName <- genICName DerivedValuesFn
   getParams dvName In reqdVals
 
@@ -84,7 +84,7 @@ getConstraintParams = do
   g <- get
   let s = codeSpec g
       cm = s ^. cMapO
-      db = s ^. sysinfodbO
+      db = s ^. systemdbO
       varsList = filter (\i -> member (i ^. uid) cm) (s ^. inputsO)
       reqdVals = nub $ varsList ++ map quantvar (concatMap (`constraintvars` db)
         (getConstraints cm varsList))
@@ -97,7 +97,7 @@ getCalcParams :: CodeDefinition -> GenState [CodeVarChunk]
 getCalcParams c = do
   g <- get
   getParams (codeName c) In $ delete (quantvar c) $ concatMap (`codevars'`
-    (codeSpec g ^. sysinfodbO)) (c ^. codeExpr : c ^. auxExprs)
+    (codeSpec g ^. systemdbO)) (c ^. codeExpr : c ^. auxExprs)
 
 -- | The parameters to the function for printing outputs are the outputs.
 getOutputParams :: GenState [CodeVarChunk]

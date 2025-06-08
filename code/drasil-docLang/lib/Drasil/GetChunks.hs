@@ -1,6 +1,6 @@
--- | Utilities to get grab certain chunks (from 'Expr', 'Sentence', etc) by 'UID' and
--- dereference the chunk it refers to.
-module SysInfo.Drasil.GetChunk (ccss, ccss', combine, vars, citeDB) where
+-- | Utilities to get grab certain chunks (from 'Expr', 'Sentence', etc) by
+-- 'UID' and dereference the chunk it refers to.
+module Drasil.GetChunks (ccss, ccss', combine, vars, citeDB) where
 
 import Language.Drasil
 import Language.Drasil.Development
@@ -8,7 +8,7 @@ import Language.Drasil.ModelExpr.Development (meDep)
 
 import Database.Drasil (ChunkDB, defResolve, symbResolve, citationTable)
 
-import SysInfo.Drasil.SystemInformation (SystemInformation, sysinfodb)
+import System.Drasil (System, systemdb)
 
 import Control.Lens ((^.))
 import Data.List (nub, sortBy)
@@ -46,6 +46,6 @@ concpt a m = map (defResolve m) $ sdep a
 concpt' :: ModelExpr -> ChunkDB -> [ConceptChunk]
 concpt' a m = map (defResolve m) $ meDep a
 
--- | Helper for extracting a bibliography from the system information.
-citeDB :: SystemInformation -> BibRef
-citeDB si = sortBy compareAuthYearTitle $ map fst $ M.elems $ si ^. (sysinfodb . citationTable)
+-- | Extract bibliography entries for a system.
+citeDB :: System -> BibRef
+citeDB si = sortBy compareAuthYearTitle $ map fst $ M.elems $ si ^. (systemdb . citationTable)

@@ -5,7 +5,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil
-import SysInfo.Drasil
+import System.Drasil
 import Language.Drasil
 import Drasil.DocLang (findAllRefs)
 
@@ -16,7 +16,7 @@ import Drasil.Website.Example (exampleSec, exampleRefs, allExampleSI)
 import Drasil.Website.Documentation (docsSec, docRefs)
 import Drasil.Website.Analysis (analysisSec, analysisRefs)
 import Drasil.Website.GettingStarted (gettingStartedSec)
-import Data.Drasil.Concepts.Physics (pendulum, motion, rigidBody)
+import Data.Drasil.Concepts.Physics (pendulum, motion, rigidBody, twoD)
 import Data.Drasil.Concepts.Documentation (game, physics, condition, safety)
 import Drasil.GlassBR.Unitals (blast)
 import Drasil.GlassBR.Concepts (glaSlab)
@@ -66,11 +66,11 @@ data FolderLocation = Folder {
   , packages :: [String]
     }
 
--- TODO: Should the website be using a ``SystemInformation''? This is primarily for the SmithEtAl template.
+-- TODO: Should the website be using a ``System''? This is primarily for the SmithEtAl template.
 --       It seems like the website is primarily that functions on a chunkdb.
 
 -- | System information.
-si :: FolderLocation -> SystemInformation
+si :: FolderLocation -> System
 si fl = SI {
     _sys         = webName,
     _kind        = web,
@@ -87,7 +87,7 @@ si fl = SI {
     _outputs     = [] :: [QuantityDict],
     _constraints = [] :: [ConstrainedChunk],
     _constants   = [] :: [ConstQDef],
-    _sysinfodb   = symbMap fl,
+    _systemdb   = symbMap fl,
     _usedinfodb  = usedDB
   }
 
@@ -101,15 +101,15 @@ sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspac
 
 -- | Needed for references and terms to work.
 symbMap :: FolderLocation -> ChunkDB
-symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, web, phsChgMtrl] ++ 
+symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, web, phsChgMtrl, twoD] ++ 
   map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast, 
   heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce, 
   normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [game, physics, condition, glaSlab, intrslce,
   slope, safety, factor]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] 
   [] [] (allRefs fl) []
 
--- | Helper to get the system name as an 'IdeaDict' from 'SystemInformation'.
-getSysName :: SystemInformation -> IdeaDict
+-- | Helper to get the system name as an 'IdeaDict' from 'System'.
+getSysName :: System -> IdeaDict
 getSysName SI{_sys = nm} = nw nm 
 
 -- | Empty database needed for 'si' to work.

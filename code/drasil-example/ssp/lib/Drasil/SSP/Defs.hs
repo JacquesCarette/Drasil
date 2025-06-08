@@ -1,7 +1,6 @@
 module Drasil.SSP.Defs where --export all of this file
 
 import Language.Drasil
-import Data.Drasil.Domains (civilEng)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
@@ -18,10 +17,7 @@ import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 ----Acronyms-----
 acronyms :: [CI]
 acronyms = [twoD, threeD, assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
-  physSyst, requirement, refBy, refName, srs, ssp, thModel, typUnc, unlikelyChg]
-
-ssp :: CI
-ssp = commonIdeaWithDict "ssp" (pn' "Slope Stability analysis Program") "SSP" [civilEng]
+  physSyst, requirement, refBy, refName, srs, thModel, typUnc, unlikelyChg]
 
 defs :: [IdeaDict]
 defs = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice,

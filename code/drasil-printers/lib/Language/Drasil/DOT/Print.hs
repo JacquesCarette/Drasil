@@ -6,6 +6,8 @@ import Data.List (intercalate)
 import System.IO
 import System.Directory
 
+import Utils.Drasil (createDirIfMissing)
+
 -- * Types
 
 -- | Type synonym for clarity.
@@ -68,7 +70,7 @@ data GraphInfo = GI {
 -- | Creates the directory for output, gathers all individual graph output functions and calls them.
 outputDot :: FilePath -> GraphInfo -> IO ()
 outputDot outputFilePath gi = do
-    createDirectoryIfMissing False outputFilePath
+    createDirIfMissing False outputFilePath
     setCurrentDirectory outputFilePath
     mkOutputAvsA gi
     mkOutputAvsAll gi

@@ -6,7 +6,7 @@ import Text.PrettyPrint (Doc, text, empty, ($$), (<>), (<+>), vcat, hcat, nest,
   cat, hcat)
 import Data.List (intersperse)
 
-import Language.Drasil hiding (Expr)
+import Language.Drasil hiding (Expr, Title)
 
 --import Language.Drasil.Document (Document, MaxWidthPercent)
 import Language.Drasil.Printing.AST (Expr, Spec)
@@ -21,7 +21,7 @@ data BibFormatter = BibFormatter {
 }
 
 html, headTag, body, title, paragraph, code, tr, th, td, figure,
-  figcaption, li, pa, ba :: Doc -> Doc
+  figcaption, li, pa, ba, dd :: Doc -> Doc
 -- | HTML tag wrapper.
 html       = wrap "html" []
 -- | Head tag wrapper.
@@ -50,14 +50,18 @@ li         = wrap "li" []
 pa         = wrap "p" []
 -- | Bring attention to element wrapper.
 ba         = wrap "b" []
+-- | Description wrapper
+dd         = wrap "dd" []
 
-ol, ul, table :: [String] -> Doc -> Doc
+ol, ul, table, dl :: [String] -> Doc -> Doc
 -- | Ordered list tag wrapper.
 ol       = wrap "ol"
 -- | Unordered list tag wrapper.
 ul       = wrap "ul"
 -- | Table tag wrapper.
 table    = wrap "table"
+-- | Description list wrapper
+dl       = wrap "dl"
 
 img :: [(String, Doc)] -> Doc
 -- | Image tag wrapper.
@@ -70,12 +74,13 @@ h n       | n < 1 = error "Illegal header (too small)"
           | otherwise = wrap ("h" ++ show n) []
 
 -- | HTML attribute selector.
-data Variation = Class | Id | Align deriving Eq
+data Variation = Class | Id | Align | Title deriving Eq
 
 instance Show Variation where
   show Class = "class"
   show Id    = "id"
   show Align = "align"
+  show Title = "title"
 
 -- | General 'Class' wrapper function and formats the document space with 'cat'.
 wrap :: String -> [String] -> Doc -> Doc
@@ -88,7 +93,7 @@ wrap' a = wrapGen' hcat Class a empty
 -- | Helper for wrapping HTML tags.
 -- The fourth argument provides class names for the CSS.
 wrapGen' :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc
-wrapGen' sepf _ s _ [] = \x -> 
+wrapGen' sepf _ s _ [] = \x ->
   sepf [text $ "<" ++ s ++ ">", indent x, tagR s]
 wrapGen' sepf Class s _ ts = \x ->
   let val = text $ foldr1 (++) (intersperse " " ts)
@@ -103,7 +108,7 @@ wrapGen = wrapGen' cat
 
 -- | Helper for creating a left HTML tag with a single attribute.
 tagL :: String -> Variation -> Doc -> Doc
-tagL t a v = text ("<" ++ t ++ " " ++ show a ++ "=\"") <> v <> text "\">" 
+tagL t a v = text ("<" ++ t ++ " " ++ show a ++ "=\"") <> v <> text "\">"
 
 -- | Helper for creating a right HTML closing tag.
 tagR :: String -> Doc
@@ -122,9 +127,16 @@ wrapInside t p = text ("<" ++ t ++ " ") <> foldl1 (<>) (map foldStr p) <> text "
 caption :: Doc -> Doc
 caption = wrap "p" ["caption"]
 
+descWrap :: [String] -> Doc -> Doc -> Doc
+descWrap = flip (wrapGen Class "dt")
+
 -- | Helper for wrapping divisions or sections.
+-- Arguments: Wrapper element type/tag (e.g., p, div, a), attribute value, body text
+refwrap' :: String -> Doc -> Doc -> Doc
+refwrap' a = flip (wrapGen Id a) [""]
+
 refwrap :: Doc -> Doc -> Doc
-refwrap = flip (wrapGen Id "div") [""]
+refwrap = refwrap' "div"
 
 -- | Helper for setting up links to references.
 reflink :: String -> Doc -> Doc
@@ -140,7 +152,7 @@ reflinkURI rf txt = text ("<a href=\"" ++ rf ++ "\">") <> txt <> text "</a>"
 
 -- | Helper for setting up figures.
 image :: Doc -> Maybe Doc -> MaxWidthPercent -> Doc
-image f Nothing wp = 
+image f Nothing wp =
   figure $ vcat [img $ [("src", f), ("alt", text "")] ++ [("width", text $ show wp ++ "%") | wp /= 100]]
 image f (Just c) wp =
   figure $ vcat [img $ [("src", f), ("alt", c)] ++ [("width", text $ show wp ++ "%") | wp /= 100], figcaption $ text "Figure: " <> c]
@@ -169,6 +181,9 @@ divTag = wrap "div"
 spanTag :: [String] -> Doc -> Doc
 spanTag = wrap "span"
 
+-- | Span tag wrapper with a title attribute.
+spanTag' :: Doc -> Doc -> Doc
+spanTag' t = wrapGen' hcat Title "span" t [""]
 -- | Indent the Document by 2 positions.
 indent :: Doc -> Doc
 indent = nest 2
@@ -186,7 +201,7 @@ indent = nest 2
 --                   (makeCases ps pExpr)
 
 -- | Build case expressions.
-makeCases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc                 
+makeCases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc
 makeCases [] _ = empty
 makeCases (p:ps) pExpr = spanTag [] (pExpr (fst p) <> text " , " <>
                           spanTag ["case"] (pExpr (snd p))) $$

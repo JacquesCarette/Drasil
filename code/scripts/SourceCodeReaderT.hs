@@ -201,7 +201,7 @@ isDataRec dataRecs = isDataRecAux dataRecs False
 --        , record2 = [a]
 --        , record3 = Type3
 --        } -> Type 
--- This is used in the CodeSpec and SystemInformation types.
+-- This is used in the CodeSpec and System types.
 useConstructFormRec :: Bool -> [String]  -> [String]
 useConstructFormRec _ [] = []
 useConstructFormRec isSameRec (l1:l2:ls) 

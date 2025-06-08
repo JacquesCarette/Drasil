@@ -2,16 +2,15 @@
 module Language.Drasil.Dump where
 
 import qualified Database.Drasil as DB
-import SysInfo.Drasil (SystemInformation, sysinfodb)
+import System.Drasil (System, systemdb)
 
-import System.Directory
 import System.IO
 import Data.Aeson (ToJSON)
 import Data.Aeson.Encode.Pretty (encodePretty)
 import qualified Data.ByteString.Lazy.Char8 as LB
 import qualified Data.Map.Strict as SM
 
-import Utils.Drasil (invert, atLeast2)
+import Utils.Drasil (invert, atLeast2, createDirIfMissing)
 import Database.Drasil (traceTable, refbyTable, ChunkDB (termTable))
 import Control.Lens ((^.))
 import System.Environment (lookupEnv)
@@ -25,7 +24,7 @@ type TargetFile = String
 -- | For debugging purposes, if the system has a `DEBUG_ENV` environment
 --   variable set to anything, we can dump the chunk maps in a system to the
 --   host system.
-dumpEverything :: SystemInformation -> PrintingInformation -> Path -> IO ()
+dumpEverything :: System -> PrintingInformation -> Path -> IO ()
 dumpEverything si pinfo p = do
   maybeDebugging <- lookupEnv "DEBUG_ENV"
   case maybeDebugging of
@@ -33,10 +32,10 @@ dumpEverything si pinfo p = do
       dumpEverything0 si pinfo p
     _ -> mempty
 
-dumpEverything0 :: SystemInformation -> PrintingInformation -> Path -> IO ()
+dumpEverything0 :: System -> PrintingInformation -> Path -> IO ()
 dumpEverything0 si pinfo targetPath = do
-  createDirectoryIfMissing True targetPath
-  let chunkDb = si ^. sysinfodb
+  createDirIfMissing True targetPath
+  let chunkDb = si ^. systemdb
       chunkDump = DB.dumpChunkDB chunkDb
       invertedChunkDump = invert chunkDump
       (sharedUIDs, nonsharedUIDs) = SM.partition atLeast2 invertedChunkDump

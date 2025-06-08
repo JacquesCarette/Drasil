@@ -24,7 +24,7 @@ collisionType: All rigid bodies collisions are vertex-to-edge collisions. (RefBy
 
 <div id="assumpDI"></div>
 
-dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: [IM:col2D](./SecIMs.md#IM:col2D), [IM:transMot](./SecIMs.md#IM:transMot), [DD:potEnergy](./SecDDs.md#DD:potEnergy), [DD:kEnergy](./SecDDs.md#DD:kEnergy), and [LC:Include-Dampening](./SecLCs.md#lcID).)
+dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: [IM:col2D](./SecIMs.md#IM:col2D), [IM:transMot](./SecIMs.md#IM:transMot), [LC:Include-Dampening](./SecLCs.md#lcID), [DD:potEnergy](./SecDDs.md#DD:potEnergy), and [DD:kEnergy](./SecDDs.md#DD:kEnergy).)
 
 <div id="assumpCAJI"></div>
 

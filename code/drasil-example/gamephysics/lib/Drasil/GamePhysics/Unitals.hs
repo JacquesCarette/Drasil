@@ -69,7 +69,7 @@ unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   momtInertA, momtInertB, timeT, inittime, momtInertK, pointOfCollision, 
   contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP, time_1, time_2, velo_1, velo_2,
   QP.chgInVelocity, QP.potEnergy, QP.height, rRot, mLarger, QP.fOfGravity, QP.positionVec, distMass, 
-  dVect, QP.chgMomentum,QP.chgInVelocity, time_1, time_2, velo_1, velo_2]
+  dVect, QP.chgMomentum,QP.chgInVelocity, time_1, time_2]
 
 -----------------------
 -- PARAMETRIZED HACK --

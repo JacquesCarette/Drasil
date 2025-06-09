@@ -138,7 +138,7 @@ ideaDicts =
   -- IdeaDicts
   [sciCompS, lateralLoad, materialProprty] ++ con' ++ doccon ++ educon ++ compcon ++
   -- CIs
-  nw progName : nw iGlass : nw lGlass : map nw doccon' ++ map nw mathcon' ++
+  map nw [progName, iGlass, lGlass] ++ map nw doccon' ++ map nw mathcon' ++
   -- ConceptChunks
   map nw [distance, algorithm] ++ map nw terms ++ map nw mathcon ++ 
   map nw softwarecon ++ map nw physicalcon ++

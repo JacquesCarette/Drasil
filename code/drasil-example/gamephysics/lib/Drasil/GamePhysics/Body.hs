@@ -164,7 +164,7 @@ tableOfAbbrvsIdeaDicts =
   map nw acronyms
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ map qw symbols) ideaDicts
+symbMap = cdb (map qw symbols) ideaDicts
   (map cw defSymbols ++ srsDomains ++ map cw iMods) units dataDefs
   iMods generalDefns tMods concIns [] allRefs citations
 

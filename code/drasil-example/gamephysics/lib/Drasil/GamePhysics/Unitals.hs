@@ -61,7 +61,7 @@ outputSymbols = map qw [QP.position, QP.velocity, QM.orientation,
 unitalChunks :: [UnitalChunk]
 unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel, 
   QP.impulseV, QP.impulseS, iVect, jVect, normalVect, QP.distance, QP.displacement, 
-  QP.time, QP.angularDisplacement, posCM, posj, massj, mTot, accj, velj,
+  QP.time, QP.angularDisplacement, posCM, posj, massj, mTot, accj, angAccj, velj,
   QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
   perpLenA, perpLenB, forcej, torquej, timeC, velA, velB, massA, massB,
   angVelA, angVelB, force_1, force_2, mass_1, mass_2, 
@@ -69,7 +69,7 @@ unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   momtInertA, momtInertB, timeT, inittime, momtInertK, pointOfCollision, 
   contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP, time_1, time_2, velo_1, velo_2,
   QP.chgInVelocity, QP.potEnergy, QP.height, rRot, mLarger, QP.fOfGravity, QP.positionVec, distMass, 
-  dVect, QP.chgMomentum,QP.chgInVelocity, time_1, time_2]
+  dVect, QP.chgMomentum]
 
 -----------------------
 -- PARAMETRIZED HACK --

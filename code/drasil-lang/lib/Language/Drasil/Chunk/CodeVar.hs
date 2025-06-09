@@ -5,11 +5,13 @@ module Language.Drasil.Chunk.CodeVar where
 import Data.Char (isSpace)
 import Control.Lens ((^.), view, makeLenses, Lens')
 
-import Language.Drasil.Classes (CommonIdea(abrv), Quantity, Idea(getA), NamedIdea(..), Callable)
+import Drasil.Code.Classes (Callable)
+import Drasil.Database.UID (HasUID(uid), (+++))
+
+import Language.Drasil.Classes (CommonIdea(abrv), Quantity, Idea(getA), NamedIdea(..))
 import Language.Drasil.Chunk.Quantity (QuantityDict, implVar')
 import Language.Drasil.Space (HasSpace(..), Space(..))
 import Language.Drasil.Symbol (HasSymbol(symbol))
-import Drasil.Database.UID (HasUID(uid), (+++))
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Stages (Stage(..))
 

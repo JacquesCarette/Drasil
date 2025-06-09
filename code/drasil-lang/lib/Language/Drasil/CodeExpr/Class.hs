@@ -1,7 +1,8 @@
 module Language.Drasil.CodeExpr.Class where
 
-import Language.Drasil.Classes(IsArgumentName, Callable)
+import Drasil.Code.Classes (IsArgumentName, Callable)
 import Drasil.Database.UID (HasUID(..))
+
 import Language.Drasil.Symbol (HasSymbol)
 import Language.Drasil.Space (Space(Actor), HasSpace(..))
 import Language.Drasil.Chunk.CodeVar (CodeIdea, CodeVarChunk)

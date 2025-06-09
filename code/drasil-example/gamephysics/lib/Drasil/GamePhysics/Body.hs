@@ -34,7 +34,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
 import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
-import Drasil.GamePhysics.Concepts (acronyms, threeD, twoD)
+import Drasil.GamePhysics.Concepts (acronyms, threeD, twoD, centreMass)
 import Drasil.GamePhysics.DataDefs (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iMods, instModIntro)
@@ -144,7 +144,7 @@ ideaDicts =
   -- Actual IdeaDicts
   doccon ++ educon ++ prodtcon ++
   -- CIs
-  nw progName : map nw acronyms ++ map nw doccon' ++ map nw CM.mathcon' ++
+  map nw [progName, twoD, threeD, centreMass] ++ map nw doccon' ++ map nw CM.mathcon' ++
   -- ConceptChunks
   nw algorithm : map nw softwarecon ++ map nw CP.physicCon ++ map nw CM.mathcon ++
   -- UnitDefns
@@ -154,7 +154,7 @@ ideaDicts =
   -- InstanceModels
   map nw iMods ++
   -- QuantityDicts
-  map nw symbolsAll ++ map (nw . (^. output)) iMods
+  map nw symbolsAll
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =

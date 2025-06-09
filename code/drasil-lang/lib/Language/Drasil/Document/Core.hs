@@ -5,9 +5,9 @@ module Language.Drasil.Document.Core where
 import Language.Drasil.Chunk.Citation (BibRef)
 
 import Drasil.Database.UID (HasUID(..))
+import Drasil.Code.CodeExpr.Lang (CodeExpr)
 import Language.Drasil.ShortName (HasShortName(shortname))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
-import Language.Drasil.CodeExpr.Lang (CodeExpr)
 import Language.Drasil.Label.Type (getAdd, prepend, IRefProg,
   LblType(..), Referable(..), HasRefAddress(..))
 import Language.Drasil.Reference (Reference)

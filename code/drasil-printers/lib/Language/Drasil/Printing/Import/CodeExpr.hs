@@ -3,10 +3,11 @@
 -- | Defines functions to render 'CodeExpr's as printable 'P.Expr's.
 module Language.Drasil.Printing.Import.CodeExpr (codeExpr) where
 
+import Drasil.Code.CodeExpr.Development
+
 import Language.Drasil (DomainDesc(..), Inclusive(..),
   RTopology(..), RealInterval(..), UID, LiteralC (int))
 import qualified Language.Drasil.Display as S (Symbol(..))
-import Language.Drasil.CodeExpr.Development
 import Language.Drasil.Literal.Development
 
 import qualified Language.Drasil.Printing.AST as P

@@ -304,6 +304,8 @@ import Drasil.Code.Classes (Callable, IsArgumentName)
 import Drasil.Code.CodeVar (CodeIdea(..), CodeChunk(..), 
   CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..), obv, qc, ccf, ccv, 
   listToArray, programName, funcPrefix, DefiningCodeExpr(..))
+import Drasil.Code.CodeExpr.Lang (CodeExpr)
+import Drasil.Code.CodeExpr.Class (CodeExprC(..))
 
 import Language.Drasil.WellTyped (RequiresChecking(..), Typed(..), TypingContext,
   TypeError, inferFromContext, temporaryIndent)
@@ -316,8 +318,6 @@ import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal)
 import Language.Drasil.ModelExpr.Class (ModelExprC(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr, DerivType, ModelExpr(Spc))
-import Language.Drasil.CodeExpr.Lang (CodeExpr)
-import Language.Drasil.CodeExpr.Class (CodeExprC(..))
 import Language.Drasil.Document (section, fig, figNoCap, figWithWidth, figNoCapWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC

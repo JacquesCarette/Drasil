@@ -6,6 +6,7 @@ import Data.Char (isSpace)
 import Control.Lens ((^.), view, makeLenses, Lens')
 
 import Drasil.Code.Classes (Callable)
+import Drasil.Code.CodeExpr.Lang (CodeExpr)
 import Drasil.Database.UID (HasUID(uid), (+++))
 
 import Language.Drasil.Classes (CommonIdea(abrv), Quantity, Idea(getA), NamedIdea(..))
@@ -14,8 +15,6 @@ import Language.Drasil.Space (HasSpace(..), Space(..))
 import Language.Drasil.Symbol (HasSymbol(symbol))
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Stages (Stage(..))
-
-import Language.Drasil.CodeExpr.Lang (CodeExpr)
 
 import Utils.Drasil (toPlainName)
 

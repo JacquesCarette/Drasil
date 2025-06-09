@@ -1,5 +1,5 @@
 {-# LANGUAGE GADTs #-}
-module Language.Drasil.CodeExpr.Convert (
+module Drasil.Code.CodeExpr.Convert (
     expr, realInterval, constraint,
     CanGenCode(..)
 ) where
@@ -10,7 +10,7 @@ import qualified Language.Drasil.Expr.Lang as E
 import qualified Language.Drasil.Expr.Development as LD
 import qualified Language.Drasil.Literal.Development as LL
 
-import Language.Drasil.CodeExpr.Lang
+import Drasil.Code.CodeExpr.Lang
 
 import Data.Bifunctor (Bifunctor(bimap))
 

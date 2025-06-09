@@ -10,6 +10,7 @@ module Language.Drasil.Document.Contents (
   unlbldCode
 ) where
 
+import Drasil.Code.CodeExpr.Lang (CodeExpr)
 import Language.Drasil.Classes (Definition(..))
 import Language.Drasil.ShortName (HasShortName(..), getSentSN)
 import Language.Drasil.Document (llcc, ulcc)
@@ -21,7 +22,6 @@ import Language.Drasil.Document.Core
      ItemType(Flat),
      ListType(Simple))
 import Language.Drasil.ModelExpr.Lang (ModelExpr)
-import Language.Drasil.CodeExpr.Lang (CodeExpr)
 import Language.Drasil.Reference (Reference)
 import Language.Drasil.Sentence (Sentence (..))
 import Language.Drasil.Document.Combinators (bulletFlat, mkEnumAbbrevList)

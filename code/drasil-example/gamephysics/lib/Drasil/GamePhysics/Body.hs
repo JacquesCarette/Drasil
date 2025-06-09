@@ -149,10 +149,6 @@ ideaDicts =
   nw algorithm : map nw softwarecon ++ map nw CP.physicCon ++ map nw CM.mathcon ++
   -- UnitDefns
   map nw derived ++ map nw fundamentals ++
-  -- GenDefns
-  map nw generalDefns ++
-  -- InstanceModels
-  map nw iMods ++
   -- QuantityDicts
   map nw symbolsAll ++ map (nw . (^. output)) iMods
 

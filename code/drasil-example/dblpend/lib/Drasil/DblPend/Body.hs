@@ -28,7 +28,7 @@ import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Data.Drasil.Software.Products (prodtcon)
-import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM, newtonSLR)
+import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 import Data.Drasil.TheoryConcepts (inModel)
 
 import Drasil.DblPend.Figures (figMotion, sysCtxFig1)
@@ -152,8 +152,6 @@ ideaDicts =
   map nw [algorithm, len, mass, errMsg, program] ++ map nw physicCon ++ map nw mathcon ++ map nw physicalcon ++
   -- UnitDefns
   map nw [kilogram, newton, degree, radian, metre, hertz] ++ map nw fundamentals ++
-  -- TheoryModels
-  nw newtonSLR :
   -- DefinedQuantityDicts
   map nw [unitVect, unitVectj] ++
   -- QuantityDicts

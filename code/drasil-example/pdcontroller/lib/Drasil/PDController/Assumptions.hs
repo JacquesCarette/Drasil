@@ -23,7 +23,7 @@ aPwrPlant = cic "pwrPlant" pwrPlantDesc "Power plant" assumpDom
 
 aDecoupled = cic "decoupled" aDecoupledDesc "Decoupled equation" assumpDom
 
-aSP = cic "setPoint" aSPDesc "Set-Point" assumpDom
+aSP = cic "setPointConstant" aSPDesc "Set-Point" assumpDom
 
 aExtDisturb
   = cic "externalDisturb" aExtDisturbDesc "External disturbance" assumpDom

@@ -65,9 +65,6 @@ htTransCladFuelEq = (exactDbl 2 $* sy cladCond $* sy gapFilmCond) $/ (exactDbl 2
 
 ---
 
-hghc :: CI
-hghc = commonIdea "hghc" (cn "HGHC") "HGHC" []
-
 nuclearPhys, fp :: IdeaDict
 nuclearPhys = nc "nuclearPhys" (nounPhraseSP "nuclear physics")
 fp = nc "fp" (cn "FP")

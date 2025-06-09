@@ -14,11 +14,11 @@ import qualified Language.Drasil as L
 import qualified Language.Drasil.Display as LD
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
-import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
-  ListType(Ordered, Unordered, Desc, Definitions, Simple), 
-  Spec(Quote, EmptyS, Ref, S, Sp, HARDNL, E, (:+:)), 
-  Fence(Norm, Abs, Curly, Paren), Expr, 
-  Ops(..), Spacing(Thin), Fonts(Emph, Bold), 
+import Language.Drasil.Printing.AST (Spec (Tooltip), ItemType(Nested, Flat),
+  ListType(Ordered, Unordered, Desc, Definitions, Simple),
+  Spec(Quote, EmptyS, Ref, S, Sp, HARDNL, E, (:+:)),
+  Fence(Norm, Abs, Curly, Paren), Expr,
+  Ops(..), Spacing(Thin), Fonts(Emph, Bold),
   Expr(..), OverSymb(Hat), Label,
   LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished, 
@@ -229,6 +229,7 @@ makeTable lls@(h:tlines) r bool t = mkEnv "longtblr" ($+$) $
 specLength :: Spec -> Int
 specLength (E x)       = length $ filter (`notElem` dontCount) $ TP.render $ runPrint (pExpr x) Curr
 specLength (S x)       = length x
+specLength (Tooltip _ s) = specLength s
 specLength (a :+: b)   = specLength a + specLength b
 specLength (Sp _)      = 1
 specLength (Ref Internal r _) = length r
@@ -259,14 +260,15 @@ makeColumns ls = hpunctuate (text " & ") $ map spec ls
 
 -- | Helper that determines the printing context based on the kind of 'Spec'.
 needs :: Spec -> MathContext
-needs (a :+: b) = needs a `lub` needs b
-needs (S _)     = Text
-needs (E _)     = Math
-needs (Sp _)    = Math
-needs HARDNL    = Text
-needs Ref{}     = Text
-needs EmptyS    = Text
-needs (Quote _) = Text
+needs (a :+: b)     = needs a `lub` needs b
+needs (S _)         = Text
+needs (Tooltip _ s) = needs s
+needs (E _)         = Math
+needs (Sp _)        = Math
+needs HARDNL        = Text
+needs Ref{}         = Text
+needs EmptyS        = Text
+needs (Quote _)     = Text
 
 -- | Prints all 'Spec's.
 spec :: Spec -> D
@@ -282,6 +284,7 @@ spec (S s)  = either error (pure . text . concatMap escapeChars) $ L.checkValidS
     escapeChars '_' = "\\_"
     escapeChars '&' = "\\&"
     escapeChars c = [c]
+spec (Tooltip _ s) = spec s
 spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = command0 "newline"
 spec (Ref Internal r sn) = snref r (spec sn)

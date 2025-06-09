@@ -162,8 +162,8 @@ PROFEXEC := --profile --rts-options '-xc -P'
 # GHC build options
 GHCTHREADS ?= 2
 
-GHCFLAGS += -Wall -j$(GHCTHREADS)
-stackArgs += --ghc-options="$(GHCFLAGS)"
+override GHCFLAGS += -Wall -j$(GHCTHREADS)
+override stackArgs += --ghc-options="$(GHCFLAGS)"
 
 # When running 'stack exec', the following stack arguments should be passed.
 STACK_EXEC_ARGS = --no-nix-pure
@@ -193,7 +193,7 @@ install: ##@Examples Install all example project binaries into your local binary
 
 # Debugging changes the arguments passed to 'stack exec' slightly.
 setup_debug_vars:
-	$(eval stackArgs += $(PROFALL))
+	$(eval override stackArgs += $(PROFALL))
 	$(eval STACK_EXEC_ARGS += $(PROFEXEC))
 	$(eval export DEBUG_ENV = 1)
 

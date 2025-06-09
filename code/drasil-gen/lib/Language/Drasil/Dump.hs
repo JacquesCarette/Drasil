@@ -4,14 +4,13 @@ module Language.Drasil.Dump where
 import qualified Database.Drasil as DB
 import System.Drasil (System, systemdb)
 
-import System.Directory
 import System.IO
 import Data.Aeson (ToJSON)
 import Data.Aeson.Encode.Pretty (encodePretty)
 import qualified Data.ByteString.Lazy.Char8 as LB
 import qualified Data.Map.Strict as SM
 
-import Utils.Drasil (invert, atLeast2)
+import Utils.Drasil (invert, atLeast2, createDirIfMissing)
 import Database.Drasil (traceTable, refbyTable, ChunkDB (termTable))
 import Control.Lens ((^.))
 import System.Environment (lookupEnv)
@@ -35,7 +34,7 @@ dumpEverything si pinfo p = do
 
 dumpEverything0 :: System -> PrintingInformation -> Path -> IO ()
 dumpEverything0 si pinfo targetPath = do
-  createDirectoryIfMissing True targetPath
+  createDirIfMissing True targetPath
   let chunkDb = si ^. systemdb
       chunkDump = DB.dumpChunkDB chunkDb
       invertedChunkDump = invert chunkDump

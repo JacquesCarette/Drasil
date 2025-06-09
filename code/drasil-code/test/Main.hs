@@ -10,9 +10,11 @@ import qualified Drasil.GProc as Proc (unCI, ProgramSym(..), ProgData(..))
 import Language.Drasil.Code (PackageSym(..), AuxiliarySym(..), AuxData(..),
   PackData(..), unPP, unJP, unCSP, unCPPP, unSP, unJLP, ImplementationType(..))
 
+import Utils.Drasil (createDirIfMissing)
+
 import Text.PrettyPrint.HughesPJ (Doc, render)
 import Control.Monad.State (evalState, runState)
-import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
+import System.Directory (setCurrentDirectory, getCurrentDirectory)
 import System.FilePath.Posix (takeDirectory)
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
@@ -28,27 +30,27 @@ import NameGenTest (nameGenTestOO, nameGenTestProc)
 main :: IO()
 main = do
   workingDir <- getCurrentDirectory
-  createDirectoryIfMissing False "java"
+  createDirIfMissing False "java"
   setCurrentDirectory "java"
   genCode (classes unJC unJP)
   setCurrentDirectory workingDir
-  createDirectoryIfMissing False "python"
+  createDirIfMissing False "python"
   setCurrentDirectory "python"
   genCode (classes unPC unPP)
   setCurrentDirectory workingDir
-  createDirectoryIfMissing False "csharp"
+  createDirIfMissing False "csharp"
   setCurrentDirectory "csharp"
   genCode (classes unCSC unCSP)
   setCurrentDirectory workingDir
-  createDirectoryIfMissing False "cpp"
+  createDirIfMissing False "cpp"
   setCurrentDirectory "cpp"
   genCode (classes unCPPC unCPPP)
   setCurrentDirectory workingDir
-  createDirectoryIfMissing False "swift"
+  createDirIfMissing False "swift"
   setCurrentDirectory "swift"
   genCode (classes unSC unSP)
   setCurrentDirectory workingDir
-  createDirectoryIfMissing False "julia"
+  createDirIfMissing False "julia"
   setCurrentDirectory "julia"
   genCode (jlClasses unJLC unJLP)
   setCurrentDirectory workingDir
@@ -104,9 +106,9 @@ createCodeFiles ns cs = mapM_ createCodeFile (zip ns cs)
 -- | Helper that creates the file and renders code.
 createCodeFile :: (Label, (FilePath, Doc)) -> IO ()
 createCodeFile (n, (path, code)) = do
-    createDirectoryIfMissing False n
+    createDirIfMissing False n
     setCurrentDirectory n
-    createDirectoryIfMissing True (takeDirectory path)
+    createDirIfMissing True (takeDirectory path)
     h <- openFile path WriteMode
     hPutStrLn h (render code)
     hClose h

@@ -4,8 +4,9 @@ import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to
 import Drasil.SRSDocument
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Drasil.HGHC.HeatTransfer (fp, hghc, dataDefs, htInputs, htOutputs, 
+import Drasil.HGHC.HeatTransfer (fp, dataDefs, htInputs, htOutputs, 
     nuclearPhys, symbols)
+import Drasil.HGHC.MetaConcepts (progName)
 
 import Data.Drasil.SI_Units (siUnits, fundamentals, derived, degree)
 import Data.Drasil.People (spencerSmith)
@@ -25,7 +26,7 @@ printSetting = piSys fullSI Equational defaultConfiguration
 
 si :: System
 si = SI {
-  _sys         = hghc,
+  _sys         = progName,
   _kind        = Doc.srs,
   _authors     = [spencerSmith],
   _quants      = symbols,
@@ -60,13 +61,31 @@ mkSRS = [TableOfContents,
 purp :: Sentence
 purp = foldlSent [S "describe", phrase CT.heatTrans, S "coefficients related to clad"]
 
+ideaDicts :: [IdeaDict]
+ideaDicts =
+  -- Actual IdeaDicts
+  [fp, nuclearPhys] ++ doccon ++
+  -- CIs
+  nw progName : map nw doccon' ++
+  -- ConceptChunks
+  map nw mathcon ++
+  -- QuantityDicts
+  map nw symbols ++
+  -- UnitDefns
+  nw degree : map nw fundamentals ++ map nw derived
+
+
 symbMap :: ChunkDB
-symbMap = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
-  ++ [nw fp, nw nuclearPhys, nw hghc, nw degree] ++ map nw doccon' ++ map nw mathcon)
+symbMap = cdb symbols ideaDicts
   ([] :: [ConceptChunk])-- FIXME: Fill in concepts
   siUnits dataDefs [] [] [] [] [] [] []
 
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts =
+  -- QuantityDicts
+  map nw symbols
+
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbols)
+usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
            ([] :: [ConceptChunk]) ([] :: [UnitDefn])
            [] [] [] [] [] [] ([] :: [Reference]) []

@@ -34,6 +34,6 @@ Computing the Inverse Laplace Transform of a function (from [TM:invLaplaceTransf
 
 \\[\frac{\\,d\frac{\\,d{y\_{\text{t}}}}{\\,dt}}{\\,dt}+\left(1+{K\_{\text{d}}}\right)\\,\frac{\\,d{y\_{\text{t}}}}{\\,dt}+\left(20+{K\_{\text{p}}}\right)\\,{y\_{\text{t}}}-{K\_{\text{d}}}\\,\frac{\\,d{r\_{\text{t}}}}{\\,dt}-{r\_{\text{t}}}\\,{K\_{\text{p}}}=0\\]
 
-The Set-Point \\({r\_{\text{t}}}\\) is a step function and a constant (from [A:Set-Point](./SecAssumps.md#setPoint)). Therefore the differential of the set point is zero. Hence the equation reduces to
+The Set-Point \\({r\_{\text{t}}}\\) is a step function and a constant (from [A:Set-Point](./SecAssumps.md#setPointConstant)). Therefore the differential of the set point is zero. Hence the equation reduces to
 
 \\[\frac{\\,d\frac{\\,d{y\_{\text{t}}}}{\\,dt}}{\\,dt}+\left(1+{K\_{\text{d}}}\right)\\,\frac{\\,d{y\_{\text{t}}}}{\\,dt}+\left(20+{K\_{\text{p}}}\right)\\,{y\_{\text{t}}}-{r\_{\text{t}}}\\,{K\_{\text{p}}}=0\\]

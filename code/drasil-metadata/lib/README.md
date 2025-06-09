@@ -9,3 +9,6 @@ Last updated: Aug 04, 2023
 
 **Metadata**
   - Contains very fundamental metadata for Drasil
+
+README.md
+  - This file

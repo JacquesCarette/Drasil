@@ -140,7 +140,7 @@ iVect, jVect, normalVect, force_1, force_2, forcej, mass_1, mass_2,
   momtInertK, pointOfCollision, contDispK, collisionImpulse, finRelVel,
   velAP, velBP, time_1, time_2, velo_1, velo_2, rRot, mLarger, distMass, dVect :: UnitalChunk
 
-iVect = uc (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
+iVect = uc (dccWDS "unitVectI" (compoundPhrase' (cn "horizontal")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) 
                (eqSymb QM.unitVect) Real metre
 jVect       = uc (dccWDS "unitVectJ" (compoundPhrase' (cn "vertical")
@@ -149,7 +149,7 @@ normalVect  = uc (dccWDS "normalVect" (nounPhraseSent (S "collision" +:+
                    phrase QM.normalVect)) (phrase QM.normalVect)) 
                    (eqSymb QM.normalVect) (Vect Real) metre
 
-dVect = uc (dccWDS "unitVect" 
+dVect = uc (dccWDS "unitVectD" 
           (cn "unit vector directed from the center of the large mass to the center of the smaller mass") 
                    (phrase QM.unitVect)) (vec (hat lD)) Real metre
 

@@ -300,6 +300,13 @@ module Language.Drasil (
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 
+import Drasil.Code.Classes (Callable, IsArgumentName)
+import Drasil.Code.CodeVar (CodeIdea(..), CodeChunk(..), 
+  CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..), obv, qc, ccf, ccv, 
+  listToArray, programName, funcPrefix, DefiningCodeExpr(..))
+import Drasil.Code.CodeExpr.Lang (CodeExpr)
+import Drasil.Code.CodeExpr.Class (CodeExprC(..))
+
 import Language.Drasil.WellTyped (RequiresChecking(..), Typed(..), TypingContext,
   TypeError, inferFromContext, temporaryIndent)
 
@@ -311,8 +318,6 @@ import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal)
 import Language.Drasil.ModelExpr.Class (ModelExprC(..))
 import Language.Drasil.ModelExpr.Lang (ModelExpr, DerivType, ModelExpr(Spc))
-import Language.Drasil.CodeExpr.Lang (CodeExpr)
-import Language.Drasil.CodeExpr.Class (CodeExprC(..))
 import Language.Drasil.Document (section, fig, figNoCap, figWithWidth, figNoCapWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC
@@ -331,8 +336,7 @@ import Drasil.Database.UID
 import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)
 import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints),
-  HasReasVal(reasVal), DefiningExpr(defnExpr), Quantity, Callable,
-  IsArgumentName, Express(..))
+  HasReasVal(reasVal), DefiningExpr(defnExpr), Quantity, Express(..))
 import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader, MayHaveDerivation(..))
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
@@ -343,9 +347,6 @@ import Language.Drasil.Chunk.Citation (
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
   , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
   , cProceedings, cTechReport, cUnpublished)
-import Language.Drasil.Chunk.CodeVar (CodeIdea(..), CodeChunk(..), 
-  CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..), obv, qc, ccf, ccv, 
-  listToArray, programName, funcPrefix, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Concept.Core (sDom) -- exported for drasil-database FIXME: move to development package?

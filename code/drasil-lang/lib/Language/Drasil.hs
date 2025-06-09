@@ -261,7 +261,8 @@ module Language.Drasil (
 
   -- ** List-related functions
   , bulletFlat, bulletNested, itemRefToSent, makeTMatrix, mkEnumAbbrevList
-  , mkTableFromColumns, noRefs, refineChain, sortBySymbol, sortBySymbolTuple
+  , mkTableFromColumns, noRefs, refineChain
+  , sortBySymbol, sortBySymbolTuple, sortByLhsSymbol
   , tAndDOnly, tAndDWAcc, tAndDWSym
   , zipSentList
 

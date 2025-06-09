@@ -1,5 +1,7 @@
 module Drasil.GlassBR.Unitals where --whole file is used
 
+import Control.Lens ((^.))
+
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
@@ -82,16 +84,16 @@ plateLen = uqcND "plateLen" (nounPhraseSP "plate length (long dimension)")
   lA metre Real
   [ gtZeroConstr,
     physRange $ UpFrom (Inc, sy plateWidth),
-    sfwrRange $ Bounded (Inc , sy dimMin) (Inc , sy dimMax)] (dbl 1.5) defaultUncrt
+    sfwrRange $ Bounded (Inc , sy $ dimMin ^. defLhs) (Inc , sy $ dimMax ^. defLhs)] (dbl 1.5) defaultUncrt
 
 plateWidth = uqcND "plateWidth" (nounPhraseSP "plate width (short dimension)")
   lB metre Real
   [ physRange $ Bounded (Exc, exactDbl 0) (Inc, sy plateLen),
-    sfwrRange $ Bounded (Inc, sy dimMin) (Inc, sy dimMax)] (dbl 1.2) defaultUncrt
+    sfwrRange $ Bounded (Inc, sy $ dimMin ^. defLhs) (Inc, sy $ dimMax ^. defLhs)] (dbl 1.2) defaultUncrt
 
 aspectRatio = uq (constrained' (dqdNoUnit aspectRatioCon (variable "AR") Real)
   [ physRange $ UpFrom (Inc, exactDbl 1),
-    sfwrRange $ UpTo (Inc, sy arMax)] (dbl 1.5)) defaultUncrt
+    sfwrRange $ UpTo (Inc, sy $ arMax ^. defLhs)] (dbl 1.5)) defaultUncrt
 
 pbTol = uvc "pbTol" (nounPhraseSP "tolerable probability of breakage")
   (sub cP (Concat [lBreak, lTol])) Real
@@ -100,7 +102,7 @@ pbTol = uvc "pbTol" (nounPhraseSP "tolerable probability of breakage")
 charWeight = uqcND "charWeight" (nounPhraseSP "charge weight")
   lW kilogram Real
   [ gtZeroConstr,
-    sfwrRange $ Bounded (Inc, sy cWeightMin) (Inc, sy cWeightMax)]
+    sfwrRange $ Bounded (Inc, sy $ cWeightMin ^. defLhs) (Inc, sy $ cWeightMax ^. defLhs)]
     (exactDbl 42) defaultUncrt
 
 tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
@@ -109,7 +111,7 @@ tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
 
 standOffDist = uq (constrained' (uc sD (variable "SD") Real metre)
   [ gtZeroConstr,
-    sfwrRange $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
+    sfwrRange $ Bounded (Inc, sy $ sdMin ^. defLhs) (Inc, sy $ sdMax ^. defLhs)] (exactDbl 45)) defaultUncrt
 
 nomThick = cuc "nomThick"
   (nounPhraseSent $ S "nominal thickness t is in" +:+ eS (mkSet Rational (map dbl nominalThicknesses)))
@@ -133,7 +135,7 @@ probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
   [probConstr] (Just $ dbl 0.4)
 
 stressDistFac = cvc "stressDistFac" (nounPhraseSP "stress distribution factor (Function)")
-  cJ Real [physRange $ Bounded (Inc, sy stressDistFacMin) (Inc, sy stressDistFacMax)] (Just $ exactDbl 15)
+  cJ Real [physRange $ Bounded (Inc, sy $ stressDistFacMin ^. defLhs) (Inc, sy $ stressDistFacMax ^. defLhs)] (Just $ exactDbl 15)
 
 probFail = cvc "probFail" (nounPhraseSP "probability of failure")
   (sub cP lFail) Real

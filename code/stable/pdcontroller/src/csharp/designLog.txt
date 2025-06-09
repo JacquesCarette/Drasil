@@ -18,7 +18,7 @@ Successfully matched String with String.
 Successfully matched Actor "Constants" with Object "Constants".
 Successfully matched Actor "InputParameters" with Object "InputParameters".
 Successfully matched Real with Double.
-Successfully matched Vect Real with List Double.
+Successfully matched ClifS (VDim "n") Real with List Double.
 Successfully matched Actor "Vector" with Object "Vector".
 Successfully matched Array Real with Array Double.
 Successfully matched Actor "Options" with Object "Options".

@@ -4,7 +4,7 @@
 
 module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 
-import Language.Drasil (QuantityDict, Space(..), implVar, nounPhraseSP,
+import Language.Drasil (QuantityDict, Space(..), vect3DS, implVar, nounPhraseSP,
   label, sub, HasSymbol(..), HasUID, Symbol)
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
@@ -64,25 +64,25 @@ y = var "y" "y-coordinate to interpolate at"  lY Real
 z = var "z" "z-coordinate to interpolate at"  lZ Real
 
 zVector = var "zVector" "list of z values" 
-  (sub lZ (label "vector")) (Vect Real)               
+  (sub lZ (label "vector")) (vect3DS Real)              
 yMatrix = var "yMatrix" "lists of y values at different z values" 
-  (sub lY (label "matrix")) (Vect $ Vect Real)        
+  (sub lY (label "matrix")) (vect3DS $ vect3DS Real) -- TODO: Yuck! Fix this!
 xMatrix = var "xMatrix" "lists of x values at different z values" 
-  (sub lX (label "matrix")) (Vect $ Vect Real)        
+  (sub lX (label "matrix")) (vect3DS $ vect3DS Real)
 arr     = var "arr"     "array in which value should be found" 
-  (label "arr")             (Vect Real)  --FIXME: temporary variable for findCT?
+  (label "arr")              (vect3DS Real)  --FIXME: temporary variable for findCT?
 x_z_1   = var "x_z_1"   "list of x values at a specific z value"    
-  (sub lX (sub lZ one))      (Vect Real)
+  (sub lX (sub lZ one))      (vect3DS Real)
 y_z_1   = var "y_z_1"   "list of y values at a specific z value"    
-  (sub lY (sub lZ one))      (Vect Real)   
+  (sub lY (sub lZ one))      (vect3DS Real)   
 x_z_2   = var "x_z_2"   "list of x values at a specific z value"    
-  (sub lX (sub lZ two))      (Vect Real)
+  (sub lX (sub lZ two))      (vect3DS Real)
 y_z_2   = var "y_z_2"   "list of y values at a specific z value"   
-  (sub lY (sub lZ two))      (Vect Real)
+  (sub lY (sub lZ two))      (vect3DS Real)
 mat     = var "mat"     "matrix from which column will be extracted"     
-  (label "mat")             (Vect $ Vect Real)
+  (label "mat")             (vect3DS $ vect3DS Real)
 col     = var "col"     "extracted column"    
-  (label "col")             (Vect Real)               
+  (label "col")             (vect3DS Real)               
 filename = var "filename" "name of file with x y and z data" 
   (label "filename")        String
 
@@ -152,7 +152,7 @@ findCT = funcDef "find"
 
 extractColumnCT :: Func
 extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix" 
-  [mat, j] (Vect Real) (Just "column of the given matrix at the given index")
+  [mat, j] (vect3DS Real) (Just "column of the given matrix at the given index") -- TODO: is this correct?
   [
     fDecDef col (matrix [[]]),
     --

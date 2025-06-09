@@ -32,7 +32,7 @@ vectEqual = funcDef "vectEqual" [vV1, vV2] Boolean
          )
   ]
 
-vectAdd = funcDef "vectAdd" [vV1, vV2] (Vect Real)
+vectAdd = funcDef "vectAdd" [vV1, vV2] (vectND "n" Real)
   [
     FRet (FCall (funcUID vect) 
       [
@@ -42,7 +42,7 @@ vectAdd = funcDef "vectAdd" [vV1, vV2] (Vect Real)
     )
   ]
   
-vectSub = funcDef "vectSub" [vV1, vV2] (Vect Real)
+vectSub = funcDef "vectSub" [vV1, vV2] (vectND "n" Real)
   [
     FRet (FCall (funcUID vect)
       [
@@ -52,7 +52,7 @@ vectSub = funcDef "vectSub" [vV1, vV2] (Vect Real)
     )
   ]
   
-vectMult = funcDef "vectMult" [vV1, vV2] (Vect Real)
+vectMult = funcDef "vectMult" [vV1, vV2] (vectND "n" Real)
   [
     FRet (FCall (funcUID vect)
       [
@@ -62,7 +62,7 @@ vectMult = funcDef "vectMult" [vV1, vV2] (Vect Real)
     )
   ]
 
-vectNeg = funcDef "vectNeg" [v_v] (Vect Real)
+vectNeg = funcDef "vectNeg" [v_v] (vectND "n" Real)
   [
     FRet (FCall (funcUID vect)
       $ map Neg [
@@ -92,7 +92,7 @@ vectCross = funcDef "vectCross" [vV1, vV2] Real
     )
   ]
   
-vectPerp = funcDef "vectPerp" [v_v] (Vect Real)
+vectPerp = funcDef "vectPerp" [v_v] (vectND "n" Real)
   [
     FRet (FCall (funcUID vect) 
       [
@@ -102,7 +102,7 @@ vectPerp = funcDef "vectPerp" [v_v] (Vect Real)
     )
   ]
 
-vectRPerp = funcDef "vectRPerp" [v_v] (Vect Real)
+vectRPerp = funcDef "vectRPerp" [v_v] (vectND "n" Real)
   [
     FRet (FCall (funcUID vect)
       [
@@ -112,7 +112,7 @@ vectRPerp = funcDef "vectRPerp" [v_v] (Vect Real)
     )
   ]
    
-vectProject = funcDef "vectProject" [vV1, vV2] (Vect Real)   
+vectProject = funcDef "vectProject" [vV1, vV2] (vectND "n" Real)   
   [ 
     FRet (FCall (funcUID vectMult) 
       [
@@ -122,7 +122,7 @@ vectProject = funcDef "vectProject" [vV1, vV2] (Vect Real)
     )
   ]
 
-vectForAngle = funcDef "vectForAngle" [rad] (Vect Real)
+vectForAngle = funcDef "vectForAngle" [rad] (vectND "n" Real)
   [
     FRet (FCall (funcUID vect)
       [
@@ -142,7 +142,7 @@ vectToAngle = funcDef "vectToAngle" [v_v] Real
     )
   ]
 
-vectRotate = funcDef "vectRotate" [vV1, vV2] (Vect Real)
+vectRotate = funcDef "vectRotate" [vV1, vV2] (vectND "n" Real)
   [
     FRet (FCall (funcUID vect)
       [
@@ -154,7 +154,7 @@ vectRotate = funcDef "vectRotate" [vV1, vV2] (Vect Real)
     )
   ]
   
-vectUnrotate = funcDef "vectUnrotate" [vV1, vV2] (Vect Real)
+vectUnrotate = funcDef "vectUnrotate" [vV1, vV2] (vectND "n" Real)
   [
     FRet (FCall (funcUID vect)
       [
@@ -176,7 +176,7 @@ vectLength = funcDef "vectLength" [v_v] Real
     FRet (Sqrt (FCall (funcUID vectLengthSq) [v_v]))
   ]
   
-vectClamp = funcDef "vectClamp" [v_v, length] (Vect Real)
+vectClamp = funcDef "vectClamp" [v_v, length] (vectND "n" Real)
   [
     (FCond (FCall (funcUID vectLength) [v_v]) :< length) 
       [FRet v_v]
@@ -185,7 +185,7 @@ vectClamp = funcDef "vectClamp" [v_v, length] (Vect Real)
       ]
   ]
 
-vectLerp = funcDef "vectLerp" [vV1, vV2, t] (Vect Real)
+vectLerp = funcDef "vectLerp" [vV1, vV2, t] (vectND "n" Real)
   [
     FRet (FCall (funcUID vectAdd)
       [
@@ -194,7 +194,7 @@ vectLerp = funcDef "vectLerp" [vV1, vV2, t] (Vect Real)
       ])
   ]
 
-vectNormalize = funcDef "vectNormalize" [v_v] (Vect Real)
+vectNormalize = funcDef "vectNormalize" [v_v] (vectND "n" Real)
   [
     FRet (FCall (funcUID vectMult) 
       [v_v, 1.0 / FCall (funcUID vectLength) [v_v] + DBL_MIN]

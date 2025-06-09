@@ -1,4 +1,115 @@
 digraph alltypes {
+	subgraph class {
+	}
+	subgraph convert {
+	}
+	subgraph development {
+	}
+	subgraph extract {
+	}
+	subgraph lang {
+		subgraph arithbinop{
+		ArithBinOp	[shape=oval, color=darkviolet, label="ArithBinOp"];
+		}
+		subgraph eqbinop{
+		EqBinOp	[shape=oval, color=darkviolet, label="EqBinOp"];
+		}
+		subgraph boolbinop{
+		BoolBinOp	[shape=oval, color=darkviolet, label="BoolBinOp"];
+		}
+		subgraph labinop{
+		LABinOp	[shape=oval, color=darkviolet, label="LABinOp"];
+		}
+		subgraph ordbinop{
+		OrdBinOp	[shape=oval, color=darkviolet, label="OrdBinOp"];
+		}
+		subgraph vvvbinop{
+		VVVBinOp	[shape=oval, color=darkviolet, label="VVVBinOp"];
+		}
+		subgraph vvnbinop{
+		VVNBinOp	[shape=oval, color=darkviolet, label="VVNBinOp"];
+		}
+		subgraph nvvbinop{
+		NVVBinOp	[shape=oval, color=darkviolet, label="NVVBinOp"];
+		}
+		subgraph essbinop{
+		ESSBinOp	[shape=oval, color=darkviolet, label="ESSBinOp"];
+		}
+		subgraph esbbinop{
+		ESBBinOp	[shape=oval, color=darkviolet, label="ESBBinOp"];
+		}
+		subgraph assocconcatoper{
+		AssocConcatOper	[shape=oval, color=darkviolet, label="AssocConcatOper"];
+		}
+		subgraph assocarithoper{
+		AssocArithOper	[shape=oval, color=darkviolet, label="AssocArithOper"];
+		}
+		subgraph assocbooloper{
+		AssocBoolOper	[shape=oval, color=darkviolet, label="AssocBoolOper"];
+		}
+		subgraph ufunc{
+		UFunc	[shape=oval, color=darkviolet, label="UFunc"];
+		}
+		subgraph ufuncb{
+		UFuncB	[shape=oval, color=darkviolet, label="UFuncB"];
+		}
+		subgraph ufuncvv{
+		UFuncVV	[shape=oval, color=darkviolet, label="UFuncVV"];
+		}
+		subgraph ufuncvn{
+		UFuncVN	[shape=oval, color=darkviolet, label="UFuncVN"];
+		}
+		subgraph codeexpr{
+		CodeExpr	[shape=oval, color=darkviolet, label="CodeExpr"];
+		CodeExpr -> Literal;
+		CodeExpr -> CodeExpr;
+		CodeExpr -> AssocArithOper;
+		CodeExpr -> AssocBoolOper;
+		CodeExpr -> AssocConcatOper;
+		CodeExpr -> UID;
+		CodeExpr -> Completeness;
+		CodeExpr -> Space;
+		CodeExpr -> String;
+		CodeExpr -> UFunc;
+		CodeExpr -> UFuncB;
+		CodeExpr -> UFuncVV;
+		CodeExpr -> UFuncVN;
+		CodeExpr -> ArithBinOp;
+		CodeExpr -> BoolBinOp;
+		CodeExpr -> EqBinOp;
+		CodeExpr -> LABinOp;
+		CodeExpr -> OrdBinOp;
+		CodeExpr -> VVVBinOp;
+		CodeExpr -> VVNBinOp;
+		CodeExpr -> NVVBinOp;
+		CodeExpr -> ESSBinOp;
+		CodeExpr -> ESBBinOp;
+		CodeExpr -> DiscreteDomainDesc;
+		CodeExpr -> RealInterval;
+		}
+	}
+	subgraph precedence {
+	}
+	subgraph clasess {
+	}
+	subgraph codeexpr {
+	}
+	subgraph codevar {
+		subgraph varorfunc{
+		VarOrFunc	[shape=oval, color=cyan3, label="VarOrFunc"];
+		VarOrFunc -> QuantityDict;
+		VarOrFunc -> VarOrFunc;
+		}
+		subgraph codevarchunk{
+		CodeVarChunk	[shape=oval, color=cyan3, label="CodeVarChunk"];
+		CodeVarChunk -> CodeChunk;
+		CodeVarChunk -> MaybeCodeChunk;
+		}
+		subgraph codefuncchunk{
+		CodeFuncChunk	[shape=oval, color=darkgreen, label="CodeFuncChunk"];
+		CodeFuncChunk -> CodeChunk;
+		}
+	}
 	subgraph uid {
 		subgraph uid{
 		UID	[shape=oval, color=cyan3, label="UID"];
@@ -37,22 +148,6 @@ digraph alltypes {
 		subgraph entryid{
 		EntryID	[shape=oval, color=red2, label="EntryID"];
 		EntryID -> String;
-		}
-	}
-	subgraph codevar {
-		subgraph varorfunc{
-		VarOrFunc	[shape=oval, color=cyan3, label="VarOrFunc"];
-		VarOrFunc -> QuantityDict;
-		VarOrFunc -> VarOrFunc;
-		}
-		subgraph codevarchunk{
-		CodeVarChunk	[shape=oval, color=cyan3, label="CodeVarChunk"];
-		CodeVarChunk -> CodeChunk;
-		CodeVarChunk -> MaybeCodeChunk;
-		}
-		subgraph codefuncchunk{
-		CodeFuncChunk	[shape=oval, color=darkgreen, label="CodeFuncChunk"];
-		CodeFuncChunk -> CodeChunk;
 		}
 	}
 	subgraph commonidea {
@@ -192,97 +287,6 @@ digraph alltypes {
 		UnitaryChunk -> QuantityDict;
 		UnitaryChunk -> UnitDefn;
 		}
-	}
-	subgraph class {
-	}
-	subgraph convert {
-	}
-	subgraph development {
-	}
-	subgraph extract {
-	}
-	subgraph lang {
-		subgraph arithbinop{
-		ArithBinOp	[shape=oval, color=darkviolet, label="ArithBinOp"];
-		}
-		subgraph eqbinop{
-		EqBinOp	[shape=oval, color=darkviolet, label="EqBinOp"];
-		}
-		subgraph boolbinop{
-		BoolBinOp	[shape=oval, color=darkviolet, label="BoolBinOp"];
-		}
-		subgraph labinop{
-		LABinOp	[shape=oval, color=darkviolet, label="LABinOp"];
-		}
-		subgraph ordbinop{
-		OrdBinOp	[shape=oval, color=darkviolet, label="OrdBinOp"];
-		}
-		subgraph vvvbinop{
-		VVVBinOp	[shape=oval, color=darkviolet, label="VVVBinOp"];
-		}
-		subgraph vvnbinop{
-		VVNBinOp	[shape=oval, color=darkviolet, label="VVNBinOp"];
-		}
-		subgraph nvvbinop{
-		NVVBinOp	[shape=oval, color=darkviolet, label="NVVBinOp"];
-		}
-		subgraph essbinop{
-		ESSBinOp	[shape=oval, color=darkviolet, label="ESSBinOp"];
-		}
-		subgraph esbbinop{
-		ESBBinOp	[shape=oval, color=darkviolet, label="ESBBinOp"];
-		}
-		subgraph assocconcatoper{
-		AssocConcatOper	[shape=oval, color=darkviolet, label="AssocConcatOper"];
-		}
-		subgraph assocarithoper{
-		AssocArithOper	[shape=oval, color=darkviolet, label="AssocArithOper"];
-		}
-		subgraph assocbooloper{
-		AssocBoolOper	[shape=oval, color=darkviolet, label="AssocBoolOper"];
-		}
-		subgraph ufunc{
-		UFunc	[shape=oval, color=darkviolet, label="UFunc"];
-		}
-		subgraph ufuncb{
-		UFuncB	[shape=oval, color=darkviolet, label="UFuncB"];
-		}
-		subgraph ufuncvv{
-		UFuncVV	[shape=oval, color=darkviolet, label="UFuncVV"];
-		}
-		subgraph ufuncvn{
-		UFuncVN	[shape=oval, color=darkviolet, label="UFuncVN"];
-		}
-		subgraph codeexpr{
-		CodeExpr	[shape=oval, color=darkviolet, label="CodeExpr"];
-		CodeExpr -> Literal;
-		CodeExpr -> CodeExpr;
-		CodeExpr -> AssocArithOper;
-		CodeExpr -> AssocBoolOper;
-		CodeExpr -> AssocConcatOper;
-		CodeExpr -> UID;
-		CodeExpr -> Completeness;
-		CodeExpr -> Space;
-		CodeExpr -> String;
-		CodeExpr -> UFunc;
-		CodeExpr -> UFuncB;
-		CodeExpr -> UFuncVV;
-		CodeExpr -> UFuncVN;
-		CodeExpr -> ArithBinOp;
-		CodeExpr -> BoolBinOp;
-		CodeExpr -> EqBinOp;
-		CodeExpr -> LABinOp;
-		CodeExpr -> OrdBinOp;
-		CodeExpr -> VVVBinOp;
-		CodeExpr -> VVNBinOp;
-		CodeExpr -> NVVBinOp;
-		CodeExpr -> ESSBinOp;
-		CodeExpr -> ESBBinOp;
-		CodeExpr -> DiscreteDomainDesc;
-		CodeExpr -> RealInterval;
-		}
-	}
-	subgraph precedence {
 	}
 	subgraph citation {
 		subgraph citefield{
@@ -675,8 +679,6 @@ digraph alltypes {
 		Conceptc	[shape=oval, color=red2, label="Conceptc"];
 		Conceptc -> IdeacDefinitioncConceptDomainc;
 		}
-	}
-	subgraph codeexpr {
 	}
 	subgraph contraints {
 		subgraph constraintreason{

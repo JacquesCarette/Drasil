@@ -232,13 +232,13 @@
 <polygon fill="black" stroke="black" points="9642.88,-383.14 9652.85,-379.54 9642.81,-376.14 9642.88,-383.14"/>
 </g>
 <!-- CodeExpr&#45;&gt;String -->
-<g id="edge922" class="edge">
+<g id="edge851" class="edge">
 <title>CodeExpr&#45;&gt;String</title>
 <path fill="none" stroke="black" d="M9652.95,-376.37C9433.85,-373.94 8617.54,-365.07 7945.31,-360 7899.35,-359.65 1358.72,-356.59 1326.31,-324 1315.03,-312.66 1315.05,-299.37 1326.31,-288 1377.76,-236.06 6299.48,-234.95 6853.71,-234.99"/>
 <polygon fill="black" stroke="black" points="6853.8,-238.49 6863.8,-234.99 6853.8,-231.49 6853.8,-238.49"/>
 </g>
 <!-- CodeExpr&#45;&gt;CodeExpr -->
-<g id="edge915" class="edge">
+<g id="edge844" class="edge">
 <title>CodeExpr&#45;&gt;CodeExpr</title>
 <path fill="none" stroke="black" d="M9748.05,-391.14C9767.02,-392.86 9783.86,-388.48 9783.86,-378 9783.86,-369.49 9772.74,-365 9758.4,-364.54"/>
 <polygon fill="black" stroke="black" points="9757.93,-361.05 9748.05,-364.86 9758.15,-368.05 9757.93,-361.05"/>
@@ -250,7 +250,7 @@
 <text text-anchor="middle" x="8391.31" y="-302.3" font-family="Times,serif" font-size="14.00">Space</text>
 </g>
 <!-- CodeExpr&#45;&gt;Space -->
-<g id="edge921" class="edge">
+<g id="edge850" class="edge">
 <title>CodeExpr&#45;&gt;Space</title>
 <path fill="none" stroke="black" d="M9667.9,-365.59C9658.26,-363.35 9647.98,-361.3 9638.31,-360 9134.12,-292.42 9000.59,-373.53 8494.31,-324 8475.07,-322.12 8453.98,-318.85 8435.93,-315.68"/>
 <polygon fill="black" stroke="black" points="8436.43,-312.22 8425.96,-313.89 8435.19,-319.11 8436.43,-312.22"/>
@@ -262,259 +262,259 @@
 <text text-anchor="middle" x="14158.31" y="-302.3" font-family="Times,serif" font-size="14.00">UID</text>
 </g>
 <!-- CodeExpr&#45;&gt;UID -->
-<g id="edge919" class="edge">
+<g id="edge848" class="edge">
 <title>CodeExpr&#45;&gt;UID</title>
 <path fill="none" stroke="black" d="M9765.32,-375.51C9887.88,-372.28 10189.02,-364.59 10441.31,-360 11657.66,-337.88 11961.9,-342.55 13178.31,-324 13544,-318.42 13986.42,-310.23 14118.97,-307.74"/>
 <polygon fill="black" stroke="black" points="14119.12,-311.24 14129.05,-307.55 14118.98,-304.24 14119.12,-311.24"/>
 </g>
 <!-- ArithBinOp -->
-<g id="node718" class="node">
+<g id="node684" class="node">
 <title>ArithBinOp</title>
 <ellipse fill="none" stroke="darkviolet" cx="11880.31" cy="-306" rx="63.09" ry="18"/>
 <text text-anchor="middle" x="11880.31" y="-302.3" font-family="Times,serif" font-size="14.00">ArithBinOp</text>
 </g>
 <!-- CodeExpr&#45;&gt;ArithBinOp -->
-<g id="edge927" class="edge">
+<g id="edge856" class="edge">
 <title>CodeExpr&#45;&gt;ArithBinOp</title>
 <path fill="none" stroke="black" d="M9765.58,-375.67C10082.27,-368.14 11631.66,-331.09 11732.31,-324 11759.3,-322.1 11788.95,-318.91 11814.57,-315.81"/>
 <polygon fill="black" stroke="black" points="11815.05,-319.28 11824.55,-314.58 11814.19,-312.33 11815.05,-319.28"/>
 </g>
 <!-- EqBinOp -->
-<g id="node719" class="node">
+<g id="node685" class="node">
 <title>EqBinOp</title>
 <ellipse fill="none" stroke="darkviolet" cx="9098.31" cy="-306" rx="51.99" ry="18"/>
 <text text-anchor="middle" x="9098.31" y="-302.3" font-family="Times,serif" font-size="14.00">EqBinOp</text>
 </g>
 <!-- CodeExpr&#45;&gt;EqBinOp -->
-<g id="edge929" class="edge">
+<g id="edge858" class="edge">
 <title>CodeExpr&#45;&gt;EqBinOp</title>
 <path fill="none" stroke="black" d="M9667.48,-365.82C9657.95,-363.6 9647.83,-361.49 9638.31,-360 9429.58,-327.3 9372.75,-358.48 9164.31,-324 9158.55,-323.05 9152.56,-321.83 9146.64,-320.49"/>
 <polygon fill="black" stroke="black" points="9147.35,-317.06 9136.81,-318.13 9145.71,-323.86 9147.35,-317.06"/>
 </g>
 <!-- BoolBinOp -->
-<g id="node720" class="node">
+<g id="node686" class="node">
 <title>BoolBinOp</title>
 <ellipse fill="none" stroke="darkviolet" cx="11493.31" cy="-306" rx="59.59" ry="18"/>
 <text text-anchor="middle" x="11493.31" y="-302.3" font-family="Times,serif" font-size="14.00">BoolBinOp</text>
 </g>
 <!-- CodeExpr&#45;&gt;BoolBinOp -->
-<g id="edge928" class="edge">
+<g id="edge857" class="edge">
 <title>CodeExpr&#45;&gt;BoolBinOp</title>
 <path fill="none" stroke="black" d="M9765.73,-375.6C10052.84,-368.41 11341.4,-335.65 11425.31,-324 11430.66,-323.26 11436.2,-322.26 11441.7,-321.12"/>
 <polygon fill="black" stroke="black" points="11442.51,-324.53 11451.51,-318.94 11440.99,-317.7 11442.51,-324.53"/>
 </g>
 <!-- LABinOp -->
-<g id="node721" class="node">
+<g id="node687" class="node">
 <title>LABinOp</title>
 <ellipse fill="none" stroke="darkviolet" cx="9646.31" cy="-306" rx="51.99" ry="18"/>
 <text text-anchor="middle" x="9646.31" y="-302.3" font-family="Times,serif" font-size="14.00">LABinOp</text>
 </g>
 <!-- CodeExpr&#45;&gt;LABinOp -->
-<g id="edge930" class="edge">
+<g id="edge859" class="edge">
 <title>CodeExpr&#45;&gt;LABinOp</title>
 <path fill="none" stroke="black" d="M9694.38,-360.41C9686.46,-351.61 9676.58,-340.63 9667.84,-330.92"/>
 <polygon fill="black" stroke="black" points="9670.42,-328.56 9661.13,-323.47 9665.22,-333.24 9670.42,-328.56"/>
 </g>
 <!-- OrdBinOp -->
-<g id="node722" class="node">
+<g id="node688" class="node">
 <title>OrdBinOp</title>
 <ellipse fill="none" stroke="darkviolet" cx="9773.31" cy="-306" rx="57.39" ry="18"/>
 <text text-anchor="middle" x="9773.31" y="-302.3" font-family="Times,serif" font-size="14.00">OrdBinOp</text>
 </g>
 <!-- CodeExpr&#45;&gt;OrdBinOp -->
-<g id="edge931" class="edge">
+<g id="edge860" class="edge">
 <title>CodeExpr&#45;&gt;OrdBinOp</title>
 <path fill="none" stroke="black" d="M9724.48,-360.41C9732.53,-351.61 9742.56,-340.63 9751.44,-330.92"/>
 <polygon fill="black" stroke="black" points="9754.09,-333.21 9758.25,-323.47 9748.92,-328.49 9754.09,-333.21"/>
 </g>
 <!-- VVVBinOp -->
-<g id="node723" class="node">
+<g id="node689" class="node">
 <title>VVVBinOp</title>
 <ellipse fill="none" stroke="darkviolet" cx="10415.31" cy="-306" rx="58.49" ry="18"/>
 <text text-anchor="middle" x="10415.31" y="-302.3" font-family="Times,serif" font-size="14.00">VVVBinOp</text>
 </g>
 <!-- CodeExpr&#45;&gt;VVVBinOp -->
-<g id="edge932" class="edge">
+<g id="edge861" class="edge">
 <title>CodeExpr&#45;&gt;VVVBinOp</title>
 <path fill="none" stroke="black" d="M9765.58,-375.39C9877.22,-371.51 10134.3,-359.23 10347.31,-324 10352.64,-323.12 10358.16,-322.03 10363.65,-320.84"/>
 <polygon fill="black" stroke="black" points="10364.49,-324.24 10373.46,-318.59 10362.93,-317.41 10364.49,-324.24"/>
 </g>
 <!-- VVNBinOp -->
-<g id="node724" class="node">
+<g id="node690" class="node">
 <title>VVNBinOp</title>
 <ellipse fill="none" stroke="darkviolet" cx="10551.31" cy="-306" rx="59.59" ry="18"/>
 <text text-anchor="middle" x="10551.31" y="-302.3" font-family="Times,serif" font-size="14.00">VVNBinOp</text>
 </g>
 <!-- CodeExpr&#45;&gt;VVNBinOp -->
-<g id="edge933" class="edge">
+<g id="edge862" class="edge">
 <title>CodeExpr&#45;&gt;VVNBinOp</title>
 <path fill="none" stroke="black" d="M9765.94,-376.46C9894.22,-374.52 10216.5,-365.54 10482.31,-324 10487.72,-323.15 10493.33,-322.09 10498.9,-320.91"/>
 <polygon fill="black" stroke="black" points="10499.85,-324.28 10508.85,-318.68 10498.32,-317.45 10499.85,-324.28"/>
 </g>
 <!-- NVVBinOp -->
-<g id="node725" class="node">
+<g id="node691" class="node">
 <title>NVVBinOp</title>
 <ellipse fill="none" stroke="darkviolet" cx="10144.31" cy="-306" rx="59.59" ry="18"/>
 <text text-anchor="middle" x="10144.31" y="-302.3" font-family="Times,serif" font-size="14.00">NVVBinOp</text>
 </g>
 <!-- CodeExpr&#45;&gt;NVVBinOp -->
-<g id="edge934" class="edge">
+<g id="edge863" class="edge">
 <title>CodeExpr&#45;&gt;NVVBinOp</title>
 <path fill="none" stroke="black" d="M9761.86,-371.11C9833.36,-362.72 9965.14,-345.87 10076.31,-324 10081.06,-323.07 10085.98,-322.01 10090.89,-320.9"/>
 <polygon fill="black" stroke="black" points="10091.99,-324.23 10100.93,-318.54 10090.39,-317.42 10091.99,-324.23"/>
 </g>
 <!-- ESSBinOp -->
-<g id="node726" class="node">
+<g id="node692" class="node">
 <title>ESSBinOp</title>
 <ellipse fill="none" stroke="darkviolet" cx="10280.31" cy="-306" rx="58.49" ry="18"/>
 <text text-anchor="middle" x="10280.31" y="-302.3" font-family="Times,serif" font-size="14.00">ESSBinOp</text>
 </g>
 <!-- CodeExpr&#45;&gt;ESSBinOp -->
-<g id="edge935" class="edge">
+<g id="edge864" class="edge">
 <title>CodeExpr&#45;&gt;ESSBinOp</title>
 <path fill="none" stroke="black" d="M9764.49,-373.8C9857.59,-367.82 10051.56,-352.87 10213.31,-324 10218.28,-323.11 10223.42,-322.06 10228.55,-320.92"/>
 <polygon fill="black" stroke="black" points="10229.39,-324.31 10238.34,-318.63 10227.8,-317.5 10229.39,-324.31"/>
 </g>
 <!-- ESBBinOp -->
-<g id="node727" class="node">
+<g id="node693" class="node">
 <title>ESBBinOp</title>
 <ellipse fill="none" stroke="darkviolet" cx="10689.31" cy="-306" rx="59.59" ry="18"/>
 <text text-anchor="middle" x="10689.31" y="-302.3" font-family="Times,serif" font-size="14.00">ESBBinOp</text>
 </g>
 <!-- CodeExpr&#45;&gt;ESBBinOp -->
-<g id="edge936" class="edge">
+<g id="edge865" class="edge">
 <title>CodeExpr&#45;&gt;ESBBinOp</title>
 <path fill="none" stroke="black" d="M9765.92,-377.3C9909.61,-377.29 10299.76,-372.39 10620.31,-324 10625.72,-323.18 10631.33,-322.14 10636.91,-320.97"/>
 <polygon fill="black" stroke="black" points="10637.86,-324.34 10646.86,-318.75 10636.34,-317.51 10637.86,-324.34"/>
 </g>
 <!-- AssocConcatOper -->
-<g id="node728" class="node">
+<g id="node694" class="node">
 <title>AssocConcatOper</title>
 <ellipse fill="none" stroke="darkviolet" cx="10859.31" cy="-306" rx="92.08" ry="18"/>
 <text text-anchor="middle" x="10859.31" y="-302.3" font-family="Times,serif" font-size="14.00">AssocConcatOper</text>
 </g>
 <!-- CodeExpr&#45;&gt;AssocConcatOper -->
-<g id="edge918" class="edge">
+<g id="edge847" class="edge">
 <title>CodeExpr&#45;&gt;AssocConcatOper</title>
 <path fill="none" stroke="black" d="M9765.78,-376.45C9923.31,-374.43 10380.8,-365.17 10758.31,-324 10766.98,-323.05 10776.03,-321.85 10785.01,-320.51"/>
 <polygon fill="black" stroke="black" points="10785.73,-323.94 10795.08,-318.96 10784.66,-317.03 10785.73,-323.94"/>
 </g>
 <!-- AssocArithOper -->
-<g id="node729" class="node">
+<g id="node695" class="node">
 <title>AssocArithOper</title>
 <ellipse fill="none" stroke="darkviolet" cx="11052.31" cy="-306" rx="83.39" ry="18"/>
 <text text-anchor="middle" x="11052.31" y="-302.3" font-family="Times,serif" font-size="14.00">AssocArithOper</text>
 </g>
 <!-- CodeExpr&#45;&gt;AssocArithOper -->
-<g id="edge916" class="edge">
+<g id="edge845" class="edge">
 <title>CodeExpr&#45;&gt;AssocArithOper</title>
 <path fill="none" stroke="black" d="M9765.69,-375.66C9977.28,-370.49 10723.92,-350.71 10960.31,-324 10968.03,-323.13 10976.07,-321.99 10984.05,-320.71"/>
 <polygon fill="black" stroke="black" points="10984.81,-324.13 10994.09,-319.03 10983.65,-317.23 10984.81,-324.13"/>
 </g>
 <!-- AssocBoolOper -->
-<g id="node730" class="node">
+<g id="node696" class="node">
 <title>AssocBoolOper</title>
 <ellipse fill="none" stroke="darkviolet" cx="11234.31" cy="-306" rx="80.69" ry="18"/>
 <text text-anchor="middle" x="11234.31" y="-302.3" font-family="Times,serif" font-size="14.00">AssocBoolOper</text>
 </g>
 <!-- CodeExpr&#45;&gt;AssocBoolOper -->
-<g id="edge917" class="edge">
+<g id="edge846" class="edge">
 <title>CodeExpr&#45;&gt;AssocBoolOper</title>
 <path fill="none" stroke="black" d="M9765.52,-376.05C9996.07,-371.98 10869.93,-354.8 11144.31,-324 11151.98,-323.14 11159.97,-321.99 11167.89,-320.7"/>
 <polygon fill="black" stroke="black" points="11168.59,-324.14 11177.85,-319 11167.41,-317.24 11168.59,-324.14"/>
 </g>
 <!-- UFunc -->
-<g id="node731" class="node">
+<g id="node697" class="node">
 <title>UFunc</title>
 <ellipse fill="none" stroke="darkviolet" cx="11374.31" cy="-306" rx="41.69" ry="18"/>
 <text text-anchor="middle" x="11374.31" y="-302.3" font-family="Times,serif" font-size="14.00">UFunc</text>
 </g>
 <!-- CodeExpr&#45;&gt;UFunc -->
-<g id="edge923" class="edge">
+<g id="edge852" class="edge">
 <title>CodeExpr&#45;&gt;UFunc</title>
 <path fill="none" stroke="black" d="M9765.59,-375.62C10042.06,-368.77 11246.17,-338.24 11324.31,-324 11327.75,-323.37 11331.28,-322.55 11334.79,-321.62"/>
 <polygon fill="black" stroke="black" points="11335.96,-324.92 11344.55,-318.72 11333.97,-318.21 11335.96,-324.92"/>
 </g>
 <!-- UFuncB -->
-<g id="node732" class="node">
+<g id="node698" class="node">
 <title>UFuncB</title>
 <ellipse fill="none" stroke="darkviolet" cx="9272.31" cy="-306" rx="48.19" ry="18"/>
 <text text-anchor="middle" x="9272.31" y="-302.3" font-family="Times,serif" font-size="14.00">UFuncB</text>
 </g>
 <!-- CodeExpr&#45;&gt;UFuncB -->
-<g id="edge924" class="edge">
+<g id="edge853" class="edge">
 <title>CodeExpr&#45;&gt;UFuncB</title>
 <path fill="none" stroke="black" d="M9667.06,-366.01C9657.64,-363.81 9647.67,-361.66 9638.31,-360 9502.17,-335.86 9464.74,-351.86 9329.31,-324 9325.38,-323.19 9321.34,-322.24 9317.3,-321.2"/>
 <polygon fill="black" stroke="black" points="9317.91,-317.74 9307.34,-318.49 9316.07,-324.49 9317.91,-317.74"/>
 </g>
 <!-- UFuncVV -->
-<g id="node733" class="node">
+<g id="node699" class="node">
 <title>UFuncVV</title>
 <ellipse fill="none" stroke="darkviolet" cx="9392.31" cy="-306" rx="53.89" ry="18"/>
 <text text-anchor="middle" x="9392.31" y="-302.3" font-family="Times,serif" font-size="14.00">UFuncVV</text>
 </g>
 <!-- CodeExpr&#45;&gt;UFuncVV -->
-<g id="edge925" class="edge">
+<g id="edge854" class="edge">
 <title>CodeExpr&#45;&gt;UFuncVV</title>
 <path fill="none" stroke="black" d="M9665.82,-366.29C9656.74,-364.14 9647.23,-361.94 9638.31,-360 9557.32,-342.35 9536.04,-342.81 9455.31,-324 9450.97,-322.99 9446.48,-321.89 9441.99,-320.75"/>
 <polygon fill="black" stroke="black" points="9442.76,-317.33 9432.2,-318.21 9441,-324.11 9442.76,-317.33"/>
 </g>
 <!-- UFuncVN -->
-<g id="node734" class="node">
+<g id="node700" class="node">
 <title>UFuncVN</title>
 <ellipse fill="none" stroke="darkviolet" cx="9520.31" cy="-306" rx="55.79" ry="18"/>
 <text text-anchor="middle" x="9520.31" y="-302.3" font-family="Times,serif" font-size="14.00">UFuncVN</text>
 </g>
 <!-- CodeExpr&#45;&gt;UFuncVN -->
-<g id="edge926" class="edge">
+<g id="edge855" class="edge">
 <title>CodeExpr&#45;&gt;UFuncVN</title>
 <path fill="none" stroke="black" d="M9673.76,-363.83C9643.01,-352.44 9598.38,-335.92 9565.18,-323.62"/>
 <polygon fill="black" stroke="black" points="9566.29,-320.3 9555.7,-320.11 9563.86,-326.86 9566.29,-320.3"/>
 </g>
 <!-- Literal -->
-<g id="node735" class="node">
+<g id="node701" class="node">
 <title>Literal</title>
 <ellipse fill="none" stroke="darkviolet" cx="10007.31" cy="-306" rx="41.69" ry="18"/>
 <text text-anchor="middle" x="10007.31" y="-302.3" font-family="Times,serif" font-size="14.00">Literal</text>
 </g>
 <!-- CodeExpr&#45;&gt;Literal -->
-<g id="edge914" class="edge">
+<g id="edge843" class="edge">
 <title>CodeExpr&#45;&gt;Literal</title>
 <path fill="none" stroke="black" d="M9757.5,-368.29C9807.56,-358.87 9887.98,-342.66 9956.31,-324 9959.65,-323.09 9963.1,-322.08 9966.55,-321.03"/>
 <polygon fill="black" stroke="black" points="9967.71,-324.33 9976.19,-317.98 9965.6,-317.66 9967.71,-324.33"/>
 </g>
 <!-- Completeness -->
-<g id="node736" class="node">
+<g id="node702" class="node">
 <title>Completeness</title>
 <ellipse fill="none" stroke="darkviolet" cx="11647.31" cy="-306" rx="76.09" ry="18"/>
 <text text-anchor="middle" x="11647.31" y="-302.3" font-family="Times,serif" font-size="14.00">Completeness</text>
 </g>
 <!-- CodeExpr&#45;&gt;Completeness -->
-<g id="edge920" class="edge">
+<g id="edge849" class="edge">
 <title>CodeExpr&#45;&gt;Completeness</title>
 <path fill="none" stroke="black" d="M9765.7,-375.66C10066.41,-368.45 11470.97,-334.36 11562.31,-324 11569.51,-323.18 11577,-322.07 11584.43,-320.81"/>
 <polygon fill="black" stroke="black" points="11585.25,-324.22 11594.48,-319 11584.02,-317.33 11585.25,-324.22"/>
 </g>
 <!-- DiscreteDomainDesc -->
-<g id="node737" class="node">
+<g id="node703" class="node">
 <title>DiscreteDomainDesc</title>
 <ellipse fill="none" stroke="black" cx="8920.31" cy="-306" rx="107.78" ry="18"/>
 <text text-anchor="middle" x="8920.31" y="-302.3" font-family="Times,serif" font-size="14.00">DiscreteDomainDesc</text>
 </g>
 <!-- CodeExpr&#45;&gt;DiscreteDomainDesc -->
-<g id="edge937" class="edge">
+<g id="edge866" class="edge">
 <title>CodeExpr&#45;&gt;DiscreteDomainDesc</title>
 <path fill="none" stroke="black" d="M9667.5,-365.7C9657.97,-363.49 9647.84,-361.41 9638.31,-360 9373.62,-320.69 9303.51,-351.26 9037.31,-324 9027.1,-322.95 9016.41,-321.67 9005.82,-320.28"/>
 <polygon fill="black" stroke="black" points="9006.1,-316.78 8995.72,-318.91 9005.16,-323.72 9006.1,-316.78"/>
 </g>
 <!-- RealInterval -->
-<g id="node738" class="node">
+<g id="node704" class="node">
 <title>RealInterval</title>
 <ellipse fill="none" stroke="black" cx="8571.31" cy="-306" rx="67.69" ry="18"/>
 <text text-anchor="middle" x="8571.31" y="-302.3" font-family="Times,serif" font-size="14.00">RealInterval</text>
 </g>
 <!-- CodeExpr&#45;&gt;RealInterval -->
-<g id="edge938" class="edge">
+<g id="edge867" class="edge">
 <title>CodeExpr&#45;&gt;RealInterval</title>
 <path fill="none" stroke="black" d="M9667.9,-365.62C9658.26,-363.38 9647.98,-361.32 9638.31,-360 9201.62,-300.39 9084.43,-380.34 8647.31,-324 8641.15,-323.21 8634.75,-322.15 8628.4,-320.95"/>
 <polygon fill="black" stroke="black" points="8629,-317.5 8618.51,-318.97 8627.62,-324.36 8629,-317.5"/>
@@ -580,7 +580,7 @@
 <polygon fill="black" stroke="black" points="17587.74,-461.03 17577.27,-462.65 17586.47,-467.91 17587.74,-461.03"/>
 </g>
 <!-- QuantityDict&#45;&gt;Space -->
-<g id="edge896" class="edge">
+<g id="edge921" class="edge">
 <title>QuantityDict&#45;&gt;Space</title>
 <path fill="none" stroke="black" d="M17466.7,-440.87C17438.13,-437.41 17403.53,-433.78 17372.31,-432 17157.96,-419.78 9853.23,-441.06 9643.31,-396 9604.79,-387.73 9600.7,-368.83 9562.31,-360 9330.88,-306.8 8730.62,-347.38 8494.31,-324 8475.07,-322.1 8453.99,-318.83 8435.93,-315.66"/>
 <polygon fill="black" stroke="black" points="8436.43,-312.2 8425.97,-313.87 8435.19,-319.09 8436.43,-312.2"/>
@@ -592,31 +592,31 @@
 <text text-anchor="middle" x="17275.31" y="-374.3" font-family="Times,serif" font-size="14.00">IdeaDict</text>
 </g>
 <!-- QuantityDict&#45;&gt;IdeaDict -->
-<g id="edge895" class="edge">
+<g id="edge920" class="edge">
 <title>QuantityDict&#45;&gt;IdeaDict</title>
 <path fill="none" stroke="black" d="M17481.38,-436.24C17436.77,-423.85 17369.3,-405.11 17323.83,-392.48"/>
 <polygon fill="black" stroke="black" points="17324.48,-389.03 17313.91,-389.72 17322.61,-395.77 17324.48,-389.03"/>
 </g>
 <!-- StageSymbol -->
-<g id="node697" class="node">
+<g id="node718" class="node">
 <title>StageSymbol</title>
 <ellipse fill="none" stroke="black" cx="17691.31" cy="-378" rx="72.29" ry="18"/>
 <text text-anchor="middle" x="17691.31" y="-374.3" font-family="Times,serif" font-size="14.00">StageSymbol</text>
 </g>
 <!-- QuantityDict&#45;&gt;StageSymbol -->
-<g id="edge897" class="edge">
+<g id="edge922" class="edge">
 <title>QuantityDict&#45;&gt;StageSymbol</title>
 <path fill="none" stroke="black" d="M17562.09,-434.15C17586.88,-423.57 17620.4,-409.27 17647.09,-397.88"/>
 <polygon fill="black" stroke="black" points="17648.76,-400.97 17656.58,-393.82 17646.01,-394.53 17648.76,-400.97"/>
 </g>
 <!-- MaybeUnitDefn -->
-<g id="node698" class="node">
+<g id="node719" class="node">
 <title>MaybeUnitDefn</title>
 <ellipse fill="none" stroke="black" cx="19377.31" cy="-378" rx="84.49" ry="18"/>
 <text text-anchor="middle" x="19377.31" y="-374.3" font-family="Times,serif" font-size="14.00">MaybeUnitDefn</text>
 </g>
 <!-- QuantityDict&#45;&gt;MaybeUnitDefn -->
-<g id="edge898" class="edge">
+<g id="edge923" class="edge">
 <title>QuantityDict&#45;&gt;MaybeUnitDefn</title>
 <path fill="none" stroke="black" d="M17584.29,-439.4C17603.32,-436.54 17624.68,-433.72 17644.31,-432 17807.54,-417.69 18946.85,-389.38 19283.71,-381.24"/>
 <polygon fill="black" stroke="black" points="19284.01,-384.73 19293.92,-380.99 19283.84,-377.73 19284.01,-384.73"/>
@@ -2554,19 +2554,19 @@
 <polygon fill="black" stroke="black" points="10037.81,-190.1 10034.31,-180.1 10030.81,-190.1 10037.81,-190.1"/>
 </g>
 <!-- CodeVarChunk&#45;&gt;CodeChunk -->
-<g id="edge859" class="edge">
+<g id="edge870" class="edge">
 <title>CodeVarChunk&#45;&gt;CodeChunk</title>
 <path fill="none" stroke="black" d="M575.95,-80.13C475.3,-66.69 285.18,-41.29 184.59,-27.85"/>
 <polygon fill="black" stroke="black" points="184.93,-24.37 174.55,-26.51 184,-31.31 184.93,-24.37"/>
 </g>
 <!-- MaybeCodeChunk -->
-<g id="node692" class="node">
+<g id="node706" class="node">
 <title>MaybeCodeChunk</title>
 <ellipse fill="none" stroke="black" cx="642.31" cy="-18" rx="94.78" ry="18"/>
 <text text-anchor="middle" x="642.31" y="-14.3" font-family="Times,serif" font-size="14.00">MaybeCodeChunk</text>
 </g>
 <!-- CodeVarChunk&#45;&gt;MaybeCodeChunk -->
-<g id="edge860" class="edge">
+<g id="edge871" class="edge">
 <title>CodeVarChunk&#45;&gt;MaybeCodeChunk</title>
 <path fill="none" stroke="black" d="M642.31,-71.7C642.31,-63.98 642.31,-54.71 642.31,-46.11"/>
 <polygon fill="black" stroke="black" points="645.81,-46.1 642.31,-36.1 638.81,-46.1 645.81,-46.1"/>
@@ -2842,7 +2842,7 @@
 <polygon fill="black" stroke="black" points="457.74,-334.58 460.2,-324.28 451.85,-330.79 457.74,-334.58"/>
 </g>
 <!-- CodeFuncChunk&#45;&gt;CodeChunk -->
-<g id="edge861" class="edge">
+<g id="edge872" class="edge">
 <title>CodeFuncChunk&#45;&gt;CodeChunk</title>
 <path fill="none" stroke="black" d="M1042.16,-521.14C814.67,-519.95 209.4,-506.21 48.31,-396 11.39,-370.74 1.31,-351.73 1.31,-307 1.31,-307 1.31,-307 1.31,-161 1.31,-120.55 -3.93,-104.38 20.31,-72 32.24,-56.06 50.43,-44.37 67.9,-36.09"/>
 <polygon fill="black" stroke="black" points="69.77,-39.09 77.49,-31.84 66.93,-32.69 69.77,-39.09"/>
@@ -3304,55 +3304,55 @@
 <polygon fill="black" stroke="black" points="18625.37,-755.86 18634.76,-750.95 18624.36,-748.93 18625.37,-755.86"/>
 </g>
 <!-- DifferentialModel&#45;&gt;Expr -->
-<g id="edge879" class="edge">
+<g id="edge904" class="edge">
 <title>DifferentialModel&#45;&gt;Expr</title>
 <path fill="none" stroke="black" d="M18608.05,-735.22C18423.82,-731.71 17994.22,-723.87 17633.31,-720 17268.77,-716.09 11434.69,-713.27 11071.31,-684 10865.04,-667.39 10745.85,-769.23 10611.31,-612 10600.91,-599.84 10600.55,-587.84 10611.31,-576 10667.92,-513.73 10911.7,-574.84 10988.31,-540 11009.49,-530.37 11005.7,-514.79 11026.31,-504 11095.5,-467.77 11149.07,-528.62 11198.31,-468 11208.4,-455.58 11209.2,-443.72 11198.31,-432 11186.81,-419.61 10679.74,-390.07 10526.63,-381.42"/>
 <polygon fill="black" stroke="black" points="10526.41,-377.9 10516.23,-380.83 10526.02,-384.89 10526.41,-377.9"/>
 </g>
 <!-- ConceptChunk -->
-<g id="node684" class="node">
+<g id="node707" class="node">
 <title>ConceptChunk</title>
 <ellipse fill="none" stroke="#00cdcd" cx="16335.31" cy="-522" rx="78.79" ry="18"/>
 <text text-anchor="middle" x="16335.31" y="-518.3" font-family="Times,serif" font-size="14.00">ConceptChunk</text>
 </g>
 <!-- DifferentialModel&#45;&gt;ConceptChunk -->
-<g id="edge881" class="edge">
+<g id="edge906" class="edge">
 <title>DifferentialModel&#45;&gt;ConceptChunk</title>
 <path fill="none" stroke="black" d="M18607.9,-735.46C18215.18,-728.76 16688.88,-701.6 16642.31,-684 16619,-675.19 16621.79,-658.77 16599.31,-648 16525.34,-612.57 16489.79,-652.23 16418.31,-612 16399.39,-601.36 16400.09,-591.89 16385.31,-576 16376.52,-566.54 16366.78,-556.2 16358.26,-547.18"/>
 <polygon fill="black" stroke="black" points="16360.55,-544.51 16351.14,-539.65 16355.47,-549.32 16360.55,-544.51"/>
 </g>
 <!-- ConstrConcept -->
-<g id="node696" class="node">
+<g id="node717" class="node">
 <title>ConstrConcept</title>
 <ellipse fill="none" stroke="#00cdcd" cx="20952.31" cy="-666" rx="79.89" ry="18"/>
 <text text-anchor="middle" x="20952.31" y="-662.3" font-family="Times,serif" font-size="14.00">ConstrConcept</text>
 </g>
 <!-- DifferentialModel&#45;&gt;ConstrConcept -->
-<g id="edge878" class="edge">
+<g id="edge903" class="edge">
 <title>DifferentialModel&#45;&gt;ConstrConcept</title>
 <path fill="none" stroke="black" d="M18789.72,-734.19C19152.94,-722.91 20503.63,-680.94 20863.65,-669.75"/>
 <polygon fill="black" stroke="black" points="20863.87,-673.25 20873.76,-669.44 20863.66,-666.25 20863.87,-673.25"/>
 </g>
 <!-- Unknown -->
-<g id="node700" class="node">
+<g id="node721" class="node">
 <title>Unknown</title>
 <ellipse fill="none" stroke="#ee0000" cx="23403.31" cy="-378" rx="54.69" ry="18"/>
 <text text-anchor="middle" x="23403.31" y="-374.3" font-family="Times,serif" font-size="14.00">Unknown</text>
 </g>
 <!-- DifferentialModel&#45;&gt;Unknown -->
-<g id="edge880" class="edge">
+<g id="edge905" class="edge">
 <title>DifferentialModel&#45;&gt;Unknown</title>
 <path fill="none" stroke="black" d="M18790.65,-735.05C18944.5,-731.79 19265.11,-725.09 19536.31,-720 19710.53,-716.73 25672.97,-721.75 25808.31,-612 25871.48,-560.77 25898.36,-489.97 25841.31,-432 25797.37,-387.35 23648.86,-399.4 23586.31,-396 23545.57,-393.79 23499.87,-389.54 23464.33,-385.85"/>
 <polygon fill="black" stroke="black" points="23464.43,-382.34 23454.11,-384.77 23463.69,-389.3 23464.43,-382.34"/>
 </g>
 <!-- UnitalChunk -->
-<g id="node701" class="node">
+<g id="node722" class="node">
 <title>UnitalChunk</title>
 <ellipse fill="none" stroke="#00cdcd" cx="18699.31" cy="-666" rx="69.59" ry="18"/>
 <text text-anchor="middle" x="18699.31" y="-662.3" font-family="Times,serif" font-size="14.00">UnitalChunk</text>
 </g>
 <!-- DifferentialModel&#45;&gt;UnitalChunk -->
-<g id="edge877" class="edge">
+<g id="edge902" class="edge">
 <title>DifferentialModel&#45;&gt;UnitalChunk</title>
 <path fill="none" stroke="black" d="M18699.31,-719.7C18699.31,-711.98 18699.31,-702.71 18699.31,-694.11"/>
 <polygon fill="black" stroke="black" points="18702.81,-694.1 18699.31,-684.1 18695.81,-694.1 18702.81,-694.1"/>
@@ -5134,25 +5134,25 @@
 <polygon fill="black" stroke="black" points="17144.14,-684.82 17152.68,-678.55 17142.1,-678.12 17144.14,-684.82"/>
 </g>
 <!-- UnitDefn&#45;&gt;UID -->
-<g id="edge907" class="edge">
+<g id="edge932" class="edge">
 <title>UnitDefn&#45;&gt;UID</title>
 <path fill="none" stroke="black" d="M16427.46,-591.26C16327.07,-587.98 16101.91,-580.8 15912.31,-576 15864.12,-574.78 14212.41,-573.04 14177.31,-540 14120.73,-486.75 14138.15,-382.83 14150.53,-333.81"/>
 <polygon fill="black" stroke="black" points="14153.97,-334.51 14153.15,-323.95 14147.2,-332.72 14153.97,-334.51"/>
 </g>
 <!-- UnitDefn&#45;&gt;ConceptChunk -->
-<g id="edge905" class="edge">
+<g id="edge930" class="edge">
 <title>UnitDefn&#45;&gt;ConceptChunk</title>
 <path fill="none" stroke="black" d="M16450.97,-578.83C16429.56,-568.5 16400.27,-554.36 16376.51,-542.89"/>
 <polygon fill="black" stroke="black" points="16377.91,-539.68 16367.38,-538.48 16374.86,-545.98 16377.91,-539.68"/>
 </g>
 <!-- UnitSymbol -->
-<g id="node714" class="node">
+<g id="node735" class="node">
 <title>UnitSymbol</title>
 <ellipse fill="none" stroke="darkviolet" cx="20258.31" cy="-522" rx="65.79" ry="18"/>
 <text text-anchor="middle" x="20258.31" y="-518.3" font-family="Times,serif" font-size="14.00">UnitSymbol</text>
 </g>
 <!-- UnitDefn&#45;&gt;UnitSymbol -->
-<g id="edge906" class="edge">
+<g id="edge931" class="edge">
 <title>UnitDefn&#45;&gt;UnitSymbol</title>
 <path fill="none" stroke="black" d="M16517.97,-581.17C16526.24,-579.05 16535.01,-577.14 16543.31,-576 16935.63,-521.98 19712.03,-564.18 20107.31,-540 20134.74,-538.32 20164.85,-535.19 20190.92,-532.08"/>
 <polygon fill="black" stroke="black" points="20191.57,-535.52 20201.07,-530.84 20190.72,-528.57 20191.57,-535.52"/>
@@ -5248,25 +5248,25 @@
 <polygon fill="black" stroke="black" points="17271.38,-406.84 17270.62,-396.28 17264.62,-405.01 17271.38,-406.84"/>
 </g>
 <!-- DefinedQuantityDict&#45;&gt;Space -->
-<g id="edge873" class="edge">
+<g id="edge898" class="edge">
 <title>DefinedQuantityDict&#45;&gt;Space</title>
 <path fill="none" stroke="black" d="M19722.41,-580.76C19708.17,-578.79 19693.3,-577.06 19679.31,-576 19617.85,-571.36 10857.87,-568.68 10803.31,-540 10751.58,-512.81 10779.67,-459.88 10728.31,-432 10671.35,-401.08 9627.04,-399.1 9562.31,-396 9068.51,-372.37 8939.7,-406.8 8452.31,-324 8445.61,-322.86 8438.59,-321.28 8431.79,-319.54"/>
 <polygon fill="black" stroke="black" points="8432.63,-316.14 8422.06,-316.91 8430.8,-322.9 8432.63,-316.14"/>
 </g>
 <!-- DefinedQuantityDict&#45;&gt;ConceptChunk -->
-<g id="edge871" class="edge">
+<g id="edge896" class="edge">
 <title>DefinedQuantityDict&#45;&gt;ConceptChunk</title>
 <path fill="none" stroke="black" d="M19722.09,-580.8C19707.95,-578.84 19693.19,-577.1 19679.31,-576 18957.74,-518.94 17142.37,-613.71 16422.31,-540 16414.86,-539.24 16407.1,-538.15 16399.41,-536.89"/>
 <polygon fill="black" stroke="black" points="16399.83,-533.41 16389.38,-535.14 16398.63,-540.31 16399.83,-533.41"/>
 </g>
 <!-- DefinedQuantityDict&#45;&gt;StageSymbol -->
-<g id="edge872" class="edge">
+<g id="edge897" class="edge">
 <title>DefinedQuantityDict&#45;&gt;StageSymbol</title>
 <path fill="none" stroke="black" d="M19878.41,-582.93C19900.78,-580.45 19924.95,-577.95 19947.31,-576 20010.09,-570.52 20470.19,-585.95 20513.31,-540 20524.26,-528.33 20524.55,-515.39 20513.31,-504 20460.08,-450.06 17855.53,-496.51 17785.31,-468 17776.68,-464.5 17739.78,-428.18 17714.86,-403.04"/>
 <polygon fill="black" stroke="black" points="17717.07,-400.3 17707.56,-395.64 17712.09,-405.21 17717.07,-400.3"/>
 </g>
 <!-- DefinedQuantityDict&#45;&gt;MaybeUnitDefn -->
-<g id="edge874" class="edge">
+<g id="edge899" class="edge">
 <title>DefinedQuantityDict&#45;&gt;MaybeUnitDefn</title>
 <path fill="none" stroke="black" d="M19878.01,-582.93C19900.49,-580.43 19924.81,-577.92 19947.31,-576 20080.89,-564.57 20639.56,-600.33 20546.31,-504 20460.56,-415.42 19545.21,-527.65 19437.31,-468 19412.95,-454.53 19396.6,-426.49 19387.19,-405.46"/>
 <polygon fill="black" stroke="black" points="19390.35,-403.94 19383.24,-396.08 19383.9,-406.66 19390.35,-403.94"/>
@@ -5290,7 +5290,7 @@
 <polygon fill="black" stroke="black" points="14197.38,-307.23 14187.09,-309.76 14196.71,-314.2 14197.38,-307.23"/>
 </g>
 <!-- USymb -->
-<g id="node716" class="node">
+<g id="node737" class="node">
 <title>USymb</title>
 <ellipse fill="none" stroke="darkgreen" cx="17548.31" cy="-378" rx="44.69" ry="18"/>
 <text text-anchor="middle" x="17548.31" y="-374.3" font-family="Times,serif" font-size="14.00">USymb</text>
@@ -5368,19 +5368,19 @@
 <polygon fill="black" stroke="black" points="13703.45,-882 13693.3,-885.04 13703.13,-888.99 13703.45,-882"/>
 </g>
 <!-- CI&#45;&gt;String -->
-<g id="edge863" class="edge">
+<g id="edge888" class="edge">
 <title>CI&#45;&gt;String</title>
 <path fill="none" stroke="black" d="M17340.57,-431.93C17344.3,-412.97 17347.32,-382.11 17334.31,-360 17302.19,-305.41 17272.41,-304.7 17211.31,-288 17094.47,-256.06 8611.43,-252.9 8490.31,-252 7885.71,-247.51 7151.5,-238.22 6954.79,-235.66"/>
 <polygon fill="black" stroke="black" points="6954.79,-232.16 6944.75,-235.53 6954.7,-239.16 6954.79,-232.16"/>
 </g>
 <!-- CI&#45;&gt;UID -->
-<g id="edge864" class="edge">
+<g id="edge889" class="edge">
 <title>CI&#45;&gt;UID</title>
 <path fill="none" stroke="black" d="M17315.81,-437.96C17310.85,-435.68 17305.49,-433.51 17300.31,-432 17178.16,-396.39 17142.27,-413.92 17016.31,-396 16914.74,-381.55 16890.5,-369.05 16788.31,-360 16254.12,-312.67 14486.58,-307.57 14198.24,-307.06"/>
 <polygon fill="black" stroke="black" points="14197.86,-303.56 14187.86,-307.04 14197.85,-310.56 14197.86,-303.56"/>
 </g>
 <!-- CI&#45;&gt;IdeaDict -->
-<g id="edge862" class="edge">
+<g id="edge887" class="edge">
 <title>CI&#45;&gt;IdeaDict</title>
 <path fill="none" stroke="black" d="M17323.37,-434.15C17315.46,-425.07 17305.15,-413.24 17296.11,-402.87"/>
 <polygon fill="black" stroke="black" points="17298.71,-400.53 17289.51,-395.29 17293.44,-405.13 17298.71,-400.53"/>
@@ -5740,31 +5740,31 @@
 <polygon fill="black" stroke="black" points="16102.71,-684.76 16111.55,-678.92 16101,-677.97 16102.71,-684.76"/>
 </g>
 <!-- ConceptInstance&#45;&gt;String -->
-<g id="edge849" class="edge">
+<g id="edge879" class="edge">
 <title>ConceptInstance&#45;&gt;String</title>
 <path fill="none" stroke="black" d="M16243.25,-654.95C16264.14,-652.29 16287.12,-649.69 16308.31,-648 16783.52,-610.18 16903.88,-628.41 17380.31,-612 17380.31,-612 19419.31,-540 19419.31,-540 19430.42,-528.49 19430.52,-515.41 19419.31,-504 19341.28,-424.56 17511.17,-524.66 17415.31,-468 17367.66,-439.84 17388.23,-402.94 17353.31,-360 17322.92,-322.63 17317.3,-305.2 17272.31,-288 17141.8,-238.11 7351.97,-256.1 7212.31,-252 7121.22,-249.33 7015.15,-242.7 6954.26,-238.55"/>
 <polygon fill="black" stroke="black" points="6954.37,-235.05 6944.15,-237.86 6953.89,-242.03 6954.37,-235.05"/>
 </g>
 <!-- ConceptInstance&#45;&gt;UID -->
-<g id="edge847" class="edge">
+<g id="edge877" class="edge">
 <title>ConceptInstance&#45;&gt;UID</title>
 <path fill="none" stroke="black" d="M16170.54,-647.92C16164.08,-614.16 16144.64,-539.14 16095.31,-504 15984.85,-425.32 15922.33,-506.55 15792.31,-468 15757.63,-457.72 15754.14,-441.77 15719.31,-432 15420.06,-348.03 14410.18,-314.34 14197.73,-308.1"/>
 <polygon fill="black" stroke="black" points="14197.76,-304.6 14187.66,-307.81 14197.56,-311.6 14197.76,-304.6"/>
 </g>
 <!-- ConceptInstance&#45;&gt;ConceptChunk -->
-<g id="edge848" class="edge">
+<g id="edge878" class="edge">
 <title>ConceptInstance&#45;&gt;ConceptChunk</title>
 <path fill="none" stroke="black" d="M16192.53,-648.15C16221.27,-622.96 16275.57,-575.37 16308.29,-546.68"/>
 <polygon fill="black" stroke="black" points="16310.9,-549.05 16316.12,-539.82 16306.29,-543.78 16310.9,-549.05"/>
 </g>
 <!-- ShortName -->
-<g id="node685" class="node">
+<g id="node708" class="node">
 <title>ShortName</title>
 <ellipse fill="none" stroke="darkgreen" cx="16022.31" cy="-522" rx="63.89" ry="18"/>
 <text text-anchor="middle" x="16022.31" y="-518.3" font-family="Times,serif" font-size="14.00">ShortName</text>
 </g>
 <!-- ConceptInstance&#45;&gt;ShortName -->
-<g id="edge850" class="edge">
+<g id="edge880" class="edge">
 <title>ConceptInstance&#45;&gt;ShortName</title>
 <path fill="none" stroke="black" d="M16137.55,-649.29C16119.37,-640.15 16097.7,-627.39 16081.31,-612 16062,-593.87 16045.87,-568.26 16035.38,-549.16"/>
 <polygon fill="black" stroke="black" points="16038.35,-547.29 16030.56,-540.11 16032.17,-550.58 16038.35,-547.29"/>
@@ -5992,7 +5992,7 @@
 <polygon fill="black" stroke="black" points="16073.11,-535.93 16062.52,-536.18 16070.95,-542.59 16073.11,-535.93"/>
 </g>
 <!-- ModelExpr -->
-<g id="node710" class="node">
+<g id="node731" class="node">
 <title>ModelExpr</title>
 <ellipse fill="none" stroke="darkviolet" cx="10859.31" cy="-378" rx="61.99" ry="18"/>
 <text text-anchor="middle" x="10859.31" y="-374.3" font-family="Times,serif" font-size="14.00">ModelExpr</text>
@@ -6112,7 +6112,7 @@
 <polygon fill="black" stroke="black" points="20676.08,-793.03 20666.13,-796.69 20676.18,-800.03 20676.08,-793.03"/>
 </g>
 <!-- Lens_ -->
-<g id="node708" class="node">
+<g id="node729" class="node">
 <title>Lens_</title>
 <ellipse fill="none" stroke="black" cx="20099.31" cy="-594" rx="37.09" ry="18"/>
 <text text-anchor="middle" x="20099.31" y="-590.3" font-family="Times,serif" font-size="14.00">Lens_</text>
@@ -6250,7 +6250,7 @@
 <polygon fill="black" stroke="black" points="6054.51,-461.43 6044.05,-463.1 6053.27,-468.32 6054.51,-461.43"/>
 </g>
 <!-- UID&#45;&gt;String -->
-<g id="edge843" class="edge">
+<g id="edge873" class="edge">
 <title>UID&#45;&gt;String</title>
 <path fill="none" stroke="black" d="M14129.05,-304.39C14010.45,-301.93 13553.92,-292.7 13178.31,-288 11094.86,-261.93 10573.84,-271.17 8490.31,-252 7885.72,-246.44 7151.5,-237.91 6954.79,-235.6"/>
 <polygon fill="black" stroke="black" points="6954.79,-232.1 6944.75,-235.48 6954.71,-239.1 6954.79,-232.1"/>
@@ -6298,19 +6298,19 @@
 <polygon fill="black" stroke="black" points="15165.35,-1172.36 15175.36,-1168.89 15165.37,-1165.36 15165.35,-1172.36"/>
 </g>
 <!-- IdeaDict&#45;&gt;MaybeString -->
-<g id="edge894" class="edge">
+<g id="edge919" class="edge">
 <title>IdeaDict&#45;&gt;MaybeString</title>
 <path fill="none" stroke="black" d="M17228.77,-371.29C17193.99,-367.3 17145.25,-362.29 17102.31,-360 16196.46,-311.59 13924.84,-392.83 13020.31,-324 13003.9,-322.75 12986.31,-320.64 12969.84,-318.32"/>
 <polygon fill="black" stroke="black" points="12970.16,-314.83 12959.76,-316.85 12969.15,-321.76 12970.16,-314.83"/>
 </g>
 <!-- IdeaDict&#45;&gt;NP -->
-<g id="edge893" class="edge">
+<g id="edge918" class="edge">
 <title>IdeaDict&#45;&gt;NP</title>
 <path fill="none" stroke="black" d="M17323.11,-372.45C17367.44,-368.42 17435.27,-362.78 17494.31,-360 17736.3,-348.62 19438.37,-378.96 19674.31,-324 19676.5,-323.49 19678.71,-322.84 19680.91,-322.08"/>
 <polygon fill="black" stroke="black" points="19682.34,-325.28 19690.3,-318.28 19679.71,-318.79 19682.34,-325.28"/>
 </g>
 <!-- IdeaDict&#45;&gt;UID -->
-<g id="edge892" class="edge">
+<g id="edge917" class="edge">
 <title>IdeaDict&#45;&gt;UID</title>
 <path fill="none" stroke="black" d="M17228.4,-371.37C17193.64,-367.44 17145.09,-362.48 17102.31,-360 16499.92,-325.04 14504.97,-309.49 14198.09,-307.28"/>
 <polygon fill="black" stroke="black" points="14197.91,-303.78 14187.89,-307.2 14197.86,-310.78 14197.91,-303.78"/>
@@ -10383,20 +10383,62 @@
 <path fill="none" stroke="black" d="M42784.31,-1151.7C42784.31,-1143.98 42784.31,-1134.71 42784.31,-1126.11"/>
 <polygon fill="black" stroke="black" points="42787.81,-1126.1 42784.31,-1116.1 42780.81,-1126.1 42787.81,-1126.1"/>
 </g>
+<!-- Literal&#45;&gt;String -->
+<g id="edge1001" class="edge">
+<title>Literal&#45;&gt;String</title>
+<path fill="none" stroke="black" d="M9977.5,-293.38C9970.64,-291.18 9963.3,-289.2 9956.31,-288 9802.27,-261.63 7340.24,-238.85 6954.87,-235.44"/>
+<polygon fill="black" stroke="black" points="6954.63,-231.94 6944.6,-235.35 6954.57,-238.94 6954.63,-231.94"/>
+</g>
+<!-- Literal&#45;&gt;Integer -->
+<g id="edge999" class="edge">
+<title>Literal&#45;&gt;Integer</title>
+<path fill="none" stroke="black" d="M10040.56,-294.99C10051.52,-292.14 10063.84,-289.43 10075.31,-288 10342.79,-254.57 19509.82,-257.96 19779.31,-252 19910.09,-249.11 20063.7,-241.9 20143.67,-237.86"/>
+<polygon fill="black" stroke="black" points="20144.18,-241.34 20153.99,-237.34 20143.82,-234.35 20144.18,-241.34"/>
+</g>
+<!-- Literal&#45;&gt;Literal -->
+<g id="edge1000" class="edge">
+<title>Literal&#45;&gt;Literal</title>
+<path fill="none" stroke="black" d="M10036.44,-318.9C10052.34,-321.2 10066.91,-316.9 10066.91,-306 10066.91,-297.49 10058.02,-293 10046.54,-292.54"/>
+<polygon fill="black" stroke="black" points="10046.23,-289.05 10036.44,-293.1 10046.62,-296.04 10046.23,-289.05"/>
+</g>
+<!-- Literal&#45;&gt;Double -->
+<g id="edge1002" class="edge">
+<title>Literal&#45;&gt;Double</title>
+<path fill="none" stroke="black" d="M10040.96,-295.32C10051.84,-292.53 10064.01,-289.77 10075.31,-288 10355.19,-244.15 10695.4,-236.51 10825.34,-235.23"/>
+<polygon fill="black" stroke="black" points="10825.46,-238.73 10835.43,-235.14 10825.4,-231.73 10825.46,-238.73"/>
+</g>
+<!-- VarOrFunc -->
+<g id="node705" class="node">
+<title>VarOrFunc</title>
+<ellipse fill="none" stroke="#00cdcd" cx="20019.31" cy="-522" rx="61.19" ry="18"/>
+<text text-anchor="middle" x="20019.31" y="-518.3" font-family="Times,serif" font-size="14.00">VarOrFunc</text>
+</g>
+<!-- VarOrFunc&#45;&gt;QuantityDict -->
+<g id="edge868" class="edge">
+<title>VarOrFunc&#45;&gt;QuantityDict</title>
+<path fill="none" stroke="black" d="M19975.16,-509.39C19965.09,-507.19 19954.39,-505.21 19944.31,-504 19429.48,-442.36 18126.82,-523.66 17611.31,-468 17603.51,-467.16 17595.36,-465.94 17587.33,-464.54"/>
+<polygon fill="black" stroke="black" points="17587.74,-461.06 17577.27,-462.68 17586.46,-467.94 17587.74,-461.06"/>
+</g>
+<!-- VarOrFunc&#45;&gt;VarOrFunc -->
+<g id="edge869" class="edge">
+<title>VarOrFunc&#45;&gt;VarOrFunc</title>
+<path fill="none" stroke="black" d="M20061.22,-535.2C20081.02,-536.74 20098.4,-532.34 20098.4,-522 20098.4,-513.52 20086.71,-509.04 20071.57,-508.55"/>
+<polygon fill="black" stroke="black" points="20071.13,-505.05 20061.22,-508.8 20071.3,-512.05 20071.13,-505.05"/>
+</g>
 <!-- ConceptChunk&#45;&gt;Sentence -->
-<g id="edge845" class="edge">
+<g id="edge875" class="edge">
 <title>ConceptChunk&#45;&gt;Sentence</title>
 <path fill="none" stroke="black" d="M16277.91,-509.55C16266.17,-507.48 16253.87,-505.5 16242.31,-504 16037.63,-477.41 15984.7,-488.36 15779.31,-468 15752.46,-465.34 15722.8,-461.85 15697.64,-458.72"/>
 <polygon fill="black" stroke="black" points="15697.88,-455.22 15687.52,-457.45 15697.01,-462.17 15697.88,-455.22"/>
 </g>
 <!-- ConceptChunk&#45;&gt;UID -->
-<g id="edge846" class="edge">
+<g id="edge876" class="edge">
 <title>ConceptChunk&#45;&gt;UID</title>
 <path fill="none" stroke="black" d="M16277.9,-509.61C16266.16,-507.54 16253.86,-505.54 16242.31,-504 16148.36,-491.46 15894.53,-522.96 15817.31,-468 15774.52,-437.54 15812.88,-389.34 15769.31,-360 15702.13,-314.75 14438.43,-308 14197.73,-307.12"/>
 <polygon fill="black" stroke="black" points="14197.69,-303.62 14187.68,-307.08 14197.66,-310.62 14197.69,-303.62"/>
 </g>
 <!-- ConceptChunk&#45;&gt;IdeaDict -->
-<g id="edge844" class="edge">
+<g id="edge874" class="edge">
 <title>ConceptChunk&#45;&gt;IdeaDict</title>
 <path fill="none" stroke="black" d="M16276.29,-510.01C16217.24,-498.42 16133.8,-480.17 16124.31,-468 16114.47,-455.38 16113.19,-443.51 16124.31,-432 16164.83,-390.07 17115.29,-401.81 17173.31,-396 17189.28,-394.4 17206.54,-391.85 17222.24,-389.2"/>
 <polygon fill="black" stroke="black" points="17223.04,-392.61 17232.3,-387.45 17221.85,-385.71 17223.04,-392.61"/>
@@ -10408,31 +10450,31 @@
 <polygon fill="black" stroke="black" points="15695.9,-457.12 15685.46,-458.91 15694.74,-464.02 15695.9,-457.12"/>
 </g>
 <!-- Citation -->
-<g id="node686" class="node">
+<g id="node709" class="node">
 <title>Citation</title>
 <ellipse fill="none" stroke="darkviolet" cx="11128.31" cy="-666" rx="48.19" ry="18"/>
 <text text-anchor="middle" x="11128.31" y="-662.3" font-family="Times,serif" font-size="14.00">Citation</text>
 </g>
 <!-- Citation&#45;&gt;UID -->
-<g id="edge853" class="edge">
+<g id="edge883" class="edge">
 <title>Citation&#45;&gt;UID</title>
 <path fill="none" stroke="black" d="M11163.42,-653.53C11192.33,-643.67 11234.14,-628.48 11269.31,-612 11357.27,-570.78 11366.16,-531.54 11459.31,-504 11591.44,-464.93 11940.89,-478.09 12078.31,-468 12439.64,-441.48 12536.38,-473.44 12890.31,-396 12936.86,-385.81 12944.55,-369.18 12991.31,-360 13214.25,-316.22 13940.83,-308.48 14118.73,-307.22"/>
 <polygon fill="black" stroke="black" points="14118.96,-310.72 14128.94,-307.16 14118.91,-303.72 14118.96,-310.72"/>
 </g>
 <!-- Citation&#45;&gt;ShortName -->
-<g id="edge854" class="edge">
+<g id="edge884" class="edge">
 <title>Citation&#45;&gt;ShortName</title>
 <path fill="none" stroke="black" d="M11168.79,-656.23C11185.57,-652.99 11205.29,-649.7 11223.31,-648 11962.97,-578.33 13824.34,-649.83 14566.31,-612 14741.92,-603.05 14784.9,-588.25 14960.31,-576 15291,-552.91 15374.24,-556.88 15705.31,-540 15789.43,-535.71 15886.08,-530.49 15950.33,-526.97"/>
 <polygon fill="black" stroke="black" points="15950.56,-530.46 15960.36,-526.42 15950.18,-523.47 15950.56,-530.46"/>
 </g>
 <!-- CitationKind -->
-<g id="node687" class="node">
+<g id="node710" class="node">
 <title>CitationKind</title>
 <ellipse fill="none" stroke="darkviolet" cx="11190.31" cy="-594" rx="69.59" ry="18"/>
 <text text-anchor="middle" x="11190.31" y="-590.3" font-family="Times,serif" font-size="14.00">CitationKind</text>
 </g>
 <!-- Citation&#45;&gt;CitationKind -->
-<g id="edge851" class="edge">
+<g id="edge881" class="edge">
 <title>Citation&#45;&gt;CitationKind</title>
 <path fill="none" stroke="black" d="M11137.44,-648.05C11144.31,-639.24 11153.79,-628.33 11162.9,-618.69"/>
 <polygon fill="black" stroke="black" points="11165.61,-620.92 11170.06,-611.31 11160.58,-616.05 11165.61,-620.92"/>
@@ -10444,13 +10486,13 @@
 <polygon fill="black" stroke="black" points="11177.6,-621.94 11181.17,-611.96 11172.16,-617.54 11177.6,-621.94"/>
 </g>
 <!-- CiteField -->
-<g id="node688" class="node">
+<g id="node711" class="node">
 <title>CiteField</title>
 <ellipse fill="none" stroke="darkviolet" cx="11169.31" cy="-522" rx="53.09" ry="18"/>
 <text text-anchor="middle" x="11169.31" y="-518.3" font-family="Times,serif" font-size="14.00">CiteField</text>
 </g>
 <!-- Citation&#45;&gt;CiteField -->
-<g id="edge852" class="edge">
+<g id="edge882" class="edge">
 <title>Citation&#45;&gt;CiteField</title>
 <path fill="none" stroke="black" d="M11083.26,-659.59C11018.79,-649.59 10912.39,-624.65 10950.31,-576 10990.6,-524.31 11029.77,-556.06 11093.31,-540 11100.27,-538.24 11107.63,-536.38 11114.95,-534.55"/>
 <polygon fill="black" stroke="black" points="11115.99,-537.9 11124.85,-532.1 11114.3,-531.1 11115.99,-537.9"/>
@@ -10462,7 +10504,7 @@
 <polygon fill="black" stroke="black" points="11122.9,-540.68 11131.72,-534.81 11121.16,-533.89 11122.9,-540.68"/>
 </g>
 <!-- EntryID -->
-<g id="node690" class="node">
+<g id="node713" class="node">
 <title>EntryID</title>
 <ellipse fill="none" stroke="#ee0000" cx="11016.31" cy="-594" rx="48.19" ry="18"/>
 <text text-anchor="middle" x="11016.31" y="-590.3" font-family="Times,serif" font-size="14.00">EntryID</text>
@@ -10522,13 +10564,13 @@
 <polygon fill="black" stroke="black" points="10728.45,-453.57 10718.05,-455.6 10727.45,-460.5 10728.45,-453.57"/>
 </g>
 <!-- BibRef -->
-<g id="node689" class="node">
+<g id="node712" class="node">
 <title>BibRef</title>
 <ellipse fill="none" stroke="#ee0000" cx="11128.31" cy="-738" rx="42.49" ry="18"/>
 <text text-anchor="middle" x="11128.31" y="-734.3" font-family="Times,serif" font-size="14.00">BibRef</text>
 </g>
 <!-- BibRef&#45;&gt;Citation -->
-<g id="edge855" class="edge">
+<g id="edge885" class="edge">
 <title>BibRef&#45;&gt;Citation</title>
 <path fill="none" stroke="black" d="M11122.43,-720.05C11121.61,-712.35 11121.37,-703.03 11121.71,-694.36"/>
 <polygon fill="black" stroke="black" points="11125.2,-694.49 11122.4,-684.28 11118.22,-694.01 11125.2,-694.49"/>
@@ -10540,61 +10582,43 @@
 <polygon fill="black" stroke="black" points="11138.4,-694.01 11134.22,-684.28 11131.42,-694.49 11138.4,-694.01"/>
 </g>
 <!-- EntryID&#45;&gt;String -->
-<g id="edge856" class="edge">
+<g id="edge886" class="edge">
 <title>EntryID&#45;&gt;String</title>
 <path fill="none" stroke="black" d="M11058.25,-585.01C11111.86,-574.4 11201.31,-555.22 11231.31,-540 11253.54,-528.73 11252.03,-515.17 11274.31,-504 11336.37,-472.88 11360.2,-489.21 11426.31,-468 11466.55,-455.09 11473.33,-442.3 11514.31,-432 11734.19,-376.76 12684.08,-448.85 12524.31,-288 12498.31,-261.83 7249.18,-253.14 7212.31,-252 7121.23,-249.18 7015.16,-242.6 6954.26,-238.5"/>
 <polygon fill="black" stroke="black" points="6954.37,-235 6944.15,-237.82 6953.89,-241.98 6954.37,-235"/>
 </g>
-<!-- VarOrFunc -->
-<g id="node691" class="node">
-<title>VarOrFunc</title>
-<ellipse fill="none" stroke="#00cdcd" cx="20019.31" cy="-522" rx="61.19" ry="18"/>
-<text text-anchor="middle" x="20019.31" y="-518.3" font-family="Times,serif" font-size="14.00">VarOrFunc</text>
-</g>
-<!-- VarOrFunc&#45;&gt;QuantityDict -->
-<g id="edge857" class="edge">
-<title>VarOrFunc&#45;&gt;QuantityDict</title>
-<path fill="none" stroke="black" d="M19975.16,-509.39C19965.09,-507.19 19954.39,-505.21 19944.31,-504 19429.48,-442.36 18126.82,-523.66 17611.31,-468 17603.51,-467.16 17595.36,-465.94 17587.33,-464.54"/>
-<polygon fill="black" stroke="black" points="17587.74,-461.06 17577.27,-462.68 17586.46,-467.94 17587.74,-461.06"/>
-</g>
-<!-- VarOrFunc&#45;&gt;VarOrFunc -->
-<g id="edge858" class="edge">
-<title>VarOrFunc&#45;&gt;VarOrFunc</title>
-<path fill="none" stroke="black" d="M20061.22,-535.2C20081.02,-536.74 20098.4,-532.34 20098.4,-522 20098.4,-513.52 20086.71,-509.04 20071.57,-508.55"/>
-<polygon fill="black" stroke="black" points="20071.13,-505.05 20061.22,-508.8 20071.3,-512.05 20071.13,-505.05"/>
-</g>
 <!-- ConstrainedChunk -->
-<g id="node693" class="node">
+<g id="node714" class="node">
 <title>ConstrainedChunk</title>
 <ellipse fill="none" stroke="#00cdcd" cx="24373.31" cy="-522" rx="96.68" ry="18"/>
 <text text-anchor="middle" x="24373.31" y="-518.3" font-family="Times,serif" font-size="14.00">ConstrainedChunk</text>
 </g>
 <!-- ConstrainedChunk&#45;&gt;QuantityDict -->
-<g id="edge865" class="edge">
+<g id="edge890" class="edge">
 <title>ConstrainedChunk&#45;&gt;QuantityDict</title>
 <path fill="none" stroke="black" d="M24276.9,-520.29C23457.3,-514.21 17687.6,-471.3 17644.31,-468 17627.87,-466.75 17610.23,-464.61 17593.76,-462.26"/>
 <polygon fill="black" stroke="black" points="17594.07,-458.77 17583.67,-460.78 17593.06,-465.69 17594.07,-458.77"/>
 </g>
 <!-- ConstraintE -->
-<g id="node694" class="node">
+<g id="node715" class="node">
 <title>ConstraintE</title>
 <ellipse fill="none" stroke="#ee0000" cx="20888.31" cy="-378" rx="66.89" ry="18"/>
 <text text-anchor="middle" x="20888.31" y="-374.3" font-family="Times,serif" font-size="14.00">ConstraintE</text>
 </g>
 <!-- ConstrainedChunk&#45;&gt;ConstraintE -->
-<g id="edge866" class="edge">
+<g id="edge891" class="edge">
 <title>ConstrainedChunk&#45;&gt;ConstraintE</title>
 <path fill="none" stroke="black" d="M24470.09,-521.04C24783.22,-520.69 25751.3,-515.75 25797.31,-468 25808.41,-456.48 25808.58,-443.36 25797.31,-432 25750.07,-384.41 21035.98,-403.17 20969.31,-396 20961.68,-395.18 20953.7,-393.96 20945.86,-392.54"/>
 <polygon fill="black" stroke="black" points="20946.51,-389.11 20936.03,-390.66 20945.19,-395.98 20946.51,-389.11"/>
 </g>
 <!-- MaybeExpr -->
-<g id="node695" class="node">
+<g id="node716" class="node">
 <title>MaybeExpr</title>
 <ellipse fill="none" stroke="black" cx="23012.31" cy="-450" rx="64.19" ry="18"/>
 <text text-anchor="middle" x="23012.31" y="-446.3" font-family="Times,serif" font-size="14.00">MaybeExpr</text>
 </g>
 <!-- ConstrainedChunk&#45;&gt;MaybeExpr -->
-<g id="edge867" class="edge">
+<g id="edge892" class="edge">
 <title>ConstrainedChunk&#45;&gt;MaybeExpr</title>
 <path fill="none" stroke="black" d="M24277.38,-519.39C24019.54,-514.68 23315.53,-499.26 23085.31,-468 23079.53,-467.21 23073.53,-466.18 23067.57,-465.02"/>
 <polygon fill="black" stroke="black" points="23068.13,-461.56 23057.63,-462.94 23066.7,-468.41 23068.13,-461.56"/>
@@ -10612,163 +10636,163 @@
 <polygon fill="black" stroke="black" points="20905.22,-334.86 20904.88,-324.28 20898.54,-332.77 20905.22,-334.86"/>
 </g>
 <!-- ConstrConcept&#45;&gt;DefinedQuantityDict -->
-<g id="edge868" class="edge">
+<g id="edge893" class="edge">
 <title>ConstrConcept&#45;&gt;DefinedQuantityDict</title>
 <path fill="none" stroke="black" d="M20873.7,-662.41C20704.22,-656.47 20291.89,-640.21 19947.31,-612 19928.03,-610.42 19907.42,-608.38 19887.78,-606.26"/>
 <polygon fill="black" stroke="black" points="19887.92,-602.75 19877.6,-605.14 19887.16,-609.71 19887.92,-602.75"/>
 </g>
 <!-- ConstrConcept&#45;&gt;ConstraintE -->
-<g id="edge869" class="edge">
+<g id="edge894" class="edge">
 <title>ConstrConcept&#45;&gt;ConstraintE</title>
 <path fill="none" stroke="black" d="M21008.13,-652.95C21019.08,-650.98 21030.52,-649.19 21041.31,-648 21421.19,-606.02 24097.47,-556.28 24479.31,-540 24777.12,-527.31 26026.3,-643.55 25816.31,-432 25768.88,-384.22 21036.25,-403.2 20969.31,-396 20961.68,-395.18 20953.7,-393.96 20945.86,-392.54"/>
 <polygon fill="black" stroke="black" points="20946.51,-389.11 20936.03,-390.66 20945.19,-395.98 20946.51,-389.11"/>
 </g>
 <!-- ConstrConcept&#45;&gt;MaybeExpr -->
-<g id="edge870" class="edge">
+<g id="edge895" class="edge">
 <title>ConstrConcept&#45;&gt;MaybeExpr</title>
 <path fill="none" stroke="black" d="M21008.64,-653.13C21019.44,-651.17 21030.7,-649.34 21041.31,-648 21104.49,-640.01 21562.52,-650.42 21613.31,-612 21653.89,-581.3 21610.2,-533.99 21651.31,-504 21709.1,-461.85 22867.36,-477.05 22938.31,-468 22944.49,-467.21 22950.91,-466.14 22957.27,-464.9"/>
 <polygon fill="black" stroke="black" points="22958.08,-468.31 22967.17,-462.86 22956.67,-461.45 22958.08,-468.31"/>
 </g>
 <!-- Term -->
-<g id="node699" class="node">
+<g id="node720" class="node">
 <title>Term</title>
 <ellipse fill="none" stroke="#00cdcd" cx="16407.31" cy="-450" rx="34.39" ry="18"/>
 <text text-anchor="middle" x="16407.31" y="-446.3" font-family="Times,serif" font-size="14.00">Term</text>
 </g>
 <!-- Term&#45;&gt;Expr -->
-<g id="edge875" class="edge">
+<g id="edge900" class="edge">
 <title>Term&#45;&gt;Expr</title>
 <path fill="none" stroke="black" d="M16375.37,-443.24C16351.48,-439.22 16317.97,-434.21 16288.31,-432 15678.87,-386.68 11399.14,-415.01 10788.31,-396 10694.8,-393.09 10585.34,-386.12 10526.31,-382.06"/>
 <polygon fill="black" stroke="black" points="10526.45,-378.57 10516.23,-381.37 10525.97,-385.55 10526.45,-378.57"/>
 </g>
 <!-- Term&#45;&gt;Unknown -->
-<g id="edge876" class="edge">
+<g id="edge901" class="edge">
 <title>Term&#45;&gt;Unknown</title>
 <path fill="none" stroke="black" d="M16432.31,-437.32C16438.1,-435.13 16444.32,-433.16 16450.31,-432 16823.74,-359.84 22917.23,-426.93 23296.31,-396 23313,-394.64 23331.02,-392.17 23347.43,-389.52"/>
 <polygon fill="black" stroke="black" points="23348.12,-392.96 23357.41,-387.86 23346.97,-386.05 23348.12,-392.96"/>
 </g>
 <!-- Unknown&#45;&gt;Integer -->
-<g id="edge885" class="edge">
+<g id="edge910" class="edge">
 <title>Unknown&#45;&gt;Integer</title>
 <path fill="none" stroke="black" d="M23409.32,-359.92C23415.2,-339.76 23420.84,-306.62 23402.31,-288 23344.47,-229.85 20672.59,-233.86 20253.39,-234.85"/>
 <polygon fill="black" stroke="black" points="20253.33,-231.35 20243.34,-234.88 20253.35,-238.35 20253.33,-231.35"/>
 </g>
 <!-- UnitalChunk&#45;&gt;UnitDefn -->
-<g id="edge911" class="edge">
+<g id="edge936" class="edge">
 <title>UnitalChunk&#45;&gt;UnitDefn</title>
 <path fill="none" stroke="black" d="M18633.83,-659.73C18582.78,-655.83 18510.08,-650.74 18446.31,-648 18023.74,-629.82 16962.06,-671.54 16543.31,-612 16538.25,-611.28 16533.02,-610.29 16527.84,-609.14"/>
 <polygon fill="black" stroke="black" points="16528.52,-605.7 16517.98,-606.77 16526.88,-612.51 16528.52,-605.7"/>
 </g>
 <!-- UnitalChunk&#45;&gt;DefinedQuantityDict -->
-<g id="edge910" class="edge">
+<g id="edge935" class="edge">
 <title>UnitalChunk&#45;&gt;DefinedQuantityDict</title>
 <path fill="none" stroke="black" d="M18768.39,-663.47C18928.75,-659.42 19338.56,-646.33 19679.31,-612 19689.43,-610.98 19700.02,-609.7 19710.51,-608.31"/>
 <polygon fill="black" stroke="black" points="19711.08,-611.77 19720.51,-606.94 19710.13,-604.83 19711.08,-611.77"/>
 </g>
 <!-- InitialValueProblem -->
-<g id="node702" class="node">
+<g id="node723" class="node">
 <title>InitialValueProblem</title>
 <ellipse fill="none" stroke="#00cdcd" cx="10916.31" cy="-450" rx="102.88" ry="18"/>
 <text text-anchor="middle" x="10916.31" y="-446.3" font-family="Times,serif" font-size="14.00">InitialValueProblem</text>
 </g>
 <!-- InitialValueProblem&#45;&gt;Expr -->
-<g id="edge882" class="edge">
+<g id="edge907" class="edge">
 <title>InitialValueProblem&#45;&gt;Expr</title>
 <path fill="none" stroke="black" d="M10843.35,-437.2C10751.92,-422.42 10598.33,-397.59 10524.88,-385.72"/>
 <polygon fill="black" stroke="black" points="10525.07,-382.21 10514.64,-384.07 10523.96,-389.12 10525.07,-382.21"/>
 </g>
 <!-- ODESolverFormat -->
-<g id="node703" class="node">
+<g id="node724" class="node">
 <title>ODESolverFormat</title>
 <ellipse fill="none" stroke="#00cdcd" cx="16555.31" cy="-450" rx="95.58" ry="18"/>
 <text text-anchor="middle" x="16555.31" y="-446.3" font-family="Times,serif" font-size="14.00">ODESolverFormat</text>
 </g>
 <!-- ODESolverFormat&#45;&gt;Expr -->
-<g id="edge883" class="edge">
+<g id="edge908" class="edge">
 <title>ODESolverFormat&#45;&gt;Expr</title>
 <path fill="none" stroke="black" d="M16489.97,-436.82C16476.88,-434.84 16463.19,-433.08 16450.31,-432 15823.38,-379.57 11417.13,-415.51 10788.31,-396 10694.8,-393.1 10585.33,-386.12 10526.31,-382.07"/>
 <polygon fill="black" stroke="black" points="10526.45,-378.57 10516.23,-381.37 10525.97,-385.55 10526.45,-378.57"/>
 </g>
 <!-- ODESolverFormat&#45;&gt;Integer -->
-<g id="edge884" class="edge">
+<g id="edge909" class="edge">
 <title>ODESolverFormat&#45;&gt;Integer</title>
 <path fill="none" stroke="black" d="M16620.65,-436.81C16633.74,-434.83 16647.43,-433.07 16660.31,-432 16707.42,-428.09 23433.97,-429.51 23467.31,-396 23502.23,-360.9 23438.14,-296.48 23423.31,-288 23351.62,-247.01 20672.18,-236.56 20253.17,-235.17"/>
 <polygon fill="black" stroke="black" points="20253.14,-231.67 20243.13,-235.14 20253.12,-238.67 20253.14,-231.67"/>
 </g>
 <!-- LHS -->
-<g id="node704" class="node">
+<g id="node725" class="node">
 <title>LHS</title>
 <ellipse fill="none" stroke="#ee0000" cx="17228.31" cy="-522" rx="30.59" ry="18"/>
 <text text-anchor="middle" x="17228.31" y="-518.3" font-family="Times,serif" font-size="14.00">LHS</text>
 </g>
 <!-- LHS&#45;&gt;Term -->
-<g id="edge886" class="edge">
+<g id="edge911" class="edge">
 <title>LHS&#45;&gt;Term</title>
 <path fill="none" stroke="black" d="M17204.44,-510.4C17197.73,-507.86 17190.34,-505.46 17183.31,-504 16863.98,-437.56 16769.12,-536.88 16450.31,-468 16447.52,-467.4 16444.67,-466.63 16441.83,-465.76"/>
 <polygon fill="black" stroke="black" points="16442.94,-462.44 16432.35,-462.48 16440.65,-469.06 16442.94,-462.44"/>
 </g>
 <!-- QDefinitione -->
-<g id="node705" class="node">
+<g id="node726" class="node">
 <title>QDefinitione</title>
 <ellipse fill="none" stroke="darkviolet" cx="19935.31" cy="-666" rx="68.79" ry="18"/>
 <text text-anchor="middle" x="19935.31" y="-662.3" font-family="Times,serif" font-size="14.00">QDefinitione</text>
 </g>
 <!-- QDefinitione&#45;&gt;DefinedQuantityDict -->
-<g id="edge887" class="edge">
+<g id="edge912" class="edge">
 <title>QDefinitione&#45;&gt;DefinedQuantityDict</title>
 <path fill="none" stroke="black" d="M19904.72,-649.81C19884.59,-639.82 19857.99,-626.61 19835.95,-615.67"/>
 <polygon fill="black" stroke="black" points="19837.32,-612.45 19826.81,-611.13 19834.21,-618.72 19837.32,-612.45"/>
 </g>
 <!-- QDefinitione&#45;&gt;UID -->
-<g id="edge888" class="edge">
+<g id="edge913" class="edge">
 <title>QDefinitione&#45;&gt;UID</title>
 <path fill="none" stroke="black" d="M19935.87,-647.95C19935.51,-627.17 19931.35,-592.75 19909.31,-576 19849.13,-530.26 17259.18,-566.28 17188.31,-540 17164.94,-531.33 17168.58,-512.92 17145.31,-504 16933.33,-422.72 16340.7,-536.7 16124.31,-468 16040.77,-441.48 16042.92,-386.28 15959.31,-360 15786.1,-305.57 14445.81,-306.27 14197.73,-306.88"/>
 <polygon fill="black" stroke="black" points="14197.72,-303.38 14187.73,-306.9 14197.74,-310.38 14197.72,-303.38"/>
 </g>
 <!-- e -->
-<g id="node706" class="node">
+<g id="node727" class="node">
 <title>e</title>
 <ellipse fill="none" stroke="black" cx="19643.31" cy="-594" rx="27" ry="18"/>
 <text text-anchor="middle" x="19643.31" y="-590.3" font-family="Times,serif" font-size="14.00">e</text>
 </g>
 <!-- QDefinitione&#45;&gt;e -->
-<g id="edge889" class="edge">
+<g id="edge914" class="edge">
 <title>QDefinitione&#45;&gt;e</title>
 <path fill="none" stroke="black" d="M19882.89,-654.23C19808.71,-638.97 19681.75,-612.81 19679.31,-612 19677.39,-611.36 19675.44,-610.64 19673.5,-609.88"/>
 <polygon fill="black" stroke="black" points="19674.47,-606.49 19663.91,-605.75 19671.71,-612.92 19674.47,-606.49"/>
 </g>
 <!-- QDefinition -->
-<g id="node707" class="node">
+<g id="node728" class="node">
 <title>QDefinition</title>
 <ellipse fill="none" stroke="black" cx="25919.31" cy="-594" rx="63.89" ry="18"/>
 <text text-anchor="middle" x="25919.31" y="-590.3" font-family="Times,serif" font-size="14.00">QDefinition</text>
 </g>
 <!-- QDefinitione&#45;&gt;QDefinition -->
-<g id="edge890" class="edge">
+<g id="edge915" class="edge">
 <title>QDefinitione&#45;&gt;QDefinition</title>
 <path fill="none" stroke="black" d="M20003.7,-663.49C20157.36,-660.15 20541.66,-652.12 20863.31,-648 21412.72,-640.97 25260.59,-655.71 25808.31,-612 25824.25,-610.73 25841.37,-608.53 25857.28,-606.12"/>
 <polygon fill="black" stroke="black" points="25858.2,-609.52 25867.54,-604.52 25857.12,-602.6 25858.2,-609.52"/>
 </g>
 <!-- QDefinitione&#45;&gt;Lens_ -->
-<g id="edge891" class="edge">
+<g id="edge916" class="edge">
 <title>QDefinitione&#45;&gt;Lens_</title>
 <path fill="none" stroke="black" d="M19969.69,-650.33C19997,-638.67 20035.08,-622.41 20062.91,-610.54"/>
 <polygon fill="black" stroke="black" points="20064.46,-613.68 20072.28,-606.54 20061.71,-607.24 20064.46,-613.68"/>
 </g>
 <!-- RelationConcept -->
-<g id="node709" class="node">
+<g id="node730" class="node">
 <title>RelationConcept</title>
 <ellipse fill="none" stroke="#00cdcd" cx="14336.31" cy="-594" rx="87.18" ry="18"/>
 <text text-anchor="middle" x="14336.31" y="-590.3" font-family="Times,serif" font-size="14.00">RelationConcept</text>
 </g>
 <!-- RelationConcept&#45;&gt;ConceptChunk -->
-<g id="edge899" class="edge">
+<g id="edge924" class="edge">
 <title>RelationConcept&#45;&gt;ConceptChunk</title>
 <path fill="none" stroke="black" d="M14396.29,-580.92C14408.18,-578.94 14420.6,-577.16 14432.31,-576 15168.01,-503.33 15356.81,-574.13 16095.31,-540 16147.79,-537.57 16206.63,-533.43 16252.92,-529.84"/>
 <polygon fill="black" stroke="black" points="16253.2,-533.33 16262.9,-529.06 16252.66,-526.35 16253.2,-533.33"/>
 </g>
 <!-- RelationConcept&#45;&gt;ModelExpr -->
-<g id="edge900" class="edge">
+<g id="edge925" class="edge">
 <title>RelationConcept&#45;&gt;ModelExpr</title>
 <path fill="none" stroke="black" d="M14276.07,-580.95C14264.26,-578.98 14251.93,-577.19 14240.31,-576 14105.74,-562.17 13149.76,-588.07 13023.31,-540 13000.01,-531.14 13003.48,-513.2 12980.31,-504 12882.95,-465.34 11287.83,-396.85 10930.12,-381.92"/>
 <polygon fill="black" stroke="black" points="10930.04,-378.42 10919.9,-381.5 10929.75,-385.41 10930.04,-378.42"/>
@@ -10796,12 +10820,6 @@
 <title>ModelExpr&#45;&gt;UID</title>
 <path fill="none" stroke="black" d="M10920.38,-374.9C11022.44,-371.44 11234.15,-364.48 11413.31,-360 11974.31,-345.98 13825.6,-312.91 14118.99,-307.7"/>
 <polygon fill="black" stroke="black" points="14119.21,-311.19 14129.14,-307.52 14119.08,-304.2 14119.21,-311.19"/>
-</g>
-<!-- ModelExpr&#45;&gt;ModelExpr -->
-<g id="edge1004" class="edge">
-<title>ModelExpr&#45;&gt;ModelExpr</title>
-<path fill="none" stroke="black" d="M10901.57,-391.2C10921.53,-392.74 10939.05,-388.34 10939.05,-378 10939.05,-369.44 10927.03,-364.95 10911.57,-364.53"/>
-<polygon fill="black" stroke="black" points="10911.47,-361.03 10901.57,-364.8 10911.65,-368.03 10911.47,-361.03"/>
 </g>
 <!-- ModelExpr&#45;&gt;ArithBinOp -->
 <g id="edge1018" class="edge">
@@ -10923,6 +10941,12 @@
 <path fill="none" stroke="black" d="M10799.97,-372.95C10739.86,-369 10644.16,-363.14 10561.31,-360 10136.21,-343.88 9069.69,-374.69 8647.31,-324 8641.06,-323.25 8634.56,-322.21 8628.12,-321.01"/>
 <polygon fill="black" stroke="black" points="8628.57,-317.53 8618.08,-319.01 8627.21,-324.4 8628.57,-317.53"/>
 </g>
+<!-- ModelExpr&#45;&gt;ModelExpr -->
+<g id="edge1004" class="edge">
+<title>ModelExpr&#45;&gt;ModelExpr</title>
+<path fill="none" stroke="black" d="M10901.57,-391.2C10921.53,-392.74 10939.05,-388.34 10939.05,-378 10939.05,-369.44 10927.03,-364.95 10911.57,-364.53"/>
+<polygon fill="black" stroke="black" points="10911.47,-361.03 10901.57,-364.8 10911.65,-368.03 10911.47,-361.03"/>
+</g>
 <!-- StatBinOp -->
 <g id="node767" class="node">
 <title>StatBinOp</title>
@@ -10984,25 +11008,25 @@
 <polygon fill="black" stroke="black" points="11996.97,-324.28 12005.06,-317.44 11994.47,-317.74 11996.97,-324.28"/>
 </g>
 <!-- UncertainChunk -->
-<g id="node711" class="node">
+<g id="node732" class="node">
 <title>UncertainChunk</title>
 <ellipse fill="none" stroke="#00cdcd" cx="30013.31" cy="-594" rx="87.18" ry="18"/>
 <text text-anchor="middle" x="30013.31" y="-590.3" font-family="Times,serif" font-size="14.00">UncertainChunk</text>
 </g>
 <!-- UncertainChunk&#45;&gt;ConstrainedChunk -->
-<g id="edge901" class="edge">
+<g id="edge926" class="edge">
 <title>UncertainChunk&#45;&gt;ConstrainedChunk</title>
 <path fill="none" stroke="black" d="M29944.95,-582.77C29923.94,-580.04 29900.72,-577.46 29879.31,-576 29844.32,-573.62 25242.53,-531.03 24479.82,-523.98"/>
 <polygon fill="black" stroke="black" points="24479.71,-520.48 24469.68,-523.89 24479.65,-527.48 24479.71,-520.48"/>
 </g>
 <!-- Uncertainty -->
-<g id="node712" class="node">
+<g id="node733" class="node">
 <title>Uncertainty</title>
 <ellipse fill="none" stroke="#00cdcd" cx="32242.31" cy="-522" rx="66.09" ry="18"/>
 <text text-anchor="middle" x="32242.31" y="-518.3" font-family="Times,serif" font-size="14.00">Uncertainty</text>
 </g>
 <!-- UncertainChunk&#45;&gt;Uncertainty -->
-<g id="edge902" class="edge">
+<g id="edge927" class="edge">
 <title>UncertainChunk&#45;&gt;Uncertainty</title>
 <path fill="none" stroke="black" d="M30082.03,-582.93C30102.95,-580.23 30126.03,-577.61 30147.31,-576 30198.63,-572.11 31796.57,-533.67 32166.42,-524.82"/>
 <polygon fill="black" stroke="black" points="32166.57,-528.31 32176.49,-524.57 32166.4,-521.31 32166.57,-528.31"/>
@@ -11026,19 +11050,19 @@
 <polygon fill="black" stroke="black" points="38994.11,-467.91 39003.36,-462.74 38992.91,-461.01 38994.11,-467.91"/>
 </g>
 <!-- UncertQ -->
-<g id="node713" class="node">
+<g id="node734" class="node">
 <title>UncertQ</title>
 <ellipse fill="none" stroke="#00cdcd" cx="20973.31" cy="-738" rx="50.09" ry="18"/>
 <text text-anchor="middle" x="20973.31" y="-734.3" font-family="Times,serif" font-size="14.00">UncertQ</text>
 </g>
 <!-- UncertQ&#45;&gt;ConstrConcept -->
-<g id="edge903" class="edge">
+<g id="edge928" class="edge">
 <title>UncertQ&#45;&gt;ConstrConcept</title>
 <path fill="none" stroke="black" d="M20968.23,-720.05C20965.89,-712.26 20963.06,-702.82 20960.43,-694.08"/>
 <polygon fill="black" stroke="black" points="20963.72,-692.85 20957.49,-684.28 20957.01,-694.86 20963.72,-692.85"/>
 </g>
 <!-- UncertQ&#45;&gt;Uncertainty -->
-<g id="edge904" class="edge">
+<g id="edge929" class="edge">
 <title>UncertQ&#45;&gt;Uncertainty</title>
 <path fill="none" stroke="black" d="M21023.5,-736.92C21527.49,-736.03 25659.77,-727.44 25777.31,-684 25800.69,-675.36 25796.91,-656.58 25820.31,-648 25903.81,-617.4 32154.33,-668.13 32223.31,-612 32241.07,-597.55 32244.81,-570.93 32244.71,-550.55"/>
 <polygon fill="black" stroke="black" points="32248.2,-550.15 32244.35,-540.28 32241.21,-550.4 32248.2,-550.15"/>
@@ -11068,19 +11092,19 @@
 <polygon fill="black" stroke="black" points="17733.79,-461.5 17723.21,-462.11 17731.86,-468.23 17733.79,-461.5"/>
 </g>
 <!-- UnitEquation -->
-<g id="node715" class="node">
+<g id="node736" class="node">
 <title>UnitEquation</title>
 <ellipse fill="none" stroke="#00cdcd" cx="16206.31" cy="-450" rx="73.39" ry="18"/>
 <text text-anchor="middle" x="16206.31" y="-446.3" font-family="Times,serif" font-size="14.00">UnitEquation</text>
 </g>
 <!-- UnitEquation&#45;&gt;UID -->
-<g id="edge908" class="edge">
+<g id="edge933" class="edge">
 <title>UnitEquation&#45;&gt;UID</title>
 <path fill="none" stroke="black" d="M16179.43,-433.1C16139.19,-409.64 16064.87,-367.68 16035.31,-360 15851.88,-312.37 14453.01,-307.54 14198.11,-307.05"/>
 <polygon fill="black" stroke="black" points="14197.84,-303.55 14187.84,-307.04 14197.83,-310.55 14197.84,-303.55"/>
 </g>
 <!-- UnitEquation&#45;&gt;USymb -->
-<g id="edge909" class="edge">
+<g id="edge934" class="edge">
 <title>UnitEquation&#45;&gt;USymb</title>
 <path fill="none" stroke="black" d="M16270.41,-441.07C16299.09,-437.79 16333.35,-434.24 16364.31,-432 16794.6,-400.91 16903.63,-421.09 17334.31,-396 17389.08,-392.81 17451.62,-387.67 17494.88,-383.87"/>
 <polygon fill="black" stroke="black" points="17495.25,-387.35 17504.9,-382.99 17494.63,-380.38 17495.25,-387.35"/>
@@ -11098,46 +11122,22 @@
 <polygon fill="black" stroke="black" points="12779.53,-314.17 12769.04,-315.71 12778.2,-321.05 12779.53,-314.17"/>
 </g>
 <!-- UnitaryChunk -->
-<g id="node717" class="node">
+<g id="node738" class="node">
 <title>UnitaryChunk</title>
 <ellipse fill="none" stroke="#00cdcd" cx="16727.31" cy="-666" rx="76.09" ry="18"/>
 <text text-anchor="middle" x="16727.31" y="-662.3" font-family="Times,serif" font-size="14.00">UnitaryChunk</text>
 </g>
 <!-- UnitaryChunk&#45;&gt;QuantityDict -->
-<g id="edge912" class="edge">
+<g id="edge937" class="edge">
 <title>UnitaryChunk&#45;&gt;QuantityDict</title>
 <path fill="none" stroke="black" d="M16780.14,-652.95C16790.74,-650.95 16801.84,-649.16 16812.31,-648 17515.33,-570.35 17697.27,-654 18403.31,-612 18569.56,-602.11 18610.08,-586.26 18776.31,-576 18813.23,-573.72 20081.51,-566.5 20107.31,-540 20118.47,-528.53 20118.54,-515.39 20107.31,-504 20058.46,-454.44 17671.41,-476.24 17602.31,-468 17596.54,-467.31 17590.55,-466.37 17584.6,-465.27"/>
 <polygon fill="black" stroke="black" points="17585.15,-461.81 17574.66,-463.3 17583.79,-468.68 17585.15,-461.81"/>
 </g>
 <!-- UnitaryChunk&#45;&gt;UnitDefn -->
-<g id="edge913" class="edge">
+<g id="edge938" class="edge">
 <title>UnitaryChunk&#45;&gt;UnitDefn</title>
 <path fill="none" stroke="black" d="M16680.56,-651.75C16637.48,-639.54 16573.77,-621.49 16529.83,-609.03"/>
 <polygon fill="black" stroke="black" points="16530.52,-605.59 16519.94,-606.23 16528.61,-612.33 16530.52,-605.59"/>
-</g>
-<!-- Literal&#45;&gt;String -->
-<g id="edge1001" class="edge">
-<title>Literal&#45;&gt;String</title>
-<path fill="none" stroke="black" d="M9977.5,-293.38C9970.64,-291.18 9963.3,-289.2 9956.31,-288 9802.27,-261.63 7340.24,-238.85 6954.87,-235.44"/>
-<polygon fill="black" stroke="black" points="6954.63,-231.94 6944.6,-235.35 6954.57,-238.94 6954.63,-231.94"/>
-</g>
-<!-- Literal&#45;&gt;Integer -->
-<g id="edge999" class="edge">
-<title>Literal&#45;&gt;Integer</title>
-<path fill="none" stroke="black" d="M10040.56,-294.99C10051.52,-292.14 10063.84,-289.43 10075.31,-288 10342.79,-254.57 19509.82,-257.96 19779.31,-252 19910.09,-249.11 20063.7,-241.9 20143.67,-237.86"/>
-<polygon fill="black" stroke="black" points="20144.18,-241.34 20153.99,-237.34 20143.82,-234.35 20144.18,-241.34"/>
-</g>
-<!-- Literal&#45;&gt;Literal -->
-<g id="edge1000" class="edge">
-<title>Literal&#45;&gt;Literal</title>
-<path fill="none" stroke="black" d="M10036.44,-318.9C10052.34,-321.2 10066.91,-316.9 10066.91,-306 10066.91,-297.49 10058.02,-293 10046.54,-292.54"/>
-<polygon fill="black" stroke="black" points="10046.23,-289.05 10036.44,-293.1 10046.62,-296.04 10046.23,-289.05"/>
-</g>
-<!-- Literal&#45;&gt;Double -->
-<g id="edge1002" class="edge">
-<title>Literal&#45;&gt;Double</title>
-<path fill="none" stroke="black" d="M10040.96,-295.32C10051.84,-292.53 10064.01,-289.77 10075.31,-288 10355.19,-244.15 10695.4,-236.51 10825.34,-235.23"/>
-<polygon fill="black" stroke="black" points="10825.46,-238.73 10835.43,-235.14 10825.4,-231.73 10825.46,-238.73"/>
 </g>
 <!-- HP -->
 <g id="node739" class="node">
@@ -11613,17 +11613,17 @@
 <path fill="none" stroke="black" d="M6196.83,-436.92C6206.19,-434.9 6216.02,-433.1 6225.31,-432 6619.02,-385.35 9396.91,-402.88 9793.31,-396 10037.96,-391.75 10331.33,-383.46 10440.04,-380.28"/>
 <polygon fill="black" stroke="black" points="10440.39,-383.78 10450.28,-379.98 10440.18,-376.78 10440.39,-383.78"/>
 </g>
-<!-- Constrainta&#45;&gt;ConstraintE -->
-<g id="edge1046" class="edge">
-<title>Constrainta&#45;&gt;ConstraintE</title>
-<path fill="none" stroke="black" d="M6196.82,-436.87C6206.18,-434.85 6216.01,-433.07 6225.31,-432 6626.82,-385.97 20371.31,-426.38 20774.31,-396 20790.59,-394.77 20808.06,-392.6 20824.33,-390.21"/>
-<polygon fill="black" stroke="black" points="20824.91,-393.66 20834.27,-388.7 20823.86,-386.74 20824.91,-393.66"/>
-</g>
 <!-- Constrainta&#45;&gt;RealInterval -->
 <g id="edge1042" class="edge">
 <title>Constrainta&#45;&gt;RealInterval</title>
 <path fill="none" stroke="black" d="M6152.56,-431.8C6155.11,-410.85 6162.84,-376.27 6186.31,-360 6238.14,-324.08 8393.46,-329.12 8456.31,-324 8472.64,-322.67 8490.17,-320.47 8506.5,-318.1"/>
 <polygon fill="black" stroke="black" points="8507.12,-321.54 8516.49,-316.6 8506.08,-314.62 8507.12,-321.54"/>
+</g>
+<!-- Constrainta&#45;&gt;ConstraintE -->
+<g id="edge1046" class="edge">
+<title>Constrainta&#45;&gt;ConstraintE</title>
+<path fill="none" stroke="black" d="M6196.82,-436.87C6206.18,-434.85 6216.01,-433.07 6225.31,-432 6626.82,-385.97 20371.31,-426.38 20774.31,-396 20790.59,-394.77 20808.06,-392.6 20824.33,-390.21"/>
+<polygon fill="black" stroke="black" points="20824.91,-393.66 20834.27,-388.7 20823.86,-386.74 20824.91,-393.66"/>
 </g>
 <!-- Constrainta&#45;&gt;ConstraintReason -->
 <g id="edge1041" class="edge">

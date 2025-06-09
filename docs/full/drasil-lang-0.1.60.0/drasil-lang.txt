@@ -1188,6 +1188,14 @@ Empty :: Symbol
 --   <tt>v_f</tt> as it is logical to place it with its parent concept.
 compsy :: Symbol -> Symbol -> Ordering
 
+module Drasil.Code.Classes
+
+-- | Members must have a named argument.
+class HasSymbol c => IsArgumentName c
+
+-- | Some chunks can be called like functions.
+class HasSymbol c => Callable c
+
 
 -- | Language for defining and manipulating units.
 module Language.Drasil.UnitLang
@@ -3306,761 +3314,6 @@ isPhysC :: Constraint e -> Bool
 --   <a>Software</a>.
 isSfwrC :: Constraint e -> Bool
 
-module Language.Drasil.CodeExpr.Lang
-
--- | Arithmetic operators (fractional, power, and subtraction).
-data ArithBinOp
-Frac :: ArithBinOp
-Pow :: ArithBinOp
-Subt :: ArithBinOp
-
--- | Equality operators (equal or not equal).
-data EqBinOp
-Eq :: EqBinOp
-NEq :: EqBinOp
-
--- | Conditional and Biconditional operators (Expressions can imply one
---   another, or exist if and only if another expression exists).
-data BoolBinOp
-Impl :: BoolBinOp
-Iff :: BoolBinOp
-
--- | Index operator.
-data LABinOp
-Index :: LABinOp
-IndexOf :: LABinOp
-
--- | Ordered binary operators (less than, greater than, less than or equal
---   to, greater than or equal to).
-data OrdBinOp
-Lt :: OrdBinOp
-Gt :: OrdBinOp
-LEq :: OrdBinOp
-GEq :: OrdBinOp
-
--- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
---   product, vector addition, vector sub).
-data VVVBinOp
-Cross :: VVVBinOp
-VAdd :: VVVBinOp
-VSub :: VVVBinOp
-
--- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
-data VVNBinOp
-Dot :: VVNBinOp
-
--- | <tt>Number x Vector -&gt; Vector</tt> binary operations (scaling).
-data NVVBinOp
-Scale :: NVVBinOp
-
--- | Element + Set -&gt; Set
-data ESSBinOp
-SAdd :: ESSBinOp
-SRemove :: ESSBinOp
-
--- | Element + Set -&gt; Bool
-data ESBBinOp
-SContains :: ESBBinOp
-data AssocConcatOper
-SUnion :: AssocConcatOper
-
--- | Associative operators (adding and multiplication). Also specifies
---   whether it is for integers or for real numbers.
-data AssocArithOper
-Add :: AssocArithOper
-Mul :: AssocArithOper
-
--- | Associative boolean operators (and, or).
-data AssocBoolOper
-And :: AssocBoolOper
-Or :: AssocBoolOper
-
--- | Unary functions (abs, log, ln, sin, etc.).
-data UFunc
-Abs :: UFunc
-Log :: UFunc
-Ln :: UFunc
-Sin :: UFunc
-Cos :: UFunc
-Tan :: UFunc
-Sec :: UFunc
-Csc :: UFunc
-Cot :: UFunc
-Arcsin :: UFunc
-Arccos :: UFunc
-Arctan :: UFunc
-Exp :: UFunc
-Sqrt :: UFunc
-Neg :: UFunc
-
--- | <tt>Bool -&gt; Bool</tt> operators.
-data UFuncB
-Not :: UFuncB
-
--- | <tt>Vector -&gt; Vector</tt> operators.
-data UFuncVV
-NegV :: UFuncVV
-
--- | <tt>Vector -&gt; Number</tt> operators.
-data UFuncVN
-Norm :: UFuncVN
-Dim :: UFuncVN
-
--- | Expression language where all terms also denote a term in GOOL (i.e.
---   translation is total and meaning preserving).
-data CodeExpr
-
--- | Brings literals into the expression language.
-[Lit] :: Literal -> CodeExpr
-
--- | Takes an associative arithmetic operator with a list of expressions.
-[AssocA] :: AssocArithOper -> [CodeExpr] -> CodeExpr
-
--- | Takes an associative boolean operator with a list of expressions.
-[AssocB] :: AssocBoolOper -> [CodeExpr] -> CodeExpr
-[AssocC] :: AssocConcatOper -> [CodeExpr] -> CodeExpr
-
--- | C stands for <a>Chunk</a>, for referring to a chunk in an expression.
---   Implicitly assumes that the chunk has a symbol.
-[C] :: UID -> CodeExpr
-
--- | A function call accepts a list of parameters and a list of named
---   parameters. For example
---   
---   <ul>
---   <li>F(x) is (FCall F [x] []).</li>
---   <li>F(x,y) would be (FCall F [x,y]).</li>
---   <li>F(x,n=y) would be (FCall F [x] [(n,y)]).</li>
---   </ul>
-[FCall] :: UID -> [CodeExpr] -> [(UID, CodeExpr)] -> CodeExpr
-
--- | Actor creation given <a>UID</a>, parameters, and named parameters.
-[New] :: UID -> [CodeExpr] -> [(UID, CodeExpr)] -> CodeExpr
-
--- | Message an actor:
---   
---   <ul>
---   <li>1st <a>UID</a> is the actor,</li>
---   <li>2nd <a>UID</a> is the method.</li>
---   </ul>
-[Message] :: UID -> UID -> [CodeExpr] -> [(UID, CodeExpr)] -> CodeExpr
-
--- | Access a field of an actor:
---   
---   <ul>
---   <li>1st <a>UID</a> is the actor,</li>
---   <li>2nd <a>UID</a> is the field.</li>
---   </ul>
-[Field] :: UID -> UID -> CodeExpr
-
--- | For multi-case expressions, each pair represents one case.
-[Case] :: Completeness -> [(CodeExpr, CodeExpr)] -> CodeExpr
-
--- | Represents a matrix of expressions.
-[Matrix] :: [[CodeExpr]] -> CodeExpr
-
--- | Represents a set of expressions
-[Set] :: Space -> [CodeExpr] -> CodeExpr
-
--- | used to refernce the (name + type = variable )
-[Variable] :: String -> CodeExpr -> CodeExpr
-
--- | Unary operation for most functions (eg. sin, cos, log, etc.).
-[UnaryOp] :: UFunc -> CodeExpr -> CodeExpr
-
--- | Unary operation for <tt>Bool -&gt; Bool</tt> operations.
-[UnaryOpB] :: UFuncB -> CodeExpr -> CodeExpr
-
--- | Unary operation for <tt>Vector -&gt; Vector</tt> operations.
-[UnaryOpVV] :: UFuncVV -> CodeExpr -> CodeExpr
-
--- | Unary operation for <tt>Vector -&gt; Number</tt> operations.
-[UnaryOpVN] :: UFuncVN -> CodeExpr -> CodeExpr
-
--- | Binary operator for arithmetic between expressions (fractional, power,
---   and subtraction).
-[ArithBinaryOp] :: ArithBinOp -> CodeExpr -> CodeExpr -> CodeExpr
-
--- | Binary operator for boolean operators (implies, iff).
-[BoolBinaryOp] :: BoolBinOp -> CodeExpr -> CodeExpr -> CodeExpr
-
--- | Binary operator for equality between expressions.
-[EqBinaryOp] :: EqBinOp -> CodeExpr -> CodeExpr -> CodeExpr
-
--- | Binary operator for indexing two expressions.
-[LABinaryOp] :: LABinOp -> CodeExpr -> CodeExpr -> CodeExpr
-
--- | Binary operator for ordering expressions (less than, greater than,
---   etc.).
-[OrdBinaryOp] :: OrdBinOp -> CodeExpr -> CodeExpr -> CodeExpr
-
--- | Binary operator for <tt>Vector x Vector -&gt; Vector</tt> operations
---   (cross product).
-[VVVBinaryOp] :: VVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
-
--- | Binary operator for <tt>Vector x Vector -&gt; Number</tt> operations
---   (dot product).
-[VVNBinaryOp] :: VVNBinOp -> CodeExpr -> CodeExpr -> CodeExpr
-
--- | Binary operator for <tt>Number x Vector -&gt; Vector</tt> operations
---   (scaling).
-[NVVBinaryOp] :: NVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
-
--- | Set operator for Set + Set -&gt; Set
-[ESSBinaryOp] :: ESSBinOp -> CodeExpr -> CodeExpr -> CodeExpr
-
--- | Set operator for Element + Set -&gt; Bool
-[ESBBinaryOp] :: ESBBinOp -> CodeExpr -> CodeExpr -> CodeExpr
-
--- | Operators are generalized arithmetic operators over a
---   <tt>DomainDesc</tt> of an <tt>Expr</tt>. Could be called BigOp. ex:
---   Summation is represented via <a>Add</a> over a discrete domain.
-[Operator] :: AssocArithOper -> DiscreteDomainDesc CodeExpr CodeExpr -> CodeExpr -> CodeExpr
-
--- | The expression is an element of a space. IsIn :: Expr -&gt; Space
---   -&gt; Expr | A different kind of <tt>IsIn</tt>. A <a>UID</a> is an
---   element of an interval.
-[RealI] :: UID -> RealInterval CodeExpr CodeExpr -> CodeExpr
-instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.ArithBinOp
-instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.EqBinOp
-instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.BoolBinOp
-instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.LABinOp
-instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.OrdBinOp
-instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.VVVBinOp
-instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.VVNBinOp
-instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.NVVBinOp
-instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.ESSBinOp
-instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.ESBBinOp
-instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.AssocConcatOper
-instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.AssocArithOper
-instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.AssocBoolOper
-instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.UFunc
-instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.UFuncB
-instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.UFuncVV
-instance GHC.Classes.Eq Language.Drasil.CodeExpr.Lang.UFuncVN
-instance Language.Drasil.Literal.Class.LiteralC Language.Drasil.CodeExpr.Lang.CodeExpr
-
-module Language.Drasil.Expr.Class
-class ExprC r
-lit :: ExprC r => Literal -> r
-($=) :: ExprC r => r -> r -> r
-($!=) :: ExprC r => r -> r -> r
-
--- | Smart constructor for ordering two equations.
-($<) :: ExprC r => r -> r -> r
-
--- | Smart constructor for ordering two equations.
-($>) :: ExprC r => r -> r -> r
-
--- | Smart constructor for ordering two equations.
-($<=) :: ExprC r => r -> r -> r
-
--- | Smart constructor for ordering two equations.
-($>=) :: ExprC r => r -> r -> r
-
--- | Smart constructor for the dot product of two equations.
-($.) :: ExprC r => r -> r -> r
-
--- | Add two expressions.
-($+) :: ExprC r => r -> r -> r
-
--- | Multiply two expressions.
-($*) :: ExprC r => r -> r -> r
-($-) :: ExprC r => r -> r -> r
-($/) :: ExprC r => r -> r -> r
-($^) :: ExprC r => r -> r -> r
-($=>) :: ExprC r => r -> r -> r
-($<=>) :: ExprC r => r -> r -> r
-($&&) :: ExprC r => r -> r -> r
-($||) :: ExprC r => r -> r -> r
-
--- | Smart constructor for set-theoretic membership relation. Added ' to
---   avoid conflict.
-in' :: ExprC r => r -> r -> r
-
--- | Smart constructor for taking the absolute value of an expression.
-abs_ :: ExprC r => r -> r
-
--- | Smart constructor for negating an expression.
-neg :: ExprC r => r -> r
-
--- | Smart constructor to take the log of an expression.
-log :: ExprC r => r -> r
-
--- | Smart constructor to take the ln of an expression.
-ln :: ExprC r => r -> r
-
--- | Smart constructor to take the square root of an expression.
-sqrt :: ExprC r => r -> r
-
--- | Smart constructor to apply sin to an expression.
-sin :: ExprC r => r -> r
-
--- | Smart constructor to apply cos to an expression.
-cos :: ExprC r => r -> r
-
--- | Smart constructor to apply tan to an expression.
-tan :: ExprC r => r -> r
-
--- | Smart constructor to apply sec to an expression.
-sec :: ExprC r => r -> r
-
--- | Smart constructor to apply csc to an expression.
-csc :: ExprC r => r -> r
-
--- | Smart constructor to apply cot to an expression.
-cot :: ExprC r => r -> r
-
--- | Smart constructor to apply arcsin to an expression.
-arcsin :: ExprC r => r -> r
-
--- | Smart constructor to apply arccos to an expression.
-arccos :: ExprC r => r -> r
-
--- | Smart constructor to apply arctan to an expression.
-arctan :: ExprC r => r -> r
-
--- | Smart constructor for the exponential (base e) function.
-exp :: ExprC r => r -> r
-
--- | Smart constructor for calculating the dimension of a vector.
-dim :: ExprC r => r -> r
-
--- | Smart constructor for calculating the normal form of a vector.
-norm :: ExprC r => r -> r
-
--- | Smart constructor for negating vectors.
-negVec :: ExprC r => r -> r
-
--- | Smart constructor for applying logical negation to an expression.
-not_ :: ExprC r => r -> r
-
--- | Smart constructor for indexing.
-idx :: ExprC r => r -> r -> r
-
--- | Smart constructor for indexOf. Finds the index of the first occurrence
---   of a value in a list.
-idxOf :: ExprC r => r -> r -> r
-
--- | Smart constructor for the summation, product, and integral functions
---   over an interval.
-defint :: ExprC r => Symbol -> r -> r -> r -> r
-
--- | Smart constructor for the summation, product, and integral functions
---   over an interval.
-defsum :: ExprC r => Symbol -> r -> r -> r -> r
-
--- | Smart constructor for the summation, product, and integral functions
---   over an interval.
-defprod :: ExprC r => Symbol -> r -> r -> r -> r
-
--- | Smart constructor for 'real interval' membership.
-realInterval :: (ExprC r, HasUID c) => c -> RealInterval r r -> r
-
--- | Euclidean function : takes a vector and returns the sqrt of the
---   sum-of-squares.
-euclidean :: ExprC r => [r] -> r
-
--- | Smart constructor to cross product two expressions.
-cross :: ExprC r => r -> r -> r
-
--- | Smart constructor for vector scaling
-vScale :: ExprC r => r -> r -> r
-
--- | Vector Addition
-vAdd :: ExprC r => r -> r -> r
-
--- | Vector Subtraction
-vSub :: ExprC r => r -> r -> r
-
--- | Smart constructor for case statements with a complete set of cases.
-completeCase :: ExprC r => [(r, r)] -> r
-
--- | Smart constructor for case statements with an incomplete set of cases.
-incompleteCase :: ExprC r => [(r, r)] -> r
-
--- | Create a matrix.
-matrix :: ExprC r => [[r]] -> r
-
--- | Create a Set.
-set' :: ExprC r => Space -> [r] -> r
-
--- | Applies a given function with a list of parameters.
-apply :: (ExprC r, HasUID f, HasSymbol f) => f -> [r] -> r
-
--- | Create an <a>Expr</a> from a <a>Symbol</a>ic Chunk.
-sy :: (ExprC r, HasUID c, HasSymbol c) => c -> r
-infixr 4 $=
-infixl 7 $/
-infixr 8 $^
-infixr 9 $&&
-infixr 9 $||
-
--- | Smart constructor for fractions.
-frac :: (ExprC r, LiteralC r) => Integer -> Integer -> r
-
--- | Smart constructor for rational expressions (only in 1/x form).
-recip_ :: (ExprC r, LiteralC r) => r -> r
-
--- | Smart constructor to square a function.
-square :: (ExprC r, LiteralC r) => r -> r
-
--- | Smart constructor to half a function exactly.
-half :: (ExprC r, LiteralC r) => r -> r
-
--- | 1/2, as an expression.
-oneHalf :: (ExprC r, LiteralC r) => r
-
--- | 1/3rd, as an expression.
-oneThird :: (ExprC r, LiteralC r) => r
-
--- | Similar to <a>apply</a>, but converts second argument into
---   <a>Symbol</a>s.
-apply1 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> r
-
--- | Similar to <a>apply</a>, but the applied function takes two parameters
---   (which are both <a>Symbol</a>s).
-apply2 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) => f -> a -> b -> r
-
--- | Create a two-by-two matrix from four given values. For example:
---   
---   <pre>
---   &gt;&gt;&gt; m2x2 1 2 3 4
---   [ [1,2],
---     [3,4] ]
---   </pre>
-m2x2 :: ExprC r => r -> r -> r -> r -> r
-
--- | Create a 2D vector (a matrix with two rows, one column). First
---   argument is placed above the second.
-vec2D :: ExprC r => r -> r -> r
-
--- | Creates a diagonal two-by-two matrix. For example:
---   
---   <pre>
---   &gt;&gt;&gt; dgnl2x2 1 2
---   [ [1, 0],
---     [0, 2] ]
---   </pre>
-dgnl2x2 :: (ExprC r, LiteralC r) => r -> r -> r
-
--- | Create a row vector
-rowVec :: ExprC r => [r] -> r
-
--- | Create a column vector
-columnVec :: ExprC r => [r] -> r
-mkSet :: ExprC r => Space -> [r] -> r
-instance Language.Drasil.Expr.Class.ExprC Language.Drasil.Expr.Lang.Expr
-instance Language.Drasil.Expr.Class.ExprC Language.Drasil.ModelExpr.Lang.ModelExpr
-instance Language.Drasil.Expr.Class.ExprC Language.Drasil.CodeExpr.Lang.CodeExpr
-
-
--- | Contains types and functions common to aspects of generating
---   documents.
-module Language.Drasil.Document.Core
-
--- | Denotes the different possible types that can be used as a list.
-data ListType
-
--- | Bulleted list.
-Bullet :: [(ItemType, Maybe String)] -> ListType
-
--- | Enumerated list.
-Numeric :: [(ItemType, Maybe String)] -> ListType
-
--- | Simple list with items denoted by <tt>:</tt>. Renders as "Title: Item"
-Simple :: [ListTuple] -> ListType
-
--- | Descriptive list, renders as "<b>Title</b>: Item" (see
---   <a>ListTuple</a>).
-Desc :: [ListTuple] -> ListType
-
--- | Renders a list of "<tt><a>Title</a></tt> is the <tt>Item</tt>".
-Definitions :: [ListTuple] -> ListType
-
--- | Denotes how something should behave in a list (<a>ListType</a>).
-data ItemType
-
--- | Standard singular item.
-Flat :: Sentence -> ItemType
-
--- | Nest a list (<a>ListType</a>) as an item.
-Nested :: Header -> ListType -> ItemType
-
--- | MaxWidthPercent should be kept in the range 1-100. Values outside this
---   range may have unexpected results. Used for specifying max figure
---   width as <tt>pagewidth*MaxWidthPercent/100</tt>.
-type MaxWidthPercent = Float
-type Title = Sentence
-type Author = Sentence
-type Header = -- | Used when creating sublists. Sentence
-type Depth = Int
-type Width = Float
-type Height = Float
-type ListTuple = -- | Formats as Title: Item. For use in lists. (Title, ItemType, Maybe String)
-type Filepath = String
-type Lbl = -- | Label. Sentence
-
--- | Contents may be labelled or unlabelled.
-data Contents
-UlC :: UnlabelledContent -> Contents
-LlC :: LabelledContent -> Contents
-
--- | Types of definitions (general, instance, theory, or data).
-data DType
-General :: DType
-Instance :: DType
-Theory :: DType
-Data :: DType
-
--- | Indicates whether a figure has a caption or not.
-data HasCaption
-NoCaption :: HasCaption
-WithCaption :: HasCaption
-
--- | Types of layout objects we deal with explicitly.
-data RawContent
-
--- | table has: header-row, data(rows), label/caption, and a bool that
---   determines whether or not to show label.
-Table :: [Sentence] -> [[Sentence]] -> Title -> Bool -> RawContent
-
--- | Paragraphs are just sentences.
-Paragraph :: Sentence -> RawContent
-
--- | Block of Equations holds an expression.
-EqnBlock :: ModelExpr -> RawContent
-
--- | Grants the ability to label a group of <a>RawContent</a>.
-DerivBlock :: Sentence -> [RawContent] -> RawContent
-
--- | For enumerated lists.
-Enumeration :: ListType -> RawContent
-
--- | Defines something with a type, identifier, and <a>Contents</a>.
-Defini :: DType -> [(Identifier, [Contents])] -> RawContent
-
--- | For creating figures in a document includes whether the figure has a
---   caption.
-Figure :: Lbl -> Filepath -> MaxWidthPercent -> HasCaption -> RawContent
-
--- | Grants the ability to reference something.
-Bib :: BibRef -> RawContent
-
--- | Contain a graph with coordinates (<a>Sentence</a>s), maybe a width and
---   height, and a label (<a>Sentence</a>).
-Graph :: [(Sentence, Sentence)] -> Maybe Width -> Maybe Height -> Lbl -> RawContent
-
--- | Block for codes TODO: Fill this one in.
-CodeBlock :: CodeExpr -> RawContent
-
--- | An identifier is just a <a>String</a>.
-type Identifier = String
-
--- | Contains a <a>Reference</a> and <a>RawContent</a>.
-data LabelledContent
-LblC :: Reference -> RawContent -> LabelledContent
-[_ref] :: LabelledContent -> Reference
-[_ctype] :: LabelledContent -> RawContent
-
--- | Only contains <a>RawContent</a>.
-newtype UnlabelledContent
-UnlblC :: RawContent -> UnlabelledContent
-[_cntnts] :: UnlabelledContent -> RawContent
-ref :: Lens' LabelledContent Reference
-ctype :: Lens' LabelledContent RawContent
-cntnts :: Iso' UnlabelledContent RawContent
-
--- | Members of this class must have <a>RawContent</a>.
-class HasContents c
-
--- | Provides a <tt>Lens</tt> to the <a>RawContent</a>.
-accessContents :: HasContents c => Lens' c RawContent
-
--- | Helper to prepend labels to <a>LabelledContent</a> when referencing.
-prependLabel :: RawContent -> IRefProg
-instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.LabelledContent
-instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.UnlabelledContent
-instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.Contents
-instance Drasil.Database.UID.HasUID Language.Drasil.Document.Core.LabelledContent
-instance GHC.Classes.Eq Language.Drasil.Document.Core.LabelledContent
-instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Document.Core.LabelledContent
-instance Language.Drasil.ShortName.HasShortName Language.Drasil.Document.Core.LabelledContent
-instance Language.Drasil.Label.Type.Referable Language.Drasil.Document.Core.LabelledContent
-instance GHC.Classes.Eq Language.Drasil.Document.Core.HasCaption
-
-
--- | Document Description Language.
-module Language.Drasil.Document
-
--- | Section Contents are split into subsections or contents, where
---   contents are standard layout objects (see <a>Contents</a>).
-data SecCons
-Sub :: Section -> SecCons
-Con :: Contents -> SecCons
-data Partition
-Sections :: Partition
-Part :: Partition
-Chapter :: Partition
-
--- | Sections have a title (<a>Sentence</a>), a list of contents
---   (<a>SecCons</a>) and a shortname (<a>Reference</a>).
-data Section
-Section :: Title -> [SecCons] -> Reference -> Section
-[tle] :: Section -> Title
-[cons] :: Section -> [SecCons]
-[_lab] :: Section -> Reference
-lab :: Lens' Section Reference
-
--- | A Document has a Title (<a>Sentence</a>), Author(s) (<a>Sentence</a>),
---   and <a>Section</a>s which hold the contents of the document.
-data Document
-Document :: Title -> Author -> ShowTableOfContents -> [Section] -> Document
-Notebook :: Title -> Author -> [Section] -> Document
-
--- | Determines whether or not the table of contents appears on the
---   generated artifacts.
-data ShowTableOfContents
-ToC :: ShowTableOfContents
-NoToC :: ShowTableOfContents
-
--- | Manually removes the first section of a document (table of contents
---   section). temp fix for Notebook (see if we need this in notebook
---   later)
-checkToC :: Document -> Document
-
--- | Smart constructor for labelled content chunks.
-llcc :: Reference -> RawContent -> LabelledContent
-
--- | Smart constructor for unlabelled content chunks (no <a>Reference</a>).
-ulcc :: RawContent -> UnlabelledContent
-
--- | Smart constructor that wraps <a>UnlabelledContent</a> into
---   <a>Contents</a>.
-mkParagraph :: Sentence -> Contents
-
--- | Smart constructor that wraps <a>LabelledContent</a> into
---   <a>Contents</a>.
-mkFig :: Reference -> RawContent -> Contents
-
--- | Smart constructor similar to <a>llcc</a>, but takes in
---   <a>RawContent</a> first.
-mkRawLC :: RawContent -> Reference -> LabelledContent
-
--- | Smart constructor for creating <a>Section</a>s with a title
---   (<a>Sentence</a>), introductory contents (ie. paragraphs, tables,
---   etc.), a list of subsections, and a shortname (<a>Reference</a>).
-section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
-
--- | <a>Figure</a> smart constructor with a <a>Lbl</a> and a
---   <a>Filepath</a>. Assumes 100% of page width as max width. Defaults to
---   <a>WithCaption</a>.
-fig :: Lbl -> Filepath -> RawContent
-
--- | <a>Figure</a> smart constructor without a caption.
-figNoCap :: Lbl -> Filepath -> RawContent
-
--- | <a>Figure</a> smart constructor that allows for customized max widths.
---   Defaults to <a>WithCaption</a>.
-figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
-
--- | <a>Figure</a> smart constructor with customized max widths and no
---   caption.
-figNoCapWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
-docNs :: UID -> UID
-docUid :: String -> UID
-
--- | Create a reference for a table. Takes in the name of a table (which
---   will also be used for its shortname).
-makeTabRef :: String -> Reference
-
--- | Create a reference for a figure. Takes in the name of a figure (which
---   will also be used for its shortname).
-makeFigRef :: String -> Reference
-
--- | Create a reference for a section. Takes in the name of a section and a
---   shortname for the section.
-makeSecRef :: String -> Sentence -> Reference
-
--- | Create a reference for a equation. Takes in the name of the equation
---   (which will also be used for its shortname).
-makeEqnRef :: String -> Reference
-
--- | Create a reference for a <a>URI</a>. Takes in a <a>UID</a> (as a
---   <a>String</a>), a reference address, and a shortname.
-makeURI :: String -> String -> ShortName -> Reference
-
--- | Variants of <a>makeTabRef</a> that takes a <a>UID</a> instead of a
---   <a>String</a>.
-makeTabRef' :: UID -> Reference
-
--- | Variants of <a>makeFigRef</a> that takes a <a>UID</a> instead of a
---   <a>String</a>.
-makeFigRef' :: UID -> Reference
-
--- | Variants of <a>makeSecRef</a> that takes a <a>UID</a> instead of a
---   <a>String</a>.
-makeSecRef' :: UID -> Sentence -> Reference
-
--- | Variants of <a>makeEqnRef</a> that takes a <a>UID</a> instead of a
---   <a>String</a>.
-makeEqnRef' :: UID -> Reference
-
--- | Variants of <a>makeURI</a> that takes a <a>UID</a> instead of a
---   <a>String</a>.
-makeURI' :: UID -> String -> ShortName -> Reference
-instance Drasil.Database.UID.HasUID Language.Drasil.Document.Section
-instance GHC.Classes.Eq Language.Drasil.Document.Section
-instance Language.Drasil.ShortName.HasShortName Language.Drasil.Document.Section
-instance Language.Drasil.Label.Type.Referable Language.Drasil.Document.Section
-instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Document.Section
-
-module Language.Drasil.CodeExpr.Precedence
-
--- | precA - precedence for arithmetic-related Binary-Associative
---   (Commutative) operators.
-precA :: AssocArithOper -> Int
-
--- | precB - precedence for boolean-related Binary-Associative
---   (Commutative) operators.
-precB :: AssocBoolOper -> Int
-
--- | eprec - <a>Expression</a> precedence.
-eprec :: CodeExpr -> Int
-
-module Language.Drasil.CodeExpr.Extract
-
--- | Get dependencies from an equation.
-eDep :: CodeExpr -> [UID]
-
--- | Get dependencies from an equation, without functions.
-eDep' :: CodeExpr -> [UID]
-
--- | Generic traversal of everything that could come from an interval to
---   names (similar to <a>eNames</a>).
-eNamesRI :: RealInterval CodeExpr CodeExpr -> [UID]
-
--- | Generic traversal of everything that could come from an interval to
---   names without functions (similar to <a>eNames'</a>).
-eNamesRI' :: RealInterval CodeExpr CodeExpr -> [UID]
-
-module Language.Drasil.CodeExpr.Convert
-
--- | Render an algebraic expression into our code expression language.
-expr :: Expr -> CodeExpr
-
--- | Convert <a>RealInterval</a> <tt>Expr</tt> <tt>Expr</tt>s into
---   <a>RealInterval</a> <a>CodeExpr</a> <a>CodeExpr</a>s.
-realInterval :: RealInterval Expr Expr -> RealInterval CodeExpr CodeExpr
-
--- | Convert constrained expressions (<a>ConstraintE</a>) into
---   <tt>Constraint''CodeExpr</tt>s.
-constraint :: ConstraintE -> Constraint CodeExpr
-class CanGenCode e
-toCodeExpr :: CanGenCode e => e -> CodeExpr
-instance Language.Drasil.CodeExpr.Convert.CanGenCode Language.Drasil.Literal.Lang.Literal
-instance Language.Drasil.CodeExpr.Convert.CanGenCode Language.Drasil.Expr.Lang.Expr
-
 
 -- | Defining all the classes which represent knowledge-about-knowledge.
 module Language.Drasil.Classes
@@ -4130,12 +3383,6 @@ class Constrained c
 
 -- | Provides a <tt>Lens</tt> to the <tt>Constraint</tt>s.
 constraints :: Constrained c => Lens' c [ConstraintE]
-
--- | Some chunks can be called like functions.
-class (HasSymbol c) => Callable c
-
--- | Members must have a named argument.
-class (HasSymbol c) => IsArgumentName c
 
 -- | Records any additional notes needed to avoid losing information
 class HasAdditionalNotes c
@@ -4327,76 +3574,6 @@ versus :: Sentence -> Sentence -> Sentence
 
 -- | Inserts the words "with respect to" between two Sentences.
 wrt :: Sentence -> Sentence -> Sentence
-
-
--- | Folding-related functions and types.
-module Language.Drasil.Sentence.Fold
-
--- | Type that helps determine enumeration method. Can use either numbers,
---   uppercase letters, or lowercase letters.
-data EnumType
-Numb :: EnumType
-Upper :: EnumType
-Lower :: EnumType
-
--- | Type to help wrap a sentence with parenthesis or to add a period at
---   the end.
-data WrapType
-Parens :: WrapType
-Period :: WrapType
-
--- | Type to help separate words with commas or semicolons.
-data SepType
-Comma :: SepType
-SemiCol :: SepType
-
--- | Type to help fold differently between listed items, or if there are
---   options (ex. using "and" or "or" at the end of a list of words).
-data FoldType
-List :: FoldType
-Options :: FoldType
-
--- | Helper for formatting a list of constraints.
-foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
-
--- | Creates a list of elements with "enumerators" in "wrappers" using
---   foldlList.
-foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
-
--- | Creates a list of elements separated by a "separator", ending with
---   "and" or "or".
-foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
-
--- | Fold sentences then turns into content using <a>foldlSent</a>.
-foldlSP :: [Sentence] -> Contents
-
--- | Same as <a>foldlSP</a> but uses <a>foldlSent_</a>.
-foldlSP_ :: [Sentence] -> Contents
-
--- | Same as <a>foldlSP</a> but uses <a>foldlSentCol</a>.
-foldlSPCol :: [Sentence] -> Contents
-
--- | Partial function application of <a>foldle</a> for sentences
---   specifically. Folds with spaces and adds a period (".") at the end.
-foldlSent :: [Sentence] -> Sentence
-
--- | <a>foldlSent</a> but does not add a period.
-foldlSent_ :: [Sentence] -> Sentence
-
--- | <a>foldlSent</a> but ends with colon.
-foldlSentCol :: [Sentence] -> Sentence
-
--- | Folds a list of elements separated by commas, including the last
---   element.
-foldlsC :: [Sentence] -> Sentence
-
--- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, and
---   13").
-foldNums :: String -> [Int] -> Sentence
-
--- | Parses a list of integers into a list of strings (ie. ["1", "4-7",
---   "13"]).
-numList :: String -> [Int] -> [String]
 
 
 -- | Defines various NounPhrase-level combinators. These hold more
@@ -4968,6 +4145,508 @@ instance Language.Drasil.Classes.HasUnitSymbol Language.Drasil.Chunk.UnitDefn.Un
 instance Language.Drasil.Classes.IsUnit Language.Drasil.Chunk.UnitDefn.UnitDefn
 
 
+-- | For adding a relation (expression) to a concept.
+module Language.Drasil.Chunk.Relation
+
+-- | For a concept (<a>ConceptChunk</a>) that also has a <tt>Relation</tt>
+--   (<a>ModelExpr</a>) attached.
+--   
+--   Ex. We can describe a pendulum arm and then apply an associated
+--   equation so that we know its behaviour.
+data RelationConcept
+
+-- | Create a <a>RelationConcept</a> from a given <tt>UID</tt>, term
+--   (<a>NP</a>), definition (<a>Sentence</a>), and <tt>Relation</tt>.
+makeRC :: Express e => String -> NP -> Sentence -> e -> RelationConcept
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Relation.RelationConcept
+instance GHC.Classes.Eq Language.Drasil.Chunk.Relation.RelationConcept
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Relation.RelationConcept
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Relation.RelationConcept
+instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Relation.RelationConcept
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Relation.RelationConcept
+instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Relation.RelationConcept
+
+
+-- | Contains the common idea type and respective constructors.
+module Language.Drasil.Chunk.CommonIdea
+
+-- | The common idea (with <tt>NounPhrase</tt>) data type. It must have a
+--   <a>UID</a>, <tt>NounPhrase</tt> for its term, an abbreviation
+--   (<a>String</a>), and a domain ([<a>UID</a>]). It is similar to
+--   <a>IdeaDict</a> and <a>IdeaDict</a> in the sense that these are for
+--   things worth naming, but this type also carries an abbreviation and
+--   related domains of knowledge.
+--   
+--   Ex. The term "Operating System" has the abbreviation <a>OS</a> and
+--   comes from the domain of computer science.
+data CI
+
+-- | The commonIdea smart constructor requires a chunk id (<a>String</a>),
+--   a term (<a>NP</a>), an abbreviation (<a>String</a>), and a domain
+--   ([<a>UID</a>]).
+commonIdea :: String -> NP -> String -> [UID] -> CI
+
+-- | Similar to <a>commonIdea</a>, but takes a list of <a>IdeaDict</a>
+--   (often a domain).
+commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
+
+-- | Prepends the abbreviation from a <a>CommonIdea</a> to a <a>String</a>.
+prependAbrv :: CommonIdea c => c -> String -> String
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.CommonIdea.CI
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CommonIdea.CI
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CommonIdea.CI
+instance Language.Drasil.Classes.CommonIdea Language.Drasil.Chunk.CommonIdea.CI
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.CommonIdea.CI
+
+module Drasil.Code.CodeExpr.Lang
+
+-- | Arithmetic operators (fractional, power, and subtraction).
+data ArithBinOp
+Frac :: ArithBinOp
+Pow :: ArithBinOp
+Subt :: ArithBinOp
+
+-- | Equality operators (equal or not equal).
+data EqBinOp
+Eq :: EqBinOp
+NEq :: EqBinOp
+
+-- | Conditional and Biconditional operators (Expressions can imply one
+--   another, or exist if and only if another expression exists).
+data BoolBinOp
+Impl :: BoolBinOp
+Iff :: BoolBinOp
+
+-- | Index operator.
+data LABinOp
+Index :: LABinOp
+IndexOf :: LABinOp
+
+-- | Ordered binary operators (less than, greater than, less than or equal
+--   to, greater than or equal to).
+data OrdBinOp
+Lt :: OrdBinOp
+Gt :: OrdBinOp
+LEq :: OrdBinOp
+GEq :: OrdBinOp
+
+-- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
+--   product, vector addition, vector sub).
+data VVVBinOp
+Cross :: VVVBinOp
+VAdd :: VVVBinOp
+VSub :: VVVBinOp
+
+-- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
+data VVNBinOp
+Dot :: VVNBinOp
+
+-- | <tt>Number x Vector -&gt; Vector</tt> binary operations (scaling).
+data NVVBinOp
+Scale :: NVVBinOp
+
+-- | Element + Set -&gt; Set
+data ESSBinOp
+SAdd :: ESSBinOp
+SRemove :: ESSBinOp
+
+-- | Element + Set -&gt; Bool
+data ESBBinOp
+SContains :: ESBBinOp
+data AssocConcatOper
+SUnion :: AssocConcatOper
+
+-- | Associative operators (adding and multiplication). Also specifies
+--   whether it is for integers or for real numbers.
+data AssocArithOper
+Add :: AssocArithOper
+Mul :: AssocArithOper
+
+-- | Associative boolean operators (and, or).
+data AssocBoolOper
+And :: AssocBoolOper
+Or :: AssocBoolOper
+
+-- | Unary functions (abs, log, ln, sin, etc.).
+data UFunc
+Abs :: UFunc
+Log :: UFunc
+Ln :: UFunc
+Sin :: UFunc
+Cos :: UFunc
+Tan :: UFunc
+Sec :: UFunc
+Csc :: UFunc
+Cot :: UFunc
+Arcsin :: UFunc
+Arccos :: UFunc
+Arctan :: UFunc
+Exp :: UFunc
+Sqrt :: UFunc
+Neg :: UFunc
+
+-- | <tt>Bool -&gt; Bool</tt> operators.
+data UFuncB
+Not :: UFuncB
+
+-- | <tt>Vector -&gt; Vector</tt> operators.
+data UFuncVV
+NegV :: UFuncVV
+
+-- | <tt>Vector -&gt; Number</tt> operators.
+data UFuncVN
+Norm :: UFuncVN
+Dim :: UFuncVN
+
+-- | Expression language where all terms also denote a term in GOOL (i.e.
+--   translation is total and meaning preserving).
+data CodeExpr
+
+-- | Brings literals into the expression language.
+[Lit] :: Literal -> CodeExpr
+
+-- | Takes an associative arithmetic operator with a list of expressions.
+[AssocA] :: AssocArithOper -> [CodeExpr] -> CodeExpr
+
+-- | Takes an associative boolean operator with a list of expressions.
+[AssocB] :: AssocBoolOper -> [CodeExpr] -> CodeExpr
+[AssocC] :: AssocConcatOper -> [CodeExpr] -> CodeExpr
+
+-- | C stands for <a>Chunk</a>, for referring to a chunk in an expression.
+--   Implicitly assumes that the chunk has a symbol.
+[C] :: UID -> CodeExpr
+
+-- | A function call accepts a list of parameters and a list of named
+--   parameters. For example
+--   
+--   <ul>
+--   <li>F(x) is (FCall F [x] []).</li>
+--   <li>F(x,y) would be (FCall F [x,y]).</li>
+--   <li>F(x,n=y) would be (FCall F [x] [(n,y)]).</li>
+--   </ul>
+[FCall] :: UID -> [CodeExpr] -> [(UID, CodeExpr)] -> CodeExpr
+
+-- | Actor creation given <a>UID</a>, parameters, and named parameters.
+[New] :: UID -> [CodeExpr] -> [(UID, CodeExpr)] -> CodeExpr
+
+-- | Message an actor:
+--   
+--   <ul>
+--   <li>1st <a>UID</a> is the actor,</li>
+--   <li>2nd <a>UID</a> is the method.</li>
+--   </ul>
+[Message] :: UID -> UID -> [CodeExpr] -> [(UID, CodeExpr)] -> CodeExpr
+
+-- | Access a field of an actor:
+--   
+--   <ul>
+--   <li>1st <a>UID</a> is the actor,</li>
+--   <li>2nd <a>UID</a> is the field.</li>
+--   </ul>
+[Field] :: UID -> UID -> CodeExpr
+
+-- | For multi-case expressions, each pair represents one case.
+[Case] :: Completeness -> [(CodeExpr, CodeExpr)] -> CodeExpr
+
+-- | Represents a matrix of expressions.
+[Matrix] :: [[CodeExpr]] -> CodeExpr
+
+-- | Represents a set of expressions
+[Set] :: Space -> [CodeExpr] -> CodeExpr
+
+-- | used to refernce the (name + type = variable )
+[Variable] :: String -> CodeExpr -> CodeExpr
+
+-- | Unary operation for most functions (eg. sin, cos, log, etc.).
+[UnaryOp] :: UFunc -> CodeExpr -> CodeExpr
+
+-- | Unary operation for <tt>Bool -&gt; Bool</tt> operations.
+[UnaryOpB] :: UFuncB -> CodeExpr -> CodeExpr
+
+-- | Unary operation for <tt>Vector -&gt; Vector</tt> operations.
+[UnaryOpVV] :: UFuncVV -> CodeExpr -> CodeExpr
+
+-- | Unary operation for <tt>Vector -&gt; Number</tt> operations.
+[UnaryOpVN] :: UFuncVN -> CodeExpr -> CodeExpr
+
+-- | Binary operator for arithmetic between expressions (fractional, power,
+--   and subtraction).
+[ArithBinaryOp] :: ArithBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+
+-- | Binary operator for boolean operators (implies, iff).
+[BoolBinaryOp] :: BoolBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+
+-- | Binary operator for equality between expressions.
+[EqBinaryOp] :: EqBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+
+-- | Binary operator for indexing two expressions.
+[LABinaryOp] :: LABinOp -> CodeExpr -> CodeExpr -> CodeExpr
+
+-- | Binary operator for ordering expressions (less than, greater than,
+--   etc.).
+[OrdBinaryOp] :: OrdBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+
+-- | Binary operator for <tt>Vector x Vector -&gt; Vector</tt> operations
+--   (cross product).
+[VVVBinaryOp] :: VVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+
+-- | Binary operator for <tt>Vector x Vector -&gt; Number</tt> operations
+--   (dot product).
+[VVNBinaryOp] :: VVNBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+
+-- | Binary operator for <tt>Number x Vector -&gt; Vector</tt> operations
+--   (scaling).
+[NVVBinaryOp] :: NVVBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+
+-- | Set operator for Set + Set -&gt; Set
+[ESSBinaryOp] :: ESSBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+
+-- | Set operator for Element + Set -&gt; Bool
+[ESBBinaryOp] :: ESBBinOp -> CodeExpr -> CodeExpr -> CodeExpr
+
+-- | Operators are generalized arithmetic operators over a
+--   <tt>DomainDesc</tt> of an <tt>Expr</tt>. Could be called BigOp. ex:
+--   Summation is represented via <a>Add</a> over a discrete domain.
+[Operator] :: AssocArithOper -> DiscreteDomainDesc CodeExpr CodeExpr -> CodeExpr -> CodeExpr
+
+-- | The expression is an element of a space. IsIn :: Expr -&gt; Space
+--   -&gt; Expr | A different kind of <tt>IsIn</tt>. A <a>UID</a> is an
+--   element of an interval.
+[RealI] :: UID -> RealInterval CodeExpr CodeExpr -> CodeExpr
+instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.ArithBinOp
+instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.EqBinOp
+instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.BoolBinOp
+instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.LABinOp
+instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.OrdBinOp
+instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.VVVBinOp
+instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.VVNBinOp
+instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.NVVBinOp
+instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.ESSBinOp
+instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.ESBBinOp
+instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.AssocConcatOper
+instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.AssocArithOper
+instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.AssocBoolOper
+instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.UFunc
+instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.UFuncB
+instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.UFuncVV
+instance GHC.Classes.Eq Drasil.Code.CodeExpr.Lang.UFuncVN
+instance Language.Drasil.Literal.Class.LiteralC Drasil.Code.CodeExpr.Lang.CodeExpr
+
+module Language.Drasil.Expr.Class
+class ExprC r
+lit :: ExprC r => Literal -> r
+($=) :: ExprC r => r -> r -> r
+($!=) :: ExprC r => r -> r -> r
+
+-- | Smart constructor for ordering two equations.
+($<) :: ExprC r => r -> r -> r
+
+-- | Smart constructor for ordering two equations.
+($>) :: ExprC r => r -> r -> r
+
+-- | Smart constructor for ordering two equations.
+($<=) :: ExprC r => r -> r -> r
+
+-- | Smart constructor for ordering two equations.
+($>=) :: ExprC r => r -> r -> r
+
+-- | Smart constructor for the dot product of two equations.
+($.) :: ExprC r => r -> r -> r
+
+-- | Add two expressions.
+($+) :: ExprC r => r -> r -> r
+
+-- | Multiply two expressions.
+($*) :: ExprC r => r -> r -> r
+($-) :: ExprC r => r -> r -> r
+($/) :: ExprC r => r -> r -> r
+($^) :: ExprC r => r -> r -> r
+($=>) :: ExprC r => r -> r -> r
+($<=>) :: ExprC r => r -> r -> r
+($&&) :: ExprC r => r -> r -> r
+($||) :: ExprC r => r -> r -> r
+
+-- | Smart constructor for set-theoretic membership relation. Added ' to
+--   avoid conflict.
+in' :: ExprC r => r -> r -> r
+
+-- | Smart constructor for taking the absolute value of an expression.
+abs_ :: ExprC r => r -> r
+
+-- | Smart constructor for negating an expression.
+neg :: ExprC r => r -> r
+
+-- | Smart constructor to take the log of an expression.
+log :: ExprC r => r -> r
+
+-- | Smart constructor to take the ln of an expression.
+ln :: ExprC r => r -> r
+
+-- | Smart constructor to take the square root of an expression.
+sqrt :: ExprC r => r -> r
+
+-- | Smart constructor to apply sin to an expression.
+sin :: ExprC r => r -> r
+
+-- | Smart constructor to apply cos to an expression.
+cos :: ExprC r => r -> r
+
+-- | Smart constructor to apply tan to an expression.
+tan :: ExprC r => r -> r
+
+-- | Smart constructor to apply sec to an expression.
+sec :: ExprC r => r -> r
+
+-- | Smart constructor to apply csc to an expression.
+csc :: ExprC r => r -> r
+
+-- | Smart constructor to apply cot to an expression.
+cot :: ExprC r => r -> r
+
+-- | Smart constructor to apply arcsin to an expression.
+arcsin :: ExprC r => r -> r
+
+-- | Smart constructor to apply arccos to an expression.
+arccos :: ExprC r => r -> r
+
+-- | Smart constructor to apply arctan to an expression.
+arctan :: ExprC r => r -> r
+
+-- | Smart constructor for the exponential (base e) function.
+exp :: ExprC r => r -> r
+
+-- | Smart constructor for calculating the dimension of a vector.
+dim :: ExprC r => r -> r
+
+-- | Smart constructor for calculating the normal form of a vector.
+norm :: ExprC r => r -> r
+
+-- | Smart constructor for negating vectors.
+negVec :: ExprC r => r -> r
+
+-- | Smart constructor for applying logical negation to an expression.
+not_ :: ExprC r => r -> r
+
+-- | Smart constructor for indexing.
+idx :: ExprC r => r -> r -> r
+
+-- | Smart constructor for indexOf. Finds the index of the first occurrence
+--   of a value in a list.
+idxOf :: ExprC r => r -> r -> r
+
+-- | Smart constructor for the summation, product, and integral functions
+--   over an interval.
+defint :: ExprC r => Symbol -> r -> r -> r -> r
+
+-- | Smart constructor for the summation, product, and integral functions
+--   over an interval.
+defsum :: ExprC r => Symbol -> r -> r -> r -> r
+
+-- | Smart constructor for the summation, product, and integral functions
+--   over an interval.
+defprod :: ExprC r => Symbol -> r -> r -> r -> r
+
+-- | Smart constructor for 'real interval' membership.
+realInterval :: (ExprC r, HasUID c) => c -> RealInterval r r -> r
+
+-- | Euclidean function : takes a vector and returns the sqrt of the
+--   sum-of-squares.
+euclidean :: ExprC r => [r] -> r
+
+-- | Smart constructor to cross product two expressions.
+cross :: ExprC r => r -> r -> r
+
+-- | Smart constructor for vector scaling
+vScale :: ExprC r => r -> r -> r
+
+-- | Vector Addition
+vAdd :: ExprC r => r -> r -> r
+
+-- | Vector Subtraction
+vSub :: ExprC r => r -> r -> r
+
+-- | Smart constructor for case statements with a complete set of cases.
+completeCase :: ExprC r => [(r, r)] -> r
+
+-- | Smart constructor for case statements with an incomplete set of cases.
+incompleteCase :: ExprC r => [(r, r)] -> r
+
+-- | Create a matrix.
+matrix :: ExprC r => [[r]] -> r
+
+-- | Create a Set.
+set' :: ExprC r => Space -> [r] -> r
+
+-- | Applies a given function with a list of parameters.
+apply :: (ExprC r, HasUID f, HasSymbol f) => f -> [r] -> r
+
+-- | Create an <a>Expr</a> from a <a>Symbol</a>ic Chunk.
+sy :: (ExprC r, HasUID c, HasSymbol c) => c -> r
+infixr 4 $=
+infixl 7 $/
+infixr 8 $^
+infixr 9 $&&
+infixr 9 $||
+
+-- | Smart constructor for fractions.
+frac :: (ExprC r, LiteralC r) => Integer -> Integer -> r
+
+-- | Smart constructor for rational expressions (only in 1/x form).
+recip_ :: (ExprC r, LiteralC r) => r -> r
+
+-- | Smart constructor to square a function.
+square :: (ExprC r, LiteralC r) => r -> r
+
+-- | Smart constructor to half a function exactly.
+half :: (ExprC r, LiteralC r) => r -> r
+
+-- | 1/2, as an expression.
+oneHalf :: (ExprC r, LiteralC r) => r
+
+-- | 1/3rd, as an expression.
+oneThird :: (ExprC r, LiteralC r) => r
+
+-- | Similar to <a>apply</a>, but converts second argument into
+--   <a>Symbol</a>s.
+apply1 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> r
+
+-- | Similar to <a>apply</a>, but the applied function takes two parameters
+--   (which are both <a>Symbol</a>s).
+apply2 :: (ExprC r, HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) => f -> a -> b -> r
+
+-- | Create a two-by-two matrix from four given values. For example:
+--   
+--   <pre>
+--   &gt;&gt;&gt; m2x2 1 2 3 4
+--   [ [1,2],
+--     [3,4] ]
+--   </pre>
+m2x2 :: ExprC r => r -> r -> r -> r -> r
+
+-- | Create a 2D vector (a matrix with two rows, one column). First
+--   argument is placed above the second.
+vec2D :: ExprC r => r -> r -> r
+
+-- | Creates a diagonal two-by-two matrix. For example:
+--   
+--   <pre>
+--   &gt;&gt;&gt; dgnl2x2 1 2
+--   [ [1, 0],
+--     [0, 2] ]
+--   </pre>
+dgnl2x2 :: (ExprC r, LiteralC r) => r -> r -> r
+
+-- | Create a row vector
+rowVec :: ExprC r => [r] -> r
+
+-- | Create a column vector
+columnVec :: ExprC r => [r] -> r
+mkSet :: ExprC r => Space -> [r] -> r
+instance Language.Drasil.Expr.Class.ExprC Language.Drasil.Expr.Lang.Expr
+instance Language.Drasil.Expr.Class.ExprC Language.Drasil.ModelExpr.Lang.ModelExpr
+instance Language.Drasil.Expr.Class.ExprC Drasil.Code.CodeExpr.Lang.CodeExpr
+
+
 -- | Defines chunks that add quantities to an idea. Similar to
 --   <tt>DefinedQuantityDict</tt>.
 module Language.Drasil.Chunk.Quantity
@@ -5082,28 +4761,6 @@ instance Language.Drasil.Chunk.Unitary.Unitary Language.Drasil.Chunk.Unitary.Uni
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Unitary.UnitaryChunk
 
 
--- | For adding a relation (expression) to a concept.
-module Language.Drasil.Chunk.Relation
-
--- | For a concept (<a>ConceptChunk</a>) that also has a <tt>Relation</tt>
---   (<a>ModelExpr</a>) attached.
---   
---   Ex. We can describe a pendulum arm and then apply an associated
---   equation so that we know its behaviour.
-data RelationConcept
-
--- | Create a <a>RelationConcept</a> from a given <tt>UID</tt>, term
---   (<a>NP</a>), definition (<a>Sentence</a>), and <tt>Relation</tt>.
-makeRC :: Express e => String -> NP -> Sentence -> e -> RelationConcept
-instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Relation.RelationConcept
-instance GHC.Classes.Eq Language.Drasil.Chunk.Relation.RelationConcept
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Relation.RelationConcept
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Relation.RelationConcept
-instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Relation.RelationConcept
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Relation.RelationConcept
-instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Relation.RelationConcept
-
-
 -- | Contains types that define quantities from concepts. Similar to
 --   <tt>QuantityDict</tt>.
 module Language.Drasil.Chunk.DefinedQuantity
@@ -5204,6 +4861,496 @@ instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Unital
 instance Language.Drasil.Chunk.UnitDefn.TempHasUnit Language.Drasil.Chunk.Unital.UnitalChunk
 instance GHC.Classes.Eq Language.Drasil.Chunk.Unital.UnitalChunk
 instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Unital.UnitalChunk
+
+
+-- | Add constraints and a reasonable value to chunks that are quantities.
+module Language.Drasil.Chunk.Constrained
+
+-- | ConstrainedChunks are symbolic quantities (<a>QuantityDict</a>) with
+--   <tt>Constraint</tt>s and maybe a typical value (<a>Maybe</a>
+--   <a>Expr</a>).
+--   
+--   Ex. Measuring the length of a pendulum would have some reasonable
+--   value (between 1 cm and 2 m) and the constraint that the length cannot
+--   be a negative value.
+data ConstrainedChunk
+ConstrainedChunk :: QuantityDict -> [ConstraintE] -> Maybe Expr -> ConstrainedChunk
+[_qd] :: ConstrainedChunk -> QuantityDict
+[_constr] :: ConstrainedChunk -> [ConstraintE]
+[_reasV] :: ConstrainedChunk -> Maybe Expr
+
+-- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
+--   (<a>NP</a>), <a>Symbol</a>, unit, <a>Space</a>, <tt>Constraint</tt>s,
+--   and an <a>Expr</a>.
+cuc :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> ConstrainedChunk
+
+-- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
+--   (<a>NP</a>), <a>Symbol</a>, <a>Space</a>, <tt>Constraint</tt>s, and a
+--   <a>Maybe</a> <a>Expr</a> (Similar to <a>cuc</a> but no units).
+cvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Maybe Expr -> ConstrainedChunk
+
+-- | Creates a new ConstrainedChunk from either a <a>ConstrainedChunk</a>,
+--   <a>ConstrConcept</a>, <tt>UncertainChunk</tt>, or an <tt>UncertQ</tt>.
+cnstrw :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrainedChunk
+
+-- | ConstrConcepts are conceptual symbolic quantities
+--   (<a>DefinedQuantityDict</a>) with <tt>Constraint</tt>s and maybe a
+--   reasonable value (no units!). Similar to <a>ConstrainedChunk</a> but
+--   includes a definition and domain.
+--   
+--   Ex. Measuring the length of a pendulum arm could be a concept that has
+--   some reasonable value (between 1 cm and 2 m) and the constraint that
+--   the length cannot be a negative value.
+data ConstrConcept
+ConstrConcept :: DefinedQuantityDict -> [ConstraintE] -> Maybe Expr -> ConstrConcept
+[_defq] :: ConstrConcept -> DefinedQuantityDict
+[_constr'] :: ConstrConcept -> [ConstraintE]
+[_reasV'] :: ConstrConcept -> Maybe Expr
+
+-- | Similar to <a>cnstrw</a>, but types must also have a <a>Concept</a>.
+cnstrw' :: (Quantity c, Concept c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrConcept
+
+-- | Creates a <a>ConstrConcept</a> with a quantitative concept, a list of
+--   <tt>Constraint</tt>s and an <a>Expr</a>.
+constrained' :: (Concept c, MayHaveUnit c, Quantity c) => c -> [ConstraintE] -> Expr -> ConstrConcept
+
+-- | Similar to <a>constrained'</a>, but defaults <a>Maybe</a> <a>Expr</a>
+--   to <a>Nothing</a>.
+constrainedNRV' :: (Concept c, MayHaveUnit c, Quantity c) => c -> [ConstraintE] -> ConstrConcept
+
+-- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
+--   (<a>NP</a>), description (<a>String</a>), <a>Symbol</a>, unit,
+--   <a>Space</a>, <tt>Constraint</tt>s, and an <a>Expr</a>.
+cuc' :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> ConstrConcept
+
+-- | Similar to <a>cuc'</a>, but <a>Symbol</a> is dependent on
+--   <a>Stage</a>.
+cuc'' :: IsUnit u => String -> NP -> String -> (Stage -> Symbol) -> u -> Space -> [ConstraintE] -> Expr -> ConstrConcept
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.Constrained.ConstrConcept
+instance GHC.Classes.Eq Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Constrained.ConstrainedChunk
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Constrained.ConstrainedChunk
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Constrained.ConstrainedChunk
+instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Constrained.ConstrainedChunk
+instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.Constrained.ConstrainedChunk
+instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Constrained.ConstrainedChunk
+instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.Constrained.ConstrainedChunk
+instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.Constrained.ConstrainedChunk
+instance GHC.Classes.Eq Language.Drasil.Chunk.Constrained.ConstrainedChunk
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Constrained.ConstrainedChunk
+
+
+-- | For adding an uncertainty value to quantities with constraints.
+module Language.Drasil.Chunk.UncertainQuantity
+
+-- | UncertQs are conceptual symbolic quantities with constraints and an
+--   <a>Uncertainty</a>. Contains a <a>ConstrConcept</a> and an
+--   <a>Uncertainty</a>.
+--   
+--   Ex. Measuring the length of a pendulum arm may be recorded with an
+--   uncertainty value.
+data UncertQ
+
+-- | UncertainChunk is a symbolic quantity with constraints, a typical
+--   value, and an uncertainty. Contains a <a>ConstrainedChunk</a> and an
+--   <a>Uncertainty</a>.
+--   
+--   Ex. Measuring the length of a pendulum arm may be recorded with an
+--   uncertainty value.
+data UncertainChunk
+UCh :: ConstrainedChunk -> Uncertainty -> UncertainChunk
+[_conc] :: UncertainChunk -> ConstrainedChunk
+[_unc'] :: UncertainChunk -> Uncertainty
+
+-- | Smart constructor that requires a <a>Quantity</a>, a percentage, and a
+--   typical value with an <a>Uncertainty</a>.
+uq :: (Quantity c, Constrained c, Concept c, HasReasVal c, MayHaveUnit c) => c -> Uncertainty -> UncertQ
+
+-- | Uncertainty quantity (<a>uq</a>) but with a constraint.
+uqc :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
+
+-- | Uncertainty quantity constraint (<a>uqc</a>) without a description.
+uqcND :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
+
+-- | Smart constructor that can project to an <a>UncertainChunk</a> (also
+--   given an <a>Uncertainty</a>).
+uncrtnChunk :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> Uncertainty -> UncertainChunk
+
+-- | Creates an uncertain variable chunk. Takes <tt>UID</tt>, term
+--   (<a>NP</a>), <a>Symbol</a>, <a>Space</a>, <tt>Constrains</tt>,
+--   <a>Expr</a>, and <a>Uncertainty</a>.
+uvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertainChunk
+
+-- | Projection function into an <a>UncertainChunk</a> from <a>UncertQ</a>
+--   or an <a>UncertainChunk</a>.
+uncrtnw :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> UncertainChunk
+instance GHC.Classes.Eq Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Uncertainty.HasUncertainty Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance GHC.Classes.Eq Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance Language.Drasil.Uncertainty.HasUncertainty Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
+
+
+-- | Contains types and functions common to aspects of generating
+--   documents.
+module Language.Drasil.Document.Core
+
+-- | Denotes the different possible types that can be used as a list.
+data ListType
+
+-- | Bulleted list.
+Bullet :: [(ItemType, Maybe String)] -> ListType
+
+-- | Enumerated list.
+Numeric :: [(ItemType, Maybe String)] -> ListType
+
+-- | Simple list with items denoted by <tt>:</tt>. Renders as "Title: Item"
+Simple :: [ListTuple] -> ListType
+
+-- | Descriptive list, renders as "<b>Title</b>: Item" (see
+--   <a>ListTuple</a>).
+Desc :: [ListTuple] -> ListType
+
+-- | Renders a list of "<tt><a>Title</a></tt> is the <tt>Item</tt>".
+Definitions :: [ListTuple] -> ListType
+
+-- | Denotes how something should behave in a list (<a>ListType</a>).
+data ItemType
+
+-- | Standard singular item.
+Flat :: Sentence -> ItemType
+
+-- | Nest a list (<a>ListType</a>) as an item.
+Nested :: Header -> ListType -> ItemType
+
+-- | MaxWidthPercent should be kept in the range 1-100. Values outside this
+--   range may have unexpected results. Used for specifying max figure
+--   width as <tt>pagewidth*MaxWidthPercent/100</tt>.
+type MaxWidthPercent = Float
+type Title = Sentence
+type Author = Sentence
+type Header = -- | Used when creating sublists. Sentence
+type Depth = Int
+type Width = Float
+type Height = Float
+type ListTuple = -- | Formats as Title: Item. For use in lists. (Title, ItemType, Maybe String)
+type Filepath = String
+type Lbl = -- | Label. Sentence
+
+-- | Contents may be labelled or unlabelled.
+data Contents
+UlC :: UnlabelledContent -> Contents
+LlC :: LabelledContent -> Contents
+
+-- | Types of definitions (general, instance, theory, or data).
+data DType
+General :: DType
+Instance :: DType
+Theory :: DType
+Data :: DType
+
+-- | Indicates whether a figure has a caption or not.
+data HasCaption
+NoCaption :: HasCaption
+WithCaption :: HasCaption
+
+-- | Types of layout objects we deal with explicitly.
+data RawContent
+
+-- | table has: header-row, data(rows), label/caption, and a bool that
+--   determines whether or not to show label.
+Table :: [Sentence] -> [[Sentence]] -> Title -> Bool -> RawContent
+
+-- | Paragraphs are just sentences.
+Paragraph :: Sentence -> RawContent
+
+-- | Block of Equations holds an expression.
+EqnBlock :: ModelExpr -> RawContent
+
+-- | Grants the ability to label a group of <a>RawContent</a>.
+DerivBlock :: Sentence -> [RawContent] -> RawContent
+
+-- | For enumerated lists.
+Enumeration :: ListType -> RawContent
+
+-- | Defines something with a type, identifier, and <a>Contents</a>.
+Defini :: DType -> [(Identifier, [Contents])] -> RawContent
+
+-- | For creating figures in a document includes whether the figure has a
+--   caption.
+Figure :: Lbl -> Filepath -> MaxWidthPercent -> HasCaption -> RawContent
+
+-- | Grants the ability to reference something.
+Bib :: BibRef -> RawContent
+
+-- | Contain a graph with coordinates (<a>Sentence</a>s), maybe a width and
+--   height, and a label (<a>Sentence</a>).
+Graph :: [(Sentence, Sentence)] -> Maybe Width -> Maybe Height -> Lbl -> RawContent
+
+-- | Block for codes TODO: Fill this one in.
+CodeBlock :: CodeExpr -> RawContent
+
+-- | An identifier is just a <a>String</a>.
+type Identifier = String
+
+-- | Contains a <a>Reference</a> and <a>RawContent</a>.
+data LabelledContent
+LblC :: Reference -> RawContent -> LabelledContent
+[_ref] :: LabelledContent -> Reference
+[_ctype] :: LabelledContent -> RawContent
+
+-- | Only contains <a>RawContent</a>.
+newtype UnlabelledContent
+UnlblC :: RawContent -> UnlabelledContent
+[_cntnts] :: UnlabelledContent -> RawContent
+ref :: Lens' LabelledContent Reference
+ctype :: Lens' LabelledContent RawContent
+cntnts :: Iso' UnlabelledContent RawContent
+
+-- | Members of this class must have <a>RawContent</a>.
+class HasContents c
+
+-- | Provides a <tt>Lens</tt> to the <a>RawContent</a>.
+accessContents :: HasContents c => Lens' c RawContent
+
+-- | Helper to prepend labels to <a>LabelledContent</a> when referencing.
+prependLabel :: RawContent -> IRefProg
+instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.LabelledContent
+instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.UnlabelledContent
+instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.Contents
+instance Drasil.Database.UID.HasUID Language.Drasil.Document.Core.LabelledContent
+instance GHC.Classes.Eq Language.Drasil.Document.Core.LabelledContent
+instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Document.Core.LabelledContent
+instance Language.Drasil.ShortName.HasShortName Language.Drasil.Document.Core.LabelledContent
+instance Language.Drasil.Label.Type.Referable Language.Drasil.Document.Core.LabelledContent
+instance GHC.Classes.Eq Language.Drasil.Document.Core.HasCaption
+
+
+-- | Document Description Language.
+module Language.Drasil.Document
+
+-- | Section Contents are split into subsections or contents, where
+--   contents are standard layout objects (see <a>Contents</a>).
+data SecCons
+Sub :: Section -> SecCons
+Con :: Contents -> SecCons
+data Partition
+Sections :: Partition
+Part :: Partition
+Chapter :: Partition
+
+-- | Sections have a title (<a>Sentence</a>), a list of contents
+--   (<a>SecCons</a>) and a shortname (<a>Reference</a>).
+data Section
+Section :: Title -> [SecCons] -> Reference -> Section
+[tle] :: Section -> Title
+[cons] :: Section -> [SecCons]
+[_lab] :: Section -> Reference
+lab :: Lens' Section Reference
+
+-- | A Document has a Title (<a>Sentence</a>), Author(s) (<a>Sentence</a>),
+--   and <a>Section</a>s which hold the contents of the document.
+data Document
+Document :: Title -> Author -> ShowTableOfContents -> [Section] -> Document
+Notebook :: Title -> Author -> [Section] -> Document
+
+-- | Determines whether or not the table of contents appears on the
+--   generated artifacts.
+data ShowTableOfContents
+ToC :: ShowTableOfContents
+NoToC :: ShowTableOfContents
+
+-- | Manually removes the first section of a document (table of contents
+--   section). temp fix for Notebook (see if we need this in notebook
+--   later)
+checkToC :: Document -> Document
+
+-- | Smart constructor for labelled content chunks.
+llcc :: Reference -> RawContent -> LabelledContent
+
+-- | Smart constructor for unlabelled content chunks (no <a>Reference</a>).
+ulcc :: RawContent -> UnlabelledContent
+
+-- | Smart constructor that wraps <a>UnlabelledContent</a> into
+--   <a>Contents</a>.
+mkParagraph :: Sentence -> Contents
+
+-- | Smart constructor that wraps <a>LabelledContent</a> into
+--   <a>Contents</a>.
+mkFig :: Reference -> RawContent -> Contents
+
+-- | Smart constructor similar to <a>llcc</a>, but takes in
+--   <a>RawContent</a> first.
+mkRawLC :: RawContent -> Reference -> LabelledContent
+
+-- | Smart constructor for creating <a>Section</a>s with a title
+--   (<a>Sentence</a>), introductory contents (ie. paragraphs, tables,
+--   etc.), a list of subsections, and a shortname (<a>Reference</a>).
+section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
+
+-- | <a>Figure</a> smart constructor with a <a>Lbl</a> and a
+--   <a>Filepath</a>. Assumes 100% of page width as max width. Defaults to
+--   <a>WithCaption</a>.
+fig :: Lbl -> Filepath -> RawContent
+
+-- | <a>Figure</a> smart constructor without a caption.
+figNoCap :: Lbl -> Filepath -> RawContent
+
+-- | <a>Figure</a> smart constructor that allows for customized max widths.
+--   Defaults to <a>WithCaption</a>.
+figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
+
+-- | <a>Figure</a> smart constructor with customized max widths and no
+--   caption.
+figNoCapWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
+docNs :: UID -> UID
+docUid :: String -> UID
+
+-- | Create a reference for a table. Takes in the name of a table (which
+--   will also be used for its shortname).
+makeTabRef :: String -> Reference
+
+-- | Create a reference for a figure. Takes in the name of a figure (which
+--   will also be used for its shortname).
+makeFigRef :: String -> Reference
+
+-- | Create a reference for a section. Takes in the name of a section and a
+--   shortname for the section.
+makeSecRef :: String -> Sentence -> Reference
+
+-- | Create a reference for a equation. Takes in the name of the equation
+--   (which will also be used for its shortname).
+makeEqnRef :: String -> Reference
+
+-- | Create a reference for a <a>URI</a>. Takes in a <a>UID</a> (as a
+--   <a>String</a>), a reference address, and a shortname.
+makeURI :: String -> String -> ShortName -> Reference
+
+-- | Variants of <a>makeTabRef</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeTabRef' :: UID -> Reference
+
+-- | Variants of <a>makeFigRef</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeFigRef' :: UID -> Reference
+
+-- | Variants of <a>makeSecRef</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeSecRef' :: UID -> Sentence -> Reference
+
+-- | Variants of <a>makeEqnRef</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeEqnRef' :: UID -> Reference
+
+-- | Variants of <a>makeURI</a> that takes a <a>UID</a> instead of a
+--   <a>String</a>.
+makeURI' :: UID -> String -> ShortName -> Reference
+instance Drasil.Database.UID.HasUID Language.Drasil.Document.Section
+instance GHC.Classes.Eq Language.Drasil.Document.Section
+instance Language.Drasil.ShortName.HasShortName Language.Drasil.Document.Section
+instance Language.Drasil.Label.Type.Referable Language.Drasil.Document.Section
+instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Document.Section
+
+
+-- | Folding-related functions and types.
+module Language.Drasil.Sentence.Fold
+
+-- | Type that helps determine enumeration method. Can use either numbers,
+--   uppercase letters, or lowercase letters.
+data EnumType
+Numb :: EnumType
+Upper :: EnumType
+Lower :: EnumType
+
+-- | Type to help wrap a sentence with parenthesis or to add a period at
+--   the end.
+data WrapType
+Parens :: WrapType
+Period :: WrapType
+
+-- | Type to help separate words with commas or semicolons.
+data SepType
+Comma :: SepType
+SemiCol :: SepType
+
+-- | Type to help fold differently between listed items, or if there are
+--   options (ex. using "and" or "or" at the end of a list of words).
+data FoldType
+List :: FoldType
+Options :: FoldType
+
+-- | Helper for formatting a list of constraints.
+foldConstraints :: Quantity c => c -> [ConstraintE] -> Sentence
+
+-- | Creates a list of elements with "enumerators" in "wrappers" using
+--   foldlList.
+foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
+
+-- | Creates a list of elements separated by a "separator", ending with
+--   "and" or "or".
+foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
+
+-- | Fold sentences then turns into content using <a>foldlSent</a>.
+foldlSP :: [Sentence] -> Contents
+
+-- | Same as <a>foldlSP</a> but uses <a>foldlSent_</a>.
+foldlSP_ :: [Sentence] -> Contents
+
+-- | Same as <a>foldlSP</a> but uses <a>foldlSentCol</a>.
+foldlSPCol :: [Sentence] -> Contents
+
+-- | Partial function application of <a>foldle</a> for sentences
+--   specifically. Folds with spaces and adds a period (".") at the end.
+foldlSent :: [Sentence] -> Sentence
+
+-- | <a>foldlSent</a> but does not add a period.
+foldlSent_ :: [Sentence] -> Sentence
+
+-- | <a>foldlSent</a> but ends with colon.
+foldlSentCol :: [Sentence] -> Sentence
+
+-- | Folds a list of elements separated by commas, including the last
+--   element.
+foldlsC :: [Sentence] -> Sentence
+
+-- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, and
+--   13").
+foldNums :: String -> [Int] -> Sentence
+
+-- | Parses a list of integers into a list of strings (ie. ["1", "4-7",
+--   "13"]).
+numList :: String -> [Int] -> [String]
 
 
 -- | Miscellaneous utility functions for use throughout Drasil.
@@ -5435,40 +5582,8 @@ unlbldExpr :: ModelExpr -> Contents
 unlbldCode :: CodeExpr -> Contents
 
 
--- | Contains the common idea type and respective constructors.
-module Language.Drasil.Chunk.CommonIdea
-
--- | The common idea (with <tt>NounPhrase</tt>) data type. It must have a
---   <a>UID</a>, <tt>NounPhrase</tt> for its term, an abbreviation
---   (<a>String</a>), and a domain ([<a>UID</a>]). It is similar to
---   <a>IdeaDict</a> and <a>IdeaDict</a> in the sense that these are for
---   things worth naming, but this type also carries an abbreviation and
---   related domains of knowledge.
---   
---   Ex. The term "Operating System" has the abbreviation <a>OS</a> and
---   comes from the domain of computer science.
-data CI
-
--- | The commonIdea smart constructor requires a chunk id (<a>String</a>),
---   a term (<a>NP</a>), an abbreviation (<a>String</a>), and a domain
---   ([<a>UID</a>]).
-commonIdea :: String -> NP -> String -> [UID] -> CI
-
--- | Similar to <a>commonIdea</a>, but takes a list of <a>IdeaDict</a>
---   (often a domain).
-commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
-
--- | Prepends the abbreviation from a <a>CommonIdea</a> to a <a>String</a>.
-prependAbrv :: CommonIdea c => c -> String -> String
-instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.CommonIdea.CI
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CommonIdea.CI
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CommonIdea.CI
-instance Language.Drasil.Classes.CommonIdea Language.Drasil.Chunk.CommonIdea.CI
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.CommonIdea.CI
-
-
 -- | Defines chunk types for use in code generation.
-module Language.Drasil.Chunk.CodeVar
+module Drasil.Code.CodeVar
 
 -- | A <a>CodeIdea</a> must include some code and its name.
 class CodeIdea c
@@ -5523,33 +5638,62 @@ CodeFC :: CodeChunk -> CodeFuncChunk
 [_ccf] :: CodeFuncChunk -> CodeChunk
 ccf :: Iso' CodeFuncChunk CodeChunk
 listToArray :: CodeVarChunk -> CodeVarChunk
-instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.CodeVar.CodeFuncChunk
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CodeVar.CodeFuncChunk
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CodeVar.CodeFuncChunk
-instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.CodeVar.CodeFuncChunk
-instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.CodeVar.CodeFuncChunk
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.CodeVar.CodeFuncChunk
-instance Language.Drasil.Classes.Callable Language.Drasil.Chunk.CodeVar.CodeFuncChunk
-instance GHC.Classes.Eq Language.Drasil.Chunk.CodeVar.CodeFuncChunk
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.CodeVar.CodeFuncChunk
-instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.CodeVar.CodeVarChunk
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CodeVar.CodeVarChunk
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CodeVar.CodeVarChunk
-instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.CodeVar.CodeVarChunk
-instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.CodeVar.CodeVarChunk
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.CodeVar.CodeVarChunk
-instance GHC.Classes.Eq Language.Drasil.Chunk.CodeVar.CodeVarChunk
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.CodeVar.CodeVarChunk
-instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.CodeVar.CodeChunk
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CodeVar.CodeChunk
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CodeVar.CodeChunk
-instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.CodeVar.CodeChunk
-instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.CodeVar.CodeChunk
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.CodeVar.CodeChunk
-instance GHC.Classes.Eq Language.Drasil.Chunk.CodeVar.CodeChunk
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.CodeVar.CodeChunk
+instance Drasil.Database.UID.HasUID Drasil.Code.CodeVar.CodeFuncChunk
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Drasil.Code.CodeVar.CodeFuncChunk
+instance Language.Drasil.Chunk.NamedIdea.Idea Drasil.Code.CodeVar.CodeFuncChunk
+instance Language.Drasil.Space.HasSpace Drasil.Code.CodeVar.CodeFuncChunk
+instance Language.Drasil.Symbol.HasSymbol Drasil.Code.CodeVar.CodeFuncChunk
+instance Language.Drasil.Classes.Quantity Drasil.Code.CodeVar.CodeFuncChunk
+instance Drasil.Code.Classes.Callable Drasil.Code.CodeVar.CodeFuncChunk
+instance GHC.Classes.Eq Drasil.Code.CodeVar.CodeFuncChunk
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Drasil.Code.CodeVar.CodeFuncChunk
+instance Drasil.Database.UID.HasUID Drasil.Code.CodeVar.CodeVarChunk
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Drasil.Code.CodeVar.CodeVarChunk
+instance Language.Drasil.Chunk.NamedIdea.Idea Drasil.Code.CodeVar.CodeVarChunk
+instance Language.Drasil.Space.HasSpace Drasil.Code.CodeVar.CodeVarChunk
+instance Language.Drasil.Symbol.HasSymbol Drasil.Code.CodeVar.CodeVarChunk
+instance Language.Drasil.Classes.Quantity Drasil.Code.CodeVar.CodeVarChunk
+instance GHC.Classes.Eq Drasil.Code.CodeVar.CodeVarChunk
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Drasil.Code.CodeVar.CodeVarChunk
+instance Drasil.Database.UID.HasUID Drasil.Code.CodeVar.CodeChunk
+instance Language.Drasil.Chunk.NamedIdea.NamedIdea Drasil.Code.CodeVar.CodeChunk
+instance Language.Drasil.Chunk.NamedIdea.Idea Drasil.Code.CodeVar.CodeChunk
+instance Language.Drasil.Space.HasSpace Drasil.Code.CodeVar.CodeChunk
+instance Language.Drasil.Symbol.HasSymbol Drasil.Code.CodeVar.CodeChunk
+instance Language.Drasil.Classes.Quantity Drasil.Code.CodeVar.CodeChunk
+instance GHC.Classes.Eq Drasil.Code.CodeVar.CodeChunk
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Drasil.Code.CodeVar.CodeChunk
 
-module Language.Drasil.CodeExpr.Class
+module Drasil.Code.CodeExpr.Precedence
+
+-- | precA - precedence for arithmetic-related Binary-Associative
+--   (Commutative) operators.
+precA :: AssocArithOper -> Int
+
+-- | precB - precedence for boolean-related Binary-Associative
+--   (Commutative) operators.
+precB :: AssocBoolOper -> Int
+
+-- | eprec - <a>Expression</a> precedence.
+eprec :: CodeExpr -> Int
+
+module Drasil.Code.CodeExpr.Extract
+
+-- | Get dependencies from an equation.
+eDep :: CodeExpr -> [UID]
+
+-- | Get dependencies from an equation, without functions.
+eDep' :: CodeExpr -> [UID]
+
+-- | Generic traversal of everything that could come from an interval to
+--   names (similar to <a>eNames</a>).
+eNamesRI :: RealInterval CodeExpr CodeExpr -> [UID]
+
+-- | Generic traversal of everything that could come from an interval to
+--   names without functions (similar to <a>eNames'</a>).
+eNamesRI' :: RealInterval CodeExpr CodeExpr -> [UID]
+
+module Drasil.Code.CodeExpr.Class
 class CodeExprC r
 
 -- | Constructs a CodeExpr for actor creation (constructor call)
@@ -5572,11 +5716,28 @@ field :: CodeExprC r => CodeVarChunk -> CodeVarChunk -> r
 -- | Similar to <a>apply</a>, but takes a relation to apply to
 --   <a>FCall</a>.
 applyWithNamedArgs :: (CodeExprC r, HasUID f, HasSymbol f, HasUID a, IsArgumentName a) => f -> [r] -> [(a, r)] -> r
-instance Language.Drasil.CodeExpr.Class.CodeExprC Language.Drasil.CodeExpr.Lang.CodeExpr
+instance Drasil.Code.CodeExpr.Class.CodeExprC Drasil.Code.CodeExpr.Lang.CodeExpr
+
+module Drasil.Code.CodeExpr.Convert
+
+-- | Render an algebraic expression into our code expression language.
+expr :: Expr -> CodeExpr
+
+-- | Convert <a>RealInterval</a> <tt>Expr</tt> <tt>Expr</tt>s into
+--   <a>RealInterval</a> <a>CodeExpr</a> <a>CodeExpr</a>s.
+realInterval :: RealInterval Expr Expr -> RealInterval CodeExpr CodeExpr
+
+-- | Convert constrained expressions (<a>ConstraintE</a>) into
+--   <tt>Constraint''CodeExpr</tt>s.
+constraint :: ConstraintE -> Constraint CodeExpr
+class CanGenCode e
+toCodeExpr :: CanGenCode e => e -> CodeExpr
+instance Drasil.Code.CodeExpr.Convert.CanGenCode Language.Drasil.Literal.Lang.Literal
+instance Drasil.Code.CodeExpr.Convert.CanGenCode Language.Drasil.Expr.Lang.Expr
 
 
 -- | Re-exporting modules
-module Language.Drasil.CodeExpr.Development
+module Drasil.Code.CodeExpr.Development
 
 -- | Expression language where all terms also denote a term in GOOL (i.e.
 --   translation is total and meaning preserving).
@@ -5854,7 +6015,7 @@ toCodeExpr :: CanGenCode e => e -> CodeExpr
 
 
 -- | Re-export CodeExpr constructors.
-module Language.Drasil.CodeExpr
+module Drasil.Code.CodeExpr
 
 -- | Expression language where all terms also denote a term in GOOL (i.e.
 --   translation is total and meaning preserving).
@@ -6044,165 +6205,6 @@ perc :: LiteralC r => Integer -> Integer -> r
 
 -- | Render an algebraic expression into our code expression language.
 expr :: Expr -> CodeExpr
-
-
--- | Add constraints and a reasonable value to chunks that are quantities.
-module Language.Drasil.Chunk.Constrained
-
--- | ConstrainedChunks are symbolic quantities (<a>QuantityDict</a>) with
---   <tt>Constraint</tt>s and maybe a typical value (<a>Maybe</a>
---   <a>Expr</a>).
---   
---   Ex. Measuring the length of a pendulum would have some reasonable
---   value (between 1 cm and 2 m) and the constraint that the length cannot
---   be a negative value.
-data ConstrainedChunk
-ConstrainedChunk :: QuantityDict -> [ConstraintE] -> Maybe Expr -> ConstrainedChunk
-[_qd] :: ConstrainedChunk -> QuantityDict
-[_constr] :: ConstrainedChunk -> [ConstraintE]
-[_reasV] :: ConstrainedChunk -> Maybe Expr
-
--- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
---   (<a>NP</a>), <a>Symbol</a>, unit, <a>Space</a>, <tt>Constraint</tt>s,
---   and an <a>Expr</a>.
-cuc :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> ConstrainedChunk
-
--- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
---   (<a>NP</a>), <a>Symbol</a>, <a>Space</a>, <tt>Constraint</tt>s, and a
---   <a>Maybe</a> <a>Expr</a> (Similar to <a>cuc</a> but no units).
-cvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Maybe Expr -> ConstrainedChunk
-
--- | Creates a new ConstrainedChunk from either a <a>ConstrainedChunk</a>,
---   <a>ConstrConcept</a>, <tt>UncertainChunk</tt>, or an <tt>UncertQ</tt>.
-cnstrw :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrainedChunk
-
--- | ConstrConcepts are conceptual symbolic quantities
---   (<a>DefinedQuantityDict</a>) with <tt>Constraint</tt>s and maybe a
---   reasonable value (no units!). Similar to <a>ConstrainedChunk</a> but
---   includes a definition and domain.
---   
---   Ex. Measuring the length of a pendulum arm could be a concept that has
---   some reasonable value (between 1 cm and 2 m) and the constraint that
---   the length cannot be a negative value.
-data ConstrConcept
-ConstrConcept :: DefinedQuantityDict -> [ConstraintE] -> Maybe Expr -> ConstrConcept
-[_defq] :: ConstrConcept -> DefinedQuantityDict
-[_constr'] :: ConstrConcept -> [ConstraintE]
-[_reasV'] :: ConstrConcept -> Maybe Expr
-
--- | Similar to <a>cnstrw</a>, but types must also have a <a>Concept</a>.
-cnstrw' :: (Quantity c, Concept c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrConcept
-
--- | Creates a <a>ConstrConcept</a> with a quantitative concept, a list of
---   <tt>Constraint</tt>s and an <a>Expr</a>.
-constrained' :: (Concept c, MayHaveUnit c, Quantity c) => c -> [ConstraintE] -> Expr -> ConstrConcept
-
--- | Similar to <a>constrained'</a>, but defaults <a>Maybe</a> <a>Expr</a>
---   to <a>Nothing</a>.
-constrainedNRV' :: (Concept c, MayHaveUnit c, Quantity c) => c -> [ConstraintE] -> ConstrConcept
-
--- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
---   (<a>NP</a>), description (<a>String</a>), <a>Symbol</a>, unit,
---   <a>Space</a>, <tt>Constraint</tt>s, and an <a>Expr</a>.
-cuc' :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> ConstrConcept
-
--- | Similar to <a>cuc'</a>, but <a>Symbol</a> is dependent on
---   <a>Stage</a>.
-cuc'' :: IsUnit u => String -> NP -> String -> (Stage -> Symbol) -> u -> Space -> [ConstraintE] -> Expr -> ConstrConcept
-instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.Constrained.ConstrConcept
-instance GHC.Classes.Eq Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance GHC.Classes.Eq Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Constrained.ConstrainedChunk
-
-
--- | For adding an uncertainty value to quantities with constraints.
-module Language.Drasil.Chunk.UncertainQuantity
-
--- | UncertQs are conceptual symbolic quantities with constraints and an
---   <a>Uncertainty</a>. Contains a <a>ConstrConcept</a> and an
---   <a>Uncertainty</a>.
---   
---   Ex. Measuring the length of a pendulum arm may be recorded with an
---   uncertainty value.
-data UncertQ
-
--- | UncertainChunk is a symbolic quantity with constraints, a typical
---   value, and an uncertainty. Contains a <a>ConstrainedChunk</a> and an
---   <a>Uncertainty</a>.
---   
---   Ex. Measuring the length of a pendulum arm may be recorded with an
---   uncertainty value.
-data UncertainChunk
-UCh :: ConstrainedChunk -> Uncertainty -> UncertainChunk
-[_conc] :: UncertainChunk -> ConstrainedChunk
-[_unc'] :: UncertainChunk -> Uncertainty
-
--- | Smart constructor that requires a <a>Quantity</a>, a percentage, and a
---   typical value with an <a>Uncertainty</a>.
-uq :: (Quantity c, Constrained c, Concept c, HasReasVal c, MayHaveUnit c) => c -> Uncertainty -> UncertQ
-
--- | Uncertainty quantity (<a>uq</a>) but with a constraint.
-uqc :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
-
--- | Uncertainty quantity constraint (<a>uqc</a>) without a description.
-uqcND :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
-
--- | Smart constructor that can project to an <a>UncertainChunk</a> (also
---   given an <a>Uncertainty</a>).
-uncrtnChunk :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> Uncertainty -> UncertainChunk
-
--- | Creates an uncertain variable chunk. Takes <tt>UID</tt>, term
---   (<a>NP</a>), <a>Symbol</a>, <a>Space</a>, <tt>Constrains</tt>,
---   <a>Expr</a>, and <a>Uncertainty</a>.
-uvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertainChunk
-
--- | Projection function into an <a>UncertainChunk</a> from <a>UncertQ</a>
---   or an <a>UncertainChunk</a>.
-uncrtnw :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> UncertainChunk
-instance GHC.Classes.Eq Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Uncertainty.HasUncertainty Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance GHC.Classes.Eq Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Uncertainty.HasUncertainty Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
 
 
 -- | Contains chunks related to adding an expression to a quantitative
@@ -6827,10 +6829,10 @@ class HasReference c
 getReferences :: HasReference c => Lens' c [Reference]
 
 -- | Some chunks can be called like functions.
-class (HasSymbol c) => Callable c
+class HasSymbol c => Callable c
 
 -- | Members must have a named argument.
-class (HasSymbol c) => IsArgumentName c
+class HasSymbol c => IsArgumentName c
 
 -- | A <tt>UID</tt> is a 'unique identifier' for things that we will put
 --   into our database of information. We use a newtype wrapper to make

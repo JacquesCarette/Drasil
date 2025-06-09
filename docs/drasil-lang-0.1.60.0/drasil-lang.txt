@@ -1503,7 +1503,7 @@ combineNINI :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 
 -- | Re-exporting modules
-module Language.Drasil.CodeExpr.Development
+module Drasil.Code.CodeExpr.Development
 
 -- | Expression language where all terms also denote a term in GOOL (i.e.
 --   translation is total and meaning preserving).
@@ -1781,7 +1781,7 @@ toCodeExpr :: CanGenCode e => e -> CodeExpr
 
 
 -- | Re-export CodeExpr constructors.
-module Language.Drasil.CodeExpr
+module Drasil.Code.CodeExpr
 
 -- | Expression language where all terms also denote a term in GOOL (i.e.
 --   translation is total and meaning preserving).
@@ -2430,10 +2430,10 @@ class HasReference c
 getReferences :: HasReference c => Lens' c [Reference]
 
 -- | Some chunks can be called like functions.
-class (HasSymbol c) => Callable c
+class HasSymbol c => Callable c
 
 -- | Members must have a named argument.
-class (HasSymbol c) => IsArgumentName c
+class HasSymbol c => IsArgumentName c
 
 -- | A <tt>UID</tt> is a 'unique identifier' for things that we will put
 --   into our database of information. We use a newtype wrapper to make

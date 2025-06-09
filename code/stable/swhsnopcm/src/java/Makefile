@@ -7,13 +7,13 @@
 
 build: SWHSNoPCM/Control.class
 
-SWHSNoPCM/Control.class: SWHSNoPCM/Control.java SWHSNoPCM/InputParameters.java SWHSNoPCM/Constants.java SWHSNoPCM/Calculations.java SWHSNoPCM/OutputFormat.java SWHSNoPCM/ODE.java SWHSNoPCM/ODEStepHandler.java
+SWHSNoPCM/Control.class: SWHSNoPCM/Control.java SWHSNoPCM/InputParameters.java SWHSNoPCM/Calculations.java SWHSNoPCM/OutputFormat.java SWHSNoPCM/ODE.java SWHSNoPCM/ODEStepHandler.java
 	javac -cp "lib/commons-math3-3.6.1.jar:." SWHSNoPCM/Control.java
 
 run: build
 	java -cp "lib/commons-math3-3.6.1.jar:." SWHSNoPCM.Control $(RUNARGS)
 
-doc: doxConfig SWHSNoPCM/Control.java SWHSNoPCM/InputParameters.java SWHSNoPCM/Constants.java SWHSNoPCM/Calculations.java SWHSNoPCM/OutputFormat.java SWHSNoPCM/ODE.java SWHSNoPCM/ODEStepHandler.java
+doc: doxConfig SWHSNoPCM/Control.java SWHSNoPCM/InputParameters.java SWHSNoPCM/Calculations.java SWHSNoPCM/OutputFormat.java SWHSNoPCM/ODE.java SWHSNoPCM/ODEStepHandler.java
 	doxygen doxConfig
 
 .PHONY: build run doc

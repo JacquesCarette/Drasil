@@ -2,6 +2,8 @@
 module Data.Drasil.ExternalLibraries.ODELibraries (
   -- * SciPy Library (Python)
   scipyODEPckg, scipyODESymbols,
+  -- DifferentialEquations.jl Library (Julia)
+  jlODEPckg, jlODESymbols,
   -- * Oslo Library (C#)
   osloPckg, osloSymbols, arrayVecDepVar,
   -- * Apache Commons (Java)
@@ -23,7 +25,7 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, functionArg,
   customObjArg, recordArg, lockedParam, unnamedParam, customClass,
   implementation, constructorInfo, methodInfo, methodInfoNoReturn,
-  appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj,
+  appendCurrSol, populateSolList, populateSolList', assignArrayIndex, assignSolFromObj,
   initSolListFromArray, initSolListWithVal, solveAndPopulateWhile,
   returnExprList, fixedReturn',
   ExternalLibraryCall, externalLibCall, choiceStepsFill, choiceStepFill,
@@ -163,6 +165,88 @@ odeintFunc = quantfunc $ implVar "odeint_scipy" (nounPhrase
   "method that solves a system of ODE using lsoda from the FORTRAN library odepack."
   "method that solves a system of ODE using lsoda from the FORTRAN library odepack.")
   (Array Real) (label "odeint")
+
+-- DifferentialEquations.jl Library (Julia)
+jlODEPckg :: ODELibPckg
+jlODEPckg = mkODELibNoPath "DifferentialEquations.jl" "7.13.0" jlODE jlODECall [Julia]
+
+jlODESymbols :: [QuantityDict]
+jlODESymbols = map qw [jlMthdArg, jlRelTolArg, jlAbsTolArg, jlSaveAtArg] ++
+  map qw [jlR, jlP, t_span, jlSol, jlMthd, jlSp] ++
+  map qw [jlODEProblem, jlF, jlODESolve, jlODEDP5]
+
+jlODE :: ExternalLibrary
+jlODE = externalLib [
+  mandatorySteps $ [
+    callStep $ libFunctionWithResult jlODEImport
+      jlODEProblem [
+        functionArg jlF (map unnamedParam [Array Real, Real, Real])
+        returnExprList, inlineArg (Array Real), preDefinedArg t_span] jlR,
+    callStep $ libFunctionWithResult jlODEImport
+      jlODEDP5 [] jlMthd,
+    callStep $ libFunctionWithResult jlODEImport
+      jlODESolve [lockedArg (sy jlR), lockedNamedArg jlMthdArg (sy jlMthd),
+      inlineNamedArg jlRelTolArg Real, inlineNamedArg jlAbsTolArg Real,
+      inlineNamedArg jlSaveAtArg Real] jlSol] ++
+    populateSolList' jlSol jlSp] -- TODO: this should probably be populateSolList, but we don't have structs
+
+jlODECall :: ODEInfo -> ExternalLibraryCall
+jlODECall info = [
+  mandatoryStepsFill $ [
+    callStepFill $ libCallFill (functionArgFill
+      (map unnamedParamFill [depVar info, jlP, indepVar info])
+      (returnExprListFill $ odeSyst info) : map (basicArgFill . matrix)
+        [[initVal info], [[tInit info, tFinal info]]]),
+    callStepFill $ libCallFill [],
+    callStepFill $ libCallFill $ map basicArgFill
+      [relTol $ odeOpts info, absTol $ odeOpts info, stepSize $ odeOpts info]] ++
+    populateSolListFill (depVar info)]
+
+jlODEImport :: String
+jlODEImport = "DifferentialEquations"
+
+jlMthdArg, jlRelTolArg, jlAbsTolArg, jlSaveAtArg :: NamedArgument
+jlMthdArg = narg $ implVar "mthd_arg_jlODE" (nounPhrase
+  "chosen method for solving ODE" "chosen methods for solving ODE")
+  String (label "alg")
+jlRelTolArg = narg $ implVar "jl_arg_reltol" (nounPhrase
+  "Chosen relative tolerance" "Chosen relative tolerances")
+  Real (label "reltol")
+jlAbsTolArg = narg $ implVar "jl_arg_abstol" (nounPhrase
+  "Chosen absolute tolerance" "Chosen absolute tolerances")
+  Real (label "abstol")
+jlSaveAtArg = narg $ implVar "jl_arg_saveat" (nounPhrase
+  "Chosen time step" "Chosen time step")
+  Real (label "saveat")
+
+jlR, jlP, t_span, jlSol, jlMthd, jlSp :: CodeVarChunk
+jlR = quantvar $ implVar "r" (nounPhrase "ODE struct" "ODE structs")
+  odeT2 (label "r")
+jlP = quantvar $ implVar "params" (nounPhrase "param?" "params?")
+  Void (label "p") -- TODO: this should be a struct of some sort
+t_span = quantvar $ implVar "t_span" (nounPhrase "Timespan" "Timespans")
+  (Array Real) (label "t_span")
+jlSol = quantvar $ implVar "jl_solve" (nounPhrase "Solution" "Solutions")
+  Void (label "sol") -- TODO: this should be a struct of some sort
+jlMthd = quantvar $ implVar "jl_method" (nounPhrase
+  "chosen method for solving ODE" "chosen methods for solving ODE")
+  String (label "algorithm")
+jlSp = quantvar $ implVar "sp_julia" (nounPhrase "ODE solution point"
+  "ODE solution points") Real (label "sp")
+
+jlF, jlODEProblem, jlODESolve, jlODEDP5 :: CodeFuncChunk
+jlF = quantfunc $ implVar "f_jlODE" (nounPhrase "function representing ODE system"
+  "functions representing ODE system") (Array Real) (label "f")
+jlODEProblem = quantfunc $ implVar "jl_ode_problem" (nounPhrase
+  "function for defining an ODE for jlODE"
+  "functions for defining an ODE for jlODE") odeT2 (label "ODEProblem")
+jlODESolve = quantfunc $ implVar "jl_ode_solve" (nounPhrase
+  "function for solving an ODE for jlODE"
+  "functions for solving an ODE for jlODE") odeT2 (label "solve")
+jlODEDP5 = quantfunc $ implVar "jl_ode_dp5" (nounPhrase "DP5" "DP5s") odeT2 (label "DP5")
+
+odeT2 :: Space
+odeT2 = Void -- TODO: this should be a struct/function? of some sort
 
 -- Oslo Library (C#)
 

@@ -25,7 +25,7 @@ import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
   temp, thermalAnalysis, thermalConduction, thermocon)
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols, osloSymbols,
-  arrayVecDepVar, apacheODESymbols, odeintSymbols)
+  arrayVecDepVar, apacheODESymbols, odeintSymbols, jlODESymbols)
 
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
@@ -94,8 +94,9 @@ symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --FOUND LOC OF ERROR: Instance Models
 symbolsAll = map qw symbols ++ map qw specParamValList ++
   [qw coilSAMax, qw tauW] ++ map qw [absTol, relTol] ++
-  scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
-  ++ map qw [listToArray $ quantvar tempW, arrayVecDepVar noPCMODEInfo]
+  scipyODESymbols ++ jlODESymbols ++ osloSymbols ++ apacheODESymbols ++
+  odeintSymbols ++
+  map qw [listToArray $ quantvar tempW, arrayVecDepVar noPCMODEInfo]
 
 concepts :: [UnitalChunk]
 concepts = map ucw [density, tau, inSA, outSA,

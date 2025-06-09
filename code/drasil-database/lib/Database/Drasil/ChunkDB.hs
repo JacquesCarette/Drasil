@@ -230,7 +230,7 @@ cdb s t c u d ins gd tm ci lc r cits =
   CDB {
     -- CHUNKS
     symbolTable = symbolMap s,
-    termTable = termMap $ t ++ termsHACK,
+    termTable = termMap t,
     conceptChunkTable = conceptMap c,
     _unitTable = unitMap u,
     _dataDefnTable = idMap "DataDefnMap" d,
@@ -245,8 +245,6 @@ cdb s t c u d ins gd tm ci lc r cits =
     _refbyTable = Map.empty,
     _refTable = idMap "RefMap" r
   }
-  where
-    termsHACK = map nw d
 
 -- | Gets the units of a 'Quantity' as 'UnitDefn's.
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]

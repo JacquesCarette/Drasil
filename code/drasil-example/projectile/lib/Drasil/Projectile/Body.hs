@@ -25,7 +25,7 @@ import Data.Drasil.Quantities.Math (pi_, piConst)
 import Data.Drasil.Quantities.Physics (acceleration, constAccel,
   gravitationalAccelConst, iPos, iSpeed, iVel, ixPos, iyPos, ixVel, iyVel,
   position, scalarPos, time, velocity, xAccel, xConstAccel, xPos,
-  xVel, yAccel, yConstAccel, yPos, yVel, physicscon)
+  xVel, yAccel, yConstAccel, yPos, yVel, physicscon, speed, scalarAccel, constAccelV)
 
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
 import Data.Drasil.SI_Units (metre, radian, second)
@@ -190,8 +190,8 @@ tableOfAbbrvsIdeaDicts =
   map nw symbols
 
 symbMap :: ChunkDB
-symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols) ideaDicts
-  (cw pi_ : map cw constrained ++ srsDomains) (map unitWrapper [metre, radian, second]) 
+symbMap = cdb symbols ideaDicts
+  (map cw constrained ++ srsDomains) (map unitWrapper [metre, radian, second]) 
   dataDefs iMods genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.
@@ -297,10 +297,11 @@ physSystParts = map (!.)
 -- Various gathered data that should be automated --
 ----------------------------------------------------
 symbols :: [QuantityDict]
-symbols = qw gravitationalAccelConst : unitalQuants ++ map qw constants ++
+symbols = unitalQuants ++ map qw constants ++
   map qw [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
   iyPos, ixVel, iyVel, position, scalarPos, projPos, projSpeed, time, velocity, xAccel,
-  xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel]
+  xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel,
+  constAccelV]
 
 constants :: [ConstQDef]
 constants = [gravitationalAccelConst, piConst, tol]

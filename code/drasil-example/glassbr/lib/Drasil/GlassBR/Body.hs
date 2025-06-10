@@ -151,9 +151,8 @@ ideaDicts =
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =
   -- CIs
-  map nw acronyms ++
+  map nw acronyms
   -- QuantityDicts
-  map nw thisSymbols
 
 symbMap :: ChunkDB
 symbMap = cdb thisSymbols ideaDicts

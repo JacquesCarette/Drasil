@@ -1,20 +1,23 @@
 module Drasil.GlassBR.Symbols where
 
-import Language.Drasil (QuantityDict, qw)
+import Language.Drasil (QuantityDict, qw, cnstrw)
 import Language.Drasil.Code (Mod(Mod), asVC)
 
 import Drasil.GlassBR.ModuleDefs (allMods, implVars)
-import Drasil.GlassBR.Unitals (inputs, outputs, specParamVals, symbols,
-  symbolsWithDefns, tmSymbols, interps, derivedInputDataConstraints, unitless)
+import Drasil.GlassBR.Unitals (specParamVals, symbols, symbolsWithDefns,
+  tmSymbols, interps, derivedInputDataConstraints, unitless, probBr,
+  stressDistFac, nomThick, sdVector, inputsWUnitsUncrtn, inputsWUncrtn, glassTypeCon)
 
 import Data.List ((\\))
 
 symbolsForSymbolTable :: [QuantityDict]
 symbolsForSymbolTable = symbolsForTermTable ++ map qw symbols ++
-  unitless ++ map qw derivedInputDataConstraints
+  unitless ++ map qw [probBr, stressDistFac, nomThick, cnstrw glassTypeCon] ++
+  map qw derivedInputDataConstraints
 
 symbolsForTermTable :: [QuantityDict]
-symbolsForTermTable = inputs ++ outputs ++ tmSymbols ++ map qw specParamVals ++ 
+symbolsForTermTable = map qw inputsWUnitsUncrtn ++ map qw inputsWUncrtn ++
+  map qw sdVector ++ tmSymbols ++ map qw specParamVals ++ 
   map qw symbolsWithDefns ++ interps
 
   -- include all module functions as symbols

@@ -5,19 +5,19 @@ import Utils.Drasil (indent, stringList)
 
 import Drasil.Shared.CodeType (CodeType(..))
 
-import Drasil.Shared.InterfaceCommon (listSize, Label, Library, Body, MSBody, VSFunction,
-  VSType, Variable, SVariable, Value, SValue, MSStatement, MSParameter, SMethod,
+import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, VSFunction,
+  VSType, SVariable, Value, SValue, MSStatement, MSParameter, SMethod,
   MixedCall, bodyStatements, oneLiner, TypeSym(infile, outfile, listInnerType),
   TypeElim(getType, getTypeString), VariableElim(variableName, variableType),
   ValueSym(valueType), Comparison(..), (&=), ControlStatement(returnStmt),
-  VisibilitySym(..), MethodSym(function), funcApp, ScopeSym(Scope))
-
+  VisibilitySym(..), MethodSym(function), funcApp, ScopeSym(Scope), listSize)
 import qualified Drasil.Shared.InterfaceCommon as IC (argsList,
   TypeSym(int, bool, double, string, listType, arrayType, void), VariableSym(var),
   Literal(litTrue, litFalse, litList, litSet, litInt, litString),
-  VariableValue(valueOf), StatementSym(valStmt, emptyStmt), DeclStatement(varDec,
+  VariableValue(valueOf), StatementSym(valStmt), DeclStatement(varDec,
   varDecDef, constDecDef), List(intToIndex, indexToInt), ParameterSym(param,
-  pointerParam), MethodSym(mainFunction), AssignStatement(assign), ScopeSym(..))
+  pointerParam), MethodSym(mainFunction), ScopeSym(..))
+
 
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
   OOTypeSym(obj), PermanenceSym(..), Initializers, objMethodCallNoParams, objMethodCall)
@@ -26,7 +26,7 @@ import qualified Drasil.GOOL.InterfaceGOOL as IG (ClassSym(buildClass),
 
 import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), RenderType(..), RenderVariable(varFromData),
-  InternalVarElim(variableBind), RenderFunction(funcFromData),
+  InternalVarElim(variableBind),
   MethodTypeSym(mType), RenderMethod(commentedFunc, mthdFromData),
   BlockCommentSym(..), ScopeElim(scopeData))
 
@@ -36,8 +36,7 @@ import qualified Drasil.Shared.RendererClassesCommon as RC (ImportElim(..),
   BodyElim(..), InternalTypeElim(..), InternalVarElim(variable), ValueElim(..),
   StatementElim(statement), VisibilityElim(..), MethodElim(..), FunctionElim(..))
 
-import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
-  on2StateValues, onStateList)
+import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, onStateList)
 
 import Drasil.GOOL.RendererClassesOO 
 
@@ -69,7 +68,6 @@ import Drasil.Shared.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
 
 import Prelude hiding (print,pi,(<>))
 import Data.List (sort, intercalate)
-import Control.Monad (join)
 import Control.Monad.State (get, modify)
 import Control.Lens ((^.))
 import qualified Control.Lens as L (set)

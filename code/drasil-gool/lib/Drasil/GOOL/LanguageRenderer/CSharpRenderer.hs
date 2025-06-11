@@ -72,7 +72,16 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
   setMethod, function, buildClass, implementingClass, commentedClass,
   modFromData, fileDoc, fileFromData, defaultOptSpace, local)
-import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP 
+import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
+  arrayDec, arrayDecDef, arrayType, bindingError, buildModule', classVar, constDecDef, 
+  constVar, constructor, contains, destructorError, discardFileLine, docInOutFunc, 
+  docMain, doubleRender, doxClass, doxFunc, doxMod, extraClass, forEach, global, 
+  implements, indexOf, indexToInt, inherit, int, intClass, intToIndex, listAddFunc, 
+  listDecDef, mainFunction, notNull, objVarSelf, openFileA, openFileR, openFileW, 
+  pi, printSt, setMethodCall, stateVar, stateVarDef, string)
+
+
+
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -102,7 +111,9 @@ import Data.Composition ((.:))
 import Data.List (intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
   equals, vcat, lbrace, rbrace, braces, colon, space, quotes, semi)
-import qualified Drasil.Shared.LanguageRenderer.Common as CS
+import qualified Drasil.Shared.LanguageRenderer.Common as CS (
+  extFuncAppMixedArgs, extVar, listAccessFunc, listSetFunc )
+
 
 
 csExt :: String
@@ -283,8 +294,10 @@ instance VariableSym CSharpCode where
 instance OOVariableSym CSharpCode where
   staticVar' _ = G.staticVar
   self = C.self
-  classVar = CP.classVar R.classVar
-  extClassVar = classVar
+  -- classVar = CP.classVar R.classVar
+  -- extClassVar = classVar
+  extClassVar = CP.classVar R.classVar
+
   objVar = G.objVar
   objVarSelf = CP.objVarSelf
 

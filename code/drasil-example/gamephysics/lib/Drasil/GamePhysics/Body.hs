@@ -24,7 +24,8 @@ import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
 import Data.Drasil.Software.Products (openSource, prodtcon, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
-import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon, rigidBody, collision, damping)
+import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon,
+  physicCon', rigidBody, collision, damping)
 import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
   mathcon, mathcon', rightHand, line, point)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
@@ -141,7 +142,8 @@ ideaDicts =
   -- Actual IdeaDicts
   doccon ++ educon ++ prodtcon ++
   -- CIs
-  map nw [progName, twoD, threeD, centreMass] ++ map nw doccon' ++ map nw CM.mathcon' ++
+  map nw [progName, centreMass] ++ map nw doccon' ++ map nw CM.mathcon' ++
+  map nw CP.physicCon' ++
   -- ConceptChunks
   nw algorithm : map nw softwarecon ++ map nw CP.physicCon ++ map nw CM.mathcon ++
   -- UnitDefns

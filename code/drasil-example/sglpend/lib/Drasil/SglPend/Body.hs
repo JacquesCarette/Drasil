@@ -125,15 +125,35 @@ si = SI {
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pendulum]
 
+ideaDicts :: [IdeaDict]
+ideaDicts = 
+  -- Actual IdeaDicts
+  inValue : doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
+  -- CIs
+  nw progName : map nw doccon' ++ map nw mathcon' ++ map nw physicCon' ++
+  map nw acronyms ++
+  -- ConceptChunks
+  map nw [mass, len, errMsg, program, algorithm] ++ map nw physicCon ++
+  map nw physicalcon ++ map nw mathcon ++
+  -- QuantityDicts
+  map nw symbols ++
+  -- UnitDefns
+  map nw [newton, degree, radian, hertz] ++
+  map nw fundamentals ++
+  -- DefinedQuantityDict
+  nw unitVect : nw unitVectj :
+  -- UnitalChunks
+  map nw physicscon
+
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts =
+  -- CIs
+  nw progName : map nw acronyms ++
+  -- QuantityDicts
+  map nw symbols
+
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ map qw symbols)
-  (nw newtonSLR : nw progName : nw mass : nw len : nw kilogram : nw inValue
-   : nw newton : nw degree : nw radian : nw unitVect : nw unitVectj
-   : [nw errMsg, nw program] ++ map nw symbols ++ map nw doccon
-   ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon'
-   ++ map nw physicCon' ++ map nw physicscon ++ concepts ++ map nw physicalcon
-   ++ map nw acronyms ++ map nw symbols ++ map nw fundamentals ++ map nw [metre, hertz] 
-   ++ [nw algorithm] ++ map nw compcon ++ map nw educon ++ map nw prodtcon)
+symbMap = cdb (map (^. output) iMods ++ map qw symbols) ideaDicts
    (map cw iMods ++ srsDomains) (map unitWrapper 
    [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs iMods
    genDefns tMods concIns [] allRefs citations
@@ -143,7 +163,7 @@ allRefs :: [Reference]
 allRefs = [externalLinkRef]
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw acronyms ++ map nw symbols) ([] :: [ConceptChunk])
+usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 concIns :: [ConceptInstance]

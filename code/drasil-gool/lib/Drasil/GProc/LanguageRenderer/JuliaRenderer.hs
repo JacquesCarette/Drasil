@@ -59,11 +59,21 @@ import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, call, funcAppMixedArgs, lambda,
   listAccess, listSet, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
   emptyStmt, print, comment, valStmt, returnStmt, param, docFunc, throw, arg,
-  argsList, ifCond, smartAdd, local, var)
+  argsList, ifCond, smartAdd, local, var, smartSub)
+
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
-import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP
+
+import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
+  listDec, listDecDef, 
+  notNull, functionDoc, listAdd,
+  listAppend, intToIndex', indexToInt', inOutFunc, docInOutFunc', forLoopError,
+  openFileR', openFileW', openFileA', multiReturn, multiAssign,
+  inOutCall, mainBody, argExists, litSet)
+
 import qualified Drasil.Shared.LanguageRenderer.CLike as C (litTrue, litFalse,
   notOp, andOp, orOp, inlineIf, while)
+
+
 import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
   fileFromData, buildModule, docMod, modFromData, listInnerType, arrayElem,
   funcDecDef, function)
@@ -424,7 +434,7 @@ instance ThunkAssign JuliaCode where
     iName <- genLoopIndex
     let
       i = var iName int
-      dim = fmap pure $ t >>= commonThunkDim (fmap unJLC . (\l -> listSize l #- litInt 1) . fmap pure) . unJLC
+      dim = fmap pure $ t >>= commonThunkDim (fmap unJLC . listSize . fmap pure) . unJLC
       loopInit = zoom lensMStoVS (fmap unJLC t) >>= commonThunkElim
         (const emptyStmt) (const $ assign v $ litZero $ fmap variableType v)
       loopBody = zoom lensMStoVS (fmap unJLC t) >>= commonThunkElim
@@ -810,7 +820,7 @@ jlRange initv finalv stepv = do
   t <- listType int
   iv <- initv
   sv <- stepv
-  fv <- finalv
+  fv <- finalv `G.smartSub` litInt 1
   mkVal t (RC.value iv <> colon <> RC.value sv <> colon <> RC.value fv)
 
 jlSplit :: String

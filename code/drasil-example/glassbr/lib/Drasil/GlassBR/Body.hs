@@ -133,18 +133,37 @@ background = foldlSent_ [phrase explosion, S "in downtown areas are dangerous fr
   phrase blast +:+ S "itself" `S.and_` S "also potentially from the secondary" 
   +:+ S "effect of falling glass"]
 
+ideaDicts :: [IdeaDict]
+ideaDicts =
+  -- IdeaDicts
+  [sciCompS, lateralLoad, materialProprty] ++ con' ++ doccon ++ educon ++ compcon ++
+  -- CIs
+  nw progName : map nw doccon' ++ map nw mathcon' ++ map nw con ++
+  -- ConceptChunks
+  map nw [distance, algorithm] ++ map nw terms ++ map nw mathcon ++ 
+  map nw softwarecon ++ map nw physicalcon ++
+  -- QuantityDicts
+  map nw thisTerms ++ map nw unitarySymbols ++
+  map nw [riskFun, isSafeProb, isSafeLoad, sdfTol, dimlessLoad, tolLoad, lDurFac] ++
+  -- UnitDefns
+  map nw fundamentals ++ map nw derived
+
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts =
+  -- CIs
+  map nw acronyms ++
+  -- QuantityDicts
+  map nw thisSymbols
+
 symbMap :: ChunkDB
-symbMap = cdb thisSymbols
-  (nw progName : map nw thisTerms ++ map nw unitarySymbols ++ map nw con'
-  ++ map nw [riskFun, isSafeProb, isSafeLoad, sdfTol, dimlessLoad, tolLoad,
-  lDurFac] ++ map nw terms ++ map nw doccon ++ map nw doccon' ++ map nw educon
-  ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon'
-  ++ map nw softwarecon ++ [nw lateralLoad, nw materialProprty]
-  ++ [nw distance, nw algorithm] ++ map nw fundamentals ++ map nw derived
-  ++ map nw physicalcon ++ map nw con) (map cw symb ++ terms ++ Doc.srsDomains)
-  (map unitWrapper [metre, second, kilogram]
+symbMap = cdb thisSymbols ideaDicts
+  (map cw symb ++ terms ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) GB.dataDefs iMods [] tMods concIns
   labCon allRefs citations
+
+usedDB :: ChunkDB
+usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -155,10 +174,6 @@ concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonf
 
 labCon :: [LabelledContent]
 labCon = funcReqsTables ++ [demandVsSDFig, dimlessloadVsARFig]
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

@@ -3,11 +3,16 @@
 Last updated: Aug. 04, 2023
 --------------------------------------------------
 
-**DrasilMeta**
-  - Contains functions to compile the DrasilMetadata at compile-time.
+DrasilMeta.hs
+  - Contains the schema of `DrasilMetadata.json` with an internal representation
+    and provides `DrasilMetaCall.hs` with the TemplateHaskell code to read the
+    JSON file.
 
-**DrasilMetaCall**
-  - Reads DrasilMeta at compile-time
+DrasilMetaCall.hs
+  - Reads `DrasilMeta.json` at compile-time.
 
-**DrasilMetadata.json**
-  - Contains the metadata for Drasil.
+DrasilMetadata.json
+  - Data about "Drasil."
+
+README.md
+  - This file

@@ -6,6 +6,7 @@ module Language.Drasil.CodeSpec where
 import Language.Drasil hiding (None, new)
 import Language.Drasil.Display (Symbol(Variable))
 import Database.Drasil
+import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
 import qualified System.Drasil as SI
 import System.Drasil (HasSystem(..))
 
@@ -15,7 +16,6 @@ import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, const
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
   auxExprs)
 import Language.Drasil.Choices (Choices(..), Maps(..), ODE(..), ExtLib(..))
-import Language.Drasil.CodeExpr.Development (expr, eNamesRI, eDep)
 import Language.Drasil.Chunk.CodeBase
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 

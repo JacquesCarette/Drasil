@@ -1,4 +1,4 @@
-module Language.Drasil.CodeExpr.Extract (
+module Drasil.Code.CodeExpr.Extract (
     eDep, eDep',
     eNamesRI, eNamesRI'
 ) where
@@ -6,7 +6,7 @@ module Language.Drasil.CodeExpr.Extract (
 import Language.Drasil.Space (RealInterval(..))
 import Drasil.Database.UID (UID)
 
-import Language.Drasil.CodeExpr.Lang (CodeExpr(..))
+import Drasil.Code.CodeExpr.Lang (CodeExpr(..))
 
 import Data.Containers.ListUtils (nubOrd)
 

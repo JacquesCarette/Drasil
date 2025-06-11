@@ -25,7 +25,7 @@
 </span><span id="line-25"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">acceleration</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">constAccel</span></span><span class="hs-special">,</span><span>
 </span><span id="line-26"></span><span>  </span><span class="annot"><span class="hs-identifier">gravitationalAccelConst</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iSpeed</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ixPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iyPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ixVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iyVel</span></span><span class="hs-special">,</span><span>
 </span><span id="line-27"></span><span>  </span><span class="annot"><span class="hs-identifier">position</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">scalarPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">velocity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">xAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">xConstAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">xPos</span></span><span class="hs-special">,</span><span>
-</span><span id="line-28"></span><span>  </span><span class="annot"><span class="hs-identifier">xVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yConstAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">physicscon</span></span><span class="hs-special">)</span><span>
+</span><span id="line-28"></span><span>  </span><span class="annot"><span class="hs-identifier">xVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yConstAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">physicscon</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">speed</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">scalarAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">constAccelV</span></span><span class="hs-special">)</span><span>
 </span><span id="line-29"></span><span>
 </span><span id="line-30"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.People</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">brooks</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">samCrawford</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">spencerSmith</span></span><span class="hs-special">)</span><span>
 </span><span id="line-31"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.SI_Units</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">metre</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">radian</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">second</span></span><span class="hs-special">)</span><span>
@@ -757,30 +757,10 @@ forall q c u.
 -&gt; [Reference]
 -&gt; [Citation]
 -&gt; ChunkDB
-</span><span class="hs-identifier hs-var">cdb</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; QuantityDict
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
-</span><span class="hs-identifier hs-var">pi_</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; [QuantityDict] -&gt; [QuantityDict]
-forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; QuantityDict) -&gt; [UnitalChunk] -&gt; [QuantityDict]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[UnitalChunk]
-</span><span class="hs-identifier hs-var">physicscon</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
-</span><a href="Drasil.Projectile.Body.html#unitalQuants"><span class="hs-identifier hs-var">unitalQuants</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
-</span><a href="Drasil.Projectile.Body.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[IdeaDict]
+</span><span class="hs-identifier hs-var">cdb</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><a href="Drasil.Projectile.Body.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span> </span><span class="annot"><span class="annottext">[IdeaDict]
 </span><a href="Drasil.Projectile.Body.html#ideaDicts"><span class="hs-identifier hs-var">ideaDicts</span></a></span><span>
-</span><span id="line-194"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ConceptChunk
-forall c. Concept c =&gt; c -&gt; ConceptChunk
-</span><span class="hs-identifier hs-var">cw</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
-</span><span class="hs-identifier hs-var">pi_</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; [ConceptChunk] -&gt; [ConceptChunk]
-forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(ConstrConcept -&gt; ConceptChunk)
+</span><span id="line-194"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(ConstrConcept -&gt; ConceptChunk)
 -&gt; [ConstrConcept] -&gt; [ConceptChunk]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; ConceptChunk
@@ -1123,9 +1103,9 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-255"></span><span id="sysCtxResp"><span class="annot"><span class="annottext">sysCtxResp :: [Sentence]
 </span><a href="Drasil.Projectile.Body.html#sysCtxResp"><span class="hs-identifier hs-var hs-var">sysCtxResp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Sentence) -&gt; [Sentence] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679072630"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679072630"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679072630"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679072592"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679072592"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679072592"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Responsibilities&quot;</span></span><span class="hs-special">)</span><span> </span><span>
@@ -1258,12 +1238,7 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span id="line-298"></span><span class="hs-comment">----------------------------------------------------</span><span>
 </span><span id="line-299"></span><span class="annot"><a href="Drasil.Projectile.Body.html#symbols"><span class="hs-identifier hs-type">symbols</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
 </span><span id="line-300"></span><span id="symbols"><span class="annot"><span class="annottext">symbols :: [QuantityDict]
-</span><a href="Drasil.Projectile.Body.html#symbols"><span class="hs-identifier hs-var hs-var">symbols</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; QuantityDict
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
-</span><span class="hs-identifier hs-var">gravitationalAccelConst</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; [QuantityDict] -&gt; [QuantityDict]
-forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><a href="Drasil.Projectile.Body.html#symbols"><span class="hs-identifier hs-var hs-var">symbols</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.Projectile.Body.html#unitalQuants"><span class="hs-identifier hs-var">unitalQuants</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(ConstQDef -&gt; QuantityDict) -&gt; [ConstQDef] -&gt; [QuantityDict]
@@ -1303,17 +1278,21 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">yAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">yConstAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">yPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">yVel</span></span><span class="hs-special">]</span><span>
-</span><span id="line-304"></span><span>
-</span><span id="line-305"></span><span class="annot"><a href="Drasil.Projectile.Body.html#constants"><span class="hs-identifier hs-type">constants</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstQDef</span></span><span class="hs-special">]</span><span>
-</span><span id="line-306"></span><span id="constants"><span class="annot"><span class="annottext">constants :: [ConstQDef]
+</span><span class="hs-identifier hs-var">yVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">speed</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">scalarAccel</span></span><span class="hs-special">,</span><span>
+</span><span id="line-304"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">constAccelV</span></span><span class="hs-special">]</span><span>
+</span><span id="line-305"></span><span>
+</span><span id="line-306"></span><span class="annot"><a href="Drasil.Projectile.Body.html#constants"><span class="hs-identifier hs-type">constants</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstQDef</span></span><span class="hs-special">]</span><span>
+</span><span id="line-307"></span><span id="constants"><span class="annot"><span class="annottext">constants :: [ConstQDef]
 </span><a href="Drasil.Projectile.Body.html#constants"><span class="hs-identifier hs-var hs-var">constants</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstQDef
 </span><span class="hs-identifier hs-var">gravitationalAccelConst</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><span class="hs-identifier hs-var">piConst</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.Projectile.Unitals.html#tol"><span class="hs-identifier hs-var">tol</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-307"></span><span>
-</span><span id="line-308"></span><span class="annot"><a href="Drasil.Projectile.Body.html#inputs"><span class="hs-identifier hs-type">inputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-309"></span><span id="inputs"><span class="annot"><span class="annottext">inputs :: [QuantityDict]
+</span><span id="line-308"></span><span>
+</span><span id="line-309"></span><span class="annot"><a href="Drasil.Projectile.Body.html#inputs"><span class="hs-identifier hs-type">inputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-310"></span><span id="inputs"><span class="annot"><span class="annottext">inputs :: [QuantityDict]
 </span><a href="Drasil.Projectile.Body.html#inputs"><span class="hs-identifier hs-var hs-var">inputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConstrConcept -&gt; QuantityDict)
 -&gt; [ConstrConcept] -&gt; [QuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
@@ -1323,9 +1302,9 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><a href="Drasil.Projectile.Unitals.html#launSpeed"><span class="hs-identifier hs-var">launSpeed</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#launAngle"><span class="hs-identifier hs-var">launAngle</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#targPos"><span class="hs-identifier hs-var">targPos</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-310"></span><span>
-</span><span id="line-311"></span><span class="annot"><a href="Drasil.Projectile.Body.html#outputs"><span class="hs-identifier hs-type">outputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-312"></span><span id="outputs"><span class="annot"><span class="annottext">outputs :: [QuantityDict]
+</span><span id="line-311"></span><span>
+</span><span id="line-312"></span><span class="annot"><a href="Drasil.Projectile.Body.html#outputs"><span class="hs-identifier hs-type">outputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-313"></span><span id="outputs"><span class="annot"><span class="annottext">outputs :: [QuantityDict]
 </span><a href="Drasil.Projectile.Body.html#outputs"><span class="hs-identifier hs-var hs-var">outputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.Projectile.Unitals.html#message"><span class="hs-identifier hs-var">message</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
@@ -1334,9 +1313,9 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#flightDur"><span class="hs-identifier hs-var">flightDur</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-313"></span><span>
-</span><span id="line-314"></span><span class="annot"><a href="Drasil.Projectile.Body.html#unitalQuants"><span class="hs-identifier hs-type">unitalQuants</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-315"></span><span id="unitalQuants"><span class="annot"><span class="annottext">unitalQuants :: [QuantityDict]
+</span><span id="line-314"></span><span>
+</span><span id="line-315"></span><span class="annot"><a href="Drasil.Projectile.Body.html#unitalQuants"><span class="hs-identifier hs-type">unitalQuants</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-316"></span><span id="unitalQuants"><span class="annot"><span class="annottext">unitalQuants :: [QuantityDict]
 </span><a href="Drasil.Projectile.Body.html#unitalQuants"><span class="hs-identifier hs-var hs-var">unitalQuants</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.Projectile.Unitals.html#message"><span class="hs-identifier hs-var">message</span></a></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. a -&gt; [a] -&gt; [a]
@@ -1347,9 +1326,9 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[ConstrConcept]
 </span><a href="Drasil.Projectile.Body.html#constrained"><span class="hs-identifier hs-var">constrained</span></a></span><span>
-</span><span id="line-316"></span><span>
-</span><span id="line-317"></span><span class="annot"><a href="Drasil.Projectile.Body.html#unitalIdeas"><span class="hs-identifier hs-type">unitalIdeas</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-318"></span><span id="unitalIdeas"><span class="annot"><span class="annottext">unitalIdeas :: [IdeaDict]
+</span><span id="line-317"></span><span>
+</span><span id="line-318"></span><span class="annot"><a href="Drasil.Projectile.Body.html#unitalIdeas"><span class="hs-identifier hs-type">unitalIdeas</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-319"></span><span id="unitalIdeas"><span class="annot"><span class="annottext">unitalIdeas :: [IdeaDict]
 </span><a href="Drasil.Projectile.Body.html#unitalIdeas"><span class="hs-identifier hs-var hs-var">unitalIdeas</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; IdeaDict
 forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
@@ -1361,23 +1340,23 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[ConstrConcept]
 </span><a href="Drasil.Projectile.Body.html#constrained"><span class="hs-identifier hs-var">constrained</span></a></span><span>
-</span><span id="line-319"></span><span>
-</span><span id="line-320"></span><span class="annot"><a href="Drasil.Projectile.Body.html#inConstraints"><span class="hs-identifier hs-type">inConstraints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
-</span><span id="line-321"></span><span id="inConstraints"><span class="annot"><span class="annottext">inConstraints :: [UncertQ]
+</span><span id="line-320"></span><span>
+</span><span id="line-321"></span><span class="annot"><a href="Drasil.Projectile.Body.html#inConstraints"><span class="hs-identifier hs-type">inConstraints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
+</span><span id="line-322"></span><span id="inConstraints"><span class="annot"><span class="annottext">inConstraints :: [UncertQ]
 </span><a href="Drasil.Projectile.Body.html#inConstraints"><span class="hs-identifier hs-var hs-var">inConstraints</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.Projectile.Unitals.html#launAngleUnc"><span class="hs-identifier hs-var">launAngleUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.Projectile.Unitals.html#launSpeedUnc"><span class="hs-identifier hs-var">launSpeedUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.Projectile.Unitals.html#targPosUnc"><span class="hs-identifier hs-var">targPosUnc</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-322"></span><span>
-</span><span id="line-323"></span><span class="annot"><a href="Drasil.Projectile.Body.html#outConstraints"><span class="hs-identifier hs-type">outConstraints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
-</span><span id="line-324"></span><span id="outConstraints"><span class="annot"><span class="annottext">outConstraints :: [UncertQ]
+</span><span id="line-323"></span><span>
+</span><span id="line-324"></span><span class="annot"><a href="Drasil.Projectile.Body.html#outConstraints"><span class="hs-identifier hs-type">outConstraints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
+</span><span id="line-325"></span><span id="outConstraints"><span class="annot"><span class="annottext">outConstraints :: [UncertQ]
 </span><a href="Drasil.Projectile.Body.html#outConstraints"><span class="hs-identifier hs-var hs-var">outConstraints</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.Projectile.Unitals.html#landPosUnc"><span class="hs-identifier hs-var">landPosUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.Projectile.Unitals.html#offsetUnc"><span class="hs-identifier hs-var">offsetUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.Projectile.Unitals.html#flightDurUnc"><span class="hs-identifier hs-var">flightDurUnc</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-325"></span><span>
-</span><span id="line-326"></span><span class="annot"><a href="Drasil.Projectile.Body.html#constrained"><span class="hs-identifier hs-type">constrained</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstrConcept</span></span><span class="hs-special">]</span><span>
-</span><span id="line-327"></span><span id="constrained"><span class="annot"><span class="annottext">constrained :: [ConstrConcept]
+</span><span id="line-326"></span><span>
+</span><span id="line-327"></span><span class="annot"><a href="Drasil.Projectile.Body.html#constrained"><span class="hs-identifier hs-type">constrained</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstrConcept</span></span><span class="hs-special">]</span><span>
+</span><span id="line-328"></span><span id="constrained"><span class="annot"><span class="annottext">constrained :: [ConstrConcept]
 </span><a href="Drasil.Projectile.Body.html#constrained"><span class="hs-identifier hs-var hs-var">constrained</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#flightDur"><span class="hs-identifier hs-var">flightDur</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#landPos"><span class="hs-identifier hs-var">landPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
@@ -1385,9 +1364,9 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><a href="Drasil.Projectile.Unitals.html#launSpeed"><span class="hs-identifier hs-var">launSpeed</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#offset"><span class="hs-identifier hs-var">offset</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#targPos"><span class="hs-identifier hs-var">targPos</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-328"></span><span>
-</span><span id="line-329"></span><span class="annot"><a href="Drasil.Projectile.Body.html#acronyms"><span class="hs-identifier hs-type">acronyms</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span class="hs-special">]</span><span>
-</span><span id="line-330"></span><span id="acronyms"><span class="annot"><span class="annottext">acronyms :: [CI]
+</span><span id="line-329"></span><span>
+</span><span id="line-330"></span><span class="annot"><a href="Drasil.Projectile.Body.html#acronyms"><span class="hs-identifier hs-type">acronyms</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span class="hs-special">]</span><span>
+</span><span id="line-331"></span><span id="acronyms"><span class="annot"><span class="annottext">acronyms :: [CI]
 </span><a href="Drasil.Projectile.Body.html#acronyms"><span class="hs-identifier hs-var hs-var">acronyms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">oneD</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">twoD</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
@@ -1396,7 +1375,7 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">genDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">goalStmt</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">inModel</span></span><span class="hs-special">,</span><span>
-</span><span id="line-331"></span><span>  </span><span class="annot"><span class="annottext">CI
+</span><span id="line-332"></span><span>  </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">physSyst</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">requirement</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">Doc.srs</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
@@ -1404,5 +1383,5 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">refName</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">thModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">typUnc</span></span><span class="hs-special">]</span><span>
-</span><span id="line-332"></span><span>
-</span><span id="line-333"></span></pre></body></html>
+</span><span id="line-333"></span><span>
+</span><span id="line-334"></span></pre></body></html>

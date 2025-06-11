@@ -20,6 +20,10 @@ import qualified Language.Drasil.NounPhrase as NP
 import Drasil.Database.UID (HasUID(..))
 
 -- | Get short form (if it exists), else get term of an 'Idea'.
+-- Uses the UID of the 'Idea' in a 'Ch' Sentence constructor to get the short
+-- form using getA. getA may return Nothing, in which case lookupS uses the
+-- term, where lookupS is the main helper for getting the short form of a
+-- 'Ch' Sentence.
 short :: Idea c => c -> Sentence
 short c = sentenceShort (c ^. uid)
 

@@ -294,9 +294,8 @@ instance VariableSym CSharpCode where
 instance OOVariableSym CSharpCode where
   staticVar' _ = G.staticVar
   self = C.self
-  -- classVar = CP.classVar R.classVar
-  -- extClassVar = classVar
-  extClassVar = CP.classVar R.classVar
+  classVar = CP.classVar R.classVar
+  extClassVar = classVar
 
   objVar = G.objVar
   objVarSelf = CP.objVarSelf

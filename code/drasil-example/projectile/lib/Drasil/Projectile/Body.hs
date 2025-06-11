@@ -170,7 +170,6 @@ ideaDicts =
   sciCompS : doccon ++ educon ++ compcon ++ concepts ++ unitalIdeas ++
   -- CIs
   nw progName : nw inValue : map nw doccon' ++ map nw physicCon' ++
-  map nw acronyms ++
   -- ConceptChunks
   map nw [mass, errMsg, program, algorithm] ++ map nw physicCon ++ map nw mathcon ++
   -- QuantityDicts

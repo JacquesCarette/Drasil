@@ -11,7 +11,7 @@ import Data.Drasil.Concepts.Documentation as Doc (body, funcReqDom, input_,
   nonFuncReqDom, output_, physicalConstraint, physicalSim, property, solutionCharSpec)
 
 import qualified Data.Drasil.Concepts.Physics as CP (collision, elasticity, 
-  friction, rigidBody, space)
+  friction, rigidBody, space) 
 import qualified Data.Drasil.Concepts.Math as CM (surface)
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)

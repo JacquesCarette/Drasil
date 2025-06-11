@@ -51,8 +51,8 @@ import Drasil.Shared.LanguageRenderer (array', new', args, array, listSep, acces
   mathFunc, ModuleDocRenderer, FuncDocRenderer, functionDox, classDox,
   moduleDox, variableList, valueList, intValue)
 
-import qualified Drasil.Shared.LanguageRenderer as R 
-
+import qualified Drasil.Shared.LanguageRenderer as R (self, self', module',
+  print, stateVar, stateVarList, constDecDef)
 import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkStateVar, mkVal, mkVal)
 
@@ -163,13 +163,14 @@ intClass f n s i svrs cstrs mths = do
 
 -- Parameters: Module name, Doc for imports, Doc to put at top of module (but 
 -- after imports), Doc to put at bottom of module, methods, classes
+-- Renamed top to topDoc to fix shadowing error with RendererClassesOO top
 buildModule :: (OORenderSym r) => Label -> FS Doc -> FS Doc -> FS Doc ->
   [SMethod r] -> [SClass r] -> FSModule r
-buildModule n imps top bot fs cs = S.modFromData n (do
+buildModule n imps topDoc bot fs cs = S.modFromData n (do
   cls <- mapM (zoom lensFStoCS) cs
   fns <- mapM (zoom lensFStoMS) fs
   is <- imps
-  tp <- top
+  tp <- topDoc
   bt <- bot
   return $ R.module' is (vibcat (tp : map RC.class' cls))
     (vibcat (map RC.method fns ++ [bt])))

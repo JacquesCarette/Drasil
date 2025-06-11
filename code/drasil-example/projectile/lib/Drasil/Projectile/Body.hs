@@ -183,13 +183,11 @@ tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =
   -- CIs
   map nw acronyms ++
-  -- DefinedQuantityDicts
-  nw pi_ :
   -- QuantityDicts
   map nw symbols
 
 symbMap :: ChunkDB
-symbMap = cdb symbols ideaDicts
+symbMap = cdb (qw pi_ : symbols) ideaDicts
   (map cw constrained ++ srsDomains) (map unitWrapper [metre, radian, second]) 
   dataDefs iMods genDefns tMods concIns [] allRefs citations
 
@@ -296,7 +294,7 @@ physSystParts = map (!.)
 -- Various gathered data that should be automated --
 ----------------------------------------------------
 symbols :: [QuantityDict]
-symbols = unitalQuants ++ map qw constants ++
+symbols = unitalQuants ++ map qw [gravitationalAccelConst, tol] ++
   map qw [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
   iyPos, ixVel, iyVel, position, scalarPos, projPos, projSpeed, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel,

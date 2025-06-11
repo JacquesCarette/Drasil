@@ -68,7 +68,9 @@ type Concept c = (Idea c, Definition c, ConceptDomain c)
 --        type Concept = forall c. (Idea c, Definition c, ConceptDomain c) => c
 
 -- | CommonIdea is a 'NamedIdea' with the additional
--- constraint that it __must__ have an abbreviation.
+-- constraint that it __must__ have an abbreviation. This is the main
+-- distinction between getA and abrv, where getA may return Nothing,
+-- while abrv will always return the abbreviation. 
 class NamedIdea c => CommonIdea c where
   -- | Introduces abrv which necessarily provides an abbreviation.
   abrv :: c -> String

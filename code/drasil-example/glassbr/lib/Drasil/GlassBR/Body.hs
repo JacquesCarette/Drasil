@@ -47,7 +47,7 @@ import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
-  sD, termsWithAccDefn, termsWithDefsOnly, terms, dataConstraints, lDurFac,
+  sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints, lDurFac,
   isSafeProb, dimlessLoad, isSafeLoad, tolLoad, riskFun, sdfTol, unitarySymbols)
 
 srs :: Document
@@ -140,7 +140,7 @@ ideaDicts =
   -- CIs
   nw progName : map nw doccon' ++ map nw mathcon' ++ map nw con ++
   -- ConceptChunks
-  map nw [distance, algorithm] ++ map nw terms ++ map nw mathcon ++ 
+  map nw [distance, algorithm] ++ map nw mathcon ++ 
   map nw softwarecon ++ map nw physicalcon ++
   -- QuantityDicts
   map nw thisTerms ++ map nw unitarySymbols ++
@@ -155,7 +155,7 @@ tableOfAbbrvsIdeaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb thisSymbols ideaDicts
-  (map cw symb ++ terms ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
+  (map cw symb ++ concepts ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) GB.dataDefs iMods [] tMods concIns
   labCon allRefs citations
 

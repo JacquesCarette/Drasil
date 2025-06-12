@@ -7,19 +7,18 @@ import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
 
-import Data.Drasil.Concepts.Computation (inValue, algorithm, inDatum, compcon)
-import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
+import Data.Drasil.Concepts.Computation (inValue, inDatum, compcon)
+import Data.Drasil.Concepts.Documentation (analysis, doccon', physics,
   problem, srsDomains, assumption, goalStmt, physSyst, sysCont, software, user,
   requirement, refBy, refName, typUnc, example, softwareSys, system, environment, 
   product_, interface, condition, physical, datum, input_, softwareConstraint, 
   output_, endUser)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
-import Data.Drasil.Concepts.Math (cartesian, mathcon)
+import Data.Drasil.Concepts.Math (cartesian)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon',
   rectilinear, oneD, twoD, motion)
-import Data.Drasil.Concepts.Software (errMsg, program)
-import Data.Drasil.Software.Products (sciCompS)
+import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.Quantities.Math (pi_, piConst)
 import Data.Drasil.Quantities.Physics (acceleration, constAccel,
@@ -31,7 +30,7 @@ import Data.Drasil.People (brooks, samCrawford, spencerSmith)
 import Data.Drasil.SI_Units (metre, radian, second)
 import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
-import Data.Drasil.Concepts.Education(calculus, educon, undergraduate, 
+import Data.Drasil.Concepts.Education(calculus, undergraduate, 
   highSchoolPhysics, highSchoolCalculus)
 
 import Drasil.Projectile.Assumptions (assumptions)
@@ -167,11 +166,11 @@ tMods = [accelerationTM, velocityTM]
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- Actual IdeaDicts
-  sciCompS : doccon ++ educon ++ compcon ++ concepts ++ unitalIdeas ++
+  compcon ++ concepts ++ unitalIdeas ++
   -- CIs
   nw progName : nw inValue : map nw doccon' ++ map nw physicCon' ++
   -- ConceptChunks
-  map nw [mass, errMsg, program, algorithm] ++ map nw physicCon ++ map nw mathcon ++
+  [nw mass] ++ map nw physicCon ++
   -- QuantityDicts
   map nw symbols ++
   -- UnitalChunks

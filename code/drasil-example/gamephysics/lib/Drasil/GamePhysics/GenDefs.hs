@@ -17,6 +17,7 @@ import Data.Drasil.Concepts.Math as CM (line, cartesian)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Drasil.GamePhysics.TMods (newtonLUG)
 import Drasil.GamePhysics.References (accelGravitySrc, impulseSrc)
+import Data.Drasil.Concepts.Physics (rigidBody)
 
 ----- General Models -----
 
@@ -64,16 +65,27 @@ conservationOfMomentDeriv = foldlSent [S "When bodies collide, they exert",
 --------------------------Acceleration due to gravity----------------------------
 accelGravityGD :: GenDefn
 accelGravityGD = gd (equationalModel' accelGravityQD) (getUnit QP.acceleration) (Just accelGravityDeriv)
-   [dRef accelGravitySrc] "accelGravity" [accelGravityDesc]
+   [dRef accelGravitySrc] "accelGravity" accelGravityDesc
 
 accelGravityQD :: ModelQDef
 accelGravityQD = mkQuantDef' QP.gravitationalAccel (nounPhraseSP "Acceleration due to gravity") accelGravityExpr
 
-accelGravityDesc :: Sentence
-accelGravityDesc = foldlSent [S "If one of the", plural QPP.mass `S.is` S "much larger than the other" `sC`
-  (S "it is convenient to define a gravitational field around the larger mass as shown above" !.),
-  S "The negative sign" `S.inThe` S "equation indicates that the", phrase QP.force, S "is an attractive",
-  phrase QP.force]
+accelGravityDesc :: [Sentence]
+accelGravityDesc =
+  [ foldlSent
+      [ (S "If one of the" +:+ plural QPP.mass) `sC` (S "much larger than the other")
+      , (S "it is convenient to define a gravitational field around the larger mass as shown above" !.)
+      , (S "The negative sign" `S.inThe` S "equation indicates that the")
+      , phrase QP.force
+      , S "is an attractive"
+      ]
+  , foldlSent 
+      [ S "In the case where one", phrase rigidBody, S "is significantly more massive than the others"
+      , S "it is convenient to define a coordinate system in which the direction normal to the surface of the larger body is considered positive."
+      , S "The negative sign in the gravitational acceleration equation reflects that the resulting force vector points in the opposite direction"
+      , S "—toward the more massive body—indicating an attractive interaction"
+      ]
+  ]
 
 accelGravityExpr :: PExpr
 accelGravityExpr = neg ((sy QP.gravitationalConst $* sy mLarger $/

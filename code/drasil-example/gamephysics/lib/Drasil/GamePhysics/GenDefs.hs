@@ -73,7 +73,7 @@ accelGravityQD = mkQuantDef' QP.gravitationalAccel (nounPhraseSP "Acceleration d
 accelGravityDesc :: [Sentence]
 accelGravityDesc =
   [ foldlSent
-      [ (S "If one of the" +:+ plural QPP.mass) `sC` (S "much larger than the other")
+      [ (S "If one of the" +:+ plural QPP.mass) `sC` S "much larger than the other"
       , (S "it is convenient to define a gravitational field around the larger mass as shown above" !.)
       , (S "The negative sign" `S.inThe` S "equation indicates that the")
       , phrase QP.force
@@ -81,11 +81,12 @@ accelGravityDesc =
       ]
   , foldlSent 
       [ S "In the case where one", phrase rigidBody, S "is significantly more massive than the others"
-      , S "it is convenient to define a coordinate system in which the direction normal to the surface of the larger body is considered positive."
-      , S "The negative sign in the gravitational acceleration equation reflects that the resulting force vector points in the opposite direction"
-      , S "—toward the more massive body—indicating an attractive interaction"
+      , (S "it is convenient to define a coordinate system in which the direction normal to the surface of the larger body is considered positive.")
+      , (S "The negative sign in the gravitational acceleration equation reflects that the resulting force vector points in the opposite direction")
+      , (S "—toward the more massive body—indicating an attractive interaction")
       ]
   ]
+  
 
 accelGravityExpr :: PExpr
 accelGravityExpr = neg ((sy QP.gravitationalConst $* sy mLarger $/

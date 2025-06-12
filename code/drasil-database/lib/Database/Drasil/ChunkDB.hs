@@ -40,11 +40,12 @@ import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Map as Map
 import Utils.Drasil (invert)
 import Debug.Trace (trace)
-import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
+import Data.Drasil.Concepts.Documentation (doccon, srsDomains)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Concepts.Computation (algorithm, inValue)
 import Data.Drasil.Concepts.Software (errMsg, program)
-import Data.Drasil.Concepts.Math (mathcon, mathcon')
+import Data.Drasil.Concepts.Math (mathcon)
+import Data.Drasil.Concepts.Education (educon)
 
 -- | The misnomers below (for the following Map types) are not actually a bad thing. We want to ensure data can't
 -- be added to a map if it's not coming from a chunk, and there's no point confusing
@@ -274,7 +275,7 @@ addCdb cdb1 cdb2 =
   }
   where
     concatCdbMap mn = Map.unionWithKey (preferNew mn)
-    preferNew mn key new _ = trace ("'" ++ show key ++ "' is inserted twice in '" ++ mn ++ "'!") new
+    preferNew mn key new _ = trace ("'" ++ show key ++ "' is inserted twice in '" ++ mn ++ "' while adding to basis!") new
 
 -- | Gets the units of a 'Quantity' as 'UnitDefn's.
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
@@ -296,9 +297,7 @@ refbyLookup c = fromMaybe [] . Map.lookup c
 basisIdeaDicts :: [IdeaDict]
 basisIdeaDicts =
   -- Actual IdeaDicts
-  doccon ++ prodtcon ++ [inValue] ++
-  -- CIs
-  map nw doccon' ++ map nw mathcon' ++
+  doccon ++ prodtcon ++ educon ++ [inValue] ++
   -- ConceptChunks
   map nw [algorithm, errMsg, program] ++ map nw mathcon
 

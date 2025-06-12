@@ -42,7 +42,7 @@ import Utils.Drasil (invert)
 import Debug.Trace (trace)
 import Data.Drasil.Concepts.Documentation (doccon, srsDomains)
 import Data.Drasil.Software.Products (prodtcon)
-import Data.Drasil.Concepts.Computation (algorithm, inValue)
+import Data.Drasil.Concepts.Computation (algorithm, compcon)
 import Data.Drasil.Concepts.Software (errMsg, program)
 import Data.Drasil.Concepts.Math (mathcon)
 import Data.Drasil.Concepts.Education (educon)
@@ -297,7 +297,7 @@ refbyLookup c = fromMaybe [] . Map.lookup c
 basisIdeaDicts :: [IdeaDict]
 basisIdeaDicts =
   -- Actual IdeaDicts
-  doccon ++ prodtcon ++ educon ++ [inValue] ++
+  doccon ++ prodtcon ++ educon ++ compcon ++
   -- ConceptChunks
   map nw [algorithm, errMsg, program] ++ map nw mathcon
 

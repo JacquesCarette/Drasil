@@ -7,7 +7,7 @@ import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
 
-import Data.Drasil.Concepts.Computation (inValue, inDatum, compcon)
+import Data.Drasil.Concepts.Computation (inDatum, compcon)
 import Data.Drasil.Concepts.Documentation (analysis, doccon', physics,
   problem, srsDomains, assumption, goalStmt, physSyst, sysCont, software, user,
   requirement, refBy, refName, typUnc, example, softwareSys, system, environment, 

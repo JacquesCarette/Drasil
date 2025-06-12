@@ -12,15 +12,10 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (olu)
 import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz, fundamentals)
-import Data.Drasil.Concepts.Computation (compcon, inValue, algorithm)
-import Data.Drasil.Concepts.Documentation (srsDomains, doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.Concepts.Education (educon)
-import Data.Drasil.Concepts.Math (mathcon, mathcon')
+import Data.Drasil.Concepts.Math (mathcon')
 import Data.Drasil.Concepts.Physics (physicCon, physicCon', motion, pendulum)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
-import Data.Drasil.Concepts.Software (program, errMsg)
-import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Theories.Physics (newtonSLR)
 import Data.Drasil.TheoryConcepts (inModel)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
@@ -128,13 +123,12 @@ purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pen
 ideaDicts :: [IdeaDict]
 ideaDicts = 
   -- Actual IdeaDicts
-  inValue : doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
+  concepts ++
   -- CIs
-  nw progName : map nw doccon' ++ map nw mathcon' ++ map nw physicCon' ++
+  nw progName : map nw mathcon' ++ map nw physicCon' ++
   map nw acronyms ++
   -- ConceptChunks
-  map nw [mass, len, errMsg, program, algorithm] ++ map nw physicCon ++
-  map nw physicalcon ++ map nw mathcon ++
+  map nw [mass, len] ++ map nw physicCon ++ map nw physicalcon ++
   -- QuantityDicts
   map nw symbols ++
   -- UnitDefns
@@ -154,7 +148,7 @@ tableOfAbbrvsIdeaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map qw symbols) ideaDicts
-   (map cw iMods ++ srsDomains) (map unitWrapper 
+   (map cw iMods) (map unitWrapper 
    [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs iMods
    genDefns tMods concIns [] allRefs citations
 

@@ -40,7 +40,7 @@ import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Map as Map
 import Utils.Drasil (invert)
 import Debug.Trace (trace)
-import Data.Drasil.Concepts.Documentation (doccon, srsDomains)
+import Data.Drasil.Concepts.Documentation (doccon, srsDomains, doccon')
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Concepts.Computation (algorithm, compcon)
 import Data.Drasil.Concepts.Software (errMsg, program)
@@ -298,6 +298,8 @@ basisIdeaDicts :: [IdeaDict]
 basisIdeaDicts =
   -- Actual IdeaDicts
   doccon ++ prodtcon ++ educon ++ compcon ++
+  -- CIs
+  map nw doccon' ++
   -- ConceptChunks
   map nw [algorithm, errMsg, program] ++ map nw mathcon
 

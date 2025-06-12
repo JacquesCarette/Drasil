@@ -19,7 +19,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variab
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   environment, datum, input_, interface, output_, problem, product_,
   physical, sysCont, software, softwareConstraint, softwareSys,
-  system, user, doccon', analysis)
+  system, user, analysis)
 import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate)
 import Data.Drasil.Concepts.Math (cartesian, ode, mathcon', graph)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion)
@@ -146,7 +146,7 @@ ideaDicts =
   -- Actual IdeaDicts
   concepts ++
   -- CIs
-  nw progName : map nw acronyms ++ map nw doccon' ++ map nw mathcon' ++ map nw physicCon' ++
+  nw progName : map nw acronyms ++ map nw mathcon' ++ map nw physicCon' ++
   -- ConceptChunks
   map nw [len, mass] ++ map nw physicCon ++ map nw physicalcon ++
   -- UnitDefns

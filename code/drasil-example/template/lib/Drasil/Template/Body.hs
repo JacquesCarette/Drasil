@@ -9,14 +9,9 @@ import Language.Drasil
 import Drasil.SRSDocument
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
-import Data.Drasil.Concepts.Computation (inValue, algorithm)
-import Data.Drasil.Concepts.Software (errMsg, program)
-import Data.Drasil.Concepts.Math (mathcon)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import qualified Drasil.DocLang.SRS as SRS
-import Data.Drasil.Software.Products
 import Data.Drasil.TheoryConcepts
 import Data.Drasil.Citations
 import Drasil.DocumentLanguage.TraceabilityGraph
@@ -107,15 +102,11 @@ si = SI {
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
-  -- Actual IdeaDicts
-  doccon ++ prodtcon ++ [inValue] ++
   -- CIs
-  nw progName : map nw doccon' ++
-  -- ConceptChunks
-  map nw [errMsg, algorithm, program] ++ map nw mathcon
+  [nw progName]
 
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [QuantityDict]) ideaDicts srsDomains
+symbMap = cdb ([] :: [QuantityDict]) ideaDicts ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
   ([] :: [LabelledContent]) ([] :: [Reference]) citations

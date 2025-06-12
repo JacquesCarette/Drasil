@@ -7,12 +7,12 @@ import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
 
-import Data.Drasil.Concepts.Computation (inDatum, compcon)
-import Data.Drasil.Concepts.Documentation (analysis, doccon', physics,
+import Data.Drasil.Concepts.Computation (inDatum)
+import Data.Drasil.Concepts.Documentation (analysis, physics,
   problem, assumption, goalStmt, physSyst, sysCont, software, user,
-  requirement, refBy, refName, typUnc, example, softwareSys, system, environment, 
-  product_, interface, condition, physical, datum, input_, softwareConstraint, 
-  output_, endUser)
+  requirement, refBy, refName, typUnc, example, softwareSys, system, environment,
+  product_, interface, condition, physical, datum, input_, softwareConstraint,
+  output_, endUser, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
 import Data.Drasil.Concepts.Math (cartesian)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
@@ -166,9 +166,9 @@ tMods = [accelerationTM, velocityTM]
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- Actual IdeaDicts
-  [projMotion, rectVel] ++ compcon ++ unitalIdeas ++
+  [projMotion, rectVel] ++ unitalIdeas ++
   -- CIs
-  nw progName : map nw doccon' ++ map nw physicCon' ++
+  nw progName : map nw physicCon' ++
   -- ConceptChunks
   [nw mass] ++ map nw physicCon ++ map nw defs ++
   -- UnitalChunks

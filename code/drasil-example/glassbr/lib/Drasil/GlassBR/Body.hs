@@ -11,7 +11,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
-  characteristic, company, condition, dataConst, datum, doccon',
+  characteristic, company, condition, dataConst, datum,
   environment, input_, interface, model, physical, problem, product_,
   software, softwareConstraint, softwareSys, standard, sysCont,
   system, term_, user, value, variable, reference, definition)
@@ -136,7 +136,7 @@ ideaDicts =
   -- IdeaDicts
   [lateralLoad, materialProprty] ++ con' ++
   -- CIs
-  nw progName : map nw doccon' ++ map nw mathcon' ++ map nw con ++
+  nw progName : map nw mathcon' ++ map nw con ++
   -- ConceptChunks
   [nw distance] ++ map nw terms ++ 
   map nw physicalcon ++

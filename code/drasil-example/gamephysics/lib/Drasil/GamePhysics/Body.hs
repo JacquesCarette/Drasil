@@ -10,7 +10,7 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   condition, consumer, endUser, environment, game, guide, input_, interface,
   object, physical, physicalSim, physics, problem, product_, project,
   quantity, realtime, section_, simulation, software, softwareSys,
-  system, systemConstraint, sysCont, task, user, doccon',
+  system, systemConstraint, sysCont, task, user,
   property, problemDescription)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (dataDefn, inModel)
@@ -139,7 +139,7 @@ units = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [new
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- CIs
-  map nw [progName, centreMass] ++ map nw doccon' ++ map nw CM.mathcon' ++
+  map nw [progName, centreMass] ++ map nw CM.mathcon' ++
   map nw CP.physicCon' ++
   -- ConceptChunks
   map nw softwarecon ++ map nw CP.physicCon ++

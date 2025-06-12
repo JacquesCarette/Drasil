@@ -16,13 +16,12 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, effect, endUser, environment, input_, interest, loss, method_,
-  physical, physics, problem, software, softwareSys, srsDomains, symbol_,
-  sysCont, system, type_, user, value, variable, doccon, doccon',
-  datumConstraint)
+  physical, physics, problem, software, softwareSys, symbol_,
+  sysCont, system, type_, user, value, variable, datumConstraint)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (inModel)
-import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
-import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
+import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
+import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon',
   number)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
 import Data.Drasil.Concepts.Physics (cohesion, fbd, force, gravity, isotropy,
@@ -30,8 +29,6 @@ import Data.Drasil.Concepts.Physics (cohesion, fbd, force, gravity, isotropy,
 import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce, 
   shearRes, solidcon)
-import Data.Drasil.Concepts.Computation (compcon, algorithm)
-import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Theories.Physics (weightSrc, hsPressureSrc)
 
 import Data.Drasil.People (brooks, henryFrankis)
@@ -153,12 +150,12 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 ideaDicts :: [IdeaDict]
 ideaDicts = 
   -- Actual IdeaDicts
-  doccon ++ prodtcon ++ defs ++ educon ++ compcon ++
+  defs ++
   -- CIs
-  nw progName : map nw acronyms ++ map nw mathcon' ++ map nw doccon' ++
+  nw progName : map nw acronyms ++ map nw mathcon' ++
   -- ConceptChunks
-  nw algorithm : map nw defs' ++ map nw softwarecon ++ map nw physicCon ++
-  map nw mathcon ++ map nw solidcon ++ map nw physicalcon ++
+  map nw defs' ++ map nw softwarecon ++ map nw physicCon ++
+  map nw solidcon ++ map nw physicalcon ++
   -- DefinedQuantityDicts
   map nw symbols ++
   -- UnitDefns
@@ -166,7 +163,7 @@ ideaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map qw symbols) ideaDicts
-  (map cw iMods ++ map cw symbols ++ srsDomains) units dataDefs iMods
+  (map cw iMods ++ map cw symbols) units dataDefs iMods
   generalDefinitions tMods concIns labCon allRefs citations
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]

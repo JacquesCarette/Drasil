@@ -9,7 +9,7 @@ import qualified Drasil.DocLang.SRS as SRS
 
 import Data.Drasil.Concepts.Computation (inDatum, compcon)
 import Data.Drasil.Concepts.Documentation (analysis, doccon', physics,
-  problem, srsDomains, assumption, goalStmt, physSyst, sysCont, software, user,
+  problem, assumption, goalStmt, physSyst, sysCont, software, user,
   requirement, refBy, refName, typUnc, example, softwareSys, system, environment, 
   product_, interface, condition, physical, datum, input_, softwareConstraint, 
   output_, endUser)
@@ -185,7 +185,7 @@ tableOfAbbrvsIdeaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb (qw pi_ : symbols) ideaDicts
-  (map cw constrained ++ srsDomains) (map unitWrapper [metre, radian, second]) 
+  (map cw constrained) (map unitWrapper [metre, radian, second]) 
   dataDefs iMods genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.
@@ -194,7 +194,7 @@ allRefs = [externalLinkRef]
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
-  (cw pi_ : srsDomains) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
+  [cw pi_] ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

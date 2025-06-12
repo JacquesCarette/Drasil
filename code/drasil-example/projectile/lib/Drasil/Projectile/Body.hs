@@ -35,7 +35,7 @@ import Data.Drasil.Concepts.Education(calculus, educon, undergraduate,
   highSchoolPhysics, highSchoolCalculus)
 
 import Drasil.Projectile.Assumptions (assumptions)
-import Drasil.Projectile.Concepts (concepts, launcher, projectile, target)
+import Drasil.Projectile.Concepts (launcher, projectile, target, defs, projMotion, rectVel)
 import Drasil.Projectile.DataDefs (dataDefs)
 import Drasil.Projectile.Figures (figLaunch, sysCtxFig1)
 import Drasil.Projectile.GenDefs (genDefns)
@@ -167,13 +167,12 @@ tMods = [accelerationTM, velocityTM]
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- Actual IdeaDicts
-  sciCompS : doccon ++ educon ++ compcon ++ concepts ++ unitalIdeas ++
+  [sciCompS, projMotion, rectVel] ++ doccon ++ educon ++ compcon ++ unitalIdeas ++
   -- CIs
   nw progName : nw inValue : map nw doccon' ++ map nw physicCon' ++
   -- ConceptChunks
   map nw [mass, errMsg, program, algorithm] ++ map nw physicCon ++ map nw mathcon ++
-  -- QuantityDicts
-  map nw symbols ++
+  map nw defs ++
   -- UnitalChunks
   map nw physicscon ++
   -- UnitDefns
@@ -183,13 +182,11 @@ tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =
   -- CIs
   map nw acronyms ++
-  -- DefinedQuantityDicts
-  nw pi_ :
   -- QuantityDicts
   map nw symbols
 
 symbMap :: ChunkDB
-symbMap = cdb symbols ideaDicts
+symbMap = cdb (qw pi_ : symbols) ideaDicts
   (map cw constrained ++ srsDomains) (map unitWrapper [metre, radian, second]) 
   dataDefs iMods genDefns tMods concIns [] allRefs citations
 
@@ -296,7 +293,7 @@ physSystParts = map (!.)
 -- Various gathered data that should be automated --
 ----------------------------------------------------
 symbols :: [QuantityDict]
-symbols = unitalQuants ++ map qw constants ++
+symbols = unitalQuants ++ map qw [gravitationalAccelConst, tol] ++
   map qw [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
   iyPos, ixVel, iyVel, position, scalarPos, projPos, projSpeed, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel,

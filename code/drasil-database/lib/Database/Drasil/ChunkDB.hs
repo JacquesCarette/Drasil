@@ -40,6 +40,11 @@ import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Map as Map
 import Utils.Drasil (invert)
 import Debug.Trace (trace)
+import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
+import Data.Drasil.Software.Products (prodtcon)
+import Data.Drasil.Concepts.Computation (algorithm, inValue)
+import Data.Drasil.Concepts.Software (errMsg, program)
+import Data.Drasil.Concepts.Math (mathcon, mathcon')
 
 -- | The misnomers below (for the following Map types) are not actually a bad thing. We want to ensure data can't
 -- be added to a map if it's not coming from a chunk, and there's no point confusing
@@ -244,7 +249,7 @@ cdb s t c u d ins gd tm ci lc r cits =
     _traceTable = Map.empty,
     _refbyTable = Map.empty,
     _refTable = idMap "RefMap" r
-  }
+  } `addCdb` basisCDB
 
 
 addCdb :: ChunkDB -> ChunkDB -> ChunkDB
@@ -284,3 +289,33 @@ generateRefbyMap = invert
 -- | Trace a 'UID' to referenced 'UID's.
 refbyLookup :: UID -> RefbyMap -> [UID]
 refbyLookup c = fromMaybe [] . Map.lookup c
+
+basisIdeaDicts :: [IdeaDict]
+basisIdeaDicts =
+  -- Actual IdeaDicts
+  doccon ++ prodtcon ++ [inValue] ++
+  -- CIs
+  map nw doccon' ++ map nw mathcon'
+  -- ConceptChunks
+  map nw [algorithm, errMsg, program] ++ map nw mathcon
+
+basisCDB :: ChunkDB
+basisCDB =
+  CDB {
+    -- CHUNKS
+    symbolTable           = Map.empty,
+    termTable             = termMap basisIdeaDicts,
+    conceptChunkTable     = srsDomains
+    _unitTable            = Map.empty,
+    _dataDefnTable        = Map.empty,
+    _insmodelTable        = Map.empty,
+    _gendefTable          = Map.empty,
+    _theoryModelTable     = Map.empty,
+    _conceptinsTable      = Map.empty,
+    _citationTable        = Map.empty, 
+    -- NOT CHUNKS
+    _labelledcontentTable = Map.empty
+    _traceTable           = Map.empty,
+    _refbyTable           = Map.empty,
+    _refTable             = Map.empty
+  }

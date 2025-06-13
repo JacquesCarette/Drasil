@@ -27,8 +27,7 @@ import Data.Drasil.Concepts.Software (correctness, verifiability,
 import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
-import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamentals,
-  derived)
+import Data.Drasil.SI_Units (siUnits)
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
@@ -144,9 +143,7 @@ ideaDicts =
   map nw softwarecon ++ map nw physicalcon ++
   -- QuantityDicts
   map nw thisTerms ++ map nw unitarySymbols ++
-  map nw [riskFun, isSafeProb, isSafeLoad, sdfTol, dimlessLoad, tolLoad, lDurFac] ++
-  -- UnitDefns
-  map nw fundamentals ++ map nw derived
+  map nw [riskFun, isSafeProb, isSafeLoad, sdfTol, dimlessLoad, tolLoad, lDurFac]
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =
@@ -155,9 +152,8 @@ tableOfAbbrvsIdeaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb thisSymbols ideaDicts
-  (map cw symb ++ terms ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
-  ++ map unitWrapper [pascal, newton]) GB.dataDefs iMods [] tMods concIns
-  labCon allRefs citations
+  (map cw symb ++ terms ++ Doc.srsDomains) siUnits 
+  GB.dataDefs iMods [] tMods concIns labCon allRefs citations
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts

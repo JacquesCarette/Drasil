@@ -35,7 +35,7 @@ import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Theories.Physics (weightSrc, hsPressureSrc)
 
 import Data.Drasil.People (brooks, henryFrankis)
-import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
+import Data.Drasil.SI_Units (degree, siUnits)
 
 import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, unlikelyChgs)
@@ -138,9 +138,6 @@ purp = foldlSent_ [S "evaluate the", phrase fs `S.ofA` phrasePoss slope,
   S "as well as the", phrase intrslce, phraseNP (normForce `and_` shearForce),
   S "along the", phrase crtSlpSrf]
 
-units :: [UnitDefn]
-units = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
-
 concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs
 
@@ -160,13 +157,11 @@ ideaDicts =
   nw algorithm : map nw defs' ++ map nw softwarecon ++ map nw physicCon ++
   map nw mathcon ++ map nw solidcon ++ map nw physicalcon ++
   -- DefinedQuantityDicts
-  map nw symbols ++
-  -- UnitDefns
-  map nw derived ++ map nw fundamentals ++ map nw units
+  map nw symbols
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map qw symbols) ideaDicts
-  (map cw iMods ++ map cw symbols ++ srsDomains) units dataDefs iMods
+  (map cw iMods ++ map cw symbols ++ srsDomains) (degree : siUnits) dataDefs iMods
   generalDefinitions tMods concIns labCon allRefs citations
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]

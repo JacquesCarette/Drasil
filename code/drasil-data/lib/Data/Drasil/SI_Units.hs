@@ -15,8 +15,11 @@ derived = [becquerel, calorie, centigrade, coulomb, farad, gray, henry, hertz, j
   katal, kilopascal, kilowatt, litre, lumen, lux,  millimetre, newton, ohm,
   pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber]
 
+common :: [UnitDefn]
+common = [s_2, m_2, m_3]
+
 siUnits :: [UnitDefn]
-siUnits = map unitWrapper fundamentals ++ map unitWrapper derived
+siUnits = fundamentals ++ derived ++ common
 
 -- * Fundamental SI Units
 

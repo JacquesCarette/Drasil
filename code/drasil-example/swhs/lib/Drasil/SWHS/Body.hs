@@ -35,8 +35,7 @@ import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat)
 import Data.Drasil.Software.Products (prodtcon)
 
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
-import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
-  fundamentals, derived, m_2, m_3)
+import Data.Drasil.SI_Units (siUnits)
 
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
@@ -70,11 +69,6 @@ printSetting = piSys fullSI Equational defaultConfiguration
 
 resourcePath :: String
 resourcePath = "../../../../datafiles/swhs/"
-
-units :: [UnitDefn]
-units = map unitWrapper [metre, kilogram, second] ++
-  map unitWrapper [centigrade, joule, watt]
---Will there be a table of contents?
 
 si :: System
 si = SI {
@@ -122,15 +116,13 @@ ideaDicts =
   -- UncertainChunks
   map nw [absTol, relTol] ++
   -- ConstQDefs
-  map nw specParamValList ++
-  -- UnitDefns
-  map nw units ++ map nw fundamentals ++ map nw derived ++ map nw [m_2, m_3]
+  map nw specParamValList
 
 symbMap :: ChunkDB
 symbMap = cdb (qw (heatEInPCM ^. output) : symbolsAll) -- heatEInPCM ?
   ideaDicts
   (cw heatEInPCM : map cw symbols ++ srsDomains ++ map cw specParamValList) -- FIXME: heatEInPCM?
-  (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs tMods concIns [] allRefs citations
+  siUnits SWHS.dataDefs insModel genDefs tMods concIns [] allRefs citations
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =

@@ -157,7 +157,7 @@ allRefs :: [Reference]
 allRefs = [externalLinkRef]
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts ([] :: [ConceptChunk])
+usedDB = cdb' ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 concIns :: [ConceptInstance]

@@ -112,7 +112,7 @@ symbMap = cdb ([] :: [QuantityDict]) ideaDicts ([] :: [ConceptChunk])
   ([] :: [LabelledContent]) ([] :: [Reference]) citations
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
+usedDB = cdb' ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
   ([] :: [LabelledContent]) ([] :: [Reference]) []

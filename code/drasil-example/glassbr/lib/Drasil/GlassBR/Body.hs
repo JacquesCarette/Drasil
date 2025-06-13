@@ -158,7 +158,7 @@ symbMap = cdb thisSymbols ideaDicts
   labCon allRefs citations
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
+usedDB = cdb' ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- | Holds all references and links used in the document.

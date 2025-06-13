@@ -175,7 +175,7 @@ tableOfAbbrvsIdeaDicts =
   map nw symbolsAll
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
+usedDB = cdb' ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
   ([] :: [ConceptChunk])
   ([] :: [UnitDefn])
   ([] :: [DataDefinition])

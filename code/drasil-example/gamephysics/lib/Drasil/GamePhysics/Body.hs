@@ -165,7 +165,7 @@ allRefs :: [Reference]
 allRefs = [externalLinkRef, pymunk] ++ uriReferences ++ offShelfSolRefs
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
+usedDB = cdb' ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of

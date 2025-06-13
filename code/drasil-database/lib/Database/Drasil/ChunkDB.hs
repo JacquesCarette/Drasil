@@ -15,7 +15,7 @@ module Database.Drasil.ChunkDB (
   RefbyMap, TraceMap, UMap,
   -- * Functions
   -- ** Constructors
-  cdb, idMap, termMap, conceptMap, traceMap, generateRefbyMap, -- idMap, termMap for docLang
+  cdb, cdb', idMap, termMap, conceptMap, traceMap, generateRefbyMap, -- idMap, termMap for docLang
   -- ** Lookup Functions
   asOrderedList, collectUnits,
   termResolve, termResolve', defResolve, symbResolve,
@@ -251,6 +251,30 @@ cdb s t c u d ins gd tm ci lc r cits =
     _refbyTable = Map.empty,
     _refTable = idMap "RefMap" r
   } `addCdb` basisCDB
+
+cdb' :: (Quantity q, MayHaveUnit q, Concept c, IsUnit u) =>
+    [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
+    [GenDefn] -> [TheoryModel] -> [ConceptInstance] ->
+    [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
+cdb' s t c u d ins gd tm ci lc r cits =
+  CDB {
+    -- CHUNKS
+    symbolTable = symbolMap s,
+    termTable = termMap t,
+    conceptChunkTable = conceptMap c,
+    _unitTable = unitMap u,
+    _dataDefnTable = idMap "DataDefnMap" d,
+    _insmodelTable = idMap "InsModelMap" ins,
+    _gendefTable = idMap "GenDefnmap" gd,
+    _theoryModelTable = idMap "TheoryModelMap" tm,
+    _conceptinsTable = idMap "ConcInsMap" ci,
+    _citationTable = idMap "CiteMap" cits,
+    -- NOT CHUNKS
+    _labelledcontentTable = idMap "LLCMap" lc,
+    _traceTable = Map.empty,
+    _refbyTable = Map.empty,
+    _refTable = idMap "RefMap" r
+  }
 
 
 addCdb :: ChunkDB -> ChunkDB -> ChunkDB

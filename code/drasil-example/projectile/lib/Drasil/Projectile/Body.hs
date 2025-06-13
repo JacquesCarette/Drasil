@@ -193,7 +193,7 @@ allRefs :: [Reference]
 allRefs = [externalLinkRef]
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
+usedDB = cdb' ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
   [cw pi_] ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 stdFields :: Fields

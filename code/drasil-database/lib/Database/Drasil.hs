@@ -5,7 +5,7 @@ module Database.Drasil (
   ChunkDB(symbolTable, termTable, conceptChunkTable, CDB), RefbyMap, TraceMap, UMap
   , TermAbbr(..)
   -- ** Constructors
-  , cdb, idMap, termMap, conceptMap, traceMap, generateRefbyMap
+  , cdb, cdb', idMap, termMap, conceptMap, traceMap, generateRefbyMap
   -- ** Lookup Functions
   , asOrderedList, collectUnits
   , termResolve, termResolve', defResolve, symbResolve

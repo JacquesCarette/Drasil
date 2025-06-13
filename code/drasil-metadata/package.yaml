@@ -2,7 +2,7 @@ name:                drasil-metadata
 version:             0.1.1.0
 author:              "Jacques Carette"
 maintainer:          "Jacques Carette"
-synopsis:	     Meta-data sub-package fro Drasil
+synopsis:	     Meta-data sub-package for Drasil
 github:              JacquesCarette/Drasil
 homepage:            https://jacquescarette.github.io/Drasil/
 description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>

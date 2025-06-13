@@ -15,7 +15,7 @@ module Database.Drasil.ChunkDB (
   RefbyMap, TraceMap, UMap,
   -- * Functions
   -- ** Constructors
-  cdb, idMap, termMap, conceptMap, traceMap, generateRefbyMap, -- idMap, termMap for docLang
+  cdb, cdb', idMap, termMap, conceptMap, traceMap, generateRefbyMap, -- idMap, termMap for docLang
   -- ** Lookup Functions
   asOrderedList, collectUnits,
   termResolve, termResolve', defResolve, symbResolve,
@@ -40,6 +40,12 @@ import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Map as Map
 import Utils.Drasil (invert)
 import Debug.Trace (trace)
+import Data.Drasil.Concepts.Documentation (doccon, srsDomains, doccon')
+import Data.Drasil.Software.Products (prodtcon)
+import Data.Drasil.Concepts.Computation (algorithm, compcon)
+import Data.Drasil.Concepts.Software (errMsg, program)
+import Data.Drasil.Concepts.Math (mathcon)
+import Data.Drasil.Concepts.Education (educon)
 
 -- | The misnomers below (for the following Map types) are not actually a bad thing. We want to ensure data can't
 -- be added to a map if it's not coming from a chunk, and there's no point confusing
@@ -244,7 +250,56 @@ cdb s t c u d ins gd tm ci lc r cits =
     _traceTable = Map.empty,
     _refbyTable = Map.empty,
     _refTable = idMap "RefMap" r
+  } `addCdb` basisCDB
+
+cdb' :: (Quantity q, MayHaveUnit q, Concept c, IsUnit u) =>
+    [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
+    [GenDefn] -> [TheoryModel] -> [ConceptInstance] ->
+    [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
+cdb' s t c u d ins gd tm ci lc r cits =
+  CDB {
+    -- CHUNKS
+    symbolTable = symbolMap s,
+    termTable = termMap t,
+    conceptChunkTable = conceptMap c,
+    _unitTable = unitMap u,
+    _dataDefnTable = idMap "DataDefnMap" d,
+    _insmodelTable = idMap "InsModelMap" ins,
+    _gendefTable = idMap "GenDefnmap" gd,
+    _theoryModelTable = idMap "TheoryModelMap" tm,
+    _conceptinsTable = idMap "ConcInsMap" ci,
+    _citationTable = idMap "CiteMap" cits,
+    -- NOT CHUNKS
+    _labelledcontentTable = idMap "LLCMap" lc,
+    _traceTable = Map.empty,
+    _refbyTable = Map.empty,
+    _refTable = idMap "RefMap" r
   }
+
+
+addCdb :: ChunkDB -> ChunkDB -> ChunkDB
+addCdb cdb1 cdb2 =
+  CDB {
+    -- CHUNKS
+    symbolTable           = concatCdbMap "SymbolMap" (symbolTable cdb1) (symbolTable cdb2),
+    termTable             = concatCdbMap "TermMap" (termTable cdb1) (termTable cdb2),
+    conceptChunkTable     = concatCdbMap "ConceptMap" (conceptChunkTable cdb1) (conceptChunkTable cdb2),
+    _unitTable            = concatCdbMap "UnitMap" (_unitTable cdb1) (_unitTable cdb2),
+    _dataDefnTable        = concatCdbMap "" (_dataDefnTable cdb1) (_dataDefnTable cdb2),
+    _insmodelTable        = concatCdbMap "" (_insmodelTable cdb1) (_insmodelTable cdb2),
+    _gendefTable          = concatCdbMap "" (_gendefTable cdb1) (_gendefTable cdb2),
+    _theoryModelTable     = concatCdbMap "" (_theoryModelTable cdb1) (_theoryModelTable cdb2),
+    _conceptinsTable      = concatCdbMap "" (_conceptinsTable cdb1) (_conceptinsTable cdb2),
+    _citationTable        = concatCdbMap "" (_citationTable cdb1) (_citationTable cdb2),
+    -- NOT CHUNKS
+    _labelledcontentTable = concatCdbMap "" (_labelledcontentTable cdb1) (_labelledcontentTable cdb2),
+    _traceTable           = concatCdbMap "" (_traceTable cdb1) (_traceTable cdb2),
+    _refbyTable           = concatCdbMap "" (_refbyTable cdb1) (_refbyTable cdb2),
+    _refTable             = concatCdbMap "" (_refTable cdb1) (_refTable cdb2)
+  }
+  where
+    concatCdbMap mn = Map.unionWithKey (preferNew mn)
+    preferNew mn key new _ = trace ("'" ++ show key ++ "' is inserted twice in '" ++ mn ++ "' while adding to basis!") new
 
 -- | Gets the units of a 'Quantity' as 'UnitDefn's.
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
@@ -262,3 +317,33 @@ generateRefbyMap = invert
 -- | Trace a 'UID' to referenced 'UID's.
 refbyLookup :: UID -> RefbyMap -> [UID]
 refbyLookup c = fromMaybe [] . Map.lookup c
+
+basisIdeaDicts :: [IdeaDict]
+basisIdeaDicts =
+  -- Actual IdeaDicts
+  doccon ++ prodtcon ++ educon ++ compcon ++
+  -- CIs
+  map nw doccon' ++
+  -- ConceptChunks
+  map nw [algorithm, errMsg, program] ++ map nw mathcon
+
+basisCDB :: ChunkDB
+basisCDB =
+  CDB {
+    -- CHUNKS
+    symbolTable           = Map.empty,
+    termTable             = termMap basisIdeaDicts,
+    conceptChunkTable     = conceptMap srsDomains,
+    _unitTable            = Map.empty,
+    _dataDefnTable        = Map.empty,
+    _insmodelTable        = Map.empty,
+    _gendefTable          = Map.empty,
+    _theoryModelTable     = Map.empty,
+    _conceptinsTable      = Map.empty,
+    _citationTable        = Map.empty, 
+    -- NOT CHUNKS
+    _labelledcontentTable = Map.empty,
+    _traceTable           = Map.empty,
+    _refbyTable           = Map.empty,
+    _refTable             = Map.empty
+  }

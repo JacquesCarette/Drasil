@@ -8,10 +8,12 @@ module Language.Drasil.Code.Imperative.Modules (
   genCalcModProc, genCalcFunc, genCalcFuncProc, genOutputMod, genOutputModProc,
   genOutputFormat, genOutputFormatProc, genSampleInput
 ) where
+
+import Database.Drasil (ChunkDB)
+import Drasil.Code.CodeExpr.Development
+
 import Language.Drasil (Constraint(..), RealInterval(..),
   HasUID(uid), Stage(..))
-import Database.Drasil (ChunkDB)
-import Language.Drasil.CodeExpr.Development
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.Descriptions (constClassDesc,
   constModDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, inputClassDesc,

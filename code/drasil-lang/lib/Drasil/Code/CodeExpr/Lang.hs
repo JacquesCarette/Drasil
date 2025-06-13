@@ -1,14 +1,13 @@
 {-# LANGUAGE GADTs #-}
-
-module Language.Drasil.CodeExpr.Lang where
+module Drasil.Code.CodeExpr.Lang where
 
 import Prelude hiding (sqrt)
 
+import Drasil.Database.UID (UID)
 import Language.Drasil.Expr.Lang (Completeness)
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal(..))
 import Language.Drasil.Space (Space, RealInterval, DiscreteDomainDesc)
-import Drasil.Database.UID (UID)
 
 -- * Operators (mostly binary)
 

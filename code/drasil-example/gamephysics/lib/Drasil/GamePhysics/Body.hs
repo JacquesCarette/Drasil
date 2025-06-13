@@ -1,11 +1,8 @@
 module Drasil.GamePhysics.Body where
 
-import Control.Lens ((^.))
-
 import Language.Drasil hiding (organization, section)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS
-import Theory.Drasil (output)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
@@ -27,14 +24,15 @@ import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
 import Data.Drasil.Software.Products (openSource, prodtcon, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
-import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon, rigidBody, collision, damping)
+import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon,
+  physicCon', rigidBody, collision, damping)
 import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
   mathcon, mathcon', rightHand, line, point)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
 import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
-import Drasil.GamePhysics.Concepts (acronyms, threeD, twoD)
+import Drasil.GamePhysics.Concepts (acronyms, threeD, twoD, centreMass)
 import Drasil.GamePhysics.DataDefs (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iMods, instModIntro)
@@ -43,7 +41,7 @@ import Drasil.GamePhysics.References (citations, uriReferences)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, pymunk)
 import Drasil.GamePhysics.TMods (tMods)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
-  inputSymbols, outputSymbols, inputConstraints, defSymbols)
+  inputSymbols, outputSymbols, inputConstraints, defSymbols, symbols)
 import Drasil.GamePhysics.GenDefs (generalDefns)
 
 srs :: Document
@@ -144,17 +142,14 @@ ideaDicts =
   -- Actual IdeaDicts
   doccon ++ educon ++ prodtcon ++
   -- CIs
-  nw progName : map nw acronyms ++ map nw doccon' ++ map nw CM.mathcon' ++
+  map nw [progName, centreMass] ++ map nw doccon' ++ map nw CM.mathcon' ++
+  map nw CP.physicCon' ++
   -- ConceptChunks
   nw algorithm : map nw softwarecon ++ map nw CP.physicCon ++ map nw CM.mathcon ++
   -- UnitDefns
   map nw derived ++ map nw fundamentals ++
-  -- GenDefns
-  map nw generalDefns ++
-  -- InstanceModels
-  map nw iMods ++
   -- QuantityDicts
-  map nw symbolsAll ++ map (nw . (^. output)) iMods
+  map nw symbolsAll
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =
@@ -164,7 +159,7 @@ tableOfAbbrvsIdeaDicts =
   map nw acronyms
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll) ideaDicts
+symbMap = cdb (map qw symbols) ideaDicts
   (map cw defSymbols ++ srsDomains ++ map cw iMods) units dataDefs
   iMods generalDefns tMods concIns [] allRefs citations
 

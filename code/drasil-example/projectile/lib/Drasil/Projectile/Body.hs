@@ -25,7 +25,7 @@ import Data.Drasil.Quantities.Math (pi_, piConst)
 import Data.Drasil.Quantities.Physics (acceleration, constAccel,
   gravitationalAccelConst, iPos, iSpeed, iVel, ixPos, iyPos, ixVel, iyVel,
   position, scalarPos, time, velocity, xAccel, xConstAccel, xPos,
-  xVel, yAccel, yConstAccel, yPos, yVel, physicscon)
+  xVel, yAccel, yConstAccel, yPos, yVel, physicscon, speed, scalarAccel, constAccelV)
 
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
 import Data.Drasil.SI_Units (metre, radian, second)
@@ -35,7 +35,7 @@ import Data.Drasil.Concepts.Education(calculus, educon, undergraduate,
   highSchoolPhysics, highSchoolCalculus)
 
 import Drasil.Projectile.Assumptions (assumptions)
-import Drasil.Projectile.Concepts (concepts, launcher, projectile, target)
+import Drasil.Projectile.Concepts (launcher, projectile, target, defs, projMotion, rectVel)
 import Drasil.Projectile.DataDefs (dataDefs)
 import Drasil.Projectile.Figures (figLaunch, sysCtxFig1)
 import Drasil.Projectile.GenDefs (genDefns)
@@ -167,14 +167,12 @@ tMods = [accelerationTM, velocityTM]
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- Actual IdeaDicts
-  sciCompS : doccon ++ educon ++ compcon ++ concepts ++ unitalIdeas ++
+  [sciCompS, projMotion, rectVel] ++ doccon ++ educon ++ compcon ++ unitalIdeas ++
   -- CIs
   nw progName : nw inValue : map nw doccon' ++ map nw physicCon' ++
-  map nw acronyms ++
   -- ConceptChunks
   map nw [mass, errMsg, program, algorithm] ++ map nw physicCon ++ map nw mathcon ++
-  -- QuantityDicts
-  map nw symbols ++
+  map nw defs ++
   -- UnitalChunks
   map nw physicscon ++
   -- UnitDefns
@@ -184,14 +182,12 @@ tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =
   -- CIs
   map nw acronyms ++
-  -- DefinedQuantityDicts
-  nw pi_ :
   -- QuantityDicts
   map nw symbols
 
 symbMap :: ChunkDB
-symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols) ideaDicts
-  (cw pi_ : map cw constrained ++ srsDomains) (map unitWrapper [metre, radian, second]) 
+symbMap = cdb (qw pi_ : symbols) ideaDicts
+  (map cw constrained ++ srsDomains) (map unitWrapper [metre, radian, second]) 
   dataDefs iMods genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.
@@ -297,10 +293,11 @@ physSystParts = map (!.)
 -- Various gathered data that should be automated --
 ----------------------------------------------------
 symbols :: [QuantityDict]
-symbols = qw gravitationalAccelConst : unitalQuants ++ map qw constants ++
+symbols = unitalQuants ++ map qw [gravitationalAccelConst, tol] ++
   map qw [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
   iyPos, ixVel, iyVel, position, scalarPos, projPos, projSpeed, time, velocity, xAccel,
-  xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel]
+  xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel,
+  constAccelV]
 
 constants :: [ConstQDef]
 constants = [gravitationalAccelConst, piConst, tol]

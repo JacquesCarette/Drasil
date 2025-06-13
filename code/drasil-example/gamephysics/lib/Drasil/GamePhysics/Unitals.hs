@@ -61,7 +61,7 @@ outputSymbols = map qw [QP.position, QP.velocity, QM.orientation,
 unitalChunks :: [UnitalChunk]
 unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel, 
   QP.impulseV, QP.impulseS, iVect, jVect, normalVect, QP.distance, QP.displacement, 
-  QP.time, QP.angularDisplacement, posCM, posj, massj, mTot, accj, velj,
+  QP.time, QP.angularDisplacement, posCM, posj, massj, mTot, accj, angAccj, velj,
   QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
   perpLenA, perpLenB, forcej, torquej, timeC, velA, velB, massA, massB,
   angVelA, angVelB, force_1, force_2, mass_1, mass_2, 
@@ -69,7 +69,7 @@ unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   momtInertA, momtInertB, timeT, inittime, momtInertK, pointOfCollision, 
   contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP, time_1, time_2, velo_1, velo_2,
   QP.chgInVelocity, QP.potEnergy, QP.height, rRot, mLarger, QP.fOfGravity, QP.positionVec, distMass, 
-  dVect, QP.chgMomentum,QP.chgInVelocity, time_1, time_2, velo_1, velo_2]
+  dVect, QP.chgMomentum]
 
 -----------------------
 -- PARAMETRIZED HACK --
@@ -140,7 +140,7 @@ iVect, jVect, normalVect, force_1, force_2, forcej, mass_1, mass_2,
   momtInertK, pointOfCollision, contDispK, collisionImpulse, finRelVel,
   velAP, velBP, time_1, time_2, velo_1, velo_2, rRot, mLarger, distMass, dVect :: UnitalChunk
 
-iVect = uc (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
+iVect = uc (dccWDS "unitVectI" (compoundPhrase' (cn "horizontal")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) 
                (eqSymb QM.unitVect) Real metre
 jVect       = uc (dccWDS "unitVectJ" (compoundPhrase' (cn "vertical")
@@ -149,7 +149,7 @@ normalVect  = uc (dccWDS "normalVect" (nounPhraseSent (S "collision" +:+
                    phrase QM.normalVect)) (phrase QM.normalVect)) 
                    (eqSymb QM.normalVect) (Vect Real) metre
 
-dVect = uc (dccWDS "unitVect" 
+dVect = uc (dccWDS "unitVectD" 
           (cn "unit vector directed from the center of the large mass to the center of the smaller mass") 
                    (phrase QM.unitVect)) (vec (hat lD)) Real metre
 

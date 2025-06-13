@@ -38,8 +38,9 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   ODEInfo(..), ODEOptions(..), ODEMethod(..), ODELibPckg, mkODELib,
   mkODELibNoPath, pubStateVar, privStateVar,
   NamedArgument, narg)
-import Language.Drasil.CodeExpr
-import Language.Drasil.CodeExpr.Development
+
+import Drasil.Code.CodeExpr
+import Drasil.Code.CodeExpr.Development
 
 import Control.Lens ((^.), _1, _2, over)
 

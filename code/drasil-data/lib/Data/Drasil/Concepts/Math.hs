@@ -75,7 +75,7 @@ point        = dccWDS "point"     (pn' "point")                   $ S "An exact 
                                                                   fromSource pointSource
 probability  = dcc "probability"  (cnIES "probability")          "The likelihood of an event to occur"
 rate         = dcc "rate"         (cn' "rate")                   "Ratio that compares two quantities having different units of measure"
-rightHand    = dcc "rightHand"    (cn' "right-handed coordinate system")  "A coordinate system where the positive z-axis comes out of the screen."
+rightHand    = dcc "rightHand"    (cn' "right-handed coordinate system")  "A coordinate system where the positive z-axis comes out of the screen"
 shape        = dcc "shape"        (cn' "shape")                  "The outline of an area or figure"
 surface      = dcc "surface"      (cn' "surface")                "The outer or topmost boundary of an object"
 unit_        = dcc "unit"         (cn' "unit")                   "Identity element"

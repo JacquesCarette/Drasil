@@ -24,7 +24,7 @@ targetXAxis: The target lies on the \\(x\\)-axis (from [A:neglectCurv](./SecAssu
 
 <div id="posXDirection"></div>
 
-posXDirection: The positive \\(x\\)-direction is from the launcher to the target. (RefBy: [IM:offsetIM](./SecIMs.md#IM:offsetIM), [IM:messageIM](./SecIMs.md#IM:messageIM), [IM:calOfLandingDist](./SecIMs.md#IM:calOfLandingDist), and [IM:calOfLandingTime](./SecIMs.md#IM:calOfLandingTime).)
+posXDirection: The positive \\(x\\)-direction is from the launcher to the target. (RefBy: [IM:messageIM](./SecIMs.md#IM:messageIM), [IM:offsetIM](./SecIMs.md#IM:offsetIM), [IM:calOfLandingDist](./SecIMs.md#IM:calOfLandingDist), and [IM:calOfLandingTime](./SecIMs.md#IM:calOfLandingTime).)
 
 <div id="constAccel"></div>
 

@@ -9,8 +9,8 @@ module Drasil.GOOL.LanguageRenderer.CSharpRenderer (
 
 import Utils.Drasil (indent)
 
-import Drasil.GOOL.CodeType (CodeType(..))
-import Drasil.GOOL.InterfaceCommon (SharedProg, Label, MSBody, VSType,
+import Drasil.Shared.CodeType (CodeType(..))
+import Drasil.Shared.InterfaceCommon (SharedProg, Label, MSBody, VSType,
   VSFunction, SVariable, SValue, MSStatement, MSParameter, SMethod, BodySym(..),
   oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..),
   VisibilitySym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..),
@@ -29,7 +29,7 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   objMethodCallNoParams, OOFunctionSym(..), ($.), GetSet(..), OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
   OOMethodSym(..))
-import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
@@ -39,7 +39,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   StatementElim(statementTerm), RenderVisibility(..), VisibilityElim, MethodTypeSym(..),
   RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..),
   MethodElim, BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
-import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block,
+import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
@@ -48,19 +48,19 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   ModuleElim)
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
-import Drasil.GOOL.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd, 
+import Drasil.Shared.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
   inLabel, tryLabel, catchLabel, throwLabel, exceptionObj', new', listSep',
   args, nullLabel, listSep, access, containing, mathFunc, valueList, 
   variableList, appendToBody, surroundBody)
-import qualified Drasil.GOOL.LanguageRenderer as R (class', multiStmt, body, 
+import qualified Drasil.Shared.LanguageRenderer as R (class', multiStmt, body, 
   printFile, param, method, listDec, classVar, func, cast, listSetFunc, 
   castObj, static, dynamic, break, continue, private, public, blockCmt, docCmt, 
   addComments, commentedMod, commentedItem)
-import Drasil.GOOL.LanguageRenderer.Constructors (mkStmt,  mkStmtNoEnd,
+import Drasil.Shared.LanguageRenderer.Constructors (mkStmt,  mkStmtNoEnd,
   mkStateVal, mkVal, VSOp, unOpPrec, powerPrec, unExpr, unExpr', 
   unExprNumDbl, typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
-import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
+import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
@@ -72,32 +72,34 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   comment, throw, ifCond, tryCatch, construct, param, method, getMethod,
   setMethod, function, buildClass, implementingClass, commentedClass,
   modFromData, fileDoc, fileFromData, defaultOptSpace, local)
-import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
-  constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
-  extFuncAppMixedArgs, indexOf, contains, listAddFunc, discardFileLine, intClass, 
-  arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, docMain, 
-  mainFunction, buildModule', string, constDecDef, docInOutFunc, bindingError, 
-  notNull, listDecDef, destructorError, stateVarDef, constVar, listSetFunc, 
-  extraClass, listAccessFunc, doubleRender, openFileR, openFileW, stateVar, 
-  inherit, implements, intToIndex, indexToInt, global, setMethodCall)
-import qualified Drasil.GOOL.LanguageRenderer.CLike as C (setType, float, double, char, 
+import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
+  arrayDec, arrayDecDef, arrayType, bindingError, buildModule', classVar, constDecDef, 
+  constVar, constructor, contains, destructorError, discardFileLine, docInOutFunc, 
+  docMain, doubleRender, doxClass, doxFunc, doxMod, extraClass, forEach, global, 
+  implements, indexOf, indexToInt, inherit, int, intClass, intToIndex, listAddFunc, 
+  listDecDef, mainFunction, notNull, objVarSelf, openFileA, openFileR, openFileW, 
+  pi, printSt, setMethodCall, stateVar, stateVarDef, string)
+
+
+
+import qualified Drasil.Shared.LanguageRenderer.CLike as C (setType, float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
   decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
   intFunc, multiAssignError, multiReturnError, multiTypeError)
-import qualified Drasil.GOOL.LanguageRenderer.Macros as M (ifExists, 
+import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists, 
   runStrategy, listSlice, stringListVals, stringListLists, forRange, 
   notifyObservers)
-import Drasil.GOOL.AST (Terminator(..), FileType(..), FileData(..), fileD, 
+import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd, 
   updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD, 
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 
   vard, CommonThunk, pureValue, vectorize, vectorize2, sumComponents,
   commonVecIndex, commonThunkElim, commonThunkDim, ScopeData)
-import Drasil.GOOL.Helpers (angles, hicat, toCode, toState, onCodeValue, 
+import Drasil.Shared.Helpers (angles, hicat, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
   on2StateWrapped, onCodeList, onStateList)
-import Drasil.GOOL.State (VS, lensGStoFS, lensMStoVS, modifyReturn, revFiles,
+import Drasil.Shared.State (VS, lensGStoFS, lensMStoVS, modifyReturn, revFiles,
   addLangImport, addLangImportVS, setFileType, getClassName, setCurrMain,
   useVarName, genLoopIndex, setVarScope)
 
@@ -109,6 +111,10 @@ import Data.Composition ((.:))
 import Data.List (intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
   equals, vcat, lbrace, rbrace, braces, colon, space, quotes, semi)
+import qualified Drasil.Shared.LanguageRenderer.Common as CS (
+  extFuncAppMixedArgs, extVar, listAccessFunc, listSetFunc )
+
+
 
 csExt :: String
 csExt = "cs"
@@ -282,7 +288,7 @@ instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
   var         = G.var
   constant    = var
-  extVar      = CP.extVar
+  extVar      = CS.extVar
   arrayElem i = G.arrayElem (litInt i)
 
 instance OOVariableSym CSharpCode where
@@ -290,6 +296,7 @@ instance OOVariableSym CSharpCode where
   self = C.self
   classVar = CP.classVar R.classVar
   extClassVar = classVar
+
   objVar = G.objVar
   objVarSelf = CP.objVarSelf
 
@@ -383,7 +390,7 @@ instance ValueExpression CSharpCode where
   inlineIf = C.inlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
-  extFuncAppMixedArgs = CP.extFuncAppMixedArgs
+  extFuncAppMixedArgs = CS.extFuncAppMixedArgs
   libFuncAppMixedArgs = C.libFuncAppMixedArgs
 
   lambda = G.lambda csLambda
@@ -461,8 +468,8 @@ instance InternalListFunc CSharpCode where
   listSizeFunc _ = funcFromData (R.func csListSize) int
   listAddFunc _ = CP.listAddFunc csListAdd
   listAppendFunc _ = G.listAppendFunc csListAppend
-  listAccessFunc = CP.listAccessFunc
-  listSetFunc = CP.listSetFunc R.listSetFunc
+  listAccessFunc = CS.listAccessFunc
+  listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance ThunkSym CSharpCode where
   type Thunk CSharpCode = CommonThunk VS

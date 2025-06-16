@@ -33,7 +33,7 @@ import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamenta
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab,
-  ptOfExplsn, con', glass, con)
+  ptOfExplsn, con', glass, iGlass, lGlass)
 import Drasil.GlassBR.DataDefs (configFp)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.Figures
@@ -138,7 +138,7 @@ ideaDicts =
   -- IdeaDicts
   [sciCompS, lateralLoad, materialProprty] ++ con' ++ doccon ++ educon ++ compcon ++
   -- CIs
-  nw progName : map nw doccon' ++ map nw mathcon' ++ map nw con ++
+  map nw [progName, iGlass, lGlass] ++ map nw doccon' ++ map nw mathcon' ++
   -- ConceptChunks
   map nw [distance, algorithm] ++ map nw terms ++ map nw mathcon ++ 
   map nw softwarecon ++ map nw physicalcon ++

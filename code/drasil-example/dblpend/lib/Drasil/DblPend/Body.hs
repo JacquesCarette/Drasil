@@ -13,7 +13,7 @@ import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (dong)
-import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz, fundamentals)
+import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.Concepts.Computation (inDatum, compcon, inValue, algorithm)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
@@ -150,8 +150,6 @@ ideaDicts =
   nw progName : map nw acronyms ++ map nw doccon' ++ map nw mathcon' ++ map nw physicCon' ++
   -- ConceptChunks
   map nw [algorithm, len, mass, errMsg, program] ++ map nw physicCon ++ map nw mathcon ++ map nw physicalcon ++
-  -- UnitDefns
-  map nw [kilogram, newton, degree, radian, metre, hertz] ++ map nw fundamentals ++
   -- DefinedQuantityDicts
   map nw [unitVect, unitVectj] ++
   -- QuantityDicts
@@ -169,7 +167,7 @@ tableOfAbbrvsIdeaDicts =
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll)
   ideaDicts srsDomains
-  (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz])
+  siUnits
   dataDefs iMods genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.

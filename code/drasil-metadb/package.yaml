@@ -1,0 +1,34 @@
+name:                drasil-metadb
+version:             0.1.1.0
+author:              "Jacques Carette"
+maintainer:          "Jacques Carette"
+synopsis:	     Meta-database sub-package for Drasil
+github:              JacquesCarette/Drasil
+homepage:            https://jacquescarette.github.io/Drasil/
+description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+language: Haskell2010
+default-extensions:
+- StrictData
+
+extra-source-files: []
+
+dependencies:
+- base >= 4.7 && < 5
+- containers
+- drasil-data
+- drasil-database
+- drasil-lang
+- drasil-theory
+
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+
+library:
+  source-dirs: lib
+  exposed-modules:
+  - MetaDatabase.Drasil
+  when:
+  - condition: false
+    other-modules: Paths_drasil_metadb

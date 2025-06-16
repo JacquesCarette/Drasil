@@ -148,7 +148,7 @@ ideaDicts =
   -- CIs
   nw progName : map nw acronyms ++ map nw mathcon' ++ map nw physicCon' ++
   -- ConceptChunks
-  map nw [len, mass] ++ map nw physicCon ++ map nw mathcon ++ map nw physicalcon ++
+  map nw [len, mass] ++ map nw physicCon ++ map nw physicalcon ++
   -- DefinedQuantityDicts
   map nw [unitVect, unitVectj] ++
   -- QuantityDicts

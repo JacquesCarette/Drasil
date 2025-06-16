@@ -170,7 +170,7 @@ ideaDicts =
   -- CIs
   nw progName : map nw physicCon' ++
   -- ConceptChunks
-  [nw mass] ++ map nw physicCon ++ map nw mathcon ++
+  [nw mass] ++ map nw physicCon ++
   map nw defs ++
   -- UnitDefns
   map nw [metre, radian, second]

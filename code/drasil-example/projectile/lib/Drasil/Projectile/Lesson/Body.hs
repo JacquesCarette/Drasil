@@ -1,5 +1,6 @@
 module Drasil.Projectile.Lesson.Body where
 
+import Drasil.SRSDocument
 import Data.List (nub)
 import Language.Drasil
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
@@ -69,7 +70,7 @@ symbMap = cdb (map qw physicscon ++ symbols) (nw projectileMotion : map nw docco
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] allRefs []
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbols :: [IdeaDict]) ([] :: [ConceptChunk])
+usedDB = cdb' ([] :: [QuantityDict]) (map nw symbols :: [IdeaDict]) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) [] [] [] [] ([] :: [ConceptInstance])
   ([] :: [LabelledContent]) ([] :: [Reference]) []
 

@@ -8,7 +8,7 @@ import Drasil.HGHC.HeatTransfer (fp, dataDefs, htInputs, htOutputs,
     nuclearPhys, symbols)
 import Drasil.HGHC.MetaConcepts (progName)
 
-import Data.Drasil.SI_Units (siUnits, fundamentals, derived, degree)
+import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans)  
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
@@ -66,9 +66,7 @@ ideaDicts =
   -- CIs
   nw progName :
   -- QuantityDicts
-  map nw symbols ++
-  -- UnitDefns
-  nw degree : map nw fundamentals ++ map nw derived
+  map nw symbols
 
 
 symbMap :: ChunkDB

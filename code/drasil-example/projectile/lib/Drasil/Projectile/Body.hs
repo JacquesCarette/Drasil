@@ -24,7 +24,7 @@ import Data.Drasil.Quantities.Math (pi_, piConst)
 import Data.Drasil.Quantities.Physics (acceleration, constAccel,
   gravitationalAccelConst, iPos, iSpeed, iVel, ixPos, iyPos, ixVel, iyVel,
   position, scalarPos, time, velocity, xAccel, xConstAccel, xPos,
-  xVel, yAccel, yConstAccel, yPos, yVel, physicscon, speed, scalarAccel, constAccelV)
+  xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel, constAccelV)
 
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
 import Data.Drasil.SI_Units (metre, radian, second)
@@ -170,9 +170,8 @@ ideaDicts =
   -- CIs
   nw progName : map nw physicCon' ++
   -- ConceptChunks
-  [nw mass] ++ map nw physicCon ++ map nw defs ++
-  -- UnitalChunks
-  map nw physicscon ++
+  [nw mass] ++ map nw physicCon ++ map nw mathcon ++
+  map nw defs ++
   -- UnitDefns
   map nw [metre, radian, second]
 

@@ -18,8 +18,7 @@ import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)
 import Data.Drasil.People (alex, luthfi, olu)
-import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
-  derived, fundamentals, joule)
+import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.Software.Products (openSource, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
@@ -133,9 +132,6 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 --FIXME: All named ideas, not just acronyms.
 
-units :: [UnitDefn] -- FIXME
-units = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [newton, radian]
-
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- CIs
@@ -143,8 +139,6 @@ ideaDicts =
   map nw CP.physicCon' ++
   -- ConceptChunks
   map nw softwarecon ++ map nw CP.physicCon ++
-  -- UnitDefns
-  map nw derived ++ map nw fundamentals ++
   -- QuantityDicts
   map nw symbolsAll
 
@@ -157,8 +151,8 @@ tableOfAbbrvsIdeaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw symbols) ideaDicts
-  (map cw defSymbols ++ map cw iMods) units dataDefs
-  iMods generalDefns tMods concIns [] allRefs citations
+  (map cw defSymbols ++ map cw iMods) 
+  siUnits dataDefs iMods generalDefns tMods concIns [] allRefs citations
 
   -- | Holds all references and links used in the document.
 allRefs :: [Reference]

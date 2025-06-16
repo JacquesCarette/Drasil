@@ -65,7 +65,7 @@ si = SI {
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ symbols) (nw projectileMotion : map nw doccon ++ 
-  map nw doccon' ++ map nw physicCon ++ concepts ++ map nw mathcon ++ map nw symbols) 
+  map nw doccon' ++ map nw physicCon ++ concepts ++ map nw mathcon) 
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] allRefs []
 
 usedDB :: ChunkDB

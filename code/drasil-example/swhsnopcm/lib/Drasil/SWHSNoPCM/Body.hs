@@ -31,8 +31,7 @@ import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
   uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
-import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
-  fundamentals, derived)
+import Data.Drasil.SI_Units (siUnits)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -77,9 +76,6 @@ printSetting = piSys fullSI Equational defaultConfiguration
 resourcePath :: String
 resourcePath = "../../../../datafiles/swhsnopcm/"
 
--- This defines the standard concepts used throughout the document
-units :: [UnitDefn]
-units = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
 symbols = pi_ : map dqdWr concepts ++ map dqdWr constrained
@@ -205,13 +201,11 @@ ideaDicts =
   -- UncertainChunks
   map nw [absTol, relTol] ++
   -- ConstQDefs
-  map nw specParamValList ++
-  -- UnitDefns
-  map nw fundamentals ++ map nw derived
+  map nw specParamValList
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts
-  (map cw symbols) units NoPCM.dataDefs NoPCM.iMods genDefs
+  (map cw symbols) siUnits NoPCM.dataDefs NoPCM.iMods genDefs
   tMods concIns [] allRefs citations
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]

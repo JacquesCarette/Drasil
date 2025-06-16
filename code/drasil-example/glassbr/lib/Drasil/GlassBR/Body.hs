@@ -41,13 +41,12 @@ import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
 import Drasil.GlassBR.MetaConcepts (progName)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations)
 import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs)
-import Drasil.GlassBR.Symbols (symbolsForSymbolTable, thisSymbols, thisTerms)
+import Drasil.GlassBR.Symbols (symbolsForSymbolTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
-  sD, termsWithAccDefn, termsWithDefsOnly, terms, dataConstraints, lDurFac,
-  isSafeProb, dimlessLoad, isSafeLoad, tolLoad, riskFun, sdfTol, unitarySymbols)
+  sD, termsWithAccDefn, termsWithDefsOnly, terms, dataConstraints)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -140,10 +139,7 @@ ideaDicts =
   map nw [progName, iGlass, lGlass] ++ map nw doccon' ++ map nw mathcon' ++
   -- ConceptChunks
   map nw [distance, algorithm] ++ map nw terms ++ map nw mathcon ++ 
-  map nw softwarecon ++ map nw physicalcon ++
-  -- QuantityDicts
-  map nw thisTerms ++ map nw unitarySymbols ++
-  map nw [riskFun, isSafeProb, isSafeLoad, sdfTol, dimlessLoad, tolLoad, lDurFac]
+  map nw softwarecon ++ map nw physicalcon
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =

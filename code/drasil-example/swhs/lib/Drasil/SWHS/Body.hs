@@ -30,7 +30,7 @@ import Data.Drasil.Concepts.Thermodynamics (enerSrc, heatTrans, htFlux,
   thermocon)
 import Data.Drasil.Quantities.Math (surArea, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol)
-import Data.Drasil.Quantities.Physics (energy, time, physicscon)
+import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat)
 import Data.Drasil.Software.Products (prodtcon)
 
@@ -51,10 +51,10 @@ import Drasil.SWHS.References (citations, uriReferences)
 import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements,
   verifyEnergyOutput)
 import Drasil.SWHS.TMods (tMods)
-import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
+import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
   htFluxC, htFluxP, inputs, inputConstraints, outputs, pcmE, pcmHTC, pcmSA,
-  relTol, simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM,
-  tempW, thickness, unitalChuncks, watE)
+  simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM,
+  tempW, thickness, watE)
 
 -------------------------------------------------------------------------------
 
@@ -108,15 +108,7 @@ ideaDicts =
   map nw mathcon' ++ 
   -- ConceptChunks
   nw algorithm : map nw thermocon ++ map nw softwarecon ++ map nw physicCon ++
-  map nw mathcon ++ map nw physicalcon ++ map nw con ++
-  -- DefinedQuantityDicts
-  map nw symbols ++
-  -- UnitalChunks
-  map nw physicscon ++ map nw unitalChuncks ++
-  -- UncertainChunks
-  map nw [absTol, relTol] ++
-  -- ConstQDefs
-  map nw specParamValList
+  map nw mathcon ++ map nw physicalcon ++ map nw con
 
 symbMap :: ChunkDB
 symbMap = cdb (qw (heatEInPCM ^. output) : symbolsAll) -- heatEInPCM ?

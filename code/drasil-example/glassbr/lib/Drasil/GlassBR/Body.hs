@@ -27,13 +27,12 @@ import Data.Drasil.Concepts.Software (correctness, verifiability,
 import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
-import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamentals,
-  derived)
+import Data.Drasil.SI_Units (siUnits)
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab,
-  ptOfExplsn, con', glass, con)
+  ptOfExplsn, con', glass, iGlass, lGlass)
 import Drasil.GlassBR.DataDefs (configFp)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.Figures
@@ -138,15 +137,13 @@ ideaDicts =
   -- IdeaDicts
   [sciCompS, lateralLoad, materialProprty] ++ con' ++ doccon ++ educon ++ compcon ++
   -- CIs
-  nw progName : map nw doccon' ++ map nw mathcon' ++ map nw con ++
+  map nw [progName, iGlass, lGlass] ++ map nw doccon' ++ map nw mathcon' ++
   -- ConceptChunks
   map nw [distance, algorithm] ++ map nw mathcon ++ 
   map nw softwarecon ++ map nw physicalcon ++
   -- QuantityDicts
   map nw thisTerms ++ map nw unitarySymbols ++
-  map nw [riskFun, isSafeProb, isSafeLoad, sdfTol, dimlessLoad, tolLoad, lDurFac] ++
-  -- UnitDefns
-  map nw fundamentals ++ map nw derived
+  map nw [riskFun, isSafeProb, isSafeLoad, sdfTol, dimlessLoad, tolLoad, lDurFac]
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =
@@ -155,9 +152,8 @@ tableOfAbbrvsIdeaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb thisSymbols ideaDicts
-  (map cw symb ++ concepts ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
-  ++ map unitWrapper [pascal, newton]) GB.dataDefs iMods [] tMods concIns
-  labCon allRefs citations
+  (map cw symb ++ concepts ++ Doc.srsDomains) siUnits
+  GB.dataDefs iMods [] tMods concIns labCon allRefs citations
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts

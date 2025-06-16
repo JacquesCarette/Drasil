@@ -8,7 +8,6 @@ import Drasil.HGHC.HeatTransfer (fp, dataDefs, htInputs, htOutputs,
     nuclearPhys, symbols)
 import Drasil.HGHC.MetaConcepts (progName)
 
-import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans)  
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
@@ -72,7 +71,7 @@ ideaDicts =
 symbMap :: ChunkDB
 symbMap = cdb symbols ideaDicts
   ([] :: [ConceptChunk])-- FIXME: Fill in concepts
-  siUnits dataDefs [] [] [] [] [] [] []
+  ([] :: [UnitDefn]) dataDefs [] [] [] [] [] [] []
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =

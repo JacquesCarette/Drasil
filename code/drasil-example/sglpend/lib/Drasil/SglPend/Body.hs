@@ -11,7 +11,6 @@ import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (olu)
-import Data.Drasil.SI_Units (siUnits)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Math (mathcon')
 import Data.Drasil.Concepts.Physics (physicCon, physicCon', motion, pendulum)
@@ -145,7 +144,7 @@ tableOfAbbrvsIdeaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map qw symbols) ideaDicts
-   (map cw iMods) siUnits dataDefs iMods
+   (map cw iMods) ([] :: [UnitDefn]) dataDefs iMods
    genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.

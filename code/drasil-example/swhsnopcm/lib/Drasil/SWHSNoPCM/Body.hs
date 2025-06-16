@@ -31,7 +31,6 @@ import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
   uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
-import Data.Drasil.SI_Units (siUnits)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -205,7 +204,7 @@ ideaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts
-  (map cw symbols) siUnits NoPCM.dataDefs NoPCM.iMods genDefs
+  (map cw symbols) ([] :: [UnitDefn]) NoPCM.dataDefs NoPCM.iMods genDefs
   tMods concIns [] allRefs citations
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]

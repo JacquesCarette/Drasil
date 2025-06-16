@@ -13,7 +13,6 @@ import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (dong)
-import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.Concepts.Computation (inDatum)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
@@ -165,7 +164,7 @@ tableOfAbbrvsIdeaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll)
-  ideaDicts ([] :: [ConceptChunk]) siUnits
+  ideaDicts ([] :: [ConceptChunk]) ([] :: [UnitDefn])
   dataDefs iMods genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.

@@ -184,7 +184,7 @@ tableOfAbbrvsIdeaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb (qw pi_ : symbols) ideaDicts
-  (map cw constrained) (map unitWrapper [metre, radian, second]) 
+  (map cw constrained) ([] :: [UnitDefn]) 
   dataDefs iMods genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.

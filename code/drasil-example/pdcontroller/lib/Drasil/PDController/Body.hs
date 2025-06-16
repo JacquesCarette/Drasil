@@ -17,7 +17,6 @@ import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.Quantities.Math (posInf, negInf)
 
 import Drasil.PDController.Assumptions (assumptions)
@@ -151,7 +150,7 @@ symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf])
   ideaDicts
   (map cw inpConstrained)
-  siUnits
+  ([] :: [UnitDefn])
   dataDefinitions
   instanceModels
   genDefns

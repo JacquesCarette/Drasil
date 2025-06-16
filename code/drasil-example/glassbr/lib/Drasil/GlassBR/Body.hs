@@ -25,7 +25,6 @@ import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability)
 
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
-import Data.Drasil.SI_Units (siUnits)
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
@@ -150,7 +149,7 @@ tableOfAbbrvsIdeaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb thisSymbols ideaDicts
-  (map cw symb ++ terms) siUnits 
+  (map cw symb ++ terms) ([] :: [UnitDefn]) 
   GB.dataDefs iMods [] tMods concIns labCon allRefs citations
 
 usedDB :: ChunkDB

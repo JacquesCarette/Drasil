@@ -10,6 +10,7 @@ import Data.Drasil.Concepts.Computation (algorithm, compcon)
 import Data.Drasil.Concepts.Software (errMsg, program)
 import Data.Drasil.Concepts.Math (mathcon)
 import Data.Drasil.Concepts.Education (educon)
+import Data.Drasil.SI_Units (siUnits)
 
 import qualified Data.Map as Map (empty)
 
@@ -34,7 +35,7 @@ basisCDB =
     symbolTable           = Map.empty,
     termTable             = termMap basisIdeaDicts,
     conceptChunkTable     = conceptMap srsDomains,
-    _unitTable            = Map.empty,
+    _unitTable            = unitMap siUnits,
     _dataDefnTable        = Map.empty,
     _insmodelTable        = Map.empty,
     _gendefTable          = Map.empty,

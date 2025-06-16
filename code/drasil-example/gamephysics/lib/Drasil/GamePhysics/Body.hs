@@ -18,7 +18,6 @@ import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)
 import Data.Drasil.People (alex, luthfi, olu)
-import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.Software.Products (openSource, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
@@ -152,7 +151,7 @@ tableOfAbbrvsIdeaDicts =
 symbMap :: ChunkDB
 symbMap = cdb (map qw symbols) ideaDicts
   (map cw defSymbols ++ map cw iMods) 
-  siUnits dataDefs iMods generalDefns tMods concIns [] allRefs citations
+  ([] :: [UnitDefn]) dataDefs iMods generalDefns tMods concIns [] allRefs citations
 
   -- | Holds all references and links used in the document.
 allRefs :: [Reference]

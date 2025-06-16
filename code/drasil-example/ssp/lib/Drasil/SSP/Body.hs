@@ -32,7 +32,7 @@ import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce,
 import Data.Drasil.Theories.Physics (weightSrc, hsPressureSrc)
 
 import Data.Drasil.People (brooks, henryFrankis)
-import Data.Drasil.SI_Units (degree, siUnits)
+import Data.Drasil.SI_Units (degree)
 
 import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, unlikelyChgs)
@@ -158,7 +158,7 @@ ideaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map qw symbols) ideaDicts
-  (map cw iMods ++ map cw symbols) (degree : siUnits) dataDefs iMods
+  (map cw iMods ++ map cw symbols) [degree] dataDefs iMods
   generalDefinitions tMods concIns labCon allRefs citations
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]

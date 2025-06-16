@@ -32,7 +32,6 @@ import Data.Drasil.Quantities.Physics (energy, time, physicscon)
 import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat)
 
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
-import Data.Drasil.SI_Units (siUnits)
 
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
@@ -119,7 +118,7 @@ symbMap :: ChunkDB
 symbMap = cdb (qw (heatEInPCM ^. output) : symbolsAll) -- heatEInPCM ?
   ideaDicts
   (cw heatEInPCM : map cw symbols ++ map cw specParamValList) -- FIXME: heatEInPCM?
-  siUnits SWHS.dataDefs insModel genDefs tMods concIns [] allRefs citations
+  ([] :: [UnitDefn]) SWHS.dataDefs insModel genDefs tMods concIns [] allRefs citations
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =

@@ -141,9 +141,7 @@ ideaDicts =
   map nw [progName, centreMass] ++ map nw doccon' ++ map nw CM.mathcon' ++
   map nw CP.physicCon' ++
   -- ConceptChunks
-  nw algorithm : map nw softwarecon ++ map nw CP.physicCon ++ map nw CM.mathcon ++
-  -- QuantityDicts
-  map nw symbolsAll
+  nw algorithm : map nw softwarecon ++ map nw CP.physicCon ++ map nw CM.mathcon
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =
@@ -153,7 +151,7 @@ tableOfAbbrvsIdeaDicts =
   map nw acronyms
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw symbols) ideaDicts
+symbMap = cdb symbols ideaDicts
   (map cw defSymbols ++ srsDomains ++ map cw iMods) 
   siUnits dataDefs iMods generalDefns tMods concIns [] allRefs citations
 

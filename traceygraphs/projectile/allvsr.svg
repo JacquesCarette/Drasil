@@ -41,7 +41,7 @@
 </g>
 <!-- instance&#45;&gt;theory -->
 <g id="edge4" class="edge">
-<title>instance:calcValues&#45;&gt;theory:message</title>
+<title>instance:calcValues&#45;&gt;theory:outputMessage</title>
 <path fill="none" stroke="black" d="M61,-71.7C61,-63.98 61,-54.71 61,-46.11"/>
 <polygon fill="black" stroke="black" points="64.5,-46.1 61,-36.1 57.5,-46.1 64.5,-46.1"/>
 </g>
@@ -59,7 +59,7 @@
 </g>
 <!-- instance&#45;&gt;theory -->
 <g id="edge7" class="edge">
-<title>instance:outputValues&#45;&gt;theory:message</title>
+<title>instance:outputValues&#45;&gt;theory:outputMessage</title>
 <path fill="none" stroke="black" d="M96.49,-71.7C101.37,-63.81 102.69,-54.3 100.43,-45.55"/>
 <polygon fill="black" stroke="black" points="103.54,-43.91 96.37,-36.1 97.11,-46.67 103.54,-43.91"/>
 </g>

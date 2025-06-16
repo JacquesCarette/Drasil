@@ -83,7 +83,7 @@
 </g>
 <!-- instance&#45;&gt;theory -->
 <g id="edge51" class="edge">
-<title>instance:calcValues&#45;&gt;theory:message</title>
+<title>instance:calcValues&#45;&gt;theory:outputMessage</title>
 <path fill="none" stroke="black" d="M270.81,-159.57C426.23,-150.86 431.83,-104.95 287.62,-93.56"/>
 <polygon fill="black" stroke="black" points="287.67,-90.05 277.44,-92.83 287.17,-97.04 287.67,-90.05"/>
 </g>
@@ -101,7 +101,7 @@
 </g>
 <!-- instance&#45;&gt;theory -->
 <g id="edge54" class="edge">
-<title>instance:outputValues&#45;&gt;theory:message</title>
+<title>instance:outputValues&#45;&gt;theory:outputMessage</title>
 <path fill="none" stroke="black" d="M270.89,-160.08C480.34,-152.62 485.86,-102.33 287.47,-92.62"/>
 <polygon fill="black" stroke="black" points="287.39,-89.12 277.25,-92.17 287.08,-96.11 287.39,-89.12"/>
 </g>
@@ -275,7 +275,7 @@
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge46" class="edge">
-<title>theory:message&#45;&gt;instance:posXDirection</title>
+<title>theory:outputMessage&#45;&gt;instance:posXDirection</title>
 <path fill="none" stroke="black" d="M277.55,-94.27C374.63,-105.88 375.78,-145.05 280.99,-157.3"/>
 <polygon fill="black" stroke="black" points="280.42,-153.84 270.88,-158.47 281.22,-160.8 280.42,-153.84"/>
 </g>
@@ -347,7 +347,7 @@
 </g>
 <!-- theory&#45;&gt;theory -->
 <g id="edge47" class="edge">
-<title>theory:message&#45;&gt;theory:offset</title>
+<title>theory:outputMessage&#45;&gt;theory:offset</title>
 <path fill="none" stroke="black" d="M277.35,-100.19C358.68,-109.06 457.23,-105.66 457.23,-90 457.23,-74.98 366.6,-71.24 287.44,-78.78"/>
 <polygon fill="black" stroke="black" points="286.95,-75.31 277.35,-79.81 287.66,-82.28 286.95,-75.31"/>
 </g>

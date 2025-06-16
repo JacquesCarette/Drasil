@@ -8,7 +8,7 @@
 </span><span id="line-8"></span><span>    </span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#nuclearPhys"><span class="hs-identifier">nuclearPhys</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.HGHC.HeatTransfer.html#symbols"><span class="hs-identifier">symbols</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.HGHC.MetaConcepts.html"><span class="hs-identifier">Drasil.HGHC.MetaConcepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.HGHC.MetaConcepts.html#progName"><span class="hs-identifier">progName</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-10"></span><span>
-</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.SI_Units</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">siUnits</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">fundamentals</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">derived</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">degree</span></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.SI_Units</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">siUnits</span></span><span class="hs-special">)</span><span>
 </span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.People</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">spencerSmith</span></span><span class="hs-special">)</span><span>
 </span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">doccon</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">doccon'</span></span><span class="hs-special">)</span><span>
 </span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">mathcon</span></span><span class="hs-special">)</span><span>
@@ -199,32 +199,11 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; IdeaDict
 forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
-</span><a href="Drasil.HGHC.HeatTransfer.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-74"></span><span>  </span><span class="hs-comment">-- UnitDefns</span><span>
-</span><span id="line-75"></span><span>  </span><span class="annot"><span class="annottext">UnitDefn -&gt; IdeaDict
-forall c. Idea c =&gt; c -&gt; IdeaDict
-</span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
-</span><span class="hs-identifier hs-var">degree</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; [IdeaDict] -&gt; [IdeaDict]
-forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(UnitDefn -&gt; IdeaDict) -&gt; [UnitDefn] -&gt; [IdeaDict]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; IdeaDict
-forall c. Idea c =&gt; c -&gt; IdeaDict
-</span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[UnitDefn]
-</span><span class="hs-identifier hs-var">fundamentals</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(UnitDefn -&gt; IdeaDict) -&gt; [UnitDefn] -&gt; [IdeaDict]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn -&gt; IdeaDict
-forall c. Idea c =&gt; c -&gt; IdeaDict
-</span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[UnitDefn]
-</span><span class="hs-identifier hs-var">derived</span></span><span>
-</span><span id="line-76"></span><span>
-</span><span id="line-77"></span><span>
-</span><span id="line-78"></span><span class="annot"><a href="Drasil.HGHC.Body.html#symbMap"><span class="hs-identifier hs-type">symbMap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span>
-</span><span id="line-79"></span><span id="symbMap"><span class="annot"><span class="annottext">symbMap :: ChunkDB
+</span><a href="Drasil.HGHC.HeatTransfer.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span>
+</span><span id="line-74"></span><span>
+</span><span id="line-75"></span><span>
+</span><span id="line-76"></span><span class="annot"><a href="Drasil.HGHC.Body.html#symbMap"><span class="hs-identifier hs-type">symbMap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span>
+</span><span id="line-77"></span><span id="symbMap"><span class="annot"><span class="annottext">symbMap :: ChunkDB
 </span><a href="Drasil.HGHC.Body.html#symbMap"><span class="hs-identifier hs-var hs-var">symbMap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 -&gt; [IdeaDict]
 -&gt; [ConceptChunk]
@@ -256,24 +235,24 @@ forall q c u.
 </span><span class="hs-identifier hs-var">cdb</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.HGHC.HeatTransfer.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span> </span><span class="annot"><span class="annottext">[IdeaDict]
 </span><a href="Drasil.HGHC.Body.html#ideaDicts"><span class="hs-identifier hs-var">ideaDicts</span></a></span><span>
-</span><span id="line-80"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-comment">-- FIXME: Fill in concepts</span><span>
-</span><span id="line-81"></span><span>  </span><span class="annot"><span class="annottext">[UnitDefn]
+</span><span id="line-78"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-comment">-- FIXME: Fill in concepts</span><span>
+</span><span id="line-79"></span><span>  </span><span class="annot"><span class="annottext">[UnitDefn]
 </span><span class="hs-identifier hs-var">siUnits</span></span><span> </span><span class="annot"><span class="annottext">[DataDefinition]
 </span><a href="Drasil.HGHC.HeatTransfer.html#dataDefs"><span class="hs-identifier hs-var">dataDefs</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-82"></span><span>
-</span><span id="line-83"></span><span class="annot"><a href="Drasil.HGHC.Body.html#tableOfAbbrvsIdeaDicts"><span class="hs-identifier hs-type">tableOfAbbrvsIdeaDicts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-84"></span><span id="tableOfAbbrvsIdeaDicts"><span class="annot"><span class="annottext">tableOfAbbrvsIdeaDicts :: [IdeaDict]
+</span><span id="line-80"></span><span>
+</span><span id="line-81"></span><span class="annot"><a href="Drasil.HGHC.Body.html#tableOfAbbrvsIdeaDicts"><span class="hs-identifier hs-type">tableOfAbbrvsIdeaDicts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-82"></span><span id="tableOfAbbrvsIdeaDicts"><span class="annot"><span class="annottext">tableOfAbbrvsIdeaDicts :: [IdeaDict]
 </span><a href="Drasil.HGHC.Body.html#tableOfAbbrvsIdeaDicts"><span class="hs-identifier hs-var hs-var">tableOfAbbrvsIdeaDicts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-85"></span><span>  </span><span class="hs-comment">-- QuantityDicts</span><span>
-</span><span id="line-86"></span><span>  </span><span class="annot"><span class="annottext">(QuantityDict -&gt; IdeaDict) -&gt; [QuantityDict] -&gt; [IdeaDict]
+</span><span id="line-83"></span><span>  </span><span class="hs-comment">-- QuantityDicts</span><span>
+</span><span id="line-84"></span><span>  </span><span class="annot"><span class="annottext">(QuantityDict -&gt; IdeaDict) -&gt; [QuantityDict] -&gt; [IdeaDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; IdeaDict
 forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.HGHC.HeatTransfer.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span>
-</span><span id="line-87"></span><span>
-</span><span id="line-88"></span><span class="annot"><a href="Drasil.HGHC.Body.html#usedDB"><span class="hs-identifier hs-type">usedDB</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span>
-</span><span id="line-89"></span><span id="usedDB"><span class="annot"><span class="annottext">usedDB :: ChunkDB
+</span><span id="line-85"></span><span>
+</span><span id="line-86"></span><span class="annot"><a href="Drasil.HGHC.Body.html#usedDB"><span class="hs-identifier hs-type">usedDB</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span>
+</span><span id="line-87"></span><span id="usedDB"><span class="annot"><span class="annottext">usedDB :: ChunkDB
 </span><a href="Drasil.HGHC.Body.html#usedDB"><span class="hs-identifier hs-var hs-var">usedDB</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 -&gt; [IdeaDict]
 -&gt; [ConceptChunk]
@@ -304,6 +283,6 @@ forall q c u.
 -&gt; ChunkDB
 </span><span class="hs-identifier hs-var">cdb</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[IdeaDict]
 </span><a href="Drasil.HGHC.Body.html#tableOfAbbrvsIdeaDicts"><span class="hs-identifier hs-var">tableOfAbbrvsIdeaDicts</span></a></span><span>
-</span><span id="line-90"></span><span>           </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-91"></span><span>           </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-92"></span></pre></body></html>
+</span><span id="line-88"></span><span>           </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-89"></span><span>           </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-90"></span></pre></body></html>

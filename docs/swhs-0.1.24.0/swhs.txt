@@ -322,7 +322,6 @@ srs :: Document
 fullSI :: System
 printSetting :: PrintingInformation
 resourcePath :: String
-units :: [UnitDefn]
 si :: System
 purp :: Sentence
 motivation :: Sentence

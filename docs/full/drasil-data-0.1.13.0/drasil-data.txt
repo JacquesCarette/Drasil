@@ -541,6 +541,7 @@ modOdeDesc :: ConceptChunk
 module Data.Drasil.SI_Units
 fundamentals :: [UnitDefn]
 derived :: [UnitDefn]
+common :: [UnitDefn]
 siUnits :: [UnitDefn]
 metre :: UnitDefn
 kilogram :: UnitDefn

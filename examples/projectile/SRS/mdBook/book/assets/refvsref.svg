@@ -101,7 +101,7 @@
 </g>
 <!-- theory&#45;&gt;theory -->
 <g id="edge14" class="edge">
-<title>theory:message&#45;&gt;theory:offset</title>
+<title>theory:outputMessage&#45;&gt;theory:offset</title>
 <path fill="none" stroke="black" d="M122.12,-100.19C203.45,-109.06 302,-105.66 302,-90 302,-74.98 211.36,-71.24 132.21,-78.78"/>
 <polygon fill="black" stroke="black" points="131.71,-75.31 122.12,-79.81 132.42,-82.28 131.71,-75.31"/>
 </g>

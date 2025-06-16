@@ -173,7 +173,7 @@
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge26" class="edge">
-<title>theory:message&#45;&gt;instance:posXDirection</title>
+<title>theory:outputMessage&#45;&gt;instance:posXDirection</title>
 <path fill="none" stroke="black" d="M230.03,-87.02C371.71,-77.03 373.58,-32.3 235.65,-21.4"/>
 <polygon fill="black" stroke="black" points="235.7,-17.9 225.48,-20.68 235.2,-24.88 235.7,-17.9"/>
 </g>

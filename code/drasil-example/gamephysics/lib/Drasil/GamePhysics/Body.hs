@@ -6,27 +6,25 @@ import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   condition, consumer, endUser, environment, game, guide, input_, interface,
   object, physical, physicalSim, physics, problem, product_, project,
   quantity, realtime, section_, simulation, software, softwareSys,
-  srsDomains, system, systemConstraint, sysCont, task, user, doccon, doccon',
+  system, systemConstraint, sysCont, task, user,
   property, problemDescription)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (dataDefn, inModel)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
-  highSchoolPhysics, educon)
+  highSchoolPhysics)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)
 import Data.Drasil.People (alex, luthfi, olu)
-import Data.Drasil.SI_Units (siUnits)
-import Data.Drasil.Software.Products (openSource, prodtcon, videoGame)
+import Data.Drasil.Software.Products (openSource, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
 import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon,
   physicCon', rigidBody, collision, damping)
 import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
-  mathcon, mathcon', rightHand, line, point)
+  mathcon', rightHand, line, point)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
@@ -135,13 +133,11 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
-  -- Actual IdeaDicts
-  doccon ++ educon ++ prodtcon ++
   -- CIs
-  map nw [progName, centreMass] ++ map nw doccon' ++ map nw CM.mathcon' ++
+  map nw [progName, centreMass] ++ map nw CM.mathcon' ++
   map nw CP.physicCon' ++
   -- ConceptChunks
-  nw algorithm : map nw softwarecon ++ map nw CP.physicCon ++ map nw CM.mathcon ++
+  map nw softwarecon ++ map nw CP.physicCon ++
   -- QuantityDicts
   map nw symbolsAll
 
@@ -154,15 +150,15 @@ tableOfAbbrvsIdeaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw symbols) ideaDicts
-  (map cw defSymbols ++ srsDomains ++ map cw iMods) 
-  siUnits dataDefs iMods generalDefns tMods concIns [] allRefs citations
+  (map cw defSymbols ++ map cw iMods) 
+  ([] :: [UnitDefn]) dataDefs iMods generalDefns tMods concIns [] allRefs citations
 
   -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef, pymunk] ++ uriReferences ++ offShelfSolRefs
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
+usedDB = cdb' ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of

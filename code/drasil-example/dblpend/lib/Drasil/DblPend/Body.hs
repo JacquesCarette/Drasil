@@ -13,21 +13,19 @@ import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (dong)
-import Data.Drasil.SI_Units (siUnits)
-import Data.Drasil.Concepts.Computation (inDatum, compcon, inValue, algorithm)
+import Data.Drasil.Concepts.Computation (inDatum)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   environment, datum, input_, interface, output_, problem, product_,
-  physical, sysCont, software, softwareConstraint, softwareSys, srsDomains,
-  system, user, doccon, doccon', analysis)
-import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate, educon, )
-import Data.Drasil.Concepts.Math (mathcon, cartesian, ode, mathcon', graph)
+  physical, sysCont, software, softwareConstraint, softwareSys,
+  system, user, analysis)
+import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate)
+import Data.Drasil.Concepts.Math (cartesian, ode, mathcon', graph)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
-import Data.Drasil.Concepts.Software (program, errMsg)
+import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
-import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 import Data.Drasil.TheoryConcepts (inModel)
 
@@ -145,11 +143,11 @@ symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ od
 ideaDicts :: [IdeaDict]
 ideaDicts = 
   -- Actual IdeaDicts
-  inValue : doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
+  concepts ++
   -- CIs
-  nw progName : map nw acronyms ++ map nw doccon' ++ map nw mathcon' ++ map nw physicCon' ++
+  nw progName : map nw acronyms ++ map nw mathcon' ++ map nw physicCon' ++
   -- ConceptChunks
-  map nw [algorithm, len, mass, errMsg, program] ++ map nw physicCon ++ map nw mathcon ++ map nw physicalcon ++
+  map nw [len, mass] ++ map nw physicCon ++ map nw physicalcon ++
   -- DefinedQuantityDicts
   map nw [unitVect, unitVectj] ++
   -- QuantityDicts
@@ -166,8 +164,7 @@ tableOfAbbrvsIdeaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll)
-  ideaDicts srsDomains
-  siUnits
+  ideaDicts ([] :: [ConceptChunk]) ([] :: [UnitDefn])
   dataDefs iMods genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.
@@ -175,7 +172,7 @@ allRefs :: [Reference]
 allRefs = [externalLinkRef]
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts ([] :: [ConceptChunk])
+usedDB = cdb' ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 stdFields :: Fields

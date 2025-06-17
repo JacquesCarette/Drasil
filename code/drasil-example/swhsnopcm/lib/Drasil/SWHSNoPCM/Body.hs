@@ -12,12 +12,10 @@ import Language.Drasil.Code (quantvar)
 import Data.List ((\\))
 import Data.Drasil.People (thulasi)
 
-import Data.Drasil.Concepts.Computation (algorithm, inValue)
-import Data.Drasil.Concepts.Documentation as Doc (doccon, doccon', material_, srsDomains, sysCont)
+import Data.Drasil.Concepts.Documentation as Doc (material_, sysCont)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (inModel)
-import Data.Drasil.Concepts.Education (educon)
-import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
+import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.Software (softwarecon)
@@ -33,8 +31,6 @@ import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
   uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
-import Data.Drasil.Software.Products (prodtcon)
-import Data.Drasil.SI_Units (siUnits)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -190,13 +186,13 @@ purp = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWH
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- Actual IdeaDicts
-  [inValue, htTrans, materialProprty] ++ prodtcon ++ doccon ++ educon ++
+  [htTrans, materialProprty] ++
   -- CIs
-  map nw [srsSWHS, progName, phsChgMtrl] ++ map nw acronyms ++ map nw doccon' ++
+  map nw [srsSWHS, progName, phsChgMtrl] ++ map nw acronyms ++
   map nw physicCon' ++ map nw mathcon' ++
   -- ConceptChunks
-  nw algorithm : map nw softwarecon ++ map nw thermocon ++ map nw con ++
-  map nw physicCon ++ map nw mathcon ++ map nw physicalcon ++
+  map nw softwarecon ++ map nw thermocon ++ map nw con ++
+  map nw physicCon ++ map nw physicalcon ++
   -- DefinedQuantityDicts
   map nw symbols ++
   -- UnitalChunks
@@ -208,7 +204,7 @@ ideaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts
-  (map cw symbols ++ srsDomains) siUnits NoPCM.dataDefs NoPCM.iMods genDefs
+  (map cw symbols) ([] :: [UnitDefn]) NoPCM.dataDefs NoPCM.iMods genDefs
   tMods concIns [] allRefs citations
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
@@ -219,7 +215,7 @@ tableOfAbbrvsIdeaDicts =
   map nw symbols
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
+usedDB = cdb' ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- | Holds all references and links used in the document.

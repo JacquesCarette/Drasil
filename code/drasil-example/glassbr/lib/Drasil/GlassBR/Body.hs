@@ -9,25 +9,22 @@ import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Data.Drasil.Concepts.Computation (computerApp, inDatum, compcon, algorithm)
+import Data.Drasil.Concepts.Computation (computerApp, inDatum)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
-  characteristic, company, condition, dataConst, datum, doccon, doccon',
+  characteristic, company, condition, dataConst, datum,
   environment, input_, interface, model, physical, problem, product_,
-  software, softwareConstraint, softwareSys, srsDomains, standard, sysCont,
+  software, softwareConstraint, softwareSys, standard, sysCont,
   system, term_, user, value, variable, reference, definition)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (dataDefn, inModel, thModel)
-import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics,
-  educon)
-import Data.Drasil.Concepts.Math (graph, mathcon, mathcon')
+import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics)
+import Data.Drasil.Concepts.Math (graph, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, materialProprty)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
-  understandability, reusability, maintainability, portability, softwarecon)
-import Data.Drasil.Software.Products (sciCompS)
+  understandability, reusability, maintainability, portability)
 
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
-import Data.Drasil.SI_Units (siUnits)
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
@@ -135,12 +132,12 @@ background = foldlSent_ [phrase explosion, S "in downtown areas are dangerous fr
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- IdeaDicts
-  [sciCompS, lateralLoad, materialProprty] ++ con' ++ doccon ++ educon ++ compcon ++
+  [lateralLoad, materialProprty] ++ con' ++
   -- CIs
-  map nw [progName, iGlass, lGlass] ++ map nw doccon' ++ map nw mathcon' ++
+  map nw [progName, iGlass, lGlass] ++ map nw mathcon' ++
   -- ConceptChunks
-  map nw [distance, algorithm] ++ map nw terms ++ map nw mathcon ++ 
-  map nw softwarecon ++ map nw physicalcon ++
+  [nw distance] ++ map nw terms ++ 
+  map nw physicalcon ++
   -- QuantityDicts
   map nw thisTerms ++ map nw unitarySymbols ++
   map nw [riskFun, isSafeProb, isSafeLoad, sdfTol, dimlessLoad, tolLoad, lDurFac]
@@ -152,11 +149,11 @@ tableOfAbbrvsIdeaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb thisSymbols ideaDicts
-  (map cw symb ++ terms ++ Doc.srsDomains) siUnits 
+  (map cw symb ++ terms) ([] :: [UnitDefn]) 
   GB.dataDefs iMods [] tMods concIns labCon allRefs citations
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
+usedDB = cdb' ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- | Holds all references and links used in the document.

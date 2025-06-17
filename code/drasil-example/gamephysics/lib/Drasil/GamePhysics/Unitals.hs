@@ -60,16 +60,10 @@ outputSymbols = map qw [QP.position, QP.velocity, QM.orientation,
 
 unitalSymbols :: [UnitalChunk]
 unitalSymbols = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel, 
-  QP.impulseV, QP.impulseS, iVect, jVect, normalVect, QP.distance, QP.displacement, 
-  QP.time, QP.angularDisplacement, posCM, posj, massj, mTot, accj, angAccj, velj,
-  QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
-  perpLenA, perpLenB, forcej, torquej, timeC, velA, velB, massA, massB,
-  angVelA, angVelB, force_1, force_2, mass_1, mass_2, 
-  dispNorm, sqrDist, velO, rOB, massIRigidBody, contDispA, contDispB, 
-  momtInertA, momtInertB, timeT, inittime, momtInertK, pointOfCollision, 
-  contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP, time_1, time_2, velo_1, velo_2,
-  QP.chgInVelocity, QP.potEnergy, QP.height, rRot, mLarger, QP.fOfGravity, QP.positionVec, distMass, 
-  dVect, QP.chgMomentum]
+  QP.impulseV, QP.impulseS, QP.distance, QP.displacement, 
+  QP.time, QP.angularDisplacement, QP.linearDisplacement, QP.linearVelocity,
+  QP.linearAccel, QP.kEnergy, QP.chgInVelocity, QP.potEnergy, QP.height, rRot,
+  mLarger, QP.fOfGravity, QP.positionVec, QP.chgMomentum] ++ unitalTerms
 
 unitalTerms :: [UnitalChunk]
 unitalTerms = [iVect, jVect, normalVect, posCM, posj, massj, mTot, accj, angAccj, velj,

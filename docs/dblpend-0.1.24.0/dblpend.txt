@@ -65,7 +65,6 @@ acronyms :: [CI]
 inputs :: [QuantityDict]
 outputs :: [QuantityDict]
 constants :: [ConstQDef]
-units :: [UnitalChunk]
 unitalChunks :: [UnitalChunk]
 lenRod_1 :: UnitalChunk
 lenRod_2 :: UnitalChunk

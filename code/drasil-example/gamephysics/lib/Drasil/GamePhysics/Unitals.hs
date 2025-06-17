@@ -28,7 +28,7 @@ defSymbols = map dqdWr unitSymbs ++ map dqdWr inputConstraints ++
   map dqdWr outputConstraints
 
 unitSymbs :: [UnitalChunk]
-unitSymbs = map ucw unitalChunks ++ map ucw [iVect, jVect, normalVect,
+unitSymbs = map ucw unitalSymbols ++ map ucw [iVect, jVect, normalVect,
   force_1, force_2, forcej, mass_1, mass_2,
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
   posCM, massj, posj, accj, angAccj, mTot, velj, torquej, timeC, initRelVel, 
@@ -45,7 +45,7 @@ symbols, symbolsAll, inputSymbols, outputSymbols :: [QuantityDict]
 
 symbolsAll = symbols ++ inputSymbols ++ outputSymbols
 
-symbols = map qw unitalChunks ++ 
+symbols = map qw unitalSymbols ++ 
   map qw unitless ++ 
   map qw inputConstraints
 
@@ -58,8 +58,8 @@ outputSymbols = map qw [QP.position, QP.velocity, QM.orientation,
   QP.angularVelocity, QP.chgMomentum, QP.chgInVelocity]
 
 
-unitalChunks :: [UnitalChunk]
-unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel, 
+unitalSymbols :: [UnitalChunk]
+unitalSymbols = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel, 
   QP.impulseV, QP.impulseS, iVect, jVect, normalVect, QP.distance, QP.displacement, 
   QP.time, QP.angularDisplacement, posCM, posj, massj, mTot, accj, angAccj, velj,
   QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
@@ -70,6 +70,17 @@ unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP, time_1, time_2, velo_1, velo_2,
   QP.chgInVelocity, QP.potEnergy, QP.height, rRot, mLarger, QP.fOfGravity, QP.positionVec, distMass, 
   dVect, QP.chgMomentum]
+
+unitalTerms :: [UnitalChunk]
+unitalTerms = [iVect, jVect, normalVect, posCM, posj, massj, mTot, accj, angAccj, velj,
+  initRelVel, normalLen,
+  perpLenA, perpLenB, forcej, torquej, timeC, velA, velB, massA, massB,
+  angVelA, angVelB, force_1, force_2, mass_1, mass_2, 
+  dispNorm, sqrDist, velO, rOB, massIRigidBody, contDispA, contDispB, 
+  momtInertA, momtInertB, timeT, inittime, momtInertK, pointOfCollision, 
+  contDispK, collisionImpulse, finRelVel, velAP, velBP, time_1, time_2, velo_1, velo_2,
+  rRot, mLarger, distMass, 
+  dVect]
 
 -----------------------
 -- PARAMETRIZED HACK --

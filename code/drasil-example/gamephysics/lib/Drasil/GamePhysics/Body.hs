@@ -40,7 +40,7 @@ import Drasil.GamePhysics.References (citations, uriReferences)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, pymunk)
 import Drasil.GamePhysics.TMods (tMods)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
-  inputSymbols, outputSymbols, inputConstraints, defSymbols, symbols)
+  inputSymbols, outputSymbols, inputConstraints, defSymbols, symbols, unitalTerms)
 import Drasil.GamePhysics.GenDefs (generalDefns)
 
 srs :: Document
@@ -143,7 +143,7 @@ ideaDicts =
   -- ConceptChunks
   nw algorithm : map nw softwarecon ++ map nw CP.physicCon ++ map nw CM.mathcon ++
   -- QuantityDicts
-  map nw symbolsAll
+  map nw unitalTerms
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =

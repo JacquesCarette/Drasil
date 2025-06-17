@@ -143,7 +143,9 @@ mkTableConcepts pinfo = mkTableFromLenses
   pinfo
   conceptChunkTable
   "Concepts"
-  [openTerm, openDefinition]
+  [openTerm] -- FIXME: `openDefinition` ommited because some ConceptChunks
+             -- contain references to non-existent `Reference`s (which are only
+             -- created at SRS generation time).
 
 -- | Makes a table with all units used in the SRS.
 mkTableUnitDefn :: PrintingInformation -> Doc

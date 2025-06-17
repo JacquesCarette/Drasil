@@ -32,7 +32,7 @@ import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
 import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
   uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
-import Data.Drasil.Quantities.Physics (time, energy, physicscon)
+import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.SI_Units (siUnits)
 
@@ -49,7 +49,7 @@ import Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, nwtnCooling, sensHtET
 import Drasil.SWHS.Unitals (coilSAMax, deltaT, htFluxC, htFluxIn,
   htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW,
   tempEnv, tempW, thFluxVect, volHtGen, watE,
-  wMass, wVol, unitalChuncks, absTol, relTol)
+  wMass, wVol, absTol, relTol)
 import Drasil.SWHS.References (uriReferences)
 
 import Drasil.SWHSNoPCM.Assumptions
@@ -196,15 +196,7 @@ ideaDicts =
   map nw physicCon' ++ map nw mathcon' ++
   -- ConceptChunks
   nw algorithm : map nw softwarecon ++ map nw thermocon ++ map nw con ++
-  map nw physicCon ++ map nw mathcon ++ map nw physicalcon ++
-  -- DefinedQuantityDicts
-  map nw symbols ++
-  -- UnitalChunks
-  map nw physicscon ++ map nw unitalChuncks ++
-  -- UncertainChunks
-  map nw [absTol, relTol] ++
-  -- ConstQDefs
-  map nw specParamValList
+  map nw physicCon ++ map nw mathcon ++ map nw physicalcon
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts

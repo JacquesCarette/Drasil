@@ -41,13 +41,9 @@ unitSymbs = map ucw unitalSymbols ++ map ucw [iVect, jVect, normalVect,
 -- TABLE OF SYMBOLS --
 ----------------------
 
-symbols, symbolsAll, inputSymbols, outputSymbols :: [QuantityDict]
+symbolsAll, inputSymbols, outputSymbols :: [QuantityDict]
 
-symbolsAll = symbols ++ inputSymbols ++ outputSymbols
-
-symbols = map qw unitalSymbols ++ 
-  map qw unitless ++ 
-  map qw inputConstraints
+symbolsAll = map qw unitless ++ map qw unitalSymbols ++ [qw QP.restitutionCoef]
 
 inputSymbols = map qw [QP.position, QP.velocity, QP.force, QM.orientation, 
   QP.angularVelocity, QP.linearVelocity, QP.gravitationalConst, QPP.mass, 
@@ -59,11 +55,13 @@ outputSymbols = map qw [QP.position, QP.velocity, QM.orientation,
 
 
 unitalSymbols :: [UnitalChunk]
-unitalSymbols = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel, 
-  QP.impulseV, QP.impulseS, QP.distance, QP.displacement, 
+unitalSymbols = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
+  QP.force, QP.impulseV, QP.impulseS, QP.distance, QP.displacement, 
   QP.time, QP.angularDisplacement, QP.linearDisplacement, QP.linearVelocity,
-  QP.linearAccel, QP.kEnergy, QP.chgInVelocity, QP.potEnergy, QP.height, rRot,
-  mLarger, QP.fOfGravity, QP.positionVec, QP.chgMomentum] ++ unitalTerms
+  QP.linearAccel, QP.kEnergy, QP.chgInVelocity, QP.potEnergy, QP.height,
+  QP.fOfGravity, QP.positionVec, QP.chgMomentum, QP.gravitationalConst,
+  QP.momentOfInertia, QPP.len, QPP.mass, QP.position, QP.velocity, QP.torque,
+  QP.angularVelocity, QM.orientation] ++ unitalTerms
 
 unitalTerms :: [UnitalChunk]
 unitalTerms = [iVect, jVect, normalVect, posCM, posj, massj, mTot, accj, angAccj, velj,

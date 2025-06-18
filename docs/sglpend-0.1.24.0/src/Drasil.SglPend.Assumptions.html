@@ -1,49 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE PostfixOperators #-}</span><span>
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.SglPend.Assumptions</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPend.Assumptions.html#assumpSingle"><span class="hs-identifier">assumpSingle</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>    </span><span>
-</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">cic</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">phrase</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">atStartNP</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-operator">(!.)</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ConceptInstance</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Sentence</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">S</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.Concept.NamedCombinators</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">the</span></span><span class="hs-special">)</span><span>
-</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
-</span><span id="line-7"></span><span>
-</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">assumpDom</span></span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">origin</span></span><span class="hs-special">)</span><span>
-</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">pendulum</span></span><span class="hs-special">)</span><span>
-</span><span id="line-11"></span><span>
-</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DblPend.Assumptions</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">assumpBasic</span></span><span class="hs-special">)</span><span>
-</span><span id="line-13"></span><span>
-</span><span id="line-14"></span><span class="annot"><a href="Drasil.SglPend.Assumptions.html#assumpSingle"><span class="hs-identifier hs-type">assumpSingle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
-</span><span id="line-15"></span><span id="assumpSingle"><span class="annot"><span class="annottext">assumpSingle :: [ConceptInstance]
-</span><a href="Drasil.SglPend.Assumptions.html#assumpSingle"><span class="hs-identifier hs-var hs-var">assumpSingle</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
-</span><a href="Drasil.SglPend.Assumptions.html#startOriginSingle"><span class="hs-identifier hs-var">startOriginSingle</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; [ConceptInstance] -&gt; [ConceptInstance]
-forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">ConceptInstance</span></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DblPend.Assumptions</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">assumpBasic</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span>
+</span><span id="line-7"></span><span class="annot"><a href="Drasil.SglPend.Assumptions.html#assumpSingle"><span class="hs-identifier hs-type">assumpSingle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
+</span><span id="line-8"></span><span id="assumpSingle"><span class="annot"><span class="annottext">assumpSingle :: [ConceptInstance]
+</span><a href="Drasil.SglPend.Assumptions.html#assumpSingle"><span class="hs-identifier hs-var hs-var">assumpSingle</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
 </span><span class="hs-identifier hs-var">assumpBasic</span></span><span>
-</span><span id="line-16"></span><span>
-</span><span id="line-17"></span><span class="annot"><a href="Drasil.SglPend.Assumptions.html#startOriginSingle"><span class="hs-identifier hs-type">startOriginSingle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
-</span><span id="line-18"></span><span id="startOriginSingle"><span class="annot"><span class="annottext">startOriginSingle :: ConceptInstance
-</span><a href="Drasil.SglPend.Assumptions.html#startOriginSingle"><span class="hs-identifier hs-var hs-var">startOriginSingle</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
-forall c.
-Concept c =&gt;
-String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
-</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;startOrigin1x&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="Drasil.SglPend.Assumptions.html#startOriginDescSingle"><span class="hs-identifier hs-var">startOriginDescSingle</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;startOrigin&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
-</span><span id="line-19"></span><span>
-</span><span id="line-20"></span><span class="annot"><a href="Drasil.SglPend.Assumptions.html#startOriginDescSingle"><span class="hs-identifier hs-type">startOriginDescSingle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-21"></span><span id="startOriginDescSingle"><span class="annot"><span class="annottext">startOriginDescSingle :: Sentence
-</span><a href="Drasil.SglPend.Assumptions.html#startOriginDescSingle"><span class="hs-identifier hs-var hs-var">startOriginDescSingle</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-forall n. NounPhrase n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
-forall t. NamedIdea t =&gt; t -&gt; NP
-</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;attached&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">`S.toThe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
-forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">origin</span></span><span> </span><span class="hs-operator">!.</span><span class="hs-special">)</span><span>
-</span><span id="line-22"></span></pre></body></html>
+</span><span id="line-9"></span></pre></body></html>

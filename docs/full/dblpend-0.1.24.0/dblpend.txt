@@ -35,9 +35,6 @@ twoDMotion :: ConceptInstance
 cartSys :: ConceptInstance
 cartSysR :: ConceptInstance
 yAxisDir :: ConceptInstance
-startOriginDouble :: ConceptInstance
-firstPend :: ConceptInstance
-secondPend :: ConceptInstance
 assumpBasic :: [ConceptInstance]
 assumpDouble :: [ConceptInstance]
 

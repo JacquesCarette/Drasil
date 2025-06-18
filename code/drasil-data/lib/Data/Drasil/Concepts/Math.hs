@@ -67,7 +67,7 @@ normal      = cc M.normal   "an object that is perpendicular to a given object"
 number      = cc M.number   "a mathematical object used to count, measure, and label"
 orient      = cc M.orient   "the relative physical position or direction of something"
 origin      = cc M.origin   "a fixed point of reference for the geometry of the surrounding space"
-parameter   = cc M.paramter "a quantity whose value is selected depending on particular circumstances"
+parameter   = cc M.parameter "a quantity whose value is selected depending on particular circumstances"
 --FIXME: Should "parameter" be in math?
 perp         = cc M.perp     "At right angles"
 pi_          = cc M.pi_      "The ratio of a circle's circumference to its diameter"

@@ -125,6 +125,7 @@ mkSRS :: SRSDecl
 si :: System
 purp :: Sentence
 ideaDicts :: [IdeaDict]
+conceptChunks :: [ConceptChunk]
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 symbMap :: ChunkDB
 

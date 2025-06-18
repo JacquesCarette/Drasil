@@ -265,6 +265,7 @@ mkSRS :: SRSDecl
 purp :: Sentence
 background :: Sentence
 ideaDicts :: [IdeaDict]
+conceptChunks :: [ConceptChunk]
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 symbMap :: ChunkDB
 usedDB :: ChunkDB

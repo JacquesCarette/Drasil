@@ -16,6 +16,7 @@ printSetting :: PrintingInformation
 mkSRS :: SRSDecl
 si :: System
 ideaDicts :: [IdeaDict]
+conceptChunks :: [ConceptChunk]
 symbMap :: ChunkDB
 usedDB :: ChunkDB
 citations :: BibRef

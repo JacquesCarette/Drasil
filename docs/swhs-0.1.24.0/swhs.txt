@@ -326,6 +326,7 @@ si :: System
 purp :: Sentence
 motivation :: Sentence
 ideaDicts :: [IdeaDict]
+conceptChunks :: [ConceptChunk]
 symbMap :: ChunkDB
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 usedDB :: ChunkDB

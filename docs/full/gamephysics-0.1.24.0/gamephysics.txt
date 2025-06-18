@@ -224,10 +224,13 @@ purp :: Sentence
 concIns :: [ConceptInstance]
 stdFields :: Fields
 ideaDicts :: [IdeaDict]
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
+conceptChunks :: [ConceptChunk]
 symbMap :: ChunkDB
-allRefs :: [Reference]
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
 usedDB :: ChunkDB
+
+-- | Holds all references and links used in the document.
+allRefs :: [Reference]
 para1_introduction_intro :: Sentence
 externalLinkRef :: Reference
 scope :: Sentence

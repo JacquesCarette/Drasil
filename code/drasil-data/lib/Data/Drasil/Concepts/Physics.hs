@@ -100,11 +100,11 @@ fOfGravity = dcc "fOfGravity" (cn "force of gravity")
 gravity = dcc "gravity" (cn "gravity")
   "the force that attracts one physical body with mass to another"
 gravitationalAccel = dcc "gravitationalAccel" (cn "gravitational acceleration")
-  "the approximate acceleration due to gravity on Earth at sea level"
+  "the approximate acceleration due to gravity"
 gravitationalConst = dcc "gravitationalConst" (cn "gravitational constant")
   "the empirical physical constant used to show the force between two objects caused by gravity"
 gravitationalMagnitude = dcc "gravitationalMagnitude" (cn "magnitude of gravitational acceleration")
-  "the magnitude of the approximate acceleration due to gravity on Earth at sea level"
+  "the magnitude of the approximate acceleration due to gravity"
 height = dccWDS "height" (cn' "height")
   (S "the" +:+ phrase distance +:+ S "above a reference point for a point of interest")
 horizontalMotion = dccWDS "horizontalMotion" (cn "horizontal motion")

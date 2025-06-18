@@ -152,15 +152,22 @@ ideaDicts =
   -- Actual IdeaDicts
   doccon ++ prodtcon ++ defs ++ educon ++ compcon ++
   -- CIs
-  nw progName : map nw acronyms ++ map nw mathcon' ++ map nw doccon' ++
+  nw progName : map nw acronyms ++ map nw mathcon' ++ map nw doccon'
+
+conceptChunks :: [ConceptChunk]
+conceptChunks =
   -- ConceptChunks
-  nw algorithm : map nw defs' ++ map nw softwarecon ++ map nw physicCon ++
-  map nw mathcon ++ map nw solidcon ++ map nw physicalcon
+  algorithm : defs' ++ softwarecon ++ physicCon ++ mathcon ++ 
+  solidcon ++ physicalcon ++ srsDomains ++
+  -- InstanceModels
+  map cw iMods ++
+  -- DefinedQuantityDicts
+  map cw symbols
+
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ map qw symbols) ideaDicts
-  (map cw iMods ++ map cw symbols ++ srsDomains) (degree : siUnits) dataDefs iMods
-  generalDefinitions tMods concIns labCon allRefs citations
+symbMap = cdb (map (^. output) iMods ++ map qw symbols) ideaDicts conceptChunks
+  (degree : siUnits) dataDefs iMods generalDefinitions tMods concIns labCon allRefs citations
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =

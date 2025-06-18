@@ -17,15 +17,3 @@ cartSysR: The Cartesian coordinate system is right-handed where positive \\(x\\)
 <div id="yAxisDir"></div>
 
 yAxisDir: The direction of the \\(y\\)-axis is directed opposite to gravity.
-
-<div id="startOrigin2x"></div>
-
-startOrigin: The first rod is attached to the origin.
-
-<div id="firstPend"></div>
-
-firstPend: The first rod has two sides. One side attaches to the origin. Another side attaches to the first object.
-
-<div id="secondPend"></div>
-
-secondPend: The second rod has two sides. One side attaches to the first object. Another side attaches to the second object.

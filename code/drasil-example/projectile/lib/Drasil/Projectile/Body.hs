@@ -28,7 +28,7 @@ import Data.Drasil.Quantities.Physics (acceleration, constAccel,
   xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel, constAccelV)
 
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
-import Data.Drasil.SI_Units (metre, radian, second)
+import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education(calculus, educon, undergraduate, 
@@ -172,9 +172,7 @@ ideaDicts =
   nw progName : nw inValue : map nw doccon' ++ map nw physicCon' ++
   -- ConceptChunks
   map nw [mass, errMsg, program, algorithm] ++ map nw physicCon ++ map nw mathcon ++
-  map nw defs ++
-  -- UnitDefns
-  map nw [metre, radian, second]
+  map nw defs
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =
@@ -185,7 +183,7 @@ tableOfAbbrvsIdeaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb (qw pi_ : symbols) ideaDicts
-  (map cw constrained ++ srsDomains) (map unitWrapper [metre, radian, second]) 
+  (map cw constrained ++ srsDomains) siUnits
   dataDefs iMods genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.

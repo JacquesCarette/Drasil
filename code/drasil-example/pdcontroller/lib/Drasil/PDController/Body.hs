@@ -141,14 +141,19 @@ ideaDicts =
   -- Actual IdeaDicts
   sciCompS : concepts ++ doccon ++
   -- CIs
-  nw progName : map nw acronyms ++ map nw mathcon' ++ map nw doccon' ++
+  nw progName : map nw acronyms ++ map nw mathcon' ++ map nw doccon'
+
+conceptChunks :: [ConceptChunk]
+conceptChunks =
   -- ConceptChunks
-  map nw physicalcon ++ map nw mathcon ++ map nw [linear, program, angular]
+  physicalcon ++ mathcon ++ [linear, program, angular] ++ srsDomains ++
+  -- ConstrConcepts
+  map cw inpConstrained
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf])
   ideaDicts
-  (map cw inpConstrained ++ srsDomains)
+  conceptChunks
   siUnits
   dataDefinitions
   instanceModels

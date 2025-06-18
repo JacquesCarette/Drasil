@@ -110,12 +110,13 @@ ideaDicts =
   -- Actual IdeaDicts
   doccon ++ prodtcon ++ [inValue] ++
   -- CIs
-  nw progName : map nw doccon' ++
-  -- ConceptChunks
-  map nw [errMsg, algorithm, program] ++ map nw mathcon
+  nw progName : map nw doccon'
+
+conceptChunks :: [ConceptChunk]
+conceptChunks = [errMsg, algorithm, program] ++ mathcon ++ srsDomains
 
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [QuantityDict]) ideaDicts srsDomains
+symbMap = cdb ([] :: [QuantityDict]) ideaDicts conceptChunks
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
   ([] :: [LabelledContent]) ([] :: [Reference]) citations

@@ -139,9 +139,20 @@ ideaDicts =
   doccon ++ educon ++ prodtcon ++
   -- CIs
   map nw [progName, centreMass] ++ map nw doccon' ++ map nw CM.mathcon' ++
-  map nw CP.physicCon' ++
+  map nw CP.physicCon'
+  
+conceptChunks :: [ConceptChunk]
+conceptChunks = 
   -- ConceptChunks
-  nw algorithm : map nw softwarecon ++ map nw CP.physicCon ++ map nw CM.mathcon
+  algorithm : softwarecon ++ CP.physicCon ++ CM.mathcon ++ srsDomains ++
+  -- InstanceModels
+  map cw iMods ++
+  -- DefinedQuantityDicts
+  map cw defSymbols
+
+symbMap :: ChunkDB
+symbMap = cdb symbolsAll ideaDicts conceptChunks
+  siUnits dataDefs iMods generalDefns tMods concIns [] allRefs citations
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =
@@ -150,18 +161,13 @@ tableOfAbbrvsIdeaDicts =
   -- CIs
   map nw acronyms
 
-symbMap :: ChunkDB
-symbMap = cdb (map qw symbolsAll) ideaDicts
-  (map cw defSymbols ++ srsDomains ++ map cw iMods) 
-  siUnits dataDefs iMods generalDefns tMods concIns [] allRefs citations
-
-  -- | Holds all references and links used in the document.
-allRefs :: [Reference]
-allRefs = [externalLinkRef, pymunk] ++ uriReferences ++ offShelfSolRefs
-
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
+
+-- | Holds all references and links used in the document.
+allRefs :: [Reference]
+allRefs = [externalLinkRef, pymunk] ++ uriReferences ++ offShelfSolRefs
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because

@@ -193,15 +193,19 @@ ideaDicts =
   [inValue, htTrans, materialProprty] ++ prodtcon ++ doccon ++ educon ++
   -- CIs
   map nw [srsSWHS, progName, phsChgMtrl] ++ map nw acronyms ++ map nw doccon' ++
-  map nw physicCon' ++ map nw mathcon' ++
+  map nw physicCon' ++ map nw mathcon'
+
+conceptChunks :: [ConceptChunk]
+conceptChunks =
   -- ConceptChunks
-  nw algorithm : map nw softwarecon ++ map nw thermocon ++ map nw con ++
-  map nw physicCon ++ map nw mathcon ++ map nw physicalcon
+  algorithm : softwarecon ++ thermocon ++ con ++ physicCon ++ mathcon ++
+  physicalcon ++ srsDomains ++
+  -- DefinedQuantityDicts
+  map cw symbols
 
 symbMap :: ChunkDB
-symbMap = cdb symbolsAll ideaDicts
-  (map cw symbols ++ srsDomains) siUnits NoPCM.dataDefs NoPCM.iMods genDefs
-  tMods concIns [] allRefs citations
+symbMap = cdb symbolsAll ideaDicts conceptChunks siUnits NoPCM.dataDefs
+  NoPCM.iMods genDefs tMods concIns [] allRefs citations
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =

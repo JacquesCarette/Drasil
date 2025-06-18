@@ -25,7 +25,9 @@ module Database.Drasil.ChunkDB (
   -- ** Lenses
   unitTable, traceTable, refbyTable, citationTable,
   dataDefnTable, insmodelTable, gendefTable, theoryModelTable,
-  conceptinsTable, labelledcontentTable, refTable
+  conceptinsTable, labelledcontentTable, refTable,
+  -- **  Helpers
+  addCdb
 ) where
 
 import Language.Drasil (HasUID(..), UID, Quantity, MayHaveUnit(..), Idea (..),
@@ -268,7 +270,7 @@ addCdb cdb1 cdb2 =
     _refTable             = concatCdbMap "" (_refTable cdb1) (_refTable cdb2)
   }
   where
-    concatCdbMap mn = Map.unionWithKey (preferNew mn)
+    concatCdbMap mn = Map.unionWithKey (preferNew mn) 
     preferNew mn key new _ = trace ("'" ++ show key ++ "' is inserted twice in '" ++ mn ++ "' while adding to basis!") new
 
 -- | Gets the units of a 'Quantity' as 'UnitDefn's.

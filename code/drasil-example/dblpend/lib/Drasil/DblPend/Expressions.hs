@@ -1,8 +1,7 @@
 module Drasil.DblPend.Expressions where
 
 import Prelude hiding (sin, cos, sqrt)
-import Language.Drasil
-
+-- import Language.Drasil (vec2D, ($.), norm, vAdd, vSub, square)
 import Data.Drasil.Quantities.Physics (gravitationalAccel, gravitationalMagnitude)
 import Drasil.DblPend.DataDefs (positionXEqn_1)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, massObj_1, massObj_2,
@@ -10,8 +9,18 @@ import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, massObj_1, massObj_2,
   tension_1, tension_2, angularVel_1, angularVel_2,
   pendDisAngle_1, pendDisAngle_2)
 
+import Language.Drasil (PExpr, ($/), ($*), ($+), ($-), exactDbl, sy, sin, cos, square, vec2D, neg)
+-- import Language.Drasil.Expr.Class(vec2D) 
+
 -- Velocity X/Y First Object
 velXExpr_1, velYExpr_1 :: PExpr
+
+-- Vectors
+velVec_1 :: PExpr
+velVec_1 = vec2D velXExpr_1 velYExpr_1
+velVec_2 :: PExpr
+velVec_2 = vec2D velXExpr_2 velYExpr_2
+
 velXExpr_1 = sy angularVel_1 $* sy lenRod_1 $* cos (sy pendDisAngle_1)
 velYExpr_1 = sy angularVel_1 $* positionXEqn_1
 
@@ -22,6 +31,14 @@ velYExpr_2 = sy yVel_1 $+ (sy angularVel_2 $* sy lenRod_2 $* sin (sy pendDisAngl
 
 -- Acceleration X/Y First Object
 accelXExpr_1, accelYExpr_1 :: PExpr
+
+-- Vectors
+accelVec_1 :: PExpr
+accelVec_1 = vec2D accelXExpr_1 accelYExpr_1
+accelVec_2 :: PExpr
+accelVec_2 = vec2D accelXExpr_2 accelYExpr_2
+
+
 accelXExpr_1 = neg (square (sy angularVel_1) $* sy lenRod_1 $* sin (sy pendDisAngle_1))
                 $+ (sy angularAccel_1 $* sy lenRod_1 $* cos (sy pendDisAngle_1))
 accelYExpr_1 = (square (sy angularVel_1) $* sy lenRod_1 $* cos (sy pendDisAngle_1))
@@ -105,3 +122,5 @@ cosAngleExpr2 :: PExpr
 cosAngleExpr2 = cos (sy pendDisAngle_2)
 sinAngleExpr2 :: PExpr
 sinAngleExpr2 = sin (sy pendDisAngle_2)
+
+

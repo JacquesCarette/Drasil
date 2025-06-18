@@ -23,9 +23,48 @@ import Drasil.DblPend.Concepts (horizontalPos,
     verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce, firstObject, secondObject)
 import Control.Lens ((^.))
 
+import Data.Drasil.Concepts.Physics (kEnergy)
+import Drasil.DblPend.Unitals (massObj_1)
+import Drasil.DblPend.Expressions (velVec_1)
+import Theory.Drasil
+import Language.Drasil (Expr, ($*), ($.), exactDbl, sy, int, express, sub, symbol)
+import Theory.Drasil (GenDefn, gdNoRefs, equationalModel)
+
+
+
+
 genDefns :: [GenDefn]
 genDefns = [velXGD_1, velYGD_1, velXGD_2, velYGD_2, accelXGD_1, accelYGD_1, accelXGD_2, accelYGD_2,
-       xForceGD_1, yForceGD_1, xForceGD_2, yForceGD_2]
+       xForceGD_1, yForceGD_1, xForceGD_2, yForceGD_2, kineticEnergyGD_1]
+
+
+-- Define kinetic energy expression
+kineticEnergyEqn_1 :: Expr
+kineticEnergyEqn_1 = exactDbl 0.5 $* sy massObj_1 $* (velVec_1 $. velVec_1)
+
+-- Create a quantity for kinetic energy of first object
+ke_1 :: QuantityDict
+ke_1 = mkQuant' "ke1"
+  (nounPhraseSP "kinetic energy of the first object")
+  Nothing Real
+  (sub (symbol kEnergy NoStage) (int 1))
+  (getUnit kEnergy)
+
+-- Wrap as quantity definition
+kineticEnergyQD_1 :: ModelQDef
+kineticEnergyQD_1 = mkQuantDef' ke_1 (nounPhraseSP "kinetic energy of the first object") (express kineticEnergyEqn_1)
+
+-- Finally the general definition
+kineticEnergyGD_1 :: GenDefn
+kineticEnergyGD_1 = gdNoRefs
+  (equationalModel' kineticEnergyQD_1)
+  (getUnit kEnergy)
+  Nothing
+  "kineticEnergy1"
+  []
+
+
+
 
 ------------------------------------------------
 -- Velocity in X Direction in the First Object--

@@ -136,10 +136,14 @@ ideaDicts =
   -- IdeaDicts
   [sciCompS, lateralLoad, materialProprty] ++ con' ++ doccon ++ educon ++ compcon ++
   -- CIs
-  map nw [progName, iGlass, lGlass] ++ map nw doccon' ++ map nw mathcon' ++
+  map nw [progName, iGlass, lGlass] ++ map nw doccon' ++ map nw mathcon'
+
+conceptChunks :: [ConceptChunk]
+conceptChunks = 
   -- ConceptChunks
-  map nw [distance, algorithm] ++ map nw mathcon ++ 
-  map nw softwarecon ++ map nw physicalcon
+  [distance, algorithm] ++ concepts ++ mathcon ++ softwarecon ++ physicalcon ++ srsDomains ++
+  -- UnitalChunks
+  map cw symb
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =
@@ -147,8 +151,7 @@ tableOfAbbrvsIdeaDicts =
   map nw acronyms
 
 symbMap :: ChunkDB
-symbMap = cdb thisSymbols ideaDicts
-  (map cw symb ++ concepts ++ Doc.srsDomains) siUnits
+symbMap = cdb thisSymbols ideaDicts conceptChunks siUnits 
   GB.dataDefs iMods [] tMods concIns labCon allRefs citations
 
 usedDB :: ChunkDB

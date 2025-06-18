@@ -28,13 +28,10 @@ digraph allvsall {
 	instance:cartSys	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSys"];
 	instance:cartSysR	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSysR"];
 	instance:yAxisDir	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:yAxisDir"];
-	instance:startOrigin2x	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:startOrigin2x"];
-	instance:firstPend	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:firstPend"];
-	instance:secondPend	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:secondPend"];
 
 	subgraph A {
 	rank="same"
-	{instance:twoDMotion, instance:cartSys, instance:cartSysR, instance:yAxisDir, instance:startOrigin2x, instance:firstPend, instance:secondPend}
+	{instance:twoDMotion, instance:cartSys, instance:cartSysR, instance:yAxisDir}
 	}
 
 	dataDefn:velocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionGDD"];

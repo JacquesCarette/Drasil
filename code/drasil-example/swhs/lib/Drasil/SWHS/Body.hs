@@ -105,22 +105,28 @@ ideaDicts =
   materialProprty : prodtcon ++ doccon ++ educon ++ compcon ++
   -- CIs
   map nw [progName', progName] ++ map nw acronymsFull ++ map nw doccon' ++
-  map nw mathcon' ++ 
+  map nw mathcon'
+
+conceptChunks :: [ConceptChunk]
+conceptChunks =
   -- ConceptChunks
-  nw algorithm : map nw thermocon ++ map nw softwarecon ++ map nw physicCon ++
-  map nw mathcon ++ map nw physicalcon ++ map nw con
+  algorithm : thermocon ++ softwarecon ++ physicCon ++ mathcon ++
+  physicalcon ++ con ++ srsDomains ++
+  -- InstanceModels
+  cw heatEInPCM :
+  -- DefinedQuantityDicts
+  map cw symbols ++
+  -- ConstQDefs
+  map cw specParamValList
 
 symbMap :: ChunkDB
-symbMap = cdb (qw (heatEInPCM ^. output) : symbolsAll) -- heatEInPCM ?
-  ideaDicts
-  (cw heatEInPCM : map cw symbols ++ srsDomains ++ map cw specParamValList) -- FIXME: heatEInPCM?
+symbMap = cdb (qw (heatEInPCM ^. output) : symbolsAll) ideaDicts conceptChunks
   siUnits SWHS.dataDefs insModel genDefs tMods concIns [] allRefs citations
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =
   -- CIs
   nw progName : map nw acronymsFull ++
-  -- DefinedQuantityDicts
   -- DefinedQuantityDicts
   map nw symbols
 

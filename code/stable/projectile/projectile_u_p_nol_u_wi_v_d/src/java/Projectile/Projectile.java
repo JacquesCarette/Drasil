@@ -40,7 +40,7 @@ public class Projectile {
     /** \brief Calculates flight duration: the time when the projectile lands (s)
         \param v_launch launch speed: the initial speed of the projectile when launched (m/s)
         \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-        \param g magnitude of gravitational acceleration (m/s^2)
+        \param g magnitude of gravitational acceleration: the magnitude of the approximate acceleration due to gravity on Earth at sea level (m/s^2)
         \return flight duration: the time when the projectile lands (s)
     */
     public static double func_t_flight(double v_launch, double theta, double g) {
@@ -50,7 +50,7 @@ public class Projectile {
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
         \param v_launch launch speed: the initial speed of the projectile when launched (m/s)
         \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-        \param g magnitude of gravitational acceleration (m/s^2)
+        \param g magnitude of gravitational acceleration: the magnitude of the approximate acceleration due to gravity on Earth at sea level (m/s^2)
         \return landing position: the distance from the launcher to the final position of the projectile (m)
     */
     public static double func_p_land(double v_launch, double theta, double g) {

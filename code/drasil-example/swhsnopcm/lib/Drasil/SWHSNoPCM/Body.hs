@@ -32,10 +32,9 @@ import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
 import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
   uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
-import Data.Drasil.Quantities.Physics (time, energy, physicscon)
+import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Software.Products (prodtcon)
-import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
-  fundamentals, derived)
+import Data.Drasil.SI_Units (siUnits)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -50,7 +49,7 @@ import Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, nwtnCooling, sensHtET
 import Drasil.SWHS.Unitals (coilSAMax, deltaT, htFluxC, htFluxIn,
   htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW,
   tempEnv, tempW, thFluxVect, volHtGen, watE,
-  wMass, wVol, unitalChuncks, absTol, relTol)
+  wMass, wVol, absTol, relTol)
 import Drasil.SWHS.References (uriReferences)
 
 import Drasil.SWHSNoPCM.Assumptions
@@ -80,9 +79,6 @@ printSetting = piSys fullSI Equational defaultConfiguration
 resourcePath :: String
 resourcePath = "../../../../datafiles/swhsnopcm/"
 
--- This defines the standard concepts used throughout the document
-units :: [UnitDefn]
-units = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
 symbols = pi_ : map dqdWr concepts ++ map dqdWr constrained
@@ -200,21 +196,11 @@ ideaDicts =
   map nw physicCon' ++ map nw mathcon' ++
   -- ConceptChunks
   nw algorithm : map nw softwarecon ++ map nw thermocon ++ map nw con ++
-  map nw physicCon ++ map nw mathcon ++ map nw physicalcon ++
-  -- DefinedQuantityDicts
-  map nw symbols ++
-  -- UnitalChunks
-  map nw physicscon ++ map nw unitalChuncks ++
-  -- UncertainChunks
-  map nw [absTol, relTol] ++
-  -- ConstQDefs
-  map nw specParamValList ++
-  -- UnitDefns
-  map nw fundamentals ++ map nw derived
+  map nw physicCon ++ map nw mathcon ++ map nw physicalcon
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts
-  (map cw symbols ++ srsDomains) units NoPCM.dataDefs NoPCM.iMods genDefs
+  (map cw symbols ++ srsDomains) siUnits NoPCM.dataDefs NoPCM.iMods genDefs
   tMods concIns [] allRefs citations
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]

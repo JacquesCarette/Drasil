@@ -11,7 +11,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (olu)
-import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz, fundamentals)
+import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.Concepts.Computation (compcon, inValue, algorithm)
 import Data.Drasil.Concepts.Documentation (srsDomains, doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
@@ -23,8 +23,6 @@ import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Theories.Physics (newtonSLR)
 import Data.Drasil.TheoryConcepts (inModel)
-import Data.Drasil.Quantities.Math (unitVect, unitVectj)
-import Data.Drasil.Quantities.Physics (physicscon)
 
 import Drasil.DblPend.Body (justification, externalLinkRef, charsOfReader,
   sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms,
@@ -134,16 +132,7 @@ ideaDicts =
   map nw acronyms ++
   -- ConceptChunks
   map nw [mass, len, errMsg, program, algorithm] ++ map nw physicCon ++
-  map nw physicalcon ++ map nw mathcon ++
-  -- QuantityDicts
-  map nw symbols ++
-  -- UnitDefns
-  map nw [newton, degree, radian, hertz] ++
-  map nw fundamentals ++
-  -- DefinedQuantityDict
-  nw unitVect : nw unitVectj :
-  -- UnitalChunks
-  map nw physicscon
+  map nw physicalcon ++ map nw mathcon
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =
@@ -154,8 +143,7 @@ tableOfAbbrvsIdeaDicts =
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map qw symbols) ideaDicts
-   (map cw iMods ++ srsDomains) (map unitWrapper 
-   [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs iMods
+   (map cw iMods ++ srsDomains) siUnits dataDefs iMods
    genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.

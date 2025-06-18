@@ -4,11 +4,9 @@
 module Data.Drasil.Concepts.Math where
 
 import Language.Drasil hiding (number, norm, matrix)
-import Language.Drasil.ShortHands (lX, lY, lZ)
 import Data.Drasil.Domains (mathematics)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import qualified "drasil-metadata" Data.Drasil.Concepts.Math as M
 
@@ -38,10 +36,10 @@ angle       = cc M.angle       "the amount of rotation needed to bring one line 
 area        = cc M.area        "a part of an object or surface"
 axis        = cc M.axis        "a fixed reference line for the measurement of coordinates" 
 calculation = cc M.calculation "a mathematical determination of the size or number of something"
-cartesian   = cc' M.cartesian  "a coordinate system that specifies each point uniquely in a plane by a set" `S.of_`
+cartesian   = cc' M.cartesian  (S "a coordinate system that specifies each point uniquely in a plane by a set" `S.of_`
                                                                   S "numerical coordinates, which are the signed distances to the point from" +:+
                                                                   S "two fixed perpendicular oriented lines, measured in the same unit of length" +:+
-                                                                  fromSource cartesianWiki
+                                                                  fromSource cartesianWiki)
 centre       = cc M.centre    "the middle point of an object"
 change       = cc M.change    "Difference between relative start and end states of an object"
 component    = cc M.component ("The scalar quantity defining the contribution " ++

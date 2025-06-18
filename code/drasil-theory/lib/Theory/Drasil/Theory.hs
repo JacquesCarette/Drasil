@@ -11,7 +11,7 @@ module Theory.Drasil.Theory (
 import Control.Lens (Lens', view, makeLenses)
 
 import Language.Drasil
-import Data.Drasil.TheoryConcepts (thModel)
+import Data.Drasil.Concepts.TheoryConcepts (thModel)
 
 import Theory.Drasil.ModelKinds
 

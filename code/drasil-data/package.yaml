@@ -33,7 +33,6 @@ library:
   - Data.Drasil.Constraints
   - Data.Drasil.SI_Units
   - Data.Drasil.Concepts.Computation
-  - Data.Drasil.Concepts.Documentation
   - Data.Drasil.Concepts.Thermodynamics
   - Data.Drasil.Concepts.PhysicalProperties
   - Data.Drasil.Concepts.Education

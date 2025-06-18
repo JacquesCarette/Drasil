@@ -5,7 +5,7 @@ module Theory.Drasil.DataDefinition where
 
 import Control.Lens
 import Language.Drasil
-import Data.Drasil.TheoryConcepts (dataDefn)
+import Data.Drasil.Concepts.TheoryConcepts (dataDefn)
 import Theory.Drasil.Classes (HasOutput(..))
 
 -- * Types

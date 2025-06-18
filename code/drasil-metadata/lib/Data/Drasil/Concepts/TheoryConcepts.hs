@@ -1,5 +1,5 @@
 -- | Theory related Drasil concepts, used across Drasil.
-module Data.Drasil.TheoryConcepts where
+module Data.Drasil.Concepts.TheoryConcepts where
 
 import Language.Drasil (cn', CI, commonIdeaWithDict)
 import Data.Drasil.Domains (softEng)

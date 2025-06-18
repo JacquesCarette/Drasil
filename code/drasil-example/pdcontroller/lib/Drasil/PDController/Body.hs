@@ -143,11 +143,7 @@ ideaDicts =
   -- CIs
   nw progName : map nw acronyms ++ map nw mathcon' ++ map nw doccon' ++
   -- ConceptChunks
-  map nw physicalcon ++ map nw mathcon ++ map nw [linear, program, angular] ++
-  -- QuantityDicts
-  map nw symbols ++map nw symbols ++
-  -- UnitalChunks
-  map nw physicscon
+  map nw physicalcon ++ map nw mathcon ++ map nw [linear, program, angular]
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf])

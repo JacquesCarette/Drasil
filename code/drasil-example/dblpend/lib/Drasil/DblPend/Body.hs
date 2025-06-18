@@ -152,8 +152,6 @@ ideaDicts =
   map nw [algorithm, len, mass, errMsg, program] ++ map nw physicCon ++ map nw mathcon ++ map nw physicalcon ++
   -- DefinedQuantityDicts
   map nw [unitVect, unitVectj] ++
-  -- QuantityDicts
-  map nw symbols ++ 
   -- UnitalChunks
   map nw physicscon
 

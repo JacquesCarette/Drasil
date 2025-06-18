@@ -141,7 +141,7 @@ ideaDicts =
   map nw [progName, centreMass] ++ map nw doccon' ++ map nw CM.mathcon' ++
   map nw CP.physicCon' ++
   -- ConceptChunks
-  nw algorithm : map nw softwarecon ++ map nw CP.physicCon ++ map nw CM.mathcon 
+  nw algorithm : map nw softwarecon ++ map nw CP.physicCon ++ map nw CM.mathcon
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =

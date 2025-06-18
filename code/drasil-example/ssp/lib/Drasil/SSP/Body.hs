@@ -155,9 +155,7 @@ ideaDicts =
   nw progName : map nw acronyms ++ map nw mathcon' ++ map nw doccon' ++
   -- ConceptChunks
   nw algorithm : map nw defs' ++ map nw softwarecon ++ map nw physicCon ++
-  map nw mathcon ++ map nw solidcon ++ map nw physicalcon ++
-  -- DefinedQuantityDicts
-  map nw symbols
+  map nw mathcon ++ map nw solidcon ++ map nw physicalcon
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map qw symbols) ideaDicts

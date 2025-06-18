@@ -23,7 +23,7 @@ import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Theories.Physics (newtonSLR)
 import Data.Drasil.TheoryConcepts (inModel)
-import Data.Drasil.Quantities.Math (unitVect, unitVectj)
+
 import Drasil.DblPend.Body (justification, externalLinkRef, charsOfReader,
   sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms,
   userCharacteristicsIntro)
@@ -132,11 +132,7 @@ ideaDicts =
   map nw acronyms ++
   -- ConceptChunks
   map nw [errMsg, program, algorithm] ++ map nw physicCon ++
-  map nw physicalcon ++ map nw mathcon ++
-  -- QuantityDicts
-  map nw symbols ++
-  -- DefinedQuantityDict
-  map nw [unitVect, unitVectj]
+  map nw physicalcon ++ map nw mathcon
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =

@@ -68,10 +68,7 @@ ideaDicts =
   -- CIs
   nw progName : map nw doccon' ++
   -- ConceptChunks
-  map nw mathcon ++
-  -- QuantityDicts
-  map nw symbols
-
+  map nw mathcon
 
 symbMap :: ChunkDB
 symbMap = cdb symbols ideaDicts

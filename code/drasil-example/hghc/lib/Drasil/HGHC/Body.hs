@@ -66,13 +66,10 @@ ideaDicts =
   -- Actual IdeaDicts
   [fp, nuclearPhys] ++ doccon ++
   -- CIs
-  nw progName : map nw doccon' ++
-  -- ConceptChunks
-  map nw mathcon
+  nw progName : map nw doccon'
 
 symbMap :: ChunkDB
-symbMap = cdb symbols ideaDicts
-  ([] :: [ConceptChunk])-- FIXME: Fill in concepts
+symbMap = cdb symbols ideaDicts mathcon
   siUnits dataDefs [] [] [] [] [] [] []
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]

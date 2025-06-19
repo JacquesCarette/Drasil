@@ -12,13 +12,13 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (olu)
 import Data.Drasil.SI_Units (siUnits)
-import Data.Drasil.Concepts.Computation (compcon, inValue, algorithm)
+import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Documentation (srsDomains, doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Concepts.Physics (physicCon, physicCon', motion, pendulum)
-import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
+import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Theories.Physics (newtonSLR)
@@ -126,15 +126,14 @@ purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pen
 ideaDicts :: [IdeaDict]
 ideaDicts = 
   -- Actual IdeaDicts
-  inValue : doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
+  doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
   -- CIs
-  nw progName : map nw doccon' ++ map nw mathcon' ++ map nw physicCon' ++
-  map nw acronyms
+  nw progName : map nw doccon' ++ map nw mathcon' ++ map nw physicCon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  [mass, len, errMsg, program, algorithm] ++ physicCon ++ physicalcon ++ mathcon ++ srsDomains ++
+  [errMsg, program, algorithm] ++ physicCon ++ physicalcon ++ mathcon ++ srsDomains ++
   -- InstanceModels
   map cw iMods
 

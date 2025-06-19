@@ -125,7 +125,7 @@ lBreak :: Symbol
 lDur :: Symbol
 lFail :: Symbol
 lTol :: Symbol
-terms :: [ConceptChunk]
+concepts :: [ConceptChunk]
 aspectRatioCon :: ConceptChunk
 glBreakage :: ConceptChunk
 lite :: ConceptChunk

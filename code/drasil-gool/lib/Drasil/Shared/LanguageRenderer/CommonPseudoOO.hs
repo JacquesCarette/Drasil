@@ -1,11 +1,23 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
-module Drasil.Shared.LanguageRenderer.CommonPseudoOO where
+module Drasil.Shared.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
+  doxClass, doxMod, docMod', modDoc', functionDoc, extVar, classVar, objVarSelf,
+  indexOf, contains, containsInt, listAddFunc, discardFileLine, intClass, funcType, buildModule,
+  arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach,
+  docMain, mainFunction, buildModule', call', listSizeFunc, listAccessFunc',
+  string, constDecDef, docInOutFunc, bindingError, extFuncAppMixedArgs, notNull,
+  listDecDef, destructorError, stateVarDef, constVar, litArray, litSet, listSetFunc, litSetFunc,
+  extraClass, listAccessFunc, doubleRender, double, openFileR, openFileW,
+  stateVar, self, multiAssign, multiReturn, listDec, funcDecDef, inOutCall,
+  forLoopError, mainBody, inOutFunc, docInOutFunc', bool,
+  floatRender, float, stringRender', string', inherit, implements, listSize, setDecDef, setDec,
+  listAdd, listAppend, intToIndex, indexToInt, intToIndex', indexToInt',
+  varDecDef, openFileR', openFileW', openFileA', argExists, global, setMethodCall) where
 
 import Utils.Drasil (indent, stringList)
 
 import Drasil.Shared.CodeType (CodeType(..))
 
-import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, VSFunction,
+import Drasil.Shared.InterfaceCommon (varDecDef, bool, extFuncAppMixedArgs,funcType, extVar, Label, Library, MSBody, VSFunction,
   VSType, SVariable, Value, SValue, MSStatement, MSParameter, SMethod,
   MixedCall, bodyStatements, oneLiner, TypeSym(infile, outfile, listInnerType),
   TypeElim(getType, getTypeString), VariableElim(variableName, variableType),
@@ -38,7 +50,8 @@ import qualified Drasil.Shared.RendererClassesCommon as RC (ImportElim(..),
 
 import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, onStateList)
 
-import Drasil.GOOL.RendererClassesOO 
+import Drasil.GOOL.RendererClassesOO (OORenderSym, OORenderMethod(intMethod),
+  ParentSpec)
 
 import qualified Drasil.GOOL.RendererClassesOO as S (OOMethodTypeSym(construct),
   OORenderMethod(intFunc), RenderClass(intClass, inherit),
@@ -47,7 +60,7 @@ import qualified Drasil.GOOL.RendererClassesOO as S (OOMethodTypeSym(construct),
 import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..),
   StateVarElim(..), ClassElim(..))
 
-import Drasil.Shared.LanguageRenderer (array', new', args, array, listSep, access,
+import Drasil.Shared.LanguageRenderer (listAccessFunc, listSetFunc, array', new', args, array, listSep, access,
   mathFunc, ModuleDocRenderer, FuncDocRenderer, functionDox, classDox,
   moduleDox, variableList, valueList, intValue)
 

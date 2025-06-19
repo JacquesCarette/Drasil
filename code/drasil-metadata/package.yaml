@@ -17,7 +17,6 @@ dependencies:
 - base >= 4.7 && < 5
 - aeson
 - template-haskell
-- lens
 - drasil-lang
 - drasil-utils
 
@@ -29,9 +28,6 @@ library:
   source-dirs: lib
   exposed-modules:
   - Data.Drasil.Domains
-  - Data.Drasil.Concepts.Documentation
-  - Data.Drasil.Concepts.TheoryConcepts
-  - Data.Drasil.Concepts.Math
   - Metadata.Drasil.DrasilMetaCall
   when:
   - condition: false

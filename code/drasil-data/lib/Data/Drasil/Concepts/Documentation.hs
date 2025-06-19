@@ -12,7 +12,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Math (graph, unit_)
 import Data.Drasil.Domains (documentc, softEng)
-import Data.Drasil.Concepts.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
+import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Control.Lens ((^.))
 

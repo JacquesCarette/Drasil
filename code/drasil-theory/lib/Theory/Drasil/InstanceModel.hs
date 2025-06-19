@@ -12,7 +12,7 @@ module Theory.Drasil.InstanceModel(
 
 import Language.Drasil
 import Theory.Drasil.Classes (HasInputs(inputs), HasOutput(..))
-import Data.Drasil.Concepts.TheoryConcepts (inModel)
+import Data.Drasil.TheoryConcepts (inModel)
 
 import Control.Lens ((^.), makeLenses, _1, _2) 
 import Theory.Drasil.ModelKinds (ModelKind, getEqModQds)

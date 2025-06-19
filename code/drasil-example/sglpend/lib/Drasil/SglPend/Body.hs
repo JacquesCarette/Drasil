@@ -18,7 +18,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Concepts.Physics (physicCon, physicCon', motion, pendulum)
-import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
+import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Theories.Physics (newtonSLR)
@@ -133,7 +133,7 @@ ideaDicts =
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  [mass, len, errMsg, program, algorithm] ++ physicCon ++ physicalcon ++ mathcon ++ srsDomains ++
+  [errMsg, program, algorithm] ++ physicCon ++ physicalcon ++ mathcon ++ srsDomains ++
   -- InstanceModels
   map cw iMods
 

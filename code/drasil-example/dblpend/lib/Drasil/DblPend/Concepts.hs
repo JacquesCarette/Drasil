@@ -2,13 +2,12 @@ module Drasil.DblPend.Concepts where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (first, second_, object)
-import Data.Drasil.Theories.Physics (newtonSLRQD)
 import Language.Drasil.Chunk.Concept.NamedCombinators (compoundNC)
 import Data.Drasil.Concepts.Physics (pendulum, motion, position, velocity, force, acceleration)
 
 
 concepts :: [IdeaDict]
-concepts = nw newtonSLRQD : map nw [rod, horizontal, vertical,
+concepts = map nw [rod, horizontal, vertical,
   pendMotion, horizontalPos, verticalPos, horizontalVel,horizontalAccel, verticalAccel,
   verticalVel, horizontalForce, verticalForce, firstRod, secondRod, firstObject, secondObject] 
   ++ map nw defs

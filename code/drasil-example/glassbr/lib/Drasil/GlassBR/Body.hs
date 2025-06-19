@@ -46,7 +46,7 @@ import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
-  sD, termsWithAccDefn, termsWithDefsOnly, terms, dataConstraints)
+  sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -141,7 +141,7 @@ ideaDicts =
 conceptChunks :: [ConceptChunk]
 conceptChunks = 
   -- ConceptChunks
-  [distance, algorithm] ++ terms ++ mathcon ++ softwarecon ++ physicalcon ++ srsDomains ++
+  [distance, algorithm] ++ concepts ++ mathcon ++ softwarecon ++ physicalcon ++ srsDomains ++
   -- UnitalChunks
   map cw symb
 

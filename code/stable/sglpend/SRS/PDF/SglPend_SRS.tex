@@ -277,7 +277,6 @@ The instance models that govern SglPend are presented in the \hyperref[Sec:IMs]{
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
 \begin{description}[font=\normalfont]
-\item[startOrigin:\phantomsection\label{startOrigin1x}]{The pendulum is attached to the origin.}
 \item[twoDMotion:\phantomsection\label{twoDMotion}]{The pendulum motion is two-dimensional (2D).}
 \item[cartSys:\phantomsection\label{cartSys}]{A Cartesian coordinate system is used.}
 \item[cartSysR:\phantomsection\label{cartSysR}]{The Cartesian coordinate system is right-handed where positive $x$-axis and $y$-axis point right up.}
@@ -1212,72 +1211,70 @@ The purpose of the traceability matrices is to provide easy references on what h
 
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions}]
-{colspec={l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[startOrigin1x]{A:startOrigin}} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}}
+{colspec={l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}}
 \\
-\hyperref[startOrigin1x]{A:startOrigin} &  &  &  &  & 
+\hyperref[twoDMotion]{A:twoDMotion} &  &  &  & 
 \\
-\hyperref[twoDMotion]{A:twoDMotion} &  &  &  &  & 
+\hyperref[cartSys]{A:cartSys} &  &  &  & 
 \\
-\hyperref[cartSys]{A:cartSys} &  &  &  &  & 
+\hyperref[cartSysR]{A:cartSysR} &  &  &  & 
 \\
-\hyperref[cartSysR]{A:cartSysR} &  &  &  &  & 
-\\
-\hyperref[yAxisDir]{A:yAxisDir} &  &  &  &  & 
+\hyperref[yAxisDir]{A:yAxisDir} &  &  &  & 
 \label{Table:TraceMatAvsA}
 \end{longtblr}
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Assumptions and Other Items}]
-{colspec={l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[startOrigin1x]{A:startOrigin}} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}}
+{colspec={l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}}
 \\
-\hyperref[DD:positionIX]{DD:positionIX} &  &  &  &  & 
+\hyperref[DD:positionIX]{DD:positionIX} &  &  &  & 
 \\
-\hyperref[DD:positionIY]{DD:positionIY} &  &  &  &  & 
+\hyperref[DD:positionIY]{DD:positionIY} &  &  &  & 
 \\
-\hyperref[DD:frequencyDD]{DD:frequencyDD} &  &  &  &  & 
+\hyperref[DD:frequencyDD]{DD:frequencyDD} &  &  &  & 
 \\
-\hyperref[DD:angFrequencyDD]{DD:angFrequencyDD} &  &  &  &  & 
+\hyperref[DD:angFrequencyDD]{DD:angFrequencyDD} &  &  &  & 
 \\
-\hyperref[DD:periodSHMDD]{DD:periodSHMDD} &  &  &  &  & 
+\hyperref[DD:periodSHMDD]{DD:periodSHMDD} &  &  &  & 
 \\
-\hyperref[TM:acceleration]{TM:acceleration} &  &  &  &  & 
+\hyperref[TM:acceleration]{TM:acceleration} &  &  &  & 
 \\
-\hyperref[TM:velocity]{TM:velocity} &  &  &  &  & 
+\hyperref[TM:velocity]{TM:velocity} &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot} &  &  &  &  & 
+\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot} &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot} &  &  &  &  & 
+\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot} &  &  &  & 
 \\
-\hyperref[GD:velocityIX]{GD:velocityIX} &  &  &  &  & 
+\hyperref[GD:velocityIX]{GD:velocityIX} &  &  &  & 
 \\
-\hyperref[GD:velocityIY]{GD:velocityIY} &  &  &  &  & 
+\hyperref[GD:velocityIY]{GD:velocityIY} &  &  &  & 
 \\
-\hyperref[GD:accelerationIX]{GD:accelerationIX} &  &  &  &  & 
+\hyperref[GD:accelerationIX]{GD:accelerationIX} &  &  &  & 
 \\
-\hyperref[GD:accelerationIY]{GD:accelerationIY} &  &  &  &  & 
+\hyperref[GD:accelerationIY]{GD:accelerationIY} &  &  &  & 
 \\
-\hyperref[GD:hForceOnPendulum]{GD:hForceOnPendulum} &  &  &  &  & 
+\hyperref[GD:hForceOnPendulum]{GD:hForceOnPendulum} &  &  &  & 
 \\
-\hyperref[GD:vForceOnPendulum]{GD:vForceOnPendulum} &  &  &  &  & 
+\hyperref[GD:vForceOnPendulum]{GD:vForceOnPendulum} &  &  &  & 
 \\
-\hyperref[GD:angFrequencyGD]{GD:angFrequencyGD} &  &  &  &  & 
+\hyperref[GD:angFrequencyGD]{GD:angFrequencyGD} &  &  &  & 
 \\
-\hyperref[GD:periodPend]{GD:periodPend} &  &  &  &  & 
+\hyperref[GD:periodPend]{GD:periodPend} &  &  &  & 
 \\
-\hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement} &  &  &  &  & 
+\hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement} &  &  &  & 
 \\
-\hyperref[inputValues]{FR:Input-Values} &  &  &  &  & 
+\hyperref[inputValues]{FR:Input-Values} &  &  &  & 
 \\
-\hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  &  & 
+\hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  & 
 \\
-\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass} &  &  &  &  & 
+\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass} &  &  &  & 
 \\
-\hyperref[outputValues]{FR:Output-Values} &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  & 
 \\
-\hyperref[correct]{NFR:Correctness} &  &  &  &  & 
+\hyperref[correct]{NFR:Correctness} &  &  &  & 
 \\
-\hyperref[portable]{NFR:Portability} &  &  &  &  & 
+\hyperref[portable]{NFR:Portability} &  &  &  & 
 \label{Table:TraceMatAvsAll}
 \end{longtblr}
 \begin{longtblr}

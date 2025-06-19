@@ -2,10 +2,6 @@
 
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
-<div id="startOrigin1x"></div>
-
-startOrigin: The pendulum is attached to the origin.
-
 <div id="twoDMotion"></div>
 
 twoDMotion: The pendulum motion is two-dimensional (2D).

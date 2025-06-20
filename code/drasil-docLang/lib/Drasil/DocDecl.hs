@@ -42,6 +42,7 @@ data DocSection = TableOfContents                       -- ^ Table of Contents
                 | UCsSec                                -- ^ Unlikely Changes.
                 | TraceabilitySec DL.TraceabilitySec    -- ^ Traceability.
                 | AuxConstntSec DL.AuxConstntSec        -- ^ Auxiliary Constants.
+                | TAandA [IdeaDict]
                 | Bibliography                          -- ^ Bibliography.
                 | AppndxSec DL.AppndxSec                -- ^ Appendix.
                 | OffShelfSolnsSec DL.OffShelfSolnsSec  -- ^ Off the Shelf Solutions.
@@ -119,6 +120,7 @@ mkDocDesc SI{_inputs = is, _systemdb = db} = map sec where
   sec UCsSec = DL.UCsSec $ DL.UCsProg $ fromConcInsDB unlikeChgDom
   sec (TraceabilitySec t) = DL.TraceabilitySec t
   sec (AuxConstntSec a) = DL.AuxConstntSec a
+  sec (TAandA ideas) = DL.TAandA ideas
   sec Bibliography = DL.Bibliography
   sec (AppndxSec a) = DL.AppndxSec a
   sec (OffShelfSolnsSec e) = DL.OffShelfSolnsSec e

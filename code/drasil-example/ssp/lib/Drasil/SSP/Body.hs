@@ -26,7 +26,7 @@ import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
   number)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
 import Data.Drasil.Concepts.Physics (cohesion, fbd, force, gravity, isotropy,
-  strain, stress, time, twoD, physicCon)
+  strain, stress, time, twoD, physicCon, physicCon')
 import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce, 
   shearRes, solidcon)
@@ -152,7 +152,7 @@ ideaDicts =
   -- Actual IdeaDicts
   doccon ++ prodtcon ++ defs ++ educon ++ compcon ++
   -- CIs
-  nw progName : map nw acronyms ++ map nw mathcon' ++ map nw doccon'
+  nw progName : map nw mathcon' ++ map nw doccon' ++ map nw physicCon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =

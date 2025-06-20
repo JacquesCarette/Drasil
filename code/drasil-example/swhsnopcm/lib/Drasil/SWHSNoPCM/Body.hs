@@ -192,7 +192,7 @@ ideaDicts =
   -- Actual IdeaDicts
   [inValue, htTrans, materialProprty] ++ prodtcon ++ doccon ++ educon ++
   -- CIs
-  map nw [srsSWHS, progName, phsChgMtrl] ++ map nw acronyms ++ map nw doccon' ++
+  map nw [srsSWHS, progName, phsChgMtrl] ++ map nw doccon' ++
   map nw physicCon' ++ map nw mathcon'
 
 conceptChunks :: [ConceptChunk]

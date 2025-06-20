@@ -29,7 +29,7 @@ physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,
   iyVel, kEnergy, linearAccel, linearDisplacement, linearVelocity, momentOfInertia, 
   position, potEnergy, pressure, scalarAccel, scalarPos, speed, time, torque, velocity,
   weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-  yPos, yVel,momentum, moment, moment2D, fOfGravity, positionVec, tension,
+  yPos, yVel,momentum, moment, fOfGravity, positionVec, tension,
   angularFrequency, period, frequency, chgMomentum]
 
 -- * Physical Quantities (With Units)

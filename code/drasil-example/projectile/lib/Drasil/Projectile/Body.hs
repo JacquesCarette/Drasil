@@ -24,20 +24,20 @@ import Data.Drasil.Concepts.Software (errMsg, program)
 import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.Quantities.Math (pi_, piConst)
-import Data.Drasil.Quantities.Physics (acceleration, constAccel, gravitationalMagnitude,
+import Data.Drasil.Quantities.Physics (acceleration, constAccel,
   gravitationalAccelConst, iPos, iSpeed, iVel, ixPos, iyPos, ixVel, iyVel,
   position, scalarPos, time, velocity, xAccel, xConstAccel, xPos,
-  xVel, yAccel, yConstAccel, yPos, yVel, physicscon)
+  xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel, constAccelV, gravitationalMagnitude)
 
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
-import Data.Drasil.SI_Units (metre, radian, second)
+import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education(calculus, educon, undergraduate, 
   highSchoolPhysics, highSchoolCalculus)
 
 import Drasil.Projectile.Assumptions (assumptions)
-import Drasil.Projectile.Concepts (concepts, launcher, projectile, target)
+import Drasil.Projectile.Concepts (launcher, projectile, target, defs, projMotion, rectVel)
 import Drasil.Projectile.DataDefs (dataDefs)
 import Drasil.Projectile.Figures (figLaunch, sysCtxFig1)
 import Drasil.Projectile.GenDefs (genDefns)
@@ -166,22 +166,37 @@ background = foldlSent_ [S "Common examples of", phrase projectile, phrase motio
 tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM]
 
+ideaDicts :: [IdeaDict]
+ideaDicts =
+  -- Actual IdeaDicts
+  [sciCompS, projMotion, rectVel] ++ doccon ++ educon ++ compcon ++ unitalIdeas ++
+  -- CIs
+  nw progName : nw inValue : map nw doccon' ++ map nw physicCon'
+
+conceptChunks :: [ConceptChunk]
+conceptChunks =
+  -- ConceptChunks
+  [mass, errMsg, program, algorithm] ++ physicCon ++ mathcon ++ defs ++ srsDomains ++
+  -- ConstrConcepts
+  map cw constrained
+
 symbMap :: ChunkDB
-symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
-  (nw progName : nw mass : nw inValue : [nw errMsg, nw program] ++
-    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
-    map nw physicscon ++ map nw mathcon ++ [nw algorithm] ++ concepts ++ 
-    [nw sciCompS] ++ unitalIdeas ++ map nw acronyms ++ map nw symbols ++ 
-    map nw educon ++ map nw [metre, radian, second] ++ map nw compcon) 
-  (cw pi_ : map cw constrained ++ srsDomains) (map unitWrapper [metre, radian, second]) 
+symbMap = cdb (qw pi_ : symbols) ideaDicts conceptChunks siUnits
   dataDefs iMods genDefns tMods concIns [] allRefs citations
+
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts =
+  -- CIs
+  map nw acronyms ++
+  -- QuantityDicts
+  map nw symbols
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms ++ map nw symbols)
+usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
   (cw pi_ : srsDomains) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 stdFields :: Fields
@@ -279,10 +294,11 @@ physSystParts = map (!.)
 -- Various gathered data that should be automated --
 ----------------------------------------------------
 symbols :: [QuantityDict]
-symbols = qw gravitationalMagnitude : unitalQuants ++ map (^. defLhs) constants ++
-  map qw [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
+symbols = unitalQuants ++ (tol ^. defLhs) :
+  map qw [gravitationalMagnitude, acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
   iyPos, ixVel, iyVel, position, scalarPos, projPos, projSpeed, time, velocity, xAccel,
-  xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel]
+  xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel,
+  constAccelV]
 
 constants :: [ConstQDef]
 constants = [gravitationalAccelConst, piConst, tol]

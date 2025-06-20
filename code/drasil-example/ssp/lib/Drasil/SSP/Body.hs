@@ -32,22 +32,21 @@ import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce,
   shearRes, solidcon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Software.Products (prodtcon)
-import Data.Drasil.Theories.Physics (physicsTMs, weightSrc, hsPressureSrc)
+import Data.Drasil.Theories.Physics (weightSrc, hsPressureSrc)
 
 import Data.Drasil.People (brooks, henryFrankis)
-import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
+import Data.Drasil.SI_Units (degree, siUnits)
 
 import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, unlikelyChgs)
-import qualified Drasil.SSP.DataDefs as SSP (dataDefs)
+import Drasil.SSP.DataDefs (dataDefs)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, defs, defs', effFandS, factor, fsConcept,
   intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf, soil,
   soilLyr, soilMechanics, soilPrpty, ssa, stabAnalysis, waterTable)
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (goals)
-import Drasil.SSP.IMods (instModIntro)
 import Drasil.SSP.MetaConcepts (progName)
-import qualified Drasil.SSP.IMods as SSP (iMods)
+import Drasil.SSP.IMods (instModIntro, iMods)
 import Drasil.SSP.References (citations, morgenstern1965)
 import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs)
 import Drasil.SSP.TMods (tMods)
@@ -78,8 +77,8 @@ si = SI {
   _motivation  = [],
   _scope       = [],
   _quants      = symbols,
-  _instModels  = SSP.iMods,
-  _datadefs    = SSP.dataDefs,
+  _instModels  = iMods,
+  _datadefs    = dataDefs,
   _configFiles = [],
   _inputs      = map qw inputs,
   _outputs     = map qw outputs,
@@ -139,9 +138,6 @@ purp = foldlSent_ [S "evaluate the", phrase fs `S.ofA` phrasePoss slope,
   S "as well as the", phrase intrslce, phraseNP (normForce `and_` shearForce),
   S "along the", phrase crtSlpSrf]
 
-units :: [UnitDefn]
-units = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
-
 concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs
 
@@ -151,26 +147,44 @@ labCon = [figPhysSyst, figIndexConv, figForceActing] ++ funcReqTables
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
--- SYMBOL MAP HELPERS --
+ideaDicts :: [IdeaDict]
+ideaDicts = 
+  -- Actual IdeaDicts
+  doccon ++ prodtcon ++ defs ++ educon ++ compcon ++
+  -- CIs
+  nw progName : map nw acronyms ++ map nw mathcon' ++ map nw doccon'
+
+conceptChunks :: [ConceptChunk]
+conceptChunks =
+  -- ConceptChunks
+  algorithm : defs' ++ softwarecon ++ physicCon ++ mathcon ++ 
+  solidcon ++ physicalcon ++ srsDomains ++
+  -- InstanceModels
+  map cw iMods ++
+  -- DefinedQuantityDicts
+  map cw symbols
+
+
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) SSP.iMods ++ map qw symbols) (map nw symbols
-  ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw generalDefinitions ++ map nw SSP.iMods
-  ++ map nw defs ++ map nw defs' ++ map nw softwarecon ++ map nw physicCon 
-  ++ map nw physicsTMs
-  ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
-  ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
-  ++ map nw compcon ++ [nw algorithm, nw progName] ++ map nw units)
-  (map cw SSP.iMods ++ map cw symbols ++ srsDomains) units SSP.dataDefs SSP.iMods
-  generalDefinitions tMods concIns labCon allRefs citations
+symbMap = cdb (map (^. output) iMods ++ map qw symbols) ideaDicts conceptChunks
+  (degree : siUnits) dataDefs iMods generalDefinitions tMods concIns labCon allRefs citations
+
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts =
+  -- CIs
+  map nw acronyms ++
+  -- ConceptChunks
+  nw progName :
+  -- DefinedQuantityDicts
+  map nw symbols
+
+usedDB :: ChunkDB
+usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
+  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef, weightSrc, hsPressureSrc]
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbols
- ++ nw progName : map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- SECTION 1 --
 --automatically generated in mkSRS -

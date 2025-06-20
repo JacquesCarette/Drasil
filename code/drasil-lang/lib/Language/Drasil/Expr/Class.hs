@@ -12,14 +12,14 @@ import Prelude hiding (sqrt, log, sin, cos, tan, exp)
 
 import Control.Lens ((^.))
 
+import Drasil.Database.UID (HasUID(..))
+import qualified Drasil.Code.CodeExpr.Lang as C
 import Language.Drasil.Symbol
 import Language.Drasil.Expr.Lang
 import Language.Drasil.Literal.Lang
 import Language.Drasil.Space (DomainDesc(..), RTopology(..), RealInterval, Space)
 import qualified Language.Drasil.ModelExpr.Lang as M
-import qualified Language.Drasil.CodeExpr.Lang as C
 import Language.Drasil.Literal.Class (LiteralC(..))
-import Drasil.Database.UID (HasUID(..))
 
 import Utils.Drasil (toColumn)
 

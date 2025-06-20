@@ -105,10 +105,18 @@ si = SI {
   _usedinfodb  = usedDB
 }
 
+ideaDicts :: [IdeaDict]
+ideaDicts =
+  -- Actual IdeaDicts
+  doccon ++ prodtcon ++ [inValue] ++
+  -- CIs
+  nw progName : map nw doccon'
+
+conceptChunks :: [ConceptChunk]
+conceptChunks = [errMsg, algorithm, program] ++ mathcon ++ srsDomains
+
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [QuantityDict]) (nw progName : nw inValue : [nw errMsg, 
-  nw program] ++ map nw doccon ++ map nw doccon' ++ [nw algorithm] ++ 
-  map nw prodtcon ++ map nw mathcon) srsDomains
+symbMap = cdb ([] :: [QuantityDict]) ideaDicts conceptChunks
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
   ([] :: [LabelledContent]) ([] :: [Reference]) citations

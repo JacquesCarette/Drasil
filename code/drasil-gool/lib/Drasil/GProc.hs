@@ -19,7 +19,7 @@ module Drasil.GProc (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   onStateValue, onCodeList, unCI, unJLC, jlName, jlVersion
   ) where
 
-import Drasil.GOOL.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
+import Drasil.Shared.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
   SVariable, SValue, MSStatement, MSParameter, SMethod, NamedArgs, SharedProg,
   BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..),
   TypeElim(..), ThunkSym(..), VectorType(..), VectorDecl(..), VectorThunk(..),
@@ -33,19 +33,19 @@ import Drasil.GOOL.InterfaceCommon (Label, MSBody, MSBlock, VSFunction, VSType,
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, extFuncApp,
   libFuncApp, exists, List(..), Set(..), listSlice, listIndexExists, at, ScopeSym(..),
   ParameterSym(..), MethodSym(..), VisibilitySym(..), convType)
-import Drasil.GOOL.InterfaceProc (GSProgram, SFile, FSModule, ProcProg,
+import Drasil.GProc.InterfaceProc (GSProgram, SFile, FSModule, ProcProg,
   ProgramSym(..), FileSym(..), ModuleSym(..))
 
-import Drasil.GOOL.AST (FileData(..), ModData(..), ProgData(..),
+import Drasil.Shared.AST (FileData(..), ModData(..), ProgData(..),
   VisibilityTag(..))
 
-import Drasil.GOOL.CodeType (CodeType(..))
+import Drasil.Shared.CodeType (CodeType(..))
 
-import Drasil.GOOL.State (GOOLState(..), lensMStoVS, headers, sources, mainMod, 
+import Drasil.Shared.State (GOOLState(..), lensMStoVS, headers, sources, mainMod, 
   initialState)
 
-import Drasil.GOOL.Helpers (onStateValue, onCodeList)
+import Drasil.Shared.Helpers (onStateValue, onCodeList)
 
-import Drasil.GOOL.CodeInfoProc (unCI)
+import Drasil.GProc.CodeInfoProc (unCI)
 
-import Drasil.GOOL.LanguageRenderer.JuliaRenderer (unJLC, jlName, jlVersion)
+import Drasil.GProc.LanguageRenderer.JuliaRenderer (unJLC, jlName, jlVersion)

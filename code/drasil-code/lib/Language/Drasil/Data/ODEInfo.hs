@@ -3,8 +3,8 @@ module Language.Drasil.Data.ODEInfo (
   ODEInfo(..), odeInfo, odeInfo', ODEOptions(..), odeOptions, ODEMethod(..)
 ) where
 
+import Drasil.Code.CodeExpr.Development
 import Language.Drasil.Chunk.Code (CodeVarChunk)
-import Language.Drasil.CodeExpr.Development
 import Language.Drasil(makeAODESolverFormat, formEquations,
   DifferentialModel(..), ODESolverFormat(..), InitialValueProblem(..))
 import Language.Drasil.Chunk.CodeBase (quantvar)

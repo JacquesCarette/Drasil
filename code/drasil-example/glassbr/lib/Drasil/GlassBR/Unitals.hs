@@ -289,8 +289,8 @@ lDur   = label "d"
 lFail  = label "f"
 lTol   = label "tol"
 
-terms :: [ConceptChunk]
-terms = [aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
+concepts :: [ConceptChunk]
+concepts = [aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
   glTyFac, lateral, load, specDeLoad, loadResis, longDurLoad, nonFactoredL,
   glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar,
   sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage, notSafe, bomb,

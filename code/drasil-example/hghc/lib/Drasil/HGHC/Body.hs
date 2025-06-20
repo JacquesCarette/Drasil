@@ -8,7 +8,7 @@ import Drasil.HGHC.HeatTransfer (fp, dataDefs, htInputs, htOutputs,
     nuclearPhys, symbols)
 import Drasil.HGHC.MetaConcepts (progName)
 
-import Data.Drasil.SI_Units (siUnits, fundamentals, derived, degree)
+import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Documentation (doccon, doccon')
 import Data.Drasil.Concepts.Math (mathcon)
@@ -61,13 +61,23 @@ mkSRS = [TableOfContents,
 purp :: Sentence
 purp = foldlSent [S "describe", phrase CT.heatTrans, S "coefficients related to clad"]
 
+ideaDicts :: [IdeaDict]
+ideaDicts =
+  -- Actual IdeaDicts
+  [fp, nuclearPhys] ++ doccon ++
+  -- CIs
+  nw progName : map nw doccon'
+
 symbMap :: ChunkDB
-symbMap = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
-  ++ [nw fp, nw nuclearPhys, nw progName, nw degree] ++ map nw doccon' ++ map nw mathcon)
-  ([] :: [ConceptChunk])-- FIXME: Fill in concepts
+symbMap = cdb symbols ideaDicts mathcon
   siUnits dataDefs [] [] [] [] [] [] []
 
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts =
+  -- QuantityDicts
+  map nw symbols
+
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbols)
+usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
            ([] :: [ConceptChunk]) ([] :: [UnitDefn])
            [] [] [] [] [] [] ([] :: [Reference]) []

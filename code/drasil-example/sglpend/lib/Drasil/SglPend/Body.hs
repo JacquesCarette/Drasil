@@ -11,20 +11,18 @@ import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (olu)
-import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz, fundamentals)
-import Data.Drasil.Concepts.Computation (compcon, inValue, algorithm)
+import Data.Drasil.SI_Units (siUnits)
+import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Documentation (srsDomains, doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Concepts.Physics (physicCon, physicCon', motion, pendulum)
-import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
+import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Theories.Physics (newtonSLR)
 import Data.Drasil.TheoryConcepts (inModel)
-import Data.Drasil.Quantities.Math (unitVect, unitVectj)
-import Data.Drasil.Quantities.Physics (physicscon)
 
 import Drasil.DblPend.Body (justification, externalLinkRef, charsOfReader,
   sysCtxIntro, sysCtxDesc, sysCtxList, stdFields, scope, terms,
@@ -125,25 +123,37 @@ si = SI {
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pendulum]
 
+ideaDicts :: [IdeaDict]
+ideaDicts = 
+  -- Actual IdeaDicts
+  doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
+  -- CIs
+  nw progName : map nw doccon' ++ map nw mathcon' ++ map nw physicCon'
+
+conceptChunks :: [ConceptChunk]
+conceptChunks =
+  -- ConceptChunks
+  [errMsg, program, algorithm] ++ physicCon ++ physicalcon ++ mathcon ++ srsDomains ++
+  -- InstanceModels
+  map cw iMods
+
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts =
+  -- CIs
+  nw progName : map nw acronyms ++
+  -- QuantityDicts
+  map nw symbols
+
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ map qw symbols)
-  (nw newtonSLR : nw progName : nw mass : nw len : nw kilogram : nw inValue
-   : nw newton : nw degree : nw radian : nw unitVect : nw unitVectj
-   : [nw errMsg, nw program] ++ map nw symbols ++ map nw doccon
-   ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon'
-   ++ map nw physicCon' ++ map nw physicscon ++ concepts ++ map nw physicalcon
-   ++ map nw acronyms ++ map nw symbols ++ map nw fundamentals ++ map nw [metre, hertz] 
-   ++ [nw algorithm] ++ map nw compcon ++ map nw educon ++ map nw prodtcon)
-   (map cw iMods ++ srsDomains) (map unitWrapper 
-   [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs iMods
-   genDefns tMods concIns [] allRefs citations
+symbMap = cdb (map (^. output) iMods ++ map qw symbols) ideaDicts conceptChunks
+  siUnits dataDefs iMods genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw acronyms ++ map nw symbols) ([] :: [ConceptChunk])
+usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 concIns :: [ConceptInstance]

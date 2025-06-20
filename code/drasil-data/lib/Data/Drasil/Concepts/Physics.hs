@@ -60,7 +60,7 @@ acceleration = dccWDS "acceleration" (cn' "acceleration")
   (S "the rate of change of a body's" +:+ phrase velocity)
 angular = dcc "angular" (cn' "angular")
   "denoting physical properties or quantities measured with reference to or by means of an angle"
-body = dccWDS "body" (cnIES "body")
+body = dccWDS "physicsBody" (cnIES "body")
   (S "an object with" +:+ phrase QPP.mass)
 chgInVelocity = dccWDS "chgInVelocity" (cn desc)
   (S "the " +:+ S desc +:+ phrase rigidBody)

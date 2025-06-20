@@ -14,8 +14,6 @@ module Language.Drasil.Classes (
   , HasUnitSymbol(usymb)
   , HasReasVal(reasVal)
   , Constrained(constraints)
-  , Callable
-  , IsArgumentName
   , HasAdditionalNotes(getNotes)
     -- the unsorted rest
   , IsUnit(udefn, getUnits)
@@ -70,7 +68,9 @@ type Concept c = (Idea c, Definition c, ConceptDomain c)
 --        type Concept = forall c. (Idea c, Definition c, ConceptDomain c) => c
 
 -- | CommonIdea is a 'NamedIdea' with the additional
--- constraint that it __must__ have an abbreviation.
+-- constraint that it __must__ have an abbreviation. This is the main
+-- distinction between getA and abrv, where getA may return Nothing,
+-- while abrv will always return the abbreviation. 
 class NamedIdea c => CommonIdea c where
   -- | Introduces abrv which necessarily provides an abbreviation.
   abrv :: c -> String
@@ -102,11 +102,6 @@ class (Idea c, HasSpace c, HasSymbol c) => Quantity c where
 --   uncert :: Lens' c (Uncertainty)
 --   replaced with HasUncertainty
 
--- TODO: This looks like it should be moved into drasil-code/?-base, it doesn't seem to be used enough atm.
---       ...but, Dr. Carette also mentioned these are dubious, maybe we should remove it?
--- | Some chunks can be called like functions.
-class (HasSymbol c) => Callable c
-
 -----------------------------------------------------
 -- Below are for units only
 -- | Some chunks store a unit symbol.
@@ -135,7 +130,3 @@ class DefiningExpr c where
   --   TODO: Well, technically, `e` doesn't need to be an "expression" of any sorts.
   --         It just needs to be _something_, and it would have approximately have same meaning.
   defnExpr :: Lens' (c e) e
-
--- TODO: This should be moved to `drasil-code-base`.
--- | Members must have a named argument.
-class (HasSymbol c) => IsArgumentName c where

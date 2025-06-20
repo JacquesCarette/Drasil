@@ -8,8 +8,8 @@ module Drasil.GOOL.LanguageRenderer.PythonRenderer (
 
 import Utils.Drasil (blank, indent)
 
-import Drasil.GOOL.CodeType (CodeType(..))
-import Drasil.GOOL.InterfaceCommon (SharedProg, Label, Library, VSType,
+import Drasil.Shared.CodeType (CodeType(..))
+import Drasil.Shared.InterfaceCommon (SharedProg, Label, Library, VSType,
   VSFunction, SVariable, SValue, MSStatement, MixedCtorCall, BodySym(..),
   BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VisibilitySym(..),
   VariableElim(..), ValueSym(..), Argument(..), Literal(..), litZero,
@@ -29,7 +29,7 @@ import Drasil.GOOL.InterfaceGOOL (OOProg, ProgramSym(..), FileSym(..),
   OOValueExpression(..), selfFuncApp, OODeclStatement(..),
   OOFuncAppStatement(..), ObserverPattern(..), StrategyPattern(..),
   OOMethodSym(..))
-import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
@@ -40,7 +40,7 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType),
   RenderMethod(..), MethodElim, BlockCommentSym(..), BlockCommentElim,
   ScopeElim(..))
-import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block, 
+import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block, 
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
 import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
@@ -49,18 +49,18 @@ import Drasil.GOOL.RendererClassesOO (OORenderSym, RenderFile(..),
   ModuleElim)
 import qualified Drasil.GOOL.RendererClassesOO as RC (perm, stateVar, class',
   module')
-import Drasil.GOOL.LanguageRenderer (classDec, dot, ifLabel, elseLabel, 
+import Drasil.Shared.LanguageRenderer (classDec, dot, ifLabel, elseLabel, 
   forLabel, inLabel, whileLabel, tryLabel, importLabel, exceptionObj', listSep',
   argv, printLabel, listSep, piLabel, access, functionDox, variableList, 
   parameterList)
-import qualified Drasil.GOOL.LanguageRenderer as R (sqrt, fabs, log10, 
+import qualified Drasil.Shared.LanguageRenderer as R (sqrt, fabs, log10, 
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, 
   classVar, listSetFunc, castObj, dynamic, break, continue, addComments, 
   commentedMod, commentedItem, var)
-import Drasil.GOOL.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal, 
+import Drasil.Shared.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal, 
   mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, inPrec, 
   unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr, mkStaticVar)
-import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
+import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, cot,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, arrayElem,
@@ -72,27 +72,20 @@ import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
   comment, throw, ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
   function, buildClass, implementingClass, commentedClass, modFromData, fileDoc,
   fileFromData, local)
-import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (int,
-  constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
-  extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
-  funcType, buildModule, bindingError, notNull, listDecDef, destructorError, 
-  stateVarDef, constVar, litArray, listSetFunc, extraClass, listAccessFunc, 
-  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
-  mainBody, inOutFunc, docInOutFunc', listSize, intToIndex, indexToInt,
-  varDecDef, openFileR', openFileW', openFileA', argExists, forEach', global, setMethodCall)
-import qualified Drasil.GOOL.LanguageRenderer.Macros as M (ifExists, 
+import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP 
+import qualified Drasil.Shared.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
   notifyObservers')
-import Drasil.GOOL.AST (Terminator(..), FileType(..), FileData(..), fileD, 
+import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd,
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..),
   td, ValData(..), vd, VarData(..), vard, CommonThunk, pureValue, vectorize,
   vectorize2, sumComponents, commonVecIndex, commonThunkElim, commonThunkDim,
   ScopeData)
-import Drasil.GOOL.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
+import Drasil.Shared.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList,
   on2StateWrapped)
-import Drasil.GOOL.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, revFiles,
+import Drasil.Shared.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, revFiles,
   addLangImportVS, getLangImports, addLibImportVS, getLibImports, addModuleImport,
   addModuleImportVS, getModuleImports, setFileType, getClassName, setCurrMain,
   getClassMap, getMainDoc, genLoopIndex, varNameAvailable)
@@ -107,7 +100,10 @@ import Data.Char (toUpper, isUpper, isLower)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, colon, brackets, isEmpty, quotes, comma, braces)
-import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
+import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
+
+import qualified Drasil.Shared.LanguageRenderer.Common as CS
+
 
 pyExt :: String
 pyExt = "py"
@@ -206,7 +202,7 @@ instance TypeSym PythonCode where
   setType t' = t' >>=(\t -> typeFromData (Set (getType t)) "" empty)
   arrayType = listType
   listInnerType = G.listInnerType
-  funcType = CP.funcType
+  funcType = CS.funcType
   void = typeFromData Void pyVoid (text pyVoid)
 
 instance OOTypeSym PythonCode where
@@ -277,7 +273,7 @@ instance VariableSym PythonCode where
   type Variable PythonCode = VarData
   var          = G.var
   constant n   = var $ toConstName n
-  extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
+  extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
   arrayElem i  = G.arrayElem (litInt i)
 
 instance OOVariableSym PythonCode where
@@ -391,10 +387,10 @@ instance ValueExpression PythonCode where
   funcAppMixedArgs = G.funcAppMixedArgs
   extFuncAppMixedArgs l n t ps ns = do
     modify (addModuleImportVS l)
-    CP.extFuncAppMixedArgs l n t ps ns
+    CS.extFuncAppMixedArgs l n t ps ns
   libFuncAppMixedArgs l n t ps ns = do
     modify (addLibImportVS l)
-    CP.extFuncAppMixedArgs l n t ps ns
+    CS.extFuncAppMixedArgs l n t ps ns
 
   lambda = G.lambda pyLambda
 
@@ -448,7 +444,7 @@ instance GetSet PythonCode where
 instance List PythonCode where
   intToIndex = CP.intToIndex
   indexToInt = CP.indexToInt
-  listSize = CP.listSize
+  listSize = CS.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend
   listAccess = G.listAccess
@@ -475,8 +471,8 @@ instance InternalListFunc PythonCode where
     funcFromData (RC.value f) int
   listAddFunc _ = CP.listAddFunc pyInsert
   listAppendFunc _ = G.listAppendFunc pyAppendFunc
-  listAccessFunc = CP.listAccessFunc
-  listSetFunc = CP.listSetFunc R.listSetFunc
+  listAccessFunc = CS.listAccessFunc
+  listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance ThunkSym PythonCode where
   type Thunk PythonCode = CommonThunk VS
@@ -551,8 +547,8 @@ instance AssignStatement PythonCode where
   (&--) = M.decrement1
 
 instance DeclStatement PythonCode where
-  varDec v scp = CP.varDecDef v scp Nothing
-  varDecDef v scp e = CP.varDecDef v scp (Just e)
+  varDec v scp = CS.varDecDef v scp Nothing
+  varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = varDec
   setDecDef = varDecDef
   listDec _ = CP.listDec
@@ -632,7 +628,7 @@ instance ControlStatement PythonCode where
 
   for _ _ _ _ = error $ CP.forLoopError pyName
   forRange i initv finalv stepv = forEach i (range initv finalv stepv)
-  forEach = CP.forEach' pyForEach
+  forEach = CS.forEach' pyForEach
   while v' b' = do 
     v <- zoom lensMStoVS v'
     b <- b'

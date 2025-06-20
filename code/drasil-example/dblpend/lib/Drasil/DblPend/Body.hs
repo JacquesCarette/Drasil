@@ -13,7 +13,7 @@ import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (dong)
-import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz, fundamentals)
+import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.Concepts.Computation (inDatum, compcon, inValue, algorithm)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
@@ -28,7 +28,7 @@ import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Data.Drasil.Software.Products (prodtcon)
-import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM, newtonSLR)
+import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 import Data.Drasil.TheoryConcepts (inModel)
 
 import Drasil.DblPend.Figures (figMotion, sysCtxFig1)
@@ -142,25 +142,38 @@ symbolsAll :: [QuantityDict]
 symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
   ++ map qw [listToArray $ quantvar pendDisAngle, arrayVecDepVar dblPenODEInfo]
 
+ideaDicts :: [IdeaDict]
+ideaDicts = 
+  -- Actual IdeaDicts
+  inValue : doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
+  -- CIs
+  nw progName : map nw acronyms ++ map nw doccon' ++ map nw mathcon' ++ map nw physicCon' ++
+  -- DefinedQuantityDicts
+  map nw [unitVect, unitVectj] ++
+  -- UnitalChunks
+  map nw physicscon
+
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts =
+  -- QuantityDicts
+  map nw symbols ++
+  -- CIs
+  nw progName : map nw acronyms
+
+conceptChunks :: [ConceptChunk]
+conceptChunks = [algorithm, len, mass, errMsg, program] ++ physicCon ++ mathcon ++ physicalcon ++ srsDomains
+
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll)
-  (nw newtonSLR : nw progName : nw mass : nw len : nw kilogram : nw inValue
-   : nw newton : nw degree : nw radian : nw unitVect : nw unitVectj
-   : [nw errMsg, nw program] ++ map nw symbols ++ map nw doccon
-   ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon'
-   ++ map nw physicCon' ++ map nw physicscon ++ concepts ++ map nw physicalcon
-   ++ map nw acronyms ++ map nw symbols ++ map nw fundamentals
-   ++ map nw [metre, hertz] ++ [nw algorithm] ++ map nw compcon
-   ++ map nw educon ++ map nw prodtcon) srsDomains
-   (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz])
-   dataDefs iMods genDefns tMods concIns [] allRefs citations
+  ideaDicts conceptChunks siUnits
+  dataDefs iMods genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw acronyms ++ map nw symbols) ([] :: [ConceptChunk])
+usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 stdFields :: Fields

@@ -21,7 +21,7 @@ import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Data.Drasil.SI_Units (second, kilogram)
+import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.Quantities.Math (posInf, negInf)
 
 import Drasil.PDController.Assumptions (assumptions)
@@ -138,14 +138,25 @@ symbolsAll = symbols ++ map qw pidDqdConstants ++ map (^. defLhs) pidConstants
   ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
   ++ map qw [listToArray $ quantvar opProcessVariable, arrayVecDepVar pidODEInfo]
 
+ideaDicts :: [IdeaDict]
+ideaDicts =
+  -- Actual IdeaDicts
+  sciCompS : concepts ++ doccon ++
+  -- CIs
+  nw progName : map nw acronyms ++ map nw mathcon' ++ map nw doccon'
+
+conceptChunks :: [ConceptChunk]
+conceptChunks =
+  -- ConceptChunks
+  physicalcon ++ mathcon ++ [linear, program, angular] ++ srsDomains ++
+  -- ConstrConcepts
+  map cw inpConstrained
+
 symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf])
-  (nw progName : [nw program, nw angular, nw linear] ++ [nw sciCompS]
-  ++ map nw doccon ++ map nw doccon' ++ concepts ++ map nw mathcon
-  ++ map nw mathcon' ++ map nw [second, kilogram] ++ map nw symbols 
-  ++ map nw physicscon ++ map nw acronyms ++ map nw physicalcon)
-  (map cw inpConstrained ++ srsDomains)
-  (map unitWrapper [second, kilogram])
+  ideaDicts
+  conceptChunks
+  siUnits
   dataDefinitions
   instanceModels
   genDefns
@@ -159,8 +170,15 @@ symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
 
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts =
+  -- CIs
+  map nw acronyms ++
+  -- QuantityDicts
+  map nw symbolsAll
+
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbolsAll)
+usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
   ([] :: [ConceptChunk])
   ([] :: [UnitDefn])
   ([] :: [DataDefinition])

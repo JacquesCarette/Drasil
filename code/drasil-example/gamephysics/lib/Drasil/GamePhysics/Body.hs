@@ -1,11 +1,8 @@
 module Drasil.GamePhysics.Body where
 
-import Control.Lens ((^.))
-
 import Language.Drasil hiding (organization, section)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS
-import Theory.Drasil (output)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
@@ -22,19 +19,19 @@ import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics, educon)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)
 import Data.Drasil.People (alex, luthfi, olu)
-import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
-  derived, fundamentals, joule)
+import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.Software.Products (openSource, prodtcon, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
-import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon, rigidBody, collision, damping)
+import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon,
+  physicCon', rigidBody, collision, damping)
 import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
   mathcon, mathcon', rightHand, line, point)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
 import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
-import Drasil.GamePhysics.Concepts (acronyms, threeD, twoD)
+import Drasil.GamePhysics.Concepts (acronyms, threeD, twoD, centreMass)
 import Drasil.GamePhysics.DataDefs (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iMods, instModIntro)
@@ -136,26 +133,41 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 --FIXME: All named ideas, not just acronyms.
 
-units :: [UnitDefn] -- FIXME
-units = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [newton, radian]
+ideaDicts :: [IdeaDict]
+ideaDicts =
+  -- Actual IdeaDicts
+  doccon ++ educon ++ prodtcon ++
+  -- CIs
+  map nw [progName, centreMass] ++ map nw doccon' ++ map nw CM.mathcon' ++
+  map nw CP.physicCon'
+  
+conceptChunks :: [ConceptChunk]
+conceptChunks = 
+  -- ConceptChunks
+  algorithm : softwarecon ++ CP.physicCon ++ CM.mathcon ++ srsDomains ++
+  -- InstanceModels
+  map cw iMods ++
+  -- DefinedQuantityDicts
+  map cw defSymbols
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll) (nw progName :
-  map nw symbolsAll ++ map nw acronyms ++ map nw prodtcon ++ map nw generalDefns
-  ++ map nw iMods ++ map (nw . (^. output)) iMods ++ map nw softwarecon
-  ++ map nw doccon ++ map nw doccon' ++ map nw CP.physicCon ++ map nw educon
-  ++ [nw algorithm] ++ map nw derived ++ map nw fundamentals
-  ++ map nw CM.mathcon ++ map nw CM.mathcon')
-  (map cw defSymbols ++ srsDomains ++ map cw iMods) units dataDefs
-  iMods generalDefns tMods concIns [] allRefs citations
+symbMap = cdb symbolsAll ideaDicts conceptChunks
+  siUnits dataDefs iMods generalDefns tMods concIns [] allRefs citations
 
-  -- | Holds all references and links used in the document.
-allRefs :: [Reference]
-allRefs = [externalLinkRef, pymunk] ++ uriReferences ++ offShelfSolRefs
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts =
+  -- QuantityDicts
+  map nw symbolsAll ++
+  -- CIs
+  map nw acronyms
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)
+usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
+
+-- | Holds all references and links used in the document.
+allRefs :: [Reference]
+allRefs = [externalLinkRef, pymunk] ++ uriReferences ++ offShelfSolRefs
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because

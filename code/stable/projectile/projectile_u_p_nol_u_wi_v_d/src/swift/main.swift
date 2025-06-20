@@ -11,7 +11,7 @@ extension String: Error {}
 /** Calculates flight duration: the time when the projectile lands (s)
     - Parameter v_launch: launch speed: the initial speed of the projectile when launched (m/s)
     - Parameter theta: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-    - Parameter g: magnitude of gravitational acceleration (m/s^2)
+    - Parameter g: magnitude of gravitational acceleration: the magnitude of the approximate acceleration due to gravity on Earth at sea level (m/s^2)
     - Returns: flight duration: the time when the projectile lands (s)
 */
 func func_t_flight(_ v_launch: Double, _ theta: Double, _ g: Double) -> Double {
@@ -21,7 +21,7 @@ func func_t_flight(_ v_launch: Double, _ theta: Double, _ g: Double) -> Double {
 /** Calculates landing position: the distance from the launcher to the final position of the projectile (m)
     - Parameter v_launch: launch speed: the initial speed of the projectile when launched (m/s)
     - Parameter theta: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-    - Parameter g: magnitude of gravitational acceleration (m/s^2)
+    - Parameter g: magnitude of gravitational acceleration: the magnitude of the approximate acceleration due to gravity on Earth at sea level (m/s^2)
     - Returns: landing position: the distance from the launcher to the final position of the projectile (m)
 */
 func func_p_land(_ v_launch: Double, _ theta: Double, _ g: Double) -> Double {

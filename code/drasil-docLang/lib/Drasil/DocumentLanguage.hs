@@ -24,7 +24,9 @@ import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
 import Database.Drasil hiding (cdb)
+
 import System.Drasil
+import Drasil.GetChunks (ccss, ccss', citeDB)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
 import Drasil.Sections.TableOfContents (toToC, findToC)

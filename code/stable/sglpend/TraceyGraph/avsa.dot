@@ -1,7 +1,6 @@
 digraph avsa {
 
 
-	instance:startOrigin1x	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:startOrigin1x"];
 	instance:twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
 	instance:cartSys	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSys"];
 	instance:cartSysR	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSysR"];
@@ -9,7 +8,7 @@ digraph avsa {
 
 	subgraph A {
 	rank="same"
-	{instance:startOrigin1x, instance:twoDMotion, instance:cartSys, instance:cartSysR, instance:yAxisDir}
+	{instance:twoDMotion, instance:cartSys, instance:cartSysR, instance:yAxisDir}
 	}
 
 }

@@ -28,7 +28,8 @@ symbols = pi_ : map dqdWr units ++ map dqdWr unitless ++ map dqdWr constrained
 symbolsAll :: [QuantityDict]
 symbolsAll = map qw symbols ++ map (^. defLhs) specParamValList ++
   map (^. defLhs) [htFusionMin, htFusionMax, coilSAMax] ++
-  map qw [absTol, relTol]
+  map qw [absTol, relTol] ++
+  map qw unitalChuncks
 
 -- Symbols with Units --
 

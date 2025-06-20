@@ -33,16 +33,15 @@ import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
 import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
   uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
-import Data.Drasil.Quantities.Physics (time, energy, physicscon)
+import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Software.Products (prodtcon)
-import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
-  fundamentals, derived)
+import Data.Drasil.SI_Units (siUnits)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
 import Drasil.SWHS.Body (charsOfReader, dataContMid, motivation,
-  introStart, externalLinkRef, physSyst1, physSyst2, sysCntxtDesc, 
+  introStart, externalLinkRef, physSyst1, physSyst2, sysCntxtDesc,
   systContRespBullets, sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, sWHT, tank, transient, water, con, phsChgMtrl)
@@ -51,7 +50,7 @@ import Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, nwtnCooling, sensHtET
 import Drasil.SWHS.Unitals (coilSAMax, deltaT, htFluxC, htFluxIn,
   htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW,
   tempEnv, tempW, thFluxVect, volHtGen, watE,
-  wMass, wVol, unitalChuncks, absTol, relTol)
+  wMass, wVol, absTol, relTol)
 import Drasil.SWHS.References (uriReferences)
 
 import Drasil.SWHSNoPCM.Assumptions
@@ -81,9 +80,6 @@ printSetting = piSys fullSI Equational defaultConfiguration
 resourcePath :: String
 resourcePath = "../../../../datafiles/swhsnopcm/"
 
--- This defines the standard concepts used throughout the document
-units :: [UnitDefn]
-units = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
 symbols = pi_ : map dqdWr concepts ++ map dqdWr constrained
@@ -192,23 +188,40 @@ si = SI {
 purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWHT)]
 
+ideaDicts :: [IdeaDict]
+ideaDicts =
+  -- Actual IdeaDicts
+  [inValue, htTrans, materialProprty] ++ prodtcon ++ doccon ++ educon ++
+  -- CIs
+  map nw [srsSWHS, progName, phsChgMtrl] ++ map nw acronyms ++ map nw doccon' ++
+  map nw physicCon' ++ map nw mathcon'
+
+conceptChunks :: [ConceptChunk]
+conceptChunks =
+  -- ConceptChunks
+  algorithm : softwarecon ++ thermocon ++ con ++ physicCon ++ mathcon ++
+  physicalcon ++ srsDomains ++
+  -- DefinedQuantityDicts
+  map cw symbols
+
 symbMap :: ChunkDB
-symbMap = cdb symbolsAll (nw progName : map nw symbols ++ map nw acronyms ++ map nw thermocon
-  ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
-  ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
-  ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived
-  ++ map nw physicalcon ++ map nw unitalChuncks ++ map nw [absTol, relTol]
-  ++ [nw srsSWHS, nw algorithm, nw inValue, nw htTrans, nw materialProprty, nw phsChgMtrl])
-  (map cw symbols ++ srsDomains) units NoPCM.dataDefs NoPCM.iMods genDefs
-  tMods concIns [] allRefs citations
+symbMap = cdb symbolsAll ideaDicts conceptChunks siUnits NoPCM.dataDefs
+  NoPCM.iMods genDefs tMods concIns [] allRefs citations
+
+tableOfAbbrvsIdeaDicts :: [IdeaDict]
+tableOfAbbrvsIdeaDicts =
+  -- CIs
+  nw progName : map nw acronyms ++
+  -- DefinedQuantityDicts
+  map nw symbols
+
+usedDB :: ChunkDB
+usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef, externalLinkRef'] ++ uriReferences
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (nw progName : map nw symbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 --------------------------
 --Section 2 : INTRODUCTION
@@ -224,8 +237,8 @@ introEnd progSent pro = foldlSent_ [progSent +:+ S "The developed program",
   S "based on the original" `sC` S "manually created version" `S.of_` namedRef externalLinkRef' (S "SWHSNoPCM")]
 
 externalLinkRef' :: Reference
-externalLinkRef' = makeURI "SWHSNoPCM_SRSLink" 
-  "https://github.com/smiths/caseStudies/blob/master/CaseStudies/noPCM" 
+externalLinkRef' = makeURI "SWHSNoPCM_SRSLink"
+  "https://github.com/smiths/caseStudies/blob/master/CaseStudies/noPCM"
   (shortname' $ S "SWHSNoPCM_SRSLink")
 
 -----------------------------------
@@ -268,7 +281,7 @@ orgDocEnd = foldlSent_ [atStartNP (the inModel),
 ------------------------------
 
 sysCntxtFig :: LabelledContent
-sysCntxtFig = llcc (makeFigRef "SysCon") 
+sysCntxtFig = llcc (makeFigRef "SysCon")
   $ fig (titleize sysCont)
   $ resourcePath ++ "SystemContextFigure.png"
 

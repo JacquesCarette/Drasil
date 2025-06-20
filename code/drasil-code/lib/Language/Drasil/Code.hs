@@ -93,24 +93,18 @@ import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..),
   makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..),
   makeOptFeats, ExtLib(..))
 
+import Drasil.Code.CodeExpr (field)
+
 import Language.Drasil.CodeSpec (CodeSpec(..), OldCodeSpec(..), HasOldCodeSpec(..), 
   codeSpec, funcUID, asVC)
-
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..),
   pubStateVar, privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod)
-
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..),
   AuxiliarySym(..))
-
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), PackData(..))
-
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeFuncChunk,
   quantvar, quantfunc, ccObjVar, listToArray)
-
 import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
-
-import Language.Drasil.CodeExpr (field)
-
 import Language.Drasil.Data.ODEInfo (ODEInfo(..), odeInfo, odeInfo', ODEOptions(..),
   odeOptions, ODEMethod(..))
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..), mkODELib,

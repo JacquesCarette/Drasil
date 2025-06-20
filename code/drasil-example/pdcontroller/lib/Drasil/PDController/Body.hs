@@ -132,7 +132,7 @@ background = foldlSent_ [S "Automatic process control with a controller (P/PI/PD
               S "cruise-control, etc"]
 
 symbolsAll :: [QuantityDict]
-symbolsAll = symbols ++ map qw pidDqdConstants ++ map qw pidConstants
+symbolsAll = symbols ++ map qw pidConstants
   ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
   ++ map qw [listToArray $ quantvar opProcessVariable, arrayVecDepVar pidODEInfo]
 

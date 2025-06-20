@@ -46,7 +46,7 @@ import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, sWHT, tank, transient, water, con, phsChgMtrl)
 import Drasil.SWHS.Requirements (nfRequirements)
 import Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, nwtnCooling, sensHtETemplate)
-import Drasil.SWHS.Unitals (coilSAMax, deltaT, htFluxC, htFluxIn,
+import Drasil.SWHS.Unitals (deltaT, htFluxC, htFluxIn,
   htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW,
   tempEnv, tempW, thFluxVect, volHtGen, watE,
   wMass, wVol, absTol, relTol)
@@ -89,7 +89,7 @@ symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
                                --FOUND LOC OF ERROR: Instance Models
 symbolsAll = map qw symbols ++ map qw specParamValList ++
-  [qw coilSAMax, qw tauW] ++ map qw [absTol, relTol] ++
+  map qw [absTol, relTol] ++
   scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
   ++ map qw [listToArray $ quantvar tempW, arrayVecDepVar noPCMODEInfo]
 

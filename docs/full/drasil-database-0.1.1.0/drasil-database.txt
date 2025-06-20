@@ -132,6 +132,7 @@ theoryModelTable :: Lens' ChunkDB TheoryModelMap
 conceptinsTable :: Lens' ChunkDB ConceptInstanceMap
 labelledcontentTable :: Lens' ChunkDB LabelledContentMap
 refTable :: Lens' ChunkDB ReferenceMap
+addCdb :: ChunkDB -> ChunkDB -> ChunkDB
 
 module Database.Drasil.Dump
 type ChunkType = String

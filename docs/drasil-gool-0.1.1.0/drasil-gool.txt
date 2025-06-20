@@ -11,6 +11,390 @@
 
 
 -- | re-export smart constructors for external code writing
+module Drasil.GProc
+type Label = String
+type GSProgram a = GS (a (Program a))
+type SFile a = FS (a (File a))
+type MSBody a = MS (a (Body a))
+type MSBlock a = MS (a (Block a))
+type VSType a = VS (a (Type a))
+type SVariable a = VS (a (Variable a))
+type SValue a = VS (a (Value a))
+type VSFunction a = VS (a (Function a))
+type MSStatement a = MS (a (Statement a))
+type MSParameter a = MS (a (Parameter a))
+type SMethod a = MS (a (Method a))
+type FSModule a = FS (a (Module a))
+type NamedArgs r = [(SVariable r, SValue r)]
+class (VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, List r, Set r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r) => SharedProg r
+class (SharedProg r, ProgramSym r) => ProcProg r
+class (FileSym r) => ProgramSym r where {
+    type Program r;
+}
+prog :: ProgramSym r => Label -> Label -> [SFile r] -> GSProgram r
+class (ModuleSym r) => FileSym r where {
+    type File r;
+}
+fileDoc :: FileSym r => FSModule r -> SFile r
+docMod :: FileSym r => String -> [String] -> String -> SFile r -> SFile r
+class (BlockSym r) => BodySym r where {
+    type Body r;
+}
+body :: BodySym r => [MSBlock r] -> MSBody r
+addComments :: BodySym r => Label -> MSBody r -> MSBody r
+bodyStatements :: BodySym r => [MSStatement r] -> MSBody r
+oneLiner :: BodySym r => MSStatement r -> MSBody r
+class (StatementSym r) => BlockSym r where {
+    type Block r;
+}
+block :: BlockSym r => [MSStatement r] -> MSBlock r
+class TypeSym r where {
+    type Type r;
+}
+bool :: TypeSym r => VSType r
+int :: TypeSym r => VSType r
+float :: TypeSym r => VSType r
+double :: TypeSym r => VSType r
+char :: TypeSym r => VSType r
+string :: TypeSym r => VSType r
+infile :: TypeSym r => VSType r
+outfile :: TypeSym r => VSType r
+listType :: TypeSym r => VSType r -> VSType r
+setType :: TypeSym r => VSType r -> VSType r
+arrayType :: TypeSym r => VSType r -> VSType r
+listInnerType :: TypeSym r => VSType r -> VSType r
+funcType :: TypeSym r => [VSType r] -> VSType r -> VSType r
+void :: TypeSym r => VSType r
+class (TypeSym r) => TypeElim r
+getType :: TypeElim r => r (Type r) -> CodeType
+getTypeString :: TypeElim r => r (Type r) -> String
+class ThunkSym r where {
+    type Thunk (r :: Type -> Type);
+}
+class TypeSym r => VectorType r
+vecType :: VectorType r => VSType r -> VSType r
+class (DeclStatement r) => VectorDecl r
+vecDec :: VectorDecl r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
+vecDecDef :: VectorDecl r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+class (VariableSym r, ThunkSym r) => VectorThunk r
+vecThunk :: VectorThunk r => SVariable r -> VSThunk r
+class (ThunkSym r, ValueSym r) => VectorExpression r
+vecScale :: VectorExpression r => SValue r -> VSThunk r -> VSThunk r
+vecAdd :: VectorExpression r => VSThunk r -> VSThunk r -> VSThunk r
+vecIndex :: VectorExpression r => SValue r -> VSThunk r -> SValue r
+vecDot :: VectorExpression r => VSThunk r -> VSThunk r -> VSThunk r
+class (VariableSym r, ThunkSym r, StatementSym r) => ThunkAssign r
+thunkAssign :: ThunkAssign r => SVariable r -> VSThunk r -> MSStatement r
+class (ValueSym r) => StatementSym r where {
+    type Statement r;
+}
+valStmt :: StatementSym r => SValue r -> MSStatement r
+emptyStmt :: StatementSym r => MSStatement r
+multi :: StatementSym r => [MSStatement r] -> MSStatement r
+class (VariableSym r, StatementSym r) => AssignStatement r
+(&-=) :: AssignStatement r => SVariable r -> SValue r -> MSStatement r
+(&+=) :: AssignStatement r => SVariable r -> SValue r -> MSStatement r
+(&++) :: AssignStatement r => SVariable r -> MSStatement r
+(&--) :: AssignStatement r => SVariable r -> MSStatement r
+assign :: AssignStatement r => SVariable r -> SValue r -> MSStatement r
+infixl 1 &-=
+infixl 1 &+=
+infixl 8 &++
+infixl 8 &--
+(&=) :: AssignStatement r => SVariable r -> SValue r -> MSStatement r
+infixr 1 &=
+assignToListIndex :: (StatementSym r, VariableValue r, List r) => SVariable r -> SValue r -> SValue r -> MSStatement r
+class (VariableSym r, StatementSym r, ScopeSym r) => DeclStatement r
+varDec :: DeclStatement r => SVariable r -> r (Scope r) -> MSStatement r
+varDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+listDec :: DeclStatement r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
+listDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+setDec :: DeclStatement r => SVariable r -> r (Scope r) -> MSStatement r
+setDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+arrayDec :: DeclStatement r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
+arrayDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
+constDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
+funcDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SVariable r] -> MSBody r -> MSStatement r
+class (VariableSym r, StatementSym r) => IOStatement r
+print :: IOStatement r => SValue r -> MSStatement r
+printLn :: IOStatement r => SValue r -> MSStatement r
+printStr :: IOStatement r => String -> MSStatement r
+printStrLn :: IOStatement r => String -> MSStatement r
+printFile :: IOStatement r => SValue r -> SValue r -> MSStatement r
+printFileLn :: IOStatement r => SValue r -> SValue r -> MSStatement r
+printFileStr :: IOStatement r => SValue r -> String -> MSStatement r
+printFileStrLn :: IOStatement r => SValue r -> String -> MSStatement r
+getInput :: IOStatement r => SVariable r -> MSStatement r
+discardInput :: IOStatement r => MSStatement r
+getFileInput :: IOStatement r => SValue r -> SVariable r -> MSStatement r
+discardFileInput :: IOStatement r => SValue r -> MSStatement r
+openFileR :: IOStatement r => SVariable r -> SValue r -> MSStatement r
+openFileW :: IOStatement r => SVariable r -> SValue r -> MSStatement r
+openFileA :: IOStatement r => SVariable r -> SValue r -> MSStatement r
+closeFile :: IOStatement r => SValue r -> MSStatement r
+getFileInputLine :: IOStatement r => SValue r -> SVariable r -> MSStatement r
+discardFileLine :: IOStatement r => SValue r -> MSStatement r
+getFileInputAll :: IOStatement r => SValue r -> SVariable r -> MSStatement r
+class (VariableSym r, StatementSym r) => StringStatement r
+stringSplit :: StringStatement r => Char -> SVariable r -> SValue r -> MSStatement r
+stringListVals :: StringStatement r => [SVariable r] -> SValue r -> MSStatement r
+stringListLists :: StringStatement r => [SVariable r] -> SValue r -> MSStatement r
+class (VariableSym r, StatementSym r) => FuncAppStatement r
+inOutCall :: FuncAppStatement r => InOutCall r
+extInOutCall :: FuncAppStatement r => Library -> InOutCall r
+class (StatementSym r) => CommentStatement r
+comment :: CommentStatement r => Comment -> MSStatement r
+class (BodySym r, VariableSym r) => ControlStatement r
+break :: ControlStatement r => MSStatement r
+continue :: ControlStatement r => MSStatement r
+returnStmt :: ControlStatement r => SValue r -> MSStatement r
+throw :: ControlStatement r => Label -> MSStatement r
+
+-- | String of if-else statements. Arguments: List of predicates and bodies
+--   (if this then that), Body for else branch
+ifCond :: ControlStatement r => [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
+switch :: ControlStatement r => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
+ifExists :: ControlStatement r => SValue r -> MSBody r -> MSBody r -> MSStatement r
+for :: ControlStatement r => MSStatement r -> SValue r -> MSStatement r -> MSBody r -> MSStatement r
+forRange :: ControlStatement r => SVariable r -> SValue r -> SValue r -> SValue r -> MSBody r -> MSStatement r
+forEach :: ControlStatement r => SVariable r -> SValue r -> MSBody r -> MSStatement r
+while :: ControlStatement r => SValue r -> MSBody r -> MSStatement r
+tryCatch :: ControlStatement r => MSBody r -> MSBody r -> MSStatement r
+assert :: ControlStatement r => SValue r -> SValue r -> MSStatement r
+ifNoElse :: ControlStatement r => [(SValue r, MSBody r)] -> MSStatement r
+switchAsIf :: (ControlStatement r, Comparison r) => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
+class (TypeSym r) => VariableSym r where {
+    type Variable r;
+}
+var :: VariableSym r => Label -> VSType r -> SVariable r
+constant :: VariableSym r => Label -> VSType r -> SVariable r
+extVar :: VariableSym r => Library -> Label -> VSType r -> SVariable r
+arrayElem :: VariableSym r => Integer -> SVariable r -> SVariable r
+class ScopeSym r where {
+    type Scope r;
+}
+global :: ScopeSym r => r (Scope r)
+mainFn :: ScopeSym r => r (Scope r)
+local :: ScopeSym r => r (Scope r)
+class (VariableSym r) => VariableElim r
+variableName :: VariableElim r => r (Variable r) -> String
+variableType :: VariableElim r => r (Variable r) -> r (Type r)
+listOf :: VariableSym r => Label -> VSType r -> SVariable r
+listVar :: VariableSym r => Label -> VSType r -> SVariable r
+class (TypeSym r) => ValueSym r where {
+    type Value r;
+}
+valueType :: ValueSym r => r (Value r) -> r (Type r)
+class (ValueSym r) => Argument r
+pointerArg :: Argument r => SValue r -> SValue r
+class (ValueSym r) => Literal r
+litTrue :: Literal r => SValue r
+litFalse :: Literal r => SValue r
+litChar :: Literal r => Char -> SValue r
+litDouble :: Literal r => Double -> SValue r
+litFloat :: Literal r => Float -> SValue r
+litInt :: Literal r => Integer -> SValue r
+litString :: Literal r => String -> SValue r
+litArray :: Literal r => VSType r -> [SValue r] -> SValue r
+litList :: Literal r => VSType r -> [SValue r] -> SValue r
+litSet :: Literal r => VSType r -> [SValue r] -> SValue r
+class (ValueSym r) => MathConstant r
+pi :: MathConstant r => SValue r
+class (VariableSym r, ValueSym r) => VariableValue r
+valueOf :: VariableValue r => SVariable r -> SValue r
+class (ValueSym r) => CommandLineArgs r
+arg :: CommandLineArgs r => Integer -> SValue r
+argsList :: CommandLineArgs r => SValue r
+argExists :: CommandLineArgs r => Integer -> SValue r
+class (ValueSym r) => NumericExpression r
+(#~) :: NumericExpression r => SValue r -> SValue r
+(#/^) :: NumericExpression r => SValue r -> SValue r
+(#|) :: NumericExpression r => SValue r -> SValue r
+(#+) :: NumericExpression r => SValue r -> SValue r -> SValue r
+(#-) :: NumericExpression r => SValue r -> SValue r -> SValue r
+(#*) :: NumericExpression r => SValue r -> SValue r -> SValue r
+(#/) :: NumericExpression r => SValue r -> SValue r -> SValue r
+(#%) :: NumericExpression r => SValue r -> SValue r -> SValue r
+(#^) :: NumericExpression r => SValue r -> SValue r -> SValue r
+log :: NumericExpression r => SValue r -> SValue r
+ln :: NumericExpression r => SValue r -> SValue r
+exp :: NumericExpression r => SValue r -> SValue r
+sin :: NumericExpression r => SValue r -> SValue r
+cos :: NumericExpression r => SValue r -> SValue r
+tan :: NumericExpression r => SValue r -> SValue r
+csc :: NumericExpression r => SValue r -> SValue r
+sec :: NumericExpression r => SValue r -> SValue r
+cot :: NumericExpression r => SValue r -> SValue r
+arcsin :: NumericExpression r => SValue r -> SValue r
+arccos :: NumericExpression r => SValue r -> SValue r
+arctan :: NumericExpression r => SValue r -> SValue r
+floor :: NumericExpression r => SValue r -> SValue r
+ceil :: NumericExpression r => SValue r -> SValue r
+infixl 8 #~
+infixl 7 #/^
+infixl 7 #|
+infixl 5 #+
+infixl 5 #-
+infixl 6 #*
+infixl 6 #/
+infixl 6 #%
+infixl 7 #^
+class (ValueSym r) => BooleanExpression r
+(?!) :: BooleanExpression r => SValue r -> SValue r
+(?&&) :: BooleanExpression r => SValue r -> SValue r -> SValue r
+(?||) :: BooleanExpression r => SValue r -> SValue r -> SValue r
+infixr 6 ?!
+infixl 2 ?&&
+infixl 1 ?||
+class (ValueSym r) => Comparison r
+(?<) :: Comparison r => SValue r -> SValue r -> SValue r
+(?<=) :: Comparison r => SValue r -> SValue r -> SValue r
+(?>) :: Comparison r => SValue r -> SValue r -> SValue r
+(?>=) :: Comparison r => SValue r -> SValue r -> SValue r
+(?==) :: Comparison r => SValue r -> SValue r -> SValue r
+(?!=) :: Comparison r => SValue r -> SValue r -> SValue r
+infixl 4 ?<
+infixl 4 ?<=
+infixl 4 ?>
+infixl 4 ?>=
+infixl 3 ?==
+infixl 3 ?!=
+class (VariableSym r, ValueSym r) => ValueExpression r
+inlineIf :: ValueExpression r => SValue r -> SValue r -> SValue r -> SValue r
+funcAppMixedArgs :: ValueExpression r => MixedCall r
+extFuncAppMixedArgs :: ValueExpression r => Library -> MixedCall r
+libFuncAppMixedArgs :: ValueExpression r => Library -> MixedCall r
+lambda :: ValueExpression r => [SVariable r] -> SValue r -> SValue r
+notNull :: ValueExpression r => SValue r -> SValue r
+funcApp :: ValueExpression r => PosCall r
+funcAppNamedArgs :: ValueExpression r => Label -> VSType r -> NamedArgs r -> SValue r
+extFuncApp :: ValueExpression r => Library -> PosCall r
+libFuncApp :: ValueExpression r => Library -> PosCall r
+exists :: ValueExpression r => SValue r -> SValue r
+class (ValueSym r) => FunctionSym r where {
+    type Function r;
+}
+class (ValueSym r) => List r
+
+-- | Does any necessary conversions from GOOL's zero-indexed assumptions to
+--   the target language's assumptions
+intToIndex :: List r => SValue r -> SValue r
+
+-- | Does any necessary conversions from the target language's indexing
+--   assumptions assumptions to GOOL's zero-indexed assumptions
+indexToInt :: List r => SValue r -> SValue r
+
+-- | Finds the size of a list. Arguments are: List
+listSize :: List r => SValue r -> SValue r
+
+-- | Inserts a value into a list. Arguments are: List, Index, Value
+listAdd :: List r => SValue r -> SValue r -> SValue r -> SValue r
+
+-- | Appens a value to a list. Arguments are: List, Value
+listAppend :: List r => SValue r -> SValue r -> SValue r
+
+-- | Gets the value of an index of a list. Arguments are: List, Index
+listAccess :: List r => SValue r -> SValue r -> SValue r
+
+-- | Sets the value of an index of a list. Arguments are: List, Index,
+--   Value
+listSet :: List r => SValue r -> SValue r -> SValue r -> SValue r
+
+-- | Finds the index of the first occurrence of a value in a list.
+--   Arguments are: List, Value
+indexOf :: List r => SValue r -> SValue r -> SValue r
+class (ValueSym r) => Set r
+
+-- | Checks membership Arguments are: Set, Value
+contains :: Set r => SValue r -> SValue r -> SValue r
+
+-- | Inserts a value into a set Arguments are: Set, Value
+setAdd :: Set r => SValue r -> SValue r -> SValue r
+
+-- | Removes a value from a set Arguments are: Set, Value
+setRemove :: Set r => SValue r -> SValue r -> SValue r
+
+-- | Removes a value from a set Arguments are: Set, Set
+setUnion :: Set r => SValue r -> SValue r -> SValue r
+
+-- | Creates a slice of a list and assigns it to a variable. Arguments are:
+--   Variable to assign List to read from (optional) Start index inclusive.
+--   (if Nothing, then list start if step &gt; 0, list end if step &lt; 0)
+--   (optional) End index exclusive. (if Nothing, then list end if step
+--   &gt; 0, list start if step &gt; 0) (optional) Step (if Nothing, then
+--   defaults to 1)
+listSlice :: InternalList r => SVariable r -> SValue r -> Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
+listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
+at :: List r => SValue r -> SValue r -> SValue r
+class VisibilitySym r where {
+    type Visibility r;
+}
+private :: VisibilitySym r => r (Visibility r)
+public :: VisibilitySym r => r (Visibility r)
+class (VariableSym r) => ParameterSym r where {
+    type Parameter r;
+}
+param :: ParameterSym r => SVariable r -> MSParameter r
+pointerParam :: ParameterSym r => SVariable r -> MSParameter r
+class (BodySym r, ParameterSym r, VisibilitySym r) => MethodSym r where {
+    type Method r;
+}
+docMain :: MethodSym r => MSBody r -> SMethod r
+function :: MethodSym r => Label -> r (Visibility r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
+mainFunction :: MethodSym r => MSBody r -> SMethod r
+docFunc :: MethodSym r => String -> [String] -> Maybe String -> SMethod r -> SMethod r
+inOutFunc :: MethodSym r => Label -> r (Visibility r) -> InOutFunc r
+docInOutFunc :: MethodSym r => Label -> r (Visibility r) -> DocInOutFunc r
+class (MethodSym r) => ModuleSym r where {
+    type Module r;
+}
+buildModule :: ModuleSym r => Label -> [Label] -> [SMethod r] -> FSModule r
+convType :: TypeSym r => CodeType -> VSType r
+data ProgData
+data FileData
+data ModData
+data VisibilityTag
+Pub :: VisibilityTag
+Priv :: VisibilityTag
+data CodeType
+Boolean :: CodeType
+Integer :: CodeType
+Float :: CodeType
+Double :: CodeType
+Char :: CodeType
+String :: CodeType
+InFile :: CodeType
+OutFile :: CodeType
+List :: CodeType -> CodeType
+Set :: CodeType -> CodeType
+Array :: CodeType -> CodeType
+Object :: ClassName -> CodeType
+Func :: [CodeType] -> CodeType -> CodeType
+Void :: CodeType
+data GOOLState
+GS :: [FilePath] -> [FilePath] -> Maybe FilePath -> Map String ClassName -> Map QualifiedName [ExceptionType] -> Map QualifiedName [QualifiedName] -> Bool -> Bool -> GOOLState
+[_headers] :: GOOLState -> [FilePath]
+[_sources] :: GOOLState -> [FilePath]
+[_mainMod] :: GOOLState -> Maybe FilePath
+[_classMap] :: GOOLState -> Map String ClassName
+[_methodExceptionMap] :: GOOLState -> Map QualifiedName [ExceptionType]
+[_callMap] :: GOOLState -> Map QualifiedName [QualifiedName]
+[_throwUsed] :: GOOLState -> Bool
+[_errorDefined] :: GOOLState -> Bool
+lensMStoVS :: Lens' MethodState ValueState
+headers :: Lens' GOOLState [FilePath]
+sources :: Lens' GOOLState [FilePath]
+mainMod :: Lens' GOOLState (Maybe FilePath)
+initialState :: GOOLState
+onStateValue :: (a -> b) -> State s a -> State s b
+onCodeList :: Monad m => ([a] -> b) -> [m a] -> m b
+unCI :: CodeInfoProc a -> a
+unJLC :: JuliaCode a -> a
+jlName :: String
+jlVersion :: String
+
+
+-- | re-export smart constructors for external code writing
 module Drasil.GOOL
 type Label = String
 type GSProgram a = GS (a (Program a))
@@ -508,387 +892,3 @@ cppName :: String
 cppVersion :: String
 swiftName :: String
 swiftVersion :: String
-
-
--- | re-export smart constructors for external code writing
-module Drasil.GProc
-type Label = String
-type GSProgram a = GS (a (Program a))
-type SFile a = FS (a (File a))
-type MSBody a = MS (a (Body a))
-type MSBlock a = MS (a (Block a))
-type VSType a = VS (a (Type a))
-type SVariable a = VS (a (Variable a))
-type SValue a = VS (a (Value a))
-type VSFunction a = VS (a (Function a))
-type MSStatement a = MS (a (Statement a))
-type MSParameter a = MS (a (Parameter a))
-type SMethod a = MS (a (Method a))
-type FSModule a = FS (a (Module a))
-type NamedArgs r = [(SVariable r, SValue r)]
-class (VectorType r, VectorDecl r, VectorThunk r, VectorExpression r, ThunkAssign r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FunctionSym r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, List r, Set r, TypeElim r, VariableElim r, MethodSym r, ScopeSym r) => SharedProg r
-class (SharedProg r, ProgramSym r) => ProcProg r
-class (FileSym r) => ProgramSym r where {
-    type Program r;
-}
-prog :: ProgramSym r => Label -> Label -> [SFile r] -> GSProgram r
-class (ModuleSym r) => FileSym r where {
-    type File r;
-}
-fileDoc :: FileSym r => FSModule r -> SFile r
-docMod :: FileSym r => String -> [String] -> String -> SFile r -> SFile r
-class (BlockSym r) => BodySym r where {
-    type Body r;
-}
-body :: BodySym r => [MSBlock r] -> MSBody r
-addComments :: BodySym r => Label -> MSBody r -> MSBody r
-bodyStatements :: BodySym r => [MSStatement r] -> MSBody r
-oneLiner :: BodySym r => MSStatement r -> MSBody r
-class (StatementSym r) => BlockSym r where {
-    type Block r;
-}
-block :: BlockSym r => [MSStatement r] -> MSBlock r
-class TypeSym r where {
-    type Type r;
-}
-bool :: TypeSym r => VSType r
-int :: TypeSym r => VSType r
-float :: TypeSym r => VSType r
-double :: TypeSym r => VSType r
-char :: TypeSym r => VSType r
-string :: TypeSym r => VSType r
-infile :: TypeSym r => VSType r
-outfile :: TypeSym r => VSType r
-listType :: TypeSym r => VSType r -> VSType r
-setType :: TypeSym r => VSType r -> VSType r
-arrayType :: TypeSym r => VSType r -> VSType r
-listInnerType :: TypeSym r => VSType r -> VSType r
-funcType :: TypeSym r => [VSType r] -> VSType r -> VSType r
-void :: TypeSym r => VSType r
-class (TypeSym r) => TypeElim r
-getType :: TypeElim r => r (Type r) -> CodeType
-getTypeString :: TypeElim r => r (Type r) -> String
-class ThunkSym r where {
-    type Thunk (r :: Type -> Type);
-}
-class TypeSym r => VectorType r
-vecType :: VectorType r => VSType r -> VSType r
-class (DeclStatement r) => VectorDecl r
-vecDec :: VectorDecl r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
-vecDecDef :: VectorDecl r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
-class (VariableSym r, ThunkSym r) => VectorThunk r
-vecThunk :: VectorThunk r => SVariable r -> VSThunk r
-class (ThunkSym r, ValueSym r) => VectorExpression r
-vecScale :: VectorExpression r => SValue r -> VSThunk r -> VSThunk r
-vecAdd :: VectorExpression r => VSThunk r -> VSThunk r -> VSThunk r
-vecIndex :: VectorExpression r => SValue r -> VSThunk r -> SValue r
-vecDot :: VectorExpression r => VSThunk r -> VSThunk r -> VSThunk r
-class (VariableSym r, ThunkSym r, StatementSym r) => ThunkAssign r
-thunkAssign :: ThunkAssign r => SVariable r -> VSThunk r -> MSStatement r
-class (ValueSym r) => StatementSym r where {
-    type Statement r;
-}
-valStmt :: StatementSym r => SValue r -> MSStatement r
-emptyStmt :: StatementSym r => MSStatement r
-multi :: StatementSym r => [MSStatement r] -> MSStatement r
-class (VariableSym r, StatementSym r) => AssignStatement r
-(&-=) :: AssignStatement r => SVariable r -> SValue r -> MSStatement r
-(&+=) :: AssignStatement r => SVariable r -> SValue r -> MSStatement r
-(&++) :: AssignStatement r => SVariable r -> MSStatement r
-(&--) :: AssignStatement r => SVariable r -> MSStatement r
-assign :: AssignStatement r => SVariable r -> SValue r -> MSStatement r
-infixl 1 &-=
-infixl 1 &+=
-infixl 8 &++
-infixl 8 &--
-(&=) :: AssignStatement r => SVariable r -> SValue r -> MSStatement r
-infixr 1 &=
-assignToListIndex :: (StatementSym r, VariableValue r, List r) => SVariable r -> SValue r -> SValue r -> MSStatement r
-class (VariableSym r, StatementSym r, ScopeSym r) => DeclStatement r
-varDec :: DeclStatement r => SVariable r -> r (Scope r) -> MSStatement r
-varDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
-listDec :: DeclStatement r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
-listDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
-setDec :: DeclStatement r => SVariable r -> r (Scope r) -> MSStatement r
-setDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
-arrayDec :: DeclStatement r => Integer -> SVariable r -> r (Scope r) -> MSStatement r
-arrayDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SValue r] -> MSStatement r
-constDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> SValue r -> MSStatement r
-funcDecDef :: DeclStatement r => SVariable r -> r (Scope r) -> [SVariable r] -> MSBody r -> MSStatement r
-class (VariableSym r, StatementSym r) => IOStatement r
-print :: IOStatement r => SValue r -> MSStatement r
-printLn :: IOStatement r => SValue r -> MSStatement r
-printStr :: IOStatement r => String -> MSStatement r
-printStrLn :: IOStatement r => String -> MSStatement r
-printFile :: IOStatement r => SValue r -> SValue r -> MSStatement r
-printFileLn :: IOStatement r => SValue r -> SValue r -> MSStatement r
-printFileStr :: IOStatement r => SValue r -> String -> MSStatement r
-printFileStrLn :: IOStatement r => SValue r -> String -> MSStatement r
-getInput :: IOStatement r => SVariable r -> MSStatement r
-discardInput :: IOStatement r => MSStatement r
-getFileInput :: IOStatement r => SValue r -> SVariable r -> MSStatement r
-discardFileInput :: IOStatement r => SValue r -> MSStatement r
-openFileR :: IOStatement r => SVariable r -> SValue r -> MSStatement r
-openFileW :: IOStatement r => SVariable r -> SValue r -> MSStatement r
-openFileA :: IOStatement r => SVariable r -> SValue r -> MSStatement r
-closeFile :: IOStatement r => SValue r -> MSStatement r
-getFileInputLine :: IOStatement r => SValue r -> SVariable r -> MSStatement r
-discardFileLine :: IOStatement r => SValue r -> MSStatement r
-getFileInputAll :: IOStatement r => SValue r -> SVariable r -> MSStatement r
-class (VariableSym r, StatementSym r) => StringStatement r
-stringSplit :: StringStatement r => Char -> SVariable r -> SValue r -> MSStatement r
-stringListVals :: StringStatement r => [SVariable r] -> SValue r -> MSStatement r
-stringListLists :: StringStatement r => [SVariable r] -> SValue r -> MSStatement r
-class (VariableSym r, StatementSym r) => FuncAppStatement r
-inOutCall :: FuncAppStatement r => InOutCall r
-extInOutCall :: FuncAppStatement r => Library -> InOutCall r
-class (StatementSym r) => CommentStatement r
-comment :: CommentStatement r => Comment -> MSStatement r
-class (BodySym r, VariableSym r) => ControlStatement r
-break :: ControlStatement r => MSStatement r
-continue :: ControlStatement r => MSStatement r
-returnStmt :: ControlStatement r => SValue r -> MSStatement r
-throw :: ControlStatement r => Label -> MSStatement r
-
--- | String of if-else statements. Arguments: List of predicates and bodies
---   (if this then that), Body for else branch
-ifCond :: ControlStatement r => [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
-switch :: ControlStatement r => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
-ifExists :: ControlStatement r => SValue r -> MSBody r -> MSBody r -> MSStatement r
-for :: ControlStatement r => MSStatement r -> SValue r -> MSStatement r -> MSBody r -> MSStatement r
-forRange :: ControlStatement r => SVariable r -> SValue r -> SValue r -> SValue r -> MSBody r -> MSStatement r
-forEach :: ControlStatement r => SVariable r -> SValue r -> MSBody r -> MSStatement r
-while :: ControlStatement r => SValue r -> MSBody r -> MSStatement r
-tryCatch :: ControlStatement r => MSBody r -> MSBody r -> MSStatement r
-assert :: ControlStatement r => SValue r -> SValue r -> MSStatement r
-ifNoElse :: ControlStatement r => [(SValue r, MSBody r)] -> MSStatement r
-switchAsIf :: (ControlStatement r, Comparison r) => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
-class (TypeSym r) => VariableSym r where {
-    type Variable r;
-}
-var :: VariableSym r => Label -> VSType r -> SVariable r
-constant :: VariableSym r => Label -> VSType r -> SVariable r
-extVar :: VariableSym r => Library -> Label -> VSType r -> SVariable r
-arrayElem :: VariableSym r => Integer -> SVariable r -> SVariable r
-class ScopeSym r where {
-    type Scope r;
-}
-global :: ScopeSym r => r (Scope r)
-mainFn :: ScopeSym r => r (Scope r)
-local :: ScopeSym r => r (Scope r)
-class (VariableSym r) => VariableElim r
-variableName :: VariableElim r => r (Variable r) -> String
-variableType :: VariableElim r => r (Variable r) -> r (Type r)
-listOf :: VariableSym r => Label -> VSType r -> SVariable r
-listVar :: VariableSym r => Label -> VSType r -> SVariable r
-class (TypeSym r) => ValueSym r where {
-    type Value r;
-}
-valueType :: ValueSym r => r (Value r) -> r (Type r)
-class (ValueSym r) => Argument r
-pointerArg :: Argument r => SValue r -> SValue r
-class (ValueSym r) => Literal r
-litTrue :: Literal r => SValue r
-litFalse :: Literal r => SValue r
-litChar :: Literal r => Char -> SValue r
-litDouble :: Literal r => Double -> SValue r
-litFloat :: Literal r => Float -> SValue r
-litInt :: Literal r => Integer -> SValue r
-litString :: Literal r => String -> SValue r
-litArray :: Literal r => VSType r -> [SValue r] -> SValue r
-litList :: Literal r => VSType r -> [SValue r] -> SValue r
-litSet :: Literal r => VSType r -> [SValue r] -> SValue r
-class (ValueSym r) => MathConstant r
-pi :: MathConstant r => SValue r
-class (VariableSym r, ValueSym r) => VariableValue r
-valueOf :: VariableValue r => SVariable r -> SValue r
-class (ValueSym r) => CommandLineArgs r
-arg :: CommandLineArgs r => Integer -> SValue r
-argsList :: CommandLineArgs r => SValue r
-argExists :: CommandLineArgs r => Integer -> SValue r
-class (ValueSym r) => NumericExpression r
-(#~) :: NumericExpression r => SValue r -> SValue r
-(#/^) :: NumericExpression r => SValue r -> SValue r
-(#|) :: NumericExpression r => SValue r -> SValue r
-(#+) :: NumericExpression r => SValue r -> SValue r -> SValue r
-(#-) :: NumericExpression r => SValue r -> SValue r -> SValue r
-(#*) :: NumericExpression r => SValue r -> SValue r -> SValue r
-(#/) :: NumericExpression r => SValue r -> SValue r -> SValue r
-(#%) :: NumericExpression r => SValue r -> SValue r -> SValue r
-(#^) :: NumericExpression r => SValue r -> SValue r -> SValue r
-log :: NumericExpression r => SValue r -> SValue r
-ln :: NumericExpression r => SValue r -> SValue r
-exp :: NumericExpression r => SValue r -> SValue r
-sin :: NumericExpression r => SValue r -> SValue r
-cos :: NumericExpression r => SValue r -> SValue r
-tan :: NumericExpression r => SValue r -> SValue r
-csc :: NumericExpression r => SValue r -> SValue r
-sec :: NumericExpression r => SValue r -> SValue r
-cot :: NumericExpression r => SValue r -> SValue r
-arcsin :: NumericExpression r => SValue r -> SValue r
-arccos :: NumericExpression r => SValue r -> SValue r
-arctan :: NumericExpression r => SValue r -> SValue r
-floor :: NumericExpression r => SValue r -> SValue r
-ceil :: NumericExpression r => SValue r -> SValue r
-infixl 8 #~
-infixl 7 #/^
-infixl 7 #|
-infixl 5 #+
-infixl 5 #-
-infixl 6 #*
-infixl 6 #/
-infixl 6 #%
-infixl 7 #^
-class (ValueSym r) => BooleanExpression r
-(?!) :: BooleanExpression r => SValue r -> SValue r
-(?&&) :: BooleanExpression r => SValue r -> SValue r -> SValue r
-(?||) :: BooleanExpression r => SValue r -> SValue r -> SValue r
-infixr 6 ?!
-infixl 2 ?&&
-infixl 1 ?||
-class (ValueSym r) => Comparison r
-(?<) :: Comparison r => SValue r -> SValue r -> SValue r
-(?<=) :: Comparison r => SValue r -> SValue r -> SValue r
-(?>) :: Comparison r => SValue r -> SValue r -> SValue r
-(?>=) :: Comparison r => SValue r -> SValue r -> SValue r
-(?==) :: Comparison r => SValue r -> SValue r -> SValue r
-(?!=) :: Comparison r => SValue r -> SValue r -> SValue r
-infixl 4 ?<
-infixl 4 ?<=
-infixl 4 ?>
-infixl 4 ?>=
-infixl 3 ?==
-infixl 3 ?!=
-class (VariableSym r, ValueSym r) => ValueExpression r
-inlineIf :: ValueExpression r => SValue r -> SValue r -> SValue r -> SValue r
-funcAppMixedArgs :: ValueExpression r => MixedCall r
-extFuncAppMixedArgs :: ValueExpression r => Library -> MixedCall r
-libFuncAppMixedArgs :: ValueExpression r => Library -> MixedCall r
-lambda :: ValueExpression r => [SVariable r] -> SValue r -> SValue r
-notNull :: ValueExpression r => SValue r -> SValue r
-funcApp :: ValueExpression r => PosCall r
-funcAppNamedArgs :: ValueExpression r => Label -> VSType r -> NamedArgs r -> SValue r
-extFuncApp :: ValueExpression r => Library -> PosCall r
-libFuncApp :: ValueExpression r => Library -> PosCall r
-exists :: ValueExpression r => SValue r -> SValue r
-class (ValueSym r) => FunctionSym r where {
-    type Function r;
-}
-class (ValueSym r) => List r
-
--- | Does any necessary conversions from GOOL's zero-indexed assumptions to
---   the target language's assumptions
-intToIndex :: List r => SValue r -> SValue r
-
--- | Does any necessary conversions from the target language's indexing
---   assumptions assumptions to GOOL's zero-indexed assumptions
-indexToInt :: List r => SValue r -> SValue r
-
--- | Finds the size of a list. Arguments are: List
-listSize :: List r => SValue r -> SValue r
-
--- | Inserts a value into a list. Arguments are: List, Index, Value
-listAdd :: List r => SValue r -> SValue r -> SValue r -> SValue r
-
--- | Appens a value to a list. Arguments are: List, Value
-listAppend :: List r => SValue r -> SValue r -> SValue r
-
--- | Gets the value of an index of a list. Arguments are: List, Index
-listAccess :: List r => SValue r -> SValue r -> SValue r
-
--- | Sets the value of an index of a list. Arguments are: List, Index,
---   Value
-listSet :: List r => SValue r -> SValue r -> SValue r -> SValue r
-
--- | Finds the index of the first occurrence of a value in a list.
---   Arguments are: List, Value
-indexOf :: List r => SValue r -> SValue r -> SValue r
-class (ValueSym r) => Set r
-
--- | Checks membership Arguments are: Set, Value
-contains :: Set r => SValue r -> SValue r -> SValue r
-
--- | Inserts a value into a set Arguments are: Set, Value
-setAdd :: Set r => SValue r -> SValue r -> SValue r
-
--- | Removes a value from a set Arguments are: Set, Value
-setRemove :: Set r => SValue r -> SValue r -> SValue r
-
--- | Removes a value from a set Arguments are: Set, Set
-setUnion :: Set r => SValue r -> SValue r -> SValue r
-
--- | Creates a slice of a list and assigns it to a variable. Arguments are:
---   Variable to assign List to read from (optional) Start index inclusive.
---   (if Nothing, then list start if step &gt; 0, list end if step &lt; 0)
---   (optional) End index exclusive. (if Nothing, then list end if step
---   &gt; 0, list start if step &gt; 0) (optional) Step (if Nothing, then
---   defaults to 1)
-listSlice :: InternalList r => SVariable r -> SValue r -> Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
-listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
-at :: List r => SValue r -> SValue r -> SValue r
-class VisibilitySym r where {
-    type Visibility r;
-}
-private :: VisibilitySym r => r (Visibility r)
-public :: VisibilitySym r => r (Visibility r)
-class (VariableSym r) => ParameterSym r where {
-    type Parameter r;
-}
-param :: ParameterSym r => SVariable r -> MSParameter r
-pointerParam :: ParameterSym r => SVariable r -> MSParameter r
-class (BodySym r, ParameterSym r, VisibilitySym r) => MethodSym r where {
-    type Method r;
-}
-docMain :: MethodSym r => MSBody r -> SMethod r
-function :: MethodSym r => Label -> r (Visibility r) -> VSType r -> [MSParameter r] -> MSBody r -> SMethod r
-mainFunction :: MethodSym r => MSBody r -> SMethod r
-docFunc :: MethodSym r => String -> [String] -> Maybe String -> SMethod r -> SMethod r
-inOutFunc :: MethodSym r => Label -> r (Visibility r) -> InOutFunc r
-docInOutFunc :: MethodSym r => Label -> r (Visibility r) -> DocInOutFunc r
-class (MethodSym r) => ModuleSym r where {
-    type Module r;
-}
-buildModule :: ModuleSym r => Label -> [Label] -> [SMethod r] -> FSModule r
-convType :: TypeSym r => CodeType -> VSType r
-data ProgData
-data FileData
-data ModData
-data VisibilityTag
-Pub :: VisibilityTag
-Priv :: VisibilityTag
-data CodeType
-Boolean :: CodeType
-Integer :: CodeType
-Float :: CodeType
-Double :: CodeType
-Char :: CodeType
-String :: CodeType
-InFile :: CodeType
-OutFile :: CodeType
-List :: CodeType -> CodeType
-Set :: CodeType -> CodeType
-Array :: CodeType -> CodeType
-Object :: ClassName -> CodeType
-Func :: [CodeType] -> CodeType -> CodeType
-Void :: CodeType
-data GOOLState
-GS :: [FilePath] -> [FilePath] -> Maybe FilePath -> Map String ClassName -> Map QualifiedName [ExceptionType] -> Map QualifiedName [QualifiedName] -> Bool -> Bool -> GOOLState
-[_headers] :: GOOLState -> [FilePath]
-[_sources] :: GOOLState -> [FilePath]
-[_mainMod] :: GOOLState -> Maybe FilePath
-[_classMap] :: GOOLState -> Map String ClassName
-[_methodExceptionMap] :: GOOLState -> Map QualifiedName [ExceptionType]
-[_callMap] :: GOOLState -> Map QualifiedName [QualifiedName]
-[_throwUsed] :: GOOLState -> Bool
-[_errorDefined] :: GOOLState -> Bool
-lensMStoVS :: Lens' MethodState ValueState
-headers :: Lens' GOOLState [FilePath]
-sources :: Lens' GOOLState [FilePath]
-mainMod :: Lens' GOOLState (Maybe FilePath)
-initialState :: GOOLState
-onStateValue :: (a -> b) -> State s a -> State s b
-onCodeList :: Monad m => ([a] -> b) -> [m a] -> m b
-unCI :: CodeInfoProc a -> a
-unJLC :: JuliaCode a -> a
-jlName :: String
-jlVersion :: String

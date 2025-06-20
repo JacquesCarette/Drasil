@@ -63,11 +63,11 @@ pymunk :: Reference
 module Drasil.GamePhysics.Unitals
 defSymbols :: [DefinedQuantityDict]
 unitSymbs :: [UnitalChunk]
-symbols :: [QuantityDict]
 symbolsAll :: [QuantityDict]
 inputSymbols :: [QuantityDict]
 outputSymbols :: [QuantityDict]
-unitalChunks :: [UnitalChunk]
+unitalSymbols :: [UnitalChunk]
+unitalTerms :: [UnitalChunk]
 forceParam :: String -> String -> Symbol -> UnitalChunk
 massParam :: String -> String -> Symbol -> UnitalChunk
 timeParam :: String -> String -> Symbol -> UnitalChunk

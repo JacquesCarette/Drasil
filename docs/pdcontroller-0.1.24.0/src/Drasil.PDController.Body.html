@@ -39,7 +39,7 @@
 </span><span id="line-39"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.SpSysDesc.html"><span class="hs-identifier">Drasil.PDController.SpSysDesc</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.PDController.SpSysDesc.html#goals"><span class="hs-identifier">goals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.SpSysDesc.html#sysFigure"><span class="hs-identifier">sysFigure</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.SpSysDesc.html#sysGoalInput"><span class="hs-identifier">sysGoalInput</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.SpSysDesc.html#sysParts"><span class="hs-identifier">sysParts</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-40"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.TModel.html"><span class="hs-identifier">Drasil.PDController.TModel</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.PDController.TModel.html#theoreticalModels"><span class="hs-identifier">theoreticalModels</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-41"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html"><span class="hs-identifier">Drasil.PDController.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.PDController.Unitals.html#symbols"><span class="hs-identifier">symbols</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#inputs"><span class="hs-identifier">inputs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#outputs"><span class="hs-identifier">outputs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#inputsUC"><span class="hs-identifier">inputsUC</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-42"></span><span>  </span><span class="annot"><a href="Drasil.PDController.Unitals.html#inpConstrained"><span class="hs-identifier">inpConstrained</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#pidConstants"><span class="hs-identifier">pidConstants</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#pidDqdConstants"><span class="hs-identifier">pidDqdConstants</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier">opProcessVariable</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-42"></span><span>  </span><span class="annot"><a href="Drasil.PDController.Unitals.html#inpConstrained"><span class="hs-identifier">inpConstrained</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#pidConstants"><span class="hs-identifier">pidConstants</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier">opProcessVariable</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-43"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.ODEs.html"><span class="hs-identifier">Drasil.PDController.ODEs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.PDController.ODEs.html#pidODEInfo"><span class="hs-identifier">pidODEInfo</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-44"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Code</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">quantvar</span></span><span class="hs-special">)</span><span>
 </span><span id="line-45"></span><span>
@@ -289,33 +289,33 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">_purpose</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.PDController.Body.html#purp"><span class="hs-identifier hs-var">purp</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-105"></span><span>  </span><span class="annot"><span class="annottext">_background :: [Sentence]
-</span><a href="#local-6989586621679064502"><span class="hs-identifier hs-var">_background</span></a></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">_background</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.PDController.Body.html#background"><span class="hs-identifier hs-var">background</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-106"></span><span>  </span><span class="annot"><span class="annottext">_motivation :: [Sentence]
-</span><a href="#local-6989586621679064504"><span class="hs-identifier hs-var">_motivation</span></a></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">_motivation</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.PDController.Body.html#motivation"><span class="hs-identifier hs-var">motivation</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-107"></span><span>  </span><span class="annot"><span class="annottext">_scope :: [Sentence]
-</span><a href="#local-6989586621679064506"><span class="hs-identifier hs-var">_scope</span></a></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">_scope</span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.PDController.IntroSection.html#scope"><span class="hs-identifier hs-var">scope</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-108"></span><span>  </span><span class="annot"><span class="annottext">_quants :: [QuantityDict]
-</span><a href="#local-6989586621679064507"><span class="hs-identifier hs-var">_quants</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><span class="hs-identifier hs-var">_quants</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.PDController.Body.html#symbolsAll"><span class="hs-identifier hs-var">symbolsAll</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-109"></span><span>  </span><span class="annot"><span class="annottext">_datadefs :: [DataDefinition]
-</span><a href="#local-6989586621679064509"><span class="hs-identifier hs-var">_datadefs</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DataDefinition]
+</span><span class="hs-identifier hs-var">_datadefs</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DataDefinition]
 </span><a href="Drasil.PDController.DataDefs.html#dataDefinitions"><span class="hs-identifier hs-var">dataDefinitions</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-110"></span><span>  </span><span class="annot"><span class="annottext">_instModels :: [InstanceModel]
-</span><a href="#local-6989586621679064510"><span class="hs-identifier hs-var">_instModels</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[InstanceModel]
+</span><span class="hs-identifier hs-var">_instModels</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[InstanceModel]
 </span><a href="Drasil.PDController.IModel.html#instanceModels"><span class="hs-identifier hs-var">instanceModels</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-111"></span><span>  </span><span class="annot"><span class="annottext">_configFiles :: [String]
-</span><a href="#local-6989586621679064511"><span class="hs-identifier hs-var">_configFiles</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span class="hs-identifier hs-var">_configFiles</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-112"></span><span>  </span><span class="annot"><span class="annottext">_inputs :: [QuantityDict]
-</span><a href="#local-6989586621679064512"><span class="hs-identifier hs-var">_inputs</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><span class="hs-identifier hs-var">_inputs</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.PDController.Unitals.html#inputs"><span class="hs-identifier hs-var">inputs</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-113"></span><span>  </span><span class="annot"><span class="annottext">_outputs :: [QuantityDict]
-</span><a href="#local-6989586621679064513"><span class="hs-identifier hs-var">_outputs</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><span class="hs-identifier hs-var">_outputs</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.PDController.Unitals.html#outputs"><span class="hs-identifier hs-var">outputs</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-114"></span><span>  </span><span class="annot"><span class="annottext">_constraints :: [ConstrainedChunk]
-</span><a href="#local-6989586621679064514"><span class="hs-identifier hs-var">_constraints</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConstrConcept -&gt; ConstrainedChunk)
+</span><span class="hs-identifier hs-var">_constraints</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConstrConcept -&gt; ConstrainedChunk)
 -&gt; [ConstrConcept] -&gt; [ConstrainedChunk]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; ConstrainedChunk
@@ -325,13 +325,13 @@ c -&gt; ConstrainedChunk
 </span><span class="hs-identifier hs-var">cnstrw</span></span><span> </span><span class="annot"><span class="annottext">[ConstrConcept]
 </span><a href="Drasil.PDController.Unitals.html#inpConstrained"><span class="hs-identifier hs-var">inpConstrained</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-115"></span><span>  </span><span class="annot"><span class="annottext">_constants :: [ConstQDef]
-</span><a href="#local-6989586621679064516"><span class="hs-identifier hs-var">_constants</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[ConstQDef]
+</span><span class="hs-identifier hs-var">_constants</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[ConstQDef]
 </span><a href="Drasil.PDController.Unitals.html#pidConstants"><span class="hs-identifier hs-var">pidConstants</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-116"></span><span>  </span><span class="annot"><span class="annottext">_systemdb :: ChunkDB
-</span><a href="#local-6989586621679064517"><span class="hs-identifier hs-var">_systemdb</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><span class="hs-identifier hs-var">_systemdb</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
 </span><a href="Drasil.PDController.Body.html#symbMap"><span class="hs-identifier hs-var">symbMap</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-117"></span><span>  </span><span class="annot"><span class="annottext">_usedinfodb :: ChunkDB
-</span><a href="#local-6989586621679064519"><span class="hs-identifier hs-var">_usedinfodb</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><span class="hs-identifier hs-var">_usedinfodb</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
 </span><a href="Drasil.PDController.Body.html#usedDB"><span class="hs-identifier hs-var">usedDB</span></a></span><span>
 </span><span id="line-118"></span><span class="hs-special">}</span><span>
 </span><span id="line-119"></span><span>
@@ -386,14 +386,6 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-135"></span><span id="symbolsAll"><span class="annot"><span class="annottext">symbolsAll :: [QuantityDict]
 </span><a href="Drasil.PDController.Body.html#symbolsAll"><span class="hs-identifier hs-var hs-var">symbolsAll</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.PDController.Unitals.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(DefinedQuantityDict -&gt; QuantityDict)
--&gt; [DefinedQuantityDict] -&gt; [QuantityDict]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; QuantityDict
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
-</span><a href="Drasil.PDController.Unitals.html#pidDqdConstants"><span class="hs-identifier hs-var">pidDqdConstants</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(ConstQDef -&gt; QuantityDict) -&gt; [ConstQDef] -&gt; [QuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
@@ -451,13 +443,6 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><a href="Drasil.PDController.MetaConcepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; [IdeaDict] -&gt; [IdeaDict]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(CI -&gt; IdeaDict) -&gt; [CI] -&gt; [IdeaDict]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; IdeaDict
-forall c. Idea c =&gt; c -&gt; IdeaDict
-</span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[CI]
-</span><a href="Drasil.PDController.Concepts.html#acronyms"><span class="hs-identifier hs-var">acronyms</span></a></span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(CI -&gt; IdeaDict) -&gt; [CI] -&gt; [IdeaDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; IdeaDict
 forall c. Idea c =&gt; c -&gt; IdeaDict

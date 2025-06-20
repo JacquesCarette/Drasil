@@ -456,13 +456,6 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; IdeaDict
 forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[CI]
-</span><a href="Drasil.DblPend.Unitals.html#acronyms"><span class="hs-identifier hs-var">acronyms</span></a></span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(CI -&gt; IdeaDict) -&gt; [CI] -&gt; [IdeaDict]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; IdeaDict
-forall c. Idea c =&gt; c -&gt; IdeaDict
-</span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[CI]
 </span><span class="hs-identifier hs-var">doccon'</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(CI -&gt; IdeaDict) -&gt; [CI] -&gt; [IdeaDict]
@@ -480,42 +473,8 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">physicCon'</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-151"></span><span>  </span><span class="hs-comment">-- ConceptChunks</span><span>
-</span><span id="line-152"></span><span>  </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; IdeaDict) -&gt; [ConceptChunk] -&gt; [IdeaDict]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; IdeaDict
-forall c. Idea c =&gt; c -&gt; IdeaDict
-</span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">algorithm</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">len</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">mass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">errMsg</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">program</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; IdeaDict) -&gt; [ConceptChunk] -&gt; [IdeaDict]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; IdeaDict
-forall c. Idea c =&gt; c -&gt; IdeaDict
-</span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
-</span><span class="hs-identifier hs-var">physicCon</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; IdeaDict) -&gt; [ConceptChunk] -&gt; [IdeaDict]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; IdeaDict
-forall c. Idea c =&gt; c -&gt; IdeaDict
-</span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
-</span><span class="hs-identifier hs-var">mathcon</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; IdeaDict) -&gt; [ConceptChunk] -&gt; [IdeaDict]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; IdeaDict
-forall c. Idea c =&gt; c -&gt; IdeaDict
-</span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
-</span><span class="hs-identifier hs-var">physicalcon</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-153"></span><span>  </span><span class="hs-comment">-- DefinedQuantityDicts</span><span>
-</span><span id="line-154"></span><span>  </span><span class="annot"><span class="annottext">(DefinedQuantityDict -&gt; IdeaDict)
+</span><span id="line-151"></span><span>  </span><span class="hs-comment">-- DefinedQuantityDicts</span><span>
+</span><span id="line-152"></span><span>  </span><span class="annot"><span class="annottext">(DefinedQuantityDict -&gt; IdeaDict)
 -&gt; [DefinedQuantityDict] -&gt; [IdeaDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; IdeaDict
@@ -525,19 +484,19 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">unitVectj</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-155"></span><span>  </span><span class="hs-comment">-- UnitalChunks</span><span>
-</span><span id="line-156"></span><span>  </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; IdeaDict) -&gt; [UnitalChunk] -&gt; [IdeaDict]
+</span><span id="line-153"></span><span>  </span><span class="hs-comment">-- UnitalChunks</span><span>
+</span><span id="line-154"></span><span>  </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; IdeaDict) -&gt; [UnitalChunk] -&gt; [IdeaDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; IdeaDict
 forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[UnitalChunk]
 </span><span class="hs-identifier hs-var">physicscon</span></span><span>
-</span><span id="line-157"></span><span>
-</span><span id="line-158"></span><span class="annot"><a href="Drasil.DblPend.Body.html#tableOfAbbrvsIdeaDicts"><span class="hs-identifier hs-type">tableOfAbbrvsIdeaDicts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-159"></span><span id="tableOfAbbrvsIdeaDicts"><span class="annot"><span class="annottext">tableOfAbbrvsIdeaDicts :: [IdeaDict]
+</span><span id="line-155"></span><span>
+</span><span id="line-156"></span><span class="annot"><a href="Drasil.DblPend.Body.html#tableOfAbbrvsIdeaDicts"><span class="hs-identifier hs-type">tableOfAbbrvsIdeaDicts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-157"></span><span id="tableOfAbbrvsIdeaDicts"><span class="annot"><span class="annottext">tableOfAbbrvsIdeaDicts :: [IdeaDict]
 </span><a href="Drasil.DblPend.Body.html#tableOfAbbrvsIdeaDicts"><span class="hs-identifier hs-var hs-var">tableOfAbbrvsIdeaDicts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-160"></span><span>  </span><span class="hs-comment">-- QuantityDicts</span><span>
-</span><span id="line-161"></span><span>  </span><span class="annot"><span class="annottext">(QuantityDict -&gt; IdeaDict) -&gt; [QuantityDict] -&gt; [IdeaDict]
+</span><span id="line-158"></span><span>  </span><span class="hs-comment">-- QuantityDicts</span><span>
+</span><span id="line-159"></span><span>  </span><span class="annot"><span class="annottext">(QuantityDict -&gt; IdeaDict) -&gt; [QuantityDict] -&gt; [IdeaDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; IdeaDict
 forall c. Idea c =&gt; c -&gt; IdeaDict
@@ -545,8 +504,8 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><a href="Drasil.DblPend.Unitals.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-162"></span><span>  </span><span class="hs-comment">-- CIs</span><span>
-</span><span id="line-163"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; IdeaDict
+</span><span id="line-160"></span><span>  </span><span class="hs-comment">-- CIs</span><span>
+</span><span id="line-161"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; IdeaDict
 forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.DblPend.MetaConcepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; [IdeaDict] -&gt; [IdeaDict]
@@ -557,9 +516,30 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[CI]
 </span><a href="Drasil.DblPend.Unitals.html#acronyms"><span class="hs-identifier hs-var">acronyms</span></a></span><span>
-</span><span id="line-164"></span><span>
-</span><span id="line-165"></span><span class="annot"><a href="Drasil.DblPend.Body.html#symbMap"><span class="hs-identifier hs-type">symbMap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span>
-</span><span id="line-166"></span><span id="symbMap"><span class="annot"><span class="annottext">symbMap :: ChunkDB
+</span><span id="line-162"></span><span>
+</span><span id="line-163"></span><span class="annot"><a href="Drasil.DblPend.Body.html#conceptChunks"><span class="hs-identifier hs-type">conceptChunks</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-164"></span><span id="conceptChunks"><span class="annot"><span class="annottext">conceptChunks :: [ConceptChunk]
+</span><a href="Drasil.DblPend.Body.html#conceptChunks"><span class="hs-identifier hs-var hs-var">conceptChunks</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">algorithm</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">len</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">mass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">errMsg</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">program</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[ConceptChunk] -&gt; [ConceptChunk] -&gt; [ConceptChunk]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
+</span><span class="hs-identifier hs-var">physicCon</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk] -&gt; [ConceptChunk] -&gt; [ConceptChunk]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
+</span><span class="hs-identifier hs-var">mathcon</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk] -&gt; [ConceptChunk] -&gt; [ConceptChunk]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
+</span><span class="hs-identifier hs-var">physicalcon</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk] -&gt; [ConceptChunk] -&gt; [ConceptChunk]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
+</span><span class="hs-identifier hs-var">srsDomains</span></span><span>
+</span><span id="line-165"></span><span>
+</span><span id="line-166"></span><span class="annot"><a href="Drasil.DblPend.Body.html#symbMap"><span class="hs-identifier hs-type">symbMap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span>
+</span><span id="line-167"></span><span id="symbMap"><span class="annot"><span class="annottext">symbMap :: ChunkDB
 </span><a href="Drasil.DblPend.Body.html#symbMap"><span class="hs-identifier hs-var hs-var">symbMap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 -&gt; [IdeaDict]
 -&gt; [ConceptChunk]
@@ -606,10 +586,9 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.DblPend.Body.html#symbolsAll"><span class="hs-identifier hs-var">symbolsAll</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-167"></span><span>  </span><span class="annot"><span class="annottext">[IdeaDict]
+</span><span id="line-168"></span><span>  </span><span class="annot"><span class="annottext">[IdeaDict]
 </span><a href="Drasil.DblPend.Body.html#ideaDicts"><span class="hs-identifier hs-var">ideaDicts</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
-</span><span class="hs-identifier hs-var">srsDomains</span></span><span>
-</span><span id="line-168"></span><span>  </span><span class="annot"><span class="annottext">[UnitDefn]
+</span><a href="Drasil.DblPend.Body.html#conceptChunks"><span class="hs-identifier hs-var">conceptChunks</span></a></span><span> </span><span class="annot"><span class="annottext">[UnitDefn]
 </span><span class="hs-identifier hs-var">siUnits</span></span><span>
 </span><span id="line-169"></span><span>  </span><span class="annot"><span class="annottext">[DataDefinition]
 </span><a href="Drasil.DblPend.DataDefs.html#dataDefs"><span class="hs-identifier hs-var">dataDefs</span></a></span><span> </span><span class="annot"><span class="annottext">[InstanceModel]
@@ -691,8 +670,8 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span id="line-188"></span><span class="hs-comment">------------------------------</span><span>
 </span><span id="line-189"></span><span class="annot"><a href="Drasil.DblPend.Body.html#justification"><span class="hs-identifier hs-type">justification</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-190"></span><span id="justification"><span class="annot"><span class="annottext">justification :: CI -&gt; Sentence
-</span><a href="Drasil.DblPend.Body.html#justification"><span class="hs-identifier hs-var hs-var">justification</span></a></span></span><span> </span><span id="local-6989586621679073597"><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679073597"><span class="hs-identifier hs-var">prog</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><a href="Drasil.DblPend.Body.html#justification"><span class="hs-identifier hs-var hs-var">justification</span></a></span></span><span> </span><span id="local-6989586621679073593"><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679073593"><span class="hs-identifier hs-var">prog</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
@@ -744,7 +723,7 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-string">&quot;The document describes the program called&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679073597"><span class="hs-identifier hs-var">prog</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679073593"><span class="hs-identifier hs-var">prog</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-196"></span><span>                            </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;, which is based on the original, manually created version of&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -853,8 +832,8 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-237"></span><span class="hs-comment">--------------------------</span><span>
 </span><span id="line-238"></span><span class="annot"><a href="Drasil.DblPend.Body.html#sysCtxIntro"><span class="hs-identifier hs-type">sysCtxIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
 </span><span id="line-239"></span><span id="sysCtxIntro"><span class="annot"><span class="annottext">sysCtxIntro :: CI -&gt; Contents
-</span><a href="Drasil.DblPend.Body.html#sysCtxIntro"><span class="hs-identifier hs-var hs-var">sysCtxIntro</span></a></span></span><span> </span><span id="local-6989586621679073610"><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679073610"><span class="hs-identifier hs-var">prog</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
+</span><a href="Drasil.DblPend.Body.html#sysCtxIntro"><span class="hs-identifier hs-var hs-var">sysCtxIntro</span></a></span></span><span> </span><span id="local-6989586621679073606"><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679073606"><span class="hs-identifier hs-var">prog</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP</span></span><span>
 </span><span id="line-240"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">LabelledContent -&gt; Sentence
 forall r.
@@ -893,7 +872,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679073610"><span class="hs-identifier hs-var">prog</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679073606"><span class="hs-identifier hs-var">prog</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span class="hs-special">,</span><span>
 </span><span id="line-244"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -945,8 +924,8 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span id="line-252"></span><span>
 </span><span id="line-253"></span><span class="annot"><a href="Drasil.DblPend.Body.html#sysCtxUsrResp"><span class="hs-identifier hs-type">sysCtxUsrResp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-254"></span><span id="sysCtxUsrResp"><span class="annot"><span class="annottext">sysCtxUsrResp :: CI -&gt; [Sentence]
-</span><a href="Drasil.DblPend.Body.html#sysCtxUsrResp"><span class="hs-identifier hs-var hs-var">sysCtxUsrResp</span></a></span></span><span> </span><span id="local-6989586621679073622"><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679073622"><span class="hs-identifier hs-var">prog</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="Drasil.DblPend.Body.html#sysCtxUsrResp"><span class="hs-identifier hs-var hs-var">sysCtxUsrResp</span></a></span></span><span> </span><span id="local-6989586621679073618"><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679073618"><span class="hs-identifier hs-var">prog</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Provide initial&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
@@ -978,7 +957,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-256"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679073622"><span class="hs-identifier hs-var">prog</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679073618"><span class="hs-identifier hs-var">prog</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;ensuring no errors in the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -1088,8 +1067,8 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-271"></span><span>
 </span><span id="line-272"></span><span class="annot"><a href="Drasil.DblPend.Body.html#sysCtxResp"><span class="hs-identifier hs-type">sysCtxResp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-273"></span><span id="sysCtxResp"><span class="annot"><span class="annottext">sysCtxResp :: CI -&gt; [Sentence]
-</span><a href="Drasil.DblPend.Body.html#sysCtxResp"><span class="hs-identifier hs-var hs-var">sysCtxResp</span></a></span></span><span> </span><span id="local-6989586621679073630"><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679073630"><span class="hs-identifier hs-var">prog</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
+</span><a href="Drasil.DblPend.Body.html#sysCtxResp"><span class="hs-identifier hs-var hs-var">sysCtxResp</span></a></span></span><span> </span><span id="local-6989586621679073626"><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679073626"><span class="hs-identifier hs-var">prog</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">user</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -1099,15 +1078,15 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-274"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679073630"><span class="hs-identifier hs-var">prog</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679073626"><span class="hs-identifier hs-var">prog</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Responsibilities&quot;</span></span><span class="hs-special">]</span><span>
 </span><span id="line-275"></span><span>
 </span><span id="line-276"></span><span class="annot"><a href="Drasil.DblPend.Body.html#sysCtxList"><span class="hs-identifier hs-type">sysCtxList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
 </span><span id="line-277"></span><span id="sysCtxList"><span class="annot"><span class="annottext">sysCtxList :: CI -&gt; Contents
-</span><a href="Drasil.DblPend.Body.html#sysCtxList"><span class="hs-identifier hs-var hs-var">sysCtxList</span></a></span></span><span> </span><span id="local-6989586621679073631"><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679073631"><span class="hs-identifier hs-var">prog</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnlabelledContent -&gt; Contents
+</span><a href="Drasil.DblPend.Body.html#sysCtxList"><span class="hs-identifier hs-var hs-var">sysCtxList</span></a></span></span><span> </span><span id="local-6989586621679073627"><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679073627"><span class="hs-identifier hs-var">prog</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnlabelledContent -&gt; Contents
 </span><span class="hs-identifier hs-var">UlC</span></span><span> </span><span class="annot"><span class="annottext">(UnlabelledContent -&gt; Contents) -&gt; UnlabelledContent -&gt; Contents
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">RawContent -&gt; UnlabelledContent
@@ -1120,7 +1099,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [ListType] -&gt; ListType
 </span><span class="hs-identifier hs-var">bulletNested</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; [Sentence]
 </span><a href="Drasil.DblPend.Body.html#sysCtxResp"><span class="hs-identifier hs-var">sysCtxResp</span></a></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679073631"><span class="hs-identifier hs-var">prog</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([ListType] -&gt; ListType) -&gt; [ListType] -&gt; ListType
+</span><a href="#local-6989586621679073627"><span class="hs-identifier hs-var">prog</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([ListType] -&gt; ListType) -&gt; [ListType] -&gt; ListType
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
 </span><span id="line-278"></span><span>  </span><span class="annot"><span class="annottext">([Sentence] -&gt; ListType) -&gt; [[Sentence]] -&gt; [ListType]
@@ -1128,7 +1107,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; ListType
 </span><span class="hs-identifier hs-var">bulletFlat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CI -&gt; [Sentence]
 </span><a href="Drasil.DblPend.Body.html#sysCtxUsrResp"><span class="hs-identifier hs-var">sysCtxUsrResp</span></a></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679073631"><span class="hs-identifier hs-var">prog</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="#local-6989586621679073627"><span class="hs-identifier hs-var">prog</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.DblPend.Body.html#sysCtxSysResp"><span class="hs-identifier hs-var">sysCtxSysResp</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-279"></span><span>
 </span><span id="line-280"></span><span class="hs-comment">--------------------------------</span><span>
@@ -1136,8 +1115,8 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span id="line-282"></span><span class="hs-comment">--------------------------------</span><span>
 </span><span id="line-283"></span><span class="annot"><a href="Drasil.DblPend.Body.html#userCharacteristicsIntro"><span class="hs-identifier hs-type">userCharacteristicsIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
 </span><span id="line-284"></span><span id="userCharacteristicsIntro"><span class="annot"><span class="annottext">userCharacteristicsIntro :: CI -&gt; Contents
-</span><a href="Drasil.DblPend.Body.html#userCharacteristicsIntro"><span class="hs-identifier hs-var hs-var">userCharacteristicsIntro</span></a></span></span><span> </span><span id="local-6989586621679073637"><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679073637"><span class="hs-identifier hs-var">prog</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
+</span><a href="Drasil.DblPend.Body.html#userCharacteristicsIntro"><span class="hs-identifier hs-var hs-var">userCharacteristicsIntro</span></a></span></span><span> </span><span id="local-6989586621679073633"><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679073633"><span class="hs-identifier hs-var">prog</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP</span></span><span>
 </span><span id="line-285"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -1148,7 +1127,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679073637"><span class="hs-identifier hs-var">prog</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679073633"><span class="hs-identifier hs-var">prog</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-286"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;should have an understanding of&quot;</span></span><span class="hs-special">,</span><span> </span><span>

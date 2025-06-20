@@ -1,8 +1,4 @@
 digraph alltypes {
-	subgraph abtractprocs {
-	}
-	subgraph clike {
-	}
 	subgraph csarprendererh {
 		subgraph csharpcodea{
 		CSharpCodea	[shape=oval, color=darkgreen, label="CSharpCodea"];
@@ -99,14 +95,6 @@ digraph alltypes {
 		subgraph blockcommentcsharpcode{
 		BlockCommentCSharpCode	[shape=oval, color=red2, label="BlockCommentCSharpCode"];
 		BlockCommentCSharpCode -> Doc;
-		}
-	}
-	subgraph commonpeudooos {
-	}
-	subgraph contructorss {
-		subgraph vsopr{
-		VSOpr	[shape=oval, color=red2, label="VSOpr"];
-		VSOpr -> VSrOpData;
 		}
 	}
 	subgraph cpprenderer {
@@ -511,100 +499,6 @@ digraph alltypes {
 		BlockCommentJavaCode -> Doc;
 		}
 	}
-	subgraph juliarenderer {
-		subgraph juliacodea{
-		JuliaCodea	[shape=oval, color=darkgreen, label="JuliaCodea"];
-		JuliaCodea -> a;
-		}
-		subgraph programjuliacode{
-		ProgramJuliaCode	[shape=oval, color=red2, label="ProgramJuliaCode"];
-		ProgramJuliaCode -> ProgData;
-		}
-		subgraph filejuliacode{
-		FileJuliaCode	[shape=oval, color=red2, label="FileJuliaCode"];
-		FileJuliaCode -> FileData;
-		}
-		subgraph importjuliacode{
-		ImportJuliaCode	[shape=oval, color=red2, label="ImportJuliaCode"];
-		ImportJuliaCode -> Doc;
-		}
-		subgraph bodyjuliacode{
-		BodyJuliaCode	[shape=oval, color=red2, label="BodyJuliaCode"];
-		BodyJuliaCode -> Doc;
-		}
-		subgraph blockjuliacode{
-		BlockJuliaCode	[shape=oval, color=red2, label="BlockJuliaCode"];
-		BlockJuliaCode -> Doc;
-		}
-		subgraph typejuliacode{
-		TypeJuliaCode	[shape=oval, color=red2, label="TypeJuliaCode"];
-		TypeJuliaCode -> TypeData;
-		}
-		subgraph unaryopjuliacode{
-		UnaryOpJuliaCode	[shape=oval, color=red2, label="UnaryOpJuliaCode"];
-		UnaryOpJuliaCode -> OpData;
-		}
-		subgraph binaryopjuliacode{
-		BinaryOpJuliaCode	[shape=oval, color=red2, label="BinaryOpJuliaCode"];
-		BinaryOpJuliaCode -> OpData;
-		}
-		subgraph scopejuliacode{
-		ScopeJuliaCode	[shape=oval, color=red2, label="ScopeJuliaCode"];
-		ScopeJuliaCode -> ScopeData;
-		}
-		subgraph variablejuliacode{
-		VariableJuliaCode	[shape=oval, color=red2, label="VariableJuliaCode"];
-		VariableJuliaCode -> VarData;
-		}
-		subgraph valuejuliacode{
-		ValueJuliaCode	[shape=oval, color=red2, label="ValueJuliaCode"];
-		ValueJuliaCode -> ValData;
-		}
-		subgraph thunkjuliacode{
-		ThunkJuliaCode	[shape=oval, color=red2, label="ThunkJuliaCode"];
-		ThunkJuliaCode -> CommonThunkVS;
-		}
-		subgraph statementjuliacode{
-		StatementJuliaCode	[shape=oval, color=red2, label="StatementJuliaCode"];
-		StatementJuliaCode -> DocTerminator;
-		}
-		subgraph functionjuliacode{
-		FunctionJuliaCode	[shape=oval, color=red2, label="FunctionJuliaCode"];
-		FunctionJuliaCode -> FuncData;
-		}
-		subgraph visibilityjuliacode{
-		VisibilityJuliaCode	[shape=oval, color=red2, label="VisibilityJuliaCode"];
-		VisibilityJuliaCode -> Doc;
-		}
-		subgraph methodtypejuliacode{
-		MethodTypeJuliaCode	[shape=oval, color=red2, label="MethodTypeJuliaCode"];
-		MethodTypeJuliaCode -> TypeData;
-		}
-		subgraph parameterjuliacode{
-		ParameterJuliaCode	[shape=oval, color=red2, label="ParameterJuliaCode"];
-		ParameterJuliaCode -> ParamData;
-		}
-		subgraph methodjuliacode{
-		MethodJuliaCode	[shape=oval, color=red2, label="MethodJuliaCode"];
-		MethodJuliaCode -> MethodData;
-		}
-		subgraph modulejuliacode{
-		ModuleJuliaCode	[shape=oval, color=red2, label="ModuleJuliaCode"];
-		ModuleJuliaCode -> ModData;
-		}
-		subgraph blockcommentjuliacode{
-		BlockCommentJuliaCode	[shape=oval, color=red2, label="BlockCommentJuliaCode"];
-		BlockCommentJuliaCode -> Doc;
-		}
-	}
-	subgraph languagepolymorpich {
-		subgraph optionalspace{
-		OptionalSpace	[shape=oval, color=darkgreen, label="OptionalSpace"];
-		OptionalSpace -> Doc;
-		}
-	}
-	subgraph macros {
-	}
 	subgraph pytonrendererh {
 		subgraph pythoncodea{
 		PythonCodea	[shape=oval, color=darkgreen, label="PythonCodea"];
@@ -801,6 +695,279 @@ digraph alltypes {
 		BlockCommentSwiftCode -> Doc;
 		}
 	}
+	subgraph codeinfooo {
+		subgraph codeinfoooa{
+		CodeInfoOOa	[shape=oval, color=darkgreen, label="CodeInfoOOa"];
+		CodeInfoOOa -> a;
+		}
+		subgraph programcodeinfooo{
+		ProgramCodeInfoOO	[shape=oval, color=red2, label="ProgramCodeInfoOO"];
+		ProgramCodeInfoOO -> GOOLState;
+		}
+		subgraph filecodeinfooo{
+		FileCodeInfoOO	[shape=oval, color=red2, label="FileCodeInfoOO"];
+		}
+		subgraph permanencecodeinfooo{
+		PermanenceCodeInfoOO	[shape=oval, color=red2, label="PermanenceCodeInfoOO"];
+		}
+		subgraph bodycodeinfooo{
+		BodyCodeInfoOO	[shape=oval, color=red2, label="BodyCodeInfoOO"];
+		}
+		subgraph blockcodeinfooo{
+		BlockCodeInfoOO	[shape=oval, color=red2, label="BlockCodeInfoOO"];
+		}
+		subgraph typecodeinfooo{
+		TypeCodeInfoOO	[shape=oval, color=red2, label="TypeCodeInfoOO"];
+		TypeCodeInfoOO -> String;
+		}
+		subgraph scopecodeinfooo{
+		ScopeCodeInfoOO	[shape=oval, color=red2, label="ScopeCodeInfoOO"];
+		}
+		subgraph variablecodeinfooo{
+		VariableCodeInfoOO	[shape=oval, color=red2, label="VariableCodeInfoOO"];
+		}
+		subgraph valuecodeinfooo{
+		ValueCodeInfoOO	[shape=oval, color=red2, label="ValueCodeInfoOO"];
+		}
+		subgraph functioncodeinfooo{
+		FunctionCodeInfoOO	[shape=oval, color=red2, label="FunctionCodeInfoOO"];
+		}
+		subgraph thunkcodeinfooo{
+		ThunkCodeInfoOO	[shape=oval, color=red2, label="ThunkCodeInfoOO"];
+		}
+		subgraph statementcodeinfooo{
+		StatementCodeInfoOO	[shape=oval, color=red2, label="StatementCodeInfoOO"];
+		}
+		subgraph visibilitycodeinfooo{
+		VisibilityCodeInfoOO	[shape=oval, color=red2, label="VisibilityCodeInfoOO"];
+		VisibilityCodeInfoOO -> VisibilityTag;
+		}
+		subgraph parametercodeinfooo{
+		ParameterCodeInfoOO	[shape=oval, color=red2, label="ParameterCodeInfoOO"];
+		}
+		subgraph methodcodeinfooo{
+		MethodCodeInfoOO	[shape=oval, color=red2, label="MethodCodeInfoOO"];
+		}
+		subgraph statevarcodeinfooo{
+		StateVarCodeInfoOO	[shape=oval, color=red2, label="StateVarCodeInfoOO"];
+		}
+		subgraph classcodeinfooo{
+		ClassCodeInfoOO	[shape=oval, color=red2, label="ClassCodeInfoOO"];
+		}
+		subgraph modulecodeinfooo{
+		ModuleCodeInfoOO	[shape=oval, color=red2, label="ModuleCodeInfoOO"];
+		}
+	}
+	subgraph interfacegool {
+		subgraph gsprograma{
+		GSPrograma	[shape=oval, color=red2, label="GSPrograma"];
+		GSPrograma -> GSaPrograma;
+		}
+		subgraph sfilea{
+		SFilea	[shape=oval, color=red2, label="SFilea"];
+		SFilea -> FSaFilea;
+		}
+		subgraph fsmodulea{
+		FSModulea	[shape=oval, color=red2, label="FSModulea"];
+		FSModulea -> FSaModulea;
+		}
+		subgraph sclassa{
+		SClassa	[shape=oval, color=red2, label="SClassa"];
+		SClassa -> CSaClassa;
+		}
+		subgraph initializersr{
+		Initializersr	[shape=oval, color=red2, label="Initializersr"];
+		Initializersr -> SVariablerSValuer;
+		}
+		subgraph csstatevara{
+		CSStateVara	[shape=oval, color=red2, label="CSStateVara"];
+		CSStateVara -> CSaStateVara;
+		}
+	}
+	subgraph rendererclasesoos {
+		subgraph parentspec{
+		ParentSpec	[shape=oval, color=red2, label="ParentSpec"];
+		ParentSpec -> Doc;
+		}
+	}
+	subgraph abtractprocs {
+	}
+	subgraph juliarenderer {
+		subgraph juliacodea{
+		JuliaCodea	[shape=oval, color=darkgreen, label="JuliaCodea"];
+		JuliaCodea -> a;
+		}
+		subgraph programjuliacode{
+		ProgramJuliaCode	[shape=oval, color=red2, label="ProgramJuliaCode"];
+		ProgramJuliaCode -> ProgData;
+		}
+		subgraph filejuliacode{
+		FileJuliaCode	[shape=oval, color=red2, label="FileJuliaCode"];
+		FileJuliaCode -> FileData;
+		}
+		subgraph importjuliacode{
+		ImportJuliaCode	[shape=oval, color=red2, label="ImportJuliaCode"];
+		ImportJuliaCode -> Doc;
+		}
+		subgraph bodyjuliacode{
+		BodyJuliaCode	[shape=oval, color=red2, label="BodyJuliaCode"];
+		BodyJuliaCode -> Doc;
+		}
+		subgraph blockjuliacode{
+		BlockJuliaCode	[shape=oval, color=red2, label="BlockJuliaCode"];
+		BlockJuliaCode -> Doc;
+		}
+		subgraph typejuliacode{
+		TypeJuliaCode	[shape=oval, color=red2, label="TypeJuliaCode"];
+		TypeJuliaCode -> TypeData;
+		}
+		subgraph unaryopjuliacode{
+		UnaryOpJuliaCode	[shape=oval, color=red2, label="UnaryOpJuliaCode"];
+		UnaryOpJuliaCode -> OpData;
+		}
+		subgraph binaryopjuliacode{
+		BinaryOpJuliaCode	[shape=oval, color=red2, label="BinaryOpJuliaCode"];
+		BinaryOpJuliaCode -> OpData;
+		}
+		subgraph scopejuliacode{
+		ScopeJuliaCode	[shape=oval, color=red2, label="ScopeJuliaCode"];
+		ScopeJuliaCode -> ScopeData;
+		}
+		subgraph variablejuliacode{
+		VariableJuliaCode	[shape=oval, color=red2, label="VariableJuliaCode"];
+		VariableJuliaCode -> VarData;
+		}
+		subgraph valuejuliacode{
+		ValueJuliaCode	[shape=oval, color=red2, label="ValueJuliaCode"];
+		ValueJuliaCode -> ValData;
+		}
+		subgraph thunkjuliacode{
+		ThunkJuliaCode	[shape=oval, color=red2, label="ThunkJuliaCode"];
+		ThunkJuliaCode -> CommonThunkVS;
+		}
+		subgraph statementjuliacode{
+		StatementJuliaCode	[shape=oval, color=red2, label="StatementJuliaCode"];
+		StatementJuliaCode -> DocTerminator;
+		}
+		subgraph functionjuliacode{
+		FunctionJuliaCode	[shape=oval, color=red2, label="FunctionJuliaCode"];
+		FunctionJuliaCode -> FuncData;
+		}
+		subgraph visibilityjuliacode{
+		VisibilityJuliaCode	[shape=oval, color=red2, label="VisibilityJuliaCode"];
+		VisibilityJuliaCode -> Doc;
+		}
+		subgraph methodtypejuliacode{
+		MethodTypeJuliaCode	[shape=oval, color=red2, label="MethodTypeJuliaCode"];
+		MethodTypeJuliaCode -> TypeData;
+		}
+		subgraph parameterjuliacode{
+		ParameterJuliaCode	[shape=oval, color=red2, label="ParameterJuliaCode"];
+		ParameterJuliaCode -> ParamData;
+		}
+		subgraph methodjuliacode{
+		MethodJuliaCode	[shape=oval, color=red2, label="MethodJuliaCode"];
+		MethodJuliaCode -> MethodData;
+		}
+		subgraph modulejuliacode{
+		ModuleJuliaCode	[shape=oval, color=red2, label="ModuleJuliaCode"];
+		ModuleJuliaCode -> ModData;
+		}
+		subgraph blockcommentjuliacode{
+		BlockCommentJuliaCode	[shape=oval, color=red2, label="BlockCommentJuliaCode"];
+		BlockCommentJuliaCode -> Doc;
+		}
+	}
+	subgraph codeinfoproc {
+		subgraph codeinfoproca{
+		CodeInfoProca	[shape=oval, color=darkgreen, label="CodeInfoProca"];
+		CodeInfoProca -> a;
+		}
+		subgraph programcodeinfoproc{
+		ProgramCodeInfoProc	[shape=oval, color=red2, label="ProgramCodeInfoProc"];
+		ProgramCodeInfoProc -> GOOLState;
+		}
+		subgraph filecodeinfoproc{
+		FileCodeInfoProc	[shape=oval, color=red2, label="FileCodeInfoProc"];
+		}
+		subgraph bodycodeinfoproc{
+		BodyCodeInfoProc	[shape=oval, color=red2, label="BodyCodeInfoProc"];
+		}
+		subgraph blockcodeinfoproc{
+		BlockCodeInfoProc	[shape=oval, color=red2, label="BlockCodeInfoProc"];
+		}
+		subgraph typecodeinfoproc{
+		TypeCodeInfoProc	[shape=oval, color=red2, label="TypeCodeInfoProc"];
+		TypeCodeInfoProc -> String;
+		}
+		subgraph scopecodeinfoproc{
+		ScopeCodeInfoProc	[shape=oval, color=red2, label="ScopeCodeInfoProc"];
+		}
+		subgraph variablecodeinfoproc{
+		VariableCodeInfoProc	[shape=oval, color=red2, label="VariableCodeInfoProc"];
+		}
+		subgraph valuecodeinfoproc{
+		ValueCodeInfoProc	[shape=oval, color=red2, label="ValueCodeInfoProc"];
+		}
+		subgraph functioncodeinfoproc{
+		FunctionCodeInfoProc	[shape=oval, color=red2, label="FunctionCodeInfoProc"];
+		}
+		subgraph thunkcodeinfoproc{
+		ThunkCodeInfoProc	[shape=oval, color=red2, label="ThunkCodeInfoProc"];
+		}
+		subgraph statementcodeinfoproc{
+		StatementCodeInfoProc	[shape=oval, color=red2, label="StatementCodeInfoProc"];
+		}
+		subgraph visibilitycodeinfoproc{
+		VisibilityCodeInfoProc	[shape=oval, color=red2, label="VisibilityCodeInfoProc"];
+		VisibilityCodeInfoProc -> VisibilityTag;
+		}
+		subgraph parametercodeinfoproc{
+		ParameterCodeInfoProc	[shape=oval, color=red2, label="ParameterCodeInfoProc"];
+		}
+		subgraph methodcodeinfoproc{
+		MethodCodeInfoProc	[shape=oval, color=red2, label="MethodCodeInfoProc"];
+		}
+		subgraph modulecodeinfoproc{
+		ModuleCodeInfoProc	[shape=oval, color=red2, label="ModuleCodeInfoProc"];
+		}
+	}
+	subgraph interfaceproc {
+		subgraph gsprograma{
+		GSPrograma	[shape=oval, color=red2, label="GSPrograma"];
+		GSPrograma -> GSaPrograma;
+		}
+		subgraph sfilea{
+		SFilea	[shape=oval, color=red2, label="SFilea"];
+		SFilea -> FSaFilea;
+		}
+		subgraph fsmodulea{
+		FSModulea	[shape=oval, color=red2, label="FSModulea"];
+		FSModulea -> FSaModulea;
+		}
+	}
+	subgraph rendererclasesprocs {
+	}
+	subgraph clike {
+	}
+	subgraph common {
+	}
+	subgraph commonpeudooos {
+	}
+	subgraph contructorss {
+		subgraph vsopr{
+		VSOpr	[shape=oval, color=red2, label="VSOpr"];
+		VSOpr -> VSrOpData;
+		}
+	}
+	subgraph languagepolymorpich {
+		subgraph optionalspace{
+		OptionalSpace	[shape=oval, color=darkgreen, label="OptionalSpace"];
+		OptionalSpace -> Doc;
+		}
+	}
+	subgraph macros {
+	}
 	subgraph ast {
 		subgraph binddata{
 		BindData	[shape=oval, color=cyan3, label="BindData"];
@@ -902,123 +1069,6 @@ digraph alltypes {
 		ExceptionType -> String;
 		}
 	}
-	subgraph codeinfooo {
-		subgraph codeinfoooa{
-		CodeInfoOOa	[shape=oval, color=darkgreen, label="CodeInfoOOa"];
-		CodeInfoOOa -> a;
-		}
-		subgraph programcodeinfooo{
-		ProgramCodeInfoOO	[shape=oval, color=red2, label="ProgramCodeInfoOO"];
-		ProgramCodeInfoOO -> GOOLState;
-		}
-		subgraph filecodeinfooo{
-		FileCodeInfoOO	[shape=oval, color=red2, label="FileCodeInfoOO"];
-		}
-		subgraph permanencecodeinfooo{
-		PermanenceCodeInfoOO	[shape=oval, color=red2, label="PermanenceCodeInfoOO"];
-		}
-		subgraph bodycodeinfooo{
-		BodyCodeInfoOO	[shape=oval, color=red2, label="BodyCodeInfoOO"];
-		}
-		subgraph blockcodeinfooo{
-		BlockCodeInfoOO	[shape=oval, color=red2, label="BlockCodeInfoOO"];
-		}
-		subgraph typecodeinfooo{
-		TypeCodeInfoOO	[shape=oval, color=red2, label="TypeCodeInfoOO"];
-		TypeCodeInfoOO -> String;
-		}
-		subgraph scopecodeinfooo{
-		ScopeCodeInfoOO	[shape=oval, color=red2, label="ScopeCodeInfoOO"];
-		}
-		subgraph variablecodeinfooo{
-		VariableCodeInfoOO	[shape=oval, color=red2, label="VariableCodeInfoOO"];
-		}
-		subgraph valuecodeinfooo{
-		ValueCodeInfoOO	[shape=oval, color=red2, label="ValueCodeInfoOO"];
-		}
-		subgraph functioncodeinfooo{
-		FunctionCodeInfoOO	[shape=oval, color=red2, label="FunctionCodeInfoOO"];
-		}
-		subgraph thunkcodeinfooo{
-		ThunkCodeInfoOO	[shape=oval, color=red2, label="ThunkCodeInfoOO"];
-		}
-		subgraph statementcodeinfooo{
-		StatementCodeInfoOO	[shape=oval, color=red2, label="StatementCodeInfoOO"];
-		}
-		subgraph visibilitycodeinfooo{
-		VisibilityCodeInfoOO	[shape=oval, color=red2, label="VisibilityCodeInfoOO"];
-		VisibilityCodeInfoOO -> VisibilityTag;
-		}
-		subgraph parametercodeinfooo{
-		ParameterCodeInfoOO	[shape=oval, color=red2, label="ParameterCodeInfoOO"];
-		}
-		subgraph methodcodeinfooo{
-		MethodCodeInfoOO	[shape=oval, color=red2, label="MethodCodeInfoOO"];
-		}
-		subgraph statevarcodeinfooo{
-		StateVarCodeInfoOO	[shape=oval, color=red2, label="StateVarCodeInfoOO"];
-		}
-		subgraph classcodeinfooo{
-		ClassCodeInfoOO	[shape=oval, color=red2, label="ClassCodeInfoOO"];
-		}
-		subgraph modulecodeinfooo{
-		ModuleCodeInfoOO	[shape=oval, color=red2, label="ModuleCodeInfoOO"];
-		}
-	}
-	subgraph codeinfoproc {
-		subgraph codeinfoproca{
-		CodeInfoProca	[shape=oval, color=darkgreen, label="CodeInfoProca"];
-		CodeInfoProca -> a;
-		}
-		subgraph programcodeinfoproc{
-		ProgramCodeInfoProc	[shape=oval, color=red2, label="ProgramCodeInfoProc"];
-		ProgramCodeInfoProc -> GOOLState;
-		}
-		subgraph filecodeinfoproc{
-		FileCodeInfoProc	[shape=oval, color=red2, label="FileCodeInfoProc"];
-		}
-		subgraph bodycodeinfoproc{
-		BodyCodeInfoProc	[shape=oval, color=red2, label="BodyCodeInfoProc"];
-		}
-		subgraph blockcodeinfoproc{
-		BlockCodeInfoProc	[shape=oval, color=red2, label="BlockCodeInfoProc"];
-		}
-		subgraph typecodeinfoproc{
-		TypeCodeInfoProc	[shape=oval, color=red2, label="TypeCodeInfoProc"];
-		TypeCodeInfoProc -> String;
-		}
-		subgraph scopecodeinfoproc{
-		ScopeCodeInfoProc	[shape=oval, color=red2, label="ScopeCodeInfoProc"];
-		}
-		subgraph variablecodeinfoproc{
-		VariableCodeInfoProc	[shape=oval, color=red2, label="VariableCodeInfoProc"];
-		}
-		subgraph valuecodeinfoproc{
-		ValueCodeInfoProc	[shape=oval, color=red2, label="ValueCodeInfoProc"];
-		}
-		subgraph functioncodeinfoproc{
-		FunctionCodeInfoProc	[shape=oval, color=red2, label="FunctionCodeInfoProc"];
-		}
-		subgraph thunkcodeinfoproc{
-		ThunkCodeInfoProc	[shape=oval, color=red2, label="ThunkCodeInfoProc"];
-		}
-		subgraph statementcodeinfoproc{
-		StatementCodeInfoProc	[shape=oval, color=red2, label="StatementCodeInfoProc"];
-		}
-		subgraph visibilitycodeinfoproc{
-		VisibilityCodeInfoProc	[shape=oval, color=red2, label="VisibilityCodeInfoProc"];
-		VisibilityCodeInfoProc -> VisibilityTag;
-		}
-		subgraph parametercodeinfoproc{
-		ParameterCodeInfoProc	[shape=oval, color=red2, label="ParameterCodeInfoProc"];
-		}
-		subgraph methodcodeinfoproc{
-		MethodCodeInfoProc	[shape=oval, color=red2, label="MethodCodeInfoProc"];
-		}
-		subgraph modulecodeinfoproc{
-		ModuleCodeInfoProc	[shape=oval, color=red2, label="ModuleCodeInfoProc"];
-		}
-	}
 	subgraph codetype {
 		subgraph codetype{
 		CodeType	[shape=oval, color=darkviolet, label="CodeType"];
@@ -1112,46 +1162,6 @@ digraph alltypes {
 		DocInOutFuncr -> StringStringSVariabler;
 		}
 	}
-	subgraph interfacegool {
-		subgraph gsprograma{
-		GSPrograma	[shape=oval, color=red2, label="GSPrograma"];
-		GSPrograma -> GSaPrograma;
-		}
-		subgraph sfilea{
-		SFilea	[shape=oval, color=red2, label="SFilea"];
-		SFilea -> FSaFilea;
-		}
-		subgraph fsmodulea{
-		FSModulea	[shape=oval, color=red2, label="FSModulea"];
-		FSModulea -> FSaModulea;
-		}
-		subgraph sclassa{
-		SClassa	[shape=oval, color=red2, label="SClassa"];
-		SClassa -> CSaClassa;
-		}
-		subgraph initializersr{
-		Initializersr	[shape=oval, color=red2, label="Initializersr"];
-		Initializersr -> SVariablerSValuer;
-		}
-		subgraph csstatevara{
-		CSStateVara	[shape=oval, color=red2, label="CSStateVara"];
-		CSStateVara -> CSaStateVara;
-		}
-	}
-	subgraph interfaceproc {
-		subgraph gsprograma{
-		GSPrograma	[shape=oval, color=red2, label="GSPrograma"];
-		GSPrograma -> GSaPrograma;
-		}
-		subgraph sfilea{
-		SFilea	[shape=oval, color=red2, label="SFilea"];
-		SFilea -> FSaFilea;
-		}
-		subgraph fsmodulea{
-		FSModulea	[shape=oval, color=red2, label="FSModulea"];
-		FSModulea -> FSaModulea;
-		}
-	}
 	subgraph languagerenderer {
 		subgraph funcdocrenderer{
 		FuncDocRenderer	[shape=oval, color=red2, label="FuncDocRenderer"];
@@ -1179,14 +1189,6 @@ digraph alltypes {
 		MSMthdTypea	[shape=oval, color=red2, label="MSMthdTypea"];
 		MSMthdTypea -> MSaMethodTypea;
 		}
-	}
-	subgraph rendererclasesoos {
-		subgraph parentspec{
-		ParentSpec	[shape=oval, color=red2, label="ParentSpec"];
-		ParentSpec -> Doc;
-		}
-	}
-	subgraph rendererclasesprocs {
 	}
 	subgraph state {
 		subgraph goolstate{

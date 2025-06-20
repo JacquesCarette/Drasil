@@ -1,0 +1,383 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | Implementations defined here are valid in some, but not all, language renderers</span></span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.Shared.LanguageRenderer.Common</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-3"></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Shared.CodeType.html"><span class="hs-identifier">Drasil.Shared.CodeType</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Shared.CodeType.html#CodeType"><span class="hs-identifier">CodeType</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html"><span class="hs-identifier">Drasil.Shared.InterfaceCommon</span></a></span><span> </span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Shared.RendererClassesCommon.html"><span class="hs-identifier">Drasil.Shared.RendererClassesCommon</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Shared.RendererClassesCommon.html#scopeData"><span class="hs-identifier">scopeData</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Shared.RendererClassesCommon.html#CommonRenderSym"><span class="hs-identifier">CommonRenderSym</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Shared.RendererClassesCommon.html#typeFromData"><span class="hs-identifier">typeFromData</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Shared.RendererClassesCommon.html#call"><span class="hs-identifier">call</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Shared.RendererClassesCommon.html#RenderFunction"><span class="hs-identifier">RenderFunction</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Shared.RendererClassesCommon.html#funcFromData"><span class="hs-identifier">funcFromData</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Monad</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">join</span></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Shared.LanguageRenderer.html"><span class="hs-identifier">Drasil.Shared.LanguageRenderer</span></a></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Drasil.Shared.LanguageRenderer.html"><span class="hs-identifier">Drasil.Shared.LanguageRenderer</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">R</span></span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Drasil.Shared.RendererClassesCommon.html"><span class="hs-identifier">Drasil.Shared.RendererClassesCommon</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">RC</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Shared.RendererClassesCommon.html#value"><span class="hs-identifier">value</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Shared.RendererClassesCommon.html#functionType"><span class="hs-identifier">functionType</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Shared.RendererClassesCommon.html#function"><span class="hs-identifier">function</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Shared.LanguageRenderer.Constructors.html"><span class="hs-identifier">Drasil.Shared.LanguageRenderer.Constructors</span></a></span><span> </span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Prelude</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">print</span></span><span class="hs-special">,</span><span class="annot"><span class="hs-identifier">pi</span></span><span class="hs-special">,</span><span class="annot"><span class="hs-operator">(&lt;&gt;)</span></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Shared.Helpers.html"><span class="hs-identifier">Drasil.Shared.Helpers</span></a></span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.PrettyPrint.HughesPJ</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">text</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">empty</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Doc</span></span><span class="hs-special">)</span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens.Zoom</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">zoom</span></span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Shared.State.html"><span class="hs-identifier">Drasil.Shared.State</span></a></span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html"><span class="hs-identifier">Drasil.Shared.InterfaceCommon</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">IC</span></span><span>
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Monad.State</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">modify</span></span><span class="hs-special">)</span><span>
+</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Drasil.Shared.RendererClassesCommon.html"><span class="hs-identifier">Drasil.Shared.RendererClassesCommon</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span> </span><span>
+</span><span id="line-20"></span><span>
+</span><span id="line-21"></span><span>
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span class="hs-comment">-- Swift and Julia --</span><span>
+</span><span id="line-24"></span><span>
+</span><span id="line-25"></span><span class="annot"><a href="Drasil.Shared.LanguageRenderer.Common.html#boolRender"><span class="hs-identifier hs-type">boolRender</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-26"></span><span id="boolRender"><span class="annot"><span class="annottext">boolRender :: String
+</span><a href="Drasil.Shared.LanguageRenderer.Common.html#boolRender"><span class="hs-identifier hs-var hs-var">boolRender</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Bool&quot;</span></span><span>
+</span><span id="line-27"></span><span>
+</span><span id="line-28"></span><span id="local-6989586621679386927"><span class="annot"><a href="Drasil.Shared.LanguageRenderer.Common.html#bool"><span class="hs-identifier hs-type">bool</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Shared.RendererClassesCommon.html#CommonRenderSym"><span class="hs-identifier hs-type">CommonRenderSym</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386927"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#VSType"><span class="hs-identifier hs-type">VSType</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386927"><span class="hs-identifier hs-type">r</span></a></span></span><span>
+</span><span id="line-29"></span><span id="bool"><span class="annot"><span class="annottext">bool :: forall (r :: * -&gt; *). CommonRenderSym r =&gt; VSType r
+</span><a href="Drasil.Shared.LanguageRenderer.Common.html#bool"><span class="hs-identifier hs-var hs-var">bool</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeType
+-&gt; String -&gt; Doc -&gt; StateT ValueState Identity (r (Type r))
+forall (r :: * -&gt; *).
+RenderType r =&gt;
+CodeType -&gt; String -&gt; Doc -&gt; VSType r
+</span><a href="Drasil.Shared.RendererClassesCommon.html#typeFromData"><span class="hs-identifier hs-var">typeFromData</span></a></span><span> </span><span class="annot"><span class="annottext">CodeType
+</span><a href="Drasil.Shared.CodeType.html#Boolean"><span class="hs-identifier hs-var">Boolean</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.Shared.LanguageRenderer.Common.html#boolRender"><span class="hs-identifier hs-var">boolRender</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.Shared.LanguageRenderer.Common.html#boolRender"><span class="hs-identifier hs-var">boolRender</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-30"></span><span>
+</span><span id="line-31"></span><span>
+</span><span id="line-32"></span><span class="hs-comment">-- Python, Java, C#, and Julia --</span><span>
+</span><span id="line-33"></span><span>
+</span><span id="line-34"></span><span id="local-6989586621679386940"><span class="annot"><a href="Drasil.Shared.LanguageRenderer.Common.html#extVar"><span class="hs-identifier hs-type">extVar</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Shared.RendererClassesCommon.html#CommonRenderSym"><span class="hs-identifier hs-type">CommonRenderSym</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386940"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#Label"><span class="hs-identifier hs-type">Label</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#Label"><span class="hs-identifier hs-type">Label</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#VSType"><span class="hs-identifier hs-type">VSType</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386940"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#SVariable"><span class="hs-identifier hs-type">SVariable</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386940"><span class="hs-identifier hs-type">r</span></a></span></span><span>
+</span><span id="line-35"></span><span id="extVar"><span class="annot"><span class="annottext">extVar :: forall (r :: * -&gt; *).
+CommonRenderSym r =&gt;
+String -&gt; String -&gt; VSType r -&gt; SVariable r
+</span><a href="Drasil.Shared.LanguageRenderer.Common.html#extVar"><span class="hs-identifier hs-var hs-var">extVar</span></a></span></span><span> </span><span id="local-6989586621679387069"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679387069"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679387070"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679387070"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679387071"><span class="annot"><span class="annottext">VSType r
+</span><a href="#local-6989586621679387071"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+-&gt; VSType r -&gt; Doc -&gt; StateT ValueState Identity (r (Variable r))
+forall (r :: * -&gt; *).
+CommonRenderSym r =&gt;
+String -&gt; VSType r -&gt; Doc -&gt; SVariable r
+</span><a href="Drasil.Shared.LanguageRenderer.Constructors.html#mkStateVar"><span class="hs-identifier hs-var">mkStateVar</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679387069"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="Drasil.Shared.LanguageRenderer.html#access"><span class="hs-operator hs-var">`access`</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679387070"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">VSType r
+</span><a href="#local-6989586621679387071"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; String -&gt; Doc
+</span><a href="Drasil.Shared.LanguageRenderer.html#extVar"><span class="hs-identifier hs-var">R.extVar</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679387069"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679387070"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-36"></span><span>
+</span><span id="line-37"></span><span class="hs-comment">-- Python, Java, C++, and Julia --</span><span>
+</span><span id="line-38"></span><span>
+</span><span id="line-39"></span><span id="local-6989586621679386945"><span class="annot"><a href="Drasil.Shared.LanguageRenderer.Common.html#funcType"><span class="hs-identifier hs-type">funcType</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Shared.RendererClassesCommon.html#CommonRenderSym"><span class="hs-identifier hs-type">CommonRenderSym</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386945"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#VSType"><span class="hs-identifier hs-type">VSType</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386945"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#VSType"><span class="hs-identifier hs-type">VSType</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386945"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#VSType"><span class="hs-identifier hs-type">VSType</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386945"><span class="hs-identifier hs-type">r</span></a></span></span><span>
+</span><span id="line-40"></span><span id="funcType"><span class="annot"><span class="annottext">funcType :: forall (r :: * -&gt; *).
+CommonRenderSym r =&gt;
+[VSType r] -&gt; VSType r -&gt; VSType r
+</span><a href="Drasil.Shared.LanguageRenderer.Common.html#funcType"><span class="hs-identifier hs-var hs-var">funcType</span></a></span></span><span> </span><span id="local-6989586621679387091"><span class="annot"><span class="annottext">[VSType r]
+</span><a href="#local-6989586621679387091"><span class="hs-identifier hs-var">ps'</span></a></span></span><span> </span><span id="local-6989586621679387092"><span class="annot"><span class="annottext">VSType r
+</span><a href="#local-6989586621679387092"><span class="hs-identifier hs-var">r'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>  </span><span class="hs-keyword">do</span><span>
+</span><span id="line-41"></span><span>  </span><span id="local-6989586621679387093"><span class="annot"><span class="annottext">[r (Type r)]
+</span><a href="#local-6989586621679387093"><span class="hs-identifier hs-var">ps</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">[VSType r] -&gt; StateT ValueState Identity [r (Type r)]
+forall (t :: * -&gt; *) (m :: * -&gt; *) a.
+(Traversable t, Monad m) =&gt;
+t (m a) -&gt; m (t a)
+forall (m :: * -&gt; *) a. Monad m =&gt; [m a] -&gt; m [a]
+</span><span class="hs-identifier hs-var">sequence</span></span><span> </span><span class="annot"><span class="annottext">[VSType r]
+</span><a href="#local-6989586621679387091"><span class="hs-identifier hs-var">ps'</span></a></span><span>
+</span><span id="line-42"></span><span>  </span><span id="local-6989586621679387095"><span class="annot"><span class="annottext">r (Type r)
+</span><a href="#local-6989586621679387095"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">VSType r
+</span><a href="#local-6989586621679387092"><span class="hs-identifier hs-var">r'</span></a></span><span>
+</span><span id="line-43"></span><span>  </span><span class="annot"><span class="annottext">CodeType -&gt; String -&gt; Doc -&gt; VSType r
+forall (r :: * -&gt; *).
+RenderType r =&gt;
+CodeType -&gt; String -&gt; Doc -&gt; VSType r
+</span><a href="Drasil.Shared.RendererClassesCommon.html#typeFromData"><span class="hs-identifier hs-var">typeFromData</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeType] -&gt; CodeType -&gt; CodeType
+</span><a href="Drasil.Shared.CodeType.html#Func"><span class="hs-identifier hs-var">Func</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(r (Type r) -&gt; CodeType) -&gt; [r (Type r)] -&gt; [CodeType]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">r (Type r) -&gt; CodeType
+forall (r :: * -&gt; *). TypeElim r =&gt; r (Type r) -&gt; CodeType
+</span><a href="Drasil.Shared.InterfaceCommon.html#getType"><span class="hs-identifier hs-var">getType</span></a></span><span> </span><span class="annot"><span class="annottext">[r (Type r)]
+</span><a href="#local-6989586621679387093"><span class="hs-identifier hs-var">ps</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">r (Type r) -&gt; CodeType
+forall (r :: * -&gt; *). TypeElim r =&gt; r (Type r) -&gt; CodeType
+</span><a href="Drasil.Shared.InterfaceCommon.html#getType"><span class="hs-identifier hs-var">getType</span></a></span><span> </span><span class="annot"><span class="annottext">r (Type r)
+</span><a href="#local-6989586621679387095"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;&quot;</span></span><span> </span><span class="annot"><span class="annottext">Doc
+</span><span class="hs-identifier hs-var">empty</span></span><span>
+</span><span id="line-44"></span><span>
+</span><span id="line-45"></span><span class="hs-comment">-- Python, Java, C#, Swift, and Julia --</span><span>
+</span><span id="line-46"></span><span id="local-6989586621679386956"><span class="annot"><a href="Drasil.Shared.LanguageRenderer.Common.html#extFuncAppMixedArgs"><span class="hs-identifier hs-type">extFuncAppMixedArgs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Shared.RendererClassesCommon.html#CommonRenderSym"><span class="hs-identifier hs-type">CommonRenderSym</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386956"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#Library"><span class="hs-identifier hs-type">Library</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#MixedCall"><span class="hs-identifier hs-type">MixedCall</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386956"><span class="hs-identifier hs-type">r</span></a></span></span><span>
+</span><span id="line-47"></span><span id="extFuncAppMixedArgs"><span class="annot"><span class="annottext">extFuncAppMixedArgs :: forall (r :: * -&gt; *). CommonRenderSym r =&gt; String -&gt; MixedCall r
+</span><a href="Drasil.Shared.LanguageRenderer.Common.html#extFuncAppMixedArgs"><span class="hs-identifier hs-var hs-var">extFuncAppMixedArgs</span></a></span></span><span> </span><span id="local-6989586621679387104"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679387104"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe String
+-&gt; Maybe Doc
+-&gt; String
+-&gt; StateT ValueState Identity (r (Type r))
+-&gt; [StateT ValueState Identity (r (Value r))]
+-&gt; [(StateT ValueState Identity (r (Variable r)),
+     StateT ValueState Identity (r (Value r)))]
+-&gt; StateT ValueState Identity (r (Value r))
+forall (r :: * -&gt; *).
+RenderValue r =&gt;
+Maybe String -&gt; Maybe Doc -&gt; MixedCall r
+</span><a href="Drasil.Shared.RendererClassesCommon.html#call"><span class="hs-identifier hs-var">call</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Maybe String
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679387104"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe Doc
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-48"></span><span>
+</span><span id="line-49"></span><span class="hs-comment">-- Python, C#, Swift, and Julia --</span><span>
+</span><span id="line-50"></span><span>
+</span><span id="line-51"></span><span id="local-6989586621679386963"><span class="annot"><a href="Drasil.Shared.LanguageRenderer.Common.html#listAccessFunc"><span class="hs-identifier hs-type">listAccessFunc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Shared.RendererClassesCommon.html#CommonRenderSym"><span class="hs-identifier hs-type">CommonRenderSym</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386963"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#VSType"><span class="hs-identifier hs-type">VSType</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386963"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#SValue"><span class="hs-identifier hs-type">SValue</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386963"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#VSFunction"><span class="hs-identifier hs-type">VSFunction</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386963"><span class="hs-identifier hs-type">r</span></a></span></span><span>
+</span><span id="line-52"></span><span id="listAccessFunc"><span class="annot"><span class="annottext">listAccessFunc :: forall (r :: * -&gt; *).
+CommonRenderSym r =&gt;
+VSType r -&gt; SValue r -&gt; VSFunction r
+</span><a href="Drasil.Shared.LanguageRenderer.Common.html#listAccessFunc"><span class="hs-identifier hs-var hs-var">listAccessFunc</span></a></span></span><span> </span><span id="local-6989586621679387114"><span class="annot"><span class="annottext">VSType r
+</span><a href="#local-6989586621679387114"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679387115"><span class="annot"><span class="annottext">SValue r
+</span><a href="#local-6989586621679387115"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SValue r -&gt; SValue r
+forall (r :: * -&gt; *). CommonRenderSym r =&gt; SValue r -&gt; SValue r
+</span><a href="Drasil.Shared.LanguageRenderer.html#intValue"><span class="hs-identifier hs-var">intValue</span></a></span><span> </span><span class="annot"><span class="annottext">SValue r
+</span><a href="#local-6989586621679387115"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="annot"><span class="annottext">SValue r
+-&gt; (r (Value r) -&gt; StateT ValueState Identity (r (Function r)))
+-&gt; StateT ValueState Identity (r (Function r))
+forall a b.
+StateT ValueState Identity a
+-&gt; (a -&gt; StateT ValueState Identity b)
+-&gt; StateT ValueState Identity b
+forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
+</span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Doc -&gt; VSType r -&gt; StateT ValueState Identity (r (Function r))
+forall (r :: * -&gt; *).
+RenderFunction r =&gt;
+Doc -&gt; VSType r -&gt; VSFunction r
+</span><a href="Drasil.Shared.RendererClassesCommon.html#funcFromData"><span class="hs-operator hs-var">`funcFromData`</span></a></span><span> </span><span class="annot"><span class="annottext">VSType r
+</span><a href="#local-6989586621679387114"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; StateT ValueState Identity (r (Function r)))
+-&gt; (r (Value r) -&gt; Doc)
+-&gt; r (Value r)
+-&gt; StateT ValueState Identity (r (Function r))
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">r (Value r) -&gt; Doc
+forall (r :: * -&gt; *). CommonRenderSym r =&gt; r (Value r) -&gt; Doc
+</span><a href="Drasil.Shared.LanguageRenderer.html#listAccessFunc"><span class="hs-identifier hs-var">R.listAccessFunc</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-53"></span><span>
+</span><span id="line-54"></span><span id="local-6989586621679386978"><span class="annot"><a href="Drasil.Shared.LanguageRenderer.Common.html#listSetFunc"><span class="hs-identifier hs-type">listSetFunc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Shared.RendererClassesCommon.html#CommonRenderSym"><span class="hs-identifier hs-type">CommonRenderSym</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386978"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#SValue"><span class="hs-identifier hs-type">SValue</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386978"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#SValue"><span class="hs-identifier hs-type">SValue</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386978"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><span id="line-55"></span><span>  </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#SValue"><span class="hs-identifier hs-type">SValue</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386978"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#VSFunction"><span class="hs-identifier hs-type">VSFunction</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386978"><span class="hs-identifier hs-type">r</span></a></span></span><span>
+</span><span id="line-56"></span><span id="listSetFunc"><span class="annot"><span class="annottext">listSetFunc :: forall (r :: * -&gt; *).
+CommonRenderSym r =&gt;
+(Doc -&gt; Doc -&gt; Doc)
+-&gt; SValue r -&gt; SValue r -&gt; SValue r -&gt; VSFunction r
+</span><a href="Drasil.Shared.LanguageRenderer.Common.html#listSetFunc"><span class="hs-identifier hs-var hs-var">listSetFunc</span></a></span></span><span> </span><span id="local-6989586621679387135"><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
+</span><a href="#local-6989586621679387135"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679387136"><span class="annot"><span class="annottext">SValue r
+</span><a href="#local-6989586621679387136"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span id="local-6989586621679387137"><span class="annot"><span class="annottext">SValue r
+</span><a href="#local-6989586621679387137"><span class="hs-identifier hs-var">idx</span></a></span></span><span> </span><span id="local-6989586621679387138"><span class="annot"><span class="annottext">SValue r
+</span><a href="#local-6989586621679387138"><span class="hs-identifier hs-var">setVal</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">StateT
+  ValueState Identity (StateT ValueState Identity (r (Function r)))
+-&gt; StateT ValueState Identity (r (Function r))
+forall (m :: * -&gt; *) a. Monad m =&gt; m (m a) -&gt; m a
+</span><span class="hs-identifier hs-var">join</span></span><span> </span><span class="annot"><span class="annottext">(StateT
+   ValueState Identity (StateT ValueState Identity (r (Function r)))
+ -&gt; StateT ValueState Identity (r (Function r)))
+-&gt; StateT
+     ValueState Identity (StateT ValueState Identity (r (Function r)))
+-&gt; StateT ValueState Identity (r (Function r))
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(r (Value r)
+ -&gt; r (Value r) -&gt; StateT ValueState Identity (r (Function r)))
+-&gt; SValue r
+-&gt; SValue r
+-&gt; StateT
+     ValueState Identity (StateT ValueState Identity (r (Function r)))
+forall a b c s.
+(a -&gt; b -&gt; c) -&gt; State s a -&gt; State s b -&gt; State s c
+</span><a href="Drasil.Shared.Helpers.html#on2StateValues"><span class="hs-identifier hs-var">on2StateValues</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679387140"><span class="annot"><span class="annottext">r (Value r)
+</span><a href="#local-6989586621679387140"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679387141"><span class="annot"><span class="annottext">r (Value r)
+</span><a href="#local-6989586621679387141"><span class="hs-identifier hs-var">toVal</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; VSType r -&gt; StateT ValueState Identity (r (Function r))
+forall (r :: * -&gt; *).
+RenderFunction r =&gt;
+Doc -&gt; VSType r -&gt; VSFunction r
+</span><a href="Drasil.Shared.RendererClassesCommon.html#funcFromData"><span class="hs-identifier hs-var">funcFromData</span></a></span><span>
+</span><span id="line-57"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
+</span><a href="#local-6989586621679387135"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">r (Value r) -&gt; Doc
+forall (r :: * -&gt; *). ValueElim r =&gt; r (Value r) -&gt; Doc
+</span><a href="Drasil.Shared.RendererClassesCommon.html#value"><span class="hs-identifier hs-var">RC.value</span></a></span><span> </span><span class="annot"><span class="annottext">r (Value r)
+</span><a href="#local-6989586621679387140"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">r (Value r) -&gt; Doc
+forall (r :: * -&gt; *). ValueElim r =&gt; r (Value r) -&gt; Doc
+</span><a href="Drasil.Shared.RendererClassesCommon.html#value"><span class="hs-identifier hs-var">RC.value</span></a></span><span> </span><span class="annot"><span class="annottext">r (Value r)
+</span><a href="#local-6989586621679387141"><span class="hs-identifier hs-var">toVal</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(r (Value r) -&gt; r (Type r)) -&gt; SValue r -&gt; VSType r
+forall a b s. (a -&gt; b) -&gt; State s a -&gt; State s b
+</span><a href="Drasil.Shared.Helpers.html#onStateValue"><span class="hs-identifier hs-var">onStateValue</span></a></span><span> </span><span class="annot"><span class="annottext">r (Value r) -&gt; r (Type r)
+forall (r :: * -&gt; *). ValueSym r =&gt; r (Value r) -&gt; r (Type r)
+</span><a href="Drasil.Shared.InterfaceCommon.html#valueType"><span class="hs-identifier hs-var">valueType</span></a></span><span> </span><span class="annot"><span class="annottext">SValue r
+</span><a href="#local-6989586621679387136"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SValue r -&gt; SValue r
+forall (r :: * -&gt; *). CommonRenderSym r =&gt; SValue r -&gt; SValue r
+</span><a href="Drasil.Shared.LanguageRenderer.html#intValue"><span class="hs-identifier hs-var">intValue</span></a></span><span> </span><span class="annot"><span class="annottext">SValue r
+</span><a href="#local-6989586621679387137"><span class="hs-identifier hs-var">idx</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-58"></span><span>  </span><span class="annot"><span class="annottext">SValue r
+</span><a href="#local-6989586621679387138"><span class="hs-identifier hs-var">setVal</span></a></span><span>
+</span><span id="line-59"></span><span>
+</span><span id="line-60"></span><span class="hs-comment">-- Python, Swift, and Julia --</span><span>
+</span><span id="line-61"></span><span>
+</span><span id="line-62"></span><span id="local-6989586621679386999"><span class="annot"><a href="Drasil.Shared.LanguageRenderer.Common.html#forEach%27"><span class="hs-identifier hs-type">forEach'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Shared.RendererClassesCommon.html#CommonRenderSym"><span class="hs-identifier hs-type">CommonRenderSym</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386999"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679386999"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#Variable"><span class="hs-identifier hs-type">Variable</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386999"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679386999"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#Value"><span class="hs-identifier hs-type">Value</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386999"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679386999"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#Body"><span class="hs-identifier hs-type">Body</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386999"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span class="hs-special">)</span><span>
+</span><span id="line-63"></span><span>  </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#SVariable"><span class="hs-identifier hs-type">SVariable</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386999"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#SValue"><span class="hs-identifier hs-type">SValue</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386999"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#MSBody"><span class="hs-identifier hs-type">MSBody</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386999"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#MSStatement"><span class="hs-identifier hs-type">MSStatement</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679386999"><span class="hs-identifier hs-type">r</span></a></span></span><span>
+</span><span id="line-64"></span><span id="forEach%27"><span class="annot"><span class="annottext">forEach' :: forall (r :: * -&gt; *).
+CommonRenderSym r =&gt;
+(r (Variable r) -&gt; r (Value r) -&gt; r (Body r) -&gt; Doc)
+-&gt; SVariable r -&gt; SValue r -&gt; MSBody r -&gt; MSStatement r
+</span><a href="Drasil.Shared.LanguageRenderer.Common.html#forEach%27"><span class="hs-identifier hs-var hs-var">forEach'</span></a></span></span><span> </span><span id="local-6989586621679387157"><span class="annot"><span class="annottext">r (Variable r) -&gt; r (Value r) -&gt; r (Body r) -&gt; Doc
+</span><a href="#local-6989586621679387157"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679387158"><span class="annot"><span class="annottext">SVariable r
+</span><a href="#local-6989586621679387158"><span class="hs-identifier hs-var">i'</span></a></span></span><span> </span><span id="local-6989586621679387159"><span class="annot"><span class="annottext">SValue r
+</span><a href="#local-6989586621679387159"><span class="hs-identifier hs-var">v'</span></a></span></span><span> </span><span id="local-6989586621679387160"><span class="annot"><span class="annottext">MSBody r
+</span><a href="#local-6989586621679387160"><span class="hs-identifier hs-var">b'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-65"></span><span>  </span><span id="local-6989586621679387161"><span class="annot"><span class="annottext">r (Variable r)
+</span><a href="#local-6989586621679387161"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">LensLike'
+  (Zoomed (StateT ValueState Identity) (r (Variable r)))
+  MethodState
+  ValueState
+-&gt; SVariable r -&gt; StateT MethodState Identity (r (Variable r))
+forall c.
+LensLike'
+  (Zoomed (StateT ValueState Identity) c) MethodState ValueState
+-&gt; StateT ValueState Identity c -&gt; StateT MethodState Identity c
+forall (m :: * -&gt; *) (n :: * -&gt; *) s t c.
+Zoom m n s t =&gt;
+LensLike' (Zoomed m c) t s -&gt; m c -&gt; n c
+</span><span class="hs-identifier hs-var">zoom</span></span><span> </span><span class="annot"><span class="annottext">LensLike'
+  (Zoomed (StateT ValueState Identity) (r (Variable r)))
+  MethodState
+  ValueState
+(ValueState -&gt; Focusing Identity (r (Variable r)) ValueState)
+-&gt; MethodState -&gt; Focusing Identity (r (Variable r)) MethodState
+Lens' MethodState ValueState
+</span><a href="Drasil.Shared.State.html#lensMStoVS"><span class="hs-identifier hs-var">lensMStoVS</span></a></span><span> </span><span class="annot"><span class="annottext">SVariable r
+</span><a href="#local-6989586621679387158"><span class="hs-identifier hs-var">i'</span></a></span><span>
+</span><span id="line-66"></span><span>  </span><span id="local-6989586621679387163"><span class="annot"><span class="annottext">r (Value r)
+</span><a href="#local-6989586621679387163"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">LensLike'
+  (Zoomed (StateT ValueState Identity) (r (Value r)))
+  MethodState
+  ValueState
+-&gt; SValue r -&gt; StateT MethodState Identity (r (Value r))
+forall c.
+LensLike'
+  (Zoomed (StateT ValueState Identity) c) MethodState ValueState
+-&gt; StateT ValueState Identity c -&gt; StateT MethodState Identity c
+forall (m :: * -&gt; *) (n :: * -&gt; *) s t c.
+Zoom m n s t =&gt;
+LensLike' (Zoomed m c) t s -&gt; m c -&gt; n c
+</span><span class="hs-identifier hs-var">zoom</span></span><span> </span><span class="annot"><span class="annottext">LensLike'
+  (Zoomed (StateT ValueState Identity) (r (Value r)))
+  MethodState
+  ValueState
+(ValueState -&gt; Focusing Identity (r (Value r)) ValueState)
+-&gt; MethodState -&gt; Focusing Identity (r (Value r)) MethodState
+Lens' MethodState ValueState
+</span><a href="Drasil.Shared.State.html#lensMStoVS"><span class="hs-identifier hs-var">lensMStoVS</span></a></span><span> </span><span class="annot"><span class="annottext">SValue r
+</span><a href="#local-6989586621679387159"><span class="hs-identifier hs-var">v'</span></a></span><span>
+</span><span id="line-67"></span><span>  </span><span id="local-6989586621679387164"><span class="annot"><span class="annottext">r (Body r)
+</span><a href="#local-6989586621679387164"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">MSBody r
+</span><a href="#local-6989586621679387160"><span class="hs-identifier hs-var">b'</span></a></span><span>
+</span><span id="line-68"></span><span>  </span><span class="annot"><span class="annottext">Doc -&gt; MSStatement r
+forall (r :: * -&gt; *). CommonRenderSym r =&gt; Doc -&gt; MSStatement r
+</span><a href="Drasil.Shared.LanguageRenderer.Constructors.html#mkStmtNoEnd"><span class="hs-identifier hs-var">mkStmtNoEnd</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">r (Variable r) -&gt; r (Value r) -&gt; r (Body r) -&gt; Doc
+</span><a href="#local-6989586621679387157"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">r (Variable r)
+</span><a href="#local-6989586621679387161"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">r (Value r)
+</span><a href="#local-6989586621679387163"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="annot"><span class="annottext">r (Body r)
+</span><a href="#local-6989586621679387164"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-69"></span><span>
+</span><span id="line-70"></span><span class="hs-comment">-- Python and Julia --</span><span>
+</span><span id="line-71"></span><span>
+</span><span id="line-72"></span><span id="local-6989586621679387021"><span class="annot"><a href="Drasil.Shared.LanguageRenderer.Common.html#varDecDef"><span class="hs-identifier hs-type">varDecDef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Shared.RendererClassesCommon.html#CommonRenderSym"><span class="hs-identifier hs-type">CommonRenderSym</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679387021"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#SVariable"><span class="hs-identifier hs-type">SVariable</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679387021"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679387021"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#Scope"><span class="hs-identifier hs-type">Scope</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679387021"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#SValue"><span class="hs-identifier hs-type">SValue</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679387021"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-73"></span><span>  </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#MSStatement"><span class="hs-identifier hs-type">MSStatement</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679387021"><span class="hs-identifier hs-type">r</span></a></span></span><span>
+</span><span id="line-74"></span><span id="varDecDef"><span class="annot"><span class="annottext">varDecDef :: forall (r :: * -&gt; *).
+CommonRenderSym r =&gt;
+SVariable r -&gt; r (Scope r) -&gt; Maybe (SValue r) -&gt; MSStatement r
+</span><a href="Drasil.Shared.LanguageRenderer.Common.html#varDecDef"><span class="hs-identifier hs-var hs-var">varDecDef</span></a></span></span><span> </span><span id="local-6989586621679387195"><span class="annot"><span class="annottext">SVariable r
+</span><a href="#local-6989586621679387195"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span id="local-6989586621679387196"><span class="annot"><span class="annottext">r (Scope r)
+</span><a href="#local-6989586621679387196"><span class="hs-identifier hs-var">scp</span></a></span></span><span> </span><span id="local-6989586621679387197"><span class="annot"><span class="annottext">Maybe (SValue r)
+</span><a href="#local-6989586621679387197"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-75"></span><span>  </span><span id="local-6989586621679387198"><span class="annot"><span class="annottext">r (Variable r)
+</span><a href="#local-6989586621679387198"><span class="hs-identifier hs-var">v'</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">LensLike'
+  (Zoomed (StateT ValueState Identity) (r (Variable r)))
+  MethodState
+  ValueState
+-&gt; SVariable r -&gt; StateT MethodState Identity (r (Variable r))
+forall c.
+LensLike'
+  (Zoomed (StateT ValueState Identity) c) MethodState ValueState
+-&gt; StateT ValueState Identity c -&gt; StateT MethodState Identity c
+forall (m :: * -&gt; *) (n :: * -&gt; *) s t c.
+Zoom m n s t =&gt;
+LensLike' (Zoomed m c) t s -&gt; m c -&gt; n c
+</span><span class="hs-identifier hs-var">zoom</span></span><span> </span><span class="annot"><span class="annottext">LensLike'
+  (Zoomed (StateT ValueState Identity) (r (Variable r)))
+  MethodState
+  ValueState
+(ValueState -&gt; Focusing Identity (r (Variable r)) ValueState)
+-&gt; MethodState -&gt; Focusing Identity (r (Variable r)) MethodState
+Lens' MethodState ValueState
+</span><a href="Drasil.Shared.State.html#lensMStoVS"><span class="hs-identifier hs-var">lensMStoVS</span></a></span><span> </span><span class="annot"><span class="annottext">SVariable r
+</span><a href="#local-6989586621679387195"><span class="hs-identifier hs-var">v</span></a></span><span>
+</span><span id="line-76"></span><span>  </span><span class="annot"><span class="annottext">(MethodState -&gt; MethodState) -&gt; StateT MethodState Identity ()
+forall s (m :: * -&gt; *). MonadState s m =&gt; (s -&gt; s) -&gt; m ()
+</span><span class="hs-identifier hs-var">modify</span></span><span> </span><span class="annot"><span class="annottext">((MethodState -&gt; MethodState) -&gt; StateT MethodState Identity ())
+-&gt; (MethodState -&gt; MethodState) -&gt; StateT MethodState Identity ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; MethodState -&gt; MethodState
+</span><a href="Drasil.Shared.State.html#useVarName"><span class="hs-identifier hs-var">useVarName</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">r (Variable r) -&gt; String
+forall (r :: * -&gt; *). VariableElim r =&gt; r (Variable r) -&gt; String
+</span><a href="Drasil.Shared.InterfaceCommon.html#variableName"><span class="hs-identifier hs-var">variableName</span></a></span><span> </span><span class="annot"><span class="annottext">r (Variable r)
+</span><a href="#local-6989586621679387198"><span class="hs-identifier hs-var">v'</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-77"></span><span>  </span><span class="annot"><span class="annottext">(MethodState -&gt; MethodState) -&gt; StateT MethodState Identity ()
+forall s (m :: * -&gt; *). MonadState s m =&gt; (s -&gt; s) -&gt; m ()
+</span><span class="hs-identifier hs-var">modify</span></span><span> </span><span class="annot"><span class="annottext">((MethodState -&gt; MethodState) -&gt; StateT MethodState Identity ())
+-&gt; (MethodState -&gt; MethodState) -&gt; StateT MethodState Identity ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; ScopeData -&gt; MethodState -&gt; MethodState
+</span><a href="Drasil.Shared.State.html#setVarScope"><span class="hs-identifier hs-var">setVarScope</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">r (Variable r) -&gt; String
+forall (r :: * -&gt; *). VariableElim r =&gt; r (Variable r) -&gt; String
+</span><a href="Drasil.Shared.InterfaceCommon.html#variableName"><span class="hs-identifier hs-var">variableName</span></a></span><span> </span><span class="annot"><span class="annottext">r (Variable r)
+</span><a href="#local-6989586621679387198"><span class="hs-identifier hs-var">v'</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">r (Scope r) -&gt; ScopeData
+forall (r :: * -&gt; *). ScopeElim r =&gt; r (Scope r) -&gt; ScopeData
+</span><a href="Drasil.Shared.RendererClassesCommon.html#scopeData"><span class="hs-identifier hs-var">scopeData</span></a></span><span> </span><span class="annot"><span class="annottext">r (Scope r)
+</span><a href="#local-6989586621679387196"><span class="hs-identifier hs-var">scp</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-78"></span><span>  </span><span class="annot"><span class="annottext">Maybe (SValue r) -&gt; MSStatement r
+</span><a href="#local-6989586621679387202"><span class="hs-identifier hs-var">def</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe (SValue r)
+</span><a href="#local-6989586621679387197"><span class="hs-identifier hs-var">e</span></a></span><span>
+</span><span id="line-79"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-80"></span><span>    </span><span id="local-6989586621679387202"><span class="annot"><span class="annottext">def :: Maybe (SValue r) -&gt; MSStatement r
+</span><a href="#local-6989586621679387202"><span class="hs-identifier hs-var hs-var">def</span></a></span></span><span> </span><span class="annot"><span class="annottext">Maybe (SValue r)
+</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MSStatement r
+forall (r :: * -&gt; *). StatementSym r =&gt; MSStatement r
+</span><a href="Drasil.Shared.InterfaceCommon.html#emptyStmt"><span class="hs-identifier hs-var">IC.emptyStmt</span></a></span><span>
+</span><span id="line-81"></span><span>    </span><span class="annot"><a href="#local-6989586621679387202"><span class="hs-identifier hs-var">def</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679387213"><span class="annot"><span class="annottext">SValue r
+</span><a href="#local-6989586621679387213"><span class="hs-identifier hs-var">d</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SVariable r -&gt; SValue r -&gt; MSStatement r
+forall (r :: * -&gt; *).
+AssignStatement r =&gt;
+SVariable r -&gt; SValue r -&gt; MSStatement r
+</span><a href="Drasil.Shared.InterfaceCommon.html#assign"><span class="hs-identifier hs-var">IC.assign</span></a></span><span> </span><span class="annot"><span class="annottext">SVariable r
+</span><a href="#local-6989586621679387195"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="annot"><span class="annottext">SValue r
+</span><a href="#local-6989586621679387213"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><span id="line-82"></span><span>
+</span><span id="line-83"></span><span>
+</span><span id="line-84"></span><span class="hs-comment">-- Python, Julia, and MATLAB --</span><span>
+</span><span id="line-85"></span><span>
+</span><span id="line-86"></span><span class="annot"><span class="hs-comment">-- | Call to get the size of a list in a language where this is not a method.</span></span><span>
+</span><span id="line-87"></span><span id="local-6989586621679387215"><span class="annot"><a href="Drasil.Shared.LanguageRenderer.Common.html#listSize"><span class="hs-identifier hs-type">listSize</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Shared.RendererClassesCommon.html#CommonRenderSym"><span class="hs-identifier hs-type">CommonRenderSym</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679387215"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#SValue"><span class="hs-identifier hs-type">SValue</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679387215"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.Shared.InterfaceCommon.html#SValue"><span class="hs-identifier hs-type">SValue</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679387215"><span class="hs-identifier hs-type">r</span></a></span></span><span>
+</span><span id="line-88"></span><span id="listSize"><span class="annot"><span class="annottext">listSize :: forall (r :: * -&gt; *). CommonRenderSym r =&gt; SValue r -&gt; SValue r
+</span><a href="Drasil.Shared.LanguageRenderer.Common.html#listSize"><span class="hs-identifier hs-var hs-var">listSize</span></a></span></span><span> </span><span id="local-6989586621679387228"><span class="annot"><span class="annottext">SValue r
+</span><a href="#local-6989586621679387228"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-89"></span><span>  </span><span id="local-6989586621679387229"><span class="annot"><span class="annottext">r (Function r)
+</span><a href="#local-6989586621679387229"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">SValue r -&gt; StateT ValueState Identity (r (Function r))
+forall (r :: * -&gt; *).
+InternalListFunc r =&gt;
+SValue r -&gt; VSFunction r
+</span><a href="Drasil.Shared.RendererClassesCommon.html#listSizeFunc"><span class="hs-identifier hs-var">S.listSizeFunc</span></a></span><span> </span><span class="annot"><span class="annottext">SValue r
+</span><a href="#local-6989586621679387228"><span class="hs-identifier hs-var">l</span></a></span><span>
+</span><span id="line-90"></span><span>  </span><span class="annot"><span class="annottext">r (Type r) -&gt; Doc -&gt; SValue r
+forall (r :: * -&gt; *).
+CommonRenderSym r =&gt;
+r (Type r) -&gt; Doc -&gt; SValue r
+</span><a href="Drasil.Shared.LanguageRenderer.Constructors.html#mkVal"><span class="hs-identifier hs-var">mkVal</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">r (Function r) -&gt; r (Type r)
+forall (r :: * -&gt; *).
+FunctionElim r =&gt;
+r (Function r) -&gt; r (Type r)
+</span><a href="Drasil.Shared.RendererClassesCommon.html#functionType"><span class="hs-identifier hs-var">RC.functionType</span></a></span><span> </span><span class="annot"><span class="annottext">r (Function r)
+</span><a href="#local-6989586621679387229"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">r (Function r) -&gt; Doc
+forall (r :: * -&gt; *). FunctionElim r =&gt; r (Function r) -&gt; Doc
+</span><a href="Drasil.Shared.RendererClassesCommon.html#function"><span class="hs-identifier hs-var">RC.function</span></a></span><span> </span><span class="annot"><span class="annottext">r (Function r)
+</span><a href="#local-6989586621679387229"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">)</span></pre></body></html>

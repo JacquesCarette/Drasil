@@ -235,6 +235,7 @@ background :: Sentence
 symbolsAll :: [QuantityDict]
 ideaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
+conceptChunks :: [ConceptChunk]
 symbMap :: ChunkDB
 
 -- | Holds all references and links used in the document.

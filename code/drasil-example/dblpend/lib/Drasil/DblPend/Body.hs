@@ -48,10 +48,6 @@ import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
 import Language.Drasil.Code (quantvar)
 import Drasil.DblPend.ODEs (dblPenODEInfo)
 
--- import Language.Drasil(vec2D, vAdd, vSub, vScale, norm, square)
-
-
-
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 

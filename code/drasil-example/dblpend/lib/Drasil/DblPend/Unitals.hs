@@ -45,7 +45,7 @@ unitalChunks = [
   xPos_1, xPos_2, yPos_1, yPos_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2,
   angularAccel_1, angularAccel_2, tension_1, tension_2, 
   QPP.mass, QP.force, QP.gravitationalAccel, QP.gravitationalMagnitude, QP.tension, QP.acceleration,
-  QP.time, QP.velocity, QP.position]
+  QP.time, QP.velocity, QP.position, velocityVec_1, velocityVec_2]
   
 lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2, 
   pendDisAngle_1, pendDisAngle_2,
@@ -185,3 +185,22 @@ pendDisAngle = cuc' "pendDisAngle"
   "column vector of displacement of rods with its derivatives"
   lTheta' radian (Vect Real)
   [physRange $ UpFrom (Inc, exactDbl 0)] (exactDbl 0)
+
+
+velocityVec_1 :: UnitalChunk
+velocityVec_1 = uc' "v_vec1"
+  (nounPhraseSP "velocity vector of the first object")
+  (S "Velocity vector of the first object in two dimensions")
+  (sub (vec cV) label1)
+  (Vect Real)
+  velU
+
+velocityVec_2 :: UnitalChunk
+velocityVec_2 = uc' "v_vec2"
+  (nounPhraseSP "velocity vector of the second object")
+  (S "Velocity vector of the second object in two dimensions")
+  (sub (vec cV) label2)
+  (Vect Real)
+  velU
+
+

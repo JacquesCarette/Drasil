@@ -1,5 +1,4 @@
 module Drasil.DblPend.Expressions where
-
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
 
@@ -20,6 +19,23 @@ velXExpr_2, velYExpr_2 :: PExpr
 velXExpr_2 = sy xVel_1 $+ (sy angularVel_2 $* sy lenRod_2 $* cos (sy pendDisAngle_2))
 velYExpr_2 = sy yVel_1 $+ (sy angularVel_2 $* sy lenRod_2 $* sin (sy pendDisAngle_2))
 
+-- NOTE: The velocity should be computed vectorially (e.g., v = ω × r) rather than component-wise.
+-- This definition uses components explicitly because Drasil does not currently support direct vector operations.
+-- Vector1 velocity
+velVecExpr_1 :: PExpr
+velVecExpr_1 = vec2D
+  (sy angularVel_1 $* sy lenRod_1 $* cos (sy pendDisAngle_1))
+  (sy angularVel_1 $* positionXEqn_1)
+
+-- Vector2 velocity
+velVecExpr_2 :: PExpr
+velVecExpr_2 = vec2D
+  (sy angularVel_1 $* sy lenRod_1 $* cos (sy pendDisAngle_1)
+    $+ sy angularVel_2 $* sy lenRod_2 $* cos (sy pendDisAngle_2))
+  (sy angularVel_1 $* positionXEqn_1
+    $+ sy angularVel_2 $* sy lenRod_2 $* sin (sy pendDisAngle_2))
+
+
 -- Acceleration X/Y First Object
 accelXExpr_1, accelYExpr_1 :: PExpr
 accelXExpr_1 = neg (square (sy angularVel_1) $* sy lenRod_1 $* sin (sy pendDisAngle_1))
@@ -35,6 +51,13 @@ accelXExpr_2 = sy xAccel_1 $-
 accelYExpr_2 = sy yAccel_1 $+
                 (square (sy angularVel_2) $* sy lenRod_2 $* cos (sy pendDisAngle_2))
                 $+ (sy angularAccel_2 $* sy lenRod_2 $* sin (sy pendDisAngle_2))
+
+
+-- Acceleration vectors
+accelVec_1 :: PExpr
+accelVec_1 = vec2D accelXExpr_1 accelYExpr_1
+accelVec_2 :: PExpr
+accelVec_2 = vec2D accelXExpr_2 accelYExpr_2
 
 -- Horizontal/Vertical force acting on the first object
 xForceWithAngle_1 :: PExpr
@@ -53,6 +76,15 @@ xForceWithAngle_2 = neg (sy tension_2) $* sin (sy pendDisAngle_2)
 yForceWithAngle_2 :: PExpr
 yForceWithAngle_2 = sy tension_2 $* cos (sy pendDisAngle_2) $- 
                     (sy massObj_2 $* sy gravitationalAccel)
+
+
+-- Force vectors
+forceVec_1 :: PExpr
+forceVec_1 = vec2D xForceWithAngle_1 yForceWithAngle_1
+
+forceVec_2 :: PExpr
+forceVec_2 = vec2D xForceWithAngle_2 yForceWithAngle_2
+
 
 -- Angular acceleration acting on the first object
 angularAccelExpr_1 :: PExpr
@@ -105,3 +137,5 @@ cosAngleExpr2 :: PExpr
 cosAngleExpr2 = cos (sy pendDisAngle_2)
 sinAngleExpr2 :: PExpr
 sinAngleExpr2 = sin (sy pendDisAngle_2)
+
+

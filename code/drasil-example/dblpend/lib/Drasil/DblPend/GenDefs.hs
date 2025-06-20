@@ -18,14 +18,14 @@ import Drasil.DblPend.DataDefs
 import qualified Drasil.DblPend.Expressions as E
 import qualified Drasil.DblPend.Derivations as D
 import Drasil.DblPend.Unitals (lenRod_1, xVel_1, xVel_2,
-    yVel_1, yVel_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2)
+    yVel_1, yVel_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2, velocityVec_1, velocityVec_2)
 import Drasil.DblPend.Concepts (horizontalPos,
     verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce, firstObject, secondObject)
 import Control.Lens ((^.))
 
 genDefns :: [GenDefn]
 genDefns = [velXGD_1, velYGD_1, velXGD_2, velYGD_2, accelXGD_1, accelYGD_1, accelXGD_2, accelYGD_2,
-       xForceGD_1, yForceGD_1, xForceGD_2, yForceGD_2]
+       xForceGD_1, yForceGD_1, xForceGD_2, yForceGD_2, velocityVecGD_1, velocityVecGD_2]
 
 ------------------------------------------------
 -- Velocity in X Direction in the First Object--
@@ -288,3 +288,33 @@ yForceMD_2 = mkMultiDefnForQuant quant EmptyS defns
 
 yForceDeriv_2 :: Derivation
 yForceDeriv_2 = mkDerivName (phraseNP (force `onThe` secondObject)) [eS' yForceMD_2]
+
+
+-- These definitions specify the velocity vectors for the first and second objects.
+-- The velocity vectors are currently computed using explicit component expressions,
+-- but ideally, these quantities should be defined vectorially (e.g., using v = ω × r)
+-- to better reflect the underlying physics. This approach is used due to current
+-- limitations in Drasil's support for direct vector operations.
+velocityVecQD_1 :: ModelQDef
+velocityVecQD_1 = mkQuantDef' velocityVec_1
+  (nounPhraseSP "velocity vector of the first object")
+  E.velVecExpr_1
+
+velocityVecGD_1 :: GenDefn
+velocityVecGD_1 = gdNoRefs (equationalModel' velocityVecQD_1)
+  (getUnit velocity)  -- same unit
+  Nothing  -- no derivation yet
+  "velocityVec1"
+  [S "Velocity vector of the first object computed from angular velocity and rod length."]
+
+velocityVecQD_2 :: ModelQDef
+velocityVecQD_2 = mkQuantDef' velocityVec_2
+  (nounPhraseSP "velocity vector of the second object")
+  E.velVecExpr_2
+
+velocityVecGD_2 :: GenDefn
+velocityVecGD_2 = gdNoRefs (equationalModel' velocityVecQD_2)
+  (getUnit velocity)
+  Nothing
+  "velocityVec2"
+  [S "Velocity vector of the second object computed from the velocity of the first object and angular velocity of the second rod."]

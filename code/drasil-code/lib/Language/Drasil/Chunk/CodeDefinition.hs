@@ -1,6 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.CodeDefinition (
-  CodeDefinition, DefinitionType(..), qtoc, qtov, odeDef, auxExprs, defType,
+  CodeDefinition, DefinitionType(..), qtoc, qtov,
+  odeDef, auxExprs, defType,
 ) where
 
 import Drasil.Code.CodeExpr.Development (expr, CanGenCode(..))
@@ -54,12 +55,12 @@ instance DefiningCodeExpr CodeDefinition where codeExpr = def
 --       It _might_ be good to create make a ``CanGenCodeDefinition''-like typeclass
 
 -- | Constructs a 'CodeDefinition' where the underlying 'CodeChunk' is for a function.
-qtoc :: (Quantity (q Expr), MayHaveUnit (q Expr), DefiningExpr q) => q Expr -> CodeDefinition
-qtoc q = CD (codeChunk $ quantfunc q) (expr $ q ^. defnExpr) [] Definition
+qtoc :: (DefinesQuantity (q Expr), DefiningExpr q) => q Expr -> CodeDefinition
+qtoc q = CD (codeChunk $ quantfunc $ q ^. defLhs) (expr $ q ^. defnExpr) [] Definition
 
 -- | Constructs a 'CodeDefinition' where the underlying 'CodeChunk' is for a variable.
 qtov :: CanGenCode e => QDefinition e -> CodeDefinition
-qtov q = CD (codeChunk $ quantvar q) (toCodeExpr $ q ^. defnExpr) [] Definition
+qtov q = CD (codeChunk $ quantvar $ q ^. defLhs) (toCodeExpr $ q ^. defnExpr) [] Definition
 
 -- | Constructs a 'CodeDefinition' for an ODE.
 odeDef :: ODEInfo -> CodeDefinition

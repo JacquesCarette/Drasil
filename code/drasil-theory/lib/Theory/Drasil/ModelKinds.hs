@@ -21,7 +21,7 @@ import Data.Maybe (mapMaybe)
 import Language.Drasil (NamedIdea(..), NP, QDefinition, HasUID(..), Expr,
   RelationConcept, ConceptDomain(..), Definition(..), Idea(..), Express(..),
   UID, DifferentialModel, mkUid, nsUid, RequiresChecking(..), Space,
-  HasSpace(typ), DefiningExpr(..))
+  HasSpace(typ), DefiningExpr(..), DefinesQuantity (defLhs))
 import Theory.Drasil.ConstraintSet (ConstraintSet)
 import Theory.Drasil.MultiDefn (MultiDefn)
 
@@ -144,7 +144,7 @@ instance RequiresChecking (ModelKinds Expr) Expr Space where
   requiredChecks (NewDEModel dm)            = requiredChecks dm
   requiredChecks (DEModel _)                = mempty
   requiredChecks (EquationalConstraints cs) = requiredChecks cs
-  requiredChecks (EquationalModel qd)       = pure (qd ^. defnExpr, qd ^. typ)
+  requiredChecks (EquationalModel qd)       = pure (qd ^. defnExpr, qd ^. defLhs . typ)
   requiredChecks (EquationalRealm md)       = requiredChecks md
   requiredChecks (OthModel _)               = mempty
 

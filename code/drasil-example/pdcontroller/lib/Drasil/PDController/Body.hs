@@ -1,5 +1,7 @@
 module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) where
 
+import Control.Lens ((^.))
+
 import Language.Drasil
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
@@ -132,7 +134,7 @@ background = foldlSent_ [S "Automatic process control with a controller (P/PI/PD
               S "cruise-control, etc"]
 
 symbolsAll :: [QuantityDict]
-symbolsAll = symbols ++ map qw pidDqdConstants ++ map qw pidConstants
+symbolsAll = symbols ++ map qw pidDqdConstants ++ map (^. defLhs) pidConstants
   ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
   ++ map qw [listToArray $ quantvar opProcessVariable, arrayVecDepVar pidODEInfo]
 

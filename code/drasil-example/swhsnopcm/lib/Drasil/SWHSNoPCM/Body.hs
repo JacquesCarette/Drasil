@@ -9,6 +9,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Language.Drasil.Code (quantvar)
 
+import Control.Lens ((^.))
 import Data.List ((\\))
 import Data.Drasil.People (thulasi)
 
@@ -88,8 +89,8 @@ symbols = pi_ : map dqdWr concepts ++ map dqdWr constrained
 symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
                                --FOUND LOC OF ERROR: Instance Models
-symbolsAll = map qw symbols ++ map qw specParamValList ++
-  [qw coilSAMax, qw tauW] ++ map qw [absTol, relTol] ++
+symbolsAll = map qw symbols ++ map (^. defLhs) specParamValList ++
+  [coilSAMax ^. defLhs, qw tauW] ++ map qw [absTol, relTol] ++
   scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
   ++ map qw [listToArray $ quantvar tempW, arrayVecDepVar noPCMODEInfo]
 

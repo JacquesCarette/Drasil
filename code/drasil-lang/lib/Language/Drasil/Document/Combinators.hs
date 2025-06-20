@@ -14,7 +14,8 @@ module Language.Drasil.Document.Combinators (
   unwrap, fterms,
   -- * List-related Functions
   bulletFlat, bulletNested, itemRefToSent, makeTMatrix, mkEnumAbbrevList,
-  mkTableFromColumns, noRefs, refineChain, sortBySymbol, sortBySymbolTuple,
+  mkTableFromColumns, noRefs, refineChain,
+  sortBySymbol, sortBySymbolTuple, sortByLhsSymbol,
   tAndDOnly, tAndDWAcc, tAndDWSym,
   zipSentList
 ) where
@@ -67,6 +68,9 @@ import Data.List (sortBy, transpose)
 -- | Sorts a list of 'HasSymbols' by 'Symbol'.
 sortBySymbol :: HasSymbol a => [a] -> [a]
 sortBySymbol = sortBy compareBySymbol
+
+sortByLhsSymbol :: ( DefinesQuantity a) =>[a] -> [a]
+sortByLhsSymbol = sortBy (compareBySymbol `on` (^. defLhs))
 
 -- | Sorts a tuple list of 'HasSymbols' by first Symbol in the tuple.
 sortBySymbolTuple :: HasSymbol a => [(a, b)] -> [(a, b)]

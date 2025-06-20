@@ -60,7 +60,7 @@ sysSetValsFollowingAssumpsTable =
     "ReqAssignments"
     (S "Required Assignments")
   where
-    r2AQs = qw loadSF : map qw (take 4 assumptionConstants)
+    r2AQs = qw loadSF : map (qw . (^. defLhs)) (take 4 assumptionConstants)
     r2ARs = assumpGL : replicate 4 assumpSV
     r2DDs = [loadDF, hFromt, glaTyFac, standOffDis, aspRat]
 

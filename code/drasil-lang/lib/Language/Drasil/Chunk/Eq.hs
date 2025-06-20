@@ -52,10 +52,7 @@ instance HasUID          (QDefinition e) where uid = qdQua . uid
 instance NamedIdea       (QDefinition e) where term = qdQua . term
 instance Idea            (QDefinition e) where getA = getA . (^. qdQua)
 instance DefinesQuantity (QDefinition e) where defLhs = qdQua . to qw
-instance HasSpace        (QDefinition e) where typ = qdQua . typ
-instance HasSymbol       (QDefinition e) where symbol = symbol . (^. qdQua)
 instance Definition      (QDefinition e) where defn = qdQua . defn
-instance Quantity        (QDefinition e) where
 instance Eq              (QDefinition e) where a == b = a ^. uid == b ^. uid
 instance MayHaveUnit     (QDefinition e) where getUnit = getUnit . view qdQua
 instance DefiningExpr     QDefinition    where defnExpr = qdExpr
@@ -63,8 +60,8 @@ instance Express e => Express (QDefinition e) where
   express q = f $ express $ q ^. defnExpr
     where
       f = case q ^. qdInputs of
-        [] -> defines (sy q)
-        is -> defines $ apply q (map M.C is)
+        [] -> defines (sy $ q ^. qdQua)
+        is -> defines $ apply (q ^. qdQua) (map M.C is)
         -- FIXME: The fact that we have to manually use `C` here is because our
         -- UID references don't carry enough information. This feels hacky at
         -- the moment, and should eventually be fixed.

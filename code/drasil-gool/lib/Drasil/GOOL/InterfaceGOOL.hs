@@ -16,7 +16,7 @@ module Drasil.GOOL.InterfaceGOOL (
   initObserverList, addObserver, StrategyPattern(..), convTypeOO
   ) where
 
-import Drasil.GOOL.InterfaceCommon (
+import Drasil.Shared.InterfaceCommon (
   -- Types
   Label, Library, MSBody, MSBlock, VSFunction, VSType, SVariable, SValue,
   MSStatement, NamedArgs, MSParameter, SMethod, MixedCall, MixedCtorCall,
@@ -26,9 +26,9 @@ import Drasil.GOOL.InterfaceCommon (
   VariableSym(var), ScopeSym(..), ValueSym(valueType), VariableValue(valueOf),
   ValueExpression, List(listSize, listAdd), listOf, StatementSym(valStmt),
   DeclStatement(listDecDef), FuncAppStatement, VisibilitySym(..), convType)
-import Drasil.GOOL.CodeType (CodeType(..), ClassName)
-import Drasil.GOOL.Helpers (onStateValue)
-import Drasil.GOOL.State (GS, FS, CS)
+import Drasil.Shared.CodeType (CodeType(..), ClassName)
+import Drasil.Shared.Helpers (onStateValue)
+import Drasil.Shared.State (GS, FS, CS)
 
 class (SharedProg r, ProgramSym r, OOVariableValue r, OODeclStatement r,
   OOFuncAppStatement r, OOValueExpression r, InternalValueExp r, GetSet r,

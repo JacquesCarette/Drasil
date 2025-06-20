@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The structure for a class of renderers is defined here.
-module Drasil.GOOL.LanguageRenderer (
+module Drasil.Shared.LanguageRenderer (
   -- * Common Syntax
   classDec, dot, commentStart, returnLabel, ifLabel, elseLabel, elseIfLabel, 
   forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, throwsLabel, 
@@ -27,21 +27,21 @@ module Drasil.GOOL.LanguageRenderer (
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
-import Drasil.GOOL.CodeType (CodeType(..))
-import Drasil.GOOL.InterfaceCommon (Label, Library, SValue, BodySym(Body),
+import Drasil.Shared.CodeType (CodeType(..))
+import Drasil.Shared.InterfaceCommon (Label, Library, SValue, BodySym(Body),
   TypeSym(Type), TypeElim(..), VariableSym(Variable), VariableElim(..),
   ValueSym(..), StatementSym(Statement), VisibilitySym(Visibility),
   ParameterSym(Parameter))
 import Drasil.GOOL.InterfaceGOOL (PermanenceSym(Permanence))
-import Drasil.GOOL.RendererClassesCommon (CommonRenderSym)
-import qualified Drasil.GOOL.RendererClassesCommon as RC (BodyElim(..),
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym)
+import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   InternalTypeElim(..), InternalVarElim(..), ValueElim(..), StatementElim(..),
   VisibilityElim(..), ParamElim(..))
 import Drasil.GOOL.RendererClassesOO (OORenderSym)
 import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..))
-import Drasil.GOOL.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
+import Drasil.Shared.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateMod, TypeData(..), VarData(..))
-import Drasil.GOOL.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
+import Drasil.Shared.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
 
 import Data.List (last, intercalate)
 import Prelude hiding (break,print,last,sqrt,abs,log,exp,sin,cos,tan,asin,acos,

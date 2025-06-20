@@ -3,15 +3,15 @@
 {-# LANGUAGE DeriveFunctor #-}
 
 -- | The logic to render Julia code is contained in this module
-module Drasil.GOOL.LanguageRenderer.JuliaRenderer (
+module Drasil.GProc.LanguageRenderer.JuliaRenderer (
   -- * Julia Code Configuration -- defines syntax of all Julia code
   JuliaCode(..), jlName, jlVersion
 ) where
 
 import Utils.Drasil (indent)
 
-import Drasil.GOOL.CodeType (CodeType(..))
-import Drasil.GOOL.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
+import Drasil.Shared.CodeType (CodeType(..))
+import Drasil.Shared.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
   SVariable, MSStatement, MSBlock, SMethod, BodySym(..), BlockSym(..),
   TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..),
   Argument(..), Literal(..), MathConstant(..), VariableValue(..),
@@ -23,10 +23,10 @@ import Drasil.GOOL.InterfaceCommon (SharedProg, Label, VSType, SValue, litZero,
   FunctionSym(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), VisibilitySym(..), ScopeSym(..), ParameterSym(..),
   MethodSym(..), (&=), switchAsIf, convScope)
-import Drasil.GOOL.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
+import Drasil.GProc.InterfaceProc (ProcProg, FSModule, ProgramSym(..),
   FileSym(..), ModuleSym(..))
 
-import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   ImportElim, RenderBody(..), BodyElim, RenderBlock(..), BlockElim,
   RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..),
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind),
@@ -36,52 +36,58 @@ import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderVisibility(..), VisibilityElim, MethodTypeSym(..), RenderParam(..),
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim,
   BlockCommentSym(..), BlockCommentElim, ScopeElim(..))
-import qualified Drasil.GOOL.RendererClassesCommon as RC (import', body, block,
+import qualified Drasil.Shared.RendererClassesCommon as RC (import', body, block,
   type', uOp, bOp, variable, value, function, statement, visibility, parameter,
   method, blockComment')
-import Drasil.GOOL.RendererClassesProc (ProcRenderSym, RenderFile(..),
+import Drasil.GProc.RendererClassesProc (ProcRenderSym, RenderFile(..),
   RenderMod(..), ModuleElim, ProcRenderMethod(..))
-import qualified Drasil.GOOL.RendererClassesProc as RC (module')
-import Drasil.GOOL.LanguageRenderer (printLabel, listSep, listSep',
+import qualified Drasil.GProc.RendererClassesProc as RC (module')
+import Drasil.Shared.LanguageRenderer (printLabel, listSep, listSep',
   variableList, parameterList, forLabel, inLabel, tryLabel, catchLabel,
   valueList)
-import qualified Drasil.GOOL.LanguageRenderer as R (sqrt, abs, log10, log,
+import qualified Drasil.Shared.LanguageRenderer as R (sqrt, abs, log10, log,
   exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body,
   addComments, blockCmt, docCmt, commentedMod, listSetFunc, commentedItem,
   break, continue, constDec', assign, subAssign, addAssign)
-import Drasil.GOOL.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
+import Drasil.Shared.LanguageRenderer.Constructors (mkVal, mkStateVal, VSOp,
   unOpPrec, powerPrec, unExpr, unExpr', binExpr, multPrec, typeUnExpr,
   typeBinExpr, mkStmt, mkStmtNoEnd)
-import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
-import qualified Drasil.GOOL.LanguageRenderer.LanguagePolymorphic as G (
+import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
+import qualified Drasil.Shared.LanguageRenderer.LanguagePolymorphic as G (
   block, multiBlock, litChar, litDouble, litInt, litString, valueOf, negateOp,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp,
   minusOp, multOp, divideOp, moduloOp, call, funcAppMixedArgs, lambda,
   listAccess, listSet, tryCatch, csc, multiBody, sec, cot, stmt, loopStmt,
   emptyStmt, print, comment, valStmt, returnStmt, param, docFunc, throw, arg,
-  argsList, ifCond, smartAdd, smartSub, local, var)
-import qualified Drasil.GOOL.LanguageRenderer.CommonPseudoOO as CP (bool,
-  boolRender, extVar, funcType, listDec, listDecDef, listAccessFunc,
-  listSetFunc, notNull, extFuncAppMixedArgs, functionDoc, listSize, listAdd,
+  argsList, ifCond, smartAdd, local, var, smartSub)
+
+import qualified Drasil.Shared.LanguageRenderer.Common as CS
+
+import qualified Drasil.Shared.LanguageRenderer.CommonPseudoOO as CP (
+  listDec, listDecDef, 
+  notNull, functionDoc, listAdd,
   listAppend, intToIndex', indexToInt', inOutFunc, docInOutFunc', forLoopError,
-  varDecDef, openFileR', openFileW', openFileA', multiReturn, multiAssign,
-  inOutCall, mainBody, argExists, forEach', litSet)
-import qualified Drasil.GOOL.LanguageRenderer.CLike as C (litTrue, litFalse,
+  openFileR', openFileW', openFileA', multiReturn, multiAssign,
+  inOutCall, mainBody, argExists, litSet)
+
+import qualified Drasil.Shared.LanguageRenderer.CLike as C (litTrue, litFalse,
   notOp, andOp, orOp, inlineIf, while)
-import qualified Drasil.GOOL.LanguageRenderer.AbstractProc as A (fileDoc,
+
+
+import qualified Drasil.GProc.LanguageRenderer.AbstractProc as A (fileDoc,
   fileFromData, buildModule, docMod, modFromData, listInnerType, arrayElem,
   funcDecDef, function)
-import qualified Drasil.GOOL.LanguageRenderer.Macros as M (increment1,
+import qualified Drasil.Shared.LanguageRenderer.Macros as M (increment1,
   decrement1, ifExists, stringListVals, stringListLists)
-import Drasil.GOOL.AST (Terminator(..), FileType(..), FileData(..), fileD,
+import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), ModData(..), md, updateMod, MethodData(..), mthd, OpData(..),
   ParamData(..), ProgData(..), TypeData(..), td, ValData(..), vd, VarData(..),
   vard, CommonThunk, progD, fd, pd, updateMthd, commonThunkDim, commonThunkElim,
   vectorize, vectorize2, commonVecIndex, sumComponents, pureValue, ScopeTag(..),
   ScopeData(..), sd)
-import Drasil.GOOL.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
+import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, onCodeList, onStateList, emptyIfEmpty)
-import Drasil.GOOL.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
+import Drasil.Shared.State (VS, lensGStoFS, revFiles, setFileType, lensMStoVS,
   getModuleImports, addModuleImportVS, getLangImports, getLibImports,
   addLibImportVS, useVarName, getMainDoc, genLoopIndex, genVarNameIf,
   setVarScope, getVarScope)
@@ -172,7 +178,7 @@ instance BlockElim JuliaCode where
 
 instance TypeSym JuliaCode where
   type Type JuliaCode = TypeData
-  bool = CP.bool
+  bool = CS.bool
   int = jlIntType
   float = jlFloatType
   double = jlDoubleType
@@ -184,7 +190,7 @@ instance TypeSym JuliaCode where
   setType = jlSetType
   arrayType = listType -- Treat arrays and lists the same, as in Python
   listInnerType = A.listInnerType
-  funcType = CP.funcType
+  funcType = CS.funcType
   void = jlVoidType
 
 instance TypeElim JuliaCode where
@@ -261,7 +267,7 @@ instance VariableSym JuliaCode where
   type Variable JuliaCode = VarData
   var = G.var
   constant = var
-  extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
+  extVar l n t = modify (addModuleImportVS l) >> CS.extVar l n t
   arrayElem i = A.arrayElem (litInt i)
 
 instance VariableElim JuliaCode where
@@ -359,10 +365,10 @@ instance ValueExpression JuliaCode where
   funcAppMixedArgs = G.funcAppMixedArgs
   extFuncAppMixedArgs l n t ps ns = do
     modify (addModuleImportVS l)
-    CP.extFuncAppMixedArgs l n t ps ns
+    CS.extFuncAppMixedArgs l n t ps ns
   libFuncAppMixedArgs l n t ps ns = do
     modify (addLibImportVS l)
-    CP.extFuncAppMixedArgs l n t ps ns
+    CS.extFuncAppMixedArgs l n t ps ns
 
   lambda = G.lambda jlLambda
 
@@ -391,7 +397,7 @@ instance ValueElim JuliaCode where
 instance List JuliaCode where
   intToIndex = CP.intToIndex'
   indexToInt = CP.indexToInt'
-  listSize = CP.listSize
+  listSize = CS.listSize
   listAdd = CP.listAdd
   listAppend = CP.listAppend
   listAccess = G.listAccess
@@ -417,8 +423,8 @@ instance InternalListFunc JuliaCode where
   listAppendFunc l v = do
     f <- funcApp jlListAppend void [l, v]
     funcFromData (RC.value f) void
-  listAccessFunc = CP.listAccessFunc
-  listSetFunc = CP.listSetFunc R.listSetFunc
+  listAccessFunc = CS.listAccessFunc
+  listSetFunc = CS.listSetFunc R.listSetFunc
 
 instance ThunkSym JuliaCode where
   type Thunk JuliaCode = CommonThunk VS
@@ -492,8 +498,8 @@ instance AssignStatement JuliaCode where
   (&--) = M.decrement1
 
 instance DeclStatement JuliaCode where
-  varDec v scp = CP.varDecDef v scp Nothing
-  varDecDef v scp e = CP.varDecDef v scp (Just e)
+  varDec v scp = CS.varDecDef v scp Nothing
+  varDecDef v scp e = CS.varDecDef v scp (Just e)
   setDec = varDec
   setDecDef = varDecDef
   listDec _ = CP.listDec
@@ -551,7 +557,7 @@ instance ControlStatement JuliaCode where
   ifExists = M.ifExists
   for _ _ _ _ = error $ CP.forLoopError jlName
   forRange i initv finalv stepv = forEach i (jlRange initv finalv stepv)
-  forEach = CP.forEach' jlForEach
+  forEach = CS.forEach' jlForEach
   while = C.while id empty jlEnd
   tryCatch = G.tryCatch jlTryCatch
   assert condition errorMessage = do
@@ -1001,7 +1007,7 @@ jlInput inSrc v = v &= (v >>= jlInput' . getType . variableType)
   where jlInput' Integer = jlParse jlIntConc int inSrc
         jlInput' Float = jlParse jlFloatConc float inSrc
         jlInput' Double = jlParse jlDoubleConc double inSrc
-        jlInput' Boolean = jlParse CP.boolRender bool inSrc
+        jlInput' Boolean = jlParse CS.boolRender bool inSrc
         jlInput' String = inSrc
         jlInput' Char = jlParse jlCharConc char inSrc
         jlInput' _ = error "Attempt to read a value of unreadable type"

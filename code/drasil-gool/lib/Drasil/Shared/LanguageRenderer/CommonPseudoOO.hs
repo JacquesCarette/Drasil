@@ -1,77 +1,86 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
-module Drasil.GOOL.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
+module Drasil.Shared.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc,
   doxClass, doxMod, docMod', modDoc', functionDoc, extVar, classVar, objVarSelf,
   indexOf, contains, containsInt, listAddFunc, discardFileLine, intClass, funcType, buildModule,
-  arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, forEach',
+  arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach,
   docMain, mainFunction, buildModule', call', listSizeFunc, listAccessFunc',
   string, constDecDef, docInOutFunc, bindingError, extFuncAppMixedArgs, notNull,
   listDecDef, destructorError, stateVarDef, constVar, litArray, litSet, listSetFunc, litSetFunc,
   extraClass, listAccessFunc, doubleRender, double, openFileR, openFileW,
   stateVar, self, multiAssign, multiReturn, listDec, funcDecDef, inOutCall,
-  forLoopError, mainBody, inOutFunc, docInOutFunc', boolRender, bool,
+  forLoopError, mainBody, inOutFunc, docInOutFunc', bool,
   floatRender, float, stringRender', string', inherit, implements, listSize, setDecDef, setDec,
   listAdd, listAppend, intToIndex, indexToInt, intToIndex', indexToInt',
-  varDecDef, openFileR', openFileW', openFileA', argExists, global, setMethodCall
-) where
+  varDecDef, openFileR', openFileW', openFileA', argExists, global, setMethodCall) where
 
 import Utils.Drasil (indent, stringList)
 
-import Drasil.GOOL.CodeType (CodeType(..))
-import Drasil.GOOL.InterfaceCommon (Label, Library, Body, MSBody, VSFunction,
-  VSType, Variable, SVariable, Value, SValue, MSStatement, MSParameter, SMethod,
+import Drasil.Shared.CodeType (CodeType(..))
+
+import Drasil.Shared.InterfaceCommon (varDecDef, bool, extFuncAppMixedArgs,funcType, extVar, Label, Library, MSBody, VSFunction,
+  VSType, SVariable, Value, SValue, MSStatement, MSParameter, SMethod,
   MixedCall, bodyStatements, oneLiner, TypeSym(infile, outfile, listInnerType),
   TypeElim(getType, getTypeString), VariableElim(variableName, variableType),
   ValueSym(valueType), Comparison(..), (&=), ControlStatement(returnStmt),
-  VisibilitySym(..), MethodSym(function), funcApp, ScopeSym(Scope))
-import qualified Drasil.GOOL.InterfaceCommon as IC (argsList,
+  VisibilitySym(..), MethodSym(function), funcApp, ScopeSym(Scope), listSize)
+import qualified Drasil.Shared.InterfaceCommon as IC (argsList,
   TypeSym(int, bool, double, string, listType, arrayType, void), VariableSym(var),
   Literal(litTrue, litFalse, litList, litSet, litInt, litString),
-  VariableValue(valueOf), StatementSym(valStmt, emptyStmt), DeclStatement(varDec,
+  VariableValue(valueOf), StatementSym(valStmt), DeclStatement(varDec,
   varDecDef, constDecDef), List(intToIndex, indexToInt), ParameterSym(param,
-  pointerParam), MethodSym(mainFunction), AssignStatement(assign), ScopeSym(..))
+  pointerParam), MethodSym(mainFunction), ScopeSym(..))
+
+
 import Drasil.GOOL.InterfaceGOOL (SFile, FSModule, SClass, CSStateVar,
   OOTypeSym(obj), PermanenceSym(..), Initializers, objMethodCallNoParams, objMethodCall)
 import qualified Drasil.GOOL.InterfaceGOOL as IG (ClassSym(buildClass),
   OOVariableSym(self, objVar), OOFunctionSym(..))
-import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, ImportSym(..),
+
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, ImportSym(..),
   RenderBody(..), RenderType(..), RenderVariable(varFromData),
-  InternalVarElim(variableBind), RenderFunction(funcFromData),
+  InternalVarElim(variableBind),
   MethodTypeSym(mType), RenderMethod(commentedFunc, mthdFromData),
   BlockCommentSym(..), ScopeElim(scopeData))
-import qualified Drasil.GOOL.RendererClassesCommon as S (RenderBody(multiBody),
-  RenderValue(call), RenderStatement(stmt),
-  InternalAssignStmt(multiAssign), InternalControlStmt(multiReturn),
-  InternalListFunc(listSizeFunc, listAddFunc, listAppendFunc))
-import qualified Drasil.GOOL.RendererClassesCommon as RC (ImportElim(..),
+
+import qualified Drasil.Shared.RendererClassesCommon as S 
+
+import qualified Drasil.Shared.RendererClassesCommon as RC (ImportElim(..),
   BodyElim(..), InternalTypeElim(..), InternalVarElim(variable), ValueElim(..),
   StatementElim(statement), VisibilityElim(..), MethodElim(..), FunctionElim(..))
-import Drasil.GOOL.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
-  on2StateValues, onStateList)
+
+import Drasil.Shared.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, onStateList)
+
 import Drasil.GOOL.RendererClassesOO (OORenderSym, OORenderMethod(intMethod),
   ParentSpec)
+
 import qualified Drasil.GOOL.RendererClassesOO as S (OOMethodTypeSym(construct),
   OORenderMethod(intFunc), RenderClass(intClass, inherit),
   RenderMod(modFromData))
+
 import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..),
   StateVarElim(..), ClassElim(..))
-import Drasil.GOOL.LanguageRenderer (array', new', args, array, listSep, access,
+
+import Drasil.Shared.LanguageRenderer (listAccessFunc, listSetFunc, array', new', args, array, listSep, access,
   mathFunc, ModuleDocRenderer, FuncDocRenderer, functionDox, classDox,
   moduleDox, variableList, valueList, intValue)
-import qualified Drasil.GOOL.LanguageRenderer as R (self, self', module',
-  print, stateVar, stateVarList, constDecDef, extVar, listAccessFunc)
-import Drasil.GOOL.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
+
+import qualified Drasil.Shared.LanguageRenderer as R (self, self', module',
+  print, stateVar, stateVarList, constDecDef)
+import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkStateVar, mkVal, mkVal)
-import Drasil.GOOL.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic,
+
+import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic,
   call, initStmts, docFunc, docFuncRepr, docClass, docMod, smartAdd, smartSub)
-import Drasil.GOOL.AST (VisibilityTag(..), ScopeTag(Global), ScopeData, sd)
-import Drasil.GOOL.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
+
+import Drasil.Shared.AST (VisibilityTag(..), ScopeTag(Global), ScopeData, sd)
+
+import Drasil.Shared.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
   lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports,
   getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc,
   useVarName, setVarScope)
 
 import Prelude hiding (print,pi,(<>))
 import Data.List (sort, intercalate)
-import Control.Monad (join)
 import Control.Monad.State (get, modify)
 import Control.Lens ((^.))
 import qualified Control.Lens as L (set)
@@ -119,11 +128,6 @@ doxMod :: (OORenderSym r) => String -> String -> [String] -> String -> SFile r -
   SFile r
 doxMod = docMod moduleDox
 
--- Python, Java, C#, and Julia --
-
-extVar :: (CommonRenderSym r) => Label -> Label -> VSType r -> SVariable r
-extVar l n t = mkStateVar (l `access` n) t (R.extVar l n)
-
 -- Python, Java, and C# --
 
 classVar :: (CommonRenderSym r) => (Doc -> Doc -> Doc) -> VSType r -> SVariable r ->
@@ -167,25 +171,19 @@ intClass f n s i svrs cstrs mths = do
   ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) (cstrs ++ mths))
   return $ onCodeValue (\p -> f n p (RC.visibility s) svs ms) i
 
--- Python, Java, C++, and Julia --
-
-funcType :: (CommonRenderSym r) => [VSType r] -> VSType r -> VSType r
-funcType ps' r' =  do
-  ps <- sequence ps'
-  r <- r'
-  typeFromData (Func (map getType ps) (getType r)) "" empty
 
 -- Python and C++ --
 
 -- Parameters: Module name, Doc for imports, Doc to put at top of module (but 
 -- after imports), Doc to put at bottom of module, methods, classes
+-- Renamed top to topDoc to fix shadowing error with RendererClassesOO top
 buildModule :: (OORenderSym r) => Label -> FS Doc -> FS Doc -> FS Doc ->
   [SMethod r] -> [SClass r] -> FSModule r
-buildModule n imps top bot fs cs = S.modFromData n (do
+buildModule n imps topDoc bot fs cs = S.modFromData n (do
   cls <- mapM (zoom lensFStoCS) cs
   fns <- mapM (zoom lensFStoMS) fs
   is <- imps
-  tp <- top
+  tp <- topDoc
   bt <- bot
   return $ R.module' is (vibcat (tp : map RC.class' cls))
     (vibcat (map RC.method fns ++ [bt])))
@@ -318,10 +316,6 @@ docInOutFunc f desc is [] [both] b = docFuncRepr functionDox desc (map fst $
 docInOutFunc f desc is os bs b = docFuncRepr functionDox desc (map fst $ bs ++
   is ++ os) [] (f (map snd is) (map snd os) (map snd bs) b)
 
--- Python, Java, C#, Swift, and Julia --
-extFuncAppMixedArgs :: (CommonRenderSym r) => Library -> MixedCall r
-extFuncAppMixedArgs l = S.call (Just l) Nothing
-
 -- Python, Java, C#, and Swift --
 
 bindingError :: String -> String
@@ -385,17 +379,6 @@ litSetFunc s t es = sequence es >>= (\elems -> mkStateVal (IC.arrayType t)
 extraClass :: (OORenderSym r) =>  Label -> Maybe Label -> [CSStateVar r] ->
   [SMethod r] -> [SMethod r] -> SClass r
 extraClass n = S.intClass n public . S.inherit
-
--- Python, C#, Swift, and Julia --
-
-listAccessFunc :: (CommonRenderSym r) => VSType r -> SValue r -> VSFunction r
-listAccessFunc t v = intValue v >>= ((`funcFromData` t) . R.listAccessFunc)
-
-listSetFunc :: (CommonRenderSym r) => (Doc -> Doc -> Doc) -> SValue r -> SValue r ->
-  SValue r -> VSFunction r
-listSetFunc f v idx setVal = join $ on2StateValues (\i toVal -> funcFromData
-  (f (RC.value i) (RC.value toVal)) (onStateValue valueType v)) (intValue idx)
-  setVal
 
 
 -- Java, C#, and Swift --
@@ -520,22 +503,6 @@ inherit n = toCode $ maybe empty ((colon <+>) . text) n
 implements :: (Monad r) => [Label] -> r ParentSpec
 implements is = toCode $ colon <+> text (intercalate listSep is)
 
--- Python, Swift, and Julia --
-
-forEach' :: (CommonRenderSym r) => (r (Variable r) -> r (Value r) -> r (Body r) -> Doc)
-  -> SVariable r -> SValue r -> MSBody r -> MSStatement r
-forEach' f i' v' b' = do
-  i <- zoom lensMStoVS i'
-  v <- zoom lensMStoVS v'
-  b <- b'
-  mkStmtNoEnd (f i v b)
-
--- Swift and Julia --
-boolRender :: String
-boolRender = "Bool"
-
-bool :: (CommonRenderSym r) => VSType r
-bool = typeFromData Boolean boolRender (text boolRender)
 
 -- TODO: put docMod' back in Swift renderer, as it is no longer common.
 docMod' :: (OORenderSym r) => String -> String -> [String] -> String -> SFile r -> SFile r
@@ -573,22 +540,12 @@ noteDoc = "Note"
 paramDoc = "Parameter"
 returnDoc = "Returns"
 
--- Python and Julia --
 
 -- | For declaring and optionally defining a variable in a language where
 --   declaring a variable before defining it is not required.
 --   v is the variable to declare, and e is Nothing if we are not defining it,
 --   and (Just d) if d is the value we are defining it as.
-varDecDef :: (CommonRenderSym r) => SVariable r -> r (Scope r) -> Maybe (SValue r)
-  -> MSStatement r
-varDecDef v scp e = do
-  v' <- zoom lensMStoVS v
-  modify $ useVarName (variableName v')
-  modify $ setVarScope (variableName v') (scopeData scp)
-  def e
-  where
-    def Nothing = IC.emptyStmt
-    def (Just d) = IC.assign v d
+
 
 fileOpen, fileR, fileW, fileA :: Label
 fileOpen = "open"
@@ -604,13 +561,6 @@ openFileA' n = funcApp fileOpen infile [n, IC.litString fileA]
 argExists :: (CommonRenderSym r) => Integer -> SValue r
 argExists i = listSize IC.argsList ?> IC.litInt (fromIntegral $ i+1)
 
--- Python, Julia, and MATLAB --
-
--- | Call to get the size of a list in a language where this is not a method.
-listSize :: (CommonRenderSym r) => SValue r -> SValue r
-listSize l = do
-  f <- S.listSizeFunc l
-  mkVal (RC.functionType f) (RC.function f)
 
 -- Julia and MATLAB --
 

@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | Implementations for C-like renderers are defined here.
-module Drasil.GOOL.LanguageRenderer.CLike (charRender, float, double, char, 
+module Drasil.Shared.LanguageRenderer.CLike (charRender, float, double, char, 
   listType, setType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
   decrement1, varDec, varDecDef, setDecDef, listDec, extObjDecNew, switch, for, while, 
@@ -10,35 +10,35 @@ module Drasil.GOOL.LanguageRenderer.CLike (charRender, float, double, char,
 
 import Utils.Drasil (indent)
 
-import Drasil.GOOL.CodeType (CodeType(..))
-import Drasil.GOOL.InterfaceCommon (Label, Library, MSBody, VSType, SVariable, 
+import Drasil.Shared.CodeType (CodeType(..))
+import Drasil.Shared.InterfaceCommon (Label, Library, MSBody, VSType, SVariable, 
   SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall, 
   TypeElim(getType, getTypeString), ScopeSym(..),
   VariableElim(..), ValueSym(Value, valueType), VisibilitySym(..))
-import qualified Drasil.GOOL.InterfaceCommon as IC (TypeSym(bool, float),
+import qualified Drasil.Shared.InterfaceCommon as IC (TypeSym(bool, float),
   ValueExpression(funcAppMixedArgs), DeclStatement(varDec, setDec, varDecDef))
 import Drasil.GOOL.InterfaceGOOL (PermanenceSym(..), extNewObj, ($.))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (OOTypeSym(obj),
   OOValueExpression(newObjMixedArgs))
-import Drasil.GOOL.RendererClassesCommon (MSMthdType, CommonRenderSym,
+import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData), 
   ValueElim(valuePrec), ScopeElim(scopeData))
-import qualified Drasil.GOOL.RendererClassesCommon as S (
+import qualified Drasil.Shared.RendererClassesCommon as S (
   InternalListFunc(listSizeFunc), RenderStatement(stmt, loopStmt))
-import qualified Drasil.GOOL.RendererClassesCommon as RC (BodyElim(..),
+import qualified Drasil.Shared.RendererClassesCommon as RC (BodyElim(..),
   InternalTypeElim(..), InternalVarElim(variable), ValueElim(value),
   StatementElim(statement))
 import Drasil.GOOL.RendererClassesOO (OORenderSym,
   OORenderMethod(intMethod))
 import qualified Drasil.GOOL.RendererClassesOO as RC (PermElim(..))
-import Drasil.GOOL.AST (Binding(..), Terminator(..))
-import Drasil.GOOL.Helpers (angles, toState, onStateValue)
-import Drasil.GOOL.LanguageRenderer (forLabel, whileLabel, containing)
-import qualified Drasil.GOOL.LanguageRenderer as R (switch, increment, 
+import Drasil.Shared.AST (Binding(..), Terminator(..))
+import Drasil.Shared.Helpers (angles, toState, onStateValue)
+import Drasil.Shared.LanguageRenderer (forLabel, whileLabel, containing)
+import qualified Drasil.Shared.LanguageRenderer as R (switch, increment, 
   decrement, this', this)
-import Drasil.GOOL.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
+import Drasil.Shared.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
   mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
-import Drasil.GOOL.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName,
+import Drasil.Shared.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName,
   useVarName, setVarScope)
 
 import Prelude hiding (break,(<>))

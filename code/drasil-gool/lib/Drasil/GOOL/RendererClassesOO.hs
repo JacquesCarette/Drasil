@@ -6,18 +6,18 @@ module Drasil.GOOL.RendererClassesOO (
   ModuleElim(..), OORenderMethod(..), OOMethodTypeSym(..)
 ) where
 
-import Drasil.GOOL.InterfaceCommon (Label, MSBody, VSFunction, VSType,
+import Drasil.Shared.InterfaceCommon (Label, MSBody, VSFunction, VSType,
   SVariable, SValue, MSParameter, SMethod, BlockSym(..), VisibilitySym(..))
 import qualified Drasil.GOOL.InterfaceGOOL as IG (SFile, FSModule, SClass,
   CSStateVar, OOVariableValue, OOValueExpression(..), InternalValueExp(..),
   FileSym(..), ModuleSym(..), ClassSym(..), PermanenceSym(..), GetSet(..),
   StateVarSym(..), ObserverPattern(..), StrategyPattern(..))
-import Drasil.GOOL.AST (Binding)
-import Drasil.GOOL.State (FS, CS)
+import Drasil.Shared.AST (Binding)
+import Drasil.Shared.State (FS, CS)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.GOOL.RendererClassesCommon (MSMthdType, CommonRenderSym,
+import Drasil.Shared.RendererClassesCommon (MSMthdType, CommonRenderSym,
   BlockCommentSym(..), MethodTypeSym(..), RenderMethod(..))
 
 class (CommonRenderSym r, IG.FileSym r, IG.InternalValueExp r, IG.GetSet r,

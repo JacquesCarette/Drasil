@@ -1,19 +1,19 @@
 {-# LANGUAGE TypeFamilies #-}
 
-module Drasil.GOOL.RendererClassesProc (
+module Drasil.GProc.RendererClassesProc (
   ProcRenderSym, RenderFile(..), RenderMod(..), ModuleElim(..),
   ProcRenderMethod(..)
 ) where
 
-import Drasil.GOOL.InterfaceCommon (Label, SMethod, MSParameter,
+import Drasil.Shared.InterfaceCommon (Label, SMethod, MSParameter,
   MSBody, BlockSym(..), VisibilitySym(..))
-import qualified Drasil.GOOL.InterfaceProc as IP (SFile, FSModule, FileSym(..),
+import qualified Drasil.GProc.InterfaceProc as IP (SFile, FSModule, FileSym(..),
   ModuleSym(..))
-import Drasil.GOOL.State (FS)
+import Drasil.Shared.State (FS)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-import Drasil.GOOL.RendererClassesCommon (CommonRenderSym, BlockCommentSym(..),
+import Drasil.Shared.RendererClassesCommon (CommonRenderSym, BlockCommentSym(..),
   RenderMethod(..), MSMthdType)
 
 class (CommonRenderSym r, IP.FileSym r, RenderFile r, RenderMod r, ModuleElim r,

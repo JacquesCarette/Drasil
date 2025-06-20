@@ -1,6 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
 
-module Drasil.GOOL.InterfaceCommon (
+module Drasil.Shared.InterfaceCommon (
   -- Types
   Label, Library, MSBody, MSBlock, VSFunction, VSType, SVariable, SValue,
   VSThunk, MSStatement, MSParameter, SMethod, NamedArgs, MixedCall,
@@ -21,13 +21,13 @@ module Drasil.GOOL.InterfaceCommon (
   VisibilitySym(..), ParameterSym(..), MethodSym(..), convType
   ) where
 
-import Drasil.GOOL.CodeType (CodeType(..))
-import Drasil.GOOL.State (MS, VS)
+import Drasil.Shared.CodeType (CodeType(..))
+import Drasil.Shared.State (MS, VS)
 
 import qualified Data.Kind as K (Type)
 import Data.Bifunctor (first)
 import CodeLang.Drasil (Comment)
-import Drasil.GOOL.AST (ScopeData(..), ScopeTag(..))
+import Drasil.Shared.AST (ScopeData(..), ScopeTag(..))
 
 type Label = String
 type Library = String

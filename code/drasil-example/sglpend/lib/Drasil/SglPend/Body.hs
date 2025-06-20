@@ -12,7 +12,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (olu)
 import Data.Drasil.SI_Units (siUnits)
-import Data.Drasil.Concepts.Computation (compcon, inValue, algorithm)
+import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Documentation (srsDomains, doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Education (educon)
@@ -126,10 +126,9 @@ purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pen
 ideaDicts :: [IdeaDict]
 ideaDicts = 
   -- Actual IdeaDicts
-  inValue : doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
+  doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
   -- CIs
-  nw progName : map nw doccon' ++ map nw mathcon' ++ map nw physicCon' ++
-  map nw acronyms
+  nw progName : map nw doccon' ++ map nw mathcon' ++ map nw physicCon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =

@@ -25,7 +25,9 @@ module Database.Drasil.ChunkDB (
   -- ** Lenses
   unitTable, traceTable, refbyTable, citationTable,
   dataDefnTable, insmodelTable, gendefTable, theoryModelTable,
-  conceptinsTable, labelledcontentTable, refTable
+  conceptinsTable, labelledcontentTable, refTable,
+  -- **  Helpers
+  addCdb
 ) where
 
 import Language.Drasil (HasUID(..), UID, Quantity, MayHaveUnit(..), Idea (..),
@@ -245,6 +247,31 @@ cdb s t c u d ins gd tm ci lc r cits =
     _refbyTable = Map.empty,
     _refTable = idMap "RefMap" r
   }
+
+
+addCdb :: ChunkDB -> ChunkDB -> ChunkDB
+addCdb cdb1 cdb2 =
+  CDB {
+    -- CHUNKS
+    symbolTable           = concatCdbMap "SymbolMap" (symbolTable cdb1) (symbolTable cdb2),
+    termTable             = concatCdbMap "TermMap" (termTable cdb1) (termTable cdb2),
+    conceptChunkTable     = concatCdbMap "ConceptMap" (conceptChunkTable cdb1) (conceptChunkTable cdb2),
+    _unitTable            = concatCdbMap "UnitMap" (_unitTable cdb1) (_unitTable cdb2),
+    _dataDefnTable        = concatCdbMap "" (_dataDefnTable cdb1) (_dataDefnTable cdb2),
+    _insmodelTable        = concatCdbMap "" (_insmodelTable cdb1) (_insmodelTable cdb2),
+    _gendefTable          = concatCdbMap "" (_gendefTable cdb1) (_gendefTable cdb2),
+    _theoryModelTable     = concatCdbMap "" (_theoryModelTable cdb1) (_theoryModelTable cdb2),
+    _conceptinsTable      = concatCdbMap "" (_conceptinsTable cdb1) (_conceptinsTable cdb2),
+    _citationTable        = concatCdbMap "" (_citationTable cdb1) (_citationTable cdb2),
+    -- NOT CHUNKS
+    _labelledcontentTable = concatCdbMap "" (_labelledcontentTable cdb1) (_labelledcontentTable cdb2),
+    _traceTable           = concatCdbMap "" (_traceTable cdb1) (_traceTable cdb2),
+    _refbyTable           = concatCdbMap "" (_refbyTable cdb1) (_refbyTable cdb2),
+    _refTable             = concatCdbMap "" (_refTable cdb1) (_refTable cdb2)
+  }
+  where
+    concatCdbMap mn = Map.unionWithKey (preferNew mn) 
+    preferNew mn key new _ = trace ("'" ++ show key ++ "' is inserted twice in '" ++ mn ++ "' while adding to basis!") new
 
 -- | Gets the units of a 'Quantity' as 'UnitDefn's.
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]

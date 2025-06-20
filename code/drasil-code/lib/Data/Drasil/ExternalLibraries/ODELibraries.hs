@@ -357,7 +357,7 @@ fode = "FirstOrderDifferentialEquations"
 
 -- | Collects variables needed for Apache's ODEs as 'QuantityDict's.
 apacheODESymbols :: [QuantityDict]
-apacheODESymbols = map qw [it, currVals, stepHandler, t0, y0, t, interpolator,
+apacheODESymbols = map qw [it, currVals, stepHandler, t0, y0, interpolator,
   isLast, curr, ode] ++ map qw [adamsC, dp54C, stepHandlerCtor, addStepHandler,
   initMethod, handleStep, getInterpState, integrate, odeCtor, getDimension,
   computeDerivatives]
@@ -489,8 +489,8 @@ popT = Actor "Populate"
 
 -- | Collects variables needed for odeint's ODEs as 'QuantityDict's.
 odeintSymbols :: [QuantityDict]
-odeintSymbols = map qw [odeintCurrVals, rk, stepper, pop, t, y, ode] ++ map qw
-  [rkdp5C, makeControlled, adamsBashC, integrateConst, odeCtor, odeOp, popCtor,
+odeintSymbols = map qw [odeintCurrVals, rk, stepper, pop] ++ map qw
+  [rkdp5C, makeControlled, adamsBashC, integrateConst, odeOp, popCtor,
   popOp]
 
 odeintCurrVals, rk, stepper, pop :: CodeVarChunk

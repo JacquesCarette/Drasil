@@ -141,7 +141,7 @@ ideaDicts =
   -- Actual IdeaDicts
   sciCompS : concepts ++ doccon ++
   -- CIs
-  nw progName : map nw acronyms ++ map nw mathcon' ++ map nw doccon'
+  nw progName : map nw mathcon' ++ map nw doccon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =

@@ -185,3 +185,21 @@ pendDisAngle = cuc' "pendDisAngle"
   "column vector of displacement of rods with its derivatives"
   lTheta' radian (Vect Real)
   [physRange $ UpFrom (Inc, exactDbl 0)] (exactDbl 0)
+
+
+velocityVec_1 :: UnitalChunk
+velocityVec_1 = uc' "v_vec1"
+  (nounPhraseSP "velocity vector of the first object")
+  (S "Velocity vector of the first object in two dimensions")
+  (sub (vec lV) label1)  -- Symbol for vector v with subscript 1
+  (Vect Real)            -- Vector-valued quantity of real numbers
+  velU                   -- Units of velocity
+
+velocityVec_2 :: UnitalChunk
+velocityVec_2 = uc' "v_vec2"
+  (nounPhraseSP "velocity vector of the second object")
+  (S "Velocity vector of the second object in two dimensions")
+  (sub (vec lV) label2)
+  (Vect Real)
+  velU
+

@@ -123,7 +123,13 @@ forceGQD = mkQuantDef force forceGEqn
 forceGEqn :: PExpr
 forceGEqn = vScale (sy mass) (sy acceleration)
 
--- Vectors velocity definitions
+-- NOTE:
+-- Ideally, this definition would be written at the vector level:
+--     velocity = d(position)/dt
+-- However, since Drasil does not yet support expressing full vector derivatives
+-- directly, we define velocity component-wise in terms of x and y.
+-- This should be updated once vector-level definitions are supported.
+
 velVecEqn_1 :: PExpr
 velVecEqn_1 = vec2D
   (sy angularVel_1 $* sy lenRod_1 $* cos (sy pendDisAngle_1))

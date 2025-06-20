@@ -19,11 +19,14 @@ velXExpr_2, velYExpr_2 :: PExpr
 velXExpr_2 = sy xVel_1 $+ (sy angularVel_2 $* sy lenRod_2 $* cos (sy pendDisAngle_2))
 velYExpr_2 = sy yVel_1 $+ (sy angularVel_2 $* sy lenRod_2 $* sin (sy pendDisAngle_2))
 
+-- NOTE: The velocity should be computed vectorially (e.g., v = ω × r) rather than component-wise.
+-- This definition uses components explicitly because Drasil does not currently support direct vector operations.
 -- Vector1 velocity
 velVecExpr_1 :: PExpr
 velVecExpr_1 = vec2D
   (sy angularVel_1 $* sy lenRod_1 $* cos (sy pendDisAngle_1))
   (sy angularVel_1 $* positionXEqn_1)
+
 -- Vector2 velocity
 velVecExpr_2 :: PExpr
 velVecExpr_2 = vec2D

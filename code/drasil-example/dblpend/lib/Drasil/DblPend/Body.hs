@@ -147,7 +147,7 @@ ideaDicts =
   -- Actual IdeaDicts
   inValue : doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
   -- CIs
-  nw progName : map nw acronyms ++ map nw doccon' ++ map nw mathcon' ++ map nw physicCon' ++
+  nw progName : map nw doccon' ++ map nw mathcon' ++ map nw physicCon' ++
   -- DefinedQuantityDicts
   map nw [unitVect, unitVectj] ++
   -- UnitalChunks

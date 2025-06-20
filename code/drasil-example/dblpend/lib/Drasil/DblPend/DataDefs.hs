@@ -7,7 +7,7 @@ import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (DataDefinition, ddENoRefs, ddMENoRefs)
 import Drasil.DblPend.Figures (figMotion)
-import Drasil.DblPend.Unitals (pendDisAngle_1, pendDisAngle_2, lenRod_1, lenRod_2, xPos_1, yPos_1, xPos_2, yPos_2)
+import Drasil.DblPend.Unitals (pendDisAngle_1, pendDisAngle_2, lenRod_1, lenRod_2, xPos_1, yPos_1, xPos_2, yPos_2, angularVel_1, angularVel_2, xVel_1, yVel_1)
 import Drasil.DblPend.Concepts (horizontalPos, verticalPos)
 import Data.Drasil.Quantities.Physics (velocity, position, time, acceleration, force)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
@@ -122,3 +122,38 @@ forceGQD = mkQuantDef force forceGEqn
 
 forceGEqn :: PExpr
 forceGEqn = vScale (sy mass) (sy acceleration)
+
+-- Velocity vector definitions
+velVecEqn_1 :: PExpr
+velVecEqn_1 = vec2D
+  (sy angularVel_1 $* sy lenRod_1 $* cos (sy pendDisAngle_1))
+  (sy angularVel_1 $* positionXEqn_1)
+
+velVecEqn_2 :: PExpr
+velVecEqn_2 = vec2D
+  (sy xVel_1 $+ (sy angularVel_2 $* sy lenRod_2 $* cos (sy pendDisAngle_2)))
+  (sy yVel_1 $+ (sy angularVel_2 $* sy lenRod_2 $* sin (sy pendDisAngle_2)))
+
+-- Velocity vector quantity definitions
+
+-- velVecQD_1 :: SimpleQDef
+-- velVecQD_1 = mkQuantDef velVec_1 velVecExpr_1
+
+-- velVecQD_2 :: SimpleQDef
+-- velVecQD_2 = mkQuantDef velVec_2 velVecExpr_2
+
+-- -- Velocity vector data definitions
+
+-- velVecDD_1 :: DataDefinition
+-- velVecDD_1 = ddENoRefs velVecQD_1 Nothing "velVecDD1" []
+
+-- velVecDD_2 :: DataDefinition
+-- velVecDD_2 = ddENoRefs velVecQD_2 Nothing "velVecDD2" []
+
+
+
+
+-- velVecQD_1 = mkQuantDef velVec_1 velVecExpr_1
+-- velVecDD_1 = ddENoRefs velVecQD_1 Nothing "velVecDD1" []
+
+

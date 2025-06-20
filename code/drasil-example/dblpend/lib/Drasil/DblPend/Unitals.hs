@@ -38,9 +38,6 @@ outputs = [qw pendDisAngle]
 constants :: [ConstQDef]
 constants = [gravitationalAccelConst]
 
-units :: [UnitalChunk]
-units = map ucw unitalChunks
-
 unitalChunks :: [UnitalChunk]
 unitalChunks = [ 
   lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2,

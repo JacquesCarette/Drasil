@@ -39,7 +39,7 @@ import Drasil.PDController.Requirements (funcReqs, nonfuncReqs)
 import Drasil.PDController.SpSysDesc (goals, sysFigure, sysGoalInput, sysParts)
 import Drasil.PDController.TModel (theoreticalModels)
 import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
-  inpConstrained, pidConstants, pidDqdConstants, opProcessVariable)
+  inpConstrained, pidConstants, opProcessVariable)
 import Drasil.PDController.ODEs (pidODEInfo)
 import Language.Drasil.Code (quantvar)
 

@@ -191,15 +191,16 @@ velocityVec_1 :: UnitalChunk
 velocityVec_1 = uc' "v_vec1"
   (nounPhraseSP "velocity vector of the first object")
   (S "Velocity vector of the first object in two dimensions")
-  (sub (vec lV) label1)  -- Symbol for vector v with subscript 1
-  (Vect Real)            -- Vector-valued quantity of real numbers
-  velU                   -- Units of velocity
+  (sub (vec cV) label1)
+  (Vect Real)
+  velU
 
 velocityVec_2 :: UnitalChunk
 velocityVec_2 = uc' "v_vec2"
   (nounPhraseSP "velocity vector of the second object")
   (S "Velocity vector of the second object in two dimensions")
-  (sub (vec lV) label2)
+  (sub (vec cV) label2)
   (Vect Real)
   velU
+
 

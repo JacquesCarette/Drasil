@@ -104,7 +104,7 @@ ideaDicts =
   -- Actual IdeaDicts
   materialProprty : prodtcon ++ doccon ++ educon ++ compcon ++
   -- CIs
-  map nw [progName', progName] ++ map nw acronymsFull ++ map nw doccon' ++
+  map nw [progName', progName] ++ [nw phsChgMtrl] ++ map nw doccon' ++
   map nw mathcon'
 
 conceptChunks :: [ConceptChunk]

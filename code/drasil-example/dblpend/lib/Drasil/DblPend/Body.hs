@@ -148,8 +148,6 @@ ideaDicts =
   inValue : doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
   -- CIs
   nw progName : map nw acronyms ++ map nw doccon' ++ map nw mathcon' ++ map nw physicCon' ++
-  -- ConceptChunks
-  map nw [algorithm, len, mass, errMsg, program] ++ map nw physicCon ++ map nw mathcon ++ map nw physicalcon ++
   -- DefinedQuantityDicts
   map nw [unitVect, unitVectj] ++
   -- UnitalChunks
@@ -162,10 +160,12 @@ tableOfAbbrvsIdeaDicts =
   -- CIs
   nw progName : map nw acronyms
 
+conceptChunks :: [ConceptChunk]
+conceptChunks = [algorithm, len, mass, errMsg, program] ++ physicCon ++ mathcon ++ physicalcon ++ srsDomains
+
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll)
-  ideaDicts srsDomains
-  siUnits
+  ideaDicts conceptChunks siUnits
   dataDefs iMods genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.

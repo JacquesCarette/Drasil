@@ -33,6 +33,7 @@ data DocSection = TableOfContents
                 | UCsSec UCsSec
                 | TraceabilitySec TraceabilitySec
                 | AuxConstntSec AuxConstntSec
+                | TAandA [IdeaDict]
                 | Bibliography
                 | AppndxSec AppndxSec
                 | OffShelfSolnsSec OffShelfSolnsSec

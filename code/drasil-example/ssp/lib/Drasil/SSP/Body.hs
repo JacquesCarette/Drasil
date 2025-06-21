@@ -84,14 +84,13 @@ si = SI {
   _outputs     = map qw outputs,
   _constraints = constrained,
   _constants   = [],
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
+  _systemdb   = symbMap
 }
   
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro
-  [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA],
+    [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA tableOfAbbrvs],
   IntroSec $ IntroProg startIntro kSent
     [ IPurpose $ purpDoc progName Verbose
     , IScope scope
@@ -154,6 +153,12 @@ ideaDicts =
   -- CIs
   nw progName : map nw mathcon' ++ map nw doccon' ++ map nw physicCon'
 
+tableOfAbbrvs :: [IdeaDict]
+tableOfAbbrvs =
+  map nw acronyms ++
+  [nw progName] ++
+  map nw symbols
+
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
@@ -177,10 +182,6 @@ tableOfAbbrvsIdeaDicts =
   nw progName :
   -- DefinedQuantityDicts
   map nw symbols
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
-  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

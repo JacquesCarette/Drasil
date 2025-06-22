@@ -49,7 +49,7 @@ import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.Code.ExtLibImport (defs, imports, steps)
 import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
   ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..),
-  Logging(..), Structure(..), hasSampleInput, InternalConcept(..))
+  Logging(..), Structure(..), hasSampleInput, InternalConcept(..), Modularity (..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Expr.Development (Completeness(..))
 import Language.Drasil.Printers (SingleLine(OneLine), codeExprDoc, showHasSymbImpl)
@@ -96,24 +96,44 @@ genMain = genModule "Control" "Controls the flow of the program"
 genMainFunc :: (OOProg r) => GenState (Maybe (SMethod r))
 genMainFunc = do
     g <- get
-    let mainFunc Library = return Nothing
-        mainFunc Program = do
-          modify (\st -> st {currentScope = MainFn})
-          v_filename <- mkVar (quantvar inFileName)
-          logInFile <- maybeLog v_filename
-          co <- initConsts
-          ip <- getInputDecl
-          ics <- genAllInputCalls
-          varDef <- mapM genCalcCall (codeSpec g ^. execOrderO)
-          wo <- genOutputCall
-          return $ Just $ (if CommentFunc `elem` commented g then docMain else
-            mainFunction) $ bodyStatements $ initLogFileVar (logKind g) mainFn
-            ++ varDecDef v_filename mainFn (arg 0)
-            : logInFile
-            -- Constants must be declared before inputs because some derived
-            -- input definitions or input constraints may use the constants
-            ++ catMaybes [co, ip] ++ ics ++ catMaybes (varDef ++ [wo])
-    mainFunc $ implType g
+    if implType g == Library then return Nothing
+                             else genMainFunc'
+
+genMainFunc' :: (OOProg r) => GenState (Maybe (SMethod r))
+genMainFunc' = do
+  g <- get
+  modify (\st -> st {currentScope = MainFn})
+  v_filename <- mkVar (quantvar inFileName)
+  logInFile <- maybeLog v_filename
+  co <- initConsts
+  ip <- getInputDecl
+  ics <- genAllInputCalls
+  varDef <- mapM (assignBodyFunc (modular g)) (codeSpec g ^. execOrderO)
+  wo <- genOutputCall
+  return $ Just $ (if CommentFunc `elem` commented g then docMain else
+    mainFunction) $ bodyStatements $ initLogFileVar (logKind g) mainFn
+    ++ varDecDef v_filename mainFn (arg 0)
+    : logInFile
+    -- Constants must be declared before inputs because some derived input
+    -- definitions or input constraints may use the constants
+    ++ catMaybes [co, ip] ++ ics ++ catMaybes (varDef ++ [wo])
+  where
+    assignBodyFunc :: OOProg r => Modularity -> 
+      CodeDefinition -> GenState (Maybe (MSStatement r))
+    assignBodyFunc Modular   = genCalcCall
+    assignBodyFunc Unmodular = genImdtCalc
+
+-- | Generates a call to a calculation function, given the 'CodeDefinition' for the
+-- value being calculated.
+genImdtCalc :: (OOProg r) => CodeDefinition -> GenState (Maybe (MSStatement r))
+genImdtCalc c = do
+  g <- get
+  let scp = convScope $ currentScope g
+  let val = c ^. codeExpr
+  val' <- convExpr val
+  v <- mkVar (quantvar c)
+  l <- maybeLog v
+  return $ pure ((multi . (: l) . varDecDef v scp) val')
 
 -- | If there are no inputs, the 'inParams' object still needs to be declared
 -- if inputs are 'Bundled', constants are stored 'WithInputs', and constant
@@ -540,17 +560,16 @@ genCalcFunc cdef = do
   let nm = codeName cdef
   tp <- codeType cdef
   v <- mkVar (quantvar cdef)
-  blcks <- case cdef ^. defType
-            of Definition -> liftS $ genCalcBlock CalcReturn cdef
-                 (cdef ^. codeExpr)
-               ODE -> maybe (error $ nm ++ " missing from ExtLibMap")
-                 (\el -> do
-                   defStmts <- mapM convStmt (el ^. defs)
-                   stepStmts <- mapM convStmt (el ^. steps)
-                   return [block (varDec v local : defStmts),
-                     block stepStmts,
-                     block [returnStmt $ valueOf v]])
-                 (Map.lookup nm (extLibMap g))
+  blcks <- case cdef ^. defType of
+            Definition -> liftS $ genCalcBlock CalcReturn cdef (cdef ^. codeExpr)
+            ODE -> maybe (error $ nm ++ " missing from ExtLibMap")
+              (\el -> do
+                defStmts <- mapM convStmt (el ^. defs)
+                stepStmts <- mapM convStmt (el ^. steps)
+                return [block (varDec v local : defStmts),
+                  block stepStmts,
+                  block [returnStmt $ valueOf v]])
+              (Map.lookup nm (extLibMap g))
   desc <- getComment cdef
   publicFunc
     nm

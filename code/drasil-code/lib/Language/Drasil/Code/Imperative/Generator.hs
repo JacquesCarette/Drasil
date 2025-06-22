@@ -36,7 +36,7 @@ import Language.Drasil.CodeSpec (CodeSpec(..), HasOldCodeSpec(..), getODE)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
 
 import Drasil.GOOL (OOProg, VisibilityTag(..),
-  ProgData(..), initialState)
+  ProgData(..), initialState, SMethod)
 import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
@@ -150,8 +150,8 @@ genPackage unRepr = do
       db = codeSpec g ^. systemdbO
       -- prps = show $ sentenceDoc db Implementation OneLine
       --   (foldlSent $ purpose $ codeSpec g)
-      prps = show $ sentenceDoc db Implementation OneLine 
-        (foldlSent $ codeSpec g ^. purpose)  
+      prps = show $ sentenceDoc db Implementation OneLine
+        (foldlSent $ codeSpec g ^. purpose)
       bckgrnd = show $ sentenceDoc db Implementation OneLine
         (foldlSent $ codeSpec g ^. background)
       mtvtn = show $ sentenceDoc db Implementation OneLine
@@ -183,7 +183,7 @@ genProgram :: (OOProg r) => GenState (OO.GSProgram r)
 genProgram = do
   g <- get
   ms <- chooseModules $ modular g
-  let n = codeSpec g ^. pNameO 
+  let n = codeSpec g ^. pNameO
   let p = show $ sentenceDoc (codeSpec g ^. systemdbO) Implementation OneLine $ foldlSent $ codeSpec g ^. purpose
   return $ OO.prog n p ms
 
@@ -202,13 +202,23 @@ genUnmodular = do
   dvName <- genICName DerivedValuesFn
   icName <- genICName InputConstraintsFn
   let n = codeSpec g ^. pNameO
-      cls = any (`member` clsMap g) [giName, dvName, icName]
+      clsyInputs :: OOProg r => [GenState (Maybe (SMethod r))]
+      clsyInputs
+        | any (`member` clsMap g) [giName, dvName, icName] = []
+        | otherwise = [genInputFormat Pub, genInputDerived Pub, genInputConstraints Pub]
+
+      modFuncs :: OOProg r => [GenState (SMethod r)]
+      modFuncs = concatMap genModFuncs (modules g)
+
+      calcFuncs :: OOProg r => Modularity -> [GenState (SMethod r)]
+      calcFuncs Modular   = map genCalcFunc (codeSpec g ^. execOrderO)
+      calcFuncs Unmodular = []
+
+      components :: OOProg r => [GenState (Maybe (SMethod r))]
+      components = genMainFunc : map (fmap Just) (calcFuncs (modular g) ++ modFuncs) ++ clsyInputs ++ [genOutputFormat]
+
   genModuleWithImports n umDesc (concatMap (^. imports) (elems $ extLibMap g))
-    (genMainFunc
-      : map (fmap Just) (map genCalcFunc (codeSpec g ^. execOrderO)
-        ++ concatMap genModFuncs (modules g))
-      ++ ((if cls then [] else [genInputFormat Pub, genInputDerived Pub,
-        genInputConstraints Pub]) ++ [genOutputFormat]))
+    components
     ([genInputClass Auxiliary, genConstClass Auxiliary]
       ++ map (fmap Just) (concatMap genModClasses $ modules g))
 

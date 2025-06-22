@@ -21,111 +21,31 @@ public class Projectile {
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
         InputParameters inParams = new InputParameters(filename);
-        float t_flight = func_t_flight(inParams);
+        float t_flight = 2.0f * inParams.v_launch * (float)(Math.Sin(inParams.theta)) / inParams.g;
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 't_flight' assigned ");
         outfile.Write(t_flight);
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
-        float p_land = func_p_land(inParams);
+        float p_land = 2.0f * (float)(Math.Pow(inParams.v_launch, 2.0f)) * (float)(Math.Sin(inParams.theta)) * (float)(Math.Cos(inParams.theta)) / inParams.g;
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'p_land' assigned ");
         outfile.Write(p_land);
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
-        float d_offset = func_d_offset(inParams, p_land);
+        float d_offset = p_land - inParams.p_target;
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'd_offset' assigned ");
         outfile.Write(d_offset);
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
-        string s = func_s(inParams, d_offset);
+        string s = Math.Abs(d_offset / inParams.p_target) < inParams.epsilon ? "The target was hit." : d_offset < 0.0f ? "The projectile fell short." : "The projectile went long.";
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 's' assigned ");
         outfile.Write(s);
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
         write_output(s, d_offset, t_flight);
-    }
-    
-    /** \brief Calculates flight duration: the time when the projectile lands (s)
-        \param inParams structure holding the input values
-        \return flight duration: the time when the projectile lands (s)
-    */
-    public static float func_t_flight(InputParameters inParams) {
-        StreamWriter outfile;
-        outfile = new StreamWriter("log.txt", true);
-        outfile.WriteLine("function func_t_flight called with inputs: {");
-        outfile.Write("  inParams = ");
-        outfile.WriteLine("Instance of InputParameters object");
-        outfile.WriteLine("  }");
-        outfile.Close();
-        
-        return 2.0f * inParams.v_launch * (float)(Math.Sin(inParams.theta)) / inParams.g;
-    }
-    
-    /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
-        \param inParams structure holding the input values
-        \return landing position: the distance from the launcher to the final position of the projectile (m)
-    */
-    public static float func_p_land(InputParameters inParams) {
-        StreamWriter outfile;
-        outfile = new StreamWriter("log.txt", true);
-        outfile.WriteLine("function func_p_land called with inputs: {");
-        outfile.Write("  inParams = ");
-        outfile.WriteLine("Instance of InputParameters object");
-        outfile.WriteLine("  }");
-        outfile.Close();
-        
-        return 2.0f * (float)(Math.Pow(inParams.v_launch, 2.0f)) * (float)(Math.Sin(inParams.theta)) * (float)(Math.Cos(inParams.theta)) / inParams.g;
-    }
-    
-    /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
-        \param inParams structure holding the input values
-        \param p_land landing position: the distance from the launcher to the final position of the projectile (m)
-        \return distance between the target position and the landing position: the offset between the target position and the landing position (m)
-    */
-    public static float func_d_offset(InputParameters inParams, float p_land) {
-        StreamWriter outfile;
-        outfile = new StreamWriter("log.txt", true);
-        outfile.WriteLine("function func_d_offset called with inputs: {");
-        outfile.Write("  inParams = ");
-        outfile.Write("Instance of InputParameters object");
-        outfile.WriteLine(", ");
-        outfile.Write("  p_land = ");
-        outfile.WriteLine(p_land);
-        outfile.WriteLine("  }");
-        outfile.Close();
-        
-        return p_land - inParams.p_target;
-    }
-    
-    /** \brief Calculates output message as a string
-        \param inParams structure holding the input values
-        \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
-        \return output message as a string
-    */
-    public static string func_s(InputParameters inParams, float d_offset) {
-        StreamWriter outfile;
-        outfile = new StreamWriter("log.txt", true);
-        outfile.WriteLine("function func_s called with inputs: {");
-        outfile.Write("  inParams = ");
-        outfile.Write("Instance of InputParameters object");
-        outfile.WriteLine(", ");
-        outfile.Write("  d_offset = ");
-        outfile.WriteLine(d_offset);
-        outfile.WriteLine("  }");
-        outfile.Close();
-        
-        if (Math.Abs(d_offset / inParams.p_target) < inParams.epsilon) {
-            return "The target was hit.";
-        }
-        else if (d_offset < 0.0f) {
-            return "The projectile fell short.";
-        }
-        else {
-            return "The projectile went long.";
-        }
     }
     
     /** \brief Writes the output values to output.txt

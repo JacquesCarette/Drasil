@@ -123,25 +123,25 @@ int main(int argc, const char *argv[]) {
     outfile << " in module Projectile" << std::endl;
     outfile.close();
     InputParameters inParams = InputParameters(filename);
-    float t_flight = func_t_flight(inParams);
+    float t_flight = 2.0f * inParams.v_launch * sin(inParams.theta) / inParams.g;
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 't_flight' assigned ";
     outfile << t_flight;
     outfile << " in module Projectile" << std::endl;
     outfile.close();
-    float p_land = func_p_land(inParams);
+    float p_land = 2.0f * pow(inParams.v_launch, 2.0f) * sin(inParams.theta) * cos(inParams.theta) / inParams.g;
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'p_land' assigned ";
     outfile << p_land;
     outfile << " in module Projectile" << std::endl;
     outfile.close();
-    float d_offset = func_d_offset(inParams, p_land);
+    float d_offset = p_land - inParams.p_target;
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'd_offset' assigned ";
     outfile << d_offset;
     outfile << " in module Projectile" << std::endl;
     outfile.close();
-    string s = func_s(inParams, d_offset);
+    string s = fabs(d_offset / inParams.p_target) < inParams.epsilon ? "The target was hit." : d_offset < 0.0f ? "The projectile fell short." : "The projectile went long.";
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 's' assigned ";
     outfile << s;
@@ -150,68 +150,6 @@ int main(int argc, const char *argv[]) {
     write_output(s, d_offset, t_flight);
     
     return 0;
-}
-
-float func_t_flight(InputParameters &inParams) {
-    ofstream outfile;
-    outfile.open("log.txt", std::fstream::app);
-    outfile << "function func_t_flight called with inputs: {" << std::endl;
-    outfile << "  inParams = ";
-    outfile << "Instance of InputParameters object" << std::endl;
-    outfile << "  }" << std::endl;
-    outfile.close();
-    
-    return 2.0f * inParams.v_launch * sin(inParams.theta) / inParams.g;
-}
-
-float func_p_land(InputParameters &inParams) {
-    ofstream outfile;
-    outfile.open("log.txt", std::fstream::app);
-    outfile << "function func_p_land called with inputs: {" << std::endl;
-    outfile << "  inParams = ";
-    outfile << "Instance of InputParameters object" << std::endl;
-    outfile << "  }" << std::endl;
-    outfile.close();
-    
-    return 2.0f * pow(inParams.v_launch, 2.0f) * sin(inParams.theta) * cos(inParams.theta) / inParams.g;
-}
-
-float func_d_offset(InputParameters &inParams, float p_land) {
-    ofstream outfile;
-    outfile.open("log.txt", std::fstream::app);
-    outfile << "function func_d_offset called with inputs: {" << std::endl;
-    outfile << "  inParams = ";
-    outfile << "Instance of InputParameters object";
-    outfile << ", " << std::endl;
-    outfile << "  p_land = ";
-    outfile << p_land << std::endl;
-    outfile << "  }" << std::endl;
-    outfile.close();
-    
-    return p_land - inParams.p_target;
-}
-
-string func_s(InputParameters &inParams, float d_offset) {
-    ofstream outfile;
-    outfile.open("log.txt", std::fstream::app);
-    outfile << "function func_s called with inputs: {" << std::endl;
-    outfile << "  inParams = ";
-    outfile << "Instance of InputParameters object";
-    outfile << ", " << std::endl;
-    outfile << "  d_offset = ";
-    outfile << d_offset << std::endl;
-    outfile << "  }" << std::endl;
-    outfile.close();
-    
-    if (fabs(d_offset / inParams.p_target) < inParams.epsilon) {
-        return "The target was hit.";
-    }
-    else if (d_offset < 0.0f) {
-        return "The projectile fell short.";
-    }
-    else {
-        return "The projectile went long.";
-    }
 }
 
 void write_output(string s, float d_offset, float t_flight) {

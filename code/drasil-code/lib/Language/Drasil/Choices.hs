@@ -78,6 +78,7 @@ instance RenderChoices Modularity where
 -- | Program implementation options.
 data ImplementationType = Library -- ^ Generated code does not include Controller.
                         | Program -- ^ Generated code includes Controller.
+  deriving Eq
 
 -- | Renders options for program implementation.
 instance RenderChoices ImplementationType where

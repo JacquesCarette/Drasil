@@ -150,7 +150,7 @@ pendDisAngle_2 = uc' "theta_2" (angle `ofThe` secondRod)
         (sub lTheta label2) Real radian
 
 unitless :: [DefinedQuantityDict]
-unitless = [QM.unitVect, QM.unitVectj, QM.pi_]
+unitless = [QM.unitVect, QM.pi_]
 
 lRod, label1, label2, labelx, labely, initial, lTheta':: Symbol
 lRod = label "rod"

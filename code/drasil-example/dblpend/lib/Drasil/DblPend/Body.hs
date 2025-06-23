@@ -148,8 +148,6 @@ ideaDicts =
   doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
   -- CIs
   nw progName : map nw doccon' ++ map nw mathcon' ++ map nw physicCon' ++
-  -- DefinedQuantityDicts
-  [nw unitVect] ++
   -- UnitalChunks
   map nw physicscon
 

@@ -23,7 +23,7 @@ import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
 import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate, educon, )
 import Data.Drasil.Concepts.Math (mathcon, cartesian, ode, mathcon', graph)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion)
-import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
+import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
@@ -161,7 +161,7 @@ tableOfAbbrvsIdeaDicts =
   nw progName : map nw acronyms
 
 conceptChunks :: [ConceptChunk]
-conceptChunks = [algorithm, len, mass, errMsg, program] ++ physicCon ++ mathcon ++ physicalcon ++ srsDomains
+conceptChunks = [algorithm, errMsg, program] ++ physicCon ++ mathcon ++ physicalcon ++ srsDomains
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll)

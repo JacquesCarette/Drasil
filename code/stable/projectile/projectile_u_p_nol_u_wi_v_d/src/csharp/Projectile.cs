@@ -21,9 +21,13 @@ public class Projectile {
         double p_target;
         get_input(filename, out v_launch, out theta, out p_target);
         input_constraints(v_launch, theta, p_target);
+        // flight duration: the time when the projectile lands (s)
         double t_flight = 2.0 * v_launch * Math.Sin(theta) / g;
+        // landing position: the distance from the launcher to the final position of the projectile (m)
         double p_land = 2.0 * Math.Pow(v_launch, 2.0) * Math.Sin(theta) * Math.Cos(theta) / g;
+        // distance between the target position and the landing position: the offset between the target position and the landing position (m)
         double d_offset = p_land - p_target;
+        // output message as a string
         string s = Math.Abs(d_offset / p_target) < epsilon ? "The target was hit." : d_offset < 0.0 ? "The projectile fell short." : "The projectile went long.";
         write_output(s, d_offset, t_flight);
     }

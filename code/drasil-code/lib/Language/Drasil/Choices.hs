@@ -209,6 +209,7 @@ makeDocConfig = DocConfig
 data Comments = CommentFunc -- ^ Function/method-level comments.
               | CommentClass -- ^ Class-level comments.
               | CommentMod -- ^ File/Module-level comments.
+              | CommentVarDecls -- ^ Variable declarations comments.
               deriving Eq
 
 -- | Renders options for implementation of comments.
@@ -216,6 +217,7 @@ instance RenderChoices Comments where
   showChs CommentFunc = S "CommentFunc"
   showChs CommentClass = S "CommentClass"
   showChs CommentMod = S "CommentMod"
+  showChs CommentVarDecls = S "CommentVarDecls"
 
 -- | Doxygen file verbosity options.
 data Verbosity = Verbose | Quiet

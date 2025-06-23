@@ -132,8 +132,12 @@ var theta: Double
 var p_target: Double
 (v_launch, theta, p_target) = try get_input(filename)
 input_constraints(v_launch, theta, p_target)
+// flight duration: the time when the projectile lands (s)
 var t_flight: Double = 2.0 * v_launch * sin(theta) / g
+// landing position: the distance from the launcher to the final position of the projectile (m)
 var p_land: Double = 2.0 * pow(v_launch, 2.0) * sin(theta) * cos(theta) / g
+// distance between the target position and the landing position: the offset between the target position and the landing position (m)
 var d_offset: Double = p_land - p_target
+// output message as a string
 var s: String = abs(d_offset / p_target) < epsilon ? "The target was hit." : d_offset < 0.0 ? "The projectile fell short." : "The projectile went long."
 try write_output(s, d_offset, t_flight)

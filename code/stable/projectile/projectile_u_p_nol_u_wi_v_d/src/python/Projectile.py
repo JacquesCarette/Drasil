@@ -75,8 +75,12 @@ g = 9.8
 epsilon = 2.0e-2
 v_launch, theta, p_target = get_input(filename)
 input_constraints(v_launch, theta, p_target)
+# flight duration: the time when the projectile lands (s)
 t_flight = 2.0 * v_launch * math.sin(theta) / g
+# landing position: the distance from the launcher to the final position of the projectile (m)
 p_land = 2.0 * v_launch ** 2.0 * math.sin(theta) * math.cos(theta) / g
+# distance between the target position and the landing position: the offset between the target position and the landing position (m)
 d_offset = p_land - p_target
+# output message as a string
 s = "The target was hit." if math.fabs(d_offset / p_target) < epsilon else "The projectile fell short." if d_offset < 0.0 else "The projectile went long."
 write_output(s, d_offset, t_flight)

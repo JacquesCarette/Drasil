@@ -62,7 +62,7 @@ import Drasil.GOOL (MSBody, MSBlock, SVariable, SValue, MSStatement,
   DeclStatement(..), OODeclStatement(..), objDecNewNoParams,
   extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse,
   VisibilitySym(..), MethodSym(..), StateVarSym(..), pubDVar, convType,
-    convTypeOO, VisibilityTag(..))
+    convTypeOO, VisibilityTag(..), CommentStatement(..))
 
 import qualified Drasil.GOOL as OO (SFile)
 import Drasil.GProc (ProcProg)
@@ -114,7 +114,7 @@ modularMainFunc = do
   varDef <- mapM genCalcCall (codeSpec g ^. execOrderO)
   wo <- genOutputCall
   let mainW = if CommentFunc `elem` commented g then docMain else mainFunction
-  return $ Just $ mainW $ bodyStatements $ 
+  return $ Just $ mainW $ bodyStatements $
     initLogFileVar (logKind g) mainFn ++ varDecDef v_filename mainFn (arg 0)
     : logInFile
     -- Constants must be declared before inputs because some derived input
@@ -134,7 +134,7 @@ unmodularMainFunc = do
   varDef <- mapM declVarCalc (codeSpec g ^. execOrderO)
   wo <- genOutputCall
   let mainW = if CommentFunc `elem` commented g then docMain else mainFunction
-  return $ Just $ mainW $ bodyStatements $ 
+  return $ Just $ mainW $ bodyStatements $
     initLogFileVar (logKind g) mainFn ++ varDecDef v_filename mainFn (arg 0)
     : logInFile
     -- Constants must be declared before inputs because some derived input
@@ -150,7 +150,10 @@ declVarCalc c = do
   val' <- convExpr val
   v <- mkVar (quantvar c)
   l <- maybeLog v
-  return $ pure ((multi . (: l) . varDecDef v scp) val')
+  cmnt <- getComment c
+  let cmnt' = [comment cmnt | CommentVarDecls `elem` commented g]
+      statements = cmnt' ++ varDecDef v scp val' : l  
+  return $ pure $ multi statements
 
 -- | If there are no inputs, the 'inParams' object still needs to be declared
 -- if inputs are 'Bundled', constants are stored 'WithInputs', and constant

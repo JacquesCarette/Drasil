@@ -33,9 +33,13 @@ int main(int argc, const char *argv[]) {
     double p_target;
     get_input(filename, v_launch, theta, p_target);
     input_constraints(v_launch, theta, p_target);
+    // flight duration: the time when the projectile lands (s)
     double t_flight = 2.0 * v_launch * sin(theta) / g;
+    // landing position: the distance from the launcher to the final position of the projectile (m)
     double p_land = 2.0 * pow(v_launch, 2.0) * sin(theta) * cos(theta) / g;
+    // distance between the target position and the landing position: the offset between the target position and the landing position (m)
     double d_offset = p_land - p_target;
+    // output message as a string
     string s = fabs(d_offset / p_target) < epsilon ? "The target was hit." : d_offset < 0.0 ? "The projectile fell short." : "The projectile went long.";
     write_output(s, d_offset, t_flight);
     

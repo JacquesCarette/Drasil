@@ -15,7 +15,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (position, force, velocity
   angularVelocity, angularAccel, gravitationalAccel, gravitationalMagnitude, tension, acceleration, time)
 import Data.Drasil.Concepts.Physics (twoD)
 import Data.Drasil.Concepts.Math as CM (angle, xDir, yDir)
-import Data.Drasil.Quantities.Math as QM (unitVect, unitVectj, pi_)
+import Data.Drasil.Quantities.Math as QM (unitVect, pi_)
 import Drasil.DblPend.Concepts (firstRod, secondRod, firstObject, secondObject, horizontalPos,
   verticalPos, horizontalVel, verticalVel, horizontalAccel, verticalAccel)
 import Data.Drasil.Units.Physics (velU, accelU, angVelU, angAccelU)

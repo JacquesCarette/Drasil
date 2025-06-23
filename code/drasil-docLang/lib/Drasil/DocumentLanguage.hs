@@ -245,6 +245,13 @@ mkRefSec progName' acronyms' si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef
     mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI tOfUnitSIName
     mkSubRef sys@SI{_systemdb = db} (TUnits' con f) =
         SRS.tOfUnit [tuIntro con, LlC $ f (nub $ sortBy compUnitDefn $ extractUnits dd db)] []
+  -- FIXME: _quants = v should be removed from this binding and symbols should
+  -- be acquired solely through document traversal, however #1658. If we do
+  -- just the doc traversal here, then we lose some symbols which only appear
+  -- in a table in GlassBR. If we grab symbols from tables (by removing the `isVar`)
+  -- in ExtractDocDesc, then the passes which extract `DefinedQuantityDict`s will
+  -- error out because some of the symbols in tables are only `QuantityDict`s, and thus
+  -- missing a `Concept`.
     
     mkSubRef sys@SI{_quants = v, _systemdb = cdb} (TSymb con) =
       SRS.tOfSymb

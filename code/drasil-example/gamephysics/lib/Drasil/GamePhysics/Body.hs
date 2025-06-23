@@ -139,16 +139,16 @@ ideaDicts =
   doccon ++ educon ++ prodtcon ++
   -- CIs
   map nw [progName, centreMass] ++ map nw doccon' ++ map nw CM.mathcon' ++
-  map nw CP.physicCon'
+  map nw CP.physicCon' ++
+  -- DefinedQuantityDicts
+  map nw defSymbols
   
 conceptChunks :: [ConceptChunk]
 conceptChunks = 
   -- ConceptChunks
   algorithm : softwarecon ++ CP.physicCon ++ CM.mathcon ++ srsDomains ++
   -- InstanceModels
-  map cw iMods ++
-  -- DefinedQuantityDicts
-  map cw defSymbols
+  map cw iMods
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks

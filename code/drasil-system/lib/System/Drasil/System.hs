@@ -57,10 +57,9 @@ data System where
   , _configFiles :: [String]
   , _inputs      :: [h]
   , _outputs     :: [i]
-  , _constraints :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
+  , _constraints :: [j] --TODO: Add SymbolMap
   , _constants   :: [ConstQDef]
-  , _systemdb   :: ChunkDB
-  , _usedinfodb  :: ChunkDB
+  , _systemdb    :: ChunkDB
   } -> System
 
 makeClassy ''System

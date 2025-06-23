@@ -65,6 +65,8 @@ import qualified Data.Map as Map (elems, toList, assocs, keys)
 import Data.Maybe (maybeToList)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
+import Language.Drasil (getA, CI)
+
 -- * Main Function
 -- | Creates a document from a document description, a title combinator function, and system information.
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
@@ -224,31 +226,41 @@ mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothi
 
 -- | Helper for creating the reference section and subsections.
 -- Includes Table of Symbols, Units and Abbreviations and Acronyms.
-mkRefSec :: System -> DocDesc -> RefSec -> Section
-mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
+mkRefSec :: CI -> [CI] -> System -> DocDesc -> RefSec -> Section
+mkRefSec progName' acronyms' si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
   where
+    -- [Implementation Notes]
+    -- 1. Abbreviations should be collected from:
+    --    - The system's term table (filtered for valid abbreviations)
+    --    - Program name concept
+    --    - Defined acronyms
+    prepareAbbreviations :: System -> [IdeaDict]
+    prepareAbbreviations sys = undefined  -- TODO
+
+    -- 2. Document sections need conversion to ModelExpr for ccss
+    docDescToModelExpr :: DocDesc -> [ModelExpr]
+    docDescToModelExpr = undefined  -- TODO: Convert document sections
+
     mkSubRef :: System -> RefTab -> Section
     mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI tOfUnitSIName
-    mkSubRef SI {_systemdb = db} (TUnits' con f) =
+    mkSubRef sys@SI{_systemdb = db} (TUnits' con f) =
         SRS.tOfUnit [tuIntro con, LlC $ f (nub $ sortBy compUnitDefn $ extractUnits dd db)] []
-    -- FIXME: _quants = v should be removed from this binding and symbols should
-    -- be acquired solely through document traversal, however #1658. If we do
-    -- just the doc traversal here, then we lose some symbols which only appear
-    -- in a table in GlassBR. If we grab symbols from tables (by removing the `isVar`)
-    -- in ExtractDocDesc, then the passes which extract `DefinedQuantityDict`s will
-    -- error out because some of the symbols in tables are only `QuantityDict`s, and thus
-    -- missing a `Concept`.
-    mkSubRef SI {_quants = v, _systemdb = cdb} (TSymb con) =
+    
+    mkSubRef sys@SI{_quants = v, _systemdb = cdb} (TSymb con) =
       SRS.tOfSymb
-      [tsIntro con,
-                LlC $ table Equational (sortBySymbol
-                $ filter (`hasStageSymbol` Equational)
-                (nub $ map qw v ++ ccss' (getDocDesc dd) (egetDocDesc dd) cdb))
-                atStart] []
-    mkSubRef SI {_systemdb = cdb} (TSymb' f con) =
-      mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
-    mkSubRef SI {_usedinfodb = db} TAandA =
-      SRS.tOfAbbAcc [LlC $ tableAbbAccGen $ nub $ map fst $ Map.elems $ termTable db] []
+        [tsIntro con,
+        LlC $ table Equational (sortBySymbol
+        $ filter (`hasStageSymbol` Equational)
+        (nub $ map qw v ++ ccss' modelExprs modelExprs cdb))
+        atStart] []
+      where modelExprs = docDescToModelExpr dd
+    
+    mkSubRef sys@SI{_systemdb = cdb} (TSymb' f con) =
+      mkTSymb (ccss modelExprs modelExprs cdb) f con
+      where modelExprs = docDescToModelExpr dd
+    
+    mkSubRef sys _ =
+      SRS.tOfAbbAcc [LlC $ tableAbbAccGen (prepareAbbreviations sys)] []
 
 -- | Helper for creating the table of symbols.
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>

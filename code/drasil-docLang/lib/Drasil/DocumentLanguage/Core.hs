@@ -22,6 +22,7 @@ type DocDesc = [DocSection]
 
 -- | Document sections are either Reference, Introduction, or Specific
 -- System Description sections (for now!).
+-- In the DocSection data type, update TAandA to take a list of IdeaDicts
 data DocSection = TableOfContents
                 | RefSec RefSec
                 | IntroSec IntroSec
@@ -33,7 +34,7 @@ data DocSection = TableOfContents
                 | UCsSec UCsSec
                 | TraceabilitySec TraceabilitySec
                 | AuxConstntSec AuxConstntSec
-                | TAandA [IdeaDict]
+                | TAandA [IdeaDict]                
                 | Bibliography
                 | AppndxSec AppndxSec
                 | OffShelfSolnsSec OffShelfSolnsSec
@@ -54,8 +55,6 @@ data RefTab where
   -- | Allows Lens functions in addition to an introduction for a table of symbols.
   TSymb' :: LFunc -> [TSIntro] -> RefTab
   -- | Default.
-  TAandA :: RefTab
-  -- add more here
 
 -- | For creating a table of symbols introduction
 data TSIntro = TypogConvention [TConvention] -- ^ Typographic conventions used.
@@ -289,6 +288,7 @@ instance Multiplate DLPlate where
     ds (OffShelfSolnsSec x) = OffShelfSolnsSec <$> offShelfSec p x
     ds (AuxConstntSec x) = AuxConstntSec <$> auxConsSec p x
     ds (AppndxSec x) = AppndxSec <$> appendSec p x
+    ds (TAandA abbrevs) = pure $ TAandA abbrevs    
     ds Bibliography = pure Bibliography
 
     res (RefProg c x) = pure $ RefProg c x

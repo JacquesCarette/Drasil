@@ -71,6 +71,7 @@ toToC (LCsSec lc)          = mktLCsSec lc
 toToC (UCsSec ulcs)        = mktUCsSec ulcs
 toToC (TraceabilitySec t)  = mktTraceabilitySec t
 toToC (AuxConstntSec acs)  = mktAuxConsSec acs
+toToC (TAandA _)           = mktTAandA
 toToC Bibliography         = mktBib
 toToC (AppndxSec a)        = mktAppndxSec a
 toToC (OffShelfSolnsSec o) = mktOffShelfSolnSec o
@@ -94,7 +95,6 @@ mktRefSec (RefProg _ l) =
     mktSubRef (TUnits' _ _) = namedRef SRS.tOfUnitLabel   $ titleize' Doc.tOfUnit
     mktSubRef (TSymb _)     = namedRef SRS.tOfSymbLabel   $ titleize' Doc.tOfSymb
     mktSubRef (TSymb' _ _)  = namedRef SRS.tOfSymbLabel   $ titleize' Doc.tOfSymb
-    mktSubRef TAandA        = namedRef SRS.tOfAbbAccLabel $ titleize' Doc.abbAcc
 
 -- | Helper for creating the 'Introduction' section ToC entry
 mktIntroSec :: IntroSec -> ItemType
@@ -174,6 +174,10 @@ mktTraceabilitySec (TraceabilityProg _) = Flat $ namedRef SRS.traceMatricesLabel
 -- | Helper for creating the 'Values of Auxiliary Constants' section ToC entry
 mktAuxConsSec :: AuxConstntSec -> ItemType
 mktAuxConsSec (AuxConsProg _ _) = Flat $ namedRef SRS.valsOfAuxConsLabel $ titleize  Doc.consVals
+
+-- | Helper for creating the 'Table of Abbreviations and Acronyms' section ToC entry
+mktTAandA :: ItemType
+mktTAandA = Flat $ namedRef SRS.tOfAbbAccLabel $ titleize' Doc.abbAcc
 
 -- | Helper for creating the 'References' section ToC entry
 mktBib :: ItemType

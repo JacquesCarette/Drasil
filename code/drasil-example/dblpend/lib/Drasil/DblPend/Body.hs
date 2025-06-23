@@ -20,7 +20,7 @@ import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   environment, datum, input_, interface, output_, problem, product_,
   physical, sysCont, software, softwareConstraint, softwareSys, srsDomains,
   system, user, doccon, doccon', analysis)
-import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate, educon, )
+import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate, educon)
 import Data.Drasil.Concepts.Math (mathcon, cartesian, ode, mathcon', graph)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
@@ -48,7 +48,6 @@ import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
 import Language.Drasil.Code (quantvar)
 import Drasil.DblPend.ODEs (dblPenODEInfo)
 
-
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
@@ -58,14 +57,17 @@ fullSI = fillcdbSRS mkSRS si
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
+-- Get abbreviations from symbols and acronyms
+abbreviationsList :: [IdeaDict]
+abbreviationsList = map nw symbols ++ map nw acronyms
+
 mkSRS :: SRSDecl
-mkSRS = [TableOfContents, -- This creates the Table of Contents
-  RefSec $      --This creates the Reference section of the SRS
-    RefProg intro      -- This add the introduction blob to the reference section
-      [ TUnits         -- Adds table of unit section with a table frame
-      , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
-      -- introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
-      , TAandA         -- Add table of abbreviation and acronym section
+mkSRS = [TableOfContents,
+  RefSec $
+    RefProg intro
+      [ TUnits
+      , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits]
+      , TAandA abbreviationsList  -- Pass abbreviations directly 
       ],
   IntroSec $
     IntroProg (justification progName) (phrase progName)
@@ -80,12 +82,11 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       SystCons [] []],                            
   SSDSec $ 
     SSDProg
-      [ SSDProblem $ PDProg purp []                -- This adds a is used to define the problem your system will solve
-        [ TermsAndDefs Nothing terms               -- This is used to define the terms to be defined in terminology sub section
-      , PhySysDesc progName physSystParts figMotion [] -- This defines the Physicalsystem sub-section, define the parts
-                                                          -- of the system using physSysParts, figMotion is a function in figures for the image
-      , Goals goalsInputs] -- This adds a goals section and goals input is defined for the preample of the goal.
-      , SSDSolChSpec $ SCSProg --This creates the solution characteristics section with a preamble
+      [ SSDProblem $ PDProg purp []
+        [ TermsAndDefs Nothing terms
+      , PhySysDesc progName physSystParts figMotion []
+      , Goals goalsInputs]
+      , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)
         , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
@@ -101,8 +102,8 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
     ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
-     AuxConsProg progName [], -- Adds Auxilliary constraint section
-  Bibliography                -- Adds reference section
+     AuxConsProg progName [],
+  Bibliography
   ]
 
 si :: System
@@ -123,8 +124,12 @@ si = SI {
   _constraints = inConstraints,
   _constants   = constants,
   _systemdb   = symbMap,
-  _usedinfodb  = usedDB
-}
+  _usedinfodb  = emptyCDB -- Temporary empty ChunkDB
+  } 
+
+
+emptyCDB :: ChunkDB
+emptyCDB = cdb [] [] [] [] [] [] [] [] [] [] [] []
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum]

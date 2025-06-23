@@ -289,3 +289,4 @@ generateRefbyMap = invert
 -- | Trace a 'UID' to referenced 'UID's.
 refbyLookup :: UID -> RefbyMap -> [UID]
 refbyLookup c = fromMaybe [] . Map.lookup c
+

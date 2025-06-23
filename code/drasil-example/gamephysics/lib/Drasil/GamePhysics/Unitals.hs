@@ -24,8 +24,7 @@ import Control.Lens((^.))
 import Data.Drasil.Constraints (gtZeroConstr)
 
 defSymbols :: [DefinedQuantityDict]
-defSymbols = map dqdWr unitSymbs ++ map dqdWr inputConstraints ++
-  map dqdWr outputConstraints
+defSymbols = map dqdWr unitSymbs ++ map dqdWr inputConstraints
 
 unitSymbs :: [UnitalChunk]
 unitSymbs = map ucw [iVect, jVect, normalVect,

@@ -26,7 +26,7 @@ import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, t
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Quantities.Physics (physicscon)
-import Data.Drasil.Quantities.Math (unitVect, unitVectj)
+import Data.Drasil.Quantities.Math (unitVect)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 import Data.Drasil.TheoryConcepts (inModel)
@@ -149,7 +149,7 @@ ideaDicts =
   -- CIs
   nw progName : map nw doccon' ++ map nw mathcon' ++ map nw physicCon' ++
   -- DefinedQuantityDicts
-  map nw [unitVect, unitVectj] ++
+  [nw unitVect] ++
   -- UnitalChunks
   map nw physicscon
 

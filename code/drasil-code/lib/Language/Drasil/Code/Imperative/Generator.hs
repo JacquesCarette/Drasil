@@ -17,7 +17,7 @@ import Language.Drasil.Code.Imperative.Modules (genInputMod, genInputModProc,
   genConstClass, genConstMod, checkConstClass, genInputClass,
   genInputConstraints, genInputConstraintsProc, genInputDerived,
   genInputDerivedProc, genInputFormat, genInputFormatProc, genMain, genMainProc,
-  genMainFunc, genMainFuncProc, genCalcMod, genCalcModProc, genCalcFunc,
+  genMainFunc, genMainFuncProc, genCalcMod, genCalcModProc,
   genCalcFuncProc, genOutputFormat, genOutputFormatProc, genOutputMod,
   genOutputModProc, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
@@ -189,12 +189,12 @@ genProgram = do
 
 -- | Generates either a single module or many modules, based on the users choice
 -- of modularity.
-chooseModules :: (OOProg r) => Modularity -> GenState [OO.SFile r]
+chooseModules :: OOProg r => Modularity -> GenState [OO.SFile r]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules Modular = genModules
 
 -- | Generates an entire SCS program as a single module.
-genUnmodular :: (OOProg r) => GenState (OO.SFile r)
+genUnmodular :: OOProg r => GenState (OO.SFile r)
 genUnmodular = do
   g <- get
   umDesc <- unmodularDesc
@@ -207,20 +207,19 @@ genUnmodular = do
         | any (`member` clsMap g) [giName, dvName, icName] = []
         | otherwise = [genInputFormat Pub, genInputDerived Pub, genInputConstraints Pub]
 
-      modFuncs :: OOProg r => [GenState (SMethod r)]
-      modFuncs = concatMap genModFuncs (modules g)
-
-      calcFuncs :: OOProg r => Modularity -> [GenState (SMethod r)]
-      calcFuncs Modular   = map genCalcFunc (codeSpec g ^. execOrderO)
-      calcFuncs Unmodular = []
+      modFuncs :: OOProg r => [GenState (Maybe (SMethod r))]
+      modFuncs = map (fmap Just) $ concatMap genModFuncs (modules g)
 
       components :: OOProg r => [GenState (Maybe (SMethod r))]
-      components = genMainFunc : map (fmap Just) (calcFuncs (modular g) ++ modFuncs) ++ clsyInputs ++ [genOutputFormat]
+      components = genMainFunc : modFuncs ++ clsyInputs ++ [genOutputFormat]
 
-  genModuleWithImports n umDesc (concatMap (^. imports) (elems $ extLibMap g))
+      classes = [genInputClass Auxiliary, genConstClass Auxiliary] ++ map (fmap Just) (concatMap genModClasses $ modules g)
+
+  genModuleWithImports n umDesc
+    (concatMap (^. imports)
+    (elems $ extLibMap g))
     components
-    ([genInputClass Auxiliary, genConstClass Auxiliary]
-      ++ map (fmap Just) (concatMap genModClasses $ modules g))
+    classes
 
 -- | Generates all modules for an SCS program.
 genModules :: (OOProg r) => GenState [OO.SFile r]

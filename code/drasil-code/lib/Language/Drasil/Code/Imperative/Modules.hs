@@ -93,14 +93,17 @@ genMain = genModule "Control" "Controls the flow of the program"
 -- functions for reading input values, calculating derived inputs, checking
 -- constraints, calculating outputs, and printing outputs.
 -- Returns Nothing if the user chose to generate a library.
-genMainFunc :: (OOProg r) => GenState (Maybe (SMethod r))
+genMainFunc :: OOProg r => GenState (Maybe (SMethod r))
 genMainFunc = do
-    g <- get
-    if implType g == Library then return Nothing
-                             else genMainFunc'
+  g <- get
+  case (implType g, modular g) of
+    (Library, _)         -> return Nothing
+    (Program, Modular)   -> modularMainFunc
+    (Program, Unmodular) -> unmodularMainFunc
 
-genMainFunc' :: (OOProg r) => GenState (Maybe (SMethod r))
-genMainFunc' = do
+-- | Structure of a modularized program's "main" function.
+modularMainFunc :: OOProg r => GenState (Maybe (SMethod r))
+modularMainFunc = do
   g <- get
   modify (\st -> st {currentScope = MainFn})
   v_filename <- mkVar (quantvar inFileName)
@@ -108,25 +111,39 @@ genMainFunc' = do
   co <- initConsts
   ip <- getInputDecl
   ics <- genAllInputCalls
-  varDef <- mapM (assignBodyFunc (modular g)) (codeSpec g ^. execOrderO)
+  varDef <- mapM genCalcCall (codeSpec g ^. execOrderO)
   wo <- genOutputCall
-  return $ Just $ (if CommentFunc `elem` commented g then docMain else
-    mainFunction) $ bodyStatements $ initLogFileVar (logKind g) mainFn
-    ++ varDecDef v_filename mainFn (arg 0)
+  let mainW = if CommentFunc `elem` commented g then docMain else mainFunction
+  return $ Just $ mainW $ bodyStatements $ 
+    initLogFileVar (logKind g) mainFn ++ varDecDef v_filename mainFn (arg 0)
     : logInFile
     -- Constants must be declared before inputs because some derived input
     -- definitions or input constraints may use the constants
     ++ catMaybes [co, ip] ++ ics ++ catMaybes (varDef ++ [wo])
-  where
-    assignBodyFunc :: OOProg r => Modularity -> 
-      CodeDefinition -> GenState (Maybe (MSStatement r))
-    assignBodyFunc Modular   = genCalcCall
-    assignBodyFunc Unmodular = genImdtCalc
 
--- | Generates a call to a calculation function, given the 'CodeDefinition' for the
--- value being calculated.
-genImdtCalc :: (OOProg r) => CodeDefinition -> GenState (Maybe (MSStatement r))
-genImdtCalc c = do
+-- | Structure of a unmodular program's "main" function.
+unmodularMainFunc :: OOProg r => GenState (Maybe (SMethod r))
+unmodularMainFunc = do
+  g <- get
+  modify (\st -> st {currentScope = MainFn})
+  v_filename <- mkVar (quantvar inFileName)
+  logInFile <- maybeLog v_filename
+  co <- initConsts
+  ip <- getInputDecl
+  ics <- genAllInputCalls -- TODO: How should the the above 3 (inclusive) be changed?
+  varDef <- mapM declVarCalc (codeSpec g ^. execOrderO)
+  wo <- genOutputCall
+  let mainW = if CommentFunc `elem` commented g then docMain else mainFunction
+  return $ Just $ mainW $ bodyStatements $ 
+    initLogFileVar (logKind g) mainFn ++ varDecDef v_filename mainFn (arg 0)
+    : logInFile
+    -- Constants must be declared before inputs because some derived input
+    -- definitions or input constraints may use the constants
+    ++ catMaybes [co, ip] ++ ics ++ catMaybes (varDef ++ [wo])
+
+-- | Declare a variable and immediately assign to it with a given expression.
+declVarCalc :: OOProg r => CodeDefinition -> GenState (Maybe (MSStatement r))
+declVarCalc c = do
   g <- get
   let scp = convScope $ currentScope g
   let val = c ^. codeExpr

@@ -14,7 +14,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (dong)
 import Data.Drasil.SI_Units (siUnits)
-import Data.Drasil.Concepts.Computation (inDatum, compcon, inValue, algorithm)
+import Data.Drasil.Concepts.Computation (inDatum, compcon, algorithm)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   environment, datum, input_, interface, output_, problem, product_,
@@ -145,7 +145,7 @@ symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ od
 ideaDicts :: [IdeaDict]
 ideaDicts = 
   -- Actual IdeaDicts
-  inValue : doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
+  doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
   -- CIs
   nw progName : map nw doccon' ++ map nw mathcon' ++ map nw physicCon' ++
   -- DefinedQuantityDicts

@@ -483,9 +483,7 @@ computer :: IdeaDict
 structure :: IdeaDict
 os :: CI
 dataStruct :: IdeaDict
-dataStruct' :: IdeaDict
 dataType :: IdeaDict
-dataType' :: IdeaDict
 inDatum :: IdeaDict
 outDatum :: IdeaDict
 inParam :: IdeaDict

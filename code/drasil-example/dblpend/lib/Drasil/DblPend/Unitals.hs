@@ -41,10 +41,9 @@ constants = [gravitationalAccelConst]
 unitalChunks :: [UnitalChunk]
 unitalChunks = [ 
   lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2,
-  pendDisAngle_1, pendDisAngle_2, xVel_1, xVel_2, yVel_1, yVel_2,
-  xPos_1, xPos_2, yPos_1, yPos_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2,
-  angularAccel_1, angularAccel_2, tension_1, tension_2, 
-  QPP.mass, QP.force, QP.gravitationalAccel, QP.tension, QP.acceleration,
+  xVel_1, xVel_2, yVel_1, yVel_2, xPos_1, xPos_2, yPos_1, yPos_2, xAccel_1,
+  yAccel_1, xAccel_2, yAccel_2, angularAccel_1, angularAccel_2, tension_1,
+  tension_2, QPP.mass, QP.force, QP.gravitationalAccel, QP.tension, QP.acceleration,
   QP.time, QP.velocity, QP.position]
   
 lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2, 

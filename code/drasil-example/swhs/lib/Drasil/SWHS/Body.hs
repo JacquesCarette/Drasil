@@ -120,7 +120,7 @@ conceptChunks =
   map cw specParamValList
 
 symbMap :: ChunkDB
-symbMap = cdb (qw (heatEInPCM ^. output) : symbolsAll) ideaDicts conceptChunks
+symbMap = cdb symbolsAll ideaDicts conceptChunks
   siUnits SWHS.dataDefs insModel genDefs tMods concIns [] allRefs citations
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]

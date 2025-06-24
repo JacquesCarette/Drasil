@@ -101,8 +101,8 @@ si = SI {
   _outputs     = [] :: [QuantityDict],
   _constraints = [] :: [ConstrainedChunk],
   _constants   = [] :: [ConstQDef],
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
+  _systemdb   = symbMap
+  -- _usedinfodb  = usedDB
 }
 
 ideaDicts :: [IdeaDict]
@@ -121,11 +121,11 @@ symbMap = cdb ([] :: [QuantityDict]) ideaDicts conceptChunks
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
   ([] :: [LabelledContent]) ([] :: [Reference]) citations
 
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
-  ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  ([] :: [LabelledContent]) ([] :: [Reference]) []
+-- usedDB :: ChunkDB
+-- usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
+--   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
+--   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
+--   ([] :: [LabelledContent]) ([] :: [Reference]) []
 
 citations :: BibRef
 citations = [parnasClements1986, koothoor2013, smithEtAl2007, smithLai2005,

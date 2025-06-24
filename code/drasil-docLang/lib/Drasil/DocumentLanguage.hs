@@ -23,7 +23,9 @@ import Drasil.TraceTable (generateTraceMap)
 import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
-import Database.Drasil hiding (cdb)
+-- import Database.Drasil (ChunkDB, termTable, collectUnits, refbyTable, conceptinsTable, idMap, conceptinsTable, traceTable, generateRefbyMap, refTable, labelledcontentTable, theoryModelTable, insmodelTable, gendefTable, dataDefnTable)
+import Database.Drasil 
+
 
 import System.Drasil
 import Drasil.GetChunks (ccss, ccss', citeDB)
@@ -64,6 +66,7 @@ import Data.List (nub, sortBy, sortOn)
 import qualified Data.Map as Map (elems, toList, assocs, keys)
 import Data.Maybe (maybeToList)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
+import Theory.Drasil
 
 -- * Main Function
 -- | Creates a document from a document description, a title combinator function, and system information.
@@ -188,7 +191,7 @@ fillReqs (_:xs) si = fillReqs xs si
 
 -- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
-extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
+extractUnits dd xcdb = collectUnits xcdb $ ccss' (getDocDesc dd) (egetDocDesc dd) xcdb
 
 -- * Section Creator Functions
 
@@ -238,17 +241,26 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
     -- in ExtractDocDesc, then the passes which extract `DefinedQuantityDict`s will
     -- error out because some of the symbols in tables are only `QuantityDict`s, and thus
     -- missing a `Concept`.
-    mkSubRef SI {_quants = v, _systemdb = cdb} (TSymb con) =
+    mkSubRef SI {_quants = v, _systemdb = xcdb} (TSymb con) =
       SRS.tOfSymb
       [tsIntro con,
                 LlC $ table Equational (sortBySymbol
                 $ filter (`hasStageSymbol` Equational)
-                (nub $ map qw v ++ ccss' (getDocDesc dd) (egetDocDesc dd) cdb))
+                (nub $ map qw v ++ ccss' (getDocDesc dd) (egetDocDesc dd) xcdb))
                 atStart] []
-    mkSubRef SI {_systemdb = cdb} (TSymb' f con) =
-      mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
-    mkSubRef SI {_usedinfodb = db} TAandA =
-      SRS.tOfAbbAcc [LlC $ tableAbbAccGen $ nub $ map fst $ Map.elems $ termTable db] []
+    mkSubRef SI {_systemdb = xcdb} (TSymb' f con) =
+      mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) xcdb) f con
+
+    mkSubRef _ (TAandA _) =
+      let db = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
+                    ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
+                    ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
+                    ([] :: [LabelledContent]) ([] :: [Reference]) []
+      in SRS.tOfAbbAcc
+          [LlC $ tableAbbAccGen $ nub $ map fst $ Map.elems $ termTable db]
+          []
+
+
 
 -- | Helper for creating the table of symbols.
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>

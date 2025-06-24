@@ -60,7 +60,7 @@ data System where
   , _constraints :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
   , _constants   :: [ConstQDef]
   , _systemdb   :: ChunkDB
-  , _usedinfodb  :: ChunkDB
+  -- , _usedinfodb  :: ChunkDB => removed dummy chunk
   } -> System
 
 makeClassy ''System

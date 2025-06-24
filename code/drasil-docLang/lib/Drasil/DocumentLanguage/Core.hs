@@ -53,7 +53,8 @@ data RefTab where
   -- | Allows Lens functions in addition to an introduction for a table of symbols.
   TSymb' :: LFunc -> [TSIntro] -> RefTab
   -- | Default.
-  TAandA :: RefTab
+  -- TAandA :: RefTab : old
+  TAandA :: [IdeaDict] -> RefTab
   -- add more here
 
 -- | For creating a table of symbols introduction

@@ -64,7 +64,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
       -- introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
-      , TAandA         -- Add table of abbreviation and acronym section
+      , TAandA abbreviationsList         -- Add table of abbreviation and acronym section
       ],
   IntroSec $
     IntroProg (justification progName) (phrase progName)
@@ -121,8 +121,8 @@ si = SI {
   _outputs     = outputs,
   _constraints = inConstraints,
   _constants   = constants,
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
+  _systemdb   = symbMap
+  -- _usedinfodb  = usedDB
 }
 
 purp :: Sentence
@@ -169,9 +169,16 @@ symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll)
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
 
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
+-- usedDB :: ChunkDB
+-- usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts ([] :: [ConceptChunk])
+--   ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
+
+abbreviationsList :: [IdeaDict]
+abbreviationsList = 
+  -- QuantityDict abbreviations
+  map nw symbols ++
+  -- Other acronyms/abbreviations
+  nw progName : map nw acronyms
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

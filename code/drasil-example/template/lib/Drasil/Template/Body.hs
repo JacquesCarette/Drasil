@@ -102,7 +102,6 @@ si = SI {
   _constraints = [] :: [ConstrainedChunk],
   _constants   = [] :: [ConstQDef],
   _systemdb   = symbMap
-  -- _usedinfodb  = usedDB
 }
 
 ideaDicts :: [IdeaDict]

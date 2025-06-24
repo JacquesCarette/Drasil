@@ -251,8 +251,8 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
     mkSubRef SI {_systemdb = xcdb} (TSymb' f con) =
       mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) xcdb) f con
 
-    mkSubRef _ (TAandA _) =
-      let db = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
+    mkSubRef _ (TAandA ideas) =
+      let db = cdb ([] :: [QuantityDict]) ideas ([] :: [ConceptChunk])
                     ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
                     ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
                     ([] :: [LabelledContent]) ([] :: [Reference]) []

@@ -15,7 +15,7 @@ import Data.Drasil.Concepts.Math (equation)
 softwarecon :: [ConceptChunk]
 softwarecon = [correctness, verifiability, physLib,
   understandability, reusability, maintainability, portability,
-  performance, program, errMsg, accuracy, reliability]
+  performance, program, accuracy, reliability]
 
 c, errMsg, physLib, program :: ConceptChunk
 

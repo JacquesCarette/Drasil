@@ -24,29 +24,22 @@ import Control.Lens ((^.))
 
 symbols :: [DefinedQuantityDict]
 symbols = pi_ : map dqdWr units ++ map dqdWr unitless ++ map dqdWr constrained
+ ++ map dqdWr unitalChuncks
 
 symbolsAll :: [QuantityDict]
 symbolsAll = map qw symbols ++ map qw specParamValList ++
   map qw [htFusionMin, htFusionMax, coilSAMax] ++
-  map qw [absTol, relTol] ++
-  map qw unitalChuncks
-
+  map qw [absTol, relTol]
 -- Symbols with Units --
 
 units :: [UnitalChunk]
-units = map ucw [inSA, outSA, heatCapSpec, htCapL,
-  htCapS, htCapV, sensHeat, pcmInitMltE,
-  volHtGen, htTransCoeff, pcmMass, wMass, htFlux, latentHeat,
-  thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
-  temp, boilPt, tempEnv, meltPt, tInitMelt,
-  tFinalMelt, vol, tankVol, wVol, deltaT,
-  density, tau, tauLP, tauSP, tauW, thickness] ++
-  map ucw [mass, time] -- ++ [tankLength, diam, coilSA]
+units = map ucw [sensHeat, htFlux, latentHeat, temp, boilPt, meltPt,
+  vol, density] ++ map ucw [mass, time] -- ++ [tankLength, diam, coilSA]
 
 unitalChuncks :: [UnitalChunk]
-unitalChuncks = [inSA, outSA, htCapL, htCapS, htCapV,
+unitalChuncks = units ++ [inSA, outSA, htCapL, htCapS, htCapV,
   pcmInitMltE, volHtGen, htTransCoeff,
-  pcmMass, wMass,
+  pcmMass, wMass, heatCapSpec,
   thFluxVect, htFluxC, htFluxIn, htFluxOut, htFluxP, latentEP,
   tempEnv, tInitMelt,
   tFinalMelt, tankVol, wVol, deltaT,

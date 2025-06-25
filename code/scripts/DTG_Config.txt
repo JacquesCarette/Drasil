@@ -1,5 +1,5 @@
 # all drasil- packs (lowercase, space separated, in order of display in output file)
-lang metadata code docLang printers build theory gool data database example gen utils website
+lang metadata code docLang printers build theory gool data database example gen utils website metadb
 
 # all class types (capitalized, space separated, in order of display in output file)
 Haskell Drasil GOOL

@@ -1,5 +1,5 @@
 module MetaDatabase.Drasil (
-    basisCDB
+    basisCDB, cdb
 ) where
 
-import MetaDatabase.Drasil.ChunkDB (basisCDB)
+import MetaDatabase.Drasil.ChunkDB (basisCDB, cdb)

@@ -1,9 +1,9 @@
 module MetaDatabase.Drasil.ChunkDB (
-    basisCDB
+    basisCDB, cdb
 ) where
 
 import Database.Drasil (ChunkDB (..), termMap, conceptMap, unitMap)
-import Language.Drasil (IdeaDict, nw)
+import Language.Drasil (IdeaDict, nw, Quantity, MayHaveUnit, Concept, IsUnit)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Concepts.Education (educon)
@@ -13,6 +13,7 @@ import Data.Drasil.Concepts.Math (mathcon)
 
 import qualified Data.Map as Map (empty)
 import Data.Drasil.SI_Units (siUnits)
+import Theory.Drasil (DataDefinition)
 
 basisIdeaDicts :: [IdeaDict]
 basisIdeaDicts =
@@ -43,3 +44,39 @@ basisCDB =
     _refbyTable           = Map.empty,
     _refTable             = Map.empty
   }
+
+  -- | Smart constructor for chunk databases. Takes in the following:
+--
+--     * ['Quantity'] (for 'SymbolMap'), 
+--     * 'NamedIdea's (for 'TermMap'),
+--     * 'Concept's (for 'ConceptMap'),
+--     * Units (something that 'IsUnit' for 'UnitMap'),
+--     * 'DataDefinition's (for 'DatadefnMap'),
+--     * 'InstanceModel's (for 'InsModelMap'),
+--     * 'GenDefn's (for 'GendefMap'),
+--     * 'TheoryModel's (for 'TheoryModelMap'),
+--     * 'ConceptInstance's (for 'ConceptInstanceMap'),
+--     * 'LabelledContent's (for 'LabelledContentMap').
+cdb :: (Quantity q, MayHaveUnit q, Concept c, IsUnit u) =>
+    [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
+    [GenDefn] -> [TheoryModel] -> [ConceptInstance] ->
+    [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
+cdb s t c u d ins gd tm ci lc r cits =
+  CDB {
+    -- CHUNKS
+    symbolTable = symbolMap s,
+    termTable = termMap t,
+    conceptChunkTable = conceptMap c,
+    _unitTable = unitMap u,
+    _dataDefnTable = idMap "DataDefnMap" d,
+    _insmodelTable = idMap "InsModelMap" ins,
+    _gendefTable = idMap "GenDefnmap" gd,
+    _theoryModelTable = idMap "TheoryModelMap" tm,
+    _conceptinsTable = idMap "ConcInsMap" ci,
+    _citationTable = idMap "CiteMap" cits,
+    -- NOT CHUNKS
+    _labelledcontentTable = idMap "LLCMap" lc,
+    _traceTable = Map.empty,
+    _refbyTable = Map.empty,
+    _refTable = idMap "RefMap" r
+  } `addCdb` basisCDB

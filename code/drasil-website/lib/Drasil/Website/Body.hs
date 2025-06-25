@@ -5,6 +5,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil
+import MetaDatabase.Drasil (cdb)
 import System.Drasil
 import Language.Drasil
 import Drasil.DocLang (findAllRefs)
@@ -114,7 +115,7 @@ getSysName SI{_sys = nm} = nw nm
 
 -- | Empty database needed for 'si' to work.
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
+usedDB = cdb' ([] :: [QuantityDict]) ([] :: [IdeaDict])
            ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- | Holds all references and links used in the website.

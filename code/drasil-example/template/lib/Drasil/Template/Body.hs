@@ -38,7 +38,7 @@ mkSRS = [TableOfContents,
     [ tunitNone []      -- Adds table of unit section with a table frame
     , tsymb [] -- Adds table of symbol section with a table frame
     --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
-    , TAandA         -- Add table of abbreviation and acronym section
+    , TAandA abbreviationsList         -- Add table of abbreviation and acronym section
     ],
   IntroSec $
   IntroProg EmptyS (phrase progName)
@@ -111,6 +111,15 @@ ideaDicts =
   -- CIs
   nw progName : map nw doccon'
 
+abbreviationsList :: [IdeaDict]
+abbreviationsList =
+  -- Actual IdeaDicts
+  doccon ++ prodtcon ++ [inValue] ++
+  -- CIs
+  nw progName : map nw doccon'
+
+  
+
 conceptChunks :: [ConceptChunk]
 conceptChunks = [errMsg, algorithm, program] ++ mathcon ++ srsDomains
 
@@ -119,12 +128,6 @@ symbMap = cdb ([] :: [QuantityDict]) ideaDicts conceptChunks
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
   ([] :: [LabelledContent]) ([] :: [Reference]) citations
-
--- usedDB :: ChunkDB
--- usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
---   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
---   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
---   ([] :: [LabelledContent]) ([] :: [Reference]) []
 
 citations :: BibRef
 citations = [parnasClements1986, koothoor2013, smithEtAl2007, smithLai2005,

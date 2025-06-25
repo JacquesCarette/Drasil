@@ -74,14 +74,13 @@ si = SI {
   _outputs     = outputs,
   _constraints = constrained,
   _constants   = constants,
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
+  _systemdb   = symbMap
 }
   --FIXME: All named ideas, not just acronyms.
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
-  RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
+  RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA abbreviationsList],
   IntroSec $
     IntroProg (startIntro software blstRskInvWGlassSlab progName)
       (short progName)
@@ -153,9 +152,13 @@ symbMap :: ChunkDB
 symbMap = cdb thisSymbols ideaDicts conceptChunks siUnits 
   GB.dataDefs iMods [] tMods concIns labCon allRefs citations
 
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
+-- usedDB :: ChunkDB
+-- usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
+--  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
+abbreviationsList :: [IdeaDict]
+abbreviationsList = 
+  -- Other acronyms/abbreviations
+  nw progName : map nw acronyms
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

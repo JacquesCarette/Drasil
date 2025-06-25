@@ -9,10 +9,7 @@ import Drasil.HGHC.HeatTransfer (fp, dataDefs, htInputs, htOutputs,
     nuclearPhys, symbols)
 import Drasil.HGHC.MetaConcepts (progName)
 
-import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.People (spencerSmith)
-import Data.Drasil.Concepts.Documentation (doccon, doccon')
-import Data.Drasil.Concepts.Math (mathcon)
 import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans)  
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
   
@@ -65,13 +62,13 @@ purp = foldlSent [S "describe", phrase CT.heatTrans, S "coefficients related to 
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- Actual IdeaDicts
-  [fp, nuclearPhys] ++ doccon ++
+  [fp, nuclearPhys] ++
   -- CIs
-  nw progName : map nw doccon'
+  [nw progName]
 
 symbMap :: ChunkDB
-symbMap = cdb symbols ideaDicts mathcon
-  siUnits dataDefs [] [] [] [] [] [] []
+symbMap = cdb symbols ideaDicts ([] :: [ConceptChunk])
+  ([] :: [UnitDefn]) dataDefs [] [] [] [] [] [] []
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =

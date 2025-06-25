@@ -1,5 +1,5 @@
 module MetaDatabase.Drasil.ChunkDB (
-    basisCDB, cdb
+  cdb
 ) where
 
 import Database.Drasil (ChunkDB (..), termMap, conceptMap, unitMap)
@@ -21,8 +21,10 @@ basisIdeaDicts =
   doccon ++ prodtcon ++ educon ++ compcon ++
   -- CIs
   map nw doccon' ++
-  -- ConceptChunks
-  map nw [algorithm, errMsg, program] ++ map nw mathcon
+
+basisConceptChunks :: [ConceptChunk]
+basisConceptChunks =
+  map nw srsDomains ++ map nw [algorithm, errMsg, program] ++ map nw mathcon
 
 basisCDB :: ChunkDB
 basisCDB =
@@ -30,7 +32,7 @@ basisCDB =
     -- CHUNKS
     symbolTable           = Map.empty,
     termTable             = termMap basisIdeaDicts,
-    conceptChunkTable     = conceptMap srsDomains,
+    conceptChunkTable     = conceptMap basisConceptChunks,
     _unitTable            = unitMap siUnits,
     _dataDefnTable        = Map.empty,
     _insmodelTable        = Map.empty,

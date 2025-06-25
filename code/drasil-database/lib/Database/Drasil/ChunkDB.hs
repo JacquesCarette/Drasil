@@ -224,6 +224,9 @@ makeLenses ''ChunkDB
 --     * 'TheoryModel's (for 'TheoryModelMap'),
 --     * 'ConceptInstance's (for 'ConceptInstanceMap'),
 --     * 'LabelledContent's (for 'LabelledContentMap').
+-- Creates an empty ChunkDB without basic data. cdb in MetaDatabase.Drasil
+-- should be preferred over this function as it includes the basic data needed
+-- for Drasil.
 cdb' :: (Quantity q, MayHaveUnit q, Concept c, IsUnit u) =>
     [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
     [GenDefn] -> [TheoryModel] -> [ConceptInstance] ->

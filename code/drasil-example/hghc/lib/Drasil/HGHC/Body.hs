@@ -2,6 +2,7 @@ module Drasil.HGHC.Body (srs, si, symbMap, printSetting, fullSI) where
 
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.SRSDocument
+import MetaDatabase.Drasil (cdb)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Drasil.HGHC.HeatTransfer (fp, dataDefs, htInputs, htOutputs, 
@@ -78,6 +79,6 @@ tableOfAbbrvsIdeaDicts =
   map nw symbols
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
+usedDB = cdb' ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
            ([] :: [ConceptChunk]) ([] :: [UnitDefn])
            [] [] [] [] [] [] ([] :: [Reference]) []

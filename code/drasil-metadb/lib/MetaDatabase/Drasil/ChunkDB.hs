@@ -61,6 +61,8 @@ basisCDB =
 --     * 'TheoryModel's (for 'TheoryModelMap'),
 --     * 'ConceptInstance's (for 'ConceptInstanceMap'),
 --     * 'LabelledContent's (for 'LabelledContentMap').
+-- Creates a ChunkDB with basic data already included. Should be used over
+-- cdb' in Database.Drasil, which does not include the basic data.
 cdb :: (Quantity q, MayHaveUnit q, Concept c, IsUnit u) =>
     [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
     [GenDefn] -> [TheoryModel] -> [ConceptInstance] ->

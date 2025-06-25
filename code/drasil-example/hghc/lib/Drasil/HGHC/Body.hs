@@ -71,15 +71,3 @@ symbMap :: ChunkDB
 symbMap = cdb symbols ideaDicts mathcon
   siUnits dataDefs [] [] [] [] [] [] []
 
-
--- No abbrvs 
-
--- tableOfAbbrvsIdeaDicts :: [IdeaDict]
--- tableOfAbbrvsIdeaDicts =
---   -- QuantityDicts
---   map nw symbols
-
--- usedDB :: ChunkDB
--- usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
---            ([] :: [ConceptChunk]) ([] :: [UnitDefn])
---            [] [] [] [] [] [] ([] :: [Reference]) []

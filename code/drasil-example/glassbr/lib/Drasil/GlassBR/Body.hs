@@ -143,22 +143,14 @@ conceptChunks =
   [distance, algorithm] ++ concepts ++ mathcon ++ softwarecon ++ physicalcon ++ srsDomains
   -- UnitalChunks
 
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
-tableOfAbbrvsIdeaDicts =
+abbreviationsList :: [IdeaDict]
+abbreviationsList = 
   -- CIs
   map nw acronyms
 
 symbMap :: ChunkDB
 symbMap = cdb thisSymbols ideaDicts conceptChunks siUnits 
   GB.dataDefs iMods [] tMods concIns labCon allRefs citations
-
--- usedDB :: ChunkDB
--- usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
---  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
-abbreviationsList :: [IdeaDict]
-abbreviationsList = 
-  -- Other acronyms/abbreviations
-  nw progName : map nw acronyms
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

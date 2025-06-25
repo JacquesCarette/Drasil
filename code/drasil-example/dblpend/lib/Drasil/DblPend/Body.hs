@@ -122,7 +122,6 @@ si = SI {
   _constraints = inConstraints,
   _constants   = constants,
   _systemdb   = symbMap
-  -- _usedinfodb  = usedDB
 }
 
 purp :: Sentence
@@ -150,11 +149,11 @@ ideaDicts =
   -- UnitalChunks
   map nw physicscon
 
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
-tableOfAbbrvsIdeaDicts =
-  -- QuantityDicts
+abbreviationsList :: [IdeaDict]
+abbreviationsList = 
+  -- QuantityDict abbreviations
   map nw symbols ++
-  -- CIs
+  -- Other acronyms/abbreviations
   nw progName : map nw acronyms
 
 conceptChunks :: [ConceptChunk]
@@ -168,17 +167,6 @@ symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll)
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
-
--- usedDB :: ChunkDB
--- usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts ([] :: [ConceptChunk])
---   ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
-
-abbreviationsList :: [IdeaDict]
-abbreviationsList = 
-  -- QuantityDict abbreviations
-  map nw symbols ++
-  -- Other acronyms/abbreviations
-  nw progName : map nw acronyms
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

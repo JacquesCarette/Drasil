@@ -5,6 +5,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil hiding (Verb, number, organization, section, variable)
 import Drasil.SRSDocument
+import MetaDatabase.Drasil (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
 import Theory.Drasil (output)
@@ -16,13 +17,12 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, effect, endUser, environment, input_, interest, loss, method_,
-  physical, physics, problem, software, softwareSys, srsDomains, symbol_,
-  sysCont, system, type_, user, value, variable, doccon, doccon',
-  datumConstraint)
+  physical, physics, problem, software, softwareSys, symbol_,
+  sysCont, system, type_, user, value, variable, datumConstraint)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (inModel)
-import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
-import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
+import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
+import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon',
   number)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
 import Data.Drasil.Concepts.Physics (cohesion, fbd, force, gravity, isotropy,
@@ -30,12 +30,10 @@ import Data.Drasil.Concepts.Physics (cohesion, fbd, force, gravity, isotropy,
 import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce, 
   shearRes, solidcon)
-import Data.Drasil.Concepts.Computation (compcon, algorithm)
-import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Theories.Physics (weightSrc, hsPressureSrc)
 
 import Data.Drasil.People (brooks, henryFrankis)
-import Data.Drasil.SI_Units (degree, siUnits)
+import Data.Drasil.SI_Units (degree)
 
 import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, unlikelyChgs)
@@ -150,15 +148,15 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 ideaDicts :: [IdeaDict]
 ideaDicts = 
   -- Actual IdeaDicts
-  doccon ++ prodtcon ++ defs ++ educon ++ compcon ++
+  defs ++
   -- CIs
-  nw progName : map nw mathcon' ++ map nw doccon' ++ map nw physicCon'
+  nw progName : map nw mathcon' ++ map nw physicCon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  algorithm : defs' ++ softwarecon ++ physicCon ++ mathcon ++ 
-  solidcon ++ physicalcon ++ srsDomains ++
+  defs' ++ softwarecon ++ physicCon ++
+  solidcon ++ physicalcon ++
   -- InstanceModels
   map cw iMods ++
   -- DefinedQuantityDicts
@@ -167,7 +165,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map qw symbols) ideaDicts conceptChunks
-  (degree : siUnits) dataDefs iMods generalDefinitions tMods concIns labCon allRefs citations
+  [degree] dataDefs iMods generalDefinitions tMods concIns labCon allRefs citations
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =
@@ -179,7 +177,7 @@ tableOfAbbrvsIdeaDicts =
   map nw symbols
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
+usedDB = cdb' ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- | Holds all references and links used in the document.

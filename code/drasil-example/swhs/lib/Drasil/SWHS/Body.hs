@@ -5,6 +5,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil hiding (organization, section, variable)
 import Drasil.SRSDocument
+import MetaDatabase.Drasil (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Theory.Drasil (GenDefn, InstanceModel, output)
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -13,14 +14,12 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (inModel)
-import Data.Drasil.Concepts.Computation (algorithm, compcon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
   condition, constraint, corSol, datum, document, environment,input_, model,
   output_, physical, physics, property, quantity, software, softwareSys,
-  solution, srsDomains, sysCont, system, user, value, variable, doccon,
-  doccon')
-import Data.Drasil.Concepts.Education (calculus, educon, engineering)
-import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_, mathcon, mathcon')
+  solution, sysCont, system, user, value, variable)
+import Data.Drasil.Concepts.Education (calculus, engineering)
+import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon)
 import Data.Drasil.Concepts.Software (program, softwarecon, correctness,
@@ -32,10 +31,8 @@ import Data.Drasil.Quantities.Math (surArea, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol)
 import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat)
-import Data.Drasil.Software.Products (prodtcon)
 
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
-import Data.Drasil.SI_Units (siUnits)
 
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
@@ -102,16 +99,16 @@ motivation = foldlSent_ [S "the demand" `S.is` S "high for renewable", pluralNP 
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- Actual IdeaDicts
-  materialProprty : prodtcon ++ doccon ++ educon ++ compcon ++
+  materialProprty :
   -- CIs
-  map nw [progName', progName] ++ [nw phsChgMtrl] ++ map nw doccon' ++
+  map nw [progName', progName] ++ [nw phsChgMtrl] ++
   map nw mathcon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  algorithm : thermocon ++ softwarecon ++ physicCon ++ mathcon ++
-  physicalcon ++ con ++ srsDomains ++
+  thermocon ++ softwarecon ++ physicCon ++
+  physicalcon ++ con ++
   -- InstanceModels
   cw heatEInPCM :
   -- DefinedQuantityDicts
@@ -121,7 +118,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb (qw (heatEInPCM ^. output) : symbolsAll) ideaDicts conceptChunks
-  siUnits SWHS.dataDefs insModel genDefs tMods concIns [] allRefs citations
+  ([] :: [UnitDefn]) SWHS.dataDefs insModel genDefs tMods concIns [] allRefs citations
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =
@@ -131,7 +128,7 @@ tableOfAbbrvsIdeaDicts =
   map nw symbols
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
+usedDB = cdb' ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] []
 
 -- | Holds all references and links used in the document.

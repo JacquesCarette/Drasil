@@ -99,11 +99,7 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; Sentence
 </span><span id="line-82"></span><span class="hs-comment">-- This contains the list of symbols used throughout the document</span><span>
 </span><span id="line-83"></span><span class="annot"><a href="Drasil.SWHSNoPCM.Body.html#symbols"><span class="hs-identifier hs-type">symbols</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span>
 </span><span id="line-84"></span><span id="symbols"><span class="annot"><span class="annottext">symbols :: [DefinedQuantityDict]
-</span><a href="Drasil.SWHSNoPCM.Body.html#symbols"><span class="hs-identifier hs-var hs-var">symbols</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
-</span><span class="hs-identifier hs-var">pi_</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
--&gt; [DefinedQuantityDict] -&gt; [DefinedQuantityDict]
-forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; DefinedQuantityDict)
+</span><a href="Drasil.SWHSNoPCM.Body.html#symbols"><span class="hs-identifier hs-var hs-var">symbols</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; DefinedQuantityDict)
 -&gt; [UnitalChunk] -&gt; [DefinedQuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; DefinedQuantityDict
@@ -136,32 +132,41 @@ c -&gt; DefinedQuantityDict
 </span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept
 </span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><span class="hs-identifier hs-var">watE</span></span><span class="hs-special">]</span><span>
-</span><span id="line-86"></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
--&gt; [DefinedQuantityDict] -&gt; [DefinedQuantityDict]
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><span id="line-86"></span><span>
+</span><span id="line-87"></span><span class="annot"><a href="Drasil.SWHSNoPCM.Body.html#symbolsAll"><span class="hs-identifier hs-type">symbolsAll</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span> </span><span class="hs-comment">--FIXME: Why is PCM (swhsSymbolsAll) here?</span><span>
+</span><span id="line-88"></span><span>                               </span><span class="hs-comment">--Can't generate without SWHS-specific symbols like pcmHTC and pcmSA</span><span>
+</span><span id="line-89"></span><span>                               </span><span class="hs-comment">--FOUND LOC OF ERROR: Instance Models</span><span>
+</span><span id="line-90"></span><span id="symbolsAll"><span class="annot"><span class="annottext">symbolsAll :: [QuantityDict]
+</span><a href="Drasil.SWHSNoPCM.Body.html#symbolsAll"><span class="hs-identifier hs-var hs-var">symbolsAll</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(DefinedQuantityDict -&gt; QuantityDict)
+-&gt; [DefinedQuantityDict] -&gt; [QuantityDict]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><span class="hs-identifier hs-var">gradient</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
-</span><span class="hs-identifier hs-var">uNormalVect</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
--&gt; [DefinedQuantityDict] -&gt; [DefinedQuantityDict]
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">pi_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><span class="hs-identifier hs-var">uNormalVect</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; DefinedQuantityDict
 forall c.
 (Quantity c, Concept c, MayHaveUnit c) =&gt;
 c -&gt; DefinedQuantityDict
 </span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">surface</span></span><span class="hs-special">]</span><span>
-</span><span id="line-87"></span><span>
-</span><span id="line-88"></span><span class="annot"><a href="Drasil.SWHSNoPCM.Body.html#symbolsAll"><span class="hs-identifier hs-type">symbolsAll</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span> </span><span class="hs-comment">--FIXME: Why is PCM (swhsSymbolsAll) here?</span><span>
-</span><span id="line-89"></span><span>                               </span><span class="hs-comment">--Can't generate without SWHS-specific symbols like pcmHTC and pcmSA</span><span>
-</span><span id="line-90"></span><span>                               </span><span class="hs-comment">--FOUND LOC OF ERROR: Instance Models</span><span>
-</span><span id="line-91"></span><span id="symbolsAll"><span class="annot"><span class="annottext">symbolsAll :: [QuantityDict]
-</span><a href="Drasil.SWHSNoPCM.Body.html#symbolsAll"><span class="hs-identifier hs-var hs-var">symbolsAll</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(DefinedQuantityDict -&gt; QuantityDict)
+</span><span class="hs-identifier hs-var">surface</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(DefinedQuantityDict -&gt; QuantityDict)
 -&gt; [DefinedQuantityDict] -&gt; [QuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 </span><a href="Drasil.SWHSNoPCM.Body.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span>
+</span><span id="line-91"></span><span>  </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; QuantityDict) -&gt; [UnitalChunk] -&gt; [QuantityDict]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[UnitalChunk]
+</span><a href="Drasil.SWHSNoPCM.Body.html#symbolConcepts"><span class="hs-identifier hs-var">symbolConcepts</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(ConstQDef -&gt; QuantityDict) -&gt; [ConstQDef] -&gt; [QuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
@@ -170,8 +175,7 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[ConstQDef]
 </span><a href="Drasil.SWHSNoPCM.Unitals.html#specParamValList"><span class="hs-identifier hs-var">specParamValList</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-92"></span><span>  </span><span class="annot"><span class="annottext">(UncertainChunk -&gt; QuantityDict)
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(UncertainChunk -&gt; QuantityDict)
 -&gt; [UncertainChunk] -&gt; [QuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UncertainChunk -&gt; QuantityDict
@@ -181,7 +185,7 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">relTol</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-93"></span><span>  </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><span id="line-92"></span><span>  </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><span class="hs-identifier hs-var">scipyODESymbols</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
@@ -191,10 +195,10 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">apacheODESymbols</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
-</span><span class="hs-identifier hs-var">odeintSymbols</span></span><span>
-</span><span id="line-94"></span><span>  </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
+</span><span class="hs-identifier hs-var">odeintSymbols</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(CodeVarChunk -&gt; QuantityDict) -&gt; [CodeVarChunk] -&gt; [QuantityDict]
+</span><span class="hs-operator hs-var">++</span></span><span>
+</span><span id="line-93"></span><span>  </span><span class="annot"><span class="annottext">(CodeVarChunk -&gt; QuantityDict) -&gt; [CodeVarChunk] -&gt; [QuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
@@ -207,42 +211,48 @@ forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; CodeVarChunk
 </span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ODEInfo -&gt; CodeVarChunk
 </span><span class="hs-identifier hs-var">arrayVecDepVar</span></span><span> </span><span class="annot"><span class="annottext">ODEInfo
 </span><a href="Drasil.SWHSNoPCM.ODEs.html#noPCMODEInfo"><span class="hs-identifier hs-var">noPCMODEInfo</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-95"></span><span>
-</span><span id="line-96"></span><span class="annot"><a href="Drasil.SWHSNoPCM.Body.html#concepts"><span class="hs-identifier hs-type">concepts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-97"></span><span id="concepts"><span class="annot"><span class="annottext">concepts :: [UnitalChunk]
+</span><span id="line-94"></span><span>
+</span><span id="line-95"></span><span class="annot"><a href="Drasil.SWHSNoPCM.Body.html#concepts"><span class="hs-identifier hs-type">concepts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-96"></span><span id="concepts"><span class="annot"><span class="annottext">concepts :: [UnitalChunk]
 </span><a href="Drasil.SWHSNoPCM.Body.html#concepts"><span class="hs-identifier hs-var hs-var">concepts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; UnitalChunk) -&gt; [UnitalChunk] -&gt; [UnitalChunk]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk
 forall c. (Unitary c, Concept c, MayHaveUnit c) =&gt; c -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">ucw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">density</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">tau</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">inSA</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">outSA</span></span><span class="hs-special">,</span><span>
-</span><span id="line-98"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">outSA</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">htCapL</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">QT.htFlux</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">htFluxIn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">htFluxOut</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">volHtGen</span></span><span class="hs-special">,</span><span>
-</span><span id="line-99"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span id="line-97"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">htTransCoeff</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">mass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">tankVol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">QT.temp</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">QT.heatCapSpec</span></span><span class="hs-special">,</span><span>
-</span><span id="line-100"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">deltaT</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">tempEnv</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">thFluxVect</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">htFluxC</span></span><span class="hs-special">,</span><span>
-</span><span id="line-101"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">vol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">htFluxC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">wMass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">wVol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">tauW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">QT.sensHeat</span></span><span class="hs-special">]</span><span>
+</span><span class="hs-identifier hs-var">tauW</span></span><span class="hs-special">]</span><span>
+</span><span id="line-98"></span><span>
+</span><span id="line-99"></span><span class="annot"><a href="Drasil.SWHSNoPCM.Body.html#symbolConcepts"><span class="hs-identifier hs-type">symbolConcepts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-100"></span><span id="symbolConcepts"><span class="annot"><span class="annottext">symbolConcepts :: [UnitalChunk]
+</span><a href="Drasil.SWHSNoPCM.Body.html#symbolConcepts"><span class="hs-identifier hs-var hs-var">symbolConcepts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; UnitalChunk) -&gt; [UnitalChunk] -&gt; [UnitalChunk]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; UnitalChunk
+forall c. (Unitary c, Concept c, MayHaveUnit c) =&gt; c -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">ucw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">density</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QT.htFlux</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QT.heatCapSpec</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">mass</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QT.sensHeat</span></span><span class="hs-special">,</span><span>
+</span><span id="line-101"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">QT.temp</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">vol</span></span><span class="hs-special">]</span><span>
 </span><span id="line-102"></span><span>
 </span><span id="line-103"></span><span class="hs-comment">-------------------</span><span>
 </span><span id="line-104"></span><span class="hs-comment">--INPUT INFORMATION</span><span>
@@ -846,11 +856,11 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-232"></span><span>
 </span><span id="line-233"></span><span class="annot"><a href="Drasil.SWHSNoPCM.Body.html#introEnd"><span class="hs-identifier hs-type">introEnd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-234"></span><span id="introEnd"><span class="annot"><span class="annottext">introEnd :: Sentence -&gt; CI -&gt; Sentence
-</span><a href="Drasil.SWHSNoPCM.Body.html#introEnd"><span class="hs-identifier hs-var hs-var">introEnd</span></a></span></span><span> </span><span id="local-6989586621679071209"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679071209"><span class="hs-identifier hs-var">progSent</span></a></span></span><span> </span><span id="local-6989586621679071210"><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679071210"><span class="hs-identifier hs-var">pro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><a href="Drasil.SWHSNoPCM.Body.html#introEnd"><span class="hs-identifier hs-var hs-var">introEnd</span></a></span></span><span> </span><span id="local-6989586621679071250"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679071250"><span class="hs-identifier hs-var">progSent</span></a></span></span><span> </span><span id="local-6989586621679071251"><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679071251"><span class="hs-identifier hs-var">pro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679071209"><span class="hs-identifier hs-var">progSent</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679071250"><span class="hs-identifier hs-var">progSent</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;The developed program&quot;</span></span><span class="hs-special">,</span><span>
@@ -859,11 +869,11 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-string">&quot;will be referred to as&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679071210"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><a href="#local-6989586621679071251"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679071210"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679071251"><span class="hs-identifier hs-var">pro</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-236"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;based on the original&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence

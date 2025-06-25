@@ -4,6 +4,7 @@ import Data.List (nub)
 import Language.Drasil
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil
+import MetaDatabase.Drasil (cdb)
 import System.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 
@@ -11,8 +12,6 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.DocLang (mkNb, LsnDecl, LsnChapter(BibSec, LearnObj, Review, CaseProb, Example), 
   LearnObj(..), Review(..), CaseProb(..), Example(..))
 
-import Data.Drasil.Concepts.Documentation (doccon, doccon')
-import Data.Drasil.Concepts.Math (mathcon)
 import qualified Data.Drasil.Concepts.Documentation as Doc (notebook)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.Physics (physicCon)
@@ -64,12 +63,12 @@ si = SI {
 }
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw physicscon ++ symbols) (nw projectileMotion : map nw doccon ++ 
-  map nw doccon' ++ map nw physicCon ++ concepts ++ map nw mathcon) 
+symbMap = cdb (map qw physicscon ++ symbols) (nw projectileMotion :
+  map nw physicCon ++ concepts) 
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] allRefs []
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbols :: [IdeaDict]) ([] :: [ConceptChunk])
+usedDB = cdb' ([] :: [QuantityDict]) (map nw symbols :: [IdeaDict]) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) [] [] [] [] ([] :: [ConceptInstance])
   ([] :: [LabelledContent]) ([] :: [Reference]) []
 

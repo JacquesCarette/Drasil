@@ -81,24 +81,24 @@ resourcePath = "../../../../datafiles/swhsnopcm/"
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
-symbols = pi_ : map dqdWr concepts ++ map dqdWr constrained
+symbols = map dqdWr concepts ++ map dqdWr constrained
  ++ map dqdWr [tempW, watE]
- ++ [gradient, uNormalVect] ++ [dqdWr surface]
 
 symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
                                --FOUND LOC OF ERROR: Instance Models
-symbolsAll = map qw symbols ++ map qw specParamValList ++
-  map qw [absTol, relTol] ++
-  scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
-  ++ map qw [listToArray $ quantvar tempW, arrayVecDepVar noPCMODEInfo]
+symbolsAll = map qw [gradient, pi_, uNormalVect, dqdWr surface] ++ map qw symbols ++
+  map qw symbolConcepts ++ map qw specParamValList ++ map qw [absTol, relTol] ++
+  scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols ++
+  map qw [listToArray $ quantvar tempW, arrayVecDepVar noPCMODEInfo]
 
 concepts :: [UnitalChunk]
-concepts = map ucw [density, tau, inSA, outSA,
-  htCapL, QT.htFlux, htFluxIn, htFluxOut, volHtGen,
-  htTransCoeff, mass, tankVol, QT.temp, QT.heatCapSpec,
-  deltaT, tempEnv, thFluxVect, time, htFluxC,
-  vol, wMass, wVol, tauW, QT.sensHeat]
+concepts = map ucw [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
+  htTransCoeff, tankVol, deltaT, tempEnv, thFluxVect, htFluxC, wMass, wVol, tauW]
+
+symbolConcepts :: [UnitalChunk]
+symbolConcepts = map ucw [density, QT.htFlux, QT.heatCapSpec, mass, QT.sensHeat,
+  QT.temp, time, vol]
 
 -------------------
 --INPUT INFORMATION

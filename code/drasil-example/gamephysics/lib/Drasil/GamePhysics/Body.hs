@@ -153,22 +153,12 @@ symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks
   siUnits dataDefs iMods generalDefns tMods concIns [] allRefs citations
 
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
-tableOfAbbrvsIdeaDicts =
+abbreviationsList :: [IdeaDict]
+abbreviationsList =
   -- QuantityDicts
   map nw symbolsAll ++
   -- CIs
   map nw acronyms
-
--- usedDB :: ChunkDB
--- usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
---   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
-abbreviationsList :: [IdeaDict]
-abbreviationsList = 
-  -- QuantityDict abbreviations
-  map nw symbolsAll ++
-  -- Other acronyms/abbreviations
-  nw progName : map nw acronyms
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

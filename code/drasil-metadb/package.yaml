@@ -15,6 +15,10 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
+- containers
+- drasil-data
+- drasil-database
+- drasil-lang
 
 ghc-options:
 - -Wall

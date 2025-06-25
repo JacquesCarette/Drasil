@@ -120,6 +120,9 @@ cradle:
     - path: "drasil-metadata/lib"
       component: "drasil-metadata:lib"
 
+    - path: "drasil-metadb/lib"
+      component: "drasil-metadb:lib"
+
     - path: "drasil-printers/lib"
       component: "drasil-printers:lib"
 

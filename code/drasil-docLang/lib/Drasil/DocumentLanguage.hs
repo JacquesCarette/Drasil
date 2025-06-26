@@ -23,9 +23,9 @@ import Drasil.TraceTable (generateTraceMap)
 import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
-import Database.Drasil (ChunkDB, termTable, collectUnits, refbyTable, conceptinsTable, 
+import Database.Drasil (ChunkDB, collectUnits, refbyTable, conceptinsTable, 
   idMap, conceptinsTable, traceTable, generateRefbyMap, refTable, labelledcontentTable, 
-  theoryModelTable, insmodelTable, gendefTable, dataDefnTable, cdb)
+  theoryModelTable, insmodelTable, gendefTable, dataDefnTable)
 
 import System.Drasil
 import Drasil.GetChunks (ccss, ccss', citeDB)
@@ -66,7 +66,7 @@ import Data.List (nub, sortBy, sortOn)
 import qualified Data.Map as Map (elems, toList, assocs, keys)
 import Data.Maybe (maybeToList)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
-import Theory.Drasil
+
 
 -- * Main Function
 -- | Creates a document from a document description, a title combinator function, and system information.
@@ -252,13 +252,9 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
       mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) xcdb) f con
 
     mkSubRef _ (TAandA ideas) =
-      let db = cdb ([] :: [QuantityDict]) ideas ([] :: [ConceptChunk])
-                    ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
-                    ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-                    ([] :: [LabelledContent]) ([] :: [Reference]) []
-      in SRS.tOfAbbAcc
-          [LlC $ tableAbbAccGen $ nub $ map fst $ Map.elems $ termTable db]
-          []
+      SRS.tOfAbbAcc
+        [LlC $ tableAbbAccGen $ nub ideas]
+        []
 
 
 

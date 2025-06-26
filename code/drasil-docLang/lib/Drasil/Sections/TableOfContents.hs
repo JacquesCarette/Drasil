@@ -94,7 +94,7 @@ mktRefSec (RefProg _ l) =
     mktSubRef (TUnits' _ _) = namedRef SRS.tOfUnitLabel   $ titleize' Doc.tOfUnit
     mktSubRef (TSymb _)     = namedRef SRS.tOfSymbLabel   $ titleize' Doc.tOfSymb
     mktSubRef (TSymb' _ _)  = namedRef SRS.tOfSymbLabel   $ titleize' Doc.tOfSymb
-    mktSubRef (TAandA _) = namedRef SRS.tOfAbbAccLabel $ titleize' Doc.abbAcc
+    mktSubRef (TAandA _)    = namedRef SRS.tOfAbbAccLabel $ titleize' Doc.abbAcc
 
 -- | Helper for creating the 'Introduction' section ToC entry
 mktIntroSec :: IntroSec -> ItemType

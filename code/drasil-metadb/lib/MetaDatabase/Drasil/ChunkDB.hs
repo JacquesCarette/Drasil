@@ -14,6 +14,10 @@ import Data.Drasil.Concepts.Math (mathcon)
 import qualified Data.Map as Map (empty)
 import Data.Drasil.SI_Units (siUnits)
 
+-- | The basic idea dicts that are used to construct the basis chunk database.
+-- Every chunk added here is added to every new chunk database created that uses
+--  the cdb constructor. This ensures that the information in these idea dicts
+--  is always available in the chunk database.
 basisIdeaDicts :: [IdeaDict]
 basisIdeaDicts =
   -- Actual IdeaDicts
@@ -23,6 +27,9 @@ basisIdeaDicts =
   -- ConceptChunks
   map nw [algorithm, errMsg, program] ++ map nw mathcon
 
+-- | The basis chunk database, which contains the basic idea dicts, concept chunks,
+--  and units that are used in all of the case studies. This database is then added
+-- to all of the new chunk databases created using the cdb constructor.
 basisCDB :: ChunkDB
 basisCDB =
   CDB {

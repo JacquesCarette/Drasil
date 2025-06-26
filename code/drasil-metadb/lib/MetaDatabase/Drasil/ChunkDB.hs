@@ -28,6 +28,10 @@ basisIdeaDicts =
   -- CIs
   map nw doccon'
 
+-- | The basic concept chunks that are used to construct the basis chunk database.
+-- Every chunk added here is added to every new chunk database created that uses
+--  the cdb constructor. This ensures that the information in these concept chunks
+--  is always available in the chunk database.
 basisConceptChunks :: [ConceptChunk]
 basisConceptChunks =
   srsDomains ++ [algorithm, errMsg, program] ++ mathcon

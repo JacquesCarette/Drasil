@@ -8,7 +8,10 @@ module Database.Drasil.ChunkDB (
   -- * Types
   -- ** 'ChunkDB'
   -- | Main database type
-  ChunkDB(..),
+  ChunkDB(symbolTable, termTable, conceptChunkTable, _unitTable, _dataDefnTable,
+    _insmodelTable, _gendefTable, _theoryModelTable, _conceptinsTable,
+    _citationTable, _labelledcontentTable, _traceTable, _refbyTable, _refTable,
+    CDB),
   TermAbbr(..),
   -- ** Maps
   -- | Exported for external use.

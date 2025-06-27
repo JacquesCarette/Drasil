@@ -311,7 +311,7 @@ unitalQuants :: [QuantityDict]
 unitalQuants = message : map qw constrained
 
 unitalIdeas :: [IdeaDict]
-unitalIdeas = nw message : map nw constrained
+unitalIdeas = [nw message]
 
 inConstraints :: [UncertQ]
 inConstraints = [launAngleUnc, launSpeedUnc, targPosUnc]

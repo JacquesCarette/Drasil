@@ -27,111 +27,31 @@ public class Projectile {
         outfile.println(" in module Projectile");
         outfile.close();
         InputParameters inParams = new InputParameters(filename);
-        double t_flight = func_t_flight(inParams);
+        double t_flight = 2.0 * inParams.v_launch * Math.sin(inParams.theta) / Constants.g;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 't_flight' assigned ");
         outfile.print(t_flight);
         outfile.println(" in module Projectile");
         outfile.close();
-        double p_land = func_p_land(inParams);
+        double p_land = 2.0 * Math.pow(inParams.v_launch, 2.0) * Math.sin(inParams.theta) * Math.cos(inParams.theta) / Constants.g;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'p_land' assigned ");
         outfile.print(p_land);
         outfile.println(" in module Projectile");
         outfile.close();
-        double d_offset = func_d_offset(inParams, p_land);
+        double d_offset = p_land - inParams.p_target;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'd_offset' assigned ");
         outfile.print(d_offset);
         outfile.println(" in module Projectile");
         outfile.close();
-        String s = func_s(inParams, d_offset);
+        String s = Math.abs(d_offset / inParams.p_target) < Constants.epsilon ? "The target was hit." : d_offset < 0.0 ? "The projectile fell short." : "The projectile went long.";
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 's' assigned ");
         outfile.print(s);
         outfile.println(" in module Projectile");
         outfile.close();
         write_output(s, d_offset, t_flight);
-    }
-    
-    /** \brief Calculates flight duration: the time when the projectile lands (s)
-        \param inParams structure holding the input values
-        \return flight duration: the time when the projectile lands (s)
-    */
-    public static double func_t_flight(InputParameters inParams) throws IOException {
-        PrintWriter outfile;
-        outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.println("function func_t_flight called with inputs: {");
-        outfile.print("  inParams = ");
-        outfile.println("Instance of InputParameters object");
-        outfile.println("  }");
-        outfile.close();
-        
-        return 2.0 * inParams.v_launch * Math.sin(inParams.theta) / Constants.g;
-    }
-    
-    /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
-        \param inParams structure holding the input values
-        \return landing position: the distance from the launcher to the final position of the projectile (m)
-    */
-    public static double func_p_land(InputParameters inParams) throws IOException {
-        PrintWriter outfile;
-        outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.println("function func_p_land called with inputs: {");
-        outfile.print("  inParams = ");
-        outfile.println("Instance of InputParameters object");
-        outfile.println("  }");
-        outfile.close();
-        
-        return 2.0 * Math.pow(inParams.v_launch, 2.0) * Math.sin(inParams.theta) * Math.cos(inParams.theta) / Constants.g;
-    }
-    
-    /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
-        \param inParams structure holding the input values
-        \param p_land landing position: the distance from the launcher to the final position of the projectile (m)
-        \return distance between the target position and the landing position: the offset between the target position and the landing position (m)
-    */
-    public static double func_d_offset(InputParameters inParams, double p_land) throws IOException {
-        PrintWriter outfile;
-        outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.println("function func_d_offset called with inputs: {");
-        outfile.print("  inParams = ");
-        outfile.print("Instance of InputParameters object");
-        outfile.println(", ");
-        outfile.print("  p_land = ");
-        outfile.println(p_land);
-        outfile.println("  }");
-        outfile.close();
-        
-        return p_land - inParams.p_target;
-    }
-    
-    /** \brief Calculates output message as a string
-        \param inParams structure holding the input values
-        \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
-        \return output message as a string
-    */
-    public static String func_s(InputParameters inParams, double d_offset) throws IOException {
-        PrintWriter outfile;
-        outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.println("function func_s called with inputs: {");
-        outfile.print("  inParams = ");
-        outfile.print("Instance of InputParameters object");
-        outfile.println(", ");
-        outfile.print("  d_offset = ");
-        outfile.println(d_offset);
-        outfile.println("  }");
-        outfile.close();
-        
-        if (Math.abs(d_offset / inParams.p_target) < Constants.epsilon) {
-            return "The target was hit.";
-        }
-        else if (d_offset < 0.0) {
-            return "The projectile fell short.";
-        }
-        else {
-            return "The projectile went long.";
-        }
     }
     
     /** \brief Writes the output values to output.txt

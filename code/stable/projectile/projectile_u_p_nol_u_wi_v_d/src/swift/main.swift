@@ -8,53 +8,6 @@ import Foundation
 
 extension String: Error {}
 
-/** Calculates flight duration: the time when the projectile lands (s)
-    - Parameter v_launch: launch speed: the initial speed of the projectile when launched (m/s)
-    - Parameter theta: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-    - Parameter g: magnitude of gravitational acceleration: the magnitude of the approximate acceleration due to gravity on Earth at sea level (m/s^2)
-    - Returns: flight duration: the time when the projectile lands (s)
-*/
-func func_t_flight(_ v_launch: Double, _ theta: Double, _ g: Double) -> Double {
-    return 2.0 * v_launch * sin(theta) / g
-}
-
-/** Calculates landing position: the distance from the launcher to the final position of the projectile (m)
-    - Parameter v_launch: launch speed: the initial speed of the projectile when launched (m/s)
-    - Parameter theta: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-    - Parameter g: magnitude of gravitational acceleration: the magnitude of the approximate acceleration due to gravity on Earth at sea level (m/s^2)
-    - Returns: landing position: the distance from the launcher to the final position of the projectile (m)
-*/
-func func_p_land(_ v_launch: Double, _ theta: Double, _ g: Double) -> Double {
-    return 2.0 * pow(v_launch, 2.0) * sin(theta) * cos(theta) / g
-}
-
-/** Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
-    - Parameter p_target: target position: the distance from the launcher to the target (m)
-    - Parameter p_land: landing position: the distance from the launcher to the final position of the projectile (m)
-    - Returns: distance between the target position and the landing position: the offset between the target position and the landing position (m)
-*/
-func func_d_offset(_ p_target: Double, _ p_land: Double) -> Double {
-    return p_land - p_target
-}
-
-/** Calculates output message as a string
-    - Parameter p_target: target position: the distance from the launcher to the target (m)
-    - Parameter epsilon: hit tolerance
-    - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
-    - Returns: output message as a string
-*/
-func func_s(_ p_target: Double, _ epsilon: Double, _ d_offset: Double) -> String {
-    if abs(d_offset / p_target) < epsilon {
-        return "The target was hit."
-    }
-    else if d_offset < 0.0 {
-        return "The projectile fell short."
-    }
-    else {
-        return "The projectile went long."
-    }
-}
-
 /** Reads input from a file with the given file name
     - Parameter filename: name of the input file
     - Returns: launch speed: the initial speed of the projectile when launched (m/s)
@@ -179,8 +132,12 @@ var theta: Double
 var p_target: Double
 (v_launch, theta, p_target) = try get_input(filename)
 input_constraints(v_launch, theta, p_target)
-var t_flight: Double = func_t_flight(v_launch, theta, g)
-var p_land: Double = func_p_land(v_launch, theta, g)
-var d_offset: Double = func_d_offset(p_target, p_land)
-var s: String = func_s(p_target, epsilon, d_offset)
+// flight duration: the time when the projectile lands (s)
+var t_flight: Double = 2.0 * v_launch * sin(theta) / g
+// landing position: the distance from the launcher to the final position of the projectile (m)
+var p_land: Double = 2.0 * pow(v_launch, 2.0) * sin(theta) * cos(theta) / g
+// distance between the target position and the landing position: the offset between the target position and the landing position (m)
+var d_offset: Double = p_land - p_target
+// output message as a string
+var s: String = abs(d_offset / p_target) < epsilon ? "The target was hit." : d_offset < 0.0 ? "The projectile fell short." : "The projectile went long."
 try write_output(s, d_offset, t_flight)

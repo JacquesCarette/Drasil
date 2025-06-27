@@ -159,8 +159,6 @@ conceptChunks =
   -- ConceptChunks
   algorithm : defs' ++ softwarecon ++ physicCon ++ mathcon ++ 
   solidcon ++ physicalcon ++ srsDomains ++
-  -- InstanceModels
-  map cw iMods ++
   -- DefinedQuantityDicts
   map cw symbols
 

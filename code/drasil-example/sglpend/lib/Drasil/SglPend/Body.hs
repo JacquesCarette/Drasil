@@ -133,9 +133,7 @@ ideaDicts =
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  [errMsg, program, algorithm] ++ physicCon ++ physicalcon ++ mathcon ++ srsDomains ++
-  -- InstanceModels
-  map cw iMods
+  [errMsg, program, algorithm] ++ physicCon ++ physicalcon ++ mathcon ++ srsDomains
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =

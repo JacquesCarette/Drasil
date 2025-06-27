@@ -25,7 +25,6 @@ import Data.Drasil.Concepts.Math (mathcon, cartesian, ode, mathcon', graph)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Concepts.Software (program, errMsg)
-import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 import Data.Drasil.TheoryConcepts (inModel)
@@ -146,9 +145,7 @@ ideaDicts =
   -- Actual IdeaDicts
   doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
   -- CIs
-  nw progName : map nw doccon' ++ map nw mathcon' ++ map nw physicCon' ++
-  -- UnitalChunks
-  map nw physicscon
+  nw progName : map nw doccon' ++ map nw mathcon' ++ map nw physicCon'
 
 tableOfAbbrvsIdeaDicts :: [IdeaDict]
 tableOfAbbrvsIdeaDicts =

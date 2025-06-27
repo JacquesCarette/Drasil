@@ -2,7 +2,10 @@ module MetaDatabase.Drasil.ChunkDB (
     basisCDB
 ) where
 
-import Database.Drasil (ChunkDB (..), termMap, conceptMap, unitMap)
+import Database.Drasil (ChunkDB (symbolTable, termTable, conceptChunkTable, _unitTable, _dataDefnTable,
+  _insmodelTable, _gendefTable, _theoryModelTable, _conceptinsTable,
+  _citationTable, _labelledcontentTable, _traceTable, _refbyTable, _refTable,
+  CDB), termMap, conceptMap, unitMap)
 import Language.Drasil (IdeaDict, nw)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import Data.Drasil.Software.Products (prodtcon)

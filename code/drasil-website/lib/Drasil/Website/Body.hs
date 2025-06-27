@@ -87,8 +87,7 @@ si fl = SI {
     _outputs     = [] :: [QuantityDict],
     _constraints = [] :: [ConstrainedChunk],
     _constants   = [] :: [ConstQDef],
-    _systemdb   = symbMap fl,
-    _usedinfodb  = usedDB
+    _systemdb   = symbMap fl
   }
 
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.
@@ -111,11 +110,6 @@ symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, web, phsChgMtrl, twoD]
 -- | Helper to get the system name as an 'IdeaDict' from 'System'.
 getSysName :: System -> IdeaDict
 getSysName SI{_sys = nm} = nw nm 
-
--- | Empty database needed for 'si' to work.
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
-           ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- | Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]

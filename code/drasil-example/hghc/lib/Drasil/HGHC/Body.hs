@@ -41,8 +41,7 @@ si = SI {
   _outputs     = htOutputs,
   _constraints = [] :: [ConstrainedChunk],
   _constants   = [],
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
+  _systemdb   = symbMap
 }
   
 mkSRS :: SRSDecl
@@ -72,12 +71,3 @@ symbMap :: ChunkDB
 symbMap = cdb symbols ideaDicts mathcon
   siUnits dataDefs [] [] [] [] [] [] []
 
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
-tableOfAbbrvsIdeaDicts =
-  -- QuantityDicts
-  map nw symbols
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
-           ([] :: [ConceptChunk]) ([] :: [UnitDefn])
-           [] [] [] [] [] [] ([] :: [Reference]) []

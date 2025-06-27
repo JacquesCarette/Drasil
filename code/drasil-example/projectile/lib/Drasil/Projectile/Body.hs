@@ -63,7 +63,7 @@ mkSRS = [TableOfContents,
     RefProg intro
       [ TUnits
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits]
-      , TAandA
+      , TAandA abbreviationsList 
       ],
   IntroSec $
     IntroProg justification (phrase progName)
@@ -145,8 +145,7 @@ si = SI {
   _outputs     = outputs,
   _constraints = map cnstrw constrained,
   _constants   = constants,
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
+  _systemdb   = symbMap
 }
 
 purp :: Sentence
@@ -182,8 +181,8 @@ symbMap :: ChunkDB
 symbMap = cdb (qw pi_ : symbols) ideaDicts conceptChunks siUnits
   dataDefs iMods genDefns tMods concIns [] allRefs citations
 
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
-tableOfAbbrvsIdeaDicts =
+abbreviationsList  :: [IdeaDict]
+abbreviationsList  =
   -- CIs
   map nw acronyms ++
   -- QuantityDicts
@@ -192,10 +191,6 @@ tableOfAbbrvsIdeaDicts =
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
-  (cw pi_ : srsDomains) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

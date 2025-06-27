@@ -38,7 +38,6 @@ mkSRS = [TableOfContents,
     [ tunitNone []      -- Adds table of unit section with a table frame
     , tsymb [] -- Adds table of symbol section with a table frame
     --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
-    , TAandA         -- Add table of abbreviation and acronym section
     ],
   IntroSec $
   IntroProg EmptyS (phrase progName)
@@ -101,8 +100,7 @@ si = SI {
   _outputs     = [] :: [QuantityDict],
   _constraints = [] :: [ConstrainedChunk],
   _constants   = [] :: [ConstQDef],
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
+  _systemdb   = symbMap
 }
 
 ideaDicts :: [IdeaDict]
@@ -120,12 +118,6 @@ symbMap = cdb ([] :: [QuantityDict]) ideaDicts conceptChunks
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
   ([] :: [LabelledContent]) ([] :: [Reference]) citations
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
-  ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  ([] :: [LabelledContent]) ([] :: [Reference]) []
 
 citations :: BibRef
 citations = [parnasClements1986, koothoor2013, smithEtAl2007, smithLai2005,

@@ -112,8 +112,6 @@ conceptChunks =
   -- ConceptChunks
   algorithm : thermocon ++ softwarecon ++ physicCon ++ mathcon ++
   physicalcon ++ con ++ srsDomains ++
-  -- InstanceModels
-  cw heatEInPCM :
   -- DefinedQuantityDicts
   map cw symbols ++
   -- ConstQDefs

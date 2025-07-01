@@ -431,7 +431,8 @@ computeDerivatives = quantfunc $ implVar "computeDerivatives_apache" (nounPhrase
 odeintPckg :: ODELibPckg
 odeintPckg = mkODELib "odeint" "v2" odeint odeintCall "." [Cpp]
 
--- | Default symbolic dimension
+-- | Symbolic dimension used for vector-valued ODE variables.
+-- Allows examples to specialize this to "2", "3", etc., while keeping library code generic.
 dim :: String
 dim = "n"
 
@@ -448,6 +449,9 @@ odeint = externalLib [
       customObjArg [] "Class representing an ODE system" ode odeCtor
         (customClass [constructorInfo odeCtor [] [],
           methodInfoNoReturn odeOp "function representation of ODE system"
+          -- | ODE parameters: generalized for vectors of symbolic dimension 'dim'.
+          -- TODO: Once ClifS is integrated, revisit this to allow symbolic multivectors as parameter types.
+          -- Likely replacement: ClifS dim Real instead of vectNDS dim Real.
             [unnamedParam (vectNDS dim Real), unnamedParam (vectNDS dim Real), lockedParam t]
             [assignArrayIndex]]),
       -- Need to declare variable holding initial value because odeint will update this variable at each step
@@ -456,7 +460,7 @@ odeint = externalLib [
       customObjArg []
         "Class for populating a list during an ODE solution process"
         pop popCtor (customClass [
-          constructorInfo popCtor [unnamedParam (Vect Real)] [],
+          constructorInfo popCtor [unnamedParam (vectNDS dim Real)] [],
           methodInfoNoReturn popOp
             "appends solution point for current ODE solution step"
             [lockedParam y, lockedParam t] [appendCurrSol (sy y)]])]]
@@ -501,7 +505,7 @@ odeintCurrVals, rk, stepper, pop :: CodeVarChunk
 odeintCurrVals = quantvar $ implVar "currVals_odeint" (nounPhrase
   "vector holding ODE solution values for the current step"
   "vectors holding ODE solution values for the current step")
-  (Vect Real) (label "currVals")
+  (vectNDS dim Real) (label "currVals")
 rk = quantvar $ implVar "rk_odeint" (nounPhrase
   "stepper for solving ODE system using Runge-Kutta-Dopri5 method"
   "steppers for solving ODE system using Runge-Kutta-Dopri5 method")
@@ -560,7 +564,7 @@ t = quantvar $ implVar "t_ode" (nounPhrase
 y = quantvar $ implVar "y_ode" (nounPhrase
   "current dependent variable value in ODE solution"
   "current dependent variable value in ODE solution")
-  (Vect Real) (label "y")
+  (vectNDS dim Real) (label "y")
 
 -- | ODE object constructor.
 odeCtor :: CodeFuncChunk
@@ -604,6 +608,7 @@ modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
     replaceDepVar (Matrix es)             = Matrix $ map (map replaceDepVar) es
     replaceDepVar (UnaryOp u e)           = UnaryOp u $ replaceDepVar e
     replaceDepVar (UnaryOpB u e)          = UnaryOpB u $ replaceDepVar e
+    -- TODO: When ClifS or multivectors are introduced, add support for UnaryOpCC and UnaryOpCN here.
     replaceDepVar (UnaryOpVV u e)         = UnaryOpVV u $ replaceDepVar e
     replaceDepVar (UnaryOpVN u e)         = UnaryOpVN u $ replaceDepVar e
     replaceDepVar (ArithBinaryOp b e1 e2) = ArithBinaryOp b

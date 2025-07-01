@@ -14,7 +14,7 @@ module Language.Drasil.Space (
   -- * Class
   HasSpace(..),
   -- * Functions
-  getActorName, getInnerSpace, mkFunction, isBasicNumSpace
+  getActorName, getInnerSpace, mkFunction, isBasicNumSpace, vectNDS
 ) where
 
 import qualified Data.List.NonEmpty        as NE
@@ -44,6 +44,17 @@ data Space =
   | Function (NE.NonEmpty Primitive) Primitive
   | Void
   deriving (Eq, Show)
+
+-- | Sanity check to ensure we only allow numeric types inside vectNDS/ClifS
+checkClifSpace :: Space -> Bool
+checkClifSpace Real    = True
+checkClifSpace Integer = True
+checkClifSpace _       = False
+
+vectNDS :: String -> Space -> Space
+vectNDS x s
+  | checkClifSpace s = ClifS (VDim x) s
+  | otherwise        = error "vectNDS only supports Real or Integer spaces"
 
 -- | HasSpace is anything which has a 'Space'.
 class HasSpace c where

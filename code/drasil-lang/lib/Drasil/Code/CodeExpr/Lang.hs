@@ -1,6 +1,8 @@
 {-# LANGUAGE GADTs #-}
 module Drasil.Code.CodeExpr.Lang where
 
+-- TODO: Add support for UnaryOpCC / UnaryOpCN for multivector (ClifS) operations when GA is integrated.
+
 import Prelude hiding (sqrt)
 
 import Drasil.Database.UID (UID)

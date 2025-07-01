@@ -11,9 +11,9 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
 ) where
 
 import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
-  QuantityDict, HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, Vect), implVar,
+  QuantityDict, HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, ClifS), implVar,
   implVarUID, implVarUID', qw, compoundPhrase, nounPhrase, nounPhraseSP, label,
-  sub, Idea(getA), NamedIdea(term), Stage(..), (+++))
+  sub, Idea(getA), NamedIdea(term), Stage(..), (+++), vectNDS)
 import Language.Drasil.Display (Symbol(Label, Concat))
 
 import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
@@ -431,6 +431,10 @@ computeDerivatives = quantfunc $ implVar "computeDerivatives_apache" (nounPhrase
 odeintPckg :: ODELibPckg
 odeintPckg = mkODELib "odeint" "v2" odeint odeintCall "." [Cpp]
 
+-- | Default symbolic dimension
+dim :: String
+dim = "n"
+
 odeint :: ExternalLibrary
 odeint = externalLib [
   choiceSteps [
@@ -444,7 +448,7 @@ odeint = externalLib [
       customObjArg [] "Class representing an ODE system" ode odeCtor
         (customClass [constructorInfo odeCtor [] [],
           methodInfoNoReturn odeOp "function representation of ODE system"
-            [unnamedParam (Vect Real), unnamedParam (Vect Real), lockedParam t]
+            [unnamedParam (vectNDS dim Real), unnamedParam (vectNDS dim Real), lockedParam t]
             [assignArrayIndex]]),
       -- Need to declare variable holding initial value because odeint will update this variable at each step
       preDefinedArg odeintCurrVals,

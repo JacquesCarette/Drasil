@@ -15,6 +15,9 @@ import Data.List.NonEmpty (toList)
 newtype Code = Code { unCode :: [(FilePath, Doc)]}
 
 -- | Default mapping between 'Space' and 'CodeType'.
+-- TODO: For now, ClifS is rendered like Vect (i.e., as a list).
+-- This does not support full GA structure (e.g., blades, bivectors, matrices).
+-- Matrix <-> ClifS representation is unclear and deferred.
 spaceToCodeType :: S.Space -> [CodeType]
 spaceToCodeType S.Integer        = [Integer]
 spaceToCodeType S.Natural        = [Integer]
@@ -23,7 +26,7 @@ spaceToCodeType S.Rational       = [Double, Float]
 spaceToCodeType S.Boolean        = [Boolean]
 spaceToCodeType S.Char           = [Char]
 spaceToCodeType S.String         = [String]
-spaceToCodeType (S.Vect s)       = map List (spaceToCodeType s)
+spaceToCodeType (S.ClifS _ s)       = map List (spaceToCodeType s)
 spaceToCodeType (S.Matrix _ _ s) = map (List . List) (spaceToCodeType s)
 spaceToCodeType (S.Set s)        = map List (spaceToCodeType s)
 spaceToCodeType (S.Array s)      = map Array (spaceToCodeType s)

@@ -66,7 +66,7 @@ readWithDataDesc fp ddsc = do
 sampleInputDD :: [CodeVarChunk] -> DataDesc'
 sampleInputDD ds = dataDesc (junk : intersperse junk (map toData ds)) "\n"
   where toData d = toData' (d ^. typ) d
-        toData' t@(Vect _) d = list d
+        toData' t@(ClifS _ _) d = list d
           (take (getDimension t) ([", ", "; "] ++ iterate (':':) ":"))
         toData' _ d = singleton' d
 
@@ -83,7 +83,7 @@ strAsExpr _        _ = error "strAsExpr should only be numeric space or string"
 
 -- | Gets the dimension of a 'Space'.
 getDimension :: Space -> Int
-getDimension (Vect t) = 1 + getDimension t
+getDimension (ClifS _ t) = 1 + getDimension t
 getDimension _ = 0
 
 -- | Splits a string at the first (and only the first) occurrence of a delimiter.

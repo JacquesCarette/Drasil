@@ -49,7 +49,14 @@ basisIdeaDicts =
 
 basisConceptChunks :: [ConceptChunk]
 basisConceptChunks =
-  srsDomains ++ [algorithm, errMsg, program] ++ mathcon
+  -- | ConceptChunks
+  --  * srsDomains - SRS related concepts. These are included in the basis as every
+  --                 case study should have a generated SRS, and these concepts would
+  --                 be needed for that.
+  --  * mathcon - Math concepts. Math is widespread throughout all of the case studies
+  --              and scientific computing software in general, so it is included
+  --              in the basis.
+  [algorithm, errMsg, program] ++ srsDomains ++ mathcon
 
 -- | The basis chunk database, which contains the basic idea dicts, concept chunks,
 --  and units that are used in all of the case studies. This database is then added

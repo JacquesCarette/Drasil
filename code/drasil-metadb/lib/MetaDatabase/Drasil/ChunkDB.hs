@@ -23,11 +23,31 @@ import Data.Drasil.SI_Units (siUnits)
 --  is always available in the chunk database.
 basisIdeaDicts :: [IdeaDict]
 basisIdeaDicts =
-  -- Actual IdeaDicts
+  -- | Actual IdeaDicts
+  --  * doccon - General documentation related IdeaDicts. Included in the basis
+  --             as it is data which all the cases studies use and is not specific
+  --             to a particular case study.
+  --  * prodtcon - A list of a few IdeaDicts that are terms related to software products.
+  --              This is included in the basis as it can be used to describe
+  --              any software, which each of the case study examples produce.
+  --              For example, one of the chunks, `sciCompS`, can be used to describe
+  --              all of the software that Drasil generates, since it is all scientific
+  --              computing software.
+  --  * educon - IdeaDict chunks with information about education. Included in the basis
+  --            as each case study should provide information about the expected users,
+  --            which usually means describing the expected education level in related
+  --            fields.
+  --  * compcon - Computing related IdeaDicts. Since all of the case studies are
+  --              concerned with software, this is included in the basis as the
+  --              computing chunks are relevant to all of them.
   doccon ++ prodtcon ++ educon ++ compcon ++
-  -- CIs
+  -- | CIs
+  --  * doccon' - A list of CommonIdeas that are added for the same purpose as `doccon`.
   map nw doccon' ++
   -- ConceptChunks
+  --  * mathcon - Math concepts. Math is widespread throughout all of the case studies
+  --              and scientific computing software in general, so it is included
+  --              in the basis.
   map nw [algorithm, errMsg, program] ++ map nw mathcon
 
 -- | The basis chunk database, which contains the basic idea dicts, concept chunks,

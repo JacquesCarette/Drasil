@@ -3,7 +3,7 @@
 module Drasil.DocumentLanguage.TraceabilityGraph where
 
 import Language.Drasil
-import Database.Drasil hiding (cdb)
+import Database.Drasil hiding (cdb')
 import System.Drasil hiding (purpose)
 import Control.Lens ((^.))
 import qualified Data.Map as Map

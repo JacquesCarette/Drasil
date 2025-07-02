@@ -2,8 +2,10 @@ module MetaDatabase.Drasil.ChunkDB (
   cdb
 ) where
 
-import Database.Drasil (ChunkDB (..), idMap, symbolMap, termMap, conceptMap,
-  unitMap, addCdb)
+import Database.Drasil (ChunkDB (symbolTable, termTable, conceptChunkTable, _unitTable, _dataDefnTable,
+  _insmodelTable, _gendefTable, _theoryModelTable, _conceptinsTable,
+  _citationTable, _labelledcontentTable, _traceTable, _refbyTable, _refTable,
+  CDB), idMap, symbolMap, termMap, conceptMap, unitMap, addCdb)
 import Language.Drasil (IdeaDict, Quantity, MayHaveUnit, Concept, IsUnit,
   ConceptChunk, ConceptInstance, Citation, Reference, LabelledContent, nw)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
@@ -17,17 +19,41 @@ import qualified Data.Map as Map (empty)
 import Data.Drasil.SI_Units (siUnits)
 import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel, GenDefn)
 
+-- | The basic idea dicts that are used to construct the basis chunk database.
+-- Every chunk added here is added to every new chunk database created that uses
+--  the cdb constructor. This ensures that the information in these idea dicts
+--  is always available in the chunk database.
 basisIdeaDicts :: [IdeaDict]
 basisIdeaDicts =
-  -- Actual IdeaDicts
+  -- | Actual IdeaDicts
+  --  * doccon - General documentation related IdeaDicts. Included in the basis
+  --             as it is data which all the cases studies use and is not specific
+  --             to a particular case study.
+  --  * prodtcon - A list of a few IdeaDicts that are terms related to software products.
+  --              This is included in the basis as it can be used to describe
+  --              any software, which each of the case study examples produce.
+  --              For example, one of the chunks, `sciCompS`, can be used to describe
+  --              all of the software that Drasil generates, since it is all scientific
+  --              computing software.
+  --  * educon - IdeaDict chunks with information about education. Included in the basis
+  --            as each case study should provide information about the expected users,
+  --            which usually means describing the expected education level in related
+  --            fields.
+  --  * compcon - Computing related IdeaDicts. Since all of the case studies are
+  --              concerned with software, this is included in the basis as the
+  --              computing chunks are relevant to all of them.
   doccon ++ prodtcon ++ educon ++ compcon ++
   -- CIs
+  --  * doccon' - A list of CommonIdeas that are added for the same purpose as `doccon`.
   map nw doccon'
 
 basisConceptChunks :: [ConceptChunk]
 basisConceptChunks =
   srsDomains ++ [algorithm, errMsg, program] ++ mathcon
 
+-- | The basis chunk database, which contains the basic idea dicts, concept chunks,
+--  and units that are used in all of the case studies. This database is then added
+-- to all of the new chunk databases created using the cdb constructor.
 basisCDB :: ChunkDB
 basisCDB =
   CDB {

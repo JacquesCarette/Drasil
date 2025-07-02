@@ -1,6 +1,6 @@
 name:                drasil-metadb
 version:             0.1.1.0
-author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
+author:              "Jacques Carette, Spencer Smith, Jack Wyand"
 maintainer:          "Jacques Carette"
 synopsis:            A framework for code and document generation for scientific software - Utils SubPackage
 github:              JacquesCarette/Drasil

@@ -50,6 +50,13 @@ basisIdeaDicts =
 basisConceptChunks :: [ConceptChunk]
 basisConceptChunks =
   -- | ConceptChunks
+  --  * algorithm - A concept chunk that describes algorithms. This is included in the
+  --                basis as algorithms are a commonly used concept in the case studies.
+  --                but did not fit into the other lists
+  --  * errMsg - Concept chunk defining an error message. Error messages are common in
+  --             any software, so this is included in the basis.
+  --  * program - A concept chunk defining a computer program. This is included 
+  --              in the basis as all of the case studies are concerned with software.
   --  * srsDomains - SRS related concepts. These are included in the basis as every
   --                 case study should have a generated SRS, and these concepts would
   --                 be needed for that.

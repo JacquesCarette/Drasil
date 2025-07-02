@@ -669,13 +669,19 @@ I do it / go for the previous section's approach}
 \ds{the below is the generic CodeSpec DSL, not the \gb{} one. TODO: fix that, 
 and use the CodeSpec stuff the same way we used System information above.}
 
+As mentioned in the previous section, the executable code is a significantly 
+different \sf{} than the documentation-heavy \sfs{} we've already discussed. We 
+have created a recipe language for executable code, and an example (taken from 
+GlassBR) can be seen in Figure~\ref{fig:gbCodeRecipe}.
+
 The recipe DSL for the executable code (\codeH{CodeSpec}) is fairly 
-straightforward for our purposes and can be seen in Figure~\ref{fig:codeSpec}. 
-If you squint, it looks fairly similar to the system information object, albeit 
-with a few distinct differences. There are many references to modules, which we 
-have not yet explicitly discussed. We will look into them in a bit more depth 
-in Section~\ref{sec:gen}, but for now suffice to say they have their own DSL 
-for tying the various requisite chunks together.
+straightforward, even though the executable code is so different from the other 
+\sfs{} in both style and audience. The DSL itself can be seen in 
+Figure~\ref{fig:codeSpec}. If you squint, it looks fairly similar to the system 
+information object, albeit with a few distinct differences. There are many 
+references to modules, which we have not yet explicitly discussed. We will look 
+into them in a bit more depth in Section~\ref{sec:gen}, but for now suffice to 
+say they have their own DSL for tying the various requisite chunks together.
 
 \fig{
 Body.hs
@@ -688,197 +694,8 @@ Code}{fig:gbCodeRecipe}
 \codeBlock{CodeSpec}{41}{72}
 }{The Recipe Language for Executable Code (CodeSpec)}{fig:codeSpec}
 
-% TODO: Rework the below
-%The recipe for the \gb{} SRS can be seen in Figure~\ref{fig:glassBRSRSRecipe}.
-%This should look familiar, as it follows a similar structure to the \smithea{} 
-%template table of contents. We use a number of helper functions and data types 
-%to condense and collect the chunks we require and avoid writing any generic 
-%boilerplate text. The structure of the document can be rearranged to an 
-%extent, 
-%in that we can add, remove, or reorder sections at will by simply moving them 
-%around within the \codeH{SRSDecl}. We can also make choices regarding the 
-%display of certain types of information in the final, generated \sf{}. For 
-%example, we alluded to vector representations earlier 
-%(Section~\ref{sec:chunky}) which we currently can display using either bold
-%typeface or italics. This choice must be made using the 
-%\codeH{TypogConvention} 
-%datatype which lists the choices made (ex. 
-%\codeH{TypogConvention[Vector Bold]}) and is used by a relevant portion of the 
-%SRS recipe if vectors are included in the \sf{}. Our \gb{} example does not 
-%make use of this convention, however the \gp{} case study does.
-%
-%As for the chunks necessary for generating the \sf{}, each section includes 
-%references to them through supplied lists in something we call the 
-%\code{C}{System Information} %System is a Haskell kw
-%object (Figure~\ref{fig:systemInformation}).
-%
-%\fig{
-%\lstinputlisting[language=Haskell, linerange={63-81}, 
-%firstnumber=63]{code/Body.hs}
-%}{System Information for \gb{}}{fig:systemInformation}
-%
-%The system information object uses helper functions to keep track of the lists 
-%of chunks necessary for filling in the sections of our \sf{}, the SRS. Each 
-%piece of the object consists of one or more chunks to be used in filling in 
-%the 
-%relevant sections. A quick description of each property can be found in 
-%Table~\ref{tab:siBreakdown}, but it should be noted that some of the defined 
-%properties are only there for convenience (and/or remain only until the next 
-%refinement pass) as they are derived from other chunks with the use of 
-%helper functions and could be inferred.
-%
-%\ds{TODO: I might remove the table and just add comments to the code block 
-%similar to 
-%what's in the next section. It seems like that might be easier for readers to 
-%reference}
-%
-%\begin{table}[]
-%\caption{System information object breakdown - every property is represented 
-%by 
-%chunks encoding given information}
-%\label{tab:siBreakdown}
-%\begin{tabular}{| P{.2\linewidth} | p{.8\linewidth}|}
-%\hline
-% \textbf{Property} & \textbf{Chunk(s) Referenced}
-%
-%
-%\\ \hline
-%	\_sys & System name (ex. "\gb{}").
-%
-%
-%\\ \hline
-%	\_kind & \SF{} type we are defining (ex. SRS).
-%
-%
-%\\ \hline
-%	\_authors & List of authors of the \sf{}.
-%
-%
-%\\ \hline
-%	\_purpose & Purpose of the \sf{}.
-%
-%
-%\\ \hline
-%	\_quants & List of required quantities.
-%
-%
-%\\ \hline
-%	\_concepts & List of required concepts not otherwise encoded.
-%
-%
-%\\ \hline
-%	\_instModels & List of required instance models.
-%
-%
-%\\ \hline
-%	\_datadefs & List of required data definitions.
-%
-%
-%\\ \hline
-%	\_configFiles & List of required configuration files.
-%
-%
-%\\ \hline
-%	\_inputs & List of required inputs to the system.
-%
-%
-%\\ \hline
-%	\_outputs & List of required outputs from the system.
-%
-%
-%\\ \hline
-%	\_constraints & List of constraints for the system (physical and software 
-%	specific).
-%
-%
-%\\ \hline
-%	\_constants & List of required constants. 
-%
-%
-%\\ \hline
-%	\_sysinfodb & Database of all required symbols. \ds{confirm this}
-%
-%
-%\\ \hline
-%	\_usedinfodb & Database of all used acronyms and symbols. \ds{confirm this}
-%
-%
-%\\ \hline
-%	refdb & Database of all relevant external references/citations.
-%
-%	
-%\\ \hline
-%\end{tabular}
-%\end{table}
-% 
-%As should be obvious, the system information object is referencing other 
-%chunks 
-%which have been defined elsewhere. Most definitions can be found in the 
-%knowledge-base, with system-specific aggregations (i.e. lists of chunks) being 
-%defined within the scope of the specific example project. For example, 
-%\codeH{iMods} referenced as the \codeH{_instModels} property is defined 
-%as shown in Figure~\ref{fig:iMods}, alongside the two system-specific instance 
-%models listed within it. The two specific instance models can be seen to be 
-%derived from other existing chunks, through the use of a series of helper 
-%functions, thus ensuring their traceability to the knowledge-base.
-%
-%\fig{
-%\lstinputlisting[language=Haskell, linerange={18-19}, 
-%firstnumber=18]{code/IMods.hs}
-%\vdots{}
-%\lstinputlisting[language=Haskell, linerange={28-33}, 
-%firstnumber=28]{code/IMods.hs}
-%\vdots{}
-%\lstinputlisting[language=Haskell, linerange={41-46}, 
-%firstnumber=41]{code/IMods.hs}
-%}{The \codeH{iMods} definition}{fig:iMods}
-%
-%Given that the system information object refers to all of the requisite chunks 
-%for the knowledge contained in our \sfs{} and the SRS recipe defines how that 
-%knowledge should be structured and organized within the \sf{}, it follows that 
-%those are all we should need to generate our SRS. As an aside, the complete 
-%recipe for the SRS specification of \gb{}\footnote{Not including chunks 
-%referenced from within our knowledge bases as they can be shared, reused, and 
-%are not necessarily specific to only this system.} including the system 
-%information object is contained in a single file in less than 370 lines of 
-%code\footnote{Including many comments, whitespace, and import statements.}. 
-%Teasing our results: the generated SRS in PDF format is 44 pages in length. 
-%This is partially due to our ability to strip away all of the common 
-%boilerplate text that we need not worry about right now, as that will be a 
-%problem for the generator (Section~\ref{sec:gen}). As it stands we have 
-%created 
-%the recipe language to represent what we truly want out of a recipe: a 
-%simplified, unnecessary-duplication-avoiding, fully traceable representation 
-%of 
-%our target \sf{}.
-%
-%With the combination of system information and the SRS recipe we can soon move
-%on to creating our generator for the finished SRS document. As the other \sf{} 
-%recipes were developed in tandem with the SRS, they follow a similar structure 
-%and in the interest of brevity we will skip the breakdown of each recipe. It 
-%is 
-%left to the reader to investigate them by diving into our examples via the 
-%Drasil github. However, there is one \sf{} that is significantly different, 
-%and 
-%as such, we will go into more depth in discussing in the following section: 
-%the 
-%executable code recipe. Said recipe allows us to not only specify knowledge 
-%and 
-%the way we wish it structured, but also implementation choices that we would 
-%like to make in the final generated source code.
-%
-%\ds{TODO ? (SEE BELOW COMMENT) - basically the list is obviously referencing 
-%other things, which are themselves defined elsewhere, and we can follow that 
-%through to figure out wtf is going on. I will pick one (DD) and traverse the 
-%SI 
-%to show how things (ex. GTF) are defined. It'll be a bunch more code snippets.}
-%\ds{Changed my mind on the above, I think the current example is shorter and 
-%flows more easily. The chunk definitions aren't relevant to the recipe lang 
-%itself or its definition, all that's relevant is that they exist. The 
-%generator 
-%/ final generation example should follow a single DD throughout as described 
-%in 
-%the above comment.}
+
+
 \section{Cooking it all up: Generation/Rendering}
 \label{sec:gen}
   - Recipes are “little programs”

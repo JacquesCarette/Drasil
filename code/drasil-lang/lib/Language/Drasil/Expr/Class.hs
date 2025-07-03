@@ -6,7 +6,9 @@ module Language.Drasil.Expr.Class (
   oneHalf, oneThird,
   apply1, apply2,
   m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet,
-  vScale, vAdd, vSub
+  vScale, vAdd, vSub,
+  geometricProd, wedgeProd, gradeSelect 
+
 ) where
 
 import Prelude hiding (sqrt, log, sin, cos, tan, exp)
@@ -242,6 +244,15 @@ class ExprC r where
   -- | Vectors with fixed components, of a given fixed dimension
   vect :: [r] -> r
 
+  -- | Smart constructor for the geometric product of two Clifford objects.
+  geometricProd :: r -> r -> r
+
+  -- | Smart constructor for the wedge (outer) product.
+  wedgeProd :: r -> r -> r
+
+  -- | Smart constructor for grade selection.
+  gradeSelect :: Natural -> r -> r
+
 instance ExprC Expr where
   lit = Lit
 
@@ -262,6 +273,8 @@ instance ExprC Expr where
 
   -- | Smart constructor for the dot product of two equations.
   ($.) = CCNBinaryOp Dot
+
+
 
   -- | Add two expressions.
   ($+) (Lit (Int 0)) r = r
@@ -392,6 +405,10 @@ instance ExprC Expr where
   cAdd  = CCCBinaryOp CAdd
   -- | Subtracting vectors
   cSub  = CCCBinaryOp CSub
+
+  geometricProd = CCCBinaryOp GeometricProd
+  wedgeProd     = CCCBinaryOp WedgeProd
+  gradeSelect n = NatCCBinaryOp GradeSelect n
 
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = Case Complete
@@ -603,6 +620,10 @@ instance ExprC M.ModelExpr where
     in
       M.Clif (S.Fixed d) $ OM.fromList $ mapWithIndex vectComp es
 
+  geometricProd = M.CCCBinaryOp M.GeometricProd
+  wedgeProd     = M.CCCBinaryOp M.WedgeProd
+  gradeSelect n = M.NatCCBinaryOp M.GradeSelect n
+
 instance ExprC C.CodeExpr where
   lit = C.Lit
 
@@ -781,3 +802,7 @@ instance ExprC C.CodeExpr where
       vectComp n e = (vectorKey n d, e)
     in
       C.Clif (S.Fixed d) $ OM.fromList $ mapWithIndex vectComp es
+
+  geometricProd = C.CCCBinaryOp C.GeometricProd
+  wedgeProd     = C.CCCBinaryOp C.WedgeProd
+  gradeSelect n = C.NatCCBinaryOp C.GradeSelect n

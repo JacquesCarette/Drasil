@@ -271,7 +271,8 @@ module Language.Drasil (
 
   -- Language.Drasil.Space
   , Space(..), Dimension(..)
-  , vect2DS, vect3DS, vectS, vectNDS
+  , vect2DS, vect3DS, vectS, vectNDS, bivector2DS, bivector3DS, bivectorS, bivectorNDS
+  , multivector2DS, multivector3DS, multivectorS, multivectorNDS
   , RealInterval(..), Inclusive(..)
   , DomainDesc(..), RTopology(..), ContinuousDomainDesc, DiscreteDomainDesc
   , getActorName, getInnerSpace

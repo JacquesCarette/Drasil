@@ -127,14 +127,18 @@ ccStiffCoeff
       "Quantity that characterizes a spring's stiffness"
 
 concepts :: [IdeaDict]
-concepts = map nw defs
+concepts = map nw termDefs
 
 defs :: [ConceptChunk]
 defs
-  = [pidCL, pidC, summingPt, powerPlant, secondOrderSystem, processError,
-     simulationTime, processVariable, setPoint, propGain, derGain, propControl,
-    derControl, ccFrequencyDomain, ccTimeDomain, ccLaplaceTransform, controlVariable, stepTime,
-     ccAbsTolerance, ccRelTolerance, ccTransferFxn, ccDampingCoeff,
-     ccStiffCoeff]
+  = termDefs ++ [simulationTime, processVariable, setPoint, propGain, derGain,
+     ccLaplaceTransform, stepTime,
+     ccAbsTolerance, ccRelTolerance]
+
+termDefs :: [ConceptChunk]
+termDefs
+  = [pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
+     propControl, derControl, ccFrequencyDomain, ccTimeDomain,
+     controlVariable, ccTransferFxn, ccDampingCoeff, ccStiffCoeff]
 
 

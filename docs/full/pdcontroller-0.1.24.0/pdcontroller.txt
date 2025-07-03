@@ -42,6 +42,7 @@ ccDampingCoeff :: ConceptChunk
 ccStiffCoeff :: ConceptChunk
 concepts :: [IdeaDict]
 defs :: [ConceptChunk]
+termDefs :: [ConceptChunk]
 
 module Drasil.PDController.Assumptions
 assumptions :: [ConceptInstance]

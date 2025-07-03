@@ -15,7 +15,10 @@ module Language.Drasil.Space (
   HasSpace(..),
   -- * Functions
   getActorName, getInnerSpace, mkFunction, isBasicNumSpace,
-  Dimension(..), vect2DS, vect3DS, vectS, vectNDS
+  Dimension(..), scalarS, vect2DS, vect3DS, vectS, vectNDS, 
+  bivector2DS, bivector3DS, bivectorS, bivectorNDS,
+  multivector2DS, multivector3DS, multivectorS, multivectorNDS,
+  ClifKind(..)
 ) where
 
 import qualified Data.List.NonEmpty        as NE
@@ -159,7 +162,7 @@ getActorName _         = error "getActorName called on non-actor space"
 -- | Gets the inner 'Space' of a vector or set.
 getInnerSpace :: Space -> Space
 getInnerSpace (Set s) = s
-getInnerSpace (ClifS _ s) = s
+getInnerSpace (ClifS _ _ s) = s
 getInnerSpace _        = error "getInnerSpace called on non-vector space"
 
 -- | Is this Space a basic numeric space?

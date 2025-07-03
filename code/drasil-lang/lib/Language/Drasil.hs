@@ -16,7 +16,7 @@ module Language.Drasil (
   , oneHalf, oneThird
   , apply1, apply2
   , m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet
-  , vScale, CAdd, CSub
+  , vScale, cAdd, cSub
   , Completeness, Relation, BasisBlades
 
   -- ** Literals Language
@@ -33,6 +33,8 @@ module Language.Drasil (
 
   --Language.Drasil.CodeExpr
   , CodeExpr
+
+  --Drasil.Code.CodeExpr.Class 
   , CodeExprC(..)
 
   -- ** Unicode symbols
@@ -311,7 +313,7 @@ import Drasil.Code.CodeExpr.Lang (CodeExpr)
 import Language.Drasil.Expr.Class (ExprC(..),
   frac, recip_, square, half, oneHalf, oneThird, apply1, apply2,
   m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet,
-  vScale, CAdd, CSub
+  vScale, cAdd, cSub
   )
 import Language.Drasil.Expr.Lang (Expr, Completeness, Relation, BasisBlades)
 import Language.Drasil.WellTyped (RequiresChecking(..), Typed(..), TypingContext,
@@ -412,3 +414,5 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
   , unitWrapper, getCu, MayHaveUnit(getUnit))
+
+import Drasil.Code.CodeExpr.Class (CodeExprC(..))

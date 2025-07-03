@@ -9,7 +9,7 @@ import Drasil.Database.UID (UID)
 
 import Language.Drasil.Literal.Class (LiteralC (..))
 import Language.Drasil.Literal.Lang  (Literal (..))
-import Language.Drasil.Space         (DiscreteDomainDesc, RealInterval, Space)
+import Language.Drasil.Space         (DiscreteDomainDesc, RealInterval, Space, ClifKind(..))
 import qualified Language.Drasil.Space as S
 import Language.Drasil.WellTyped
 import Data.Either (lefts, fromLeft)
@@ -326,16 +326,17 @@ instance LiteralC Expr where
 
 -- helper function for typechecking to help reduce duplication
 -- TODO: refactor these if expressions so they're more readable (the else is too far from the if)
+-- helper function for typechecking to help reduce duplication
 cccInfer :: TypingContext Space -> CCCBinOp -> Expr -> Expr -> Either Space TypeError
 cccInfer ctx op l r = case (infer ctx l, infer ctx r) of
-    (Left lt@(S.ClifS lD lsp), Left (S.ClifS rD rsp)) ->
-      if lD == rD then -- The dimension in which the clif is embedded must match
+    (Left lt@(S.ClifS lD lKind lsp), Left (S.ClifS rD rKind rsp)) ->
+      if lD == rD && lKind == rKind then -- The dimension and kind must match
         if lsp == rsp && S.isBasicNumSpace lsp then
           if op == CSub && (lsp == S.Natural || rsp == S.Natural) then
             Right $ "Clif subtraction expects both operands to be clifs of non-natural numbers. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
           else Left lt
         else Right $ "Clif " ++ pretty op ++ " expects both operands to be clifs of non-natural numbers. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
-      else Right $ "Clif " ++ pretty op ++ " expects both Clifs to be of the same dimension. Received `" ++ show lD ++ "` and `" ++ show rD ++ "`."
+      else Right $ "Clif " ++ pretty op ++ " expects both Clifs to be of the same dimension and kind. Received `" ++ show lD ++ ", " ++ show lKind ++ "` and `" ++ show rD ++ ", " ++ show rKind ++ "`."
     (Left lsp, Left rsp) -> Right $ "Vector operation " ++ pretty op ++ " expects clif operands. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
     (_       , Right re) -> Right re
     (Right le, _       ) -> Right le
@@ -437,7 +438,7 @@ instance Typed Expr Space where
     x              -> x
 
   infer cxt (UnaryOpCC NegC e) = case infer cxt e of
-    Left c@(S.ClifS _ sp) -> if S.isBasicNumSpace sp && sp /= S.Natural
+    Left c@(S.ClifS _ _ sp) -> if S.isBasicNumSpace sp && sp /= S.Natural
       then Left c
       else Right $ "Clif negation only applies to, non-natural, numbered clifs. Received `" ++ show sp ++ "`."
     Left sp -> Right $ "Clif negation should only be applied to numeric clifs. Received `" ++ show sp ++ "`."
@@ -445,17 +446,17 @@ instance Typed Expr Space where
 
   -- TODO: support generalized clif norm
   infer cxt (UnaryOpCN Norm e) = case infer cxt e of
-    Left (S.ClifS _ S.Real) -> Left S.Real
+    Left (S.ClifS _ _ S.Real) -> Left S.Real
     Left sp -> Right $ "Vector norm only applies to vectors (or clifs) of real numbers. Received `" ++ show sp ++ "`."
     x -> x
 
   infer cxt (UnaryOpCN Dim e) = case infer cxt e of
-    Left (S.ClifS _ _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
+    Left (S.ClifS _ _ _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
     Left sp -> Right $ "Vector 'dim' only applies to vectors. Received `" ++ show sp ++ "`."
     x -> x
   
   infer cxt (UnaryOpCN Grade e) = case infer cxt e of
-    Left (S.ClifS _ _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
+    Left (S.ClifS _ _ _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
     Left sp -> Right $ "Vector 'grade' only applies to vectors. Received `" ++ show sp ++ "`."
     x -> x
 
@@ -495,7 +496,7 @@ instance Typed Expr Space where
     (Right le, _) -> Right le
 
   infer cxt (LABinaryOp Index l n) = case (infer cxt l, infer cxt n) of
-    (Left (S.ClifS _ lt), Left nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
+    (Left (S.ClifS _ _ lt), Left nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
       then Left lt
       else Right $ "List accessor not of type Integer nor Natural, but of type `" ++ show nt ++ "`"
     (Left lt         , Left _)  -> Right $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
@@ -516,7 +517,7 @@ instance Typed Expr Space where
     (Right le, _) -> Right le
 
   infer cxt (NCCBinaryOp Scale l r) = case (infer cxt l, infer cxt r) of
-    (Left lt, Left (S.ClifS _ rsp)) -> if S.isBasicNumSpace lt && lt == rsp
+    (Left lt, Left (S.ClifS _ _ rsp)) -> if S.isBasicNumSpace lt && lt == rsp
       then Left rsp
       else if lt /= rsp then
         Right $ "Vector scaling expects a scaling by the same kind as the vector's but found scaling by`" ++ show lt ++ "` over vectors of type `" ++ show rsp ++ "`."
@@ -528,10 +529,10 @@ instance Typed Expr Space where
 
   -- If you select grade N of a Clif, you get a Clif of grade N
   infer cxt (NatCCBinaryOp GradeSelect n c) = case infer cxt c of
-    Left (S.ClifS _ sp) -> Left $ S.ClifS (S.Fixed n) sp
+    Left (S.ClifS _ k sp) -> Left $ S.ClifS (S.Fixed n) k sp
     Left rsp -> Right $ "Grade selection expects clif as second operand. Received `" ++ show rsp ++ "`."
     Right x -> Right x
-
+  
   infer cxt (CCCBinaryOp o l r) = cccInfer cxt o l r
     {- case (infer cxt l, infer cxt r) of
     (Left lTy, Left rTy) -> if lTy == rTy && S.isBasicNumSpace lTy && lTy /= S.Natural
@@ -541,16 +542,48 @@ instance Typed Expr Space where
     (Right le, _       ) -> Right le
     -}
 
+  infer cxt (CCCBinaryOp o l r) = cccInfer cxt o l r
+
   infer cxt (CCNBinaryOp Dot l r) = case (infer cxt l, infer cxt r) of
-    (Left lt@(S.ClifS lD lsp), Left rt@(S.ClifS rD rsp)) ->
-      if lD == rD then
+    (Left lt@(S.ClifS lD lKind lsp), Left rt@(S.ClifS rD rKind rsp)) ->
+      if lD == rD && lKind == rKind then
         if lsp == rsp && S.isBasicNumSpace lsp
         then Left lsp
         else Right $ "Vector dot product expects same numeric vector types, but found `" ++ show lt ++ "` · `" ++ show rt ++ "`."
-      else Right $ "Clif dot product expects both Clifs to be of the same dimension. Received `" ++ show lD ++ "` and `" ++ show rD ++ "`."
+      else Right $ "Clif dot product expects both Clifs to be of the same dimension and kind. Received `" ++ show lD ++ ", " ++ show lKind ++ "` and `" ++ show rD ++ ", " ++ show rKind ++ "`."
     (Left lsp, Left rsp) -> Right $ "Vector dot product expects vector operands. Received `" ++ show lsp ++ "` · `" ++ show rsp ++ "`."
     (_, Right rx) -> Right rx
     (Right lx, _) -> Right lx
+
+  infer cxt (UnaryOpCC NegC e) = case infer cxt e of
+    Left c@(S.ClifS _ _ sp) -> if S.isBasicNumSpace sp && sp /= S.Natural
+      then Left c
+      else Right $ "Clif negation only applies to, non-natural, numbered clifs. Received `" ++ show sp ++ "`."
+    Left sp -> Right $ "Clif negation should only be applied to numeric clifs. Received `" ++ show sp ++ "`."
+    x -> x
+
+  infer cxt (UnaryOpCN Norm e) = case infer cxt e of
+    Left (S.ClifS _ _ S.Real) -> Left S.Real
+    Left sp -> Right $ "Vector norm only applies to vectors (or clifs) of real numbers. Received `" ++ show sp ++ "`."
+    x -> x
+
+  infer cxt (UnaryOpCN Dim e) = case infer cxt e of
+    Left (S.ClifS _ _ _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
+    Left sp -> Right $ "Vector 'dim' only applies to vectors. Received `" ++ show sp ++ "`."
+    x -> x
+
+  infer cxt (UnaryOpCN Grade e) = case infer cxt e of
+    Left (S.ClifS _ _ _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
+    Left sp -> Right $ "Vector 'grade' only applies to vectors. Received `" ++ show sp ++ "`."
+    x -> x
+
+  infer cxt (LABinaryOp Index l n) = case (infer cxt l, infer cxt n) of
+    (Left (S.ClifS _ _ lt), Left nt) -> if nt == S.Integer || nt == S.Natural
+      then Left lt
+      else Right $ "List accessor not of type Integer nor Natural, but of type `" ++ show nt ++ "`"
+    (Left lt         , Left _)  -> Right $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
+    (_               , Right e) -> Right e
+    (Right e         , _      ) -> Right e
 
   infer cxt (ESSBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
     (Left lt, Left rt@(S.Set rsp)) -> if S.isBasicNumSpace lt && lt == rsp
@@ -608,8 +641,8 @@ instance Typed Expr Space where
   -- 1. Contain only basic numeric types inside it
   -- 2. Have a dimension of at least the grade (a 0-dimensional vector makes no sense)
   infer ctx (Clif d es) =
-      -- A clif with no explicit compile/"specification"-time expressions in the components
-    if OM.null es then Left $ S.ClifS d S.Real
+    -- A clif with no explicit compile/"specification"-time expressions in the components
+    if OM.null es then Left $ S.ClifS d S.Vector S.Real
     else
       case eitherLists (infer ctx <$> OM.elems es) of
         Left _ ->
@@ -623,11 +656,9 @@ instance Typed Expr Space where
                 S.VDim _  -> True
           in
           -- `Clif`s must store a basic number space, not things like other clifs
-          -- if S.isBasicNumSpace t then
-            if isValidDim then
-              Left $ S.ClifS d S.Real
-            else Right $ "The number of components in a clif of dimension " ++ show d ++ " must be 2 ^ " ++ show d
-          -- else Right $ "Clifs must contain basic number spaces. Received " ++ show t
+          if isValidDim then
+            Left $ S.ClifS d S.Vector S.Real
+          else Right $ "The number of components in a clif of dimension " ++ show d ++ " must be 2 ^ " ++ show d
         Right x -> Right x
 
 

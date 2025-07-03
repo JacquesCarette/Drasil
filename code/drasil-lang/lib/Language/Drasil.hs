@@ -382,7 +382,7 @@ import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
   , compareAuthYearTitle)
 import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getSentSN, HasShortName(..))
-import Language.Drasil.Space (Space(..), vect2DS, vect3DS, vectS, vectNDS, Dimension(..), RealInterval(..), Inclusive(..),
+import Language.Drasil.Space (Space(..), vect2DS, vect3DS, vectS, vectNDS, bivector2DS, bivector3DS, bivectorS, bivectorNDS, multivector2DS, multivector3DS, multivectorS, multivectorNDS, Dimension(..), RealInterval(..), Inclusive(..),
   RTopology(..), DomainDesc(..), ContinuousDomainDesc, DiscreteDomainDesc,
   getActorName, getInnerSpace, HasSpace(..), mkFunction, Primitive)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+),

@@ -74,7 +74,7 @@ vectS :: Natural -> Space -> Space
 vectS n s | checkClifSpace s = ClifS (Fixed n) s
 
 vectNDS :: String -> Space -> Space
-vectNDS x s | checkClifSpace s = ClifS (VDim x) s
+vectNDS x s | isBasicNumSpace s && checkClifSpace s = ClifS (VDim x) Vector s
 
 -- | 2D bivector in Clifford algebra
 bivector2DS :: Space -> Space

@@ -62,51 +62,51 @@ checkClifSpace _ = True --error $ "Non-real clif spaces unsupported"
 
 -- | Scalar in Clifford algebra (dimension is always 1)
 scalarS :: Space -> Space
-scalarS s | checkClifSpace s = ClifS (Fixed 1) Scalar s
+scalarS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 1) Scalar s
 
 vect2DS :: Space -> Space
-vect2DS s | checkClifSpace s = ClifS (Fixed 2) s
+vect2DS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 2) Vector s
 
 vect3DS :: Space -> Space
-vect3DS s | checkClifSpace s = ClifS (Fixed 3) s
+vect3DS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 3) Vector s
 
 vectS :: Natural -> Space -> Space
-vectS n s | checkClifSpace s = ClifS (Fixed n) s
+vectS n s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed n) Vector s
 
 vectNDS :: String -> Space -> Space
 vectNDS x s | isBasicNumSpace s && checkClifSpace s = ClifS (VDim x) Vector s
 
 -- | 2D bivector in Clifford algebra
 bivector2DS :: Space -> Space
-bivector2DS s | checkClifSpace s = ClifS (Fixed 2) Bivector s
+bivector2DS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 2) Bivector s
 
 -- | 3D bivector in Clifford algebra
 bivector3DS :: Space -> Space
-bivector3DS s | checkClifSpace s = ClifS (Fixed 3) Bivector s
+bivector3DS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 3) Bivector s
 
 -- | n-dimensional bivector in Clifford algebra
 bivectorS :: Natural -> Space -> Space
-bivectorS n s | checkClifSpace s = ClifS (Fixed n) Bivector s
+bivectorS n s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed n) Bivector s
 
 -- | n-dimensional bivector (symbolic dimension) in Clifford algebra
 bivectorNDS :: String -> Space -> Space
-bivectorNDS x s | checkClifSpace s = ClifS (VDim x) Bivector s
+bivectorNDS x s | isBasicNumSpace s && checkClifSpace s = ClifS (VDim x) Bivector s
 
 -- | 2D multivector in Clifford algebra
 multivector2DS :: Space -> Space
-multivector2DS s | checkClifSpace s = ClifS (Fixed 2) Multivector s
+multivector2DS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 2) Multivector s
 
 -- | 3D multivector in Clifford algebra
 multivector3DS :: Space -> Space
-multivector3DS s | checkClifSpace s = ClifS (Fixed 3) Multivector s
+multivector3DS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 3) Multivector s
 
 -- | n-dimensional multivector in Clifford algebra
 multivectorS :: Natural -> Space -> Space
-multivectorS n s | checkClifSpace s = ClifS (Fixed n) Multivector s
+multivectorS n s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed n) Multivector s
 
 -- | n-dimensional multivector (symbolic dimension) in Clifford algebra
 multivectorNDS :: String -> Space -> Space
-multivectorNDS x s | checkClifSpace s = ClifS (VDim x) Multivector s
+multivectorNDS x s | isBasicNumSpace s && checkClifSpace s = ClifS (VDim x) Multivector s
 
 -- | The dimension of a clif
 data Dimension where

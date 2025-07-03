@@ -609,8 +609,8 @@ modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
     replaceDepVar (UnaryOp u e)           = UnaryOp u $ replaceDepVar e
     replaceDepVar (UnaryOpB u e)          = UnaryOpB u $ replaceDepVar e
     -- TODO: When ClifS or multivectors are introduced, add support for UnaryOpCC and UnaryOpCN here.
-    replaceDepVar (UnaryOpVV u e)         = UnaryOpVV u $ replaceDepVar e
-    replaceDepVar (UnaryOpVN u e)         = UnaryOpVN u $ replaceDepVar e
+    replaceDepVar (UnaryOpCC u e)         = UnaryOpCC u $ replaceDepVar e
+    replaceDepVar (UnaryOpCN u e)         = UnaryOpCN u $ replaceDepVar e
     replaceDepVar (ArithBinaryOp b e1 e2) = ArithBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
     replaceDepVar (BoolBinaryOp b e1 e2)  = BoolBinaryOp b
@@ -621,9 +621,9 @@ modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
       (replaceDepVar e1) (replaceDepVar e2)
     replaceDepVar (OrdBinaryOp b e1 e2)   = OrdBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (VVNBinaryOp b e1 e2)   = VVNBinaryOp b
+    replaceDepVar (CCNBinaryOp b e1 e2)   = CCNBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (VVVBinaryOp b e1 e2)   = VVVBinaryOp b
+    replaceDepVar (CCCBinaryOp b e1 e2)   = CCCBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
     replaceDepVar (Operator ao dd e)      = Operator ao dd $ replaceDepVar e
     replaceDepVar e = e

@@ -16,7 +16,8 @@ module Language.Drasil (
   , oneHalf, oneThird
   , apply1, apply2
   , m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet
-  , Completeness, Relation
+  , vScale, CAdd, CSub
+  , Completeness, Relation, BasisBlades
 
   -- ** Literals Language
   , Literal
@@ -269,7 +270,8 @@ module Language.Drasil (
   -- | Used for rendering mathematical symbols in Drasil.
 
   -- Language.Drasil.Space
-  , Space(..)
+  , Space(..), Dimension(..)
+  , vect2DS, vect3DS, vectS, vectNDS
   , RealInterval(..), Inclusive(..)
   , DomainDesc(..), RTopology(..), ContinuousDomainDesc, DiscreteDomainDesc
   , getActorName, getInnerSpace
@@ -305,8 +307,12 @@ import Drasil.Code.CodeVar (CodeIdea(..), CodeChunk(..),
   CodeVarChunk(..), CodeFuncChunk(..), VarOrFunc(..), obv, qc, ccf, ccv, 
   listToArray, programName, funcPrefix, DefiningCodeExpr(..))
 import Drasil.Code.CodeExpr.Lang (CodeExpr)
-import Drasil.Code.CodeExpr.Class (CodeExprC(..))
-
+import Language.Drasil.Expr.Class (ExprC(..),
+  frac, recip_, square, half, oneHalf, oneThird, apply1, apply2,
+  m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet,
+  vScale, CAdd, CSub
+  )
+import Language.Drasil.Expr.Lang (Expr, Completeness, Relation, BasisBlades)
 import Language.Drasil.WellTyped (RequiresChecking(..), Typed(..), TypingContext,
   TypeError, inferFromContext, temporaryIndent)
 
@@ -376,7 +382,7 @@ import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
   , compareAuthYearTitle)
 import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getSentSN, HasShortName(..))
-import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..),
+import Language.Drasil.Space (Space(..), vect2DS, vect3DS, vectS, vectNDS, Dimension(..), RealInterval(..), Inclusive(..),
   RTopology(..), DomainDesc(..), ContinuousDomainDesc, DiscreteDomainDesc,
   getActorName, getInnerSpace, HasSpace(..), mkFunction, Primitive)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+),

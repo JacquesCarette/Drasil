@@ -3,8 +3,8 @@ module Drasil.Code.CodeExpr.Development (
     -- CodeExpr
     CodeExpr(..), 
     ArithBinOp(..), EqBinOp(..), BoolBinOp(..), LABinOp(..), OrdBinOp(..),
-    VVVBinOp(..), VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..), AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..),
-    UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
+    CCCBinOp(..), CCNBinOp(..), NCCBinOp(..), ESSBinOp(..), ESBBinOp(..), AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..),
+    UFunc(..), UFuncB(..), UFuncCC(..), UFuncCN(..),
     -- Class
     CodeExprC(..),
     -- Extract
@@ -17,9 +17,9 @@ module Drasil.Code.CodeExpr.Development (
 ) where
 
 import Drasil.Code.CodeExpr.Lang (CodeExpr(..),
-    UFuncVV(..), UFuncVN(..), UFuncB(..), UFunc(..),
-    AssocBoolOper(..), AssocArithOper(..), AssocConcatOper(..),VVNBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..),
-    VVVBinOp(..), OrdBinOp(..), LABinOp(..), BoolBinOp(..), EqBinOp(..),
+    UFuncCC(..), UFuncCN(..), UFuncB(..), UFunc(..),
+    AssocBoolOper(..), AssocArithOper(..), AssocConcatOper(..),CCNBinOp(..), NCCBinOp(..), ESSBinOp(..), ESBBinOp(..),
+    CCCBinOp(..), OrdBinOp(..), LABinOp(..), BoolBinOp(..), EqBinOp(..),
     ArithBinOp(..))
 import Drasil.Code.CodeExpr.Class (CodeExprC(..))
 import Drasil.Code.CodeExpr.Extract (eDep, eDep', eNamesRI, eNamesRI')

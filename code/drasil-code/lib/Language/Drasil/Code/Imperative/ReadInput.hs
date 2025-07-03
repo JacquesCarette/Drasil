@@ -83,8 +83,8 @@ strAsExpr _        _ = error "strAsExpr should only be numeric space or string"
 
 -- | Gets the dimension of a 'Space'.
 getDimension :: Space -> Int
-getDimension (ClifS _ t) = 1 + getDimension t
-getDimension _ = 0
+getDimension (ClifS _ s) = 1 + getDimension s -- TODO: Does this make sense? Maybe we're 
+                                              -- overloading the term "dimension" now.getDimension _ = 0
 
 -- | Splits a string at the first (and only the first) occurrence of a delimiter.
 -- The delimiter is dropped from the result.
@@ -98,12 +98,13 @@ splitAtFirst = splitAtFirst' []
         dropDelim [] s = s
         dropDelim _ [] = error "impossible"
 
+-- | Commented Matrix related for now
 -- | Converts a list of 'String's to a Matrix 'Expr' of a given 'Space'.
-strListAsExpr :: Space -> [String] -> Expr
-strListAsExpr (Vect t) ss = Matrix [map (strAsExpr t) ss]
-strListAsExpr _ _ = error "strListsAsExpr called on non-vector space"
+-- strListAsExpr :: Space -> [String] -> Expr
+-- strListAsExpr (ClifS t) ss = Matrix [map (strAsExpr t) ss]
+-- strListAsExpr _ _ = error "strListsAsExpr called on non-vector space"
 
--- | Converts a 2D list of 'String's to a Matrix 'Expr' of a given 'Space'.
-strList2DAsExpr :: Space -> [[String]] -> Expr
-strList2DAsExpr (Vect (Vect t)) sss = Matrix $ map (map (strAsExpr t)) sss
-strList2DAsExpr _ _ = error "strLists2DAsExprs called on non-2D-vector space"
+-- -- | Converts a 2D list of 'String's to a Matrix 'Expr' of a given 'Space'.
+-- strList2DAsExpr :: Space -> [[String]] -> Expr
+-- strList2DAsExpr (ClifS (ClifS t)) sss = Matrix $ map (map (strAsExpr t)) sss
+-- strList2DAsExpr _ _ = error "strLists2DAsExprs called on non-2D-vector space"

@@ -35,17 +35,17 @@ prec2Spc _ = 170
 prec2Stat :: StatBinOp -> Int
 prec2Stat _ = 130
 
--- | prec2VVV - precedence for Vec->Vec->Vec-related binary operations.
-prec2VVV :: VVVBinOp -> Int
-prec2VVV _ = 190
+-- | prec2CCC - precedence for Clif->Clif->Clif-related binary operations.
+prec2CCC :: CCCBinOp -> Int
+prec2CCC _ = 190
 
--- | prec2VVN - precedence for Vec->Vec->Num-related binary operations.
-prec2VVN :: VVNBinOp -> Int
-prec2VVN _ = 190
+-- | prec2CCN - precedence for Clif->Clif->Num-related binary operations.
+prec2CCN :: CCNBinOp -> Int
+prec2CCN _ = 190
 
--- | prec2NVV - precedence for Num->Vec->Vec-related binary operations.
-prec2NVV :: NVVBinOp -> Int
-prec2NVV _ = 190
+-- | prec2NCC - precedence for Num->Clif->Clif-related binary operations.
+prec2NCC :: NCCBinOp -> Int
+prec2NCC _ = 190
 
 prec2ESS :: ESSBinOp -> Int
 prec2ESS _ = 190
@@ -77,13 +77,13 @@ prec1 _   = 250
 prec1B :: UFuncB -> Int
 prec1B Not = 230
 
--- | prec1VV - precedence of vector-vector-related unary operators.
-prec1VV :: UFuncVV -> Int
-prec1VV _ = 250
+-- | prec1CC - precedence of Cliftor-Cliftor-related unary operators.
+prec1CC :: uFuncCC -> Int
+prec1CC _ = 250
 
--- | prec1Vec - precedence of vector-number-related unary operators.
-prec1VN :: UFuncVN -> Int
-prec1VN _ = 230
+-- | prec1Clif - precedence of Cliftor-number-related unary operators.
+prec1CN :: uFuncCN -> Int
+prec1CN _ = 230
 
 -- | eprec - `ModelExpr` precedence.
 mePrec :: ModelExpr -> Int
@@ -101,8 +101,8 @@ mePrec Set{}                  = 220
 mePrec (Variable _ _)         = 220
 mePrec (UnaryOp fn _)         = prec1 fn
 mePrec (UnaryOpB fn _)        = prec1B fn
-mePrec (UnaryOpVV fn _)       = prec1VV fn
-mePrec (UnaryOpVN fn _)       = prec1VN fn
+mePrec (UnaryOpCC fn _)       = prec1CC fn
+mePrec (UnaryOpCN fn _)       = prec1CN fn
 mePrec (Operator o _ _)       = precA o
 mePrec (ArithBinaryOp bo _ _) = prec2Arith bo
 mePrec (BoolBinaryOp bo _ _)  = prec2Bool bo
@@ -111,9 +111,9 @@ mePrec (LABinaryOp bo _ _)    = prec2LA bo
 mePrec (SpaceBinaryOp bo _ _) = prec2Spc bo
 mePrec (StatBinaryOp bo _ _)  = prec2Stat bo
 mePrec (OrdBinaryOp bo _ _)   = prec2Ord bo
-mePrec (VVVBinaryOp bo _ _)   = prec2VVV bo
-mePrec (VVNBinaryOp bo _ _)   = prec2VVN bo
-mePrec (NVVBinaryOp bo _ _)   = prec2NVV bo
+mePrec (CCCBinaryOp bo _ _)   = prec2CCC bo
+mePrec (CCNBinaryOp bo _ _)   = prec2CCN bo
+mePrec (NCCBinaryOp bo _ _)   = prec2NCC bo
 mePrec (ESSBinaryOp bo _ _)   = prec2ESS bo
 mePrec (ESBBinaryOp bo _ _)   = prec2ESB bo
 mePrec RealI{}                = 170

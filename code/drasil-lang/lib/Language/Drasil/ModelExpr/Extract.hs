@@ -4,8 +4,9 @@ module Language.Drasil.ModelExpr.Extract where
 import Data.Containers.ListUtils (nubOrd)
 
 import Language.Drasil.ModelExpr.Lang (ModelExpr(..))
-import Language.Drasil.Space (RealInterval(..))
-import Drasil.Database.UID (UID)
+import Language.Drasil.Space          (RealInterval(..))
+import Drasil.Database.UID            (UID)
+import qualified Data.Map.Ordered as OM
 
 -- | Generic traverse of all expressions that could lead to names.
 meNames :: ModelExpr -> [UID]
@@ -21,8 +22,8 @@ meNames (Case _ ls)           = concatMap (meNames . fst) ls ++
                                 concatMap (meNames . snd) ls
 meNames (UnaryOp _ u)         = meNames u
 meNames (UnaryOpB _ u)        = meNames u
-meNames (UnaryOpVV _ u)       = meNames u
-meNames (UnaryOpVN _ u)       = meNames u
+meNames (UnaryOpCC _ u)       = meNames u
+meNames (UnaryOpCN _ u)       = meNames u
 meNames (ArithBinaryOp _ a b) = meNames a ++ meNames b
 meNames (BoolBinaryOp _ a b)  = meNames a ++ meNames b
 meNames (EqBinaryOp _ a b)    = meNames a ++ meNames b
@@ -30,9 +31,9 @@ meNames (LABinaryOp _ a b)    = meNames a ++ meNames b
 meNames (SpaceBinaryOp _ a b) = meNames a ++ meNames b
 meNames (StatBinaryOp _ a b)  = meNames a ++ meNames b
 meNames (OrdBinaryOp _ a b)   = meNames a ++ meNames b
-meNames (VVVBinaryOp _ a b)   = meNames a ++ meNames b
-meNames (VVNBinaryOp _ a b)   = meNames a ++ meNames b
-meNames (NVVBinaryOp _ a b)   = meNames a ++ meNames b
+meNames (CCCBinaryOp _ a b)   = meNames a ++ meNames b
+meNames (CCNBinaryOp _ a b)   = meNames a ++ meNames b
+meNames (NCCBinaryOp _ a b)   = meNames a ++ meNames b
 meNames (ESSBinaryOp _ _ s)   = meNames s
 meNames (ESBBinaryOp _ _ s)   = meNames s
 meNames (Operator _ _ e)      = meNames e
@@ -41,6 +42,7 @@ meNames (Set _ a)             = concatMap meNames a
 meNames (Variable _ e)        = meNames e
 meNames (RealI c b)           = c : meNamesRI b
 meNames (ForAll _ _ de)       = meNames de
+meNames (Clif _ es) = concatMap meNames $ OM.elems es
 
 -- | Generic traversal of everything that could come from an interval to names (similar to 'meNames').
 meNamesRI :: RealInterval ModelExpr ModelExpr -> [UID]
@@ -64,8 +66,8 @@ meNames' (Case _ ls)           = concatMap (meNames' . fst) ls ++
                                  concatMap (meNames' . snd) ls
 meNames' (UnaryOp _ u)         = meNames' u
 meNames' (UnaryOpB _ u)        = meNames' u
-meNames' (UnaryOpVV _ u)       = meNames' u
-meNames' (UnaryOpVN _ u)       = meNames' u
+meNames' (UnaryOpCC _ u)       = meNames' u
+meNames' (UnaryOpCN _ u)       = meNames' u
 meNames' (ArithBinaryOp _ a b) = meNames' a ++ meNames' b
 meNames' (BoolBinaryOp _ a b)  = meNames' a ++ meNames' b
 meNames' (EqBinaryOp _ a b)    = meNames' a ++ meNames' b
@@ -73,9 +75,9 @@ meNames' (LABinaryOp _ a b)    = meNames' a ++ meNames' b
 meNames' (OrdBinaryOp _ a b)   = meNames' a ++ meNames' b
 meNames' (SpaceBinaryOp _ a b) = meNames' a ++ meNames' b
 meNames' (StatBinaryOp _ a b)  = meNames' a ++ meNames' b
-meNames' (VVVBinaryOp _ a b)   = meNames' a ++ meNames' b
-meNames' (VVNBinaryOp _ a b)   = meNames' a ++ meNames' b
-meNames' (NVVBinaryOp _ a b)   = meNames' a ++ meNames' b
+meNames' (CCCBinaryOp _ a b)   = meNames' a ++ meNames' b
+meNames' (CCNBinaryOp _ a b)   = meNames' a ++ meNames' b
+meNames' (NCCBinaryOp _ a b)   = meNames' a ++ meNames' b
 meNames' (ESSBinaryOp _ _ s)   = meNames' s
 meNames' (ESBBinaryOp _ _ s)   = meNames' s
 meNames' (Operator _ _ e)      = meNames' e

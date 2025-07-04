@@ -6,7 +6,8 @@ module Drasil.DblPend.GenDefs (genDefns, velXGD_1, velYGD_1,
 import Prelude hiding (cos, sin, sqrt)
 import qualified Data.List.NonEmpty as NE
 
-import Language.Drasil
+-- import Language.Drasil
+import Language.Drasil (vect2DS, vect3DS, bivector2DS, bivector3DS, multivector2DS, multivector3DS)
 import Utils.Drasil (weave)
 import Theory.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators

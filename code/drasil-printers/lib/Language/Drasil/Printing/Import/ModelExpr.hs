@@ -15,6 +15,8 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb, 
 
 import Control.Lens ((^.))
 import Data.List (intersperse)
+import qualified Data.Map as Map
+import qualified Data.Map.Ordered as OM
 
 import Language.Drasil.Printing.Import.Literal (literal)
 import Language.Drasil.Printing.Import.Space (space)
@@ -44,7 +46,7 @@ neg' (AssocA Mul _)       = True
 neg' (LABinaryOp Index _ _) = True
 neg' (UnaryOp _ _)          = True
 neg' (UnaryOpB _ _)         = True
-neg' (UnaryOpVV _ _)        = True
+neg' (UnaryOpCC _ _)        = True
 neg' (C _)                  = True
 neg' _                      = False
 
@@ -153,11 +155,11 @@ modelExpr (UnaryOp Arctan u)         sm = mkCall sm P.Arctan u
 modelExpr (UnaryOp Exp u)            sm = P.Row [P.MO P.Exp, P.Sup $ modelExpr u sm]
 modelExpr (UnaryOp Abs u)            sm = P.Fenced P.Abs P.Abs $ modelExpr u sm
 modelExpr (UnaryOpB Not u)           sm = P.Row [P.MO P.Not, modelExpr u sm]
-modelExpr (UnaryOpVN Norm u)         sm = P.Fenced P.Norm P.Norm $ modelExpr u sm
-modelExpr (UnaryOpVN Dim u)          sm = mkCall sm P.Dim u
+modelExpr (UnaryOpCN Norm u)         sm = P.Fenced P.Norm P.Norm $ modelExpr u sm
+modelExpr (UnaryOpCN Dim u)          sm = mkCall sm P.Dim u
 modelExpr (UnaryOp Sqrt u)           sm = P.Sqrt $ modelExpr u sm
 modelExpr (UnaryOp Neg u)            sm = neg sm u
-modelExpr (UnaryOpVV NegV u)         sm = neg sm u
+modelExpr (UnaryOpCC NegV u)         sm = neg sm u
 modelExpr (ArithBinaryOp Frac a b)   sm = P.Div (modelExpr a sm) (modelExpr b sm)
 modelExpr (ArithBinaryOp Pow a b)    sm = pow sm a b
 modelExpr (ArithBinaryOp Subt a b)   sm = P.Row [modelExpr a sm, P.MO P.Subt, modelExpr b sm]
@@ -171,11 +173,11 @@ modelExpr (OrdBinaryOp Lt a b)       sm = mkBOp sm P.Lt a b
 modelExpr (OrdBinaryOp Gt a b)       sm = mkBOp sm P.Gt a b
 modelExpr (OrdBinaryOp LEq a b)      sm = mkBOp sm P.LEq a b
 modelExpr (OrdBinaryOp GEq a b)      sm = mkBOp sm P.GEq a b
-modelExpr (VVNBinaryOp Dot a b)      sm = mkBOp sm P.Dot a b
-modelExpr (VVVBinaryOp Cross a b)    sm = mkBOp sm P.Cross a b
-modelExpr (VVVBinaryOp VAdd a b)     sm = mkBOp sm P.VAdd a b
-modelExpr (VVVBinaryOp VSub a b)     sm = mkBOp sm P.VSub a b
-modelExpr (NVVBinaryOp Scale a b)    sm = mkBOp sm P.Scale a b
+modelExpr (CCNBinaryOp Dot a b)      sm = mkBOp sm P.Dot a b
+modelExpr (CCCBinaryOp Cross a b)    sm = mkBOp sm P.Cross a b
+modelExpr (CCCBinaryOp CAdd a b)     sm = mkBOp sm P.CAdd a b
+modelExpr (CCCBinaryOp CSub a b)     sm = mkBOp sm P.CSub a b
+modelExpr (NCCBinaryOp Scale a b)    sm = mkBOp sm P.Scale a b
 modelExpr (ESSBinaryOp SAdd a b)     sm = mkBOp sm P.SAdd a b
 modelExpr (ESSBinaryOp SRemove a b)    sm = mkBOp sm P.SRemove a b
 modelExpr (ESBBinaryOp SContains a b)  sm = mkBOp sm P.SContains a b
@@ -189,6 +191,11 @@ modelExpr (ForAll c s de)            sm = P.Row [
     P.MO P.ForAll, symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c, P.MO P.IsIn, space sm s,
     P.MO P.Dot, modelExpr de sm
   ]
+  
+-- TODO: Fix this to be more specific to Clifs
+-- TODO: How do we control whether to print all the components or just a subset (e.g. only the vector components)?
+modelExpr (Clif _ es)                sm = P.Mtx $ map ((:[]) . (`modelExpr` sm)) $ OM.elems es
+modelExpr _ _ = error "Printing/Import.hs: modelExpr: unhandled ModelExpr type"
 
 -- | Common method of converting associative operations into printable layout AST.
 assocExpr :: P.Ops -> Int -> [ModelExpr] -> PrintingInformation -> P.Expr

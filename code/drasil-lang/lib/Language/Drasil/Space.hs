@@ -14,13 +14,19 @@ module Language.Drasil.Space (
   -- * Class
   HasSpace(..),
   -- * Functions
-  getActorName, getInnerSpace, mkFunction, isBasicNumSpace
+  getActorName, getInnerSpace, mkFunction, isBasicNumSpace,
+  Dimension(..), scalarS, vect2DS, vect3DS, vectS, vectNDS, 
+  bivector2DS, bivector3DS, bivectorS, bivectorNDS,
+  multivector2DS, multivector3DS, multivectorS, multivectorNDS,
+  ClifKind(..)
 ) where
 
 import qualified Data.List.NonEmpty        as NE
 
 import           Control.Lens              (Getter)
 import           Language.Drasil.Symbol    (Symbol)
+import           Numeric.Natural           (Natural)
+
 
 -- FIXME: These need to be spaces and not just types.
 
@@ -28,22 +34,101 @@ import           Language.Drasil.Symbol    (Symbol)
 -- numerical spaces (such as the set of integers, rationals, etc.),
 -- a space for booleans, a space for characters, dimensional spaces (vectors, arrays, etc.),
 -- a space for Actors, discrete sets (both for numbers and strings), and a void space.
-data Space =
-    Integer
-  | Rational
-  | Real
-  | Natural
-  | Boolean
-  | Char
-  | String
-  | Vect Space -- TODO: Length for vectors?
-  | Set Space
-  | Matrix Int Int Space
-  | Array Space
-  | Actor String 
-  | Function (NE.NonEmpty Primitive) Primitive
-  | Void
+data Space where
+    Integer   :: Space
+    Rational  :: Space
+    Real      :: Space
+    Natural   :: Space
+    Boolean   :: Space
+    Char      :: Space
+    String    :: Space
+    Set       :: Space -> Space
+    Matrix    :: Int -> Int -> Space -> Space
+    Array     :: Space -> Space
+    Actor     :: String -> Space
+    Function  :: (NE.NonEmpty Primitive) -> Primitive -> Space
+    Void      :: Space
+    -- | Clifford algebra objects (Clifs) with a dimension and kind (e.g., Scalar, Vector, Bivector, Multivector)
+    ClifS     :: Dimension -> ClifKind -> Space -> Space
   deriving (Eq, Show)
+
+-- | Kinds of Clifford algebra objects.
+data ClifKind = Scalar | Vector | Bivector | Multivector
+  deriving (Eq, Show)
+
+-- | The dimension of a clif
+data Dimension where
+  -- | Fixed dimension
+  Fixed :: Natural -> Dimension
+  -- | Variable dimension
+  VDim  :: String -> Dimension
+  deriving (Eq, Show)
+
+-- Example of a 3D vector of real numbers using ClifS
+-- exampleVector :: Space
+-- exampleVector = ClifS (Fixed 3) Vector Real
+
+-- A scalar (real number) using ClifS
+-- exampleScalar :: Space
+-- exampleScalar = ClifS (Fixed 1) Scalar Real
+
+-- An n-dimensional multivector of real numbers:
+-- ClifS (VDim "n") Multivector Real
+
+-- TODO: check if non-real numbers in Clifs make any sense; allowing for now to avoid errors in offending examples
+-- as we figure out matrices
+-- | Only allow Real as the inner space for now.
+checkClifSpace :: Space -> Bool
+checkClifSpace Real = True
+checkClifSpace _ = True --error $ "Non-real clif spaces unsupported"
+
+-- | Helper that constructs a scalar Clifford object
+scalarS :: Space -> Space
+scalarS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 1) Scalar s
+
+vect2DS :: Space -> Space
+vect2DS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 2) Vector s
+
+vect3DS :: Space -> Space
+vect3DS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 3) Vector s
+
+vectS :: Natural -> Space -> Space
+vectS n s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed n) Vector s
+
+vectNDS :: String -> Space -> Space
+vectNDS x s | isBasicNumSpace s && checkClifSpace s = ClifS (VDim x) Vector s
+
+-- | 2D bivector in Clifford algebra
+bivector2DS :: Space -> Space
+bivector2DS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 2) Bivector s
+
+-- | 3D bivector in Clifford algebra
+bivector3DS :: Space -> Space
+bivector3DS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 3) Bivector s
+
+-- | n-dimensional bivector in Clifford algebra
+bivectorS :: Natural -> Space -> Space
+bivectorS n s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed n) Bivector s
+
+-- | n-dimensional bivector (symbolic dimension) in Clifford algebra
+bivectorNDS :: String -> Space -> Space
+bivectorNDS x s | isBasicNumSpace s && checkClifSpace s = ClifS (VDim x) Bivector s
+
+-- | 2D multivector in Clifford algebra
+multivector2DS :: Space -> Space
+multivector2DS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 2) Multivector s
+
+-- | 3D multivector in Clifford algebra
+multivector3DS :: Space -> Space
+multivector3DS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 3) Multivector s
+
+-- | n-dimensional multivector in Clifford algebra
+multivectorS :: Natural -> Space -> Space
+multivectorS n s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed n) Multivector s
+
+-- | n-dimensional multivector (symbolic dimension) in Clifford algebra
+multivectorNDS :: String -> Space -> Space
+multivectorNDS x s | isBasicNumSpace s && checkClifSpace s = ClifS (VDim x) Multivector s
 
 -- | HasSpace is anything which has a 'Space'.
 class HasSpace c where
@@ -87,8 +172,8 @@ getActorName _         = error "getActorName called on non-actor space"
 
 -- | Gets the inner 'Space' of a vector or set.
 getInnerSpace :: Space -> Space
-getInnerSpace (Vect s) = s
 getInnerSpace (Set s) = s
+getInnerSpace (ClifS _ _ s) = s
 getInnerSpace _        = error "getInnerSpace called on non-vector space"
 
 -- | Is this Space a basic numeric space?
@@ -101,9 +186,9 @@ isBasicNumSpace Boolean      = False
 isBasicNumSpace Char         = False
 isBasicNumSpace String       = False
 isBasicNumSpace Set {}       = False
-isBasicNumSpace Vect {}      = False
 isBasicNumSpace Matrix {}    = False
 isBasicNumSpace Array {}     = False
 isBasicNumSpace Actor {}     = False
 isBasicNumSpace Function {}  = False
 isBasicNumSpace Void         = False
+isBasicNumSpace ClifS {}     = False

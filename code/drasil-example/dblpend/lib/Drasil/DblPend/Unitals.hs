@@ -182,5 +182,5 @@ pendDisAngle :: ConstrConcept
 pendDisAngle = cuc' "pendDisAngle"
   (nounPhraseSP "dependent variables")
   "column vector of displacement of rods with its derivatives"
-  lTheta' radian (Vect Real)
+  lTheta' radian (vectNDS dim Real)
   [physRange $ UpFrom (Inc, exactDbl 0)] (exactDbl 0)

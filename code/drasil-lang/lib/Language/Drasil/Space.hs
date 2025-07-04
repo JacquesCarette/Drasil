@@ -72,6 +72,9 @@ data Dimension where
 -- exampleScalar :: Space
 -- exampleScalar = ClifS (Fixed 1) Scalar Real
 
+-- An n-dimensional multivector of real numbers:
+-- ClifS (VDim "n") Multivector Real
+
 -- TODO: check if non-real numbers in Clifs make any sense; allowing for now to avoid errors in offending examples
 -- as we figure out matrices
 -- | Only allow Real as the inner space for now.

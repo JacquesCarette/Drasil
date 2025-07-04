@@ -11,7 +11,7 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
 ) where
 
 import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
-  QuantityDict, HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, ClifS), implVar,
+  QuantityDict, HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, ClifS, ClifKind), implVar,
   implVarUID, implVarUID', qw, compoundPhrase, nounPhrase, nounPhraseSP, label,
   sub, Idea(getA), NamedIdea(term), Stage(..), (+++), vectNDS)
 import Language.Drasil.Display (Symbol(Label, Concat))
@@ -454,6 +454,8 @@ odeint = externalLib [
           -- Likely replacement: ClifS dim Real instead of vectNDS dim Real.
             [unnamedParam (vectNDS dim Real), unnamedParam (vectNDS dim Real), lockedParam t]
             [assignArrayIndex]]),
+            -- [unnamedParam (ClifS (VDim dim) Multivector Real), unnamedParam (ClifS (VDim dim) Multivector Real), lockedParam t]
+            -- [assignArrayIndex]]),
       -- Need to declare variable holding initial value because odeint will update this variable at each step
       preDefinedArg odeintCurrVals,
       inlineArg Real, inlineArg Real, inlineArg Real,

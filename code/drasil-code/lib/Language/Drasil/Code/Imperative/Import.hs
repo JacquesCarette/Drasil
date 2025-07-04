@@ -66,6 +66,19 @@ import Control.Monad (liftM2,liftM3)
 import Control.Monad.State (get, modify)
 import Control.Lens ((^.))
 
+-- TODO: Update all vector/ClifS operations (e.g., unopVN, unopVV, vecVecVecBfunc, etc.)
+-- to properly handle the new ClifS representation (distinguish Scalar, Vector, Multivector, etc.)
+-- and operate on the correct structure (list, list of lists, etc.).
+
+-- | Similar to 'unop', but for vectors.
+unopVN :: (SharedProg r) => uFuncCN -> (SValue r -> SValue r)
+unopVN Dim = listSize
+unopVN Norm = error "unop: Norm not implemented" -- TODO
+
+-- | Similar to 'unop', but for vectors.
+unopVV :: (SharedProg r) => uFuncCC -> (SValue r -> SValue r)
+unopVV NegV = error "unop: Negation on Vectors not implemented" --
+
 -- | Gets a chunk's 'CodeType', by checking which 'CodeType' the user has chosen to
 -- match the chunk's 'Space' to.
 codeType :: (HasSpace c) => c -> GenState CodeType

@@ -27,6 +27,7 @@ spaceToCodeType S.Boolean        = [Boolean]
 spaceToCodeType S.Char           = [Char]
 spaceToCodeType S.String         = [String]
 spaceToCodeType (S.ClifS _ s)       = map List (spaceToCodeType s)
+-- This is just something I could think of after Dr Carette's comment
 -- spaceToCodeType (S.ClifS _ kind s) = case kind of
 --     S.Scalar      -> spaceToCodeType s
 --     S.Vector      -> map List (spaceToCodeType s)

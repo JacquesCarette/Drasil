@@ -37,7 +37,7 @@ instance Eq          ParameterChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Finds the units of the 'CodeChunk' used to make the 'ParameterChunk'.
 instance MayHaveUnit ParameterChunk where getUnit = getUnit . view pcc
 
--- | Automatically chooses 'PassBy' based on 'Space' ('Vect'ors and 'Actor's passed by reference).
+-- | Automatically chooses 'PassBy' based on 'Space' ('Clif's and 'Actor's passed by reference).
 pcAuto :: (CodeIdea c) => c -> ParameterChunk
 pcAuto c = PC cdch (choosePB $ cdch ^. typ)
   where cdch = codeChunk c

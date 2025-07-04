@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.Quantity (
   -- * Class
   DefinesQuantity(defLhs),
   -- * Constructors
-  codeVC, implVar, implVar', implVarUID, implVarUID', 
+  implVar, implVar', implVarUID, implVarUID', 
   mkQuant, mkQuant', qw, vc, vc'', vcSt, vcUnit) where
 
 import Control.Lens (Getter, (^.), makeLenses, view)
@@ -116,18 +116,6 @@ vcUnit i des sym space u = QD (nw $ nc i des) space (const sym) (Just u)
 -- | Similar to 'vc', but creates a 'QuantityDict' from something that knows about 'Stage's.
 vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict
 vcSt i des sym space = QD (nw $ nc i des) space sym Nothing
-
--- | Makes a 'QuantityDict' from an 'Idea', 'Symbol', and 'Space'.
--- 'Symbol' is implementation-only.
-codeVC :: Idea c => c -> Symbol -> Space -> QuantityDict
-codeVC n s t = QD (nw n) t f Nothing
-  where
-    -- TODO: This seems a bit odd. If the symbol of a "codeVC" is always "Empty" in the
-    -- Equational stage, why does it give anything (e.g., 'Empty')? The same problem
-    -- occurs above. Should this be reworked to never allow this 'invalid' state?
-    f :: Stage -> Symbol
-    f Implementation = s
-    f Equational = Empty
 
 -- | Creates a 'QuantityDict' from an 'Idea', 'Symbol', and 'Space'.
 vc'' :: Idea c => c -> Symbol -> Space -> QuantityDict

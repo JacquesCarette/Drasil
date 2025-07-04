@@ -2726,10 +2726,6 @@ mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> 
 --   dependent on <a>Stage</a>.
 mkQuant' :: String -> NP -> Maybe String -> Space -> (Stage -> Symbol) -> Maybe UnitDefn -> QuantityDict
 
--- | Makes a <a>QuantityDict</a> from an <a>Idea</a>, <a>Symbol</a>, and
---   <a>Space</a>. <a>Symbol</a> is implementation-only.
-codeVC :: Idea c => c -> Symbol -> Space -> QuantityDict
-
 -- | Makes a variable that is implementation-only.
 implVar :: String -> NP -> Space -> Symbol -> QuantityDict
 

@@ -44,6 +44,9 @@ acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angularFrequency, 
   period, frequency, chgMomentum :: UnitalChunk
 
+dim :: String
+dim = "2"
+
 acceleration           = uc CP.acceleration           (Concat [vec lA, label "(", lT, label ")"]) (vectNDS dim Real) accelU
 angularAccel           = uc CP.angAccel               lAlpha                                      Real                    angAccelU
 angularDisplacement    = uc CP.angDisp                lTheta                                      Real                    radian

@@ -56,6 +56,22 @@ data Space where
 data ClifKind = Scalar | Vector | Bivector | Multivector
   deriving (Eq, Show)
 
+-- | The dimension of a clif
+data Dimension where
+  -- | Fixed dimension
+  Fixed :: Natural -> Dimension
+  -- | Variable dimension
+  VDim  :: String -> Dimension
+  deriving (Eq, Show)
+
+-- Example of a 3D vector of real numbers using ClifS
+-- exampleVector :: Space
+-- exampleVector = ClifS (Fixed 3) Vector Real
+
+-- A scalar (real number) using ClifS
+-- exampleScalar :: Space
+-- exampleScalar = ClifS (Fixed 1) Scalar Real
+
 -- TODO: check if non-real numbers in Clifs make any sense; allowing for now to avoid errors in offending examples
 -- as we figure out matrices
 -- | Only allow Real as the inner space for now.
@@ -63,7 +79,7 @@ checkClifSpace :: Space -> Bool
 checkClifSpace Real = True
 checkClifSpace _ = True --error $ "Non-real clif spaces unsupported"
 
--- | Scalar in Clifford algebra (dimension is always 1)
+-- | Helper that constructs a scalar Clifford object
 scalarS :: Space -> Space
 scalarS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 1) Scalar s
 
@@ -110,14 +126,6 @@ multivectorS n s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed n) Multi
 -- | n-dimensional multivector (symbolic dimension) in Clifford algebra
 multivectorNDS :: String -> Space -> Space
 multivectorNDS x s | isBasicNumSpace s && checkClifSpace s = ClifS (VDim x) Multivector s
-
--- | The dimension of a clif
-data Dimension where
-  -- | Fixed dimension
-  Fixed :: Natural -> Dimension
-  -- | Variable dimension
-  VDim  :: String -> Dimension
-  deriving (Eq, Show)
 
 -- | HasSpace is anything which has a 'Space'.
 class HasSpace c where

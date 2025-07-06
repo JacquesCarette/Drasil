@@ -11,11 +11,11 @@ projects. Code and other software artifacts say the same thing, but to different
 audiences - if they didn't, they would be describing different systems.
 
 Take, for example, a software requirements document. It is a human-readable
-abstraction of *what* the software is supposed to do. Whereas a design document
-is a human-readable version of *how* the software is supposed to fulfill its
-requirements. The source code itself is a computer-readable list of instructions
-combining *what* must be done and, in many languages, *how* that is to be
-accomplished.
+abstraction of \textit{what} the software is supposed to do. Whereas a design 
+document is a human-readable version of \textit{how} the software is supposed 
+to fulfill its requirements. The source code itself is a computer-readable list 
+of instructions combining \textit{what} must be done and, in many languages, 
+\textit{how} that is to be accomplished.
 
 [Put in figures of an example from \gb{}/Projectile here, showing SRS, DD, and
 code versions of the same knowledge]
@@ -76,6 +76,17 @@ maintainable solution to a problem.}
 manually update artifacts after modifying code, particularly in regulated 
 industries}
 
+\section{Problem Statement and Motivation}
+Despite the recognized value of documentation and software artifacts (\sfs{}), 
+the process of creating and maintaining them is fraught with redundancy, 
+tedium, and potential risks of inconsistency. As software evolves, artifacts 
+(requirements documents, design documents, source code, etc.) often fall out of 
+sync, leading to errors, increased maintenance costs, and reduced trust in 
+documentation. This thesis addresses the challenge: \emph{How can we 
+systematically reduce unnecessary redundancy and improve consistency across 
+software artifacts, especially in domains where correctness and traceability 
+are critical?}
+
 \section{Scope}
 \label{sec:scope}
 We are well aware of the ambitious nature of attempting to solve the problem of
@@ -110,13 +121,38 @@ EasterbrookAndJohns2009}, or amethododical~\citep{Kelly2013} processes instead.
 
 \section{Roadmap}
 
-\ds{Background - softifacts, software families / reuse, literate software, 
-generative programming; Our process - breaking down softifacts and finding 
-their commonalities; The Drasil Framework - using those commonalities to 
-underpin a framework for software generation; Early results \& Future 
-directions}
+The remainder of this thesis is organized as follows:
+\begin{itemize}
+    \item \textbf{Chapter~\ref{c:background}: Background} reviews the 
+    literature on software artifacts, reuse, literate programming, and 
+    generative programming.
+    \item \textbf{Chapter~\ref{c:process}: Our Process} details the methods 
+    used to analyze artifacts and identify redundancy.
+    \item \textbf{Chapter~\ref{c:drasil}: The Drasil Framework} presents the 
+    design and implementation of Drasil.
+    \item \textbf{Chapter~\ref{c:results}: Results} discusses the outcomes of 
+    applying Drasil to case studies.
+    \item \textbf{Chapter~\ref{c:future}: Future Work} outlines potential 
+    extensions and open questions.
+    \item \textbf{Chapter~\ref{c:conclusion}: Conclusion} summarizes the 
+    findings and their implications.
+\end{itemize}
 
-\section{Contributions \& Publications}
+\section{Contributions}
+
+The main contributions of this thesis are:
+\begin{itemize}
+    \item A systematic analysis of redundancy and inconsistency in software 
+    artifacts, with a focus on scientific computing.
+    \item The design and implementation of the Drasil framework, which enables 
+    knowledge-centric generation of multiple software artifacts from a single 
+    source of truth.
+    \item A demonstration of Drasil's effectiveness through reimplementation of 
+    several case studies, highlighting improvements in consistency, 
+    maintainability, and traceability.
+    \item A discussion of the limitations, challenges, and future directions 
+    for knowledge-centric software artifact generation.
+\end{itemize}
 
 \ds{After so much time working here, I think I've finally realized one of the 
 true contributions of this thesis/Drasil. Not only the framework itself 

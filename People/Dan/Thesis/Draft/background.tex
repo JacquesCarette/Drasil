@@ -1,4 +1,5 @@
 \chapter{Background}
+\label{c:background}
 \section{Software Artifacts}
 \label{sec:sfs}
 
@@ -287,8 +288,24 @@ effort to address this challenge, numerous approaches to component
 compatibility testing have been proposed~\cite{Wu2001}.
 
 Neighbors~\cite{Neighbors1980, Neighbors1984,Neighbors1989} proposed a method 
-for engineering reusable software systems known as ``Draco".  \ds{Finish 
-talking about Draco here}
+for engineering reusable software systems known as ``Draco". Draco was one of 
+the earliest and most influential frameworks for software reuse, particularly 
+in the context of domain-specific software generation. The core idea behind 
+Draco is to enable the construction of software systems by composing reusable, 
+domain-specific components called "domain knowledge modules." In Draco, a 
+software engineer first defines a domain model, capturing the essential 
+abstractions and operations relevant to a particular problem area. The system 
+then provides a set of reusable transformations and code generation templates 
+tailored to that domain. By selecting and configuring these modules, developers 
+can automatically generate large portions of a software system, significantly 
+reducing manual coding effort. Draco's approach anticipated many later 
+developments in software product lines and generative programming, emphasizing 
+the importance of capturing domain knowledge explicitly and supporting its 
+reuse across multiple projects. Although Draco itself is no longer widely used, 
+its concepts have influenced modern frameworks for generative programming and 
+domain-specific language design~\cite{Neighbors1984, Czarnecki2000}.
+
+\todo{refine the above and move citations as needed}
 
 \subsection{Reproducible Research}
 

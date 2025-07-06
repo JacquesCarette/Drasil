@@ -533,73 +533,39 @@ chunks encoding given information}
 \begin{tabular}{| P{.2\linewidth} | p{.8\linewidth}|}
 \hline
  \textbf{Property} & \textbf{Chunk(s) Referenced}
-
-
 \\ \hline
 	\_sys & System name (ex. "\gb{}").
-
-
 \\ \hline
 	\_kind & \SF{} type we are defining (ex. SRS).
-
-
 \\ \hline
 	\_authors & List of authors of the \sf{}.
-
-
 \\ \hline
 	\_purpose & Purpose of the \sf{}.
-
-
 \\ \hline
 	\_quants & List of required quantities.
-
-
 \\ \hline
 	\_concepts & List of required concepts not otherwise encoded.
-
-
 \\ \hline
 	\_instModels & List of required instance models.
-
-
 \\ \hline
 	\_datadefs & List of required data definitions.
-
-
 \\ \hline
 	\_configFiles & List of required configuration files.
-
-
 \\ \hline
 	\_inputs & List of required inputs to the system.
-
-
 \\ \hline
 	\_outputs & List of required outputs from the system.
-
-
 \\ \hline
 	\_constraints & List of constraints for the system (physical and software 
 	specific).
-
-
 \\ \hline
 	\_constants & List of required constants. 
-
-
 \\ \hline
 	\_sysinfodb & Database of all required symbols. \ds{confirm this}
-
-
 \\ \hline
 	\_usedinfodb & Database of all used acronyms and symbols. \ds{confirm this}
-
-
 \\ \hline
 	refdb & Database of all relevant external references/citations.
-
-	
 \\ \hline
 \end{tabular}
 \end{table}
@@ -665,23 +631,35 @@ the above comment.}
 \ds{I've gone back and forth a few times on this and can't think of a good way 
 to give the executable code recipe for \gb{}. I might need to rethink the way 
 I do it / go for the previous section's approach}
+%
+%As mentioned in the previous section, the executable code is a significantly 
+%different \sf{} than the documentation-heavy \sfs{} we've already discussed. 
+%We 
+%have created a recipe language for executable code, and an example (taken from 
+%GlassBR) can be seen in Figure~\ref{fig:gbCodeRecipe}.
 
-\ds{the below is the generic CodeSpec DSL, not the \gb{} one. TODO: fix that, 
-and use the CodeSpec stuff the same way we used System information above.}
+As discussed in the previous section, the executable code recipe is 
+fundamentally different from the documentation-heavy SRS recipe. While the SRS 
+recipe focuses on organizing and projecting knowledge for human consumption, 
+the executable code recipe must specify the structure and content required for 
+generating working source code. This includes not only the relevant knowledge 
+chunks, but also the implementation choices (modules, functions, and other 
+details) necessary for code generation. 
 
-As mentioned in the previous section, the executable code is a significantly 
-different \sf{} than the documentation-heavy \sfs{} we've already discussed. We 
-have created a recipe language for executable code, and an example (taken from 
-GlassBR) can be seen in Figure~\ref{fig:gbCodeRecipe}.
-
-The recipe DSL for the executable code (\codeH{CodeSpec}) is fairly 
-straightforward, even though the executable code is so different from the other 
-\sfs{} in both style and audience. The DSL itself can be seen in 
-Figure~\ref{fig:codeSpec}. If you squint, it looks fairly similar to the system 
-information object, albeit with a few distinct differences. There are many 
-references to modules, which we have not yet explicitly discussed. We will look 
-into them in a bit more depth in Section~\ref{sec:gen}, but for now suffice to 
-say they have their own DSL for tying the various requisite chunks together.
+An example, the recipe for GlassBR's executable code constructed using the 
+\codeH{CodeSpec} DSL, is shown in Figure~\ref{fig:gbCodeRecipe}. 
+Here, the \codeH{codeSpec} function takes three arguments:
+\begin{itemize}
+\item \codeH{fullSI}: the system information object, which aggregates all the 
+knowledge chunks relevant to GlassBR (as described in the SRS example).
+\item \codeH{choices}: a record specifying code generation options, such as 
+target languages, architecture, data handling, and auxiliary files. The example 
+\codeH{choices} definition for \gb{} can be seen in 
+Figure~\ref{fig:gbCodeRecipe} and the object itself will be explained in more 
+detail later in this section.
+\item \codeH{allMods}: a list of modules to be generated, each defined in terms 
+of the knowledge chunks and functions they encapsulate.
+\end{itemize}
 
 \fig{
 Body.hs
@@ -694,6 +672,149 @@ Code}{fig:gbCodeRecipe}
 \codeBlock{CodeSpec}{41}{72}
 }{The Recipe Language for Executable Code (CodeSpec)}{fig:codeSpec}
 
+The \codeH{CodeSpec} DSL itself is defined in Figure~\ref{fig:codeSpec}, and 
+a subsection of its key fields are summarized in 
+Table~\ref{tab:codeSpecBreakdown}. As mentioned above, we use a helper function 
+\codeH{codeSpec} to extract the appropriate fields from the system information, 
+choices, and module list retaining full traceability and avoiding unnecessary 
+manual duplication.
+
+\begin{table}[]
+\caption{CodeSpec object breakdown}
+\label{tab:codeSpecBreakdown}
+\begin{tabular} {| P{.2\linewidth} | p{.8\linewidth}|}
+\hline
+\textbf{Property} & \textbf{Chunk(s) Referenced} 
+\\ \hline 
+	pName & Program name 
+\\ \hline 
+	authors & List of authors 
+\\ \hline 
+	inputs & All input variables 
+%\\ \hline 
+%	extInputs & External input variables to be supplied by a file
+%\\ \hline 
+%	derivedInputs & Derived inputs calculated from external inputs in a single 
+%	step
+\\\hline 
+	outputs & All output variables 
+\\\hline 
+	configFiles & Required configuration files 
+\\\hline 
+	execOrder & Mathematical definitions ordered such that they form a path 
+	from inputs to outputs 
+\\\hline 
+	cMap & Constraints on variables 
+\\\hline 
+	constants & Constants used in the program 
+%\\ \hline 
+%	constMap & Map of the above constants used in the program for efficient 
+%	lookups
+\\ \hline 
+	mods & List of additional code modules to generate
+\\ \hline 
+	sysinfodb & Database of all knowledge chunks for the given problem
+\\ \hline
+\end{tabular}
+\end{table}
+
+As with the SRS recipe, the code recipe references knowledge chunks defined 
+elsewhere. For example, the list of input variables is defined in 
+\codeH{Unitals.hs} just as they were for the SRS. Similarly, the modules to be 
+generated are defined in \codeH{ModuleDefs.hs} and make reference to other 
+chunks (both system specific and generic) from our knowledge-base. Looking 
+into the modules, we can see the \codeH{readTableMod} module, for example, is 
+defined as shown in Figure~\ref{fig:readTableMod}. This module provides a 
+function for reading ASTM glass data from a file, encapsulating both the 
+knowledge of the data format and the implementation logic required for code 
+generation.
+
+\fig{\codeBlock{ModuleDefs}{30}{39}}
+{The \codeH{readTableMod} module definition}{fig:readTableMod}
+
+While the encapsulation of knowledge in chunks is interesting, we have seen it 
+before in the SRS recipe example. What is novel to the code recipe is the 
+\codeH{Choices} object. As mentioned above, it contains the outcome of very 
+important implementation-level choices that must be made to generate the 
+executable code. The definition for the \codeH{Choices} object can be seen in 
+Figure~\ref{fig:choicesDefn} and a breakdown of each property can be found in 
+Table~\ref{tab:choicesBreakdown}.
+
+\fig{\codeBlock{ChoicesDefn}{26}{42}}{The \codeH{Choices} object 
+definition}{fig:choicesDefn}
+
+\begin{table}[]
+\caption{Choices object breakdown}
+\label{tab:choicesBreakdown}
+\begin{tabular} {| P{.2\linewidth} | p{.8\linewidth}|}
+\hline
+\textbf{Property} & \textbf{} 
+\\ \hline 
+	lang & List of target languages
+\\ \hline 
+	architecture & Architecture of the generated code. Includes modularity 
+	(whether to split into modules or generate a single flat file) and 
+	implementation type (library to be consumed or standalone program)
+\\ \hline 
+	dataInfo & Data structure and representation choices. (Ex. bundle inputs 
+	together into a class/struct, define constants inline, use the languages 
+	constant mechanism, etc.)
+\\\hline 
+	maps & Mapping of Drasil concepts and mathematical spaces to code concepts 
+	and types in the target language(s) (ex. One could map the concept of $\pi$ 
+	with the language's built-in $\pi$ and the $\mathbb{R}$ space to 
+	single/double precision floating point numbers)
+\\\hline 
+	optFeats & Choices for optional features including documentation (comments 
+	and verbosity), logging, and auxiliary files.
+\\\hline 
+	srsConstraints & Constraint violation behaviour. Can be used to specify 
+	whether to throw a warning or exception for physical/software constraints 
+	independently.
+\\\hline 
+	extLibs & List of external libraries to use (ex. for solving specific 
+	classes of mathematics problems). These libraries are external to Drasil 
+	and give the option for users to link to optimized, well-established 
+	libraries rather than reimplementing them from scratch in Drasil.
+\\\hline 
+\end{tabular}
+\end{table}
+
+With our understanding of the \codeH{Choices} object, we can now look back at 
+the GlassBR example (Figure~\ref{fig:gbCodeRecipe}) and understand what 
+specific implementation choices have been made. First off, the \codeH{lang} 
+property has been set so the generated code will be output in five different 
+programming languages: Python, C++, C\#, Java, and Swift. This is a good 
+demonstration of Drasil's ability to target multiple platforms from a 
+single knowledge base. The \codeH{architecture} is configured as modular, with 
+input-related functions separated into their own modules (
+\codeH{Modular Separated}), and the implementation type is set to 
+\codeH{Program}, meaning the generated code will be a complete, runnable 
+application rather than just a library. 
+
+For data representation, the \codeH{dataInfo} field specifies that inputs 
+should be bundled together (for example, as a class or struct), constants 
+should be defined inline within the code, and the language's constant mechanism 
+should be used where possible. The \codeH{optFeats} field enables comprehensive 
+documentation by including function, class, and module-level comments, but sets 
+the documentation verbosity to quiet and hides date fields in the generated 
+comments. Logging is also enabled for both variable assignments and function 
+calls, with all logs directed to a file named \codeH{log.txt}. Additionally, 
+the auxiliary files generated include a sample input file (pointing to a real 
+data file) and a \codeH{README}, supporting both usability and reproducibility. 
+
+Finally, the \codeH{srsConstraints} field is set so that any violation of 
+software or physical constraints will result in an exception, ensuring that 
+errors are caught and handled strictly during execution. This configuration 
+ensures that the generated GlassBR code is well-documented, maintainable, and 
+ready for use in a variety of environments.
+
+By structuring the executable code recipe in this way, Drasil ensures that all 
+generated code is fully traceable to the underlying knowledge base and any 
+external libraries. Any change in the knowledge chunks or their relationships 
+is automatically reflected in the generated code, just as it is in the 
+documentation. This approach minimizes duplication, maximizes consistency, and 
+enables reliable code generation for scientific computing applications.
 
 
 \section{Cooking it all up: Generation/Rendering}
@@ -709,7 +830,7 @@ Code}{fig:gbCodeRecipe}
 
   - Practical approach to iron out kinks / find holes in Drasil
 
-  - Find places to improve upon the existing case studies - ‘update as you go’ 
+  - Find places to improve upon the existing case studies - 'update as you go' 
   mindset
 
   - Observe the amount of effort required to correct errors - show examples

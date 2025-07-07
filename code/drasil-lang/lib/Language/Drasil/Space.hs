@@ -56,6 +56,11 @@ data Space where
 data ClifKind = Scalar | Vector | Bivector | Multivector
   deriving (Eq, Show)
 
+
+-- Suggestion: In order to support things like Fixed (a + b) in the future, 
+-- we want to use an Expr or symbolic type instead of Natural / String. 
+-- Not needed now, but worth keeping in mind.
+
 -- | The dimension of a clif
 data Dimension where
   -- | Fixed dimension
@@ -170,11 +175,13 @@ getActorName :: Space -> String
 getActorName (Actor n) = n
 getActorName _         = error "getActorName called on non-actor space"
 
--- | Gets the inner 'Space' of a vector or set.
-getInnerSpace :: Space -> Space
-getInnerSpace (Set s) = s
-getInnerSpace (ClifS _ _ s) = s
-getInnerSpace _        = error "getInnerSpace called on non-vector space"
+-- | Gets the inner 'Type' 
+getInnerType :: Space -> Space
+getInnerType (Set s) = s
+getInnerType (Array s)      = s
+getInnerType (Matrix _ _ s) = s
+getInnerType (ClifS _ _ s) = s
+getInnerType _        = error "getInnerType called on non-vector space"
 
 -- | Is this Space a basic numeric space?
 isBasicNumSpace :: Space -> Bool

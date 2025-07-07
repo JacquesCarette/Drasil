@@ -83,19 +83,13 @@ strAsExpr Rational s = dbl (read s :: Double)
 strAsExpr String   s = str s
 strAsExpr _        _ = error "strAsExpr should only be numeric space or string"
 
--- | Gets the dimension of a 'Space'.
 getDimension :: Space -> Int
-getDimension (ClifS _ s) = 1 + getDimension s -- TODO: Does this make sense? Maybe we're 
-                                              -- overloading the term "dimension" now.getDimension _ = 0
-
-
--- getDimension :: Space -> Int
--- getDimension (ClifS _ kind s) = case kind of
---   Scalar      -> 0
---   Vector      -> 1 + getDimension s
---   Bivector    -> 2 + getDimension s -- or another logic if needed
---   Multivector -> 2 + getDimension s -- treat as 2D for now (matrix)
--- getDimension _ = 0
+getDimension (ClifS _ kind s) = case kind of
+  Scalar      -> 0
+  Vector      -> 1 + getDimension s
+  Bivector    -> 2 + getDimension s -- or another logic if needed
+  Multivector -> 2 + getDimension s -- treat as 2D for now (matrix)
+getDimension _ = 0
 
 -- | Splits a string at the first (and only the first) occurrence of a delimiter.
 -- The delimiter is dropped from the result.
@@ -109,19 +103,21 @@ splitAtFirst = splitAtFirst' []
         dropDelim [] s = s
         dropDelim _ [] = error "impossible"
 
--- Converts a list of 'String's to an Expr of a given 'Space'.
--- strListAsExpr :: Space -> [String] -> Expr
--- strListAsExpr (ClifS _ kind t) ss = case kind of
---   Vector      -> Matrix [map (strAsExpr t) ss]
---   Scalar      -> error "strListAsExpr: Scalar does not accept a list"
---   Multivector -> error "strListAsExpr: Use strList2DAsExpr for multivectors"
---   Bivector    -> error "strListAsExpr: Not implemented for bivectors"
--- strListAsExpr _ _ = error "strListAsExpr called on non-vector space"
+strListAsExpr :: Space -> [String] -> Expr
+strListAsExpr (ClifS _ kind t) ss = case kind of
+  Scalar      -> case ss of
+                   [x] -> strAsExpr t x
+                   _   -> error "Expected a single value for Scalar"
+  Vector      -> Matrix [map (strAsExpr t) ss]
+  Bivector    -> Matrix [map (strAsExpr t) ss]  -- or error if unclear format
+  Multivector -> error "Use strList2DAsExpr for Multivectors"
+strListAsExpr _ _ = error "strListAsExpr called on unsupported or non-ClifS Space"
 
--- strList2DAsExpr :: Space -> [[String]] -> Expr
--- strList2DAsExpr (ClifS _ kind t) sss = case kind of
---   Multivector -> Matrix $ map (map (strAsExpr t)) sss
---   Vector      -> error "strList2DAsExpr: Use strListAsExpr for vectors"
---   Scalar      -> error "strList2DAsExpr: Scalar does not accept a 2D list"
---   Bivector    -> error "strList2DAsExpr: Not implemented for bivectors"
--- strList2DAsExpr _ _ = error "strList2DAsExpr called on non-multivector space"
+strList2DAsExpr :: Space -> [[String]] -> Expr
+strList2DAsExpr (ClifS _ kind t) sss = case kind of
+  Multivector -> Matrix $ map (map (strAsExpr t)) sss
+  Bivector    -> Matrix $ map (map (strAsExpr t)) sss  -- temporary
+  Vector      -> error "Use strListAsExpr for Vector"
+  Scalar      -> error "Scalar does not accept 2D data"
+strList2DAsExpr _ _ = error "strList2DAsExpr called on unsupported or non-ClifS Space"
+

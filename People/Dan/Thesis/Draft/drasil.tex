@@ -646,12 +646,12 @@ generating working source code. This includes not only the relevant knowledge
 chunks, but also the implementation choices (modules, functions, and other 
 details) necessary for code generation. 
 
-An example, the recipe for GlassBR's executable code constructed using the 
+An example, the recipe for \gb{}'s executable code constructed using the 
 \codeH{CodeSpec} DSL, is shown in Figure~\ref{fig:gbCodeRecipe}. 
 Here, the \codeH{codeSpec} function takes three arguments:
 \begin{itemize}
 \item \codeH{fullSI}: the system information object, which aggregates all the 
-knowledge chunks relevant to GlassBR (as described in the SRS example).
+knowledge chunks relevant to \gb{} (as described in the SRS example).
 \item \codeH{choices}: a record specifying code generation options, such as 
 target languages, architecture, data handling, and auxiliary files. The example 
 \codeH{choices} definition for \gb{} can be seen in 
@@ -781,7 +781,7 @@ definition}{fig:choicesDefn}
 \end{table}
 
 With our understanding of the \codeH{Choices} object, we can now look back at 
-the GlassBR example (Figure~\ref{fig:gbCodeRecipe}) and understand what 
+the \gb{} example (Figure~\ref{fig:gbCodeRecipe}) and understand what 
 specific implementation choices have been made. First off, the \codeH{lang} 
 property has been set so the generated code will be output in five different 
 programming languages: Python, C++, C\#, Java, and Swift. This is a good 
@@ -806,7 +806,7 @@ data file) and a \codeH{README}, supporting both usability and reproducibility.
 Finally, the \codeH{srsConstraints} field is set so that any violation of 
 software or physical constraints will result in an exception, ensuring that 
 errors are caught and handled strictly during execution. This configuration 
-ensures that the generated GlassBR code is well-documented, maintainable, and 
+ensures that the generated \gb{} code is well-documented, maintainable, and 
 ready for use in a variety of environments.
 
 By structuring the executable code recipe in this way, Drasil ensures that all 
@@ -830,14 +830,140 @@ produces the diverse \sfs{} required by different stakeholders. In the
 following section, we delve into the mechanisms and philosophy behind Drasil's 
 generation and rendering, showing how the framework brings together all the 
 ingredients we've discussed to deliver consistent, traceable, and maintainable 
-software artifacts.
+\sfs{}.
 
 \section{Cooking it all up: Generation/Rendering}
 \label{sec:gen}
-  - Recipes are “little programs”
-  - Each recipe can be rendered a number of ways, based on parameters fed to the generator.
-  -  Implicit parameters vs explicit: Ex. an SRS will always be rendered based on the recipe, but its output will either be LaTeX or HTML based on an explicit choice. Implicit params fed to gen table of symbols/A\&A / ToU.
 
+Now that Drasil's mechanisms for knowledge capture and recipe specification 
+have been established, we can begin the process of transforming these 
+structured specifications into tangible \sfs{}. This section details the 
+generation and rendering process, showing how Drasil unifies the ingredients 
+discussed so far to deliver consistent, traceable, and maintainable \sfs{}. To 
+ground the discussion, we will follow a long-running example from 
+the \gb{} case study, tracing the journey from knowledge capture to 
+the generation of a Software Requirements Specification (SRS) and executable 
+code.
+
+\subsection{From Recipe to \SF{}: The Generation Pipeline}
+
+At its core, Drasil treats recipes as ``little programs'' which are 
+intermediate representations that specify both the structure and content of a 
+target \sf{}. Each recipe, whether for an SRS, code, or another \sf{}, is 
+constructed by selecting and organizing relevant knowledge chunks, as described 
+in previous sections. The generation process then interprets these recipes, 
+applying rendering strategies to produce the desired output format (ex. 
+\LaTeX{}, HTML, Python, C\#, etc.).
+
+The generation pipeline in Drasil can be summarized as follows:
+\begin{enumerate}
+    \item \textbf{Recipe Construction:} The user defines a recipe by specifying 
+    the structure and selecting the relevant knowledge chunks and configuration 
+    options.
+    \item \textbf{Knowledge Projection:} The generator traverses the recipe, projecting knowledge from the underlying chunks according to the needs of each section and the intended audience.
+    \item \textbf{Rendering:} The projected knowledge is rendered into the 
+    target format using a set of rendering engines. These engines handle both 
+    the transformation of content (ex. mathematical expressions, tables, code) 
+    and the application of formatting conventions.
+    \item \textbf{\SF{} Assembly:} The rendered sections are assembled into the 
+    final \sf{}, with cross-references, traceability links, and auxiliary 
+    materials (such as tables of symbols or sample input files) generated as 
+    needed.
+\end{enumerate}
+
+\ds{Should I add a transition here?}
+
+\subsection{A \gb{} Example: Generating the SRS}
+
+\ds{Should I get more into the code in my example? I feel like I've shown a lot 
+of code already and this part is fairly straightforward, but I could rip some 
+code examples to add here}
+
+To illustrate this process, let us revisit the \gb{} case study. Earlier, we 
+described how the SRS recipe for \gb{} is constructed by specifying the 
+document structure and referencing the necessary knowledge chunks through the 
+system information object (see Section~\ref{sec:glassBRSRSRecipe}). Here, we 
+follow the journey of a single concept, the dimensionless load $\hat{q}$, from 
+its definition in the knowledge base to its appearance in the generated SRS.
+
+\paragraph{Step 1: Knowledge Capture}
+The definition of $\hat{q}$ is captured as a chunk in the knowledge base, complete with its symbolic representation, natural language description, units, and mathematical expression (see Figure~\ref{fig:gbrddq}). This chunk is referenced in multiple places: the Table of Symbols, the Data Definitions section, and within equations in the Instance Models.
+
+\paragraph{Step 2: Recipe Specification}
+The SRS recipe for \gb{} includes a section for Data Definitions, which is 
+populated by referencing the list of data definition chunks in the system 
+information object. $\hat{q}$ is included in this list, ensuring it will appear 
+in the appropriate section of the generated document. Similarly, the Table of 
+Symbols section is populated by traversing the list of quantities and concepts, 
+again including $\hat{q}$.
+
+\paragraph{Step 3: Generation and Rendering}
+When the generator is invoked to produce the SRS (ex. as a \LaTeX{} document), 
+it traverses the recipe, visiting each section. For the Data Definitions 
+section, it projects the full definition of $\hat{q}$, including its symbol, 
+description, units, and defining equation. For the Table of Symbols, it 
+projects only the symbol, a brief description, and the units. The rendering 
+engine formats these projections according to the conventions of the target 
+output (ex. as a table in \LaTeX{}).
+
+\paragraph{Step 4: Assembly and Output}
+The rendered sections are assembled into the final SRS document. Cross-references are automatically generated, so that, for example, references to $\hat{q}$ in Instance Models or Requirements link back to its definition in the Data Definitions or Table of Symbols. Auxiliary materials, such as the Table of Units and Table of Abbreviations, are generated by traversing the relevant lists in the system information object, ensuring consistency and completeness.
+
+\subsection{Multiple Renderings from a Single Source}
+
+A key strength of Drasil's approach is the ability to generate multiple \sfs{} 
+from the same underlying knowledge and recipes. For example, the same knowledge 
+chunk for $\hat{q}$ can be rendered in:
+\begin{itemize}
+    \item The SRS (as a data definition, symbol in tables, and in equations)
+    \item The Module Guide (as a referenced quantity in module responsibilities)
+    \item The generated source code (as a variable or function, with its calculation derived from the defining equation)
+\end{itemize}
+
+This is achieved by applying different rendering strategies depending on the 
+target \sf{} and audience. For instance, when generating code, the 
+mathematical expression for $\hat{q}$ is translated into the syntax of the 
+target programming language (ex. Python or C++), while in the SRS it is 
+rendered as a \LaTeX{} equation. The generator ensures that all references 
+remain consistent, and any change to the definition of $\hat{q}$ is 
+automatically propagated to all \sfs{}.
+
+\subsection{Parameterization and Flexibility}
+
+Drasil's generation process supports both explicit and implicit parameters. 
+Explicit parameters, such as the choice of output format (\LaTeX{}, HTML, 
+etc.), are provided by the user at generation time. Implicit parameters, such 
+as the inclusion of auxiliary sections (ex. Table of Symbols), are determined 
+by the recipe and the conventions of the target \sf{}. This allows for 
+flexible customization while maintaining consistency.
+
+For example, in \gb{}, the same SRS recipe can be rendered as a PDF (via 
+\LaTeX{}) for formal documentation, or as HTML for web-based dissemination. 
+Similarly, the code recipe can target multiple programming languages by 
+specifying the desired languages in the \codeH{Choices} object (see 
+Section~\ref{sec:gbCodeRecipe}).
+
+\subsection{Traceability and Consistency}
+
+Because all \sfs{} are generated from a single source of truth, Drasil ensures 
+traceability and consistency across documents and code. Any change to a 
+knowledge chunk (such as correcting the definition of $\hat{q}$) is reflected 
+everywhere it appears: in the SRS, code, and any other generated \sf{}. This 
+minimizes the risk of inconsistencies and reduces the maintenance burden.
+
+\subsection{Summary}
+
+In summary, Drasil's generation and rendering process operationalizes the 
+knowledge-centric approach by interpreting recipes as programs that select, 
+project, and render knowledge into a variety of \sfs{}. The \gb{} example 
+demonstrates how a single concept, captured once, is automatically and 
+consistently propagated throughout all relevant \sfs{}. This approach not 
+only reduces unnecessary redundancy, but also enhances traceability, 
+maintainability, and confidence in the resulting software system.
+
+The next section will discuss how iteration and refinement were used in the 
+creation of Drasil, and how the framework enables rapid evolution of both 
+knowledge and artifacts.
 
 \section{Iteration and refinement}
 \label{sec:iterefine}

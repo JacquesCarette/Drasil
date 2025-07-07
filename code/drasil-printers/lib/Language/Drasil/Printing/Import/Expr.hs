@@ -7,7 +7,7 @@ import Language.Drasil hiding (neg, sec, symbol, isIn, Matrix, Set)
 import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),
   AssocBoolOper(..), BoolBinOp(..), EqBinOp(..), Expr(..),
-  LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), uFuncCN(..), uFuncCC(..),
+  LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncCN(..), UFuncCC(..),
   CCNBinOp(..), CCCBinOp(..), NCCBinOp(..), ESSBinOp(..), ESBBinOp(..), AssocConcatOper(..), eprec, precA, precB, precC)
 import Language.Drasil.Literal.Development (Literal(..))
 
@@ -142,7 +142,7 @@ expr (UnaryOpCN Norm u)       sm = P.Fenced P.Norm P.Norm $ expr u sm
 expr (UnaryOpCN Dim u)        sm = mkCall sm P.Dim u
 expr (UnaryOp Sqrt u)         sm = P.Sqrt $ expr u sm
 expr (UnaryOp Neg u)          sm = neg sm u
-expr (UnaryOpCC NegV u)       sm = neg sm u
+expr (UnaryOpCC NegC u)       sm = neg sm u
 expr (ArithBinaryOp Frac a b) sm = P.Div (expr a sm) (expr b sm)
 expr (ArithBinaryOp Pow a b)  sm = pow sm a b
 expr (ArithBinaryOp Subt a b) sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]

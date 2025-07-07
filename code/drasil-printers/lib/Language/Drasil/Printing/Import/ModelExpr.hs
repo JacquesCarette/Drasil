@@ -16,7 +16,7 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb, 
 import Control.Lens ((^.))
 import Data.List (intersperse)
 import qualified Data.Map as Map
-import qualified Data.Map.Ordered as OM
+import qualified Data.Map.Ordered as OMap
 
 import Language.Drasil.Printing.Import.Literal (literal)
 import Language.Drasil.Printing.Import.Space (space)
@@ -159,7 +159,7 @@ modelExpr (UnaryOpCN Norm u)         sm = P.Fenced P.Norm P.Norm $ modelExpr u s
 modelExpr (UnaryOpCN Dim u)          sm = mkCall sm P.Dim u
 modelExpr (UnaryOp Sqrt u)           sm = P.Sqrt $ modelExpr u sm
 modelExpr (UnaryOp Neg u)            sm = neg sm u
-modelExpr (UnaryOpCC NegV u)         sm = neg sm u
+modelExpr (UnaryOpCC NegC u)         sm = neg sm u
 modelExpr (ArithBinaryOp Frac a b)   sm = P.Div (modelExpr a sm) (modelExpr b sm)
 modelExpr (ArithBinaryOp Pow a b)    sm = pow sm a b
 modelExpr (ArithBinaryOp Subt a b)   sm = P.Row [modelExpr a sm, P.MO P.Subt, modelExpr b sm]
@@ -191,10 +191,10 @@ modelExpr (ForAll c s de)            sm = P.Row [
     P.MO P.ForAll, symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c, P.MO P.IsIn, space sm s,
     P.MO P.Dot, modelExpr de sm
   ]
-  
+
 -- TODO: Fix this to be more specific to Clifs
 -- TODO: How do we control whether to print all the components or just a subset (e.g. only the vector components)?
-modelExpr (Clif _ es)                sm = P.Mtx $ map ((:[]) . (`modelExpr` sm)) $ OM.elems es
+modelExpr (Clif _ es)                sm = P.Mtx $ map ((:[]) . (`modelExpr` sm)) $ OMap.elems es
 modelExpr _ _ = error "Printing/Import.hs: modelExpr: unhandled ModelExpr type"
 
 -- | Common method of converting associative operations into printable layout AST.

@@ -12,7 +12,7 @@ import Drasil.Code.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&), in')
 import qualified Drasil.Code.CodeExpr.Development as S (CodeExpr(..))
 import Drasil.Code.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
   AssocArithOper(..), AssocBoolOper(..), AssocConcatOper(..), BoolBinOp(..), EqBinOp(..),
-  LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), uFuncCC(..), uFuncCN(..),
+  LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncCC(..), UFuncCN(..),
   CCNBinOp(..), CCCBinOp(..), NCCBinOp(..), ESSBinOp(..), ESBBinOp(..))
 import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
   Space (Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..))
@@ -77,7 +77,7 @@ unopVN Norm = error "unop: Norm not implemented" -- TODO
 
 -- | Similar to 'unop', but for vectors.
 unopVV :: (SharedProg r) => uFuncCC -> (SValue r -> SValue r)
-unopVV NegV = error "unop: Negation on Vectors not implemented" --
+unopVV NegC = error "unop: Negation on Vectors not implemented" --
 
 -- | Gets a chunk's 'CodeType', by checking which 'CodeType' the user has chosen to
 -- match the chunk's 'Space' to.
@@ -460,13 +460,13 @@ unopB :: (SharedProg r) => UFuncB -> (SValue r -> SValue r)
 unopB Not = (?!)
 
 -- | Similar to 'unop', but for vectors.
-unopVN :: (SharedProg r) => uFuncCN -> (SValue r -> SValue r)
-unopVN Dim = listSize
-unopVN Norm = error "unop: Norm not implemented" -- TODO
+unopCN :: (SharedProg r) => uFuncCN -> (SValue r -> SValue r)
+unopCN Dim = listSize
+unopCN Norm = error "unop: Norm not implemented" -- TODO
 
 -- | Similar to 'unop', but for vectors.
-unopVV :: (SharedProg r) => uFuncCC -> (SValue r -> SValue r)
-unopVV NegV = error "unop: Negation on Vectors not implemented" -- TODO
+unopCC :: (SharedProg r) => uFuncCC -> (SValue r -> SValue r)
+unopCC NegC = error "unop: Negation on Vectors not implemented" -- TODO
 
 -- Maps an 'ArithBinOp' to it's corresponding GOOL binary function.
 arithBfunc :: (SharedProg r) => ArithBinOp -> (SValue r -> SValue r -> SValue r)

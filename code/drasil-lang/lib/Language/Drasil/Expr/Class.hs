@@ -190,7 +190,7 @@ class ExprC r where
   norm :: r -> r
 
   -- | Smart constructor for negating vectors (or general clifs).
-  negVec :: r -> r
+  negClif :: r -> r
 
   -- | Smart constructor for applying logical negation to an expression.
   not_ :: r -> r
@@ -371,7 +371,7 @@ instance ExprC Expr where
   norm = UnaryOpCN Norm
 
   -- | Smart constructor for negating vectors.
-  negVec = UnaryOpCC NegC
+  negClif = UnaryOpCC NegC
 
   -- | And more general scaling
   cScale = NCCBinaryOp Scale
@@ -556,7 +556,7 @@ instance ExprC M.ModelExpr where
   norm = M.UnaryOpCN M.Norm
 
   -- | Smart constructor for negating vectors.
-  negVec = M.UnaryOpCC M.NegC
+  negClif = M.UnaryOpCC M.NegC
 
   -- | More general scaling
   cScale = M.NCCBinaryOp M.Scale
@@ -740,7 +740,7 @@ instance ExprC C.CodeExpr where
   norm = C.UnaryOpCN C.Norm
 
   -- | Smart constructor for negating vectors.
-  negVec = C.UnaryOpCC C.NegC
+  negClif = C.UnaryOpCC C.NegC
 
   -- | And more general scaling
   cScale = C.NCCBinaryOp C.Scale

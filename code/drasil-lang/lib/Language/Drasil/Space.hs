@@ -14,7 +14,7 @@ module Language.Drasil.Space (
   -- * Class
   HasSpace(..),
   -- * Functions
-  getActorName, getInnerSpace, mkFunction, isBasicNumSpace,
+  getActorName, getInnerType, mkFunction, isBasicNumSpace,
   Dimension(..), scalarS, vect2DS, vect3DS, vectS, vectNDS, 
   bivector2DS, bivector3DS, bivectorS, bivectorNDS,
   multivector2DS, multivector3DS, multivectorS, multivectorNDS,
@@ -90,50 +90,55 @@ checkClifSpace _ = True --error $ "Non-real clif spaces unsupported"
 -- | Helper that constructs a scalar Clifford object
 scalarS :: Space -> Space
 scalarS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 1) Scalar s
+scalarS s = s  -- fallback: leave the space unchanged 
 
 vect2DS :: Space -> Space
 vect2DS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 2) Vector s
+vect2DS s = s
 
 vect3DS :: Space -> Space
 vect3DS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 3) Vector s
+vect3DS s = s
 
 vectS :: Natural -> Space -> Space
 vectS n s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed n) Vector s
+vectS _ s = s
 
 vectNDS :: String -> Space -> Space
 vectNDS x s | isBasicNumSpace s && checkClifSpace s = ClifS (VDim x) Vector s
+vectNDS _ s = s
 
--- | 2D bivector in Clifford algebra
 bivector2DS :: Space -> Space
 bivector2DS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 2) Bivector s
+bivector2DS s = s
 
--- | 3D bivector in Clifford algebra
 bivector3DS :: Space -> Space
 bivector3DS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 3) Bivector s
+bivector3DS s = s
 
--- | n-dimensional bivector in Clifford algebra
 bivectorS :: Natural -> Space -> Space
 bivectorS n s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed n) Bivector s
+bivectorS _ s = s
 
--- | n-dimensional bivector (symbolic dimension) in Clifford algebra
 bivectorNDS :: String -> Space -> Space
 bivectorNDS x s | isBasicNumSpace s && checkClifSpace s = ClifS (VDim x) Bivector s
+bivectorNDS _ s = s
 
--- | 2D multivector in Clifford algebra
 multivector2DS :: Space -> Space
 multivector2DS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 2) Multivector s
+multivector2DS s = s
 
--- | 3D multivector in Clifford algebra
 multivector3DS :: Space -> Space
 multivector3DS s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed 3) Multivector s
+multivector3DS s = s
 
--- | n-dimensional multivector in Clifford algebra
 multivectorS :: Natural -> Space -> Space
 multivectorS n s | isBasicNumSpace s && checkClifSpace s = ClifS (Fixed n) Multivector s
+multivectorS _ s = s
 
--- | n-dimensional multivector (symbolic dimension) in Clifford algebra
 multivectorNDS :: String -> Space -> Space
 multivectorNDS x s | isBasicNumSpace s && checkClifSpace s = ClifS (VDim x) Multivector s
+multivectorNDS _ s = s
 
 -- | HasSpace is anything which has a 'Space'.
 class HasSpace c where

@@ -3,16 +3,17 @@ module Language.Drasil.Code.Imperative.ReadInput (
   sampleInputDD, readWithDataDesc
 ) where
 
-import Language.Drasil hiding (Data, Matrix, CodeVarChunk)
+import Language.Drasil as S hiding (Data, CodeVarChunk)
 import Language.Drasil.Code.DataDesc (DataDesc'(..), Data'(..), DataItem'(..),
   Delimiter, dataDesc, junk, list, singleton')
 import Language.Drasil.Chunk.Code (CodeVarChunk)
-import Language.Drasil.Expr.Development (Expr(Matrix))
+import Language.Drasil.Expr.Development (Expr(..))
 
 import Control.Lens ((^.))
 import Data.List (intersperse, isPrefixOf, transpose)
 import Data.List.Split (splitOn)
 import Data.List.NonEmpty (NonEmpty(..), toList)
+import Language.Drasil.Space
 
 -- TODO: Update this logic to handle all ClifKind cases (Scalar, Vector, Multivector, etc.)
 
@@ -29,14 +30,14 @@ readWithDataDesc fp ddsc = do
       readData Junk _ = []
       readData (Datum d) s = [readDataItem d s]
       readData (Data dis 0 d) s = zipWith readDataItem (toList dis) (splitOn d s)
-      readData (Data ((DI c [dlm1]):|_) 1 dlm2) s = map ((Matrix . (:[])) .
-        map (strAsExpr (getInnerSpace $ c ^. typ))) $ transpose $
+      readData (Data ((DI c [dlm1]):|_) 1 dlm2) s = map ((S.Matrix . (:[])) .
+        map (strAsExpr (getInnerType $ c ^. typ))) $ transpose $
         map (splitOn dlm2) $ splitOn dlm1 s
-      readData (Data ((DI c [dlm1, dlm3]):|_) 1 dlm2) s = map (Matrix .
-        map (map (strAsExpr (getInnerSpace $ c ^. typ)))) $ transpose $
+      readData (Data ((DI c [dlm1, dlm3]):|_) 1 dlm2) s = map (S.Matrix .
+        map (map (strAsExpr (getInnerType $ c ^. typ)))) $ transpose $
         map (map (splitOn dlm3) . splitOn dlm2) $ splitOn dlm1 s
-      readData (Data ((DI c [dlm1, dlm2]):|_) 2 dlm3) s = map (Matrix .
-        map (map (strAsExpr (getInnerSpace $ c ^. typ))) . transpose) $
+      readData (Data ((DI c [dlm1, dlm2]):|_) 2 dlm3) s = map (S.Matrix .
+        map (map (strAsExpr (getInnerType $ c ^. typ))) . transpose) $
         transpose $ map (map (splitOn dlm3) . splitOn dlm2) $ splitOn dlm1 s
       readData _ _ = error "Invalid degree of intermixing in DataDesc or list with more than 2 dimensions (not yet supported)"
       -- Below match is an attempt at a generic match for Data, but it doesn't
@@ -68,7 +69,7 @@ readWithDataDesc fp ddsc = do
 sampleInputDD :: [CodeVarChunk] -> DataDesc'
 sampleInputDD ds = dataDesc (junk : intersperse junk (map toData ds)) "\n"
   where toData d = toData' (d ^. typ) d
-        toData' t@(ClifS _ _) d = list d
+        toData' t@(ClifS _ _ _) d = list d
           (take (getDimension t) ([", ", "; "] ++ iterate (':':) ":"))
         toData' _ d = singleton' d
 

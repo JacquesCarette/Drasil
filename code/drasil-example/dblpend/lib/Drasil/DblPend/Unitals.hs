@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
 import Data.Drasil.SI_Units (metre, radian, kilogram, newton)
 import qualified Data.Drasil.Quantities.Physics as QP (position, force, velocity,
-  angularVelocity, angularAccel, gravitationalAccel, tension, acceleration, time)
+  angularVelocity, angularAccel, gravitationalAccel, tension, acceleration, time, dim)
 import Data.Drasil.Concepts.Physics (twoD)
 import Data.Drasil.Concepts.Math as CM (angle, xDir, yDir)
 import Data.Drasil.Quantities.Math as QM (unitVect, pi_)
@@ -182,5 +182,5 @@ pendDisAngle :: ConstrConcept
 pendDisAngle = cuc' "pendDisAngle"
   (nounPhraseSP "dependent variables")
   "column vector of displacement of rods with its derivatives"
-  lTheta' radian (ClifS (VDim dim) Multivector Real)
+  lTheta' radian (ClifS (VDim QP.dim) Multivector Real)
   [physRange $ UpFrom (Inc, exactDbl 0)] (exactDbl 0)

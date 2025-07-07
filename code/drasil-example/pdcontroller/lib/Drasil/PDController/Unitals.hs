@@ -119,7 +119,7 @@ odeAbsTolConst = mkQuantDef dqdAbsTol (dbl 1.0e-10)
 odeRelTolConst = mkQuantDef dqdRelTol (dbl 1.0e-10)
 
 opProcessVariable
-  = constrained' (dqdNoUnit processVariable symYT (vectNDS dim RealReal))
+  = constrained' (dqdNoUnit processVariable symYT (ClifS (VDim dim) Multivector RealReal))
       [gtZeroConstr]
       (exactDbl 1)
 qdProcessVariableTD = qw opProcessVariable

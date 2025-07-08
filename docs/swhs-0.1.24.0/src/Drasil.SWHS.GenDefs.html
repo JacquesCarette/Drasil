@@ -307,14 +307,14 @@ f -&gt; a -&gt; r
 </span><span id="line-79"></span><span>
 </span><span id="line-80"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#newtonLawNote"><span class="hs-identifier hs-type">newtonLawNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-81"></span><span id="newtonLawNote"><span class="annot"><span class="annottext">newtonLawNote :: UnitalChunk -&gt; ConceptInstance -&gt; ConceptChunk -&gt; Sentence
-</span><a href="Drasil.SWHS.GenDefs.html#newtonLawNote"><span class="hs-identifier hs-var hs-var">newtonLawNote</span></a></span></span><span> </span><span id="local-6989586621679086629"><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679086629"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span id="local-6989586621679086630"><span class="annot"><span class="annottext">ConceptInstance
-</span><a href="#local-6989586621679086630"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679086631"><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679086631"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><a href="Drasil.SWHS.GenDefs.html#newtonLawNote"><span class="hs-identifier hs-var hs-var">newtonLawNote</span></a></span></span><span> </span><span id="local-6989586621679086546"><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="#local-6989586621679086546"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span id="local-6989586621679086547"><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="#local-6989586621679086547"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679086548"><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="#local-6989586621679086548"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="#local-6989586621679086629"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679086546"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;found by assuming that&quot;</span></span><span class="hs-special">,</span><span>
@@ -330,7 +330,7 @@ forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
-</span><a href="#local-6989586621679086630"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679086547"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;This law&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-83"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
@@ -352,7 +352,7 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">surface</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ConceptChunk -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679086631"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679086548"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-85"></span><span>
 </span><span id="line-86"></span><span class="hs-comment">------------------------------------</span><span>
 </span><span id="line-87"></span><span class="hs-comment">-- General Definitions Derivation --</span><span>
@@ -360,9 +360,9 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span id="line-89"></span><span>
 </span><span id="line-90"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempSimpDeriv"><span class="hs-identifier hs-type">rocTempSimpDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
 </span><span id="line-91"></span><span id="rocTempSimpDeriv"><span class="annot"><span class="annottext">rocTempSimpDeriv :: Sentence -&gt; [ConceptInstance] -&gt; Derivation
-</span><a href="Drasil.SWHS.GenDefs.html#rocTempSimpDeriv"><span class="hs-identifier hs-var hs-var">rocTempSimpDeriv</span></a></span></span><span> </span><span id="local-6989586621679086642"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679086642"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679086643"><span class="annot"><span class="annottext">[ConceptInstance]
-</span><a href="#local-6989586621679086643"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
+</span><a href="Drasil.SWHS.GenDefs.html#rocTempSimpDeriv"><span class="hs-identifier hs-var hs-var">rocTempSimpDeriv</span></a></span></span><span> </span><span id="local-6989586621679086559"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679086559"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679086560"><span class="annot"><span class="annottext">[ConceptInstance]
+</span><a href="#local-6989586621679086560"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
 </span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;simplified&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -377,8 +377,8 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall a. [[a]] -&gt; [a]
 </span><span class="hs-identifier hs-var">weave</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence -&gt; [ConceptInstance] -&gt; [Sentence]
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempSimpDerivSent"><span class="hs-identifier hs-var">rocTempSimpDerivSent</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679086642"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
-</span><a href="#local-6989586621679086643"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; Sentence) -&gt; [ModelExpr] -&gt; [Sentence]
+</span><a href="#local-6989586621679086559"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
+</span><a href="#local-6989586621679086560"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; Sentence) -&gt; [ModelExpr] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">[ModelExpr]
@@ -386,9 +386,9 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span id="line-93"></span><span>
 </span><span id="line-94"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempSimpDerivSent"><span class="hs-identifier hs-type">rocTempSimpDerivSent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-95"></span><span id="rocTempSimpDerivSent"><span class="annot"><span class="annottext">rocTempSimpDerivSent :: Sentence -&gt; [ConceptInstance] -&gt; [Sentence]
-</span><a href="Drasil.SWHS.GenDefs.html#rocTempSimpDerivSent"><span class="hs-identifier hs-var hs-var">rocTempSimpDerivSent</span></a></span></span><span> </span><span id="local-6989586621679086650"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679086650"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679086651"><span class="annot"><span class="annottext">[ConceptInstance]
-</span><a href="#local-6989586621679086651"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; Sentence) -&gt; [[Sentence]] -&gt; [Sentence]
+</span><a href="Drasil.SWHS.GenDefs.html#rocTempSimpDerivSent"><span class="hs-identifier hs-var hs-var">rocTempSimpDerivSent</span></a></span></span><span> </span><span id="local-6989586621679086567"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679086567"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679086568"><span class="annot"><span class="annottext">[ConceptInstance]
+</span><a href="#local-6989586621679086568"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; Sentence) -&gt; [[Sentence]] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSentCol</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence]
@@ -397,8 +397,8 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span id="line-96"></span><span>  </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivArbVol"><span class="hs-identifier hs-var">rocTempDerivArbVol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [ConceptInstance] -&gt; [Sentence]
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivConsFlx"><span class="hs-identifier hs-var">rocTempDerivConsFlx</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679086650"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
-</span><a href="#local-6989586621679086651"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="#local-6989586621679086567"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
+</span><a href="#local-6989586621679086568"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivDens"><span class="hs-identifier hs-var">rocTempDerivDens</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-97"></span><span>
 </span><span id="line-98"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivInteg"><span class="hs-identifier hs-type">rocTempDerivInteg</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
@@ -512,9 +512,9 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span id="line-112"></span><span>
 </span><span id="line-113"></span><span class="annot"><a href="Drasil.SWHS.GenDefs.html#rocTempDerivConsFlx"><span class="hs-identifier hs-type">rocTempDerivConsFlx</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
 </span><span id="line-114"></span><span id="rocTempDerivConsFlx"><span class="annot"><span class="annottext">rocTempDerivConsFlx :: Sentence -&gt; [ConceptInstance] -&gt; [Sentence]
-</span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivConsFlx"><span class="hs-identifier hs-var hs-var">rocTempDerivConsFlx</span></a></span></span><span> </span><span id="local-6989586621679086666"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679086666"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679086667"><span class="annot"><span class="annottext">[ConceptInstance]
-</span><a href="#local-6989586621679086667"><span class="hs-identifier hs-var">assumps</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="Drasil.SWHS.GenDefs.html#rocTempDerivConsFlx"><span class="hs-identifier hs-var hs-var">rocTempDerivConsFlx</span></a></span></span><span> </span><span id="local-6989586621679086583"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679086583"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679086584"><span class="annot"><span class="annottext">[ConceptInstance]
+</span><a href="#local-6989586621679086584"><span class="hs-identifier hs-var">assumps</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Where&quot;</span></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-115"></span><span>  </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
@@ -538,7 +538,7 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">GenDefn
 </span><a href="Drasil.SWHS.GenDefs.html#rocTempSimp"><span class="hs-identifier hs-var">rocTempSimp</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679086666"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679086583"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Assuming&quot;</span></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-117"></span><span>  </span><span class="annot"><span class="annottext">SepType -&gt; FoldType -&gt; [Sentence] -&gt; Sentence
@@ -571,7 +571,7 @@ forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
-</span><a href="#local-6989586621679086667"><span class="hs-identifier hs-var">assumps</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679086584"><span class="hs-identifier hs-var">assumps</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;we have&quot;</span></span><span class="hs-special">]</span><span>

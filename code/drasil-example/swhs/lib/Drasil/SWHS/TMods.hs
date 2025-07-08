@@ -39,8 +39,7 @@ tMods = [consThermE, sensHtE, latentHtE, nwtnCooling]
 -------------------------
 consThermE :: TheoryModel
 consThermE = tm (equationalConstraints' consThermECS)
-  [qw thFluxVect, qw gradient, qw volHtGen,
-    qw density, qw heatCapSpec, qw temp, qw time] ([] :: [ConceptChunk])
+  ([] :: [QuantityDict]) ([] :: [ConceptChunk])
   [] [express consThermERel] [] [dRef consThemESrc] "consThermE" consThermENotes
 
 consThermECS :: ConstraintSet ModelExpr
@@ -72,8 +71,7 @@ data PhaseChange = AllPhases
 
 sensHtETemplate :: PhaseChange -> Sentence -> TheoryModel
 sensHtETemplate pc desc = tm (equationalModel' qd)
-  [qw sensHeat, qw htCapS, qw mass,
-    qw deltaT, qw meltPt, qw temp, qw htCapL, qw boilPt, qw htCapV] ([] :: [ConceptChunk])
+  ([] :: [QuantityDict]) ([] :: [ConceptChunk])
   [qd] [] [] [dRef sensHtESrc] "sensHtE" [desc]
     where
       qd = sensHtEQD pc eqn desc
@@ -119,7 +117,7 @@ sensHtEdesc = foldlSent [
 -------------------------
 latentHtE :: TheoryModel
 latentHtE = tm latentHtEMK
-  [qw latentHeat, qw time, qw tau] ([] :: [ConceptChunk])
+  ([] :: [QuantityDict]) ([] :: [ConceptChunk])
   [] [express latentHtEFD] [] [dRef latHtESrc] "latentHtE" latentHtENotes
 
 latentHtEMK :: ModelKind ModelExpr
@@ -149,7 +147,7 @@ latentHtENotes = map foldlSent [
 -------------------------
 nwtnCooling :: TheoryModel
 nwtnCooling = tm nwtnCoolingMK
-  [qw latentHeat, qw time, qw htTransCoeff, qw deltaT] ([] :: [ConceptChunk])
+  ([] :: [QuantityDict]) ([] :: [ConceptChunk])
   [] [express nwtnCoolingFD] [] [dRefInfo incroperaEtAl2007 $ Page [8]]
   "nwtnCooling" nwtnCoolingNotes
 

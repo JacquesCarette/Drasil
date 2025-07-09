@@ -35,9 +35,9 @@
 </span><a href="Language.Drasil.Printing.AST.html#Point"><span class="hs-identifier hs-var">P.Point</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#Int"><span class="hs-identifier hs-var">P.Int</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">]</span><span>
-</span><span id="line-23"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Helpers.html#digitsProcess"><span class="hs-identifier hs-var">digitsProcess</span></a></span><span> </span><span id="local-6989586621679122030"><span class="annot"><span class="annottext">[Integer]
-</span><a href="#local-6989586621679122030"><span class="hs-identifier hs-var">ds</span></a></span></span><span> </span><span id="local-6989586621679122031"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679122031"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span id="line-23"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Helpers.html#digitsProcess"><span class="hs-identifier hs-var">digitsProcess</span></a></span><span> </span><span id="local-6989586621679122031"><span class="annot"><span class="annottext">[Integer]
+</span><a href="#local-6989586621679122031"><span class="hs-identifier hs-var">ds</span></a></span></span><span> </span><span id="local-6989586621679122032"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679122032"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="hs-number">3</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#Int"><span class="hs-identifier hs-var">P.Int</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Ops -&gt; Expr
@@ -50,7 +50,7 @@ forall a. Int -&gt; a -&gt; [a]
 </span><span class="hs-number">3</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679122031"><span class="hs-identifier hs-var">pos</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><a href="#local-6989586621679122032"><span class="hs-identifier hs-var">pos</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#Int"><span class="hs-identifier hs-var">P.Int</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; [Expr] -&gt; [Expr]
 forall a. [a] -&gt; [a] -&gt; [a]
@@ -58,45 +58,45 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#Int"><span class="hs-identifier hs-var">P.Int</span></a></span><span> </span><span class="annot"><span class="annottext">[Integer]
-</span><a href="#local-6989586621679122030"><span class="hs-identifier hs-var">ds</span></a></span><span>
-</span><span id="line-24"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Helpers.html#digitsProcess"><span class="hs-identifier hs-var">digitsProcess</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679122033"><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679122033"><span class="hs-identifier hs-var">hd</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679122034"><span class="annot"><span class="annottext">[Integer]
-</span><a href="#local-6989586621679122034"><span class="hs-identifier hs-var">tl</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679122035"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679122035"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span id="local-6989586621679122036"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679122036"><span class="hs-identifier hs-var">coun</span></a></span></span><span> </span><span id="local-6989586621679122037"><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679122037"><span class="hs-identifier hs-var">ex</span></a></span></span><span>
+</span><a href="#local-6989586621679122031"><span class="hs-identifier hs-var">ds</span></a></span><span>
+</span><span id="line-24"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Helpers.html#digitsProcess"><span class="hs-identifier hs-var">digitsProcess</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679122034"><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679122034"><span class="hs-identifier hs-var">hd</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679122035"><span class="annot"><span class="annottext">[Integer]
+</span><a href="#local-6989586621679122035"><span class="hs-identifier hs-var">tl</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679122036"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679122036"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span id="local-6989586621679122037"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679122037"><span class="hs-identifier hs-var">coun</span></a></span></span><span> </span><span id="local-6989586621679122038"><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679122038"><span class="hs-identifier hs-var">ex</span></a></span></span><span>
 </span><span id="line-25"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679122035"><span class="hs-identifier hs-var">pos</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+</span><a href="#local-6989586621679122036"><span class="hs-identifier hs-var">pos</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">/=</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679122036"><span class="hs-identifier hs-var">coun</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><a href="#local-6989586621679122037"><span class="hs-identifier hs-var">coun</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#Int"><span class="hs-identifier hs-var">P.Int</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679122033"><span class="hs-identifier hs-var">hd</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; [Expr] -&gt; [Expr]
+</span><a href="#local-6989586621679122034"><span class="hs-identifier hs-var">hd</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; [Expr] -&gt; [Expr]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Integer] -&gt; Int -&gt; Int -&gt; Integer -&gt; [Expr]
 </span><a href="Language.Drasil.Printing.Import.Helpers.html#digitsProcess"><span class="hs-identifier hs-var">digitsProcess</span></a></span><span> </span><span class="annot"><span class="annottext">[Integer]
-</span><a href="#local-6989586621679122034"><span class="hs-identifier hs-var">tl</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679122035"><span class="hs-identifier hs-var">pos</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679122036"><span class="hs-identifier hs-var">coun</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679122035"><span class="hs-identifier hs-var">tl</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679122036"><span class="hs-identifier hs-var">pos</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679122037"><span class="hs-identifier hs-var">coun</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679122037"><span class="hs-identifier hs-var">ex</span></a></span><span>
+</span><a href="#local-6989586621679122038"><span class="hs-identifier hs-var">ex</span></a></span><span>
 </span><span id="line-26"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679122037"><span class="hs-identifier hs-var">ex</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Bool
+</span><a href="#local-6989586621679122038"><span class="hs-identifier hs-var">ex</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">/=</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Ops -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#MO"><span class="hs-identifier hs-var">P.MO</span></a></span><span> </span><span class="annot"><span class="annottext">Ops
 </span><a href="Language.Drasil.Printing.AST.html#Point"><span class="hs-identifier hs-var">P.Point</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#Int"><span class="hs-identifier hs-var">P.Int</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679122033"><span class="hs-identifier hs-var">hd</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; [Expr] -&gt; [Expr]
+</span><a href="#local-6989586621679122034"><span class="hs-identifier hs-var">hd</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; [Expr] -&gt; [Expr]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(Integer -&gt; Expr) -&gt; [Integer] -&gt; [Expr]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#Int"><span class="hs-identifier hs-var">P.Int</span></a></span><span> </span><span class="annot"><span class="annottext">[Integer]
-</span><a href="#local-6989586621679122034"><span class="hs-identifier hs-var">tl</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; [Expr] -&gt; [Expr]
+</span><a href="#local-6989586621679122035"><span class="hs-identifier hs-var">tl</span></a></span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; [Expr] -&gt; [Expr]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Ops -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#MO"><span class="hs-identifier hs-var">P.MO</span></a></span><span> </span><span class="annot"><span class="annottext">Ops
@@ -107,41 +107,41 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#Int"><span class="hs-identifier hs-var">P.Int</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679122037"><span class="hs-identifier hs-var">ex</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679122038"><span class="hs-identifier hs-var">ex</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-27"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Ops -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#MO"><span class="hs-identifier hs-var">P.MO</span></a></span><span> </span><span class="annot"><span class="annottext">Ops
 </span><a href="Language.Drasil.Printing.AST.html#Point"><span class="hs-identifier hs-var">P.Point</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#Int"><span class="hs-identifier hs-var">P.Int</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679122033"><span class="hs-identifier hs-var">hd</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; [Expr] -&gt; [Expr]
+</span><a href="#local-6989586621679122034"><span class="hs-identifier hs-var">hd</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; [Expr] -&gt; [Expr]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(Integer -&gt; Expr) -&gt; [Integer] -&gt; [Expr]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#Int"><span class="hs-identifier hs-var">P.Int</span></a></span><span> </span><span class="annot"><span class="annottext">[Integer]
-</span><a href="#local-6989586621679122034"><span class="hs-identifier hs-var">tl</span></a></span><span>
-</span><span id="line-28"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Helpers.html#digitsProcess"><span class="hs-identifier hs-var">digitsProcess</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span id="local-6989586621679122042"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679122042"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span id="local-6989586621679122043"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679122043"><span class="hs-identifier hs-var">coun</span></a></span></span><span> </span><span id="local-6989586621679122044"><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679122044"><span class="hs-identifier hs-var">ex</span></a></span></span><span>
+</span><a href="#local-6989586621679122035"><span class="hs-identifier hs-var">tl</span></a></span><span>
+</span><span id="line-28"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Helpers.html#digitsProcess"><span class="hs-identifier hs-var">digitsProcess</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span id="local-6989586621679122043"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679122043"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span id="local-6989586621679122044"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679122044"><span class="hs-identifier hs-var">coun</span></a></span></span><span> </span><span id="local-6989586621679122045"><span class="annot"><span class="annottext">Integer
+</span><a href="#local-6989586621679122045"><span class="hs-identifier hs-var">ex</span></a></span></span><span>
 </span><span id="line-29"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679122042"><span class="hs-identifier hs-var">pos</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+</span><a href="#local-6989586621679122043"><span class="hs-identifier hs-var">pos</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">&gt;</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679122043"><span class="hs-identifier hs-var">coun</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><a href="#local-6989586621679122044"><span class="hs-identifier hs-var">coun</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#Int"><span class="hs-identifier hs-var">P.Int</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; [Expr] -&gt; [Expr]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Integer] -&gt; Int -&gt; Int -&gt; Integer -&gt; [Expr]
 </span><a href="Language.Drasil.Printing.Import.Helpers.html#digitsProcess"><span class="hs-identifier hs-var">digitsProcess</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679122042"><span class="hs-identifier hs-var">pos</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679122043"><span class="hs-identifier hs-var">coun</span></a></span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679122043"><span class="hs-identifier hs-var">pos</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679122044"><span class="hs-identifier hs-var">coun</span></a></span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679122044"><span class="hs-identifier hs-var">ex</span></a></span><span>
+</span><a href="#local-6989586621679122045"><span class="hs-identifier hs-var">ex</span></a></span><span>
 </span><span id="line-30"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679122044"><span class="hs-identifier hs-var">ex</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Bool
+</span><a href="#local-6989586621679122045"><span class="hs-identifier hs-var">ex</span></a></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">/=</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Ops -&gt; Expr
@@ -157,7 +157,7 @@ forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#Int"><span class="hs-identifier hs-var">P.Int</span></a></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679122044"><span class="hs-identifier hs-var">ex</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679122045"><span class="hs-identifier hs-var">ex</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-31"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Ops -&gt; Expr
 </span><a href="Language.Drasil.Printing.AST.html#MO"><span class="hs-identifier hs-var">P.MO</span></a></span><span> </span><span class="annot"><span class="annottext">Ops
@@ -179,12 +179,12 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-44"></span><span class="hs-comment">-- https://en.wikipedia.org/wiki/Scientific_notation</span><span>
 </span><span id="line-45"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Helpers.html#processExpo"><span class="hs-identifier hs-type">processExpo</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">)</span><span>
 </span><span id="line-46"></span><span id="processExpo"><span class="annot"><span class="annottext">processExpo :: Int -&gt; (Int, Int)
-</span><a href="Language.Drasil.Printing.Import.Helpers.html#processExpo"><span class="hs-identifier hs-var hs-var">processExpo</span></a></span></span><span> </span><span id="local-6989586621679122047"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679122047"><span class="hs-identifier hs-var">a</span></a></span></span><span>
+</span><a href="Language.Drasil.Printing.Import.Helpers.html#processExpo"><span class="hs-identifier hs-var hs-var">processExpo</span></a></span></span><span> </span><span id="local-6989586621679122048"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679122048"><span class="hs-identifier hs-var">a</span></a></span></span><span>
 </span><span id="line-47"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Integral a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-identifier hs-var">mod</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679122047"><span class="hs-identifier hs-var">a</span></a></span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679122048"><span class="hs-identifier hs-var">a</span></a></span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Int
@@ -193,14 +193,14 @@ forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679122047"><span class="hs-identifier hs-var">a</span></a></span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679122048"><span class="hs-identifier hs-var">a</span></a></span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
 </span><span id="line-48"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Integral a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-identifier hs-var">mod</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679122047"><span class="hs-identifier hs-var">a</span></a></span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679122048"><span class="hs-identifier hs-var">a</span></a></span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Int
@@ -209,14 +209,14 @@ forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">2</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679122047"><span class="hs-identifier hs-var">a</span></a></span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679122048"><span class="hs-identifier hs-var">a</span></a></span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">2</span></span><span class="hs-special">)</span><span>
 </span><span id="line-49"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Integral a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-identifier hs-var">mod</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679122047"><span class="hs-identifier hs-var">a</span></a></span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679122048"><span class="hs-identifier hs-var">a</span></a></span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Int
@@ -225,7 +225,7 @@ forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">2</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">3</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679122047"><span class="hs-identifier hs-var">a</span></a></span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679122048"><span class="hs-identifier hs-var">a</span></a></span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">3</span></span><span class="hs-special">)</span><span>
@@ -242,94 +242,94 @@ forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span id="line-56"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Helpers.html#lookupC"><span class="hs-identifier hs-type">lookupC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Stage</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Symbol</span></span><span>
 </span><span id="line-57"></span><span id="lookupC"><span class="annot"><span class="annottext">lookupC :: Stage -&gt; ChunkDB -&gt; UID -&gt; Symbol
 </span><a href="Language.Drasil.Printing.Import.Helpers.html#lookupC"><span class="hs-identifier hs-var hs-var">lookupC</span></a></span></span><span> </span><span class="annot"><span class="annottext">Stage
-</span><span class="hs-identifier hs-var">Equational</span></span><span>     </span><span id="local-6989586621679122052"><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679122052"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span id="local-6989586621679122053"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679122053"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Symbol
+</span><span class="hs-identifier hs-var">Equational</span></span><span>     </span><span id="local-6989586621679122053"><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679122053"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span id="local-6989586621679122054"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679122054"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span>   </span><span class="annot"><span class="annottext">(QuantityDict -&gt; Symbol) -&gt; QuantityDict -&gt; Symbol
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; UID -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">symbResolve</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679122052"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679122053"><span class="hs-identifier hs-var">c</span></a></span><span>
+</span><a href="#local-6989586621679122053"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679122054"><span class="hs-identifier hs-var">c</span></a></span><span>
 </span><span id="line-58"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Helpers.html#lookupC"><span class="hs-identifier hs-var">lookupC</span></a></span><span> </span><span class="annot"><span class="annottext">Stage
-</span><span class="hs-identifier hs-var">Implementation</span></span><span> </span><span id="local-6989586621679122055"><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679122055"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span id="local-6989586621679122056"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679122056"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Symbol
+</span><span class="hs-identifier hs-var">Implementation</span></span><span> </span><span id="local-6989586621679122056"><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679122056"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span id="local-6989586621679122057"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679122057"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">codeSymb</span></span><span> </span><span class="annot"><span class="annottext">(QuantityDict -&gt; Symbol) -&gt; QuantityDict -&gt; Symbol
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; UID -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">symbResolve</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679122055"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679122056"><span class="hs-identifier hs-var">c</span></a></span><span>
+</span><a href="#local-6989586621679122056"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679122057"><span class="hs-identifier hs-var">c</span></a></span><span>
 </span><span id="line-59"></span><span>
 </span><span id="line-60"></span><span class="annot"><span class="hs-comment">-- | Look up a term given a chunk database and a 'UID' associated with the term. Also specifies capitalization</span></span><span>
 </span><span id="line-61"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Helpers.html#lookupT"><span class="hs-identifier hs-type">lookupT</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TermCapitalization</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-62"></span><span id="lookupT"><span class="annot"><span class="annottext">lookupT :: ChunkDB -&gt; UID -&gt; TermCapitalization -&gt; Sentence
-</span><a href="Language.Drasil.Printing.Import.Helpers.html#lookupT"><span class="hs-identifier hs-var hs-var">lookupT</span></a></span></span><span> </span><span id="local-6989586621679122058"><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679122058"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span id="local-6989586621679122059"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679122059"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679122060"><span class="annot"><span class="annottext">TermCapitalization
-</span><a href="#local-6989586621679122060"><span class="hs-identifier hs-var">tCap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TermCapitalization -&gt; NP -&gt; Sentence
+</span><a href="Language.Drasil.Printing.Import.Helpers.html#lookupT"><span class="hs-identifier hs-var hs-var">lookupT</span></a></span></span><span> </span><span id="local-6989586621679122059"><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679122059"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span id="local-6989586621679122060"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679122060"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679122061"><span class="annot"><span class="annottext">TermCapitalization
+</span><a href="#local-6989586621679122061"><span class="hs-identifier hs-var">tCap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TermCapitalization -&gt; NP -&gt; Sentence
 </span><a href="Language.Drasil.Printing.Import.Helpers.html#resolveCapT"><span class="hs-identifier hs-var">resolveCapT</span></a></span><span> </span><span class="annot"><span class="annottext">TermCapitalization
-</span><a href="#local-6989586621679122060"><span class="hs-identifier hs-var">tCap</span></a></span><span> </span><span class="annot"><span class="annottext">(NP -&gt; Sentence) -&gt; NP -&gt; Sentence
+</span><a href="#local-6989586621679122061"><span class="hs-identifier hs-var">tCap</span></a></span><span> </span><span class="annot"><span class="annottext">(NP -&gt; Sentence) -&gt; NP -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">TermAbbr -&gt; NP
 </span><span class="hs-identifier hs-var">longForm</span></span><span> </span><span class="annot"><span class="annottext">(TermAbbr -&gt; NP) -&gt; TermAbbr -&gt; NP
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; UID -&gt; TermAbbr
 </span><span class="hs-identifier hs-var">termResolve'</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679122058"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679122059"><span class="hs-identifier hs-var">c</span></a></span><span>
+</span><a href="#local-6989586621679122059"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679122060"><span class="hs-identifier hs-var">c</span></a></span><span>
 </span><span id="line-63"></span><span>
 </span><span id="line-64"></span><span class="annot"><span class="hs-comment">-- | Look up the acronym/abbreviation of a term. Otherwise returns the singular form of a term. Takes a chunk database and a 'UID' associated with the term.</span></span><span>
 </span><span id="line-65"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Helpers.html#lookupS"><span class="hs-identifier hs-type">lookupS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TermCapitalization</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-66"></span><span id="lookupS"><span class="annot"><span class="annottext">lookupS :: ChunkDB -&gt; UID -&gt; TermCapitalization -&gt; Sentence
-</span><a href="Language.Drasil.Printing.Import.Helpers.html#lookupS"><span class="hs-identifier hs-var hs-var">lookupS</span></a></span></span><span> </span><span id="local-6989586621679122063"><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679122063"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span id="local-6989586621679122064"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679122064"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679122065"><span class="annot"><span class="annottext">TermCapitalization
-</span><a href="#local-6989586621679122065"><span class="hs-identifier hs-var">sCap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; ([Char] -&gt; Sentence) -&gt; Maybe [Char] -&gt; Sentence
+</span><a href="Language.Drasil.Printing.Import.Helpers.html#lookupS"><span class="hs-identifier hs-var hs-var">lookupS</span></a></span></span><span> </span><span id="local-6989586621679122064"><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679122064"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span id="local-6989586621679122065"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679122065"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679122066"><span class="annot"><span class="annottext">TermCapitalization
+</span><a href="#local-6989586621679122066"><span class="hs-identifier hs-var">sCap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; ([Char] -&gt; Sentence) -&gt; Maybe [Char] -&gt; Sentence
 forall b a. b -&gt; (a -&gt; b) -&gt; Maybe a -&gt; b
 </span><span class="hs-identifier hs-var">maybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TermCapitalization -&gt; NP -&gt; Sentence
 </span><a href="Language.Drasil.Printing.Import.Helpers.html#resolveCapT"><span class="hs-identifier hs-var">resolveCapT</span></a></span><span> </span><span class="annot"><span class="annottext">TermCapitalization
-</span><a href="#local-6989586621679122065"><span class="hs-identifier hs-var">sCap</span></a></span><span> </span><span class="annot"><span class="annottext">(NP -&gt; Sentence) -&gt; NP -&gt; Sentence
+</span><a href="#local-6989586621679122066"><span class="hs-identifier hs-var">sCap</span></a></span><span> </span><span class="annot"><span class="annottext">(NP -&gt; Sentence) -&gt; NP -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">TermAbbr -&gt; NP
 </span><span class="hs-identifier hs-var">longForm</span></span><span> </span><span class="annot"><span class="annottext">TermAbbr
-</span><a href="#local-6989586621679122067"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Sentence
+</span><a href="#local-6989586621679122068"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">(Maybe [Char] -&gt; Sentence) -&gt; Maybe [Char] -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">TermAbbr -&gt; Maybe [Char]
 </span><span class="hs-identifier hs-var">shortForm</span></span><span> </span><span class="annot"><span class="annottext">TermAbbr
-</span><a href="#local-6989586621679122067"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe [Char] -&gt; ([Char] -&gt; Maybe [Char]) -&gt; Maybe [Char]
+</span><a href="#local-6989586621679122068"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe [Char] -&gt; ([Char] -&gt; Maybe [Char]) -&gt; Maybe [Char]
 forall a b. Maybe a -&gt; (a -&gt; Maybe b) -&gt; Maybe b
 forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
 </span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="annot"><span class="annottext">TermCapitalization -&gt; [Char] -&gt; Maybe [Char]
 </span><a href="Language.Drasil.Printing.Import.Helpers.html#capHelper"><span class="hs-identifier hs-var">capHelper</span></a></span><span> </span><span class="annot"><span class="annottext">TermCapitalization
-</span><a href="#local-6989586621679122065"><span class="hs-identifier hs-var">sCap</span></a></span><span>
-</span><span id="line-67"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679122067"><span class="annot"><span class="annottext">l :: TermAbbr
-</span><a href="#local-6989586621679122067"><span class="hs-identifier hs-var hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; UID -&gt; TermAbbr
+</span><a href="#local-6989586621679122066"><span class="hs-identifier hs-var">sCap</span></a></span><span>
+</span><span id="line-67"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679122068"><span class="annot"><span class="annottext">l :: TermAbbr
+</span><a href="#local-6989586621679122068"><span class="hs-identifier hs-var hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; UID -&gt; TermAbbr
 </span><span class="hs-identifier hs-var">termResolve'</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679122063"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679122064"><span class="hs-identifier hs-var">c</span></a></span><span>
+</span><a href="#local-6989586621679122064"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679122065"><span class="hs-identifier hs-var">c</span></a></span><span>
 </span><span id="line-68"></span><span>
 </span><span id="line-69"></span><span class="annot"><span class="hs-comment">-- | Look up the plural form of a term given a chunk database and a 'UID' associated with the term.</span></span><span>
 </span><span id="line-70"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Helpers.html#lookupP"><span class="hs-identifier hs-type">lookupP</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TermCapitalization</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-71"></span><span id="lookupP"><span class="annot"><span class="annottext">lookupP :: ChunkDB -&gt; UID -&gt; TermCapitalization -&gt; Sentence
-</span><a href="Language.Drasil.Printing.Import.Helpers.html#lookupP"><span class="hs-identifier hs-var hs-var">lookupP</span></a></span></span><span> </span><span id="local-6989586621679122070"><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679122070"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span id="local-6989586621679122071"><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679122071"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679122072"><span class="annot"><span class="annottext">TermCapitalization
-</span><a href="#local-6989586621679122072"><span class="hs-identifier hs-var">pCap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TermCapitalization -&gt; NP -&gt; Sentence
+</span><a href="Language.Drasil.Printing.Import.Helpers.html#lookupP"><span class="hs-identifier hs-var hs-var">lookupP</span></a></span></span><span> </span><span id="local-6989586621679122071"><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679122071"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span id="local-6989586621679122072"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679122072"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679122073"><span class="annot"><span class="annottext">TermCapitalization
+</span><a href="#local-6989586621679122073"><span class="hs-identifier hs-var">pCap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TermCapitalization -&gt; NP -&gt; Sentence
 </span><a href="Language.Drasil.Printing.Import.Helpers.html#resolveCapP"><span class="hs-identifier hs-var">resolveCapP</span></a></span><span> </span><span class="annot"><span class="annottext">TermCapitalization
-</span><a href="#local-6989586621679122072"><span class="hs-identifier hs-var">pCap</span></a></span><span> </span><span class="annot"><span class="annottext">(NP -&gt; Sentence) -&gt; NP -&gt; Sentence
+</span><a href="#local-6989586621679122073"><span class="hs-identifier hs-var">pCap</span></a></span><span> </span><span class="annot"><span class="annottext">(NP -&gt; Sentence) -&gt; NP -&gt; Sentence
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">TermAbbr -&gt; NP
 </span><span class="hs-identifier hs-var">longForm</span></span><span> </span><span class="annot"><span class="annottext">(TermAbbr -&gt; NP) -&gt; TermAbbr -&gt; NP
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; UID -&gt; TermAbbr
 </span><span class="hs-identifier hs-var">termResolve'</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679122070"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679122071"><span class="hs-identifier hs-var">c</span></a></span><span>
+</span><a href="#local-6989586621679122071"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679122072"><span class="hs-identifier hs-var">c</span></a></span><span>
 </span><span id="line-72"></span><span>
 </span><span id="line-73"></span><span class="annot"><span class="hs-comment">-- | Helper to get the proper function for capitalizing a 'NP' based on its 'TermCapitalization'. Singular case.</span></span><span>
 </span><span id="line-74"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Helpers.html#resolveCapT"><span class="hs-identifier hs-type">resolveCapT</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TermCapitalization</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">)</span><span>
@@ -367,25 +367,25 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span id="line-86"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Helpers.html#capHelper"><span class="hs-identifier hs-type">capHelper</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TermCapitalization</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-87"></span><span id="capHelper"><span class="annot"><span class="annottext">capHelper :: TermCapitalization -&gt; [Char] -&gt; Maybe [Char]
 </span><a href="Language.Drasil.Printing.Import.Helpers.html#capHelper"><span class="hs-identifier hs-var hs-var">capHelper</span></a></span></span><span> </span><span class="annot"><span class="annottext">TermCapitalization
-</span><span class="hs-identifier hs-var">NoCap</span></span><span> </span><span id="local-6989586621679122079"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679122079"><span class="hs-identifier hs-var">s</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Maybe [Char]
+</span><span class="hs-identifier hs-var">NoCap</span></span><span> </span><span id="local-6989586621679122080"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679122080"><span class="hs-identifier hs-var">s</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Maybe [Char]
 forall a. a -&gt; Maybe a
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679122079"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><a href="#local-6989586621679122080"><span class="hs-identifier hs-var">s</span></a></span><span>
 </span><span id="line-88"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Helpers.html#capHelper"><span class="hs-identifier hs-var">capHelper</span></a></span><span> </span><span class="annot"><span class="annottext">TermCapitalization
 </span><span class="hs-identifier">_</span></span><span>     </span><span class="hs-special">[</span><span class="hs-special">]</span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe [Char]
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
 </span><span id="line-89"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Helpers.html#capHelper"><span class="hs-identifier hs-var">capHelper</span></a></span><span> </span><span class="annot"><span class="annottext">TermCapitalization
-</span><span class="hs-identifier">_</span></span><span>     </span><span class="hs-special">(</span><span id="local-6989586621679122080"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679122080"><span class="hs-identifier hs-var">x</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679122081"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679122081"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Maybe [Char]
+</span><span class="hs-identifier">_</span></span><span>     </span><span class="hs-special">(</span><span id="local-6989586621679122081"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679122081"><span class="hs-identifier hs-var">x</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679122082"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679122082"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Maybe [Char]
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; Char
 </span><span class="hs-identifier hs-var">toUpper</span></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679122080"><span class="hs-identifier hs-var">x</span></a></span><span class="annot"><span class="annottext">Char -&gt; [Char] -&gt; [Char]
+</span><a href="#local-6989586621679122081"><span class="hs-identifier hs-var">x</span></a></span><span class="annot"><span class="annottext">Char -&gt; [Char] -&gt; [Char]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679122081"><span class="hs-identifier hs-var">xs</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679122082"><span class="hs-identifier hs-var">xs</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-90"></span></pre></body></html>

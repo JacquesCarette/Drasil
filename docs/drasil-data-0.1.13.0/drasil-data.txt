@@ -716,6 +716,7 @@ yPos :: ConceptChunk
 yVel :: ConceptChunk
 momentum :: ConceptChunk
 moment :: ConceptChunk
+moment2D :: ConceptChunk
 fOfGravity :: ConceptChunk
 positionVec :: ConceptChunk
 pendulum :: ConceptChunk

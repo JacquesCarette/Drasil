@@ -127,7 +127,7 @@ momentum = dccWDS "momentum" (cn "momentum")
   ( S "the quantity of motion" `S.of_` S "a moving body, measured as a product" `S.of_`
   phraseNP (QPP.mass `and_` velocity))
 moment = dccWDS "moment" (cn' "moment")
-  (S "A measure of the tendency of a body to rotate about a specific HELLO!!" +:+ phrase point `S.or_` phrase axis)
+  (S "A measure of the tendency of a body to rotate about a specific" +:+ phrase point `S.or_` phrase axis)
 moment2D = dccWDS "moment2D" (cn' "moment")
   (S "A measure of the tendency of a body to rotate about a specific" +:+ phrase point `S.or_` phrase axis)
 motion = dccWDS "motion" (cn "motion")

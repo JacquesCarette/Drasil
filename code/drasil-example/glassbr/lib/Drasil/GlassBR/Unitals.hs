@@ -181,17 +181,14 @@ stressDistFacMax = mkQuantDef (vc "stressDistFacMax" (nounPhraseSP "maximum valu
   (subMax (eqSymb stressDistFac)) Real) (exactDbl 32)
 {--}
 
-unitarySymbols :: [UnitaryChunk]
-unitarySymbols = [loadDur]
-
 unitalSymbols :: [UnitalChunk]
 unitalSymbols = [demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight,
-  sflawParamK, sflawParamM, minThick]
+  sflawParamK, sflawParamM, loadDur, minThick]
 
-sdx, sdy, sdz, loadDur :: UnitaryChunk
+sdx, sdy, sdz :: UnitaryChunk
 
 demand, tmDemand, lRe, tmLRe, minThick, nonFactorL, eqTNTWeight,
-  sflawParamM, sflawParamK, modElas :: UnitalChunk
+  sflawParamM, sflawParamK, loadDur, modElas :: UnitalChunk
 
 demand      = uc demandq lQ Real pascal --correct Space used?
 
@@ -217,8 +214,8 @@ sflawParamK = uc' "sflawParamK" (nounPhraseSP "surface flaw parameter") --parame
 sflawParamM = uc' "sflawParamM" (nounPhraseSP "surface flaw parameter") --parameterize?
   (S "placeholder") lM Real sFlawPU
 
-loadDur     = unitary "loadDur"    (nounPhraseSP "duration of load")
-  (sub lT lDur) second Real
+loadDur     = uc' "loadDur"    (nounPhraseSP "duration of load")
+  (S "placeholder") (sub lT lDur) Real second
 
 sdx         = unitary "sdx" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase xComp))
   (subX (eqSymb standOffDist)) metre Real

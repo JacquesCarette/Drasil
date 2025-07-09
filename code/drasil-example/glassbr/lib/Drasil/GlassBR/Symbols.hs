@@ -7,14 +7,14 @@ import Drasil.GlassBR.ModuleDefs (allMods, implVars)
 import Drasil.GlassBR.Unitals (specParamVals, modElas,
   tmSymbols, interps, derivedInputDataConstraints, unitless, probBr,
   stressDistFac, nomThick, sdVector, inputsWUnitsUncrtn, inputsWUncrtn,
-  glassTypeCon, unitalSymbols, unitarySymbols)
+  glassTypeCon, unitalSymbols)
 
 import Data.List ((\\))
 
 symbolsForSymbolTable :: [QuantityDict]
 symbolsForSymbolTable = symbolsForTermTable ++ map qw unitalSymbols ++
-  map qw unitarySymbols ++ unitless ++ map qw [probBr, stressDistFac,
-  nomThick, cnstrw glassTypeCon] ++ map qw derivedInputDataConstraints
+  unitless ++ map qw [probBr, stressDistFac, nomThick, cnstrw glassTypeCon] ++
+  map qw derivedInputDataConstraints
 
 symbolsForTermTable :: [QuantityDict]
 symbolsForTermTable = map qw inputsWUnitsUncrtn ++ map qw inputsWUncrtn ++

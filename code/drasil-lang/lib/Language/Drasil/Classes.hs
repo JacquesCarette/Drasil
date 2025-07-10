@@ -7,9 +7,10 @@ module Language.Drasil.Classes (
     NamedIdea(term)
   , Idea(getA)
   , CommonIdea(abrv)
-  , Concept
   , Definition(defn)
   , ConceptDomain(cdom)
+  , Concept
+  , DrasilConcept(metaConcept)
   , Quantity
   , HasUnitSymbol(usymb)
   , HasReasVal(reasVal)

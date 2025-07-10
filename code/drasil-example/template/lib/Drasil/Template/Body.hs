@@ -38,6 +38,7 @@ mkSRS = [TableOfContents,
     [ tunitNone []      -- Adds table of unit section with a table frame
     , tsymb [] -- Adds table of symbol section with a table frame
     --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
+    , TAandA 
     ],
   IntroSec $
   IntroProg EmptyS (phrase progName)
@@ -109,6 +110,9 @@ ideaDicts =
   doccon ++ prodtcon ++ [inValue] ++
   -- CIs
   nw progName : map nw doccon'
+
+TAandA :: [IdeaDict]
+TAandA = []
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = [errMsg, algorithm, program] ++ mathcon ++ srsDomains

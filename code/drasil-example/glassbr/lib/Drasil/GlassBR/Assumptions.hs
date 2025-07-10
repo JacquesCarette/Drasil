@@ -18,7 +18,7 @@ import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass,
 import Drasil.GlassBR.MetaConcepts (progName)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (constantK, constantLoadDur, 
-  constantLoadSF, constantM, constantModElas, explosion, lateral, lDurFac,
+  constantLoadSF, constantM, constantModElas, explosion, lateral, loadDF,
   loadDur)
 
 assumptions :: [ConceptInstance]
@@ -37,7 +37,7 @@ assumpSV           = cic "assumpSV"   (standardValuesDesc loadDur)      "standar
 assumpGL           = cic "assumpGL"   glassLiteDesc                     "glassLite"           Doc.assumpDom
 assumpBC           = cic "assumpBC"   boundaryConditionsDesc            "boundaryConditions"  Doc.assumpDom
 assumpRT           = cic "assumpRT"   responseTypeDesc                  "responseType"        Doc.assumpDom
-assumpLDFC         = cic "assumpLDFC" (ldfConstantDesc lDurFac)         "ldfConstant"         Doc.assumpDom
+assumpLDFC         = cic "assumpLDFC" (ldfConstantDesc loadDF)         "ldfConstant"         Doc.assumpDom
 
 glassTypeDesc :: Sentence
 glassTypeDesc = foldlSent [S "The standard E1300-09a for",
@@ -83,7 +83,7 @@ responseTypeDesc :: Sentence
 responseTypeDesc = foldlSent [atStartNP (the responseTy), S "considered in",
   short progName, S "is flexural"]
 
-ldfConstantDesc :: QuantityDict -> Sentence
+ldfConstantDesc :: (HasSymbol c, NamedIdea c) => c -> Sentence
 ldfConstantDesc mainConcept = foldlSent [S "With", phrase reference, S "to",
   refS assumpSV `sC` phraseNP (NP.the (value `of_`
   mainConcept)), sParen (ch mainConcept) `S.is` phraseNP (a_ constant)

@@ -13,7 +13,7 @@ import Data.Drasil.Concepts.Documentation (goal, user, datum)
 import Data.Drasil.SI_Units
 
 import Drasil.GlassBR.DataDefs (aGrtrThanB, arRef, calofDemand, glaTyFac,
-  gtfRef, hRef, loadDF, stdVals)
+  gtfRef, hRef, loadDFDD, stdVals)
 import Drasil.GlassBR.Figures (dimlessloadVsARFig)
 import Drasil.GlassBR.Goals (willBreakGS)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
@@ -43,7 +43,7 @@ probConstraint = Bounded (Inc, exactDbl 0) (Inc, exactDbl 1)
 
 risk :: InstanceModel
 risk = imNoDeriv (equationalModelN (riskFun ^. term) riskQD)
-  (qwUC modElas : qwUC lDurFac : qwUC stressDistFac :
+  (qwUC modElas : qwUC loadDF : qwUC stressDistFac :
     map qwUC [sflawParamK, sflawParamM, minThick] ++ abInputConstraints)
   (qw riskFun) [] [dRef astm2009, dRefInfo beasonEtAl1998 $ Equation [4, 5],
     dRefInfo campidelli $ Equation [14]] "riskFun" [aGrtrThanB, hRef, ldfRef, jRef]
@@ -52,7 +52,7 @@ risk = imNoDeriv (equationalModelN (riskFun ^. term) riskQD)
 riskQD :: SimpleQDef
 riskQD = mkQuantDef riskFun ((sy sflawParamK $/
   (sy plateLen $* sy plateWidth $^ (sy sflawParamM $- exactDbl 1))) $* 
-  ((sy modElas $* square (sy minThick)) $^ sy sflawParamM) $* sy lDurFac $* exp (sy stressDistFac))
+  ((sy modElas $* square (sy minThick)) $^ sy sflawParamM) $* sy loadDF $* exp (sy stressDistFac))
 
 {--}
 
@@ -120,7 +120,7 @@ tolPreQD = mkQuantDef tolLoad tolPreEq
 
 tolStrDisFac :: InstanceModel
 tolStrDisFac = imNoDeriv (equationalModelN (sdfTol ^. term) tolStrDisFacQD)
-  ((lDurFac, Nothing) : qwC pbTol probConstraint : qwUC modElas : abInputConstraints ++
+  ((qw loadDF, Nothing) : qwC pbTol probConstraint : qwUC modElas : abInputConstraints ++
     map qwUC [sflawParamM, sflawParamK, minThick]) (qw sdfTol) []
   [dRef astm2009] "sdfTol" [pbTolUsr, aGrtrThanB, stdVals [sflawParamM,
       sflawParamK, mkUnitary modElas], hRef, ldfRef]  
@@ -129,7 +129,7 @@ tolStrDisFacQD :: SimpleQDef
 tolStrDisFacQD = mkQuantDef sdfTol $ ln (ln (recip_ (exactDbl 1 $- sy pbTol))
   $* ((sy plateLen $* sy plateWidth) $^ (sy sflawParamM $- exactDbl 1) $/
     (sy sflawParamK $* ((sy modElas $* 
-    square (sy minThick)) $^ sy sflawParamM) $* sy lDurFac)))
+    square (sy minThick)) $^ sy sflawParamM) $* sy loadDF)))
 
 {--}
 
@@ -206,7 +206,7 @@ capRef, jRef, jtolRef, ldfRef, nonFLRef, probBRRef, qHtRef, qHtTlTolRef,
 capRef      = definedIn' calofCapacity (S "and is also called capacity")
 jRef        = definedIn  strDisFac
 jtolRef     = definedIn  tolStrDisFac
-ldfRef      = definedIn  loadDF
+ldfRef      = definedIn  loadDFDD
 nonFLRef    = definedIn  nonFL
 probBRRef   = definedIn  probOfBreak
 qHtRef      = definedIn  dimLL

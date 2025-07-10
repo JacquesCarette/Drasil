@@ -3,6 +3,7 @@ module Drasil.PDController.Unitals where
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (second)
 import Language.Drasil
+import Language.Drasil.Space (ClifKind(..))
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Drasil.PDController.Concepts
@@ -119,7 +120,7 @@ odeAbsTolConst = mkQuantDef dqdAbsTol (dbl 1.0e-10)
 odeRelTolConst = mkQuantDef dqdRelTol (dbl 1.0e-10)
 
 opProcessVariable
-  = constrained' (dqdNoUnit processVariable symYT (ClifS (VDim dim) Multivector RealReal))
+  = constrained' (dqdNoUnit processVariable symYT (ClifS (VDim dim) Vector Real))
       [gtZeroConstr]
       (exactDbl 1)
 qdProcessVariableTD = qw opProcessVariable

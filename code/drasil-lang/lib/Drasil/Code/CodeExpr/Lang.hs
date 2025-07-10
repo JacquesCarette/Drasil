@@ -5,7 +5,7 @@ module Drasil.Code.CodeExpr.Lang where
 import Prelude hiding (sqrt)
 import Numeric.Natural
 
-import Language.Drasil.Expr.Lang (Completeness, BasisBlades(..))
+import Language.Drasil.Expr.Lang (Completeness, BasisBlades)
 import Language.Drasil.Literal.Class (LiteralC(..))
 import Language.Drasil.Literal.Lang (Literal(..))
 import qualified Language.Drasil.Space as S

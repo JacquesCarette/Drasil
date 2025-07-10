@@ -2,6 +2,7 @@ module Drasil.GamePhysics.Unitals where
 
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..), Decoration(Magnitude))
+import Language.Drasil.Space (ClifKind(..))
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
@@ -149,7 +150,7 @@ jVect       = uc (dccWDS "unitVectJ" (compoundPhrase' (cn "vertical")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) (vec $ hat lJ) Real metre
 normalVect  = uc (dccWDS "normalVect" (nounPhraseSent (S "collision" +:+
                    phrase QM.normalVect)) (phrase QM.normalVect)) 
-                   (eqSymb QM.normalVect) (ClifS (VDim dim) Multivector Real) metre
+                   (eqSymb QM.normalVect) (ClifS (VDim dim) Vector Real) metre
 
 dVect = uc (dccWDS "unitVectD" 
           (cn "unit vector directed from the center of the large mass to the center of the smaller mass") 
@@ -216,12 +217,12 @@ timeC = uc (dccWDS "timeC" (cn "denotes the time at collision")
 initRelVel = uc (dccWDS "v_i^AB" (compoundPhrase'
                  (compoundPhrase' (cn "initial relative") (QP.velocity ^. term))
                  (cn "between rigid bodies of A and B")) (phrase QP.velocity))
-                 (sup (sub (eqSymb QP.velocity) QP.initial) (Concat [lBodyA, lBodyB])) (ClifS (VDim dim) Multivector Real) velU
+                 (sup (sub (eqSymb QP.velocity) QP.initial) (Concat [lBodyA, lBodyB])) (ClifS (VDim dim) Vector Real) velU
 
 finRelVel = uc (dccWDS "v_f^AB" (compoundPhrase'
                  (compoundPhrase' (cn "final relative") (QP.velocity ^. term))
                  (cn "between rigid bodies of A and B")) (phrase QP.velocity))
-                 (sup (sub (eqSymb QP.velocity) QP.final) (Concat [lBodyA, lBodyB])) (ClifS (VDim dim) Multivector Real) velU
+                 (sup (sub (eqSymb QP.velocity) QP.final) (Concat [lBodyA, lBodyB])) (ClifS (VDim dim) Vector Real) velU
 
 massIRigidBody = uc (dccWDS "massj" (compoundPhrase' (QPP.mass ^. term) 
                 (cn "of the j-th rigid body")) (phrase QPP.mass)) 
@@ -255,11 +256,11 @@ forcej = uc (dccWDS "forcej" (compoundPhrase'
 velAP = uc (dccWDS "v^AP" (compoundPhrase' (QP.velocity ^. term)
               (cn "of the point of collision P in body A")) 
               (phrase QP.velocity)) (sup (eqSymb QP.velocity)(Concat [lBodyA, lPoint])) 
-              (ClifS (VDim dim) Multivector Real) velU
+              (ClifS (VDim dim) Vector Real) velU
 velBP = uc (dccWDS "v^BP" (compoundPhrase' (QP.velocity ^. term)
               (cn "of the point of collision P in body B")) 
               (phrase QP.velocity)) (sup (eqSymb QP.velocity)(Concat [lBodyB, lPoint]))
-              (ClifS (VDim dim) Multivector Real) velU
+              (ClifS (VDim dim) Vector Real) velU
 
 force_1    = forceParam "1" "first"  label1
 force_2    = forceParam "2" "second" label2

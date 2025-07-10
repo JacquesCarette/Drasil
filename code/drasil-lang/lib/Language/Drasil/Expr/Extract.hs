@@ -2,6 +2,7 @@
 module Language.Drasil.Expr.Extract where
 
 import Data.Containers.ListUtils (nubOrd)
+import qualified Data.Map.Ordered as OM
 
 import Language.Drasil.Expr.Lang (Expr(..))
 import Language.Drasil.Space (RealInterval(..))
@@ -29,6 +30,8 @@ eNames (OrdBinaryOp _ a b)   = eNames a ++ eNames b
 eNames (CCCBinaryOp _ a b)   = eNames a ++ eNames b
 eNames (CCNBinaryOp _ a b)   = eNames a ++ eNames b
 eNames (NCCBinaryOp _ a b)   = eNames a ++ eNames b
+eNames (NatCCBinaryOp _ _ b) = eNames b  -- Natural is not an Expr, so only extract from b
+eNames (Clif _ b)            = concatMap eNames (OM.elems b)  -- Extract from BasisBlades values
 eNames (ESSBinaryOp _ _ s)   = eNames s
 eNames (ESBBinaryOp _ _ s)   = eNames s
 eNames (Operator _ _ e)      = eNames e
@@ -67,6 +70,8 @@ eNames' (OrdBinaryOp _ a b)   = eNames' a ++ eNames' b
 eNames' (CCCBinaryOp _ a b)   = eNames' a ++ eNames' b
 eNames' (CCNBinaryOp _ a b)   = eNames' a ++ eNames' b
 eNames' (NCCBinaryOp _ a b)   = eNames' a ++ eNames' b
+eNames' (NatCCBinaryOp _ _ b) = eNames' b  -- Natural is not an Expr, so only extract from b
+eNames' (Clif _ b)            = concatMap eNames' (OM.elems b)  -- Extract from BasisBlades values
 eNames' (ESSBinaryOp _ _ s)   = eNames' s
 eNames' (ESBBinaryOp _ _ s)   = eNames' s
 eNames' (Operator _ _ e)      = eNames' e

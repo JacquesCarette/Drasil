@@ -5,7 +5,7 @@
 module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 
 import Drasil.Code.CodeExpr (CodeExpr, LiteralC(int))
-import Language.Drasil (QuantityDict, Space(..), implVar, nounPhraseSP, vect3DS3DS,
+import Language.Drasil (QuantityDict, Space(..), implVar, nounPhraseSP, vect3DS,
   label, sub, HasSymbol(..), HasUID, Symbol, ExprC(..))
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands

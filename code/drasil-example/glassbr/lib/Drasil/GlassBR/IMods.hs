@@ -123,7 +123,7 @@ tolStrDisFac = imNoDeriv (equationalModelN (sdfTol ^. term) tolStrDisFacQD)
   ((qw loadDF, Nothing) : qwC pbTol probConstraint : qwUC modElas : abInputConstraints ++
     map qwUC [sflawParamM, sflawParamK, minThick]) (qw sdfTol) []
   [dRef astm2009] "sdfTol" [pbTolUsr, aGrtrThanB, stdVals [sflawParamM,
-      sflawParamK, mkUnitary modElas], hRef, ldfRef]  
+      sflawParamK, modElas], hRef, ldfRef]  
 
 tolStrDisFacQD :: SimpleQDef
 tolStrDisFacQD = mkQuantDef sdfTol $ ln (ln (recip_ (exactDbl 1 $- sy pbTol))

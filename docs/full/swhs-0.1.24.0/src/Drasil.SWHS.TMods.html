@@ -88,10 +88,10 @@ r -&gt; DecRef
 </span><a href="Drasil.SWHS.TMods.html#consThermECS"><span class="hs-identifier hs-var hs-var">consThermECS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; NonEmpty ModelExpr -&gt; ConstraintSet ModelExpr
 forall e. ConceptChunk -&gt; NonEmpty e -&gt; ConstraintSet e
 </span><span class="hs-identifier hs-var">mkConstraintSet</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="#local-6989586621679086980"><span class="hs-identifier hs-var">consCC</span></a></span><span> </span><span class="annot"><span class="annottext">NonEmpty ModelExpr
-</span><a href="#local-6989586621679086981"><span class="hs-identifier hs-var">rels</span></a></span><span>
-</span><span id="line-47"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679086980"><span class="annot"><span class="annottext">consCC :: ConceptChunk
-</span><a href="#local-6989586621679086980"><span class="hs-identifier hs-var hs-var">consCC</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
+</span><a href="#local-6989586621679086978"><span class="hs-identifier hs-var">consCC</span></a></span><span> </span><span class="annot"><span class="annottext">NonEmpty ModelExpr
+</span><a href="#local-6989586621679086979"><span class="hs-identifier hs-var">rels</span></a></span><span>
+</span><span id="line-47"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679086978"><span class="annot"><span class="annottext">consCC :: ConceptChunk
+</span><a href="#local-6989586621679086978"><span class="hs-identifier hs-var hs-var">consCC</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;consThermECS&quot;</span></span><span>
 </span><span id="line-48"></span><span>          </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -103,8 +103,8 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. Definition c =&gt; Lens' c Sentence
 Lens' ConceptChunk Sentence
 </span><span class="hs-identifier hs-var">defn</span></span><span class="hs-special">)</span><span>
-</span><span id="line-49"></span><span>        </span><span id="local-6989586621679086981"><span class="annot"><span class="annottext">rels :: NonEmpty ModelExpr
-</span><a href="#local-6989586621679086981"><span class="hs-identifier hs-var hs-var">rels</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[ModelExpr] -&gt; NonEmpty ModelExpr
+</span><span id="line-49"></span><span>        </span><span id="local-6989586621679086979"><span class="annot"><span class="annottext">rels :: NonEmpty ModelExpr
+</span><a href="#local-6989586621679086979"><span class="hs-identifier hs-var hs-var">rels</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[ModelExpr] -&gt; NonEmpty ModelExpr
 forall a. HasCallStack =&gt; [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelExpr
 </span><a href="Drasil.SWHS.TMods.html#consThermERel"><span class="hs-identifier hs-var">consThermERel</span></a></span><span class="hs-special">]</span><span>
@@ -236,9 +236,9 @@ r -&gt; Sentence
 </span><span id="line-71"></span><span>
 </span><span id="line-72"></span><span class="annot"><a href="Drasil.SWHS.TMods.html#sensHtETemplate"><span class="hs-identifier hs-type">sensHtETemplate</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.SWHS.TMods.html#PhaseChange"><span class="hs-identifier hs-type">PhaseChange</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span>
 </span><span id="line-73"></span><span id="sensHtETemplate"><span class="annot"><span class="annottext">sensHtETemplate :: PhaseChange -&gt; Sentence -&gt; TheoryModel
-</span><a href="Drasil.SWHS.TMods.html#sensHtETemplate"><span class="hs-identifier hs-var hs-var">sensHtETemplate</span></a></span></span><span> </span><span id="local-6989586621679087007"><span class="annot"><span class="annottext">PhaseChange
-</span><a href="#local-6989586621679087007"><span class="hs-identifier hs-var">pc</span></a></span></span><span> </span><span id="local-6989586621679087008"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679087008"><span class="hs-identifier hs-var">desc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr
+</span><a href="Drasil.SWHS.TMods.html#sensHtETemplate"><span class="hs-identifier hs-var hs-var">sensHtETemplate</span></a></span></span><span> </span><span id="local-6989586621679087005"><span class="annot"><span class="annottext">PhaseChange
+</span><a href="#local-6989586621679087005"><span class="hs-identifier hs-var">pc</span></a></span></span><span> </span><span id="local-6989586621679087006"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679087006"><span class="hs-identifier hs-var">desc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [ModelQDef]
@@ -263,36 +263,36 @@ ModelKind ModelExpr
 </span><span class="hs-identifier hs-var">tm</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelQDef -&gt; ModelKind ModelExpr
 forall e. QDefinition e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalModel'</span></span><span> </span><span class="annot"><span class="annottext">ModelQDef
-</span><a href="#local-6989586621679087009"><span class="hs-identifier hs-var">qd</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679087007"><span class="hs-identifier hs-var">qd</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-74"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-75"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelQDef
-</span><a href="#local-6989586621679087009"><span class="hs-identifier hs-var">qd</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Reference -&gt; DecRef
+</span><a href="#local-6989586621679087007"><span class="hs-identifier hs-var">qd</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Reference -&gt; DecRef
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; DecRef
 </span><span class="hs-identifier hs-var">dRef</span></span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.SWHS.References.html#sensHtESrc"><span class="hs-identifier hs-var">sensHtESrc</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;sensHtE&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679087008"><span class="hs-identifier hs-var">desc</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679087006"><span class="hs-identifier hs-var">desc</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-76"></span><span>    </span><span class="hs-keyword">where</span><span>
-</span><span id="line-77"></span><span>      </span><span id="local-6989586621679087009"><span class="annot"><span class="annottext">qd :: ModelQDef
-</span><a href="#local-6989586621679087009"><span class="hs-identifier hs-var hs-var">qd</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PhaseChange -&gt; ModelExpr -&gt; Sentence -&gt; ModelQDef
+</span><span id="line-77"></span><span>      </span><span id="local-6989586621679087007"><span class="annot"><span class="annottext">qd :: ModelQDef
+</span><a href="#local-6989586621679087007"><span class="hs-identifier hs-var hs-var">qd</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PhaseChange -&gt; ModelExpr -&gt; Sentence -&gt; ModelQDef
 </span><a href="Drasil.SWHS.TMods.html#sensHtEQD"><span class="hs-identifier hs-var">sensHtEQD</span></a></span><span> </span><span class="annot"><span class="annottext">PhaseChange
-</span><a href="#local-6989586621679087007"><span class="hs-identifier hs-var">pc</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679087012"><span class="hs-identifier hs-var">eqn</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679087008"><span class="hs-identifier hs-var">desc</span></a></span><span>
-</span><span id="line-78"></span><span>      </span><span id="local-6989586621679087012"><span class="annot"><span class="annottext">eqn :: ModelExpr
-</span><a href="#local-6989586621679087012"><span class="hs-identifier hs-var hs-var">eqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PhaseChange -&gt; ModelExpr
+</span><a href="#local-6989586621679087005"><span class="hs-identifier hs-var">pc</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679087010"><span class="hs-identifier hs-var">eqn</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679087006"><span class="hs-identifier hs-var">desc</span></a></span><span>
+</span><span id="line-78"></span><span>      </span><span id="local-6989586621679087010"><span class="annot"><span class="annottext">eqn :: ModelExpr
+</span><a href="#local-6989586621679087010"><span class="hs-identifier hs-var hs-var">eqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PhaseChange -&gt; ModelExpr
 </span><a href="Drasil.SWHS.TMods.html#sensHtEEqn"><span class="hs-identifier hs-var">sensHtEEqn</span></a></span><span> </span><span class="annot"><span class="annottext">PhaseChange
-</span><a href="#local-6989586621679087007"><span class="hs-identifier hs-var">pc</span></a></span><span>
+</span><a href="#local-6989586621679087005"><span class="hs-identifier hs-var">pc</span></a></span><span>
 </span><span id="line-79"></span><span>
 </span><span id="line-80"></span><span>
 </span><span id="line-81"></span><span class="annot"><a href="Drasil.SWHS.TMods.html#sensHtEQD"><span class="hs-identifier hs-type">sensHtEQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.SWHS.TMods.html#PhaseChange"><span class="hs-identifier hs-type">PhaseChange</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelQDef</span></span><span>
 </span><span id="line-82"></span><span id="sensHtEQD"><span class="annot"><span class="annottext">sensHtEQD :: PhaseChange -&gt; ModelExpr -&gt; Sentence -&gt; ModelQDef
-</span><a href="Drasil.SWHS.TMods.html#sensHtEQD"><span class="hs-identifier hs-var hs-var">sensHtEQD</span></a></span></span><span> </span><span id="local-6989586621679087014"><span class="annot"><span class="annottext">PhaseChange
-</span><a href="#local-6989586621679087014"><span class="hs-identifier hs-var">pc</span></a></span></span><span> </span><span id="local-6989586621679087015"><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679087015"><span class="hs-identifier hs-var">eqn</span></a></span></span><span> </span><span id="local-6989586621679087016"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679087016"><span class="hs-identifier hs-var">desc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.SWHS.TMods.html#sensHtEQD"><span class="hs-identifier hs-var hs-var">sensHtEQD</span></a></span></span><span> </span><span id="local-6989586621679087012"><span class="annot"><span class="annottext">PhaseChange
+</span><a href="#local-6989586621679087012"><span class="hs-identifier hs-var">pc</span></a></span></span><span> </span><span id="local-6989586621679087013"><span class="annot"><span class="annottext">ModelExpr
+</span><a href="#local-6989586621679087013"><span class="hs-identifier hs-var">eqn</span></a></span></span><span> </span><span id="local-6989586621679087014"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679087014"><span class="hs-identifier hs-var">desc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Sentence
 -&gt; (Stage -&gt; Symbol)
@@ -309,8 +309,8 @@ String
 -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">fromEqnSt''</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;sensHeat&quot;</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679087018"><span class="hs-identifier hs-var">np</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679087016"><span class="hs-identifier hs-var">desc</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Stage -&gt; Symbol
+</span><a href="#local-6989586621679087016"><span class="hs-identifier hs-var">np</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679087014"><span class="hs-identifier hs-var">desc</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Stage -&gt; Symbol
 forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">symbol</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">sensHeat</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk
@@ -320,14 +320,14 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. HasSpace c =&gt; Getter c Space
 Getter UnitalChunk Space
 </span><span class="hs-identifier hs-var">typ</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679087015"><span class="hs-identifier hs-var">eqn</span></a></span><span>
-</span><span id="line-83"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679087018"><span class="annot"><span class="annottext">np :: NP
-</span><a href="#local-6989586621679087018"><span class="hs-identifier hs-var hs-var">np</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP
+</span><a href="#local-6989586621679087013"><span class="hs-identifier hs-var">eqn</span></a></span><span>
+</span><span id="line-83"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679087016"><span class="annot"><span class="annottext">np :: NP
+</span><a href="#local-6989586621679087016"><span class="hs-identifier hs-var hs-var">np</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Sensible heat energy&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">PhaseChange
-</span><a href="#local-6989586621679087014"><span class="hs-identifier hs-var">pc</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><a href="#local-6989586621679087012"><span class="hs-identifier hs-var">pc</span></a></span><span> </span><span class="hs-keyword">of</span><span>
 </span><span id="line-84"></span><span>                                                       </span><span class="annot"><span class="annottext">PhaseChange
 </span><a href="Drasil.SWHS.TMods.html#Liquid"><span class="hs-identifier hs-var">Liquid</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot; (no state change)&quot;</span></span><span>
@@ -337,12 +337,12 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span id="line-86"></span><span>
 </span><span id="line-87"></span><span class="annot"><a href="Drasil.SWHS.TMods.html#sensHtEEqn"><span class="hs-identifier hs-type">sensHtEEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.SWHS.TMods.html#PhaseChange"><span class="hs-identifier hs-type">PhaseChange</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
 </span><span id="line-88"></span><span id="sensHtEEqn"><span class="annot"><span class="annottext">sensHtEEqn :: PhaseChange -&gt; ModelExpr
-</span><a href="Drasil.SWHS.TMods.html#sensHtEEqn"><span class="hs-identifier hs-var hs-var">sensHtEEqn</span></a></span></span><span> </span><span id="local-6989586621679087021"><span class="annot"><span class="annottext">PhaseChange
-</span><a href="#local-6989586621679087021"><span class="hs-identifier hs-var">pChange</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">PhaseChange
-</span><a href="#local-6989586621679087021"><span class="hs-identifier hs-var">pChange</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><a href="Drasil.SWHS.TMods.html#sensHtEEqn"><span class="hs-identifier hs-var hs-var">sensHtEEqn</span></a></span></span><span> </span><span id="local-6989586621679087019"><span class="annot"><span class="annottext">PhaseChange
+</span><a href="#local-6989586621679087019"><span class="hs-identifier hs-var">pChange</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">PhaseChange
+</span><a href="#local-6989586621679087019"><span class="hs-identifier hs-var">pChange</span></a></span><span> </span><span class="hs-keyword">of</span><span>
 </span><span id="line-89"></span><span>  </span><span class="annot"><span class="annottext">PhaseChange
 </span><a href="Drasil.SWHS.TMods.html#Liquid"><span class="hs-identifier hs-var">Liquid</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679087022"><span class="hs-identifier hs-var">liquidFormula</span></a></span><span>
+</span><a href="#local-6989586621679087020"><span class="hs-identifier hs-var">liquidFormula</span></a></span><span>
 </span><span id="line-90"></span><span>  </span><span class="annot"><span class="annottext">PhaseChange
 </span><a href="Drasil.SWHS.TMods.html#AllPhases"><span class="hs-identifier hs-var">AllPhases</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[(ModelExpr, ModelExpr)] -&gt; ModelExpr
 forall r. ExprC r =&gt; [(r, r)] -&gt; r
@@ -374,7 +374,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">meltPt</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelExpr
-</span><a href="#local-6989586621679087022"><span class="hs-identifier hs-var">liquidFormula</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
+</span><a href="#local-6989586621679087020"><span class="hs-identifier hs-var">liquidFormula</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -420,8 +420,8 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">temp</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-94"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-95"></span><span>    </span><span id="local-6989586621679087022"><span class="annot"><span class="annottext">liquidFormula :: ModelExpr
-</span><a href="#local-6989586621679087022"><span class="hs-identifier hs-var hs-var">liquidFormula</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
+</span><span id="line-95"></span><span>    </span><span id="local-6989586621679087020"><span class="annot"><span class="annottext">liquidFormula :: ModelExpr
+</span><a href="#local-6989586621679087020"><span class="hs-identifier hs-var hs-var">liquidFormula</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk

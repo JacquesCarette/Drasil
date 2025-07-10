@@ -51,8 +51,6 @@ module Drasil.GlassBR.Units
 sFlawPU :: UnitDefn
 
 module Drasil.GlassBR.Unitals
-symbolsWithDefns :: [UnitalChunk]
-modElas :: UnitalChunk
 constrained :: [ConstrainedChunk]
 plateLen :: UncertQ
 plateWidth :: UncertQ
@@ -90,22 +88,21 @@ sdMax :: ConstQDef
 stressDistFacMin :: ConstQDef
 stressDistFacMax :: ConstQDef
 sdMin :: ConstQDef
-unitarySymbols :: [UnitaryChunk]
 unitalSymbols :: [UnitalChunk]
-symbols :: [UnitaryChunk]
-minThick :: UnitaryChunk
-sflawParamK :: UnitaryChunk
-sflawParamM :: UnitaryChunk
 sdx :: UnitaryChunk
 sdy :: UnitaryChunk
 sdz :: UnitaryChunk
-loadDur :: UnitaryChunk
 demand :: UnitalChunk
 tmDemand :: UnitalChunk
 lRe :: UnitalChunk
 tmLRe :: UnitalChunk
+minThick :: UnitalChunk
 nonFactorL :: UnitalChunk
 eqTNTWeight :: UnitalChunk
+sflawParamM :: UnitalChunk
+sflawParamK :: UnitalChunk
+loadDur :: UnitalChunk
+modElas :: UnitalChunk
 unitless :: [QuantityDict]
 interps :: [QuantityDict]
 riskFun :: QuantityDict
@@ -139,6 +136,7 @@ load :: ConceptChunk
 specDeLoad :: ConceptChunk
 loadResis :: ConceptChunk
 longDurLoad :: ConceptChunk
+modE :: ConceptChunk
 nonFactoredL :: ConceptChunk
 glassWL :: ConceptChunk
 shortDurLoad :: ConceptChunk

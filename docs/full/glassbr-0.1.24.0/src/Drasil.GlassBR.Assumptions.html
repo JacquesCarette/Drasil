@@ -81,8 +81,8 @@ forall c.
 Concept c =&gt;
 String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;assumpSV&quot;</span></span><span>   </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Sentence
-</span><a href="Drasil.GlassBR.Assumptions.html#standardValuesDesc"><span class="hs-identifier hs-var">standardValuesDesc</span></a></span><span> </span><span class="annot"><span class="annottext">UnitaryChunk
+</span><span class="hs-string">&quot;assumpSV&quot;</span></span><span>   </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+</span><a href="Drasil.GlassBR.Assumptions.html#standardValuesDesc"><span class="hs-identifier hs-var">standardValuesDesc</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.GlassBR.Unitals.html#loadDur"><span class="hs-identifier hs-var">loadDur</span></a></span><span class="hs-special">)</span><span>      </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;standardValues&quot;</span></span><span>      </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">Doc.assumpDom</span></span><span>
@@ -313,10 +313,10 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">calculation</span></span><span class="hs-special">]</span><span>
 </span><span id="line-65"></span><span>
-</span><span id="line-66"></span><span class="annot"><a href="Drasil.GlassBR.Assumptions.html#standardValuesDesc"><span class="hs-identifier hs-type">standardValuesDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitaryChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-67"></span><span id="standardValuesDesc"><span class="annot"><span class="annottext">standardValuesDesc :: UnitaryChunk -&gt; Sentence
-</span><a href="Drasil.GlassBR.Assumptions.html#standardValuesDesc"><span class="hs-identifier hs-var hs-var">standardValuesDesc</span></a></span></span><span> </span><span id="local-6989586621679084645"><span class="annot"><span class="annottext">UnitaryChunk
-</span><a href="#local-6989586621679084645"><span class="hs-identifier hs-var">mainIdea</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-66"></span><span class="annot"><a href="Drasil.GlassBR.Assumptions.html#standardValuesDesc"><span class="hs-identifier hs-type">standardValuesDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitalChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-67"></span><span id="standardValuesDesc"><span class="annot"><span class="annottext">standardValuesDesc :: UnitalChunk -&gt; Sentence
+</span><a href="Drasil.GlassBR.Assumptions.html#standardValuesDesc"><span class="hs-identifier hs-var hs-var">standardValuesDesc</span></a></span></span><span> </span><span id="local-6989586621679084613"><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="#local-6989586621679084613"><span class="hs-identifier hs-var">mainIdea</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; NP
@@ -334,15 +334,15 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><span class="hs-identifier hs-var">SRS.valsOfAuxCons</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-glyph">::</span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-glyph">::</span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;are assumed for the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Sentence
+</span><span class="hs-string">&quot;are assumed for the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitaryChunk
-</span><a href="#local-6989586621679084645"><span class="hs-identifier hs-var">mainIdea</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="#local-6989586621679084613"><span class="hs-identifier hs-var">mainIdea</span></a></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-69"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
-</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitaryChunk -&gt; Sentence
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
-</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitaryChunk
-</span><a href="#local-6989586621679084645"><span class="hs-identifier hs-var">mainIdea</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="#local-6989586621679084613"><span class="hs-identifier hs-var">mainIdea</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;and the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
@@ -435,8 +435,8 @@ forall c. Idea c =&gt; c -&gt; Sentence
 </span><span id="line-85"></span><span>
 </span><span id="line-86"></span><span class="annot"><a href="Drasil.GlassBR.Assumptions.html#ldfConstantDesc"><span class="hs-identifier hs-type">ldfConstantDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-87"></span><span id="ldfConstantDesc"><span class="annot"><span class="annottext">ldfConstantDesc :: QuantityDict -&gt; Sentence
-</span><a href="Drasil.GlassBR.Assumptions.html#ldfConstantDesc"><span class="hs-identifier hs-var hs-var">ldfConstantDesc</span></a></span></span><span> </span><span id="local-6989586621679084656"><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679084656"><span class="hs-identifier hs-var">mainConcept</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><a href="Drasil.GlassBR.Assumptions.html#ldfConstantDesc"><span class="hs-identifier hs-var hs-var">ldfConstantDesc</span></a></span></span><span> </span><span id="local-6989586621679084624"><span class="annot"><span class="annottext">QuantityDict
+</span><a href="#local-6989586621679084624"><span class="hs-identifier hs-var">mainConcept</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;With&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence
@@ -459,11 +459,11 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`of_`</span></span><span>
 </span><span id="line-89"></span><span>  </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679084656"><span class="hs-identifier hs-var">mainConcept</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><a href="#local-6989586621679084624"><span class="hs-identifier hs-var">mainConcept</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679084656"><span class="hs-identifier hs-var">mainConcept</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679084624"><span class="hs-identifier hs-var">mainConcept</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; NP

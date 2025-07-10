@@ -4,26 +4,27 @@
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Code</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Mod</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Mod</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">asVC</span></span><span class="hs-special">)</span><span>
 </span><span id="line-5"></span><span>
 </span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GlassBR.ModuleDefs.html"><span class="hs-identifier">Drasil.GlassBR.ModuleDefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GlassBR.ModuleDefs.html#allMods"><span class="hs-identifier">allMods</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.ModuleDefs.html#implVars"><span class="hs-identifier">implVars</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html"><span class="hs-identifier">Drasil.GlassBR.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#specParamVals"><span class="hs-identifier">specParamVals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#symbols"><span class="hs-identifier">symbols</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#symbolsWithDefns"><span class="hs-identifier">symbolsWithDefns</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html"><span class="hs-identifier">Drasil.GlassBR.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#specParamVals"><span class="hs-identifier">specParamVals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#modElas"><span class="hs-identifier">modElas</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-8"></span><span>  </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#tmSymbols"><span class="hs-identifier">tmSymbols</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#interps"><span class="hs-identifier">interps</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#derivedInputDataConstraints"><span class="hs-identifier">derivedInputDataConstraints</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#unitless"><span class="hs-identifier">unitless</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#probBr"><span class="hs-identifier">probBr</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-9"></span><span>  </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#stressDistFac"><span class="hs-identifier">stressDistFac</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#nomThick"><span class="hs-identifier">nomThick</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#sdVector"><span class="hs-identifier">sdVector</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#inputsWUnitsUncrtn"><span class="hs-identifier">inputsWUnitsUncrtn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#inputsWUncrtn"><span class="hs-identifier">inputsWUncrtn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#glassTypeCon"><span class="hs-identifier">glassTypeCon</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-10"></span><span>
-</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(\\)</span></span><span class="hs-special">)</span><span>
-</span><span id="line-12"></span><span>
-</span><span id="line-13"></span><span class="annot"><a href="Drasil.GlassBR.Symbols.html#symbolsForSymbolTable"><span class="hs-identifier hs-type">symbolsForSymbolTable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-14"></span><span id="symbolsForSymbolTable"><span class="annot"><span class="annottext">symbolsForSymbolTable :: [QuantityDict]
+</span><span id="line-9"></span><span>  </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#stressDistFac"><span class="hs-identifier">stressDistFac</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#nomThick"><span class="hs-identifier">nomThick</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#sdVector"><span class="hs-identifier">sdVector</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#inputsWUnitsUncrtn"><span class="hs-identifier">inputsWUnitsUncrtn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#inputsWUncrtn"><span class="hs-identifier">inputsWUncrtn</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-10"></span><span>  </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#glassTypeCon"><span class="hs-identifier">glassTypeCon</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#unitalSymbols"><span class="hs-identifier">unitalSymbols</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(\\)</span></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span>
+</span><span id="line-14"></span><span class="annot"><a href="Drasil.GlassBR.Symbols.html#symbolsForSymbolTable"><span class="hs-identifier hs-type">symbolsForSymbolTable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-15"></span><span id="symbolsForSymbolTable"><span class="annot"><span class="annottext">symbolsForSymbolTable :: [QuantityDict]
 </span><a href="Drasil.GlassBR.Symbols.html#symbolsForSymbolTable"><span class="hs-identifier hs-var hs-var">symbolsForSymbolTable</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.GlassBR.Symbols.html#symbolsForTermTable"><span class="hs-identifier hs-var">symbolsForTermTable</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(UnitaryChunk -&gt; QuantityDict) -&gt; [UnitaryChunk] -&gt; [QuantityDict]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; QuantityDict) -&gt; [UnitalChunk] -&gt; [QuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[UnitaryChunk]
-</span><a href="Drasil.GlassBR.Unitals.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[UnitalChunk]
+</span><a href="Drasil.GlassBR.Unitals.html#unitalSymbols"><span class="hs-identifier hs-var">unitalSymbols</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-15"></span><span>  </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><span id="line-16"></span><span>  </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.GlassBR.Unitals.html#unitless"><span class="hs-identifier hs-var">unitless</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(ConstrainedChunk -&gt; QuantityDict)
@@ -42,16 +43,16 @@ c -&gt; ConstrainedChunk
 </span><a href="Drasil.GlassBR.Unitals.html#glassTypeCon"><span class="hs-identifier hs-var">glassTypeCon</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-16"></span><span>  </span><span class="annot"><span class="annottext">(UncertainChunk -&gt; QuantityDict)
+</span><span id="line-17"></span><span>  </span><span class="annot"><span class="annottext">(UncertainChunk -&gt; QuantityDict)
 -&gt; [UncertainChunk] -&gt; [QuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UncertainChunk -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[UncertainChunk]
 </span><a href="Drasil.GlassBR.Unitals.html#derivedInputDataConstraints"><span class="hs-identifier hs-var">derivedInputDataConstraints</span></a></span><span>
-</span><span id="line-17"></span><span>
-</span><span id="line-18"></span><span class="annot"><a href="Drasil.GlassBR.Symbols.html#symbolsForTermTable"><span class="hs-identifier hs-type">symbolsForTermTable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-19"></span><span id="symbolsForTermTable"><span class="annot"><span class="annottext">symbolsForTermTable :: [QuantityDict]
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span class="annot"><a href="Drasil.GlassBR.Symbols.html#symbolsForTermTable"><span class="hs-identifier hs-type">symbolsForTermTable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-20"></span><span id="symbolsForTermTable"><span class="annot"><span class="annottext">symbolsForTermTable :: [QuantityDict]
 </span><a href="Drasil.GlassBR.Symbols.html#symbolsForTermTable"><span class="hs-identifier hs-var hs-var">symbolsForTermTable</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UncertQ -&gt; QuantityDict) -&gt; [UncertQ] -&gt; [QuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; QuantityDict
@@ -68,7 +69,7 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#inputsWUncrtn"><span class="hs-identifier hs-var">inputsWUncrtn</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-20"></span><span>  </span><span class="annot"><span class="annottext">(UnitaryChunk -&gt; QuantityDict) -&gt; [UnitaryChunk] -&gt; [QuantityDict]
+</span><span id="line-21"></span><span>  </span><span class="annot"><span class="annottext">(UnitaryChunk -&gt; QuantityDict) -&gt; [UnitaryChunk] -&gt; [QuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitaryChunk -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
@@ -86,19 +87,17 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#specParamVals"><span class="hs-identifier hs-var">specParamVals</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span>
-</span><span id="line-21"></span><span>  </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; QuantityDict) -&gt; [UnitalChunk] -&gt; [QuantityDict]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+</span><span id="line-22"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[UnitalChunk]
-</span><a href="Drasil.GlassBR.Unitals.html#symbolsWithDefns"><span class="hs-identifier hs-var">symbolsWithDefns</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GlassBR.Unitals.html#modElas"><span class="hs-identifier hs-var">modElas</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.GlassBR.Unitals.html#interps"><span class="hs-identifier hs-var">interps</span></a></span><span>
-</span><span id="line-22"></span><span>
-</span><span id="line-23"></span><span>  </span><span class="hs-comment">-- include all module functions as symbols</span><span>
-</span><span id="line-24"></span><span class="annot"><a href="Drasil.GlassBR.Symbols.html#thisSymbols"><span class="hs-identifier hs-type">thisSymbols</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-25"></span><span id="thisSymbols"><span class="annot"><span class="annottext">thisSymbols :: [QuantityDict]
+</span><span id="line-23"></span><span>
+</span><span id="line-24"></span><span>  </span><span class="hs-comment">-- include all module functions as symbols</span><span>
+</span><span id="line-25"></span><span class="annot"><a href="Drasil.GlassBR.Symbols.html#thisSymbols"><span class="hs-identifier hs-type">thisSymbols</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-26"></span><span id="thisSymbols"><span class="annot"><span class="annottext">thisSymbols :: [QuantityDict]
 </span><a href="Drasil.GlassBR.Symbols.html#thisSymbols"><span class="hs-identifier hs-var hs-var">thisSymbols</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Func -&gt; QuantityDict) -&gt; [Func] -&gt; [QuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Func -&gt; QuantityDict
@@ -108,11 +107,11 @@ forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Name
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[Name]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[Class]
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679083251"><span class="annot"><span class="annottext">[Func]
-</span><a href="#local-6989586621679083251"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Func]
-</span><a href="#local-6989586621679083251"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Mod]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679083219"><span class="annot"><span class="annottext">[Func]
+</span><a href="#local-6989586621679083219"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Func]
+</span><a href="#local-6989586621679083219"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Mod]
 </span><a href="Drasil.GlassBR.ModuleDefs.html#allMods"><span class="hs-identifier hs-var">allMods</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-26"></span><span>  </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
+</span><span id="line-27"></span><span>  </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. Eq a =&gt; [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">\\</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.GlassBR.Symbols.html#symbolsForSymbolTable"><span class="hs-identifier hs-var">symbolsForSymbolTable</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
@@ -126,9 +125,9 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.GlassBR.Symbols.html#symbolsForSymbolTable"><span class="hs-identifier hs-var">symbolsForSymbolTable</span></a></span><span>
-</span><span id="line-27"></span><span>  </span><span>
-</span><span id="line-28"></span><span class="annot"><a href="Drasil.GlassBR.Symbols.html#thisTerms"><span class="hs-identifier hs-type">thisTerms</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-29"></span><span id="thisTerms"><span class="annot"><span class="annottext">thisTerms :: [QuantityDict]
+</span><span id="line-28"></span><span>  </span><span>
+</span><span id="line-29"></span><span class="annot"><a href="Drasil.GlassBR.Symbols.html#thisTerms"><span class="hs-identifier hs-type">thisTerms</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-30"></span><span id="thisTerms"><span class="annot"><span class="annottext">thisTerms :: [QuantityDict]
 </span><a href="Drasil.GlassBR.Symbols.html#thisTerms"><span class="hs-identifier hs-var hs-var">thisTerms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Func -&gt; QuantityDict) -&gt; [Func] -&gt; [QuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Func -&gt; QuantityDict
@@ -138,11 +137,11 @@ forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Name
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[Name]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[Class]
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679083253"><span class="annot"><span class="annottext">[Func]
-</span><a href="#local-6989586621679083253"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Func]
-</span><a href="#local-6989586621679083253"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Mod]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679083221"><span class="annot"><span class="annottext">[Func]
+</span><a href="#local-6989586621679083221"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Func]
+</span><a href="#local-6989586621679083221"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Mod]
 </span><a href="Drasil.GlassBR.ModuleDefs.html#allMods"><span class="hs-identifier hs-var">allMods</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-30"></span><span>  </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
+</span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. Eq a =&gt; [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">\\</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.GlassBR.Symbols.html#symbolsForTermTable"><span class="hs-identifier hs-var">symbolsForTermTable</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
@@ -156,4 +155,4 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.GlassBR.Symbols.html#symbolsForTermTable"><span class="hs-identifier hs-var">symbolsForTermTable</span></a></span><span>
-</span><span id="line-31"></span></pre></body></html>
+</span><span id="line-32"></span></pre></body></html>

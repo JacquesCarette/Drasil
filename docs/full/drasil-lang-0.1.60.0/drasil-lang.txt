@@ -4708,10 +4708,6 @@ vc'' :: Idea c => c -> Symbol -> Space -> QuantityDict
 -- | Similar to <a>vc</a>, but creates a <a>QuantityDict</a> from something
 --   that knows about <a>Stage</a>s.
 vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict
-
--- | Creates a <a>QuantityDict</a> from a <a>UID</a>, term (<a>NP</a>),
---   <a>Symbol</a>, <a>Space</a>, and unit (<a>UnitDefn</a>).
-vcUnit :: String -> NP -> Symbol -> Space -> UnitDefn -> QuantityDict
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Quantity.QuantityDict
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Quantity.QuantityDict
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Quantity.QuantityDict
@@ -4737,9 +4733,6 @@ unit :: Unitary c => c -> UnitDefn
 --   Ex. A pendulum arm is an idea associated with a symbol (l) and units
 --   (cm, m, etc.).
 data UnitaryChunk
-
--- | Makes a <a>UnitaryChunk</a> from a quantity with a unit.
-mkUnitary :: (Unitary u, MayHaveUnit u) => u -> UnitaryChunk
 
 -- | Builds the <a>QuantityDict</a> part from the <tt>UID</tt>, term
 --   (<a>NP</a>), <a>Symbol</a>, and <a>Space</a>. Assumes there's no
@@ -7153,10 +7146,6 @@ vc'' :: Idea c => c -> Symbol -> Space -> QuantityDict
 -- | Similar to <a>vc</a>, but creates a <a>QuantityDict</a> from something
 --   that knows about <a>Stage</a>s.
 vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict
-
--- | Creates a <a>QuantityDict</a> from a <a>UID</a>, term (<a>NP</a>),
---   <a>Symbol</a>, <a>Space</a>, and unit (<a>UnitDefn</a>).
-vcUnit :: String -> NP -> Symbol -> Space -> UnitDefn -> QuantityDict
 data QDefinition e
 
 -- | Create a <a>QDefinition</a> with a <a>UID</a> (as a <a>Space</a>),
@@ -7223,9 +7212,6 @@ unitary :: IsUnit u => String -> NP -> Symbol -> u -> Space -> UnitaryChunk
 -- | Same as <a>unitary</a> but with a <a>Symbol</a> that changes based on
 --   the <a>Stage</a>.
 unitary' :: IsUnit u => String -> NP -> (Stage -> Symbol) -> u -> Space -> UnitaryChunk
-
--- | Makes a <a>UnitaryChunk</a> from a quantity with a unit.
-mkUnitary :: (Unitary u, MayHaveUnit u) => u -> UnitaryChunk
 
 -- | Helper for getting the unit's <a>Symbol</a> from a chunk, as opposed
 --   to the symbols of the chunk itself.

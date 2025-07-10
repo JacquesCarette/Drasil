@@ -66,6 +66,7 @@ import Data.Maybe (maybeToList)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- * Main Function
+
 -- | Creates a document from a document description, a title combinator function, and system information.
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
 mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = docauthors} =

@@ -7,7 +7,7 @@ module Language.Drasil.Chunk.Quantity (
   DefinesQuantity(defLhs),
   -- * Constructors
   implVar, implVar', implVarUID, implVarUID', 
-  mkQuant, mkQuant', qw, vc, vcSt, vcUnit) where
+  mkQuant, mkQuant', qw, vc, vcSt) where
 
 import Control.Lens (Getter, (^.), makeLenses, view)
 

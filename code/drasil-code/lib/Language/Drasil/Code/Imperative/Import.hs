@@ -393,8 +393,8 @@ convExpr Operator{} = error "convExpr: Operator"
 convExpr (RealI c ri)  = do
   g <- get
   convExpr $ renderRealInt (lookupC g c) ri
-convExpr (NatCCBinaryOp o n a) = error "convExpr: NatCCBinaryOp not implemented" -- TODO
-convExpr (Clif dim bb) = error "convExpr: Clif not implemented" -- TODO
+convExpr (NatCCBinaryOp _ _ _) = error "convExpr: NatCCBinaryOp not implemented" -- TODO
+convExpr (Clif _ _) = error "convExpr: Clif not implemented" -- TODO
 
 -- | Generates a function/method call, based on the 'UID' of the chunk representing
 -- the function, the list of argument 'Expr's, the list of named argument 'Expr's,
@@ -461,16 +461,6 @@ unop Neg  = (#~)
 -- | Similar to 'unop', but for the 'Not' constructor.
 unopB :: (SharedProg r) => UFuncB -> (SValue r -> SValue r)
 unopB Not = (?!)
-
--- | Similar to 'unop', but for vectors.
-unopCN :: (SharedProg r) => UFuncCN -> (SValue r -> SValue r)
-unopCN Dim = listSize
-unopCN Norm = error "unop: Norm not implemented" -- TODO
-unopCN Grade = error "unop: Grade not implemented" -- TODO
-
--- | Similar to 'unop', but for vectors.
-unopCC :: (SharedProg r) => UFuncCC -> (SValue r -> SValue r)
-unopCC NegC = error "unop: Negation on Vectors not implemented" -- TODO
 
 -- Maps an 'ArithBinOp' to it's corresponding GOOL binary function.
 arithBfunc :: (SharedProg r) => ArithBinOp -> (SValue r -> SValue r -> SValue r)
@@ -1099,8 +1089,8 @@ convExprProc Operator{} = error "convExprProc: Operator"
 convExprProc (RealI c ri)  = do
   g <- get
   convExprProc $ renderRealInt (lookupC g c) ri
-convExprProc (NatCCBinaryOp o n a) = error "convExprProc: NatCCBinaryOp not implemented" -- TODO
-convExprProc (Clif dim bb) = error "convExprProc: Clif not implemented" -- TODO
+convExprProc (NatCCBinaryOp _ _ _) = error "convExprProc: NatCCBinaryOp not implemented" -- TODO
+convExprProc (Clif _ _) = error "convExprProc: Clif not implemented" -- TODO
 
 -- | Generates a function call, based on the 'UID' of the chunk representing
 -- the function, the list of argument 'Expr's, the list of named argument 'Expr's,

@@ -191,7 +191,7 @@ fillReqs (_:xs) si = fillReqs xs si
 
 -- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
-extractUnits dd xcdb = collectUnits xcdb $ ccss' (getDocDesc dd) (egetDocDesc dd) xcdb
+extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
 
 -- * Section Creator Functions
 
@@ -241,15 +241,15 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
     -- in ExtractDocDesc, then the passes which extract `DefinedQuantityDict`s will
     -- error out because some of the symbols in tables are only `QuantityDict`s, and thus
     -- missing a `Concept`.
-    mkSubRef SI {_quants = v, _systemdb = xcdb} (TSymb con) =
+    mkSubRef SI {_quants = v, _systemdb = cdb} (TSymb con) =
       SRS.tOfSymb
       [tsIntro con,
                 LlC $ table Equational (sortBySymbol
                 $ filter (`hasStageSymbol` Equational)
-                (nub $ map qw v ++ ccss' (getDocDesc dd) (egetDocDesc dd) xcdb))
+                (nub $ map qw v ++ ccss' (getDocDesc dd) (egetDocDesc dd) cdb))
                 atStart] []
-    mkSubRef SI {_systemdb = xcdb} (TSymb' f con) =
-      mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) xcdb) f con
+    mkSubRef SI {_systemdb = cdb} (TSymb' f con) =
+      mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
 
     mkSubRef _ (TAandA ideas) =
       SRS.tOfAbbAcc

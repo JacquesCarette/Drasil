@@ -4,21 +4,22 @@ import Language.Drasil (QuantityDict, qw, cnstrw)
 import Language.Drasil.Code (Mod(Mod), asVC)
 
 import Drasil.GlassBR.ModuleDefs (allMods, implVars)
-import Drasil.GlassBR.Unitals (specParamVals, symbols, symbolsWithDefns,
+import Drasil.GlassBR.Unitals (specParamVals, modElas,
   tmSymbols, interps, derivedInputDataConstraints, unitless, probBr,
-  stressDistFac, nomThick, sdVector, inputsWUnitsUncrtn, inputsWUncrtn, glassTypeCon)
+  stressDistFac, nomThick, sdVector, inputsWUnitsUncrtn, inputsWUncrtn,
+  glassTypeCon, unitalSymbols)
 
 import Data.List ((\\))
 
 symbolsForSymbolTable :: [QuantityDict]
-symbolsForSymbolTable = symbolsForTermTable ++ map qw symbols ++
+symbolsForSymbolTable = symbolsForTermTable ++ map qw unitalSymbols ++
   unitless ++ map qw [probBr, stressDistFac, nomThick, cnstrw glassTypeCon] ++
   map qw derivedInputDataConstraints
 
 symbolsForTermTable :: [QuantityDict]
 symbolsForTermTable = map qw inputsWUnitsUncrtn ++ map qw inputsWUncrtn ++
   map qw sdVector ++ tmSymbols ++ map qw specParamVals ++ 
-  map qw symbolsWithDefns ++ interps
+  [qw modElas] ++ interps
 
   -- include all module functions as symbols
 thisSymbols :: [QuantityDict]

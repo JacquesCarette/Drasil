@@ -21,15 +21,6 @@ import Drasil.GlassBR.Units (sFlawPU)
 
 {--}
 
-symbolsWithDefns :: [UnitalChunk]
-symbolsWithDefns = [modElas]
-
-modElas :: UnitalChunk
-modElas = uc' "modElas" (nounPhraseSP "modulus of elasticity of glass")
-  (S "the ratio of tensile stress to tensile strain of glass") cE Real pascal
-
-{--}
-
 constrained :: [ConstrainedChunk]
 constrained = map cnstrw dataConstraints ++ [nomThick, cnstrw glassTypeCon]
  -- map cnstrw inputDataConstraints ++ map cnstrw derivedInputDataConstraints -- ++
@@ -190,18 +181,14 @@ stressDistFacMax = mkQuantDef (vc "stressDistFacMax" (nounPhraseSP "maximum valu
   (subMax (eqSymb stressDistFac)) Real) (exactDbl 32)
 {--}
 
-unitarySymbols :: [UnitaryChunk]
-unitarySymbols = [minThick, sflawParamK, sflawParamM, loadDur]
-
 unitalSymbols :: [UnitalChunk]
-unitalSymbols = [demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight]
+unitalSymbols = [demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight,
+  sflawParamK, sflawParamM, loadDur, minThick]
 
-symbols :: [UnitaryChunk]
-symbols = unitarySymbols ++ map mkUnitary unitalSymbols
+sdx, sdy, sdz :: UnitaryChunk
 
-minThick, sflawParamK, sflawParamM, sdx, sdy, sdz, loadDur :: UnitaryChunk
-
-demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight :: UnitalChunk
+demand, tmDemand, lRe, tmLRe, minThick, nonFactorL, eqTNTWeight,
+  sflawParamM, sflawParamK, loadDur, modElas :: UnitalChunk
 
 demand      = uc demandq lQ Real pascal --correct Space used?
 
@@ -216,11 +203,22 @@ nonFactorL  = uc nonFactoredL (variable "NFL") Real pascal --correct Space used?
 eqTNTWeight = uc eqTNTChar (sub (eqSymb charWeight) (eqSymb tNT)) Real
   kilogram
 
-loadDur     = unitary "loadDur"    (nounPhraseSP "duration of load")
-  (sub lT lDur) second Real
+modElas     = uc modE cE Real pascal
 
-minThick    = unitary "minThick"   (nounPhraseSP "minimum thickness")
-  lH metre Real
+minThick    = uc' "minThick" (nounPhraseSP "minimum thickness")
+  (S "minimum thickness of the glass plate") lH Real metre
+
+sflawParamK = uc' "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?
+  (S ("surface flaw parameter related to the coefficient of " ++
+    "variation of the glass strength data")) lK Real sFlawPU
+
+sflawParamM = uc' "sflawParamM" (nounPhraseSP "surface flaw parameter") --parameterize?
+  (S "surface flaw parameter related to the mean of the glass strength data")
+  lM Real sFlawPU
+
+loadDur     = uc' "loadDur"    (nounPhraseSP "duration of load")
+  (S "the amount of time that a load is applied to the glass plate")
+  (sub lT lDur) Real second
 
 sdx         = unitary "sdx" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase xComp))
   (subX (eqSymb standOffDist)) metre Real
@@ -230,12 +228,6 @@ sdy         = unitary "sdy" (nounPhraseSent $ phrase standOffDist +:+ sParen (ph
 
 sdz         = unitary "sdz" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase zComp))
   (subZ (eqSymb standOffDist)) metre Real
-
-sflawParamK = unitary "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?
-  lK sFlawPU Real
-
-sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --parameterize?
-  lM sFlawPU Real
 
 {-Quantities-}
 
@@ -295,7 +287,7 @@ concepts = [aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, 
   explosion]
 
 aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
-  glTyFac, lateral, load, specDeLoad, loadResis, longDurLoad, nonFactoredL,
+  glTyFac, lateral, load, specDeLoad, loadResis, longDurLoad, modE, nonFactoredL,
   glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar,
   sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage, notSafe, bomb,
   explosion :: ConceptChunk
@@ -367,6 +359,8 @@ loadShareFac  = cc' lShareFac
   S "loads), in a sealed", short iGlass, S "unit"])
 longDurLoad   = dcc "longDurLoad"        (nounPhraseSP "long duration load")
   "any load lasting approximately 30 days"
+modE = dcc "modElas" (nounPhraseSP "modulus of elasticity of glass")
+  "the ratio of tensile stress to tensile strain of glass"
 nonFactoredL  = cc' nFL
   (foldlSent_ [S "three second duration uniform load associated with a",
   S "probability of breakage less than or equal to 8", plural lite,
@@ -403,8 +397,8 @@ constants = [constantM, constantK, constantModElas, constantLoadDur, constantLoa
                 ++ specParamVals
 
 constantM, constantK, constantModElas, constantLoadDur, constantLoadSF :: ConstQDef
-constantK       = mkQuantDef sflawParamK $ dbl 2.86e-53
 constantM       = mkQuantDef sflawParamM $ exactDbl 7
+constantK       = mkQuantDef sflawParamK $ dbl 2.86e-53
 constantModElas = mkQuantDef modElas     $ dbl 7.17e10
 constantLoadDur = mkQuantDef loadDur     $ exactDbl 3
 constantLoadSF  = mkQuantDef loadSF      $ exactDbl 1

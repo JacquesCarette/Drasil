@@ -12,7 +12,8 @@ import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
   ixPos, ixVel, iyPos, iyVel, kEnergy, linAccel, linDisp, linVelo, momentOfInertia, position, 
   potEnergy, pressure, restitutionCoef, scalarAccel, scalarPos, speed, time, torque,
   velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist, 
-  yPos, yVel, momentum, moment, fOfGravity, positionVec, tension, angFreq, period, frequency, chgMomentum)
+  yPos, yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angFreq, period, 
+  frequency, chgMomentum)
 
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second, hertz)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
@@ -75,6 +76,7 @@ chgMomentum            = uc CP.chgMomentum            (Concat [cDelta,vec cP])  
 momentum               = uc CP.momentum               (vec cP)                                    (ClifS (VDim vecDim) S.Vector Real)                   impulseU
 moment                 = uc CP.moment                 (vec cM)                                    (ClifS (VDim vecDim) S.Vector Real)                   torqueU      -- general vector torque in 2D/3D
 moment2D               = uc CP.moment                 cM                                          Real                                                torqueU      -- scalar moment in 2D
+
 -- FIXME: moment2D should eventually be a specialization of moment, not separately defined
 period                 = uc CP.period                 cT                                          Real                                                second
 position               = uc CP.position               (Concat [vec lP, label "(", lT, label ")"]) Real                                                metre

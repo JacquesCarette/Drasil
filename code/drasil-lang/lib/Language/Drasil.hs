@@ -109,13 +109,13 @@ module Language.Drasil (
   -- *** Quantities and Units
   -- Language.Drasil.Chunk.Quantity
   , QuantityDict, DefinesQuantity(defLhs), qw, mkQuant, mkQuant'
-  , codeVC, implVar, implVar', implVarUID, implVarUID' , vc, vc'', vcSt, vcUnit
+  , implVar, implVar', implVarUID, implVarUID' , vc, vc'', vcSt
   -- Language.Drasil.Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', fromEqnSt''
   , mkQDefSt, mkQuantDef, mkQuantDef', ec
   , mkFuncDef, mkFuncDef', mkFuncDefByQ
   -- Language.Drasil.Chunk.Unitary
-  , Unitary(..), UnitaryChunk, unitary, unitary', mkUnitary, unit_symb
+  , Unitary(..), UnitaryChunk, unitary, unitary', unit_symb
   -- Language.Drasil.Chunk.DefinedQuantity
   , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdQd, dqdWr
   -- Language.Drasil.Chunk.Unital

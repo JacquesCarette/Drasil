@@ -21,8 +21,7 @@ theoreticalModels = [tmLaplace, tmInvLaplace, tmSOSystem]
 tmLaplace :: TheoryModel
 tmLaplace
   = tm (othModel' laplaceRC)
-      [qw qdLaplaceTransform, qw qdFreqDomain, qw time, qw posInf,
-       qw qdFxnTDomain]
+      ([] :: [QuantityDict])
       ([] :: [ConceptChunk])
       []
       [express laplaceRel]
@@ -53,8 +52,7 @@ laplaceDesc
 tmInvLaplace :: TheoryModel
 tmInvLaplace
   = tm (othModel' invlaplaceRC)
-      [qw qdLaplaceTransform, qw qdFreqDomain, qw time, qw posInf,
-       qw qdFxnTDomain]
+      ([] :: [QuantityDict])
       ([] :: [ConceptChunk])
       []
       [express invLaplaceRel]
@@ -83,7 +81,7 @@ invLaplaceDesc
 tmSOSystem :: TheoryModel
 tmSOSystem
   = tm (othModel' tmSOSystemRC)
-      [qw mass, qw qdDampingCoeff, qw qdStiffnessCoeff, qw qdFreqDomain]
+      ([] :: [QuantityDict])
       ([] :: [ConceptChunk])
       []
       [express soSystemRel]

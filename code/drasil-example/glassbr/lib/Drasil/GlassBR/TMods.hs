@@ -22,7 +22,7 @@ tMods = [pbIsSafe, lrIsSafe]
 
 lrIsSafe :: TheoryModel
 lrIsSafe = tm (equationalModel' lrIsSafeQD)
-   [qw isSafeLoad, qw tmLRe, qw tmDemand] ([] :: [ConceptChunk])
+   ([] :: [QuantityDict]) ([] :: [ConceptChunk])
    [lrIsSafeQD] [] [] [dRef astm2009] 
    "isSafeLoad" [lrIsSafeDesc]
 
@@ -37,7 +37,7 @@ lrIsSafeDesc = tModDesc isSafeLoad
 
 pbIsSafe :: TheoryModel
 pbIsSafe = tm (equationalModel' pbIsSafeQD) 
-  [qw isSafeProb, qw probFail, qw pbTolfail] ([] :: [ConceptChunk])
+  ([] :: [QuantityDict]) ([] :: [ConceptChunk])
   [pbIsSafeQD] [] [] [dRef astm2009]
   "isSafeProb" [pbIsSafeDesc]
 

@@ -12,8 +12,8 @@ import Data.Drasil.Concepts.Math (cartesian, equation, vector)
 import Data.Drasil.Concepts.Physics (gravity, twoD, rigidBody)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density, 
   mass, specWeight, vol)
-import qualified Data.Drasil.Quantities.Physics as QP (acceleration, velocity, position,
-  force, gravitationalAccel, pressure, torque, weight, positionVec, time, momentOfInertia,
+import qualified Data.Drasil.Quantities.Physics as QP (acceleration, velocity,
+  force, gravitationalAccel, pressure, torque, weight, positionVec, momentOfInertia,
   angularAccel, speed)
 import Data.Drasil.Equations.Defining.Physics
 import Data.Drasil.Equations.Defining.Derivations
@@ -144,12 +144,12 @@ newtonSLRNotes = [foldlSent
 
 accelerationTM :: TheoryModel
 accelerationTM = tm (equationalModelU "accelerationTM" accelerationQD)
-  [qw QP.acceleration, qw QP.velocity, qw QP.time] ([] :: [ConceptChunk]) [accelerationQD] [] []
+  ([] :: [QuantityDict]) ([] :: [ConceptChunk]) [accelerationQD] [] []
   [dRef accelerationWiki] "acceleration" []
 
 -- * Velocity
 
 velocityTM :: TheoryModel
 velocityTM = tm (equationalModelU "velocityTM" velocityQD)
-  [qw QP.velocity, qw QP.position, qw QP.time] ([] :: [ConceptChunk]) [velocityQD] [] []
+  ([] :: [QuantityDict]) ([] :: [ConceptChunk]) [velocityQD] [] []
   [dRef velocityWiki] "velocity" []

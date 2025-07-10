@@ -167,7 +167,7 @@ tMods = [accelerationTM, velocityTM]
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- Actual IdeaDicts
-  [sciCompS, projMotion, rectVel] ++ doccon ++ educon ++ compcon ++ unitalIdeas ++
+  [sciCompS, projMotion, rectVel] ++ doccon ++ educon ++ compcon ++
   -- CIs
   nw progName : map nw doccon' ++ map nw physicCon'
 
@@ -309,9 +309,6 @@ outputs = [message, qw offset, qw flightDur]
 
 unitalQuants :: [QuantityDict]
 unitalQuants = message : map qw constrained
-
-unitalIdeas :: [IdeaDict]
-unitalIdeas = [nw message]
 
 inConstraints :: [UncertQ]
 inConstraints = [launAngleUnc, launSpeedUnc, targPosUnc]

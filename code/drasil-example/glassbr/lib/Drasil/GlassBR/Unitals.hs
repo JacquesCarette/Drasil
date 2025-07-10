@@ -206,16 +206,19 @@ eqTNTWeight = uc eqTNTChar (sub (eqSymb charWeight) (eqSymb tNT)) Real
 modElas     = uc modE cE Real pascal
 
 minThick    = uc' "minThick" (nounPhraseSP "minimum thickness")
-  (S "placeholder") lH Real metre
+  (S "minimum thickness of the glass plate") lH Real metre
 
 sflawParamK = uc' "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?
-  (S "placeholder") lK Real sFlawPU
+  (S ("surface flaw parameter related to the coefficient of " ++
+    "variation of the glass strength data")) lK Real sFlawPU
 
 sflawParamM = uc' "sflawParamM" (nounPhraseSP "surface flaw parameter") --parameterize?
-  (S "placeholder") lM Real sFlawPU
+  (S "surface flaw parameter related to the mean of the glass strength data")
+  lM Real sFlawPU
 
 loadDur     = uc' "loadDur"    (nounPhraseSP "duration of load")
-  (S "placeholder") (sub lT lDur) Real second
+  (S "the amount of time that a load is applied to the glass plate")
+  (sub lT lDur) Real second
 
 sdx         = unitary "sdx" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase xComp))
   (subX (eqSymb standOffDist)) metre Real

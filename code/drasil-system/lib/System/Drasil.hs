@@ -1,10 +1,14 @@
 module System.Drasil (
-  -- * System Information
-    System(..)
-  -- * Lenses
-  , HasSystem(..)
+  -- * System
+  -- ** Types
+  System(..), SystemKind(..),
+  -- ** Lenses
+  HasSystem(..),
+  -- ** Functions
+  whatsTheBigIdea,
   -- * Reference Database
-  , Purpose, Background, Scope, Motivation
+  -- ** Types
+  Purpose, Background, Scope, Motivation,
 ) where
 
 import System.Drasil.System

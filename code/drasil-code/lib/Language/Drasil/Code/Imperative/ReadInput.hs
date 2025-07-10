@@ -3,19 +3,17 @@ module Language.Drasil.Code.Imperative.ReadInput (
   sampleInputDD, readWithDataDesc
 ) where
 
-import Language.Drasil as S hiding (Data, CodeVarChunk)
+import Language.Drasil hiding (Data, Matrix, CodeVarChunk)
+import Language.Drasil.Space (ClifKind(..))
 import Language.Drasil.Code.DataDesc (DataDesc'(..), Data'(..), DataItem'(..),
   Delimiter, dataDesc, junk, list, singleton')
 import Language.Drasil.Chunk.Code (CodeVarChunk)
-import Language.Drasil.Expr.Development (Expr(..))
+import Language.Drasil.Expr.Development (Expr(Matrix))
 
 import Control.Lens ((^.))
 import Data.List (intersperse, isPrefixOf, transpose)
 import Data.List.Split (splitOn)
 import Data.List.NonEmpty (NonEmpty(..), toList)
-import Language.Drasil.Space
-
--- TODO: Update this logic to handle all ClifKind cases (Scalar, Vector, Multivector, etc.)
 
 -- | Reads data from a file and converts the values to 'Expr's. The file must be
 -- formatted according to the 'DataDesc'' passed as a parameter.
@@ -30,13 +28,13 @@ readWithDataDesc fp ddsc = do
       readData Junk _ = []
       readData (Datum d) s = [readDataItem d s]
       readData (Data dis 0 d) s = zipWith readDataItem (toList dis) (splitOn d s)
-      readData (Data ((DI c [dlm1]):|_) 1 dlm2) s = map ((S.Matrix . (:[])) .
+      readData (Data ((DI c [dlm1]):|_) 1 dlm2) s = map ((Matrix . (:[])) .
         map (strAsExpr (getInnerType $ c ^. typ))) $ transpose $
         map (splitOn dlm2) $ splitOn dlm1 s
-      readData (Data ((DI c [dlm1, dlm3]):|_) 1 dlm2) s = map (S.Matrix .
+      readData (Data ((DI c [dlm1, dlm3]):|_) 1 dlm2) s = map (Matrix .
         map (map (strAsExpr (getInnerType $ c ^. typ)))) $ transpose $
         map (map (splitOn dlm3) . splitOn dlm2) $ splitOn dlm1 s
-      readData (Data ((DI c [dlm1, dlm2]):|_) 2 dlm3) s = map (S.Matrix .
+      readData (Data ((DI c [dlm1, dlm2]):|_) 2 dlm3) s = map (Matrix .
         map (map (strAsExpr (getInnerType $ c ^. typ))) . transpose) $
         transpose $ map (map (splitOn dlm3) . splitOn dlm2) $ splitOn dlm1 s
       readData _ _ = error "Invalid degree of intermixing in DataDesc or list with more than 2 dimensions (not yet supported)"
@@ -69,7 +67,7 @@ readWithDataDesc fp ddsc = do
 sampleInputDD :: [CodeVarChunk] -> DataDesc'
 sampleInputDD ds = dataDesc (junk : intersperse junk (map toData ds)) "\n"
   where toData d = toData' (d ^. typ) d
-        toData' t@(ClifS _ _ _) d = list d
+        toData' t@(ClifS _ Vector _) d = list d
           (take (getDimension t) ([", ", "; "] ++ iterate (':':) ":"))
         toData' _ d = singleton' d
 
@@ -84,12 +82,10 @@ strAsExpr Rational s = dbl (read s :: Double)
 strAsExpr String   s = str s
 strAsExpr _        _ = error "strAsExpr should only be numeric space or string"
 
+-- | Gets the dimension of a 'Space'.
 getDimension :: Space -> Int
-getDimension (ClifS _ kind s) = case kind of
-  Scalar      -> 0
-  Vector      -> 1 + getDimension s
-  Bivector    -> 2 + getDimension s -- or another logic if needed
-  Multivector -> 2 + getDimension s -- treat as 2D for now (matrix)
+getDimension (ClifS (Fixed n) Vector _) = fromIntegral n
+getDimension (ClifS _ Vector t) = 1 + getDimension t
 getDimension _ = 0
 
 -- | Splits a string at the first (and only the first) occurrence of a delimiter.
@@ -104,21 +100,12 @@ splitAtFirst = splitAtFirst' []
         dropDelim [] s = s
         dropDelim _ [] = error "impossible"
 
+-- | Converts a list of 'String's to a Matrix 'Expr' of a given 'Space'.
 strListAsExpr :: Space -> [String] -> Expr
-strListAsExpr (ClifS _ kind t) ss = case kind of
-  Scalar      -> case ss of
-                   [x] -> strAsExpr t x
-                   _   -> error "Expected a single value for Scalar"
-  Vector      -> Matrix [map (strAsExpr t) ss]
-  Bivector    -> Matrix [map (strAsExpr t) ss]  -- or error if unclear format
-  Multivector -> error "Use strList2DAsExpr for Multivectors"
-strListAsExpr _ _ = error "strListAsExpr called on unsupported or non-ClifS Space"
+strListAsExpr (ClifS _ Vector t) ss = Matrix [map (strAsExpr t) ss]
+strListAsExpr _ _ = error "strListsAsExpr called on non-vector space"
 
+-- | Converts a 2D list of 'String's to a Matrix 'Expr' of a given 'Space'.
 strList2DAsExpr :: Space -> [[String]] -> Expr
-strList2DAsExpr (ClifS _ kind t) sss = case kind of
-  Multivector -> Matrix $ map (map (strAsExpr t)) sss
-  Bivector    -> Matrix $ map (map (strAsExpr t)) sss  -- temporary
-  Vector      -> error "Use strListAsExpr for Vector"
-  Scalar      -> error "Scalar does not accept 2D data"
-strList2DAsExpr _ _ = error "strList2DAsExpr called on unsupported or non-ClifS Space"
-
+strList2DAsExpr (ClifS _ Vector (ClifS _ Vector t)) sss = Matrix $ map (map (strAsExpr t)) sss
+strList2DAsExpr _ _ = error "strLists2DAsExprs called on non-2D-vector space"

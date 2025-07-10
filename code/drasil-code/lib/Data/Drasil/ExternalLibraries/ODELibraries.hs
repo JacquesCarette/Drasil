@@ -11,9 +11,10 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
 ) where
 
 import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
-  QuantityDict, HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, ClifS, ClifKind), implVar,
+  QuantityDict, HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, ClifS), implVar,
   implVarUID, implVarUID', qw, compoundPhrase, nounPhrase, nounPhraseSP, label,
-  sub, Idea(getA), NamedIdea(term), Stage(..), (+++), vectNDS)
+  sub, Idea(getA), NamedIdea(term), Stage(..), (+++))
+import Language.Drasil.Space (ClifKind(..), Dimension(..))
 import Language.Drasil.Display (Symbol(Label, Concat))
 
 import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
@@ -39,7 +40,7 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   mkODELibNoPath, pubStateVar, privStateVar,
   NamedArgument, narg)
 
-import Drasil.Code.CodeExpr
+import Drasil.Code.CodeExpr hiding (dim)
 import Drasil.Code.CodeExpr.Development
 
 import Control.Lens ((^.), _1, _2, over)

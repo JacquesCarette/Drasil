@@ -22,14 +22,13 @@ import Drasil.GlassBR.Units (sFlawPU)
 {--}
 
 constrained :: [ConstrainedChunk]
-constrained = map cnstrw dataConstraints ++ [nomThick, cnstrw glassTypeCon]
+constrained = map cnstrw dataConstraints ++ map cnstrw [nomThick, glassTypeCon]
  -- map cnstrw inputDataConstraints ++ map cnstrw derivedInputDataConstraints -- ++
   -- [cnstrw probBr, cnstrw probFail, cnstrw stressDistFac, cnstrw nomThick, cnstrw glassTypeCon]
 
 plateLen, plateWidth, aspectRatio, charWeight, standOffDist :: UncertQ
 pbTol, tNT :: UncertainChunk
-nomThick :: ConstrainedChunk
-glassTypeCon :: ConstrConcept
+glassTypeCon, nomThick :: ConstrConcept
 
 {--}
 
@@ -47,7 +46,7 @@ inputsWUncrtn = [pbTol, tNT]
 
 --inputs with no uncertainties
 inputsNoUncrtn :: [ConstrainedChunk]
-inputsNoUncrtn = [cnstrw glassTypeCon, nomThick]
+inputsNoUncrtn = map cnstrw [glassTypeCon, nomThick]
 
 --derived inputs with units and uncertainties
 derivedInsWUnitsUncrtn :: [UncertQ]
@@ -102,9 +101,10 @@ standOffDist = uq (constrained' (uc sD (variable "SD") Real metre)
   [ gtZeroConstr,
     sfwrRange $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
 
-nomThick = cuc "nomThick"
+nomThick = cuc' "nomThick"
   (nounPhraseSent $ S "nominal thickness t is in" +:+ eS (mkSet Rational (map dbl nominalThicknesses)))
-  lT millimetre {-Discrete nominalThicknesses, but not implemented-} Rational
+  "the specified standard thickness of the glass plate" lT millimetre
+  {-Discrete nominalThicknesses, but not implemented-} Rational
   [sfwrElem $ mkSet Rational (map dbl nominalThicknesses)] $ exactDbl 8 -- for testing
 
 glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)

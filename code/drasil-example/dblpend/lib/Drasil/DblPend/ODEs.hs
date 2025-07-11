@@ -6,7 +6,8 @@ import Language.Drasil.Code (odeInfo, odeOptions, quantvar, ODEInfo,
 
 import Data.Drasil.Quantities.Physics (time)
 
-import Drasil.DblPend.Unitals(massObj_1, massObj_2, lenRod_1, lenRod_2, pendDisAngle)
+import Drasil.DblPend.Unitals(massObj_1, massObj_2, lenRod_1, lenRod_2, pendDisAngle,
+  velVec_1, accelVec_1, velVec_2, accelVec_2)
 import Prelude hiding (sin, cos)
 
 dblPenODEOpts :: ODEOptions
@@ -20,25 +21,12 @@ dblPenODEInfo = odeInfo
   (exactDbl 0)
   (exactDbl 20) -- final time
   [dbl 1.3463968515384828, exactDbl 0, dbl 2.356194490192345, exactDbl 0] -- unit in radian [3*pi/7, 0, 3*pi/4, 0]
-  [ o1,
-    neg g $* 
-      (two $* m1 $+ m2) $* sin t1 $-
-      (m2 $* g $* sin (t1 $- (two $* t2))) $-
-      ((two $* sin (t1 $- t2 )) $* m2 $* 
-      (square o2 $* l2 $+
-      (square o1 $* l1 $* cos (t1 $- t2))))
-      $/
-      l1 $* (two $* m1 $+ m2 $-
-      (m2 $* cos (two $* t1  $- (two $* t2)))),
-    o2,
-    two $* sin (t1 $- t2) $* 
-      (square o1 $* l1 $* (m1 $+ m2 ) $+
-      (g $* (m1 $+ m2 ) $* cos t1) $+
-      (square o2 $* l2 $* m2 $* cos (t1 $- t2 )))
-      $/
-      l2 $* (two $* m1 $+ m2 $-
-      (m2 $* cos (two $* t1  $- (two $* t2))))
-    ]
+  [
+    velVec_1,    -- d(theta1)/dt = omega1
+    accelVec_1,  -- d(omega1)/dt = vector a1
+    velVec_2,    -- d(theta2)/dt = omega2
+    accelVec_2   -- d(omega2)/dt = vector a2
+  ]
   dblPenODEOpts
     where t1  = idx (sy pendDisAngle) (int 0) -- t1 is theta 1
           o1  = idx (sy pendDisAngle) (int 1) -- o1 is omega 1

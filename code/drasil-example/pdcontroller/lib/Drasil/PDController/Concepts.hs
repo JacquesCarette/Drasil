@@ -140,5 +140,3 @@ termDefs
   = [pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
      propControl, derControl, ccFrequencyDomain, ccTimeDomain,
      controlVariable, ccTransferFxn, ccDampingCoeff, ccStiffCoeff]
-
-

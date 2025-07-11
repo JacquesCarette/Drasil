@@ -100,7 +100,7 @@ soSystemRel
   = exactDbl 1 
     $/ (sy mass $* square (sy qdFreqDomain) 
     $+ (sy qdDampingCoeff $* sy qdFreqDomain)
-    $+ sy qdStiffnessCoeff)
+    $+ sy dqdStiffnessCoeff)
 
 soSystemDesc :: Sentence
 soSystemDesc

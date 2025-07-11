@@ -566,9 +566,6 @@ symbMap :: FolderLocation -> ChunkDB
 --   <a>System</a>.
 getSysName :: System -> IdeaDict
 
--- | Empty database needed for <a>si</a> to work.
-usedDB :: ChunkDB
-
 -- | Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]
 

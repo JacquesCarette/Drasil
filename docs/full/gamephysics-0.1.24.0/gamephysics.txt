@@ -226,8 +226,7 @@ stdFields :: Fields
 ideaDicts :: [IdeaDict]
 conceptChunks :: [ConceptChunk]
 symbMap :: ChunkDB
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
-usedDB :: ChunkDB
+abbreviationsList :: [IdeaDict]
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

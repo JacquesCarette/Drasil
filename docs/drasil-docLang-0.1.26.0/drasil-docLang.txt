@@ -797,7 +797,7 @@ data RefTab
 [TSymb'] :: LFunc -> [TSIntro] -> RefTab
 
 -- | Default.
-[TAandA] :: RefTab
+[TAandA] :: [IdeaDict] -> RefTab
 
 -- | Stakeholders section (wraps stakeholders subsections
 --   <a>StkhldrSub</a>).
@@ -1091,7 +1091,7 @@ data () => ChunkDB
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data () => System
-[SI] :: forall a b e h i j. (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> ChunkDB -> System
+[SI] :: forall a b e h i j. (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
 
 -- | Smart constructor for chunk databases. Takes in the following:
 --   
@@ -1354,7 +1354,7 @@ data RefTab
 [TSymb'] :: LFunc -> [TSIntro] -> RefTab
 
 -- | Default.
-[TAandA] :: RefTab
+[TAandA] :: [IdeaDict] -> RefTab
 
 -- | Stakeholders section (wraps stakeholders subsections
 --   <a>StkhldrSub</a>).

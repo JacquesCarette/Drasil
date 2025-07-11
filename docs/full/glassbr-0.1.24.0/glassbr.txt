@@ -19,7 +19,7 @@ aR :: CI
 fullyT :: CI
 glassTypeFac :: CI
 heatS :: CI
-loadDurFactor :: CI
+lDurFac :: CI
 iGlass :: CI
 lGlass :: CI
 lResistance :: CI
@@ -113,11 +113,11 @@ isSafeLoad :: QuantityDict
 sdfTol :: QuantityDict
 dimlessLoad :: QuantityDict
 tolLoad :: QuantityDict
-lDurFac :: QuantityDict
 interpY :: QuantityDict
 interpZ :: QuantityDict
 gTF :: DefinedQuantityDict
 loadSF :: DefinedQuantityDict
+loadDF :: DefinedQuantityDict
 lBreak :: Symbol
 lDur :: Symbol
 lFail :: Symbol
@@ -134,6 +134,7 @@ glTyFac :: ConceptChunk
 lateral :: ConceptChunk
 load :: ConceptChunk
 specDeLoad :: ConceptChunk
+loadDurFac :: ConceptChunk
 loadResis :: ConceptChunk
 longDurLoad :: ConceptChunk
 modE :: ConceptChunk
@@ -227,7 +228,7 @@ glaTyFacQD :: SimpleQDef
 gtfRef :: Sentence
 hFromt :: DataDefinition
 hFromtQD :: SimpleQDef
-loadDF :: DataDefinition
+loadDFDD :: DataDefinition
 standOffDis :: DataDefinition
 eqTNTWDD :: DataDefinition
 calofDemand :: DataDefinition
@@ -264,9 +265,8 @@ purp :: Sentence
 background :: Sentence
 ideaDicts :: [IdeaDict]
 conceptChunks :: [ConceptChunk]
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
+abbreviationsList :: [IdeaDict]
 symbMap :: ChunkDB
-usedDB :: ChunkDB
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

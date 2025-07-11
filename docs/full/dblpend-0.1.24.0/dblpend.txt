@@ -234,13 +234,12 @@ motivation :: Sentence
 background :: Sentence
 symbolsAll :: [QuantityDict]
 ideaDicts :: [IdeaDict]
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
+abbreviationsList :: [IdeaDict]
 conceptChunks :: [ConceptChunk]
 symbMap :: ChunkDB
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
-usedDB :: ChunkDB
 stdFields :: Fields
 concIns :: [ConceptInstance]
 justification :: CI -> Sentence

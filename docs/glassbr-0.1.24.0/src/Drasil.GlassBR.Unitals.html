@@ -13,8 +13,8 @@
 </span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.SI_Units</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">kilogram</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">metre</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">millimetre</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">pascal</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">second</span></span><span class="hs-special">)</span><span>
 </span><span id="line-14"></span><span>
 </span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html"><span class="hs-identifier">Drasil.GlassBR.Concepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#aR"><span class="hs-identifier">aR</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#annealed"><span class="hs-identifier">annealed</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#fullyT"><span class="hs-identifier">fullyT</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#glaPlane"><span class="hs-identifier">glaPlane</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#glassTypeFac"><span class="hs-identifier">glassTypeFac</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-16"></span><span>  </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#heatS"><span class="hs-identifier">heatS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#iGlass"><span class="hs-identifier">iGlass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#lGlass"><span class="hs-identifier">lGlass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#lResistance"><span class="hs-identifier">lResistance</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#lShareFac"><span class="hs-identifier">lShareFac</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#loadDurFactor"><span class="hs-identifier">loadDurFactor</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#nFL"><span class="hs-identifier">nFL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#responseTy"><span class="hs-identifier">responseTy</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-17"></span><span>  </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#stdOffDist"><span class="hs-identifier">stdOffDist</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span>  </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#heatS"><span class="hs-identifier">heatS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#iGlass"><span class="hs-identifier">iGlass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#lGlass"><span class="hs-identifier">lGlass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#lResistance"><span class="hs-identifier">lResistance</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#lShareFac"><span class="hs-identifier">lShareFac</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#nFL"><span class="hs-identifier">nFL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#responseTy"><span class="hs-identifier">responseTy</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-17"></span><span>  </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#stdOffDist"><span class="hs-identifier">stdOffDist</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#lDurFac"><span class="hs-identifier">lDurFac</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GlassBR.References.html"><span class="hs-identifier">Drasil.GlassBR.References</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GlassBR.References.html#astm2009"><span class="hs-identifier">astm2009</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.References.html#astm2012"><span class="hs-identifier">astm2012</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.References.html#astm2016"><span class="hs-identifier">astm2016</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Units.html"><span class="hs-identifier">Drasil.GlassBR.Units</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GlassBR.Units.html#sFlawPU"><span class="hs-identifier">sFlawPU</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-20"></span><span class="hs-comment">--FIXME: Many of the current terms can be separated into terms and defns?</span><span>
@@ -1238,8 +1238,7 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span id="line-236"></span><span>  </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#sdfTol"><span class="hs-identifier hs-var">sdfTol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#dimlessLoad"><span class="hs-identifier hs-var">dimlessLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.GlassBR.Unitals.html#tolLoad"><span class="hs-identifier hs-var">tolLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.GlassBR.Unitals.html#lDurFac"><span class="hs-identifier hs-var">lDurFac</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
+</span><a href="Drasil.GlassBR.Unitals.html#tolLoad"><span class="hs-identifier hs-var">tolLoad</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(DefinedQuantityDict -&gt; QuantityDict)
 -&gt; [DefinedQuantityDict] -&gt; [QuantityDict]
@@ -1248,7 +1247,8 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#gTF"><span class="hs-identifier hs-var">gTF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
-</span><a href="Drasil.GlassBR.Unitals.html#loadSF"><span class="hs-identifier hs-var">loadSF</span></a></span><span class="hs-special">]</span><span>
+</span><a href="Drasil.GlassBR.Unitals.html#loadSF"><span class="hs-identifier hs-var">loadSF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.GlassBR.Unitals.html#loadDF"><span class="hs-identifier hs-var">loadDF</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-237"></span><span>
 </span><span id="line-238"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#interps"><span class="hs-identifier hs-type">interps</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
 </span><span id="line-239"></span><span id="interps"><span class="annot"><span class="annottext">interps :: [QuantityDict]
@@ -1257,9 +1257,9 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#interpZ"><span class="hs-identifier hs-var">interpZ</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-240"></span><span>
 </span><span id="line-241"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#riskFun"><span class="hs-identifier hs-type">riskFun</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#isSafePb"><span class="hs-identifier hs-type">isSafePb</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#isSafeProb"><span class="hs-identifier hs-type">isSafeProb</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#isSafeLR"><span class="hs-identifier hs-type">isSafeLR</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#isSafeLoad"><span class="hs-identifier hs-type">isSafeLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#sdfTol"><span class="hs-identifier hs-type">sdfTol</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-242"></span><span>  </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#dimlessLoad"><span class="hs-identifier hs-type">dimlessLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#tolLoad"><span class="hs-identifier hs-type">tolLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#lDurFac"><span class="hs-identifier hs-type">lDurFac</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#interpY"><span class="hs-identifier hs-type">interpY</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#interpZ"><span class="hs-identifier hs-type">interpZ</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span>
+</span><span id="line-242"></span><span>  </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#dimlessLoad"><span class="hs-identifier hs-type">dimlessLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#tolLoad"><span class="hs-identifier hs-type">tolLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#interpY"><span class="hs-identifier hs-type">interpY</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#interpZ"><span class="hs-identifier hs-type">interpZ</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span>
 </span><span id="line-243"></span><span>
-</span><span id="line-244"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#gTF"><span class="hs-identifier hs-type">gTF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#loadSF"><span class="hs-identifier hs-type">loadSF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span>
+</span><span id="line-244"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#gTF"><span class="hs-identifier hs-type">gTF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#loadSF"><span class="hs-identifier hs-type">loadSF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#loadDF"><span class="hs-identifier hs-type">loadDF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span>
 </span><span id="line-245"></span><span>
 </span><span id="line-246"></span><span id="dimlessLoad"><span class="annot"><span class="annottext">dimlessLoad :: QuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#dimlessLoad"><span class="hs-identifier hs-var hs-var">dimlessLoad</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
@@ -1348,11 +1348,10 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span>
 </span><span id="line-261"></span><span>
 </span><span id="line-262"></span><span>
-</span><span id="line-263"></span><span id="lDurFac"><span class="annot"><span class="annottext">lDurFac :: QuantityDict
-</span><a href="Drasil.GlassBR.Unitals.html#lDurFac"><span class="hs-identifier hs-var hs-var">lDurFac</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Symbol -&gt; Space -&gt; QuantityDict
-forall c. Idea c =&gt; c -&gt; Symbol -&gt; Space -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">vc''</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="Drasil.GlassBR.Concepts.html#loadDurFactor"><span class="hs-identifier hs-var">loadDurFactor</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-263"></span><span id="loadDF"><span class="annot"><span class="annottext">loadDF :: DefinedQuantityDict
+</span><a href="Drasil.GlassBR.Unitals.html#loadDF"><span class="hs-identifier hs-var hs-var">loadDF</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqdNoUnit</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.GlassBR.Unitals.html#loadDurFac"><span class="hs-identifier hs-var">loadDurFac</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;LDF&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span>
@@ -1461,7 +1460,7 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><a href="Drasil.GlassBR.Unitals.html#explosion"><span class="hs-identifier hs-var">explosion</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-288"></span><span>
 </span><span id="line-289"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#aspectRatioCon"><span class="hs-identifier hs-type">aspectRatioCon</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#glBreakage"><span class="hs-identifier hs-type">glBreakage</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#lite"><span class="hs-identifier hs-type">lite</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#glassTy"><span class="hs-identifier hs-type">glassTy</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#annealedGl"><span class="hs-identifier hs-type">annealedGl</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#fTemperedGl"><span class="hs-identifier hs-type">fTemperedGl</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#hStrengthGl"><span class="hs-identifier hs-type">hStrengthGl</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-290"></span><span>  </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#glTyFac"><span class="hs-identifier hs-type">glTyFac</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#lateral"><span class="hs-identifier hs-type">lateral</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#load"><span class="hs-identifier hs-type">load</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#specDeLoad"><span class="hs-identifier hs-type">specDeLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#loadResis"><span class="hs-identifier hs-type">loadResis</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#longDurLoad"><span class="hs-identifier hs-type">longDurLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#modE"><span class="hs-identifier hs-type">modE</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#nonFactoredL"><span class="hs-identifier hs-type">nonFactoredL</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-290"></span><span>  </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#glTyFac"><span class="hs-identifier hs-type">glTyFac</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#lateral"><span class="hs-identifier hs-type">lateral</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#load"><span class="hs-identifier hs-type">load</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#specDeLoad"><span class="hs-identifier hs-type">specDeLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#loadDurFac"><span class="hs-identifier hs-type">loadDurFac</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#loadResis"><span class="hs-identifier hs-type">loadResis</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#longDurLoad"><span class="hs-identifier hs-type">longDurLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#modE"><span class="hs-identifier hs-type">modE</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#nonFactoredL"><span class="hs-identifier hs-type">nonFactoredL</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-291"></span><span>  </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#glassWL"><span class="hs-identifier hs-type">glassWL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#shortDurLoad"><span class="hs-identifier hs-type">shortDurLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#loadShareFac"><span class="hs-identifier hs-type">loadShareFac</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#probBreak"><span class="hs-identifier hs-type">probBreak</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#specA"><span class="hs-identifier hs-type">specA</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#blastResisGla"><span class="hs-identifier hs-type">blastResisGla</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#eqTNTChar"><span class="hs-identifier hs-type">eqTNTChar</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-292"></span><span>  </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#sD"><span class="hs-identifier hs-type">sD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#blast"><span class="hs-identifier hs-type">blast</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#blastTy"><span class="hs-identifier hs-type">blastTy</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#glassGeo"><span class="hs-identifier hs-type">glassGeo</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#capacity"><span class="hs-identifier hs-type">capacity</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#demandq"><span class="hs-identifier hs-type">demandq</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#safeMessage"><span class="hs-identifier hs-type">safeMessage</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#notSafe"><span class="hs-identifier hs-type">notSafe</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#bomb"><span class="hs-identifier hs-type">bomb</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-293"></span><span>  </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#explosion"><span class="hs-identifier hs-type">explosion</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
@@ -1742,19 +1741,26 @@ r -&gt; Sentence
 </span><span class="hs-string">&quot;applied load (demand) or pressure&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-350"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;a uniformly distributed lateral pressure&quot;</span></span><span>
-</span><span id="line-351"></span><span id="loadResis"><span class="annot"><span class="annottext">loadResis :: ConceptChunk
+</span><span id="line-351"></span><span id="loadDurFac"><span class="annot"><span class="annottext">loadDurFac :: ConceptChunk
+</span><a href="Drasil.GlassBR.Unitals.html#loadDurFac"><span class="hs-identifier hs-var hs-var">loadDurFac</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence -&gt; ConceptChunk
+forall c. Idea c =&gt; c -&gt; Sentence -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">cc'</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><a href="Drasil.GlassBR.Concepts.html#lDurFac"><span class="hs-identifier hs-var">lDurFac</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;factor related to the effect of sustained loading on glass strength&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-352"></span><span id="loadResis"><span class="annot"><span class="annottext">loadResis :: ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#loadResis"><span class="hs-identifier hs-var hs-var">loadResis</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence -&gt; ConceptChunk
 forall c. Idea c =&gt; c -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">cc'</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.GlassBR.Concepts.html#lResistance"><span class="hs-identifier hs-var">lResistance</span></a></span><span>
-</span><span id="line-352"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-353"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the uniform lateral load that a glass construction can sustain&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-353"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-354"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;based upon a given probability of breakage and load duration as defined in&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-354"></span><span>  </span><span class="annot"><span class="annottext">Citation -&gt; RefInfo -&gt; Sentence
+</span><span id="line-355"></span><span>  </span><span class="annot"><span class="annottext">Citation -&gt; RefInfo -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; RefInfo -&gt; Sentence
@@ -1765,19 +1771,19 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">Page</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">53</span></span><span class="hs-special">]</span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-355"></span><span id="loadShareFac"><span class="annot"><span class="annottext">loadShareFac :: ConceptChunk
+</span><span id="line-356"></span><span id="loadShareFac"><span class="annot"><span class="annottext">loadShareFac :: ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#loadShareFac"><span class="hs-identifier hs-var hs-var">loadShareFac</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence -&gt; ConceptChunk
 forall c. Idea c =&gt; c -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">cc'</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.GlassBR.Concepts.html#lShareFac"><span class="hs-identifier hs-var">lShareFac</span></a></span><span>
-</span><span id="line-356"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-357"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;a multiplying factor derived from the load sharing between the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-357"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-358"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;double glazing, of equal or different thicknesses and types (including the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-358"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-359"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;layered behaviour of&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
@@ -1785,7 +1791,7 @@ forall c. Idea c =&gt; c -&gt; Sentence
 </span><a href="Drasil.GlassBR.Concepts.html#lGlass"><span class="hs-identifier hs-var">lGlass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;under long duration&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-359"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-360"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;loads), in a sealed&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
@@ -1793,38 +1799,38 @@ forall c. Idea c =&gt; c -&gt; Sentence
 </span><a href="Drasil.GlassBR.Concepts.html#iGlass"><span class="hs-identifier hs-var">iGlass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;unit&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-360"></span><span id="longDurLoad"><span class="annot"><span class="annottext">longDurLoad :: ConceptChunk
+</span><span id="line-361"></span><span id="longDurLoad"><span class="annot"><span class="annottext">longDurLoad :: ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#longDurLoad"><span class="hs-identifier hs-var hs-var">longDurLoad</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;longDurLoad&quot;</span></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;long duration load&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-361"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-362"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;any load lasting approximately 30 days&quot;</span></span><span>
-</span><span id="line-362"></span><span id="modE"><span class="annot"><span class="annottext">modE :: ConceptChunk
+</span><span id="line-363"></span><span id="modE"><span class="annot"><span class="annottext">modE :: ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#modE"><span class="hs-identifier hs-var hs-var">modE</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modElas&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;modulus of elasticity of glass&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-363"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-364"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the ratio of tensile stress to tensile strain of glass&quot;</span></span><span>
-</span><span id="line-364"></span><span id="nonFactoredL"><span class="annot"><span class="annottext">nonFactoredL :: ConceptChunk
+</span><span id="line-365"></span><span id="nonFactoredL"><span class="annot"><span class="annottext">nonFactoredL :: ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#nonFactoredL"><span class="hs-identifier hs-var hs-var">nonFactoredL</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence -&gt; ConceptChunk
 forall c. Idea c =&gt; c -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">cc'</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.GlassBR.Concepts.html#nFL"><span class="hs-identifier hs-var">nFL</span></a></span><span>
-</span><span id="line-365"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-366"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;three second duration uniform load associated with a&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-366"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-367"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;probability of breakage less than or equal to 8&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#lite"><span class="hs-identifier hs-var">lite</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-367"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-368"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;per 1000 for monolithic&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
@@ -1832,27 +1838,27 @@ forall c. Idea c =&gt; c -&gt; Sentence
 </span><a href="Drasil.GlassBR.Concepts.html#annealed"><span class="hs-identifier hs-var">annealed</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;glass&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-368"></span><span id="notSafe"><span class="annot"><span class="annottext">notSafe :: ConceptChunk
+</span><span id="line-369"></span><span id="notSafe"><span class="annot"><span class="annottext">notSafe :: ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#notSafe"><span class="hs-identifier hs-var hs-var">notSafe</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;notSafe&quot;</span></span><span>     </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;not safe&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-369"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-370"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;For the given input parameters, the glass is NOT considered safe.&quot;</span></span><span>
-</span><span id="line-370"></span><span id="probBreak"><span class="annot"><span class="annottext">probBreak :: ConceptChunk
+</span><span id="line-371"></span><span id="probBreak"><span class="annot"><span class="annottext">probBreak :: ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#probBreak"><span class="hs-identifier hs-var hs-var">probBreak</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrainedChunk -&gt; Sentence -&gt; ConceptChunk
 forall c. Idea c =&gt; c -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">cc'</span></span><span> </span><span class="annot"><span class="annottext">ConstrainedChunk
 </span><a href="Drasil.GlassBR.Unitals.html#probBr"><span class="hs-identifier hs-var">probBr</span></a></span><span>
-</span><span id="line-371"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span id="line-372"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the fraction of glass lites or plies that would break at the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-372"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-373"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;first occurrence of a specified load and duration, typically expressed&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-373"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-374"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;in lites per 1000&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Sentence) -&gt; Sentence -&gt; Sentence
@@ -1863,90 +1869,90 @@ forall r.
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">Citation
 </span><a href="Drasil.GlassBR.References.html#astm2016"><span class="hs-identifier hs-var">astm2016</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-374"></span><span id="safeMessage"><span class="annot"><span class="annottext">safeMessage :: ConceptChunk
+</span><span id="line-375"></span><span id="safeMessage"><span class="annot"><span class="annottext">safeMessage :: ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#safeMessage"><span class="hs-identifier hs-var hs-var">safeMessage</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;safeMessage&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;safe&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-375"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-376"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;For the given input parameters, the glass is considered safe.&quot;</span></span><span>
-</span><span id="line-376"></span><span id="sD"><span class="annot"><span class="annottext">sD :: ConceptChunk
+</span><span id="line-377"></span><span id="sD"><span class="annot"><span class="annottext">sD :: ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#sD"><span class="hs-identifier hs-var hs-var">sD</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence -&gt; ConceptChunk
 forall c. Idea c =&gt; c -&gt; Sentence -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">cc'</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.GlassBR.Concepts.html#stdOffDist"><span class="hs-identifier hs-var">stdOffDist</span></a></span><span>
-</span><span id="line-377"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-378"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the distance from the glazing surface to the centroid of a hemispherical&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-378"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-379"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;high explosive charge&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-379"></span><span id="shortDurLoad"><span class="annot"><span class="annottext">shortDurLoad :: ConceptChunk
+</span><span id="line-380"></span><span id="shortDurLoad"><span class="annot"><span class="annottext">shortDurLoad :: ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#shortDurLoad"><span class="hs-identifier hs-var hs-var">shortDurLoad</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;shortDurLoad&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;short duration load&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-380"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-381"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;any load lasting 3 seconds or less&quot;</span></span><span>
-</span><span id="line-381"></span><span id="specA"><span class="annot"><span class="annottext">specA :: ConceptChunk
+</span><span id="line-382"></span><span id="specA"><span class="annot"><span class="annottext">specA :: ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#specA"><span class="hs-identifier hs-var hs-var">specA</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;specA&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;specifying authority&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-382"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><span id="line-383"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the design professional responsible for interpreting applicable &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-383"></span><span>    </span><span class="annot"><span class="annottext">String
+</span><span id="line-384"></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;regulations of authorities having jurisdiction and considering &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-384"></span><span>    </span><span class="annot"><span class="annottext">String
+</span><span id="line-385"></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;appropriate site specific factors to determine the appropriate &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-385"></span><span>    </span><span class="annot"><span class="annottext">String
+</span><span id="line-386"></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;values used to calculate the specified design load, and furnishing&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-386"></span><span>    </span><span class="annot"><span class="annottext">String
+</span><span id="line-387"></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot; other information required to perform this practice&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-387"></span><span id="specDeLoad"><span class="annot"><span class="annottext">specDeLoad :: ConceptChunk
+</span><span id="line-388"></span><span id="specDeLoad"><span class="annot"><span class="annottext">specDeLoad :: ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#specDeLoad"><span class="hs-identifier hs-var hs-var">specDeLoad</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;specDeLoad&quot;</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;specified design load&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-388"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><span id="line-389"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the magnitude in Pa (psf), type (for example, wind or snow) and &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-389"></span><span>    </span><span class="annot"><span class="annottext">String
+</span><span id="line-390"></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;duration of the load given by the specifying authority&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-390"></span><span>
-</span><span id="line-391"></span><span class="hs-comment">{--}</span><span>
-</span><span id="line-392"></span><span>
-</span><span id="line-393"></span><span class="hs-comment">--Constants--</span><span>
-</span><span id="line-394"></span><span>
-</span><span id="line-395"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#constants"><span class="hs-identifier hs-type">constants</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstQDef</span></span><span class="hs-special">]</span><span>
-</span><span id="line-396"></span><span id="constants"><span class="annot"><span class="annottext">constants :: [ConstQDef]
+</span><span id="line-391"></span><span>
+</span><span id="line-392"></span><span class="hs-comment">{--}</span><span>
+</span><span id="line-393"></span><span>
+</span><span id="line-394"></span><span class="hs-comment">--Constants--</span><span>
+</span><span id="line-395"></span><span>
+</span><span id="line-396"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#constants"><span class="hs-identifier hs-type">constants</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstQDef</span></span><span class="hs-special">]</span><span>
+</span><span id="line-397"></span><span id="constants"><span class="annot"><span class="annottext">constants :: [ConstQDef]
 </span><a href="Drasil.GlassBR.Unitals.html#constants"><span class="hs-identifier hs-var hs-var">constants</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.GlassBR.Unitals.html#constantM"><span class="hs-identifier hs-var">constantM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.GlassBR.Unitals.html#constantK"><span class="hs-identifier hs-var">constantK</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.GlassBR.Unitals.html#constantModElas"><span class="hs-identifier hs-var">constantModElas</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.GlassBR.Unitals.html#constantLoadDur"><span class="hs-identifier hs-var">constantLoadDur</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.GlassBR.Unitals.html#constantLoadSF"><span class="hs-identifier hs-var">constantLoadSF</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-397"></span><span>                </span><span class="annot"><span class="annottext">[ConstQDef] -&gt; [ConstQDef] -&gt; [ConstQDef]
+</span><span id="line-398"></span><span>                </span><span class="annot"><span class="annottext">[ConstQDef] -&gt; [ConstQDef] -&gt; [ConstQDef]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[ConstQDef]
 </span><a href="Drasil.GlassBR.Unitals.html#specParamVals"><span class="hs-identifier hs-var">specParamVals</span></a></span><span>
-</span><span id="line-398"></span><span>
-</span><span id="line-399"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#constantM"><span class="hs-identifier hs-type">constantM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#constantK"><span class="hs-identifier hs-type">constantK</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#constantModElas"><span class="hs-identifier hs-type">constantModElas</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#constantLoadDur"><span class="hs-identifier hs-type">constantLoadDur</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#constantLoadSF"><span class="hs-identifier hs-type">constantLoadSF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstQDef</span></span><span>
-</span><span id="line-400"></span><span id="constantM"><span class="annot"><span class="annottext">constantM :: ConstQDef
+</span><span id="line-399"></span><span>
+</span><span id="line-400"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#constantM"><span class="hs-identifier hs-type">constantM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#constantK"><span class="hs-identifier hs-type">constantK</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#constantModElas"><span class="hs-identifier hs-type">constantModElas</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#constantLoadDur"><span class="hs-identifier hs-type">constantLoadDur</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#constantLoadSF"><span class="hs-identifier hs-type">constantLoadSF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstQDef</span></span><span>
+</span><span id="line-401"></span><span id="constantM"><span class="annot"><span class="annottext">constantM :: ConstQDef
 </span><a href="Drasil.GlassBR.Unitals.html#constantM"><span class="hs-identifier hs-var hs-var">constantM</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
 forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -1956,7 +1962,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">7</span></span><span>
-</span><span id="line-401"></span><span id="constantK"><span class="annot"><span class="annottext">constantK :: ConstQDef
+</span><span id="line-402"></span><span id="constantK"><span class="annot"><span class="annottext">constantK :: ConstQDef
 </span><a href="Drasil.GlassBR.Unitals.html#constantK"><span class="hs-identifier hs-var hs-var">constantK</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
 forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -1966,7 +1972,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">2.86e-53</span></span><span>
-</span><span id="line-402"></span><span id="constantModElas"><span class="annot"><span class="annottext">constantModElas :: ConstQDef
+</span><span id="line-403"></span><span id="constantModElas"><span class="annot"><span class="annottext">constantModElas :: ConstQDef
 </span><a href="Drasil.GlassBR.Unitals.html#constantModElas"><span class="hs-identifier hs-var hs-var">constantModElas</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
 forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -1976,7 +1982,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">7.17e10</span></span><span>
-</span><span id="line-403"></span><span id="constantLoadDur"><span class="annot"><span class="annottext">constantLoadDur :: ConstQDef
+</span><span id="line-404"></span><span id="constantLoadDur"><span class="annot"><span class="annottext">constantLoadDur :: ConstQDef
 </span><a href="Drasil.GlassBR.Unitals.html#constantLoadDur"><span class="hs-identifier hs-var hs-var">constantLoadDur</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
 forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -1986,7 +1992,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">3</span></span><span>
-</span><span id="line-404"></span><span id="constantLoadSF"><span class="annot"><span class="annottext">constantLoadSF :: ConstQDef
+</span><span id="line-405"></span><span id="constantLoadSF"><span class="annot"><span class="annottext">constantLoadSF :: ConstQDef
 </span><a href="Drasil.GlassBR.Unitals.html#constantLoadSF"><span class="hs-identifier hs-var hs-var">constantLoadSF</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Literal -&gt; ConstQDef
 forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
@@ -1996,26 +2002,26 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1</span></span><span>
-</span><span id="line-405"></span><span>
-</span><span id="line-406"></span><span class="hs-comment">--Equations--</span><span>
-</span><span id="line-407"></span><span>
-</span><span id="line-408"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#sdVector"><span class="hs-identifier hs-type">sdVector</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitaryChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-409"></span><span id="sdVector"><span class="annot"><span class="annottext">sdVector :: [UnitaryChunk]
+</span><span id="line-406"></span><span>
+</span><span id="line-407"></span><span class="hs-comment">--Equations--</span><span>
+</span><span id="line-408"></span><span>
+</span><span id="line-409"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#sdVector"><span class="hs-identifier hs-type">sdVector</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitaryChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-410"></span><span id="sdVector"><span class="annot"><span class="annottext">sdVector :: [UnitaryChunk]
 </span><a href="Drasil.GlassBR.Unitals.html#sdVector"><span class="hs-identifier hs-var hs-var">sdVector</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitaryChunk
 </span><a href="Drasil.GlassBR.Unitals.html#sdx"><span class="hs-identifier hs-var">sdx</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk
 </span><a href="Drasil.GlassBR.Unitals.html#sdy"><span class="hs-identifier hs-var">sdy</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitaryChunk
 </span><a href="Drasil.GlassBR.Unitals.html#sdz"><span class="hs-identifier hs-var">sdz</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-410"></span><span>
-</span><span id="line-411"></span><span class="hs-comment">--</span><span>
-</span><span id="line-412"></span><span class="hs-comment">--Pulled to be used in &quot;Terms And Definitions&quot; Section--</span><span>
-</span><span id="line-413"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#termsWithDefsOnly"><span class="hs-identifier hs-type">termsWithDefsOnly</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#termsWithAccDefn"><span class="hs-identifier hs-type">termsWithAccDefn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#loadTypes"><span class="hs-identifier hs-type">loadTypes</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#glassTypes"><span class="hs-identifier hs-type">glassTypes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-414"></span><span>
-</span><span id="line-415"></span><span id="glassTypes"><span class="annot"><span class="annottext">glassTypes :: [ConceptChunk]
+</span><span id="line-411"></span><span>
+</span><span id="line-412"></span><span class="hs-comment">--</span><span>
+</span><span id="line-413"></span><span class="hs-comment">--Pulled to be used in &quot;Terms And Definitions&quot; Section--</span><span>
+</span><span id="line-414"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#termsWithDefsOnly"><span class="hs-identifier hs-type">termsWithDefsOnly</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#termsWithAccDefn"><span class="hs-identifier hs-type">termsWithAccDefn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#loadTypes"><span class="hs-identifier hs-type">loadTypes</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#glassTypes"><span class="hs-identifier hs-type">glassTypes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-415"></span><span>
+</span><span id="line-416"></span><span id="glassTypes"><span class="annot"><span class="annottext">glassTypes :: [ConceptChunk]
 </span><a href="Drasil.GlassBR.Unitals.html#glassTypes"><span class="hs-identifier hs-var hs-var">glassTypes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#annealedGl"><span class="hs-identifier hs-var">annealedGl</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#fTemperedGl"><span class="hs-identifier hs-var">fTemperedGl</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#hStrengthGl"><span class="hs-identifier hs-var">hStrengthGl</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-416"></span><span id="termsWithDefsOnly"><span class="annot"><span class="annottext">termsWithDefsOnly :: [ConceptChunk]
+</span><span id="line-417"></span><span id="termsWithDefsOnly"><span class="annot"><span class="annottext">termsWithDefsOnly :: [ConceptChunk]
 </span><a href="Drasil.GlassBR.Unitals.html#termsWithDefsOnly"><span class="hs-identifier hs-var hs-var">termsWithDefsOnly</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#glBreakage"><span class="hs-identifier hs-var">glBreakage</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#lateral"><span class="hs-identifier hs-var">lateral</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -2023,13 +2029,13 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><a href="Drasil.GlassBR.Unitals.html#specA"><span class="hs-identifier hs-var">specA</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#blastResisGla"><span class="hs-identifier hs-var">blastResisGla</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#eqTNTChar"><span class="hs-identifier hs-var">eqTNTChar</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-417"></span><span id="termsWithAccDefn"><span class="annot"><span class="annottext">termsWithAccDefn :: [ConceptChunk]
+</span><span id="line-418"></span><span id="termsWithAccDefn"><span class="annot"><span class="annottext">termsWithAccDefn :: [ConceptChunk]
 </span><a href="Drasil.GlassBR.Unitals.html#termsWithAccDefn"><span class="hs-identifier hs-var hs-var">termsWithAccDefn</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#sD"><span class="hs-identifier hs-var">sD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#loadShareFac"><span class="hs-identifier hs-var">loadShareFac</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#glTyFac"><span class="hs-identifier hs-var">glTyFac</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#aspectRatioCon"><span class="hs-identifier hs-var">aspectRatioCon</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-418"></span><span id="loadTypes"><span class="annot"><span class="annottext">loadTypes :: [ConceptChunk]
+</span><span id="line-419"></span><span id="loadTypes"><span class="annot"><span class="annottext">loadTypes :: [ConceptChunk]
 </span><a href="Drasil.GlassBR.Unitals.html#loadTypes"><span class="hs-identifier hs-var hs-var">loadTypes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#loadResis"><span class="hs-identifier hs-var">loadResis</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#nonFactoredL"><span class="hs-identifier hs-var">nonFactoredL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -2037,37 +2043,37 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><a href="Drasil.GlassBR.Unitals.html#shortDurLoad"><span class="hs-identifier hs-var">shortDurLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#specDeLoad"><span class="hs-identifier hs-var">specDeLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#longDurLoad"><span class="hs-identifier hs-var">longDurLoad</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-419"></span><span>
-</span><span id="line-420"></span><span class="hs-comment">--Defined for DataDefs.hs and this file only--</span><span>
-</span><span id="line-421"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#actualThicknesses"><span class="hs-identifier hs-type">actualThicknesses</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">]</span><span>
-</span><span id="line-422"></span><span id="actualThicknesses"><span class="annot"><span class="annottext">actualThicknesses :: [Double]
+</span><span id="line-420"></span><span>
+</span><span id="line-421"></span><span class="hs-comment">--Defined for DataDefs.hs and this file only--</span><span>
+</span><span id="line-422"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#actualThicknesses"><span class="hs-identifier hs-type">actualThicknesses</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">]</span><span>
+</span><span id="line-423"></span><span id="actualThicknesses"><span class="annot"><span class="annottext">actualThicknesses :: [Double]
 </span><a href="Drasil.GlassBR.Unitals.html#actualThicknesses"><span class="hs-identifier hs-var hs-var">actualThicknesses</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((Double, Double) -&gt; Double) -&gt; [(Double, Double)] -&gt; [Double]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">(Double, Double) -&gt; Double
 forall a b. (a, b) -&gt; b
 </span><span class="hs-identifier hs-var">snd</span></span><span> </span><span class="annot"><span class="annottext">[(Double, Double)]
 </span><a href="Drasil.GlassBR.Unitals.html#glassThickness"><span class="hs-identifier hs-var">glassThickness</span></a></span><span>
-</span><span id="line-423"></span><span>
-</span><span id="line-424"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#nominalThicknesses"><span class="hs-identifier hs-type">nominalThicknesses</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">]</span><span>
-</span><span id="line-425"></span><span id="nominalThicknesses"><span class="annot"><span class="annottext">nominalThicknesses :: [Double]
+</span><span id="line-424"></span><span>
+</span><span id="line-425"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#nominalThicknesses"><span class="hs-identifier hs-type">nominalThicknesses</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">]</span><span>
+</span><span id="line-426"></span><span id="nominalThicknesses"><span class="annot"><span class="annottext">nominalThicknesses :: [Double]
 </span><a href="Drasil.GlassBR.Unitals.html#nominalThicknesses"><span class="hs-identifier hs-var hs-var">nominalThicknesses</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((Double, Double) -&gt; Double) -&gt; [(Double, Double)] -&gt; [Double]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">(Double, Double) -&gt; Double
 forall a b. (a, b) -&gt; a
 </span><span class="hs-identifier hs-var">fst</span></span><span> </span><span class="annot"><span class="annottext">[(Double, Double)]
 </span><a href="Drasil.GlassBR.Unitals.html#glassThickness"><span class="hs-identifier hs-var">glassThickness</span></a></span><span>
-</span><span id="line-426"></span><span>
-</span><span id="line-427"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#glassTypeFactors"><span class="hs-identifier hs-type">glassTypeFactors</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Integer</span></span><span class="hs-special">]</span><span>
-</span><span id="line-428"></span><span id="glassTypeFactors"><span class="annot"><span class="annottext">glassTypeFactors :: [Integer]
+</span><span id="line-427"></span><span>
+</span><span id="line-428"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#glassTypeFactors"><span class="hs-identifier hs-type">glassTypeFactors</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Integer</span></span><span class="hs-special">]</span><span>
+</span><span id="line-429"></span><span id="glassTypeFactors"><span class="annot"><span class="annottext">glassTypeFactors :: [Integer]
 </span><a href="Drasil.GlassBR.Unitals.html#glassTypeFactors"><span class="hs-identifier hs-var hs-var">glassTypeFactors</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((Integer, CI) -&gt; Integer) -&gt; [(Integer, CI)] -&gt; [Integer]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">(Integer, CI) -&gt; Integer
 forall a b. (a, b) -&gt; a
 </span><span class="hs-identifier hs-var">fst</span></span><span> </span><span class="annot"><span class="annottext">[(Integer, CI)]
 </span><a href="Drasil.GlassBR.Unitals.html#glassType"><span class="hs-identifier hs-var">glassType</span></a></span><span>
-</span><span id="line-429"></span><span>
-</span><span id="line-430"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#glassTypeAbbrs"><span class="hs-identifier hs-type">glassTypeAbbrs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-431"></span><span id="glassTypeAbbrs"><span class="annot"><span class="annottext">glassTypeAbbrs :: [Sentence]
+</span><span id="line-430"></span><span>
+</span><span id="line-431"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#glassTypeAbbrs"><span class="hs-identifier hs-type">glassTypeAbbrs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-432"></span><span id="glassTypeAbbrs"><span class="annot"><span class="annottext">glassTypeAbbrs :: [Sentence]
 </span><a href="Drasil.GlassBR.Unitals.html#glassTypeAbbrs"><span class="hs-identifier hs-var hs-var">glassTypeAbbrs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((Integer, CI) -&gt; Sentence) -&gt; [(Integer, CI)] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
@@ -2079,12 +2085,12 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall a b. (a, b) -&gt; b
 </span><span class="hs-identifier hs-var">snd</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(Integer, CI)]
 </span><a href="Drasil.GlassBR.Unitals.html#glassType"><span class="hs-identifier hs-var">glassType</span></a></span><span>
-</span><span id="line-432"></span><span>
-</span><span id="line-433"></span><span class="hs-keyword">type</span><span> </span><span id="GlassType"><span class="annot"><a href="Drasil.GlassBR.Unitals.html#GlassType"><span class="hs-identifier hs-var">GlassType</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Integer</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>         </span><span class="hs-comment">--[(Factor, Term)]</span><span>
-</span><span id="line-434"></span><span class="hs-keyword">type</span><span> </span><span id="GlassThickness"><span class="annot"><a href="Drasil.GlassBR.Unitals.html#GlassThickness"><span class="hs-identifier hs-var">GlassThickness</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-comment">--[(Nominal, Actual)]</span><span>
-</span><span id="line-435"></span><span>
-</span><span id="line-436"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#glassType"><span class="hs-identifier hs-type">glassType</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#GlassType"><span class="hs-identifier hs-type">GlassType</span></a></span><span>
-</span><span id="line-437"></span><span id="glassType"><span class="annot"><span class="annottext">glassType :: [(Integer, CI)]
+</span><span id="line-433"></span><span>
+</span><span id="line-434"></span><span class="hs-keyword">type</span><span> </span><span id="GlassType"><span class="annot"><a href="Drasil.GlassBR.Unitals.html#GlassType"><span class="hs-identifier hs-var">GlassType</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Integer</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>         </span><span class="hs-comment">--[(Factor, Term)]</span><span>
+</span><span id="line-435"></span><span class="hs-keyword">type</span><span> </span><span id="GlassThickness"><span class="annot"><a href="Drasil.GlassBR.Unitals.html#GlassThickness"><span class="hs-identifier hs-var">GlassThickness</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-comment">--[(Nominal, Actual)]</span><span>
+</span><span id="line-436"></span><span>
+</span><span id="line-437"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#glassType"><span class="hs-identifier hs-type">glassType</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#GlassType"><span class="hs-identifier hs-type">GlassType</span></a></span><span>
+</span><span id="line-438"></span><span id="glassType"><span class="annot"><span class="annottext">glassType :: [(Integer, CI)]
 </span><a href="Drasil.GlassBR.Unitals.html#glassType"><span class="hs-identifier hs-var hs-var">glassType</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.GlassBR.Concepts.html#annealed"><span class="hs-identifier hs-var">annealed</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer
@@ -2092,53 +2098,53 @@ forall a b. (a, b) -&gt; b
 </span><a href="Drasil.GlassBR.Concepts.html#fullyT"><span class="hs-identifier hs-var">fullyT</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">2</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.GlassBR.Concepts.html#heatS"><span class="hs-identifier hs-var">heatS</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-438"></span><span>
-</span><span id="line-439"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#glassThickness"><span class="hs-identifier hs-type">glassThickness</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#GlassThickness"><span class="hs-identifier hs-type">GlassThickness</span></a></span><span>
-</span><span id="line-440"></span><span id="glassThickness"><span class="annot"><span class="annottext">glassThickness :: [(Double, Double)]
+</span><span id="line-439"></span><span>
+</span><span id="line-440"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#glassThickness"><span class="hs-identifier hs-type">glassThickness</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#GlassThickness"><span class="hs-identifier hs-type">GlassThickness</span></a></span><span>
+</span><span id="line-441"></span><span id="glassThickness"><span class="annot"><span class="annottext">glassThickness :: [(Double, Double)]
 </span><a href="Drasil.GlassBR.Unitals.html#glassThickness"><span class="hs-identifier hs-var hs-var">glassThickness</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-441"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
+</span><span id="line-442"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">2.5</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">2.16</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-442"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
+</span><span id="line-443"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">2.7</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">2.59</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-443"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
+</span><span id="line-444"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">3.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">2.92</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-444"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
+</span><span id="line-445"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">4.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">3.78</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-445"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
+</span><span id="line-446"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">5.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">4.57</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-446"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
+</span><span id="line-447"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">6.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">5.56</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-447"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
+</span><span id="line-448"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">8.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">7.42</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-448"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
+</span><span id="line-449"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">10.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">9.02</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-449"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
+</span><span id="line-450"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">12.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">11.91</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-450"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
+</span><span id="line-451"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">16.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">15.09</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-451"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
+</span><span id="line-452"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">19.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">18.26</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-452"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
+</span><span id="line-453"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">22.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">21.44</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-453"></span><span>
-</span><span id="line-454"></span><span class="hs-comment">--Below are present in this file temporarily--</span><span>
-</span><span id="line-455"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#lateralLoad"><span class="hs-identifier hs-type">lateralLoad</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span>
-</span><span id="line-456"></span><span id="lateralLoad"><span class="annot"><span class="annottext">lateralLoad :: IdeaDict
+</span><span id="line-454"></span><span>
+</span><span id="line-455"></span><span class="hs-comment">--Below are present in this file temporarily--</span><span>
+</span><span id="line-456"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#lateralLoad"><span class="hs-identifier hs-type">lateralLoad</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span>
+</span><span id="line-457"></span><span id="lateralLoad"><span class="annot"><span class="annottext">lateralLoad :: IdeaDict
 </span><a href="Drasil.GlassBR.Unitals.html#lateralLoad"><span class="hs-identifier hs-var hs-var">lateralLoad</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; IdeaDict
 forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#lateral"><span class="hs-identifier hs-var">lateral</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Drasil.GlassBR.Unitals.html#load"><span class="hs-identifier hs-var">load</span></a></span><span>
-</span><span id="line-457"></span></pre></body></html>
+</span><span id="line-458"></span></pre></body></html>

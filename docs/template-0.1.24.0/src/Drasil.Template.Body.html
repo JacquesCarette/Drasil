@@ -68,128 +68,126 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-39"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[TSIntro] -&gt; RefTab
 </span><span class="hs-identifier hs-var">tsymb</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-comment">-- Adds table of symbol section with a table frame</span><span>
 </span><span id="line-40"></span><span>    </span><span class="hs-comment">--introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols </span><span>
-</span><span id="line-41"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">RefTab
-</span><span class="hs-identifier hs-var">TAandA</span></span><span>         </span><span class="hs-comment">-- Add table of abbreviation and acronym section</span><span>
-</span><span id="line-42"></span><span>    </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-43"></span><span>  </span><span class="annot"><span class="annottext">IntroSec -&gt; DocSection
+</span><span id="line-41"></span><span>    </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-42"></span><span>  </span><span class="annot"><span class="annottext">IntroSec -&gt; DocSection
 </span><span class="hs-identifier hs-var">IntroSec</span></span><span> </span><span class="annot"><span class="annottext">(IntroSec -&gt; DocSection) -&gt; IntroSec -&gt; DocSection
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-44"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; [IntroSub] -&gt; IntroSec
+</span><span id="line-43"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; [IntroSub] -&gt; IntroSec
 </span><span class="hs-identifier hs-var">IntroProg</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.Template.Body.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-45"></span><span>    </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; IntroSub
+</span><span id="line-44"></span><span>    </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; IntroSub
 </span><span class="hs-identifier hs-var">IPurpose</span></span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; IntroSub) -&gt; [Sentence] -&gt; IntroSub
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Verbosity -&gt; [Sentence]
 </span><span class="hs-identifier hs-var">purpDoc</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.Template.Body.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="annot"><span class="annottext">Verbosity
 </span><span class="hs-identifier hs-var">Verbose</span></span><span class="hs-special">,</span><span>
-</span><span id="line-46"></span><span>      </span><span class="annot"><span class="annottext">Sentence -&gt; IntroSub
+</span><span id="line-45"></span><span>      </span><span class="annot"><span class="annottext">Sentence -&gt; IntroSub
 </span><span class="hs-identifier hs-var">IScope</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span class="hs-special">,</span><span>
-</span><span id="line-47"></span><span>      </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence] -&gt; IntroSub
+</span><span id="line-46"></span><span>      </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence] -&gt; IntroSub
 </span><span class="hs-identifier hs-var">IChar</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-48"></span><span>      </span><span class="annot"><span class="annottext">CI -&gt; Section -&gt; Sentence -&gt; IntroSub
+</span><span id="line-47"></span><span>      </span><span class="annot"><span class="annottext">CI -&gt; Section -&gt; Sentence -&gt; IntroSub
 </span><span class="hs-identifier hs-var">IOrgSec</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">inModel</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; Section
 </span><span class="hs-identifier hs-var">SRS.inModel</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span>
-</span><span id="line-49"></span><span>    </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-50"></span><span>  </span><span class="annot"><span class="annottext">GSDSec -&gt; DocSection
+</span><span id="line-48"></span><span>    </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-49"></span><span>  </span><span class="annot"><span class="annottext">GSDSec -&gt; DocSection
 </span><span class="hs-identifier hs-var">GSDSec</span></span><span> </span><span class="annot"><span class="annottext">(GSDSec -&gt; DocSection) -&gt; GSDSec -&gt; DocSection
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-51"></span><span>    </span><span class="annot"><span class="annottext">[GSDSub] -&gt; GSDSec
+</span><span id="line-50"></span><span>    </span><span class="annot"><span class="annottext">[GSDSub] -&gt; GSDSec
 </span><span class="hs-identifier hs-var">GSDProg</span></span><span>
-</span><span id="line-52"></span><span>      </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; GSDSub
+</span><span id="line-51"></span><span>      </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; GSDSub
 </span><span class="hs-identifier hs-var">SysCntxt</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-53"></span><span>        </span><span class="annot"><span class="annottext">[Contents] -&gt; GSDSub
+</span><span id="line-52"></span><span>        </span><span class="annot"><span class="annottext">[Contents] -&gt; GSDSub
 </span><span class="hs-identifier hs-var">UsrChars</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-54"></span><span>        </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; GSDSub
+</span><span id="line-53"></span><span>        </span><span class="annot"><span class="annottext">[Contents] -&gt; [Section] -&gt; GSDSub
 </span><span class="hs-identifier hs-var">SystCons</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-55"></span><span>        </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-56"></span><span>  </span><span class="annot"><span class="annottext">SSDSec -&gt; DocSection
+</span><span id="line-54"></span><span>        </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-55"></span><span>  </span><span class="annot"><span class="annottext">SSDSec -&gt; DocSection
 </span><span class="hs-identifier hs-var">SSDSec</span></span><span> </span><span class="annot"><span class="annottext">(SSDSec -&gt; DocSection) -&gt; SSDSec -&gt; DocSection
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-57"></span><span>    </span><span class="annot"><span class="annottext">[SSDSub] -&gt; SSDSec
+</span><span id="line-56"></span><span>    </span><span class="annot"><span class="annottext">[SSDSub] -&gt; SSDSec
 </span><span class="hs-identifier hs-var">SSDProg</span></span><span>
-</span><span id="line-58"></span><span>      </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">ProblemDescription -&gt; SSDSub
+</span><span id="line-57"></span><span>      </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">ProblemDescription -&gt; SSDSub
 </span><span class="hs-identifier hs-var">SSDProblem</span></span><span> </span><span class="annot"><span class="annottext">(ProblemDescription -&gt; SSDSub) -&gt; ProblemDescription -&gt; SSDSub
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Section] -&gt; [PDSub] -&gt; ProblemDescription
 </span><span class="hs-identifier hs-var">PDProg</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>                </span><span class="hs-comment">--  This adds a is used to define the problem your system will solve</span><span>
-</span><span id="line-59"></span><span>      </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">Maybe Sentence -&gt; [ConceptChunk] -&gt; PDSub
+</span><span id="line-58"></span><span>      </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">Maybe Sentence -&gt; [ConceptChunk] -&gt; PDSub
 forall c. Concept c =&gt; Maybe Sentence -&gt; [c] -&gt; PDSub
 </span><span class="hs-identifier hs-var">TermsAndDefs</span></span><span> </span><span class="annot"><span class="annottext">Maybe Sentence
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>   </span><span class="hs-comment">-- This is used to define the terms to be defined in terminology sub section</span><span>
-</span><span id="line-60"></span><span>      </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; [Sentence] -&gt; LabelledContent -&gt; [Contents] -&gt; PDSub
+</span><span id="line-59"></span><span>      </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; [Sentence] -&gt; LabelledContent -&gt; [Contents] -&gt; PDSub
 forall a.
 Idea a =&gt;
 a -&gt; [Sentence] -&gt; LabelledContent -&gt; [Contents] -&gt; PDSub
 </span><span class="hs-identifier hs-var">PhySysDesc</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.Template.Body.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">LabelledContent
 </span><a href="Drasil.Template.Body.html#figTemp"><span class="hs-identifier hs-var">figTemp</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-comment">-- This defines the Physicalsystem sub-section, define the parts</span><span>
-</span><span id="line-61"></span><span>                                                          </span><span class="hs-comment">-- of the system using physSysParts, figMotion is a function in figures for the image</span><span>
-</span><span id="line-62"></span><span>      </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; PDSub
+</span><span id="line-60"></span><span>                                                          </span><span class="hs-comment">-- of the system using physSysParts, figMotion is a function in figures for the image</span><span>
+</span><span id="line-61"></span><span>      </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; PDSub
 </span><span class="hs-identifier hs-var">Goals</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-63"></span><span>      </span><span class="hs-special">]</span><span> </span><span class="hs-comment">-- This adds a goals section and goals input is defined for the preample of the goal.</span><span>
-</span><span id="line-64"></span><span>      </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SolChSpec -&gt; SSDSub
+</span><span id="line-62"></span><span>      </span><span class="hs-special">]</span><span> </span><span class="hs-comment">-- This adds a goals section and goals input is defined for the preample of the goal.</span><span>
+</span><span id="line-63"></span><span>      </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">SolChSpec -&gt; SSDSub
 </span><span class="hs-identifier hs-var">SSDSolChSpec</span></span><span> </span><span class="annot"><span class="annottext">(SolChSpec -&gt; SSDSub) -&gt; SolChSpec -&gt; SSDSub
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[SCSSub] -&gt; SolChSpec
 </span><span class="hs-identifier hs-var">SCSProg</span></span><span>
-</span><span id="line-65"></span><span>        </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">SCSSub
+</span><span id="line-64"></span><span>        </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">SCSSub
 </span><span class="hs-identifier hs-var">Assumptions</span></span><span>
-</span><span id="line-66"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Fields -&gt; SCSSub
+</span><span id="line-65"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Fields -&gt; SCSSub
 </span><span class="hs-identifier hs-var">TMs</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-67"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Fields -&gt; DerivationDisplay -&gt; SCSSub
+</span><span id="line-66"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Fields -&gt; DerivationDisplay -&gt; SCSSub
 </span><span class="hs-identifier hs-var">GDs</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">DerivationDisplay
 </span><span class="hs-identifier hs-var">HideDerivation</span></span><span>
-</span><span id="line-68"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Fields -&gt; DerivationDisplay -&gt; SCSSub
+</span><span id="line-67"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Fields -&gt; DerivationDisplay -&gt; SCSSub
 </span><span class="hs-identifier hs-var">DDs</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">DerivationDisplay
 </span><span class="hs-identifier hs-var">HideDerivation</span></span><span>
-</span><span id="line-69"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Fields -&gt; DerivationDisplay -&gt; SCSSub
+</span><span id="line-68"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Fields -&gt; DerivationDisplay -&gt; SCSSub
 </span><span class="hs-identifier hs-var">IMs</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">DerivationDisplay
 </span><span class="hs-identifier hs-var">HideDerivation</span></span><span>
-</span><span id="line-70"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [UncertQ] -&gt; SCSSub
+</span><span id="line-69"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [UncertQ] -&gt; SCSSub
 forall c.
 (HasUncertainty c, Quantity c, Constrained c, HasReasVal c,
  MayHaveUnit c) =&gt;
 Sentence -&gt; [c] -&gt; SCSSub
 </span><span class="hs-identifier hs-var">Constraints</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-71"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[UncertQ] -&gt; [Contents] -&gt; SCSSub
+</span><span id="line-70"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[UncertQ] -&gt; [Contents] -&gt; SCSSub
 forall c.
 (Quantity c, Constrained c) =&gt;
 [c] -&gt; [Contents] -&gt; SCSSub
 </span><span class="hs-identifier hs-var">CorrSolnPpties</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-72"></span><span>
-</span><span id="line-73"></span><span>        </span><span class="hs-special">]</span><span>
-</span><span id="line-74"></span><span>      </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-75"></span><span>  </span><span class="annot"><span class="annottext">ReqrmntSec -&gt; DocSection
+</span><span id="line-71"></span><span>
+</span><span id="line-72"></span><span>        </span><span class="hs-special">]</span><span>
+</span><span id="line-73"></span><span>      </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-74"></span><span>  </span><span class="annot"><span class="annottext">ReqrmntSec -&gt; DocSection
 </span><span class="hs-identifier hs-var">ReqrmntSec</span></span><span> </span><span class="annot"><span class="annottext">(ReqrmntSec -&gt; DocSection) -&gt; ReqrmntSec -&gt; DocSection
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[ReqsSub] -&gt; ReqrmntSec
 </span><span class="hs-identifier hs-var">ReqsProg</span></span><span>
-</span><span id="line-76"></span><span>    </span><span class="hs-special">[</span><span>
-</span><span id="line-77"></span><span>       </span><span class="annot"><span class="annottext">Sentence -&gt; [LabelledContent] -&gt; ReqsSub
+</span><span id="line-75"></span><span>    </span><span class="hs-special">[</span><span>
+</span><span id="line-76"></span><span>       </span><span class="annot"><span class="annottext">Sentence -&gt; [LabelledContent] -&gt; ReqsSub
 </span><span class="hs-identifier hs-var">FReqsSub</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-78"></span><span>     </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ReqsSub
+</span><span id="line-77"></span><span>     </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ReqsSub
 </span><span class="hs-identifier hs-var">NonFReqsSub</span></span><span>
-</span><span id="line-79"></span><span>    </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-80"></span><span>  </span><span class="annot"><span class="annottext">DocSection
+</span><span id="line-78"></span><span>    </span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-79"></span><span>  </span><span class="annot"><span class="annottext">DocSection
 </span><span class="hs-identifier hs-var">LCsSec</span></span><span class="hs-special">,</span><span>
-</span><span id="line-81"></span><span>  </span><span class="annot"><span class="annottext">DocSection
+</span><span id="line-80"></span><span>  </span><span class="annot"><span class="annottext">DocSection
 </span><span class="hs-identifier hs-var">UCsSec</span></span><span class="hs-special">,</span><span>
-</span><span id="line-82"></span><span>  </span><span class="annot"><span class="annottext">TraceabilitySec -&gt; DocSection
+</span><span id="line-81"></span><span>  </span><span class="annot"><span class="annottext">TraceabilitySec -&gt; DocSection
 </span><span class="hs-identifier hs-var">TraceabilitySec</span></span><span> </span><span class="annot"><span class="annottext">(TraceabilitySec -&gt; DocSection) -&gt; TraceabilitySec -&gt; DocSection
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[TraceConfig] -&gt; TraceabilitySec
@@ -199,65 +197,62 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">System -&gt; [TraceConfig]
 </span><span class="hs-identifier hs-var">traceMatStandard</span></span><span> </span><span class="annot"><span class="annottext">System
 </span><a href="Drasil.Template.Body.html#si"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-83"></span><span>  </span><span class="annot"><span class="annottext">AuxConstntSec -&gt; DocSection
+</span><span id="line-82"></span><span>  </span><span class="annot"><span class="annottext">AuxConstntSec -&gt; DocSection
 </span><span class="hs-identifier hs-var">AuxConstntSec</span></span><span> </span><span class="annot"><span class="annottext">(AuxConstntSec -&gt; DocSection) -&gt; AuxConstntSec -&gt; DocSection
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-84"></span><span>     </span><span class="annot"><span class="annottext">CI -&gt; [ConstQDef] -&gt; AuxConstntSec
+</span><span id="line-83"></span><span>     </span><span class="annot"><span class="annottext">CI -&gt; [ConstQDef] -&gt; AuxConstntSec
 </span><span class="hs-identifier hs-var">AuxConsProg</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.Template.Body.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-85"></span><span>  </span><span class="annot"><span class="annottext">DocSection
+</span><span id="line-84"></span><span>  </span><span class="annot"><span class="annottext">DocSection
 </span><span class="hs-identifier hs-var">Bibliography</span></span><span class="hs-special">]</span><span>
-</span><span id="line-86"></span><span>
-</span><span id="line-87"></span><span class="annot"><a href="Drasil.Template.Body.html#si"><span class="hs-identifier hs-type">si</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span>
-</span><span id="line-88"></span><span id="si"><span class="annot"><span class="annottext">si :: System
+</span><span id="line-85"></span><span>
+</span><span id="line-86"></span><span class="annot"><a href="Drasil.Template.Body.html#si"><span class="hs-identifier hs-type">si</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span>
+</span><span id="line-87"></span><span id="si"><span class="annot"><span class="annottext">si :: System
 </span><a href="Drasil.Template.Body.html#si"><span class="hs-identifier hs-var hs-var">si</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SI</span></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-89"></span><span>  </span><span class="annot"><span class="annottext">_sys :: CI
+</span><span id="line-88"></span><span>  </span><span class="annot"><span class="annottext">_sys :: CI
 </span><span class="hs-identifier hs-var">_sys</span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.Template.Body.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-90"></span><span>  </span><span class="annot"><span class="annottext">_kind :: CI
+</span><span id="line-89"></span><span>  </span><span class="annot"><span class="annottext">_kind :: CI
 </span><span class="hs-identifier hs-var">_kind</span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">Doc.srs</span></span><span class="hs-special">,</span><span>
-</span><span id="line-91"></span><span>  </span><span class="annot"><span class="annottext">_authors :: People
+</span><span id="line-90"></span><span>  </span><span class="annot"><span class="annottext">_authors :: People
 </span><span class="hs-identifier hs-var">_authors</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
 </span><a href="Drasil.Template.Body.html#authorName"><span class="hs-identifier hs-var">authorName</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-92"></span><span>  </span><span class="annot"><span class="annottext">_background :: [Sentence]
+</span><span id="line-91"></span><span>  </span><span class="annot"><span class="annottext">_background :: [Sentence]
 </span><span class="hs-identifier hs-var">_background</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-93"></span><span>  </span><span class="annot"><span class="annottext">_purpose :: [Sentence]
+</span><span id="line-92"></span><span>  </span><span class="annot"><span class="annottext">_purpose :: [Sentence]
 </span><span class="hs-identifier hs-var">_purpose</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-94"></span><span>  </span><span class="annot"><span class="annottext">_motivation :: [Sentence]
+</span><span id="line-93"></span><span>  </span><span class="annot"><span class="annottext">_motivation :: [Sentence]
 </span><span class="hs-identifier hs-var">_motivation</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-95"></span><span>  </span><span class="annot"><span class="annottext">_scope :: [Sentence]
+</span><span id="line-94"></span><span>  </span><span class="annot"><span class="annottext">_scope :: [Sentence]
 </span><span class="hs-identifier hs-var">_scope</span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-96"></span><span>  </span><span class="annot"><span class="annottext">_quants :: [QuantityDict]
+</span><span id="line-95"></span><span>  </span><span class="annot"><span class="annottext">_quants :: [QuantityDict]
 </span><span class="hs-identifier hs-var">_quants</span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-97"></span><span>  </span><span class="annot"><span class="annottext">_instModels :: [InstanceModel]
+</span><span id="line-96"></span><span>  </span><span class="annot"><span class="annottext">_instModels :: [InstanceModel]
 </span><span class="hs-identifier hs-var">_instModels</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-98"></span><span>  </span><span class="annot"><span class="annottext">_datadefs :: [DataDefinition]
+</span><span id="line-97"></span><span>  </span><span class="annot"><span class="annottext">_datadefs :: [DataDefinition]
 </span><span class="hs-identifier hs-var">_datadefs</span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-99"></span><span>  </span><span class="annot"><span class="annottext">_configFiles :: [String]
+</span><span id="line-98"></span><span>  </span><span class="annot"><span class="annottext">_configFiles :: [String]
 </span><span class="hs-identifier hs-var">_configFiles</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-100"></span><span>  </span><span class="annot"><span class="annottext">_inputs :: [QuantityDict]
+</span><span id="line-99"></span><span>  </span><span class="annot"><span class="annottext">_inputs :: [QuantityDict]
 </span><span class="hs-identifier hs-var">_inputs</span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-101"></span><span>  </span><span class="annot"><span class="annottext">_outputs :: [QuantityDict]
+</span><span id="line-100"></span><span>  </span><span class="annot"><span class="annottext">_outputs :: [QuantityDict]
 </span><span class="hs-identifier hs-var">_outputs</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-102"></span><span>  </span><span class="annot"><span class="annottext">_constraints :: [ConstrainedChunk]
+</span><span id="line-101"></span><span>  </span><span class="annot"><span class="annottext">_constraints :: [ConstrainedChunk]
 </span><span class="hs-identifier hs-var">_constraints</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstrainedChunk</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-103"></span><span>  </span><span class="annot"><span class="annottext">_constants :: [ConstQDef]
+</span><span id="line-102"></span><span>  </span><span class="annot"><span class="annottext">_constants :: [ConstQDef]
 </span><span class="hs-identifier hs-var">_constants</span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstQDef</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-104"></span><span>  </span><span class="annot"><span class="annottext">_systemdb :: ChunkDB
+</span><span id="line-103"></span><span>  </span><span class="annot"><span class="annottext">_systemdb :: ChunkDB
 </span><span class="hs-identifier hs-var">_systemdb</span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="Drasil.Template.Body.html#symbMap"><span class="hs-identifier hs-var">symbMap</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-105"></span><span>  </span><span class="annot"><span class="annottext">_usedinfodb :: ChunkDB
-</span><span class="hs-identifier hs-var">_usedinfodb</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="Drasil.Template.Body.html#usedDB"><span class="hs-identifier hs-var">usedDB</span></a></span><span>
-</span><span id="line-106"></span><span class="hs-special">}</span><span>
-</span><span id="line-107"></span><span>
-</span><span id="line-108"></span><span class="annot"><a href="Drasil.Template.Body.html#ideaDicts"><span class="hs-identifier hs-type">ideaDicts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-109"></span><span id="ideaDicts"><span class="annot"><span class="annottext">ideaDicts :: [IdeaDict]
+</span><a href="Drasil.Template.Body.html#symbMap"><span class="hs-identifier hs-var">symbMap</span></a></span><span>
+</span><span id="line-104"></span><span class="hs-special">}</span><span>
+</span><span id="line-105"></span><span>
+</span><span id="line-106"></span><span class="annot"><a href="Drasil.Template.Body.html#ideaDicts"><span class="hs-identifier hs-type">ideaDicts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-107"></span><span id="ideaDicts"><span class="annot"><span class="annottext">ideaDicts :: [IdeaDict]
 </span><a href="Drasil.Template.Body.html#ideaDicts"><span class="hs-identifier hs-var hs-var">ideaDicts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-110"></span><span>  </span><span class="hs-comment">-- Actual IdeaDicts</span><span>
-</span><span id="line-111"></span><span>  </span><span class="annot"><span class="annottext">[IdeaDict]
+</span><span id="line-108"></span><span>  </span><span class="hs-comment">-- Actual IdeaDicts</span><span>
+</span><span id="line-109"></span><span>  </span><span class="annot"><span class="annottext">[IdeaDict]
 </span><span class="hs-identifier hs-var">doccon</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict]
@@ -267,8 +262,8 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">inValue</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-112"></span><span>  </span><span class="hs-comment">-- CIs</span><span>
-</span><span id="line-113"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; IdeaDict
+</span><span id="line-110"></span><span>  </span><span class="hs-comment">-- CIs</span><span>
+</span><span id="line-111"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; IdeaDict
 forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.Template.Body.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; [IdeaDict] -&gt; [IdeaDict]
@@ -279,9 +274,9 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[CI]
 </span><span class="hs-identifier hs-var">doccon'</span></span><span>
-</span><span id="line-114"></span><span>
-</span><span id="line-115"></span><span class="annot"><a href="Drasil.Template.Body.html#conceptChunks"><span class="hs-identifier hs-type">conceptChunks</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-116"></span><span id="conceptChunks"><span class="annot"><span class="annottext">conceptChunks :: [ConceptChunk]
+</span><span id="line-112"></span><span>
+</span><span id="line-113"></span><span class="annot"><a href="Drasil.Template.Body.html#conceptChunks"><span class="hs-identifier hs-type">conceptChunks</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-114"></span><span id="conceptChunks"><span class="annot"><span class="annottext">conceptChunks :: [ConceptChunk]
 </span><a href="Drasil.Template.Body.html#conceptChunks"><span class="hs-identifier hs-var hs-var">conceptChunks</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">errMsg</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">algorithm</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -292,9 +287,9 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
 </span><span class="hs-identifier hs-var">srsDomains</span></span><span>
-</span><span id="line-117"></span><span>
-</span><span id="line-118"></span><span class="annot"><a href="Drasil.Template.Body.html#symbMap"><span class="hs-identifier hs-type">symbMap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span>
-</span><span id="line-119"></span><span id="symbMap"><span class="annot"><span class="annottext">symbMap :: ChunkDB
+</span><span id="line-115"></span><span>
+</span><span id="line-116"></span><span class="annot"><a href="Drasil.Template.Body.html#symbMap"><span class="hs-identifier hs-type">symbMap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span>
+</span><span id="line-117"></span><span id="symbMap"><span class="annot"><span class="annottext">symbMap :: ChunkDB
 </span><a href="Drasil.Template.Body.html#symbMap"><span class="hs-identifier hs-var hs-var">symbMap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 -&gt; [IdeaDict]
 -&gt; [ConceptChunk]
@@ -326,66 +321,31 @@ forall q c u.
 </span><span class="hs-identifier hs-var">cdb</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[IdeaDict]
 </span><a href="Drasil.Template.Body.html#ideaDicts"><span class="hs-identifier hs-var">ideaDicts</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
 </span><a href="Drasil.Template.Body.html#conceptChunks"><span class="hs-identifier hs-var">conceptChunks</span></a></span><span>
-</span><span id="line-120"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-121"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-122"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Citation]
+</span><span id="line-118"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-119"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-120"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Citation]
 </span><a href="Drasil.Template.Body.html#citations"><span class="hs-identifier hs-var">citations</span></a></span><span>
-</span><span id="line-123"></span><span>
-</span><span id="line-124"></span><span class="annot"><a href="Drasil.Template.Body.html#usedDB"><span class="hs-identifier hs-type">usedDB</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span>
-</span><span id="line-125"></span><span id="usedDB"><span class="annot"><span class="annottext">usedDB :: ChunkDB
-</span><a href="Drasil.Template.Body.html#usedDB"><span class="hs-identifier hs-var hs-var">usedDB</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
--&gt; [IdeaDict]
--&gt; [ConceptChunk]
--&gt; [UnitDefn]
--&gt; [DataDefinition]
--&gt; [InstanceModel]
--&gt; [GenDefn]
--&gt; [TheoryModel]
--&gt; [ConceptInstance]
--&gt; [LabelledContent]
--&gt; [Reference]
--&gt; [Citation]
--&gt; ChunkDB
-forall q c u.
-(Quantity q, MayHaveUnit q, Concept c, IsUnit u) =&gt;
-[q]
--&gt; [IdeaDict]
--&gt; [c]
--&gt; [u]
--&gt; [DataDefinition]
--&gt; [InstanceModel]
--&gt; [GenDefn]
--&gt; [TheoryModel]
--&gt; [ConceptInstance]
--&gt; [LabelledContent]
--&gt; [Reference]
--&gt; [Citation]
--&gt; ChunkDB
-</span><span class="hs-identifier hs-var">cdb</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-126"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-127"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-128"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-129"></span><span>
-</span><span id="line-130"></span><span class="annot"><a href="Drasil.Template.Body.html#citations"><span class="hs-identifier hs-type">citations</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">BibRef</span></span><span>
-</span><span id="line-131"></span><span id="citations"><span class="annot"><span class="annottext">citations :: [Citation]
+</span><span id="line-121"></span><span>
+</span><span id="line-122"></span><span class="annot"><a href="Drasil.Template.Body.html#citations"><span class="hs-identifier hs-type">citations</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">BibRef</span></span><span>
+</span><span id="line-123"></span><span id="citations"><span class="annot"><span class="annottext">citations :: [Citation]
 </span><a href="Drasil.Template.Body.html#citations"><span class="hs-identifier hs-var hs-var">citations</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation
 </span><span class="hs-identifier hs-var">parnasClements1986</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
 </span><span class="hs-identifier hs-var">koothoor2013</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
 </span><span class="hs-identifier hs-var">smithEtAl2007</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
 </span><span class="hs-identifier hs-var">smithLai2005</span></span><span class="hs-special">,</span><span>
-</span><span id="line-132"></span><span>             </span><span class="annot"><span class="annottext">Citation
+</span><span id="line-124"></span><span>             </span><span class="annot"><span class="annottext">Citation
 </span><span class="hs-identifier hs-var">smithKoothoor2016</span></span><span class="hs-special">]</span><span>
-</span><span id="line-133"></span><span>
-</span><span id="line-134"></span><span class="annot"><a href="Drasil.Template.Body.html#inConstraints"><span class="hs-identifier hs-type">inConstraints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
-</span><span id="line-135"></span><span id="inConstraints"><span class="annot"><span class="annottext">inConstraints :: [UncertQ]
+</span><span id="line-125"></span><span>
+</span><span id="line-126"></span><span class="annot"><a href="Drasil.Template.Body.html#inConstraints"><span class="hs-identifier hs-type">inConstraints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
+</span><span id="line-127"></span><span id="inConstraints"><span class="annot"><span class="annottext">inConstraints :: [UncertQ]
 </span><a href="Drasil.Template.Body.html#inConstraints"><span class="hs-identifier hs-var hs-var">inConstraints</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-136"></span><span>
-</span><span id="line-137"></span><span class="annot"><a href="Drasil.Template.Body.html#outConstraints"><span class="hs-identifier hs-type">outConstraints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
-</span><span id="line-138"></span><span id="outConstraints"><span class="annot"><span class="annottext">outConstraints :: [UncertQ]
+</span><span id="line-128"></span><span>
+</span><span id="line-129"></span><span class="annot"><a href="Drasil.Template.Body.html#outConstraints"><span class="hs-identifier hs-type">outConstraints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
+</span><span id="line-130"></span><span id="outConstraints"><span class="annot"><span class="annottext">outConstraints :: [UncertQ]
 </span><a href="Drasil.Template.Body.html#outConstraints"><span class="hs-identifier hs-var hs-var">outConstraints</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-139"></span><span>
-</span><span id="line-140"></span><span class="annot"><a href="Drasil.Template.Body.html#figTemp"><span class="hs-identifier hs-type">figTemp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span>
-</span><span id="line-141"></span><span id="figTemp"><span class="annot"><span class="annottext">figTemp :: LabelledContent
+</span><span id="line-131"></span><span>
+</span><span id="line-132"></span><span class="annot"><a href="Drasil.Template.Body.html#figTemp"><span class="hs-identifier hs-type">figTemp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span>
+</span><span id="line-133"></span><span id="figTemp"><span class="annot"><span class="annottext">figTemp :: LabelledContent
 </span><a href="Drasil.Template.Body.html#figTemp"><span class="hs-identifier hs-var hs-var">figTemp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
 </span><span class="hs-identifier hs-var">makeFigRef</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -394,29 +354,29 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; String -&gt; MaxWidthPercent -&gt; RawContent
 </span><span class="hs-identifier hs-var">figWithWidth</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span>
-</span><span id="line-142"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><span id="line-134"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 </span><span class="hs-identifier hs-var">resourcePath</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;dblpend.png&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">MaxWidthPercent
 </span><span class="hs-number">60</span></span><span>
-</span><span id="line-143"></span><span>
-</span><span id="line-144"></span><span>
-</span><span id="line-145"></span><span class="hs-comment">-- MOVE TO CONCEPTS</span><span>
-</span><span id="line-146"></span><span class="annot"><a href="Drasil.Template.Body.html#progName"><span class="hs-identifier hs-type">progName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span>
-</span><span id="line-147"></span><span id="progName"><span class="annot"><span class="annottext">progName :: CI
+</span><span id="line-135"></span><span>
+</span><span id="line-136"></span><span>
+</span><span id="line-137"></span><span class="hs-comment">-- MOVE TO CONCEPTS</span><span>
+</span><span id="line-138"></span><span class="annot"><a href="Drasil.Template.Body.html#progName"><span class="hs-identifier hs-type">progName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span>
+</span><span id="line-139"></span><span id="progName"><span class="annot"><span class="annottext">progName :: CI
 </span><a href="Drasil.Template.Body.html#progName"><span class="hs-identifier hs-var hs-var">progName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [IdeaDict] -&gt; CI
 </span><span class="hs-identifier hs-var">commonIdeaWithDict</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;progName&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">pn</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;ProgName&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;ProgName&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-148"></span><span>
-</span><span id="line-149"></span><span class="hs-comment">-- MOVE TO DATA.PEOPLE</span><span>
-</span><span id="line-150"></span><span class="annot"><a href="Drasil.Template.Body.html#authorName"><span class="hs-identifier hs-type">authorName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Person</span></span><span>
-</span><span id="line-151"></span><span id="authorName"><span class="annot"><span class="annottext">authorName :: Person
+</span><span id="line-140"></span><span>
+</span><span id="line-141"></span><span class="hs-comment">-- MOVE TO DATA.PEOPLE</span><span>
+</span><span id="line-142"></span><span class="annot"><a href="Drasil.Template.Body.html#authorName"><span class="hs-identifier hs-type">authorName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Person</span></span><span>
+</span><span id="line-143"></span><span id="authorName"><span class="annot"><span class="annottext">authorName :: Person
 </span><a href="Drasil.Template.Body.html#authorName"><span class="hs-identifier hs-var hs-var">authorName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Person
 </span><span class="hs-identifier hs-var">person</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Author&quot;</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Name&quot;</span></span><span>
-</span><span id="line-152"></span></pre></body></html>
+</span><span id="line-144"></span></pre></body></html>

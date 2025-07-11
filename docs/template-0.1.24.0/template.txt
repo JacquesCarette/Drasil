@@ -18,7 +18,6 @@ si :: System
 ideaDicts :: [IdeaDict]
 conceptChunks :: [ConceptChunk]
 symbMap :: ChunkDB
-usedDB :: ChunkDB
 citations :: BibRef
 inConstraints :: [UncertQ]
 outConstraints :: [UncertQ]

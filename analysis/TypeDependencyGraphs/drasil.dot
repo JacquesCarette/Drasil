@@ -1219,6 +1219,7 @@ digraph alltypes {
 		RefTab -> LabelledContent;
 		RefTab -> TSIntro;
 		RefTab -> LFunc;
+		RefTab -> IdeaDict;
 		}
 		subgraph tsintro{
 		TSIntro	[shape=oval, color=darkviolet, label="TSIntro"];

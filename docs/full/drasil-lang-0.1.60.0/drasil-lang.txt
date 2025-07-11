@@ -4701,10 +4701,6 @@ qw :: (Quantity q, MayHaveUnit q) => q -> QuantityDict
 --   <a>Symbol</a>, and <a>Space</a>.
 vc :: String -> NP -> Symbol -> Space -> QuantityDict
 
--- | Creates a <a>QuantityDict</a> from an <a>Idea</a>, <a>Symbol</a>, and
---   <a>Space</a>.
-vc'' :: Idea c => c -> Symbol -> Space -> QuantityDict
-
 -- | Similar to <a>vc</a>, but creates a <a>QuantityDict</a> from something
 --   that knows about <a>Stage</a>s.
 vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict
@@ -7138,10 +7134,6 @@ implVarUID' :: UID -> NP -> Maybe String -> Space -> Symbol -> Maybe UnitDefn ->
 -- | Creates a <a>QuantityDict</a> from a <a>UID</a>, term (<a>NP</a>),
 --   <a>Symbol</a>, and <a>Space</a>.
 vc :: String -> NP -> Symbol -> Space -> QuantityDict
-
--- | Creates a <a>QuantityDict</a> from an <a>Idea</a>, <a>Symbol</a>, and
---   <a>Space</a>.
-vc'' :: Idea c => c -> Symbol -> Space -> QuantityDict
 
 -- | Similar to <a>vc</a>, but creates a <a>QuantityDict</a> from something
 --   that knows about <a>Stage</a>s.

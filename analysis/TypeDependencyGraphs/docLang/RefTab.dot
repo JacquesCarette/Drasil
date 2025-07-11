@@ -6,4 +6,5 @@ RefTab -> UnitDefn;
 RefTab -> LabelledContent;
 RefTab -> TSIntro;
 RefTab -> LFunc;
+RefTab -> IdeaDict;
 }

@@ -19,7 +19,6 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   physical, physics, problem, software, softwareSys, srsDomains, symbol_,
   sysCont, system, type_, user, value, variable, doccon, doccon',
   datumConstraint)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (inModel)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
 import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
@@ -53,6 +52,8 @@ import Drasil.SSP.TMods (tMods)
 import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
   inputs, inputsWUncrtn, outputs, symbols)
 
+import System.Drasil (System(..), SystemKind(SRS))
+
 --Document Setup--
 
 srs :: Document
@@ -70,7 +71,7 @@ resourcePath = "../../../../datafiles/ssp/"
 si :: System
 si = SI {
   _sys         = progName, 
-  _kind        = Doc.srs, 
+  _kind        = SRS, 
   _authors     = [henryFrankis, brooks],
   _purpose     = [purp],
   _background  = [],

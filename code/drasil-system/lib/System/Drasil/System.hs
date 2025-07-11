@@ -6,21 +6,24 @@
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
 
 module System.Drasil.System (
-  -- * System Information
+  -- * System
   -- ** Types
-  System(..),
+  System(..), SystemKind(..),
   -- ** Lenses
   HasSystem(..),
+  -- ** Functions
+  whatsTheBigIdea,
   -- * Reference Database
   -- ** Types
   Purpose, Background, Scope, Motivation,
   ) where
 
-import Language.Drasil
+import Language.Drasil hiding (kind, Notebook)
 import Theory.Drasil
 import Database.Drasil (ChunkDB)
 
 import Control.Lens (makeClassy)
+import qualified Data.Drasil.Concepts.Documentation as Doc
 
 -- | Project Example purpose.
 type Purpose = [Sentence]
@@ -31,6 +34,19 @@ type Scope = [Sentence]
 -- | Project Example motivation.
 type Motivation = [Sentence]
 
+data SystemKind =
+    SRS
+  | Notebook
+  | Website
+
+whatsTheBigIdea :: System -> IdeaDict
+whatsTheBigIdea si = whatKind' (_kind si)
+  where
+    whatKind' :: SystemKind -> IdeaDict
+    whatKind' SRS = nw Doc.srs
+    whatKind' Notebook = nw Doc.notebook
+    whatKind' Website = mkIdea "website" (cn "website") (Just "web")
+
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artifact generation.
 data System where
@@ -39,13 +55,12 @@ data System where
 -- I'm thinking for getting concepts that are also quantities, we could
 -- use a lookup of some sort from their internal (Drasil) ids.
  SI :: (CommonIdea a, Idea a,
-  Idea b,
   Quantity e, Eq e, MayHaveUnit e,
   Quantity h, MayHaveUnit h,
   Quantity i, MayHaveUnit i,
   HasUID j, Constrained j) => 
   { _sys         :: a
-  , _kind        :: b
+  , _kind        :: SystemKind
   , _authors     :: People
   , _purpose     :: Purpose
   , _background  :: Background

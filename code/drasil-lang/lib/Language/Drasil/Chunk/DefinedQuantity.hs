@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.DefinedQuantity (
   DefinedQuantityDict,
   -- * Constructors
   dqd, dqdNoUnit, dqd',
-  dqdQd, dqdWr, tempdqdWr') where
+  dqdQd, dqdWr) where
 
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..),
@@ -71,10 +71,6 @@ dqd' = DQD
 -- | When the input already has all the necessary information. A 'projection' operator from some a type with instances of listed classes to a 'DefinedQuantityDict'.
 dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
 dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
-
--- | Temporary projection constructor, not to be used outside @drasil-lang@.
-tempdqdWr' :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
-tempdqdWr' c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
 
 -- | When we want to merge a quantity and a concept. This is suspicious.
 dqdQd :: (Quantity c, MayHaveUnit c) => c -> ConceptChunk -> DefinedQuantityDict

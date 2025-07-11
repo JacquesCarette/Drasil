@@ -59,7 +59,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
       --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
-      , TAandA         -- Add table of abbreviation and acronym section
+      , TAandA abbreviationsList         -- Add table of abbreviation and acronym section
       ],
   IntroSec $
     IntroProg (justification progName) (phrase progName)
@@ -116,8 +116,7 @@ si = SI {
   _outputs     = outputs,
   _constraints = inConstraints,
   _constants   = [] :: [ConstQDef],
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
+  _systemdb   = symbMap
 }
 
 purp :: Sentence
@@ -135,8 +134,8 @@ conceptChunks =
   -- ConceptChunks
   [errMsg, program, algorithm] ++ physicCon ++ physicalcon ++ mathcon ++ srsDomains
 
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
-tableOfAbbrvsIdeaDicts =
+abbreviationsList :: [IdeaDict]
+abbreviationsList =
   -- CIs
   nw progName : map nw acronyms ++
   -- QuantityDicts
@@ -149,10 +148,6 @@ symbMap = cdb (map (^. output) iMods ++ map qw symbols) ideaDicts conceptChunks
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 concIns :: [ConceptInstance]
 concIns = assumpSingle ++ goals ++ funcReqs ++ nonFuncReqs

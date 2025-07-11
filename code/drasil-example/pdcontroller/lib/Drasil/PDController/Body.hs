@@ -3,7 +3,6 @@ module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) wher
 import Language.Drasil
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
@@ -58,7 +57,7 @@ printSetting = piSys fullSI Equational defaultConfiguration
 mkSRS :: SRSDecl
 mkSRS
   = [TableOfContents,
-    RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
+    RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA abbreviationsList],
      IntroSec $
        IntroProg introPara (phrase progName)
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
@@ -113,8 +112,7 @@ si = SI {
   _outputs = outputs,
   _constraints = map cnstrw inpConstrained,
   _constants = pidConstants,
-  _systemdb = symbMap,
-  _usedinfodb = usedDB
+  _systemdb = symbMap
 }
 
 purp :: Sentence
@@ -168,26 +166,13 @@ symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
 
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
-tableOfAbbrvsIdeaDicts =
+abbreviationsList  :: [IdeaDict]
+abbreviationsList  =
   -- CIs
   map nw acronyms ++
   -- QuantityDicts
   map nw symbolsAll
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
-  ([] :: [ConceptChunk])
-  ([] :: [UnitDefn])
-  ([] :: [DataDefinition])
-  ([] :: [InstanceModel])
-  ([] :: [GenDefn])
-  ([] :: [TheoryModel])
-  ([] :: [ConceptInstance])
-  ([] :: [LabelledContent])
-  ([] :: [Reference])
-  []
-
+  
 conceptInstances :: [ConceptInstance]
 conceptInstances = assumptions ++ goals ++ funcReqs ++ nonfuncReqs ++ likelyChgs
 

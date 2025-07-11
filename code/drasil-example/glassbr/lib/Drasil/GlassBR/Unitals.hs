@@ -13,8 +13,8 @@ import Data.Drasil.Quantities.Physics (subMax, subMin, subX, subY, subZ)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
 import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, glassTypeFac,
-  heatS, iGlass, lGlass, lResistance, lShareFac, loadDurFactor, nFL, responseTy,
-  stdOffDist)
+  heatS, iGlass, lGlass, lResistance, lShareFac, nFL, responseTy,
+  stdOffDist, lDurFac)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016)
 import Drasil.GlassBR.Units (sFlawPU)
 --FIXME: Many of the current terms can be separated into terms and defns?
@@ -233,15 +233,15 @@ sdz         = unitary "sdz" (nounPhraseSent $ phrase standOffDist +:+ sParen (ph
 
 unitless :: [QuantityDict]
 unitless = [riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad,
-  sdfTol, dimlessLoad, tolLoad, lDurFac] ++ map qw [gTF, loadSF]
+  sdfTol, dimlessLoad, tolLoad] ++ map qw [gTF, loadSF, loadDF]
 
 interps :: [QuantityDict]
 interps = [interpY, interpZ]
 
 riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, sdfTol,
-  dimlessLoad, tolLoad, lDurFac, interpY, interpZ :: QuantityDict
+  dimlessLoad, tolLoad, interpY, interpZ :: QuantityDict
 
-gTF, loadSF :: DefinedQuantityDict
+gTF, loadSF, loadDF :: DefinedQuantityDict
 
 dimlessLoad = vc "dimlessLoad" (nounPhraseSP "dimensionless load") (hat lQ) Real
 
@@ -260,7 +260,7 @@ interpY = vc "interpY" (nounPhraseSP "interpY") (variable "interpY") (mkFunction
 interpZ = vc "interpZ" (nounPhraseSP "interpZ") (variable "interpZ") (mkFunction [String, Real, Real] Real)
 
 
-lDurFac       = vc'' loadDurFactor (variable "LDF") Real
+loadDF        = dqdNoUnit loadDurFac (variable "LDF") Real
 loadSF        = dqdNoUnit loadShareFac (variable "LSF") Real
 
 riskFun = vc "riskFun" (nounPhraseSP "risk of failure") cB Real
@@ -287,7 +287,7 @@ concepts = [aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, 
   explosion]
 
 aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
-  glTyFac, lateral, load, specDeLoad, loadResis, longDurLoad, modE, nonFactoredL,
+  glTyFac, lateral, load, specDeLoad, loadDurFac, loadResis, longDurLoad, modE, nonFactoredL,
   glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar,
   sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage, notSafe, bomb,
   explosion :: ConceptChunk
@@ -348,6 +348,7 @@ lite          = dcc "lite"        (cn' "lite")
   "pieces of glass that are cut, prepared, and used to create the window or door"
 load          = dcc "load"        (nounPhraseSP "applied load (demand) or pressure")
   "a uniformly distributed lateral pressure"
+loadDurFac    = cc' lDurFac (S "factor related to the effect of sustained loading on glass strength")
 loadResis     = cc' lResistance
   (foldlSent_ [S "the uniform lateral load that a glass construction can sustain",
   S "based upon a given probability of breakage and load duration as defined in",

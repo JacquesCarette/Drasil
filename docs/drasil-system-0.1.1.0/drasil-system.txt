@@ -15,18 +15,18 @@ module System.Drasil
 --   system to be used in artifact generation.
 data System
 [SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
-class HasSystem c_a8hj
-system :: HasSystem c_a8hj => Lens' c_a8hj System
-authors :: HasSystem c_a8hj => Lens' c_a8hj People
-background :: HasSystem c_a8hj => Lens' c_a8hj Background
-configFiles :: HasSystem c_a8hj => Lens' c_a8hj [String]
-constants :: HasSystem c_a8hj => Lens' c_a8hj [ConstQDef]
-datadefs :: HasSystem c_a8hj => Lens' c_a8hj [DataDefinition]
-instModels :: HasSystem c_a8hj => Lens' c_a8hj [InstanceModel]
-motivation :: HasSystem c_a8hj => Lens' c_a8hj Motivation
-purpose :: HasSystem c_a8hj => Lens' c_a8hj Purpose
-scope :: HasSystem c_a8hj => Lens' c_a8hj Scope
-systemdb :: HasSystem c_a8hj => Lens' c_a8hj ChunkDB
+class HasSystem c_a8hi
+system :: HasSystem c_a8hi => Lens' c_a8hi System
+authors :: HasSystem c_a8hi => Lens' c_a8hi People
+background :: HasSystem c_a8hi => Lens' c_a8hi Background
+configFiles :: HasSystem c_a8hi => Lens' c_a8hi [String]
+constants :: HasSystem c_a8hi => Lens' c_a8hi [ConstQDef]
+datadefs :: HasSystem c_a8hi => Lens' c_a8hi [DataDefinition]
+instModels :: HasSystem c_a8hi => Lens' c_a8hi [InstanceModel]
+motivation :: HasSystem c_a8hi => Lens' c_a8hi Motivation
+purpose :: HasSystem c_a8hi => Lens' c_a8hi Purpose
+scope :: HasSystem c_a8hi => Lens' c_a8hi Scope
+systemdb :: HasSystem c_a8hi => Lens' c_a8hi ChunkDB
 
 -- | Project Example purpose.
 type Purpose = [Sentence]

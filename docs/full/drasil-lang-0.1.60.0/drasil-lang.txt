@@ -4871,13 +4871,8 @@ ConstrainedChunk :: QuantityDict -> [ConstraintE] -> Maybe Expr -> ConstrainedCh
 [_reasV] :: ConstrainedChunk -> Maybe Expr
 
 -- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
---   (<a>NP</a>), <a>Symbol</a>, unit, <a>Space</a>, <tt>Constraint</tt>s,
---   and an <a>Expr</a>.
-cuc :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> ConstrainedChunk
-
--- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
 --   (<a>NP</a>), <a>Symbol</a>, <a>Space</a>, <tt>Constraint</tt>s, and a
---   <a>Maybe</a> <a>Expr</a> (Similar to <a>cuc</a> but no units).
+--   <a>Maybe</a> <a>Expr</a> (Similar to <tt>cuc</tt> but no units).
 cvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Maybe Expr -> ConstrainedChunk
 
 -- | Creates a new ConstrainedChunk from either a <a>ConstrainedChunk</a>,
@@ -7435,13 +7430,8 @@ ConstrConcept :: DefinedQuantityDict -> [ConstraintE] -> Maybe Expr -> ConstrCon
 [_reasV'] :: ConstrConcept -> Maybe Expr
 
 -- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
---   (<a>NP</a>), <a>Symbol</a>, unit, <a>Space</a>, <tt>Constraint</tt>s,
---   and an <a>Expr</a>.
-cuc :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> ConstrainedChunk
-
--- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
 --   (<a>NP</a>), <a>Symbol</a>, <a>Space</a>, <tt>Constraint</tt>s, and a
---   <a>Maybe</a> <a>Expr</a> (Similar to <a>cuc</a> but no units).
+--   <a>Maybe</a> <a>Expr</a> (Similar to <tt>cuc</tt> but no units).
 cvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Maybe Expr -> ConstrainedChunk
 
 -- | Creates a <a>ConstrConcept</a> with a quantitative concept, a list of

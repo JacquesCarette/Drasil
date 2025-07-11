@@ -59,8 +59,8 @@ charWeight :: UncertQ
 standOffDist :: UncertQ
 pbTol :: UncertainChunk
 tNT :: UncertainChunk
-nomThick :: ConstrainedChunk
 glassTypeCon :: ConstrConcept
+nomThick :: ConstrConcept
 inputs :: [QuantityDict]
 inputsWUnitsUncrtn :: [UncertQ]
 inputsWUncrtn :: [UncertainChunk]

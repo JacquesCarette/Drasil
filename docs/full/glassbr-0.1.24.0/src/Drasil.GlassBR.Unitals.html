@@ -33,25 +33,27 @@ c -&gt; ConstrainedChunk
 </span><span class="hs-identifier hs-var">cnstrw</span></span><span> </span><span class="annot"><span class="annottext">[UncertainChunk]
 </span><a href="Drasil.GlassBR.Unitals.html#dataConstraints"><span class="hs-identifier hs-var">dataConstraints</span></a></span><span> </span><span class="annot"><span class="annottext">[ConstrainedChunk] -&gt; [ConstrainedChunk] -&gt; [ConstrainedChunk]
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrainedChunk
-</span><a href="Drasil.GlassBR.Unitals.html#nomThick"><span class="hs-identifier hs-var">nomThick</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; ConstrainedChunk
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(ConstrConcept -&gt; ConstrainedChunk)
+-&gt; [ConstrConcept] -&gt; [ConstrainedChunk]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; ConstrainedChunk
 forall c.
 (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) =&gt;
 c -&gt; ConstrainedChunk
-</span><span class="hs-identifier hs-var">cnstrw</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><span class="hs-identifier hs-var">cnstrw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.GlassBR.Unitals.html#nomThick"><span class="hs-identifier hs-var">nomThick</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.GlassBR.Unitals.html#glassTypeCon"><span class="hs-identifier hs-var">glassTypeCon</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-26"></span><span> </span><span class="hs-comment">-- map cnstrw inputDataConstraints ++ map cnstrw derivedInputDataConstraints -- ++</span><span>
 </span><span id="line-27"></span><span>  </span><span class="hs-comment">-- [cnstrw probBr, cnstrw probFail, cnstrw stressDistFac, cnstrw nomThick, cnstrw glassTypeCon]</span><span>
 </span><span id="line-28"></span><span>
 </span><span id="line-29"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#plateLen"><span class="hs-identifier hs-type">plateLen</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#plateWidth"><span class="hs-identifier hs-type">plateWidth</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#aspectRatio"><span class="hs-identifier hs-type">aspectRatio</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#charWeight"><span class="hs-identifier hs-type">charWeight</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#standOffDist"><span class="hs-identifier hs-type">standOffDist</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span>
 </span><span id="line-30"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#pbTol"><span class="hs-identifier hs-type">pbTol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#tNT"><span class="hs-identifier hs-type">tNT</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UncertainChunk</span></span><span>
-</span><span id="line-31"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#nomThick"><span class="hs-identifier hs-type">nomThick</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstrainedChunk</span></span><span>
-</span><span id="line-32"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#glassTypeCon"><span class="hs-identifier hs-type">glassTypeCon</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstrConcept</span></span><span>
-</span><span id="line-33"></span><span>
-</span><span id="line-34"></span><span class="hs-comment">{--}</span><span>
-</span><span id="line-35"></span><span>
-</span><span id="line-36"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#inputs"><span class="hs-identifier hs-type">inputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-37"></span><span id="inputs"><span class="annot"><span class="annottext">inputs :: [QuantityDict]
+</span><span id="line-31"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#glassTypeCon"><span class="hs-identifier hs-type">glassTypeCon</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#nomThick"><span class="hs-identifier hs-type">nomThick</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstrConcept</span></span><span>
+</span><span id="line-32"></span><span>
+</span><span id="line-33"></span><span class="hs-comment">{--}</span><span>
+</span><span id="line-34"></span><span>
+</span><span id="line-35"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#inputs"><span class="hs-identifier hs-type">inputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-36"></span><span id="inputs"><span class="annot"><span class="annottext">inputs :: [QuantityDict]
 </span><a href="Drasil.GlassBR.Unitals.html#inputs"><span class="hs-identifier hs-var hs-var">inputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UncertQ -&gt; QuantityDict) -&gt; [UncertQ] -&gt; [QuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; QuantityDict
@@ -68,7 +70,7 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><a href="Drasil.GlassBR.Unitals.html#inputsWUncrtn"><span class="hs-identifier hs-var">inputsWUncrtn</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-38"></span><span>  </span><span class="annot"><span class="annottext">(ConstrainedChunk -&gt; QuantityDict)
+</span><span id="line-37"></span><span>  </span><span class="annot"><span class="annottext">(ConstrainedChunk -&gt; QuantityDict)
 -&gt; [ConstrainedChunk] -&gt; [QuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConstrainedChunk -&gt; QuantityDict
@@ -82,47 +84,50 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[UnitaryChunk]
 </span><a href="Drasil.GlassBR.Unitals.html#sdVector"><span class="hs-identifier hs-var">sdVector</span></a></span><span>
-</span><span id="line-39"></span><span>
-</span><span id="line-40"></span><span class="hs-comment">--inputs with units and uncertainties</span><span>
-</span><span id="line-41"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#inputsWUnitsUncrtn"><span class="hs-identifier hs-type">inputsWUnitsUncrtn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
-</span><span id="line-42"></span><span id="inputsWUnitsUncrtn"><span class="annot"><span class="annottext">inputsWUnitsUncrtn :: [UncertQ]
+</span><span id="line-38"></span><span>
+</span><span id="line-39"></span><span class="hs-comment">--inputs with units and uncertainties</span><span>
+</span><span id="line-40"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#inputsWUnitsUncrtn"><span class="hs-identifier hs-type">inputsWUnitsUncrtn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
+</span><span id="line-41"></span><span id="inputsWUnitsUncrtn"><span class="annot"><span class="annottext">inputsWUnitsUncrtn :: [UncertQ]
 </span><a href="Drasil.GlassBR.Unitals.html#inputsWUnitsUncrtn"><span class="hs-identifier hs-var hs-var">inputsWUnitsUncrtn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#plateLen"><span class="hs-identifier hs-var">plateLen</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#plateWidth"><span class="hs-identifier hs-var">plateWidth</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#charWeight"><span class="hs-identifier hs-var">charWeight</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-43"></span><span>
-</span><span id="line-44"></span><span class="hs-comment">--inputs with uncertainties and no units</span><span>
-</span><span id="line-45"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#inputsWUncrtn"><span class="hs-identifier hs-type">inputsWUncrtn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertainChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-46"></span><span id="inputsWUncrtn"><span class="annot"><span class="annottext">inputsWUncrtn :: [UncertainChunk]
+</span><span id="line-42"></span><span>
+</span><span id="line-43"></span><span class="hs-comment">--inputs with uncertainties and no units</span><span>
+</span><span id="line-44"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#inputsWUncrtn"><span class="hs-identifier hs-type">inputsWUncrtn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertainChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-45"></span><span id="inputsWUncrtn"><span class="annot"><span class="annottext">inputsWUncrtn :: [UncertainChunk]
 </span><a href="Drasil.GlassBR.Unitals.html#inputsWUncrtn"><span class="hs-identifier hs-var hs-var">inputsWUncrtn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UncertainChunk
 </span><a href="Drasil.GlassBR.Unitals.html#pbTol"><span class="hs-identifier hs-var">pbTol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertainChunk
 </span><a href="Drasil.GlassBR.Unitals.html#tNT"><span class="hs-identifier hs-var">tNT</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-47"></span><span>
-</span><span id="line-48"></span><span class="hs-comment">--inputs with no uncertainties</span><span>
-</span><span id="line-49"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#inputsNoUncrtn"><span class="hs-identifier hs-type">inputsNoUncrtn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstrainedChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-50"></span><span id="inputsNoUncrtn"><span class="annot"><span class="annottext">inputsNoUncrtn :: [ConstrainedChunk]
-</span><a href="Drasil.GlassBR.Unitals.html#inputsNoUncrtn"><span class="hs-identifier hs-var hs-var">inputsNoUncrtn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept -&gt; ConstrainedChunk
+</span><span id="line-46"></span><span>
+</span><span id="line-47"></span><span class="hs-comment">--inputs with no uncertainties</span><span>
+</span><span id="line-48"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#inputsNoUncrtn"><span class="hs-identifier hs-type">inputsNoUncrtn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstrainedChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-49"></span><span id="inputsNoUncrtn"><span class="annot"><span class="annottext">inputsNoUncrtn :: [ConstrainedChunk]
+</span><a href="Drasil.GlassBR.Unitals.html#inputsNoUncrtn"><span class="hs-identifier hs-var hs-var">inputsNoUncrtn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConstrConcept -&gt; ConstrainedChunk)
+-&gt; [ConstrConcept] -&gt; [ConstrainedChunk]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; ConstrainedChunk
 forall c.
 (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) =&gt;
 c -&gt; ConstrainedChunk
-</span><span class="hs-identifier hs-var">cnstrw</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
-</span><a href="Drasil.GlassBR.Unitals.html#glassTypeCon"><span class="hs-identifier hs-var">glassTypeCon</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrainedChunk
+</span><span class="hs-identifier hs-var">cnstrw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.GlassBR.Unitals.html#glassTypeCon"><span class="hs-identifier hs-var">glassTypeCon</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.GlassBR.Unitals.html#nomThick"><span class="hs-identifier hs-var">nomThick</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-51"></span><span>
-</span><span id="line-52"></span><span class="hs-comment">--derived inputs with units and uncertainties</span><span>
-</span><span id="line-53"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#derivedInsWUnitsUncrtn"><span class="hs-identifier hs-type">derivedInsWUnitsUncrtn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
-</span><span id="line-54"></span><span id="derivedInsWUnitsUncrtn"><span class="annot"><span class="annottext">derivedInsWUnitsUncrtn :: [UncertQ]
+</span><span id="line-50"></span><span>
+</span><span id="line-51"></span><span class="hs-comment">--derived inputs with units and uncertainties</span><span>
+</span><span id="line-52"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#derivedInsWUnitsUncrtn"><span class="hs-identifier hs-type">derivedInsWUnitsUncrtn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
+</span><span id="line-53"></span><span id="derivedInsWUnitsUncrtn"><span class="annot"><span class="annottext">derivedInsWUnitsUncrtn :: [UncertQ]
 </span><a href="Drasil.GlassBR.Unitals.html#derivedInsWUnitsUncrtn"><span class="hs-identifier hs-var hs-var">derivedInsWUnitsUncrtn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#standOffDist"><span class="hs-identifier hs-var">standOffDist</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-55"></span><span>
-</span><span id="line-56"></span><span class="hs-comment">--derived inputs with uncertainties and no units</span><span>
-</span><span id="line-57"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#derivedInsWUncrtn"><span class="hs-identifier hs-type">derivedInsWUncrtn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
-</span><span id="line-58"></span><span id="derivedInsWUncrtn"><span class="annot"><span class="annottext">derivedInsWUncrtn :: [UncertQ]
+</span><span id="line-54"></span><span>
+</span><span id="line-55"></span><span class="hs-comment">--derived inputs with uncertainties and no units</span><span>
+</span><span id="line-56"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#derivedInsWUncrtn"><span class="hs-identifier hs-type">derivedInsWUncrtn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
+</span><span id="line-57"></span><span id="derivedInsWUncrtn"><span class="annot"><span class="annottext">derivedInsWUncrtn :: [UncertQ]
 </span><a href="Drasil.GlassBR.Unitals.html#derivedInsWUncrtn"><span class="hs-identifier hs-var hs-var">derivedInsWUncrtn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#aspectRatio"><span class="hs-identifier hs-var">aspectRatio</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-59"></span><span>
-</span><span id="line-60"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#inputDataConstraints"><span class="hs-identifier hs-type">inputDataConstraints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertainChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-61"></span><span id="inputDataConstraints"><span class="annot"><span class="annottext">inputDataConstraints :: [UncertainChunk]
+</span><span id="line-58"></span><span>
+</span><span id="line-59"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#inputDataConstraints"><span class="hs-identifier hs-type">inputDataConstraints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertainChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-60"></span><span id="inputDataConstraints"><span class="annot"><span class="annottext">inputDataConstraints :: [UncertainChunk]
 </span><a href="Drasil.GlassBR.Unitals.html#inputDataConstraints"><span class="hs-identifier hs-var hs-var">inputDataConstraints</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UncertQ -&gt; UncertainChunk) -&gt; [UncertQ] -&gt; [UncertainChunk]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; UncertainChunk
@@ -134,7 +139,7 @@ c -&gt; UncertainChunk
 </span><a href="Drasil.GlassBR.Unitals.html#inputsWUnitsUncrtn"><span class="hs-identifier hs-var">inputsWUnitsUncrtn</span></a></span><span> </span><span class="annot"><span class="annottext">[UncertainChunk] -&gt; [UncertainChunk] -&gt; [UncertainChunk]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-62"></span><span>  </span><span class="annot"><span class="annottext">(UncertainChunk -&gt; UncertainChunk)
+</span><span id="line-61"></span><span>  </span><span class="annot"><span class="annottext">(UncertainChunk -&gt; UncertainChunk)
 -&gt; [UncertainChunk] -&gt; [UncertainChunk]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UncertainChunk -&gt; UncertainChunk
@@ -144,9 +149,9 @@ forall c.
 c -&gt; UncertainChunk
 </span><span class="hs-identifier hs-var">uncrtnw</span></span><span> </span><span class="annot"><span class="annottext">[UncertainChunk]
 </span><a href="Drasil.GlassBR.Unitals.html#inputsWUncrtn"><span class="hs-identifier hs-var">inputsWUncrtn</span></a></span><span>
-</span><span id="line-63"></span><span>
-</span><span id="line-64"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#derivedInputDataConstraints"><span class="hs-identifier hs-type">derivedInputDataConstraints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertainChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-65"></span><span id="derivedInputDataConstraints"><span class="annot"><span class="annottext">derivedInputDataConstraints :: [UncertainChunk]
+</span><span id="line-62"></span><span>
+</span><span id="line-63"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#derivedInputDataConstraints"><span class="hs-identifier hs-type">derivedInputDataConstraints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertainChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-64"></span><span id="derivedInputDataConstraints"><span class="annot"><span class="annottext">derivedInputDataConstraints :: [UncertainChunk]
 </span><a href="Drasil.GlassBR.Unitals.html#derivedInputDataConstraints"><span class="hs-identifier hs-var hs-var">derivedInputDataConstraints</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UncertQ -&gt; UncertainChunk) -&gt; [UncertQ] -&gt; [UncertainChunk]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; UncertainChunk
@@ -156,7 +161,7 @@ forall c.
 c -&gt; UncertainChunk
 </span><span class="hs-identifier hs-var">uncrtnw</span></span><span> </span><span class="annot"><span class="annottext">[UncertQ]
 </span><a href="Drasil.GlassBR.Unitals.html#derivedInsWUnitsUncrtn"><span class="hs-identifier hs-var">derivedInsWUnitsUncrtn</span></a></span><span>
-</span><span id="line-66"></span><span>  </span><span class="annot"><span class="annottext">[UncertainChunk] -&gt; [UncertainChunk] -&gt; [UncertainChunk]
+</span><span id="line-65"></span><span>  </span><span class="annot"><span class="annottext">[UncertainChunk] -&gt; [UncertainChunk] -&gt; [UncertainChunk]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(UncertQ -&gt; UncertainChunk) -&gt; [UncertQ] -&gt; [UncertainChunk]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
@@ -167,17 +172,17 @@ forall c.
 c -&gt; UncertainChunk
 </span><span class="hs-identifier hs-var">uncrtnw</span></span><span> </span><span class="annot"><span class="annottext">[UncertQ]
 </span><a href="Drasil.GlassBR.Unitals.html#derivedInsWUncrtn"><span class="hs-identifier hs-var">derivedInsWUncrtn</span></a></span><span>
-</span><span id="line-67"></span><span>
-</span><span id="line-68"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#dataConstraints"><span class="hs-identifier hs-type">dataConstraints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertainChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-69"></span><span id="dataConstraints"><span class="annot"><span class="annottext">dataConstraints :: [UncertainChunk]
+</span><span id="line-66"></span><span>
+</span><span id="line-67"></span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#dataConstraints"><span class="hs-identifier hs-type">dataConstraints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertainChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-68"></span><span id="dataConstraints"><span class="annot"><span class="annottext">dataConstraints :: [UncertainChunk]
 </span><a href="Drasil.GlassBR.Unitals.html#dataConstraints"><span class="hs-identifier hs-var hs-var">dataConstraints</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[UncertainChunk]
 </span><a href="Drasil.GlassBR.Unitals.html#inputDataConstraints"><span class="hs-identifier hs-var">inputDataConstraints</span></a></span><span> </span><span class="annot"><span class="annottext">[UncertainChunk] -&gt; [UncertainChunk] -&gt; [UncertainChunk]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[UncertainChunk]
 </span><a href="Drasil.GlassBR.Unitals.html#derivedInputDataConstraints"><span class="hs-identifier hs-var">derivedInputDataConstraints</span></a></span><span>
+</span><span id="line-69"></span><span>
 </span><span id="line-70"></span><span>
-</span><span id="line-71"></span><span>
-</span><span id="line-72"></span><span id="plateLen"><span class="annot"><span class="annottext">plateLen :: UncertQ
+</span><span id="line-71"></span><span id="plateLen"><span class="annot"><span class="annottext">plateLen :: UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#plateLen"><span class="hs-identifier hs-var hs-var">plateLen</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Symbol
@@ -202,13 +207,13 @@ String
 </span><span class="hs-string">&quot;plateLen&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;plate length (long dimension)&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-73"></span><span>  </span><span class="annot"><span class="annottext">Symbol
+</span><span id="line-72"></span><span>  </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lA</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">metre</span></span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span>
-</span><span id="line-74"></span><span>  </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">ConstraintE
+</span><span id="line-73"></span><span>  </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">,</span><span>
-</span><span id="line-75"></span><span>    </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
+</span><span id="line-74"></span><span>    </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
 </span><span class="hs-identifier hs-var">physRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -220,7 +225,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#plateWidth"><span class="hs-identifier hs-var">plateWidth</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-76"></span><span>    </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
+</span><span id="line-75"></span><span>    </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
 </span><span class="hs-identifier hs-var">sfwrRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -241,8 +246,8 @@ forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">1.5</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
-</span><span id="line-77"></span><span>
-</span><span id="line-78"></span><span id="plateWidth"><span class="annot"><span class="annottext">plateWidth :: UncertQ
+</span><span id="line-76"></span><span>
+</span><span id="line-77"></span><span id="plateWidth"><span class="annot"><span class="annottext">plateWidth :: UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#plateWidth"><span class="hs-identifier hs-var hs-var">plateWidth</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Symbol
@@ -267,11 +272,11 @@ String
 </span><span class="hs-string">&quot;plateWidth&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;plate width (short dimension)&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-79"></span><span>  </span><span class="annot"><span class="annottext">Symbol
+</span><span id="line-78"></span><span>  </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lB</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">metre</span></span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span>
-</span><span id="line-80"></span><span>  </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
+</span><span id="line-79"></span><span>  </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
 </span><span class="hs-identifier hs-var">physRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -287,7 +292,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#plateLen"><span class="hs-identifier hs-var">plateLen</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-81"></span><span>    </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
+</span><span id="line-80"></span><span>    </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
 </span><span class="hs-identifier hs-var">sfwrRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -308,8 +313,8 @@ forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">1.2</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
-</span><span id="line-82"></span><span>
-</span><span id="line-83"></span><span id="aspectRatio"><span class="annot"><span class="annottext">aspectRatio :: UncertQ
+</span><span id="line-81"></span><span>
+</span><span id="line-82"></span><span id="aspectRatio"><span class="annot"><span class="annottext">aspectRatio :: UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#aspectRatio"><span class="hs-identifier hs-var hs-var">aspectRatio</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Uncertainty -&gt; UncertQ
 forall c.
 (Quantity c, Constrained c, Concept c, HasReasVal c,
@@ -325,7 +330,7 @@ c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
 </span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;AR&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span>
-</span><span id="line-84"></span><span>  </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
+</span><span id="line-83"></span><span>  </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
 </span><span class="hs-identifier hs-var">physRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -336,7 +341,7 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-85"></span><span>    </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
+</span><span id="line-84"></span><span>    </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
 </span><span class="hs-identifier hs-var">sfwrRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -352,8 +357,8 @@ forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">1.5</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
-</span><span id="line-86"></span><span>
-</span><span id="line-87"></span><span id="pbTol"><span class="annot"><span class="annottext">pbTol :: UncertainChunk
+</span><span id="line-85"></span><span>
+</span><span id="line-86"></span><span id="pbTol"><span class="annot"><span class="annottext">pbTol :: UncertainChunk
 </span><a href="Drasil.GlassBR.Unitals.html#pbTol"><span class="hs-identifier hs-var hs-var">pbTol</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Symbol
@@ -366,14 +371,14 @@ forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-string">&quot;pbTol&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;tolerable probability of breakage&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-88"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span id="line-87"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">cP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol] -&gt; Symbol
 </span><span class="hs-identifier hs-var">Concat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Symbol
 </span><a href="Drasil.GlassBR.Unitals.html#lBreak"><span class="hs-identifier hs-var">lBreak</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="Drasil.GlassBR.Unitals.html#lTol"><span class="hs-identifier hs-var">lTol</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span>
-</span><span id="line-89"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
+</span><span id="line-88"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">probConstr</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Expr
 forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="annottext">Double
@@ -382,8 +387,8 @@ forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-number">0.001</span></span><span> </span><span class="annot"><span class="annottext">Maybe Int
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span class="hs-special">)</span><span>
-</span><span id="line-90"></span><span>
-</span><span id="line-91"></span><span id="charWeight"><span class="annot"><span class="annottext">charWeight :: UncertQ
+</span><span id="line-89"></span><span>
+</span><span id="line-90"></span><span id="charWeight"><span class="annot"><span class="annottext">charWeight :: UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#charWeight"><span class="hs-identifier hs-var hs-var">charWeight</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Symbol
@@ -408,13 +413,13 @@ String
 </span><span class="hs-string">&quot;charWeight&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;charge weight&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-92"></span><span>  </span><span class="annot"><span class="annottext">Symbol
+</span><span id="line-91"></span><span>  </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lW</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">kilogram</span></span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span>
-</span><span id="line-93"></span><span>  </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">ConstraintE
+</span><span id="line-92"></span><span>  </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">,</span><span>
-</span><span id="line-94"></span><span>    </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
+</span><span id="line-93"></span><span>    </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
 </span><span class="hs-identifier hs-var">sfwrRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -431,13 +436,13 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.GlassBR.Unitals.html#cWeightMax"><span class="hs-identifier hs-var">cWeightMax</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-95"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span id="line-94"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">42</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
-</span><span id="line-96"></span><span>
-</span><span id="line-97"></span><span id="tNT"><span class="annot"><span class="annottext">tNT :: UncertainChunk
+</span><span id="line-95"></span><span>
+</span><span id="line-96"></span><span id="tNT"><span class="annot"><span class="annottext">tNT :: UncertainChunk
 </span><a href="Drasil.GlassBR.Unitals.html#tNT"><span class="hs-identifier hs-var hs-var">tNT</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Symbol
@@ -450,18 +455,18 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-string">&quot;tNT&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;TNT equivalent factor&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-98"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span id="line-97"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;TNT&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span>
-</span><span id="line-99"></span><span>  </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">ConstraintE
+</span><span id="line-98"></span><span>  </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span> </span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
-</span><span id="line-100"></span><span>
-</span><span id="line-101"></span><span id="standOffDist"><span class="annot"><span class="annottext">standOffDist :: UncertQ
+</span><span id="line-99"></span><span>
+</span><span id="line-100"></span><span id="standOffDist"><span class="annot"><span class="annottext">standOffDist :: UncertQ
 </span><a href="Drasil.GlassBR.Unitals.html#standOffDist"><span class="hs-identifier hs-var hs-var">standOffDist</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Uncertainty -&gt; UncertQ
 forall c.
 (Quantity c, Constrained c, Concept c, HasReasVal c,
@@ -481,9 +486,9 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-string">&quot;SD&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">metre</span></span><span class="hs-special">)</span><span>
-</span><span id="line-102"></span><span>  </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">ConstraintE
+</span><span id="line-101"></span><span>  </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">ConstraintE
 </span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">,</span><span>
-</span><span id="line-103"></span><span>    </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
+</span><span id="line-102"></span><span>    </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
 </span><span class="hs-identifier hs-var">sfwrRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -504,29 +509,31 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">45</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
-</span><span id="line-104"></span><span>
-</span><span id="line-105"></span><span id="nomThick"><span class="annot"><span class="annottext">nomThick :: ConstrainedChunk
+</span><span id="line-103"></span><span>
+</span><span id="line-104"></span><span id="nomThick"><span class="annot"><span class="annottext">nomThick :: ConstrConcept
 </span><a href="Drasil.GlassBR.Unitals.html#nomThick"><span class="hs-identifier hs-var hs-var">nomThick</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; NP
+-&gt; String
 -&gt; Symbol
 -&gt; UnitDefn
 -&gt; Space
 -&gt; [ConstraintE]
 -&gt; Expr
--&gt; ConstrainedChunk
+-&gt; ConstrConcept
 forall u.
 IsUnit u =&gt;
 String
 -&gt; NP
+-&gt; String
 -&gt; Symbol
 -&gt; u
 -&gt; Space
 -&gt; [ConstraintE]
 -&gt; Expr
--&gt; ConstrainedChunk
-</span><span class="hs-identifier hs-var">cuc</span></span><span> </span><span class="annot"><span class="annottext">String
+-&gt; ConstrConcept
+</span><span class="hs-identifier hs-var">cuc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;nomThick&quot;</span></span><span>
-</span><span id="line-106"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
+</span><span id="line-105"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; NP) -&gt; Sentence -&gt; NP
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
@@ -542,9 +549,11 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="annottext">[Double]
 </span><a href="Drasil.GlassBR.Unitals.html#nominalThicknesses"><span class="hs-identifier hs-var">nominalThicknesses</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-107"></span><span>  </span><span class="annot"><span class="annottext">Symbol
+</span><span id="line-106"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;the specified standard thickness of the glass plate&quot;</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lT</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
-</span><span class="hs-identifier hs-var">millimetre</span></span><span> </span><span class="hs-comment">{-Discrete nominalThicknesses, but not implemented-}</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">millimetre</span></span><span>
+</span><span id="line-107"></span><span>  </span><span class="hs-comment">{-Discrete nominalThicknesses, but not implemented-}</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Rational</span></span><span>
 </span><span id="line-108"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr -&gt; ConstraintE
 </span><span class="hs-identifier hs-var">sfwrElem</span></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; ConstraintE) -&gt; Expr -&gt; ConstraintE
@@ -557,7 +566,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Double -&gt; Expr
 forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="annottext">[Double]
-</span><a href="Drasil.GlassBR.Unitals.html#nominalThicknesses"><span class="hs-identifier hs-var">nominalThicknesses</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; ConstrainedChunk) -&gt; Expr -&gt; ConstrainedChunk
+</span><a href="Drasil.GlassBR.Unitals.html#nominalThicknesses"><span class="hs-identifier hs-var">nominalThicknesses</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; ConstrConcept) -&gt; Expr -&gt; ConstrConcept
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 forall r. LiteralC r =&gt; Integer -&gt; r

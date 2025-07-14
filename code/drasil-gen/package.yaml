@@ -24,6 +24,7 @@ dependencies:
 - time
 - drasil-build
 - drasil-code
+- drasil-data
 - drasil-database
 - drasil-docLang
 - drasil-gool

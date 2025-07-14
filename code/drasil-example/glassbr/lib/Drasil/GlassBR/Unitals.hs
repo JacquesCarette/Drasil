@@ -148,12 +148,12 @@ dimMax, dimMin, arMax, cWeightMax, cWeightMin, sdMax, stressDistFacMin, stressDi
 
 dimMax     = mkQuantDef (uc' "dimMax"
   (nounPhraseSP "maximum value for one of the dimensions of the glass plate")
-  (S "placeholder definition")
+  (S "the upper bound on the length or width of the glass plate")
   (subMax lD) Real metre) (exactDbl 5)
 
 dimMin     = mkQuantDef (uc' "dimMin"
   (nounPhraseSP "minimum value for one of the dimensions of the glass plate")
-  (S "placeholder definition")
+  (S "the lower bound on the length or width of the glass plate")
   (subMin lD) Real metre) (dbl 0.1)
 
 arMax     = mkQuantDef (vc "arMax"
@@ -162,22 +162,22 @@ arMax     = mkQuantDef (vc "arMax"
 
 cWeightMax = mkQuantDef (uc' "cWeightMax"
   (nounPhraseSP "maximum permissible input charge weight")
-  (S "placeholder definition")
+  (S "the maximum permissible input weight of the charge that can be input")
   (subMax (eqSymb charWeight)) Real kilogram) (exactDbl 910)
 
 cWeightMin = mkQuantDef (uc' "cWeightMin"
   (nounPhraseSP "minimum permissible input charge weight")
-  (S "placeholder definition")
+  (S "the minimum permissible weight of the charge that can be input")
   (subMin (eqSymb charWeight)) Real kilogram) (dbl 4.5)
 
 sdMax     = mkQuantDef (uc' "sdMax"
   (nounPhraseSP "maximum stand off distance permissible for input")
-  (S "placeholder definition")
+  (S "the maximum permissible stand off distance that can be input")
   (subMax (eqSymb standOffDist)) Real metre) (exactDbl 130)
 
 sdMin     = mkQuantDef (uc' "sdMin"
   (nounPhraseSP "minimum stand off distance permissible for input")
-  (S "placeholder definition")
+  (S "the minimum permissible stand off distance that can be input")
   (subMin (eqSymb standOffDist)) Real metre) (exactDbl 6)
 
 stressDistFacMin = mkQuantDef (vc "stressDistFacMin" (nounPhraseSP "minimum value for the stress distribution factor")
@@ -227,15 +227,15 @@ loadDur     = uc' "loadDur"    (nounPhraseSP "duration of load")
   (sub lT lDur) Real second
 
 sdx         = uc' "sdx" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase xComp))
-  (S "placeholder definition")
+  (S "the x-component of the stand off distance")
   (subX (eqSymb standOffDist)) Real metre
 
 sdy         = uc' "sdy" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase yComp))
-  (S "placeholder definition")
+  (S "the y-component of the stand off distance")
   (subY (eqSymb standOffDist)) Real metre
 
 sdz         = uc' "sdz" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase zComp))
-  (S "placeholder definition")
+  (S "the z-component of the stand off distance")
   (subZ (eqSymb standOffDist)) Real metre
 
 {-Quantities-}

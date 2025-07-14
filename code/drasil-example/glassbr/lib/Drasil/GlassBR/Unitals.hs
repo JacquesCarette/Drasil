@@ -146,33 +146,39 @@ specParamVals = [dimMax, dimMin, arMax, cWeightMax, cWeightMin,
 dimMax, dimMin, arMax, cWeightMax, cWeightMin, sdMax, stressDistFacMin, stressDistFacMax,
   sdMin :: ConstQDef
 
-dimMax     = mkQuantDef (unitary "dimMax"
+dimMax     = mkQuantDef (uc' "dimMax"
   (nounPhraseSP "maximum value for one of the dimensions of the glass plate")
-  (subMax lD) metre Real) (exactDbl 5)
+  (S "placeholder definition")
+  (subMax lD) Real metre) (exactDbl 5)
 
-dimMin     = mkQuantDef (unitary "dimMin"
+dimMin     = mkQuantDef (uc' "dimMin"
   (nounPhraseSP "minimum value for one of the dimensions of the glass plate")
-  (subMin lD) metre Real) (dbl 0.1)
+  (S "placeholder definition")
+  (subMin lD) Real metre) (dbl 0.1)
 
 arMax     = mkQuantDef (vc "arMax"
   (nounPhraseSP "maximum aspect ratio")
   (subMax (variable "AR")) Real) (exactDbl 5)
 
-cWeightMax = mkQuantDef (unitary "cWeightMax"
+cWeightMax = mkQuantDef (uc' "cWeightMax"
   (nounPhraseSP "maximum permissible input charge weight")
-  (subMax (eqSymb charWeight)) kilogram Real) (exactDbl 910)
+  (S "placeholder definition")
+  (subMax (eqSymb charWeight)) Real kilogram) (exactDbl 910)
 
-cWeightMin = mkQuantDef (unitary "cWeightMin"
+cWeightMin = mkQuantDef (uc' "cWeightMin"
   (nounPhraseSP "minimum permissible input charge weight")
-  (subMin (eqSymb charWeight)) kilogram Real) (dbl 4.5)
+  (S "placeholder definition")
+  (subMin (eqSymb charWeight)) Real kilogram) (dbl 4.5)
 
-sdMax     = mkQuantDef (unitary "sdMax"
+sdMax     = mkQuantDef (uc' "sdMax"
   (nounPhraseSP "maximum stand off distance permissible for input")
-  (subMax (eqSymb standOffDist)) metre Real) (exactDbl 130)
+  (S "placeholder definition")
+  (subMax (eqSymb standOffDist)) Real metre) (exactDbl 130)
 
-sdMin     = mkQuantDef (unitary "sdMin"
+sdMin     = mkQuantDef (uc' "sdMin"
   (nounPhraseSP "minimum stand off distance permissible for input")
-  (subMin (eqSymb standOffDist)) metre Real) (exactDbl 6)
+  (S "placeholder definition")
+  (subMin (eqSymb standOffDist)) Real metre) (exactDbl 6)
 
 stressDistFacMin = mkQuantDef (vc "stressDistFacMin" (nounPhraseSP "minimum value for the stress distribution factor")
   (subMin (eqSymb stressDistFac)) Real) (exactDbl 1)
@@ -185,7 +191,7 @@ unitalSymbols :: [UnitalChunk]
 unitalSymbols = [demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight,
   sflawParamK, sflawParamM, loadDur, minThick]
 
-sdx, sdy, sdz :: UnitaryChunk
+sdx, sdy, sdz :: UnitalChunk
 
 demand, tmDemand, lRe, tmLRe, minThick, nonFactorL, eqTNTWeight,
   sflawParamM, sflawParamK, loadDur, modElas :: UnitalChunk
@@ -220,14 +226,17 @@ loadDur     = uc' "loadDur"    (nounPhraseSP "duration of load")
   (S "the amount of time that a load is applied to the glass plate")
   (sub lT lDur) Real second
 
-sdx         = unitary "sdx" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase xComp))
-  (subX (eqSymb standOffDist)) metre Real
+sdx         = uc' "sdx" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase xComp))
+  (S "placeholder definition")
+  (subX (eqSymb standOffDist)) Real metre
 
-sdy         = unitary "sdy" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase yComp))
-  (subY (eqSymb standOffDist)) metre Real
+sdy         = uc' "sdy" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase yComp))
+  (S "placeholder definition")
+  (subY (eqSymb standOffDist)) Real metre
 
-sdz         = unitary "sdz" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase zComp))
-  (subZ (eqSymb standOffDist)) metre Real
+sdz         = uc' "sdz" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase zComp))
+  (S "placeholder definition")
+  (subZ (eqSymb standOffDist)) Real metre
 
 {-Quantities-}
 
@@ -406,7 +415,7 @@ constantLoadSF  = mkQuantDef loadSF      $ exactDbl 1
 
 --Equations--
 
-sdVector :: [UnitaryChunk]
+sdVector :: [UnitalChunk]
 sdVector = [sdx, sdy, sdz]
 
 --

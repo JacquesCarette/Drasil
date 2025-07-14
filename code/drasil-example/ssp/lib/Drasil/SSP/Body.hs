@@ -5,7 +5,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil hiding (Verb, number, organization, section, variable)
 import Drasil.SRSDocument
-import MetaDatabase.Drasil (cdb)
+import Database.Drasil.ChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
 import Theory.Drasil (output)

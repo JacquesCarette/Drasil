@@ -2,7 +2,7 @@ module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) wher
 
 import Language.Drasil
 import Drasil.SRSDocument
-import MetaDatabase.Drasil (cdb)
+import Database.Drasil.ChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import qualified Language.Drasil.Sentence.Combinators as S

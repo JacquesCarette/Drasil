@@ -2,7 +2,7 @@ module Drasil.Projectile.Body (printSetting, si, srs, fullSI) where
 
 import Language.Drasil
 import Drasil.SRSDocument
-import MetaDatabase.Drasil (cdb)
+import Database.Drasil.ChunkDB (cdb)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S

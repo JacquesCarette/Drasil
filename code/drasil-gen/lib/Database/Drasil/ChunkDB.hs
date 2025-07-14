@@ -1,4 +1,4 @@
-module MetaDatabase.Drasil.ChunkDB (
+module Database.Drasil.ChunkDB (
   cdb
 ) where
 

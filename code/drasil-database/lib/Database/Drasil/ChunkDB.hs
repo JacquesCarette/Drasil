@@ -18,7 +18,7 @@ module Database.Drasil.ChunkDB (
   RefbyMap, TraceMap, UMap,
   -- * Functions
   -- ** Constructors
-  cdb', idMap, symbolMap, termMap, conceptMap, unitMap, traceMap, generateRefbyMap, -- idMap, termMap for docLang & metadb
+  cdb', idMap, symbolMap, termMap, conceptMap, unitMap, traceMap, generateRefbyMap, -- idMap, termMap for docLang
   -- ** Lookup Functions
   asOrderedList, collectUnits,
   termResolve, termResolve', defResolve, symbResolve,

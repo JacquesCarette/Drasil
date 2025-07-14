@@ -29,8 +29,6 @@ dependencies:
 - drasil-gool
 - drasil-lang
 - drasil-metadata
-- drasil-metadb
-- drasil-printers
 - drasil-theory
 - drasil-utils
 - dblpend

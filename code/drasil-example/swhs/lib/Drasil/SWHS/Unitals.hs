@@ -1,6 +1,7 @@
 module Drasil.SWHS.Unitals where -- all of this file is exported
 
 import Language.Drasil
+import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Display (Symbol(Atop), Decoration(Delta))
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -18,7 +19,7 @@ import Data.Drasil.Units.PhysicalProperties (densityU)
 import qualified Data.Drasil.Units.Thermodynamics as UT (heatTransferCoef,
   heatCapSpec, thermalFlux, volHtGenU)
 
-import Drasil.SWHS.Concepts (water)
+import Drasil.SWHS.Concepts (water, phsChgMtrl)
 
 import Control.Lens ((^.))
 
@@ -469,12 +470,12 @@ consTolAux = mkQuantDef consTol $ perc 1 5
 -- Used in Constraint 1
 tankLengthMin = mkQuantDef (uc' "tankLengthMin"
   (nounPhraseSP "minimum length of tank")
-  (S "placeholder definition")
+  (S "the minimum length of the tank")
   (subMin (eqSymb tankLength)) Real metre) $ dbl 0.1
 
 tankLengthMax = mkQuantDef (uc' "tankLengthMax"
   (nounPhraseSP "maximum length of tank")
-  (S "placeholder definition")
+  (S "the maximum length of the tank")
   (subMax (eqSymb tankLength)) Real metre) $ exactDbl 50
 
 fracMinAux = mkQuantDef fracMin $ dbl 1.0e-6
@@ -485,53 +486,53 @@ arMax = mkQuantDef aspectRatioMax $ exactDbl 100
 -- Used in Constraint 5
 pcmDensityMin = mkQuantDef (ucStaged' "pcmDensityMin"
   (nounPhraseSP "minimum density of PCM")
-  (S "placeholder definition")
+  (S "the minimum density of the" +:+ phrase phsChgMtrl)
   (staged (supMin (eqSymb pcmDensity)) 
   (subMin (unicodeConv $ eqSymb pcmDensity))) Real densityU) $ exactDbl 500
 
 pcmDensityMax = mkQuantDef (ucStaged' "pcmDensityMax"
   (nounPhraseSP "maximum density of PCM") 
-  (S "placeholder definition")
+  (S "the maximum density of the" +:+ phrase phsChgMtrl)
   (staged (supMax (eqSymb pcmDensity)) 
   (subMax (unicodeConv $ eqSymb pcmDensity))) Real densityU) $ exactDbl 20000
 
 -- Used in Constraint 7
 htCapSPMin = mkQuantDef (uc' "htCapSPMin"
   (nounPhraseSP "minimum specific heat capacity of PCM as a solid")
-  (S "placeholder definition")
+  (S "the minimum" +:+ phrase heatCapSpec `S.ofThe` phrase phsChgMtrl)
   (subMin (eqSymb htCapSP)) Real UT.heatCapSpec) $ exactDbl 100
 
 htCapSPMax = mkQuantDef (uc' "htCapSPMax"
   (nounPhraseSP "maximum specific heat capacity of PCM as a solid")
-  (S "placeholder definition")
+  (S "the maximum" +:+ phrase heatCapSpec `S.ofThe` phrase phsChgMtrl +:+ S "as a solid")
   (subMax (eqSymb htCapSP)) Real UT.heatCapSpec) $ exactDbl 4000
 
 -- Used in Constraint 8
 htCapLPMin = mkQuantDef (uc' "htCapLPMin"
   (nounPhraseSP "minimum specific heat capacity of PCM as a liquid")
-  (S "placeholder definition")
+  (S "the minimum" +:+ phrase heatCapSpec `S.ofThe` phrase phsChgMtrl +:+ S "as a liquid")
   (subMin (eqSymb htCapLP)) Real UT.heatCapSpec) $ exactDbl 100
 
 htCapLPMax = mkQuantDef (uc' "htCapLPMax"
   (nounPhraseSP "maximum specific heat capacity of PCM as a liquid")
-  (S "placeholder definition")
+  (S "the maximum" +:+ phrase heatCapSpec `S.ofThe` phrase phsChgMtrl +:+ S "as a liquid")
   (subMax (eqSymb htCapLP)) Real UT.heatCapSpec) $ exactDbl 5000
 
 -- Used in Constraint 9
 htFusionMin = mkQuantDef (uc' "htFusionMin"
   (nounPhraseSP "minimum specific latent heat of fusion")
-  (S "placeholder definition")
+  (S "the minimum specific latent heat of fusion")
   (subMin (eqSymb htFusion)) Real UT.heatCapSpec) $ exactDbl 0 
 
 htFusionMax = mkQuantDef (uc' "htFusionMax"
   (nounPhraseSP "maximum specific latent heat of fusion")
-  (S "placeholder definition")
+  (S "the maximum specific latent heat of fusion")
   (subMax (eqSymb htFusion)) Real UT.heatCapSpec) $ exactDbl 1000000 
 
 -- Used in Constraint 10
 coilSAMax = mkQuantDef (ucStaged' "coilSAMax"
   (nounPhraseSP "maximum surface area of coil") 
-  (S "placeholder definition")
+  (S "the maximum surface area of the heating coil")
   (staged (supMax (eqSymb coilSA))
   (subMax (eqSymb coilSA))) Real m_2) $ exactDbl 100000
 

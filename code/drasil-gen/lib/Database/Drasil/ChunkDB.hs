@@ -1,10 +1,5 @@
-<<<<<<< HEAD:code/drasil-metadb/lib/MetaDatabase/Drasil/ChunkDB.hs
 module MetaDatabase.Drasil.ChunkDB (
   cdb
-=======
-module Database.Drasil.ChunkDB (
-    basisCDB
->>>>>>> 151adb71c6618eaa5ce739f0f19bcc7122a9ba75:code/drasil-gen/lib/Database/Drasil/ChunkDB.hs
 ) where
 
 import Database.Drasil (ChunkDB (symbolTable, termTable, conceptChunkTable, _unitTable, _dataDefnTable,

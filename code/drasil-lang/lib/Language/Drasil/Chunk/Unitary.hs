@@ -4,17 +4,15 @@ module Language.Drasil.Chunk.Unitary (
   -- * Chunk Types
   Unitary(..), UnitaryChunk,
   -- * Constructors
-  unitary, unitary', unit_symb) where
+  unit_symb) where
 
 import Language.Drasil.Symbol
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  IsUnit, usymb, Quantity)
-import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, mkQuant')
+  usymb, Quantity)
+import Language.Drasil.Chunk.Quantity (QuantityDict)
 import Language.Drasil.UnitLang (USymb)
-import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn, unitWrapper)
-import Language.Drasil.Space (Space, HasSpace(..))
-import Language.Drasil.Stages (Stage)
-import Language.Drasil.NounPhrase.Core (NP)
+import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn)
+import Language.Drasil.Space (HasSpace(..))
 import Drasil.Database.UID (HasUID(..))
 
 import Control.Lens ((^.), makeLenses)
@@ -47,17 +45,6 @@ instance Quantity      UnitaryChunk where
 instance Unitary       UnitaryChunk where unit x = x ^. un
 -- | Finds the units of the 'QuantityDict' used to make the 'UnitaryChunk'.
 instance MayHaveUnit   UnitaryChunk where getUnit u = Just $ u ^. un
-
--- | Builds the 'QuantityDict' part from the 'UID', term ('NP'), 'Symbol', and 'Space'.
--- Assumes there's no abbreviation.
-unitary :: (IsUnit u) => String -> NP -> Symbol -> u -> Space -> UnitaryChunk
-unitary i t s u space = UC (mkQuant i t s space (Just uu) Nothing) uu -- Unit doesn't have a unitDefn, so [] is passed in
-  where uu = unitWrapper u
-
--- | Same as 'unitary' but with a 'Symbol' that changes based on the 'Stage'.
-unitary' :: (IsUnit u) => String -> NP -> (Stage -> Symbol) -> u -> Space -> UnitaryChunk
-unitary' i t s u space = UC (mkQuant' i t Nothing space s (Just uu)) uu -- Unit doesn't have a unitDefn, so [] is passed in
-  where uu = unitWrapper u
 
 -- | Helper for getting the unit's 'Symbol' from a chunk, 
 -- as opposed to the symbols of the chunk itself.

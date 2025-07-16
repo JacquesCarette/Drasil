@@ -50,12 +50,22 @@ data Space where
     Void      :: Space
     -- | Clifford algebra objects (Clifs) with a dimension and kind (e.g., Scalar, Vector, Bivector, Multivector)
     ClifS     :: Dimension -> ClifKind -> Space -> Space
+    -- ClifS     :: Dimension -> [Natural] -> Space -> Space
+    -- ClifS (Fixed 3) [0,1,2] Real  -- Contains grades 0, 1, 2
+    -- ClifS (Fixed 3) [1] Real  --pure vector 
+
   deriving (Eq, Show)
+
+  -- grade selection can be undefined if we want to create pure grade objects (vectors..) bc clifkinf implies the grade
+  -- gradeselect fct handles grade extraction at runtime
 
 -- | Kinds of Clifford algebra objects.
-data ClifKind = Scalar | Vector | Bivector | Multivector
+data ClifKind = Scalar | Vector | Bivector | Multivector --here the grade is implicit but 
+-- with the gradeSelect function i have a type lvl and runtime lvl inconsistency
   deriving (Eq, Show)
 
+-- To explicitly define the grade its either I change the ClifKind to Natural
+-- i add both grade and kind
 
 -- Suggestion: In order to support things like Fixed (a + b) in the future, 
 -- we want to use an Expr or symbolic type instead of Natural / String. 

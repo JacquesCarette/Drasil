@@ -10,10 +10,7 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
   odeintPckg, odeintSymbols
 ) where
 
-import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
-  QuantityDict, HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, ClifS), implVar,
-  implVarUID, implVarUID', qw, compoundPhrase, nounPhrase, nounPhraseSP, label,
-  sub, Idea(getA), NamedIdea(term), Stage(..), (+++))
+import Language.Drasil hiding (dim)
 import Language.Drasil.Space (ClifKind(..), Dimension(..))
 import Language.Drasil.Display (Symbol(Label, Concat))
 

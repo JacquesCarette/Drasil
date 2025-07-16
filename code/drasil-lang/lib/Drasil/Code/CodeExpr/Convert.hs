@@ -13,6 +13,9 @@ import qualified Language.Drasil.Literal.Development as LL
 import Drasil.Code.CodeExpr.Lang
 
 import Data.Bifunctor (Bifunctor(bimap))
+import Numeric.Natural (Natural)
+import qualified Data.Map.Ordered as OM
+import qualified Data.Map as M
 
 class CanGenCode e where
     toCodeExpr :: e -> CodeExpr
@@ -47,8 +50,8 @@ expr (LD.OrdBinaryOp bo l r)   = OrdBinaryOp (ordBinOp bo) (expr l) (expr r)
 expr (LD.CCCBinaryOp bo l r)   = CCCBinaryOp (cccBinOp bo) (expr l) (expr r)
 expr (LD.CCNBinaryOp bo l r)   = CCNBinaryOp (ccnBinOp bo) (expr l) (expr r)
 expr (LD.NCCBinaryOp bo l r)   = NCCBinaryOp (nccBinOp bo) (expr l) (expr r)
-expr (LD.NatCCBinaryOp _ _ _) = error "NatCCBinaryOp not supported in code generation"
-expr (LD.Clif _ _)           = error "Clif expressions not supported in code generation"
+expr (LD.NatCCBinaryOp op n e) = NatCCBinaryOp (natccBinOp op) n (expr e)
+expr (LD.Clif d es)           = Clif d (OM.fromList $ map (\(k, e) -> (k, expr e)) $ OM.toList es)
 expr (LD.ESSBinaryOp bo l r) = ESSBinaryOp (essBinOp bo) (expr l) (expr r)
 expr (LD.ESBBinaryOp bo l r)   = ESBBinaryOp (esbBinOp bo) (expr l) (expr r)
 expr (LD.Operator aao dd e)    = Operator (assocArithOp aao) (renderDomainDesc dd) (expr e)
@@ -96,11 +99,11 @@ ordBinOp LD.LEq = LEq
 ordBinOp LD.GEq = GEq
 
 cccBinOp :: LD.CCCBinOp -> CCCBinOp
-cccBinOp LD.Cross        = Cross
-cccBinOp LD.CAdd         = CAdd
-cccBinOp LD.CSub         = CSub
-cccBinOp LD.WedgeProd    = error "WedgeProd not supported in code generation"
-cccBinOp LD.GeometricProd = error "GeometricProd not supported in code generation"
+cccBinOp LD.Cross         = Cross
+cccBinOp LD.CAdd          = CAdd  
+cccBinOp LD.CSub          = CSub
+cccBinOp LD.WedgeProd     = WedgeProd
+cccBinOp LD.GeometricProd = GeometricProd
 
 ccnBinOp :: LD.CCNBinOp -> CCNBinOp
 ccnBinOp LD.Dot = Dot
@@ -108,8 +111,11 @@ ccnBinOp LD.Dot = Dot
 nccBinOp :: LD.NCCBinOp -> NCCBinOp
 nccBinOp LD.Scale = Scale
 
+natccBinOp :: E.NatCCBinOp -> NatCCBinOp
+natccBinOp E.GradeSelect = GradeSelect
+
 essBinOp :: LD.ESSBinOp -> ESSBinOp
-essBinOp LD.SAdd = SAdd
+essBinOp LD.SAdd    = SAdd
 essBinOp LD.SRemove = SRemove
 
 esbBinOp :: LD.ESBBinOp -> ESBBinOp
@@ -152,4 +158,4 @@ uFuncCC LD.NegC = NegC
 uFuncCN :: LD.UFuncCN -> UFuncCN
 uFuncCN LD.Norm  = Norm
 uFuncCN LD.Dim   = Dim
-uFuncCN LD.Grade = error "Grade not supported in code generation"
+uFuncCN LD.Grade = Grade

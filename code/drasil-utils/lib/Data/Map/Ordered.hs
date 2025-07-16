@@ -1,6 +1,6 @@
 module Data.Map.Ordered (OrderedMap,
     null, size, empty, singleton,
-    insert, lookup, elems, fromList) where
+    insert, lookup, elems, fromList, toList) where
 
 import Prelude hiding (lookup, null)
 
@@ -37,3 +37,6 @@ elems (OM m) = map snd $ sortOn fst $ M.elems m
 fromList :: Ord k => [(k, v)] -> OrderedMap k v
 fromList []           = empty
 fromList ((k, v):kvs) = foldl'(\acc (k', v') -> insert k' v' acc) (singleton k v) kvs -- Outermost entry is inserted first
+
+toList :: OrderedMap k v -> [(k, v)]
+toList (OM m) = [(k, v) | (k, (_, v)) <- M.toList m]

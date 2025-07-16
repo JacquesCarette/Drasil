@@ -10,6 +10,10 @@ import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncCN(..), UFuncCC(..),
   CCNBinOp(..), CCCBinOp(..), NCCBinOp(..), ESSBinOp(..), ESBBinOp(..), AssocConcatOper(..), eprec, precA, precB, precC)
 import Language.Drasil.Literal.Development (Literal(..))
+import Language.Drasil.Space (Dimension(..))
+import Language.Drasil (BasisBlades)
+import qualified Data.Map.Ordered as OM
+import Numeric.Natural (Natural)
 
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb, stg)
@@ -140,6 +144,7 @@ expr (UnaryOp Abs u)          sm = P.Fenced P.Abs P.Abs $ expr u sm
 expr (UnaryOpB Not u)         sm = P.Row [P.MO P.Not, expr u sm]
 expr (UnaryOpCN Norm u)       sm = P.Fenced P.Norm P.Norm $ expr u sm
 expr (UnaryOpCN Dim u)        sm = mkCall sm P.Dim u
+expr (UnaryOpCN Grade u)      sm = mkCall sm P.Grade u
 expr (UnaryOp Sqrt u)         sm = P.Sqrt $ expr u sm
 expr (UnaryOp Neg u)          sm = neg sm u
 expr (UnaryOpCC NegC u)       sm = neg sm u
@@ -159,14 +164,20 @@ expr (OrdBinaryOp GEq a b)    sm = mkBOp sm P.GEq a b
 expr (CCCBinaryOp Cross a b)  sm = mkBOp sm P.Cross a b
 expr (CCCBinaryOp CAdd a b)   sm = mkBOp sm P.CAdd a b
 expr (CCCBinaryOp CSub a b)   sm = mkBOp sm P.CSub a b
+expr (CCCBinaryOp WedgeProd a b) sm = mkBOp sm P.WedgeProd a b
+expr (CCCBinaryOp GeometricProd a b) sm = mkBOp sm P.GeometricProd a b
 expr (CCNBinaryOp Dot a b)    sm = mkBOp sm P.Dot a b
 expr (NCCBinaryOp Scale a b)  sm = mkBOp sm P.Scale a b
+-- TODO: Re-enable Clifford algebra printing after fixing type issues
+-- expr (NatCCBinaryOp GradeSelect n e) sm = gradeSelectExpr sm n e
 expr (ESSBinaryOp SAdd a b)   sm = mkBOp sm P.SAdd a b
 expr (ESSBinaryOp SRemove a b)    sm = mkBOp sm P.SRemove a b
 expr (ESBBinaryOp SContains a b)  sm = mkBOp sm P.SContains a b
 expr (Operator o d e)         sm = eop sm o d e
 expr (RealI c ri)             sm = renderRealInt sm (lookupC (sm ^. stg)
   (sm ^. ckdb) c) ri
+-- TODO: Re-enable Clifford algebra printing after fixing type issues
+-- expr (Clif dim blades)        sm = clifExpr sm dim blades
 
 -- | Common method of converting associative operations into printable layout AST.
 assocExpr :: P.Ops -> Int -> [Expr] -> PrintingInformation -> P.Expr
@@ -222,3 +233,6 @@ renderRealInt st s (UpTo (Inc,a))   = P.Row [symbol s, P.MO P.LEq, expr a st]
 renderRealInt st s (UpTo (Exc,a))   = P.Row [symbol s, P.MO P.Lt,  expr a st]
 renderRealInt st s (UpFrom (Inc,a)) = P.Row [symbol s, P.MO P.GEq, expr a st]
 renderRealInt st s (UpFrom (Exc,a)) = P.Row [symbol s, P.MO P.Gt,  expr a st]
+
+-- TODO: Clifford algebra printing functions will be re-implemented
+-- with proper type handling once we resolve the type access issues

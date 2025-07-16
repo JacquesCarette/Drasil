@@ -9,7 +9,9 @@ import Language.Drasil (DomainDesc(..), Inclusive(..),
   RTopology(..), RealInterval(..), UID, LiteralC (int))
 import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Literal.Development
-
+import Language.Drasil.Space (Dimension(..))
+import Language.Drasil (BasisBlades)
+import Numeric.Natural (Natural)
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb, stg)
 
@@ -164,7 +166,14 @@ codeExpr (CCNBinaryOp Dot a b)       sm = mkBOp sm P.Dot a b
 codeExpr (CCCBinaryOp Cross a b)     sm = mkBOp sm P.Cross a b
 codeExpr (CCCBinaryOp CAdd a b)      sm = mkBOp sm P.CAdd a b
 codeExpr (CCCBinaryOp CSub a b)      sm = mkBOp sm P.CSub a b
+codeExpr (CCCBinaryOp WedgeProd a b) sm = mkBOp sm P.WedgeProd a b
+codeExpr (CCCBinaryOp GeometricProd a b) sm = mkBOp sm P.GeometricProd a b
 codeExpr (NCCBinaryOp Scale a b)     sm = mkBOp sm P.Scale a b
+-- TODO: Re-enable Clifford algebra printing after fixing type issues
+-- codeExpr (NatCCBinaryOp GradeSelect n e) sm = gradeSelectCodeExpr sm n e
+codeExpr (UnaryOpCN Grade u)         sm = mkCall sm P.Grade u
+-- TODO: Re-enable Clifford algebra printing after fixing type issues  
+-- codeExpr (Clif dim blades)           sm = clifCodeExpr sm dim blades
 codeExpr (ESSBinaryOp SAdd a b)      sm = mkBOp sm P.SAdd a b
 codeExpr (ESSBinaryOp SRemove a b)   sm = mkBOp sm P.SRemove a b
 codeExpr (ESBBinaryOp SContains a b) sm = mkBOp sm P.SContains a b

@@ -38,7 +38,7 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   NamedArgument, narg)
 
 import Drasil.Code.CodeExpr hiding (dim)
-import Drasil.Code.CodeExpr.Development
+import qualified Drasil.Code.CodeExpr.Development as CE
 
 import Control.Lens ((^.), _1, _2, over)
 
@@ -594,36 +594,36 @@ diffCodeChunk c = quantvar $ implVarUID' (c +++ "d" )
 modifiedODESyst :: String -> ODEInfo -> [CodeExpr]
 modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
   where
-    replaceDepVar cc@(C c) | c == depVar info ^. uid = C $ depVar info +++ ("_" ++ sufx)
+    replaceDepVar cc@(CE.C c) | c == depVar info ^. uid = CE.C $ depVar info +++ ("_" ++ sufx)
                            | otherwise               = cc
-    replaceDepVar (AssocA a es)           = AssocA a (map replaceDepVar es)
-    replaceDepVar (AssocB b es)           = AssocB b (map replaceDepVar es)
-    replaceDepVar (FCall u es nes)        = FCall u (map replaceDepVar es)
+    replaceDepVar (CE.AssocA a es)           = CE.AssocA a (map replaceDepVar es)
+    replaceDepVar (CE.AssocB b es)           = CE.AssocB b (map replaceDepVar es)
+    replaceDepVar (CE.FCall u es nes)        = CE.FCall u (map replaceDepVar es)
       (map (over _2 replaceDepVar) nes)
-    replaceDepVar (New u es nes)          = New u (map replaceDepVar es)
+    replaceDepVar (CE.New u es nes)          = CE.New u (map replaceDepVar es)
       (map (over _2 replaceDepVar) nes)
-    replaceDepVar (Message au mu es nes)  = Message au mu (map replaceDepVar es)
+    replaceDepVar (CE.Message au mu es nes)  = CE.Message au mu (map replaceDepVar es)
       (map (over _2 replaceDepVar) nes)
-    replaceDepVar (Case c cs)             = Case c (map (over _1 replaceDepVar) cs)
-    replaceDepVar (Matrix es)             = Matrix $ map (map replaceDepVar) es
-    replaceDepVar (UnaryOp u e)           = UnaryOp u $ replaceDepVar e
-    replaceDepVar (UnaryOpB u e)          = UnaryOpB u $ replaceDepVar e
+    replaceDepVar (CE.Case c cs)             = CE.Case c (map (over _1 replaceDepVar) cs)
+    replaceDepVar (CE.Matrix es)             = CE.Matrix $ map (map replaceDepVar) es
+    replaceDepVar (CE.UnaryOp u e)           = CE.UnaryOp u $ replaceDepVar e
+    replaceDepVar (CE.UnaryOpB u e)          = CE.UnaryOpB u $ replaceDepVar e
     -- TODO: When ClifS or multivectors are introduced, add support for UnaryOpCC and UnaryOpCN here.
-    replaceDepVar (UnaryOpCC u e)         = UnaryOpCC u $ replaceDepVar e
-    replaceDepVar (UnaryOpCN u e)         = UnaryOpCN u $ replaceDepVar e
-    replaceDepVar (ArithBinaryOp b e1 e2) = ArithBinaryOp b
+    replaceDepVar (CE.UnaryOpCC u e)         = CE.UnaryOpCC u $ replaceDepVar e
+    replaceDepVar (CE.UnaryOpCN u e)         = CE.UnaryOpCN u $ replaceDepVar e
+    replaceDepVar (CE.ArithBinaryOp b e1 e2) = CE.ArithBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (BoolBinaryOp b e1 e2)  = BoolBinaryOp b
+    replaceDepVar (CE.BoolBinaryOp b e1 e2)  = CE.BoolBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (EqBinaryOp b e1 e2)    = EqBinaryOp b
+    replaceDepVar (CE.EqBinaryOp b e1 e2)    = CE.EqBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (LABinaryOp b e1 e2)    = LABinaryOp b
+    replaceDepVar (CE.LABinaryOp b e1 e2)    = CE.LABinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (OrdBinaryOp b e1 e2)   = OrdBinaryOp b
+    replaceDepVar (CE.OrdBinaryOp b e1 e2)   = CE.OrdBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (CCNBinaryOp b e1 e2)   = CCNBinaryOp b
+    replaceDepVar (CE.CCNBinaryOp b e1 e2)   = CE.CCNBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (CCCBinaryOp b e1 e2)   = CCCBinaryOp b
+    replaceDepVar (CE.CCCBinaryOp b e1 e2)   = CE.CCCBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
-    replaceDepVar (Operator ao dd e)      = Operator ao dd $ replaceDepVar e
+    replaceDepVar (CE.Operator ao dd e)      = CE.Operator ao dd $ replaceDepVar e
     replaceDepVar e = e

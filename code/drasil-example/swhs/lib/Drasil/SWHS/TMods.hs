@@ -49,7 +49,7 @@ consThermECS = mkConstraintSet consCC rels
         rels   = NE.fromList [consThermERel]
 
 consThermERel :: ModelExpr
-consThermERel = NegClif (sy gradient) $. sy thFluxVect $+ sy volHtGen $=
+consThermERel = negClif (sy gradient) $. sy thFluxVect $+ sy volHtGen $=
   sy density $* sy heatCapSpec $* pderiv (sy temp) time
 
 consThermENotes :: [Sentence]

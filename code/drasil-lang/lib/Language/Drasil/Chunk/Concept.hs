@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.Concept (
   -- * Concept Chunks
   -- ** From an idea ('IdeaDict')
-  ConceptChunk, dcc, dccWDS, cc, cc', ccs, cw,
+  ConceptChunk, dcc, dccA, dccAWDS, dccWDS, cc, cc', ccs, cw,
   -- ** From a 'ConceptChunk'
   ConceptInstance, cic
   ) where
@@ -18,16 +18,24 @@ import Drasil.Database.UID (HasUID(uid), nsUid)
 import Control.Lens ((^.))
 
 --FIXME: Temporary ConceptDomain tag hacking to not break everything. 
- 
+
+-- | Smart constructor for creating a concept chunks with an abbreviation
+-- Takes a UID (String), a term (NounPhrase), a definition (String), and an abbreviation (Maybe String).
+dccA :: String -> NP -> String -> Maybe String -> ConceptChunk
+dccA i ter des a = ConDict (mkIdea i ter a) (S des) []
+
+dccAWDS :: String -> NP -> Sentence -> Maybe String -> ConceptChunk
+dccAWDS i t d a = ConDict (mkIdea i t a) d []
+
 dcc :: String -> NP -> String -> ConceptChunk 
 -- | Smart constructor for creating concept chunks given a 'UID', 
 -- 'NounPhrase' ('NP') and definition (as a 'String').
-dcc i ter des = ConDict (mkIdea i ter Nothing) (S des) []
+dcc i ter des = dccA i ter des Nothing
 -- ^ Concept domain tagging is not yet implemented in this constructor.
 
 -- | Similar to 'dcc', except the definition takes a 'Sentence'.
 dccWDS :: String -> NP -> Sentence -> ConceptChunk
-dccWDS i t d = ConDict (mkIdea i t Nothing) d []
+dccWDS i t d = dccAWDS i t d Nothing
 
 -- | Constructor for projecting an idea into a 'ConceptChunk'. Takes the definition of the 
 -- 'ConceptChunk' as a 'String'. Does not allow concept domain tagging.

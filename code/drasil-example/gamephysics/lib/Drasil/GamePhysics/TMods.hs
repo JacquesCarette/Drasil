@@ -59,7 +59,8 @@ newtonLUG = tmNoRefs newtonLUGModel
   [] [express newtonLUGModel] [] "UniversalGravLaw" newtonLUGNotes
 
 newtonForceQuant :: DefinedQuantityDict
-newtonForceQuant = dqd' (dcc "force" (nounPhraseSP "Newton's law of universal gravitation") "placeholder definition") (symbol force) Real Nothing
+newtonForceQuant = dqd' (dcc "force" (nounPhraseSP "Newton's law of universal gravitation") 
+                    "the gravitational force between two masses") (symbol force) Real Nothing
 
 -- Can't include fractions within a sentence (in the part where 'r denotes the
 -- unit displacement vector, equivalent to r/||r||' (line 184)). Changed to a

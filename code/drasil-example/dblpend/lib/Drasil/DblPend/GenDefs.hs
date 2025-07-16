@@ -219,7 +219,7 @@ xForceGD_1 = gdNoRefs (equationalRealmU "xForce1" xForceMD_1)
 xForceMD_1 :: MultiDefn ModelExpr
 xForceMD_1 = mkMultiDefnForQuant quant EmptyS defns
     where quant = dqd' (dccWDS "force" (horizontalForce `onThe` firstObject)
-                    (S "placeholder definition"))
+                    (S "the horizontal force acting on the first object"))
                     (symbol force) Real (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "xForceWithMass1"
@@ -240,7 +240,7 @@ yForceGD_1 = gdNoRefs (equationalRealmU "yForce1" yForceMD_1)
 yForceMD_1 :: MultiDefn ModelExpr
 yForceMD_1 = mkMultiDefnForQuant quant EmptyS defns
     where quant = dqd' (dccWDS "force" (verticalForce `onThe` firstObject)
-                    (S "placeholder definition"))
+                    (S "the vertical force acting on the first object"))
                     (symbol force) Real (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "yForceWithMass1"
@@ -261,7 +261,7 @@ xForceGD_2 = gdNoRefs (equationalRealmU "xForce2" xForceMD_2)
 xForceMD_2 :: MultiDefn ModelExpr
 xForceMD_2 = mkMultiDefnForQuant quant EmptyS defns
     where quant = dqd' (dccWDS "force" (horizontalForce `onThe` secondObject)
-                    (S "placeholder definition"))
+                    (S "the horizontal force acting on the second object"))
                     (symbol force) Real (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "xForceWithMass2"
@@ -282,7 +282,7 @@ yForceGD_2 = gdNoRefs (equationalRealmU "yForce2" yForceMD_2)
 yForceMD_2 :: MultiDefn ModelExpr
 yForceMD_2 = mkMultiDefnForQuant quant EmptyS defns
     where quant = dqd' (dccWDS "force" (verticalForce `onThe` secondObject)
-                    (S "placeholder definition"))
+                    (S "the vertical force acting on the second object"))
                     (symbol force) Real (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "yForceWithMass2"

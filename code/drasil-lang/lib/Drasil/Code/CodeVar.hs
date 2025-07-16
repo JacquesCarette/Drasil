@@ -10,14 +10,15 @@ import Drasil.Code.CodeExpr.Lang (CodeExpr)
 import Drasil.Database.UID (HasUID(uid), (+++))
 
 import Language.Drasil.Classes (CommonIdea(abrv), Quantity, Idea(getA), NamedIdea(..))
-import Language.Drasil.Chunk.Quantity (QuantityDict, implVar')
 import Language.Drasil.Space (HasSpace(..), Space(..))
 import Language.Drasil.Symbol (HasSymbol(symbol))
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Stages (Stage(..))
 
 import Utils.Drasil (toPlainName)
-
+import Language.Drasil.Chunk.Concept (dccAWDS)
+import Language.Drasil.Chunk.DefinedQuantity (dqd', DefinedQuantityDict)
+import Language.Drasil.Sentence (Sentence(S))
 
 -- not using lenses for now
 -- | A 'CodeIdea' must include some code and its name. 
@@ -49,7 +50,7 @@ data VarOrFunc = Var | Func
 
 -- | Basic chunk representation in the code generation context.
 -- Contains a QuantityDict and the kind of code (variable or function).
-data CodeChunk = CodeC { _qc  :: QuantityDict
+data CodeChunk = CodeC { _qc  :: DefinedQuantityDict
                        , kind :: VarOrFunc  -- TODO: Jason: Once we have function spaces, I believe we won't need to store this
                        }
 makeLenses ''CodeChunk
@@ -121,7 +122,7 @@ instance MayHaveUnit CodeFuncChunk where getUnit = getUnit . view ccf
 -- Changes a 'CodeVarChunk'\'s space from 'Vect' to 'Array'.
 listToArray :: CodeVarChunk -> CodeVarChunk
 listToArray c = newSpc (c ^. typ)
-  where newSpc (Vect t) = CodeVC (CodeC (implVar' (show $ c +++ "_array")
-          (c ^. term) (getA c) (Array t) (symbol c Implementation) (getUnit c)) 
-          Var) (c ^. obv)
+  where newSpc (Vect t) = CodeVC (CodeC (dqd' (dccAWDS (show $ c +++ "_array")
+          (c ^. term) (S "placeholder definition") (getA c)) 
+          (const (symbol c Implementation)) (Array t) (getUnit c)) Var) (c ^. obv)
         newSpc _ = c

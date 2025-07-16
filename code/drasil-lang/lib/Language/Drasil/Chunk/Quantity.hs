@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.Quantity (
   -- * Class
   DefinesQuantity(defLhs),
   -- * Constructors
-  implVar, implVar', implVarUID, implVarUID', 
+  implVar, implVarUID, implVarUID', 
   mkQuant, mkQuant', qw, vc, vcSt) where
 
 import Control.Lens (Getter, (^.), makeLenses, view)
@@ -81,14 +81,6 @@ implVar i des sp sym = vcSt i des f sp
     f Implementation = sym
     f Equational = Empty
 
--- | Similar to 'implVar' but allows specification of abbreviation and unit.
-implVar' :: String -> NP -> Maybe String -> Space -> Symbol -> 
-  Maybe UnitDefn -> QuantityDict
-implVar' s np a t sym = mkQuant' s np a t f
-  where f :: Stage -> Symbol
-        f Implementation = sym
-        f Equational = Empty
-
 -- | Similar to 'implVar' but takes in a 'UID' rather than a 'String'.
 implVarUID :: UID -> NP -> Space -> Symbol -> QuantityDict
 implVarUID i des sp sym = QD (nw $ ncUID i des) sp f Nothing
@@ -97,7 +89,8 @@ implVarUID i des sp sym = QD (nw $ ncUID i des) sp f Nothing
     f Implementation = sym
     f Equational = Empty
 
--- | Similar to 'implVar'' but takes in a 'UID' rather than a 'String'.
+-- | Similar to 'implVar' but takes in a 'UID' rather than a 'String' and
+-- specifies the abbreviation and unit
 implVarUID' :: UID -> NP -> Maybe String -> Space -> Symbol -> 
   Maybe UnitDefn -> QuantityDict
 implVarUID' s np a t sym = QD (mkIdeaUID s np a) t f

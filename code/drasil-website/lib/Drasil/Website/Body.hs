@@ -73,7 +73,7 @@ data FolderLocation = Folder {
 si :: FolderLocation -> System
 si fl = SI {
     _sys         = webName,
-    _kind        = web,
+    _kind        = Website,
     _authors     = [] :: [Person],
     _quants      = [] :: [QuantityDict],
     _purpose     = [],

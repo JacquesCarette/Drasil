@@ -43,6 +43,8 @@ import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
 import Drasil.PDController.ODEs (pidODEInfo)
 import Language.Drasil.Code (quantvar)
 
+import System.Drasil (SystemKind(Specification))
+
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
 
@@ -99,7 +101,7 @@ mkSRS
 si :: System
 si = SI {
   _sys = progName,
-  _kind = Doc.srs,
+  _kind = Specification,
   _authors = [naveen],
   _purpose = [purp],
   _background  = [background],

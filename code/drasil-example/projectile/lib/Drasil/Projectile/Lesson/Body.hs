@@ -1,7 +1,7 @@
 module Drasil.Projectile.Lesson.Body where
 
 import Data.List (nub)
-import Language.Drasil
+import Language.Drasil hiding (Notebook)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil
 import System.Drasil
@@ -27,6 +27,8 @@ import Drasil.Projectile.Lesson.Review (reviewContent)
 import Drasil.Projectile.Lesson.CaseProb (caseProbCont, figRefs)
 import Drasil.Projectile.Lesson.Example (exampleContent, horiz_velo)
 
+import System.Drasil (System(..), SystemKind(Notebook))
+
 nb :: Document
 nb = mkNb mkNB (S.forGen titleize phrase) si
 
@@ -45,7 +47,7 @@ mkNB = [
 si :: System
 si = SI {
   _sys         = projectileMotion,
-  _kind        = Doc.notebook,
+  _kind        = Notebook,
   _authors     = [spencerSmith],
   _purpose     = [],
   _background  = [], 

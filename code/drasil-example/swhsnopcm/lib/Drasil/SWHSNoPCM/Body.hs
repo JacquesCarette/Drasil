@@ -14,7 +14,6 @@ import Data.Drasil.People (thulasi)
 
 import Data.Drasil.Concepts.Computation (algorithm, inValue)
 import Data.Drasil.Concepts.Documentation as Doc (doccon, doccon', material_, srsDomains, sysCont)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (inModel)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
@@ -66,6 +65,8 @@ import Drasil.SWHSNoPCM.Requirements (funcReqs, inReqDesc)
 import Drasil.SWHSNoPCM.References (citations)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
   specParamValList)
+
+import System.Drasil (SystemKind(Specification))
 
 srs :: Document
 srs = mkDoc mkSRS S.forT si
@@ -163,7 +164,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 si :: System
 si = SI {
   _sys         = srsSWHS,
-  _kind        = Doc.srs,
+  _kind        = Specification,
   _authors     = [thulasi],
   _purpose     = [purp],
   _background  = [introStartNoPCM],

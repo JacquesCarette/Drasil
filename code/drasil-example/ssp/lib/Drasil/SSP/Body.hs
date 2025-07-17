@@ -52,7 +52,7 @@ import Drasil.SSP.TMods (tMods)
 import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
   inputs, inputsWUncrtn, outputs, symbols)
 
-import System.Drasil (System(..), SystemKind(SRS))
+import System.Drasil (SystemKind(Specification))
 
 --Document Setup--
 
@@ -71,7 +71,7 @@ resourcePath = "../../../../datafiles/ssp/"
 si :: System
 si = SI {
   _sys         = progName, 
-  _kind        = SRS, 
+  _kind        = Specification,
   _authors     = [henryFrankis, brooks],
   _purpose     = [purp],
   _background  = [],

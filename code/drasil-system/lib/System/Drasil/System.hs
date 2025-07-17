@@ -35,7 +35,8 @@ type Scope = [Sentence]
 type Motivation = [Sentence]
 
 data SystemKind =
-    SRS
+    Specification
+  | RunnableSoftware
   | Notebook
   | Website
 
@@ -43,7 +44,8 @@ whatsTheBigIdea :: System -> IdeaDict
 whatsTheBigIdea si = whatKind' (_kind si)
   where
     whatKind' :: SystemKind -> IdeaDict
-    whatKind' SRS = nw Doc.srs
+    whatKind' Specification = nw Doc.srs
+    whatKind' RunnableSoftware = mkIdea "runnable software" (cn "runnable software") (Just "software")
     whatKind' Notebook = nw Doc.notebook
     whatKind' Website = mkIdea "website" (cn "website") (Just "web")
 

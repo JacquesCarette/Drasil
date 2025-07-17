@@ -77,16 +77,16 @@ import Control.Lens ((^.))
 -- with proper library integration once we resolve the type access issues
 
 -- | Similar to 'unop', but for vectors.
-unopVN :: (SharedProg r) => UFuncCN -> (SValue r -> SValue r)
-unopVN Dim = listSize
+unopCN :: (SharedProg r) => UFuncCN -> (SValue r -> SValue r)
+unopCN Dim = listSize
 -- TODO: Re-enable after proper library integration
 -- unopVN Norm = \mv -> funcApp (func "norm" double) double [mv]
 -- unopVN Grade = \mv -> funcApp (func "grade" int) int [mv]
 
 -- TODO: Clifford algebra unary operations for UFuncCC will be re-implemented
 -- | Similar to 'unop', but for vectors.
-unopVV :: (SharedProg r) => UFuncCC -> (SValue r -> SValue r)
-unopVV _ = error "Clifford algebra unary operations not yet implemented"
+unopCC :: (SharedProg r) => UFuncCC -> (SValue r -> SValue r)
+unopCC _ = error "Clifford algebra unary operations not yet implemented"
 -- TODO: Re-enable after proper library integration
 -- unopVV NegC = \mv -> funcApp (func "negate" (listType double)) (listType double) [mv]
 
@@ -361,8 +361,8 @@ convExpr (Field o f) = do
   return $ valueOf v
 convExpr (UnaryOp o u)    = fmap (unop o) (convExpr u)
 convExpr (UnaryOpB o u)   = fmap (unopB o) (convExpr u)
-convExpr (UnaryOpCC o u)  = fmap (unopVV o) (convExpr u)
-convExpr (UnaryOpCN o u)  = fmap (unopVN o) (convExpr u)
+convExpr (UnaryOpCC o u)  = fmap (unopCC o) (convExpr u)
+convExpr (UnaryOpCN o u)  = fmap (unopCN o) (convExpr u)
 convExpr (ArithBinaryOp Frac (Lit (Int a)) (Lit (Int b))) = do -- hack to deal with integer division
   sm <- spaceCodeType Rational
   let getLiteral Double = litDouble (fromIntegral a) #/ litDouble (fromIntegral b)
@@ -1067,8 +1067,8 @@ convExprProc (Message {}) = error "convExprProc: Procedural renderers do not sup
 convExprProc (Field _ _) = error "convExprProc: Procedural renderers do not support object field access"
 convExprProc (UnaryOp o u)    = fmap (unop o) (convExprProc u)
 convExprProc (UnaryOpB o u)   = fmap (unopB o) (convExprProc u)
-convExprProc (UnaryOpCC o u)  = fmap (unopVV o) (convExprProc u)
-convExprProc (UnaryOpCN o u)  = fmap (unopVN o) (convExprProc u)
+convExprProc (UnaryOpCC o u)  = fmap (unopCC o) (convExprProc u)
+convExprProc (UnaryOpCN o u)  = fmap (unopCN o) (convExprProc u)
 convExprProc (ArithBinaryOp Frac (Lit (Int a)) (Lit (Int b))) = do -- hack to deal with integer division
   sm <- spaceCodeType Rational
   let getLiteral Double = litDouble (fromIntegral a) #/ litDouble (fromIntegral b)

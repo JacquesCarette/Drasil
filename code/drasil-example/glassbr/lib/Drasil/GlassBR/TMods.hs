@@ -50,5 +50,5 @@ pbIsSafeExpr = sy probFail $< sy pbTolfail
 pbIsSafeDesc :: Sentence
 pbIsSafeDesc = tModDesc isSafeProb
 
-tModDesc :: QuantityDict -> Sentence
+tModDesc :: DefinedQuantityDict -> Sentence
 tModDesc main = S "If" +:+. (ch main `sC` S "the structure is considered safe")

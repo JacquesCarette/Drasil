@@ -132,7 +132,7 @@ module Language.Drasil (
   , physRange, sfwrRange, physElem, sfwrElem, isPhysC, isSfwrC
   -- Language.Drasil.Chunk.Constrained
   , ConstrainedChunk(..), ConstrConcept(..)
-  , cvc, constrained', cuc', cuc'', constrainedNRV'
+  , cvc, constrained', cuc', cuc'', cucNoUnit', constrainedNRV'
   , cnstrw, cnstrw'
   -- Language.Drasil.Chunk.UncertainQuantity
   , UncertainChunk(..), UncertQ, uq, uqc, uqcND, uncrtnChunk, uvc

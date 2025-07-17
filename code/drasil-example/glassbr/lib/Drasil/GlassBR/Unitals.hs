@@ -27,26 +27,26 @@ constrained = map cnstrw dataConstraints ++ map cnstrw [nomThick, glassTypeCon]
   -- [cnstrw probBr, cnstrw probFail, cnstrw stressDistFac, cnstrw nomThick, cnstrw glassTypeCon]
 
 plateLen, plateWidth, aspectRatio, charWeight, standOffDist :: UncertQ
-pbTol, tNT :: UncertainChunk
+pbTol, tNT :: UncertQ
 glassTypeCon, nomThick :: ConstrConcept
 
 {--}
 
-inputs :: [QuantityDict]
-inputs = map qw inputsWUnitsUncrtn ++ map qw inputsWUncrtn ++
-  map qw inputsNoUncrtn ++ map qw sdVector
+inputs :: [DefinedQuantityDict]
+inputs = map dqdWr inputsWUnitsUncrtn ++ map dqdWr inputsWUncrtn ++
+  map dqdWr inputsNoUncrtn ++ map dqdWr sdVector
 
 --inputs with units and uncertainties
 inputsWUnitsUncrtn :: [UncertQ]
 inputsWUnitsUncrtn = [plateLen, plateWidth, charWeight]
 
 --inputs with uncertainties and no units
-inputsWUncrtn :: [UncertainChunk]
+inputsWUncrtn :: [UncertQ]
 inputsWUncrtn = [pbTol, tNT]
 
 --inputs with no uncertainties
-inputsNoUncrtn :: [ConstrainedChunk]
-inputsNoUncrtn = map cnstrw [glassTypeCon, nomThick]
+inputsNoUncrtn :: [ConstrConcept]
+inputsNoUncrtn = map cnstrw' [glassTypeCon, nomThick]
 
 --derived inputs with units and uncertainties
 derivedInsWUnitsUncrtn :: [UncertQ]
@@ -56,26 +56,25 @@ derivedInsWUnitsUncrtn = [standOffDist]
 derivedInsWUncrtn :: [UncertQ]
 derivedInsWUncrtn = [aspectRatio]
 
-inputDataConstraints :: [UncertainChunk]
-inputDataConstraints = map uncrtnw inputsWUnitsUncrtn ++
-  map uncrtnw inputsWUncrtn
+inputDataConstraints :: [UncertQ]
+inputDataConstraints = inputsWUnitsUncrtn ++ inputsWUncrtn
 
-derivedInputDataConstraints :: [UncertainChunk]
-derivedInputDataConstraints = map uncrtnw derivedInsWUnitsUncrtn
-  ++ map uncrtnw derivedInsWUncrtn
+derivedInputDataConstraints :: [UncertQ]
+derivedInputDataConstraints = derivedInsWUnitsUncrtn
+  ++ derivedInsWUncrtn
 
-dataConstraints :: [UncertainChunk]
+dataConstraints :: [UncertQ]
 dataConstraints = inputDataConstraints ++ derivedInputDataConstraints
 
 
-plateLen = uqcND "plateLen" (nounPhraseSP "plate length (long dimension)")
-  lA metre Real
+plateLen = uqc "plateLen" (nounPhraseSP "plate length (long dimension)")
+  "the length (long dimension) of the glass plate" lA metre Real
   [ gtZeroConstr,
     physRange $ UpFrom (Inc, sy plateWidth),
     sfwrRange $ Bounded (Inc , sy dimMin) (Inc , sy dimMax)] (dbl 1.5) defaultUncrt
 
-plateWidth = uqcND "plateWidth" (nounPhraseSP "plate width (short dimension)")
-  lB metre Real
+plateWidth = uqc "plateWidth" (nounPhraseSP "plate width (short dimension)")
+  "the width (short dimension) of the glass plate" lB metre Real
   [ physRange $ Bounded (Exc, exactDbl 0) (Inc, sy plateLen),
     sfwrRange $ Bounded (Inc, sy dimMin) (Inc, sy dimMax)] (dbl 1.2) defaultUncrt
 
@@ -83,9 +82,10 @@ aspectRatio = uq (constrained' (dqdNoUnit aspectRatioCon (variable "AR") Real)
   [ physRange $ UpFrom (Inc, exactDbl 1),
     sfwrRange $ UpTo (Inc, sy arMax)] (dbl 1.5)) defaultUncrt
 
-pbTol = uvc "pbTol" (nounPhraseSP "tolerable probability of breakage")
-  (sub cP (Concat [lBreak, lTol])) Real
-  [probConstr] (dbl 0.008) (uncty 0.001 Nothing)
+pbTol = uq (constrained' (dqdNoUnit (dcc "pbTol" (nounPhraseSP "tolerable probability of breakage")
+  "the tolerable probability of breakage of the glass plate")
+  (sub cP (Concat [lBreak, lTol])) Real)
+  [probConstr] (dbl 0.008)) (uncty 0.001 Nothing)
 
 charWeight = uqcND "charWeight" (nounPhraseSP "charge weight")
   lW kilogram Real
@@ -93,9 +93,10 @@ charWeight = uqcND "charWeight" (nounPhraseSP "charge weight")
     sfwrRange $ Bounded (Inc, sy cWeightMin) (Inc, sy cWeightMax)]
     (exactDbl 42) defaultUncrt
 
-tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
-  (variable "TNT") Real
-  [ gtZeroConstr ] (exactDbl 1) defaultUncrt
+tNT = uq (constrained' (dqdNoUnit (dcc "tNT" (nounPhraseSP "TNT equivalent factor")
+  "the TNT equivalent factor")
+  (variable "TNT") Real)
+  [ gtZeroConstr ] (exactDbl 1)) defaultUncrt
 
 standOffDist = uq (constrained' (uc sD (variable "SD") Real metre)
   [ gtZeroConstr,
@@ -111,28 +112,33 @@ glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)
   [sfwrElem $ mkSet String $ map (str . abrv . snd) glassType]
 
 
-outputs :: [QuantityDict]
-outputs = map qw [isSafePb, isSafeLR] ++ [qw probBr, qw stressDistFac]
+outputs :: [DefinedQuantityDict]
+outputs = map dqdWr [isSafePb, isSafeLR] ++ map dqdWr [probBr, stressDistFac]
 
 -- | Symbols uniquely relevant to theory models.
-tmSymbols :: [QuantityDict]
-tmSymbols = map qw [probFail, pbTolfail]
+tmSymbols :: [DefinedQuantityDict]
+tmSymbols = map dqdWr [probFail, pbTolfail]
 
-probBr, probFail, pbTolfail, stressDistFac :: ConstrainedChunk
-probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
+probBr, probFail, pbTolfail, stressDistFac :: ConstrConcept
+probBr = cucNoUnit' "probBr" (nounPhraseSP "probability of breakage")
+  "the probability of breakage of the glass plate"
   (sub cP lBreak) Real
-  [probConstr] (Just $ dbl 0.4)
+  [probConstr] (dbl 0.4)
 
-stressDistFac = cvc "stressDistFac" (nounPhraseSP "stress distribution factor (Function)")
-  cJ Real [physRange $ Bounded (Inc, sy stressDistFacMin) (Inc, sy stressDistFacMax)] (Just $ exactDbl 15)
+stressDistFac = cucNoUnit' "stressDistFac" (nounPhraseSP "stress distribution factor (Function)")
+  "the stress distribution factor of the glass plate"
+  cJ Real [physRange $ Bounded (Inc, sy stressDistFacMin)
+  (Inc, sy stressDistFacMax)] (exactDbl 15)
 
-probFail = cvc "probFail" (nounPhraseSP "probability of failure")
+probFail = cucNoUnit' "probFail" (nounPhraseSP "probability of failure")
+  "the probability of failure of the glass plate"
   (sub cP lFail) Real
-  [probConstr] (Just $ dbl 0.4)
+  [probConstr] (dbl 0.4)
 
-pbTolfail = cvc "pbTolfail" (nounPhraseSP "tolerable probability of failure")
+pbTolfail = cucNoUnit' "pbTolfail" (nounPhraseSP "tolerable probability of failure")
+  "the tolerable probability of failure of the glass plate"
   (sub cP (Concat [lFail, lTol])) Real
-  [probConstr] (Just $ dbl 0.008)
+  [probConstr] (dbl 0.008)
 
 
   --FIXME: no typical value!
@@ -185,7 +191,7 @@ unitalSymbols :: [UnitalChunk]
 unitalSymbols = [demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight,
   sflawParamK, sflawParamM, loadDur, minThick]
 
-sdx, sdy, sdz :: UnitaryChunk
+sdx, sdy, sdz :: UnitalChunk
 
 demand, tmDemand, lRe, tmLRe, minThick, nonFactorL, eqTNTWeight,
   sflawParamM, sflawParamK, loadDur, modElas :: UnitalChunk
@@ -220,56 +226,60 @@ loadDur     = uc' "loadDur"    (nounPhraseSP "duration of load")
   (S "the amount of time that a load is applied to the glass plate")
   (sub lT lDur) Real second
 
-sdx         = unitary "sdx" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase xComp))
-  (subX (eqSymb standOffDist)) metre Real
+sdx         = uc' "sdx" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase xComp))
+  (S "the x-component of the stand off distance") (subX (eqSymb standOffDist)) Real metre
 
-sdy         = unitary "sdy" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase yComp))
-  (subY (eqSymb standOffDist)) metre Real
+sdy         = uc' "sdy" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase yComp))
+  (S "the y-component of the stand off distance") (subY (eqSymb standOffDist)) Real metre
 
-sdz         = unitary "sdz" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase zComp))
-  (subZ (eqSymb standOffDist)) metre Real
+sdz         = uc' "sdz" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase zComp))
+  (S "the x-component of the stand off distance") (subZ (eqSymb standOffDist)) Real metre
 
 {-Quantities-}
 
-unitless :: [QuantityDict]
+unitless :: [DefinedQuantityDict]
 unitless = [riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad,
-  sdfTol, dimlessLoad, tolLoad] ++ map qw [gTF, loadSF, loadDF]
+  sdfTol, dimlessLoad, tolLoad, gTF, loadSF, loadDF]
 
-interps :: [QuantityDict]
+interps :: [DefinedQuantityDict]
 interps = [interpY, interpZ]
 
 riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, sdfTol,
-  dimlessLoad, tolLoad, interpY, interpZ :: QuantityDict
+  dimlessLoad, tolLoad, interpY, interpZ :: DefinedQuantityDict
 
 gTF, loadSF, loadDF :: DefinedQuantityDict
 
-dimlessLoad = vc "dimlessLoad" (nounPhraseSP "dimensionless load") (hat lQ) Real
+dimlessLoad = dqdNoUnit (dcc "dimlessLoad" (nounPhraseSP "dimensionless load") 
+  "the dimensionless load") (hat lQ) Real
 
 gTF           = dqdNoUnit glTyFac (variable "GTF") Integer
 
-isSafePb   = vc "isSafePb"   (nounPhraseSP "probability of glass breakage safety requirement")
-  (variable "isSafePb")   Boolean
-isSafeProb = vc "isSafeProb" (nounPhraseSP "probability of failure safety requirement")
-  (variable "isSafeProb") Boolean
-isSafeLR   = vc "isSafeLR"   (nounPhraseSP "3 second load equivalent resistance safety requirement")
-  (variable "isSafeLR")   Boolean
-isSafeLoad = vc "isSafeLoad" (nounPhraseSP "load resistance safety requirement")
-  (variable "isSafeLoad") Boolean
+isSafePb   = dqdNoUnit (dcc "isSafePb" (nounPhraseSP "probability of glass breakage safety requirement")
+  "the probability of glass breakage safety requirement") (variable "isSafePb") Boolean
+isSafeProb = dqdNoUnit (dcc "isSafeProb" (nounPhraseSP "probability of failure safety requirement")
+  "the probability of failure safety requirement") (variable "isSafeProb") Boolean
+isSafeLR   = dqdNoUnit (dcc "isSafeLR"   (nounPhraseSP "3 second load equivalent resistance safety requirement")
+  "the 3 second load equivalent resistance safety requirement") (variable "isSafeLR") Boolean
+isSafeLoad = dqdNoUnit (dcc "isSafeLoad" (nounPhraseSP "load resistance safety requirement")
+  "the load resistance safety requirement") (variable "isSafeLoad") Boolean
 
-interpY = vc "interpY" (nounPhraseSP "interpY") (variable "interpY") (mkFunction [String, Real, Real] Real)
-interpZ = vc "interpZ" (nounPhraseSP "interpZ") (variable "interpZ") (mkFunction [String, Real, Real] Real)
+interpY = dqdNoUnit (dcc "interpY" (nounPhraseSP "interpY")
+  "interpolated y") (variable "interpY") (mkFunction [String, Real, Real] Real)
+interpZ = dqdNoUnit (dcc "interpZ" (nounPhraseSP "interpZ")
+  "interpolated z") (variable "interpZ") (mkFunction [String, Real, Real] Real)
 
 
 loadDF        = dqdNoUnit loadDurFac (variable "LDF") Real
 loadSF        = dqdNoUnit loadShareFac (variable "LSF") Real
 
-riskFun = vc "riskFun" (nounPhraseSP "risk of failure") cB Real
+riskFun = dqdNoUnit (dcc "riskFun" (nounPhraseSP "risk of failure")
+  "the risk of failure") cB Real
 
-sdfTol = vc "sdfTol" (nounPhraseSP "tolerable stress distribution factor")
-  (sub (eqSymb stressDistFac) lTol) Real
+sdfTol = dqdNoUnit (dcc "sdfTol" (nounPhraseSP "tolerable stress distribution factor")
+  "the tolerable stress distribution factor") (sub (eqSymb stressDistFac) lTol) Real
 
-tolLoad = vc "tolLoad" (nounPhraseSP "tolerable load")
-  (sub (eqSymb dimlessLoad) lTol) Real
+tolLoad = dqdNoUnit (dcc "tolLoad" (nounPhraseSP "tolerable load")
+  "the tolerable load") (sub (eqSymb dimlessLoad) lTol) Real
 
 
 
@@ -406,7 +416,7 @@ constantLoadSF  = mkQuantDef loadSF      $ exactDbl 1
 
 --Equations--
 
-sdVector :: [UnitaryChunk]
+sdVector :: [UnitalChunk]
 sdVector = [sdx, sdy, sdz]
 
 --

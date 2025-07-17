@@ -15,11 +15,11 @@ import Data.List (nub, sortBy)
 import qualified Data.Map as M
 
 -- | Gets a list of quantities ('QuantityDict') from an equation in order to print.
-vars :: ModelExpr -> ChunkDB -> [QuantityDict]
+vars :: ModelExpr -> ChunkDB -> [DefinedQuantityDict]
 vars e m = map (symbResolve m) $ meDep e
 
 -- | Gets a list of quantities ('QuantityDict') from a 'Sentence' in order to print.
-vars' :: Sentence -> ChunkDB -> [QuantityDict]
+vars' :: Sentence -> ChunkDB -> [DefinedQuantityDict]
 vars' a m = map (symbResolve m) $ sdep a
 
 -- | Combines the functions of 'vars' and 'concpt' to create a list of 'DefinedQuantityDict's from a 'Sentence'.
@@ -35,7 +35,7 @@ ccss :: [Sentence] -> [ModelExpr] -> ChunkDB -> [DefinedQuantityDict]
 ccss s e c = nub $ concatMap (`combine` c) s ++ concatMap (`combine'` c) e
 
 -- | Gets a list of quantities ('QuantityDict's) from 'Sentence's and expressions that are contained in the database ('ChunkDB').
-ccss' :: [Sentence] -> [ModelExpr] -> ChunkDB -> [QuantityDict]
+ccss' :: [Sentence] -> [ModelExpr] -> ChunkDB -> [DefinedQuantityDict]
 ccss' s e c = nub $ concatMap (`vars'` c) s ++ concatMap (`vars` c) e
 
 -- | Gets a list of concepts ('ConceptChunk') from a 'Sentence' in order to print.

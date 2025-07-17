@@ -1,6 +1,6 @@
 module Drasil.GamePhysics.Unitals where
 
-import Language.Drasil
+import Language.Drasil (dim)
 import Language.Drasil.Display (Symbol(..), Decoration(Magnitude))
 import Language.Drasil.Space (ClifKind(..))
 import Language.Drasil.ShortHands
@@ -134,6 +134,10 @@ velParam n w = uc
 -----------------------
 -- CHUNKS WITH UNITS --
 -----------------------
+
+-- Dimension for vector space (2D)
+dim :: String
+dim = "2"
 
 iVect, jVect, normalVect, force_1, force_2, forcej, mass_1, mass_2, 
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,

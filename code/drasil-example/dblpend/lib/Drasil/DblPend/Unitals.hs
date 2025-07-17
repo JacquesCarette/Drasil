@@ -42,16 +42,17 @@ constants = [gravitationalAccelConst]
 
 unitalChunks :: [UnitalChunk]
 unitalChunks = [ 
-  lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2,
+  lenRod_1, lenRod_2, massObj_1, massObj_2, pendDisAngle_1, pendDisAngle_2,
   xVel_1, xVel_2, yVel_1, yVel_2, xPos_1, xPos_2, yPos_1, yPos_2, xAccel_1,
-  yAccel_1, xAccel_2, yAccel_2, angularAccel_1, angularAccel_2, tension_1,
-  tension_2, QPP.mass, QP.force, QP.gravitationalAccel, QP.tension, QP.acceleration,
+  yAccel_1, xAccel_2, yAccel_2, angularVel_1, angularVel_2, angularAccel_1, angularAccel_2,
+  mvVel_1, mvVel_2, mvAccel_1, mvAccel_2, mvForce_1, mvForce_2,
+  QPP.mass, QP.force, QP.gravitationalAccel, QP.tension, QP.acceleration,
   QP.time, QP.velocity, QP.position]
   
-lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2, 
-  pendDisAngle_1, pendDisAngle_2, xVel_1, xVel_2, yVel_1, yVel_2, 
-  xPos_1, xPos_2, yPos_1, yPos_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2,
-  angularAccel_1, angularAccel_2, tension_1, tension_2 :: UnitalChunk
+lenRod_1, lenRod_2, massObj_1, massObj_2, pendDisAngle_1, pendDisAngle_2, 
+  xVel_1, xVel_2, yVel_1, yVel_2, xPos_1, xPos_2, yPos_1, yPos_2, xAccel_1, 
+  yAccel_1, xAccel_2, yAccel_2, angularVel_1, angularVel_2, angularAccel_1, angularAccel_2,
+  mvVel_1, mvVel_2, mvAccel_1, mvAccel_2, mvForce_1, mvForce_2 :: UnitalChunk
 
 lenRod_1 = uc' "l_1" (len `ofThe` firstRod)
         (phraseNP (len `the_ofThe` firstRod)) -- Fix me, can have more information 
@@ -99,7 +100,15 @@ xVel_2 = uc' "v_x2" (horizontalVel `ofThe` secondObject)
         (phraseNP (QP.velocity `the_ofThe` secondObject) `S.inThe` phrase CM.xDir)
         (sub lV (Concat [labelx, label2])) Real velU
 
-velVec_1 = vec2D (l1 $* o1 $* cos t1) (neg (l1 $* o1 $* sin t1))
+-- Clifford velocity representation for first object
+mvVel_1 = uc' "v_mv1" (QP.velocity `ofThe` firstObject)
+        (phraseNP (QP.velocity `the_ofThe` firstObject))
+        (sub lV label1) Real velU
+
+-- Clifford velocity representation for second object
+mvVel_2 = uc' "v_mv2" (QP.velocity `ofThe` secondObject)
+        (phraseNP (QP.velocity `the_ofThe` secondObject))
+        (sub lV label2) Real velU
 
 yVel_1 = uc' "v_y1" (verticalVel `ofThe` firstObject)
         (phraseNP (QP.velocity `the_ofThe` firstObject) `S.inThe` phrase CM.yDir)
@@ -109,7 +118,7 @@ yVel_2 = uc' "v_y2" (verticalVel `ofThe` secondObject)
         (phraseNP (QP.velocity `the_ofThe` secondObject) `S.inThe` phrase CM.yDir)
         (sub lV (Concat [labely, label2])) Real velU
 
-velVec_2 = cAdd velVec_1 (vec2D (l2 $* o2 $* cos t2) (neg (l2 $* o2 $* sin t2)))
+
 
 xAccel_1 = uc' "a_x1" (horizontalAccel `ofThe` firstObject)
         (phraseNP (QP.acceleration `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)
@@ -119,8 +128,10 @@ xAccel_2 = uc' "a_x2" (horizontalAccel `ofThe` secondObject)
         (phraseNP (QP.acceleration `the_ofThe` secondObject) `S.inThe` phrase CM.xDir)
         (sub lA (Concat [labelx, label2])) Real accelU
 
-accelVec_1 = cSub (vec2D (l1 $* t1dd $* cos t1) (neg (l1 $* t1dd $* sin t1)))
-                 (vec2D (l1 $* square o1 $* sin t1) (l1 $* square o1 $* cos t1))
+-- Clifford acceleration representation for first object
+mvAccel_1 = uc' "a_mv1" (QP.acceleration `ofThe` firstObject)
+        (phraseNP (QP.acceleration `the_ofThe` firstObject))
+        (sub lA label1) Real accelU
 
 yAccel_1 = uc' "a_y1" (verticalAccel `ofThe` firstObject)
         (phraseNP (QP.acceleration `the_ofThe` firstObject) `S.inThe` phrase CM.yDir)
@@ -130,8 +141,18 @@ yAccel_2 = uc' "a_y2" (verticalAccel `ofThe` secondObject)
         (phraseNP (QP.acceleration `the_ofThe` secondObject) `S.inThe` phrase CM.yDir)
         (sub lA (Concat [labely, label2])) Real accelU
 
-accelVec_2 = cSub (cAdd accelVec_1 (vec2D (l2 $* t2dd $* cos t2) (neg (l2 $* t2dd $* sin t2))))
-                  (vec2D (l2 $* square o2 $* sin t2) (l2 $* square o2 $* cos t2))
+-- Clifford acceleration representation for second object
+mvAccel_2 = uc' "a_mv2" (QP.acceleration `ofThe` secondObject)
+        (phraseNP (QP.acceleration `the_ofThe` secondObject))
+        (sub lA label2) Real accelU
+
+angularVel_1 = uc' "omega_1" (QP.angularVelocity `ofThe` firstObject)
+        (phraseNP (QP.angularVelocity `the_ofThe` firstObject))
+        (sub cOmega label1) Real angVelU
+
+angularVel_2 = uc' "omega_2" (QP.angularVelocity `ofThe` secondObject)
+        (phraseNP (QP.angularVelocity `the_ofThe` secondObject))
+        (sub cOmega label2) Real angVelU
 
 -- angularAccel_1 = uc' "alpha_x1" (QP.angularAccel `ofThe` firstObject)
 --         (phraseNP (QP.angularAccel `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)
@@ -148,21 +169,15 @@ angularAccel_2 = uc' "alpha_2" (QP.angularAccel `ofThe` secondObject)
         (phraseNP (QP.angularAccel `the_ofThe` secondObject))
         (sub lAlpha label2) Real angAccelU
 
-tension_1 = uc' "T_1" (QP.tension `ofThe` firstObject)
-        (phraseNP (QP.tension `the_ofThe` firstObject))
-        (sub (vec cT) label1) Real newton
+-- Clifford force representation for first object
+mvForce_1 = uc' "F_mv1" (QP.force `ofThe` firstObject)
+        (phraseNP (QP.force `the_ofThe` firstObject))
+        (sub lF label1) Real newton
 
-tension_2 = uc' "T_2" (QP.tension `ofThe` secondObject)
-        (phraseNP (QP.tension `the_ofThe` secondObject))
-        (sub (vec cT) label2) Real newton
-
-angularVel_1 = uc' "w_1" (QP.angularVelocity `ofThe` firstObject)
-        (phraseNP (QP.angularVelocity `the_ofThe` firstObject))
-        (sub lW label1) Real angVelU
-
-angularVel_2 = uc' "w_2" (QP.angularVelocity `ofThe` secondObject)
-        (phraseNP (QP.angularVelocity `the_ofThe` secondObject))
-        (sub lW label2) Real angVelU
+-- Clifford force representation for second object  
+mvForce_2 = uc' "F_mv2" (QP.force `ofThe` secondObject)
+        (phraseNP (QP.force `the_ofThe` secondObject))
+        (sub lF label2) Real newton
 
 pendDisAngle_1 = uc' "theta_1" (angle `ofThe` firstRod)
         (phraseNP (angle `the_ofThe` firstRod))

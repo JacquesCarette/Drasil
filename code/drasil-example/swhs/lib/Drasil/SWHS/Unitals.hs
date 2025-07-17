@@ -2,6 +2,7 @@ module Drasil.SWHS.Unitals where -- all of this file is exported
 
 import Language.Drasil
 import Language.Drasil.Display (Symbol(Atop), Decoration(Delta))
+import Language.Drasil.Space (ClifKind(..))
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
@@ -9,7 +10,7 @@ import Data.Drasil.Concepts.Documentation (simulation)
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Quantities.Math (gradient, pi_, surArea, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
-import Data.Drasil.Quantities.Physics (subMax, subMin, supMax, supMin, time)
+import Data.Drasil.Quantities.Physics (subMax, subMin, supMax, supMin, time, vecDim)
 import Data.Drasil.Quantities.Thermodynamics (sensHeat, temp, meltPt,
   htFlux, latentHeat, boilPt, heatCapSpec)
 import Data.Drasil.SI_Units (m_2, second, kilogram, metre, joule,
@@ -409,7 +410,7 @@ outputs = [tempW, tempPCM, watE, pcmE]
 tempW = cuc' "tempW"
   (nounPhraseSP "temperature of the water")
   "the average kinetic energy of the particles within the water" 
-  (sub (eqSymb temp) lWater) centigrade (Vect Real)
+  (sub (eqSymb temp) lWater) centigrade (ClifS (VDim vecDim) Vector Real)
   [physRange $ Bounded (Inc, sy tempInit) (Inc, sy tempC)] (exactDbl 0)
 
 -- Constraint 19

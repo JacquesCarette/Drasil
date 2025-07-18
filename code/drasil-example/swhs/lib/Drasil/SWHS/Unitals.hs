@@ -26,10 +26,10 @@ symbols :: [DefinedQuantityDict]
 symbols = pi_ : map dqdWr units ++ map dqdWr unitless ++ map dqdWr constrained
  ++ map dqdWr unitalChuncks
 
-symbolsAll :: [QuantityDict]
-symbolsAll = map qw symbols ++ map qw specParamValList ++
-  map qw [htFusionMin, htFusionMax, coilSAMax] ++
-  map qw [absTol, relTol]
+symbolsAll :: [DefinedQuantityDict]
+symbolsAll = symbols ++ map dqdWr specParamValList ++
+  map dqdWr [htFusionMin, htFusionMax, coilSAMax] ++
+  map dqdWr [absTol, relTol]
 -- Symbols with Units --
 
 units :: [UnitalChunk]
@@ -240,8 +240,8 @@ constrained :: [ConstrConcept]
 constrained = map cnstrw' inputConstraints ++ map cnstrw' outputs
 
 -- Input Constraints
-inputs :: [QuantityDict]
-inputs = map qw inputConstraints ++ map qw [absTol, relTol]
+inputs :: [DefinedQuantityDict]
+inputs = map dqdWr inputConstraints ++ map dqdWr [absTol, relTol]
 
 inputConstraints :: [UncertQ]
 inputConstraints = [tankLength, diam, pcmVol, pcmSA, pcmDensity,
@@ -435,17 +435,17 @@ pcmE = cuc' "pcmE" (nounPhraseSP "change in heat energy in the PCM")
 -- Uncertainties with no Units --
 ---------------------------------
 
-absTol, relTol :: UncertainChunk
+absTol, relTol :: UncertQ
 
-absTol = uvc "absTol" (nounPhraseSP "absolute tolerance") 
-  (sub cA lTol) Real
+absTol = uq (constrained' (dqdNoUnit (dcc "absTol" (nounPhraseSP "absolute tolerance")
+  "the absolute tolerance") (sub cA lTol) Real)
   [physRange $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 1)] 
-   (dbl (10.0**(-10))) (uncty 0.01 Nothing)
+   (dbl (10.0**(-10)))) (uncty 0.01 Nothing)
 
-relTol = uvc "relTol" (nounPhraseSP "relative tolerance") 
-  (sub cR lTol) Real
+relTol = uq (constrained' (dqdNoUnit (dcc "relTol" (nounPhraseSP "relative tolerance") 
+  "the relative tolerance") (sub cR lTol) Real)
   [physRange $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 1)] 
-  (dbl (10.0**(-10))) (uncty 0.01 Nothing)
+  (dbl (10.0**(-10)))) (uncty 0.01 Nothing)
 
 -------------------------
 -- Max / Min Variables --

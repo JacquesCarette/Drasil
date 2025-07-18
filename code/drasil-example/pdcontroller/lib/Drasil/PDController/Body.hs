@@ -6,7 +6,6 @@ import qualified Drasil.DocLang.SRS as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Software.Products (sciCompS)

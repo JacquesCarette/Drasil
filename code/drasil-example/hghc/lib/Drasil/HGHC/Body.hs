@@ -13,8 +13,7 @@ import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Documentation (doccon, doccon')
 import Data.Drasil.Concepts.Math (mathcon)
 import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans)  
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-  
+ 
 import System.Drasil (SystemKind(Specification))
 
 srs :: Document

@@ -13,7 +13,6 @@ import Drasil.DocLang (mkNb, LsnDecl, LsnChapter(BibSec, LearnObj, Review, CaseP
 
 import Data.Drasil.Concepts.Documentation (doccon, doccon')
 import Data.Drasil.Concepts.Math (mathcon)
-import qualified Data.Drasil.Concepts.Documentation as Doc (notebook)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.Physics (physicCon)
 

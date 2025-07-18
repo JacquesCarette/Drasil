@@ -27,8 +27,6 @@ import Drasil.Projectile.Lesson.Review (reviewContent)
 import Drasil.Projectile.Lesson.CaseProb (caseProbCont, figRefs)
 import Drasil.Projectile.Lesson.Example (exampleContent, horiz_velo)
 
-import System.Drasil (System(..), SystemKind(Notebook))
-
 nb :: Document
 nb = mkNb mkNB (S.forGen titleize phrase) si
 

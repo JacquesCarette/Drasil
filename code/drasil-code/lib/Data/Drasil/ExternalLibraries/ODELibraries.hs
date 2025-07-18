@@ -11,9 +11,9 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
 ) where
 
 import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
-  QuantityDict, HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, Vect), dqdNoUnit,
-  qw, compoundPhrase, nounPhrase, nounPhraseSP, label,
-  sub, Idea(getA), NamedIdea(term), Stage(..), (+++), dcc, dccAWDS, dqd', Definition (defn), (+:+), Sentence (S), dccWDS)
+  HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, Vect), dqdNoUnit,
+  compoundPhrase, nounPhrase, nounPhraseSP, label, sub, Idea(getA), NamedIdea(term), Stage(..),
+  (+++), dcc, dccAWDS, dqd', Definition (defn), (+:+), Sentence (S), dccWDS, DefinedQuantityDict, dqdWr)
 import Language.Drasil.Display (Symbol(Label, Concat))
 
 import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
@@ -103,10 +103,10 @@ odeT = Actor "ode"
 numpyArrayT = Actor "numpyArray"
 
 -- | Collects variables needed for SciPy's ODEs as 'QuantityDict's.
-scipyODESymbols :: [QuantityDict]
-scipyODESymbols = map qw [mthdArg, atolArg, rtolArg]
-  ++ map qw [r, t, y, xAxis, ut, transpose]
-  ++ map qw [f, odefunc, setIntegrator, setInitVal, successful, integrateStep,
+scipyODESymbols :: [DefinedQuantityDict]
+scipyODESymbols = map dqdWr [mthdArg, atolArg, rtolArg]
+  ++ map dqdWr [r, t, y, xAxis, ut, transpose]
+  ++ map dqdWr [f, odefunc, setIntegrator, setInitVal, successful, integrateStep,
   arange, odeintFunc]
 
 mthdArg, atolArg, rtolArg :: NamedArgument
@@ -225,9 +225,9 @@ osloImport :: String
 osloImport = "Microsoft.Research.Oslo"
 
 -- | Collects variables needed for Oslo's ODEs as 'QuantityDict's.
-osloSymbols :: [QuantityDict]
-osloSymbols = map qw [initv, opts, aTol, rTol, sol, points, sp, x] ++
-  map qw [fOslo, options, vector, rk547m, gearBDF, solveFromToStep]
+osloSymbols :: [DefinedQuantityDict]
+osloSymbols = map dqdWr [initv, opts, aTol, rTol, sol, points, sp, x] ++
+  map dqdWr [fOslo, options, vector, rk547m, gearBDF, solveFromToStep]
 
 initv, opts, aTol, rTol, sol, points, sp, x :: CodeVarChunk
 initv = quantvar $ dqdNoUnit (dcc "initv_oslo" (nounPhrase
@@ -386,9 +386,9 @@ siImp = apacheImport ++ sampling ++ "." ++ si
 fode = "FirstOrderDifferentialEquations"
 
 -- | Collects variables needed for Apache's ODEs as 'QuantityDict's.
-apacheODESymbols :: [QuantityDict]
-apacheODESymbols = map qw [it, currVals, stepHandler, t0, y0, interpolator,
-  isLast, curr, ode] ++ map qw [adamsC, dp54C, stepHandlerCtor, addStepHandler,
+apacheODESymbols :: [DefinedQuantityDict]
+apacheODESymbols = map dqdWr [it, currVals, stepHandler, t0, y0, interpolator,
+  isLast, curr, ode] ++ map dqdWr [adamsC, dp54C, stepHandlerCtor, addStepHandler,
   initMethod, handleStep, getInterpState, integrate, odeCtor, getDimension,
   computeDerivatives]
 
@@ -531,8 +531,8 @@ popT :: Space
 popT = Actor "Populate"
 
 -- | Collects variables needed for odeint's ODEs as 'QuantityDict's.
-odeintSymbols :: [QuantityDict]
-odeintSymbols = map qw [odeintCurrVals, rk, stepper, pop] ++ map qw
+odeintSymbols :: [DefinedQuantityDict]
+odeintSymbols = map dqdWr [odeintCurrVals, rk, stepper, pop] ++ map dqdWr
   [rkdp5C, makeControlled, adamsBashC, integrateConst, odeOp, popCtor,
   popOp]
 

@@ -5,20 +5,21 @@ module Language.Drasil.Chunk.DefinedQuantity (
   DefinedQuantityDict,
   -- * Constructors
   dqd, dqdNoUnit, dqd',
-  dqdQd, dqdWr, tempdqdWr') where
+  dqdQd, dqdWr, tempdqdWr', implVar) where
 
-import Language.Drasil.Symbol (HasSymbol(symbol), Symbol)
+import Language.Drasil.Symbol (HasSymbol(symbol), Symbol (Empty))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..),
   Definition(defn), ConceptDomain(cdom), IsUnit, Quantity)
-import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
+import Language.Drasil.Chunk.Concept (ConceptChunk, cw, dcc)
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space, HasSpace(..))
-import Language.Drasil.Stages (Stage)
+import Language.Drasil.Stages (Stage (Implementation, Equational))
 import Drasil.Database.UID (HasUID(uid))
 
 import Control.Lens ((^.), makeLenses, view)
+import Language.Drasil.NounPhrase.Core (NP)
 
 -- | DefinedQuantityDict is the combination of a 'Concept' and a 'Quantity'.
 -- Contains a 'ConceptChunk', a 'Symbol' dependent on 'Stage', a 'Space', and maybe a 'UnitDefn'.
@@ -64,6 +65,9 @@ dqd c s sp = DQD c (const s) sp . Just . unitWrapper
 dqdNoUnit :: ConceptChunk -> Symbol -> Space -> DefinedQuantityDict
 dqdNoUnit c s sp = DQD c (const s) sp Nothing
 
+dqdNoUnit' :: ConceptChunk -> (Stage -> Symbol) -> Space -> DefinedQuantityDict
+dqdNoUnit' c s sp = DQD c s sp Nothing
+
 -- | Similar to 'dqd', but the 'Symbol' is now dependent on the 'Stage'.
 dqd' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> DefinedQuantityDict
 dqd' = DQD
@@ -79,3 +83,11 @@ tempdqdWr' c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
 -- | When we want to merge a quantity and a concept. This is suspicious.
 dqdQd :: (Quantity c, MayHaveUnit c) => c -> ConceptChunk -> DefinedQuantityDict
 dqdQd c cc = DQD cc (symbol c) (c ^. typ) (getUnit c)
+
+-- | Makes a variable that is implementation-only.
+implVar :: String -> NP -> String -> Space -> Symbol -> DefinedQuantityDict
+implVar i ter desc sp sym = dqdNoUnit' (dcc i ter desc) f sp
+  where
+    f :: Stage -> Symbol
+    f Implementation = sym
+    f Equational = Empty

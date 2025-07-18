@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.Quantity (
   -- * Class
   DefinesQuantity(defLhs),
   -- * Constructors
-  implVar, implVarUID, implVarUID', 
+  implVarUID, implVarUID', 
   mkQuant, mkQuant', qw, vc, vcSt) where
 
 import Control.Lens (Getter, (^.), makeLenses, view)
@@ -72,14 +72,6 @@ mkQuant i t s sp u ab = QD (mkIdea i t ab) sp (const s) u
 mkQuant' :: String -> NP -> Maybe String -> Space -> (Stage -> Symbol) -> 
   Maybe UnitDefn -> QuantityDict
 mkQuant' i t ab = QD (mkIdea i t ab)
-
--- | Makes a variable that is implementation-only.
-implVar :: String -> NP -> Space -> Symbol -> QuantityDict
-implVar i des sp sym = vcSt i des f sp
-  where
-    f :: Stage -> Symbol
-    f Implementation = sym
-    f Equational = Empty
 
 -- | Similar to 'implVar' but takes in a 'UID' rather than a 'String'.
 implVarUID :: UID -> NP -> Space -> Symbol -> QuantityDict

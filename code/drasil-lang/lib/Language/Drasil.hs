@@ -106,7 +106,7 @@ module Language.Drasil (
   -- *** Quantities and Units
   -- Language.Drasil.Chunk.Quantity
   , QuantityDict, DefinesQuantity(defLhs), qw, mkQuant, mkQuant'
-  , implVar, implVar', implVarUID, implVarUID' , vc, vcSt
+  , implVar, implVar', implVarUID, implVarUID', implVarAU', vc, vcSt
   -- Language.Drasil.Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', fromEqnSt''
   , mkQDefSt, mkQuantDef, mkQuantDef', ec

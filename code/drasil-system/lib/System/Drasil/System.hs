@@ -22,6 +22,8 @@ import Language.Drasil hiding (kind, Notebook)
 import Theory.Drasil
 import Database.Drasil (ChunkDB)
 
+import Drasil.Metadata (runnableSoftware, website)
+
 import Control.Lens (makeClassy)
 import qualified Data.Drasil.Concepts.Documentation as Doc
 
@@ -45,9 +47,9 @@ whatsTheBigIdea si = whatKind' (_kind si)
   where
     whatKind' :: SystemKind -> IdeaDict
     whatKind' Specification = nw Doc.srs
-    whatKind' RunnableSoftware = mkIdea "runnable software" (cn "runnable software") (Just "software")
+    whatKind' RunnableSoftware = runnableSoftware
     whatKind' Notebook = nw Doc.notebook
-    whatKind' Website = mkIdea "website" (cn "website") (Just "web")
+    whatKind' Website = website
 
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artifact generation.

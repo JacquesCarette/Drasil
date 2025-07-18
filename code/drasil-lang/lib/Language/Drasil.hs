@@ -96,7 +96,7 @@ module Language.Drasil (
   -- Language.Drasil.Chunk.Concept.Core
   , ConceptChunk, ConceptInstance, sDom
   -- Language.Drasil.Chunk.Concept
-  , dcc, dccWDS, cc, cc', ccs, cw, cic
+  , dcc, dccAWDS, dccA, dccWDS, cc, cc', ccs, cw, cic
   -- Language.Drasil.Chunk.Relation
   , RelationConcept, makeRC
   -- Language.Drasil.Chunk.DifferentialModel
@@ -106,7 +106,7 @@ module Language.Drasil (
   -- *** Quantities and Units
   -- Language.Drasil.Chunk.Quantity
   , QuantityDict, DefinesQuantity(defLhs), qw, mkQuant, mkQuant'
-  , implVar, implVar', implVarUID, implVarUID' , vc, vcSt
+  , implVar, implVar', implVarUID, implVarUID', implVarAU', vc, vcSt
   -- Language.Drasil.Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', fromEqnSt''
   , mkQDefSt, mkQuantDef, mkQuantDef', ec

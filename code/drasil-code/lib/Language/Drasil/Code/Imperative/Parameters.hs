@@ -110,7 +110,7 @@ getOutputParams = do
 -- Passes parameters that are constants to 'getConstVars' for further processing.
 -- Other parameters are put into the returned parameter list as long as they
 -- are not matched to a code concept.
-getParams :: (Quantity c, MayHaveUnit c) => Name -> ParamType -> [c] ->
+getParams :: (Quantity c, MayHaveUnit c, Concept c) => Name -> ParamType -> [c] ->
   GenState [CodeVarChunk]
 getParams n pt cs' = do
   g <- get

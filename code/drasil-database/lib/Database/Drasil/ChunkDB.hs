@@ -31,9 +31,9 @@ module Database.Drasil.ChunkDB (
 ) where
 
 import Language.Drasil (HasUID(..), UID, Quantity, MayHaveUnit(..), Idea (..),
-  QuantityDict, IdeaDict, Concept, ConceptChunk, IsUnit(..), UnitDefn,
+  IdeaDict, Concept, ConceptChunk, IsUnit(..), UnitDefn,
   Reference, ConceptInstance, LabelledContent, Citation,
-  qw, nw, cw, unitWrapper, NP, NamedIdea(..))
+  nw, cw, unitWrapper, NP, NamedIdea(..), DefinedQuantityDict, dqdWr)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Control.Lens ((^.), makeLenses)
@@ -51,7 +51,7 @@ type UMap a = Map.Map UID (a, Int)
 
 -- | A bit of a misnomer as it's really a map of all quantities, for retrieving
 -- symbols and their units.
-type SymbolMap  = UMap QuantityDict
+type SymbolMap  = UMap DefinedQuantityDict
 
 -- | A map of all concepts, normally used for retrieving definitions.
 type ConceptMap = UMap ConceptChunk
@@ -95,8 +95,8 @@ cdbMap mn f rawChunks = Map.fromListWithKey preferNew kvs
     preferNew key new _ = trace ("'" ++ show key ++ "' is inserted twice in '" ++ mn ++ "'!") new
 
 -- | Smart constructor for a 'SymbolMap'.
-symbolMap :: (Quantity c, MayHaveUnit c) => [c] -> SymbolMap
-symbolMap = cdbMap "SymbolMap" qw
+symbolMap :: (Quantity c, MayHaveUnit c, Concept c) => [c] -> SymbolMap
+symbolMap = cdbMap "SymbolMap" dqdWr
 
 -- | Smart constructor for a 'TermMap'.
 termMap :: (Idea c) => [c] -> TermMap
@@ -128,7 +128,7 @@ uMapLookup tys ms u t = getFM $ Map.lookup u t
   where getFM = maybe (error $ tys ++ ": " ++ show u ++ " not found in " ++ ms) fst
 
 -- | Looks up a 'UID' in the symbol table from the 'ChunkDB'. If nothing is found, an error is thrown.
-symbResolve :: ChunkDB -> UID -> QuantityDict
+symbResolve :: ChunkDB -> UID -> DefinedQuantityDict
 symbResolve m x = uMapLookup "Symbol" "SymbolMap" x $ symbolTable m
 
 data TermAbbr = TermAbbr { longForm :: NP, shortForm :: Maybe String }
@@ -224,7 +224,7 @@ makeLenses ''ChunkDB
 --     * 'TheoryModel's (for 'TheoryModelMap'),
 --     * 'ConceptInstance's (for 'ConceptInstanceMap'),
 --     * 'LabelledContent's (for 'LabelledContentMap').
-cdb :: (Quantity q, MayHaveUnit q, Concept c, IsUnit u) =>
+cdb :: (Quantity q, MayHaveUnit q, Concept q, Concept c, IsUnit u) =>
     [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
     [GenDefn] -> [TheoryModel] -> [ConceptInstance] ->
     [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB

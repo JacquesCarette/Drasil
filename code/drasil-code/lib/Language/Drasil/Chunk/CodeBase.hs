@@ -5,12 +5,12 @@ import Drasil.Code.CodeExpr.Development
 import Language.Drasil
 
 -- | Construct a 'CodeVarChunk' from a 'Quantity'.
-quantvar :: (Quantity c, MayHaveUnit c) => c -> CodeVarChunk
-quantvar c = CodeVC (CodeC (qw c) Var) Nothing
+quantvar :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeVarChunk
+quantvar c = CodeVC (CodeC (dqdWr c) Var) Nothing
 
 -- | Construct a 'CodeFuncChunk' from a 'Quantity'.
-quantfunc :: (Quantity c, MayHaveUnit c) => c -> CodeFuncChunk
-quantfunc c = CodeFC $ CodeC (qw c) Func
+quantfunc :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeFuncChunk
+quantfunc c = CodeFC $ CodeC (dqdWr c) Func
 
 -- | Get a list of 'CodeChunk's from an equation.
 codevars :: CodeExpr -> ChunkDB -> [CodeVarChunk]

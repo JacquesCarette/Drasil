@@ -246,7 +246,7 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
       [tsIntro con,
                 LlC $ table Equational (sortBySymbol
                 $ filter (`hasStageSymbol` Equational)
-                (nub $ map qw v ++ ccss' (getDocDesc dd) (egetDocDesc dd) cdb))
+                (nub $ map dqdWr v ++ ccss' (getDocDesc dd) (egetDocDesc dd) cdb))
                 atStart] []
     mkSubRef SI {_systemdb = cdb} (TSymb' f con) =
       mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con

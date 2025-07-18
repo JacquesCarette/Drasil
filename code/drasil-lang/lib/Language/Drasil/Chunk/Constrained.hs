@@ -6,12 +6,12 @@ module Language.Drasil.Chunk.Constrained (
   ConstrainedChunk(..), cvc, cnstrw,
   -- ** From a Concept
   ConstrConcept(..),
-  cnstrw', constrained', constrainedNRV', cuc', cuc'') where
+  cnstrw', constrained', constrainedNRV', cuc', cuc'', cucNoUnit') where
 
 import Control.Lens ((^.), makeLenses, view)
 
-import Language.Drasil.Chunk.Concept (cw, dcc)
-import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', dqdWr)
+import Language.Drasil.Chunk.Concept (cw, dcc, dccWDS)
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', dqdWr, dqdNoUnit)
 import Language.Drasil.Chunk.Quantity (QuantityDict, qw, vc)
 import Language.Drasil.Chunk.Unital (uc')
 import Language.Drasil.Symbol (HasSymbol(..), Symbol)
@@ -123,6 +123,12 @@ cuc' :: (IsUnit u) => String -> NP -> String -> Symbol -> u
 cuc' nam trm desc sym un space cs rv =
   ConstrConcept (dqd (cw (uc' nam trm (S desc) sym space un)) sym space uu) cs (Just rv)
   where uu = unitWrapper un
+
+-- | Similar to cuc', but does not include a unit.
+cucNoUnit' :: String -> NP -> String -> Symbol
+            -> Space -> [ConstraintE] -> Expr -> ConstrConcept
+cucNoUnit' nam trm desc sym space cs rv =
+  ConstrConcept (dqdNoUnit (dccWDS nam trm (S desc)) sym space) cs (Just rv)
 
 -- | Similar to 'cuc'', but 'Symbol' is dependent on 'Stage'.
 cuc'' :: (IsUnit u) => String -> NP -> String -> (Stage -> Symbol) -> u

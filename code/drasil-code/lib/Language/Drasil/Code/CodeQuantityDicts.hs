@@ -4,20 +4,23 @@ module Language.Drasil.Code.CodeQuantityDicts where
 import Language.Drasil
 
 -- | Variable for the input file's name.
-inFileName :: QuantityDict
-inFileName = implVar "inFileName"
-  (nounPhrase "name of the input file" "names of the input files") String
-  (label "filename")
+inFileName :: DefinedQuantityDict
+inFileName = dqdNoUnit (dccWDS "inFileName"
+  (nounPhrase "name of the input file" "names of the input files")
+  (S "the name of the input file"))
+  (label "filename") String
 
 -- | Variable for an object of the InputParameters class.
-inParams :: QuantityDict
-inParams = implVar "inParams" (nounPhrase
+inParams :: DefinedQuantityDict
+inParams = dqdNoUnit (dccWDS "inParams" (nounPhrase
   "structure holding the input values" "structures holding the input values")
-  (Actor "InputParameters") (label "inParams")
+  (S "the structure holding the input values"))
+  (label "inParams") (Actor "InputParameters")
 
 -- | Variable for an object of the Constants class.
-consts :: QuantityDict
-consts = implVar "consts" (nounPhrase
+consts :: DefinedQuantityDict
+consts = dqdNoUnit (dccWDS "consts" (nounPhrase
   "structure holding the constant values"
   "structures holding the constant values")
-  (Actor "Constants") (label "consts")
+  (S "the structure holding the constant values"))
+  (label "consts") (Actor "Constants")

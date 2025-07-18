@@ -173,7 +173,7 @@ lrIsSafe = imNoDeriv (equationalModelN (nounPhraseSP "Safety Req-LR") lrIsSafeQD
 lrIsSafeQD :: SimpleQDef 
 lrIsSafeQD = mkQuantDef isSafeLR (sy lRe $> sy demand)
 
-iModDesc :: QuantityDict -> Sentence -> Sentence
+iModDesc :: DefinedQuantityDict -> Sentence -> Sentence
 iModDesc main s = foldlSent [S "If", ch main `sC` S "the glass is" +:+.
     S "considered safe", s `S.are` S "either both True or both False"]
   

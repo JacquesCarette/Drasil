@@ -15,7 +15,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.People (dong)
 import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.Concepts.Computation (inDatum, compcon, algorithm)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
+import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   environment, datum, input_, interface, output_, problem, product_,
   physical, sysCont, software, softwareConstraint, softwareSys, srsDomains,
@@ -46,6 +46,7 @@ import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
 import Language.Drasil.Code (quantvar)
 import Drasil.DblPend.ODEs (dblPenODEInfo)
 
+import System.Drasil (SystemKind(Specification))
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -106,7 +107,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
 si :: System
 si = SI {
   _sys         = progName, 
-  _kind        = Doc.srs,
+  _kind        = Specification,
   _authors     = [dong],
   _purpose     = [purp],
   _background  = [background],

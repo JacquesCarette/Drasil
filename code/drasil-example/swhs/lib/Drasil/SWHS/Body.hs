@@ -11,7 +11,6 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (inModel)
 import Data.Drasil.Concepts.Computation (algorithm, compcon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
@@ -56,6 +55,8 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
   simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM,
   tempW, thickness, watE)
 
+import System.Drasil (SystemKind(Specification))
+
 -------------------------------------------------------------------------------
 
 srs :: Document
@@ -73,7 +74,7 @@ resourcePath = "../../../../datafiles/swhs/"
 si :: System
 si = SI {
   _sys         = progName',
-  _kind        = Doc.srs,
+  _kind        = Specification,
   _authors     = [thulasi, brooks, spencerSmith],
   _purpose     = [purp],
   _background  = [],

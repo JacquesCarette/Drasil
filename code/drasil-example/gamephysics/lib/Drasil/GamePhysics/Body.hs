@@ -13,7 +13,6 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   quantity, realtime, section_, simulation, software, softwareSys,
   srsDomains, system, systemConstraint, sysCont, task, user, doccon, doccon',
   property, problemDescription)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (dataDefn, inModel)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics, educon)
@@ -42,6 +41,8 @@ import Drasil.GamePhysics.TMods (tMods)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
 import Drasil.GamePhysics.GenDefs (generalDefns)
+
+import System.Drasil (SystemKind(Specification))
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize short) si
@@ -97,7 +98,7 @@ mkSRS = [TableOfContents,
 si :: System
 si = SI {
   _sys         = progName,
-  _kind        = Doc.srs,
+  _kind        = Specification,
   _authors     = [alex, luthfi, olu],
   _purpose     = [purp],
   _background  = [],

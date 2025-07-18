@@ -15,7 +15,6 @@ import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
   environment, input_, interface, model, physical, problem, product_,
   software, softwareConstraint, softwareSys, srsDomains, standard, sysCont,
   system, term_, user, value, variable, reference, definition)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (dataDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics,
   educon)
@@ -48,6 +47,8 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
   sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints)
 
+import System.Drasil (SystemKind(Specification))
+
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
@@ -60,7 +61,7 @@ printSetting = piSys fullSI Equational defaultConfiguration
 si :: System
 si = SI {
   _sys         = progName,
-  _kind        = Doc.srs,
+  _kind        = Specification,
   _authors     = [nikitha, spencerSmith],
   _purpose     = [purp],
   _background  = [background],

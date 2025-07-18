@@ -4,13 +4,13 @@ module Language.Drasil.Chunk.DefinedQuantity (
   -- * Chunk Type
   DefinedQuantityDict,
   -- * Constructors
-  dqd, dqdNoUnit, dqd',
-  dqdQd, dqdWr, tempdqdWr', implVar, implVar') where
+  dqd, dqdNoUnit, dqd', dqdQd, dqdWr, tempdqdWr',
+  implVar, implVar', implVarAU, implVarAU') where
 
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol (Empty))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Express(..),
   Definition(defn), ConceptDomain(cdom), IsUnit, Quantity)
-import Language.Drasil.Chunk.Concept (ConceptChunk, cw, dcc, dccWDS)
+import Language.Drasil.Chunk.Concept (ConceptChunk, cw, dcc, dccWDS, dccA, dccAWDS)
 import Language.Drasil.Expr.Class (sy)
 import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
@@ -100,3 +100,19 @@ implVar' i ter desc sp sym = dqdNoUnit' (dccWDS i ter desc) f sp
     f :: Stage -> Symbol
     f Implementation = sym
     f Equational = Empty
+
+-- | Similar to 'implVar' but allows specification of abbreviation and unit.
+implVarAU :: String -> NP -> String -> Maybe String -> Space -> Symbol -> 
+  Maybe UnitDefn -> DefinedQuantityDict
+implVarAU s np desc a t sym = dqd' (dccA s np desc a) f t
+  where f :: Stage -> Symbol
+        f Implementation = sym
+        f Equational = Empty
+
+-- | Similar to 'implVarAU' but takes a Sentence for the description rather than a String.
+implVarAU' :: String -> NP -> Sentence -> Maybe String -> Space -> Symbol -> 
+  Maybe UnitDefn -> DefinedQuantityDict
+implVarAU' s np desc a t sym = dqd' (dccAWDS s np desc a) f t
+  where f :: Stage -> Symbol
+        f Implementation = sym
+        f Equational = Empty

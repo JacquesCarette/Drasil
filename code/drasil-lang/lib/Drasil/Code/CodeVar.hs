@@ -16,10 +16,7 @@ import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Stages (Stage(..))
 
 import Utils.Drasil (toPlainName)
-import Language.Drasil.Chunk.Concept (dccAWDS)
-import Language.Drasil.Chunk.DefinedQuantity (dqd', DefinedQuantityDict)
-import Language.Drasil.Sentence (Sentence(S))
-
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, implVarAU')
 -- not using lenses for now
 -- | A 'CodeIdea' must include some code and its name. 
 class CodeIdea c where
@@ -134,7 +131,7 @@ instance MayHaveUnit   CodeFuncChunk where getUnit = getUnit . view ccf
 -- Changes a 'CodeVarChunk'\'s space from 'Vect' to 'Array'.
 listToArray :: CodeVarChunk -> CodeVarChunk
 listToArray c = newSpc (c ^. typ)
-  where newSpc (Vect t) = CodeVC (CodeC (dqd' (dccAWDS (show $ c +++ "_array")
-          (c ^. term) (S "placeholder definition") (getA c)) 
-          (const (symbol c Implementation)) (Array t) (getUnit c)) Var) (c ^. obv)
+  where newSpc (Vect t) = CodeVC (CodeC (implVarAU' (show $ c +++ "_array")
+          (c ^. term) (c ^. defn) (getA c)
+          (Array t) (symbol c Implementation) (getUnit c)) Var) (c ^. obv)
         newSpc _ = c

@@ -58,7 +58,7 @@ resourcePath = "../../../../datafiles/gamephysics/"
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
-  RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
+  RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA abbreviationsList],
   IntroSec $ IntroProg para1_introduction_intro (short progName)
   [IPurpose $ purpDoc progName Verbose,
    IScope scope,
@@ -116,8 +116,7 @@ si = SI {
   _outputs     = outputSymbols, 
   _constraints = inputConstraints,
   _constants   = [],
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
+  _systemdb   = symbMap
 }
 
 purp :: Sentence
@@ -153,16 +152,12 @@ symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks
   siUnits dataDefs iMods generalDefns tMods concIns [] allRefs citations
 
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
-tableOfAbbrvsIdeaDicts =
+abbreviationsList :: [IdeaDict]
+abbreviationsList =
   -- QuantityDicts
   map nw symbolsAll ++
   -- CIs
   map nw acronyms
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
-  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

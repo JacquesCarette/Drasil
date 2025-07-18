@@ -88,8 +88,7 @@ si = SI {
   _outputs     = map qw outputs,
   _constraints = constrained,
   _constants   = specParamValList,
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
+  _systemdb   = symbMap
 }
 
 purp :: Sentence
@@ -122,16 +121,12 @@ symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks
   siUnits SWHS.dataDefs insModel genDefs tMods concIns [] allRefs citations
 
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
-tableOfAbbrvsIdeaDicts =
+abbreviationsList :: [IdeaDict]
+abbreviationsList =
   -- CIs
   nw progName : map nw acronymsFull ++
   -- DefinedQuantityDicts
   map nw symbols
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] []
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -142,7 +137,7 @@ mkSRS = [TableOfContents,
   RefSec $ RefProg intro [
     TUnits,
     tsymb'' tSymbIntro $ TermExcept [uNormalVect],
-    TAandA],
+    TAandA abbreviationsList],
   IntroSec $
     IntroProg (introStart +:+ introStartSWHS) (introEnd (plural progName') progName)
     [IPurpose $ purpDoc progName Verbose,

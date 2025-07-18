@@ -13,7 +13,7 @@ import System.Drasil (System(SI))
 
 typeCheckSI :: System -> IO ()
 typeCheckSI
-  (SI _ _ _ _ _ _ _ _ ims dds _ _ _ _ _ chks _)
+  (SI _ _ _ _ _ _ _ _ ims dds _ _ _ _ _ chks )
   = do
     -- build a variable context (a map of UIDs to "Space"s [types])
     let cxt = M.map (\(dict, _) -> dict ^. typ) (symbolTable chks)

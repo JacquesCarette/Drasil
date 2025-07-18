@@ -61,8 +61,7 @@ si = SI {
   _outputs     = [] :: [QuantityDict],
   _constraints = [] :: [ConstrainedChunk],
   _constants   = [] :: [ConstQDef],
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
+  _systemdb   = symbMap
 }
 
 symbMap :: ChunkDB

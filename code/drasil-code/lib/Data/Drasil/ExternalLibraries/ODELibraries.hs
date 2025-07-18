@@ -11,9 +11,9 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
 ) where
 
 import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
-  HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, Vect), dqdNoUnit,
+  HasSpace(typ), Space (Actor, Natural, Real, Void, Boolean, String, Array, Vect), implVar, implVar',
   compoundPhrase, nounPhrase, nounPhraseSP, label, sub, Idea(getA), NamedIdea(term), Stage(..),
-  (+++), dcc, dccAWDS, dqd', Definition (defn), (+:+), Sentence (S), dccWDS, DefinedQuantityDict, dqdWr)
+  (+++), dccAWDS, dqd', Definition (defn), (+:+), Sentence (S), DefinedQuantityDict, dqdWr)
 import Language.Drasil.Display (Symbol(Label, Concat))
 
 import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
@@ -110,74 +110,74 @@ scipyODESymbols = map dqdWr [mthdArg, atolArg, rtolArg]
   arange, odeintFunc]
 
 mthdArg, atolArg, rtolArg :: NamedArgument
-mthdArg = narg $ dqdNoUnit (dcc "method_scipy" (nounPhrase
+mthdArg = narg $ implVar "method_scipy" (nounPhrase
   "chosen method for solving ODE" "chosen methods for solving ODE")
-  "the chosen method for solving the ODE")
-  (label "method") String
-atolArg = narg $ dqdNoUnit (dcc "atol_scipy" (nounPhrase
+  "the chosen method for solving the ODE"
+  String (label "method")
+atolArg = narg $ implVar "atol_scipy" (nounPhrase
   "absolute tolerance for ODE solution" "absolute tolerances for ODE solution")
-  "the absolute tolerance for the ODE solution")
-  (label "atol") Real
-rtolArg = narg $ dqdNoUnit (dcc "rtol_scipy" (nounPhrase
+  "the absolute tolerance for the ODE solution"
+  Real (label "atol") 
+rtolArg = narg $ implVar "rtol_scipy" (nounPhrase
   "relative tolerance for ODE solution" "relative tolerances for ODE solution")
-  "the relative tolerance for the ODE solution")
-  (label "rtol") Real
+  "the relative tolerance for the ODE solution"
+  Real (label "rtol")
 
 
 r, xAxis, ut, transpose :: CodeVarChunk
-r = quantvar $ dqdNoUnit (dcc "r_scipy" (nounPhrase "ODE object" "ODE objects")
-  "the ODE object")
-  (label "r") odeT
-xAxis = quantvar $ dqdNoUnit (dcc "x_numpy" (nounPhrase "Numpy value" "Numpy value")
-  "the x-axis Numpy value")
-  (label "x_axis") (Array Real)
-ut = quantvar $ dqdNoUnit (dcc "ut_scipy"
+r = quantvar $ implVar "r_scipy" (nounPhrase "ODE object" "ODE objects")
+  "the ODE object"
+  odeT (label "r")
+xAxis = quantvar $ implVar "x_numpy" (nounPhrase "Numpy value" "Numpy value")
+  "the x-axis Numpy value"
+  (Array Real) (label "x_axis")
+ut = quantvar $ implVar "ut_scipy"
   (nounPhrase "Scipy integrated value" "Scipy integrated value")
-  "the Scipy integrated value")
-  (label "u_t") numpyArrayT
-transpose = quantvar $ dqdNoUnit (dcc "transpose_numpy"
+  "the Scipy integrated value"
+  numpyArrayT (label "u_t")
+transpose = quantvar $ implVar "transpose_numpy"
   (nounPhrase "Numpy Array Transpose" "Numpy Array Transpose")
-  "the Numpy Array Transpose")
-  (label "u_t.T") (Array Real) -- (ccObjVar ut transpose) does not seem to work.
+  "the Numpy Array Transpose"
+  (Array Real) (label "u_t.T") -- (ccObjVar ut transpose) does not seem to work.
 
 
 f, odefunc, setIntegrator, setInitVal, successful,
   integrateStep, arange, odeintFunc :: CodeFuncChunk
-f = quantfunc $ dqdNoUnit (dcc "f_scipy" (nounPhrase "function representing ODE system"
-  "functions representing ODE system") "the function representing the ODE system")
-  (label "f") (Array Real)
-odefunc = quantfunc $ dqdNoUnit (dcc "ode_scipy" (nounPhrase
+f = quantfunc $ implVar "f_scipy" (nounPhrase "function representing ODE system"
+  "functions representing ODE system") "the function representing the ODE system"
+  (Array Real) (label "f")
+odefunc = quantfunc $ implVar "ode_scipy" (nounPhrase
   "function for defining an ODE for SciPy"
   "functions for defining an ODE for SciPy")
-  "the function for defining an ODE for SciPy") (label "ode") odeT
-setIntegrator = quantfunc $ dqdNoUnit (dcc "set_integrator_scipy" (nounPhrase
+  "the function for defining an ODE for SciPy" odeT (label "ode")
+setIntegrator = quantfunc $ implVar "set_integrator_scipy" (nounPhrase
   "method for setting SciPy integrator" "methods for setting SciPy integrator")
-  "the method for setting the SciPy integrator") (label "set_integrator") Void
-setInitVal = quantfunc $ dqdNoUnit (dcc "set_initial_value_scipy" (nounPhrase
+  "the method for setting the SciPy integrator" Void (label "set_integrator")
+setInitVal = quantfunc $ implVar "set_initial_value_scipy" (nounPhrase
   "method for setting initial value for ODE for SciPy"
   "methods for setting initial value for ODE for SciPy")
-  "the method for setting the initial value for the ODE for SciPy")
-  (label "set_initial_value") Void
-successful = quantfunc $ dqdNoUnit (dcc "successful_scipy" (nounPhrase
+  "the method for setting the initial value for the ODE for SciPy"
+  Void (label "set_initial_value")
+successful = quantfunc $ implVar "successful_scipy" (nounPhrase
   "method returning True if integration is current successful"
   "methods returning True if integration is current successful")
-  "the method returning True if integration is currently successful")
-  (label "successful") Boolean
-integrateStep = quantfunc $ dqdNoUnit (dcc "integrate_scipy" (nounPhrase
+  "the method returning True if integration is currently successful"
+  Boolean (label "successful")
+integrateStep = quantfunc $ implVar "integrate_scipy" (nounPhrase
   "method that performs one integration step on an ODE"
   "methods that perform one integration step on an ODE")
-  "the method that performs one integration step on an ODE")
-  (label "integrate") Void
-arange = quantfunc $ dqdNoUnit (dcc "arrange_numpy" (nounPhrase
+  "the method that performs one integration step on an ODE"
+  Void (label "integrate")
+arange = quantfunc $ implVar "arrange_numpy" (nounPhrase
   "method that returns evenly spaced numbers over a specified interval."
   "method that returns evenly spaced numbers over a specified interval.")
-  "the method that returns evenly spaced numbers over a specified interval.")
-  (label "arange") (Array Real)
-odeintFunc = quantfunc $ dqdNoUnit (dcc "odeint_scipy" (nounPhrase
+  "the method that returns evenly spaced numbers over a specified interval."
+  (Array Real) (label "arange")
+odeintFunc = quantfunc $ implVar "odeint_scipy" (nounPhrase
   "method that solves a system of ODE using lsoda from the FORTRAN library odepack."
   "method that solves a system of ODE using lsoda from the FORTRAN library odepack.")
-  "the method that solves a system of ODEs using lsoda from the FORTRAN library odepack.")
-  (label "odeint") (Array Real)
+  "the method that solves a system of ODEs using lsoda from the FORTRAN library odepack."
+  (Array Real) (label "odeint")
 
 -- Oslo Library (C#)
 
@@ -230,79 +230,79 @@ osloSymbols = map dqdWr [initv, opts, aTol, rTol, sol, points, sp, x] ++
   map dqdWr [fOslo, options, vector, rk547m, gearBDF, solveFromToStep]
 
 initv, opts, aTol, rTol, sol, points, sp, x :: CodeVarChunk
-initv = quantvar $ dqdNoUnit (dcc "initv_oslo" (nounPhrase
+initv = quantvar $ implVar "initv_oslo" (nounPhrase
   "vector containing the initial values of the dependent variables"
   "vectors containing the initial values of the dependent variables")
-  "the vector containing the initial values of the dependent variables")
-  (label "initv") vecT
-opts = quantvar $ dqdNoUnit (dcc "opts_oslo" (nounPhrase
+  "the vector containing the initial values of the dependent variables"
+  vecT (label "initv")
+opts = quantvar $ implVar "opts_oslo" (nounPhrase
   "record containing options for ODE solving"
   "records containing options for ODE solving")
-  "the record containing options for ODE solving")
-  (label "opts") optT
-aTol = quantvar $ dqdNoUnit (dcc "aTol_oslo" (nounPhrase
+  "the record containing options for ODE solving"
+  optT (label "opts")
+aTol = quantvar $ implVar "aTol_oslo" (nounPhrase
   "absolute tolerance for ODE solution" "absolute tolerances for ODE solution")
-  "the absolute tolerance for the ODE solution")
-  (label "AbsoluteTolerance") Real
-rTol = quantvar $ dqdNoUnit (dcc "rTol_oslo" (nounPhrase
+  "the absolute tolerance for the ODE solution"
+  Real (label "AbsoluteTolerance")
+rTol = quantvar $ implVar "rTol_oslo" (nounPhrase
   "relative tolerance for ODE solution" "relative tolerances for ODE solution")
-  "the relative tolerance for the ODE solution")
-  (label "RelativeTolerance") Real
-sol = quantvar $ dqdNoUnit (dcc "sol_oslo" (nounPhrase 
+  "the relative tolerance for the ODE solution"
+  Real (label "RelativeTolerance")
+sol = quantvar $ implVar "sol_oslo" (nounPhrase 
   "container for ODE information" "containers for ODE information") 
-  "the container for ODE information") (label "sol") solT
-points = quantvar $ dqdNoUnit (dcc "points_oslo" (nounPhrase
+  "the container for ODE information" solT(label "sol") 
+points = quantvar $ implVar "points_oslo" (nounPhrase
   "container holding ODE solution" "containers holding ODE solution")
-  "the container holding the ODE solution")
-  (label "points") solT
-sp = quantvar $ dqdNoUnit (dcc "sp_oslo" (nounPhrase "ODE solution point"
-  "ODE solution points") "the ODE solution point") 
-  (label "sp") (Actor "SolPoint")
-x = quantvar $ dqdNoUnit (dcc "X_oslo" (nounPhrase "dependent variable"
-  "dependent variables") "the dependent variable")
-  (label "X") (Array Real)
+  "the container holding the ODE solution"
+  solT (label "points")
+sp = quantvar $ implVar "sp_oslo" (nounPhrase "ODE solution point"
+  "ODE solution points") "the ODE solution point"
+  (Actor "SolPoint") (label "sp")
+x = quantvar $ implVar "X_oslo" (nounPhrase "dependent variable"
+  "dependent variables") "the dependent variable"
+  (Array Real) (label "X")
 
 fOslo, options, vector, rk547m, gearBDF, solveFromToStep :: CodeFuncChunk
-fOslo = quantfunc $ dqdNoUnit (dcc "f_oslo" (nounPhrase
+fOslo = quantfunc $ implVar "f_oslo" (nounPhrase
   "function representing ODE system" "functions representing ODE system")
-  "the function representing the ODE system")
-  (label "f") vecT
-options = quantfunc $ dqdNoUnit (dcc "Options_oslo" (nounPhrase
+  "the function representing the ODE system"
+  vecT (label "f")
+options = quantfunc $ implVar "Options_oslo" (nounPhrase
   "constructor for Options record" "constructors for Options record")
-  "the constructor for the Options record")
-  (label "Options") optT
-vector = quantfunc $ dqdNoUnit (dcc "Vector_oslo" (nounPhrase
+  "the constructor for the Options record"
+  optT (label "Options")
+vector = quantfunc $ implVar "Vector_oslo" (nounPhrase
   "constructor for an OSLO Vector" "constructors for an OSLO Vector")
-  "the constructor for an OSLO Vector")
-  (label "Vector") vecT
-rk547m = quantfunc $ dqdNoUnit (dcc "RK547M_oslo" (nounPhrase
+  "the constructor for an OSLO Vector"
+  vecT (label "Vector")
+rk547m = quantfunc $ implVar "RK547M_oslo" (nounPhrase
   "function for initiating an ODE to be solved by Runge-Kutta method"
   "functions for initiating an ODE to be solved by Runge-Kutta method")
-  "the function for initiating an ODE to be solved by the Runge-Kutta method")
-  (label "Ode.RK547M") solT
-gearBDF = quantfunc $ dqdNoUnit (dcc "GearBDF_oslo" (nounPhrase
+  "the function for initiating an ODE to be solved by the Runge-Kutta method"
+  solT (label "Ode.RK547M")
+gearBDF = quantfunc $ implVar "GearBDF_oslo" (nounPhrase
   "function for initiating an ODE to be solved by Gear's BDF method"
   "functions for initiating an ODE to be solved by Gear's BDF method")
-  "the function for initiating an ODE to be solved by Gear's BDF method")
-  (label "Ode.GearBDF") solT
-solveFromToStep = quantfunc $ dqdNoUnit (dcc "SolveFromToStep_oslo" (nounPhrase
+  "the function for initiating an ODE to be solved by Gear's BDF method"
+  solT (label "Ode.GearBDF")
+solveFromToStep = quantfunc $ implVar "SolveFromToStep_oslo" (nounPhrase
   "method for solving an ODE given a time range"
   "methods for solving an ODE given a time range")
-  "the method for solving an ODE given a time range")
-  (label "SolveFromToStep") solT
+  "the method for solving an ODE given a time range"
+  solT (label "SolveFromToStep")
 
 vecDepVar :: ODEInfo -> CodeVarChunk
-vecDepVar info = quantvar $ dqdNoUnit (dccWDS (show $ dv ^. uid) (dv ^. term)
-  (dv ^. defn)) (sub (symbol dv Implementation) (label "vec")) vecT
+vecDepVar info = quantvar $ implVar' (show $ dv ^. uid) (dv ^. term)
+  (dv ^. defn) vecT (sub (symbol dv Implementation) (label "vec"))
   where dv = depVar info
 
 -- Hack required because
 -- | Oslo's Vector type behaves like an array, so needs to
 -- be represented as one or else will hit type errors in GOOL.
 arrayVecDepVar :: ODEInfo -> CodeVarChunk
-arrayVecDepVar info = quantvar $ dqdNoUnit (dccWDS (show $ dv +++ "vec")
-  (dv ^. term) (dv ^. defn)) (sub (symbol dv Implementation) (label "vec"))
-  (dv ^. typ)
+arrayVecDepVar info = quantvar $ implVar' (show $ dv +++ "vec")
+  (dv ^. term) (dv ^. defn) (dv ^. typ)
+  (sub (symbol dv Implementation) (label "vec"))
   where dv = listToArray $ depVar info
 
 -- Apache Commons (Java)
@@ -393,80 +393,80 @@ apacheODESymbols = map dqdWr [it, currVals, stepHandler, t0, y0, interpolator,
   computeDerivatives]
 
 it, currVals, stepHandler, t0, y0, interpolator, isLast, curr :: CodeVarChunk
-it = quantvar $ dqdNoUnit (dcc "it_apache" (nounPhrase "integrator for solving ODEs"
-  "integrators for solving ODEs") "the integrator for solving ODEs")
-  (label "it") (Actor foi)
-currVals = quantvar $ dqdNoUnit (dcc "curr_vals_apache" (nounPhrase
+it = quantvar $ implVar "it_apache" (nounPhrase "integrator for solving ODEs"
+  "integrators for solving ODEs") "the integrator for solving ODEs"
+  (Actor foi) (label "it")
+currVals = quantvar $ implVar "curr_vals_apache" (nounPhrase
   "array holding ODE solution values for the current step"
   "arrays holding ODE solution values for the current step")
-  "the array holding ODE solution values for the current step")
-  (label "curr_vals") (Array Real)
-stepHandler = quantvar $ dqdNoUnit (dcc "stepHandler_apache" (nounPhrase
-  "ODE step handler" "ODE step handlers") "the ODE step handler") 
-  (label "stepHandler") (Actor $ "ODE" ++ sh)
-t0 = quantvar $ dqdNoUnit (dcc "t0_apache" (nounPhrase "initial time for ODE solving"
-  "intial times for ODE solving") "the initial time for ODE solving")
-   (label "t0") Real
-y0 = quantvar $ dqdNoUnit (dcc "y0_apache" (nounPhrase
+  "the array holding ODE solution values for the current step"
+  (Array Real) (label "curr_vals")
+stepHandler = quantvar $ implVar "stepHandler_apache" (nounPhrase
+  "ODE step handler" "ODE step handlers") "the ODE step handler"
+  (Actor $ "ODE" ++ sh) (label "stepHandler")
+t0 = quantvar $ implVar "t0_apache" (nounPhrase "initial time for ODE solving"
+  "intial times for ODE solving") "the initial time for ODE solving"
+   Real (label "t0")
+y0 = quantvar $ implVar "y0_apache" (nounPhrase
   "array of initial values for ODE solving"
   "arrays of initial values for ODE solving")
-  "the array of initial values for ODE solving") (label "y0") (Array Real)
-interpolator = quantvar $ dqdNoUnit (dcc "interpolator_apache" (nounPhrase
+  "the array of initial values for ODE solving" (Array Real) (label "y0")
+interpolator = quantvar $ implVar "interpolator_apache" (nounPhrase
   "step interpolator for ODE solving" "step interpolator for ODE solving")
-  "the step interpolator for ODE solving") (label "interpolator") (Actor si)
-isLast = quantvar $ dqdNoUnit (dcc "isLast_apache" (nounPhrase
+  "the step interpolator for ODE solving" (Actor si) (label "interpolator")
+isLast = quantvar $ implVar "isLast_apache" (nounPhrase
   "boolean for whether the current step is the last step"
   "booleans for whether the current step is the last step")
-  "the boolean for whether the current step is the last step")
-  (label "isLast") Boolean
-curr = quantvar $ dqdNoUnit (dcc "curr_apache" (nounPhrase
+  "the boolean for whether the current step is the last step"
+  Boolean (label "isLast")
+curr = quantvar $ implVar "curr_apache" (nounPhrase
   "ODE solution array for current step" "ODE solution arrays for current step")
-  "the ODE solution array for the current step")
-  (label "curr") (Array Real)
+  "the ODE solution array for the current step"
+  (Array Real) (label "curr")
 
 adamsC, dp54C, stepHandlerCtor, addStepHandler, initMethod, handleStep,
   getInterpState, integrate, getDimension, computeDerivatives :: CodeFuncChunk
-adamsC = quantfunc $ dqdNoUnit (dcc "adams_ctor_apache" (nounPhrase
+adamsC = quantfunc $ implVar "adams_ctor_apache" (nounPhrase
   "constructor for an Adams-Bashforth integrator"
   "constructors for an Adams-Bashforth integrator") 
-  "the constructors for an Adams-Bashforth integrator")
-  (Label adams) (Actor adams)
-dp54C = quantfunc $ dqdNoUnit (dcc "dp54_ctor_apache" (nounPhrase
+  "the constructors for an Adams-Bashforth integrator"
+  (Actor adams) (Label adams)
+dp54C = quantfunc $ implVar "dp54_ctor_apache" (nounPhrase
   "constructor for a Dormand-Prince 5-4 integrator"
   "constructors for a Dormand-Prince 5-4 integrator")
-  "the constructors for a Dormand-Prince 5-4 integrator")
-  (Label dp54) (Actor dp54)
-stepHandlerCtor = quantfunc $ dqdNoUnit (dcc "StepHandler_ctor_apache" (nounPhrase
+  "the constructors for a Dormand-Prince 5-4 integrator"
+  (Actor dp54) (Label dp54)
+stepHandlerCtor = quantfunc $ implVar "StepHandler_ctor_apache" (nounPhrase
   "constructor for StepHandler" "constructors for StepHandler")
-  "the constructor for StepHandler")
-  (Label $ "ODE" ++ sh) (Actor $ "ODE" ++ sh)
-addStepHandler = quantfunc $ dqdNoUnit (dcc "addStepHandler_apache" (nounPhrase
+  "the constructor for StepHandler"
+  (Actor $ "ODE" ++ sh) (Label $ "ODE" ++ sh)
+addStepHandler = quantfunc $ implVar "addStepHandler_apache" (nounPhrase
   "method for adding a step handler to an integrator"
   "methods for adding a step handler to an integrator")
-  "the method for adding a step handler to an integrator")
-  (label "addStepHandler") Void
-initMethod = quantfunc $ dqdNoUnit (dcc "init_apache" (nounPhrase
+  "the method for adding a step handler to an integrator"
+  Void (label "addStepHandler")
+initMethod = quantfunc $ implVar "init_apache" (nounPhrase
   "method to initialize step handler" "methods to initialize step handler")
-  "the method to initialize the step handler") (label "init") Void
-handleStep = quantfunc $ dqdNoUnit (dcc "handleStep_apache" (nounPhrase
+  "the method to initialize the step handler" Void (label "init")
+handleStep = quantfunc $ implVar "handleStep_apache" (nounPhrase
   "method to call at each ODE step" "methods to call at each ODE step")
-  "the method to call at each ODE step") (label "handleStep") Void
-getInterpState = quantfunc $ dqdNoUnit (dcc "getInterpolatedState_apache" (nounPhrase
+  "the method to call at each ODE step" Void (label "handleStep")
+getInterpState = quantfunc $ implVar "getInterpolatedState_apache" (nounPhrase
   "method for getting current state during ODE solving"
   "methods for getting current state during ODE solving")
-  "the method for getting the current state during ODE solving")
-  (label "getInterpolatedState") (Array Real)
-integrate = quantfunc $ dqdNoUnit (dcc "integrate_apache" (nounPhrase
+  "the method for getting the current state during ODE solving"
+  (Array Real) (label "getInterpolatedState")
+integrate = quantfunc $ implVar "integrate_apache" (nounPhrase
   "method for integrating an ODE" "methods for integrating an ODE")
-  "the method for integrating an ODE") (label "integrate") Void
-getDimension = quantfunc $ dqdNoUnit (dcc "getDimension_apache" (nounPhrase
+  "the method for integrating an ODE" Void (label "integrate")
+getDimension = quantfunc $ implVar "getDimension_apache" (nounPhrase
   "method returning the dimension of an ODE system"
   "methods returning the dimension of an ODE system")
-  "the method returning the dimension of an ODE system")
-  (label "getDimension") Natural
-computeDerivatives = quantfunc $ dqdNoUnit (dcc "computeDerivatives_apache" (nounPhrase
+  "the method returning the dimension of an ODE system"
+  Natural (label "getDimension")
+computeDerivatives = quantfunc $ implVar "computeDerivatives_apache" (nounPhrase
   "method encoding an ODE system" "methods encoding an ODE system")
-  "the method encoding an ODE system") (label "computeDerivatives") Void
+  "the method encoding an ODE system" Void (label "computeDerivatives")
 
 -- odeint (C++)
 
@@ -537,87 +537,87 @@ odeintSymbols = map dqdWr [odeintCurrVals, rk, stepper, pop] ++ map dqdWr
   popOp]
 
 odeintCurrVals, rk, stepper, pop :: CodeVarChunk
-odeintCurrVals = quantvar $ dqdNoUnit (dcc "currVals_odeint" (nounPhrase
+odeintCurrVals = quantvar $ implVar "currVals_odeint" (nounPhrase
   "vector holding ODE solution values for the current step"
   "vectors holding ODE solution values for the current step")
-  "the vector holding the ODE solution values for the current step")
-  (label "currVals") (Vect Real)
-rk = quantvar $ dqdNoUnit (dcc "rk_odeint" (nounPhrase
+  "the vector holding the ODE solution values for the current step"
+  (Vect Real) (label "currVals")
+rk = quantvar $ implVar "rk_odeint" (nounPhrase
   "stepper for solving ODE system using Runge-Kutta-Dopri5 method"
   "steppers for solving ODE system using Runge-Kutta-Dopri5 method")
-  "the stepper for solving the ODE system using the Runge-Kutta-Dopri5 method")
-  (label "rk") (Actor rkdp5)
-stepper = quantvar $ dqdNoUnit (dcc "stepper_odeint" (nounPhrase
+  "the stepper for solving the ODE system using the Runge-Kutta-Dopri5 method"
+  (Actor rkdp5) (label "rk")
+stepper = quantvar $ implVar "stepper_odeint" (nounPhrase
   "stepper for solving ODE system" "steppers for solving ODE system")
-  "the stepper for solving the ODE system") (label "stepper") (Actor "auto")
-pop = quantvar $ dqdNoUnit (dcc "pop_odeint" (nounPhrase
+  "the stepper for solving the ODE system" (Actor "auto") (label "stepper")
+pop = quantvar $ implVar"pop_odeint" (nounPhrase
   "object to populate ODE solution vector"
   "objects to populate ODE solution vector")
-  "the object to populate the ODE solution vector") (label "pop") popT
+  "the object to populate the ODE solution vector" popT (label "pop")
 
 rkdp5C, makeControlled, adamsBashC, integrateConst, odeOp, popCtor,
   popOp :: CodeFuncChunk
-rkdp5C = quantfunc $ dqdNoUnit (dcc "rkdp5_odeint" (nounPhrase
+rkdp5C = quantfunc $ implVar "rkdp5_odeint" (nounPhrase
   "constructor for stepper using Runge-Kutta-Dopri5 method"
   "constructors for stepper using Runge-Kutta-Dopri5 method")
-  "the constructor for stepper using the Runge-Kutta-Dopri5 method")
-  (Label rkdp5) (Actor rkdp5)
-makeControlled = quantfunc $ dqdNoUnit (dcc "make_controlled_odeint" (nounPhrase
+  "the constructor for stepper using the Runge-Kutta-Dopri5 method"
+  (Actor rkdp5) (Label rkdp5)
+makeControlled = quantfunc $ implVar "make_controlled_odeint" (nounPhrase
   "function for adding error control to a stepper"
   "functions for adding error control to a stepper")
-  "the function for adding error control to a stepper")
-  (Label $ odeNameSpace ++ "make_controlled") (Actor "auto")
-adamsBashC = quantfunc $ dqdNoUnit (dcc "adamsBash_odeint" (nounPhrase
+  "the function for adding error control to a stepper"
+  (Actor "auto") (Label $ odeNameSpace ++ "make_controlled")
+adamsBashC = quantfunc $ implVar "adamsBash_odeint" (nounPhrase
   "constructor for stepper using Adams-Bashforth method"
   "constructors for stepper using Adams-Bashforth method")
-  "the constructor for stepper using the Adams-Bashforth method")
-  (Label adamsBash) (Actor adamsBash)
-integrateConst = quantfunc $ dqdNoUnit (dcc "integrate_const_odeint" (nounPhrase
+  "the constructor for stepper using the Adams-Bashforth method"
+  (Actor adamsBash) (Label adamsBash)
+integrateConst = quantfunc $ implVar "integrate_const_odeint" (nounPhrase
   "function for integrating with a constant step size"
   "functions for integrating with a constant step size")
-  "the function for integrating with a constant step size")
-  (Label $ odeNameSpace ++ "integrate_const") Void
-odeOp = quantfunc $ dqdNoUnit (dcc "ode_operator_odeint" (nounPhrase
+  "the function for integrating with a constant step size"
+  Void (Label $ odeNameSpace ++ "integrate_const")
+odeOp = quantfunc $ implVar "ode_operator_odeint" (nounPhrase
   "method defining override for calling ODE object"
   "methods defining override for calling ODE object")
-  "the method defining override for calling an ODE object")
-  (label "operator()") Void
-popCtor = quantfunc $ dqdNoUnit (dcc "Populate_odeint" (nounPhrase
+  "the method defining override for calling an ODE object"
+  Void (label "operator()")
+popCtor = quantfunc $ implVar "Populate_odeint" (nounPhrase
   "constructor for Populate object for ODE solving with odeint"
   "constructors for Populate object for ODE solving with odeint")
-  "the constructor for the Populate object for ODE solving with odeint")
-  (label "Populate") popT
-popOp = quantfunc $ dqdNoUnit (dcc "pop_operator_odeint" (nounPhrase
+  "the constructor for the Populate object for ODE solving with odeint"
+  popT (label "Populate")
+popOp = quantfunc $ implVar "pop_operator_odeint" (nounPhrase
   "method defining override for calling Populate object"
   "methods defining override for calling Populate object")
-  "the method defining override for calling a Populate object")
-  (label "operator()") Void
+  "the method defining override for calling a Populate object"
+  Void (label "operator()")
 
 -- 'CodeChunk's used in multiple external ODE libraries
 
 ode, t, y :: CodeVarChunk
 -- | ODE object & definition.
-ode = quantvar $ dqdNoUnit (dcc "ode_obj" (nounPhrase
+ode = quantvar $ implVar "ode_obj" (nounPhrase
   "object representing an ODE system" "objects representing an ODE system")
-  "the object representing an ODE system") (label "ode") odeObj
+  "the object representing an ODE system" odeObj (label "ode")
 -- | Independent variable in an ODE.
-t = quantvar $ dqdNoUnit (dcc "t_ode" (nounPhrase
+t = quantvar $ implVar "t_ode" (nounPhrase
   "current independent variable value in ODE solution"
   "current independent variable value in ODE solution")
-  "the current independent variable value in the ODE solution")
-  (label "t") Real
+  "the current independent variable value in the ODE solution"
+  Real (label "t")
 -- | Dependent variable in an ODE.
-y = quantvar $ dqdNoUnit (dcc "y_ode" (nounPhrase
+y = quantvar $ implVar "y_ode" (nounPhrase
   "current dependent variable value in ODE solution"
   "current dependent variable value in ODE solution")
-  "the current dependent variable value in the ODE solution")
-  (label "y") (Vect Real)
+  "the current dependent variable value in the ODE solution"
+  (Vect Real) (label "y")
 
 -- | ODE object constructor.
 odeCtor :: CodeFuncChunk
-odeCtor = quantfunc $ dqdNoUnit (dcc "ODE_constructor" (nounPhrase
+odeCtor = quantfunc $ implVar "ODE_constructor" (nounPhrase
   "constructor for ODE object" "constructors for ODE object")
-  "the constructor for the ODE object") (label "ODE") odeObj
+  "the constructor for the ODE object" odeObj (label "ODE")
 
 -- | ODE object.
 odeObj :: Space

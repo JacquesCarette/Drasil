@@ -100,7 +100,7 @@ sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspac
 
 -- | Needed for references and terms to work.
 symbMap :: FolderLocation -> ChunkDB
-symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, web, phsChgMtrl, twoD] ++ 
+symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, phsChgMtrl, twoD] ++ 
   map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast, 
   heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce, 
   normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [game, physics, condition, glaSlab, intrslce,
@@ -122,9 +122,8 @@ allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, pap
   ++ concatMap findAllRefs (sections fl)
 
 -- | Used for system name and kind inside of 'si'.
-webName, web :: CI
-webName = commonIdea "websiteName" (cn websiteTitle) "Drasil" []
-web = commonIdea "website" (cn "website") "web" []
+webName :: CI
+webName = commonIdea "websiteName" (cn websiteTitle) "Drasil" [] -- FIXME: Improper use of a `CI`.
 
 -- * Header Section
 

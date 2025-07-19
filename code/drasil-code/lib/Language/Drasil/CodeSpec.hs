@@ -179,15 +179,15 @@ codeSpec si chs ms = CS {
 -- from 'System' to populate the 'OldCodeSpec' structure.
 oldcodeSpec :: SI.System -> Choices -> [Mod] -> OldCodeSpec
 oldcodeSpec SI.SI{ SI._sys = sys
-                   , SI._authors = as
-                   , SI._instModels = ims
-                   , SI._datadefs = ddefs
-                   , SI._configFiles = cfp
-                   , SI._inputs = ins
-                   , SI._outputs = outs
-                   , SI._constraints = cs
-                   , SI._constants = cnsts
-                   , SI._systemdb = db } chs ms =
+                 , SI._authors = as
+                 , SI._instModels = ims
+                 , SI._dataDefns = ddefs
+                 , SI._configFiles = cfp
+                 , SI._inputs = ins
+                 , SI._outputs = outs
+                 , SI._constraints = cs
+                 , SI._constants = cnsts
+                 , SI._systemdb = db } chs ms =
   let n = programName sys
       inputs' = map quantvar ins
       const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))

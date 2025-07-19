@@ -163,25 +163,27 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 si :: System
 si = SI {
-  _sys         = srsSWHS,
-  _kind        = Specification,
-  _authors     = [thulasi],
-  _purpose     = [purp],
-  _background  = [introStartNoPCM],
-  _motivation  = [motivation],
-  _scope       = [scope],
+  _sys          = srsSWHS,
+  _kind         = Specification,
+  _authors      = [thulasi],
+  _purpose      = [purp],
+  _background   = [introStartNoPCM],
+  _motivation   = [motivation],
+  _scope        = [scope],
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but 
   -- tau does not appear in the document and thus should not be displayed.
-  _quants      = (map qw unconstrained ++ map qw symbolsAll) \\ [qw tau],
-  _instModels  = NoPCM.iMods,
-  _datadefs    = NoPCM.dataDefs,
-  _configFiles = [],
-  _inputs      = inputs ++ [qw watE], --inputs ++ outputs?
-  _outputs     = map qw [tempW, watE],     --outputs
-  _constraints = map cnstrw constrained ++ map cnstrw [tempW, watE], --constrained
-  _constants   = piConst : specParamValList,
-  _systemdb   = symbMap
+  _quants       = (map qw unconstrained ++ map qw symbolsAll) \\ [qw tau],
+  _theoryModels = tMods,
+  _genDefns     = genDefs,
+  _instModels   = NoPCM.iMods,
+  _dataDefns    = NoPCM.dataDefs,
+  _configFiles  = [],
+  _inputs       = inputs ++ [qw watE], --inputs ++ outputs?
+  _outputs      = map qw [tempW, watE],     --outputs
+  _constraints  = map cnstrw constrained ++ map cnstrw [tempW, watE], --constrained
+  _constants    = piConst : specParamValList,
+  _systemdb     = symbMap
 }
 
 purp :: Sentence

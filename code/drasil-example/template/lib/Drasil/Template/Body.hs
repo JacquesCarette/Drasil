@@ -85,22 +85,24 @@ mkSRS = [TableOfContents,
 
 si :: System
 si = SI {
-  _sys         = progName,
-  _kind        = Specification,
-  _authors     = [authorName],
-  _background  = [],
-  _purpose     = [],
-  _motivation  = [],
-  _scope       = [],
-  _quants      = [] :: [QuantityDict],
-  _instModels  = [] :: [InstanceModel],
-  _datadefs    = [] :: [DataDefinition],
-  _configFiles = [],
-  _inputs      = [] :: [QuantityDict],
-  _outputs     = [] :: [QuantityDict],
-  _constraints = [] :: [ConstrainedChunk],
-  _constants   = [] :: [ConstQDef],
-  _systemdb   = symbMap
+  _sys          = progName,
+  _kind         = Specification,
+  _authors      = [authorName],
+  _background   = [],
+  _purpose      = [],
+  _motivation   = [],
+  _scope        = [],
+  _quants       = [] :: [QuantityDict],
+  _theoryModels = [],
+  _genDefns     = [],
+  _instModels   = [] :: [InstanceModel],
+  _dataDefns    = [] :: [DataDefinition],
+  _configFiles  = [],
+  _inputs       = [] :: [QuantityDict],
+  _outputs      = [] :: [QuantityDict],
+  _constraints  = [] :: [ConstrainedChunk],
+  _constants    = [] :: [ConstQDef],
+  _systemdb     = symbMap
 }
 
 ideaDicts :: [IdeaDict]

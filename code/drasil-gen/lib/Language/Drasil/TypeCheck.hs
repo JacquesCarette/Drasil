@@ -9,11 +9,11 @@ import Data.Either (isRight, rights)
 import Control.Lens ((^.))
 import Data.Bifunctor (second)
 import Data.List (partition)
-import System.Drasil (System(SI))
+import System.Drasil (System(SI, _instModels, _dataDefns, _systemdb))
 
 typeCheckSI :: System -> IO ()
 typeCheckSI
-  (SI _ _ _ _ _ _ _ _ ims dds _ _ _ _ _ chks )
+  SI{_instModels = ims, _dataDefns = dds, _systemdb = chks}
   = do
     -- build a variable context (a map of UIDs to "Space"s [types])
     let cxt = M.map (\(dict, _) -> dict ^. typ) (symbolTable chks)

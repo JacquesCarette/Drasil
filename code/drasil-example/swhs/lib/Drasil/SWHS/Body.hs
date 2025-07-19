@@ -73,22 +73,24 @@ resourcePath = "../../../../datafiles/swhs/"
 
 si :: System
 si = SI {
-  _sys         = progName',
-  _kind        = Specification,
-  _authors     = [thulasi, brooks, spencerSmith],
-  _purpose     = [purp],
-  _background  = [],
-  _motivation  = [motivation],
-  _scope       = [scope],
-  _quants      = symbols,
-  _instModels  = insModel,
-  _datadefs    = SWHS.dataDefs,
-  _configFiles = [],
-  _inputs      = inputs,
-  _outputs     = map qw outputs,
-  _constraints = constrained,
-  _constants   = specParamValList,
-  _systemdb   = symbMap
+  _sys          = progName',
+  _kind         = Specification,
+  _authors      = [thulasi, brooks, spencerSmith],
+  _purpose      = [purp],
+  _background   = [],
+  _motivation   = [motivation],
+  _scope        = [scope],
+  _quants       = symbols,
+  _theoryModels = tMods,
+  _genDefns     = genDefs,
+  _instModels   = insModel,
+  _dataDefns    = SWHS.dataDefs,
+  _configFiles  = [],
+  _inputs       = inputs,
+  _outputs      = map qw outputs,
+  _constraints  = constrained,
+  _constants    = specParamValList,
+  _systemdb     = symbMap
 }
 
 purp :: Sentence

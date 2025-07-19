@@ -60,22 +60,24 @@ printSetting = piSys fullSI Equational defaultConfiguration
 
 si :: System
 si = SI {
-  _sys         = progName,
-  _kind        = Specification,
-  _authors     = [nikitha, spencerSmith],
-  _purpose     = [purp],
-  _background  = [background],
-  _motivation  = [],
-  _scope       = [scope],
-  _quants      = symbolsForSymbolTable,
-  _instModels  = iMods,
-  _datadefs    = GB.dataDefs,
-  _configFiles = configFp,
-  _inputs      = inputs,
-  _outputs     = outputs,
-  _constraints = constrained,
-  _constants   = constants,
-  _systemdb   = symbMap
+  _sys          = progName,
+  _kind         = Specification,
+  _authors      = [nikitha, spencerSmith],
+  _purpose      = [purp],
+  _background   = [background],
+  _motivation   = [],
+  _scope        = [scope],
+  _quants       = symbolsForSymbolTable,
+  _theoryModels = tMods,
+  _genDefns     = [],
+  _instModels   = iMods,
+  _dataDefns    = GB.dataDefs,
+  _configFiles  = configFp,
+  _inputs       = inputs,
+  _outputs      = outputs,
+  _constraints  = constrained,
+  _constants    = constants,
+  _systemdb     = symbMap
 }
   --FIXME: All named ideas, not just acronyms.
 

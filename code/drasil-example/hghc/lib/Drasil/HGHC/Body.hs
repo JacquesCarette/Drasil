@@ -27,22 +27,24 @@ printSetting = piSys fullSI Equational defaultConfiguration
 
 si :: System
 si = SI {
-  _sys         = progName,
-  _kind        = Specification,
-  _authors     = [spencerSmith],
-  _quants      = symbols,
-  _purpose     = [purp],
-  _background  = [],
-  _motivation  = [],
-  _scope       = [],
-  _instModels  = [], -- FIXME; empty _instModels
-  _datadefs    = dataDefs,
-  _configFiles = [],
-  _inputs      = htInputs,
-  _outputs     = htOutputs,
-  _constraints = [] :: [ConstrainedChunk],
-  _constants   = [],
-  _systemdb   = symbMap
+  _sys          = progName,
+  _kind         = Specification,
+  _authors      = [spencerSmith],
+  _quants       = symbols,
+  _purpose      = [purp],
+  _background   = [],
+  _motivation   = [],
+  _scope        = [],
+  _theoryModels = [],
+  _genDefns     = [],
+  _instModels   = [],
+  _dataDefns    = dataDefs,
+  _configFiles  = [],
+  _inputs       = htInputs,
+  _outputs      = htOutputs,
+  _constraints  = [] :: [ConstrainedChunk],
+  _constants    = [],
+  _systemdb     = symbMap
 }
   
 mkSRS :: SRSDecl

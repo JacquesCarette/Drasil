@@ -97,26 +97,28 @@ mkSRS = [TableOfContents,
 
 si :: System
 si = SI {
-  _sys         = progName,
-  _kind        = Specification,
-  _authors     = [alex, luthfi, olu],
-  _purpose     = [purp],
-  _background  = [],
-  _motivation  = [],
-  _scope       = [],
+  _sys          = progName,
+  _kind         = Specification,
+  _authors      = [alex, luthfi, olu],
+  _purpose      = [purp],
+  _background   = [],
+  _motivation   = [],
+  _scope        = [],
   -- FIXME: The _quants field should be filled in with all the symbols, however
   -- #1658 is why this is empty, otherwise we end up with unused (and probably
   -- should be removed) symbols. But that's for another time. This is "fine"
   -- because _quants are only used relative to #1658.
-  _quants      = [] :: [QuantityDict], -- map qw iMods ++ map qw symbolsAll,
-  _instModels  = iMods,
-  _datadefs    = dataDefs,
-  _configFiles = [],
-  _inputs      = inputSymbols,
-  _outputs     = outputSymbols, 
-  _constraints = inputConstraints,
-  _constants   = [],
-  _systemdb   = symbMap
+  _quants       = [] :: [QuantityDict],
+  _theoryModels = tMods,
+  _genDefns     = generalDefns,
+  _instModels   = iMods,
+  _dataDefns    = dataDefs,
+  _configFiles  = [],
+  _inputs       = inputSymbols,
+  _outputs      = outputSymbols, 
+  _constraints  = inputConstraints,
+  _constants    = [],
+  _systemdb     = symbMap
 }
 
 purp :: Sentence

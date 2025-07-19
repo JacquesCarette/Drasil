@@ -43,22 +43,24 @@ mkNB = [
 
 si :: System
 si = SI {
-  _sys         = projectileMotion,
-  _kind        = Notebook,
-  _authors     = [spencerSmith],
-  _purpose     = [],
-  _background  = [], 
-  _motivation  = [],
-  _scope       = [],
-  _quants      = [] :: [QuantityDict],
-  _instModels  = [],
-  _datadefs    = [],
-  _configFiles = [],
-  _inputs      = [] :: [QuantityDict],
-  _outputs     = [] :: [QuantityDict],
-  _constraints = [] :: [ConstrainedChunk],
-  _constants   = [] :: [ConstQDef],
-  _systemdb   = symbMap
+  _sys          = projectileMotion,
+  _kind         = Notebook,
+  _authors      = [spencerSmith],
+  _purpose      = [],
+  _background   = [], 
+  _motivation   = [],
+  _scope        = [],
+  _quants       = [] :: [QuantityDict],
+  _theoryModels = [],
+  _genDefns     = [],
+  _instModels   = [],
+  _dataDefns    = [],
+  _configFiles  = [],
+  _inputs       = [] :: [QuantityDict],
+  _outputs      = [] :: [QuantityDict],
+  _constraints  = [] :: [ConstrainedChunk],
+  _constants    = [] :: [ConstQDef],
+  _systemdb     = symbMap
 }
 
 symbMap :: ChunkDB

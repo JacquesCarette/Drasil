@@ -106,22 +106,24 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
 
 si :: System
 si = SI {
-  _sys         = progName, 
-  _kind        = Specification,
-  _authors     = [dong],
-  _purpose     = [purp],
-  _background  = [background],
-  _motivation  = [motivation],
-  _scope       = [scope],
-  _quants      = symbolsAll,
-  _instModels  = iMods,
-  _datadefs    = dataDefs,
-  _configFiles = [],
-  _inputs      = inputs,
-  _outputs     = outputs,
-  _constraints = inConstraints,
-  _constants   = constants,
-  _systemdb   = symbMap
+  _sys          = progName, 
+  _kind         = Specification,
+  _authors      = [dong],
+  _purpose      = [purp],
+  _background   = [background],
+  _motivation   = [motivation],
+  _scope        = [scope],
+  _quants       = symbolsAll,
+  _theoryModels = tMods,
+  _genDefns     = genDefns,
+  _dataDefns    = dataDefs,
+  _instModels   = iMods,
+  _configFiles  = [],
+  _inputs       = inputs,
+  _outputs      = outputs,
+  _constraints  = inConstraints,
+  _constants    = constants,
+  _systemdb     = symbMap
 }
 
 purp :: Sentence

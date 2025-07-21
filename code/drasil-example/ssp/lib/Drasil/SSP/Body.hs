@@ -80,8 +80,8 @@ si = SI {
   _instModels  = iMods,
   _datadefs    = dataDefs,
   _configFiles = [],
-  _inputs      = map qw inputs,
-  _outputs     = map qw outputs,
+  _inputs      = inputs,
+  _outputs     = outputs,
   _constraints = constrained,
   _constants   = [],
   _systemdb   = symbMap
@@ -163,7 +163,7 @@ conceptChunks =
 
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ map qw symbols) ideaDicts conceptChunks
+symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks
   (degree : siUnits) dataDefs iMods generalDefinitions tMods concIns labCon allRefs citations
 
 abbreviationsList :: [IdeaDict]

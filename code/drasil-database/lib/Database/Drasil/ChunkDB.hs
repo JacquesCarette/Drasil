@@ -8,14 +8,17 @@ module Database.Drasil.ChunkDB (
   -- * Types
   -- ** 'ChunkDB'
   -- | Main database type
-  ChunkDB(CDB, symbolTable, termTable, conceptChunkTable),
+  ChunkDB(symbolTable, termTable, conceptChunkTable, _unitTable, _dataDefnTable,
+    _insmodelTable, _gendefTable, _theoryModelTable, _conceptinsTable,
+    _citationTable, _labelledcontentTable, _traceTable, _refbyTable, _refTable,
+    CDB),
   TermAbbr(..),
   -- ** Maps
   -- | Exported for external use.
   RefbyMap, TraceMap, UMap,
   -- * Functions
   -- ** Constructors
-  cdb, idMap, termMap, conceptMap, traceMap, generateRefbyMap, -- idMap, termMap for docLang
+  cdb, idMap, termMap, conceptMap, unitMap, traceMap, generateRefbyMap, -- idMap, termMap for docLang
   -- ** Lookup Functions
   asOrderedList, collectUnits,
   termResolve, termResolve', defResolve, symbResolve,

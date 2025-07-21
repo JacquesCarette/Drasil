@@ -75,7 +75,7 @@ si fl = SI {
     _sys         = webName,
     _kind        = web,
     _authors     = [] :: [Person],
-    _quants      = [] :: [QuantityDict],
+    _quants      = [] :: [DefinedQuantityDict],
     _purpose     = [],
     _background  = [],
     _motivation  = [],
@@ -83,8 +83,8 @@ si fl = SI {
     _instModels  = [],
     _datadefs    = [],
     _configFiles = [],
-    _inputs      = [] :: [QuantityDict],
-    _outputs     = [] :: [QuantityDict],
+    _inputs      = [] :: [DefinedQuantityDict],
+    _outputs     = [] :: [DefinedQuantityDict],
     _constraints = [] :: [ConstrainedChunk],
     _constants   = [] :: [ConstQDef],
     _systemdb   = symbMap fl
@@ -100,7 +100,7 @@ sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspac
 
 -- | Needed for references and terms to work.
 symbMap :: FolderLocation -> ChunkDB
-symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, web, phsChgMtrl, twoD] ++ 
+symbMap fl = cdb ([] :: [DefinedQuantityDict]) (map nw [webName, web, phsChgMtrl, twoD] ++ 
   map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast, 
   heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce, 
   normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [game, physics, condition, glaSlab, intrslce,

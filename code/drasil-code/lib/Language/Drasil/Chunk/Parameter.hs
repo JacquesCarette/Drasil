@@ -41,7 +41,7 @@ instance MayHaveUnit ParameterChunk where getUnit = getUnit . view pcc
 pcAuto :: (CodeIdea c) => c -> ParameterChunk
 pcAuto c = PC cdch (choosePB $ cdch ^. typ)
   where cdch = codeChunk c
-        choosePB (ClifS _ _ _) = Ref
+        choosePB (ClifS {}) = Ref
         choosePB (Actor _) = Ref
         choosePB _ = Val
 

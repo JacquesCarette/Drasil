@@ -451,12 +451,12 @@ instance Typed Expr Space where
     x -> x
 
   infer cxt (UnaryOpCN Dim e) = case infer cxt e of
-    Left (S.ClifS _ _ _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
+    Left (S.ClifS {}) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
     Left sp -> Right $ "Vector 'dim' only applies to vectors. Received `" ++ show sp ++ "`."
     x -> x
   
   infer cxt (UnaryOpCN Grade e) = case infer cxt e of
-    Left (S.ClifS _ _ _) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
+    Left (S.ClifS {}) -> Left S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
     Left sp -> Right $ "Vector 'grade' only applies to vectors. Received `" ++ show sp ++ "`."
     x -> x
 

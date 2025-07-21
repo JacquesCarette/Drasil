@@ -1,6 +1,7 @@
 module Drasil.SWHS.Unitals where -- all of this file is exported
 
 import Language.Drasil
+import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Display (Symbol(Atop), Decoration(Delta))
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -18,7 +19,7 @@ import Data.Drasil.Units.PhysicalProperties (densityU)
 import qualified Data.Drasil.Units.Thermodynamics as UT (heatTransferCoef,
   heatCapSpec, thermalFlux, volHtGenU)
 
-import Drasil.SWHS.Concepts (water)
+import Drasil.SWHS.Concepts (water, phsChgMtrl)
 
 import Control.Lens ((^.))
 
@@ -467,13 +468,15 @@ tankLengthMin, tankLengthMax, pcmDensityMin,
 consTolAux = mkQuantDef consTol $ perc 1 5
 
 -- Used in Constraint 1
-tankLengthMin = mkQuantDef (unitary "tankLengthMin"
+tankLengthMin = mkQuantDef (uc' "tankLengthMin"
   (nounPhraseSP "minimum length of tank")
-  (subMin (eqSymb tankLength)) metre Real) $ dbl 0.1
+  (S "the minimum length of the tank")
+  (subMin (eqSymb tankLength)) Real metre) $ dbl 0.1
 
-tankLengthMax = mkQuantDef (unitary "tankLengthMax"
+tankLengthMax = mkQuantDef (uc' "tankLengthMax"
   (nounPhraseSP "maximum length of tank")
-  (subMax (eqSymb tankLength)) metre Real) $ exactDbl 50
+  (S "the maximum length of the tank")
+  (subMax (eqSymb tankLength)) Real metre) $ exactDbl 50
 
 fracMinAux = mkQuantDef fracMin $ dbl 1.0e-6
 
@@ -481,97 +484,122 @@ arMin = mkQuantDef aspectRatioMin $ dbl 0.01
 arMax = mkQuantDef aspectRatioMax $ exactDbl 100
 
 -- Used in Constraint 5
-pcmDensityMin = mkQuantDef (unitary' "pcmDensityMin"
-  (nounPhraseSP "minimum density of PCM") (staged (supMin (eqSymb pcmDensity)) 
-  (subMin (unicodeConv $ eqSymb pcmDensity))) densityU Real) $ exactDbl 500
+pcmDensityMin = mkQuantDef (ucStaged' "pcmDensityMin"
+  (nounPhraseSP "minimum density of PCM")
+  (S "the minimum density of the" +:+ phrase phsChgMtrl)
+  (staged (supMin (eqSymb pcmDensity)) 
+  (subMin (unicodeConv $ eqSymb pcmDensity))) Real densityU) $ exactDbl 500
 
-pcmDensityMax = mkQuantDef (unitary' "pcmDensityMax"
-  (nounPhraseSP "maximum density of PCM") (staged (supMax (eqSymb pcmDensity)) 
-  (subMax (unicodeConv $ eqSymb pcmDensity))) densityU Real) $ exactDbl 20000
+pcmDensityMax = mkQuantDef (ucStaged' "pcmDensityMax"
+  (nounPhraseSP "maximum density of PCM") 
+  (S "the maximum density of the" +:+ phrase phsChgMtrl)
+  (staged (supMax (eqSymb pcmDensity)) 
+  (subMax (unicodeConv $ eqSymb pcmDensity))) Real densityU) $ exactDbl 20000
 
 -- Used in Constraint 7
-htCapSPMin = mkQuantDef (unitary "htCapSPMin"
+htCapSPMin = mkQuantDef (uc' "htCapSPMin"
   (nounPhraseSP "minimum specific heat capacity of PCM as a solid")
-  (subMin (eqSymb htCapSP)) UT.heatCapSpec Real) $ exactDbl 100
+  (S "the minimum" +:+ phrase heatCapSpec `S.ofThe` phrase phsChgMtrl)
+  (subMin (eqSymb htCapSP)) Real UT.heatCapSpec) $ exactDbl 100
 
-htCapSPMax = mkQuantDef (unitary "htCapSPMax"
+htCapSPMax = mkQuantDef (uc' "htCapSPMax"
   (nounPhraseSP "maximum specific heat capacity of PCM as a solid")
-  (subMax (eqSymb htCapSP)) UT.heatCapSpec Real) $ exactDbl 4000
+  (S "the maximum" +:+ phrase heatCapSpec `S.ofThe` phrase phsChgMtrl +:+ S "as a solid")
+  (subMax (eqSymb htCapSP)) Real UT.heatCapSpec) $ exactDbl 4000
 
 -- Used in Constraint 8
-htCapLPMin = mkQuantDef (unitary "htCapLPMin"
+htCapLPMin = mkQuantDef (uc' "htCapLPMin"
   (nounPhraseSP "minimum specific heat capacity of PCM as a liquid")
-  (subMin (eqSymb htCapLP)) UT.heatCapSpec Real) $ exactDbl 100
+  (S "the minimum" +:+ phrase heatCapSpec `S.ofThe` phrase phsChgMtrl +:+ S "as a liquid")
+  (subMin (eqSymb htCapLP)) Real UT.heatCapSpec) $ exactDbl 100
 
-htCapLPMax = mkQuantDef (unitary "htCapLPMax"
+htCapLPMax = mkQuantDef (uc' "htCapLPMax"
   (nounPhraseSP "maximum specific heat capacity of PCM as a liquid")
-  (subMax (eqSymb htCapLP)) UT.heatCapSpec Real) $ exactDbl 5000
+  (S "the maximum" +:+ phrase heatCapSpec `S.ofThe` phrase phsChgMtrl +:+ S "as a liquid")
+  (subMax (eqSymb htCapLP)) Real UT.heatCapSpec) $ exactDbl 5000
 
 -- Used in Constraint 9
-htFusionMin = mkQuantDef (unitary "htFusionMin"
+htFusionMin = mkQuantDef (uc' "htFusionMin"
   (nounPhraseSP "minimum specific latent heat of fusion")
-  (subMin (eqSymb htFusion)) UT.heatCapSpec Real) $ exactDbl 0 
+  (S "the minimum specific latent heat of fusion")
+  (subMin (eqSymb htFusion)) Real UT.heatCapSpec) $ exactDbl 0 
 
-htFusionMax = mkQuantDef (unitary "htFusionMax"
+htFusionMax = mkQuantDef (uc' "htFusionMax"
   (nounPhraseSP "maximum specific latent heat of fusion")
-  (subMax (eqSymb htFusion)) UT.heatCapSpec Real) $ exactDbl 1000000 
+  (S "the maximum specific latent heat of fusion")
+  (subMax (eqSymb htFusion)) Real UT.heatCapSpec) $ exactDbl 1000000 
 
 -- Used in Constraint 10
-coilSAMax = mkQuantDef (unitary' "coilSAMax"
-  (nounPhraseSP "maximum surface area of coil") (staged (supMax (eqSymb coilSA))
-  (subMax (eqSymb coilSA))) m_2 Real) $ exactDbl 100000
+coilSAMax = mkQuantDef (ucStaged' "coilSAMax"
+  (nounPhraseSP "maximum surface area of coil") 
+  (S "the maximum surface area of the heating coil")
+  (staged (supMax (eqSymb coilSA))
+  (subMax (eqSymb coilSA))) Real m_2) $ exactDbl 100000
 
 -- Used in Constraint 12
-wDensityMin = mkQuantDef (unitary' "wDensityMin"
-  (nounPhraseSP "minimum density of water") (staged (supMin (eqSymb wDensity)) 
-  (subMin (unicodeConv $ eqSymb wDensity))) densityU Real) $ exactDbl 950
+wDensityMin = mkQuantDef (ucStaged' "wDensityMin"
+  (nounPhraseSP "minimum density of water")
+  (S "the minimum density of water")
+  (staged (supMin (eqSymb wDensity)) 
+  (subMin (unicodeConv $ eqSymb wDensity))) Real densityU) $ exactDbl 950
 
-wDensityMax = mkQuantDef (unitary' "wDensityMax"
-  (nounPhraseSP "maximum density of water") (staged (supMax (eqSymb wDensity)) 
-  (subMax (unicodeConv $ eqSymb wDensity))) densityU Real) $ exactDbl 1000
+wDensityMax = mkQuantDef (ucStaged' "wDensityMax"
+  (nounPhraseSP "maximum density of water")
+  (S "the maximum density of water")
+  (staged (supMax (eqSymb wDensity)) 
+  (subMax (unicodeConv $ eqSymb wDensity))) Real densityU) $ exactDbl 1000
   
 -- Used in Constraint 13
-htCapWMin = mkQuantDef (unitary' "htCapWMin"
+htCapWMin = mkQuantDef (ucStaged' "htCapWMin"
   (nounPhraseSP "minimum specific heat capacity of water")
-  (staged (supMin (eqSymb htCapW)) (subMin (eqSymb htCapW))) UT.heatCapSpec 
-  Real) $ exactDbl 4170
+  (S "the minimum" +:+ phrase heatCapSpec +:+ S "of water")
+  (staged (supMin (eqSymb htCapW)) (subMin (eqSymb htCapW))) Real UT.heatCapSpec)
+  $ exactDbl 4170
 
-htCapWMax = mkQuantDef (unitary' "htCapWMax"
+htCapWMax = mkQuantDef (ucStaged' "htCapWMax"
   (nounPhraseSP "maximum specific heat capacity of water")
-  (staged (supMax (eqSymb htCapW)) (subMax (eqSymb htCapW))) UT.heatCapSpec 
-  Real) $ exactDbl 4210
+  (S "the maximum" +:+ phrase heatCapSpec +:+ S "of water")
+  (staged (supMax (eqSymb htCapW)) (subMax (eqSymb htCapW))) Real 
+  UT.heatCapSpec) $ exactDbl 4210
 
 -- Used in Constraint 14
-coilHTCMin = mkQuantDef (unitary' "coilHTCMin"
+coilHTCMin = mkQuantDef (ucStaged' "coilHTCMin"
   (nounPhraseSP $ "minimum convective heat " ++
   "transfer coefficient between coil and water")
+  (S "the minimum convective heat transfer coefficient between coil and water")
   (staged (supMin (eqSymb coilHTC)) (subMin (eqSymb coilHTC))) 
-  UT.heatTransferCoef Real) $ exactDbl 10
+  Real UT.heatTransferCoef) $ exactDbl 10
 
-coilHTCMax = mkQuantDef (unitary' "coilHTCMax"
+coilHTCMax = mkQuantDef (ucStaged' "coilHTCMax"
   (nounPhraseSP $ "maximum convective heat " ++
   "transfer coefficient between coil and water")
+  (S "the maximum convective heat transfer coefficient between coil and water")
   (staged (supMax (eqSymb coilHTC)) (subMax (eqSymb coilHTC))) 
-  UT.heatTransferCoef Real) $ exactDbl 10000
+  Real UT.heatTransferCoef) $ exactDbl 10000
   
 -- Used in Constraint 15
-pcmHTCMin = mkQuantDef (unitary' "pcmHTCMin"
+pcmHTCMin = mkQuantDef (ucStaged' "pcmHTCMin"
   (nounPhraseSP $ "minimum convective heat " ++
   "transfer coefficient between PCM and water")
+  (S "the minimum convective heat transfer coefficient between the" +:+
+  phrase phsChgMtrl +:+ S "and water")
   (staged (supMin (eqSymb pcmHTC)) (subMin (eqSymb pcmHTC))) 
-  UT.heatTransferCoef Real) $ exactDbl 10
+  Real UT.heatTransferCoef) $ exactDbl 10
 
-pcmHTCMax = mkQuantDef (unitary' "pcmHTCMax"
+pcmHTCMax = mkQuantDef (ucStaged' "pcmHTCMax"
   (nounPhraseSP $ "maximum convective heat " ++
   "transfer coefficient between PCM and water")
+  (S "the maximum convective heat transfer coefficient between the" +:+
+  phrase phsChgMtrl +:+ S "and water")
   (staged (supMax (eqSymb pcmHTC)) (subMax (eqSymb pcmHTC))) 
-  UT.heatTransferCoef Real) $ exactDbl 10000
+  Real UT.heatTransferCoef) $ exactDbl 10000
   
 -- Used in Constraint 17
-timeFinalMax = mkQuantDef (unitary' "timeFinalMax"
+timeFinalMax = mkQuantDef (ucStaged' "timeFinalMax"
   (nounPhraseSP "maximum final time")
-  (staged (supMax (eqSymb timeFinal)) (subMax (eqSymb timeFinal))) second 
-  Real) $ exactDbl 86400
+  (S "the maximum final time for the simulation")
+  (staged (supMax (eqSymb timeFinal)) (subMax (eqSymb timeFinal))) Real
+  second) $ exactDbl 86400
 
 -- Labels
 lCoil, lEnv, lFinal, lFusion, lIn, lInit, lLiquid, lMelt, lOut, lPCM, lSolid,

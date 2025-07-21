@@ -1,6 +1,7 @@
 {-# LANGUAGE TemplateHaskellQuotes, DeriveLift, DeriveGeneric #-}
-module Metadata.Drasil.DrasilMeta where
+module Drasil.Metadata.Drasil (DrasilMeta(..), drasilMetaCfg) where
 
+import Data.Maybe (fromMaybe)
 import Data.Aeson (decodeFileStrict, FromJSON, ToJSON)
 import GHC.Generics (Generic)
 import Language.Haskell.TH.Syntax (Lift, addDependentFile)
@@ -13,7 +14,8 @@ import Language.Haskell.TH (Exp, Q, runIO)
 -}
 
 -- | Create DrasilMeta newtype
-newtype DrasilMeta = DrasilMeta {version :: String} deriving (Generic, Show, Lift)
+newtype DrasilMeta = DrasilMeta { version :: String }
+  deriving (Generic, Show, Lift)
 
 instance ToJSON DrasilMeta
 
@@ -22,9 +24,7 @@ instance FromJSON DrasilMeta
 -- | Configures drasilMeta at compile-time
 drasilMetaCfg :: Q Exp
 drasilMetaCfg = do
-  let fp = "lib/Metadata/Drasil/DrasilMetadata.json"
+  let fp = "lib/Drasil/Metadata/Drasil.json"
   maybeDM <- runIO (decodeFileStrict fp :: IO (Maybe DrasilMeta))
   addDependentFile fp
-  [|fromMaybe (error "could not read in the drasil metadata file") maybeDM|]
-
-
+  [| fromMaybe (error "could not read in the drasil metadata file") maybeDM |]

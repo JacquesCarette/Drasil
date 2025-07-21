@@ -7,7 +7,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
-import Data.Drasil.Domains (mathematics, physics)
+import Drasil.Metadata (mathematics, physics)
 import Data.Drasil.Concepts.Documentation (property, value)
 import Data.Drasil.Concepts.Math (xComp, xDir, yComp, yDir, point, axis, cartesian)
 import Control.Lens((^.)) --need for parametrization hack

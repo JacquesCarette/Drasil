@@ -13,15 +13,14 @@ import Language.Haskell.TH (Exp, Q, runIO)
    - Mark Karpov: https://markkarpov.com/tutorial/th.html
 -}
 
--- | Create DrasilMeta newtype
+-- | Basic Drasil metadata.
 newtype DrasilMeta = DrasilMeta { version :: String }
   deriving (Generic, Show, Lift)
 
 instance ToJSON DrasilMeta
-
 instance FromJSON DrasilMeta
 
--- | Configures drasilMeta at compile-time
+-- | Prepare a Template Haskell expression that reads Drasil's metadata from a local JSON file.
 drasilMetaCfg :: Q Exp
 drasilMetaCfg = do
   let fp = "lib/Drasil/Metadata/Drasil.json"

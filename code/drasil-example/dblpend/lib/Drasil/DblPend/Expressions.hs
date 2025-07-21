@@ -272,14 +272,14 @@ sinAngleExpr2 = sin (sy pendDisAngle_2)
 
 -- Unit direction vectors for each pendulum using Clifford representation
 directionVector_1 :: PExpr
-directionVector_1 = vec2D cosAngleExpr1 sinAngleExpr1
+directionVector_1 = cosAngleExpr1 `cScale` e1_2D `cAdd` sinAngleExpr1 `cScale` e2_2D
 
 directionVector_2 :: PExpr  
-directionVector_2 = vec2D cosAngleExpr2 sinAngleExpr2
+directionVector_2 = cosAngleExpr2 `cScale` e1_2D `cAdd` sinAngleExpr2 `cScale` e2_2D
 
 -- Perpendicular direction vectors (rotated 90 degrees)
 perpDirectionVector_1 :: PExpr
-perpDirectionVector_1 = vec2D (neg sinAngleExpr1) cosAngleExpr1
+perpDirectionVector_1 = (neg sinAngleExpr1) `cScale` e1_2D `cAdd` cosAngleExpr1 `cScale` e2_2D
 
 perpDirectionVector_2 :: PExpr
-perpDirectionVector_2 = vec2D (neg sinAngleExpr2) cosAngleExpr2
+perpDirectionVector_2 = (neg sinAngleExpr2) `cScale` e1_2D `cAdd` cosAngleExpr2 `cScale` e2_2D

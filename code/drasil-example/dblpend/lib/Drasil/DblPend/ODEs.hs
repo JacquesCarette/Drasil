@@ -8,7 +8,7 @@ import Drasil.Code.CodeExpr (CodeExpr, expr)
 import Data.Drasil.Quantities.Physics (time)
 
 import Drasil.DblPend.Unitals(massObj_1, massObj_2, lenRod_1, lenRod_2, pendDisAngle,
-  mvVel_1, mvAccel_1, mvVel_2, mvAccel_2)
+  angularVel_1, angularAccel_1, angularVel_2, angularAccel_2)
 import Prelude hiding (sin, cos)
 
 dblPenODEOpts :: ODEOptions
@@ -23,10 +23,10 @@ dblPenODEInfo = odeInfo
   (exactDbl 20) -- final time
     [dbl 1.3463968515384828, exactDbl 0, dbl 2.356194490192345, exactDbl 0] -- unit in radian [3*pi/7, 0, 3*pi/4, 0]
   [
-    sy mvVel_1,      -- d(theta1)/dt = multivector velocity 1
-    sy mvAccel_1,    -- d(omega1)/dt = multivector acceleration 1
-    sy mvVel_2,      -- d(theta2)/dt = multivector velocity 2
-    sy mvAccel_2     -- d(omega2)/dt = multivector acceleration 2
+    sy angularVel_1,      -- d(theta1)/dt = angular velocity 1
+    sy angularAccel_1,    -- d(omega1)/dt = angular acceleration 1
+    sy angularVel_2,      -- d(theta2)/dt = angular velocity 2
+    sy angularAccel_2     -- d(omega2)/dt = angular acceleration 2
   ]
   dblPenODEOpts
     where t1  = idx (sy pendDisAngle) (int 0) :: Expr -- t1 is theta 1

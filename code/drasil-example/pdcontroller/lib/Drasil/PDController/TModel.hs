@@ -35,9 +35,9 @@ laplaceRC = makeRC "laplaceRC" (cn' "Laplace Transform") EmptyS laplaceRel
 
 laplaceRel :: Relation
 laplaceRel
-  = sy qdLaplaceTransform $=
-      defint (eqSymb time) (sy negInf) (sy posInf) (sy qdFxnTDomain 
-      $* DrasilLang.exp (neg (sy qdFreqDomain) $* sy time))
+  = sy dqdLaplaceTransform $=
+      defint (eqSymb time) (sy negInf) (sy posInf) (sy dqdFxnTDomain 
+      $* DrasilLang.exp (neg (sy dqdFreqDomain) $* sy time))
 
 laplaceDesc :: Sentence
 laplaceDesc
@@ -66,7 +66,7 @@ invlaplaceRC
   = makeRC "invLaplaceRC" (cn' "Inverse Laplace Transform") EmptyS invLaplaceRel
 
 invLaplaceRel :: Relation
-invLaplaceRel = sy qdFxnTDomain $= sy qdInvLaplaceTransform
+invLaplaceRel = sy dqdFxnTDomain $= sy dqdInvLaplaceTransform
 
 invLaplaceDesc :: Sentence
 invLaplaceDesc
@@ -98,8 +98,8 @@ tmSOSystemRC
 soSystemRel :: Relation
 soSystemRel
   = exactDbl 1 
-    $/ (sy mass $* square (sy qdFreqDomain) 
-    $+ (sy qdDampingCoeff $* sy qdFreqDomain)
+    $/ (sy mass $* square (sy dqdFreqDomain) 
+    $+ (sy dqdDampingCoeff $* sy dqdFreqDomain)
     $+ sy dqdStiffnessCoeff)
 
 soSystemDesc :: Sentence

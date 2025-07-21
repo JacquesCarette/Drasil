@@ -6,11 +6,10 @@ module Language.Drasil.Printing.Import.CodeExpr (codeExpr) where
 import Drasil.Code.CodeExpr.Development
 
 import Language.Drasil (DomainDesc(..), Inclusive(..),
-  RTopology(..), RealInterval(..), UID, LiteralC (int))
+  RTopology(..), RealInterval(..), UID, LiteralC (int), BasisBlades)
 import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Literal.Development
 import Language.Drasil.Space (Dimension(..))
-import Language.Drasil (BasisBlades)
 import Numeric.Natural (Natural)
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb, stg)

@@ -3991,6 +3991,12 @@ data ConceptChunk
 --   Concept domain tagging is not yet implemented in this constructor.
 dcc :: String -> NP -> String -> ConceptChunk
 
+-- | Smart constructor for creating a concept chunks with an abbreviation
+--   Takes a UID (String), a term (NounPhrase), a definition (String), and
+--   an abbreviation (Maybe String).
+dccA :: String -> NP -> String -> Maybe String -> ConceptChunk
+dccAWDS :: String -> NP -> Sentence -> Maybe String -> ConceptChunk
+
 -- | Similar to <a>dcc</a>, except the definition takes a <a>Sentence</a>.
 dccWDS :: String -> NP -> Sentence -> ConceptChunk
 

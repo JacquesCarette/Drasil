@@ -14,19 +14,26 @@ module System.Drasil
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data System
-[SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
-class HasSystem c_a8hf
-system :: HasSystem c_a8hf => Lens' c_a8hf System
-authors :: HasSystem c_a8hf => Lens' c_a8hf People
-background :: HasSystem c_a8hf => Lens' c_a8hf Background
-configFiles :: HasSystem c_a8hf => Lens' c_a8hf [String]
-constants :: HasSystem c_a8hf => Lens' c_a8hf [ConstQDef]
-datadefs :: HasSystem c_a8hf => Lens' c_a8hf [DataDefinition]
-instModels :: HasSystem c_a8hf => Lens' c_a8hf [InstanceModel]
-motivation :: HasSystem c_a8hf => Lens' c_a8hf Motivation
-purpose :: HasSystem c_a8hf => Lens' c_a8hf Purpose
-scope :: HasSystem c_a8hf => Lens' c_a8hf Scope
-systemdb :: HasSystem c_a8hf => Lens' c_a8hf ChunkDB
+[SI] :: (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
+data SystemKind
+Specification :: SystemKind
+RunnableSoftware :: SystemKind
+Notebook :: SystemKind
+Website :: SystemKind
+class HasSystem c_a8Ro
+system :: HasSystem c_a8Ro => Lens' c_a8Ro System
+authors :: HasSystem c_a8Ro => Lens' c_a8Ro People
+background :: HasSystem c_a8Ro => Lens' c_a8Ro Background
+configFiles :: HasSystem c_a8Ro => Lens' c_a8Ro [String]
+constants :: HasSystem c_a8Ro => Lens' c_a8Ro [ConstQDef]
+datadefs :: HasSystem c_a8Ro => Lens' c_a8Ro [DataDefinition]
+instModels :: HasSystem c_a8Ro => Lens' c_a8Ro [InstanceModel]
+kind :: HasSystem c_a8Ro => Lens' c_a8Ro SystemKind
+motivation :: HasSystem c_a8Ro => Lens' c_a8Ro Motivation
+purpose :: HasSystem c_a8Ro => Lens' c_a8Ro Purpose
+scope :: HasSystem c_a8Ro => Lens' c_a8Ro Scope
+systemdb :: HasSystem c_a8Ro => Lens' c_a8Ro ChunkDB
+whatsTheBigIdea :: System -> IdeaDict
 
 -- | Project Example purpose.
 type Purpose = [Sentence]

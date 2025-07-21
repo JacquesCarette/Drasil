@@ -4110,6 +4110,10 @@ digraph alltypes {
 	}
 	subgraph domains {
 	}
+	subgraph supportedsoftware {
+	}
+	subgraph metadata {
+	}
 	subgraph drailmetas {
 		subgraph drasilmeta{
 		DrasilMeta	[shape=oval, color=darkgreen, label="DrasilMeta"];
@@ -4433,6 +4437,11 @@ digraph alltypes {
 	subgraph printers {
 	}
 	subgraph sytems {
+		subgraph systemkind{
+		SystemKind	[shape=oval, color=darkviolet, label="SystemKind"];
+		SystemKind -> System;
+		SystemKind -> IdeaDict;
+		}
 		subgraph system{
 		System	[shape=oval, color=darkviolet, label="System"];
 		System -> CommonIdea;
@@ -4567,7 +4576,7 @@ digraph alltypes {
 		subgraph multidefne{
 		MultiDefne	[shape=oval, color=cyan3, label="MultiDefne"];
 		MultiDefne -> UID;
-		MultiDefne -> QuantityDict;
+		MultiDefne -> DefinedQuantityDict;
 		MultiDefne -> Sentence;
 		MultiDefne -> NonEmptyDefiningExpre;
 		}

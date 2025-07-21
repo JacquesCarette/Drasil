@@ -1,3 +1,4 @@
 digraph system{
+SystemKind	[shape=oval, color=turquoise4, label="SystemKind"];
 System	[shape=oval, color=turquoise4, label="System"];
 }

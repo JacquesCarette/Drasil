@@ -1,4 +1,9 @@
 	subgraph sytems {
+		subgraph systemkind{
+		SystemKind	[shape=oval, color=darkviolet, label="SystemKind"];
+		SystemKind -> System;
+		SystemKind -> IdeaDict;
+		}
 		subgraph system{
 		System	[shape=oval, color=darkviolet, label="System"];
 		System -> CommonIdea;

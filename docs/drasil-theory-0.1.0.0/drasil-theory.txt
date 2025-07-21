@@ -113,11 +113,11 @@ data DefiningExpr e
 
 -- | Smart constructor for MultiDefns, does nothing special at the moment.
 --   First argument is the <a>Space</a> to become a <a>UID</a>.
-mkMultiDefn :: String -> QuantityDict -> Sentence -> NonEmpty (DefiningExpr e) -> MultiDefn e
+mkMultiDefn :: String -> DefinedQuantityDict -> Sentence -> NonEmpty (DefiningExpr e) -> MultiDefn e
 
 -- | Smart constructor for <a>MultiDefn</a>s defining <a>UID</a>s using
 --   that of the <a>QuantityDict</a>.
-mkMultiDefnForQuant :: QuantityDict -> Sentence -> NonEmpty (DefiningExpr e) -> MultiDefn e
+mkMultiDefnForQuant :: DefinedQuantityDict -> Sentence -> NonEmpty (DefiningExpr e) -> MultiDefn e
 
 -- | Smart constructor for <a>DefiningExpr</a>s.
 mkDefiningExpr :: String -> [UID] -> Sentence -> e -> DefiningExpr e

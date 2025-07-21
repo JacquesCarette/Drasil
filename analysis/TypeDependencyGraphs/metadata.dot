@@ -1,6 +1,10 @@
 digraph alltypes {
 	subgraph domains {
 	}
+	subgraph supportedsoftware {
+	}
+	subgraph metadata {
+	}
 	subgraph drailmetas {
 		subgraph drasilmeta{
 		DrasilMeta	[shape=oval, color=darkgreen, label="DrasilMeta"];

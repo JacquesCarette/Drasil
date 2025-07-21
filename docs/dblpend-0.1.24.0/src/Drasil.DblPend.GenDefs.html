@@ -975,50 +975,50 @@ forall a. a -&gt; Maybe a
 </span><span id="line-218"></span><span>
 </span><span id="line-219"></span><span class="annot"><a href="Drasil.DblPend.GenDefs.html#xForceMD_1"><span class="hs-identifier hs-type">xForceMD_1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MultiDefn</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
 </span><span id="line-220"></span><span id="xForceMD_1"><span class="annot"><span class="annottext">xForceMD_1 :: MultiDefn ModelExpr
-</span><a href="Drasil.DblPend.GenDefs.html#xForceMD_1"><span class="hs-identifier hs-var hs-var">xForceMD_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.DblPend.GenDefs.html#xForceMD_1"><span class="hs-identifier hs-var hs-var">xForceMD_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 -&gt; Sentence
 -&gt; NonEmpty (DefiningExpr ModelExpr)
 -&gt; MultiDefn ModelExpr
 forall e.
-QuantityDict
+DefinedQuantityDict
 -&gt; Sentence -&gt; NonEmpty (DefiningExpr e) -&gt; MultiDefn e
-</span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679071523"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="#local-6989586621679071570"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679071525"><span class="hs-identifier hs-var">defns</span></a></span><span>
-</span><span id="line-221"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679071523"><span class="annot"><span class="annottext">quant :: QuantityDict
-</span><a href="#local-6989586621679071523"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
--&gt; NP
--&gt; Maybe String
--&gt; Space
+</span><a href="#local-6989586621679071572"><span class="hs-identifier hs-var">defns</span></a></span><span>
+</span><span id="line-221"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679071570"><span class="annot"><span class="annottext">quant :: DefinedQuantityDict
+</span><a href="#local-6989586621679071570"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 -&gt; (Stage -&gt; Symbol)
+-&gt; Space
 -&gt; Maybe UnitDefn
--&gt; QuantityDict
-</span><span class="hs-identifier hs-var">mkQuant'</span></span><span> </span><span class="annot"><span class="annottext">String
+-&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqd'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;force&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#horizontalForce"><span class="hs-identifier hs-var">horizontalForce</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`onThe`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#firstObject"><span class="hs-identifier hs-var">firstObject</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-222"></span><span>                    </span><span class="annot"><span class="annottext">Maybe String
-forall a. Maybe a
-</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Stage -&gt; Symbol
+</span><span id="line-222"></span><span>                    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;the horizontal force acting on the first object&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-223"></span><span>                    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Stage -&gt; Symbol
 forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">symbol</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
+</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span>
-</span><span id="line-223"></span><span>          </span><span id="local-6989586621679071525"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679071525"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
+</span><span id="line-224"></span><span>          </span><span id="local-6989586621679071572"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
+</span><a href="#local-6989586621679071572"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
 forall a. HasCallStack =&gt; [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-224"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
+</span><span id="line-225"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
 forall e. String -&gt; [UID] -&gt; Sentence -&gt; e -&gt; DefiningExpr e
 </span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;xForceWithMass1&quot;</span></span><span>
-</span><span id="line-225"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span id="line-226"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; DefiningExpr ModelExpr)
 -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -1033,17 +1033,17 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall e. Lens' (QDefinition e) e
 forall (c :: * -&gt; *) e. DefiningExpr c =&gt; Lens' (c e) e
 </span><span class="hs-identifier hs-var">defnExpr</span></span><span class="hs-special">,</span><span>
-</span><span id="line-226"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
+</span><span id="line-227"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
 forall e. String -&gt; [UID] -&gt; Sentence -&gt; e -&gt; DefiningExpr e
 </span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;xForceWithAngle1&quot;</span></span><span>
-</span><span id="line-227"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span id="line-228"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 PExpr
 </span><a href="Drasil.DblPend.Expressions.html#xForceWithAngle_1"><span class="hs-identifier hs-var">E.xForceWithAngle_1</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-228"></span><span>
-</span><span id="line-229"></span><span class="annot"><a href="Drasil.DblPend.GenDefs.html#xForceDeriv_1"><span class="hs-identifier hs-type">xForceDeriv_1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
-</span><span id="line-230"></span><span id="xForceDeriv_1"><span class="annot"><span class="annottext">xForceDeriv_1 :: Derivation
+</span><span id="line-229"></span><span>
+</span><span id="line-230"></span><span class="annot"><a href="Drasil.DblPend.GenDefs.html#xForceDeriv_1"><span class="hs-identifier hs-type">xForceDeriv_1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
+</span><span id="line-231"></span><span id="xForceDeriv_1"><span class="annot"><span class="annottext">xForceDeriv_1 :: Derivation
 </span><a href="Drasil.DblPend.GenDefs.html#xForceDeriv_1"><span class="hs-identifier hs-var hs-var">xForceDeriv_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
 </span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -1055,12 +1055,12 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS'</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn ModelExpr
 </span><a href="Drasil.DblPend.GenDefs.html#xForceMD_1"><span class="hs-identifier hs-var">xForceMD_1</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-231"></span><span>
-</span><span id="line-232"></span><span class="hs-comment">-------------------------------------------------</span><span>
-</span><span id="line-233"></span><span class="hs-comment">-- Vertical force acting on the first object --</span><span>
-</span><span id="line-234"></span><span class="hs-comment">-------------------------------------------------</span><span>
-</span><span id="line-235"></span><span class="annot"><a href="Drasil.DblPend.GenDefs.html#yForceGD_1"><span class="hs-identifier hs-type">yForceGD_1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
-</span><span id="line-236"></span><span id="yForceGD_1"><span class="annot"><span class="annottext">yForceGD_1 :: GenDefn
+</span><span id="line-232"></span><span>
+</span><span id="line-233"></span><span class="hs-comment">-------------------------------------------------</span><span>
+</span><span id="line-234"></span><span class="hs-comment">-- Vertical force acting on the first object --</span><span>
+</span><span id="line-235"></span><span class="hs-comment">-------------------------------------------------</span><span>
+</span><span id="line-236"></span><span class="annot"><a href="Drasil.DblPend.GenDefs.html#yForceGD_1"><span class="hs-identifier hs-type">yForceGD_1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
+</span><span id="line-237"></span><span id="yForceGD_1"><span class="annot"><span class="annottext">yForceGD_1 :: GenDefn
 </span><a href="Drasil.DblPend.GenDefs.html#yForceGD_1"><span class="hs-identifier hs-var hs-var">yForceGD_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr
 -&gt; Maybe UnitDefn
 -&gt; Maybe Derivation
@@ -1076,7 +1076,7 @@ forall e. String -&gt; MultiDefn e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalRealmU</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;yForce1&quot;</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn ModelExpr
 </span><a href="Drasil.DblPend.GenDefs.html#yForceMD_1"><span class="hs-identifier hs-var">yForceMD_1</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-237"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
+</span><span id="line-238"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
@@ -1084,53 +1084,53 @@ forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Derivation
 </span><a href="Drasil.DblPend.GenDefs.html#yForceDeriv_1"><span class="hs-identifier hs-var">yForceDeriv_1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;yForce1&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-238"></span><span>
-</span><span id="line-239"></span><span class="annot"><a href="Drasil.DblPend.GenDefs.html#yForceMD_1"><span class="hs-identifier hs-type">yForceMD_1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MultiDefn</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
-</span><span id="line-240"></span><span id="yForceMD_1"><span class="annot"><span class="annottext">yForceMD_1 :: MultiDefn ModelExpr
-</span><a href="Drasil.DblPend.GenDefs.html#yForceMD_1"><span class="hs-identifier hs-var hs-var">yForceMD_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><span id="line-239"></span><span>
+</span><span id="line-240"></span><span class="annot"><a href="Drasil.DblPend.GenDefs.html#yForceMD_1"><span class="hs-identifier hs-type">yForceMD_1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MultiDefn</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
+</span><span id="line-241"></span><span id="yForceMD_1"><span class="annot"><span class="annottext">yForceMD_1 :: MultiDefn ModelExpr
+</span><a href="Drasil.DblPend.GenDefs.html#yForceMD_1"><span class="hs-identifier hs-var hs-var">yForceMD_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 -&gt; Sentence
 -&gt; NonEmpty (DefiningExpr ModelExpr)
 -&gt; MultiDefn ModelExpr
 forall e.
-QuantityDict
+DefinedQuantityDict
 -&gt; Sentence -&gt; NonEmpty (DefiningExpr e) -&gt; MultiDefn e
-</span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679071553"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="#local-6989586621679071601"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679071554"><span class="hs-identifier hs-var">defns</span></a></span><span>
-</span><span id="line-241"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679071553"><span class="annot"><span class="annottext">quant :: QuantityDict
-</span><a href="#local-6989586621679071553"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
--&gt; NP
--&gt; Maybe String
--&gt; Space
+</span><a href="#local-6989586621679071602"><span class="hs-identifier hs-var">defns</span></a></span><span>
+</span><span id="line-242"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679071601"><span class="annot"><span class="annottext">quant :: DefinedQuantityDict
+</span><a href="#local-6989586621679071601"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 -&gt; (Stage -&gt; Symbol)
+-&gt; Space
 -&gt; Maybe UnitDefn
--&gt; QuantityDict
-</span><span class="hs-identifier hs-var">mkQuant'</span></span><span> </span><span class="annot"><span class="annottext">String
+-&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqd'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;force&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#verticalForce"><span class="hs-identifier hs-var">verticalForce</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`onThe`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#firstObject"><span class="hs-identifier hs-var">firstObject</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-242"></span><span>                    </span><span class="annot"><span class="annottext">Maybe String
-forall a. Maybe a
-</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Stage -&gt; Symbol
+</span><span id="line-243"></span><span>                    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;the vertical force acting on the first object&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-244"></span><span>                    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Stage -&gt; Symbol
 forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">symbol</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
+</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span>
-</span><span id="line-243"></span><span>          </span><span id="local-6989586621679071554"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679071554"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
+</span><span id="line-245"></span><span>          </span><span id="local-6989586621679071602"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
+</span><a href="#local-6989586621679071602"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
 forall a. HasCallStack =&gt; [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-244"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
+</span><span id="line-246"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
 forall e. String -&gt; [UID] -&gt; Sentence -&gt; e -&gt; DefiningExpr e
 </span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;yForceWithMass1&quot;</span></span><span>
-</span><span id="line-245"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span id="line-247"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; DefiningExpr ModelExpr)
 -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -1145,17 +1145,17 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall e. Lens' (QDefinition e) e
 forall (c :: * -&gt; *) e. DefiningExpr c =&gt; Lens' (c e) e
 </span><span class="hs-identifier hs-var">defnExpr</span></span><span class="hs-special">,</span><span>
-</span><span id="line-246"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
+</span><span id="line-248"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
 forall e. String -&gt; [UID] -&gt; Sentence -&gt; e -&gt; DefiningExpr e
 </span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;yForceWithAngle1&quot;</span></span><span>
-</span><span id="line-247"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span id="line-249"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 PExpr
 </span><a href="Drasil.DblPend.Expressions.html#yForceWithAngle_1"><span class="hs-identifier hs-var">E.yForceWithAngle_1</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-248"></span><span>
-</span><span id="line-249"></span><span class="annot"><a href="Drasil.DblPend.GenDefs.html#yForceDeriv_1"><span class="hs-identifier hs-type">yForceDeriv_1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
-</span><span id="line-250"></span><span id="yForceDeriv_1"><span class="annot"><span class="annottext">yForceDeriv_1 :: Derivation
+</span><span id="line-250"></span><span>
+</span><span id="line-251"></span><span class="annot"><a href="Drasil.DblPend.GenDefs.html#yForceDeriv_1"><span class="hs-identifier hs-type">yForceDeriv_1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
+</span><span id="line-252"></span><span id="yForceDeriv_1"><span class="annot"><span class="annottext">yForceDeriv_1 :: Derivation
 </span><a href="Drasil.DblPend.GenDefs.html#yForceDeriv_1"><span class="hs-identifier hs-var hs-var">yForceDeriv_1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
 </span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -1167,12 +1167,12 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS'</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn ModelExpr
 </span><a href="Drasil.DblPend.GenDefs.html#yForceMD_1"><span class="hs-identifier hs-var">yForceMD_1</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-251"></span><span>
-</span><span id="line-252"></span><span class="hs-comment">-------------------------------------------------</span><span>
-</span><span id="line-253"></span><span class="hs-comment">-- Horizontal force acting on the second object --</span><span>
+</span><span id="line-253"></span><span>
 </span><span id="line-254"></span><span class="hs-comment">-------------------------------------------------</span><span>
-</span><span id="line-255"></span><span class="annot"><a href="Drasil.DblPend.GenDefs.html#xForceGD_2"><span class="hs-identifier hs-type">xForceGD_2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
-</span><span id="line-256"></span><span id="xForceGD_2"><span class="annot"><span class="annottext">xForceGD_2 :: GenDefn
+</span><span id="line-255"></span><span class="hs-comment">-- Horizontal force acting on the second object --</span><span>
+</span><span id="line-256"></span><span class="hs-comment">-------------------------------------------------</span><span>
+</span><span id="line-257"></span><span class="annot"><a href="Drasil.DblPend.GenDefs.html#xForceGD_2"><span class="hs-identifier hs-type">xForceGD_2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
+</span><span id="line-258"></span><span id="xForceGD_2"><span class="annot"><span class="annottext">xForceGD_2 :: GenDefn
 </span><a href="Drasil.DblPend.GenDefs.html#xForceGD_2"><span class="hs-identifier hs-var hs-var">xForceGD_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr
 -&gt; Maybe UnitDefn
 -&gt; Maybe Derivation
@@ -1188,7 +1188,7 @@ forall e. String -&gt; MultiDefn e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalRealmU</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;xForce2&quot;</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn ModelExpr
 </span><a href="Drasil.DblPend.GenDefs.html#xForceMD_2"><span class="hs-identifier hs-var">xForceMD_2</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-257"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
+</span><span id="line-259"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
@@ -1196,53 +1196,53 @@ forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Derivation
 </span><a href="Drasil.DblPend.GenDefs.html#xForceDeriv_2"><span class="hs-identifier hs-var">xForceDeriv_2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;xForce2&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-258"></span><span>
-</span><span id="line-259"></span><span class="annot"><a href="Drasil.DblPend.GenDefs.html#xForceMD_2"><span class="hs-identifier hs-type">xForceMD_2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MultiDefn</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
-</span><span id="line-260"></span><span id="xForceMD_2"><span class="annot"><span class="annottext">xForceMD_2 :: MultiDefn ModelExpr
-</span><a href="Drasil.DblPend.GenDefs.html#xForceMD_2"><span class="hs-identifier hs-var hs-var">xForceMD_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><span id="line-260"></span><span>
+</span><span id="line-261"></span><span class="annot"><a href="Drasil.DblPend.GenDefs.html#xForceMD_2"><span class="hs-identifier hs-type">xForceMD_2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MultiDefn</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
+</span><span id="line-262"></span><span id="xForceMD_2"><span class="annot"><span class="annottext">xForceMD_2 :: MultiDefn ModelExpr
+</span><a href="Drasil.DblPend.GenDefs.html#xForceMD_2"><span class="hs-identifier hs-var hs-var">xForceMD_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 -&gt; Sentence
 -&gt; NonEmpty (DefiningExpr ModelExpr)
 -&gt; MultiDefn ModelExpr
 forall e.
-QuantityDict
+DefinedQuantityDict
 -&gt; Sentence -&gt; NonEmpty (DefiningExpr e) -&gt; MultiDefn e
-</span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679071569"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="#local-6989586621679071617"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679071570"><span class="hs-identifier hs-var">defns</span></a></span><span>
-</span><span id="line-261"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679071569"><span class="annot"><span class="annottext">quant :: QuantityDict
-</span><a href="#local-6989586621679071569"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
--&gt; NP
--&gt; Maybe String
--&gt; Space
+</span><a href="#local-6989586621679071618"><span class="hs-identifier hs-var">defns</span></a></span><span>
+</span><span id="line-263"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679071617"><span class="annot"><span class="annottext">quant :: DefinedQuantityDict
+</span><a href="#local-6989586621679071617"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 -&gt; (Stage -&gt; Symbol)
+-&gt; Space
 -&gt; Maybe UnitDefn
--&gt; QuantityDict
-</span><span class="hs-identifier hs-var">mkQuant'</span></span><span> </span><span class="annot"><span class="annottext">String
+-&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqd'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;force&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#horizontalForce"><span class="hs-identifier hs-var">horizontalForce</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`onThe`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#secondObject"><span class="hs-identifier hs-var">secondObject</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-262"></span><span>                    </span><span class="annot"><span class="annottext">Maybe String
-forall a. Maybe a
-</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Stage -&gt; Symbol
+</span><span id="line-264"></span><span>                    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;the horizontal force acting on the second object&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-265"></span><span>                    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Stage -&gt; Symbol
 forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">symbol</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
+</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span>
-</span><span id="line-263"></span><span>          </span><span id="local-6989586621679071570"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679071570"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
+</span><span id="line-266"></span><span>          </span><span id="local-6989586621679071618"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
+</span><a href="#local-6989586621679071618"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
 forall a. HasCallStack =&gt; [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-264"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
+</span><span id="line-267"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
 forall e. String -&gt; [UID] -&gt; Sentence -&gt; e -&gt; DefiningExpr e
 </span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;xForceWithMass2&quot;</span></span><span>
-</span><span id="line-265"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span id="line-268"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; DefiningExpr ModelExpr)
 -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -1257,17 +1257,17 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall e. Lens' (QDefinition e) e
 forall (c :: * -&gt; *) e. DefiningExpr c =&gt; Lens' (c e) e
 </span><span class="hs-identifier hs-var">defnExpr</span></span><span class="hs-special">,</span><span>
-</span><span id="line-266"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
+</span><span id="line-269"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
 forall e. String -&gt; [UID] -&gt; Sentence -&gt; e -&gt; DefiningExpr e
 </span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;xForceWithAngle2&quot;</span></span><span>
-</span><span id="line-267"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span id="line-270"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 PExpr
 </span><a href="Drasil.DblPend.Expressions.html#xForceWithAngle_2"><span class="hs-identifier hs-var">E.xForceWithAngle_2</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-268"></span><span>
-</span><span id="line-269"></span><span class="annot"><a href="Drasil.DblPend.GenDefs.html#xForceDeriv_2"><span class="hs-identifier hs-type">xForceDeriv_2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
-</span><span id="line-270"></span><span id="xForceDeriv_2"><span class="annot"><span class="annottext">xForceDeriv_2 :: Derivation
+</span><span id="line-271"></span><span>
+</span><span id="line-272"></span><span class="annot"><a href="Drasil.DblPend.GenDefs.html#xForceDeriv_2"><span class="hs-identifier hs-type">xForceDeriv_2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
+</span><span id="line-273"></span><span id="xForceDeriv_2"><span class="annot"><span class="annottext">xForceDeriv_2 :: Derivation
 </span><a href="Drasil.DblPend.GenDefs.html#xForceDeriv_2"><span class="hs-identifier hs-var hs-var">xForceDeriv_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
 </span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -1279,12 +1279,12 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS'</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn ModelExpr
 </span><a href="Drasil.DblPend.GenDefs.html#xForceMD_2"><span class="hs-identifier hs-var">xForceMD_2</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-271"></span><span>
-</span><span id="line-272"></span><span class="hs-comment">-------------------------------------------------</span><span>
-</span><span id="line-273"></span><span class="hs-comment">-- Vertical force acting on the first object --</span><span>
-</span><span id="line-274"></span><span class="hs-comment">-------------------------------------------------</span><span>
-</span><span id="line-275"></span><span class="annot"><a href="Drasil.DblPend.GenDefs.html#yForceGD_2"><span class="hs-identifier hs-type">yForceGD_2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
-</span><span id="line-276"></span><span id="yForceGD_2"><span class="annot"><span class="annottext">yForceGD_2 :: GenDefn
+</span><span id="line-274"></span><span>
+</span><span id="line-275"></span><span class="hs-comment">-------------------------------------------------</span><span>
+</span><span id="line-276"></span><span class="hs-comment">-- Vertical force acting on the first object --</span><span>
+</span><span id="line-277"></span><span class="hs-comment">-------------------------------------------------</span><span>
+</span><span id="line-278"></span><span class="annot"><a href="Drasil.DblPend.GenDefs.html#yForceGD_2"><span class="hs-identifier hs-type">yForceGD_2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
+</span><span id="line-279"></span><span id="yForceGD_2"><span class="annot"><span class="annottext">yForceGD_2 :: GenDefn
 </span><a href="Drasil.DblPend.GenDefs.html#yForceGD_2"><span class="hs-identifier hs-var hs-var">yForceGD_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind ModelExpr
 -&gt; Maybe UnitDefn
 -&gt; Maybe Derivation
@@ -1300,7 +1300,7 @@ forall e. String -&gt; MultiDefn e -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">equationalRealmU</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;yForce2&quot;</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn ModelExpr
 </span><a href="Drasil.DblPend.GenDefs.html#yForceMD_2"><span class="hs-identifier hs-var">yForceMD_2</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-277"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
+</span><span id="line-280"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
@@ -1308,53 +1308,53 @@ forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Derivation
 </span><a href="Drasil.DblPend.GenDefs.html#yForceDeriv_2"><span class="hs-identifier hs-var">yForceDeriv_2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;yForce2&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-278"></span><span>
-</span><span id="line-279"></span><span class="annot"><a href="Drasil.DblPend.GenDefs.html#yForceMD_2"><span class="hs-identifier hs-type">yForceMD_2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MultiDefn</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
-</span><span id="line-280"></span><span id="yForceMD_2"><span class="annot"><span class="annottext">yForceMD_2 :: MultiDefn ModelExpr
-</span><a href="Drasil.DblPend.GenDefs.html#yForceMD_2"><span class="hs-identifier hs-var hs-var">yForceMD_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><span id="line-281"></span><span>
+</span><span id="line-282"></span><span class="annot"><a href="Drasil.DblPend.GenDefs.html#yForceMD_2"><span class="hs-identifier hs-type">yForceMD_2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MultiDefn</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
+</span><span id="line-283"></span><span id="yForceMD_2"><span class="annot"><span class="annottext">yForceMD_2 :: MultiDefn ModelExpr
+</span><a href="Drasil.DblPend.GenDefs.html#yForceMD_2"><span class="hs-identifier hs-var hs-var">yForceMD_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 -&gt; Sentence
 -&gt; NonEmpty (DefiningExpr ModelExpr)
 -&gt; MultiDefn ModelExpr
 forall e.
-QuantityDict
+DefinedQuantityDict
 -&gt; Sentence -&gt; NonEmpty (DefiningExpr e) -&gt; MultiDefn e
-</span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679071585"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="#local-6989586621679071633"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679071586"><span class="hs-identifier hs-var">defns</span></a></span><span>
-</span><span id="line-281"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679071585"><span class="annot"><span class="annottext">quant :: QuantityDict
-</span><a href="#local-6989586621679071585"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
--&gt; NP
--&gt; Maybe String
--&gt; Space
+</span><a href="#local-6989586621679071634"><span class="hs-identifier hs-var">defns</span></a></span><span>
+</span><span id="line-284"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679071633"><span class="annot"><span class="annottext">quant :: DefinedQuantityDict
+</span><a href="#local-6989586621679071633"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 -&gt; (Stage -&gt; Symbol)
+-&gt; Space
 -&gt; Maybe UnitDefn
--&gt; QuantityDict
-</span><span class="hs-identifier hs-var">mkQuant'</span></span><span> </span><span class="annot"><span class="annottext">String
+-&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqd'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;force&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#verticalForce"><span class="hs-identifier hs-var">verticalForce</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`onThe`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.DblPend.Concepts.html#secondObject"><span class="hs-identifier hs-var">secondObject</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-282"></span><span>                    </span><span class="annot"><span class="annottext">Maybe String
-forall a. Maybe a
-</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Stage -&gt; Symbol
+</span><span id="line-285"></span><span>                    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;the vertical force acting on the second object&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-286"></span><span>                    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Stage -&gt; Symbol
 forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">symbol</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
+</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Maybe UnitDefn
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span>
-</span><span id="line-283"></span><span>          </span><span id="local-6989586621679071586"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
-</span><a href="#local-6989586621679071586"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
+</span><span id="line-287"></span><span>          </span><span id="local-6989586621679071634"><span class="annot"><span class="annottext">defns :: NonEmpty (DefiningExpr ModelExpr)
+</span><a href="#local-6989586621679071634"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr ModelExpr] -&gt; NonEmpty (DefiningExpr ModelExpr)
 forall a. HasCallStack =&gt; [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-284"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
+</span><span id="line-288"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
 forall e. String -&gt; [UID] -&gt; Sentence -&gt; e -&gt; DefiningExpr e
 </span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;yForceWithMass2&quot;</span></span><span>
-</span><span id="line-285"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span id="line-289"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">(ModelExpr -&gt; DefiningExpr ModelExpr)
 -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -1369,17 +1369,17 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall e. Lens' (QDefinition e) e
 forall (c :: * -&gt; *) e. DefiningExpr c =&gt; Lens' (c e) e
 </span><span class="hs-identifier hs-var">defnExpr</span></span><span class="hs-special">,</span><span>
-</span><span id="line-286"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
+</span><span id="line-290"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [UID] -&gt; Sentence -&gt; ModelExpr -&gt; DefiningExpr ModelExpr
 forall e. String -&gt; [UID] -&gt; Sentence -&gt; e -&gt; DefiningExpr e
 </span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;yForceWithAngle2&quot;</span></span><span>
-</span><span id="line-287"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span id="line-291"></span><span>                      </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr
 PExpr
 </span><a href="Drasil.DblPend.Expressions.html#yForceWithAngle_2"><span class="hs-identifier hs-var">E.yForceWithAngle_2</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-288"></span><span>
-</span><span id="line-289"></span><span class="annot"><a href="Drasil.DblPend.GenDefs.html#yForceDeriv_2"><span class="hs-identifier hs-type">yForceDeriv_2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
-</span><span id="line-290"></span><span id="yForceDeriv_2"><span class="annot"><span class="annottext">yForceDeriv_2 :: Derivation
+</span><span id="line-292"></span><span>
+</span><span id="line-293"></span><span class="annot"><a href="Drasil.DblPend.GenDefs.html#yForceDeriv_2"><span class="hs-identifier hs-type">yForceDeriv_2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
+</span><span id="line-294"></span><span id="yForceDeriv_2"><span class="annot"><span class="annottext">yForceDeriv_2 :: Derivation
 </span><a href="Drasil.DblPend.GenDefs.html#yForceDeriv_2"><span class="hs-identifier hs-var hs-var">yForceDeriv_2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [Sentence] -&gt; Derivation
 </span><span class="hs-identifier hs-var">mkDerivName</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -1391,4 +1391,4 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 forall t. Express t =&gt; t -&gt; Sentence
 </span><span class="hs-identifier hs-var">eS'</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn ModelExpr
 </span><a href="Drasil.DblPend.GenDefs.html#yForceMD_2"><span class="hs-identifier hs-var">yForceMD_2</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-291"></span></pre></body></html>
+</span><span id="line-295"></span></pre></body></html>

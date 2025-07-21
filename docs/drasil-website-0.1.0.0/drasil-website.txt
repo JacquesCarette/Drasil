@@ -572,9 +572,6 @@ allRefs :: FolderLocation -> [Reference]
 -- | Used for system name and kind inside of <a>si</a>.
 webName :: CI
 
--- | Used for system name and kind inside of <a>si</a>.
-web :: CI
-
 -- | Header section creator.
 headerSec :: Section
 

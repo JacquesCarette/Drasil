@@ -58,6 +58,14 @@ documentc :: IdeaDict
 --   Various domains that are used in Drasil. May have an abbreviation.
 knowledgemng :: IdeaDict
 
+
+-- | Categories of software that Drasil can generate.
+module Drasil.Metadata.SupportedSoftware
+runnableSoftware :: IdeaDict
+website :: IdeaDict
+
+module Drasil.Metadata
+
 module Metadata.Drasil.DrasilMeta
 
 -- | Create DrasilMeta newtype

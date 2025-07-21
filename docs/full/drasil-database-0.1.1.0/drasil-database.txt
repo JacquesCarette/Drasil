@@ -18,6 +18,20 @@ module Database.Drasil.ChunkDB
 --   in its respective example, else an error is thrown.
 data ChunkDB
 CDB :: SymbolMap -> TermMap -> ConceptMap -> UnitMap -> DatadefnMap -> InsModelMap -> GendefMap -> TheoryModelMap -> ConceptInstanceMap -> CitationMap -> LabelledContentMap -> ReferenceMap -> TraceMap -> RefbyMap -> ChunkDB
+[symbolTable] :: ChunkDB -> SymbolMap
+[termTable] :: ChunkDB -> TermMap
+[conceptChunkTable] :: ChunkDB -> ConceptMap
+[_unitTable] :: ChunkDB -> UnitMap
+[_dataDefnTable] :: ChunkDB -> DatadefnMap
+[_insmodelTable] :: ChunkDB -> InsModelMap
+[_gendefTable] :: ChunkDB -> GendefMap
+[_theoryModelTable] :: ChunkDB -> TheoryModelMap
+[_conceptinsTable] :: ChunkDB -> ConceptInstanceMap
+[_citationTable] :: ChunkDB -> CitationMap
+[_labelledcontentTable] :: ChunkDB -> LabelledContentMap
+[_refTable] :: ChunkDB -> ReferenceMap
+[_traceTable] :: ChunkDB -> TraceMap
+[_refbyTable] :: ChunkDB -> RefbyMap
 data TermAbbr
 TermAbbr :: NP -> Maybe String -> TermAbbr
 [longForm] :: TermAbbr -> NP
@@ -63,6 +77,9 @@ termMap :: Idea c => [c] -> TermMap
 
 -- | Smart constructor for a <a>ConceptMap</a>.
 conceptMap :: Concept c => [c] -> ConceptMap
+
+-- | Smart constructor for a <a>UnitMap</a>.
+unitMap :: IsUnit u => [u] -> UnitMap
 
 -- | Smart constructor for a <a>TraceMap</a> given a traceability matrix.
 traceMap :: [(UID, [UID])] -> TraceMap
@@ -149,6 +166,20 @@ module Database.Drasil
 --   in its respective example, else an error is thrown.
 data ChunkDB
 CDB :: SymbolMap -> TermMap -> ConceptMap -> UnitMap -> DatadefnMap -> InsModelMap -> GendefMap -> TheoryModelMap -> ConceptInstanceMap -> CitationMap -> LabelledContentMap -> ReferenceMap -> TraceMap -> RefbyMap -> ChunkDB
+[symbolTable] :: ChunkDB -> SymbolMap
+[termTable] :: ChunkDB -> TermMap
+[conceptChunkTable] :: ChunkDB -> ConceptMap
+[_unitTable] :: ChunkDB -> UnitMap
+[_dataDefnTable] :: ChunkDB -> DatadefnMap
+[_insmodelTable] :: ChunkDB -> InsModelMap
+[_gendefTable] :: ChunkDB -> GendefMap
+[_theoryModelTable] :: ChunkDB -> TheoryModelMap
+[_conceptinsTable] :: ChunkDB -> ConceptInstanceMap
+[_citationTable] :: ChunkDB -> CitationMap
+[_labelledcontentTable] :: ChunkDB -> LabelledContentMap
+[_refTable] :: ChunkDB -> ReferenceMap
+[_traceTable] :: ChunkDB -> TraceMap
+[_refbyTable] :: ChunkDB -> RefbyMap
 
 -- | A reference map, used to hold a <a>UID</a> and where it is referenced
 --   (<a>UID</a>s).
@@ -194,6 +225,9 @@ termMap :: Idea c => [c] -> TermMap
 
 -- | Smart constructor for a <a>ConceptMap</a>.
 conceptMap :: Concept c => [c] -> ConceptMap
+
+-- | Smart constructor for a <a>UnitMap</a>.
+unitMap :: IsUnit u => [u] -> UnitMap
 
 -- | Smart constructor for a <a>TraceMap</a> given a traceability matrix.
 traceMap :: [(UID, [UID])] -> TraceMap

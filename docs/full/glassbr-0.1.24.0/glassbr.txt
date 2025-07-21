@@ -89,9 +89,9 @@ stressDistFacMin :: ConstQDef
 stressDistFacMax :: ConstQDef
 sdMin :: ConstQDef
 unitalSymbols :: [UnitalChunk]
-sdx :: UnitaryChunk
-sdy :: UnitaryChunk
-sdz :: UnitaryChunk
+sdx :: UnitalChunk
+sdy :: UnitalChunk
+sdz :: UnitalChunk
 demand :: UnitalChunk
 tmDemand :: UnitalChunk
 lRe :: UnitalChunk
@@ -162,7 +162,7 @@ constantK :: ConstQDef
 constantModElas :: ConstQDef
 constantLoadDur :: ConstQDef
 constantLoadSF :: ConstQDef
-sdVector :: [UnitaryChunk]
+sdVector :: [UnitalChunk]
 termsWithDefsOnly :: [ConceptChunk]
 termsWithAccDefn :: [ConceptChunk]
 loadTypes :: [ConceptChunk]

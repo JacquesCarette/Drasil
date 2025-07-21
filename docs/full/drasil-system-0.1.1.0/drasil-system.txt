@@ -18,18 +18,18 @@ module System.Drasil.System
 --   system to be used in artifact generation.
 data System
 [SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
-class HasSystem c_a8iP
-system :: HasSystem c_a8iP => Lens' c_a8iP System
-authors :: HasSystem c_a8iP => Lens' c_a8iP People
-background :: HasSystem c_a8iP => Lens' c_a8iP Background
-configFiles :: HasSystem c_a8iP => Lens' c_a8iP [String]
-constants :: HasSystem c_a8iP => Lens' c_a8iP [ConstQDef]
-datadefs :: HasSystem c_a8iP => Lens' c_a8iP [DataDefinition]
-instModels :: HasSystem c_a8iP => Lens' c_a8iP [InstanceModel]
-motivation :: HasSystem c_a8iP => Lens' c_a8iP Motivation
-purpose :: HasSystem c_a8iP => Lens' c_a8iP Purpose
-scope :: HasSystem c_a8iP => Lens' c_a8iP Scope
-systemdb :: HasSystem c_a8iP => Lens' c_a8iP ChunkDB
+class HasSystem c_a8iM
+system :: HasSystem c_a8iM => Lens' c_a8iM System
+authors :: HasSystem c_a8iM => Lens' c_a8iM People
+background :: HasSystem c_a8iM => Lens' c_a8iM Background
+configFiles :: HasSystem c_a8iM => Lens' c_a8iM [String]
+constants :: HasSystem c_a8iM => Lens' c_a8iM [ConstQDef]
+datadefs :: HasSystem c_a8iM => Lens' c_a8iM [DataDefinition]
+instModels :: HasSystem c_a8iM => Lens' c_a8iM [InstanceModel]
+motivation :: HasSystem c_a8iM => Lens' c_a8iM Motivation
+purpose :: HasSystem c_a8iM => Lens' c_a8iM Purpose
+scope :: HasSystem c_a8iM => Lens' c_a8iM Scope
+systemdb :: HasSystem c_a8iM => Lens' c_a8iM ChunkDB
 
 -- | Project Example purpose.
 type Purpose = [Sentence]
@@ -51,18 +51,18 @@ module System.Drasil
 --   system to be used in artifact generation.
 data System
 [SI] :: (CommonIdea a, Idea a, Idea b, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> b -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
-class HasSystem c_a8iP
-system :: HasSystem c_a8iP => Lens' c_a8iP System
-authors :: HasSystem c_a8iP => Lens' c_a8iP People
-background :: HasSystem c_a8iP => Lens' c_a8iP Background
-configFiles :: HasSystem c_a8iP => Lens' c_a8iP [String]
-constants :: HasSystem c_a8iP => Lens' c_a8iP [ConstQDef]
-datadefs :: HasSystem c_a8iP => Lens' c_a8iP [DataDefinition]
-instModels :: HasSystem c_a8iP => Lens' c_a8iP [InstanceModel]
-motivation :: HasSystem c_a8iP => Lens' c_a8iP Motivation
-purpose :: HasSystem c_a8iP => Lens' c_a8iP Purpose
-scope :: HasSystem c_a8iP => Lens' c_a8iP Scope
-systemdb :: HasSystem c_a8iP => Lens' c_a8iP ChunkDB
+class HasSystem c_a8iM
+system :: HasSystem c_a8iM => Lens' c_a8iM System
+authors :: HasSystem c_a8iM => Lens' c_a8iM People
+background :: HasSystem c_a8iM => Lens' c_a8iM Background
+configFiles :: HasSystem c_a8iM => Lens' c_a8iM [String]
+constants :: HasSystem c_a8iM => Lens' c_a8iM [ConstQDef]
+datadefs :: HasSystem c_a8iM => Lens' c_a8iM [DataDefinition]
+instModels :: HasSystem c_a8iM => Lens' c_a8iM [InstanceModel]
+motivation :: HasSystem c_a8iM => Lens' c_a8iM Motivation
+purpose :: HasSystem c_a8iM => Lens' c_a8iM Purpose
+scope :: HasSystem c_a8iM => Lens' c_a8iM Scope
+systemdb :: HasSystem c_a8iM => Lens' c_a8iM ChunkDB
 
 -- | Project Example purpose.
 type Purpose = [Sentence]

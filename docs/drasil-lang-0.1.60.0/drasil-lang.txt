@@ -2806,15 +2806,6 @@ unit :: Unitary c => c -> UnitDefn
 --   (cm, m, etc.).
 data UnitaryChunk
 
--- | Builds the <a>QuantityDict</a> part from the <tt>UID</tt>, term
---   (<a>NP</a>), <a>Symbol</a>, and <a>Space</a>. Assumes there's no
---   abbreviation.
-unitary :: IsUnit u => String -> NP -> Symbol -> u -> Space -> UnitaryChunk
-
--- | Same as <a>unitary</a> but with a <a>Symbol</a> that changes based on
---   the <a>Stage</a>.
-unitary' :: IsUnit u => String -> NP -> (Stage -> Symbol) -> u -> Space -> UnitaryChunk
-
 -- | Helper for getting the unit's <a>Symbol</a> from a chunk, as opposed
 --   to the symbols of the chunk itself.
 unit_symb :: Unitary c => c -> USymb

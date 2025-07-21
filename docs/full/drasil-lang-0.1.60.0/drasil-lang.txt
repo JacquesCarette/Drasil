@@ -4730,15 +4730,6 @@ unit :: Unitary c => c -> UnitDefn
 --   (cm, m, etc.).
 data UnitaryChunk
 
--- | Builds the <a>QuantityDict</a> part from the <tt>UID</tt>, term
---   (<a>NP</a>), <a>Symbol</a>, and <a>Space</a>. Assumes there's no
---   abbreviation.
-unitary :: IsUnit u => String -> NP -> Symbol -> u -> Space -> UnitaryChunk
-
--- | Same as <a>unitary</a> but with a <a>Symbol</a> that changes based on
---   the <a>Stage</a>.
-unitary' :: IsUnit u => String -> NP -> (Stage -> Symbol) -> u -> Space -> UnitaryChunk
-
 -- | Helper for getting the unit's <a>Symbol</a> from a chunk, as opposed
 --   to the symbols of the chunk itself.
 unit_symb :: Unitary c => c -> USymb
@@ -4785,10 +4776,6 @@ dqdQd :: (Quantity c, MayHaveUnit c) => c -> ConceptChunk -> DefinedQuantityDict
 --   <tt>projection</tt> operator from some a type with instances of listed
 --   classes to a <a>DefinedQuantityDict</a>.
 dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
-
--- | Temporary projection constructor, not to be used outside
---   <tt>drasil-lang</tt>.
-tempdqdWr' :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
 instance GHC.Classes.Eq Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
@@ -7190,15 +7177,6 @@ unit :: Unitary c => c -> UnitDefn
 --   Ex. A pendulum arm is an idea associated with a symbol (l) and units
 --   (cm, m, etc.).
 data UnitaryChunk
-
--- | Builds the <a>QuantityDict</a> part from the <tt>UID</tt>, term
---   (<a>NP</a>), <a>Symbol</a>, and <a>Space</a>. Assumes there's no
---   abbreviation.
-unitary :: IsUnit u => String -> NP -> Symbol -> u -> Space -> UnitaryChunk
-
--- | Same as <a>unitary</a> but with a <a>Symbol</a> that changes based on
---   the <a>Stage</a>.
-unitary' :: IsUnit u => String -> NP -> (Stage -> Symbol) -> u -> Space -> UnitaryChunk
 
 -- | Helper for getting the unit's <a>Symbol</a> from a chunk, as opposed
 --   to the symbols of the chunk itself.

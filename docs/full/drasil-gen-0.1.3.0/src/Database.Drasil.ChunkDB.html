@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Database.Drasil.ChunkDB</span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-2"></span><span>    </span><span class="annot"><a href="Database.Drasil.ChunkDB.html#basisCDB"><span class="hs-identifier">basisCDB</span></a></span><span>
+</span><span id="line-3"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-4"></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Database.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">ChunkDB</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">symbolTable</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">termTable</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">conceptChunkTable</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_unitTable</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_dataDefnTable</span></span><span class="hs-special">,</span><span>
+</span><span id="line-6"></span><span>  </span><span class="annot"><span class="hs-identifier">_insmodelTable</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_gendefTable</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_theoryModelTable</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_conceptinsTable</span></span><span class="hs-special">,</span><span>
+</span><span id="line-7"></span><span>  </span><span class="annot"><span class="hs-identifier">_citationTable</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_labelledcontentTable</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_traceTable</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_refbyTable</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_refTable</span></span><span class="hs-special">,</span><span>
+</span><span id="line-8"></span><span>  </span><span class="annot"><span class="hs-identifier">CDB</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">termMap</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">conceptMap</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">unitMap</span></span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">IdeaDict</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">nw</span></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">doccon</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">doccon'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">srsDomains</span></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Software.Products</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">prodtcon</span></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Education</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">educon</span></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Computation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">compcon</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">algorithm</span></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Software</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">errMsg</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">program</span></span><span class="hs-special">)</span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">mathcon</span></span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Map</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">empty</span></span><span class="hs-special">)</span><span>
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.SI_Units</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">siUnits</span></span><span class="hs-special">)</span><span>
+</span><span id="line-19"></span><span>
+</span><span id="line-20"></span><span class="hs-comment">-- | The basic idea dicts that are used to construct the basis chunk database.</span><span>
+</span><span id="line-21"></span><span class="hs-comment">-- Every chunk added here is added to every new chunk database created that uses</span><span>
+</span><span id="line-22"></span><span class="hs-comment">--  the cdb constructor. This ensures that the information in these idea dicts</span><span>
+</span><span id="line-23"></span><span class="hs-comment">--  is always available in the chunk database.</span><span>
+</span><span id="line-24"></span><span class="annot"><a href="Database.Drasil.ChunkDB.html#basisIdeaDicts"><span class="hs-identifier hs-type">basisIdeaDicts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-25"></span><span id="basisIdeaDicts"><span class="annot"><span class="annottext">basisIdeaDicts :: [IdeaDict]
+</span><a href="Database.Drasil.ChunkDB.html#basisIdeaDicts"><span class="hs-identifier hs-var hs-var">basisIdeaDicts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-26"></span><span>  </span><span class="hs-comment">-- | Actual IdeaDicts</span><span>
+</span><span id="line-27"></span><span>  </span><span class="hs-comment">--  * doccon - General documentation related IdeaDicts. Included in the basis</span><span>
+</span><span id="line-28"></span><span>  </span><span class="hs-comment">--             as it is data which all the cases studies use and is not specific</span><span>
+</span><span id="line-29"></span><span>  </span><span class="hs-comment">--             to a particular case study.</span><span>
+</span><span id="line-30"></span><span>  </span><span class="hs-comment">--  * prodtcon - A list of a few IdeaDicts that are terms related to software products.</span><span>
+</span><span id="line-31"></span><span>  </span><span class="hs-comment">--              This is included in the basis as it can be used to describe</span><span>
+</span><span id="line-32"></span><span>  </span><span class="hs-comment">--              any software, which each of the case study examples produce.</span><span>
+</span><span id="line-33"></span><span>  </span><span class="hs-comment">--              For example, one of the chunks, `sciCompS`, can be used to describe</span><span>
+</span><span id="line-34"></span><span>  </span><span class="hs-comment">--              all of the software that Drasil generates, since it is all scientific</span><span>
+</span><span id="line-35"></span><span>  </span><span class="hs-comment">--              computing software.</span><span>
+</span><span id="line-36"></span><span>  </span><span class="hs-comment">--  * educon - IdeaDict chunks with information about education. Included in the basis</span><span>
+</span><span id="line-37"></span><span>  </span><span class="hs-comment">--            as each case study should provide information about the expected users,</span><span>
+</span><span id="line-38"></span><span>  </span><span class="hs-comment">--            which usually means describing the expected education level in related</span><span>
+</span><span id="line-39"></span><span>  </span><span class="hs-comment">--            fields.</span><span>
+</span><span id="line-40"></span><span>  </span><span class="hs-comment">--  * compcon - Computing related IdeaDicts. Since all of the case studies are</span><span>
+</span><span id="line-41"></span><span>  </span><span class="hs-comment">--              concerned with software, this is included in the basis as the</span><span>
+</span><span id="line-42"></span><span>  </span><span class="hs-comment">--              computing chunks are relevant to all of them.</span><span>
+</span><span id="line-43"></span><span>  </span><span class="annot"><span class="annottext">[IdeaDict]
+</span><span class="hs-identifier hs-var">doccon</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict]
+</span><span class="hs-identifier hs-var">prodtcon</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict]
+</span><span class="hs-identifier hs-var">educon</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict]
+</span><span class="hs-identifier hs-var">compcon</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span>
+</span><span id="line-44"></span><span>  </span><span class="hs-comment">-- | CIs</span><span>
+</span><span id="line-45"></span><span>  </span><span class="hs-comment">--  * doccon' - A list of CommonIdeas that are added for the same purpose as `doccon`.</span><span>
+</span><span id="line-46"></span><span>  </span><span class="annot"><span class="annottext">(CI -&gt; IdeaDict) -&gt; [CI] -&gt; [IdeaDict]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; IdeaDict
+forall c. Idea c =&gt; c -&gt; IdeaDict
+</span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[CI]
+</span><span class="hs-identifier hs-var">doccon'</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span>
+</span><span id="line-47"></span><span>  </span><span class="hs-comment">-- ConceptChunks</span><span>
+</span><span id="line-48"></span><span>  </span><span class="hs-comment">--  * mathcon - Math concepts. Math is widespread throughout all of the case studies</span><span>
+</span><span id="line-49"></span><span>  </span><span class="hs-comment">--              and scientific computing software in general, so it is included</span><span>
+</span><span id="line-50"></span><span>  </span><span class="hs-comment">--              in the basis.</span><span>
+</span><span id="line-51"></span><span>  </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; IdeaDict) -&gt; [ConceptChunk] -&gt; [IdeaDict]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; IdeaDict
+forall c. Idea c =&gt; c -&gt; IdeaDict
+</span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">algorithm</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">errMsg</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">program</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; IdeaDict) -&gt; [ConceptChunk] -&gt; [IdeaDict]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; IdeaDict
+forall c. Idea c =&gt; c -&gt; IdeaDict
+</span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
+</span><span class="hs-identifier hs-var">mathcon</span></span><span>
+</span><span id="line-52"></span><span>
+</span><span id="line-53"></span><span class="hs-comment">-- | The basis chunk database, which contains the basic idea dicts, concept chunks,</span><span>
+</span><span id="line-54"></span><span class="hs-comment">--  and units that are used in all of the case studies. This database is then added</span><span>
+</span><span id="line-55"></span><span class="hs-comment">-- to all of the new chunk databases created using the cdb constructor.</span><span>
+</span><span id="line-56"></span><span class="annot"><a href="Database.Drasil.ChunkDB.html#basisCDB"><span class="hs-identifier hs-type">basisCDB</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span>
+</span><span id="line-57"></span><span id="basisCDB"><span class="annot"><span class="annottext">basisCDB :: ChunkDB
+</span><a href="Database.Drasil.ChunkDB.html#basisCDB"><span class="hs-identifier hs-var hs-var">basisCDB</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-58"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">CDB</span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-59"></span><span>    </span><span class="hs-comment">-- CHUNKS</span><span>
+</span><span id="line-60"></span><span>    </span><span class="annot"><span class="annottext">symbolTable :: SymbolMap
+</span><span class="hs-identifier hs-var">symbolTable</span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SymbolMap
+forall k a. Map k a
+</span><span class="hs-identifier hs-var">Map.empty</span></span><span class="hs-special">,</span><span>
+</span><span id="line-61"></span><span>    </span><span class="annot"><span class="annottext">termTable :: TermMap
+</span><span class="hs-identifier hs-var">termTable</span></span><span>             </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; TermMap
+forall c. Idea c =&gt; [c] -&gt; TermMap
+</span><span class="hs-identifier hs-var">termMap</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict]
+</span><a href="Database.Drasil.ChunkDB.html#basisIdeaDicts"><span class="hs-identifier hs-var">basisIdeaDicts</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-62"></span><span>    </span><span class="annot"><span class="annottext">conceptChunkTable :: ConceptMap
+</span><span class="hs-identifier hs-var">conceptChunkTable</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[ConceptChunk] -&gt; ConceptMap
+forall c. Concept c =&gt; [c] -&gt; ConceptMap
+</span><span class="hs-identifier hs-var">conceptMap</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
+</span><span class="hs-identifier hs-var">srsDomains</span></span><span class="hs-special">,</span><span>
+</span><span id="line-63"></span><span>    </span><span class="annot"><span class="annottext">_unitTable :: UnitMap
+</span><span class="hs-identifier hs-var">_unitTable</span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[UnitDefn] -&gt; UnitMap
+forall u. IsUnit u =&gt; [u] -&gt; UnitMap
+</span><span class="hs-identifier hs-var">unitMap</span></span><span> </span><span class="annot"><span class="annottext">[UnitDefn]
+</span><span class="hs-identifier hs-var">siUnits</span></span><span class="hs-special">,</span><span> </span><span class="hs-comment">-- SI units are important to all case studies since they rely on physical quantities</span><span>
+</span><span id="line-64"></span><span>    </span><span class="annot"><span class="annottext">_dataDefnTable :: DatadefnMap
+</span><span class="hs-identifier hs-var">_dataDefnTable</span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DatadefnMap
+forall k a. Map k a
+</span><span class="hs-identifier hs-var">Map.empty</span></span><span class="hs-special">,</span><span>
+</span><span id="line-65"></span><span>    </span><span class="annot"><span class="annottext">_insmodelTable :: InsModelMap
+</span><span class="hs-identifier hs-var">_insmodelTable</span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">InsModelMap
+forall k a. Map k a
+</span><span class="hs-identifier hs-var">Map.empty</span></span><span class="hs-special">,</span><span>
+</span><span id="line-66"></span><span>    </span><span class="annot"><span class="annottext">_gendefTable :: GendefMap
+</span><span class="hs-identifier hs-var">_gendefTable</span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GendefMap
+forall k a. Map k a
+</span><span class="hs-identifier hs-var">Map.empty</span></span><span class="hs-special">,</span><span>
+</span><span id="line-67"></span><span>    </span><span class="annot"><span class="annottext">_theoryModelTable :: TheoryModelMap
+</span><span class="hs-identifier hs-var">_theoryModelTable</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TheoryModelMap
+forall k a. Map k a
+</span><span class="hs-identifier hs-var">Map.empty</span></span><span class="hs-special">,</span><span>
+</span><span id="line-68"></span><span>    </span><span class="annot"><span class="annottext">_conceptinsTable :: ConceptInstanceMap
+</span><span class="hs-identifier hs-var">_conceptinsTable</span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptInstanceMap
+forall k a. Map k a
+</span><span class="hs-identifier hs-var">Map.empty</span></span><span class="hs-special">,</span><span>
+</span><span id="line-69"></span><span>    </span><span class="annot"><span class="annottext">_citationTable :: CitationMap
+</span><span class="hs-identifier hs-var">_citationTable</span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationMap
+forall k a. Map k a
+</span><span class="hs-identifier hs-var">Map.empty</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-70"></span><span>    </span><span class="hs-comment">-- NOT CHUNKS</span><span>
+</span><span id="line-71"></span><span>    </span><span class="annot"><span class="annottext">_labelledcontentTable :: LabelledContentMap
+</span><span class="hs-identifier hs-var">_labelledcontentTable</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">LabelledContentMap
+forall k a. Map k a
+</span><span class="hs-identifier hs-var">Map.empty</span></span><span class="hs-special">,</span><span>
+</span><span id="line-72"></span><span>    </span><span class="annot"><span class="annottext">_traceTable :: TraceMap
+</span><span class="hs-identifier hs-var">_traceTable</span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TraceMap
+forall k a. Map k a
+</span><span class="hs-identifier hs-var">Map.empty</span></span><span class="hs-special">,</span><span>
+</span><span id="line-73"></span><span>    </span><span class="annot"><span class="annottext">_refbyTable :: TraceMap
+</span><span class="hs-identifier hs-var">_refbyTable</span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TraceMap
+forall k a. Map k a
+</span><span class="hs-identifier hs-var">Map.empty</span></span><span class="hs-special">,</span><span>
+</span><span id="line-74"></span><span>    </span><span class="annot"><span class="annottext">_refTable :: ReferenceMap
+</span><span class="hs-identifier hs-var">_refTable</span></span><span>             </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ReferenceMap
+forall k a. Map k a
+</span><span class="hs-identifier hs-var">Map.empty</span></span><span>
+</span><span id="line-75"></span><span>  </span><span class="hs-special">}</span></pre></body></html>

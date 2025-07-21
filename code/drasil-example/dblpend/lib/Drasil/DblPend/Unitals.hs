@@ -22,18 +22,18 @@ import Data.Drasil.Units.Physics (velU, accelU, angVelU, angAccelU)
 import Data.Drasil.Quantities.Physics (gravitationalAccelConst)
 
 
-symbols:: [QuantityDict]
-symbols = map qw unitalChunks ++ map qw unitless ++ [qw pendDisAngle] ++ map qw constants
+symbols:: [DefinedQuantityDict]
+symbols = map dqdWr unitalChunks ++ unitless ++ [dqdWr pendDisAngle] ++ map dqdWr constants
 
 acronyms :: [CI]
 acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
   physSyst, requirement, refBy, refName, srs, thModel, typUnc]
 
-inputs :: [QuantityDict]
-inputs = map qw [lenRod_1, lenRod_2, massObj_1, massObj_2] 
+inputs :: [DefinedQuantityDict]
+inputs = map dqdWr [lenRod_1, lenRod_2, massObj_1, massObj_2] 
 
-outputs :: [QuantityDict]
-outputs = [qw pendDisAngle]
+outputs :: [DefinedQuantityDict]
+outputs = [dqdWr pendDisAngle]
 
 constants :: [ConstQDef]
 constants = [gravitationalAccelConst]

@@ -25,7 +25,7 @@ imPD
   = im (newDEModel' imPDRC)
       [qwC dqdSetPointTD $ UpFrom (Exc, exactDbl 0), qwC dqdPropGain $ UpFrom (Exc, exactDbl 0),
        qwC dqdDerivGain $ UpFrom (Exc, exactDbl 0)]
-      (qw dqdProcessVariableTD)
+      dqdProcessVariableTD
       [UpFrom (Exc, exactDbl 0)]
       [dRef abbasi2015, dRef johnson2008]
       (Just imDeriv)

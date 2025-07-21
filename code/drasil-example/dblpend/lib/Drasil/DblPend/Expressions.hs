@@ -34,7 +34,7 @@ mvVelExpr_2 = mvVelExpr_1 `cAdd` mvVelComponent_2
 -- Clifford Acceleration for First Object using direction vectors and proper scaling
 -- Centripetal acceleration component
 centripetalAccel_1 :: PExpr
-centripetalAccel_1 = (neg (square (sy angularVel_1) $* sy lenRod_1)) `cScale` directionVector_1
+centripetalAccel_1 = neg (square (sy angularVel_1) $* sy lenRod_1) `cScale` directionVector_1
 
 -- Tangential acceleration component  
 tangentialAccel_1 :: PExpr
@@ -46,7 +46,7 @@ mvAccelExpr_1 = centripetalAccel_1 `cAdd` tangentialAccel_1
 
 -- Additional acceleration component for second object
 centripetalAccel_2 :: PExpr
-centripetalAccel_2 = (neg (square (sy angularVel_2) $* sy lenRod_2)) `cScale` directionVector_2
+centripetalAccel_2 = neg (square (sy angularVel_2) $* sy lenRod_2) `cScale` directionVector_2
 
 tangentialAccel_2 :: PExpr
 tangentialAccel_2 = (sy angularAccel_2 $* sy lenRod_2) `cScale` perpDirectionVector_2
@@ -62,14 +62,14 @@ mvAccelExpr_2 = mvAccelExpr_1 `cAdd` mvAccelComponent_2
 
 -- Gravitational force vector (always downward)
 gravitationalForce_1 :: PExpr
-gravitationalForce_1 = (neg (sy massObj_1 $* sy gravitationalMagnitude)) `cScale` e2_2D
+gravitationalForce_1 = neg (sy massObj_1 $* sy gravitationalMagnitude) `cScale` e2_2D
 
 gravitationalForce_2 :: PExpr  
-gravitationalForce_2 = (neg (sy massObj_2 $* sy gravitationalMagnitude)) `cScale` e2_2D
+gravitationalForce_2 = neg (sy massObj_2 $* sy gravitationalMagnitude) `cScale` e2_2D
 
 -- Inertial force for first object (mass × acceleration)
 inertialForce_1 :: PExpr
-inertialForce_1 = (sy massObj_1) `cScale` mvAccelExpr_1
+inertialForce_1 = sy massObj_1 `cScale` mvAccelExpr_1
 
 -- Total force for first object
 mvForceExpr_1 :: PExpr
@@ -77,7 +77,7 @@ mvForceExpr_1 = inertialForce_1 `cAdd` gravitationalForce_1
 
 -- Inertial force for second object
 inertialForce_2 :: PExpr
-inertialForce_2 = (sy massObj_2) `cScale` mvAccelExpr_2
+inertialForce_2 = sy massObj_2 `cScale` mvAccelExpr_2
 
 -- Total force for second object
 mvForceExpr_2 :: PExpr  
@@ -136,7 +136,7 @@ forceDotFromGeometric = gradeSelect 0 forceGeometricProduct
 
 -- Example of scaling a Clifford object
 scaledForce_1 :: PExpr
-scaledForce_1 = (sy massObj_1) `cScale` mvVelExpr_1
+scaledForce_1 = sy massObj_1 `cScale` mvVelExpr_1
 
 -- Example of Clifford subtraction
 forceDifference :: PExpr
@@ -175,17 +175,17 @@ yComponent_vel1 = gradeSelect 1 mvVelExpr_1 $. e2_2D
 
 -- Angular velocity as a bivector (rotation in the plane)
 angularVelBivector_1 :: PExpr
-angularVelBivector_1 = (sy angularVel_1) `cScale` (e1_2D `wedgeProd` e2_2D)
+angularVelBivector_1 = sy angularVel_1 `cScale` (e1_2D `wedgeProd` e2_2D)
 
 angularVelBivector_2 :: PExpr
-angularVelBivector_2 = (sy angularVel_2) `cScale` (e1_2D `wedgeProd` e2_2D)
+angularVelBivector_2 = sy angularVel_2 `cScale` (e1_2D `wedgeProd` e2_2D)
 
 -- Position vectors for the pendulum masses
 positionVector_1 :: PExpr
-positionVector_1 = (sy lenRod_1) `cScale` directionVector_1
+positionVector_1 = sy lenRod_1 `cScale` directionVector_1
 
 positionVector_2 :: PExpr
-positionVector_2 = positionVector_1 `cAdd` ((sy lenRod_2) `cScale` directionVector_2)
+positionVector_2 = positionVector_1 `cAdd` (sy lenRod_2 `cScale` directionVector_2)
 
 -- Torque as bivector (position wedge force)
 torqueBivector_1 :: PExpr
@@ -279,7 +279,7 @@ directionVector_2 = cosAngleExpr2 `cScale` e1_2D `cAdd` sinAngleExpr2 `cScale` e
 
 -- Perpendicular direction vectors (rotated 90 degrees)
 perpDirectionVector_1 :: PExpr
-perpDirectionVector_1 = (neg sinAngleExpr1) `cScale` e1_2D `cAdd` cosAngleExpr1 `cScale` e2_2D
+perpDirectionVector_1 = neg sinAngleExpr1 `cScale` e1_2D `cAdd` cosAngleExpr1 `cScale` e2_2D
 
 perpDirectionVector_2 :: PExpr
-perpDirectionVector_2 = (neg sinAngleExpr2) `cScale` e1_2D `cAdd` cosAngleExpr2 `cScale` e2_2D
+perpDirectionVector_2 = neg sinAngleExpr2 `cScale` e1_2D `cAdd` cosAngleExpr2 `cScale` e2_2D

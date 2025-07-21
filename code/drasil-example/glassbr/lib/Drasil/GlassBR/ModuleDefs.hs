@@ -6,7 +6,7 @@ module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 
 import Drasil.Code.CodeExpr (CodeExpr, LiteralC(int))
 import Language.Drasil (Space(..), nounPhraseSP,
-  label, sub, HasSymbol(..), HasUID, Symbol, ExprC(..), dqdNoUnit, DefinedQuantityDict, dcc)
+  label, sub, HasSymbol(..), HasUID, Symbol, ExprC(..), DefinedQuantityDict, implVar)
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod, 
@@ -45,7 +45,7 @@ one = Integ 1
 two = Integ 2
 
 var :: String -> String -> String -> Symbol -> Space -> DefinedQuantityDict
-var nam np desc = dqdNoUnit (dcc nam (nounPhraseSP np) desc)
+var nam np desc sym sp = implVar nam (nounPhraseSP np) desc sp sym
 
 y_2, y_1, x_2, x_1, x :: DefinedQuantityDict
 y_1  = var "y1" "lower y-coordinate"

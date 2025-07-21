@@ -24,8 +24,8 @@ symbolsForTermTable = map dqdWr inputsWUnitsUncrtn ++ map dqdWr inputsWUncrtn ++
   -- include all module functions as symbols
 thisSymbols :: [DefinedQuantityDict]
 thisSymbols = (map asVC (concatMap (\(Mod _ _ _ _ l) -> l) allMods)
-  \\ symbolsForSymbolTable) ++ map dqdWr implVars ++ symbolsForSymbolTable
+  \\ symbolsForSymbolTable) ++ implVars ++ symbolsForSymbolTable
   
 thisTerms :: [DefinedQuantityDict]
 thisTerms = (map asVC (concatMap (\(Mod _ _ _ _ l) -> l) allMods)
-  \\ symbolsForTermTable) ++ map dqdWr implVars ++ symbolsForTermTable
+  \\ symbolsForTermTable) ++ implVars ++ symbolsForTermTable

@@ -1,5 +1,5 @@
 {-# LANGUAGE TemplateHaskell #-}
--- | Contains types that define quantities from concepts. Similar to 'QuantityDict'.
+-- | Contains types that define quantities from concepts.
 module Language.Drasil.Chunk.DefinedQuantity (
   -- * Chunk Type
   DefinedQuantityDict,

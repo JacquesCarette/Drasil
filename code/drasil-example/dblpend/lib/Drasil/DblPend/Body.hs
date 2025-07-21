@@ -148,7 +148,7 @@ ideaDicts =
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList = 
-  -- QuantityDict abbreviations
+  -- DefinedQuantityDict abbreviations
   map nw symbols ++
   -- Other acronyms/abbreviations
   nw progName : map nw acronyms

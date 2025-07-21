@@ -102,7 +102,7 @@ odeT, numpyArrayT :: Space
 odeT = Actor "ode"
 numpyArrayT = Actor "numpyArray"
 
--- | Collects variables needed for SciPy's ODEs as 'QuantityDict's.
+-- | Collects variables needed for SciPy's ODEs as 'DefinedQuantityDict's.
 scipyODESymbols :: [DefinedQuantityDict]
 scipyODESymbols = map dqdWr [mthdArg, atolArg, rtolArg]
   ++ map dqdWr [r, t, y, xAxis, ut, transpose]
@@ -224,7 +224,7 @@ optT = Actor "Options"
 osloImport :: String
 osloImport = "Microsoft.Research.Oslo"
 
--- | Collects variables needed for Oslo's ODEs as 'QuantityDict's.
+-- | Collects variables needed for Oslo's ODEs as 'DefinedQuantityDict's.
 osloSymbols :: [DefinedQuantityDict]
 osloSymbols = map dqdWr [initv, opts, aTol, rTol, sol, points, sp, x] ++
   map dqdWr [fOslo, options, vector, rk547m, gearBDF, solveFromToStep]
@@ -385,7 +385,7 @@ si = "StepInterpolator"
 siImp = apacheImport ++ sampling ++ "." ++ si
 fode = "FirstOrderDifferentialEquations"
 
--- | Collects variables needed for Apache's ODEs as 'QuantityDict's.
+-- | Collects variables needed for Apache's ODEs as 'DefinedQuantityDict's.
 apacheODESymbols :: [DefinedQuantityDict]
 apacheODESymbols = map dqdWr [it, currVals, stepHandler, t0, y0, interpolator,
   isLast, curr, ode] ++ map dqdWr [adamsC, dp54C, stepHandlerCtor, addStepHandler,
@@ -530,7 +530,7 @@ adamsBash = odeNameSpace ++ "adams_bashforth<3,vector<double>>"
 popT :: Space
 popT = Actor "Populate"
 
--- | Collects variables needed for odeint's ODEs as 'QuantityDict's.
+-- | Collects variables needed for odeint's ODEs as 'DefinedQuantityDict's.
 odeintSymbols :: [DefinedQuantityDict]
 odeintSymbols = map dqdWr [odeintCurrVals, rk, stepper, pop] ++ map dqdWr
   [rkdp5C, makeControlled, adamsBashC, integrateConst, odeOp, popCtor,

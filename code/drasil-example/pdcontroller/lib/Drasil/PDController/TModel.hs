@@ -21,7 +21,7 @@ theoreticalModels = [tmLaplace, tmInvLaplace, tmSOSystem]
 tmLaplace :: TheoryModel
 tmLaplace
   = tm (othModel' laplaceRC)
-      ([] :: [QuantityDict])
+      ([] :: [DefinedQuantityDict])
       ([] :: [ConceptChunk])
       []
       [express laplaceRel]
@@ -52,7 +52,7 @@ laplaceDesc
 tmInvLaplace :: TheoryModel
 tmInvLaplace
   = tm (othModel' invlaplaceRC)
-      ([] :: [QuantityDict])
+      ([] :: [DefinedQuantityDict])
       ([] :: [ConceptChunk])
       []
       [express invLaplaceRel]
@@ -81,7 +81,7 @@ invLaplaceDesc
 tmSOSystem :: TheoryModel
 tmSOSystem
   = tm (othModel' tmSOSystemRC)
-      ([] :: [QuantityDict])
+      ([] :: [DefinedQuantityDict])
       ([] :: [ConceptChunk])
       []
       [express soSystemRel]

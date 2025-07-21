@@ -104,17 +104,13 @@ module Language.Drasil (
   , makeAODESolverFormat, makeAIVP, formEquations, makeASystemDE, makeASingleDE
 
   -- *** Quantities and Units
-  -- Language.Drasil.Chunk.Quantity
-  , QuantityDict, DefinesQuantity(defLhs), qw, mkQuant, mkQuant'
-  , implVar, implVar', implVarUID, implVarUID', implVarAU', vc, vcSt
   -- Language.Drasil.Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', fromEqnSt''
   , mkQDefSt, mkQuantDef, mkQuantDef', ec
-  , mkFuncDef, mkFuncDef', mkFuncDefByQ
-  -- Language.Drasil.Chunk.Unitary
-  , Unitary(..), UnitaryChunk, unitary, unitary', unit_symb
+  , mkFuncDef, mkFuncDef', mkFuncDefByQ  -- Language.Drasil.Chunk.Unitary
   -- Language.Drasil.Chunk.DefinedQuantity
   , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdQd, dqdWr
+  , DefinesQuantity(defLhs), implVar, implVar', implVarAU'
   -- Language.Drasil.Chunk.Unital
   , UnitalChunk(..), uc, uc', ucStaged, ucStaged', ucuc, ucw
   -- Language.Drasil.Chunk.UnitDefn
@@ -131,12 +127,11 @@ module Language.Drasil (
   , ConstraintReason(..), Constraint(..), ConstraintE
   , physRange, sfwrRange, physElem, sfwrElem, isPhysC, isSfwrC
   -- Language.Drasil.Chunk.Constrained
-  , ConstrainedChunk(..), ConstrConcept(..)
-  , cvc, constrained', cuc', cuc'', cucNoUnit', constrainedNRV'
-  , cnstrw, cnstrw'
+  , ConstrConcept(..)
+  , constrained', cuc', cuc'', cucNoUnit', constrainedNRV'
+  , cnstrw'
   -- Language.Drasil.Chunk.UncertainQuantity
-  , UncertainChunk(..), UncertQ, uq, uqc, uqcND, uncrtnChunk, uvc
-  , uncrtnw
+  , UncertQ, uq, uqc, uqcND
   -- Language.Drasil.Uncertainty
   , Uncertainty, uncty, HasUncertainty(..)
   , defaultUncrt, uncVal, uncPrec, exact
@@ -358,7 +353,6 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
   fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', ec,
   mkFuncDef, mkFuncDef', mkFuncDefByQ)
 import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)
 import Language.Drasil.Chunk.DifferentialModel(DifferentialModel(..), ODESolverFormat(..),
   InitialValueProblem(..), ($^^), ($**), ($++), makeAODESolverFormat, makeAIVP, makeASystemDE, 
@@ -366,7 +360,6 @@ import Language.Drasil.Chunk.DifferentialModel(DifferentialModel(..), ODESolverF
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), uc, uc', ucStaged, ucStaged',
   ucuc, ucw)
-import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
   , HasFields(getFields)
   , author, editor

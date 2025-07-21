@@ -20,7 +20,7 @@ import Theory.Drasil.ModelKinds
 class Theory t where
   valid_context :: Lens' t [TheoryModel]
   spaces        :: Lens' t [SpaceDefn]
-  quantities    :: Lens' t [QuantityDict]
+  quantities    :: Lens' t [DefinedQuantityDict]
   operations    :: Lens' t [ConceptChunk] -- FIXME: Should not be Concept
   defined_quant :: Lens' t [ModelQDef]
   invariants    :: Lens' t [ModelExpr]
@@ -34,7 +34,7 @@ data SpaceDefn -- FIXME: This should be defined.
 --      * con - a ConceptChunk,
 --      * vctx - definition context ('TheoryModel's),
 --      * spc - type definitions ('SpaceDefn's),
---      * quan - quantities ('QuantityDict's),
+--      * quan - quantities ('DefinedQuantityDict's),
 --      * ops - operations ('ConceptChunk's),
 --      * defq - definitions ('QDefinition's),
 --      * invs - invariants ('ModelExpr's),
@@ -50,7 +50,7 @@ data TheoryModel = TM
   { _mk    :: ModelKind ModelExpr
   , _vctx  :: [TheoryModel]
   , _spc   :: [SpaceDefn]
-  , _quan  :: [QuantityDict]
+  , _quan  :: [DefinedQuantityDict]
   , _ops   :: [ConceptChunk]
   , _defq  :: [ModelQDef]
   , _invs  :: [ModelExpr]
@@ -111,19 +111,19 @@ instance Referable TheoryModel where
 -- This should likely be re-arranged somehow. Especially since since of the arguments
 -- have the same type!
 -- | Constructor for theory models. Must have a source. Uses the shortname of the reference address.
-tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind ModelExpr ->
+tm :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr ->
     [q] -> [c] -> [ModelQDef] ->
     [ModelExpr] -> [ModelQDef] -> [DecRef] ->
     String -> [Sentence] -> TheoryModel
 tm mkind _ _ _  _   _   [] _   = error $ "Source field of " ++ showUID mkind ++ " is empty"
 tm mkind q c dq inv dfn r  lbe = 
-  TM mkind [] [] (map qw q) (map cw c) dq inv dfn r (shortname' $ S lbe)
+  TM mkind [] [] (map dqdWr q) (map cw c) dq inv dfn r (shortname' $ S lbe)
       (prependAbrv thModel lbe)
 
 -- | Constructor for theory models. Uses the shortname of the reference address.
-tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind ModelExpr ->
+tmNoRefs :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr ->
     [q] -> [c] -> [ModelQDef] -> [ModelExpr] -> [ModelQDef] -> 
     String -> [Sentence] -> TheoryModel
 tmNoRefs mkind q c dq inv dfn lbe = 
-  TM mkind [] [] (map qw q) (map cw c) dq inv dfn [] (shortname' $ S lbe)
+  TM mkind [] [] (map dqdWr q) (map cw c) dq inv dfn [] (shortname' $ S lbe)
       (prependAbrv thModel lbe)

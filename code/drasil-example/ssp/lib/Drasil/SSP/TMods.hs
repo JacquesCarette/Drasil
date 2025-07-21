@@ -34,7 +34,7 @@ tMods = [factOfSafety, equilibrium, mcShrStrgth, effStress, newtonSL]
 ------------- New Chunk -----------
 factOfSafety :: TheoryModel
 factOfSafety = tm (equationalModelU "factOfSafetyTM" factOfSafetyQD)
-  ([] :: [QuantityDict]) ([] :: [ConceptChunk])
+  ([] :: [DefinedQuantityDict]) ([] :: [ConceptChunk])
   [factOfSafetyQD] [] [] [dRef fredlund1977] "factOfSafety" []
 
 ------------------------------------
@@ -48,7 +48,7 @@ factOfSafetyExpr = sy resistiveShear $/ sy mobilizedShear
 ------------- New Chunk -----------
 equilibrium :: TheoryModel
 equilibrium = tm (equationalConstraints' equilibriumCS)
-  ([] :: [QuantityDict]) ([] :: [ConceptChunk])
+  ([] :: [DefinedQuantityDict]) ([] :: [ConceptChunk])
   [] (map express equilibriumRels) [] [dRef fredlund1977] "equilibrium" [eqDesc]
 
 ------------------------------------  
@@ -75,7 +75,7 @@ eqDesc = foldlSent [S "For a body in static equilibrium" `sC` S "the net",
 ------------- New Chunk -----------
 mcShrStrgth :: TheoryModel
 mcShrStrgth = tm (equationalModelU "mcShrSrgth" mcShrStrgthQD)
-  ([] :: [QuantityDict]) 
+  ([] :: [DefinedQuantityDict]) 
   ([] :: [ConceptChunk])
   [mcShrStrgthQD] [] [] [dRef fredlund1977] "mcShrStrgth" [mcShrStrgthDesc]
 
@@ -105,7 +105,7 @@ mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",
 ------------- New Chunk -----------
 effStress :: TheoryModel
 effStress = tm (equationalModelU "effectiveStressTM" effStressQD)
-  ([] :: [QuantityDict]) 
+  ([] :: [DefinedQuantityDict]) 
   ([] :: [ConceptChunk])
   [effStressQD] [] [] [dRef fredlund1977] "effStress" [effStressDesc]
 

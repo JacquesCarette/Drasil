@@ -16,7 +16,7 @@ import Control.Lens ((^.))
 liftS :: State a b -> State a [b]
 liftS = fmap (: [])
 
--- | Gets the 'QuantityDict' corresponding to a 'UID'.
+-- | Gets the 'DefinedQuantityDict' corresponding to a 'UID'.
 lookupC :: DrasilState -> UID -> DefinedQuantityDict
 lookupC g = symbResolve (codeSpec g ^. systemdbO)
 

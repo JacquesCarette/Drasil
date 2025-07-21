@@ -21,8 +21,8 @@ import Drasil.GlassBR.Units (sFlawPU)
 
 {--}
 
-constrained :: [ConstrainedChunk]
-constrained = map cnstrw dataConstraints ++ map cnstrw [nomThick, glassTypeCon]
+constrained :: [ConstrConcept]
+constrained = map constrained' dataConstraints ++ map constraned' [nomThick, glassTypeCon]
  -- map cnstrw inputDataConstraints ++ map cnstrw derivedInputDataConstraints -- ++
   -- [cnstrw probBr, cnstrw probFail, cnstrw stressDistFac, cnstrw nomThick, cnstrw glassTypeCon]
 

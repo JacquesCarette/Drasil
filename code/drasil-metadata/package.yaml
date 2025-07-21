@@ -27,6 +27,7 @@ ghc-options:
 library:
   source-dirs: lib
   exposed-modules:
+  - Drasil.Metadata
   - Data.Drasil.Domains
   - Metadata.Drasil.DrasilMetaCall
   when:

@@ -111,6 +111,6 @@ eprec (CCNBinaryOp bo _ _)   = prec2CCN bo
 eprec (NCCBinaryOp bo _ _)   = prec2NCC bo
 eprec (ESSBinaryOp bo _ _)   = prec2ESS bo
 eprec (ESBBinaryOp bo _ _)   = prec2ESB bo
-eprec (NatCCBinaryOp _ _ _)  = 250  -- Reasonable precedence for natural clif operations
+eprec (NatCCBinaryOp {})    = 250  -- Reasonable precedence for natural clif operations
 eprec (Clif _ _)            = 500  -- High precedence like literals
 eprec RealI{}                = 170

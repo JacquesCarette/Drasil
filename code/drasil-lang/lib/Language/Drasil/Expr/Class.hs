@@ -408,7 +408,7 @@ instance ExprC Expr where
 
   geometricProd = CCCBinaryOp GeometricProd
   wedgeProd     = CCCBinaryOp WedgeProd
-  gradeSelect n = NatCCBinaryOp GradeSelect n
+  gradeSelect   = NatCCBinaryOp GradeSelect
 
   -- | Smart constructor for case statements with a complete set of cases.
   completeCase = Case Complete
@@ -622,7 +622,7 @@ instance ExprC M.ModelExpr where
 
   geometricProd = M.CCCBinaryOp M.GeometricProd
   wedgeProd     = M.CCCBinaryOp M.WedgeProd
-  gradeSelect n = M.NatCCBinaryOp M.GradeSelect n
+  gradeSelect   = M.NatCCBinaryOp M.GradeSelect
 
 instance ExprC C.CodeExpr where
   lit = C.Lit
@@ -805,4 +805,4 @@ instance ExprC C.CodeExpr where
 
   geometricProd = C.CCCBinaryOp C.GeometricProd
   wedgeProd     = C.CCCBinaryOp C.WedgeProd
-  gradeSelect n = C.NatCCBinaryOp C.GradeSelect n
+  gradeSelect   = C.NatCCBinaryOp C.GradeSelect

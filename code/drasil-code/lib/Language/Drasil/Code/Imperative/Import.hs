@@ -1109,7 +1109,7 @@ convExprProc Operator{} = error "convExprProc: Operator"
 convExprProc (RealI c ri)  = do
   g <- get
   convExprProc $ renderRealInt (lookupC g c) ri
-convExprProc (NatCCBinaryOp _ _ _) = error "convExprProc: NatCCBinaryOp not implemented" -- TODO
+convExprProc (NatCCBinaryOp {}) = error "convExprProc: NatCCBinaryOp not implemented" -- TODO
 convExprProc (Clif _ _) = error "convExprProc: Clif not implemented" -- TODO
 
 -- | Generates a function call, based on the 'UID' of the chunk representing

@@ -12,7 +12,7 @@ import qualified Language.Drasil.Literal.Development as LL
 
 import Drasil.Code.CodeExpr.Lang
 
-import Data.Bifunctor (Bifunctor(bimap))
+import Data.Bifunctor (Bifunctor(bimap), second)
 import Numeric.Natural (Natural)
 import qualified Data.Map.Ordered as OM
 import qualified Data.Map as M
@@ -51,7 +51,7 @@ expr (LD.CCCBinaryOp bo l r)   = CCCBinaryOp (cccBinOp bo) (expr l) (expr r)
 expr (LD.CCNBinaryOp bo l r)   = CCNBinaryOp (ccnBinOp bo) (expr l) (expr r)
 expr (LD.NCCBinaryOp bo l r)   = NCCBinaryOp (nccBinOp bo) (expr l) (expr r)
 expr (LD.NatCCBinaryOp op n e) = NatCCBinaryOp (natccBinOp op) n (expr e)
-expr (LD.Clif d es)           = Clif d (OM.fromList $ map (\(k, e) -> (k, expr e)) $ OM.toList es)
+expr (LD.Clif d es)           = Clif d (OM.fromList $ map (second expr) $ OM.toList es)
 expr (LD.ESSBinaryOp bo l r) = ESSBinaryOp (essBinOp bo) (expr l) (expr r)
 expr (LD.ESBBinaryOp bo l r)   = ESBBinaryOp (esbBinOp bo) (expr l) (expr r)
 expr (LD.Operator aao dd e)    = Operator (assocArithOp aao) (renderDomainDesc dd) (expr e)

@@ -3,6 +3,8 @@
 module Language.Drasil.Chunk.DefinedQuantity (
   -- * Chunk Type
   DefinedQuantityDict,
+  -- * Type classes
+  DefinesQuantity(defLhs),
   -- * Constructors
   dqd, dqdNoUnit, dqd', dqdQd, dqdWr, tempdqdWr',
   implVar, implVar', implVarAU, implVarAU') where
@@ -18,7 +20,7 @@ import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage (Implementation, Equational))
 import Drasil.Database.UID (HasUID(uid))
 
-import Control.Lens ((^.), makeLenses, view)
+import Control.Lens ((^.), makeLenses, view, Getter)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Sentence (Sentence)
 
@@ -34,6 +36,9 @@ data DefinedQuantityDict = DQD { _con :: ConceptChunk
                                }
 
 makeLenses ''DefinedQuantityDict
+
+class DefinesQuantity d where
+  defLhs :: Getter d DefinedQuantityDict
 
 -- | Finds the 'UID' of the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
 instance HasUID        DefinedQuantityDict where uid = con . uid

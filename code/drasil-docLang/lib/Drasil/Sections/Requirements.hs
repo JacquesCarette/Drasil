@@ -169,7 +169,7 @@ mkValsSourceTable vals labl cap = llcc (makeTabRef labl) $
   Table [atStart symbol_, atStart description, S "Source", atStart' unit_]
   (mkTable [ch . fst, atStart . fst, snd, toSentence . fst] $ sortBySymbolTuple vals) cap True
 
-mkQRTuple :: (HasOutput i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
+mkQRTuple :: (HasOutput i, HasShortName i, Referable i) => [i] -> [(DefinedQuantityDict, Sentence)]
 mkQRTuple = map (\c -> (c ^. output, refS c))
 
 mkQRTupleRef :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> [r] -> [(QuantityDict, Sentence)]

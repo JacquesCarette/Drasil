@@ -9,7 +9,7 @@ module Language.Drasil.Chunk.Unital (
 import Control.Lens (makeLenses, view, (^.))
 
 import Language.Drasil.Chunk.Concept (dccWDS,cw)
-import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', tempdqdWr')
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', dqdWr)
 import Language.Drasil.Chunk.Unitary (Unitary(..))
 import Language.Drasil.Symbol
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
@@ -86,7 +86,7 @@ ucStaged' i t d sym space u = UC (dqd' (dccWDS i t d) sym space (Just un)) un
 
 -- | Attach units to a chunk that has a symbol and definition.
 ucuc :: (Quantity c, Concept c, MayHaveUnit c) => c -> UnitDefn -> UnitalChunk
-ucuc c = UC (tempdqdWr' c)
+ucuc c = UC (dqdWr c)
 
 -- | Constructs a UnitalChunk from a 'Concept' with 'Units'.
 ucw :: (Unitary c, Concept c, MayHaveUnit c) => c -> UnitalChunk

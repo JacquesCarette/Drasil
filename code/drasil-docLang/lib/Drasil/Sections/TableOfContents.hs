@@ -7,7 +7,7 @@ import Drasil.DocumentLanguage.Core
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Drasil.DocLang.SRS as SRS
 import qualified Data.Drasil.Concepts.Documentation as Doc
-import qualified Data.Drasil.TheoryConcepts as Doc (dataDefn, genDefn, inModel, thModel)
+import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
 
 {- Layout for Table of Contents in SRS documents:
 Table of Contents
@@ -142,10 +142,10 @@ mktSSDSec (SSDProg l) =
 
     mktSubSCS :: SCSSub -> Sentence
     mktSubSCS (Assumptions _)      = namedRef SRS.assumptLabel     $ titleize' Doc.assumption
-    mktSubSCS TMs {}               = namedRef SRS.thModelLabel     $ titleize' Doc.thModel
-    mktSubSCS GDs {}               = namedRef SRS.genDefnLabel     $ titleize' Doc.genDefn
-    mktSubSCS DDs {}               = namedRef SRS.dataDefnLabel    $ titleize' Doc.dataDefn
-    mktSubSCS IMs {}               = namedRef SRS.inModelLabel     $ titleize' Doc.inModel
+    mktSubSCS TMs {}               = namedRef SRS.thModelLabel     $ titleize' thModel
+    mktSubSCS GDs {}               = namedRef SRS.genDefnLabel     $ titleize' genDefn
+    mktSubSCS DDs {}               = namedRef SRS.dataDefnLabel    $ titleize' dataDefn
+    mktSubSCS IMs {}               = namedRef SRS.inModelLabel     $ titleize' inModel
     mktSubSCS (Constraints _ _)    = namedRef SRS.datConLabel      $ titleize' Doc.datumConstraint
     mktSubSCS (CorrSolnPpties _ _) = namedRef SRS.corSolPropsLabel $ titleize' Doc.propOfCorSol
 

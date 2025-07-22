@@ -5,6 +5,7 @@
 
 module Drasil.Template.Body where
 
+import Drasil.Metadata
 import Language.Drasil
 import Drasil.SRSDocument
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
@@ -16,7 +17,6 @@ import Data.Drasil.Concepts.Math (mathcon)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Software.Products
-import Data.Drasil.TheoryConcepts
 import Data.Drasil.Citations
 import Drasil.DocumentLanguage.TraceabilityGraph
 import Drasil.DocLang (tunitNone)

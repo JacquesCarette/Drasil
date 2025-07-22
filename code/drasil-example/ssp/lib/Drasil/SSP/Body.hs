@@ -10,6 +10,9 @@ import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
 import Theory.Drasil (output)
 
 import Prelude hiding (sin, cos, tan)
+
+import Drasil.Metadata (inModel)
+
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -19,7 +22,6 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   physical, physics, problem, software, softwareSys, srsDomains, symbol_,
   sysCont, system, type_, user, value, variable, doccon, doccon',
   datumConstraint)
-import Data.Drasil.TheoryConcepts as Doc (inModel)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
 import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
   number)

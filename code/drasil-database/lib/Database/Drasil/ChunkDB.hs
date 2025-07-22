@@ -165,10 +165,10 @@ refResolve = uMapLookup "Reference" "ReferenceMap"
 unitLookup :: UID -> UnitMap -> UnitDefn
 unitLookup = uMapLookup "Unit" "UnitMap"
 
-data DomDefn = DomDefn { definition :: Sentence, domain :: [UID]}
+data DomDefn = DomDefn { domain :: [UID], definition :: Sentence}
 
 -- | Looks up a 'UID' in all tables with concepts from the 'ChunkDB'. If nothing is found, an error is thrown.
-defResolve :: (Sentence -> [UID] -> c) -> ChunkDB -> UID -> c
+defResolve :: ([UID] -> Sentence -> c) -> ChunkDB -> UID -> c
 defResolve f db x
   | (Just (c, _)) <- Map.lookup x (symbolTable db)       = go c
   | (Just (c, _)) <- Map.lookup x (conceptChunkTable db) = go c
@@ -178,7 +178,7 @@ defResolve f db x
   | (Just (c, _)) <- Map.lookup x (_theoryModelTable db) = go c
   | (Just (c, _)) <- Map.lookup x (_conceptinsTable db)  = go c
   | otherwise = error $ "Definition: " ++ show x ++ " not found in ConceptMap"
-  where go c = f (c ^. defn) (cdom c)
+  where go c = f (cdom c) (c ^. defn)
 
 defResolve' :: ChunkDB -> UID -> DomDefn
 defResolve' = defResolve DomDefn

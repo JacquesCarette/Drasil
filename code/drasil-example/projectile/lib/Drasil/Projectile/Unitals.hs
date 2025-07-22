@@ -44,4 +44,4 @@ message = dqdNoUnit (dcc "outputMessage" (nounPhraseSent (S "output message as a
 
 ---
 tol :: ConstQDef
-tol = mkQuantDef (vcSt "tol" (nounPhraseSP "hit tolerance") (autoStage vEpsilon) Real) (perc 2 2)
+tol = mkQuantDef (dqdNoUnit' (dcc "tol" (nounPhraseSP "hit tolerance") "the hit tolerance") (autoStage vEpsilon) Real) (perc 2 2)

@@ -85,7 +85,7 @@ si fl = SI {
     _configFiles = [],
     _inputs      = [] :: [DefinedQuantityDict],
     _outputs     = [] :: [DefinedQuantityDict],
-    _constraints = [] :: [ConstrainedChunk],
+    _constraints = [] :: [ConstrConcept],
     _constants   = [] :: [ConstQDef],
     _systemdb   = symbMap fl
   }

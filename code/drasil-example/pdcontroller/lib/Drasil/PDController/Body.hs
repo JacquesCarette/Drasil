@@ -110,7 +110,7 @@ si = SI {
   _configFiles = [],
   _inputs = inputs,
   _outputs = outputs,
-  _constraints = map cnstrw inpConstrained,
+  _constraints = map cnstrw' inpConstrained,
   _constants = pidConstants,
   _systemdb = symbMap
 }

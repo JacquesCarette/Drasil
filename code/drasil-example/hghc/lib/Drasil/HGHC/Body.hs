@@ -39,7 +39,7 @@ si = SI {
   _configFiles = [],
   _inputs      = htInputs,
   _outputs     = htOutputs,
-  _constraints = [] :: [ConstrainedChunk],
+  _constraints = [] :: [ConstrConcept],
   _constants   = [],
   _systemdb   = symbMap
 }

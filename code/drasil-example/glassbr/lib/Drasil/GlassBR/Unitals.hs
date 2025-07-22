@@ -22,7 +22,7 @@ import Drasil.GlassBR.Units (sFlawPU)
 {--}
 
 constrained :: [ConstrConcept]
-constrained = map constrained' dataConstraints ++ map constraned' [nomThick, glassTypeCon]
+constrained = map cnstrw' dataConstraints ++ map cnstrw' [nomThick, glassTypeCon]
  -- map cnstrw inputDataConstraints ++ map cnstrw derivedInputDataConstraints -- ++
   -- [cnstrw probBr, cnstrw probFail, cnstrw stressDistFac, cnstrw nomThick, cnstrw glassTypeCon]
 
@@ -152,38 +152,49 @@ specParamVals = [dimMax, dimMin, arMax, cWeightMax, cWeightMin,
 dimMax, dimMin, arMax, cWeightMax, cWeightMin, sdMax, stressDistFacMin, stressDistFacMax,
   sdMin :: ConstQDef
 
-dimMax     = mkQuantDef (unitary "dimMax"
+dimMax     = mkQuantDef (uc' "dimMax"
   (nounPhraseSP "maximum value for one of the dimensions of the glass plate")
-  (subMax lD) metre Real) (exactDbl 5)
+  (S "the maximum value for one of the dimensions of the glass plate")
+  (subMax lD) Real metre) (exactDbl 5)
 
-dimMin     = mkQuantDef (unitary "dimMin"
+dimMin     = mkQuantDef (uc' "dimMin"
   (nounPhraseSP "minimum value for one of the dimensions of the glass plate")
-  (subMin lD) metre Real) (dbl 0.1)
+  (S "the minimum value for one of the dimensions of the glass plate")
+  (subMin lD) Real metre) (dbl 0.1)
 
-arMax     = mkQuantDef (vc "arMax"
+arMax     = mkQuantDef (dqdNoUnit (dcc "arMax"
   (nounPhraseSP "maximum aspect ratio")
+  "the maximum aspect ratio")
   (subMax (variable "AR")) Real) (exactDbl 5)
 
-cWeightMax = mkQuantDef (unitary "cWeightMax"
+cWeightMax = mkQuantDef (uc' "cWeightMax"
   (nounPhraseSP "maximum permissible input charge weight")
-  (subMax (eqSymb charWeight)) kilogram Real) (exactDbl 910)
+  (S "the maximum permissible input charge weight")
+  (subMax (eqSymb charWeight)) Real kilogram) (exactDbl 910)
 
-cWeightMin = mkQuantDef (unitary "cWeightMin"
+cWeightMin = mkQuantDef (uc' "cWeightMin"
   (nounPhraseSP "minimum permissible input charge weight")
-  (subMin (eqSymb charWeight)) kilogram Real) (dbl 4.5)
+  (S "the minimum permissible input charge weight")
+  (subMin (eqSymb charWeight)) Real kilogram) (dbl 4.5)
 
-sdMax     = mkQuantDef (unitary "sdMax"
+sdMax     = mkQuantDef (uc' "sdMax"
   (nounPhraseSP "maximum stand off distance permissible for input")
-  (subMax (eqSymb standOffDist)) metre Real) (exactDbl 130)
+  (S "the maximum stand off distance permissible for input")
+  (subMax (eqSymb standOffDist)) Real metre) (exactDbl 130)
 
-sdMin     = mkQuantDef (unitary "sdMin"
+sdMin     = mkQuantDef (uc' "sdMin"
   (nounPhraseSP "minimum stand off distance permissible for input")
-  (subMin (eqSymb standOffDist)) metre Real) (exactDbl 6)
+  (S "the minimum stand off distance permissible for input")
+  (subMin (eqSymb standOffDist)) Real metre) (exactDbl 6)
 
-stressDistFacMin = mkQuantDef (vc "stressDistFacMin" (nounPhraseSP "minimum value for the stress distribution factor")
+stressDistFacMin = mkQuantDef (dqdNoUnit (dcc "stressDistFacMin"
+  (nounPhraseSP "minimum value for the stress distribution factor")
+  "the minimum value for the stress distribution factor")
   (subMin (eqSymb stressDistFac)) Real) (exactDbl 1)
 
-stressDistFacMax = mkQuantDef (vc "stressDistFacMax" (nounPhraseSP "maximum value for the stress distribution factor")
+stressDistFacMax = mkQuantDef (dqdNoUnit (dcc "stressDistFacMax"
+  (nounPhraseSP "maximum value for the stress distribution factor")
+  "the maximum value for the stress distribution factor")
   (subMax (eqSymb stressDistFac)) Real) (exactDbl 32)
 {--}
 

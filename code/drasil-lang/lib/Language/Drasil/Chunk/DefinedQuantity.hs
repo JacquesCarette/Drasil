@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.DefinedQuantity (
   -- * Type classes
   DefinesQuantity(defLhs),
   -- * Constructors
-  dqd, dqdNoUnit, dqd', dqdQd, dqdWr, tempdqdWr',
+  dqd, dqdNoUnit, dqdNoUnit', dqd', dqdQd, dqdWr, tempdqdWr',
   implVar, implVar', implVarAU, implVarAU') where
 
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol (Empty))

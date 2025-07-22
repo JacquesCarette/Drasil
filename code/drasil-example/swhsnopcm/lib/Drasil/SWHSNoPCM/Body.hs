@@ -178,7 +178,7 @@ si = SI {
   _configFiles = [],
   _inputs      = inputs ++ [dqdWr watE], --inputs ++ outputs?
   _outputs     = [tempW, watE],     --outputs
-  _constraints = map cnstrw constrained ++ map cnstrw [tempW, watE], --constrained
+  _constraints = map cnstrw' constrained ++ map cnstrw' [tempW, watE], --constrained
   _constants   = piConst : specParamValList,
   _systemdb   = symbMap
 }

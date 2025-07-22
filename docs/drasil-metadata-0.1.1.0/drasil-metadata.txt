@@ -63,3 +63,27 @@ documentc :: IdeaDict
 knowledgemng :: IdeaDict
 runnableSoftware :: IdeaDict
 website :: IdeaDict
+
+-- | Data definition.
+--   
+--   These are internal-to-Drasil common ideas, and need to be defined at
+--   the same time as theories.
+dataDefn :: CI
+
+-- | General definition.
+--   
+--   These are internal-to-Drasil common ideas, and need to be defined at
+--   the same time as theories.
+genDefn :: CI
+
+-- | Instance model.
+--   
+--   These are internal-to-Drasil common ideas, and need to be defined at
+--   the same time as theories.
+inModel :: CI
+
+-- | Theoretical model.
+--   
+--   These are internal-to-Drasil common ideas, and need to be defined at
+--   the same time as theories.
+thModel :: CI

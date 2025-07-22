@@ -10,34 +10,6 @@
 @version 0.1.0.0
 
 
--- | Theory related Drasil concepts, used across Drasil.
-module Data.Drasil.TheoryConcepts
-
--- | Data definition.
---   
---   These are internal-to-Drasil common ideas, and need to be defined at
---   the same time as theories.
-dataDefn :: CI
-
--- | General definition.
---   
---   These are internal-to-Drasil common ideas, and need to be defined at
---   the same time as theories.
-genDefn :: CI
-
--- | Instance model.
---   
---   These are internal-to-Drasil common ideas, and need to be defined at
---   the same time as theories.
-inModel :: CI
-
--- | Theoretical model.
---   
---   These are internal-to-Drasil common ideas, and need to be defined at
---   the same time as theories.
-thModel :: CI
-
-
 -- | Defining all the classes which represent knowledge-about-theories.
 module Theory.Drasil.Classes
 

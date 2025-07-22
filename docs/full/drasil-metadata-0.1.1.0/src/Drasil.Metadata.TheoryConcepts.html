@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | Theory related Drasil concepts, used across Drasil.</span></span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.Metadata.TheoryConcepts</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-3"></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">cn'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">CI</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">commonIdeaWithDict</span></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Metadata.Domains.html"><span class="hs-identifier">Drasil.Metadata.Domains</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Metadata.Domains.html#softEng"><span class="hs-identifier">softEng</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span>
+</span><span id="line-8"></span><span class="hs-comment">-- | These are internal-to-Drasil common ideas, and need to be defined at the </span><span>
+</span><span id="line-9"></span><span class="hs-comment">-- same time as theories.</span><span>
+</span><span id="line-10"></span><span class="annot"><a href="Drasil.Metadata.TheoryConcepts.html#dataDefn"><span class="hs-identifier hs-type">dataDefn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Metadata.TheoryConcepts.html#genDefn"><span class="hs-identifier hs-type">genDefn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Metadata.TheoryConcepts.html#inModel"><span class="hs-identifier hs-type">inModel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Metadata.TheoryConcepts.html#thModel"><span class="hs-identifier hs-type">thModel</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span>
+</span><span id="line-11"></span><span class="annot"><span class="hs-comment">-- | Data definition.</span></span><span>
+</span><span id="line-12"></span><span id="dataDefn"><span class="annot"><span class="annottext">dataDefn :: CI
+</span><a href="Drasil.Metadata.TheoryConcepts.html#dataDefn"><span class="hs-identifier hs-var hs-var">dataDefn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [IdeaDict] -&gt; CI
+</span><span class="hs-identifier hs-var">commonIdeaWithDict</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;dataDefn&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;data definition&quot;</span></span><span class="hs-special">)</span><span>    </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;DD&quot;</span></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
+</span><a href="Drasil.Metadata.Domains.html#softEng"><span class="hs-identifier hs-var">softEng</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-13"></span><span class="annot"><span class="hs-comment">-- | General definition.</span></span><span>
+</span><span id="line-14"></span><span id="genDefn"><span class="annot"><span class="annottext">genDefn :: CI
+</span><a href="Drasil.Metadata.TheoryConcepts.html#genDefn"><span class="hs-identifier hs-var hs-var">genDefn</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [IdeaDict] -&gt; CI
+</span><span class="hs-identifier hs-var">commonIdeaWithDict</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;genDefn&quot;</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;general definition&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;GD&quot;</span></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
+</span><a href="Drasil.Metadata.Domains.html#softEng"><span class="hs-identifier hs-var">softEng</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-15"></span><span class="annot"><span class="hs-comment">-- | Instance model.</span></span><span>
+</span><span id="line-16"></span><span id="inModel"><span class="annot"><span class="annottext">inModel :: CI
+</span><a href="Drasil.Metadata.TheoryConcepts.html#inModel"><span class="hs-identifier hs-var hs-var">inModel</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [IdeaDict] -&gt; CI
+</span><span class="hs-identifier hs-var">commonIdeaWithDict</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;inModel&quot;</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;instance model&quot;</span></span><span class="hs-special">)</span><span>     </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;IM&quot;</span></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
+</span><a href="Drasil.Metadata.Domains.html#softEng"><span class="hs-identifier hs-var">softEng</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-17"></span><span class="annot"><span class="hs-comment">-- | Theoretical model.</span></span><span>
+</span><span id="line-18"></span><span id="thModel"><span class="annot"><span class="annottext">thModel :: CI
+</span><a href="Drasil.Metadata.TheoryConcepts.html#thModel"><span class="hs-identifier hs-var hs-var">thModel</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [IdeaDict] -&gt; CI
+</span><span class="hs-identifier hs-var">commonIdeaWithDict</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;thModel&quot;</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;theoretical model&quot;</span></span><span class="hs-special">)</span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;TM&quot;</span></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
+</span><a href="Drasil.Metadata.Domains.html#softEng"><span class="hs-identifier hs-var">softEng</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-19"></span></pre></body></html>

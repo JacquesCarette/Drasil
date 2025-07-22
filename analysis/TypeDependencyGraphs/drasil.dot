@@ -4118,6 +4118,8 @@ digraph alltypes {
 	}
 	subgraph supportedsoftware {
 	}
+	subgraph teoryconcepths {
+	}
 	subgraph metadata {
 	}
 	subgraph print {
@@ -4464,8 +4466,6 @@ digraph alltypes {
 		}
 	}
 	subgraph drails {
-	}
-	subgraph teoryconcepths {
 	}
 	subgraph clasess {
 	}

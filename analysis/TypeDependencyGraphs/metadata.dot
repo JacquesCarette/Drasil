@@ -9,6 +9,8 @@ digraph alltypes {
 	}
 	subgraph supportedsoftware {
 	}
+	subgraph teoryconcepths {
+	}
 	subgraph metadata {
 	}
 }

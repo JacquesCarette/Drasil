@@ -1,6 +1,4 @@
 digraph alltypes {
-	subgraph teoryconcepths {
-	}
 	subgraph clasess {
 	}
 	subgraph contraintsets {

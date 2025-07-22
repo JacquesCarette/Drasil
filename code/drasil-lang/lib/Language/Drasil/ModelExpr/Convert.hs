@@ -81,6 +81,9 @@ ccnBinOp E.Dot = Dot
 nccBinOp :: E.NCCBinOp -> NCCBinOp
 nccBinOp E.Scale = Scale
 
+natccBinOp :: E.NatCCBinOp -> NatCCBinOp
+natccBinOp E.GradeSelect = GradeSelect
+
 essBinOp :: E.ESSBinOp -> ESSBinOp
 essBinOp E.SAdd = SAdd
 essBinOp E.SRemove = SRemove
@@ -111,6 +114,7 @@ expr (E.OrdBinaryOp o l r)   = OrdBinaryOp (ordBinOp o) (expr l) (expr r)
 expr (E.CCCBinaryOp v l r)   = CCCBinaryOp (cccBinOp v) (expr l) (expr r)
 expr (E.CCNBinaryOp v l r)   = CCNBinaryOp (ccnBinOp v) (expr l) (expr r)
 expr (E.NCCBinaryOp v l r)   = NCCBinaryOp (nccBinOp v) (expr l) (expr r)
+expr (E.NatCCBinaryOp v n r) = NatCCBinaryOp (natccBinOp v) n (expr r)
 expr (E.ESSBinaryOp o l r)   = ESSBinaryOp (essBinOp o) (expr l) (expr r)
 expr (E.ESBBinaryOp o l r)   = ESBBinaryOp (esbBinOp o) (expr l) (expr r)
 expr (E.Operator ao dd e)    = Operator (assocArithOper ao) (domainDesc dd) (expr e)

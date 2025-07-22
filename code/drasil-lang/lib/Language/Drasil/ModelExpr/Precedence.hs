@@ -47,6 +47,10 @@ prec2CCN _ = 190
 prec2NCC :: NCCBinOp -> Int
 prec2NCC _ = 190
 
+-- | prec2NatCC - precedence for Nat->Clif->Clif-related binary operations.
+prec2NatCC :: NatCCBinOp -> Int
+prec2NatCC _ = 190
+
 prec2ESS :: ESSBinOp -> Int
 prec2ESS _ = 190
 
@@ -114,7 +118,9 @@ mePrec (OrdBinaryOp bo _ _)   = prec2Ord bo
 mePrec (CCCBinaryOp bo _ _)   = prec2CCC bo
 mePrec (CCNBinaryOp bo _ _)   = prec2CCN bo
 mePrec (NCCBinaryOp bo _ _)   = prec2NCC bo
+mePrec (NatCCBinaryOp bo _ _) = prec2NatCC bo
 mePrec (ESSBinaryOp bo _ _)   = prec2ESS bo
 mePrec (ESBBinaryOp bo _ _)   = prec2ESB bo
 mePrec RealI{}                = 170
 mePrec ForAll{}               = 130
+mePrec Clif{}                 = 220

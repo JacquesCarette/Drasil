@@ -34,6 +34,7 @@ meNames (OrdBinaryOp _ a b)   = meNames a ++ meNames b
 meNames (CCCBinaryOp _ a b)   = meNames a ++ meNames b
 meNames (CCNBinaryOp _ a b)   = meNames a ++ meNames b
 meNames (NCCBinaryOp _ a b)   = meNames a ++ meNames b
+meNames (NatCCBinaryOp _ _ b)  = meNames b
 meNames (ESSBinaryOp _ _ s)   = meNames s
 meNames (ESBBinaryOp _ _ s)   = meNames s
 meNames (Operator _ _ e)      = meNames e
@@ -78,6 +79,7 @@ meNames' (StatBinaryOp _ a b)  = meNames' a ++ meNames' b
 meNames' (CCCBinaryOp _ a b)   = meNames' a ++ meNames' b
 meNames' (CCNBinaryOp _ a b)   = meNames' a ++ meNames' b
 meNames' (NCCBinaryOp _ a b)   = meNames' a ++ meNames' b
+meNames' (NatCCBinaryOp _ _ b)  = meNames' b
 meNames' (ESSBinaryOp _ _ s)   = meNames' s
 meNames' (ESBBinaryOp _ _ s)   = meNames' s
 meNames' (Operator _ _ e)      = meNames' e
@@ -86,6 +88,7 @@ meNames' (Set _ a)             = concatMap meNames' a
 meNames' (Variable _ e)        = meNames' e
 meNames' (RealI c b)           = c : meNamesRI' b
 meNames' (ForAll _ _ de)       = meNames' de
+meNames' (Clif _ es) = concatMap meNames' $ OM.elems es
 
 -- | Generic traversal of everything that could come from an interval to names without functions (similar to 'meNames'').
 meNamesRI' :: RealInterval ModelExpr ModelExpr -> [UID]

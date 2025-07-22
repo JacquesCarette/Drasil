@@ -17,23 +17,24 @@ import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, massObj_1, massObj_2,
 clifScalar :: PExpr
 clifScalar = lit 1  -- scalar unit
 
--- Grade 1 basis elements (vectors)
+-- Grade 1 basis elements (vectors) - using simplified component representation
 e1_clif :: PExpr
-e1_clif = clif Nothing [int 0, int 1, int 0, int 0]  -- e₁ basis element
+e1_clif = clif Nothing [int 0, int 1, int 0, int 0]  -- e₀ basis element (first vector basis)
 
 e2_clif :: PExpr  
-e2_clif = clif Nothing [int 0, int 0, int 1, int 0]  -- e₂ basis element
+e2_clif = clif Nothing [int 0, int 0, int 1, int 0]  -- e₁ basis element (second vector basis)
 
 -- Grade 2 basis element (bivector)
 e12_clif :: PExpr
 e12_clif = clif Nothing [int 0, int 0, int 0, int 1]  -- e₁ ∧ e₂ basis element
 
--- Backward compatibility: Standard 2D vectors for component extraction
+-- Clifford basis vectors for component extraction (using simplified representation)
+-- These represent the e₀ and e₁ basis vectors in 2D Clifford space
 e1_2D :: PExpr
-e1_2D = vect [int 1, int 0]  -- e₁ basis vector
+e1_2D = clif Nothing [int 0, int 1, int 0, int 0]  -- e₀ basis vector (first basis element)
 
 e2_2D :: PExpr  
-e2_2D = vect [int 0, int 1]  -- e₂ basis vector
+e2_2D = clif Nothing [int 0, int 0, int 1, int 0]  -- e₁ basis vector (second basis element)
 
 -- ============================================================================
 -- CLIFFORD ALGEBRA MULTIVECTOR CONSTRUCTION HELPERS

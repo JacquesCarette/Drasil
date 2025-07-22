@@ -1,7 +1,6 @@
 module Drasil.SWHS.Unitals where -- all of this file is exported
 
 import Language.Drasil
-import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Display (Symbol(Atop), Decoration(Delta))
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -19,7 +18,7 @@ import Data.Drasil.Units.PhysicalProperties (densityU)
 import qualified Data.Drasil.Units.Thermodynamics as UT (heatTransferCoef,
   heatCapSpec, thermalFlux, volHtGenU)
 
-import Drasil.SWHS.Concepts (water, phsChgMtrl)
+import Drasil.SWHS.Concepts (water)
 
 import Control.Lens ((^.))
 
@@ -556,7 +555,6 @@ htCapWMax = mkQuantDef (ucStaged' "htCapWMax"
   (subMax (eqSymb htCapW))) Real UT.heatCapSpec) $ exactDbl 4210
 
 -- Used in Constraint 14
-coilHTCMin = mkQuantDef (ucStaged' "coilHTCMin"
 coilHTCMin = mkQuantDef (ucStaged' "coilHTCMin"
   (nounPhraseSP $ "minimum convective heat " ++
   "transfer coefficient between coil and water")

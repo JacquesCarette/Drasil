@@ -50,7 +50,6 @@ data Space where
     Void      :: Space
     -- | Clifford algebra objects (Clifs) with a dimension and kind (e.g., Scalar, Vector, Bivector, Multivector)
     ClifS     :: Dimension -> ClifKind -> Space -> Space
-    -- ClifS     :: Dimension -> [Natural] -> Space -> Space
     -- ClifS (Fixed 3) [0,1,2] Real  -- Contains grades 0, 1, 2
     -- ClifS (Fixed 3) [1] Real  --pure vector 
 

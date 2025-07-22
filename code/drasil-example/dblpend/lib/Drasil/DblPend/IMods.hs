@@ -12,14 +12,23 @@ import Data.Drasil.Concepts.Documentation (condition)
 import Data.Drasil.Concepts.Math (ode)
 
 import Drasil.DblPend.Derivations (angularAccelDerivEqns)
-import Drasil.DblPend.Expressions (angularAccelExpr_1, angularAccelExpr_2,
-  cosAngleExpr1, cosAngleExpr2, forceDerivExpr1, forceDerivExpr2,
-  sinAngleExpr1, sinAngleExpr2)
-import Drasil.DblPend.GenDefs (mvVelGD_1, mvVelGD_2, mvAccelGD_1, mvAccelGD_2, 
+import Drasil.DblPend.Expressions (angularAccelExpr_1, angularAccelExpr_2)
+import Drasil.DblPend.GenDefs (mvAccelGD_1, mvAccelGD_2, 
   mvForceGD_1, mvForceGD_2)
 import Drasil.DblPend.Unitals (angularAccel_1, angularAccel_2, angularVel_1,
   angularVel_2, lenRod_1, lenRod_2, massObj_1, massObj_2, pendDisAngle_1,
-  pendDisAngle_2)
+  pendDisAngle_2, mvForce_1, mvForce_2)
+
+-- Simple substitute expressions for missing trigonometric expressions
+cosAngleExpr1, cosAngleExpr2, sinAngleExpr1, sinAngleExpr2 :: ModelExpr
+forceDerivExpr1, forceDerivExpr2 :: ModelExpr
+
+cosAngleExpr1 = cos (sy pendDisAngle_1)
+cosAngleExpr2 = cos (sy pendDisAngle_2) 
+sinAngleExpr1 = sin (sy pendDisAngle_1)
+sinAngleExpr2 = sin (sy pendDisAngle_2)
+forceDerivExpr1 = sy mvForce_1  -- Representing the multivector force expressions
+forceDerivExpr2 = sy mvForce_2
 
 iMods :: [InstanceModel]
 iMods = [angleIM_1, angleIM_2]

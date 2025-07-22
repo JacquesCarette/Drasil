@@ -1,9 +1,9 @@
 -- | Theory related Drasil concepts, used across Drasil.
-module Data.Drasil.TheoryConcepts where
+module Drasil.Metadata.TheoryConcepts where
 
 import Language.Drasil (cn', CI, commonIdeaWithDict)
 
-import Drasil.Metadata (softEng)
+import Drasil.Metadata.Domains (softEng)
 
 -- | These are internal-to-Drasil common ideas, and need to be defined at the 
 -- same time as theories.

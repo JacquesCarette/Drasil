@@ -1,6 +1,7 @@
 module Drasil.SWHSNoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI) where
 
 import Language.Drasil hiding (section)
+import Drasil.Metadata (inModel)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Theory.Drasil (TheoryModel)
@@ -14,7 +15,6 @@ import Data.Drasil.People (thulasi)
 
 import Data.Drasil.Concepts.Computation (algorithm, inValue)
 import Data.Drasil.Concepts.Documentation as Doc (doccon, doccon', material_, srsDomains, sysCont)
-import Data.Drasil.TheoryConcepts as Doc (inModel)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)

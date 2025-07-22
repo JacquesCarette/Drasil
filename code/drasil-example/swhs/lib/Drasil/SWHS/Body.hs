@@ -11,7 +11,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Data.Drasil.TheoryConcepts as Doc (inModel)
+import Drasil.Metadata (inModel)
 import Data.Drasil.Concepts.Computation (algorithm, compcon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
   condition, constraint, corSol, datum, document, environment,input_, model,

@@ -7,14 +7,15 @@
 
 module Data.Drasil.Concepts.Documentation where
 
+import Control.Lens ((^.))
+
 import Language.Drasil hiding (organization, year, label, variable)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
-import Data.Drasil.Concepts.Math (graph, unit_)
-import Drasil.Metadata (documentc, softEng)
-import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
+import Drasil.Metadata (documentc, softEng, dataDefn, genDefn, inModel, thModel)
 
-import Control.Lens ((^.))
+import Data.Drasil.Concepts.Math (graph, unit_)
+
 
 -- | Collects all documentation-related named chunks (not concept-level yet).
 doccon :: [IdeaDict]

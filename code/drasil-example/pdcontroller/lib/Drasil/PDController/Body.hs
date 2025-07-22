@@ -1,6 +1,7 @@
 module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) where
 
 import Language.Drasil
+import Drasil.Metadata (dataDefn)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -12,7 +13,6 @@ import Data.Drasil.Software.Products (sciCompS)
 import Data.Drasil.ExternalLibraries.ODELibraries
        (apacheODESymbols, arrayVecDepVar, odeintSymbols, osloSymbols,
         scipyODESymbols)
-import qualified Data.Drasil.TheoryConcepts as IDict (dataDefn)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
@@ -63,7 +63,7 @@ mkSRS
        IntroProg introPara (phrase progName)
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
-          IOrgSec IDict.dataDefn (SRS.inModel [] [])
+          IOrgSec dataDefn (SRS.inModel [] [])
             (S "The instance model referred as" +:+ refS imPD +:+
                S "provides an"
                +:+ titleize ode +:+ sParen (short ode)

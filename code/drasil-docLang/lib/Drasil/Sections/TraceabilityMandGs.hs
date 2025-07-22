@@ -16,7 +16,7 @@ import Drasil.DocumentLanguage.TraceabilityMatrix (generateTraceTableView,
 import Data.Drasil.Concepts.Documentation (assumption, assumpDom, chgProbDom,
   goalStmt, goalStmtDom, requirement, reqDom, item, section_, likelyChg,
   unlikelyChg)
-import qualified Data.Drasil.TheoryConcepts as Doc (genDefn, dataDefn, inModel, thModel)
+import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
 import Database.Drasil
 import System.Drasil
 import Language.Drasil
@@ -73,16 +73,16 @@ traceMatAssumpAssump = TraceConfig (mkUid "TraceMatAvsA") [plural assumption
 
 -- | Other assumptions of the traceability matrix
 traceMatAssumpOther :: TraceConfig
-traceMatAssumpOther = TraceConfig (mkUid "TraceMatAvsAll") [plural Doc.dataDefn,
-  plural Doc.thModel, plural Doc.genDefn, plural Doc.inModel, plural requirement,
+traceMatAssumpOther = TraceConfig (mkUid "TraceMatAvsAll") [plural dataDefn,
+  plural thModel, plural genDefn, plural inModel, plural requirement,
   plural likelyChg, pluralNP (unlikelyChg `NC.onThePP` assumption)]
   (titleize' assumption +:+ S "and Other" +:+ titleize' item) [tvAssumps]
   [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs, tvChanges]
 
 -- | Refinement of the traceability matrix.
 traceMatRefinement :: TraceConfig
-traceMatRefinement = TraceConfig (mkUid "TraceMatRefvsRef") [plural Doc.dataDefn,
-  plural Doc.thModel, plural Doc.genDefn, plural Doc.inModel +:+
+traceMatRefinement = TraceConfig (mkUid "TraceMatRefvsRef") [plural dataDefn,
+  plural thModel, plural genDefn, plural inModel +:+
   S "on each other"] (titleize' item +:+ S "and Other" +:+ titleize' section_)
   [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels]
   [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels]
@@ -90,8 +90,8 @@ traceMatRefinement = TraceConfig (mkUid "TraceMatRefvsRef") [plural Doc.dataDefn
 -- | Records other requirements. Converts the 'System' into a 'TraceConfig'.
 traceMatOtherReq :: System -> TraceConfig
 traceMatOtherReq si = TraceConfig (mkUid "TraceMatAllvsR") [plural requirement
-  `S.and_` pluralNP (goalStmt `NC.onThePP` Doc.dataDefn), plural Doc.thModel, 
-  plural Doc.genDefn, plural Doc.inModel] (x titleize' +:+ S "and Other" +:+ 
+  `S.and_` pluralNP (goalStmt `NC.onThePP` dataDefn), plural thModel, 
+  plural genDefn, plural inModel] (x titleize' +:+ S "and Other" +:+ 
   titleize' item) [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs] 
   [tvGoals, tvReqs] where
     x g = foldl' (\a (f,t) -> a `sC'` case traceMReferrers (flip f $ _systemdb si) $

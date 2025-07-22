@@ -9,7 +9,7 @@ module Theory.Drasil.GenDefn (
   getEqModQdsFromGd) where
 
 import Language.Drasil
-import Data.Drasil.TheoryConcepts (genDefn)
+import Drasil.Metadata (genDefn)
 import Theory.Drasil.ModelKinds (ModelKind, getEqModQds)
 
 import Control.Lens ((^.), view, makeLenses)

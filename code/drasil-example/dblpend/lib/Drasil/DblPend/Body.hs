@@ -3,6 +3,7 @@ module Drasil.DblPend.Body where
 
 import Control.Lens ((^.))
 
+import Drasil.Metadata (inModel)
 import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
@@ -27,7 +28,6 @@ import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
-import Data.Drasil.TheoryConcepts (inModel)
 
 import Drasil.DblPend.Figures (figMotion, sysCtxFig1)
 import Drasil.DblPend.Assumptions (assumpDouble)

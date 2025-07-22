@@ -1,5 +1,6 @@
 module Drasil.Projectile.Body (printSetting, si, srs, fullSI) where
 
+import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
 import Language.Drasil
 import Drasil.SRSDocument
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -30,7 +31,6 @@ import Data.Drasil.Quantities.Physics (acceleration, constAccel,
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
 import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
-import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education(calculus, educon, undergraduate, 
   highSchoolPhysics, highSchoolCalculus)
 

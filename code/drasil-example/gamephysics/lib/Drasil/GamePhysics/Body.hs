@@ -1,6 +1,7 @@
 module Drasil.GamePhysics.Body where
 
 import Language.Drasil hiding (organization, section)
+import Drasil.Metadata (dataDefn, inModel)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -13,7 +14,6 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   quantity, realtime, section_, simulation, software, softwareSys,
   srsDomains, system, systemConstraint, sysCont, task, user, doccon, doccon',
   property, problemDescription)
-import Data.Drasil.TheoryConcepts as Doc (dataDefn, inModel)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics, educon)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)

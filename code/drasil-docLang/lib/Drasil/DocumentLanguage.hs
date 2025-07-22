@@ -71,8 +71,8 @@ import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 -- * Main Function
 -- | Creates a document from a document description, a title combinator function, and system information.
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
-mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = docauthors} =
-  Document (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) docauthors) (findToC l) $
+mkDoc dd comb si@SI {_sys = sys, _authors = docauthors} =
+  Document (whatsTheBigIdea si `comb` nw sys) (foldlList Comma List $ map (S . name) docauthors) (findToC l) $
   mkSections fullSI l where
     fullSI = fillcdbSRS dd si
     l = mkDocDesc fullSI dd

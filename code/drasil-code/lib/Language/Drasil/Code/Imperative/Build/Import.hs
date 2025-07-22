@@ -19,7 +19,7 @@ import Data.Maybe (maybeToList)
 import System.FilePath.Posix (takeExtension, takeBaseName)
 import Text.PrettyPrint.HughesPJ (Doc)
 import Utils.Drasil (capitalize)
-import Metadata.Drasil.DrasilMetaCall (watermark)
+import Drasil.Metadata (watermark)
 
 -- | Holds all the needed information to run a program.
 data CodeHarness = Ch {

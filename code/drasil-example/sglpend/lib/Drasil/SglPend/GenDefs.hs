@@ -142,8 +142,9 @@ hForceOnPendulumGD = gdNoRefs (equationalRealmU "hForceOnPendulum" hForceOnPendu
 
 hForceOnPendulumMD :: MultiDefn ModelExpr
 hForceOnPendulumMD = mkMultiDefnForQuant quant EmptyS defns
-    where quant = mkQuant' "force" (horizontalForce `onThe` pendulum)
-                    Nothing Real (symbol force) (getUnit force)
+    where quant = dqd' (dccWDS "force" (horizontalForce `onThe` pendulum)
+                    (S "the horizontal force acting on the pendulum"))
+                    (symbol force) Real (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "hForceOnPendulumViaComponent"
                       [] EmptyS $ express E.hForceOnPendulumViaComponent,
@@ -161,8 +162,9 @@ vForceOnPendulumGD = gdNoRefs (equationalRealmU "vForceOnPendulum" vForceOnPendu
 
 vForceOnPendulumMD :: MultiDefn ModelExpr
 vForceOnPendulumMD = mkMultiDefnForQuant quant EmptyS defns
-    where quant = mkQuant' "force" (verticalForce `onThe` pendulum)
-                    Nothing Real (symbol force) (getUnit force)
+    where quant = dqd' (dccWDS "force" (verticalForce `onThe` pendulum)
+                    (S "the vertical force acting on the pendulum"))
+                    (symbol force) Real (getUnit force)
           defns = NE.fromList [
                     mkDefiningExpr "vForceOnPendulumViaComponent"
                       [] EmptyS $ express E.vForceOnPendulumViaComponent,

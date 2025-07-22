@@ -23,19 +23,19 @@ Specification :: SystemKind
 RunnableSoftware :: SystemKind
 Notebook :: SystemKind
 Website :: SystemKind
-class HasSystem c_a8SV
-system :: HasSystem c_a8SV => Lens' c_a8SV System
-authors :: HasSystem c_a8SV => Lens' c_a8SV People
-background :: HasSystem c_a8SV => Lens' c_a8SV Background
-configFiles :: HasSystem c_a8SV => Lens' c_a8SV [String]
-constants :: HasSystem c_a8SV => Lens' c_a8SV [ConstQDef]
-datadefs :: HasSystem c_a8SV => Lens' c_a8SV [DataDefinition]
-instModels :: HasSystem c_a8SV => Lens' c_a8SV [InstanceModel]
-kind :: HasSystem c_a8SV => Lens' c_a8SV SystemKind
-motivation :: HasSystem c_a8SV => Lens' c_a8SV Motivation
-purpose :: HasSystem c_a8SV => Lens' c_a8SV Purpose
-scope :: HasSystem c_a8SV => Lens' c_a8SV Scope
-systemdb :: HasSystem c_a8SV => Lens' c_a8SV ChunkDB
+class HasSystem c_a8SZ
+system :: HasSystem c_a8SZ => Lens' c_a8SZ System
+authors :: HasSystem c_a8SZ => Lens' c_a8SZ People
+background :: HasSystem c_a8SZ => Lens' c_a8SZ Background
+configFiles :: HasSystem c_a8SZ => Lens' c_a8SZ [String]
+constants :: HasSystem c_a8SZ => Lens' c_a8SZ [ConstQDef]
+datadefs :: HasSystem c_a8SZ => Lens' c_a8SZ [DataDefinition]
+instModels :: HasSystem c_a8SZ => Lens' c_a8SZ [InstanceModel]
+kind :: HasSystem c_a8SZ => Lens' c_a8SZ SystemKind
+motivation :: HasSystem c_a8SZ => Lens' c_a8SZ Motivation
+purpose :: HasSystem c_a8SZ => Lens' c_a8SZ Purpose
+scope :: HasSystem c_a8SZ => Lens' c_a8SZ Scope
+systemdb :: HasSystem c_a8SZ => Lens' c_a8SZ ChunkDB
 whatsTheBigIdea :: System -> IdeaDict
 
 -- | Project Example purpose.
@@ -63,19 +63,19 @@ Specification :: SystemKind
 RunnableSoftware :: SystemKind
 Notebook :: SystemKind
 Website :: SystemKind
-class HasSystem c_a8SV
-system :: HasSystem c_a8SV => Lens' c_a8SV System
-authors :: HasSystem c_a8SV => Lens' c_a8SV People
-background :: HasSystem c_a8SV => Lens' c_a8SV Background
-configFiles :: HasSystem c_a8SV => Lens' c_a8SV [String]
-constants :: HasSystem c_a8SV => Lens' c_a8SV [ConstQDef]
-datadefs :: HasSystem c_a8SV => Lens' c_a8SV [DataDefinition]
-instModels :: HasSystem c_a8SV => Lens' c_a8SV [InstanceModel]
-kind :: HasSystem c_a8SV => Lens' c_a8SV SystemKind
-motivation :: HasSystem c_a8SV => Lens' c_a8SV Motivation
-purpose :: HasSystem c_a8SV => Lens' c_a8SV Purpose
-scope :: HasSystem c_a8SV => Lens' c_a8SV Scope
-systemdb :: HasSystem c_a8SV => Lens' c_a8SV ChunkDB
+class HasSystem c_a8SZ
+system :: HasSystem c_a8SZ => Lens' c_a8SZ System
+authors :: HasSystem c_a8SZ => Lens' c_a8SZ People
+background :: HasSystem c_a8SZ => Lens' c_a8SZ Background
+configFiles :: HasSystem c_a8SZ => Lens' c_a8SZ [String]
+constants :: HasSystem c_a8SZ => Lens' c_a8SZ [ConstQDef]
+datadefs :: HasSystem c_a8SZ => Lens' c_a8SZ [DataDefinition]
+instModels :: HasSystem c_a8SZ => Lens' c_a8SZ [InstanceModel]
+kind :: HasSystem c_a8SZ => Lens' c_a8SZ SystemKind
+motivation :: HasSystem c_a8SZ => Lens' c_a8SZ Motivation
+purpose :: HasSystem c_a8SZ => Lens' c_a8SZ Purpose
+scope :: HasSystem c_a8SZ => Lens' c_a8SZ Scope
+systemdb :: HasSystem c_a8SZ => Lens' c_a8SZ ChunkDB
 whatsTheBigIdea :: System -> IdeaDict
 
 -- | Project Example purpose.

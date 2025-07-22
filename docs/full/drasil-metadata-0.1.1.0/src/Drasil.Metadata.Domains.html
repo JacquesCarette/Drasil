@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | Defines domains of knowledge for use in Drasil.</span></span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.Metadata.Domains</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-3"></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">IdeaDict</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mkIdea</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">cn'</span></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span>
+</span><span id="line-6"></span><span class="annot"><span class="hs-comment">-- | Various domains that are used in Drasil. May have an abbreviation.</span></span><span>
+</span><span id="line-7"></span><span class="annot"><a href="Drasil.Metadata.Domains.html#compScience"><span class="hs-identifier hs-type">compScience</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Metadata.Domains.html#softEng"><span class="hs-identifier hs-type">softEng</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Metadata.Domains.html#mathematics"><span class="hs-identifier hs-type">mathematics</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Metadata.Domains.html#progLanguage"><span class="hs-identifier hs-type">progLanguage</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Metadata.Domains.html#physics"><span class="hs-identifier hs-type">physics</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Metadata.Domains.html#civilEng"><span class="hs-identifier hs-type">civilEng</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-8"></span><span>  </span><span class="annot"><a href="Drasil.Metadata.Domains.html#materialEng"><span class="hs-identifier hs-type">materialEng</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Metadata.Domains.html#documentc"><span class="hs-identifier hs-type">documentc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Metadata.Domains.html#knowledgemng"><span class="hs-identifier hs-type">knowledgemng</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span>
+</span><span id="line-9"></span><span class="hs-comment">-------------------------------------------------------------------------------</span><span>
+</span><span id="line-10"></span><span class="hs-comment">--  IdeaDict     |   |      id       |       term                    |  abbreviation</span><span>
+</span><span id="line-11"></span><span class="hs-comment">-------------------------------------------------------------------------------</span><span>
+</span><span id="line-12"></span><span class="annot"><span class="hs-comment">-- | For ideas, concepts, or terms related to Computer Science.</span></span><span>
+</span><span id="line-13"></span><span id="compScience"><span class="annot"><span class="annottext">compScience :: IdeaDict
+</span><a href="Drasil.Metadata.Domains.html#compScience"><span class="hs-identifier hs-var hs-var">compScience</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Maybe String -&gt; IdeaDict
+</span><span class="hs-identifier hs-var">mkIdea</span></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;compScience&quot;</span></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Computer Science&quot;</span></span><span class="hs-special">)</span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Maybe String
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;CS&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span class="annot"><span class="hs-comment">-- | For ideas, concepts, or terms related to Software Engineering.</span></span><span>
+</span><span id="line-15"></span><span id="softEng"><span class="annot"><span class="annottext">softEng :: IdeaDict
+</span><a href="Drasil.Metadata.Domains.html#softEng"><span class="hs-identifier hs-var hs-var">softEng</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Maybe String -&gt; IdeaDict
+</span><span class="hs-identifier hs-var">mkIdea</span></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;softEng&quot;</span></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Software Engineering&quot;</span></span><span class="hs-special">)</span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Maybe String
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;SE&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span class="annot"><span class="hs-comment">-- | For ideas, concepts, or terms related to Mathematics.</span></span><span>
+</span><span id="line-17"></span><span id="mathematics"><span class="annot"><span class="annottext">mathematics :: IdeaDict
+</span><a href="Drasil.Metadata.Domains.html#mathematics"><span class="hs-identifier hs-var hs-var">mathematics</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Maybe String -&gt; IdeaDict
+</span><span class="hs-identifier hs-var">mkIdea</span></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;mathematics&quot;</span></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Mathematics&quot;</span></span><span class="hs-special">)</span><span>           </span><span class="annot"><span class="annottext">Maybe String
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-18"></span><span class="annot"><span class="hs-comment">-- | For ideas, concepts, or terms related to Programming Languages.</span></span><span>
+</span><span id="line-19"></span><span id="progLanguage"><span class="annot"><span class="annottext">progLanguage :: IdeaDict
+</span><a href="Drasil.Metadata.Domains.html#progLanguage"><span class="hs-identifier hs-var hs-var">progLanguage</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Maybe String -&gt; IdeaDict
+</span><span class="hs-identifier hs-var">mkIdea</span></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;progLanguage&quot;</span></span><span>   </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Programming Language&quot;</span></span><span class="hs-special">)</span><span>  </span><span class="annot"><span class="annottext">Maybe String
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-20"></span><span class="annot"><span class="hs-comment">-- | For ideas, concepts, or terms related to Physics.</span></span><span>
+</span><span id="line-21"></span><span id="physics"><span class="annot"><span class="annottext">physics :: IdeaDict
+</span><a href="Drasil.Metadata.Domains.html#physics"><span class="hs-identifier hs-var hs-var">physics</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Maybe String -&gt; IdeaDict
+</span><span class="hs-identifier hs-var">mkIdea</span></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;physics&quot;</span></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Physics&quot;</span></span><span class="hs-special">)</span><span>               </span><span class="annot"><span class="annottext">Maybe String
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-22"></span><span class="annot"><span class="hs-comment">-- | For ideas, concepts, or terms related to Civil Engineering.</span></span><span>
+</span><span id="line-23"></span><span id="civilEng"><span class="annot"><span class="annottext">civilEng :: IdeaDict
+</span><a href="Drasil.Metadata.Domains.html#civilEng"><span class="hs-identifier hs-var hs-var">civilEng</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Maybe String -&gt; IdeaDict
+</span><span class="hs-identifier hs-var">mkIdea</span></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;civilEng&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Civil Engineering&quot;</span></span><span class="hs-special">)</span><span>     </span><span class="annot"><span class="annottext">Maybe String
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-24"></span><span class="annot"><span class="hs-comment">-- | For ideas, concepts, or terms related to Material Engineering.</span></span><span>
+</span><span id="line-25"></span><span id="materialEng"><span class="annot"><span class="annottext">materialEng :: IdeaDict
+</span><a href="Drasil.Metadata.Domains.html#materialEng"><span class="hs-identifier hs-var hs-var">materialEng</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Maybe String -&gt; IdeaDict
+</span><span class="hs-identifier hs-var">mkIdea</span></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;materialEng&quot;</span></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Material Engineering&quot;</span></span><span class="hs-special">)</span><span>  </span><span class="annot"><span class="annottext">Maybe String
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-26"></span><span class="annot"><span class="hs-comment">-- | For ideas, concepts, or terms related to Documents.</span></span><span>
+</span><span id="line-27"></span><span id="documentc"><span class="annot"><span class="annottext">documentc :: IdeaDict
+</span><a href="Drasil.Metadata.Domains.html#documentc"><span class="hs-identifier hs-var hs-var">documentc</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Maybe String -&gt; IdeaDict
+</span><span class="hs-identifier hs-var">mkIdea</span></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;documentc&quot;</span></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Document&quot;</span></span><span class="hs-special">)</span><span>              </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Maybe String
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Doc&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-28"></span><span class="annot"><span class="hs-comment">-- | For ideas, concepts, or terms related to Knowledge Management.</span></span><span>
+</span><span id="line-29"></span><span id="knowledgemng"><span class="annot"><span class="annottext">knowledgemng :: IdeaDict
+</span><a href="Drasil.Metadata.Domains.html#knowledgemng"><span class="hs-identifier hs-var hs-var">knowledgemng</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Maybe String -&gt; IdeaDict
+</span><span class="hs-identifier hs-var">mkIdea</span></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;knowledgemng&quot;</span></span><span>   </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Knowledge Management&quot;</span></span><span class="hs-special">)</span><span>  </span><span class="annot"><span class="annottext">Maybe String
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-30"></span></pre></body></html>

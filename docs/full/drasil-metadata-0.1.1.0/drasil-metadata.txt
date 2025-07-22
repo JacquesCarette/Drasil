@@ -11,7 +11,7 @@
 
 
 -- | Defines domains of knowledge for use in Drasil.
-module Data.Drasil.Domains
+module Drasil.Metadata.Domains
 
 -- | For ideas, concepts, or terms related to Computer Science.
 --   
@@ -58,6 +58,22 @@ documentc :: IdeaDict
 --   Various domains that are used in Drasil. May have an abbreviation.
 knowledgemng :: IdeaDict
 
+module Drasil.Metadata.Drasil
+
+-- | Basic Drasil metadata.
+newtype DrasilMeta
+DrasilMeta :: String -> DrasilMeta
+[version] :: DrasilMeta -> String
+
+-- | Prepare a Template Haskell expression that reads Drasil's metadata
+--   from a local JSON file.
+drasilMetaCfg :: Q Exp
+instance Language.Haskell.TH.Syntax.Lift Drasil.Metadata.Drasil.DrasilMeta
+instance GHC.Show.Show Drasil.Metadata.Drasil.DrasilMeta
+instance GHC.Generics.Generic Drasil.Metadata.Drasil.DrasilMeta
+instance Data.Aeson.Types.ToJSON.ToJSON Drasil.Metadata.Drasil.DrasilMeta
+instance Data.Aeson.Types.FromJSON.FromJSON Drasil.Metadata.Drasil.DrasilMeta
+
 
 -- | Categories of software that Drasil can generate.
 module Drasil.Metadata.SupportedSoftware
@@ -66,28 +82,8 @@ website :: IdeaDict
 
 module Drasil.Metadata
 
-module Metadata.Drasil.DrasilMeta
-
--- | Create DrasilMeta newtype
-newtype DrasilMeta
-DrasilMeta :: String -> DrasilMeta
-[version] :: DrasilMeta -> String
-
--- | Configures drasilMeta at compile-time
-drasilMetaCfg :: Q Exp
-instance Language.Haskell.TH.Syntax.Lift Metadata.Drasil.DrasilMeta.DrasilMeta
-instance GHC.Show.Show Metadata.Drasil.DrasilMeta.DrasilMeta
-instance GHC.Generics.Generic Metadata.Drasil.DrasilMeta.DrasilMeta
-instance Data.Aeson.Types.ToJSON.ToJSON Metadata.Drasil.DrasilMeta.DrasilMeta
-instance Data.Aeson.Types.FromJSON.FromJSON Metadata.Drasil.DrasilMeta.DrasilMeta
-
-module Metadata.Drasil.DrasilMetaCall
-
--- | Reads drasilMeta at compile-time
+-- | Drasil metadata.
 drasilMeta :: DrasilMeta
 
--- | Create DrasilMeta newtype
-newtype DrasilMeta
-DrasilMeta :: String -> DrasilMeta
-[version] :: DrasilMeta -> String
+-- | Drasil's watermark for generated files.
 watermark :: String

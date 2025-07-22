@@ -20,19 +20,19 @@ Specification :: SystemKind
 RunnableSoftware :: SystemKind
 Notebook :: SystemKind
 Website :: SystemKind
-class HasSystem c_a8Ro
-system :: HasSystem c_a8Ro => Lens' c_a8Ro System
-authors :: HasSystem c_a8Ro => Lens' c_a8Ro People
-background :: HasSystem c_a8Ro => Lens' c_a8Ro Background
-configFiles :: HasSystem c_a8Ro => Lens' c_a8Ro [String]
-constants :: HasSystem c_a8Ro => Lens' c_a8Ro [ConstQDef]
-datadefs :: HasSystem c_a8Ro => Lens' c_a8Ro [DataDefinition]
-instModels :: HasSystem c_a8Ro => Lens' c_a8Ro [InstanceModel]
-kind :: HasSystem c_a8Ro => Lens' c_a8Ro SystemKind
-motivation :: HasSystem c_a8Ro => Lens' c_a8Ro Motivation
-purpose :: HasSystem c_a8Ro => Lens' c_a8Ro Purpose
-scope :: HasSystem c_a8Ro => Lens' c_a8Ro Scope
-systemdb :: HasSystem c_a8Ro => Lens' c_a8Ro ChunkDB
+class HasSystem c_a8Rs
+system :: HasSystem c_a8Rs => Lens' c_a8Rs System
+authors :: HasSystem c_a8Rs => Lens' c_a8Rs People
+background :: HasSystem c_a8Rs => Lens' c_a8Rs Background
+configFiles :: HasSystem c_a8Rs => Lens' c_a8Rs [String]
+constants :: HasSystem c_a8Rs => Lens' c_a8Rs [ConstQDef]
+datadefs :: HasSystem c_a8Rs => Lens' c_a8Rs [DataDefinition]
+instModels :: HasSystem c_a8Rs => Lens' c_a8Rs [InstanceModel]
+kind :: HasSystem c_a8Rs => Lens' c_a8Rs SystemKind
+motivation :: HasSystem c_a8Rs => Lens' c_a8Rs Motivation
+purpose :: HasSystem c_a8Rs => Lens' c_a8Rs Purpose
+scope :: HasSystem c_a8Rs => Lens' c_a8Rs Scope
+systemdb :: HasSystem c_a8Rs => Lens' c_a8Rs ChunkDB
 whatsTheBigIdea :: System -> IdeaDict
 
 -- | Project Example purpose.

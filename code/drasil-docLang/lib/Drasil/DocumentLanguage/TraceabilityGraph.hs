@@ -114,7 +114,7 @@ checkUIDAbbrev si t
   | Just (x, _) <- Map.lookup t (s ^. insmodelTable)        = abrv x
   | Just (x, _) <- Map.lookup t (s ^. gendefTable)          = abrv x
   | Just (x, _) <- Map.lookup t (s ^. theoryModelTable)     = abrv x
-  | Just (x, _) <- Map.lookup t (s ^. conceptinsTable)      = fromMaybe "" $ getA $ defResolve s $ sDom $ cdom x
+  | Just (x, _) <- Map.lookup t (s ^. conceptinsTable)      = fromMaybe "" $ shortForm $ termResolve' s $ sDom $ cdom x
   | Map.member t (s ^. labelledcontentTable)                = show t
   | Map.member t (s ^. citationTable)                       = ""
   | otherwise = error $ show t ++ "Caught."
@@ -127,7 +127,7 @@ checkUIDRefAdd si t
   | Just (x, _) <- Map.lookup t (s ^. insmodelTable)        = getAdd $ getRefAdd x
   | Just (x, _) <- Map.lookup t (s ^. gendefTable)          = getAdd $ getRefAdd x
   | Just (x, _) <- Map.lookup t (s ^. theoryModelTable)     = getAdd $ getRefAdd x
-  | Just (x, _) <- Map.lookup t (s ^. conceptinsTable)      = fromMaybe "" (getA $ defResolve s $ sDom $ cdom x) ++ ":" ++ getAdd (getRefAdd x)
+  | Just (x, _) <- Map.lookup t (s ^. conceptinsTable)      = fromMaybe "" (shortForm $ termResolve' s $ sDom $ cdom x) ++ ":" ++ getAdd (getRefAdd x)
   | Map.member t (s ^. labelledcontentTable)                = show t
   | Map.member t (s ^. citationTable)                       = ""
   | otherwise = error $ show t ++ "Caught."

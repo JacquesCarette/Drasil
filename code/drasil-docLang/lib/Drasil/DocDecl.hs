@@ -139,10 +139,10 @@ mkDocDesc sys@SI{_inputs = is, _systemdb = db} = map sec where
 
   scsSub :: SCSSub -> DL.SCSSub
   scsSub Assumptions = DL.Assumptions $ fromConcInsDB assumpDom
-  scsSub (TMs s f) = DL.TMs s f $ _theoryModels sys
-  scsSub (GDs s f dd) = DL.GDs s f (_genDefns sys) dd
-  scsSub (DDs s f dd) = DL.DDs s f (_dataDefns sys) dd
-  scsSub (IMs s f dd) = DL.IMs s f (_instModels sys) dd
+  scsSub (TMs s f)    = DL.TMs s f (sys ^. theoryModels)
+  scsSub (GDs s f dd) = DL.GDs s f (sys ^. genDefns)     dd
+  scsSub (DDs s f dd) = DL.DDs s f (sys ^. dataDefns)    dd
+  scsSub (IMs s f dd) = DL.IMs s f (sys ^. instModels)   dd
   scsSub (Constraints s c) = DL.Constraints s c
   scsSub (CorrSolnPpties c cs) = DL.CorrSolnPpties c cs
 

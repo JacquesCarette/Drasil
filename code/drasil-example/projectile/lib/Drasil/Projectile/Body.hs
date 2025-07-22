@@ -48,6 +48,8 @@ import Drasil.Projectile.Unitals
 
 import Theory.Drasil (TheoryModel)
 
+import System.Drasil (SystemKind(Specification))
+
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
@@ -131,7 +133,7 @@ projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles"
 si :: System
 si = SI {
   _sys         = progName,
-  _kind        = Doc.srs,
+  _kind        = Specification,
   _authors     = [samCrawford, brooks, spencerSmith],
   _purpose     = [purp],
   _background  = [background],

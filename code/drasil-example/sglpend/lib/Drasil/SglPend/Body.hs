@@ -14,7 +14,6 @@ import Data.Drasil.People (olu)
 import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Documentation (srsDomains, doccon, doccon')
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Concepts.Physics (physicCon, physicCon', motion, pendulum)
@@ -42,6 +41,8 @@ import Drasil.SglPend.MetaConcepts (progName)
 import Drasil.SglPend.GenDefs (genDefns)
 import Drasil.SglPend.Unitals (inputs, outputs, inConstraints, outConstraints, symbols)
 import Drasil.SglPend.Requirements (funcReqs)
+
+import System.Drasil (SystemKind(Specification))
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -102,7 +103,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
 si :: System
 si = SI {
   _sys         = progName, 
-  _kind        = Doc.srs,
+  _kind        = Specification,
   _authors     = [olu],
   _purpose     = [purp],
   _background  = [],

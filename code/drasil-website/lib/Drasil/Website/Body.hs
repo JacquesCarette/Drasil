@@ -73,7 +73,7 @@ data FolderLocation = Folder {
 si :: FolderLocation -> System
 si fl = SI {
     _sys         = webName,
-    _kind        = web,
+    _kind        = Website,
     _authors     = [] :: [Person],
     _quants      = [] :: [DefinedQuantityDict],
     _purpose     = [],
@@ -122,9 +122,8 @@ allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, pap
   ++ concatMap findAllRefs (sections fl)
 
 -- | Used for system name and kind inside of 'si'.
-webName, web :: CI
-webName = commonIdea "websiteName" (cn websiteTitle) "Drasil" []
-web = commonIdea "website" (cn "website") "web" []
+webName :: CI
+webName = commonIdea "websiteName" (cn websiteTitle) "Drasil" [] -- FIXME: Improper use of a `CI`.
 
 -- * Header Section
 

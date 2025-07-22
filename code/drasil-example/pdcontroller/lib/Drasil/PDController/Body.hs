@@ -6,7 +6,6 @@ import qualified Drasil.DocLang.SRS as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Software.Products (sciCompS)
@@ -41,6 +40,8 @@ import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
   inpConstrained, pidConstants, opProcessVariable)
 import Drasil.PDController.ODEs (pidODEInfo)
 import Language.Drasil.Code (quantvar)
+
+import System.Drasil (SystemKind(Specification))
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
@@ -98,7 +99,7 @@ mkSRS
 si :: System
 si = SI {
   _sys = progName,
-  _kind = Doc.srs,
+  _kind = Specification,
   _authors = [naveen],
   _purpose = [purp],
   _background  = [background],

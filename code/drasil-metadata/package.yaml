@@ -18,7 +18,6 @@ dependencies:
 - aeson
 - template-haskell
 - drasil-lang
-- drasil-utils
 
 ghc-options:
 - -Wall
@@ -28,8 +27,6 @@ library:
   source-dirs: lib
   exposed-modules:
   - Drasil.Metadata
-  - Data.Drasil.Domains
-  - Metadata.Drasil.DrasilMetaCall
   when:
   - condition: false
     other-modules: Paths_drasil_metadata

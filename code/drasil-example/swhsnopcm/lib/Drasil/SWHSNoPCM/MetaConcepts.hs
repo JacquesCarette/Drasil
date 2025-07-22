@@ -1,7 +1,7 @@
 module Drasil.SWHSNoPCM.MetaConcepts (progName) where
 
 import Language.Drasil
-import Data.Drasil.Domains (materialEng)
+import Drasil.Metadata (materialEng)
 
 progName :: CI
 progName = commonIdeaWithDict "swhsNoPCM" 

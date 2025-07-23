@@ -218,8 +218,10 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="Drasil.PDController.Unitals.html#qdStepTime"><span class="hs-identifier hs-var">qdStepTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdSimTime"><span class="hs-identifier hs-var">qdSimTime</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-46"></span><span>     </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdDampingCoeff"><span class="hs-identifier hs-var">qdDampingCoeff</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdStiffnessCoeff"><span class="hs-identifier hs-var">qdStiffnessCoeff</span></a></span><span class="hs-special">]</span><span>
+</span><a href="Drasil.PDController.Unitals.html#qdDampingCoeff"><span class="hs-identifier hs-var">qdDampingCoeff</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdStiffnessCoeff"><span class="hs-identifier hs-var">dqdStiffnessCoeff</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-47"></span><span>
 </span><span id="line-48"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdLaplaceTransform"><span class="hs-identifier hs-type">qdLaplaceTransform</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-type">qdFreqDomain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdFxnTDomain"><span class="hs-identifier hs-type">qdFxnTDomain</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-49"></span><span>                    </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdInvLaplaceTransform"><span class="hs-identifier hs-type">qdInvLaplaceTransform</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-type">qdPropGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-type">qdDerivGain</span></a></span><span class="hs-special">,</span><span>
@@ -227,51 +229,53 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-51"></span><span>                    </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdProcessVariableFD"><span class="hs-identifier hs-type">qdProcessVariableFD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdProcessErrorTD"><span class="hs-identifier hs-type">qdProcessErrorTD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdProcessErrorFD"><span class="hs-identifier hs-type">qdProcessErrorFD</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-52"></span><span>                    </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdPropControlFD"><span class="hs-identifier hs-type">qdPropControlFD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdDerivativeControlFD"><span class="hs-identifier hs-type">qdDerivativeControlFD</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-53"></span><span>                    </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdTransferFunctionFD"><span class="hs-identifier hs-type">qdTransferFunctionFD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdCtrlVarFD"><span class="hs-identifier hs-type">qdCtrlVarFD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdCtrlVarTD"><span class="hs-identifier hs-type">qdCtrlVarTD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdStepTime"><span class="hs-identifier hs-type">qdStepTime</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-54"></span><span>                    </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdSimTime"><span class="hs-identifier hs-type">qdSimTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdDampingCoeff"><span class="hs-identifier hs-type">qdDampingCoeff</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdStiffnessCoeff"><span class="hs-identifier hs-type">qdStiffnessCoeff</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span>
+</span><span id="line-54"></span><span>                    </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdSimTime"><span class="hs-identifier hs-type">qdSimTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdDampingCoeff"><span class="hs-identifier hs-type">qdDampingCoeff</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span>
 </span><span id="line-55"></span><span>
-</span><span id="line-56"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#inputs"><span class="hs-identifier hs-type">inputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-57"></span><span id="inputs"><span class="annot"><span class="annottext">inputs :: [QuantityDict]
+</span><span id="line-56"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#dqdAbsTol"><span class="hs-identifier hs-type">dqdAbsTol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#dqdRelTol"><span class="hs-identifier hs-type">dqdRelTol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#dqdStiffnessCoeff"><span class="hs-identifier hs-type">dqdStiffnessCoeff</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span>
+</span><span id="line-57"></span><span>
+</span><span id="line-58"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#inputs"><span class="hs-identifier hs-type">inputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-59"></span><span id="inputs"><span class="annot"><span class="annottext">inputs :: [QuantityDict]
 </span><a href="Drasil.PDController.Unitals.html#inputs"><span class="hs-identifier hs-var hs-var">inputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdSetPointTD"><span class="hs-identifier hs-var">qdSetPointTD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-var">qdDerivGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdStepTime"><span class="hs-identifier hs-var">qdStepTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdSimTime"><span class="hs-identifier hs-var">qdSimTime</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-58"></span><span>
-</span><span id="line-59"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#outputs"><span class="hs-identifier hs-type">outputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-60"></span><span id="outputs"><span class="annot"><span class="annottext">outputs :: [QuantityDict]
+</span><span id="line-60"></span><span>
+</span><span id="line-61"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#outputs"><span class="hs-identifier hs-type">outputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-62"></span><span id="outputs"><span class="annot"><span class="annottext">outputs :: [QuantityDict]
 </span><a href="Drasil.PDController.Unitals.html#outputs"><span class="hs-identifier hs-var hs-var">outputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdProcessVariableTD"><span class="hs-identifier hs-var">qdProcessVariableTD</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-61"></span><span>
-</span><span id="line-62"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#inputsUC"><span class="hs-identifier hs-type">inputsUC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
-</span><span id="line-63"></span><span id="inputsUC"><span class="annot"><span class="annottext">inputsUC :: [UncertQ]
+</span><span id="line-63"></span><span>
+</span><span id="line-64"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#inputsUC"><span class="hs-identifier hs-type">inputsUC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
+</span><span id="line-65"></span><span id="inputsUC"><span class="annot"><span class="annottext">inputsUC :: [UncertQ]
 </span><a href="Drasil.PDController.Unitals.html#inputsUC"><span class="hs-identifier hs-var hs-var">inputsUC</span></a></span></span><span>
-</span><span id="line-64"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UncertQ
+</span><span id="line-66"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.PDController.Unitals.html#ipSetPtUnc"><span class="hs-identifier hs-var">ipSetPtUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.PDController.Unitals.html#ipPropGainUnc"><span class="hs-identifier hs-var">ipPropGainUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.PDController.Unitals.html#ipDerGainUnc"><span class="hs-identifier hs-var">ipDerGainUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.PDController.Unitals.html#ipStepTimeUnc"><span class="hs-identifier hs-var">ipStepTimeUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.PDController.Unitals.html#ipSimTimeUnc"><span class="hs-identifier hs-var">ipSimTimeUnc</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-65"></span><span>
-</span><span id="line-66"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#inpConstrained"><span class="hs-identifier hs-type">inpConstrained</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstrConcept</span></span><span class="hs-special">]</span><span>
-</span><span id="line-67"></span><span id="inpConstrained"><span class="annot"><span class="annottext">inpConstrained :: [ConstrConcept]
+</span><span id="line-67"></span><span>
+</span><span id="line-68"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#inpConstrained"><span class="hs-identifier hs-type">inpConstrained</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstrConcept</span></span><span class="hs-special">]</span><span>
+</span><span id="line-69"></span><span id="inpConstrained"><span class="annot"><span class="annottext">inpConstrained :: [ConstrConcept]
 </span><a href="Drasil.PDController.Unitals.html#inpConstrained"><span class="hs-identifier hs-var hs-var">inpConstrained</span></a></span></span><span>
-</span><span id="line-68"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept
+</span><span id="line-70"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#ipPropGain"><span class="hs-identifier hs-var">ipPropGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#ipDerivGain"><span class="hs-identifier hs-var">ipDerivGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#ipSetPt"><span class="hs-identifier hs-var">ipSetPt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#ipStepTime"><span class="hs-identifier hs-var">ipStepTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#ipSimTime"><span class="hs-identifier hs-var">ipSimTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-var">opProcessVariable</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-69"></span><span>
-</span><span id="line-70"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipPropGain"><span class="hs-identifier hs-type">ipPropGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipDerivGain"><span class="hs-identifier hs-type">ipDerivGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipSetPt"><span class="hs-identifier hs-type">ipSetPt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipStepTime"><span class="hs-identifier hs-type">ipStepTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipSimTime"><span class="hs-identifier hs-type">ipSimTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-type">opProcessVariable</span></a></span><span> </span><span class="hs-glyph">::</span><span>
-</span><span id="line-71"></span><span>            </span><span class="annot"><span class="hs-identifier hs-type">ConstrConcept</span></span><span>
-</span><span id="line-72"></span><span>
-</span><span id="line-73"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipSetPtUnc"><span class="hs-identifier hs-type">ipSetPtUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipPropGainUnc"><span class="hs-identifier hs-type">ipPropGainUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipDerGainUnc"><span class="hs-identifier hs-type">ipDerGainUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipStepTimeUnc"><span class="hs-identifier hs-type">ipStepTimeUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipSimTimeUnc"><span class="hs-identifier hs-type">ipSimTimeUnc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span>
+</span><span id="line-71"></span><span>
+</span><span id="line-72"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipPropGain"><span class="hs-identifier hs-type">ipPropGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipDerivGain"><span class="hs-identifier hs-type">ipDerivGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipSetPt"><span class="hs-identifier hs-type">ipSetPt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipStepTime"><span class="hs-identifier hs-type">ipStepTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipSimTime"><span class="hs-identifier hs-type">ipSimTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-type">opProcessVariable</span></a></span><span> </span><span class="hs-glyph">::</span><span>
+</span><span id="line-73"></span><span>            </span><span class="annot"><span class="hs-identifier hs-type">ConstrConcept</span></span><span>
 </span><span id="line-74"></span><span>
-</span><span id="line-75"></span><span id="ipPropGain"><span class="annot"><span class="annottext">ipPropGain :: ConstrConcept
+</span><span id="line-75"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipSetPtUnc"><span class="hs-identifier hs-type">ipSetPtUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipPropGainUnc"><span class="hs-identifier hs-type">ipPropGainUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipDerGainUnc"><span class="hs-identifier hs-type">ipDerGainUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipStepTimeUnc"><span class="hs-identifier hs-type">ipStepTimeUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipSimTimeUnc"><span class="hs-identifier hs-type">ipSimTimeUnc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span>
+</span><span id="line-76"></span><span>
+</span><span id="line-77"></span><span id="ipPropGain"><span class="annot"><span class="annottext">ipPropGain :: ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#ipPropGain"><span class="hs-identifier hs-var hs-var">ipPropGain</span></a></span></span><span>
-</span><span id="line-76"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+</span><span id="line-78"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
 forall c.
 (Concept c, MayHaveUnit c, Quantity c) =&gt;
 c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
@@ -284,7 +288,7 @@ c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">20</span></span><span class="hs-special">)</span><span>
-</span><span id="line-77"></span><span id="ipPropGainUnc"><span class="annot"><span class="annottext">ipPropGainUnc :: UncertQ
+</span><span id="line-79"></span><span id="ipPropGainUnc"><span class="annot"><span class="annottext">ipPropGainUnc :: UncertQ
 </span><a href="Drasil.PDController.Unitals.html#ipPropGainUnc"><span class="hs-identifier hs-var hs-var">ipPropGainUnc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Uncertainty -&gt; UncertQ
 forall c.
 (Quantity c, Constrained c, Concept c, HasReasVal c,
@@ -293,15 +297,15 @@ c -&gt; Uncertainty -&gt; UncertQ
 </span><span class="hs-identifier hs-var">uq</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#ipPropGain"><span class="hs-identifier hs-var">ipPropGain</span></a></span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
-</span><span id="line-78"></span><span id="qdPropGain"><span class="annot"><span class="annottext">qdPropGain :: QuantityDict
+</span><span id="line-80"></span><span id="qdPropGain"><span class="annot"><span class="annottext">qdPropGain :: QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var hs-var">qdPropGain</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#ipPropGain"><span class="hs-identifier hs-var">ipPropGain</span></a></span><span>
-</span><span id="line-79"></span><span>
-</span><span id="line-80"></span><span id="ipDerivGain"><span class="annot"><span class="annottext">ipDerivGain :: ConstrConcept
+</span><span id="line-81"></span><span>
+</span><span id="line-82"></span><span id="ipDerivGain"><span class="annot"><span class="annottext">ipDerivGain :: ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#ipDerivGain"><span class="hs-identifier hs-var hs-var">ipDerivGain</span></a></span></span><span>
-</span><span id="line-81"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+</span><span id="line-83"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
 forall c.
 (Concept c, MayHaveUnit c, Quantity c) =&gt;
 c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
@@ -320,11 +324,11 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-82"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span id="line-84"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
-</span><span id="line-83"></span><span id="ipDerGainUnc"><span class="annot"><span class="annottext">ipDerGainUnc :: UncertQ
+</span><span id="line-85"></span><span id="ipDerGainUnc"><span class="annot"><span class="annottext">ipDerGainUnc :: UncertQ
 </span><a href="Drasil.PDController.Unitals.html#ipDerGainUnc"><span class="hs-identifier hs-var hs-var">ipDerGainUnc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Uncertainty -&gt; UncertQ
 forall c.
 (Quantity c, Constrained c, Concept c, HasReasVal c,
@@ -333,13 +337,13 @@ c -&gt; Uncertainty -&gt; UncertQ
 </span><span class="hs-identifier hs-var">uq</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#ipDerivGain"><span class="hs-identifier hs-var">ipDerivGain</span></a></span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
-</span><span id="line-84"></span><span id="qdDerivGain"><span class="annot"><span class="annottext">qdDerivGain :: QuantityDict
+</span><span id="line-86"></span><span id="qdDerivGain"><span class="annot"><span class="annottext">qdDerivGain :: QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-var hs-var">qdDerivGain</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#ipDerivGain"><span class="hs-identifier hs-var">ipDerivGain</span></a></span><span>
-</span><span id="line-85"></span><span>
-</span><span id="line-86"></span><span id="ipSetPt"><span class="annot"><span class="annottext">ipSetPt :: ConstrConcept
+</span><span id="line-87"></span><span>
+</span><span id="line-88"></span><span id="ipSetPt"><span class="annot"><span class="annottext">ipSetPt :: ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#ipSetPt"><span class="hs-identifier hs-var hs-var">ipSetPt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
 forall c.
 (Concept c, MayHaveUnit c, Quantity c) =&gt;
@@ -353,7 +357,7 @@ c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
-</span><span id="line-87"></span><span id="ipSetPtUnc"><span class="annot"><span class="annottext">ipSetPtUnc :: UncertQ
+</span><span id="line-89"></span><span id="ipSetPtUnc"><span class="annot"><span class="annottext">ipSetPtUnc :: UncertQ
 </span><a href="Drasil.PDController.Unitals.html#ipSetPtUnc"><span class="hs-identifier hs-var hs-var">ipSetPtUnc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Uncertainty -&gt; UncertQ
 forall c.
 (Quantity c, Constrained c, Concept c, HasReasVal c,
@@ -362,15 +366,15 @@ c -&gt; Uncertainty -&gt; UncertQ
 </span><span class="hs-identifier hs-var">uq</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#ipSetPt"><span class="hs-identifier hs-var">ipSetPt</span></a></span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
-</span><span id="line-88"></span><span id="qdSetPointTD"><span class="annot"><span class="annottext">qdSetPointTD :: QuantityDict
+</span><span id="line-90"></span><span id="qdSetPointTD"><span class="annot"><span class="annottext">qdSetPointTD :: QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdSetPointTD"><span class="hs-identifier hs-var hs-var">qdSetPointTD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#ipSetPt"><span class="hs-identifier hs-var">ipSetPt</span></a></span><span>
-</span><span id="line-89"></span><span>
-</span><span id="line-90"></span><span class="hs-comment">--FIXME: the original timeStep is 0.01, this will trigger an error in Java ODE solver</span><span>
-</span><span id="line-91"></span><span class="hs-comment">--change it from 0.01 to 0.001 is a temporary fix to make ODE solver working</span><span>
-</span><span id="line-92"></span><span id="ipStepTime"><span class="annot"><span class="annottext">ipStepTime :: ConstrConcept
+</span><span id="line-91"></span><span>
+</span><span id="line-92"></span><span class="hs-comment">--FIXME: the original timeStep is 0.01, this will trigger an error in Java ODE solver</span><span>
+</span><span id="line-93"></span><span class="hs-comment">--change it from 0.01 to 0.001 is a temporary fix to make ODE solver working</span><span>
+</span><span id="line-94"></span><span id="ipStepTime"><span class="annot"><span class="annottext">ipStepTime :: ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#ipStepTime"><span class="hs-identifier hs-var hs-var">ipStepTime</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
 forall c.
 (Concept c, MayHaveUnit c, Quantity c) =&gt;
@@ -384,7 +388,7 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><a href="Drasil.PDController.Unitals.html#symTStep"><span class="hs-identifier hs-var">symTStep</span></a></span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">second</span></span><span class="hs-special">)</span><span>
-</span><span id="line-93"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
+</span><span id="line-95"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
 </span><span class="hs-identifier hs-var">physRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -401,11 +405,11 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#ipSimTime"><span class="hs-identifier hs-var">ipSimTime</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-94"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Expr
+</span><span id="line-96"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Expr
 forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">0.001</span></span><span class="hs-special">)</span><span>
-</span><span id="line-95"></span><span id="ipStepTimeUnc"><span class="annot"><span class="annottext">ipStepTimeUnc :: UncertQ
+</span><span id="line-97"></span><span id="ipStepTimeUnc"><span class="annot"><span class="annottext">ipStepTimeUnc :: UncertQ
 </span><a href="Drasil.PDController.Unitals.html#ipStepTimeUnc"><span class="hs-identifier hs-var hs-var">ipStepTimeUnc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Uncertainty -&gt; UncertQ
 forall c.
 (Quantity c, Constrained c, Concept c, HasReasVal c,
@@ -414,15 +418,15 @@ c -&gt; Uncertainty -&gt; UncertQ
 </span><span class="hs-identifier hs-var">uq</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#ipStepTime"><span class="hs-identifier hs-var">ipStepTime</span></a></span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
-</span><span id="line-96"></span><span id="qdStepTime"><span class="annot"><span class="annottext">qdStepTime :: QuantityDict
+</span><span id="line-98"></span><span id="qdStepTime"><span class="annot"><span class="annottext">qdStepTime :: QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdStepTime"><span class="hs-identifier hs-var hs-var">qdStepTime</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#ipStepTime"><span class="hs-identifier hs-var">ipStepTime</span></a></span><span>
-</span><span id="line-97"></span><span>
-</span><span id="line-98"></span><span id="ipSimTime"><span class="annot"><span class="annottext">ipSimTime :: ConstrConcept
+</span><span id="line-99"></span><span>
+</span><span id="line-100"></span><span id="ipSimTime"><span class="annot"><span class="annottext">ipSimTime :: ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#ipSimTime"><span class="hs-identifier hs-var hs-var">ipSimTime</span></a></span></span><span>
-</span><span id="line-99"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+</span><span id="line-101"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
 forall c.
 (Concept c, MayHaveUnit c, Quantity c) =&gt;
 c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
@@ -435,7 +439,7 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><a href="Drasil.PDController.Unitals.html#symTSim"><span class="hs-identifier hs-var">symTSim</span></a></span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">second</span></span><span class="hs-special">)</span><span>
-</span><span id="line-100"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
+</span><span id="line-102"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
 </span><span class="hs-identifier hs-var">physRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -450,11 +454,11 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">60</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-101"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span id="line-103"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">10</span></span><span class="hs-special">)</span><span>
-</span><span id="line-102"></span><span id="ipSimTimeUnc"><span class="annot"><span class="annottext">ipSimTimeUnc :: UncertQ
+</span><span id="line-104"></span><span id="ipSimTimeUnc"><span class="annot"><span class="annottext">ipSimTimeUnc :: UncertQ
 </span><a href="Drasil.PDController.Unitals.html#ipSimTimeUnc"><span class="hs-identifier hs-var hs-var">ipSimTimeUnc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Uncertainty -&gt; UncertQ
 forall c.
 (Quantity c, Constrained c, Concept c, HasReasVal c,
@@ -463,15 +467,13 @@ c -&gt; Uncertainty -&gt; UncertQ
 </span><span class="hs-identifier hs-var">uq</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#ipSimTime"><span class="hs-identifier hs-var">ipSimTime</span></a></span><span> </span><span class="annot"><span class="annottext">Uncertainty
 </span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
-</span><span id="line-103"></span><span id="qdSimTime"><span class="annot"><span class="annottext">qdSimTime :: QuantityDict
+</span><span id="line-105"></span><span id="qdSimTime"><span class="annot"><span class="annottext">qdSimTime :: QuantityDict
 </span><a href="Drasil.PDController.Unitals.html#qdSimTime"><span class="hs-identifier hs-var hs-var">qdSimTime</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#ipSimTime"><span class="hs-identifier hs-var">ipSimTime</span></a></span><span>
-</span><span id="line-104"></span><span>
-</span><span id="line-105"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#odeAbsTolConst"><span class="hs-identifier hs-type">odeAbsTolConst</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#odeRelTolConst"><span class="hs-identifier hs-type">odeRelTolConst</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstQDef</span></span><span>
 </span><span id="line-106"></span><span>
-</span><span id="line-107"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#dqdAbsTol"><span class="hs-identifier hs-type">dqdAbsTol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#dqdRelTol"><span class="hs-identifier hs-type">dqdRelTol</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span>
+</span><span id="line-107"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#odeAbsTolConst"><span class="hs-identifier hs-type">odeAbsTolConst</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#odeRelTolConst"><span class="hs-identifier hs-type">odeRelTolConst</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstQDef</span></span><span>
 </span><span id="line-108"></span><span>
 </span><span id="line-109"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#pidConstants"><span class="hs-identifier hs-type">pidConstants</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstQDef</span></span><span class="hs-special">]</span><span>
 </span><span id="line-110"></span><span id="pidConstants"><span class="annot"><span class="annottext">pidConstants :: [ConstQDef]
@@ -710,30 +712,20 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span id="line-177"></span><span>      </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span>
 </span><span id="line-178"></span><span>
-</span><span id="line-179"></span><span id="qdStiffnessCoeff"><span class="annot"><span class="annottext">qdStiffnessCoeff :: QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdStiffnessCoeff"><span class="hs-identifier hs-var hs-var">qdStiffnessCoeff</span></a></span></span><span>
-</span><span id="line-180"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
--&gt; NP
--&gt; Symbol
--&gt; Space
--&gt; Maybe UnitDefn
--&gt; Maybe String
--&gt; QuantityDict
-</span><span class="hs-identifier hs-var">mkQuant</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;qdTimeConst&quot;</span></span><span>
-</span><span id="line-181"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
-</span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Stiffness coefficient of the spring&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-182"></span><span>      </span><span class="annot"><span class="annottext">Symbol
+</span><span id="line-179"></span><span class="hs-comment">-- TODO: Create a separate description for the stiffness coefficient to state</span><span>
+</span><span id="line-180"></span><span class="hs-comment">-- that it is the &quot;stiffness coefficient of the spring&quot; (#4275)</span><span>
+</span><span id="line-181"></span><span id="dqdStiffnessCoeff"><span class="annot"><span class="annottext">dqdStiffnessCoeff :: DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdStiffnessCoeff"><span class="hs-identifier hs-var hs-var">dqdStiffnessCoeff</span></a></span></span><span>
+</span><span id="line-182"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; DefinedQuantityDict
+forall u.
+IsUnit u =&gt;
+ConceptChunk -&gt; Symbol -&gt; Space -&gt; u -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqd</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#ccStiffCoeff"><span class="hs-identifier hs-var">ccStiffCoeff</span></a></span><span>
+</span><span id="line-183"></span><span>      </span><span class="annot"><span class="annottext">Symbol
 </span><a href="Drasil.PDController.Unitals.html#symStifnessCoeff"><span class="hs-identifier hs-var">symStifnessCoeff</span></a></span><span>
-</span><span id="line-183"></span><span>      </span><span class="annot"><span class="annottext">Space
+</span><span id="line-184"></span><span>      </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span>
-</span><span id="line-184"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn -&gt; Maybe UnitDefn
-forall a. a -&gt; Maybe a
-</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
-</span><span class="hs-identifier hs-var">second</span></span><span class="hs-special">)</span><span>
-</span><span id="line-185"></span><span>      </span><span class="annot"><span class="annottext">Maybe String
-forall a. Maybe a
-</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-185"></span><span>      </span><span class="annot"><span class="annottext">UnitDefn
+</span><span class="hs-identifier hs-var">second</span></span><span>
 </span><span id="line-186"></span></pre></body></html>

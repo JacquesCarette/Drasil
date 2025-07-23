@@ -17,25 +17,27 @@ module System.Drasil.System
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data System
-[SI] :: (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
+[SI] :: (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
 data SystemKind
 Specification :: SystemKind
 RunnableSoftware :: SystemKind
 Notebook :: SystemKind
 Website :: SystemKind
-class HasSystem c_a8SZ
-system :: HasSystem c_a8SZ => Lens' c_a8SZ System
-authors :: HasSystem c_a8SZ => Lens' c_a8SZ People
-background :: HasSystem c_a8SZ => Lens' c_a8SZ Background
-configFiles :: HasSystem c_a8SZ => Lens' c_a8SZ [String]
-constants :: HasSystem c_a8SZ => Lens' c_a8SZ [ConstQDef]
-datadefs :: HasSystem c_a8SZ => Lens' c_a8SZ [DataDefinition]
-instModels :: HasSystem c_a8SZ => Lens' c_a8SZ [InstanceModel]
-kind :: HasSystem c_a8SZ => Lens' c_a8SZ SystemKind
-motivation :: HasSystem c_a8SZ => Lens' c_a8SZ Motivation
-purpose :: HasSystem c_a8SZ => Lens' c_a8SZ Purpose
-scope :: HasSystem c_a8SZ => Lens' c_a8SZ Scope
-systemdb :: HasSystem c_a8SZ => Lens' c_a8SZ ChunkDB
+class HasSystem c_a8Un
+system :: HasSystem c_a8Un => Lens' c_a8Un System
+authors :: HasSystem c_a8Un => Lens' c_a8Un People
+background :: HasSystem c_a8Un => Lens' c_a8Un Background
+configFiles :: HasSystem c_a8Un => Lens' c_a8Un [String]
+constants :: HasSystem c_a8Un => Lens' c_a8Un [ConstQDef]
+dataDefns :: HasSystem c_a8Un => Lens' c_a8Un [DataDefinition]
+genDefns :: HasSystem c_a8Un => Lens' c_a8Un [GenDefn]
+instModels :: HasSystem c_a8Un => Lens' c_a8Un [InstanceModel]
+kind :: HasSystem c_a8Un => Lens' c_a8Un SystemKind
+motivation :: HasSystem c_a8Un => Lens' c_a8Un Motivation
+purpose :: HasSystem c_a8Un => Lens' c_a8Un Purpose
+scope :: HasSystem c_a8Un => Lens' c_a8Un Scope
+systemdb :: HasSystem c_a8Un => Lens' c_a8Un ChunkDB
+theoryModels :: HasSystem c_a8Un => Lens' c_a8Un [TheoryModel]
 whatsTheBigIdea :: System -> IdeaDict
 
 -- | Project Example purpose.
@@ -57,25 +59,27 @@ module System.Drasil
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data System
-[SI] :: (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [InstanceModel] -> [DataDefinition] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
+[SI] :: (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
 data SystemKind
 Specification :: SystemKind
 RunnableSoftware :: SystemKind
 Notebook :: SystemKind
 Website :: SystemKind
-class HasSystem c_a8SZ
-system :: HasSystem c_a8SZ => Lens' c_a8SZ System
-authors :: HasSystem c_a8SZ => Lens' c_a8SZ People
-background :: HasSystem c_a8SZ => Lens' c_a8SZ Background
-configFiles :: HasSystem c_a8SZ => Lens' c_a8SZ [String]
-constants :: HasSystem c_a8SZ => Lens' c_a8SZ [ConstQDef]
-datadefs :: HasSystem c_a8SZ => Lens' c_a8SZ [DataDefinition]
-instModels :: HasSystem c_a8SZ => Lens' c_a8SZ [InstanceModel]
-kind :: HasSystem c_a8SZ => Lens' c_a8SZ SystemKind
-motivation :: HasSystem c_a8SZ => Lens' c_a8SZ Motivation
-purpose :: HasSystem c_a8SZ => Lens' c_a8SZ Purpose
-scope :: HasSystem c_a8SZ => Lens' c_a8SZ Scope
-systemdb :: HasSystem c_a8SZ => Lens' c_a8SZ ChunkDB
+class HasSystem c_a8Un
+system :: HasSystem c_a8Un => Lens' c_a8Un System
+authors :: HasSystem c_a8Un => Lens' c_a8Un People
+background :: HasSystem c_a8Un => Lens' c_a8Un Background
+configFiles :: HasSystem c_a8Un => Lens' c_a8Un [String]
+constants :: HasSystem c_a8Un => Lens' c_a8Un [ConstQDef]
+dataDefns :: HasSystem c_a8Un => Lens' c_a8Un [DataDefinition]
+genDefns :: HasSystem c_a8Un => Lens' c_a8Un [GenDefn]
+instModels :: HasSystem c_a8Un => Lens' c_a8Un [InstanceModel]
+kind :: HasSystem c_a8Un => Lens' c_a8Un SystemKind
+motivation :: HasSystem c_a8Un => Lens' c_a8Un Motivation
+purpose :: HasSystem c_a8Un => Lens' c_a8Un Purpose
+scope :: HasSystem c_a8Un => Lens' c_a8Un Scope
+systemdb :: HasSystem c_a8Un => Lens' c_a8Un ChunkDB
+theoryModels :: HasSystem c_a8Un => Lens' c_a8Un [TheoryModel]
 whatsTheBigIdea :: System -> IdeaDict
 
 -- | Project Example purpose.

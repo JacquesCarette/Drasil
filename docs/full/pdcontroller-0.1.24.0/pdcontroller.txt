@@ -156,7 +156,9 @@ qdCtrlVarTD :: QuantityDict
 qdStepTime :: QuantityDict
 qdSimTime :: QuantityDict
 qdDampingCoeff :: QuantityDict
-qdStiffnessCoeff :: QuantityDict
+dqdAbsTol :: DefinedQuantityDict
+dqdRelTol :: DefinedQuantityDict
+dqdStiffnessCoeff :: DefinedQuantityDict
 inputs :: [QuantityDict]
 outputs :: [QuantityDict]
 inputsUC :: [UncertQ]
@@ -174,8 +176,6 @@ ipStepTimeUnc :: UncertQ
 ipSimTimeUnc :: UncertQ
 odeAbsTolConst :: ConstQDef
 odeRelTolConst :: ConstQDef
-dqdAbsTol :: DefinedQuantityDict
-dqdRelTol :: DefinedQuantityDict
 pidConstants :: [ConstQDef]
 pidDqdConstants :: [DefinedQuantityDict]
 

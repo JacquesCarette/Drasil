@@ -19,7 +19,7 @@ import Data.Drasil.Units.PhysicalProperties (densityU)
 import qualified Data.Drasil.Units.Thermodynamics as UT (heatTransferCoef,
   heatCapSpec, thermalFlux, volHtGenU)
 
-import Drasil.SWHS.Concepts (water)
+import Drasil.SWHS.Concepts (water, phsChgMtrl)
 
 import Control.Lens ((^.))
 

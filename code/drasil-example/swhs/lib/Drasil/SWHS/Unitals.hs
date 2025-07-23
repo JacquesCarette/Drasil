@@ -486,12 +486,12 @@ arMax = mkQuantDef aspectRatioMax $ exactDbl 100
 -- Used in Constraint 5
 pcmDensityMin = mkQuantDef (ucStaged' "pcmDensityMin"
   (nounPhraseSP "minimum density of PCM") 
-  (S "the minimum density of the" +:+ phsChgMtrl) (staged (supMin (eqSymb pcmDensity)) 
+  (S "the minimum density of the" +:+ phrase phsChgMtrl) (staged (supMin (eqSymb pcmDensity)) 
   (subMin (unicodeConv $ eqSymb pcmDensity))) Real densityU) $ exactDbl 500
 
 pcmDensityMax = mkQuantDef (ucStaged' "pcmDensityMax"
   (nounPhraseSP "maximum density of PCM")
-  (S"the maximum density of the" +:+ phsChgMtrl) (staged (supMax (eqSymb pcmDensity)) 
+  (S"the maximum density of the" +:+ phrase phsChgMtrl) (staged (supMax (eqSymb pcmDensity)) 
   (subMax (unicodeConv $ eqSymb pcmDensity))) Real densityU) $ exactDbl 20000
 
 -- Used in Constraint 7

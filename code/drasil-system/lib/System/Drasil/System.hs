@@ -12,7 +12,7 @@ module System.Drasil.System (
   -- ** Lenses
   HasSystem(..),
   -- ** Functions
-  whatsTheBigIdea,
+  whatsTheBigIdea, mkSystem,
   -- * Reference Database
   -- ** Types
   Purpose, Background, Scope, Motivation,
@@ -84,3 +84,13 @@ data System where
   } -> System
 
 makeClassy ''System
+
+mkSystem :: (CommonIdea a, Idea a,
+  Quantity e, Eq e, MayHaveUnit e,
+  Quantity h, MayHaveUnit h,
+  Quantity i, MayHaveUnit i,
+  HasUID j, Constrained j) =>
+  a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation ->
+    [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
+    [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
+mkSystem = SI

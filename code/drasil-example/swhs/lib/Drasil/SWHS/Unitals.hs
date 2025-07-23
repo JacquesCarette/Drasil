@@ -501,8 +501,7 @@ htCapSPMin = mkQuantDef (uc' "htCapSPMin"
 
 htCapSPMax = mkQuantDef (uc' "htCapSPMax"
   (nounPhraseSP "maximum specific heat capacity of PCM as a solid")
-  (S "the maximum
-  " +:+ phrase heatCapSpec `S.ofThe` phrase phsChgMtrl +:+ S "as a solid")
+  (S "the maximum" +:+ phrase heatCapSpec `S.ofThe` phrase phsChgMtrl +:+ S "as a solid")
   (subMax (eqSymb htCapSP)) Real UT.heatCapSpec) $ exactDbl 4000
 
 -- Used in Constraint 8

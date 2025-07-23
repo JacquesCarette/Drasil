@@ -103,6 +103,7 @@ To maintain a clean, understandable project history and improve collaboration, p
       2. Update
       3. more edits
   - Of course, these messages should line up with what was actually changed
+- *Acknowledge your co-authors!* Each commit declares who submitted the work. For example, [130e76](https://github.com/JacquesCarette/Drasil/commit/130e76ed4246989765cf1b7440ccadb7f226df2b.patch) shows that Jason wrote the commit (see the “From” field). Normally, we assume that Jason wrote this code himself as well. For situations where this isn't true, such as in [8deb7c](https://github.com/JacquesCarette/Drasil/commit/8deb7caf8442b90a1fa56f1926e2d44a378230a4.patch), we should note each contributor by appending a new line in the format "Co-Authored-By: X <X's email>" to the end of the commit message. If multiple authors exist, you should append one new line in that format for each contributor.
 - Properly syncing with `main`
   - Syncing with `main` regularly can be a very good thing due to the existance of stable artifacts checked into the repo, when done correctly
     1. Avoid using `merge`, it results in many merge commits making the commit history very "noisy"

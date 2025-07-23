@@ -71,26 +71,14 @@ data FolderLocation = Folder {
 
 -- | System information.
 si :: FolderLocation -> System
-si fl = SI {
-    _sys          = webName,
-    _kind         = Website,
-    _authors      = [] :: [Person],
-    _quants       = [] :: [QuantityDict],
-    _purpose      = [],
-    _background   = [],
-    _motivation   = [],
-    _scope        = [],
-    _theoryModels = [],
-    _genDefns     = [],
-    _instModels   = [],
-    _dataDefns    = [],
-    _configFiles  = [],
-    _inputs       = [] :: [QuantityDict],
-    _outputs      = [] :: [QuantityDict],
-    _constraints  = [] :: [ConstrainedChunk],
-    _constants    = [] :: [ConstQDef],
-    _systemdb     = symbMap fl
-  }
+si fl = mkSystem
+  webName Website []
+  [] [] [] []
+  ([] :: [QuantityDict])
+  [] [] [] []
+  []
+  ([] :: [QuantityDict]) ([] :: [QuantityDict]) ([] :: [ConstrConcept]) []
+  (symbMap fl)
 
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.
 sections :: FolderLocation -> [Section]

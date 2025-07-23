@@ -5,6 +5,7 @@
 
 module Drasil.Template.Body where
 
+import System.Drasil (SystemKind(Specification), mkSystem)
 import Drasil.Metadata
 import Language.Drasil
 import Drasil.SRSDocument
@@ -20,7 +21,6 @@ import Data.Drasil.Software.Products
 import Data.Drasil.Citations
 import Drasil.DocumentLanguage.TraceabilityGraph
 import Drasil.DocLang (tunitNone)
-import System.Drasil (SystemKind(Specification))
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -84,26 +84,14 @@ mkSRS = [TableOfContents,
   Bibliography]
 
 si :: System
-si = SI {
-  _sys          = progName,
-  _kind         = Specification,
-  _authors      = [authorName],
-  _background   = [],
-  _purpose      = [],
-  _motivation   = [],
-  _scope        = [],
-  _quants       = [] :: [QuantityDict],
-  _theoryModels = [],
-  _genDefns     = [],
-  _instModels   = [] :: [InstanceModel],
-  _dataDefns    = [] :: [DataDefinition],
-  _configFiles  = [],
-  _inputs       = [] :: [QuantityDict],
-  _outputs      = [] :: [QuantityDict],
-  _constraints  = [] :: [ConstrainedChunk],
-  _constants    = [] :: [ConstQDef],
-  _systemdb     = symbMap
-}
+si = mkSystem
+  progName Specification [authorName]
+  [] [] [] []
+  ([] :: [QuantityDict])
+  ([] :: [TheoryModel]) ([] :: [GenDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
+  []
+  ([] :: [QuantityDict]) ([] :: [QuantityDict]) ([] :: [ConstrainedChunk]) ([] :: [ConstQDef])
+  symbMap
 
 ideaDicts :: [IdeaDict]
 ideaDicts =

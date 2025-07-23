@@ -41,7 +41,7 @@ import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
 import Drasil.PDController.ODEs (pidODEInfo)
 import Language.Drasil.Code (quantvar)
 
-import System.Drasil (SystemKind(Specification))
+import System.Drasil (SystemKind(Specification), mkSystem)
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
@@ -97,26 +97,14 @@ mkSRS
      TraceabilitySec $ TraceabilityProg $ traceMatStandard si, Bibliography]
 
 si :: System
-si = SI {
-  _sys = progName,
-  _kind = Specification,
-  _authors = [naveen],
-  _purpose = [purp],
-  _background  = [background],
-  _motivation  = [motivation],
-  _scope       = [scope],
-  _quants = symbolsAll,
-  _theoryModels = theoreticalModels,
-  _genDefns = genDefns,
-  _instModels = instanceModels,
-  _dataDefns = dataDefinitions,
-  _configFiles = [],
-  _inputs = inputs,
-  _outputs = outputs,
-  _constraints = map cnstrw inpConstrained,
-  _constants = pidConstants,
-  _systemdb = symbMap
-}
+si = mkSystem
+  progName Specification [naveen]
+  [purp] [background] [scope] [motivation]
+  symbolsAll
+  theoreticalModels genDefns dataDefinitions instanceModels
+  []
+  inputs outputs (map cnstrw inpConstrained)
+  pidConstants symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "provide a model" `S.ofA` phrase pidC,

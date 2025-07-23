@@ -1,16 +1,16 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.Body (srs, si, symbMap, printSetting, fullSI) where
 
+import Prelude hiding (sin, cos, tan)
+
 import Control.Lens ((^.))
 
+import System.Drasil (SystemKind(Specification), mkSystem)
 import Language.Drasil hiding (Verb, number, organization, section, variable)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
 import Theory.Drasil (output)
-
-import Prelude hiding (sin, cos, tan)
-
 import Drasil.Metadata (inModel)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -54,8 +54,6 @@ import Drasil.SSP.TMods (tMods)
 import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
   inputs, inputsWUncrtn, outputs, symbols)
 
-import System.Drasil (SystemKind(Specification))
-
 --Document Setup--
 
 srs :: Document
@@ -71,26 +69,14 @@ resourcePath :: String
 resourcePath = "../../../../datafiles/ssp/"
 
 si :: System
-si = SI {
-  _sys          = progName, 
-  _kind         = Specification,
-  _authors      = [henryFrankis, brooks],
-  _purpose      = [purp],
-  _background   = [],
-  _motivation   = [],
-  _scope        = [],
-  _quants       = symbols,
-  _theoryModels = tMods,
-  _genDefns     = generalDefinitions, 
-  _instModels   = iMods,
-  _dataDefns    = dataDefs,
-  _configFiles  = [],
-  _inputs       = map qw inputs,
-  _outputs      = map qw outputs,
-  _constraints  = constrained,
-  _constants    = [],
-  _systemdb     = symbMap
-}
+si = mkSystem
+  progName Specification [henryFrankis, brooks]
+  [purp] [] [] []
+  symbols
+  tMods generalDefinitions dataDefs iMods
+  []
+  inputs outputs constrained []
+  symbMap
   
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,

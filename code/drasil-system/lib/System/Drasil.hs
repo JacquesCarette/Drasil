@@ -5,7 +5,7 @@ module System.Drasil (
   -- ** Lenses
   HasSystem(..),
   -- ** Functions
-  whatsTheBigIdea,
+  whatsTheBigIdea, mkSystem,
   -- * Reference Database
   -- ** Types
   Purpose, Background, Scope, Motivation,

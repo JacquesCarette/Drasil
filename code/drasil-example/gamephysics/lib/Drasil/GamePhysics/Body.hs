@@ -42,7 +42,7 @@ import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
 import Drasil.GamePhysics.GenDefs (generalDefns)
 
-import System.Drasil (SystemKind(Specification))
+import System.Drasil (SystemKind(Specification), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize short) si
@@ -96,30 +96,16 @@ mkSRS = [TableOfContents,
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
 
 si :: System
-si = SI {
-  _sys          = progName,
-  _kind         = Specification,
-  _authors      = [alex, luthfi, olu],
-  _purpose      = [purp],
-  _background   = [],
-  _motivation   = [],
-  _scope        = [],
+si = mkSystem progName Specification [alex, luthfi, olu]
+  [purp] [] [] [] ([] :: [QuantityDict])
   -- FIXME: The _quants field should be filled in with all the symbols, however
   -- #1658 is why this is empty, otherwise we end up with unused (and probably
   -- should be removed) symbols. But that's for another time. This is "fine"
   -- because _quants are only used relative to #1658.
-  _quants       = [] :: [QuantityDict],
-  _theoryModels = tMods,
-  _genDefns     = generalDefns,
-  _instModels   = iMods,
-  _dataDefns    = dataDefs,
-  _configFiles  = [],
-  _inputs       = inputSymbols,
-  _outputs      = outputSymbols, 
-  _constraints  = inputConstraints,
-  _constants    = [],
-  _systemdb     = symbMap
-}
+  tMods generalDefns dataDefs iMods
+  []
+  inputSymbols outputSymbols inputConstraints []
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "simulate", short twoD, phrase CP.rigidBody,

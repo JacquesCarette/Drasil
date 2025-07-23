@@ -47,7 +47,7 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
   sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints)
 
-import System.Drasil (SystemKind(Specification))
+import System.Drasil (SystemKind(Specification), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -59,27 +59,13 @@ printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
 si :: System
-si = SI {
-  _sys          = progName,
-  _kind         = Specification,
-  _authors      = [nikitha, spencerSmith],
-  _purpose      = [purp],
-  _background   = [background],
-  _motivation   = [],
-  _scope        = [scope],
-  _quants       = symbolsForSymbolTable,
-  _theoryModels = tMods,
-  _genDefns     = [],
-  _instModels   = iMods,
-  _dataDefns    = GB.dataDefs,
-  _configFiles  = configFp,
-  _inputs       = inputs,
-  _outputs      = outputs,
-  _constraints  = constrained,
-  _constants    = constants,
-  _systemdb     = symbMap
-}
-  --FIXME: All named ideas, not just acronyms.
+si = mkSystem progName Specification
+  [nikitha, spencerSmith] [purp] [background] [scope] []
+  symbolsForSymbolTable
+  tMods [] GB.dataDefs iMods
+  configFp
+  inputs outputs constrained constants
+  symbMap
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,

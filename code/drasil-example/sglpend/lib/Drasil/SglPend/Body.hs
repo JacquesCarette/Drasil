@@ -42,7 +42,7 @@ import Drasil.SglPend.GenDefs (genDefns)
 import Drasil.SglPend.Unitals (inputs, outputs, inConstraints, outConstraints, symbols)
 import Drasil.SglPend.Requirements (funcReqs)
 
-import System.Drasil (SystemKind(Specification))
+import System.Drasil (SystemKind(Specification), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -101,26 +101,13 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
   ]
 
 si :: System
-si = SI {
-  _sys          = progName, 
-  _kind         = Specification,
-  _authors      = [olu],
-  _purpose      = [purp],
-  _background   = [],
-  _scope        = [],
-  _motivation   = [],
-  _quants       = symbols,
-  _theoryModels = tMods,
-  _genDefns     = genDefns,
-  _instModels   = iMods,
-  _dataDefns    = dataDefs,
-  _configFiles  = [],
-  _inputs       = inputs,
-  _outputs      = outputs,
-  _constraints  = inConstraints,
-  _constants    = [] :: [ConstQDef],
-  _systemdb     = symbMap
-}
+si = mkSystem progName Specification [olu]
+  [purp] [] [] []
+  symbols
+  tMods genDefns dataDefs iMods
+  []
+  inputs outputs inConstraints []
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pendulum]

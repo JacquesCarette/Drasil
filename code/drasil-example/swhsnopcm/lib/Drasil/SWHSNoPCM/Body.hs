@@ -66,7 +66,7 @@ import Drasil.SWHSNoPCM.References (citations)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
   specParamValList)
 
-import System.Drasil (SystemKind(Specification))
+import System.Drasil (SystemKind(Specification), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS S.forT si
@@ -162,29 +162,18 @@ stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 si :: System
-si = SI {
-  _sys          = srsSWHS,
-  _kind         = Specification,
-  _authors      = [thulasi],
-  _purpose      = [purp],
-  _background   = [introStartNoPCM],
-  _motivation   = [motivation],
-  _scope        = [scope],
+si = mkSystem
+  srsSWHS Specification [thulasi]
+  [purp] [introStartNoPCM] [scope] [motivation]
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but 
   -- tau does not appear in the document and thus should not be displayed.
-  _quants       = (map qw unconstrained ++ map qw symbolsAll) \\ [qw tau],
-  _theoryModels = tMods,
-  _genDefns     = genDefs,
-  _instModels   = NoPCM.iMods,
-  _dataDefns    = NoPCM.dataDefs,
-  _configFiles  = [],
-  _inputs       = inputs ++ [qw watE], --inputs ++ outputs?
-  _outputs      = map qw [tempW, watE],     --outputs
-  _constraints  = map cnstrw constrained ++ map cnstrw [tempW, watE], --constrained
-  _constants    = piConst : specParamValList,
-  _systemdb     = symbMap
-}
+  ((map qw unconstrained ++ map qw symbolsAll) \\ [qw tau])
+  tMods genDefs NoPCM.dataDefs NoPCM.iMods
+  []
+  (inputs ++ [qw watE]) (map qw [tempW, watE])
+  (map cnstrw constrained ++ map cnstrw [tempW, watE]) (piConst : specParamValList)
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWHT)]

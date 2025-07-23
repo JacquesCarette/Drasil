@@ -6,7 +6,8 @@ import Language.Drasil
 import Language.Drasil.Development
 import Language.Drasil.ModelExpr.Development (meDep)
 
-import Database.Drasil (ChunkDB, defResolve, symbResolve, citationTable)
+import Database.Drasil (ChunkDB, defResolve', symbResolve,
+  citationTable, DomDefn(definition))
 
 import System.Drasil (System, systemdb)
 
@@ -39,12 +40,12 @@ ccss' :: [Sentence] -> [ModelExpr] -> ChunkDB -> [DefinedQuantityDict]
 ccss' s e c = nub $ concatMap (`vars'` c) s ++ concatMap (`vars` c) e
 
 -- | Gets a list of concepts ('ConceptChunk') from a 'Sentence' in order to print.
-concpt :: Sentence -> ChunkDB -> [ConceptChunk]
-concpt a m = map (defResolve m) $ sdep a
+concpt :: Sentence -> ChunkDB -> [Sentence]
+concpt a m = map (definition . defResolve' m) $ sdep a
 
 -- | Gets a list of concepts ('ConceptChunk') from an expression in order to print.
-concpt' :: ModelExpr -> ChunkDB -> [ConceptChunk]
-concpt' a m = map (defResolve m) $ meDep a
+concpt' :: ModelExpr -> ChunkDB -> [Sentence]
+concpt' a m = map (definition . defResolve' m) $ meDep a
 
 -- | Extract bibliography entries for a system.
 citeDB :: System -> BibRef

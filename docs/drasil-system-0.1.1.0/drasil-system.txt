@@ -36,6 +36,7 @@ scope :: HasSystem c_a8SQ => Lens' c_a8SQ Scope
 systemdb :: HasSystem c_a8SQ => Lens' c_a8SQ ChunkDB
 theoryModels :: HasSystem c_a8SQ => Lens' c_a8SQ [TheoryModel]
 whatsTheBigIdea :: System -> IdeaDict
+mkSystem :: (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
 
 -- | Project Example purpose.
 type Purpose = [Sentence]

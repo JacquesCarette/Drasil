@@ -39,6 +39,7 @@ scope :: HasSystem c_a8Un => Lens' c_a8Un Scope
 systemdb :: HasSystem c_a8Un => Lens' c_a8Un ChunkDB
 theoryModels :: HasSystem c_a8Un => Lens' c_a8Un [TheoryModel]
 whatsTheBigIdea :: System -> IdeaDict
+mkSystem :: (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
 
 -- | Project Example purpose.
 type Purpose = [Sentence]
@@ -81,6 +82,7 @@ scope :: HasSystem c_a8Un => Lens' c_a8Un Scope
 systemdb :: HasSystem c_a8Un => Lens' c_a8Un ChunkDB
 theoryModels :: HasSystem c_a8Un => Lens' c_a8Un [TheoryModel]
 whatsTheBigIdea :: System -> IdeaDict
+mkSystem :: (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
 
 -- | Project Example purpose.
 type Purpose = [Sentence]

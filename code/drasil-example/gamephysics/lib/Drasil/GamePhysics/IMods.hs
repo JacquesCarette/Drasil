@@ -41,7 +41,7 @@ transMot = imNoRefs (equationalModel' transMotQD)
   , qwC forcej             $ UpFrom (Exc, exactDbl 0)
   , qwC massj              $ UpFrom (Exc, exactDbl 0)
   ]
-  (qw accj) [] (Just transMotDeriv)
+  (dqdWr accj) [] (Just transMotDeriv)
   "transMot" [transMotDesc, transMotOutputs, rigidTwoDAssump, noDampConsAssumps]
 
 transMotQD :: SimpleQDef
@@ -86,7 +86,7 @@ rotMot = imNoRefs (equationalModel' rotMotQD)
   , qwC torquej         $ UpFrom (Exc, exactDbl 0)
   , qwC momentOfInertia $ UpFrom (Exc, exactDbl 0)
   ]
-  (qw angAccj) [UpFrom (Exc, exactDbl 0)] 
+  (dqdWr angAccj) [UpFrom (Exc, exactDbl 0)] 
   (Just rotMotDeriv) "rotMot"
   [rotMotDesc, rigidTwoDAssump, rightHandAssump]
 
@@ -125,7 +125,7 @@ col2D = imNoDerivNoRefs (equationalModel "col2DIM" col2DNP col2DFD)
   ]
   -- why a constraint on velA if velA is not an output?
   -- (qw timeC) [sy velA $> 0, sy timeC $> 0] "col2D"
-  (qw timeC) [UpFrom (Exc, exactDbl 0)] "col2D"
+  (dqdWr timeC) [UpFrom (Exc, exactDbl 0)] "col2D"
   [col2DOutputs, rigidTwoDAssump, rightHandAssump, collisionAssump,
     noDampConsAssumps, impulseNote]
 

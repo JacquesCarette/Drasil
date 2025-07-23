@@ -123,7 +123,7 @@ ccDampingCoeff
       "Quantity that characterizes a second order system's oscillatory response"
 
 ccStiffCoeff
-  = dcc "stiffnessCoeff" (nounPhraseSP "Stiffness Coefficient")
+  = dcc "stiffnessCoeff" (nounPhraseSP "Stiffness coefficient")
       "Quantity that characterizes a spring's stiffness"
 
 concepts :: [IdeaDict]
@@ -140,5 +140,3 @@ termDefs
   = [pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
      propControl, derControl, ccFrequencyDomain, ccTimeDomain,
      controlVariable, ccTransferFxn, ccDampingCoeff, ccStiffCoeff]
-
-

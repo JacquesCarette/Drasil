@@ -85,7 +85,7 @@ ${K_{\text{d}}}$ & Derivative Gain & --
 \\
 ${K_{\text{p}}}$ & Proportional Gain & --
 \\
-$k$ & Stiffness coefficient of the spring & ${\text{s}}$
+$k$ & Stiffness coefficient & ${\text{s}}$
 \\
 $\mathit{L⁻¹[F(s)]}$ & Inverse Laplace Transform of a function & --
 \\
@@ -242,7 +242,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Control Variable: The Control Variable is the output of the PD controller.}
 \item{Transfer Function: The Transfer Function of a system is the ratio of the output to the input functions in the frequency domain.}
 \item{Damping Coefficient: Quantity that characterizes a second order system's oscillatory response.}
-\item{Stiffness Coefficient: Quantity that characterizes a spring's stiffness.}
+\item{Stiffness coefficient: Quantity that characterizes a spring's stiffness.}
 \item{Simulation Time: Total execution time of the PD simulation.}
 \item{Process Variable: The output value from the power plant.}
 \item{Set-Point: The desired value that the control system must reach. This also knows as the reference variable.}
@@ -295,7 +295,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[Transfer Function:\phantomsection\label{pwrPlantTxFnx}]{The combined Power Plant and Sensor (\hyperref[pwrPlant]{A:Power plant}) are characterized by a Second Order mass-spring-damper System. (RefBy: \hyperref[TM:tmSOSystem]{TM:tmSOSystem}.)}
 \item[Spring Mass:\phantomsection\label{massSpring}]{The mass of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 1 kilogram. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant} and \hyperref[likeChgPP]{LC:DC Gain and Time Constant}.)}
 \item[Spring Damping Coefficient:\phantomsection\label{dampingCoeffSpring}]{The Damping Coefficient of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 1. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant} and \hyperref[likeChgPP]{LC:DC Gain and Time Constant}.)}
-\item[Spring Stiffness Coefficient:\phantomsection\label{stiffnessCoeffSpring}]{The Stiffness Coefficient of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 20. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant} and \hyperref[likeChgPP]{LC:DC Gain and Time Constant}.)}
+\item[Spring Stiffness Coefficient:\phantomsection\label{stiffnessCoeffSpring}]{The Stiffness coefficient of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 20. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant} and \hyperref[likeChgPP]{LC:DC Gain and Time Constant}.)}
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -386,7 +386,7 @@ Description & \begin{symbDescription}
               \item{$m$ is the mass (${\text{kg}}$)}
               \item{$s$ is the Complex frequency-domain parameter (Unitless)}
               \item{$c$ is the Damping coefficient of the spring (Unitless)}
-              \item{$k$ is the Stiffness coefficient of the spring (${\text{s}}$)}
+              \item{$k$ is the Stiffness coefficient (${\text{s}}$)}
               \end{symbDescription}
 \\ \midrule
 Notes & The Transfer Function (from \hyperref[pwrPlantTxFnx]{A:Transfer Function}) of a Second Order System (mass-spring-damper) is characterized by this equation.
@@ -424,7 +424,7 @@ Description & \begin{symbDescription}
               \item{$s$ is the Complex frequency-domain parameter (Unitless)}
               \end{symbDescription}
 \\ \midrule
-Notes & The Transfer Function of the Second Order System (from \hyperref[TM:tmSOSystem]{TM:tmSOSystem}) is reduced to this equation by substituting the mass (m) to 1 Kg (from \hyperref[massSpring]{A:Spring Mass}), the Damping Coefficient ($c$) to 1 (from \hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}), and the Stiffness Coefficient ($k$) to 20 (from \hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}). The equation is converted to the frequency domain by applying the Laplace transform (from \hyperref[TM:laplaceTransform]{TM:laplaceTransform}). Additionally, there are no external disturbances to the power plant (from \hyperref[externalDisturb]{A:External disturbance}).
+Notes & The Transfer Function of the Second Order System (from \hyperref[TM:tmSOSystem]{TM:tmSOSystem}) is reduced to this equation by substituting the mass (m) to 1 Kg (from \hyperref[massSpring]{A:Spring Mass}), the Damping Coefficient ($c$) to 1 (from \hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}), and the Stiffness coefficient ($k$) to 20 (from \hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}). The equation is converted to the frequency domain by applying the Laplace transform (from \hyperref[TM:laplaceTransform]{TM:laplaceTransform}). Additionally, there are no external disturbances to the power plant (from \hyperref[externalDisturb]{A:External disturbance}).
         
 \\ \midrule
 Source & \cite{pidWiki} and \cite{abbasi2015}
@@ -742,7 +742,7 @@ This section provides the non-functional requirements, the qualities that the so
 This section lists the likely changes to be made to the software.
 
 \begin{description}[font=\normalfont]
-\item[DC Gain and Time Constant:\phantomsection\label{likeChgPP}]{The mass, Damping Coefficient and the Stiffness Coefficient may be changed to be supplied by the user (from \hyperref[massSpring]{A:Spring Mass}, \hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}, and \hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}).}
+\item[DC Gain and Time Constant:\phantomsection\label{likeChgPP}]{The mass, Damping Coefficient and the Stiffness coefficient may be changed to be supplied by the user (from \hyperref[massSpring]{A:Spring Mass}, \hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}, and \hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}).}
 \end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}

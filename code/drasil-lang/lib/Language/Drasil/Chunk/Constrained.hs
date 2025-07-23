@@ -2,8 +2,6 @@
 -- | Add constraints and a reasonable value to chunks that are quantities.
 module Language.Drasil.Chunk.Constrained (
   -- * Constrained Chunks
-  -- ** From an Idea
-  ConstrainedChunk(..), cvc, cnstrw,
   -- ** From a Concept
   ConstrConcept(..),
   cnstrw', constrained', constrainedNRV', cuc', cuc'', cucNoUnit') where
@@ -12,7 +10,6 @@ import Control.Lens ((^.), makeLenses, view)
 
 import Language.Drasil.Chunk.Concept (cw, dcc, dccWDS)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', dqdWr, dqdNoUnit)
-import Language.Drasil.Chunk.Quantity (QuantityDict, qw, vc)
 import Language.Drasil.Chunk.Unital (uc')
 import Language.Drasil.Symbol (HasSymbol(..), Symbol)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
@@ -27,46 +24,6 @@ import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage)
 import Drasil.Database.UID (HasUID(..))
-
--- | ConstrainedChunks are symbolic quantities ('QuantityDict')
--- with 'Constraint's and maybe a typical value ('Maybe' 'Expr').
---
--- Ex. Measuring the length of a pendulum would have some reasonable value (between 1 cm and 2 m)
--- and the constraint that the length cannot be a negative value.
-data ConstrainedChunk = ConstrainedChunk { _qd     :: QuantityDict
-                                         , _constr :: [ConstraintE]
-                                         , _reasV  :: Maybe Expr
-                                         }
-makeLenses ''ConstrainedChunk
-
--- | Finds 'UID' of the 'QuantityDict' used to make the 'ConstrainedChunk'.
-instance HasUID        ConstrainedChunk where uid = qd . uid
--- | Finds term ('NP') of the 'QuantityDict' used to make the 'ConstrainedChunk'.
-instance NamedIdea     ConstrainedChunk where term = qd . term
--- | Finds the idea contained in the 'QuantityDict' used to make the 'ConstrainedChunk'.
-instance Idea          ConstrainedChunk where getA = getA . view qd
--- | Finds the 'Space' of the 'QuantityDict' used to make the 'ConstrainedChunk'.
-instance HasSpace      ConstrainedChunk where typ = qd . typ
--- | Finds the 'Symbol' of the 'QuantityDict' used to make the 'ConstrainedChunk'.
-instance HasSymbol     ConstrainedChunk where symbol c = symbol (c^.qd)
--- | 'ConstrainedChunk's have a 'Quantity'. 
-instance Quantity      ConstrainedChunk where
--- | Finds the 'Constraint's of a 'ConstrainedChunk'.
-instance Constrained   ConstrainedChunk where constraints = constr
--- | Finds a reasonable value for the 'ConstrainedChunk'.
-instance HasReasVal    ConstrainedChunk where reasVal     = reasV
--- | Equal if 'UID's are equal.
-instance Eq            ConstrainedChunk where c1 == c2 = (c1 ^. qd . uid) == (c2 ^. qd . uid)
--- | Finds units contained in the 'QuantityDict' used to make the 'ConstrainedChunk'.
-instance MayHaveUnit   ConstrainedChunk where getUnit = getUnit . view qd
-
--- | Creates a constrained unitary chunk from a 'UID', term ('NP'), 'Symbol', 'Space', 'Constraint's, and a 'Maybe' 'Expr' (Similar to 'cuc' but no units).
-cvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Maybe Expr -> ConstrainedChunk
-cvc i des sym space = ConstrainedChunk (qw (vc i des sym space))
-
--- | Creates a new ConstrainedChunk from either a 'ConstrainedChunk', 'ConstrConcept', 'UncertainChunk', or an 'UncertQ'.
-cnstrw :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrainedChunk
-cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal)
 
 -- | ConstrConcepts are conceptual symbolic quantities ('DefinedQuantityDict')
 -- with 'Constraint's and maybe a reasonable value (no units!).

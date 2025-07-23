@@ -88,7 +88,7 @@ mkMultiDefn u q s des
 
 -- Should showUID be used here?
 
--- | Smart constructor for 'MultiDefn's defining 'UID's using that of the 'QuantityDict'.
+-- | Smart constructor for 'MultiDefn's defining 'UID's using that of the 'DefinedQuantityDict'.
 mkMultiDefnForQuant :: DefinedQuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
 mkMultiDefnForQuant q = mkMultiDefn (showUID q) q
 

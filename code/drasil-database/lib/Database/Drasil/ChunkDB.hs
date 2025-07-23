@@ -12,7 +12,7 @@ module Database.Drasil.ChunkDB (
     _insmodelTable, _gendefTable, _theoryModelTable, _conceptinsTable,
     _citationTable, _labelledcontentTable, _traceTable, _refbyTable, _refTable,
     CDB),
-  TermAbbr(..),
+  TermAbbr(..), DomDefn(..),
   -- ** Maps
   -- | Exported for external use.
   RefbyMap, TraceMap, UMap,
@@ -30,13 +30,14 @@ module Database.Drasil.ChunkDB (
   dataDefnTable, insmodelTable, gendefTable, theoryModelTable,
   conceptinsTable, labelledcontentTable, refTable,
   -- **  Helpers
-  addCdb
+  addCdb, defResolve'
 ) where
 
 import Language.Drasil (HasUID(..), UID, Quantity, MayHaveUnit(..), Idea (..),
   IdeaDict, Concept, ConceptChunk, IsUnit(..), UnitDefn,
   Reference, ConceptInstance, LabelledContent, Citation,
-  nw, cw, unitWrapper, NP, NamedIdea(..), DefinedQuantityDict, dqdWr)
+  nw, cw, unitWrapper, NP, NamedIdea(..), DefinedQuantityDict, dqdWr,
+  Sentence, Definition (defn), ConceptDomain (cdom))
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Control.Lens ((^.), makeLenses)
@@ -140,7 +141,7 @@ data TermAbbr = TermAbbr { longForm :: NP, shortForm :: Maybe String }
 -- and abbreviation.
 termResolve :: (NP -> Maybe String -> c) -> ChunkDB -> UID -> c
 termResolve f db trg
-  | (Just (c, _)) <- Map.lookup trg (termTable db) = go c
+  | (Just (c, _)) <- Map.lookup trg (termTable db)         = go c
   | (Just (c, _)) <- Map.lookup trg (symbolTable db)       = go c
   | (Just (c, _)) <- Map.lookup trg (conceptChunkTable db) = go c
   | (Just (c, _)) <- Map.lookup trg (_unitTable db)        = go c
@@ -164,9 +165,23 @@ refResolve = uMapLookup "Reference" "ReferenceMap"
 unitLookup :: UID -> UnitMap -> UnitDefn
 unitLookup = uMapLookup "Unit" "UnitMap"
 
--- | Looks up a 'UID' in the definition table from the 'ChunkDB'. If nothing is found, an error is thrown.
-defResolve :: ChunkDB -> UID -> ConceptChunk
-defResolve m x = uMapLookup "Concept" "ConceptMap" x $ conceptChunkTable m
+data DomDefn = DomDefn { domain :: [UID], definition :: Sentence}
+
+-- | Looks up a 'UID' in all tables with concepts from the 'ChunkDB'. If nothing is found, an error is thrown.
+defResolve :: ([UID] -> Sentence -> c) -> ChunkDB -> UID -> c
+defResolve f db x
+  | (Just (c, _)) <- Map.lookup x (symbolTable db)       = go c
+  | (Just (c, _)) <- Map.lookup x (conceptChunkTable db) = go c
+  | (Just (c, _)) <- Map.lookup x (_unitTable db)        = go c
+  | (Just (c, _)) <- Map.lookup x (_insmodelTable db)    = go c
+  | (Just (c, _)) <- Map.lookup x (_gendefTable db)      = go c
+  | (Just (c, _)) <- Map.lookup x (_theoryModelTable db) = go c
+  | (Just (c, _)) <- Map.lookup x (_conceptinsTable db)  = go c
+  | otherwise = error $ "Definition: " ++ show x ++ " not found in ConceptMap"
+  where go c = f (cdom c) (c ^. defn)
+
+defResolve' :: ChunkDB -> UID -> DomDefn
+defResolve' = defResolve DomDefn
 
 -- | Looks up a 'UID' in the datadefinition table. If nothing is found, an error is thrown.
 datadefnLookup :: UID -> DatadefnMap -> DataDefinition

@@ -209,7 +209,7 @@
                 </tr>
                 <tr>
                   <td><em>k</em></td>
-                  <td>Stiffness coefficient of the spring</td>
+                  <td>Stiffness coefficient</td>
                   <td><em>s</em></td>
                 </tr>
                 <tr>
@@ -518,7 +518,7 @@
                     Damping Coefficient: Quantity that characterizes a second order system's oscillatory response.
                   </li>
                   <li>
-                    Stiffness Coefficient: Quantity that characterizes a spring's stiffness.
+                    Stiffness coefficient: Quantity that characterizes a spring's stiffness.
                   </li>
                   <li>
                     Simulation Time: Total execution time of the PD simulation.
@@ -649,7 +649,7 @@
                   </p>
                   <p>
                     <div id="stiffnessCoeffSpring">
-                      Spring Stiffness Coefficient: The Stiffness Coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 20. (RefBy: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a> and <a href=#likeChgPP>LC:DC Gain and Time Constant</a>.)
+                      Spring Stiffness Coefficient: The Stiffness coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 20. (RefBy: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a> and <a href=#likeChgPP>LC:DC Gain and Time Constant</a>.)
                     </div>
                   </p>
                 </div>
@@ -796,9 +796,7 @@
                           <li>
                             <em>c</em> is the Damping coefficient of the spring (Unitless)
                           </li>
-                          <li>
-                            <em>k</em> is the Stiffness coefficient of the spring (<em>s</em>)
-                          </li>
+                          <li><em>k</em> is the Stiffness coefficient (<em>s</em>)</li>
                         </ul>
                       </td>
                     </tr>
@@ -864,7 +862,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The Transfer Function of the Second Order System (from <a href=#TM:tmSOSystem>TM:tmSOSystem</a>) is reduced to this equation by substituting the mass (m) to 1 Kg (from <a href=#massSpring>A:Spring Mass</a>), the Damping Coefficient (<em>c</em>) to 1 (from <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>), and the Stiffness Coefficient (<em>k</em>) to 20 (from <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>). The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>). Additionally, there are no external disturbances to the power plant (from <a href=#externalDisturb>A:External disturbance</a>).
+                          The Transfer Function of the Second Order System (from <a href=#TM:tmSOSystem>TM:tmSOSystem</a>) is reduced to this equation by substituting the mass (m) to 1 Kg (from <a href=#massSpring>A:Spring Mass</a>), the Damping Coefficient (<em>c</em>) to 1 (from <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>), and the Stiffness coefficient (<em>k</em>) to 20 (from <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>). The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>). Additionally, there are no external disturbances to the power plant (from <a href=#externalDisturb>A:External disturbance</a>).
                         </p>
                       </td>
                     </tr>
@@ -1425,7 +1423,7 @@
         <div class="list">
           <p>
             <div id="likeChgPP">
-              DC Gain and Time Constant: The mass, Damping Coefficient and the Stiffness Coefficient may be changed to be supplied by the user (from <a href=#massSpring>A:Spring Mass</a>, <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>, and <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>).
+              DC Gain and Time Constant: The mass, Damping Coefficient and the Stiffness coefficient may be changed to be supplied by the user (from <a href=#massSpring>A:Spring Mass</a>, <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>, and <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>).
             </div>
           </p>
         </div>

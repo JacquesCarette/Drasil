@@ -40,16 +40,16 @@ unitSymbs = map ucw [iVect, jVect, normalVect,
 -- TABLE OF SYMBOLS --
 ----------------------
 
-symbolsAll, inputSymbols, outputSymbols :: [QuantityDict]
+symbolsAll, inputSymbols, outputSymbols :: [DefinedQuantityDict]
 
-symbolsAll = map qw unitless ++ map qw unitalSymbols ++ [qw QP.restitutionCoef]
+symbolsAll = unitless ++ map dqdWr unitalSymbols ++ [QP.restitutionCoef]
 
-inputSymbols = map qw [QP.position, QP.velocity, QP.force, QM.orientation, 
+inputSymbols = map dqdWr [QP.position, QP.velocity, QP.force, QM.orientation, 
   QP.angularVelocity, QP.linearVelocity, QP.gravitationalConst, QPP.mass, 
   QPP.len, QP.momentOfInertia, QP.torque, QP.kEnergy, QP.chgInVelocity, QP.potEnergy, QP.fOfGravity, QP.positionVec] ++
-  [qw QP.restitutionCoef]
+  [QP.restitutionCoef]
 
-outputSymbols = map qw [QP.position, QP.velocity, QM.orientation, 
+outputSymbols = map dqdWr [QP.position, QP.velocity, QM.orientation, 
   QP.angularVelocity, QP.chgMomentum, QP.chgInVelocity]
 
 
@@ -300,11 +300,12 @@ lPoint  = label "P"
 -- CHUNKS WITHOUT UNITS --
 --------------------------
 
-unitless :: [QuantityDict]
-unitless = qw QM.pi_ : [numParticles]
+unitless :: [DefinedQuantityDict]
+unitless = QM.pi_ : [numParticles]
 
-numParticles :: QuantityDict
-numParticles = vc "n" (nounPhraseSP "number of particles in a rigid body") lN Integer
+numParticles :: DefinedQuantityDict
+numParticles = dqdNoUnit (dcc "n" (nounPhraseSP "number of particles in a rigid body")
+  "the number of particles in a rigidbody") lN Integer
 
 -----------------------
 -- CONSTRAINT CHUNKS --

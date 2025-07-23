@@ -50,29 +50,29 @@ si = SI {
   _background  = [], 
   _motivation  = [],
   _scope       = [],
-  _quants      = [] :: [QuantityDict],
+  _quants      = [] :: [DefinedQuantityDict],
   _instModels  = [],
   _datadefs    = [],
   _configFiles = [],
-  _inputs      = [] :: [QuantityDict],
-  _outputs     = [] :: [QuantityDict],
-  _constraints = [] :: [ConstrainedChunk],
+  _inputs      = [] :: [DefinedQuantityDict],
+  _outputs     = [] :: [DefinedQuantityDict],
+  _constraints = [] :: [ConstrConcept],
   _constants   = [] :: [ConstQDef],
   _systemdb   = symbMap
 }
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw physicscon ++ symbols) (nw projectileMotion : map nw doccon ++ 
+symbMap = cdb (map dqdWr physicscon ++ symbols) (nw projectileMotion : map nw doccon ++ 
   map nw doccon' ++ map nw physicCon ++ concepts ++ map nw mathcon) 
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] allRefs []
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbols :: [IdeaDict]) ([] :: [ConceptChunk])
+usedDB = cdb ([] :: [DefinedQuantityDict]) (map nw symbols :: [IdeaDict]) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) [] [] [] [] ([] :: [ConceptInstance])
   ([] :: [LabelledContent]) ([] :: [Reference]) []
 
-symbols :: [QuantityDict]
-symbols = [qw horiz_velo]
+symbols :: [DefinedQuantityDict]
+symbols = [dqdWr horiz_velo]
 
 projectileMotion :: CI
 projectileMotion = commonIdea "projectileMotion" (pn "Projectile Motion Lesson") "Projectile Motion" []

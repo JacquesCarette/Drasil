@@ -219,7 +219,7 @@ oldcodeSpec SI.SI{ SI._sys = sys
 
 -- medium hacks ---
 
--- | Convert a 'Func' to an implementation-stage 'QuantityDict' representing the
+-- | Convert a 'Func' to an implementation-stage 'DefinedQuantityDict' representing the
 -- function.
 asVC :: Func -> DefinedQuantityDict
 asVC (FDef (FuncDef n d _ _ _ _)) = dqdNoUnit (dcc n (nounPhraseSP n) d) (Variable n) Real

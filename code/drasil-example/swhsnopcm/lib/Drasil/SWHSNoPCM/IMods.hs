@@ -37,7 +37,7 @@ eBalanceOnWtr :: InstanceModel
 eBalanceOnWtr = im (newDEModel' eBalanceOnWtrRC)
   [qwC tempC $ UpFrom (Inc, sy tempInit)
   , qwUC tempInit, qwUC timeFinal, qwUC coilSA, qwUC coilHTC, qwUC htCapW, qwUC wMass]
-  (qw tempW) []
+  (dqdWr tempW) []
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
   [dRefInfo koothoor2013 $ RefNote "with PCM removed"]
   (Just eBalanceOnWtrDeriv) "eBalanceOnWtr" balWtrNotes

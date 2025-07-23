@@ -92,13 +92,13 @@ si = SI {
   _purpose     = [],
   _motivation  = [],
   _scope       = [],
-  _quants      = [] :: [QuantityDict],
+  _quants      = [] :: [DefinedQuantityDict],
   _instModels  = [] :: [InstanceModel],
   _datadefs    = [] :: [DataDefinition],
   _configFiles = [],
-  _inputs      = [] :: [QuantityDict],
-  _outputs     = [] :: [QuantityDict],
-  _constraints = [] :: [ConstrainedChunk],
+  _inputs      = [] :: [DefinedQuantityDict],
+  _outputs     = [] :: [DefinedQuantityDict],
+  _constraints = [] :: [ConstrConcept],
   _constants   = [] :: [ConstQDef],
   _systemdb   = symbMap
 }
@@ -114,7 +114,7 @@ conceptChunks :: [ConceptChunk]
 conceptChunks = [errMsg, algorithm, program] ++ mathcon ++ srsDomains
 
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [QuantityDict]) ideaDicts conceptChunks
+symbMap = cdb ([] :: [DefinedQuantityDict]) ideaDicts conceptChunks
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
   ([] :: [LabelledContent]) ([] :: [Reference]) citations

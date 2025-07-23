@@ -136,9 +136,9 @@ background = foldlSent_ [phraseNP (a_ pendulum), S "consists" `S.of_` phrase mas
   S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
   S "highly sensitive to initial conditions"]
 
-symbolsAll :: [QuantityDict]
+symbolsAll :: [DefinedQuantityDict]
 symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
-  ++ map qw [listToArray $ quantvar pendDisAngle, arrayVecDepVar dblPenODEInfo]
+  ++ map dqdWr [listToArray $ quantvar pendDisAngle, arrayVecDepVar dblPenODEInfo]
 
 ideaDicts :: [IdeaDict]
 ideaDicts = 
@@ -149,7 +149,7 @@ ideaDicts =
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList = 
-  -- QuantityDict abbreviations
+  -- DefinedQuantityDict abbreviations
   map nw symbols ++
   -- Other acronyms/abbreviations
   nw progName : map nw acronyms
@@ -158,7 +158,7 @@ conceptChunks :: [ConceptChunk]
 conceptChunks = [algorithm, errMsg, program] ++ physicCon ++ mathcon ++ physicalcon ++ srsDomains
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll)
+symbMap = cdb (map (^. output) iMods ++ symbolsAll)
   ideaDicts conceptChunks siUnits
   dataDefs iMods genDefns tMods concIns [] allRefs citations
 

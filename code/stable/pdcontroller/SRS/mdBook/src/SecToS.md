@@ -18,7 +18,7 @@ The symbols used in this document are summarized in the [Table of Symbols](./Sec
 |\\({H\_{\text{s}}}\\)   |Transfer Function in the frequency domain   |--               |
 |\\({K\_{\text{d}}}\\)   |Derivative Gain                             |--               |
 |\\({K\_{\text{p}}}\\)   |Proportional Gain                           |--               |
-|\\(k\\)                 |Stiffness coefficient of the spring         |\\({\text{s}}\\) |
+|\\(k\\)                 |Stiffness coefficient                       |\\({\text{s}}\\) |
 |\\(\mathit{L⁻¹[F(s)]}\\)|Inverse Laplace Transform of a function     |--               |
 |\\(m\\)                 |Mass                                        |\\({\text{kg}}\\)|
 |\\({P\_{\text{s}}}\\)   |Proportional control in the frequency domain|--               |

@@ -111,7 +111,7 @@ si = SI {
   _configFiles = [],
   _inputs = inputs,
   _outputs = outputs,
-  _constraints = map cnstrw inpConstrained,
+  _constraints = map cnstrw' inpConstrained,
   _constants = pidConstants,
   _systemdb = symbMap
 }
@@ -130,10 +130,10 @@ background = foldlSent_ [S "Automatic process control with a controller (P/PI/PD
               S "in a variety of applications such as thermostats, automobile",
               S "cruise-control, etc"]
 
-symbolsAll :: [QuantityDict]
-symbolsAll = symbols ++ map qw pidConstants
+symbolsAll :: [DefinedQuantityDict]
+symbolsAll = symbols ++ map dqdWr pidConstants
   ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
-  ++ map qw [listToArray $ quantvar opProcessVariable, arrayVecDepVar pidODEInfo]
+  ++ map dqdWr [listToArray $ quantvar opProcessVariable, arrayVecDepVar pidODEInfo]
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
@@ -150,7 +150,7 @@ conceptChunks =
   map cw inpConstrained
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw physicscon ++ symbolsAll ++ [qw mass, qw posInf, qw negInf])
+symbMap = cdb (map dqdWr physicscon ++ symbolsAll ++ [dqdWr mass, dqdWr posInf, dqdWr negInf])
   ideaDicts
   conceptChunks
   siUnits

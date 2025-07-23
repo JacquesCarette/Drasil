@@ -46,31 +46,31 @@ funcPrefix = "func_"
 data VarOrFunc = Var | Func
 
 -- | Basic chunk representation in the code generation context.
--- Contains a QuantityDict and the kind of code (variable or function).
+-- Contains a DefinedQuantityDict and the kind of code (variable or function).
 data CodeChunk = CodeC { _qc  :: DefinedQuantityDict
                        , kind :: VarOrFunc  -- TODO: Jason: Once we have function spaces, I believe we won't need to store this
                        }
 makeLenses ''CodeChunk
 
--- | Finds the 'UID' of the 'QuantityDict' used to make the 'CodeChunk'.
+-- | Finds the 'UID' of the 'DefinedQuantityDict' used to make the 'CodeChunk'.
 instance HasUID        CodeChunk where uid = qc . uid
--- | Finds the term ('NP') of the 'QuantityDict' used to make the 'CodeChunk'.
+-- | Finds the term ('NP') of the 'DefinedQuantityDict' used to make the 'CodeChunk'.
 instance NamedIdea     CodeChunk where term = qc . term
--- | Finds the idea contained in the 'QuantityDict' used to make the 'CodeChunk'.
+-- | Finds the idea contained in the 'DefinedQuantityDict' used to make the 'CodeChunk'.
 instance Idea          CodeChunk where getA = getA . view qc
 -- | Finds the Definition contained in the 'DefinedQuantityDict' used to make the CodeChunk
 instance Definition    CodeChunk where defn = qc . defn
 
 instance ConceptDomain CodeChunk where cdom = cdom . view qc
--- | Finds the 'Space' of the 'QuantityDict' used to make the 'CodeChunk'.
+-- | Finds the 'Space' of the 'DefinedQuantityDict' used to make the 'CodeChunk'.
 instance HasSpace      CodeChunk where typ = qc . typ
--- | Finds the 'Stage' dependent 'Symbol' of the 'QuantityDict' used to make the 'CodeChunk'.
+-- | Finds the 'Stage' dependent 'Symbol' of the 'DefinedQuantityDict' used to make the 'CodeChunk'.
 instance HasSymbol     CodeChunk where symbol = symbol . view qc
 -- | 'CodeChunk's have a 'Quantity'.
 instance Quantity      CodeChunk
 -- | Equal if 'UID's are equal.
 instance Eq            CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
--- | Finds the units of the 'QuantityDict' used to make the 'CodeChunk'.
+-- | Finds the units of the 'DefinedQuantityDict' used to make the 'CodeChunk'.
 instance MayHaveUnit   CodeChunk where getUnit = getUnit . view qc
 
 -- | Chunk representing a variable. The @obv@ field represents the object containing 

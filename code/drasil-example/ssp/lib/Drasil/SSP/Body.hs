@@ -72,22 +72,24 @@ resourcePath = "../../../../datafiles/ssp/"
 
 si :: System
 si = SI {
-  _sys         = progName, 
-  _kind        = Specification,
-  _authors     = [henryFrankis, brooks],
-  _purpose     = [purp],
-  _background  = [],
-  _motivation  = [],
-  _scope       = [],
-  _quants      = symbols,
-  _instModels  = iMods,
-  _datadefs    = dataDefs,
-  _configFiles = [],
-  _inputs      = map qw inputs,
-  _outputs     = map qw outputs,
-  _constraints = constrained,
-  _constants   = [],
-  _systemdb   = symbMap
+  _sys          = progName, 
+  _kind         = Specification,
+  _authors      = [henryFrankis, brooks],
+  _purpose      = [purp],
+  _background   = [],
+  _motivation   = [],
+  _scope        = [],
+  _quants       = symbols,
+  _theoryModels = tMods,
+  _genDefns     = generalDefinitions, 
+  _instModels   = iMods,
+  _dataDefns    = dataDefs,
+  _configFiles  = [],
+  _inputs       = map qw inputs,
+  _outputs      = map qw outputs,
+  _constraints  = constrained,
+  _constants    = [],
+  _systemdb     = symbMap
 }
   
 mkSRS :: SRSDecl

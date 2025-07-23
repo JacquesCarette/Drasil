@@ -63,22 +63,24 @@ data System where
   Quantity h, MayHaveUnit h,
   Quantity i, MayHaveUnit i,
   HasUID j, Constrained j) => 
-  { _sys         :: a
-  , _kind        :: SystemKind
-  , _authors     :: People
-  , _purpose     :: Purpose
-  , _background  :: Background
-  , _scope       :: Scope
-  , _motivation  :: Motivation
-  , _quants      :: [e]
-  , _instModels  :: [InstanceModel]
-  , _datadefs    :: [DataDefinition]
-  , _configFiles :: [String]
-  , _inputs      :: [h]
-  , _outputs     :: [i]
-  , _constraints :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
-  , _constants   :: [ConstQDef]
-  , _systemdb   :: ChunkDB
+  { _sys          :: a
+  , _kind         :: SystemKind
+  , _authors      :: People
+  , _purpose      :: Purpose
+  , _background   :: Background
+  , _scope        :: Scope
+  , _motivation   :: Motivation
+  , _quants       :: [e]
+  , _theoryModels :: [TheoryModel]
+  , _genDefns     :: [GenDefn]
+  , _dataDefns    :: [DataDefinition]
+  , _instModels   :: [InstanceModel]
+  , _configFiles  :: [String]
+  , _inputs       :: [h]
+  , _outputs      :: [i]
+  , _constraints  :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
+  , _constants    :: [ConstQDef]
+  , _systemdb     :: ChunkDB
   } -> System
 
 makeClassy ''System

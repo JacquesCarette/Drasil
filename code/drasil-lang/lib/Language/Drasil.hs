@@ -58,6 +58,7 @@ module Language.Drasil (
   , Definition(defn)
   , ConceptDomain(cdom)
   , Concept
+  , DrasilConcept(metaConcept)
   , HasSpace(typ)
   , HasUnitSymbol(usymb)
   , Quantity
@@ -334,9 +335,11 @@ import Language.Drasil.Unicode (RenderSpecial(..), Special(..))
 import Drasil.Database.UID
     (UID, HasUID(..), (+++), (+++.), (+++!), mkUid, nsUid, showUID)
 import Language.Drasil.Symbol (HasSymbol(symbol), Decoration, Symbol)
-import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
-  IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints),
-  HasReasVal(reasVal), DefiningExpr(defnExpr), Quantity, Express(..))
+import Language.Drasil.Classes (Definition(defn), ConceptDomain(cdom),
+  CommonIdea(abrv), Concept, DrasilConcept(metaConcept),
+  HasUnitSymbol(usymb), IsUnit(getUnits),HasAdditionalNotes(getNotes),
+  Constrained(constraints), HasReasVal(reasVal), DefiningExpr(defnExpr),
+  Quantity, Express(..))
 import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader, MayHaveDerivation(..))
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (

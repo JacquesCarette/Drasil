@@ -23,7 +23,7 @@ import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfectInsul,
   charging, discharging)
 import Drasil.SWHS.Unitals (wVol, volHtGen, tempC, tempInit, tempW,
   tempPCM, htCapLP, htCapW, htCapSP, wDensity, pcmDensity, pcmVol)
-  
+
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------

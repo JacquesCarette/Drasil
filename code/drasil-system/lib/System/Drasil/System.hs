@@ -86,9 +86,9 @@ data System where
 makeClassy ''System
 
 mkSystem :: (CommonIdea a, Idea a,
-  Quantity e, Eq e, MayHaveUnit e,
-  Quantity h, MayHaveUnit h,
-  Quantity i, MayHaveUnit i,
+  Quantity e, Eq e, MayHaveUnit e, Concept e,
+  Quantity h, MayHaveUnit h, Concept h,
+  Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
   a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation ->
     [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->

@@ -1,6 +1,7 @@
 module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) where
 
 import Language.Drasil
+import Drasil.Metadata (dataDefn)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -12,7 +13,6 @@ import Data.Drasil.Software.Products (sciCompS)
 import Data.Drasil.ExternalLibraries.ODELibraries
        (apacheODESymbols, arrayVecDepVar, odeintSymbols, osloSymbols,
         scipyODESymbols)
-import qualified Data.Drasil.TheoryConcepts as IDict (dataDefn)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
@@ -41,7 +41,7 @@ import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
 import Drasil.PDController.ODEs (pidODEInfo)
 import Language.Drasil.Code (quantvar)
 
-import System.Drasil (SystemKind(Specification))
+import System.Drasil (SystemKind(Specification), mkSystem)
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
@@ -63,7 +63,7 @@ mkSRS
        IntroProg introPara (phrase progName)
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
-          IOrgSec IDict.dataDefn (SRS.inModel [] [])
+          IOrgSec dataDefn (SRS.inModel [] [])
             (S "The instance model referred as" +:+ refS imPD +:+
                S "provides an"
                +:+ titleize ode +:+ sParen (short ode)
@@ -97,24 +97,14 @@ mkSRS
      TraceabilitySec $ TraceabilityProg $ traceMatStandard si, Bibliography]
 
 si :: System
-si = SI {
-  _sys = progName,
-  _kind = Specification,
-  _authors = [naveen],
-  _purpose = [purp],
-  _background  = [background],
-  _motivation  = [motivation],
-  _scope       = [scope],
-  _quants = symbolsAll,
-  _datadefs = dataDefinitions,
-  _instModels = instanceModels,
-  _configFiles = [],
-  _inputs = inputs,
-  _outputs = outputs,
-  _constraints = map cnstrw' inpConstrained,
-  _constants = pidConstants,
-  _systemdb = symbMap
-}
+si = mkSystem
+  progName Specification [naveen]
+  [purp] [background] [scope] [motivation]
+  symbolsAll
+  theoreticalModels genDefns dataDefinitions instanceModels
+  []
+  inputs outputs (map cnstrw' inpConstrained)
+  pidConstants symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "provide a model" `S.ofA` phrase pidC,

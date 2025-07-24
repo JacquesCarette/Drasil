@@ -1,6 +1,7 @@
 module Drasil.SWHSNoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI) where
 
 import Language.Drasil hiding (section)
+import Drasil.Metadata (inModel)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Theory.Drasil (TheoryModel)
@@ -14,7 +15,6 @@ import Data.Drasil.People (thulasi)
 
 import Data.Drasil.Concepts.Computation (algorithm, inValue)
 import Data.Drasil.Concepts.Documentation as Doc (doccon, doccon', material_, srsDomains, sysCont)
-import Data.Drasil.TheoryConcepts as Doc (inModel)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
@@ -66,7 +66,7 @@ import Drasil.SWHSNoPCM.References (citations)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
   specParamValList)
 
-import System.Drasil (SystemKind(Specification))
+import System.Drasil (SystemKind(Specification), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS S.forT si
@@ -162,27 +162,18 @@ stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 si :: System
-si = SI {
-  _sys         = srsSWHS,
-  _kind        = Specification,
-  _authors     = [thulasi],
-  _purpose     = [purp],
-  _background  = [introStartNoPCM],
-  _motivation  = [motivation],
-  _scope       = [scope],
+si = mkSystem
+  srsSWHS Specification [thulasi]
+  [purp] [introStartNoPCM] [scope] [motivation]
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but 
   -- tau does not appear in the document and thus should not be displayed.
-  _quants      = (map dqdWr unconstrained ++ symbolsAll) \\ [dqdWr tau],
-  _instModels  = NoPCM.iMods,
-  _datadefs    = NoPCM.dataDefs,
-  _configFiles = [],
-  _inputs      = inputs ++ [dqdWr watE], --inputs ++ outputs?
-  _outputs     = [tempW, watE],     --outputs
-  _constraints = map cnstrw' constrained ++ map cnstrw' [tempW, watE], --constrained
-  _constants   = piConst : specParamValList,
-  _systemdb   = symbMap
-}
+  ((map dqdWr unconstrained ++ symbolsAll) \\ [dqdWr tau])
+  tMods genDefs NoPCM.dataDefs NoPCM.iMods
+  []
+  (inputs ++ [dqdWr watE]) [tempW, watE]
+  (map cnstrw' constrained ++ map cnstrw' [tempW, watE]) (piConst : specParamValList)
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWHT)]

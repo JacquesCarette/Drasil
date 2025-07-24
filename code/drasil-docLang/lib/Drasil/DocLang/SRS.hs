@@ -43,7 +43,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption
   scpOfReq, scpOfTheProj, solutionCharSpec, specificsystemdescription,
   stakeholder, sysCont, systemConstraint, termAndDef, terminology, traceyMandG,
   tOfCont, tOfSymb, tOfUnit, userCharacteristic, refMat, abbAcc)
-import qualified Data.Drasil.TheoryConcepts as Doc (dataDefn, genDefn, inModel, thModel)
+import qualified Drasil.Metadata as M (dataDefn, genDefn, inModel, thModel)
 
 
 -- Ordered by appearance in SRS.
@@ -112,13 +112,13 @@ solCharSpec   cs ss = section (titleize Doc.solutionCharSpec)          cs ss sol
 -- | Assumptions section.
 assumpt       cs ss = section (titleize' Doc.assumption)               cs ss assumptLabel
 -- | Theoretical Models section.
-thModel       cs ss = section (titleize' Doc.thModel)                  cs ss thModelLabel
+thModel       cs ss = section (titleize' M.thModel)                  cs ss thModelLabel
 -- | General Definitions section.
-genDefn       cs ss = section (titleize' Doc.genDefn)                  cs ss genDefnLabel
+genDefn       cs ss = section (titleize' M.genDefn)                  cs ss genDefnLabel
 -- | Data Definitions section.
-dataDefn      cs ss = section (titleize' Doc.dataDefn)                 cs ss dataDefnLabel
+dataDefn      cs ss = section (titleize' M.dataDefn)                 cs ss dataDefnLabel
 -- | Instance Models section.
-inModel       cs ss = section (titleize' Doc.inModel)                  cs ss inModelLabel
+inModel       cs ss = section (titleize' M.inModel)                  cs ss inModelLabel
 -- | Data Constraints section.
 datCon        cs ss = section (titleize' Doc.datumConstraint)          cs ss datConLabel
 -- | Properties of a Correct Solution section.
@@ -212,10 +212,10 @@ goalStmtLabel       = makeSecRef "GoalStmt"         $ titleize' Doc.goalStmt
 
 solCharSpecLabel    = makeSecRef "SolCharSpec"      $ titleize  Doc.solutionCharSpec
 assumptLabel        = makeSecRef "Assumps"          $ titleize' Doc.assumption
-thModelLabel        = makeSecRef "TMs"              $ titleize' Doc.thModel
-genDefnLabel        = makeSecRef "GDs"              $ titleize' Doc.genDefn
-dataDefnLabel       = makeSecRef "DDs"              $ titleize' Doc.dataDefn
-inModelLabel        = makeSecRef "IMs"              $ titleize' Doc.inModel
+thModelLabel        = makeSecRef "TMs"              $ titleize' M.thModel
+genDefnLabel        = makeSecRef "GDs"              $ titleize' M.genDefn
+dataDefnLabel       = makeSecRef "DDs"              $ titleize' M.dataDefn
+inModelLabel        = makeSecRef "IMs"              $ titleize' M.inModel
 datConLabel         = makeSecRef "DataConstraints"  $ titleize' Doc.datumConstraint
 corSolPropsLabel    = makeSecRef "CorSolProps"      $ titleize' Doc.propOfCorSol
 

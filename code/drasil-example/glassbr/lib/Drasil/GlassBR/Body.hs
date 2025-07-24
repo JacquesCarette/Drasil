@@ -3,6 +3,7 @@ module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
 import Language.Drasil hiding (organization, section, variable)
+import Drasil.Metadata as M (dataDefn, inModel, thModel)
 import Drasil.SRSDocument
 import Drasil.DocLang (auxSpecSent, termDefnF')
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
@@ -15,7 +16,6 @@ import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
   environment, input_, interface, model, physical, problem, product_,
   software, softwareConstraint, softwareSys, srsDomains, standard, sysCont,
   system, term_, user, value, variable, reference, definition)
-import Data.Drasil.TheoryConcepts as Doc (dataDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics,
   educon)
 import Data.Drasil.Concepts.Math (graph, mathcon, mathcon')
@@ -47,7 +47,7 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
   sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints)
 
-import System.Drasil (SystemKind(Specification))
+import System.Drasil (SystemKind(Specification), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -59,25 +59,13 @@ printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
 si :: System
-si = SI {
-  _sys         = progName,
-  _kind        = Specification,
-  _authors     = [nikitha, spencerSmith],
-  _purpose     = [purp],
-  _background  = [background],
-  _motivation  = [],
-  _scope       = [scope],
-  _quants      = symbolsForSymbolTable,
-  _instModels  = iMods,
-  _datadefs    = GB.dataDefs,
-  _configFiles = configFp,
-  _inputs      = inputs,
-  _outputs     = outputs,
-  _constraints = constrained,
-  _constants   = constants,
-  _systemdb   = symbMap
-}
-  --FIXME: All named ideas, not just acronyms.
+si = mkSystem progName Specification
+  [nikitha, spencerSmith] [purp] [background] [scope] []
+  symbolsForSymbolTable
+  tMods [] GB.dataDefs iMods
+  configFp
+  inputs outputs constrained constants
+  symbMap
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -88,7 +76,7 @@ mkSRS = [TableOfContents,
     [IPurpose $ purpDoc progName Verbose,
      IScope scope,
      IChar [] (undIR ++ appStanddIR) [],
-     IOrgSec Doc.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
+     IOrgSec M.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
   StkhldrSec $
     StkhldrProg
       [Client progName $ phraseNP (a_ company)
@@ -189,7 +177,7 @@ termsAndDescBulletsLoadSubSec = [Nested (atStart load `sDash` capSent (load ^. d
   map tAndDOnly (drop 2 loadTypes)]
 
 solChSpecSubsections :: [CI]
-solChSpecSubsections = [thModel, inModel, Doc.dataDefn, dataConst]
+solChSpecSubsections = [thModel, inModel, dataDefn, dataConst]
 
 --Used in "Values of Auxiliary Constants" Section--
 auxiliaryConstants :: [ConstQDef]

@@ -178,22 +178,21 @@ codeSpec si chs ms = CS {
 -- This function extracts various components (e.g., inputs, outputs, constraints, etc.)
 -- from 'System' to populate the 'OldCodeSpec' structure.
 oldcodeSpec :: SI.System -> Choices -> [Mod] -> OldCodeSpec
-oldcodeSpec SI.SI{ SI._sys = sys
-                   , SI._authors = as
-                   , SI._instModels = ims
-                   , SI._datadefs = ddefs
-                   , SI._configFiles = cfp
-                   , SI._inputs = ins
-                   , SI._outputs = outs
-                   , SI._constraints = cs
-                   , SI._constants = cnsts
-                   , SI._systemdb = db } chs ms =
-  let n = programName sys
+oldcodeSpec sys@SI.SI{ SI._sys = sysIdea
+                 , SI._authors = as
+                 , SI._configFiles = cfp
+                 , SI._inputs = ins
+                 , SI._outputs = outs
+                 , SI._constraints = cs
+                 , SI._constants = cnsts
+                 , SI._systemdb = db } chs ms =
+  let ddefs = sys ^. dataDefns
+      n = programName sysIdea
       inputs' = map quantvar ins
       const' = map qtov (filter ((`Map.notMember` conceptMatch (maps chs)) . (^. uid))
         cnsts)
       derived = map qtov $ getDerivedInputs ddefs inputs' const' db
-      rels = (map qtoc (getEqModQdsFromIm ims ++ mapMaybe qdEFromDD ddefs) \\ derived)
+      rels = (map qtoc (getEqModQdsFromIm (sys ^. instModels) ++ mapMaybe qdEFromDD ddefs) \\ derived)
         ++ mapODE (getODE $ extLibs chs)
       -- TODO: When we have better DEModels, we should be deriving our ODE information
       --       directly from the instance models (ims) instead of directly from the choices.

@@ -5,12 +5,15 @@ module Drasil.Metadata (
     -- * Domains
     module Drasil.Metadata.Domains,
     -- * Supported Software
-    module Drasil.Metadata.SupportedSoftware
+    module Drasil.Metadata.SupportedSoftware,
+    -- * Theory Concepts
+    module Drasil.Metadata.TheoryConcepts
 ) where
 
 import Drasil.Metadata.Domains
 import Drasil.Metadata.Drasil (DrasilMeta(..), drasilMetaCfg)
 import Drasil.Metadata.SupportedSoftware
+import Drasil.Metadata.TheoryConcepts
 
 -- | Drasil metadata.
 drasilMeta :: DrasilMeta

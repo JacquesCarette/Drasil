@@ -3,6 +3,7 @@ module Drasil.DblPend.Body where
 
 import Control.Lens ((^.))
 
+import Drasil.Metadata (inModel)
 import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
@@ -27,7 +28,6 @@ import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
-import Data.Drasil.TheoryConcepts (inModel)
 
 import Drasil.DblPend.Figures (figMotion, sysCtxFig1)
 import Drasil.DblPend.Assumptions (assumpDouble)
@@ -46,7 +46,7 @@ import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
 import Language.Drasil.Code (quantvar)
 import Drasil.DblPend.ODEs (dblPenODEInfo)
 
-import System.Drasil (SystemKind(Specification))
+import System.Drasil (SystemKind(Specification), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -105,24 +105,14 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
   ]
 
 si :: System
-si = SI {
-  _sys         = progName, 
-  _kind        = Specification,
-  _authors     = [dong],
-  _purpose     = [purp],
-  _background  = [background],
-  _motivation  = [motivation],
-  _scope       = [scope],
-  _quants      = symbolsAll,
-  _instModels  = iMods,
-  _datadefs    = dataDefs,
-  _configFiles = [],
-  _inputs      = inputs,
-  _outputs     = outputs,
-  _constraints = inConstraints,
-  _constants   = constants,
-  _systemdb   = symbMap
-}
+si = mkSystem progName Specification [dong]
+  [purp] [background] [scope] [motivation]
+  symbolsAll
+  tMods genDefns dataDefs iMods
+  []
+  inputs outputs inConstraints
+  constants
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum]

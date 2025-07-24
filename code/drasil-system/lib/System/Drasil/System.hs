@@ -12,7 +12,7 @@ module System.Drasil.System (
   -- ** Lenses
   HasSystem(..),
   -- ** Functions
-  whatsTheBigIdea,
+  whatsTheBigIdea, mkSystem,
   -- * Reference Database
   -- ** Types
   Purpose, Background, Scope, Motivation,
@@ -63,22 +63,34 @@ data System where
   Quantity h, MayHaveUnit h, Concept h,
   Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) => 
-  { _sys         :: a
-  , _kind        :: SystemKind
-  , _authors     :: People
-  , _purpose     :: Purpose
-  , _background  :: Background
-  , _scope       :: Scope
-  , _motivation  :: Motivation
-  , _quants      :: [e]
-  , _instModels  :: [InstanceModel]
-  , _datadefs    :: [DataDefinition]
-  , _configFiles :: [String]
-  , _inputs      :: [h]
-  , _outputs     :: [i]
-  , _constraints :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
-  , _constants   :: [ConstQDef]
-  , _systemdb   :: ChunkDB
+  { _sys          :: a
+  , _kind         :: SystemKind
+  , _authors      :: People
+  , _purpose      :: Purpose
+  , _background   :: Background
+  , _scope        :: Scope
+  , _motivation   :: Motivation
+  , _quants       :: [e]
+  , _theoryModels :: [TheoryModel]
+  , _genDefns     :: [GenDefn]
+  , _dataDefns    :: [DataDefinition]
+  , _instModels   :: [InstanceModel]
+  , _configFiles  :: [String]
+  , _inputs       :: [h]
+  , _outputs      :: [i]
+  , _constraints  :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
+  , _constants    :: [ConstQDef]
+  , _systemdb     :: ChunkDB
   } -> System
 
 makeClassy ''System
+
+mkSystem :: (CommonIdea a, Idea a,
+  Quantity e, Eq e, MayHaveUnit e,
+  Quantity h, MayHaveUnit h,
+  Quantity i, MayHaveUnit i,
+  HasUID j, Constrained j) =>
+  a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation ->
+    [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->
+    [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
+mkSystem = SI

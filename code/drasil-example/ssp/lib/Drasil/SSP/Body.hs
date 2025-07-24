@@ -1,15 +1,18 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.Body (srs, si, symbMap, printSetting, fullSI) where
 
+import Prelude hiding (sin, cos, tan)
+
 import Control.Lens ((^.))
 
+import System.Drasil (SystemKind(Specification), mkSystem)
 import Language.Drasil hiding (Verb, number, organization, section, variable)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
 import Theory.Drasil (output)
+import Drasil.Metadata (inModel)
 
-import Prelude hiding (sin, cos, tan)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -19,7 +22,6 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   physical, physics, problem, software, softwareSys, srsDomains, symbol_,
   sysCont, system, type_, user, value, variable, doccon, doccon',
   datumConstraint)
-import Data.Drasil.TheoryConcepts as Doc (inModel)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
 import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
   number)
@@ -52,8 +54,6 @@ import Drasil.SSP.TMods (tMods)
 import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
   inputs, inputsWUncrtn, outputs, symbols)
 
-import System.Drasil (SystemKind(Specification))
-
 --Document Setup--
 
 srs :: Document
@@ -69,24 +69,14 @@ resourcePath :: String
 resourcePath = "../../../../datafiles/ssp/"
 
 si :: System
-si = SI {
-  _sys         = progName, 
-  _kind        = Specification,
-  _authors     = [henryFrankis, brooks],
-  _purpose     = [purp],
-  _background  = [],
-  _motivation  = [],
-  _scope       = [],
-  _quants      = symbols,
-  _instModels  = iMods,
-  _datadefs    = dataDefs,
-  _configFiles = [],
-  _inputs      = inputs,
-  _outputs     = outputs,
-  _constraints = constrained,
-  _constants   = [],
-  _systemdb   = symbMap
-}
+si = mkSystem
+  progName Specification [henryFrankis, brooks]
+  [purp] [] [] []
+  symbols
+  tMods generalDefinitions dataDefs iMods
+  []
+  inputs outputs constrained []
+  symbMap
   
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,

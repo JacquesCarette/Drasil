@@ -5,6 +5,8 @@
 
 module Drasil.Template.Body where
 
+import System.Drasil (SystemKind(Specification), mkSystem)
+import Drasil.Metadata
 import Language.Drasil
 import Drasil.SRSDocument
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
@@ -16,11 +18,9 @@ import Data.Drasil.Concepts.Math (mathcon)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Software.Products
-import Data.Drasil.TheoryConcepts
 import Data.Drasil.Citations
 import Drasil.DocumentLanguage.TraceabilityGraph
 import Drasil.DocLang (tunitNone)
-import System.Drasil (SystemKind(Specification))
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -84,24 +84,14 @@ mkSRS = [TableOfContents,
   Bibliography]
 
 si :: System
-si = SI {
-  _sys         = progName,
-  _kind        = Specification,
-  _authors     = [authorName],
-  _background  = [],
-  _purpose     = [],
-  _motivation  = [],
-  _scope       = [],
-  _quants      = [] :: [DefinedQuantityDict],
-  _instModels  = [] :: [InstanceModel],
-  _datadefs    = [] :: [DataDefinition],
-  _configFiles = [],
-  _inputs      = [] :: [DefinedQuantityDict],
-  _outputs     = [] :: [DefinedQuantityDict],
-  _constraints = [] :: [ConstrConcept],
-  _constants   = [] :: [ConstQDef],
-  _systemdb   = symbMap
-}
+si = mkSystem
+  progName Specification [authorName]
+  [] [] [] []
+  ([] :: [DefinedQuantityDict])
+  ([] :: [TheoryModel]) ([] :: [GenDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
+  []
+  ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) ([] :: [ConstQDef])
+  symbMap
 
 ideaDicts :: [IdeaDict]
 ideaDicts =

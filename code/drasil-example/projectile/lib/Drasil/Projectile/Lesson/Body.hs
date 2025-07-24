@@ -42,24 +42,13 @@ mkNB = [
   ]
 
 si :: System
-si = SI {
-  _sys         = projectileMotion,
-  _kind        = Notebook,
-  _authors     = [spencerSmith],
-  _purpose     = [],
-  _background  = [], 
-  _motivation  = [],
-  _scope       = [],
-  _quants      = [] :: [DefinedQuantityDict],
-  _instModels  = [],
-  _datadefs    = [],
-  _configFiles = [],
-  _inputs      = [] :: [DefinedQuantityDict],
-  _outputs     = [] :: [DefinedQuantityDict],
-  _constraints = [] :: [ConstrConcept],
-  _constants   = [] :: [ConstQDef],
-  _systemdb   = symbMap
-}
+si = mkSystem
+  projectileMotion Notebook [spencerSmith]
+  [] [] [] []
+  ([] :: [DefinedQuantityDict])
+  [] [] [] [] []
+  ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) []
+  symbMap
 
 symbMap :: ChunkDB
 symbMap = cdb (map dqdWr physicscon ++ symbols) (nw projectileMotion : map nw doccon ++ 

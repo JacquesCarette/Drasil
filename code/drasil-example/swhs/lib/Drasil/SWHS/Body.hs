@@ -11,7 +11,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Data.Drasil.TheoryConcepts as Doc (inModel)
+import Drasil.Metadata (inModel)
 import Data.Drasil.Concepts.Computation (algorithm, compcon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
   condition, constraint, corSol, datum, document, environment,input_, model,
@@ -55,7 +55,7 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
   simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM,
   tempW, thickness, watE)
 
-import System.Drasil (SystemKind(Specification))
+import System.Drasil (SystemKind(Specification), mkSystem)
 
 -------------------------------------------------------------------------------
 
@@ -72,24 +72,14 @@ resourcePath :: String
 resourcePath = "../../../../datafiles/swhs/"
 
 si :: System
-si = SI {
-  _sys         = progName',
-  _kind        = Specification,
-  _authors     = [thulasi, brooks, spencerSmith],
-  _purpose     = [purp],
-  _background  = [],
-  _motivation  = [motivation],
-  _scope       = [scope],
-  _quants      = symbols,
-  _instModels  = insModel,
-  _datadefs    = SWHS.dataDefs,
-  _configFiles = [],
-  _inputs      = inputs,
-  _outputs     = map dqdWr outputs,
-  _constraints = constrained,
-  _constants   = specParamValList,
-  _systemdb   = symbMap
-}
+si = mkSystem
+  progName' Specification [thulasi, brooks, spencerSmith]
+  [purp] [] [scope] [motivation]
+  symbols
+  tMods genDefs SWHS.dataDefs iMods
+  []
+  inputs outputs constrained specParamValList
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the effect" `S.of_` S "employing",

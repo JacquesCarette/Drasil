@@ -3,7 +3,7 @@
 module Language.Drasil.Chunk.Constrained (
   -- * Constrained Chunks
   -- ** From an Idea
-  ConstrainedChunk(..), cuc, cvc, cnstrw,
+  ConstrainedChunk(..), cvc, cnstrw,
   -- ** From a Concept
   ConstrConcept(..),
   cnstrw', constrained', constrainedNRV', cuc', cuc'') where
@@ -14,7 +14,6 @@ import Language.Drasil.Chunk.Concept (cw, dcc)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', dqdWr)
 import Language.Drasil.Chunk.Quantity (QuantityDict, qw, vc)
 import Language.Drasil.Chunk.Unital (uc')
-import Language.Drasil.Chunk.Unitary (unitary)
 import Language.Drasil.Symbol (HasSymbol(..), Symbol)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Express(express),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity,
@@ -60,11 +59,6 @@ instance HasReasVal    ConstrainedChunk where reasVal     = reasV
 instance Eq            ConstrainedChunk where c1 == c2 = (c1 ^. qd . uid) == (c2 ^. qd . uid)
 -- | Finds units contained in the 'QuantityDict' used to make the 'ConstrainedChunk'.
 instance MayHaveUnit   ConstrainedChunk where getUnit = getUnit . view qd
-
--- | Creates a constrained unitary chunk from a 'UID', term ('NP'), 'Symbol', unit, 'Space', 'Constraint's, and an 'Expr'.
-cuc :: (IsUnit u) => String -> NP -> Symbol -> u
-  -> Space -> [ConstraintE] -> Expr -> ConstrainedChunk
-cuc i t s u space cs rv = ConstrainedChunk (qw (unitary i t s u space)) cs (Just rv)
 
 -- | Creates a constrained unitary chunk from a 'UID', term ('NP'), 'Symbol', 'Space', 'Constraint's, and a 'Maybe' 'Expr' (Similar to 'cuc' but no units).
 cvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Maybe Expr -> ConstrainedChunk

@@ -72,25 +72,14 @@ data FolderLocation = Folder {
 
 -- | System information.
 si :: FolderLocation -> System
-si fl = SI {
-    _sys         = webName,
-    _kind        = web,
-    _authors     = [] :: [Person],
-    _quants      = [] :: [QuantityDict],
-    _purpose     = [],
-    _background  = [],
-    _motivation  = [],
-    _scope       = [],
-    _instModels  = [],
-    _datadefs    = [],
-    _configFiles = [],
-    _inputs      = [] :: [QuantityDict],
-    _outputs     = [] :: [QuantityDict],
-    _constraints = [] :: [ConstrainedChunk],
-    _constants   = [] :: [ConstQDef],
-    _systemdb   = symbMap fl,
-    _usedinfodb  = usedDB
-  }
+si fl = mkSystem
+  webName Website []
+  [] [] [] []
+  ([] :: [QuantityDict])
+  [] [] [] []
+  []
+  ([] :: [QuantityDict]) ([] :: [QuantityDict]) ([] :: [ConstrConcept]) []
+  (symbMap fl)
 
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.
 sections :: FolderLocation -> [Section]
@@ -102,7 +91,7 @@ sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspac
 
 -- | Needed for references and terms to work.
 symbMap :: FolderLocation -> ChunkDB
-symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, web, phsChgMtrl, twoD] ++ 
+symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, phsChgMtrl, twoD] ++ 
   map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast, 
   heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce, 
   normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [game, physics, condition, glaSlab, intrslce,
@@ -112,11 +101,6 @@ symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, web, phsChgMtrl, twoD]
 -- | Helper to get the system name as an 'IdeaDict' from 'System'.
 getSysName :: System -> IdeaDict
 getSysName SI{_sys = nm} = nw nm 
-
--- | Empty database needed for 'si' to work.
-usedDB :: ChunkDB
-usedDB = cdb' ([] :: [QuantityDict]) ([] :: [IdeaDict])
-           ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- | Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]
@@ -129,9 +113,8 @@ allRefs fl = [gitHubRef, wikiRef, infoEncodingWiki, chunksWiki, recipesWiki, pap
   ++ concatMap findAllRefs (sections fl)
 
 -- | Used for system name and kind inside of 'si'.
-webName, web :: CI
-webName = commonIdea "websiteName" (cn websiteTitle) "Drasil" []
-web = commonIdea "website" (cn "website") "web" []
+webName :: CI
+webName = commonIdea "websiteName" (cn websiteTitle) "Drasil" [] -- FIXME: Improper use of a `CI`.
 
 -- * Header Section
 

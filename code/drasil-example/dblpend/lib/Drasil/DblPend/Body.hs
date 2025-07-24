@@ -3,6 +3,7 @@ module Drasil.DblPend.Body where
 
 import Control.Lens ((^.))
 
+import Drasil.Metadata (inModel)
 import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
@@ -15,7 +16,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (dong)
 import Data.Drasil.Concepts.Computation (inDatum)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
+import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   environment, datum, input_, interface, output_, problem, product_,
   physical, sysCont, software, softwareConstraint, softwareSys,
@@ -27,7 +28,6 @@ import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
-import Data.Drasil.TheoryConcepts (inModel)
 
 import Drasil.DblPend.Figures (figMotion, sysCtxFig1)
 import Drasil.DblPend.Assumptions (assumpDouble)
@@ -46,6 +46,7 @@ import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
 import Language.Drasil.Code (quantvar)
 import Drasil.DblPend.ODEs (dblPenODEInfo)
 
+import System.Drasil (SystemKind(Specification), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -63,7 +64,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
       -- introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
-      , TAandA         -- Add table of abbreviation and acronym section
+      , TAandA abbreviationsList         -- Add table of abbreviation and acronym section
       ],
   IntroSec $
     IntroProg (justification progName) (phrase progName)
@@ -104,25 +105,14 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
   ]
 
 si :: System
-si = SI {
-  _sys         = progName, 
-  _kind        = Doc.srs,
-  _authors     = [dong],
-  _purpose     = [purp],
-  _background  = [background],
-  _motivation  = [motivation],
-  _scope       = [scope],
-  _quants      = symbolsAll,
-  _instModels  = iMods,
-  _datadefs    = dataDefs,
-  _configFiles = [],
-  _inputs      = inputs,
-  _outputs     = outputs,
-  _constraints = inConstraints,
-  _constants   = constants,
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
-}
+si = mkSystem progName Specification [dong]
+  [purp] [background] [scope] [motivation]
+  symbolsAll
+  tMods genDefns dataDefs iMods
+  []
+  inputs outputs inConstraints
+  constants
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum]
@@ -145,15 +135,13 @@ ideaDicts =
   -- Actual IdeaDicts
   concepts ++
   -- CIs
-  nw progName : map nw mathcon' ++ map nw physicCon' ++
-  -- UnitalChunks
-  map nw physicscon
+  nw progName : map nw mathcon' ++ map nw physicCon'
 
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
-tableOfAbbrvsIdeaDicts =
-  -- QuantityDicts
+abbreviationsList :: [IdeaDict]
+abbreviationsList = 
+  -- QuantityDict abbreviations
   map nw symbols ++
-  -- CIs
+  -- Other acronyms/abbreviations
   nw progName : map nw acronyms
 
 conceptChunks :: [ConceptChunk]
@@ -167,10 +155,6 @@ symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll)
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
-
-usedDB :: ChunkDB
-usedDB = cdb' ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

@@ -7,13 +7,12 @@ import Language.Drasil hiding (organization, section, variable)
 import Drasil.SRSDocument
 import Database.Drasil.ChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
-import Theory.Drasil (GenDefn, InstanceModel, output)
+import Theory.Drasil (GenDefn, InstanceModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.TheoryConcepts as Doc (inModel)
+import Drasil.Metadata (inModel)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
   condition, constraint, corSol, datum, document, environment,input_, model,
   output_, physical, physics, property, quantity, software, softwareSys,
@@ -53,6 +52,8 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
   simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM,
   tempW, thickness, watE)
 
+import System.Drasil (SystemKind(Specification), mkSystem)
+
 -------------------------------------------------------------------------------
 
 srs :: Document
@@ -68,25 +69,14 @@ resourcePath :: String
 resourcePath = "../../../../datafiles/swhs/"
 
 si :: System
-si = SI {
-  _sys         = progName',
-  _kind        = Doc.srs,
-  _authors     = [thulasi, brooks, spencerSmith],
-  _purpose     = [purp],
-  _background  = [],
-  _motivation  = [motivation],
-  _scope       = [scope],
-  _quants      = symbols,
-  _instModels  = insModel,
-  _datadefs    = SWHS.dataDefs,
-  _configFiles = [],
-  _inputs      = inputs,
-  _outputs     = map qw outputs,
-  _constraints = constrained,
-  _constants   = specParamValList,
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
-}
+si = mkSystem
+  progName' Specification [thulasi, brooks, spencerSmith]
+  [purp] [] [scope] [motivation]
+  symbols
+  tMods genDefs SWHS.dataDefs iMods
+  []
+  inputs outputs constrained specParamValList
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the effect" `S.of_` S "employing",
@@ -109,27 +99,21 @@ conceptChunks =
   -- ConceptChunks
   thermocon ++ softwarecon ++ physicCon ++
   physicalcon ++ con ++
-  -- InstanceModels
-  cw heatEInPCM :
   -- DefinedQuantityDicts
   map cw symbols ++
   -- ConstQDefs
   map cw specParamValList
 
 symbMap :: ChunkDB
-symbMap = cdb (qw (heatEInPCM ^. output) : symbolsAll) ideaDicts conceptChunks
+symbMap = cdb symbolsAll ideaDicts conceptChunks
   ([] :: [UnitDefn]) SWHS.dataDefs insModel genDefs tMods concIns [] allRefs citations
 
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
-tableOfAbbrvsIdeaDicts =
+abbreviationsList :: [IdeaDict]
+abbreviationsList =
   -- CIs
   nw progName : map nw acronymsFull ++
   -- DefinedQuantityDicts
   map nw symbols
-
-usedDB :: ChunkDB
-usedDB = cdb' ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] []
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -140,7 +124,7 @@ mkSRS = [TableOfContents,
   RefSec $ RefProg intro [
     TUnits,
     tsymb'' tSymbIntro $ TermExcept [uNormalVect],
-    TAandA],
+    TAandA abbreviationsList],
   IntroSec $
     IntroProg (introStart +:+ introStartSWHS) (introEnd (plural progName') progName)
     [IPurpose $ purpDoc progName Verbose,

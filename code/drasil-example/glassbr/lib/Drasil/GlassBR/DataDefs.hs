@@ -1,5 +1,5 @@
 module Drasil.GlassBR.DataDefs (dataDefs, aspRat, glaTyFac, glaTyFacQD, gtfRef,
-  hFromt, hFromtQD, loadDF, standOffDis, eqTNTWDD, calofDemand, aGrtrThanB,
+  hFromt, hFromtQD, loadDFDD, standOffDis, eqTNTWDD, calofDemand, aGrtrThanB,
   arRef, hRef, configFp, stdVals) where
 
 import Control.Lens ((^.))
@@ -22,7 +22,7 @@ import Drasil.GlassBR.Unitals
 ----------------------
 
 dataDefs :: [DataDefinition]
-dataDefs = [hFromt, loadDF, glaTyFac, standOffDis, aspRat, eqTNTWDD, calofDemand]
+dataDefs = [hFromt, loadDFDD, glaTyFac, standOffDis, aspRat, eqTNTWDD, calofDemand]
 
 {--}
 
@@ -45,10 +45,10 @@ loadDFEq :: Expr
 loadDFEq = (sy loadDur $/ exactDbl 60) $^ (sy sflawParamM $/ exactDbl 16)
 
 loadDFQD :: SimpleQDef
-loadDFQD = mkQuantDef lDurFac loadDFEq
+loadDFQD = mkQuantDef loadDF loadDFEq
 
-loadDF :: DataDefinition
-loadDF = ddE loadDFQD [dRef astm2009] Nothing "loadDurFactor"
+loadDFDD :: DataDefinition
+loadDFDD = ddE loadDFQD [dRef astm2009] Nothing "loadDurFactor"
   [stdVals [loadDur, sflawParamM], ldfConst]
 
 {--}
@@ -138,7 +138,7 @@ hMin = ch nomThick `S.is` S "a function that maps from the nominal thickness"
   +:+. (sParen (ch minThick) `S.toThe` phrase minThick)
 
 ldfConst :: Sentence
-ldfConst = ch lDurFac `S.is` S "assumed to be constant" +:+. fromSource assumpLDFC
+ldfConst = ch loadDF `S.is` S "assumed to be constant" +:+. fromSource assumpLDFC
 
 arRef, gtfRef, hRef :: Sentence
 arRef  = definedIn  aspRat

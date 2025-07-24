@@ -3,7 +3,7 @@ module Data.Drasil.Concepts.Math where
 
 import Language.Drasil hiding (number, norm, matrix)
 import Language.Drasil.ShortHands (lX, lY, lZ)
-import Data.Drasil.Domains (mathematics)
+import Drasil.Metadata (mathematics)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Chunk.Concept.NamedCombinators

@@ -1,7 +1,7 @@
 module Drasil.Projectile.Lesson.Body where
 
 import Data.List (nub)
-import Language.Drasil
+import Language.Drasil hiding (Notebook)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil
 import Database.Drasil.ChunkDB (cdb)
@@ -12,7 +12,6 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Drasil.DocLang (mkNb, LsnDecl, LsnChapter(BibSec, LearnObj, Review, CaseProb, Example), 
   LearnObj(..), Review(..), CaseProb(..), Example(..))
 
-import qualified Data.Drasil.Concepts.Documentation as Doc (notebook)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.Physics (physicCon)
 
@@ -42,25 +41,13 @@ mkNB = [
   ]
 
 si :: System
-si = SI {
-  _sys         = projectileMotion,
-  _kind        = Doc.notebook,
-  _authors     = [spencerSmith],
-  _purpose     = [],
-  _background  = [], 
-  _motivation  = [],
-  _scope       = [],
-  _quants      = [] :: [QuantityDict],
-  _instModels  = [],
-  _datadefs    = [],
-  _configFiles = [],
-  _inputs      = [] :: [QuantityDict],
-  _outputs     = [] :: [QuantityDict],
-  _constraints = [] :: [ConstrainedChunk],
-  _constants   = [] :: [ConstQDef],
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
-}
+si = mkSystem
+  projectileMotion Notebook [spencerSmith]
+  [] [] [] []
+  ([] :: [QuantityDict])
+  [] [] [] [] []
+  ([] :: [QuantityDict]) ([] :: [QuantityDict]) ([] :: [ConstrConcept]) []
+  symbMap
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ symbols) (nw projectileMotion :

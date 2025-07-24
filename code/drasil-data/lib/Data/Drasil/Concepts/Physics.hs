@@ -7,7 +7,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
-import Data.Drasil.Domains (mathematics, physics)
+import Drasil.Metadata (mathematics, physics)
 import Data.Drasil.Concepts.Documentation (property, value)
 import Data.Drasil.Concepts.Math (xComp, xDir, yComp, yDir, point, axis, cartesian)
 import Control.Lens((^.)) --need for parametrization hack
@@ -48,7 +48,7 @@ acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity, cohes
   potEnergy, pressure, rectilinear, restitutionCoef, rigidBody, scalarAccel, scalarPos, shm,
   space, speed, stiffCoeff, strain, stress, tension, time, torque, velocity, weight,
   xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-  yPos, yVel, momentum, moment, fOfGravity, positionVec, pendulum, body,
+  yPos, yVel, momentum, moment, moment2D, fOfGravity, positionVec, pendulum, body,
   kinematics, frequency, period, motion, horizontalMotion, verticalMotion, chgMomentum :: ConceptChunk
 
 oneD, twoD, threeD :: CI
@@ -127,6 +127,8 @@ momentum = dccWDS "momentum" (cn "momentum")
   ( S "the quantity of motion" `S.of_` S "a moving body, measured as a product" `S.of_`
   phraseNP (QPP.mass `and_` velocity))
 moment = dccWDS "moment" (cn' "moment")
+  (S "A measure of the tendency of a body to rotate about a specific" +:+ phrase point `S.or_` phrase axis)
+moment2D = dccWDS "moment2D" (cn' "moment")
   (S "A measure of the tendency of a body to rotate about a specific" +:+ phrase point `S.or_` phrase axis)
 motion = dccWDS "motion" (cn "motion")
   (S "change in position of a physical body over time")

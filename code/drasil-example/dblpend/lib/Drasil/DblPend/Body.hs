@@ -43,7 +43,7 @@ import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs)
 import Drasil.DblPend.References (citations)
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
   osloSymbols, apacheODESymbols, odeintSymbols, arrayVecDepVar)
-import Language.Drasil.Code (quantvar)
+import Language.Drasil.Code (quantvar, codeDQDs)
 import Drasil.DblPend.ODEs (dblPenODEInfo)
 
 import System.Drasil (SystemKind(Specification), mkSystem)
@@ -128,7 +128,7 @@ background = foldlSent_ [phraseNP (a_ pendulum), S "consists" `S.of_` phrase mas
 
 symbolsAll :: [DefinedQuantityDict]
 symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
-  ++ map dqdWr [listToArray $ quantvar pendDisAngle, arrayVecDepVar dblPenODEInfo]
+  ++ map dqdWr [listToArray $ quantvar pendDisAngle, arrayVecDepVar dblPenODEInfo] ++ codeDQDs
 
 ideaDicts :: [IdeaDict]
 ideaDicts = 

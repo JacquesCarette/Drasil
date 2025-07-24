@@ -2,6 +2,7 @@ module Drasil.Projectile.Body (printSetting, si, srs, fullSI) where
 
 import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
 import Language.Drasil
+import Language.Drasil.Code (codeDQDs)
 import Drasil.SRSDocument
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
@@ -295,7 +296,7 @@ symbols = unitalQuants ++ map dqdWr [gravitationalAccelConst, tol] ++
   map dqdWr [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
   iyPos, ixVel, iyVel, position, scalarPos, projPos, projSpeed, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel,
-  constAccelV]
+  constAccelV] ++ codeDQDs
 
 constants :: [ConstQDef]
 constants = [gravitationalAccelConst, piConst, tol]

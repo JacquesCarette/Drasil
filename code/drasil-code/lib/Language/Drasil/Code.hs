@@ -44,6 +44,8 @@ module Language.Drasil.Code (
   unPP, unJP, unCSP, unCPPP, unSP, unJLP
   -- Language.Drasil.Chunk.NamedArgument
   , NamedArgument, narg
+  -- Language.Drasil.Code.CodeQuantityDicts
+  , codeDQDs
 ) where
 
 import Prelude hiding (break, print, return, log, exp)
@@ -116,3 +118,5 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (unC
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (unCPPP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer (unSP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer (unJLP)
+
+import Language.Drasil.Code.CodeQuantityDicts (codeDQDs)

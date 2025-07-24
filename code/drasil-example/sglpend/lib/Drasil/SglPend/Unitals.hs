@@ -3,6 +3,7 @@ module Drasil.SglPend.Unitals where
 import Language.Drasil
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import Language.Drasil.Code (codeDQDs)
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
@@ -19,7 +20,7 @@ import Drasil.DblPend.Unitals (lRod)
 
 
 symbols:: [DefinedQuantityDict]
-symbols = map dqdWr unitalChunks ++ unitless
+symbols = map dqdWr unitalChunks ++ unitless ++ codeDQDs
 
 inputs :: [DefinedQuantityDict]
 inputs = map dqdWr [lenRod, QPP.mass, QP.angularAccel, pendDisplacementAngle, initialPendAngle]

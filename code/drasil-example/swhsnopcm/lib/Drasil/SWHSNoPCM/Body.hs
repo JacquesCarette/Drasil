@@ -8,7 +8,7 @@ import Theory.Drasil (TheoryModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Language.Drasil.Code (quantvar)
+import Language.Drasil.Code (quantvar, codeDQDs)
 
 import Data.List ((\\))
 import Data.Drasil.People (thulasi)
@@ -91,7 +91,7 @@ symbolsAll :: [DefinedQuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
 symbolsAll = [gradient, pi_, uNormalVect, dqdWr surface] ++ symbols ++
   map dqdWr symbolConcepts ++ map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++
   scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols ++
-  map dqdWr [listToArray $ quantvar tempW, arrayVecDepVar noPCMODEInfo]
+  map dqdWr [listToArray $ quantvar tempW, arrayVecDepVar noPCMODEInfo] ++ codeDQDs
 
 concepts :: [UnitalChunk]
 concepts = map ucw [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,

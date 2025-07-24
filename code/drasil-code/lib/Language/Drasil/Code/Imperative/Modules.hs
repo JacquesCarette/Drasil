@@ -840,7 +840,9 @@ genInputFormatProc s = do
       genInFormat _ = do
         ins <- getInputFormatIns
         outs <- getInputFormatOuts
-        bod <- readDataProc dd
+        -- TODO: Fix this for Clifford algebra - temporarily commenting out
+        -- bod <- readDataProc dd
+        let bod = [] -- Empty body for now
         desc <- inFmtFuncDesc
         mthd <- getFunc s giName desc ins outs bod
         return $ Just mthd

@@ -13,19 +13,19 @@ import Data.Drasil.Quantities.Physics (velocity, position, time, acceleration, f
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 
 dataDefs :: [DataDefinition]
-dataDefs = [positionGDD, positionXDD_1, positionYDD_1, positionXDD_2, positionYDD_2, accelGDD, forceGDD]
+dataDefs = [velocityGDD, positionXDD_1, positionYDD_1, positionXDD_2, positionYDD_2, accelGDD, forceGDD]
 
 ------------------------
--- Position in General--
+-- Velocity in General--
 ------------------------
-positionGDD :: DataDefinition
-positionGDD = ddMENoRefs positionGQD Nothing "positionGDD" []
+velocityGDD :: DataDefinition
+velocityGDD = ddMENoRefs velocityGQD Nothing "velocityGDD" []
 
-positionGQD :: ModelQDef
-positionGQD = mkQuantDef velocity positionGEqn
+velocityGQD :: ModelQDef
+velocityGQD = mkQuantDef velocity velocityGEqn
 
-positionGEqn :: ModelExpr
-positionGEqn = deriv (sy position) time
+velocityGEqn :: ModelExpr
+velocityGEqn = deriv (sy position) time
 
 -------------------------------------------------
 -- Position in X Direction in the First Object --
@@ -46,7 +46,7 @@ positionXRef_1 :: Sentence
 positionXRef_1 = ch xPos_1 `S.isThe` phrase horizontalPos
 
 ------------------------------------------------
--- Position in Y Dirction in the First Object --
+-- Position in Y Direction in the First Object --
 ------------------------------------------------
 positionYDD_1 :: DataDefinition
 positionYDD_1 = ddENoRefs positionYQD_1 Nothing "positionYDD1" [positionYRef_1, positionYFigRef_1]
@@ -64,7 +64,7 @@ positionYRef_1 :: Sentence
 positionYRef_1 = ch yPos_1 `S.isThe` phrase verticalPos
 
 -----------------------------------------------
--- Position in X Dirction in the Second Object--
+-- Position in X Direction in the Second Object--
 -----------------------------------------------
 positionXDD_2 :: DataDefinition
 positionXDD_2 = ddENoRefs positionXQD_2 Nothing "positionXDD2" [positionXRef_2, positionXFigRef_2]
@@ -82,7 +82,7 @@ positionXRef_2 :: Sentence
 positionXRef_2 = ch xPos_2 `S.isThe` phrase horizontalPos
 
 -----------------------------------------------
--- Position in Y Dirction in the Second Object--
+-- Position in Y Direction in the Second Object--
 -----------------------------------------------
 positionYDD_2 :: DataDefinition
 positionYDD_2 = ddENoRefs positionYQD_2 Nothing "positionYDD2" [positionYRef_2, positionYFigRef_2]
@@ -100,7 +100,7 @@ positionYRef_2 :: Sentence
 positionYRef_2 = ch yPos_2 `S.isThe` phrase verticalPos
 
 ---------------------------
--- Accleartion in General--
+-- Acceleration in General--
 ---------------------------
 accelGDD :: DataDefinition
 accelGDD = ddMENoRefs accelGQD Nothing "accelerationGDD" []
@@ -121,4 +121,4 @@ forceGQD :: SimpleQDef
 forceGQD = mkQuantDef force forceGEqn
 
 forceGEqn :: PExpr
-forceGEqn = vScale (sy mass) (sy acceleration)
+forceGEqn = cScale (sy mass) (sy acceleration)

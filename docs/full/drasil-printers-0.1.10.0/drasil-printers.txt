@@ -1493,11 +1493,11 @@ renderUsedUIDs :: [(UID, String)] -> Doc
 
 -- | For the last section of the log output. Shows which chunk UID is being
 --   used at which stage. Note that chunks used at a "higher stage" (like
---   <a>Concept</a>s and <a>QuantityDict</a>s) will still be built off of
+--   <a>Concept</a>s and <tt>QuantityDict</tt>s) will still be built off of
 --   the more basic types (like <a>IdeaDict</a>s), they are just not
 --   explicitly used in that manner. Also, some chunks may have been
 --   "downgraded" when put into the database (for example, mapping a
---   <a>QuantityDict</a> wrapper onto things like Constrained and Unital
+--   <tt>QuantityDict</tt> wrapper onto things like Constrained and Unital
 --   chunks happens often).
 mkListShowUsedUIDs :: PrintingInformation -> [(UID, String)]
 

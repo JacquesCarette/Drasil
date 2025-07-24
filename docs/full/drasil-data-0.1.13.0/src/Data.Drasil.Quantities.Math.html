@@ -182,7 +182,9 @@ c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span id="line-41"></span><span class="annot"><a href="Data.Drasil.Quantities.Math.html#piConst"><span class="hs-identifier hs-type">piConst</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstQDef</span></span><span>
 </span><span id="line-42"></span><span id="piConst"><span class="annot"><span class="annottext">piConst :: ConstQDef
 </span><a href="Data.Drasil.Quantities.Math.html#piConst"><span class="hs-identifier hs-var hs-var">piConst</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Data.Drasil.Quantities.Math.html#pi_"><span class="hs-identifier hs-var">pi_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Literal
 forall r. LiteralC r =&gt; Double -&gt; r

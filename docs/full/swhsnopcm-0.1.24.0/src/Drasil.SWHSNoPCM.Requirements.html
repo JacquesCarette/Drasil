@@ -76,15 +76,16 @@ forall t. NamedIdea t =&gt; t -&gt; NP
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
 </span><a href="Drasil.SWHSNoPCM.Requirements.html#findMass"><span class="hs-identifier hs-var">findMass</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-39"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QuantityDict -&gt; Sentence
+</span><span id="line-39"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Sentence
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DataDefinition
 </span><span class="hs-identifier hs-var">balanceDecayRate</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
--&gt; Getting QuantityDict DataDefinition QuantityDict -&gt; QuantityDict
+-&gt; Getting DefinedQuantityDict DataDefinition DefinedQuantityDict
+-&gt; DefinedQuantityDict
 forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting QuantityDict DataDefinition QuantityDict
-forall d. DefinesQuantity d =&gt; Getter d QuantityDict
-Getter DataDefinition QuantityDict
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting DefinedQuantityDict DataDefinition DefinedQuantityDict
+forall d. DefinesQuantity d =&gt; Getter d DefinedQuantityDict
+Getter DataDefinition DefinedQuantityDict
 </span><span class="hs-identifier hs-var">defLhs</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition

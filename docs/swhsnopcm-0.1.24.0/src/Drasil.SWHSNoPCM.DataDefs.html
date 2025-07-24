@@ -27,7 +27,9 @@
 </span><span id="line-17"></span><span class="annot"><a href="Drasil.SWHSNoPCM.DataDefs.html#waterVolumeQD"><span class="hs-identifier hs-type">waterVolumeQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-18"></span><span id="waterVolumeQD"><span class="annot"><span class="annottext">waterVolumeQD :: SimpleQDef
 </span><a href="Drasil.SWHSNoPCM.DataDefs.html#waterVolumeQD"><span class="hs-identifier hs-var hs-var">waterVolumeQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">wVol</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SWHSNoPCM.DataDefs.html#waterVolumeEqn"><span class="hs-identifier hs-var">waterVolumeEqn</span></a></span><span>

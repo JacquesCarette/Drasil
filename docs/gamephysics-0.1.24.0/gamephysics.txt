@@ -63,9 +63,9 @@ pymunk :: Reference
 module Drasil.GamePhysics.Unitals
 defSymbols :: [DefinedQuantityDict]
 unitSymbs :: [UnitalChunk]
-symbolsAll :: [QuantityDict]
-inputSymbols :: [QuantityDict]
-outputSymbols :: [QuantityDict]
+symbolsAll :: [DefinedQuantityDict]
+inputSymbols :: [DefinedQuantityDict]
+outputSymbols :: [DefinedQuantityDict]
 unitalSymbols :: [UnitalChunk]
 unitalTerms :: [UnitalChunk]
 forceParam :: String -> String -> Symbol -> UnitalChunk
@@ -140,8 +140,8 @@ lCMass :: Symbol
 lColl :: Symbol
 lOrigin :: Symbol
 lPoint :: Symbol
-unitless :: [QuantityDict]
-numParticles :: QuantityDict
+unitless :: [DefinedQuantityDict]
+numParticles :: DefinedQuantityDict
 lengthCons :: ConstrConcept
 massCons :: ConstrConcept
 mmntOfInCons :: ConstrConcept

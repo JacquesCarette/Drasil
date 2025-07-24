@@ -60,7 +60,7 @@ morgenstern1965 :: Citation
 module Drasil.SSP.Unitals
 symbols :: [DefinedQuantityDict]
 wiif :: String
-constrained :: [ConstrainedChunk]
+constrained :: [ConstrConcept]
 inputsWUncrtn :: [UncertQ]
 inputsNoUncrtn :: [DefinedQuantityDict]
 inputs :: [DefinedQuantityDict]

@@ -1,7 +1,0 @@
-digraph quantitydict{
-QuantityDict	[shape=oval, color=cyan3, label="QuantityDict"];
-QuantityDict -> IdeaDict;
-QuantityDict -> Space;
-QuantityDict -> StageSymbol;
-QuantityDict -> MaybeUnitDefn;
-}

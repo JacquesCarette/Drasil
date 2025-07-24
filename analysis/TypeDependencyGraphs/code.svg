@@ -93,15 +93,15 @@
 <ellipse fill="none" stroke="darkgreen" cx="6692.9" cy="-234" rx="90.18" ry="18"/>
 <text text-anchor="middle" x="6692.9" y="-230.3" font-family="Times,serif" font-size="14.00">NamedArgument</text>
 </g>
-<!-- QuantityDict -->
+<!-- DefinedQuantityDict -->
 <g id="node9" class="node">
-<title>QuantityDict</title>
-<ellipse fill="none" stroke="black" cx="6692.9" cy="-162" rx="70.39" ry="18"/>
-<text text-anchor="middle" x="6692.9" y="-158.3" font-family="Times,serif" font-size="14.00">QuantityDict</text>
+<title>DefinedQuantityDict</title>
+<ellipse fill="none" stroke="black" cx="6692.9" cy="-162" rx="105.88" ry="18"/>
+<text text-anchor="middle" x="6692.9" y="-158.3" font-family="Times,serif" font-size="14.00">DefinedQuantityDict</text>
 </g>
-<!-- NamedArgument&#45;&gt;QuantityDict -->
+<!-- NamedArgument&#45;&gt;DefinedQuantityDict -->
 <g id="edge6" class="edge">
-<title>NamedArgument&#45;&gt;QuantityDict</title>
+<title>NamedArgument&#45;&gt;DefinedQuantityDict</title>
 <path fill="none" stroke="black" d="M6692.9,-215.7C6692.9,-207.98 6692.9,-198.71 6692.9,-190.11"/>
 <polygon fill="black" stroke="black" points="6696.4,-190.1 6692.9,-180.1 6689.4,-190.1 6696.4,-190.1"/>
 </g>
@@ -2010,8 +2010,8 @@
 <!-- FuncType&#45;&gt;CodeVarChunk -->
 <g id="edge188" class="edge">
 <title>FuncType&#45;&gt;CodeVarChunk</title>
-<path fill="none" stroke="black" d="M7345.26,-293.91C7335.97,-291.71 7326.14,-289.59 7316.9,-288 7162.78,-261.49 7116.09,-298.83 6966.9,-252 6960.99,-250.15 6777.72,-146.09 6771.9,-144 6565.92,-70.2 6308.4,-38.06 6177.97,-25.71"/>
-<polygon fill="black" stroke="black" points="6177.94,-22.2 6167.66,-24.75 6177.29,-29.17 6177.94,-22.2"/>
+<path fill="none" stroke="black" d="M7345.26,-293.91C7335.97,-291.71 7326.14,-289.59 7316.9,-288 7162.78,-261.49 7113.81,-305.56 6966.9,-252 6886.63,-222.74 6887.07,-176.08 6807.9,-144 6593.7,-57.2 6319.36,-30.61 6181.41,-22.51"/>
+<polygon fill="black" stroke="black" points="6181.5,-19.01 6171.32,-21.94 6181.1,-26 6181.5,-19.01"/>
 </g>
 <!-- StepGroup -->
 <g id="node148" class="node">

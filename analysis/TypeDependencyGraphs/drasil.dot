@@ -90,7 +90,7 @@ digraph alltypes {
 	subgraph namedargument {
 		subgraph namedargument{
 		NamedArgument	[shape=oval, color=darkgreen, label="NamedArgument"];
-		NamedArgument -> QuantityDict;
+		NamedArgument -> DefinedQuantityDict;
 		}
 	}
 	subgraph parameter {
@@ -1030,6 +1030,11 @@ digraph alltypes {
 		TermAbbr -> NP;
 		TermAbbr -> MaybeString;
 		}
+		subgraph domdefn{
+		DomDefn	[shape=oval, color=cyan3, label="DomDefn"];
+		DomDefn -> UID;
+		DomDefn -> Sentence;
+		}
 		subgraph chunkdb{
 		ChunkDB	[shape=oval, color=cyan3, label="ChunkDB"];
 		ChunkDB -> SymbolMap;
@@ -1053,7 +1058,7 @@ digraph alltypes {
 		}
 		subgraph symbolmap{
 		SymbolMap	[shape=oval, color=red2, label="SymbolMap"];
-		SymbolMap -> UMapQuantityDict;
+		SymbolMap -> UMapDefinedQuantityDict;
 		}
 		subgraph conceptmap{
 		ConceptMap	[shape=oval, color=red2, label="ConceptMap"];
@@ -3273,7 +3278,7 @@ digraph alltypes {
 	subgraph codevar {
 		subgraph varorfunc{
 		VarOrFunc	[shape=oval, color=cyan3, label="VarOrFunc"];
-		VarOrFunc -> QuantityDict;
+		VarOrFunc -> DefinedQuantityDict;
 		VarOrFunc -> VarOrFunc;
 		}
 		subgraph codevarchunk{
@@ -3337,12 +3342,6 @@ digraph alltypes {
 	subgraph concept {
 	}
 	subgraph contraineds {
-		subgraph constrainedchunk{
-		ConstrainedChunk	[shape=oval, color=cyan3, label="ConstrainedChunk"];
-		ConstrainedChunk -> QuantityDict;
-		ConstrainedChunk -> ConstraintE;
-		ConstrainedChunk -> MaybeExpr;
-		}
 		subgraph constrconcept{
 		ConstrConcept	[shape=oval, color=cyan3, label="ConstrConcept"];
 		ConstrConcept -> DefinedQuantityDict;
@@ -3409,15 +3408,6 @@ digraph alltypes {
 		IdeaDict -> MaybeString;
 		}
 	}
-	subgraph quantity {
-		subgraph quantitydict{
-		QuantityDict	[shape=oval, color=cyan3, label="QuantityDict"];
-		QuantityDict -> IdeaDict;
-		QuantityDict -> Space;
-		QuantityDict -> StageSymbol;
-		QuantityDict -> MaybeUnitDefn;
-		}
-	}
 	subgraph relation {
 		subgraph relationconcept{
 		RelationConcept	[shape=oval, color=cyan3, label="RelationConcept"];
@@ -3426,11 +3416,6 @@ digraph alltypes {
 		}
 	}
 	subgraph uncertainquantity {
-		subgraph uncertainchunk{
-		UncertainChunk	[shape=oval, color=cyan3, label="UncertainChunk"];
-		UncertainChunk -> ConstrainedChunk;
-		UncertainChunk -> Uncertainty;
-		}
 		subgraph uncertq{
 		UncertQ	[shape=oval, color=cyan3, label="UncertQ"];
 		UncertQ -> ConstrConcept;
@@ -3458,11 +3443,6 @@ digraph alltypes {
 		}
 	}
 	subgraph unitary {
-		subgraph unitarychunk{
-		UnitaryChunk	[shape=oval, color=cyan3, label="UnitaryChunk"];
-		UnitaryChunk -> QuantityDict;
-		UnitaryChunk -> UnitDefn;
-		}
 	}
 	subgraph citation {
 		subgraph citefield{
@@ -4531,7 +4511,7 @@ digraph alltypes {
 		}
 		subgraph input{
 		Input	[shape=oval, color=red2, label="Input"];
-		Input -> QuantityDictMaybeRealIntervalExprExpr;
+		Input -> DefinedQuantityDictMaybeRealIntervalExprExpr;
 		}
 		subgraph inputs{
 		Inputs	[shape=oval, color=red2, label="Inputs"];
@@ -4539,7 +4519,7 @@ digraph alltypes {
 		}
 		subgraph output{
 		Output	[shape=oval, color=red2, label="Output"];
-		Output -> QuantityDict;
+		Output -> DefinedQuantityDict;
 		}
 		subgraph outputconstraints{
 		OutputConstraints	[shape=oval, color=red2, label="OutputConstraints"];
@@ -4585,7 +4565,7 @@ digraph alltypes {
 		TheoryModel -> ModelKindModelExpr;
 		TheoryModel -> TheoryModel;
 		TheoryModel -> SpaceDefn;
-		TheoryModel -> QuantityDict;
+		TheoryModel -> DefinedQuantityDict;
 		TheoryModel -> ConceptChunk;
 		TheoryModel -> ModelQDef;
 		TheoryModel -> ModelExpr;

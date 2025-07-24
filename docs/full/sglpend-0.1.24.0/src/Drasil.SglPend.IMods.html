@@ -41,7 +41,7 @@
 </span><a href="Drasil.SglPend.IMods.html#angularDisplacementMK"><span class="hs-identifier hs-var">angularDisplacementMK</span></a></span><span>
 </span><span id="line-30"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
 </span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SglPend.Unitals.html#lenRod"><span class="hs-identifier hs-var">lenRod</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
@@ -56,7 +56,7 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
 </span><span id="line-31"></span><span>  </span><span class="hs-special">,</span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
 </span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SglPend.Unitals.html#initialPendAngle"><span class="hs-identifier hs-var">initialPendAngle</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
@@ -71,7 +71,7 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
 </span><span id="line-32"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
 </span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">gravitationalAccel</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
@@ -85,8 +85,8 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-33"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Output
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; Output
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+forall c. (Quantity c, Concept c, MayHaveUnit c) =&gt; c -&gt; Output
+</span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SglPend.Unitals.html#pendDisplacementAngle"><span class="hs-identifier hs-var">pendDisplacementAngle</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; RealInterval Expr Expr
 forall b a. (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">UpFrom</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive

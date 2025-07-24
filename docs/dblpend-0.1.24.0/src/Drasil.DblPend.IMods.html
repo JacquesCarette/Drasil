@@ -221,7 +221,7 @@ r -&gt; Sentence
 </span><a href="Drasil.DblPend.IMods.html#angleMK_1"><span class="hs-identifier hs-var">angleMK_1</span></a></span><span>
 </span><span id="line-51"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
 </span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#lenRod_1"><span class="hs-identifier hs-var">lenRod_1</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
@@ -236,7 +236,7 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-52"></span><span>   </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
 </span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#lenRod_2"><span class="hs-identifier hs-var">lenRod_2</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
@@ -251,7 +251,7 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-53"></span><span>   </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
 </span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#massObj_1"><span class="hs-identifier hs-var">massObj_1</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
@@ -266,7 +266,7 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-54"></span><span>   </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
 </span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#massObj_2"><span class="hs-identifier hs-var">massObj_2</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
@@ -280,16 +280,16 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-55"></span><span>   </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Input
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; Input
+forall q. (Quantity q, MayHaveUnit q, Concept q) =&gt; q -&gt; Input
 </span><span class="hs-identifier hs-var">qwUC</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#pendDisAngle_1"><span class="hs-identifier hs-var">pendDisAngle_1</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-56"></span><span>   </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Input
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; Input
+forall q. (Quantity q, MayHaveUnit q, Concept q) =&gt; q -&gt; Input
 </span><span class="hs-identifier hs-var">qwUC</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#pendDisAngle_2"><span class="hs-identifier hs-var">pendDisAngle_2</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-57"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Output
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; Output
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+forall c. (Quantity c, Concept c, MayHaveUnit c) =&gt; c -&gt; Output
+</span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#pendDisAngle_1"><span class="hs-identifier hs-var">pendDisAngle_1</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-58"></span><span>  </span><span class="annot"><span class="annottext">Maybe Derivation
 forall a. Maybe a
@@ -360,7 +360,7 @@ PExpr
 </span><a href="Drasil.DblPend.IMods.html#angleMK_2"><span class="hs-identifier hs-var">angleMK_2</span></a></span><span>
 </span><span id="line-72"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
 </span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#lenRod_1"><span class="hs-identifier hs-var">lenRod_1</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
@@ -375,7 +375,7 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-73"></span><span>   </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
 </span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#lenRod_2"><span class="hs-identifier hs-var">lenRod_2</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
@@ -390,7 +390,7 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-74"></span><span>   </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
 </span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#massObj_1"><span class="hs-identifier hs-var">massObj_1</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
@@ -405,7 +405,7 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-75"></span><span>   </span><span class="annot"><span class="annottext">UnitalChunk -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
 </span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#massObj_2"><span class="hs-identifier hs-var">massObj_2</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
@@ -419,16 +419,16 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-76"></span><span>   </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Input
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; Input
+forall q. (Quantity q, MayHaveUnit q, Concept q) =&gt; q -&gt; Input
 </span><span class="hs-identifier hs-var">qwUC</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#pendDisAngle_1"><span class="hs-identifier hs-var">pendDisAngle_1</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-77"></span><span>   </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Input
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; Input
+forall q. (Quantity q, MayHaveUnit q, Concept q) =&gt; q -&gt; Input
 </span><span class="hs-identifier hs-var">qwUC</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#pendDisAngle_2"><span class="hs-identifier hs-var">pendDisAngle_2</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-78"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Output
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; Output
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+forall c. (Quantity c, Concept c, MayHaveUnit c) =&gt; c -&gt; Output
+</span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.DblPend.Unitals.html#pendDisAngle_2"><span class="hs-identifier hs-var">pendDisAngle_2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-79"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
 forall a. a -&gt; Maybe a

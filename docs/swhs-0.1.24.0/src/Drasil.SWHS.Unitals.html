@@ -73,41 +73,47 @@ c -&gt; DefinedQuantityDict
 </span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">[UnitalChunk]
 </span><a href="Drasil.SWHS.Unitals.html#unitalChuncks"><span class="hs-identifier hs-var">unitalChuncks</span></a></span><span>
 </span><span id="line-29"></span><span>
-</span><span id="line-30"></span><span class="annot"><a href="Drasil.SWHS.Unitals.html#symbolsAll"><span class="hs-identifier hs-type">symbolsAll</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-31"></span><span id="symbolsAll"><span class="annot"><span class="annottext">symbolsAll :: [QuantityDict]
-</span><a href="Drasil.SWHS.Unitals.html#symbolsAll"><span class="hs-identifier hs-var hs-var">symbolsAll</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(DefinedQuantityDict -&gt; QuantityDict)
--&gt; [DefinedQuantityDict] -&gt; [QuantityDict]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; QuantityDict
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
-</span><a href="Drasil.SWHS.Unitals.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
+</span><span id="line-30"></span><span class="annot"><a href="Drasil.SWHS.Unitals.html#symbolsAll"><span class="hs-identifier hs-type">symbolsAll</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-31"></span><span id="symbolsAll"><span class="annot"><span class="annottext">symbolsAll :: [DefinedQuantityDict]
+</span><a href="Drasil.SWHS.Unitals.html#symbolsAll"><span class="hs-identifier hs-var hs-var">symbolsAll</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
+</span><a href="Drasil.SWHS.Unitals.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
+-&gt; [DefinedQuantityDict] -&gt; [DefinedQuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(ConstQDef -&gt; QuantityDict) -&gt; [ConstQDef] -&gt; [QuantityDict]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(ConstQDef -&gt; DefinedQuantityDict)
+-&gt; [ConstQDef] -&gt; [DefinedQuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; QuantityDict
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[ConstQDef]
-</span><a href="Drasil.SWHS.Unitals.html#specParamValList"><span class="hs-identifier hs-var">specParamValList</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; DefinedQuantityDict
+forall c.
+(Quantity c, Concept c, MayHaveUnit c) =&gt;
+c -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">[ConstQDef]
+</span><a href="Drasil.SWHS.Unitals.html#specParamValList"><span class="hs-identifier hs-var">specParamValList</span></a></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
+-&gt; [DefinedQuantityDict] -&gt; [DefinedQuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-32"></span><span>  </span><span class="annot"><span class="annottext">(ConstQDef -&gt; QuantityDict) -&gt; [ConstQDef] -&gt; [QuantityDict]
+</span><span id="line-32"></span><span>  </span><span class="annot"><span class="annottext">(ConstQDef -&gt; DefinedQuantityDict)
+-&gt; [ConstQDef] -&gt; [DefinedQuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; QuantityDict
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstQDef
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef -&gt; DefinedQuantityDict
+forall c.
+(Quantity c, Concept c, MayHaveUnit c) =&gt;
+c -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#htFusionMin"><span class="hs-identifier hs-var">htFusionMin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#htFusionMax"><span class="hs-identifier hs-var">htFusionMax</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstQDef
-</span><a href="Drasil.SWHS.Unitals.html#coilSAMax"><span class="hs-identifier hs-var">coilSAMax</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
+</span><a href="Drasil.SWHS.Unitals.html#coilSAMax"><span class="hs-identifier hs-var">coilSAMax</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
+-&gt; [DefinedQuantityDict] -&gt; [DefinedQuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-33"></span><span>  </span><span class="annot"><span class="annottext">(UncertainChunk -&gt; QuantityDict)
--&gt; [UncertainChunk] -&gt; [QuantityDict]
+</span><span id="line-33"></span><span>  </span><span class="annot"><span class="annottext">(UncertQ -&gt; DefinedQuantityDict)
+-&gt; [UncertQ] -&gt; [DefinedQuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UncertainChunk -&gt; QuantityDict
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UncertainChunk
-</span><a href="Drasil.SWHS.Unitals.html#absTol"><span class="hs-identifier hs-var">absTol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertainChunk
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; DefinedQuantityDict
+forall c.
+(Quantity c, Concept c, MayHaveUnit c) =&gt;
+c -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.SWHS.Unitals.html#absTol"><span class="hs-identifier hs-var">absTol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#relTol"><span class="hs-identifier hs-var">relTol</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-34"></span><span class="hs-comment">-- Symbols with Units --</span><span>
 </span><span id="line-35"></span><span>
@@ -1128,22 +1134,28 @@ c -&gt; ConstrConcept
 </span><a href="Drasil.SWHS.Unitals.html#outputs"><span class="hs-identifier hs-var">outputs</span></a></span><span>
 </span><span id="line-242"></span><span>
 </span><span id="line-243"></span><span class="hs-comment">-- Input Constraints</span><span>
-</span><span id="line-244"></span><span class="annot"><a href="Drasil.SWHS.Unitals.html#inputs"><span class="hs-identifier hs-type">inputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-245"></span><span id="inputs"><span class="annot"><span class="annottext">inputs :: [QuantityDict]
-</span><a href="Drasil.SWHS.Unitals.html#inputs"><span class="hs-identifier hs-var hs-var">inputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UncertQ -&gt; QuantityDict) -&gt; [UncertQ] -&gt; [QuantityDict]
+</span><span id="line-244"></span><span class="annot"><a href="Drasil.SWHS.Unitals.html#inputs"><span class="hs-identifier hs-type">inputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-245"></span><span id="inputs"><span class="annot"><span class="annottext">inputs :: [DefinedQuantityDict]
+</span><a href="Drasil.SWHS.Unitals.html#inputs"><span class="hs-identifier hs-var hs-var">inputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UncertQ -&gt; DefinedQuantityDict)
+-&gt; [UncertQ] -&gt; [DefinedQuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; QuantityDict
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[UncertQ]
-</span><a href="Drasil.SWHS.Unitals.html#inputConstraints"><span class="hs-identifier hs-var">inputConstraints</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; DefinedQuantityDict
+forall c.
+(Quantity c, Concept c, MayHaveUnit c) =&gt;
+c -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">[UncertQ]
+</span><a href="Drasil.SWHS.Unitals.html#inputConstraints"><span class="hs-identifier hs-var">inputConstraints</span></a></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
+-&gt; [DefinedQuantityDict] -&gt; [DefinedQuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(UncertainChunk -&gt; QuantityDict)
--&gt; [UncertainChunk] -&gt; [QuantityDict]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(UncertQ -&gt; DefinedQuantityDict)
+-&gt; [UncertQ] -&gt; [DefinedQuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UncertainChunk -&gt; QuantityDict
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UncertainChunk
-</span><a href="Drasil.SWHS.Unitals.html#absTol"><span class="hs-identifier hs-var">absTol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertainChunk
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; DefinedQuantityDict
+forall c.
+(Quantity c, Concept c, MayHaveUnit c) =&gt;
+c -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.SWHS.Unitals.html#absTol"><span class="hs-identifier hs-var">absTol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#relTol"><span class="hs-identifier hs-var">relTol</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-246"></span><span>
 </span><span id="line-247"></span><span class="annot"><a href="Drasil.SWHS.Unitals.html#inputConstraints"><span class="hs-identifier hs-type">inputConstraints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
@@ -2615,26 +2627,30 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span id="line-436"></span><span class="hs-comment">-- Uncertainties with no Units --</span><span>
 </span><span id="line-437"></span><span class="hs-comment">---------------------------------</span><span>
 </span><span id="line-438"></span><span>
-</span><span id="line-439"></span><span class="annot"><a href="Drasil.SWHS.Unitals.html#absTol"><span class="hs-identifier hs-type">absTol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#relTol"><span class="hs-identifier hs-type">relTol</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UncertainChunk</span></span><span>
+</span><span id="line-439"></span><span class="annot"><a href="Drasil.SWHS.Unitals.html#absTol"><span class="hs-identifier hs-type">absTol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#relTol"><span class="hs-identifier hs-type">relTol</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span>
 </span><span id="line-440"></span><span>
-</span><span id="line-441"></span><span id="absTol"><span class="annot"><span class="annottext">absTol :: UncertainChunk
-</span><a href="Drasil.SWHS.Unitals.html#absTol"><span class="hs-identifier hs-var hs-var">absTol</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
--&gt; NP
--&gt; Symbol
--&gt; Space
--&gt; [ConstraintE]
--&gt; Expr
--&gt; Uncertainty
--&gt; UncertainChunk
-</span><span class="hs-identifier hs-var">uvc</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-441"></span><span id="absTol"><span class="annot"><span class="annottext">absTol :: UncertQ
+</span><a href="Drasil.SWHS.Unitals.html#absTol"><span class="hs-identifier hs-var hs-var">absTol</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Uncertainty -&gt; UncertQ
+forall c.
+(Quantity c, Constrained c, Concept c, HasReasVal c,
+ MayHaveUnit c) =&gt;
+c -&gt; Uncertainty -&gt; UncertQ
+</span><span class="hs-identifier hs-var">uq</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+forall c.
+(Concept c, MayHaveUnit c, Quantity c) =&gt;
+c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+</span><span class="hs-identifier hs-var">constrained'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqdNoUnit</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;absTol&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;absolute tolerance&quot;</span></span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-442"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-string">&quot;absolute tolerance&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-442"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;the absolute tolerance&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">cA</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="Drasil.SWHS.Unitals.html#lTol"><span class="hs-identifier hs-var">lTol</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span>
 </span><span id="line-443"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
 </span><span class="hs-identifier hs-var">physRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
@@ -2656,30 +2672,34 @@ forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-number">10.0</span></span><span class="annot"><span class="annottext">Double -&gt; Double -&gt; Double
 forall a. Floating a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">**</span></span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Double
-</span><span class="hs-number">10</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Maybe Int -&gt; Uncertainty
+</span><span class="hs-number">10</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Maybe Int -&gt; Uncertainty
 </span><span class="hs-identifier hs-var">uncty</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">0.01</span></span><span> </span><span class="annot"><span class="annottext">Maybe Int
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span class="hs-special">)</span><span>
 </span><span id="line-445"></span><span>
-</span><span id="line-446"></span><span id="relTol"><span class="annot"><span class="annottext">relTol :: UncertainChunk
-</span><a href="Drasil.SWHS.Unitals.html#relTol"><span class="hs-identifier hs-var hs-var">relTol</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
--&gt; NP
--&gt; Symbol
--&gt; Space
--&gt; [ConstraintE]
--&gt; Expr
--&gt; Uncertainty
--&gt; UncertainChunk
-</span><span class="hs-identifier hs-var">uvc</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-446"></span><span id="relTol"><span class="annot"><span class="annottext">relTol :: UncertQ
+</span><a href="Drasil.SWHS.Unitals.html#relTol"><span class="hs-identifier hs-var hs-var">relTol</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Uncertainty -&gt; UncertQ
+forall c.
+(Quantity c, Constrained c, Concept c, HasReasVal c,
+ MayHaveUnit c) =&gt;
+c -&gt; Uncertainty -&gt; UncertQ
+</span><span class="hs-identifier hs-var">uq</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+forall c.
+(Concept c, MayHaveUnit c, Quantity c) =&gt;
+c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+</span><span class="hs-identifier hs-var">constrained'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqdNoUnit</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;relTol&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;relative tolerance&quot;</span></span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-447"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span id="line-447"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;the relative tolerance&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">cR</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><a href="Drasil.SWHS.Unitals.html#lTol"><span class="hs-identifier hs-var">lTol</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span>
 </span><span id="line-448"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
 </span><span class="hs-identifier hs-var">physRange</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
 -&gt; RealInterval Expr Expr -&gt; ConstraintE
@@ -2701,7 +2721,7 @@ forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-number">10.0</span></span><span class="annot"><span class="annottext">Double -&gt; Double -&gt; Double
 forall a. Floating a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">**</span></span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Double
-</span><span class="hs-number">10</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Maybe Int -&gt; Uncertainty
+</span><span class="hs-number">10</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Maybe Int -&gt; Uncertainty
 </span><span class="hs-identifier hs-var">uncty</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">0.01</span></span><span> </span><span class="annot"><span class="annottext">Maybe Int
 forall a. Maybe a
@@ -2751,7 +2771,9 @@ forall a. Maybe a
 </span><span id="line-467"></span><span>
 </span><span id="line-468"></span><span id="consTolAux"><span class="annot"><span class="annottext">consTolAux :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#consTolAux"><span class="hs-identifier hs-var hs-var">consTolAux</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SWHS.Unitals.html#consTol"><span class="hs-identifier hs-var">consTol</span></a></span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -2764,7 +2786,9 @@ forall r. LiteralC r =&gt; Integer -&gt; Integer -&gt; r
 </span><span id="line-470"></span><span class="hs-comment">-- Used in Constraint 1</span><span>
 </span><span id="line-471"></span><span id="tankLengthMin"><span class="annot"><span class="annottext">tankLengthMin :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#tankLengthMin"><span class="hs-identifier hs-var hs-var">tankLengthMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall u.
@@ -2793,7 +2817,9 @@ forall r. LiteralC r =&gt; Double -&gt; r
 </span><span id="line-475"></span><span>
 </span><span id="line-476"></span><span id="tankLengthMax"><span class="annot"><span class="annottext">tankLengthMax :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#tankLengthMax"><span class="hs-identifier hs-var hs-var">tankLengthMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall u.
@@ -2822,7 +2848,9 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span id="line-480"></span><span>
 </span><span id="line-481"></span><span id="fracMinAux"><span class="annot"><span class="annottext">fracMinAux :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#fracMinAux"><span class="hs-identifier hs-var hs-var">fracMinAux</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SWHS.Unitals.html#fracMin"><span class="hs-identifier hs-var">fracMin</span></a></span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -2833,7 +2861,9 @@ forall r. LiteralC r =&gt; Double -&gt; r
 </span><span id="line-482"></span><span>
 </span><span id="line-483"></span><span id="arMin"><span class="annot"><span class="annottext">arMin :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#arMin"><span class="hs-identifier hs-var hs-var">arMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SWHS.Unitals.html#aspectRatioMin"><span class="hs-identifier hs-var">aspectRatioMin</span></a></span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -2843,7 +2873,9 @@ forall r. LiteralC r =&gt; Double -&gt; r
 </span><span class="hs-number">0.01</span></span><span>
 </span><span id="line-484"></span><span id="arMax"><span class="annot"><span class="annottext">arMax :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#arMax"><span class="hs-identifier hs-var hs-var">arMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SWHS.Unitals.html#aspectRatioMax"><span class="hs-identifier hs-var">aspectRatioMax</span></a></span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -2855,7 +2887,9 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span id="line-486"></span><span class="hs-comment">-- Used in Constraint 5</span><span>
 </span><span id="line-487"></span><span id="pcmDensityMin"><span class="annot"><span class="annottext">pcmDensityMin :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#pcmDensityMin"><span class="hs-identifier hs-var hs-var">pcmDensityMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Sentence
@@ -2871,21 +2905,20 @@ String
 </span><span class="hs-string">&quot;pcmDensityMin&quot;</span></span><span>
 </span><span id="line-488"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;minimum density of PCM&quot;</span></span><span class="hs-special">)</span><span>
+</span><span class="hs-string">&quot;minimum density of PCM&quot;</span></span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-489"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the minimum density of the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-490"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
+</span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">staged</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">supMin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#pcmDensity"><span class="hs-identifier hs-var">pcmDensity</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-491"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
+</span><span id="line-490"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">subMin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">unicodeConv</span></span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -2900,10 +2933,12 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">500</span></span><span>
-</span><span id="line-492"></span><span>
-</span><span id="line-493"></span><span id="pcmDensityMax"><span class="annot"><span class="annottext">pcmDensityMax :: ConstQDef
+</span><span id="line-491"></span><span>
+</span><span id="line-492"></span><span id="pcmDensityMax"><span class="annot"><span class="annottext">pcmDensityMax :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#pcmDensityMax"><span class="hs-identifier hs-var hs-var">pcmDensityMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Sentence
@@ -2917,23 +2952,22 @@ String
 -&gt; NP -&gt; Sentence -&gt; (Stage -&gt; Symbol) -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">ucStaged'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;pcmDensityMax&quot;</span></span><span>
-</span><span id="line-494"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-493"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;maximum density of PCM&quot;</span></span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-495"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;maximum density of PCM&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-494"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the maximum density of the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-496"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
+</span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">staged</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">supMax</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#pcmDensity"><span class="hs-identifier hs-var">pcmDensity</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-497"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
+</span><span id="line-495"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">subMax</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">unicodeConv</span></span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -2948,11 +2982,13 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">20000</span></span><span>
-</span><span id="line-498"></span><span>
-</span><span id="line-499"></span><span class="hs-comment">-- Used in Constraint 7</span><span>
-</span><span id="line-500"></span><span id="htCapSPMin"><span class="annot"><span class="annottext">htCapSPMin :: ConstQDef
+</span><span id="line-496"></span><span>
+</span><span id="line-497"></span><span class="hs-comment">-- Used in Constraint 7</span><span>
+</span><span id="line-498"></span><span id="htCapSPMin"><span class="annot"><span class="annottext">htCapSPMin :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#htCapSPMin"><span class="hs-identifier hs-var hs-var">htCapSPMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall u.
@@ -2960,10 +2996,10 @@ IsUnit u =&gt;
 String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;htCapSPMin&quot;</span></span><span>
-</span><span id="line-501"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-499"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;minimum specific heat capacity of PCM as a solid&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-502"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-500"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the minimum&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
@@ -2973,8 +3009,11 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.ofThe`</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-503"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
+</span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;as a solid&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-501"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">subMin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
@@ -2986,10 +3025,12 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">100</span></span><span>
-</span><span id="line-504"></span><span>
-</span><span id="line-505"></span><span id="htCapSPMax"><span class="annot"><span class="annottext">htCapSPMax :: ConstQDef
+</span><span id="line-502"></span><span>
+</span><span id="line-503"></span><span id="htCapSPMax"><span class="annot"><span class="annottext">htCapSPMax :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#htCapSPMax"><span class="hs-identifier hs-var hs-var">htCapSPMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall u.
@@ -2997,10 +3038,10 @@ IsUnit u =&gt;
 String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;htCapSPMax&quot;</span></span><span>
-</span><span id="line-506"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-504"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;maximum specific heat capacity of PCM as a solid&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-507"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-505"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the maximum&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
@@ -3014,7 +3055,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;as a solid&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-508"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
+</span><span id="line-506"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">subMax</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
@@ -3026,11 +3067,13 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">4000</span></span><span>
-</span><span id="line-509"></span><span>
-</span><span id="line-510"></span><span class="hs-comment">-- Used in Constraint 8</span><span>
-</span><span id="line-511"></span><span id="htCapLPMin"><span class="annot"><span class="annottext">htCapLPMin :: ConstQDef
+</span><span id="line-507"></span><span>
+</span><span id="line-508"></span><span class="hs-comment">-- Used in Constraint 8</span><span>
+</span><span id="line-509"></span><span id="htCapLPMin"><span class="annot"><span class="annottext">htCapLPMin :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#htCapLPMin"><span class="hs-identifier hs-var hs-var">htCapLPMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall u.
@@ -3038,10 +3081,10 @@ IsUnit u =&gt;
 String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;htCapLPMin&quot;</span></span><span>
-</span><span id="line-512"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-510"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;minimum specific heat capacity of PCM as a liquid&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-513"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-511"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the minimum&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
@@ -3055,7 +3098,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;as a liquid&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-514"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
+</span><span id="line-512"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">subMin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
@@ -3067,10 +3110,12 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">100</span></span><span>
-</span><span id="line-515"></span><span>
-</span><span id="line-516"></span><span id="htCapLPMax"><span class="annot"><span class="annottext">htCapLPMax :: ConstQDef
+</span><span id="line-513"></span><span>
+</span><span id="line-514"></span><span id="htCapLPMax"><span class="annot"><span class="annottext">htCapLPMax :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#htCapLPMax"><span class="hs-identifier hs-var hs-var">htCapLPMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall u.
@@ -3078,10 +3123,10 @@ IsUnit u =&gt;
 String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;htCapLPMax&quot;</span></span><span>
-</span><span id="line-517"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-515"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;maximum specific heat capacity of PCM as a liquid&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-518"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-516"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the maximum&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
@@ -3095,7 +3140,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;as a liquid&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-519"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
+</span><span id="line-517"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">subMax</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
@@ -3107,11 +3152,13 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">5000</span></span><span>
-</span><span id="line-520"></span><span>
-</span><span id="line-521"></span><span class="hs-comment">-- Used in Constraint 9</span><span>
-</span><span id="line-522"></span><span id="htFusionMin"><span class="annot"><span class="annottext">htFusionMin :: ConstQDef
+</span><span id="line-518"></span><span>
+</span><span id="line-519"></span><span class="hs-comment">-- Used in Constraint 9</span><span>
+</span><span id="line-520"></span><span id="htFusionMin"><span class="annot"><span class="annottext">htFusionMin :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#htFusionMin"><span class="hs-identifier hs-var hs-var">htFusionMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall u.
@@ -3119,13 +3166,13 @@ IsUnit u =&gt;
 String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;htFusionMin&quot;</span></span><span>
-</span><span id="line-523"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-521"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;minimum specific latent heat of fusion&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-524"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-522"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the minimum specific latent heat of fusion&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-525"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
+</span><span id="line-523"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">subMin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
@@ -3137,10 +3184,12 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span> </span><span>
-</span><span id="line-526"></span><span>
-</span><span id="line-527"></span><span id="htFusionMax"><span class="annot"><span class="annottext">htFusionMax :: ConstQDef
+</span><span id="line-524"></span><span>
+</span><span id="line-525"></span><span id="htFusionMax"><span class="annot"><span class="annottext">htFusionMax :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#htFusionMax"><span class="hs-identifier hs-var hs-var">htFusionMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
 forall u.
@@ -3148,13 +3197,13 @@ IsUnit u =&gt;
 String -&gt; NP -&gt; Sentence -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">uc'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;htFusionMax&quot;</span></span><span>
-</span><span id="line-528"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-526"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;maximum specific latent heat of fusion&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-529"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-527"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the maximum specific latent heat of fusion&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-530"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
+</span><span id="line-528"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">subMax</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
@@ -3166,11 +3215,13 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1000000</span></span><span> </span><span>
-</span><span id="line-531"></span><span>
-</span><span id="line-532"></span><span class="hs-comment">-- Used in Constraint 10</span><span>
-</span><span id="line-533"></span><span id="coilSAMax"><span class="annot"><span class="annottext">coilSAMax :: ConstQDef
+</span><span id="line-529"></span><span>
+</span><span id="line-530"></span><span class="hs-comment">-- Used in Constraint 10</span><span>
+</span><span id="line-531"></span><span id="coilSAMax"><span class="annot"><span class="annottext">coilSAMax :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#coilSAMax"><span class="hs-identifier hs-var hs-var">coilSAMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Sentence
@@ -3184,19 +3235,18 @@ String
 -&gt; NP -&gt; Sentence -&gt; (Stage -&gt; Symbol) -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">ucStaged'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;coilSAMax&quot;</span></span><span>
-</span><span id="line-534"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-532"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;maximum surface area of coil&quot;</span></span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-535"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-533"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;the maximum surface area of the heating coil&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-536"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
+</span><span class="hs-string">&quot;the maximum surface area of the heating coil&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">staged</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">supMax</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#coilSA"><span class="hs-identifier hs-var">coilSA</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-537"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
+</span><span id="line-534"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">subMax</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
@@ -3208,11 +3258,13 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">100000</span></span><span>
-</span><span id="line-538"></span><span>
-</span><span id="line-539"></span><span class="hs-comment">-- Used in Constraint 12</span><span>
-</span><span id="line-540"></span><span id="wDensityMin"><span class="annot"><span class="annottext">wDensityMin :: ConstQDef
+</span><span id="line-535"></span><span>
+</span><span id="line-536"></span><span class="hs-comment">-- Used in Constraint 12</span><span>
+</span><span id="line-537"></span><span id="wDensityMin"><span class="annot"><span class="annottext">wDensityMin :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#wDensityMin"><span class="hs-identifier hs-var hs-var">wDensityMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Sentence
@@ -3226,19 +3278,18 @@ String
 -&gt; NP -&gt; Sentence -&gt; (Stage -&gt; Symbol) -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">ucStaged'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;wDensityMin&quot;</span></span><span>
-</span><span id="line-541"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-538"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;minimum density of water&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-542"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-539"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;the minimum density of water&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-543"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
+</span><span class="hs-string">&quot;the minimum density of water&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">staged</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">supMin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#wDensity"><span class="hs-identifier hs-var">wDensity</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-544"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
+</span><span id="line-540"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">subMin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">unicodeConv</span></span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -3253,10 +3304,12 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">950</span></span><span>
-</span><span id="line-545"></span><span>
-</span><span id="line-546"></span><span id="wDensityMax"><span class="annot"><span class="annottext">wDensityMax :: ConstQDef
+</span><span id="line-541"></span><span>
+</span><span id="line-542"></span><span id="wDensityMax"><span class="annot"><span class="annottext">wDensityMax :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#wDensityMax"><span class="hs-identifier hs-var hs-var">wDensityMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Sentence
@@ -3270,19 +3323,18 @@ String
 -&gt; NP -&gt; Sentence -&gt; (Stage -&gt; Symbol) -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">ucStaged'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;wDensityMax&quot;</span></span><span>
-</span><span id="line-547"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-543"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;maximum density of water&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-548"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-544"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;the maximum density of water&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-549"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
+</span><span class="hs-string">&quot;the maximum density of water&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">staged</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">supMax</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#wDensity"><span class="hs-identifier hs-var">wDensity</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-550"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
+</span><span id="line-545"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">subMax</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">unicodeConv</span></span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -3297,11 +3349,13 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1000</span></span><span>
-</span><span id="line-551"></span><span>  </span><span>
-</span><span id="line-552"></span><span class="hs-comment">-- Used in Constraint 13</span><span>
-</span><span id="line-553"></span><span id="htCapWMin"><span class="annot"><span class="annottext">htCapWMin :: ConstQDef
+</span><span id="line-546"></span><span>  </span><span>
+</span><span id="line-547"></span><span class="hs-comment">-- Used in Constraint 13</span><span>
+</span><span id="line-548"></span><span id="htCapWMin"><span class="annot"><span class="annottext">htCapWMin :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#htCapWMin"><span class="hs-identifier hs-var hs-var">htCapWMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Sentence
@@ -3315,10 +3369,10 @@ String
 -&gt; NP -&gt; Sentence -&gt; (Stage -&gt; Symbol) -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">ucStaged'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;htCapWMin&quot;</span></span><span>
-</span><span id="line-554"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-549"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;minimum specific heat capacity of water&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-555"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-550"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the minimum&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
@@ -3327,29 +3381,30 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">heatCapSpec</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;of water&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-556"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
+</span><span class="hs-string">&quot;of water&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">staged</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">supMin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
-</span><a href="Drasil.SWHS.Unitals.html#htCapW"><span class="hs-identifier hs-var">htCapW</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
+</span><a href="Drasil.SWHS.Unitals.html#htCapW"><span class="hs-identifier hs-var">htCapW</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-551"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">subMin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#htCapW"><span class="hs-identifier hs-var">htCapW</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
-</span><span class="hs-identifier hs-var">UT.heatCapSpec</span></span><span class="hs-special">)</span><span>
-</span><span id="line-557"></span><span>  </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
+</span><span class="hs-identifier hs-var">UT.heatCapSpec</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">4170</span></span><span>
-</span><span id="line-558"></span><span>
-</span><span id="line-559"></span><span id="htCapWMax"><span class="annot"><span class="annottext">htCapWMax :: ConstQDef
+</span><span id="line-552"></span><span>
+</span><span id="line-553"></span><span id="htCapWMax"><span class="annot"><span class="annottext">htCapWMax :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#htCapWMax"><span class="hs-identifier hs-var hs-var">htCapWMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Sentence
@@ -3363,10 +3418,10 @@ String
 -&gt; NP -&gt; Sentence -&gt; (Stage -&gt; Symbol) -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">ucStaged'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;htCapWMax&quot;</span></span><span>
-</span><span id="line-560"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-554"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;maximum specific heat capacity of water&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-561"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-555"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the maximum&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
@@ -3375,30 +3430,31 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">heatCapSpec</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;of water&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-562"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
+</span><span class="hs-string">&quot;of water&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">staged</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">supMax</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
-</span><a href="Drasil.SWHS.Unitals.html#htCapW"><span class="hs-identifier hs-var">htCapW</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
+</span><a href="Drasil.SWHS.Unitals.html#htCapW"><span class="hs-identifier hs-var">htCapW</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-556"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">subMax</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#htCapW"><span class="hs-identifier hs-var">htCapW</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span>
-</span><span id="line-563"></span><span>  </span><span class="annot"><span class="annottext">UnitDefn
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">UT.heatCapSpec</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">4210</span></span><span>
-</span><span id="line-564"></span><span>
-</span><span id="line-565"></span><span class="hs-comment">-- Used in Constraint 14</span><span>
-</span><span id="line-566"></span><span id="coilHTCMin"><span class="annot"><span class="annottext">coilHTCMin :: ConstQDef
+</span><span id="line-557"></span><span>
+</span><span id="line-558"></span><span class="hs-comment">-- Used in Constraint 14</span><span>
+</span><span id="line-559"></span><span id="coilHTCMin"><span class="annot"><span class="annottext">coilHTCMin :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#coilHTCMin"><span class="hs-identifier hs-var hs-var">coilHTCMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Sentence
@@ -3412,19 +3468,19 @@ String
 -&gt; NP -&gt; Sentence -&gt; (Stage -&gt; Symbol) -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">ucStaged'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;coilHTCMin&quot;</span></span><span>
-</span><span id="line-567"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-560"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; NP) -&gt; String -&gt; NP
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;minimum convective heat &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-568"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-561"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;transfer coefficient between coil and water&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-569"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-562"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;the minimum convective heat transfer coefficient between coil and water&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-570"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
+</span><span class="hs-string">&quot;the minimum convective heat transfer coefficient between the coil and water&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-563"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">staged</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">supMin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
@@ -3433,8 +3489,8 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">subMin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
-</span><a href="Drasil.SWHS.Unitals.html#coilHTC"><span class="hs-identifier hs-var">coilHTC</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-571"></span><span>  </span><span class="annot"><span class="annottext">Space
+</span><a href="Drasil.SWHS.Unitals.html#coilHTC"><span class="hs-identifier hs-var">coilHTC</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-564"></span><span>  </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">UT.heatTransferCoef</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -3442,10 +3498,12 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">10</span></span><span>
-</span><span id="line-572"></span><span>
-</span><span id="line-573"></span><span id="coilHTCMax"><span class="annot"><span class="annottext">coilHTCMax :: ConstQDef
+</span><span id="line-565"></span><span>
+</span><span id="line-566"></span><span id="coilHTCMax"><span class="annot"><span class="annottext">coilHTCMax :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#coilHTCMax"><span class="hs-identifier hs-var hs-var">coilHTCMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Sentence
@@ -3459,19 +3517,19 @@ String
 -&gt; NP -&gt; Sentence -&gt; (Stage -&gt; Symbol) -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">ucStaged'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;coilHTCMax&quot;</span></span><span>
-</span><span id="line-574"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-567"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; NP) -&gt; String -&gt; NP
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;maximum convective heat &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-575"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-568"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;transfer coefficient between coil and water&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-576"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-569"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;the maximum convective heat transfer coefficient between coil and water&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-577"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
+</span><span class="hs-string">&quot;the maximum convective heat transfer coefficient between the coil and water&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-570"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">staged</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">supMax</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
@@ -3481,7 +3539,7 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#coilHTC"><span class="hs-identifier hs-var">coilHTC</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-578"></span><span>  </span><span class="annot"><span class="annottext">Space
+</span><span id="line-571"></span><span>  </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">UT.heatTransferCoef</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -3489,11 +3547,13 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">10000</span></span><span>
-</span><span id="line-579"></span><span>  </span><span>
-</span><span id="line-580"></span><span class="hs-comment">-- Used in Constraint 15</span><span>
-</span><span id="line-581"></span><span id="pcmHTCMin"><span class="annot"><span class="annottext">pcmHTCMin :: ConstQDef
+</span><span id="line-572"></span><span>  </span><span>
+</span><span id="line-573"></span><span class="hs-comment">-- Used in Constraint 15</span><span>
+</span><span id="line-574"></span><span id="pcmHTCMin"><span class="annot"><span class="annottext">pcmHTCMin :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#pcmHTCMin"><span class="hs-identifier hs-var hs-var">pcmHTCMin</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Sentence
@@ -3507,27 +3567,27 @@ String
 -&gt; NP -&gt; Sentence -&gt; (Stage -&gt; Symbol) -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">ucStaged'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;pcmHTCMin&quot;</span></span><span>
-</span><span id="line-582"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-575"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; NP) -&gt; String -&gt; NP
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;minimum convective heat &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-583"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-576"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;transfer coefficient between PCM and water&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-584"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-577"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the minimum convective heat transfer coefficient between the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-585"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+</span><span id="line-578"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;and water&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-586"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
+</span><span id="line-579"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">staged</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">supMin</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
@@ -3537,7 +3597,7 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#pcmHTC"><span class="hs-identifier hs-var">pcmHTC</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-587"></span><span>  </span><span class="annot"><span class="annottext">Space
+</span><span id="line-580"></span><span>  </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">UT.heatTransferCoef</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -3545,10 +3605,12 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">10</span></span><span>
-</span><span id="line-588"></span><span>
-</span><span id="line-589"></span><span id="pcmHTCMax"><span class="annot"><span class="annottext">pcmHTCMax :: ConstQDef
+</span><span id="line-581"></span><span>
+</span><span id="line-582"></span><span id="pcmHTCMax"><span class="annot"><span class="annottext">pcmHTCMax :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#pcmHTCMax"><span class="hs-identifier hs-var hs-var">pcmHTCMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Sentence
@@ -3562,27 +3624,27 @@ String
 -&gt; NP -&gt; Sentence -&gt; (Stage -&gt; Symbol) -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">ucStaged'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;pcmHTCMax&quot;</span></span><span>
-</span><span id="line-590"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-583"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; NP) -&gt; String -&gt; NP
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;maximum convective heat &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-591"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-584"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;transfer coefficient between PCM and water&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-592"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-585"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the maximum convective heat transfer coefficient between the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-593"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+</span><span id="line-586"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;and water&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-594"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
+</span><span id="line-587"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">staged</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">supMax</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
@@ -3592,7 +3654,7 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#pcmHTC"><span class="hs-identifier hs-var">pcmHTC</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-595"></span><span>  </span><span class="annot"><span class="annottext">Space
+</span><span id="line-588"></span><span>  </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">UT.heatTransferCoef</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -3600,11 +3662,13 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">10000</span></span><span>
-</span><span id="line-596"></span><span>  </span><span>
-</span><span id="line-597"></span><span class="hs-comment">-- Used in Constraint 17</span><span>
-</span><span id="line-598"></span><span id="timeFinalMax"><span class="annot"><span class="annottext">timeFinalMax :: ConstQDef
+</span><span id="line-589"></span><span>  </span><span>
+</span><span id="line-590"></span><span class="hs-comment">-- Used in Constraint 17</span><span>
+</span><span id="line-591"></span><span id="timeFinalMax"><span class="annot"><span class="annottext">timeFinalMax :: ConstQDef
 </span><a href="Drasil.SWHS.Unitals.html#timeFinalMax"><span class="hs-identifier hs-var hs-var">timeFinalMax</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Sentence
@@ -3618,13 +3682,13 @@ String
 -&gt; NP -&gt; Sentence -&gt; (Stage -&gt; Symbol) -&gt; Space -&gt; u -&gt; UnitalChunk
 </span><span class="hs-identifier hs-var">ucStaged'</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;timeFinalMax&quot;</span></span><span>
-</span><span id="line-599"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span id="line-592"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;maximum final time&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-600"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span id="line-593"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;the maximum final time for the simulation&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-601"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
+</span><span id="line-594"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">staged</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol
 </span><span class="hs-identifier hs-var">supMax</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
@@ -3633,81 +3697,81 @@ forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">subMax</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Symbol
 forall q. HasSymbol q =&gt; q -&gt; Symbol
 </span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
-</span><a href="Drasil.SWHS.Unitals.html#timeFinal"><span class="hs-identifier hs-var">timeFinal</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
-</span><span class="hs-identifier hs-var">Real</span></span><span>
-</span><span id="line-602"></span><span>  </span><span class="annot"><span class="annottext">UnitDefn
+</span><a href="Drasil.SWHS.Unitals.html#timeFinal"><span class="hs-identifier hs-var">timeFinal</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-595"></span><span>  </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">second</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Literal -&gt; ConstQDef) -&gt; Literal -&gt; ConstQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Literal
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">86400</span></span><span>
-</span><span id="line-603"></span><span>
-</span><span id="line-604"></span><span class="hs-comment">-- Labels</span><span>
-</span><span id="line-605"></span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lCoil"><span class="hs-identifier hs-type">lCoil</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lEnv"><span class="hs-identifier hs-type">lEnv</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lFinal"><span class="hs-identifier hs-type">lFinal</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lFusion"><span class="hs-identifier hs-type">lFusion</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lIn"><span class="hs-identifier hs-type">lIn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lInit"><span class="hs-identifier hs-type">lInit</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lLiquid"><span class="hs-identifier hs-type">lLiquid</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lMelt"><span class="hs-identifier hs-type">lMelt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lOut"><span class="hs-identifier hs-type">lOut</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lPCM"><span class="hs-identifier hs-type">lPCM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lSolid"><span class="hs-identifier hs-type">lSolid</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-606"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lStep"><span class="hs-identifier hs-type">lStep</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lTank"><span class="hs-identifier hs-type">lTank</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lTol"><span class="hs-identifier hs-type">lTol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lVapour"><span class="hs-identifier hs-type">lVapour</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lWater"><span class="hs-identifier hs-type">lWater</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Symbol</span></span><span>
-</span><span id="line-607"></span><span id="lCoil"><span class="annot"><span class="annottext">lCoil :: Symbol
+</span><span id="line-596"></span><span>
+</span><span id="line-597"></span><span class="hs-comment">-- Labels</span><span>
+</span><span id="line-598"></span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lCoil"><span class="hs-identifier hs-type">lCoil</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lEnv"><span class="hs-identifier hs-type">lEnv</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lFinal"><span class="hs-identifier hs-type">lFinal</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lFusion"><span class="hs-identifier hs-type">lFusion</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lIn"><span class="hs-identifier hs-type">lIn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lInit"><span class="hs-identifier hs-type">lInit</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lLiquid"><span class="hs-identifier hs-type">lLiquid</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lMelt"><span class="hs-identifier hs-type">lMelt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lOut"><span class="hs-identifier hs-type">lOut</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lPCM"><span class="hs-identifier hs-type">lPCM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lSolid"><span class="hs-identifier hs-type">lSolid</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-599"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lStep"><span class="hs-identifier hs-type">lStep</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lTank"><span class="hs-identifier hs-type">lTank</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lTol"><span class="hs-identifier hs-type">lTol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lVapour"><span class="hs-identifier hs-type">lVapour</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#lWater"><span class="hs-identifier hs-type">lWater</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Symbol</span></span><span>
+</span><span id="line-600"></span><span id="lCoil"><span class="annot"><span class="annottext">lCoil :: Symbol
 </span><a href="Drasil.SWHS.Unitals.html#lCoil"><span class="hs-identifier hs-var hs-var">lCoil</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;C&quot;</span></span><span>
-</span><span id="line-608"></span><span id="lEnv"><span class="annot"><span class="annottext">lEnv :: Symbol
+</span><span id="line-601"></span><span id="lEnv"><span class="annot"><span class="annottext">lEnv :: Symbol
 </span><a href="Drasil.SWHS.Unitals.html#lEnv"><span class="hs-identifier hs-var hs-var">lEnv</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;env&quot;</span></span><span>
-</span><span id="line-609"></span><span id="lFinal"><span class="annot"><span class="annottext">lFinal :: Symbol
+</span><span id="line-602"></span><span id="lFinal"><span class="annot"><span class="annottext">lFinal :: Symbol
 </span><a href="Drasil.SWHS.Unitals.html#lFinal"><span class="hs-identifier hs-var hs-var">lFinal</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;final&quot;</span></span><span>
-</span><span id="line-610"></span><span id="lFusion"><span class="annot"><span class="annottext">lFusion :: Symbol
+</span><span id="line-603"></span><span id="lFusion"><span class="annot"><span class="annottext">lFusion :: Symbol
 </span><a href="Drasil.SWHS.Unitals.html#lFusion"><span class="hs-identifier hs-var hs-var">lFusion</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;f&quot;</span></span><span>
-</span><span id="line-611"></span><span id="lIn"><span class="annot"><span class="annottext">lIn :: Symbol
+</span><span id="line-604"></span><span id="lIn"><span class="annot"><span class="annottext">lIn :: Symbol
 </span><a href="Drasil.SWHS.Unitals.html#lIn"><span class="hs-identifier hs-var hs-var">lIn</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;in&quot;</span></span><span>
-</span><span id="line-612"></span><span id="lInit"><span class="annot"><span class="annottext">lInit :: Symbol
+</span><span id="line-605"></span><span id="lInit"><span class="annot"><span class="annottext">lInit :: Symbol
 </span><a href="Drasil.SWHS.Unitals.html#lInit"><span class="hs-identifier hs-var hs-var">lInit</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;init&quot;</span></span><span>
-</span><span id="line-613"></span><span id="lLiquid"><span class="annot"><span class="annottext">lLiquid :: Symbol
+</span><span id="line-606"></span><span id="lLiquid"><span class="annot"><span class="annottext">lLiquid :: Symbol
 </span><a href="Drasil.SWHS.Unitals.html#lLiquid"><span class="hs-identifier hs-var hs-var">lLiquid</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;L&quot;</span></span><span>
-</span><span id="line-614"></span><span id="lMelt"><span class="annot"><span class="annottext">lMelt :: Symbol
+</span><span id="line-607"></span><span id="lMelt"><span class="annot"><span class="annottext">lMelt :: Symbol
 </span><a href="Drasil.SWHS.Unitals.html#lMelt"><span class="hs-identifier hs-var hs-var">lMelt</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;melt&quot;</span></span><span>
-</span><span id="line-615"></span><span id="lOut"><span class="annot"><span class="annottext">lOut :: Symbol
+</span><span id="line-608"></span><span id="lOut"><span class="annot"><span class="annottext">lOut :: Symbol
 </span><a href="Drasil.SWHS.Unitals.html#lOut"><span class="hs-identifier hs-var hs-var">lOut</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;out&quot;</span></span><span>
-</span><span id="line-616"></span><span id="lPCM"><span class="annot"><span class="annottext">lPCM :: Symbol
+</span><span id="line-609"></span><span id="lPCM"><span class="annot"><span class="annottext">lPCM :: Symbol
 </span><a href="Drasil.SWHS.Unitals.html#lPCM"><span class="hs-identifier hs-var hs-var">lPCM</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;P&quot;</span></span><span>
-</span><span id="line-617"></span><span id="lSolid"><span class="annot"><span class="annottext">lSolid :: Symbol
+</span><span id="line-610"></span><span id="lSolid"><span class="annot"><span class="annottext">lSolid :: Symbol
 </span><a href="Drasil.SWHS.Unitals.html#lSolid"><span class="hs-identifier hs-var hs-var">lSolid</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;S&quot;</span></span><span>
-</span><span id="line-618"></span><span id="lStep"><span class="annot"><span class="annottext">lStep :: Symbol
+</span><span id="line-611"></span><span id="lStep"><span class="annot"><span class="annottext">lStep :: Symbol
 </span><a href="Drasil.SWHS.Unitals.html#lStep"><span class="hs-identifier hs-var hs-var">lStep</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;step&quot;</span></span><span>
-</span><span id="line-619"></span><span id="lTank"><span class="annot"><span class="annottext">lTank :: Symbol
+</span><span id="line-612"></span><span id="lTank"><span class="annot"><span class="annottext">lTank :: Symbol
 </span><a href="Drasil.SWHS.Unitals.html#lTank"><span class="hs-identifier hs-var hs-var">lTank</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;tank&quot;</span></span><span>
-</span><span id="line-620"></span><span id="lTol"><span class="annot"><span class="annottext">lTol :: Symbol
+</span><span id="line-613"></span><span id="lTol"><span class="annot"><span class="annottext">lTol :: Symbol
 </span><a href="Drasil.SWHS.Unitals.html#lTol"><span class="hs-identifier hs-var hs-var">lTol</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;tol&quot;</span></span><span>
-</span><span id="line-621"></span><span id="lVapour"><span class="annot"><span class="annottext">lVapour :: Symbol
+</span><span id="line-614"></span><span id="lVapour"><span class="annot"><span class="annottext">lVapour :: Symbol
 </span><a href="Drasil.SWHS.Unitals.html#lVapour"><span class="hs-identifier hs-var hs-var">lVapour</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;V&quot;</span></span><span>
-</span><span id="line-622"></span><span id="lWater"><span class="annot"><span class="annottext">lWater :: Symbol
+</span><span id="line-615"></span><span id="lWater"><span class="annot"><span class="annottext">lWater :: Symbol
 </span><a href="Drasil.SWHS.Unitals.html#lWater"><span class="hs-identifier hs-var hs-var">lWater</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
 </span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;W&quot;</span></span><span>
-</span><span id="line-623"></span></pre></body></html>
+</span><span id="line-616"></span></pre></body></html>

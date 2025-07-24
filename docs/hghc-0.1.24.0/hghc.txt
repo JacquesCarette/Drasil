@@ -12,16 +12,16 @@
 module Drasil.HGHC.Choices
 
 module Drasil.HGHC.HeatTransfer
-symbols :: [QuantityDict]
+symbols :: [DefinedQuantityDict]
 dataDefs :: [DataDefinition]
 qDefs :: [SimpleQDef]
-htVars :: [QuantityDict]
-htInputs :: [QuantityDict]
-htOutputs :: [QuantityDict]
-cladThick :: QuantityDict
-coolFilmCond :: QuantityDict
-gapFilmCond :: QuantityDict
-cladCond :: QuantityDict
+htVars :: [DefinedQuantityDict]
+htInputs :: [DefinedQuantityDict]
+htOutputs :: [DefinedQuantityDict]
+cladThick :: DefinedQuantityDict
+coolFilmCond :: DefinedQuantityDict
+gapFilmCond :: DefinedQuantityDict
+cladCond :: DefinedQuantityDict
 htTransCladCoolEq :: Expr
 htTransCladFuelEq :: Expr
 htTransCladCool :: SimpleQDef

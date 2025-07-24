@@ -16,15 +16,16 @@ module Theory.Drasil
 -- | Members of this class may have inputs.
 class HasInputs c
 
--- | Provides a <tt>Lens</tt> that holds a <a>QuantityDict</a> and maybe
---   constraints.
-inputs :: HasInputs c => Lens' c [(QuantityDict, Maybe (RealInterval Expr Expr))]
+-- | Provides a <tt>Lens</tt> that holds a <a>DefinedQuantityDict</a> and
+--   maybe constraints.
+inputs :: HasInputs c => Lens' c [(DefinedQuantityDict, Maybe (RealInterval Expr Expr))]
 
 -- | Members of this class may have outputs.
 class HasOutput c
 
--- | Provides a <a>Getter</a> that holds a <a>QuantityDict</a> for output.
-output :: HasOutput c => Getter c QuantityDict
+-- | Provides a <a>Getter</a> that holds a <a>DefinedQuantityDict</a> for
+--   output.
+output :: HasOutput c => Getter c DefinedQuantityDict
 
 -- | Provides a <a>Getter</a> that holds constraints on the output.
 out_constraints :: HasOutput c => Getter c [RealInterval Expr Expr]
@@ -88,7 +89,7 @@ data DefiningExpr e
 mkMultiDefn :: String -> DefinedQuantityDict -> Sentence -> NonEmpty (DefiningExpr e) -> MultiDefn e
 
 -- | Smart constructor for <a>MultiDefn</a>s defining <a>UID</a>s using
---   that of the <a>QuantityDict</a>.
+--   that of the <a>DefinedQuantityDict</a>.
 mkMultiDefnForQuant :: DefinedQuantityDict -> Sentence -> NonEmpty (DefiningExpr e) -> MultiDefn e
 
 -- | Smart constructor for <a>DefiningExpr</a>s.
@@ -185,10 +186,10 @@ imNoRefs :: ModelKind Expr -> Inputs -> Output -> OutputConstraints -> Maybe Der
 imNoDerivNoRefs :: ModelKind Expr -> Inputs -> Output -> OutputConstraints -> String -> [Sentence] -> InstanceModel
 
 -- | For building a quantity with no constraint.
-qwUC :: (Quantity q, MayHaveUnit q) => q -> Input
+qwUC :: (Quantity q, MayHaveUnit q, Concept q) => q -> Input
 
 -- | For building a quantity with a constraint.
-qwC :: (Quantity q, MayHaveUnit q) => q -> RealInterval Expr Expr -> Input
+qwC :: (Quantity q, MayHaveUnit q, Concept q) => q -> RealInterval Expr Expr -> Input
 
 -- | Grab all related <a>QDefinition</a>s from a list of instance models.
 getEqModQdsFromIm :: [InstanceModel] -> [SimpleQDef]
@@ -198,7 +199,7 @@ getEqModQdsFromIm :: [InstanceModel] -> [SimpleQDef]
 class Theory t
 valid_context :: Theory t => Lens' t [TheoryModel]
 spaces :: Theory t => Lens' t [SpaceDefn]
-quantities :: Theory t => Lens' t [QuantityDict]
+quantities :: Theory t => Lens' t [DefinedQuantityDict]
 operations :: Theory t => Lens' t [ConceptChunk]
 defined_quant :: Theory t => Lens' t [ModelQDef]
 invariants :: Theory t => Lens' t [ModelExpr]
@@ -211,7 +212,7 @@ defined_fun :: Theory t => Lens' t [ModelQDef]
 --   <li>con - a ConceptChunk,</li>
 --   <li>vctx - definition context (<a>TheoryModel</a>s),</li>
 --   <li>spc - type definitions (<a>SpaceDefn</a>s),</li>
---   <li>quan - quantities (<a>QuantityDict</a>s),</li>
+--   <li>quan - quantities (<a>DefinedQuantityDict</a>s),</li>
 --   <li>ops - operations (<a>ConceptChunk</a>s),</li>
 --   <li>defq - definitions (<a>QDefinition</a>s),</li>
 --   <li>invs - invariants (<a>ModelExpr</a>s),</li>
@@ -228,8 +229,8 @@ data TheoryModel
 
 -- | Constructor for theory models. Must have a source. Uses the shortname
 --   of the reference address.
-tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind ModelExpr -> [q] -> [c] -> [ModelQDef] -> [ModelExpr] -> [ModelQDef] -> [DecRef] -> String -> [Sentence] -> TheoryModel
+tm :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr -> [q] -> [c] -> [ModelQDef] -> [ModelExpr] -> [ModelQDef] -> [DecRef] -> String -> [Sentence] -> TheoryModel
 
 -- | Constructor for theory models. Uses the shortname of the reference
 --   address.
-tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind ModelExpr -> [q] -> [c] -> [ModelQDef] -> [ModelExpr] -> [ModelQDef] -> String -> [Sentence] -> TheoryModel
+tmNoRefs :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr -> [q] -> [c] -> [ModelQDef] -> [ModelExpr] -> [ModelQDef] -> String -> [Sentence] -> TheoryModel

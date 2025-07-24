@@ -278,22 +278,22 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 -&gt; [Sentence]
 -&gt; [Sentence]
 -&gt; [Sentence]
--&gt; [QuantityDict]
+-&gt; [DefinedQuantityDict]
 -&gt; [TheoryModel]
 -&gt; [GenDefn]
 -&gt; [DataDefinition]
 -&gt; [InstanceModel]
 -&gt; [String]
--&gt; [QuantityDict]
--&gt; [QuantityDict]
+-&gt; [DefinedQuantityDict]
+-&gt; [DefinedQuantityDict]
 -&gt; [UncertQ]
 -&gt; [ConstQDef]
 -&gt; ChunkDB
 -&gt; System
 forall a e h i j.
-(CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Quantity h,
- MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j,
- Constrained j) =&gt;
+(CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Concept e,
+ Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i,
+ Concept i, HasUID j, Constrained j) =&gt;
 a
 -&gt; SystemKind
 -&gt; People
@@ -319,7 +319,7 @@ a
 </span><span class="hs-identifier hs-var">olu</span></span><span class="hs-special">]</span><span>
 </span><span id="line-105"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.SglPend.Body.html#purp"><span class="hs-identifier hs-var">purp</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-106"></span><span>  </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><span id="line-106"></span><span>  </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 </span><a href="Drasil.SglPend.Unitals.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span>
 </span><span id="line-107"></span><span>  </span><span class="annot"><span class="annottext">[TheoryModel]
 </span><a href="Drasil.SglPend.Body.html#tMods"><span class="hs-identifier hs-var">tMods</span></a></span><span> </span><span class="annot"><span class="annottext">[GenDefn]
@@ -327,8 +327,8 @@ a
 </span><a href="Drasil.SglPend.DataDefs.html#dataDefs"><span class="hs-identifier hs-var">dataDefs</span></a></span><span> </span><span class="annot"><span class="annottext">[InstanceModel]
 </span><a href="Drasil.SglPend.IMods.html#iMods"><span class="hs-identifier hs-var">iMods</span></a></span><span>
 </span><span id="line-108"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-109"></span><span>  </span><span class="annot"><span class="annottext">[QuantityDict]
-</span><a href="Drasil.SglPend.Unitals.html#inputs"><span class="hs-identifier hs-var">inputs</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><span id="line-109"></span><span>  </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
+</span><a href="Drasil.SglPend.Unitals.html#inputs"><span class="hs-identifier hs-var">inputs</span></a></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 </span><a href="Drasil.SglPend.Unitals.html#outputs"><span class="hs-identifier hs-var">outputs</span></a></span><span> </span><span class="annot"><span class="annottext">[UncertQ]
 </span><a href="Drasil.SglPend.Unitals.html#inConstraints"><span class="hs-identifier hs-var">inConstraints</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-110"></span><span>  </span><span class="annot"><span class="annottext">ChunkDB
@@ -436,16 +436,17 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-131"></span><span>  </span><span class="hs-comment">-- QuantityDicts</span><span>
-</span><span id="line-132"></span><span>  </span><span class="annot"><span class="annottext">(QuantityDict -&gt; IdeaDict) -&gt; [QuantityDict] -&gt; [IdeaDict]
+</span><span id="line-132"></span><span>  </span><span class="annot"><span class="annottext">(DefinedQuantityDict -&gt; IdeaDict)
+-&gt; [DefinedQuantityDict] -&gt; [IdeaDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; IdeaDict
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; IdeaDict
 forall c. Idea c =&gt; c -&gt; IdeaDict
-</span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 </span><a href="Drasil.SglPend.Unitals.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span>
 </span><span id="line-133"></span><span>
 </span><span id="line-134"></span><span class="annot"><a href="Drasil.SglPend.Body.html#symbMap"><span class="hs-identifier hs-type">symbMap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span>
 </span><span id="line-135"></span><span id="symbMap"><span class="annot"><span class="annottext">symbMap :: ChunkDB
-</span><a href="Drasil.SglPend.Body.html#symbMap"><span class="hs-identifier hs-var hs-var">symbMap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><a href="Drasil.SglPend.Body.html#symbMap"><span class="hs-identifier hs-var hs-var">symbMap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 -&gt; [IdeaDict]
 -&gt; [ConceptChunk]
 -&gt; [UnitDefn]
@@ -459,7 +460,7 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 -&gt; [Citation]
 -&gt; ChunkDB
 forall q c u.
-(Quantity q, MayHaveUnit q, Concept c, IsUnit u) =&gt;
+(Quantity q, MayHaveUnit q, Concept q, Concept c, IsUnit u) =&gt;
 [q]
 -&gt; [IdeaDict]
 -&gt; [c]
@@ -473,23 +474,21 @@ forall q c u.
 -&gt; [Reference]
 -&gt; [Citation]
 -&gt; ChunkDB
-</span><span class="hs-identifier hs-var">cdb</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(InstanceModel -&gt; QuantityDict)
--&gt; [InstanceModel] -&gt; [QuantityDict]
+</span><span class="hs-identifier hs-var">cdb</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(InstanceModel -&gt; DefinedQuantityDict)
+-&gt; [InstanceModel] -&gt; [DefinedQuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">InstanceModel
--&gt; Getting QuantityDict InstanceModel QuantityDict -&gt; QuantityDict
+-&gt; Getting DefinedQuantityDict InstanceModel DefinedQuantityDict
+-&gt; DefinedQuantityDict
 forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting QuantityDict InstanceModel QuantityDict
-forall c. HasOutput c =&gt; Getter c QuantityDict
-Getter InstanceModel QuantityDict
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting DefinedQuantityDict InstanceModel DefinedQuantityDict
+forall c. HasOutput c =&gt; Getter c DefinedQuantityDict
+Getter InstanceModel DefinedQuantityDict
 </span><span class="hs-identifier hs-var">output</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[InstanceModel]
-</span><a href="Drasil.SglPend.IMods.html#iMods"><span class="hs-identifier hs-var">iMods</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
+</span><a href="Drasil.SglPend.IMods.html#iMods"><span class="hs-identifier hs-var">iMods</span></a></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
+-&gt; [DefinedQuantityDict] -&gt; [DefinedQuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(QuantityDict -&gt; QuantityDict) -&gt; [QuantityDict] -&gt; [QuantityDict]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; QuantityDict
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 </span><a href="Drasil.SglPend.Unitals.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[IdeaDict]
 </span><a href="Drasil.SglPend.Body.html#ideaDicts"><span class="hs-identifier hs-var">ideaDicts</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
 </span><a href="Drasil.SglPend.Body.html#conceptChunks"><span class="hs-identifier hs-var">conceptChunks</span></a></span><span>

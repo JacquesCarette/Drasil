@@ -41,7 +41,9 @@ forall a. Maybe a
 </span><span id="line-26"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#positionIXQD"><span class="hs-identifier hs-type">positionIXQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-27"></span><span id="positionIXQD"><span class="annot"><span class="annottext">positionIXQD :: SimpleQDef
 </span><a href="Drasil.SglPend.DataDefs.html#positionIXQD"><span class="hs-identifier hs-var hs-var">positionIXQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.ixPos</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SglPend.DataDefs.html#positionIXEqn"><span class="hs-identifier hs-var">positionIXEqn</span></a></span><span>
@@ -105,7 +107,9 @@ forall a. Maybe a
 </span><span id="line-42"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#positionIYQD"><span class="hs-identifier hs-type">positionIYQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-43"></span><span id="positionIYQD"><span class="annot"><span class="annottext">positionIYQD :: SimpleQDef
 </span><a href="Drasil.SglPend.DataDefs.html#positionIYQD"><span class="hs-identifier hs-var hs-var">positionIYQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.iyPos</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SglPend.DataDefs.html#positionIYEqn"><span class="hs-identifier hs-var">positionIYEqn</span></a></span><span>
@@ -171,7 +175,9 @@ forall a. Maybe a
 </span><span id="line-59"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#frequencyDDQD"><span class="hs-identifier hs-type">frequencyDDQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-60"></span><span id="frequencyDDQD"><span class="annot"><span class="annottext">frequencyDDQD :: SimpleQDef
 </span><a href="Drasil.SglPend.DataDefs.html#frequencyDDQD"><span class="hs-identifier hs-var hs-var">frequencyDDQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.frequency</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SglPend.DataDefs.html#frequencyDDEqn"><span class="hs-identifier hs-var">frequencyDDEqn</span></a></span><span>
@@ -219,7 +225,9 @@ forall a. Maybe a
 </span><span id="line-74"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#angFrequencyDDQD"><span class="hs-identifier hs-type">angFrequencyDDQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-75"></span><span id="angFrequencyDDQD"><span class="annot"><span class="annottext">angFrequencyDDQD :: SimpleQDef
 </span><a href="Drasil.SglPend.DataDefs.html#angFrequencyDDQD"><span class="hs-identifier hs-var hs-var">angFrequencyDDQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.angularFrequency</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SglPend.DataDefs.html#angFrequencyDDEqn"><span class="hs-identifier hs-var">angFrequencyDDEqn</span></a></span><span>
@@ -275,7 +283,9 @@ forall a. Maybe a
 </span><span id="line-88"></span><span class="annot"><a href="Drasil.SglPend.DataDefs.html#periodSHMDDQD"><span class="hs-identifier hs-type">periodSHMDDQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-89"></span><span id="periodSHMDDQD"><span class="annot"><span class="annottext">periodSHMDDQD :: SimpleQDef
 </span><a href="Drasil.SglPend.DataDefs.html#periodSHMDDQD"><span class="hs-identifier hs-var hs-var">periodSHMDDQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">QP.period</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SglPend.DataDefs.html#periodSHMDDEqn"><span class="hs-identifier hs-var">periodSHMDDEqn</span></a></span><span>

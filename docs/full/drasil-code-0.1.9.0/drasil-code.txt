@@ -12,10 +12,10 @@
 module Language.Drasil.Chunk.CodeBase
 
 -- | Construct a <a>CodeVarChunk</a> from a <a>Quantity</a>.
-quantvar :: (Quantity c, MayHaveUnit c) => c -> CodeVarChunk
+quantvar :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeVarChunk
 
 -- | Construct a <a>CodeFuncChunk</a> from a <a>Quantity</a>.
-quantfunc :: (Quantity c, MayHaveUnit c) => c -> CodeFuncChunk
+quantfunc :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeFuncChunk
 
 -- | Get a list of <a>CodeChunk</a>s from an equation.
 codevars :: CodeExpr -> ChunkDB -> [CodeVarChunk]
@@ -43,10 +43,10 @@ codeName :: CodeIdea c => c -> String
 codeChunk :: CodeIdea c => c -> CodeChunk
 
 -- | Basic chunk representation in the code generation context. Contains a
---   QuantityDict and the kind of code (variable or function).
+--   DefinedQuantityDict and the kind of code (variable or function).
 data () => CodeChunk
-CodeC :: QuantityDict -> VarOrFunc -> CodeChunk
-[_qc] :: CodeChunk -> QuantityDict
+CodeC :: DefinedQuantityDict -> VarOrFunc -> CodeChunk
+[_qc] :: CodeChunk -> DefinedQuantityDict
 [kind] :: CodeChunk -> VarOrFunc
 
 -- | Chunk representing a variable. The <tt>obv</tt> field represents the
@@ -68,10 +68,10 @@ Func :: VarOrFunc
 obv :: Lens' CodeVarChunk (Maybe CodeChunk)
 
 -- | Construct a <a>CodeVarChunk</a> from a <a>Quantity</a>.
-quantvar :: (Quantity c, MayHaveUnit c) => c -> CodeVarChunk
+quantvar :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeVarChunk
 
 -- | Construct a <a>CodeFuncChunk</a> from a <a>Quantity</a>.
-quantfunc :: (Quantity c, MayHaveUnit c) => c -> CodeFuncChunk
+quantfunc :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeFuncChunk
 
 -- | Combine an Object-type <a>CodeChunk</a> with another <a>CodeChunk</a>
 --   to create a new <a>CodeChunk</a> which represents a field of the
@@ -133,17 +133,19 @@ sfwrLookup :: HasUID q => ConstraintCEMap -> q -> (q, [ConstraintCE])
 module Language.Drasil.Chunk.NamedArgument
 
 -- | Any quantity can be a named argument (wrapper for
---   <a>QuantityDict</a>), but with more of a focus on generating code
---   arguments.
+--   <a>DefinedQuantityDict</a>), but with more of a focus on generating
+--   code arguments.
 newtype NamedArgument
-NA :: QuantityDict -> NamedArgument
-[_qtd] :: NamedArgument -> QuantityDict
+NA :: DefinedQuantityDict -> NamedArgument
+[_qtd] :: NamedArgument -> DefinedQuantityDict
 
 -- | Smart constructor for <a>NamedArgument</a> .
-narg :: (Quantity q, MayHaveUnit q) => q -> NamedArgument
+narg :: (Quantity q, MayHaveUnit q, Concept q) => q -> NamedArgument
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.NamedArgument.NamedArgument
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.NamedArgument.NamedArgument
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.NamedArgument.NamedArgument
+instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.NamedArgument.NamedArgument
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.NamedArgument.NamedArgument
 instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.NamedArgument.NamedArgument
 instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.NamedArgument.NamedArgument
 instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.NamedArgument.NamedArgument
@@ -173,6 +175,8 @@ pcVal :: CodeIdea c => c -> ParameterChunk
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Parameter.ParameterChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Parameter.ParameterChunk
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Parameter.ParameterChunk
+instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Parameter.ParameterChunk
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Parameter.ParameterChunk
 instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Parameter.ParameterChunk
 instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.Parameter.ParameterChunk
 instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Parameter.ParameterChunk
@@ -198,13 +202,13 @@ spaceToCodeType :: Space -> [CodeType]
 module Language.Drasil.Code.CodeQuantityDicts
 
 -- | Variable for the input file's name.
-inFileName :: QuantityDict
+inFileName :: DefinedQuantityDict
 
 -- | Variable for an object of the InputParameters class.
-inParams :: QuantityDict
+inParams :: DefinedQuantityDict
 
 -- | Variable for an object of the Constants class.
-consts :: QuantityDict
+consts :: DefinedQuantityDict
 
 module Language.Drasil.Code.DataDesc
 
@@ -607,7 +611,7 @@ ODE :: DefinitionType
 
 -- | Constructs a <a>CodeDefinition</a> where the underlying
 --   <a>CodeChunk</a> is for a function.
-qtoc :: (Quantity (q Expr), MayHaveUnit (q Expr), DefiningExpr q) => q Expr -> CodeDefinition
+qtoc :: (Quantity (q Expr), MayHaveUnit (q Expr), DefiningExpr q, Concept (q Expr)) => q Expr -> CodeDefinition
 
 -- | Constructs a <a>CodeDefinition</a> where the underlying
 --   <a>CodeChunk</a> is for a variable.
@@ -620,6 +624,8 @@ defType :: Lens' CodeDefinition DefinitionType
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.CodeDefinition.CodeDefinition
+instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.CodeDefinition.CodeDefinition
+instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.CodeDefinition.CodeDefinition
@@ -705,7 +711,7 @@ type Description = String
 type Import = String
 
 -- | Define an assignment statement.
-($:=) :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> FuncStmt
+($:=) :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeExpr -> FuncStmt
 
 -- | Define a public state variable based on the given <a>CodeVarChunk</a>.
 pubStateVar :: CodeVarChunk -> StateVariable
@@ -730,15 +736,15 @@ ctorDef :: Name -> Description -> [ParameterChunk] -> [Initializer] -> [FuncStmt
 -- | Define a for-loop. <a>Quantity</a> is for the iteration variable,
 --   <a>CodeExpr</a> is the upper bound at that variable (the variable will
 --   start with a value of 0). [<a>FuncStmt</a>] is for the loop body.
-ffor :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> [FuncStmt] -> FuncStmt
+ffor :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeExpr -> [FuncStmt] -> FuncStmt
 
 -- | Define a for-loop. <a>Quantity</a> is for the iteration variable, and
 --   3 <a>CodeExpr</a>s for the start, stop, step numbers.
 --   [<a>FuncStmt</a>] is for the loop body.
-fforRange :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> CodeExpr -> CodeExpr -> [FuncStmt] -> FuncStmt
+fforRange :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeExpr -> CodeExpr -> CodeExpr -> [FuncStmt] -> FuncStmt
 
 -- | Define a declare-define statement.
-fDecDef :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> FuncStmt
+fDecDef :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeExpr -> FuncStmt
 
 -- | Gets the name of a function.
 fname :: Func -> Name
@@ -754,7 +760,7 @@ funcData :: Name -> Description -> DataDesc -> Func
 -- | Define a function by providing the <a>FuncStmt</a>s for its body.
 --   Other parameters are function name, description, list of parameters,
 --   space of the returned value, and description of the returned value.
-funcDef :: (Quantity c, MayHaveUnit c) => Name -> Description -> [c] -> Space -> Maybe Description -> [FuncStmt] -> Func
+funcDef :: (Quantity c, MayHaveUnit c, Concept c) => Name -> Description -> [c] -> Space -> Maybe Description -> [FuncStmt] -> Func
 
 -- | Like <a>funcDef</a> but uses <a>ParameterChunk</a>s to represent the
 --   parameters.
@@ -1656,21 +1662,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | The database of all chunks used in the problem.
 [_systemdb] :: OldCodeSpec -> ChunkDB
-class HasOldCodeSpec c_axx5
-oldCodeSpec :: HasOldCodeSpec c_axx5 => Lens' c_axx5 OldCodeSpec
-authorsO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 People
-cMapO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 [FilePath]
-constMapO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 ConstantMap
-constantsO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 [Const]
-derivedInputsO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 [Derived]
-execOrderO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 [Def]
-extInputsO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 [Input]
-inputsO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 [Input]
-modsO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 [Mod]
-outputsO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 [Output]
-pNameO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 Name
-systemdbO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 ChunkDB
+class HasOldCodeSpec c_axQ6
+oldCodeSpec :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 OldCodeSpec
+authorsO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 People
+cMapO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 [FilePath]
+constMapO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 ConstantMap
+constantsO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 [Const]
+derivedInputsO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 [Derived]
+execOrderO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 [Def]
+extInputsO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 [Input]
+inputsO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 [Input]
+modsO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 [Mod]
+outputsO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 [Output]
+pNameO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 Name
+systemdbO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 ChunkDB
 
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
@@ -1702,9 +1708,9 @@ codeSpec :: System -> Choices -> [Mod] -> CodeSpec
 --   populate the <a>OldCodeSpec</a> structure.
 oldcodeSpec :: System -> Choices -> [Mod] -> OldCodeSpec
 
--- | Convert a <a>Func</a> to an implementation-stage <a>QuantityDict</a>
---   representing the function.
-asVC :: Func -> QuantityDict
+-- | Convert a <a>Func</a> to an implementation-stage
+--   <a>DefinedQuantityDict</a> representing the function.
+asVC :: Func -> DefinedQuantityDict
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID
@@ -1952,8 +1958,8 @@ module Language.Drasil.Code.Imperative.Helpers
 -- | Puts a state-dependent value into a singleton list.
 liftS :: State a b -> State a [b]
 
--- | Gets the <a>QuantityDict</a> corresponding to a <a>UID</a>.
-lookupC :: DrasilState -> UID -> QuantityDict
+-- | Gets the <a>DefinedQuantityDict</a> corresponding to a <a>UID</a>.
+lookupC :: DrasilState -> UID -> DefinedQuantityDict
 
 -- | Converts a <a>ScopeType</a> to a <a>Scope</a>
 convScope :: SharedProg r => ScopeType -> r (Scope r)
@@ -2863,31 +2869,31 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> [Mod] -> CodeSpec
-class HasOldCodeSpec c_axx5
-oldCodeSpec :: HasOldCodeSpec c_axx5 => Lens' c_axx5 OldCodeSpec
-authorsO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 People
-cMapO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 [FilePath]
-constMapO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 ConstantMap
-constantsO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 [Const]
-derivedInputsO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 [Derived]
-execOrderO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 [Def]
-extInputsO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 [Input]
-inputsO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 [Input]
-modsO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 [Mod]
-outputsO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 [Output]
-pNameO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 Name
-systemdbO :: HasOldCodeSpec c_axx5 => Lens' c_axx5 ChunkDB
+class HasOldCodeSpec c_axQ6
+oldCodeSpec :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 OldCodeSpec
+authorsO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 People
+cMapO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 [FilePath]
+constMapO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 ConstantMap
+constantsO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 [Const]
+derivedInputsO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 [Derived]
+execOrderO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 [Def]
+extInputsO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 [Input]
+inputsO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 [Input]
+modsO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 [Mod]
+outputsO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 [Output]
+pNameO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 Name
+systemdbO :: HasOldCodeSpec c_axQ6 => Lens' c_axQ6 ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID
 
--- | Convert a <a>Func</a> to an implementation-stage <a>QuantityDict</a>
---   representing the function.
-asVC :: Func -> QuantityDict
+-- | Convert a <a>Func</a> to an implementation-stage
+--   <a>DefinedQuantityDict</a> representing the function.
+asVC :: Func -> DefinedQuantityDict
 
 -- | Define an assignment statement.
-($:=) :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> FuncStmt
+($:=) :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeExpr -> FuncStmt
 
 -- | Holds module information.
 data Mod
@@ -2926,17 +2932,17 @@ pubStateVar :: CodeVarChunk -> StateVariable
 privStateVar :: CodeVarChunk -> StateVariable
 
 -- | Define a declare-define statement.
-fDecDef :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> FuncStmt
+fDecDef :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeExpr -> FuncStmt
 
 -- | Define a for-loop. <a>Quantity</a> is for the iteration variable,
 --   <a>CodeExpr</a> is the upper bound at that variable (the variable will
 --   start with a value of 0). [<a>FuncStmt</a>] is for the loop body.
-ffor :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> [FuncStmt] -> FuncStmt
+ffor :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeExpr -> [FuncStmt] -> FuncStmt
 
 -- | Define a for-loop. <a>Quantity</a> is for the iteration variable, and
 --   3 <a>CodeExpr</a>s for the start, stop, step numbers.
 --   [<a>FuncStmt</a>] is for the loop body.
-fforRange :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> CodeExpr -> CodeExpr -> [FuncStmt] -> FuncStmt
+fforRange :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeExpr -> CodeExpr -> CodeExpr -> [FuncStmt] -> FuncStmt
 
 -- | Define a function that reads data from a file, according to the given
 --   <a>DataDesc</a>.
@@ -2945,7 +2951,7 @@ funcData :: Name -> Description -> DataDesc -> Func
 -- | Define a function by providing the <a>FuncStmt</a>s for its body.
 --   Other parameters are function name, description, list of parameters,
 --   space of the returned value, and description of the returned value.
-funcDef :: (Quantity c, MayHaveUnit c) => Name -> Description -> [c] -> Space -> Maybe Description -> [FuncStmt] -> Func
+funcDef :: (Quantity c, MayHaveUnit c, Concept c) => Name -> Description -> [c] -> Space -> Maybe Description -> [FuncStmt] -> Func
 
 -- | Define a <a>Mod</a> with the given <a>Name</a>, <a>Description</a>,
 --   <tt>Classes</tt>, and <tt>Functions</tt>.
@@ -3342,7 +3348,7 @@ data AuxData
 data PackData
 
 -- | Basic chunk representation in the code generation context. Contains a
---   QuantityDict and the kind of code (variable or function).
+--   DefinedQuantityDict and the kind of code (variable or function).
 data () => CodeChunk
 
 -- | Chunk representing a variable. The <tt>obv</tt> field represents the
@@ -3353,10 +3359,10 @@ data () => CodeVarChunk
 data () => CodeFuncChunk
 
 -- | Construct a <a>CodeVarChunk</a> from a <a>Quantity</a>.
-quantvar :: (Quantity c, MayHaveUnit c) => c -> CodeVarChunk
+quantvar :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeVarChunk
 
 -- | Construct a <a>CodeFuncChunk</a> from a <a>Quantity</a>.
-quantfunc :: (Quantity c, MayHaveUnit c) => c -> CodeFuncChunk
+quantfunc :: (Quantity c, MayHaveUnit c, Concept c) => c -> CodeFuncChunk
 
 -- | Combine an Object-type <a>CodeChunk</a> with another <a>CodeChunk</a>
 --   to create a new <a>CodeChunk</a> which represents a field of the
@@ -3465,12 +3471,12 @@ unSP :: SwiftProject a -> a
 unJLP :: JuliaProject a -> a
 
 -- | Any quantity can be a named argument (wrapper for
---   <a>QuantityDict</a>), but with more of a focus on generating code
---   arguments.
+--   <a>DefinedQuantityDict</a>), but with more of a focus on generating
+--   code arguments.
 data NamedArgument
 
 -- | Smart constructor for <a>NamedArgument</a> .
-narg :: (Quantity q, MayHaveUnit q) => q -> NamedArgument
+narg :: (Quantity q, MayHaveUnit q, Concept q) => q -> NamedArgument
 
 
 -- | Define and collect information about ODEs and ODE solvers from various
@@ -3480,14 +3486,16 @@ module Data.Drasil.ExternalLibraries.ODELibraries
 -- | <a>SciPy</a> ODE library package.
 scipyODEPckg :: ODELibPckg
 
--- | Collects variables needed for SciPy's ODEs as <a>QuantityDict</a>s.
-scipyODESymbols :: [QuantityDict]
+-- | Collects variables needed for SciPy's ODEs as
+--   <a>DefinedQuantityDict</a>s.
+scipyODESymbols :: [DefinedQuantityDict]
 
 -- | <a>Oslo</a> ODE library package.
 osloPckg :: ODELibPckg
 
--- | Collects variables needed for Oslo's ODEs as <a>QuantityDict</a>s.
-osloSymbols :: [QuantityDict]
+-- | Collects variables needed for Oslo's ODEs as
+--   <a>DefinedQuantityDict</a>s.
+osloSymbols :: [DefinedQuantityDict]
 
 -- | Oslo's Vector type behaves like an array, so needs to be represented
 --   as one or else will hit type errors in GOOL.
@@ -3496,11 +3504,13 @@ arrayVecDepVar :: ODEInfo -> CodeVarChunk
 -- | <a>Apache Commons</a> ODE library package.
 apacheODEPckg :: ODELibPckg
 
--- | Collects variables needed for Apache's ODEs as <a>QuantityDict</a>s.
-apacheODESymbols :: [QuantityDict]
+-- | Collects variables needed for Apache's ODEs as
+--   <a>DefinedQuantityDict</a>s.
+apacheODESymbols :: [DefinedQuantityDict]
 
 -- | <a>odeint</a> ODE library package.
 odeintPckg :: ODELibPckg
 
--- | Collects variables needed for odeint's ODEs as <a>QuantityDict</a>s.
-odeintSymbols :: [QuantityDict]
+-- | Collects variables needed for odeint's ODEs as
+--   <a>DefinedQuantityDict</a>s.
+odeintSymbols :: [DefinedQuantityDict]

@@ -264,7 +264,7 @@
 <tr><td style="text-align: left">\({H_{\text{s}}}\)</td><td style="text-align: left">Transfer Function in the frequency domain</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">\({K_{\text{d}}}\)</td><td style="text-align: left">Derivative Gain</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">\({K_{\text{p}}}\)</td><td style="text-align: left">Proportional Gain</td><td style="text-align: left">–</td></tr>
-<tr><td style="text-align: left">\(k\)</td><td style="text-align: left">Stiffness Coefficient</td><td style="text-align: left">\({\text{s}}\)</td></tr>
+<tr><td style="text-align: left">\(k\)</td><td style="text-align: left">Stiffness coefficient</td><td style="text-align: left">\({\text{s}}\)</td></tr>
 <tr><td style="text-align: left">\(\mathit{L⁻¹[F(s)]}\)</td><td style="text-align: left">Inverse Laplace Transform of a function</td><td style="text-align: left">–</td></tr>
 <tr><td style="text-align: left">\(m\)</td><td style="text-align: left">Mass</td><td style="text-align: left">\({\text{kg}}\)</td></tr>
 <tr><td style="text-align: left">\({P_{\text{s}}}\)</td><td style="text-align: left">Proportional control in the frequency domain</td><td style="text-align: left">–</td></tr>
@@ -363,7 +363,7 @@
 <li>Control Variable: The Control Variable is the output of the PD controller.</li>
 <li>Transfer Function: The Transfer Function of a system is the ratio of the output to the input functions in the frequency domain.</li>
 <li>Damping Coefficient: Quantity that characterizes a second order system’s oscillatory response.</li>
-<li>Stiffness Coefficient: Quantity that characterizes a spring’s stiffness.</li>
+<li>Stiffness coefficient: Quantity that characterizes a spring’s stiffness.</li>
 <li>Simulation Time: Total execution time of the PD simulation.</li>
 <li>Process Variable: The output value from the power plant.</li>
 <li>Set-Point: The desired value that the control system must reach. This also knows as the reference variable.</li>
@@ -412,7 +412,7 @@
 <div id="dampingCoeffSpring"></div>
 <p>Spring Damping Coefficient: The Damping Coefficient of the spring in the mass-spring-damper system (<a href="./SecAssumps.html#pwrPlant">A:Power plant</a>) is assumed to be 1. (RefBy: <a href="./SecGDs.html#GD:gdPowerPlant">GD:gdPowerPlant</a> and <a href="./SecLCs.html#likeChgPP">LC:DC Gain and Time Constant</a>.)</p>
 <div id="stiffnessCoeffSpring"></div>
-<p>Spring Stiffness Coefficient: The Stiffness Coefficient of the spring in the mass-spring-damper system (<a href="./SecAssumps.html#pwrPlant">A:Power plant</a>) is assumed to be 20. (RefBy: <a href="./SecGDs.html#GD:gdPowerPlant">GD:gdPowerPlant</a> and <a href="./SecLCs.html#likeChgPP">LC:DC Gain and Time Constant</a>.)</p>
+<p>Spring Stiffness Coefficient: The Stiffness coefficient of the spring in the mass-spring-damper system (<a href="./SecAssumps.html#pwrPlant">A:Power plant</a>) is assumed to be 20. (RefBy: <a href="./SecGDs.html#GD:gdPowerPlant">GD:gdPowerPlant</a> and <a href="./SecLCs.html#likeChgPP">LC:DC Gain and Time Constant</a>.)</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:TMs"><a class="header" href="#Sec:TMs">Theoretical Models</a></h1>
 <p>This section focuses on the general equations and laws that PD Controller is based on.</p>
 <div align="center">
@@ -443,7 +443,7 @@
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Refname</th><th style="text-align: left">TM:tmSOSystem</th></tr></thead><tbody>
 <tr><td style="text-align: left">Label</td><td style="text-align: left">Second Order Mass-Spring-Damper System</td></tr>
 <tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\frac{1}{m\,s^{2}+c\,s+k}\]</td></tr>
-<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(s\) is the Complex frequency-domain parameter (Unitless)</li><li>\(c\) is the Damping coefficient of the spring (Unitless)</li><li>\(k\) is the Stiffness Coefficient (\({\text{s}}\))</li></ul></td></tr>
+<tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(m\) is the mass (\({\text{kg}}\))</li><li>\(s\) is the Complex frequency-domain parameter (Unitless)</li><li>\(c\) is the Damping coefficient of the spring (Unitless)</li><li>\(k\) is the Stiffness coefficient (\({\text{s}}\))</li></ul></td></tr>
 <tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The Transfer Function (from <a href="./SecAssumps.html#pwrPlantTxFnx">A:Transfer Function</a>) of a Second Order System (mass-spring-damper) is characterized by this equation.</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#abbasi2015">abbasi2015</a></td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecGDs.html#GD:gdPowerPlant">GD:gdPowerPlant</a></td></tr>
@@ -457,7 +457,7 @@
 <tr><td style="text-align: left">Label</td><td style="text-align: left">The Transfer Function of the Power Plant</td></tr>
 <tr><td style="text-align: left">Equation</td><td style="text-align: left">\[\frac{1}{s^{2}+s+20}\]</td></tr>
 <tr><td style="text-align: left">Description</td><td style="text-align: left"><ul><li>\(s\) is the Complex frequency-domain parameter (Unitless)</li></ul></td></tr>
-<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The Transfer Function of the Second Order System (from <a href="./SecTMs.html#TM:tmSOSystem">TM:tmSOSystem</a>) is reduced to this equation by substituting the mass (m) to 1 Kg (from <a href="./SecAssumps.html#massSpring">A:Spring Mass</a>), the Damping Coefficient (\(c\)) to 1 (from <a href="./SecAssumps.html#dampingCoeffSpring">A:Spring Damping Coefficient</a>), and the Stiffness Coefficient (\(k\)) to 20 (from <a href="./SecAssumps.html#stiffnessCoeffSpring">A:Spring Stiffness Coefficient</a>). The equation is converted to the frequency domain by applying the Laplace transform (from <a href="./SecTMs.html#TM:laplaceTransform">TM:laplaceTransform</a>). Additionally, there are no external disturbances to the power plant (from <a href="./SecAssumps.html#externalDisturb">A:External disturbance</a>).</li></ul></td></tr>
+<tr><td style="text-align: left">Notes</td><td style="text-align: left"><ul><li>The Transfer Function of the Second Order System (from <a href="./SecTMs.html#TM:tmSOSystem">TM:tmSOSystem</a>) is reduced to this equation by substituting the mass (m) to 1 Kg (from <a href="./SecAssumps.html#massSpring">A:Spring Mass</a>), the Damping Coefficient (\(c\)) to 1 (from <a href="./SecAssumps.html#dampingCoeffSpring">A:Spring Damping Coefficient</a>), and the Stiffness coefficient (\(k\)) to 20 (from <a href="./SecAssumps.html#stiffnessCoeffSpring">A:Spring Stiffness Coefficient</a>). The equation is converted to the frequency domain by applying the Laplace transform (from <a href="./SecTMs.html#TM:laplaceTransform">TM:laplaceTransform</a>). Additionally, there are no external disturbances to the power plant (from <a href="./SecAssumps.html#externalDisturb">A:External disturbance</a>).</li></ul></td></tr>
 <tr><td style="text-align: left">Source</td><td style="text-align: left"><a href="./SecReferences.html#pidWiki">pidWiki</a> and <a href="./SecReferences.html#abbasi2015">abbasi2015</a></td></tr>
 <tr><td style="text-align: left">RefBy</td><td style="text-align: left"><a href="./SecIMs.html#IM:pdEquationIM">IM:pdEquationIM</a></td></tr>
 </tbody></table>
@@ -588,7 +588,7 @@
 <div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:LCs"><a class="header" href="#Sec:LCs">Likely Changes</a></h1>
 <p>This section lists the likely changes to be made to the software.</p>
 <div id="likeChgPP"></div>
-<p>DC Gain and Time Constant: The mass, Damping Coefficient and the Stiffness Coefficient may be changed to be supplied by the user (from <a href="./SecAssumps.html#massSpring">A:Spring Mass</a>, <a href="./SecAssumps.html#dampingCoeffSpring">A:Spring Damping Coefficient</a>, and <a href="./SecAssumps.html#stiffnessCoeffSpring">A:Spring Stiffness Coefficient</a>).</p>
+<p>DC Gain and Time Constant: The mass, Damping Coefficient and the Stiffness coefficient may be changed to be supplied by the user (from <a href="./SecAssumps.html#massSpring">A:Spring Mass</a>, <a href="./SecAssumps.html#dampingCoeffSpring">A:Spring Damping Coefficient</a>, and <a href="./SecAssumps.html#stiffnessCoeffSpring">A:Spring Stiffness Coefficient</a>).</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="Sec:TraceMatrices"><a class="header" href="#Sec:TraceMatrices">Traceability Matrices and Graphs</a></h1>
 <p>The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an “X” should be modified as well. <a href="./SecTraceMatrices.html#Table:TraceMatAvsA">Tab:TraceMatAvsA</a> shows the dependencies of the assumptions on each other. <a href="./SecTraceMatrices.html#Table:TraceMatAvsAll">Tab:TraceMatAvsAll</a> shows the dependencies of the data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href="./SecTraceMatrices.html#Table:TraceMatRefvsRef">Tab:TraceMatRefvsRef</a> shows the dependencies of the data definitions, theoretical models, general definitions, and instance models on each other. <a href="./SecTraceMatrices.html#Table:TraceMatAllvsR">Tab:TraceMatAllvsR</a> shows the dependencies of the requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models.</p>
 <div id="Table:TraceMatAvsA"></div>

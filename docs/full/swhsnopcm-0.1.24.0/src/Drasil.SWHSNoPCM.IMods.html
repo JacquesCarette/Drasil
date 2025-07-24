@@ -53,7 +53,7 @@ forall e. DifferentialModel -&gt; ModelKind e
 </span><a href="Drasil.SWHSNoPCM.IMods.html#eBalanceOnWtrRC"><span class="hs-identifier hs-var">eBalanceOnWtrRC</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-38"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UncertQ -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
 </span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><span class="hs-identifier hs-var">tempC</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
@@ -68,27 +68,27 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><span class="hs-identifier hs-var">tempInit</span></span><span class="hs-special">)</span><span>
 </span><span id="line-39"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Input
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; Input
+forall q. (Quantity q, MayHaveUnit q, Concept q) =&gt; q -&gt; Input
 </span><span class="hs-identifier hs-var">qwUC</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><span class="hs-identifier hs-var">tempInit</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Input
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; Input
+forall q. (Quantity q, MayHaveUnit q, Concept q) =&gt; q -&gt; Input
 </span><span class="hs-identifier hs-var">qwUC</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><span class="hs-identifier hs-var">timeFinal</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Input
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; Input
+forall q. (Quantity q, MayHaveUnit q, Concept q) =&gt; q -&gt; Input
 </span><span class="hs-identifier hs-var">qwUC</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><span class="hs-identifier hs-var">coilSA</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Input
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; Input
+forall q. (Quantity q, MayHaveUnit q, Concept q) =&gt; q -&gt; Input
 </span><span class="hs-identifier hs-var">qwUC</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><span class="hs-identifier hs-var">coilHTC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Input
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; Input
+forall q. (Quantity q, MayHaveUnit q, Concept q) =&gt; q -&gt; Input
 </span><span class="hs-identifier hs-var">qwUC</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><span class="hs-identifier hs-var">htCapW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Input
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; Input
+forall q. (Quantity q, MayHaveUnit q, Concept q) =&gt; q -&gt; Input
 </span><span class="hs-identifier hs-var">qwUC</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">wMass</span></span><span class="hs-special">]</span><span>
 </span><span id="line-40"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; Output
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; Output
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+forall c. (Quantity c, Concept c, MayHaveUnit c) =&gt; c -&gt; Output
+</span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-41"></span><span>  </span><span class="hs-comment">--Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit</span><span>
 </span><span id="line-42"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; RefInfo -&gt; DecRef
@@ -126,11 +126,11 @@ forall a. a -&gt; Maybe a
 </span><span id="line-49"></span><span>    </span><span class="annot"><span class="annottext">ConstrConcept
 </span><span class="hs-identifier hs-var">tempW</span></span><span>
 </span><span id="line-50"></span><span>    </span><span class="annot"><span class="annottext">[[Expr]]
-</span><a href="#local-6989586621679071235"><span class="hs-identifier hs-var">coeffs</span></a></span><span>
+</span><a href="#local-6989586621679071531"><span class="hs-identifier hs-var">coeffs</span></a></span><span>
 </span><span id="line-51"></span><span>    </span><span class="annot"><span class="annottext">[Unknown]
-</span><a href="#local-6989586621679071236"><span class="hs-identifier hs-var">unknowns</span></a></span><span>
+</span><a href="#local-6989586621679071532"><span class="hs-identifier hs-var">unknowns</span></a></span><span>
 </span><span id="line-52"></span><span>    </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679071237"><span class="hs-identifier hs-var">constants</span></a></span><span>
+</span><a href="#local-6989586621679071533"><span class="hs-identifier hs-var">constants</span></a></span><span>
 </span><span id="line-53"></span><span>    </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;eBalanceOnWtrRC&quot;</span></span><span> </span><span>
 </span><span id="line-54"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -149,8 +149,8 @@ forall s a. s -&gt; Getting a s a -&gt; a
 forall c. Definition c =&gt; Lens' c Sentence
 Lens' ConstrConcept Sentence
 </span><span class="hs-identifier hs-var">defn</span></span><span class="hs-special">)</span><span>
-</span><span id="line-56"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679071235"><span class="annot"><span class="annottext">coeffs :: [[Expr]]
-</span><a href="#local-6989586621679071235"><span class="hs-identifier hs-var hs-var">coeffs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="annottext">Unknown -&gt; Expr
+</span><span id="line-56"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679071531"><span class="annot"><span class="annottext">coeffs :: [[Expr]]
+</span><a href="#local-6989586621679071531"><span class="hs-identifier hs-var hs-var">coeffs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="annottext">Unknown -&gt; Expr
 forall r. LiteralC r =&gt; Unknown -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Unknown
 </span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
@@ -160,12 +160,12 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">tauW</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span class="hs-special">]</span><span>
-</span><span id="line-57"></span><span>          </span><span id="local-6989586621679071236"><span class="annot"><span class="annottext">unknowns :: [Unknown]
-</span><a href="#local-6989586621679071236"><span class="hs-identifier hs-var hs-var">unknowns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Unknown
+</span><span id="line-57"></span><span>          </span><span id="local-6989586621679071532"><span class="annot"><span class="annottext">unknowns :: [Unknown]
+</span><a href="#local-6989586621679071532"><span class="hs-identifier hs-var hs-var">unknowns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Unknown
 </span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Unknown
 </span><span class="hs-number">0</span></span><span class="hs-special">]</span><span>
-</span><span id="line-58"></span><span>          </span><span id="local-6989586621679071237"><span class="annot"><span class="annottext">constants :: [Expr]
-</span><a href="#local-6989586621679071237"><span class="hs-identifier hs-var hs-var">constants</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr -&gt; Expr
+</span><span id="line-58"></span><span>          </span><span id="local-6989586621679071533"><span class="annot"><span class="annottext">constants :: [Expr]
+</span><a href="#local-6989586621679071533"><span class="hs-identifier hs-var hs-var">constants</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr -&gt; Expr
 forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">recip_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr

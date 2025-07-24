@@ -46,7 +46,7 @@ sensHtESrc :: Reference
 
 module Drasil.SWHS.Unitals
 symbols :: [DefinedQuantityDict]
-symbolsAll :: [QuantityDict]
+symbolsAll :: [DefinedQuantityDict]
 units :: [UnitalChunk]
 unitalChuncks :: [UnitalChunk]
 inSA :: UnitalChunk
@@ -86,7 +86,7 @@ aspectRatio :: DefinedQuantityDict
 aspectRatioMin :: DefinedQuantityDict
 aspectRatioMax :: DefinedQuantityDict
 constrained :: [ConstrConcept]
-inputs :: [QuantityDict]
+inputs :: [DefinedQuantityDict]
 inputConstraints :: [UncertQ]
 tankLength :: UncertQ
 diam :: UncertQ
@@ -111,8 +111,8 @@ tempW :: ConstrConcept
 watE :: ConstrConcept
 pcmE :: ConstrConcept
 outputs :: [ConstrConcept]
-absTol :: UncertainChunk
-relTol :: UncertainChunk
+absTol :: UncertQ
+relTol :: UncertQ
 specParamValList :: [ConstQDef]
 tankLengthMin :: ConstQDef
 tankLengthMax :: ConstQDef

@@ -1017,13 +1017,13 @@ inReq :: Sentence -> ConceptInstance
 --   section. Takes a list of wrapped variables and something that is
 --   <a>Referable</a>.
 mkInputPropsTable :: (Quantity i, MayHaveUnit i) => [i] -> LabelledContent
-mkQRTuple :: (HasOutput i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
-mkQRTupleRef :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> [r] -> [(QuantityDict, Sentence)]
+mkQRTuple :: (HasOutput i, HasShortName i, Referable i) => [i] -> [(DefinedQuantityDict, Sentence)]
+mkQRTupleRef :: (Quantity i, MayHaveUnit i, Concept i, HasShortName r, Referable r) => [i] -> [r] -> [(DefinedQuantityDict, Sentence)]
 
 -- | Creates a table for use in the Functional Requirments section. Takes a
 --   list of tuples containing variables and sources, a label, and a
 --   caption.
-mkValsSourceTable :: (Quantity i, MayHaveUnit i) => [(i, Sentence)] -> String -> Sentence -> LabelledContent
+mkValsSourceTable :: (Quantity i, MayHaveUnit i, Concept i) => [(i, Sentence)] -> String -> Sentence -> LabelledContent
 
 -- | Reference for the Required Inputs table.
 reqInputsRef :: Reference
@@ -1091,7 +1091,7 @@ data () => ChunkDB
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data () => System
-[SI] :: forall a e h i j. (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
+[SI] :: forall a e h i j. (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Concept e, Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
 
 -- | Smart constructor for chunk databases. Takes in the following:
 --   
@@ -1107,7 +1107,7 @@ data () => System
 --   <li><a>ConceptInstance</a>s (for <a>ConceptInstanceMap</a>),</li>
 --   <li><a>LabelledContent</a>s (for <a>LabelledContentMap</a>).</li>
 --   </ul>
-cdb :: (Quantity q, MayHaveUnit q, Concept c, IsUnit u) => [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
+cdb :: (Quantity q, MayHaveUnit q, Concept q, Concept c, IsUnit u) => [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
 
 -- | Printing information contains a database, a stage, and a printing
 --   configuration.

@@ -4157,6 +4157,19 @@ instance Language.Drasil.Classes.HasUnitSymbol Language.Drasil.Chunk.UnitDefn.Un
 instance Language.Drasil.Classes.IsUnit Language.Drasil.Chunk.UnitDefn.UnitDefn
 
 
+-- | Defines chunks to add units to a quantity. Similar to
+--   <tt>UnitalChunk</tt>.
+module Language.Drasil.Chunk.Unitary
+
+-- | A Unitary is a <a>Quantity</a> that <b>must</b> have a unit.
+class (Quantity c) => Unitary c
+unit :: Unitary c => c -> UnitDefn
+
+-- | Helper for getting the unit's <tt>Symbol</tt> from a chunk, as opposed
+--   to the symbols of the chunk itself.
+unit_symb :: Unitary c => c -> USymb
+
+
 -- | For adding a relation (expression) to a concept.
 module Language.Drasil.Chunk.Relation
 
@@ -4659,98 +4672,7 @@ instance Language.Drasil.Expr.Class.ExprC Language.Drasil.ModelExpr.Lang.ModelEx
 instance Language.Drasil.Expr.Class.ExprC Drasil.Code.CodeExpr.Lang.CodeExpr
 
 
--- | Defines chunks that add quantities to an idea. Similar to
---   <tt>DefinedQuantityDict</tt>.
-module Language.Drasil.Chunk.Quantity
-
--- | QuantityDict is a combination of an <a>IdeaDict</a> with a quantity.
---   Contains an <a>IdeaDict</a>, <a>Space</a>, a function from
---   <a>Stage</a> -&gt; <a>Symbol</a>, and <a>Maybe</a> a <a>UnitDefn</a>.
---   
---   Ex. A pendulum arm does not necessarily have to be defined as a
---   concept before we assign a space (Real numbers), a symbol (l), or
---   units (cm, m, etc.).
-data QuantityDict
-class DefinesQuantity d
-defLhs :: DefinesQuantity d => Getter d QuantityDict
-
--- | Makes a variable that is implementation-only.
-implVar :: String -> NP -> Space -> Symbol -> QuantityDict
-
--- | Similar to <a>implVar</a> but allows specification of abbreviation and
---   unit.
-implVar' :: String -> NP -> Maybe String -> Space -> Symbol -> Maybe UnitDefn -> QuantityDict
-
--- | Similar to <a>implVar</a> but takes in a <a>UID</a> rather than a
---   <a>String</a>.
-implVarUID :: UID -> NP -> Space -> Symbol -> QuantityDict
-
--- | Similar to <a>implVar'</a> but takes in a <a>UID</a> rather than a
---   <a>String</a>.
-implVarUID' :: UID -> NP -> Maybe String -> Space -> Symbol -> Maybe UnitDefn -> QuantityDict
-
--- | Make a <a>QuantityDict</a> from a <a>UID</a>, <a>NP</a>,
---   <a>Symbol</a>, <a>Space</a>, <a>Maybe</a> <a>UnitDefn</a>, and an
---   abbreviation (<a>Maybe</a> <a>String</a>).
-mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> QuantityDict
-
--- | Similar to <a>mkQuant</a>, but the abbreviation is moved to the third
---   argument (<a>Maybe</a> <a>String</a>), and the <a>Symbol</a> is now
---   dependent on <a>Stage</a>.
-mkQuant' :: String -> NP -> Maybe String -> Space -> (Stage -> Symbol) -> Maybe UnitDefn -> QuantityDict
-
--- | Smart constructor for a <a>QuantityDict</a> from another
---   <a>Quantity</a> with units.
-qw :: (Quantity q, MayHaveUnit q) => q -> QuantityDict
-
--- | Creates a <a>QuantityDict</a> from a <a>UID</a>, term (<a>NP</a>),
---   <a>Symbol</a>, and <a>Space</a>.
-vc :: String -> NP -> Symbol -> Space -> QuantityDict
-
--- | Similar to <a>vc</a>, but creates a <a>QuantityDict</a> from something
---   that knows about <a>Stage</a>s.
-vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict
-instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Quantity.QuantityDict
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Quantity.QuantityDict
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Quantity.QuantityDict
-instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Quantity.QuantityDict
-instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.Quantity.QuantityDict
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Quantity.QuantityDict
-instance GHC.Classes.Eq Language.Drasil.Chunk.Quantity.QuantityDict
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Quantity.QuantityDict
-instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Quantity.QuantityDict
-
-
--- | Defines chunks to add units to a quantity. Similar to
---   <tt>UnitalChunk</tt>.
-module Language.Drasil.Chunk.Unitary
-
--- | A Unitary is a <a>Quantity</a> that <b>must</b> have a unit.
-class (Quantity c) => Unitary c
-unit :: Unitary c => c -> UnitDefn
-
--- | UnitaryChunks are for ideas with quantities that must have units.
---   Contains a <a>QuantityDict</a> and a <a>UnitDefn</a>.
---   
---   Ex. A pendulum arm is an idea associated with a symbol (l) and units
---   (cm, m, etc.).
-data UnitaryChunk
-
--- | Helper for getting the unit's <a>Symbol</a> from a chunk, as opposed
---   to the symbols of the chunk itself.
-unit_symb :: Unitary c => c -> USymb
-instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Unitary.UnitaryChunk
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Unitary.UnitaryChunk
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Unitary.UnitaryChunk
-instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Unitary.UnitaryChunk
-instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.Unitary.UnitaryChunk
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Unitary.UnitaryChunk
-instance Language.Drasil.Chunk.Unitary.Unitary Language.Drasil.Chunk.Unitary.UnitaryChunk
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Unitary.UnitaryChunk
-
-
--- | Contains types that define quantities from concepts. Similar to
---   <tt>QuantityDict</tt>.
+-- | Contains types that define quantities from concepts.
 module Language.Drasil.Chunk.DefinedQuantity
 
 -- | DefinedQuantityDict is the combination of a <a>Concept</a> and a
@@ -4762,6 +4684,8 @@ module Language.Drasil.Chunk.DefinedQuantity
 --   Ex. A pendulum arm can be defined as a concept with a symbol (l),
 --   space (Real numbers), and units (cm, m, etc.).
 data DefinedQuantityDict
+class DefinesQuantity d
+defLhs :: DefinesQuantity d => Getter d DefinedQuantityDict
 
 -- | Smart constructor that creates a DefinedQuantityDict with a
 --   <a>ConceptChunk</a>, a <a>Symbol</a> independent of <a>Stage</a>, a
@@ -4770,18 +4694,34 @@ dqd :: IsUnit u => ConceptChunk -> Symbol -> Space -> u -> DefinedQuantityDict
 
 -- | Similar to <a>dqd</a>, but without any units.
 dqdNoUnit :: ConceptChunk -> Symbol -> Space -> DefinedQuantityDict
+dqdNoUnit' :: ConceptChunk -> (Stage -> Symbol) -> Space -> DefinedQuantityDict
 
 -- | Similar to <a>dqd</a>, but the <a>Symbol</a> is now dependent on the
 --   <a>Stage</a>.
 dqd' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> DefinedQuantityDict
 
 -- | When we want to merge a quantity and a concept. This is suspicious.
-dqdQd :: (Quantity c, MayHaveUnit c) => c -> ConceptChunk -> DefinedQuantityDict
+dqdQd :: (Quantity c, MayHaveUnit c) => c -> Sentence -> DefinedQuantityDict
 
 -- | When the input already has all the necessary information. A
 --   <tt>projection</tt> operator from some a type with instances of listed
 --   classes to a <a>DefinedQuantityDict</a>.
 dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
+
+-- | Makes a variable that is implementation-only.
+implVar :: String -> NP -> String -> Space -> Symbol -> DefinedQuantityDict
+
+-- | Similar to <a>implVar</a>, but takes in a <a>Sentence</a> for the
+--   description rather than a <a>String</a>.
+implVar' :: String -> NP -> Sentence -> Space -> Symbol -> DefinedQuantityDict
+
+-- | Similar to <a>implVar</a> but allows specification of abbreviation and
+--   unit.
+implVarAU :: String -> NP -> String -> Maybe String -> Space -> Symbol -> Maybe UnitDefn -> DefinedQuantityDict
+
+-- | Similar to <a>implVarAU</a> but takes a Sentence for the description
+--   rather than a String.
+implVarAU' :: String -> NP -> Sentence -> Maybe String -> Space -> Symbol -> Maybe UnitDefn -> DefinedQuantityDict
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
 instance GHC.Classes.Eq Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
@@ -4850,31 +4790,9 @@ instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Unital.Unital
 -- | Add constraints and a reasonable value to chunks that are quantities.
 module Language.Drasil.Chunk.Constrained
 
--- | ConstrainedChunks are symbolic quantities (<a>QuantityDict</a>) with
---   <tt>Constraint</tt>s and maybe a typical value (<a>Maybe</a>
---   <a>Expr</a>).
---   
---   Ex. Measuring the length of a pendulum would have some reasonable
---   value (between 1 cm and 2 m) and the constraint that the length cannot
---   be a negative value.
-data ConstrainedChunk
-ConstrainedChunk :: QuantityDict -> [ConstraintE] -> Maybe Expr -> ConstrainedChunk
-[_qd] :: ConstrainedChunk -> QuantityDict
-[_constr] :: ConstrainedChunk -> [ConstraintE]
-[_reasV] :: ConstrainedChunk -> Maybe Expr
-
--- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
---   (<a>NP</a>), <a>Symbol</a>, <a>Space</a>, <tt>Constraint</tt>s, and a
---   <a>Maybe</a> <a>Expr</a> (Similar to <tt>cuc</tt> but no units).
-cvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Maybe Expr -> ConstrainedChunk
-
--- | Creates a new ConstrainedChunk from either a <a>ConstrainedChunk</a>,
---   <a>ConstrConcept</a>, <tt>UncertainChunk</tt>, or an <tt>UncertQ</tt>.
-cnstrw :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrainedChunk
-
 -- | ConstrConcepts are conceptual symbolic quantities
 --   (<a>DefinedQuantityDict</a>) with <tt>Constraint</tt>s and maybe a
---   reasonable value (no units!). Similar to <a>ConstrainedChunk</a> but
+--   reasonable value (no units!). Similar to <tt>ConstrainedChunk</tt> but
 --   includes a definition and domain.
 --   
 --   Ex. Measuring the length of a pendulum arm could be a concept that has
@@ -4886,7 +4804,7 @@ ConstrConcept :: DefinedQuantityDict -> [ConstraintE] -> Maybe Expr -> ConstrCon
 [_constr'] :: ConstrConcept -> [ConstraintE]
 [_reasV'] :: ConstrConcept -> Maybe Expr
 
--- | Similar to <a>cnstrw</a>, but types must also have a <a>Concept</a>.
+-- | Similar to <tt>cnstrw</tt>, but types must also have a <a>Concept</a>.
 cnstrw' :: (Quantity c, Concept c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrConcept
 
 -- | Creates a <a>ConstrConcept</a> with a quantitative concept, a list of
@@ -4905,6 +4823,9 @@ cuc' :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [Constrain
 -- | Similar to <a>cuc'</a>, but <a>Symbol</a> is dependent on
 --   <a>Stage</a>.
 cuc'' :: IsUnit u => String -> NP -> String -> (Stage -> Symbol) -> u -> Space -> [ConstraintE] -> Expr -> ConstrConcept
+
+-- | Similar to cuc', but does not include a unit.
+cucNoUnit' :: String -> NP -> String -> Symbol -> Space -> [ConstraintE] -> Expr -> ConstrConcept
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Constrained.ConstrConcept
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Constrained.ConstrConcept
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Constrained.ConstrConcept
@@ -4918,16 +4839,6 @@ instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.Constrained.Co
 instance GHC.Classes.Eq Language.Drasil.Chunk.Constrained.ConstrConcept
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Constrained.ConstrConcept
 instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.Constrained.ConstrConcept
-instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance GHC.Classes.Eq Language.Drasil.Chunk.Constrained.ConstrainedChunk
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Constrained.ConstrainedChunk
 
 
 -- | For adding an uncertainty value to quantities with constraints.
@@ -4941,17 +4852,6 @@ module Language.Drasil.Chunk.UncertainQuantity
 --   uncertainty value.
 data UncertQ
 
--- | UncertainChunk is a symbolic quantity with constraints, a typical
---   value, and an uncertainty. Contains a <a>ConstrainedChunk</a> and an
---   <a>Uncertainty</a>.
---   
---   Ex. Measuring the length of a pendulum arm may be recorded with an
---   uncertainty value.
-data UncertainChunk
-UCh :: ConstrainedChunk -> Uncertainty -> UncertainChunk
-[_conc] :: UncertainChunk -> ConstrainedChunk
-[_unc'] :: UncertainChunk -> Uncertainty
-
 -- | Smart constructor that requires a <a>Quantity</a>, a percentage, and a
 --   typical value with an <a>Uncertainty</a>.
 uq :: (Quantity c, Constrained c, Concept c, HasReasVal c, MayHaveUnit c) => c -> Uncertainty -> UncertQ
@@ -4961,19 +4861,6 @@ uqc :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [Constraint
 
 -- | Uncertainty quantity constraint (<a>uqc</a>) without a description.
 uqcND :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
-
--- | Smart constructor that can project to an <a>UncertainChunk</a> (also
---   given an <a>Uncertainty</a>).
-uncrtnChunk :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> Uncertainty -> UncertainChunk
-
--- | Creates an uncertain variable chunk. Takes <tt>UID</tt>, term
---   (<a>NP</a>), <a>Symbol</a>, <a>Space</a>, <tt>Constrains</tt>,
---   <a>Expr</a>, and <a>Uncertainty</a>.
-uvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertainChunk
-
--- | Projection function into an <a>UncertainChunk</a> from <a>UncertQ</a>
---   or an <a>UncertainChunk</a>.
-uncrtnw :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> UncertainChunk
 instance GHC.Classes.Eq Language.Drasil.Chunk.UncertainQuantity.UncertQ
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertQ
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.UncertainQuantity.UncertQ
@@ -4988,17 +4875,6 @@ instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.UncertainQuant
 instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.UncertainQuantity.UncertQ
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.UncertainQuantity.UncertQ
 instance Language.Drasil.ExprClasses.Express Language.Drasil.Chunk.UncertainQuantity.UncertQ
-instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance GHC.Classes.Eq Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Space.HasSpace Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Symbol.HasSymbol Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Uncertainty.HasUncertainty Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
 
 
 -- | Contains types and functions common to aspects of generating
@@ -5595,12 +5471,12 @@ Var :: VarOrFunc
 Func :: VarOrFunc
 
 -- | Basic chunk representation in the code generation context. Contains a
---   QuantityDict and the kind of code (variable or function).
+--   DefinedQuantityDict and the kind of code (variable or function).
 data CodeChunk
-CodeC :: QuantityDict -> VarOrFunc -> CodeChunk
-[_qc] :: CodeChunk -> QuantityDict
+CodeC :: DefinedQuantityDict -> VarOrFunc -> CodeChunk
+[_qc] :: CodeChunk -> DefinedQuantityDict
 [kind] :: CodeChunk -> VarOrFunc
-qc :: Lens' CodeChunk QuantityDict
+qc :: Lens' CodeChunk DefinedQuantityDict
 
 -- | Chunk representing a variable. The <tt>obv</tt> field represents the
 --   object containing this variable, if it is an object field.
@@ -5620,6 +5496,8 @@ listToArray :: CodeVarChunk -> CodeVarChunk
 instance Drasil.Database.UID.HasUID Drasil.Code.CodeVar.CodeFuncChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Drasil.Code.CodeVar.CodeFuncChunk
 instance Language.Drasil.Chunk.NamedIdea.Idea Drasil.Code.CodeVar.CodeFuncChunk
+instance Language.Drasil.Classes.Definition Drasil.Code.CodeVar.CodeFuncChunk
+instance Language.Drasil.Classes.ConceptDomain Drasil.Code.CodeVar.CodeFuncChunk
 instance Language.Drasil.Space.HasSpace Drasil.Code.CodeVar.CodeFuncChunk
 instance Language.Drasil.Symbol.HasSymbol Drasil.Code.CodeVar.CodeFuncChunk
 instance Language.Drasil.Classes.Quantity Drasil.Code.CodeVar.CodeFuncChunk
@@ -5629,6 +5507,8 @@ instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Drasil.Code.CodeVar.CodeFunc
 instance Drasil.Database.UID.HasUID Drasil.Code.CodeVar.CodeVarChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Drasil.Code.CodeVar.CodeVarChunk
 instance Language.Drasil.Chunk.NamedIdea.Idea Drasil.Code.CodeVar.CodeVarChunk
+instance Language.Drasil.Classes.Definition Drasil.Code.CodeVar.CodeVarChunk
+instance Language.Drasil.Classes.ConceptDomain Drasil.Code.CodeVar.CodeVarChunk
 instance Language.Drasil.Space.HasSpace Drasil.Code.CodeVar.CodeVarChunk
 instance Language.Drasil.Symbol.HasSymbol Drasil.Code.CodeVar.CodeVarChunk
 instance Language.Drasil.Classes.Quantity Drasil.Code.CodeVar.CodeVarChunk
@@ -5637,6 +5517,8 @@ instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Drasil.Code.CodeVar.CodeVarC
 instance Drasil.Database.UID.HasUID Drasil.Code.CodeVar.CodeChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Drasil.Code.CodeVar.CodeChunk
 instance Language.Drasil.Chunk.NamedIdea.Idea Drasil.Code.CodeVar.CodeChunk
+instance Language.Drasil.Classes.Definition Drasil.Code.CodeVar.CodeChunk
+instance Language.Drasil.Classes.ConceptDomain Drasil.Code.CodeVar.CodeChunk
 instance Language.Drasil.Space.HasSpace Drasil.Code.CodeVar.CodeChunk
 instance Language.Drasil.Symbol.HasSymbol Drasil.Code.CodeVar.CodeChunk
 instance Language.Drasil.Classes.Quantity Drasil.Code.CodeVar.CodeChunk
@@ -6214,7 +6096,7 @@ mkQDefSt :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Maybe UnitDef
 
 -- | Used to help make <a>QDefinition</a>s when <a>UID</a>, term, and
 --   <a>Symbol</a> come from the same source.
-mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
+mkQuantDef :: (Quantity c, MayHaveUnit c, Concept c) => c -> e -> QDefinition e
 
 -- | Used to help make <a>QDefinition</a>s when <a>UID</a> and
 --   <a>Symbol</a> come from the same source, with the term separate.
@@ -6238,7 +6120,7 @@ mkFuncDefByQ :: (Quantity c, MayHaveUnit c, HasSpace c, Quantity i, HasSpace i) 
 instance Drasil.Database.UID.HasUID (Language.Drasil.Chunk.Eq.QDefinition e)
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea (Language.Drasil.Chunk.Eq.QDefinition e)
 instance Language.Drasil.Chunk.NamedIdea.Idea (Language.Drasil.Chunk.Eq.QDefinition e)
-instance Language.Drasil.Chunk.Quantity.DefinesQuantity (Language.Drasil.Chunk.Eq.QDefinition e)
+instance Language.Drasil.Chunk.DefinedQuantity.DefinesQuantity (Language.Drasil.Chunk.Eq.QDefinition e)
 instance Language.Drasil.Space.HasSpace (Language.Drasil.Chunk.Eq.QDefinition e)
 instance Language.Drasil.Symbol.HasSymbol (Language.Drasil.Chunk.Eq.QDefinition e)
 instance Language.Drasil.Classes.Definition (Language.Drasil.Chunk.Eq.QDefinition e)
@@ -6876,10 +6758,10 @@ codeName :: CodeIdea c => c -> String
 codeChunk :: CodeIdea c => c -> CodeChunk
 
 -- | Basic chunk representation in the code generation context. Contains a
---   QuantityDict and the kind of code (variable or function).
+--   DefinedQuantityDict and the kind of code (variable or function).
 data CodeChunk
-CodeC :: QuantityDict -> VarOrFunc -> CodeChunk
-[_qc] :: CodeChunk -> QuantityDict
+CodeC :: DefinedQuantityDict -> VarOrFunc -> CodeChunk
+[_qc] :: CodeChunk -> DefinedQuantityDict
 [kind] :: CodeChunk -> VarOrFunc
 
 -- | Chunk representing a variable. The <tt>obv</tt> field represents the
@@ -6899,7 +6781,7 @@ data VarOrFunc
 Var :: VarOrFunc
 Func :: VarOrFunc
 obv :: Lens' CodeVarChunk (Maybe CodeChunk)
-qc :: Lens' CodeChunk QuantityDict
+qc :: Lens' CodeChunk DefinedQuantityDict
 ccf :: Iso' CodeFuncChunk CodeChunk
 ccv :: Lens' CodeVarChunk CodeChunk
 listToArray :: CodeVarChunk -> CodeVarChunk
@@ -6971,6 +6853,12 @@ sDom :: [UID] -> UID
 --   
 --   Concept domain tagging is not yet implemented in this constructor.
 dcc :: String -> NP -> String -> ConceptChunk
+dccAWDS :: String -> NP -> Sentence -> Maybe String -> ConceptChunk
+
+-- | Smart constructor for creating a concept chunks with an abbreviation
+--   Takes a UID (String), a term (NounPhrase), a definition (String), and
+--   an abbreviation (Maybe String).
+dccA :: String -> NP -> String -> Maybe String -> ConceptChunk
 
 -- | Similar to <a>dcc</a>, except the definition takes a <a>Sentence</a>.
 dccWDS :: String -> NP -> Sentence -> ConceptChunk
@@ -7078,54 +6966,6 @@ makeASystemDE :: UnitalChunk -> ConstrConcept -> [[Expr]] -> [Unknown] -> [Expr]
 
 -- | Create a <a>DifferentialModel</a> by the input language
 makeASingleDE :: UnitalChunk -> ConstrConcept -> LHS -> Expr -> String -> NP -> Sentence -> DifferentialModel
-
--- | QuantityDict is a combination of an <a>IdeaDict</a> with a quantity.
---   Contains an <a>IdeaDict</a>, <a>Space</a>, a function from
---   <a>Stage</a> -&gt; <a>Symbol</a>, and <a>Maybe</a> a <a>UnitDefn</a>.
---   
---   Ex. A pendulum arm does not necessarily have to be defined as a
---   concept before we assign a space (Real numbers), a symbol (l), or
---   units (cm, m, etc.).
-data QuantityDict
-class DefinesQuantity d
-defLhs :: DefinesQuantity d => Getter d QuantityDict
-
--- | Smart constructor for a <a>QuantityDict</a> from another
---   <a>Quantity</a> with units.
-qw :: (Quantity q, MayHaveUnit q) => q -> QuantityDict
-
--- | Make a <a>QuantityDict</a> from a <a>UID</a>, <a>NP</a>,
---   <a>Symbol</a>, <a>Space</a>, <a>Maybe</a> <a>UnitDefn</a>, and an
---   abbreviation (<a>Maybe</a> <a>String</a>).
-mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> QuantityDict
-
--- | Similar to <a>mkQuant</a>, but the abbreviation is moved to the third
---   argument (<a>Maybe</a> <a>String</a>), and the <a>Symbol</a> is now
---   dependent on <a>Stage</a>.
-mkQuant' :: String -> NP -> Maybe String -> Space -> (Stage -> Symbol) -> Maybe UnitDefn -> QuantityDict
-
--- | Makes a variable that is implementation-only.
-implVar :: String -> NP -> Space -> Symbol -> QuantityDict
-
--- | Similar to <a>implVar</a> but allows specification of abbreviation and
---   unit.
-implVar' :: String -> NP -> Maybe String -> Space -> Symbol -> Maybe UnitDefn -> QuantityDict
-
--- | Similar to <a>implVar</a> but takes in a <a>UID</a> rather than a
---   <a>String</a>.
-implVarUID :: UID -> NP -> Space -> Symbol -> QuantityDict
-
--- | Similar to <a>implVar'</a> but takes in a <a>UID</a> rather than a
---   <a>String</a>.
-implVarUID' :: UID -> NP -> Maybe String -> Space -> Symbol -> Maybe UnitDefn -> QuantityDict
-
--- | Creates a <a>QuantityDict</a> from a <a>UID</a>, term (<a>NP</a>),
---   <a>Symbol</a>, and <a>Space</a>.
-vc :: String -> NP -> Symbol -> Space -> QuantityDict
-
--- | Similar to <a>vc</a>, but creates a <a>QuantityDict</a> from something
---   that knows about <a>Stage</a>s.
-vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict
 data QDefinition e
 
 -- | Create a <a>QDefinition</a> with a <a>UID</a> (as a <a>Space</a>),
@@ -7151,7 +6991,7 @@ mkQDefSt :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Maybe UnitDef
 
 -- | Used to help make <a>QDefinition</a>s when <a>UID</a>, term, and
 --   <a>Symbol</a> come from the same source.
-mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
+mkQuantDef :: (Quantity c, MayHaveUnit c, Concept c) => c -> e -> QDefinition e
 
 -- | Used to help make <a>QDefinition</a>s when <a>UID</a> and
 --   <a>Symbol</a> come from the same source, with the term separate.
@@ -7173,18 +7013,7 @@ mkFuncDef' :: (HasUID f, HasSymbol f, HasSpace f, HasUID i, HasSymbol i, HasSpac
 --   and a defining Expr
 mkFuncDefByQ :: (Quantity c, MayHaveUnit c, HasSpace c, Quantity i, HasSpace i) => c -> [i] -> e -> QDefinition e
 
--- | A Unitary is a <a>Quantity</a> that <b>must</b> have a unit.
-class (Quantity c) => Unitary c
-unit :: Unitary c => c -> UnitDefn
-
--- | UnitaryChunks are for ideas with quantities that must have units.
---   Contains a <a>QuantityDict</a> and a <a>UnitDefn</a>.
---   
---   Ex. A pendulum arm is an idea associated with a symbol (l) and units
---   (cm, m, etc.).
-data UnitaryChunk
-
--- | Helper for getting the unit's <a>Symbol</a> from a chunk, as opposed
+-- | Helper for getting the unit's <tt>Symbol</tt> from a chunk, as opposed
 --   to the symbols of the chunk itself.
 unit_symb :: Unitary c => c -> USymb
 
@@ -7209,14 +7038,28 @@ dqd' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> DefinedQ
 
 -- | Similar to <a>dqd</a>, but without any units.
 dqdNoUnit :: ConceptChunk -> Symbol -> Space -> DefinedQuantityDict
+dqdNoUnit' :: ConceptChunk -> (Stage -> Symbol) -> Space -> DefinedQuantityDict
 
 -- | When we want to merge a quantity and a concept. This is suspicious.
-dqdQd :: (Quantity c, MayHaveUnit c) => c -> ConceptChunk -> DefinedQuantityDict
+dqdQd :: (Quantity c, MayHaveUnit c) => c -> Sentence -> DefinedQuantityDict
 
 -- | When the input already has all the necessary information. A
 --   <tt>projection</tt> operator from some a type with instances of listed
 --   classes to a <a>DefinedQuantityDict</a>.
 dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
+class DefinesQuantity d
+defLhs :: DefinesQuantity d => Getter d DefinedQuantityDict
+
+-- | Makes a variable that is implementation-only.
+implVar :: String -> NP -> String -> Space -> Symbol -> DefinedQuantityDict
+
+-- | Similar to <a>implVar</a>, but takes in a <a>Sentence</a> for the
+--   description rather than a <a>String</a>.
+implVar' :: String -> NP -> Sentence -> Space -> Symbol -> DefinedQuantityDict
+
+-- | Similar to <a>implVarAU</a> but takes a Sentence for the description
+--   rather than a String.
+implVarAU' :: String -> NP -> Sentence -> Maybe String -> Space -> Symbol -> Maybe UnitDefn -> DefinedQuantityDict
 
 -- | Similar to a <a>DefinedQuantityDict</a>, UnitalChunks are concepts
 --   with quantities that must have a unit definition. Contains
@@ -7386,22 +7229,9 @@ isPhysC :: Constraint e -> Bool
 --   <a>Software</a>.
 isSfwrC :: Constraint e -> Bool
 
--- | ConstrainedChunks are symbolic quantities (<a>QuantityDict</a>) with
---   <tt>Constraint</tt>s and maybe a typical value (<a>Maybe</a>
---   <a>Expr</a>).
---   
---   Ex. Measuring the length of a pendulum would have some reasonable
---   value (between 1 cm and 2 m) and the constraint that the length cannot
---   be a negative value.
-data ConstrainedChunk
-ConstrainedChunk :: QuantityDict -> [ConstraintE] -> Maybe Expr -> ConstrainedChunk
-[_qd] :: ConstrainedChunk -> QuantityDict
-[_constr] :: ConstrainedChunk -> [ConstraintE]
-[_reasV] :: ConstrainedChunk -> Maybe Expr
-
 -- | ConstrConcepts are conceptual symbolic quantities
 --   (<a>DefinedQuantityDict</a>) with <tt>Constraint</tt>s and maybe a
---   reasonable value (no units!). Similar to <a>ConstrainedChunk</a> but
+--   reasonable value (no units!). Similar to <tt>ConstrainedChunk</tt> but
 --   includes a definition and domain.
 --   
 --   Ex. Measuring the length of a pendulum arm could be a concept that has
@@ -7412,11 +7242,6 @@ ConstrConcept :: DefinedQuantityDict -> [ConstraintE] -> Maybe Expr -> ConstrCon
 [_defq] :: ConstrConcept -> DefinedQuantityDict
 [_constr'] :: ConstrConcept -> [ConstraintE]
 [_reasV'] :: ConstrConcept -> Maybe Expr
-
--- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
---   (<a>NP</a>), <a>Symbol</a>, <a>Space</a>, <tt>Constraint</tt>s, and a
---   <a>Maybe</a> <a>Expr</a> (Similar to <tt>cuc</tt> but no units).
-cvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Maybe Expr -> ConstrainedChunk
 
 -- | Creates a <a>ConstrConcept</a> with a quantitative concept, a list of
 --   <tt>Constraint</tt>s and an <a>Expr</a>.
@@ -7431,27 +7256,15 @@ cuc' :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [Constrain
 --   <a>Stage</a>.
 cuc'' :: IsUnit u => String -> NP -> String -> (Stage -> Symbol) -> u -> Space -> [ConstraintE] -> Expr -> ConstrConcept
 
+-- | Similar to cuc', but does not include a unit.
+cucNoUnit' :: String -> NP -> String -> Symbol -> Space -> [ConstraintE] -> Expr -> ConstrConcept
+
 -- | Similar to <a>constrained'</a>, but defaults <a>Maybe</a> <a>Expr</a>
 --   to <a>Nothing</a>.
 constrainedNRV' :: (Concept c, MayHaveUnit c, Quantity c) => c -> [ConstraintE] -> ConstrConcept
 
--- | Creates a new ConstrainedChunk from either a <a>ConstrainedChunk</a>,
---   <a>ConstrConcept</a>, <tt>UncertainChunk</tt>, or an <tt>UncertQ</tt>.
-cnstrw :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrainedChunk
-
--- | Similar to <a>cnstrw</a>, but types must also have a <a>Concept</a>.
+-- | Similar to <tt>cnstrw</tt>, but types must also have a <a>Concept</a>.
 cnstrw' :: (Quantity c, Concept c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrConcept
-
--- | UncertainChunk is a symbolic quantity with constraints, a typical
---   value, and an uncertainty. Contains a <a>ConstrainedChunk</a> and an
---   <a>Uncertainty</a>.
---   
---   Ex. Measuring the length of a pendulum arm may be recorded with an
---   uncertainty value.
-data UncertainChunk
-UCh :: ConstrainedChunk -> Uncertainty -> UncertainChunk
-[_conc] :: UncertainChunk -> ConstrainedChunk
-[_unc'] :: UncertainChunk -> Uncertainty
 
 -- | UncertQs are conceptual symbolic quantities with constraints and an
 --   <a>Uncertainty</a>. Contains a <a>ConstrConcept</a> and an
@@ -7470,19 +7283,6 @@ uqc :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [Constraint
 
 -- | Uncertainty quantity constraint (<a>uqc</a>) without a description.
 uqcND :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
-
--- | Smart constructor that can project to an <a>UncertainChunk</a> (also
---   given an <a>Uncertainty</a>).
-uncrtnChunk :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> Uncertainty -> UncertainChunk
-
--- | Creates an uncertain variable chunk. Takes <tt>UID</tt>, term
---   (<a>NP</a>), <a>Symbol</a>, <a>Space</a>, <tt>Constrains</tt>,
---   <a>Expr</a>, and <a>Uncertainty</a>.
-uvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertainChunk
-
--- | Projection function into an <a>UncertainChunk</a> from <a>UncertQ</a>
---   or an <a>UncertainChunk</a>.
-uncrtnw :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> UncertainChunk
 
 -- | Something that may contain an uncertainty value and a precision value.
 data Uncertainty

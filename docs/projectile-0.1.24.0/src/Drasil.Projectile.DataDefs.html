@@ -45,7 +45,9 @@ forall a. Maybe a
 </span><span id="line-23"></span><span class="annot"><a href="Drasil.Projectile.DataDefs.html#speedIXQD"><span class="hs-identifier hs-type">speedIXQD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.DataDefs.html#speedIYQD"><span class="hs-identifier hs-type">speedIYQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-24"></span><span id="speedIXQD"><span class="annot"><span class="annottext">speedIXQD :: SimpleQDef
 </span><a href="Drasil.Projectile.DataDefs.html#speedIXQD"><span class="hs-identifier hs-var hs-var">speedIXQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">ixVel</span></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -64,7 +66,9 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.Projectile.Unitals.html#launAngle"><span class="hs-identifier hs-var">launAngle</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-25"></span><span id="speedIYQD"><span class="annot"><span class="annottext">speedIYQD :: SimpleQDef
 </span><a href="Drasil.Projectile.DataDefs.html#speedIYQD"><span class="hs-identifier hs-var hs-var">speedIYQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">iyVel</span></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; SimpleQDef) -&gt; Expr -&gt; SimpleQDef
 forall a b. (a -&gt; b) -&gt; a -&gt; b

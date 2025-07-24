@@ -17,25 +17,25 @@
 </g>
 <!-- dataDefn&#45;&gt;dataDefn -->
 <g id="edge2" class="edge">
-<title>dataDefn:qdPropControlFD&#45;&gt;dataDefn:qdProcessErrorFD</title>
+<title>dataDefn:dqdPropControlFD&#45;&gt;dataDefn:dqdProcessErrorFD</title>
 <path fill="none" stroke="black" d="M128.03,-93.2C138.57,-92.81 146,-91.74 146,-90 146,-88.91 143.1,-88.09 138.35,-87.53"/>
 <polygon fill="black" stroke="black" points="138.25,-84.01 128.03,-86.8 137.75,-90.99 138.25,-84.01"/>
 </g>
 <!-- dataDefn&#45;&gt;dataDefn -->
 <g id="edge4" class="edge">
-<title>dataDefn:qdDerivativeControlFD&#45;&gt;dataDefn:qdProcessErrorFD</title>
+<title>dataDefn:dqdDerivativeControlFD&#45;&gt;dataDefn:dqdProcessErrorFD</title>
 <path fill="none" stroke="black" d="M128.41,-96.75C148.1,-96.82 164,-94.57 164,-90 164,-86.25 153.3,-84.06 138.58,-83.44"/>
 <polygon fill="black" stroke="black" points="138.47,-79.94 128.41,-83.25 138.34,-86.93 138.47,-79.94"/>
 </g>
 <!-- dataDefn&#45;&gt;dataDefn -->
 <g id="edge6" class="edge">
-<title>dataDefn:qdCtrlVarFD&#45;&gt;dataDefn:qdPropControlFD</title>
+<title>dataDefn:dqdCtrlVarFD&#45;&gt;dataDefn:dqdPropControlFD</title>
 <path fill="none" stroke="black" d="M128.07,-99.81C156.54,-101.21 182,-97.94 182,-90 182,-83.02 162.33,-79.65 138.24,-79.89"/>
 <polygon fill="black" stroke="black" points="137.96,-76.39 128.07,-80.19 138.17,-83.39 137.96,-76.39"/>
 </g>
 <!-- dataDefn&#45;&gt;dataDefn -->
 <g id="edge7" class="edge">
-<title>dataDefn:qdCtrlVarFD&#45;&gt;dataDefn:qdDerivativeControlFD</title>
+<title>dataDefn:dqdCtrlVarFD&#45;&gt;dataDefn:dqdDerivativeControlFD</title>
 <path fill="none" stroke="black" d="M128.31,-102.43C164.84,-105.68 200,-101.53 200,-90 200,-79.55 171.13,-75.17 138.52,-76.85"/>
 <polygon fill="black" stroke="black" points="138.04,-73.38 128.31,-77.57 138.53,-80.36 138.04,-73.38"/>
 </g>
@@ -47,31 +47,31 @@
 </g>
 <!-- dataDefn&#45;&gt;theory -->
 <g id="edge1" class="edge">
-<title>dataDefn:qdProcessErrorFD&#45;&gt;theory:laplaceRC</title>
+<title>dataDefn:dqdProcessErrorFD&#45;&gt;theory:laplaceRC</title>
 <path fill="none" stroke="black" d="M47.84,-71.7C44.62,-63.9 43.73,-54.51 45.16,-45.83"/>
 <polygon fill="black" stroke="black" points="48.56,-46.68 47.92,-36.1 41.83,-44.77 48.56,-46.68"/>
 </g>
 <!-- dataDefn&#45;&gt;theory -->
 <g id="edge3" class="edge">
-<title>dataDefn:qdPropControlFD&#45;&gt;theory:laplaceRC</title>
+<title>dataDefn:dqdPropControlFD&#45;&gt;theory:laplaceRC</title>
 <path fill="none" stroke="black" d="M59.67,-71.7C58.08,-63.98 57.62,-54.71 58.31,-46.11"/>
 <polygon fill="black" stroke="black" points="61.79,-46.49 59.71,-36.1 54.86,-45.52 61.79,-46.49"/>
 </g>
 <!-- dataDefn&#45;&gt;theory -->
 <g id="edge5" class="edge">
-<title>dataDefn:qdDerivativeControlFD&#45;&gt;theory:laplaceRC</title>
+<title>dataDefn:dqdDerivativeControlFD&#45;&gt;theory:laplaceRC</title>
 <path fill="none" stroke="black" d="M71.5,-71.7C71.5,-63.98 71.5,-54.71 71.5,-46.11"/>
 <polygon fill="black" stroke="black" points="75,-46.1 71.5,-36.1 68,-46.1 75,-46.1"/>
 </g>
 <!-- theory&#45;&gt;dataDefn -->
 <g id="edge10" class="edge">
-<title>theory:imPDRC&#45;&gt;dataDefn:qdProcessErrorFD</title>
+<title>theory:imPDRC&#45;&gt;dataDefn:dqdProcessErrorFD</title>
 <path fill="none" stroke="black" d="M83.29,-36.1C84.9,-43.79 85.37,-53.05 84.71,-61.67"/>
 <polygon fill="black" stroke="black" points="81.22,-61.31 83.33,-71.7 88.16,-62.27 81.22,-61.31"/>
 </g>
 <!-- theory&#45;&gt;dataDefn -->
 <g id="edge11" class="edge">
-<title>theory:imPDRC&#45;&gt;dataDefn:qdCtrlVarFD</title>
+<title>theory:imPDRC&#45;&gt;dataDefn:dqdCtrlVarFD</title>
 <path fill="none" stroke="black" d="M95.08,-36.1C98.34,-43.88 99.27,-53.26 97.87,-61.95"/>
 <polygon fill="black" stroke="black" points="94.47,-61.12 95.16,-71.7 101.21,-63 94.47,-61.12"/>
 </g>

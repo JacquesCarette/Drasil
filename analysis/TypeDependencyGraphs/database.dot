@@ -5,6 +5,11 @@ digraph alltypes {
 		TermAbbr -> NP;
 		TermAbbr -> MaybeString;
 		}
+		subgraph domdefn{
+		DomDefn	[shape=oval, color=cyan3, label="DomDefn"];
+		DomDefn -> UID;
+		DomDefn -> Sentence;
+		}
 		subgraph chunkdb{
 		ChunkDB	[shape=oval, color=cyan3, label="ChunkDB"];
 		ChunkDB -> SymbolMap;
@@ -28,7 +33,7 @@ digraph alltypes {
 		}
 		subgraph symbolmap{
 		SymbolMap	[shape=oval, color=red2, label="SymbolMap"];
-		SymbolMap -> UMapQuantityDict;
+		SymbolMap -> UMapDefinedQuantityDict;
 		}
 		subgraph conceptmap{
 		ConceptMap	[shape=oval, color=red2, label="ConceptMap"];

@@ -96,7 +96,7 @@ launAngle :: ConstrConcept
 launSpeed :: ConstrConcept
 offset :: ConstrConcept
 targPos :: ConstrConcept
-message :: QuantityDict
+message :: DefinedQuantityDict
 tol :: ConstQDef
 
 module Drasil.Projectile.Expressions
@@ -190,7 +190,7 @@ mkNB :: LsnDecl
 si :: System
 symbMap :: ChunkDB
 usedDB :: ChunkDB
-symbols :: [QuantityDict]
+symbols :: [DefinedQuantityDict]
 projectileMotion :: CI
 allRefs :: [Reference]
 

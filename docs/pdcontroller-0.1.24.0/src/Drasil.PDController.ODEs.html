@@ -4,8 +4,8 @@
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Code</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">odeInfo'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">odeOptions</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">quantvar</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ODEInfo</span></span><span class="hs-special">,</span><span>
 </span><span id="line-5"></span><span>    </span><span class="annot"><span class="hs-identifier">ODEMethod</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">RK45</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ODEOptions</span></span><span class="hs-special">)</span><span>
 </span><span id="line-6"></span><span>
-</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html"><span class="hs-identifier">Drasil.PDController.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdSetPointTD"><span class="hs-identifier">qdSetPointTD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier">qdPropGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier">qdDerivGain</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-8"></span><span>    </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdSimTime"><span class="hs-identifier">qdSimTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdStepTime"><span class="hs-identifier">qdStepTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#odeRelTolConst"><span class="hs-identifier">odeRelTolConst</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#odeAbsTolConst"><span class="hs-identifier">odeAbsTolConst</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html"><span class="hs-identifier">Drasil.PDController.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.PDController.Unitals.html#dqdSetPointTD"><span class="hs-identifier">dqdSetPointTD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#dqdPropGain"><span class="hs-identifier">dqdPropGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#dqdDerivGain"><span class="hs-identifier">dqdDerivGain</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-8"></span><span>    </span><span class="annot"><a href="Drasil.PDController.Unitals.html#dqdSimTime"><span class="hs-identifier">dqdSimTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#dqdStepTime"><span class="hs-identifier">dqdStepTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#odeRelTolConst"><span class="hs-identifier">odeRelTolConst</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#odeAbsTolConst"><span class="hs-identifier">odeAbsTolConst</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.IModel.html"><span class="hs-identifier">Drasil.PDController.IModel</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Drasil.PDController.IModel.html#imPDRC"><span class="hs-identifier">imPDRC</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-10"></span><span>
 </span><span id="line-11"></span><span>
@@ -22,11 +22,11 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; CodeExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstQDef
-</span><a href="Drasil.PDController.Unitals.html#odeRelTolConst"><span class="hs-identifier hs-var">odeRelTolConst</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; CodeExpr
+</span><a href="Drasil.PDController.Unitals.html#odeRelTolConst"><span class="hs-identifier hs-var">odeRelTolConst</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; CodeExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; CodeExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdStepTime"><span class="hs-identifier hs-var">qdStepTime</span></a></span><span class="hs-special">)</span><span>
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdStepTime"><span class="hs-identifier hs-var">dqdStepTime</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-15"></span><span>
 </span><span id="line-16"></span><span class="annot"><a href="Drasil.PDController.ODEs.html#pdIVP"><span class="hs-identifier hs-type">pdIVP</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">InitialValueProblem</span></span><span>
 </span><span id="line-17"></span><span id="pdIVP"><span class="annot"><span class="annottext">pdIVP :: InitialValueProblem
@@ -34,11 +34,11 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">makeAIVP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdSimTime"><span class="hs-identifier hs-var">qdSimTime</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdSimTime"><span class="hs-identifier hs-var">dqdSimTime</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
@@ -54,16 +54,22 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 -&gt; InitialValueProblem
 -&gt; ODEInfo
 </span><span class="hs-identifier hs-var">odeInfo'</span></span><span>
-</span><span id="line-21"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QuantityDict -&gt; CodeVarChunk
-forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; CodeVarChunk
-</span><span class="hs-identifier hs-var">quantvar</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; CodeVarChunk
-forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; CodeVarChunk
-</span><span class="hs-identifier hs-var">quantvar</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-var">qdDerivGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; CodeVarChunk
-forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; CodeVarChunk
-</span><span class="hs-identifier hs-var">quantvar</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdSetPointTD"><span class="hs-identifier hs-var">qdSetPointTD</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-21"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; CodeVarChunk
+forall c.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; CodeVarChunk
+</span><span class="hs-identifier hs-var">quantvar</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdPropGain"><span class="hs-identifier hs-var">dqdPropGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; CodeVarChunk
+forall c.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; CodeVarChunk
+</span><span class="hs-identifier hs-var">quantvar</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdDerivGain"><span class="hs-identifier hs-var">dqdDerivGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; CodeVarChunk
+forall c.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; CodeVarChunk
+</span><span class="hs-identifier hs-var">quantvar</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdSetPointTD"><span class="hs-identifier hs-var">dqdSetPointTD</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-22"></span><span>  </span><span class="annot"><span class="annottext">ODEOptions
 </span><a href="Drasil.PDController.ODEs.html#pidODEOptions"><span class="hs-identifier hs-var">pidODEOptions</span></a></span><span>
 </span><span id="line-23"></span><span>  </span><span class="annot"><span class="annottext">DifferentialModel

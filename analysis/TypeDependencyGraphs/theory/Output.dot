@@ -1,4 +1,4 @@
 digraph output{
 Output	[shape=oval, color=red2, label="Output"];
-Output -> QuantityDict;
+Output -> DefinedQuantityDict;
 }

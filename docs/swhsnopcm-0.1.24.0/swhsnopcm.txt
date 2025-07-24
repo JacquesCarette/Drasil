@@ -73,8 +73,8 @@ funcReqs :: [ConceptInstance]
 inReqDesc :: Sentence
 
 module Drasil.SWHSNoPCM.Unitals
-inputs :: [QuantityDict]
-unconstrained :: [UncertainChunk]
+inputs :: [DefinedQuantityDict]
+unconstrained :: [UncertQ]
 constrained :: [UncertQ]
 tempInit :: UncertQ
 specParamValList :: [ConstQDef]

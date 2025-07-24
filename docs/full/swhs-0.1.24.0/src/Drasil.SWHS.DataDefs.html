@@ -61,7 +61,9 @@
 </span><span id="line-39"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#waterMassQD"><span class="hs-identifier hs-type">waterMassQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-40"></span><span id="waterMassQD"><span class="annot"><span class="annottext">waterMassQD :: SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#waterMassQD"><span class="hs-identifier hs-var hs-var">waterMassQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#wMass"><span class="hs-identifier hs-var">wMass</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SWHS.DataDefs.html#waterMassEqn"><span class="hs-identifier hs-var">waterMassEqn</span></a></span><span>
@@ -110,7 +112,9 @@ forall a. Maybe a
 </span><span id="line-53"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#waterVolumeQD"><span class="hs-identifier hs-type">waterVolumeQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-54"></span><span id="waterVolumeQD"><span class="annot"><span class="annottext">waterVolumeQD :: SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#waterVolumeQD"><span class="hs-identifier hs-var hs-var">waterVolumeQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#wVol"><span class="hs-identifier hs-var">wVol</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SWHS.DataDefs.html#waterVolumeEqn"><span class="hs-identifier hs-var">waterVolumeEqn</span></a></span><span>
@@ -170,7 +174,9 @@ forall a. Maybe a
 </span><span id="line-69"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#tankVolumeQD"><span class="hs-identifier hs-type">tankVolumeQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-70"></span><span id="tankVolumeQD"><span class="annot"><span class="annottext">tankVolumeQD :: SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#tankVolumeQD"><span class="hs-identifier hs-var hs-var">tankVolumeQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#tankVol"><span class="hs-identifier hs-var">tankVol</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SWHS.DataDefs.html#tankVolumeEqn"><span class="hs-identifier hs-var">tankVolumeEqn</span></a></span><span>
@@ -216,7 +222,9 @@ forall a. Maybe a
 </span><span id="line-80"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceDecayRateQD"><span class="hs-identifier hs-type">balanceDecayRateQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-81"></span><span id="balanceDecayRateQD"><span class="annot"><span class="annottext">balanceDecayRateQD :: SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#balanceDecayRateQD"><span class="hs-identifier hs-var hs-var">balanceDecayRateQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#tauW"><span class="hs-identifier hs-var">tauW</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SWHS.DataDefs.html#balanceDecayRateEqn"><span class="hs-identifier hs-var">balanceDecayRateEqn</span></a></span><span>
@@ -288,7 +296,9 @@ forall a. Maybe a
 </span><span id="line-96"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceDecayTimeQD"><span class="hs-identifier hs-type">balanceDecayTimeQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-97"></span><span id="balanceDecayTimeQD"><span class="annot"><span class="annottext">balanceDecayTimeQD :: SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#balanceDecayTimeQD"><span class="hs-identifier hs-var hs-var">balanceDecayTimeQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SWHS.Unitals.html#eta"><span class="hs-identifier hs-var">eta</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SWHS.DataDefs.html#balanceDecayTimeEqn"><span class="hs-identifier hs-var">balanceDecayTimeEqn</span></a></span><span>
@@ -344,7 +354,9 @@ forall a. Maybe a
 </span><span id="line-108"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceSolidPCMQD"><span class="hs-identifier hs-type">balanceSolidPCMQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-109"></span><span id="balanceSolidPCMQD"><span class="annot"><span class="annottext">balanceSolidPCMQD :: SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#balanceSolidPCMQD"><span class="hs-identifier hs-var hs-var">balanceSolidPCMQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#tauSP"><span class="hs-identifier hs-var">tauSP</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SWHS.DataDefs.html#balanceSolidPCMEqn"><span class="hs-identifier hs-var">balanceSolidPCMEqn</span></a></span><span>
@@ -401,7 +413,9 @@ forall a. Maybe a
 </span><span id="line-121"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#balanceLiquidPCMQD"><span class="hs-identifier hs-type">balanceLiquidPCMQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-122"></span><span id="balanceLiquidPCMQD"><span class="annot"><span class="annottext">balanceLiquidPCMQD :: SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#balanceLiquidPCMQD"><span class="hs-identifier hs-var hs-var">balanceLiquidPCMQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SWHS.Unitals.html#tauLP"><span class="hs-identifier hs-var">tauLP</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SWHS.DataDefs.html#balanceLiquidPCMEqn"><span class="hs-identifier hs-var">balanceLiquidPCMEqn</span></a></span><span>
@@ -458,7 +472,9 @@ forall a. Maybe a
 </span><span id="line-134"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#ddHtFusionQD"><span class="hs-identifier hs-type">ddHtFusionQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-135"></span><span id="ddHtFusionQD"><span class="annot"><span class="annottext">ddHtFusionQD :: SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#ddHtFusionQD"><span class="hs-identifier hs-var hs-var">ddHtFusionQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><a href="Drasil.SWHS.Unitals.html#htFusion"><span class="hs-identifier hs-var">htFusion</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SWHS.DataDefs.html#htFusionEqn"><span class="hs-identifier hs-var">htFusionEqn</span></a></span><span>
@@ -560,7 +576,9 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-153"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#ddMeltFracQD"><span class="hs-identifier hs-type">ddMeltFracQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-154"></span><span id="ddMeltFracQD"><span class="annot"><span class="annottext">ddMeltFracQD :: SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#ddMeltFracQD"><span class="hs-identifier hs-var hs-var">ddMeltFracQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SWHS.Unitals.html#meltFrac"><span class="hs-identifier hs-var">meltFrac</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SWHS.DataDefs.html#meltFracEqn"><span class="hs-identifier hs-var">meltFracEqn</span></a></span><span>
@@ -608,14 +626,14 @@ r -&gt; DecRef
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;meltFrac&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679086570"><span class="hs-identifier hs-var">meltFracConst</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
+</span><a href="#local-6989586621679086672"><span class="hs-identifier hs-var">meltFracConst</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 </span><a href="Drasil.SWHS.DataDefs.html#ddHtFusion"><span class="hs-identifier hs-var">ddHtFusion</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-166"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679086570"><span class="annot"><span class="annottext">meltFracConst :: Sentence
-</span><a href="#local-6989586621679086570"><span class="hs-identifier hs-var hs-var">meltFracConst</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><span id="line-166"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679086672"><span class="annot"><span class="annottext">meltFracConst :: Sentence
+</span><a href="#local-6989586621679086672"><span class="hs-identifier hs-var hs-var">meltFracConst</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
@@ -655,7 +673,9 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span id="line-171"></span><span class="annot"><a href="Drasil.SWHS.DataDefs.html#aspRatQD"><span class="hs-identifier hs-type">aspRatQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-172"></span><span id="aspRatQD"><span class="annot"><span class="annottext">aspRatQD :: SimpleQDef
 </span><a href="Drasil.SWHS.DataDefs.html#aspRatQD"><span class="hs-identifier hs-var hs-var">aspRatQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SWHS.Unitals.html#aspectRatio"><span class="hs-identifier hs-var">aspectRatio</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Drasil.SWHS.DataDefs.html#aspRatEq"><span class="hs-identifier hs-var">aspRatEq</span></a></span><span>

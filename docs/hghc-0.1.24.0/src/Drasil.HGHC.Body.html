@@ -48,22 +48,22 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; Sentence
 -&gt; Purpose
 -&gt; Purpose
 -&gt; Purpose
--&gt; [QuantityDict]
+-&gt; [DefinedQuantityDict]
 -&gt; [TheoryModel]
 -&gt; [GenDefn]
 -&gt; [DataDefinition]
 -&gt; [InstanceModel]
 -&gt; [String]
--&gt; [QuantityDict]
--&gt; [QuantityDict]
+-&gt; [DefinedQuantityDict]
+-&gt; [DefinedQuantityDict]
 -&gt; [ConstrConcept]
 -&gt; [ConstQDef]
 -&gt; ChunkDB
 -&gt; System
 forall a e h i j.
-(CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Quantity h,
- MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j,
- Constrained j) =&gt;
+(CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Concept e,
+ Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i,
+ Concept i, HasUID j, Constrained j) =&gt;
 a
 -&gt; SystemKind
 -&gt; People
@@ -90,12 +90,12 @@ a
 </span><span class="hs-identifier hs-var">spencerSmith</span></span><span class="hs-special">]</span><span>
 </span><span id="line-30"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.HGHC.Body.html#purp"><span class="hs-identifier hs-var">purp</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 </span><a href="Drasil.HGHC.HeatTransfer.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span>
 </span><span id="line-32"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[DataDefinition]
 </span><a href="Drasil.HGHC.HeatTransfer.html#dataDefs"><span class="hs-identifier hs-var">dataDefs</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-33"></span><span>  </span><span class="annot"><span class="annottext">[QuantityDict]
-</span><a href="Drasil.HGHC.HeatTransfer.html#htInputs"><span class="hs-identifier hs-var">htInputs</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><span id="line-33"></span><span>  </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
+</span><a href="Drasil.HGHC.HeatTransfer.html#htInputs"><span class="hs-identifier hs-var">htInputs</span></a></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 </span><a href="Drasil.HGHC.HeatTransfer.html#htOutputs"><span class="hs-identifier hs-var">htOutputs</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstrConcept</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-34"></span><span>  </span><span class="annot"><span class="annottext">ChunkDB
 </span><a href="Drasil.HGHC.Body.html#symbMap"><span class="hs-identifier hs-var">symbMap</span></a></span><span>
@@ -198,7 +198,7 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span id="line-59"></span><span>
 </span><span id="line-60"></span><span class="annot"><a href="Drasil.HGHC.Body.html#symbMap"><span class="hs-identifier hs-type">symbMap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span>
 </span><span id="line-61"></span><span id="symbMap"><span class="annot"><span class="annottext">symbMap :: ChunkDB
-</span><a href="Drasil.HGHC.Body.html#symbMap"><span class="hs-identifier hs-var hs-var">symbMap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><a href="Drasil.HGHC.Body.html#symbMap"><span class="hs-identifier hs-var hs-var">symbMap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 -&gt; [IdeaDict]
 -&gt; [ConceptChunk]
 -&gt; [UnitDefn]
@@ -212,7 +212,7 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 -&gt; [Citation]
 -&gt; ChunkDB
 forall q c u.
-(Quantity q, MayHaveUnit q, Concept c, IsUnit u) =&gt;
+(Quantity q, MayHaveUnit q, Concept q, Concept c, IsUnit u) =&gt;
 [q]
 -&gt; [IdeaDict]
 -&gt; [c]
@@ -226,7 +226,7 @@ forall q c u.
 -&gt; [Reference]
 -&gt; [Citation]
 -&gt; ChunkDB
-</span><span class="hs-identifier hs-var">cdb</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
+</span><span class="hs-identifier hs-var">cdb</span></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 </span><a href="Drasil.HGHC.HeatTransfer.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span> </span><span class="annot"><span class="annottext">[IdeaDict]
 </span><a href="Drasil.HGHC.Body.html#ideaDicts"><span class="hs-identifier hs-var">ideaDicts</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
 </span><span class="hs-identifier hs-var">mathcon</span></span><span>

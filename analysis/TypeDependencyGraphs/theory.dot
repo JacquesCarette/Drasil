@@ -63,7 +63,7 @@ digraph alltypes {
 		}
 		subgraph input{
 		Input	[shape=oval, color=red2, label="Input"];
-		Input -> QuantityDictMaybeRealIntervalExprExpr;
+		Input -> DefinedQuantityDictMaybeRealIntervalExprExpr;
 		}
 		subgraph inputs{
 		Inputs	[shape=oval, color=red2, label="Inputs"];
@@ -71,7 +71,7 @@ digraph alltypes {
 		}
 		subgraph output{
 		Output	[shape=oval, color=red2, label="Output"];
-		Output -> QuantityDict;
+		Output -> DefinedQuantityDict;
 		}
 		subgraph outputconstraints{
 		OutputConstraints	[shape=oval, color=red2, label="OutputConstraints"];
@@ -117,7 +117,7 @@ digraph alltypes {
 		TheoryModel -> ModelKindModelExpr;
 		TheoryModel -> TheoryModel;
 		TheoryModel -> SpaceDefn;
-		TheoryModel -> QuantityDict;
+		TheoryModel -> DefinedQuantityDict;
 		TheoryModel -> ConceptChunk;
 		TheoryModel -> ModelQDef;
 		TheoryModel -> ModelExpr;

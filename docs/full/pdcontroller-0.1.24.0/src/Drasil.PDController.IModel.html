@@ -27,7 +27,7 @@
 </span><a href="Drasil.PDController.IModel.html#imPD"><span class="hs-identifier hs-var hs-var">imPD</span></a></span></span><span>
 </span><span id="line-25"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind Expr
 -&gt; Inputs
--&gt; QuantityDict
+-&gt; DefinedQuantityDict
 -&gt; OutputConstraints
 -&gt; [DecRef]
 -&gt; Maybe Derivation
@@ -38,12 +38,12 @@
 forall e. DifferentialModel -&gt; ModelKind e
 </span><span class="hs-identifier hs-var">newDEModel'</span></span><span> </span><span class="annot"><span class="annottext">DifferentialModel
 </span><a href="Drasil.PDController.IModel.html#imPDRC"><span class="hs-identifier hs-var">imPDRC</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-26"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QuantityDict -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-26"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
-</span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdSetPointTD"><span class="hs-identifier hs-var">qdSetPointTD</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
+</span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdSetPointTD"><span class="hs-identifier hs-var">dqdSetPointTD</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
 -&gt; RealInterval Expr Expr -&gt; Input
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -52,12 +52,12 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; RealInterval Expr Expr -&gt; Input
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
-</span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
+</span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdPropGain"><span class="hs-identifier hs-var">dqdPropGain</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
 -&gt; RealInterval Expr Expr -&gt; Input
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -67,12 +67,12 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-27"></span><span>       </span><span class="annot"><span class="annottext">QuantityDict -&gt; RealInterval Expr Expr -&gt; Input
+</span><span id="line-27"></span><span>       </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
-</span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-var">qdDerivGain</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
+</span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdDerivGain"><span class="hs-identifier hs-var">dqdDerivGain</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
 -&gt; RealInterval Expr Expr -&gt; Input
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; RealInterval Expr Expr
@@ -82,10 +82,8 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-28"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; QuantityDict
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdProcessVariableTD"><span class="hs-identifier hs-var">qdProcessVariableTD</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-28"></span><span>      </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdProcessVariableTD"><span class="hs-identifier hs-var">dqdProcessVariableTD</span></a></span><span>
 </span><span id="line-29"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; RealInterval Expr Expr
 forall b a. (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">UpFrom</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
@@ -129,9 +127,9 @@ forall a. a -&gt; Maybe a
 </span><span id="line-39"></span><span>      </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-var">opProcessVariable</span></a></span><span>
 </span><span id="line-40"></span><span>      </span><span class="annot"><span class="annottext">LHS
-</span><a href="#local-6989586621679064786"><span class="hs-identifier hs-var">lhs</span></a></span><span>
+</span><a href="#local-6989586621679065051"><span class="hs-identifier hs-var">lhs</span></a></span><span>
 </span><span id="line-41"></span><span>      </span><span class="annot"><span class="annottext">Expr
-</span><a href="#local-6989586621679064787"><span class="hs-identifier hs-var">rhs</span></a></span><span>
+</span><a href="#local-6989586621679065052"><span class="hs-identifier hs-var">rhs</span></a></span><span>
 </span><span id="line-42"></span><span>      </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;imPDRC&quot;</span></span><span>
 </span><span id="line-43"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -139,17 +137,17 @@ forall a. a -&gt; Maybe a
 </span><span class="hs-string">&quot;Computation of the Process Variable as a function of time&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-44"></span><span>      </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span>
-</span><span id="line-45"></span><span>      </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679064786"><span class="annot"><span class="annottext">lhs :: LHS
-</span><a href="#local-6989586621679064786"><span class="hs-identifier hs-var hs-var">lhs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span id="line-45"></span><span>      </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679065051"><span class="annot"><span class="annottext">lhs :: LHS
+</span><a href="#local-6989586621679065051"><span class="hs-identifier hs-var hs-var">lhs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-var">qdDerivGain</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Integer -&gt; Term
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdDerivGain"><span class="hs-identifier hs-var">dqdDerivGain</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Integer -&gt; Term
 </span><span class="hs-operator hs-var">$**</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-var">opProcessVariable</span></a></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Integer -&gt; Integer
 </span><span class="hs-operator hs-var">$^^</span></span><span> </span><span class="annot"><span class="annottext">Integer
@@ -169,31 +167,31 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">20</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Integer -&gt; Term
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdPropGain"><span class="hs-identifier hs-var">dqdPropGain</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Integer -&gt; Term
 </span><span class="hs-operator hs-var">$**</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-var">opProcessVariable</span></a></span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Integer -&gt; Integer
 </span><span class="hs-operator hs-var">$^^</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-48"></span><span>            </span><span id="local-6989586621679064787"><span class="annot"><span class="annottext">rhs :: Expr
-</span><a href="#local-6989586621679064787"><span class="hs-identifier hs-var hs-var">rhs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
+</span><span id="line-48"></span><span>            </span><span id="local-6989586621679065052"><span class="annot"><span class="annottext">rhs :: Expr
+</span><a href="#local-6989586621679065052"><span class="hs-identifier hs-var hs-var">rhs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdSetPointTD"><span class="hs-identifier hs-var">qdSetPointTD</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdSetPointTD"><span class="hs-identifier hs-var">dqdSetPointTD</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span>
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdPropGain"><span class="hs-identifier hs-var">dqdPropGain</span></a></span><span>
 </span><span id="line-49"></span><span>      </span><span class="hs-comment">-- Matrix form: </span><span>
-</span><span id="line-50"></span><span>      </span><span class="hs-comment">-- coeffs = [[exactDbl 1, exactDbl 1 $+ sy qdDerivGain, exactDbl 20 $+ sy qdPropGain]]</span><span>
+</span><span id="line-50"></span><span>      </span><span class="hs-comment">-- coeffs = [[exactDbl 1, exactDbl 1 $+ sy dqdDerivGain, exactDbl 20 $+ sy dqdPropGain]]</span><span>
 </span><span id="line-51"></span><span>      </span><span class="hs-comment">-- unknowns = [2, 1, 0]</span><span>
-</span><span id="line-52"></span><span>      </span><span class="hs-comment">-- constants = [sy qdSetPointTD $* sy qdPropGain]</span><span>
+</span><span id="line-52"></span><span>      </span><span class="hs-comment">-- constants = [sy dqdSetPointTD $* sy dqdPropGain]</span><span>
 </span><span id="line-53"></span><span>
 </span><span id="line-54"></span><span class="annot"><a href="Drasil.PDController.IModel.html#imDeriv"><span class="hs-identifier hs-type">imDeriv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
 </span><span id="line-55"></span><span id="imDeriv"><span class="annot"><span class="annottext">imDeriv :: Derivation
@@ -238,10 +236,10 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="Drasil.PDController.Concepts.html#processVariable"><span class="hs-identifier hs-var">processVariable</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Sentence
+</span><a href="Drasil.PDController.Concepts.html#processVariable"><span class="hs-identifier hs-var">processVariable</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Sentence
 forall t. Express t =&gt; t -&gt; Sentence
-</span><span class="hs-identifier hs-var">eS'</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdProcessVariableFD"><span class="hs-identifier hs-var">qdProcessVariableFD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS'</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdProcessVariableFD"><span class="hs-identifier hs-var">dqdProcessVariableFD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;in a&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -280,60 +278,60 @@ forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
 </span><span id="line-73"></span><span class="annot"><a href="Drasil.PDController.IModel.html#derivEqn1"><span class="hs-identifier hs-type">derivEqn1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelExpr</span></span><span>
 </span><span id="line-74"></span><span id="derivEqn1"><span class="annot"><span class="annottext">derivEqn1 :: ModelExpr
 </span><a href="Drasil.PDController.IModel.html#derivEqn1"><span class="hs-identifier hs-var hs-var">derivEqn1</span></a></span></span><span>
-</span><span id="line-75"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span id="line-75"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdProcessVariableFD"><span class="hs-identifier hs-var">qdProcessVariableFD</span></a></span><span>
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdProcessVariableFD"><span class="hs-identifier hs-var">dqdProcessVariableFD</span></a></span><span>
 </span><span id="line-76"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdSetPointFD"><span class="hs-identifier hs-var">qdSetPointFD</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdSetPointFD"><span class="hs-identifier hs-var">dqdSetPointFD</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdProcessVariableFD"><span class="hs-identifier hs-var">qdProcessVariableFD</span></a></span><span class="hs-special">)</span><span>
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdProcessVariableFD"><span class="hs-identifier hs-var">dqdProcessVariableFD</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-77"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdPropGain"><span class="hs-identifier hs-var">dqdPropGain</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-var">qdDerivGain</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdDerivGain"><span class="hs-identifier hs-var">dqdDerivGain</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdFreqDomain"><span class="hs-identifier hs-var">dqdFreqDomain</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-78"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
 forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
 </span><span class="hs-identifier hs-var">recip_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
 forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdFreqDomain"><span class="hs-identifier hs-var">dqdFreqDomain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdFreqDomain"><span class="hs-identifier hs-var">dqdFreqDomain</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
@@ -351,17 +349,17 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><a href="Drasil.PDController.IModel.html#derivEqn2"><span class="hs-identifier hs-var hs-var">derivEqn2</span></a></span></span><span>
 </span><span id="line-85"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr
 forall r. (ExprC r, LiteralC r) =&gt; r -&gt; r
-</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdFreqDomain"><span class="hs-identifier hs-var">dqdFreqDomain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdProcessVariableFD"><span class="hs-identifier hs-var">qdProcessVariableFD</span></a></span><span>
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdProcessVariableFD"><span class="hs-identifier hs-var">dqdProcessVariableFD</span></a></span><span>
 </span><span id="line-86"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
@@ -369,23 +367,23 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-var">qdDerivGain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdDerivGain"><span class="hs-identifier hs-var">dqdDerivGain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdProcessVariableFD"><span class="hs-identifier hs-var">qdProcessVariableFD</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdProcessVariableFD"><span class="hs-identifier hs-var">dqdProcessVariableFD</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span class="hs-special">)</span><span>
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdFreqDomain"><span class="hs-identifier hs-var">dqdFreqDomain</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-87"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
@@ -393,49 +391,49 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">20</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdPropGain"><span class="hs-identifier hs-var">dqdPropGain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdProcessVariableFD"><span class="hs-identifier hs-var">qdProcessVariableFD</span></a></span><span class="hs-special">)</span><span>
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdProcessVariableFD"><span class="hs-identifier hs-var">dqdProcessVariableFD</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-88"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdSetPointFD"><span class="hs-identifier hs-var">qdSetPointFD</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdSetPointFD"><span class="hs-identifier hs-var">dqdSetPointFD</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdFreqDomain"><span class="hs-identifier hs-var">dqdFreqDomain</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-var">qdDerivGain</span></a></span><span class="hs-special">)</span><span>
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdDerivGain"><span class="hs-identifier hs-var">dqdDerivGain</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-89"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdSetPointFD"><span class="hs-identifier hs-var">qdSetPointFD</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdSetPointFD"><span class="hs-identifier hs-var">dqdSetPointFD</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdPropGain"><span class="hs-identifier hs-var">dqdPropGain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
@@ -448,10 +446,10 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span id="line-93"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Computing the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdInvLaplaceTransform"><span class="hs-identifier hs-var">qdInvLaplaceTransform</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdInvLaplaceTransform"><span class="hs-identifier hs-var">dqdInvLaplaceTransform</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
 </span><span id="line-94"></span><span>     </span><span class="annot"><span class="annottext">TheoryModel -&gt; Sentence
 forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
@@ -470,11 +468,11 @@ forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelExpr -&gt; UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; ModelExpr -&gt; c -&gt; ModelExpr
 forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdProcessVariableTD"><span class="hs-identifier hs-var">qdProcessVariableTD</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdProcessVariableTD"><span class="hs-identifier hs-var">dqdProcessVariableTD</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
@@ -484,20 +482,20 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-var">qdDerivGain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdDerivGain"><span class="hs-identifier hs-var">dqdDerivGain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; ModelExpr -&gt; c -&gt; ModelExpr
 forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdProcessVariableTD"><span class="hs-identifier hs-var">qdProcessVariableTD</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdProcessVariableTD"><span class="hs-identifier hs-var">dqdProcessVariableTD</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span>
 </span><span id="line-100"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
@@ -506,47 +504,47 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">20</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdPropGain"><span class="hs-identifier hs-var">dqdPropGain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdProcessVariableTD"><span class="hs-identifier hs-var">qdProcessVariableTD</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdProcessVariableTD"><span class="hs-identifier hs-var">dqdProcessVariableTD</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-101"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-var">qdDerivGain</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdDerivGain"><span class="hs-identifier hs-var">dqdDerivGain</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; ModelExpr -&gt; c -&gt; ModelExpr
 forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdSetPointTD"><span class="hs-identifier hs-var">qdSetPointTD</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdSetPointTD"><span class="hs-identifier hs-var">dqdSetPointTD</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span>
 </span><span id="line-102"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdSetPointTD"><span class="hs-identifier hs-var">qdSetPointTD</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdSetPointTD"><span class="hs-identifier hs-var">dqdSetPointTD</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdPropGain"><span class="hs-identifier hs-var">dqdPropGain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
 forall r. LiteralC r =&gt; Integer -&gt; r
@@ -563,10 +561,10 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall t. NamedIdea t =&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><a href="Drasil.PDController.Concepts.html#setPoint"><span class="hs-identifier hs-var">setPoint</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Sentence
+</span><a href="Drasil.PDController.Concepts.html#setPoint"><span class="hs-identifier hs-var">setPoint</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Sentence
 forall t. Express t =&gt; t -&gt; Sentence
-</span><span class="hs-identifier hs-var">eS'</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdSetPointTD"><span class="hs-identifier hs-var">qdSetPointTD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS'</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdSetPointTD"><span class="hs-identifier hs-var">dqdSetPointTD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;is a step function and a constant&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span>
@@ -599,11 +597,11 @@ forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelExpr -&gt; UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; ModelExpr -&gt; c -&gt; ModelExpr
 forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdProcessVariableTD"><span class="hs-identifier hs-var">qdProcessVariableTD</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdProcessVariableTD"><span class="hs-identifier hs-var">dqdProcessVariableTD</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
@@ -613,20 +611,20 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-var">qdDerivGain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdDerivGain"><span class="hs-identifier hs-var">dqdDerivGain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; UnitalChunk -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; ModelExpr -&gt; c -&gt; ModelExpr
 forall r c. (ModelExprC r, HasUID c, HasSymbol c) =&gt; r -&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdProcessVariableTD"><span class="hs-identifier hs-var">qdProcessVariableTD</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdProcessVariableTD"><span class="hs-identifier hs-var">dqdProcessVariableTD</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span>
 </span><span id="line-117"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
@@ -635,30 +633,30 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">20</span></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$+</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdPropGain"><span class="hs-identifier hs-var">dqdPropGain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdProcessVariableTD"><span class="hs-identifier hs-var">qdProcessVariableTD</span></a></span><span class="hs-special">)</span><span>
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdProcessVariableTD"><span class="hs-identifier hs-var">dqdProcessVariableTD</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-118"></span><span>      </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$-</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdSetPointTD"><span class="hs-identifier hs-var">qdSetPointTD</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdSetPointTD"><span class="hs-identifier hs-var">dqdSetPointTD</span></a></span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
-</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; ModelExpr
+</span><span class="hs-operator hs-var">$*</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; ModelExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; ModelExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdPropGain"><span class="hs-identifier hs-var">dqdPropGain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ModelExpr -&gt; ModelExpr -&gt; ModelExpr
 forall r. ExprC r =&gt; r -&gt; r -&gt; r
 </span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; ModelExpr
 forall r. LiteralC r =&gt; Integer -&gt; r

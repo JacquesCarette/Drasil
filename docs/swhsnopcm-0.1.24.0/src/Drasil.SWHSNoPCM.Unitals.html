@@ -10,27 +10,33 @@
 </span><span id="line-10"></span><span>  </span><span class="annot"><span class="hs-identifier">relTol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tankLength</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tankLengthMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tankLengthMin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tempC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">timeFinal</span></span><span class="hs-special">,</span><span>
 </span><span id="line-11"></span><span>  </span><span class="annot"><span class="hs-identifier">timeFinalMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">timeStep</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">wDensity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">wDensityMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">wDensityMin</span></span><span class="hs-special">)</span><span>
 </span><span id="line-12"></span><span>
-</span><span id="line-13"></span><span class="annot"><a href="Drasil.SWHSNoPCM.Unitals.html#inputs"><span class="hs-identifier hs-type">inputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-14"></span><span id="inputs"><span class="annot"><span class="annottext">inputs :: [QuantityDict]
-</span><a href="Drasil.SWHSNoPCM.Unitals.html#inputs"><span class="hs-identifier hs-var hs-var">inputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UncertQ -&gt; QuantityDict) -&gt; [UncertQ] -&gt; [QuantityDict]
+</span><span id="line-13"></span><span class="annot"><a href="Drasil.SWHSNoPCM.Unitals.html#inputs"><span class="hs-identifier hs-type">inputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-14"></span><span id="inputs"><span class="annot"><span class="annottext">inputs :: [DefinedQuantityDict]
+</span><a href="Drasil.SWHSNoPCM.Unitals.html#inputs"><span class="hs-identifier hs-var hs-var">inputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UncertQ -&gt; DefinedQuantityDict)
+-&gt; [UncertQ] -&gt; [DefinedQuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; QuantityDict
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[UncertQ]
-</span><a href="Drasil.SWHSNoPCM.Unitals.html#constrained"><span class="hs-identifier hs-var">constrained</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; DefinedQuantityDict
+forall c.
+(Quantity c, Concept c, MayHaveUnit c) =&gt;
+c -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">[UncertQ]
+</span><a href="Drasil.SWHSNoPCM.Unitals.html#constrained"><span class="hs-identifier hs-var">constrained</span></a></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
+-&gt; [DefinedQuantityDict] -&gt; [DefinedQuantityDict]
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(UncertainChunk -&gt; QuantityDict)
--&gt; [UncertainChunk] -&gt; [QuantityDict]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(UncertQ -&gt; DefinedQuantityDict)
+-&gt; [UncertQ] -&gt; [DefinedQuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UncertainChunk -&gt; QuantityDict
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[UncertainChunk]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; DefinedQuantityDict
+forall c.
+(Quantity c, Concept c, MayHaveUnit c) =&gt;
+c -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">[UncertQ]
 </span><a href="Drasil.SWHSNoPCM.Unitals.html#unconstrained"><span class="hs-identifier hs-var">unconstrained</span></a></span><span>
 </span><span id="line-15"></span><span>
-</span><span id="line-16"></span><span class="annot"><a href="Drasil.SWHSNoPCM.Unitals.html#unconstrained"><span class="hs-identifier hs-type">unconstrained</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertainChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-17"></span><span id="unconstrained"><span class="annot"><span class="annottext">unconstrained :: [UncertainChunk]
-</span><a href="Drasil.SWHSNoPCM.Unitals.html#unconstrained"><span class="hs-identifier hs-var hs-var">unconstrained</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UncertainChunk
-</span><span class="hs-identifier hs-var">absTol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertainChunk
+</span><span id="line-16"></span><span class="annot"><a href="Drasil.SWHSNoPCM.Unitals.html#unconstrained"><span class="hs-identifier hs-type">unconstrained</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
+</span><span id="line-17"></span><span id="unconstrained"><span class="annot"><span class="annottext">unconstrained :: [UncertQ]
+</span><a href="Drasil.SWHSNoPCM.Unitals.html#unconstrained"><span class="hs-identifier hs-var hs-var">unconstrained</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">absTol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><span class="hs-identifier hs-var">relTol</span></span><span class="hs-special">]</span><span>
 </span><span id="line-18"></span><span>
 </span><span id="line-19"></span><span class="annot"><a href="Drasil.SWHSNoPCM.Unitals.html#constrained"><span class="hs-identifier hs-type">constrained</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>

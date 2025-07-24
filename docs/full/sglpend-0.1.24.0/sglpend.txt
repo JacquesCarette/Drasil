@@ -24,9 +24,9 @@ module Drasil.SglPend.MetaConcepts
 progName :: CI
 
 module Drasil.SglPend.Unitals
-symbols :: [QuantityDict]
-inputs :: [QuantityDict]
-outputs :: [QuantityDict]
+symbols :: [DefinedQuantityDict]
+inputs :: [DefinedQuantityDict]
+outputs :: [DefinedQuantityDict]
 units :: [UnitalChunk]
 unitalChunks :: [UnitalChunk]
 lenRod :: UnitalChunk

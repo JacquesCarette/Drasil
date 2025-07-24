@@ -12,14 +12,14 @@
 </span><a href="Drasil.SWHSNoPCM.ODEs.html#noPCMODEOpts"><span class="hs-identifier hs-var hs-var">noPCMODEOpts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ODEMethod -&gt; CodeExpr -&gt; CodeExpr -&gt; CodeExpr -&gt; ODEOptions
 </span><span class="hs-identifier hs-var">odeOptions</span></span><span>
 </span><span id="line-12"></span><span>  </span><span class="annot"><span class="annottext">ODEMethod
-</span><span class="hs-identifier hs-var">RK45</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertainChunk -&gt; CodeExpr
+</span><span class="hs-identifier hs-var">RK45</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; CodeExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; CodeExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertainChunk
-</span><span class="hs-identifier hs-var">absTol</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertainChunk -&gt; CodeExpr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">absTol</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; CodeExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; CodeExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
-</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertainChunk
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><span class="hs-identifier hs-var">relTol</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; CodeExpr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; CodeExpr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
@@ -51,10 +51,14 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 -&gt; ODEInfo
 </span><span class="hs-identifier hs-var">odeInfo'</span></span><span>
 </span><span id="line-19"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; CodeVarChunk
-forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; CodeVarChunk
+forall c.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; CodeVarChunk
 </span><span class="hs-identifier hs-var">quantvar</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">tauW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; CodeVarChunk
-forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; CodeVarChunk
+forall c.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; CodeVarChunk
 </span><span class="hs-identifier hs-var">quantvar</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
 </span><span class="hs-identifier hs-var">tempC</span></span><span class="hs-special">]</span><span>
 </span><span id="line-20"></span><span>  </span><span class="annot"><span class="annottext">ODEOptions

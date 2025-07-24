@@ -1,4 +1,4 @@
 digraph input{
 Input	[shape=oval, color=red2, label="Input"];
-Input -> QuantityDictMaybeRealIntervalExprExpr;
+Input -> DefinedQuantityDictMaybeRealIntervalExprExpr;
 }

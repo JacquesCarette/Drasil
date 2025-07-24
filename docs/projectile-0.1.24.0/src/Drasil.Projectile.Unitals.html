@@ -260,27 +260,33 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span id="line-39"></span><span>
 </span><span id="line-40"></span><span class="hs-comment">---</span><span>
 </span><span id="line-41"></span><span class="hs-comment">-- The output contains a message, as a string, so it needs to be a quantity</span><span>
-</span><span id="line-42"></span><span class="annot"><a href="Drasil.Projectile.Unitals.html#message"><span class="hs-identifier hs-type">message</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span>
-</span><span id="line-43"></span><span id="message"><span class="annot"><span class="annottext">message :: QuantityDict
-</span><a href="Drasil.Projectile.Unitals.html#message"><span class="hs-identifier hs-var hs-var">message</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-42"></span><span class="annot"><a href="Drasil.Projectile.Unitals.html#message"><span class="hs-identifier hs-type">message</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span>
+</span><span id="line-43"></span><span id="message"><span class="annot"><span class="annottext">message :: DefinedQuantityDict
+</span><a href="Drasil.Projectile.Unitals.html#message"><span class="hs-identifier hs-var hs-var">message</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqdNoUnit</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;outputMessage&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;output message as a string&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><span class="hs-string">&quot;output message as a string&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;the output message given as a string&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">lS</span></span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">String</span></span><span>
 </span><span id="line-44"></span><span>
 </span><span id="line-45"></span><span class="hs-comment">---</span><span>
 </span><span id="line-46"></span><span class="annot"><a href="Drasil.Projectile.Unitals.html#tol"><span class="hs-identifier hs-type">tol</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstQDef</span></span><span>
 </span><span id="line-47"></span><span id="tol"><span class="annot"><span class="annottext">tol :: ConstQDef
-</span><a href="Drasil.Projectile.Unitals.html#tol"><span class="hs-identifier hs-var hs-var">tol</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Literal -&gt; ConstQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
-</span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; (Stage -&gt; Symbol) -&gt; Space -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">vcSt</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.Projectile.Unitals.html#tol"><span class="hs-identifier hs-var hs-var">tol</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Literal -&gt; ConstQDef
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
+</span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; (Stage -&gt; Symbol) -&gt; Space -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqdNoUnit'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;tol&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;hit tolerance&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Stage -&gt; Symbol
+</span><span class="hs-string">&quot;hit tolerance&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;the hit tolerance&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">autoStage</span></span><span> </span><span class="annot"><span class="annottext">Symbol
 </span><span class="hs-identifier hs-var">vEpsilon</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Space
 </span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Literal

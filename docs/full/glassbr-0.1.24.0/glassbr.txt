@@ -51,33 +51,33 @@ module Drasil.GlassBR.Units
 sFlawPU :: UnitDefn
 
 module Drasil.GlassBR.Unitals
-constrained :: [ConstrainedChunk]
+constrained :: [ConstrConcept]
 plateLen :: UncertQ
 plateWidth :: UncertQ
 aspectRatio :: UncertQ
 charWeight :: UncertQ
 standOffDist :: UncertQ
-pbTol :: UncertainChunk
-tNT :: UncertainChunk
+pbTol :: UncertQ
+tNT :: UncertQ
 glassTypeCon :: ConstrConcept
 nomThick :: ConstrConcept
-inputs :: [QuantityDict]
+inputs :: [DefinedQuantityDict]
 inputsWUnitsUncrtn :: [UncertQ]
-inputsWUncrtn :: [UncertainChunk]
-inputsNoUncrtn :: [ConstrainedChunk]
+inputsWUncrtn :: [UncertQ]
+inputsNoUncrtn :: [ConstrConcept]
 derivedInsWUnitsUncrtn :: [UncertQ]
 derivedInsWUncrtn :: [UncertQ]
-inputDataConstraints :: [UncertainChunk]
-derivedInputDataConstraints :: [UncertainChunk]
-dataConstraints :: [UncertainChunk]
-outputs :: [QuantityDict]
+inputDataConstraints :: [UncertQ]
+derivedInputDataConstraints :: [UncertQ]
+dataConstraints :: [UncertQ]
+outputs :: [DefinedQuantityDict]
 
 -- | Symbols uniquely relevant to theory models.
-tmSymbols :: [QuantityDict]
-probBr :: ConstrainedChunk
-probFail :: ConstrainedChunk
-pbTolfail :: ConstrainedChunk
-stressDistFac :: ConstrainedChunk
+tmSymbols :: [DefinedQuantityDict]
+probBr :: ConstrConcept
+probFail :: ConstrConcept
+pbTolfail :: ConstrConcept
+stressDistFac :: ConstrConcept
 specParamVals :: [ConstQDef]
 dimMax :: ConstQDef
 dimMin :: ConstQDef
@@ -103,18 +103,18 @@ sflawParamM :: UnitalChunk
 sflawParamK :: UnitalChunk
 loadDur :: UnitalChunk
 modElas :: UnitalChunk
-unitless :: [QuantityDict]
-interps :: [QuantityDict]
-riskFun :: QuantityDict
-isSafePb :: QuantityDict
-isSafeProb :: QuantityDict
-isSafeLR :: QuantityDict
-isSafeLoad :: QuantityDict
-sdfTol :: QuantityDict
-dimlessLoad :: QuantityDict
-tolLoad :: QuantityDict
-interpY :: QuantityDict
-interpZ :: QuantityDict
+unitless :: [DefinedQuantityDict]
+interps :: [DefinedQuantityDict]
+riskFun :: DefinedQuantityDict
+isSafePb :: DefinedQuantityDict
+isSafeProb :: DefinedQuantityDict
+isSafeLR :: DefinedQuantityDict
+isSafeLoad :: DefinedQuantityDict
+sdfTol :: DefinedQuantityDict
+dimlessLoad :: DefinedQuantityDict
+tolLoad :: DefinedQuantityDict
+interpY :: DefinedQuantityDict
+interpZ :: DefinedQuantityDict
 gTF :: DefinedQuantityDict
 loadSF :: DefinedQuantityDict
 loadDF :: DefinedQuantityDict
@@ -184,15 +184,15 @@ lrIsSafe :: TheoryModel
 
 module Drasil.GlassBR.ModuleDefs
 allMods :: [Mod]
-implVars :: [QuantityDict]
+implVars :: [DefinedQuantityDict]
 interpY :: Func
 interpZ :: Func
 
 module Drasil.GlassBR.Symbols
-symbolsForSymbolTable :: [QuantityDict]
-symbolsForTermTable :: [QuantityDict]
-thisSymbols :: [QuantityDict]
-thisTerms :: [QuantityDict]
+symbolsForSymbolTable :: [DefinedQuantityDict]
+symbolsForTermTable :: [DefinedQuantityDict]
+thisSymbols :: [DefinedQuantityDict]
+thisTerms :: [DefinedQuantityDict]
 
 module Drasil.GlassBR.Goals
 goals :: [ConceptInstance]

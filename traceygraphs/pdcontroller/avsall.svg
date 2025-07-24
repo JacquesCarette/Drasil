@@ -23,31 +23,31 @@
 </g>
 <!-- dataDefn&#45;&gt;instance -->
 <g id="edge1" class="edge">
-<title>dataDefn:qdProcessErrorFD&#45;&gt;instance:setPointConstant</title>
+<title>dataDefn:dqdProcessErrorFD&#45;&gt;instance:setPointConstant</title>
 <path fill="none" stroke="black" d="M210.37,-80.87C196.67,-50.11 165.45,10.47 136.87,-1.97"/>
 <polygon fill="black" stroke="black" points="134.64,0.74 128.5,-7.89 138.69,-4.97 134.64,0.74"/>
 </g>
 <!-- dataDefn&#45;&gt;instance -->
 <g id="edge2" class="edge">
-<title>dataDefn:qdProcessErrorFD&#45;&gt;instance:initialValue</title>
+<title>dataDefn:dqdProcessErrorFD&#45;&gt;instance:initialValue</title>
 <path fill="none" stroke="black" d="M164.09,-80.76C141.83,-71.48 117.27,-59.91 98.57,-49.96"/>
 <polygon fill="black" stroke="black" points="100.09,-46.81 89.64,-45.08 96.73,-52.95 100.09,-46.81"/>
 </g>
 <!-- dataDefn&#45;&gt;instance -->
 <g id="edge3" class="edge">
-<title>dataDefn:qdDerivativeControlFD&#45;&gt;instance:unfilteredDerivative</title>
+<title>dataDefn:dqdDerivativeControlFD&#45;&gt;instance:unfilteredDerivative</title>
 <path fill="none" stroke="black" d="M175.89,-80.76C155.28,-71.36 130.62,-59.6 110.4,-49.55"/>
 <polygon fill="black" stroke="black" points="111.96,-46.42 101.45,-45.08 108.83,-52.68 111.96,-46.42"/>
 </g>
 <!-- dataDefn&#45;&gt;instance -->
 <g id="edge4" class="edge">
-<title>dataDefn:qdCtrlVarFD&#45;&gt;instance:decoupled</title>
+<title>dataDefn:dqdCtrlVarFD&#45;&gt;instance:decoupled</title>
 <path fill="none" stroke="black" d="M187.68,-80.76C168.81,-71.24 144.02,-59.29 122.16,-49.17"/>
 <polygon fill="black" stroke="black" points="123.54,-45.95 112.99,-44.96 120.61,-52.31 123.54,-45.95"/>
 </g>
 <!-- dataDefn&#45;&gt;instance -->
 <g id="edge5" class="edge">
-<title>dataDefn:qdCtrlVarFD&#45;&gt;instance:parallelEq</title>
+<title>dataDefn:dqdCtrlVarFD&#45;&gt;instance:parallelEq</title>
 <path fill="none" stroke="black" d="M199.48,-80.76C182.44,-71.15 157.62,-59.08 134.06,-48.9"/>
 <polygon fill="black" stroke="black" points="135.35,-45.64 124.77,-44.96 132.61,-52.09 135.35,-45.64"/>
 </g>

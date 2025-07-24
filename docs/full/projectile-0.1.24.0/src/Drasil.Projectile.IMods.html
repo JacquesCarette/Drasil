@@ -40,7 +40,7 @@
 </span><span id="line-35"></span><span id="timeIM"><span class="annot"><span class="annottext">timeIM :: InstanceModel
 </span><a href="Drasil.Projectile.IMods.html#timeIM"><span class="hs-identifier hs-var hs-var">timeIM</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind Expr
 -&gt; Inputs
--&gt; QuantityDict
+-&gt; DefinedQuantityDict
 -&gt; OutputConstraints
 -&gt; Maybe Derivation
 -&gt; String
@@ -54,7 +54,7 @@ forall e. NP -&gt; QDefinition e -&gt; ModelKind e
 </span><a href="Drasil.Projectile.IMods.html#timeQD"><span class="hs-identifier hs-var">timeQD</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-36"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
 </span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#launSpeed"><span class="hs-identifier hs-var">launSpeed</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
@@ -69,7 +69,7 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
 </span><span id="line-37"></span><span>  </span><span class="hs-special">,</span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
 </span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#launAngle"><span class="hs-identifier hs-var">launAngle</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
@@ -91,9 +91,11 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><span class="hs-identifier hs-var">pi_</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-38"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; QuantityDict
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><span id="line-38"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; DefinedQuantityDict
+forall c.
+(Quantity c, Concept c, MayHaveUnit c) =&gt;
+c -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#flightDur"><span class="hs-identifier hs-var">flightDur</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; RealInterval Expr Expr
 forall b a. (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">UpFrom</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
@@ -113,7 +115,9 @@ forall a. a -&gt; Maybe a
 </span><span id="line-41"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#timeQD"><span class="hs-identifier hs-type">timeQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span> </span><span>
 </span><span id="line-42"></span><span id="timeQD"><span class="annot"><span class="annottext">timeQD :: SimpleQDef
 </span><a href="Drasil.Projectile.IMods.html#timeQD"><span class="hs-identifier hs-var hs-var">timeQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#flightDur"><span class="hs-identifier hs-var">flightDur</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 PExpr
@@ -360,7 +364,7 @@ forall c. Express c =&gt; c -&gt; ModelExpr
 </span><span id="line-74"></span><span id="landPosIM"><span class="annot"><span class="annottext">landPosIM :: InstanceModel
 </span><a href="Drasil.Projectile.IMods.html#landPosIM"><span class="hs-identifier hs-var hs-var">landPosIM</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind Expr
 -&gt; Inputs
--&gt; QuantityDict
+-&gt; DefinedQuantityDict
 -&gt; OutputConstraints
 -&gt; Maybe Derivation
 -&gt; String
@@ -374,7 +378,7 @@ forall e. NP -&gt; QDefinition e -&gt; ModelKind e
 </span><a href="Drasil.Projectile.IMods.html#landPosQD"><span class="hs-identifier hs-var">landPosQD</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-75"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
 </span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#launSpeed"><span class="hs-identifier hs-var">launSpeed</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
@@ -389,7 +393,7 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-76"></span><span>   </span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
 </span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#launAngle"><span class="hs-identifier hs-var">launAngle</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
@@ -411,9 +415,11 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><span class="hs-identifier hs-var">pi_</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-77"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; QuantityDict
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><span id="line-77"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; DefinedQuantityDict
+forall c.
+(Quantity c, Concept c, MayHaveUnit c) =&gt;
+c -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#landPos"><span class="hs-identifier hs-var">landPos</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; RealInterval Expr Expr
 forall b a. (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">UpFrom</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
@@ -433,7 +439,9 @@ forall a. a -&gt; Maybe a
 </span><span id="line-80"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#landPosQD"><span class="hs-identifier hs-type">landPosQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-81"></span><span id="landPosQD"><span class="annot"><span class="annottext">landPosQD :: SimpleQDef
 </span><a href="Drasil.Projectile.IMods.html#landPosQD"><span class="hs-identifier hs-var hs-var">landPosQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#landPos"><span class="hs-identifier hs-var">landPos</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 PExpr
@@ -606,7 +614,7 @@ forall c. Express c =&gt; c -&gt; ModelExpr
 </span><span id="line-108"></span><span id="offsetIM"><span class="annot"><span class="annottext">offsetIM :: InstanceModel
 </span><a href="Drasil.Projectile.IMods.html#offsetIM"><span class="hs-identifier hs-var hs-var">offsetIM</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind Expr
 -&gt; Inputs
--&gt; QuantityDict
+-&gt; DefinedQuantityDict
 -&gt; OutputConstraints
 -&gt; String
 -&gt; [Sentence]
@@ -619,7 +627,7 @@ forall e. NP -&gt; QDefinition e -&gt; ModelKind e
 </span><a href="Drasil.Projectile.IMods.html#offsetQD"><span class="hs-identifier hs-var">offsetQD</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-109"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
 </span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#landPos"><span class="hs-identifier hs-var">landPos</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
@@ -634,7 +642,7 @@ forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
 </span><span id="line-110"></span><span>  </span><span class="hs-special">,</span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
 </span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#targPos"><span class="hs-identifier hs-var">targPos</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
@@ -647,9 +655,11 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-111"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; QuantityDict
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><span id="line-111"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; DefinedQuantityDict
+forall c.
+(Quantity c, Concept c, MayHaveUnit c) =&gt;
+c -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqdWr</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#offset"><span class="hs-identifier hs-var">offset</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;offsetIM&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.IMods.html#landPosNote"><span class="hs-identifier hs-var">landPosNote</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
@@ -658,7 +668,9 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span id="line-113"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#offsetQD"><span class="hs-identifier hs-type">offsetQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-114"></span><span id="offsetQD"><span class="annot"><span class="annottext">offsetQD :: SimpleQDef
 </span><a href="Drasil.Projectile.IMods.html#offsetQD"><span class="hs-identifier hs-var hs-var">offsetQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#offset"><span class="hs-identifier hs-var">offset</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 PExpr
@@ -668,7 +680,7 @@ PExpr
 </span><span id="line-117"></span><span id="messageIM"><span class="annot"><span class="annottext">messageIM :: InstanceModel
 </span><a href="Drasil.Projectile.IMods.html#messageIM"><span class="hs-identifier hs-var hs-var">messageIM</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind Expr
 -&gt; Inputs
--&gt; QuantityDict
+-&gt; DefinedQuantityDict
 -&gt; OutputConstraints
 -&gt; String
 -&gt; [Sentence]
@@ -681,7 +693,7 @@ forall e. NP -&gt; QDefinition e -&gt; ModelKind e
 </span><a href="Drasil.Projectile.IMods.html#messageQD"><span class="hs-identifier hs-var">messageQD</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-118"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
 </span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#offset"><span class="hs-identifier hs-var">offset</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
@@ -699,7 +711,7 @@ forall r c. (ExprC r, HasUID c, HasSymbol c) =&gt; c -&gt; r
 </span><a href="Drasil.Projectile.Unitals.html#targPos"><span class="hs-identifier hs-var">targPos</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-119"></span><span>  </span><span class="hs-special">,</span><span class="annot"><span class="annottext">ConstrConcept -&gt; RealInterval Expr Expr -&gt; Input
 forall q.
-(Quantity q, MayHaveUnit q) =&gt;
+(Quantity q, MayHaveUnit q, Concept q) =&gt;
 q -&gt; RealInterval Expr Expr -&gt; Input
 </span><span class="hs-identifier hs-var">qwC</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><a href="Drasil.Projectile.Unitals.html#targPos"><span class="hs-identifier hs-var">targPos</span></a></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Input)
@@ -712,10 +724,8 @@ forall b a. (Inclusive, b) -&gt; RealInterval a b
 forall r. LiteralC r =&gt; Integer -&gt; r
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="annottext">Integer
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-120"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; QuantityDict
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="Drasil.Projectile.Unitals.html#message"><span class="hs-identifier hs-var">message</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-120"></span><span>  </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.Projectile.Unitals.html#message"><span class="hs-identifier hs-var">message</span></a></span><span>
 </span><span id="line-121"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;messageIM&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Drasil.Projectile.IMods.html#offsetNote"><span class="hs-identifier hs-var">offsetNote</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence
@@ -725,9 +735,11 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span id="line-122"></span><span>
 </span><span id="line-123"></span><span class="annot"><a href="Drasil.Projectile.IMods.html#messageQD"><span class="hs-identifier hs-type">messageQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SimpleQDef</span></span><span>
 </span><span id="line-124"></span><span id="messageQD"><span class="annot"><span class="annottext">messageQD :: SimpleQDef
-</span><a href="Drasil.Projectile.IMods.html#messageQD"><span class="hs-identifier hs-var hs-var">messageQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Expr -&gt; SimpleQDef
-forall c e. (Quantity c, MayHaveUnit c) =&gt; c -&gt; e -&gt; QDefinition e
-</span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.Projectile.IMods.html#messageQD"><span class="hs-identifier hs-var hs-var">messageQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr -&gt; SimpleQDef
+forall c e.
+(Quantity c, MayHaveUnit c, Concept c) =&gt;
+c -&gt; e -&gt; QDefinition e
+</span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.Projectile.Unitals.html#message"><span class="hs-identifier hs-var">message</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 PExpr
 </span><a href="Drasil.Projectile.Expressions.html#message"><span class="hs-identifier hs-var">E.message</span></a></span><span>

@@ -57,10 +57,10 @@ smithLai2005 :: Citation
 smithKoothoor2016 :: Citation
 
 module Drasil.DblPend.Unitals
-symbols :: [QuantityDict]
+symbols :: [DefinedQuantityDict]
 acronyms :: [CI]
-inputs :: [QuantityDict]
-outputs :: [QuantityDict]
+inputs :: [DefinedQuantityDict]
+outputs :: [DefinedQuantityDict]
 constants :: [ConstQDef]
 unitalChunks :: [UnitalChunk]
 lenRod_1 :: UnitalChunk
@@ -232,7 +232,7 @@ si :: System
 purp :: Sentence
 motivation :: Sentence
 background :: Sentence
-symbolsAll :: [QuantityDict]
+symbolsAll :: [DefinedQuantityDict]
 ideaDicts :: [IdeaDict]
 abbreviationsList :: [IdeaDict]
 conceptChunks :: [ConceptChunk]

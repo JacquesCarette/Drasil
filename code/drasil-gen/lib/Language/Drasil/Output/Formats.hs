@@ -5,7 +5,7 @@ import Data.Char (toLower)
 import Build.Drasil ((+:+), Command, makeS, mkCheckedCommand, mkCommand, mkFreeVar,
   mkFile, mkRule, RuleTransformer(makeRule))
 import Language.Drasil.Printers (DocType(..), Format(TeX, MDBook))
-import Metadata.Drasil.DrasilMetaCall (watermark)
+import Drasil.Metadata (watermark)
 
 -- | When choosing your document, you must specify the filename for
 -- the generated output (specified /without/ a file extension).

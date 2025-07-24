@@ -1,6 +1,7 @@
 module Drasil.SWHSNoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI) where
 
 import Language.Drasil hiding (section)
+import Drasil.Metadata (inModel)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Theory.Drasil (TheoryModel)
@@ -14,8 +15,6 @@ import Data.Drasil.People (thulasi)
 
 import Data.Drasil.Concepts.Computation (algorithm, inValue)
 import Data.Drasil.Concepts.Documentation as Doc (doccon, doccon', material_, srsDomains, sysCont)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.TheoryConcepts as Doc (inModel)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
@@ -67,6 +66,8 @@ import Drasil.SWHSNoPCM.References (citations)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
   specParamValList)
 
+import System.Drasil (SystemKind(Specification), mkSystem)
+
 srs :: Document
 srs = mkDoc mkSRS S.forT si
 
@@ -113,7 +114,7 @@ mkSRS = [TableOfContents,
   RefSec $ RefProg intro
   [TUnits,
   tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder, VectorUnits],
-  TAandA],
+  TAandA abbreviationsList],
   IntroSec $
     IntroProg (introStart +:+ introStartNoPCM) (introEnd (plural progName) progName)
     [ IPurpose $ purpDoc progName Verbose
@@ -161,28 +162,18 @@ stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 si :: System
-si = SI {
-  _sys         = srsSWHS,
-  _kind        = Doc.srs,
-  _authors     = [thulasi],
-  _purpose     = [purp],
-  _background  = [introStartNoPCM],
-  _motivation  = [motivation],
-  _scope       = [scope],
+si = mkSystem
+  srsSWHS Specification [thulasi]
+  [purp] [introStartNoPCM] [scope] [motivation]
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but 
   -- tau does not appear in the document and thus should not be displayed.
-  _quants      = (map qw unconstrained ++ map qw symbolsAll) \\ [qw tau],
-  _instModels  = NoPCM.iMods,
-  _datadefs    = NoPCM.dataDefs,
-  _configFiles = [],
-  _inputs      = inputs ++ [qw watE], --inputs ++ outputs?
-  _outputs     = map qw [tempW, watE],     --outputs
-  _constraints = map cnstrw constrained ++ map cnstrw [tempW, watE], --constrained
-  _constants   = piConst : specParamValList,
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
-}
+  ((map qw unconstrained ++ map qw symbolsAll) \\ [qw tau])
+  tMods genDefs NoPCM.dataDefs NoPCM.iMods
+  []
+  (inputs ++ [qw watE]) (map qw [tempW, watE])
+  (map cnstrw constrained ++ map cnstrw [tempW, watE]) (piConst : specParamValList)
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWHT)]
@@ -207,16 +198,12 @@ symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks siUnits NoPCM.dataDefs
   NoPCM.iMods genDefs tMods concIns [] allRefs citations
 
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
-tableOfAbbrvsIdeaDicts =
+abbreviationsList :: [IdeaDict]
+abbreviationsList =
   -- CIs
   nw progName : map nw acronyms ++
   -- DefinedQuantityDicts
   map nw symbols
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

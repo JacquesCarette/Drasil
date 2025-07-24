@@ -109,13 +109,13 @@ module Language.Drasil (
   -- *** Quantities and Units
   -- Language.Drasil.Chunk.Quantity
   , QuantityDict, DefinesQuantity(defLhs), qw, mkQuant, mkQuant'
-  , implVar, implVar', implVarUID, implVarUID' , vc, vc'', vcSt
+  , implVar, implVar', implVarUID, implVarUID' , vc, vcSt
   -- Language.Drasil.Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', fromEqnSt''
   , mkQDefSt, mkQuantDef, mkQuantDef', ec
   , mkFuncDef, mkFuncDef', mkFuncDefByQ
   -- Language.Drasil.Chunk.Unitary
-  , Unitary(..), UnitaryChunk, unitary, unitary', unit_symb
+  , Unitary(..), UnitaryChunk, unit_symb
   -- Language.Drasil.Chunk.DefinedQuantity
   , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdQd, dqdWr
   -- Language.Drasil.Chunk.Unital
@@ -135,7 +135,7 @@ module Language.Drasil (
   , physRange, sfwrRange, physElem, sfwrElem, isPhysC, isSfwrC
   -- Language.Drasil.Chunk.Constrained
   , ConstrainedChunk(..), ConstrConcept(..)
-  , cuc, cvc, constrained', cuc', cuc'', constrainedNRV'
+  , cvc, constrained', cuc', cuc'', constrainedNRV'
   , cnstrw, cnstrw'
   -- Language.Drasil.Chunk.UncertainQuantity
   , UncertainChunk(..), UncertQ, uq, uqc, uqcND, uncrtnChunk, uvc

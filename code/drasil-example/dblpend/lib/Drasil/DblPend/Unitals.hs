@@ -1,6 +1,7 @@
 module Drasil.DblPend.Unitals where
 
 import Prelude hiding (sin, cos)
+
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
@@ -8,7 +9,6 @@ import Language.Drasil.Space (ClifKind(Vector))
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Constraints (gtZeroConstr)
-import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
   requirement, refBy, refName, srs, typUnc)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)

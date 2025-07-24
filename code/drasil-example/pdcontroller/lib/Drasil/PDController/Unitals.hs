@@ -45,7 +45,7 @@ symbols
      qdProcessVariableTD, qdProcessVariableFD, qdProcessErrorTD,
      qdProcessErrorFD, qdDerivativeControlFD, qdPropControlFD,
      qdTransferFunctionFD, qdCtrlVarTD, qdCtrlVarFD, qdStepTime, qdSimTime,
-     qdDampingCoeff, qdStiffnessCoeff]
+     qdDampingCoeff, qw dqdStiffnessCoeff]
 
 qdLaplaceTransform, qdFreqDomain, qdFxnTDomain,
                     qdInvLaplaceTransform, qdPropGain, qdDerivGain,
@@ -53,7 +53,9 @@ qdLaplaceTransform, qdFreqDomain, qdFxnTDomain,
                     qdProcessVariableFD, qdProcessErrorTD, qdProcessErrorFD,
                     qdPropControlFD, qdDerivativeControlFD,
                     qdTransferFunctionFD, qdCtrlVarFD, qdCtrlVarTD, qdStepTime,
-                    qdSimTime, qdDampingCoeff, qdStiffnessCoeff :: QuantityDict
+                    qdSimTime, qdDampingCoeff :: QuantityDict
+
+dqdAbsTol, dqdRelTol, dqdStiffnessCoeff :: DefinedQuantityDict
 
 inputs :: [QuantityDict]
 inputs = [qdSetPointTD, qdDerivGain, qdPropGain, qdStepTime, qdSimTime]
@@ -105,8 +107,6 @@ ipSimTimeUnc = uq ipSimTime defaultUncrt
 qdSimTime = qw ipSimTime
 
 odeAbsTolConst, odeRelTolConst :: ConstQDef
-
-dqdAbsTol, dqdRelTol :: DefinedQuantityDict
 
 pidConstants :: [ConstQDef]
 pidConstants = [odeAbsTolConst, odeRelTolConst]
@@ -178,10 +178,10 @@ qdDampingCoeff
       symDampingCoeff
       Real
 
-qdStiffnessCoeff
-  = mkQuant "qdTimeConst"
-      (nounPhraseSent (S "Stiffness coefficient of the spring"))
+-- TODO: Create a separate description for the stiffness coefficient to state
+-- that it is the "stiffness coefficient of the spring" (#4275)
+dqdStiffnessCoeff
+  = dqd ccStiffCoeff
       symStifnessCoeff
       Real
-      (Just second)
-      Nothing
+      second

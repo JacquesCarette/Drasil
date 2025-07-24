@@ -5,6 +5,8 @@
 
 module Drasil.Template.Body where
 
+import System.Drasil (SystemKind(Specification), mkSystem)
+import Drasil.Metadata
 import Language.Drasil
 import Drasil.SRSDocument
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
@@ -14,10 +16,8 @@ import Data.Drasil.Concepts.Computation (inValue, algorithm)
 import Data.Drasil.Concepts.Software (errMsg, program)
 import Data.Drasil.Concepts.Math (mathcon)
 
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Software.Products
-import Data.Drasil.TheoryConcepts
 import Data.Drasil.Citations
 import Drasil.DocumentLanguage.TraceabilityGraph
 import Drasil.DocLang (tunitNone)
@@ -38,7 +38,6 @@ mkSRS = [TableOfContents,
     [ tunitNone []      -- Adds table of unit section with a table frame
     , tsymb [] -- Adds table of symbol section with a table frame
     --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
-    , TAandA         -- Add table of abbreviation and acronym section
     ],
   IntroSec $
   IntroProg EmptyS (phrase progName)
@@ -85,25 +84,14 @@ mkSRS = [TableOfContents,
   Bibliography]
 
 si :: System
-si = SI {
-  _sys         = progName,
-  _kind        = Doc.srs,
-  _authors     = [authorName],
-  _background  = [],
-  _purpose     = [],
-  _motivation  = [],
-  _scope       = [],
-  _quants      = [] :: [QuantityDict],
-  _instModels  = [] :: [InstanceModel],
-  _datadefs    = [] :: [DataDefinition],
-  _configFiles = [],
-  _inputs      = [] :: [QuantityDict],
-  _outputs     = [] :: [QuantityDict],
-  _constraints = [] :: [ConstrainedChunk],
-  _constants   = [] :: [ConstQDef],
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
-}
+si = mkSystem
+  progName Specification [authorName]
+  [] [] [] []
+  ([] :: [QuantityDict])
+  ([] :: [TheoryModel]) ([] :: [GenDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
+  []
+  ([] :: [QuantityDict]) ([] :: [QuantityDict]) ([] :: [ConstrainedChunk]) ([] :: [ConstQDef])
+  symbMap
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
@@ -120,12 +108,6 @@ symbMap = cdb ([] :: [QuantityDict]) ideaDicts conceptChunks
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
   ([] :: [LabelledContent]) ([] :: [Reference]) citations
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
-  ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  ([] :: [LabelledContent]) ([] :: [Reference]) []
 
 citations :: BibRef
 citations = [parnasClements1986, koothoor2013, smithEtAl2007, smithLai2005,

@@ -1,5 +1,6 @@
 module Drasil.Projectile.Body (printSetting, si, srs, fullSI) where
 
+import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
 import Language.Drasil
 import Drasil.SRSDocument
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -30,7 +31,6 @@ import Data.Drasil.Quantities.Physics (acceleration, constAccel,
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
 import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
-import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education(calculus, educon, undergraduate, 
   highSchoolPhysics, highSchoolCalculus)
 
@@ -48,6 +48,8 @@ import Drasil.Projectile.Unitals
 
 import Theory.Drasil (TheoryModel)
 
+import System.Drasil (SystemKind(Specification))
+
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
@@ -63,7 +65,7 @@ mkSRS = [TableOfContents,
     RefProg intro
       [ TUnits
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits]
-      , TAandA
+      , TAandA abbreviationsList 
       ],
   IntroSec $
     IntroProg justification (phrase progName)
@@ -119,7 +121,7 @@ scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)),
 
 externalLinkRef :: Reference
 externalLinkRef = makeURI "projectileSRSLink" 
-  "https://github.com/smiths/caseStudies/tree/master/CaseStudies/projectile" 
+  "https://github.com/smiths/caseStudies/tree/master/CaseStudies/projectile"
   (shortname' $ S "projectileSRSLink")
 
 projectileExamples :: [Sentence]
@@ -130,23 +132,24 @@ projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles"
 
 si :: System
 si = SI {
-  _sys         = progName,
-  _kind        = Doc.srs,
-  _authors     = [samCrawford, brooks, spencerSmith],
-  _purpose     = [purp],
-  _background  = [background],
-  _motivation  = [motivation],
-  _scope       = [scope],
-  _quants      = symbols,
-  _instModels  = iMods,
-  _datadefs    = dataDefs,
-  _configFiles = [],
-  _inputs      = inputs,
-  _outputs     = outputs,
-  _constraints = map cnstrw constrained,
-  _constants   = constants,
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
+  _sys          = progName,
+  _kind         = Specification,
+  _authors      = [samCrawford, brooks, spencerSmith],
+  _purpose      = [purp],
+  _background   = [background],
+  _motivation   = [motivation],
+  _scope        = [scope],
+  _quants       = symbols,
+  _theoryModels = tMods,
+  _genDefns     = genDefns,
+  _instModels   = iMods,
+  _dataDefns    = dataDefs,
+  _configFiles  = [],
+  _inputs       = inputs,
+  _outputs      = outputs,
+  _constraints  = map cnstrw constrained,
+  _constants    = constants,
+  _systemdb     = symbMap
 }
 
 purp :: Sentence
@@ -182,8 +185,8 @@ symbMap :: ChunkDB
 symbMap = cdb (qw pi_ : symbols) ideaDicts conceptChunks siUnits
   dataDefs iMods genDefns tMods concIns [] allRefs citations
 
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
-tableOfAbbrvsIdeaDicts =
+abbreviationsList  :: [IdeaDict]
+abbreviationsList  =
   -- CIs
   map nw acronyms ++
   -- QuantityDicts
@@ -192,10 +195,6 @@ tableOfAbbrvsIdeaDicts =
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
-  (cw pi_ : srsDomains) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

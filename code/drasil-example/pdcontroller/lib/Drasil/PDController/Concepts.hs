@@ -1,9 +1,10 @@
 module Drasil.PDController.Concepts where
 
+import Drasil.Metadata
+import Language.Drasil
+
 import Data.Drasil.Concepts.Documentation
        (assumption, goalStmt, physSyst, requirement, refBy, refName, srs, typUnc)
-import Data.Drasil.TheoryConcepts
-import Language.Drasil
 
 acronyms :: [CI]
 acronyms
@@ -140,5 +141,3 @@ termDefs
   = [pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
      propControl, derControl, ccFrequencyDomain, ccTimeDomain,
      controlVariable, ccTransferFxn, ccDampingCoeff, ccStiffCoeff]
-
-

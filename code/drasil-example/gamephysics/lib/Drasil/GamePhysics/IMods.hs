@@ -1,6 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.GamePhysics.IMods (iMods, instModIntro) where
 
+import Drasil.Metadata (inModel)
 import Language.Drasil
 import Language.Drasil.ShortHands (lJ)
 import Theory.Drasil
@@ -20,7 +21,6 @@ import Drasil.GamePhysics.TMods (newtonSL, newtonSLR)
 import Drasil.GamePhysics.Unitals (accj, forcej, massA, massj, normalVect,
   timeC, torquej, velA, velj, angAccj)
 
-import Data.Drasil.TheoryConcepts (inModel)
 
 import Data.Drasil.Concepts.Documentation (condition, goal, output_)
 import Data.Drasil.Concepts.Math (equation, ode)

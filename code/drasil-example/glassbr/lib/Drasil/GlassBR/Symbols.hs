@@ -13,7 +13,7 @@ import Data.List ((\\))
 
 symbolsForSymbolTable :: [QuantityDict]
 symbolsForSymbolTable = symbolsForTermTable ++ map qw unitalSymbols ++
-  unitless ++ map qw [probBr, stressDistFac, nomThick, cnstrw glassTypeCon] ++
+  unitless ++ map qw [probBr, stressDistFac, cnstrw nomThick, cnstrw glassTypeCon] ++
   map qw derivedInputDataConstraints
 
 symbolsForTermTable :: [QuantityDict]

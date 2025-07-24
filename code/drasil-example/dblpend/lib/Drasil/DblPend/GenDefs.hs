@@ -122,3 +122,4 @@ mvForceDerivSents_2 = [S "The second object's multivector force follows the same
 
 mvForceDerivEqns_2 :: [Sentence]
 mvForceDerivEqns_2 = [eS $ sy mvForce_2 $= express E.mvForceExpr_2]
+

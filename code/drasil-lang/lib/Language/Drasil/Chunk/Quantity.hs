@@ -7,7 +7,7 @@ module Language.Drasil.Chunk.Quantity (
   DefinesQuantity(defLhs),
   -- * Constructors
   implVar, implVar', implVarUID, implVarUID', 
-  mkQuant, mkQuant', qw, vc, vc'', vcSt) where
+  mkQuant, mkQuant', qw, vc, vcSt) where
 
 import Control.Lens (Getter, (^.), makeLenses, view)
 
@@ -112,7 +112,3 @@ vc i des sym space = QD (nw $ nc i des) space (const sym) Nothing
 -- | Similar to 'vc', but creates a 'QuantityDict' from something that knows about 'Stage's.
 vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict
 vcSt i des sym space = QD (nw $ nc i des) space sym Nothing
-
--- | Creates a 'QuantityDict' from an 'Idea', 'Symbol', and 'Space'.
-vc'' :: Idea c => c -> Symbol -> Space -> QuantityDict
-vc'' n sym space = QD (nw n) space (const sym) Nothing

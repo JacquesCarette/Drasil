@@ -1,6 +1,7 @@
 module Drasil.GamePhysics.Body where
 
 import Language.Drasil hiding (organization, section)
+import Drasil.Metadata (dataDefn, inModel)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -13,8 +14,6 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   quantity, realtime, section_, simulation, software, softwareSys,
   srsDomains, system, systemConstraint, sysCont, task, user, doccon, doccon',
   property, problemDescription)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.TheoryConcepts as Doc (dataDefn, inModel)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics, educon)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)
@@ -43,6 +42,8 @@ import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
 import Drasil.GamePhysics.GenDefs (generalDefns)
 
+import System.Drasil (SystemKind(Specification), mkSystem)
+
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize short) si
 
@@ -57,7 +58,7 @@ resourcePath = "../../../../datafiles/gamephysics/"
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
-  RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
+  RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA abbreviationsList],
   IntroSec $ IntroProg para1_introduction_intro (short progName)
   [IPurpose $ purpDoc progName Verbose,
    IScope scope,
@@ -95,29 +96,16 @@ mkSRS = [TableOfContents,
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
 
 si :: System
-si = SI {
-  _sys         = progName,
-  _kind        = Doc.srs,
-  _authors     = [alex, luthfi, olu],
-  _purpose     = [purp],
-  _background  = [],
-  _motivation  = [],
-  _scope       = [],
+si = mkSystem progName Specification [alex, luthfi, olu]
+  [purp] [] [] [] ([] :: [QuantityDict])
   -- FIXME: The _quants field should be filled in with all the symbols, however
   -- #1658 is why this is empty, otherwise we end up with unused (and probably
   -- should be removed) symbols. But that's for another time. This is "fine"
   -- because _quants are only used relative to #1658.
-  _quants      = [] :: [QuantityDict], -- map qw iMods ++ map qw symbolsAll,
-  _instModels  = iMods,
-  _datadefs    = dataDefs,
-  _configFiles = [],
-  _inputs      = inputSymbols,
-  _outputs     = outputSymbols, 
-  _constraints = inputConstraints,
-  _constants   = [],
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
-}
+  tMods generalDefns dataDefs iMods
+  []
+  inputSymbols outputSymbols inputConstraints []
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "simulate", short twoD, phrase CP.rigidBody,
@@ -152,16 +140,12 @@ symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks
   siUnits dataDefs iMods generalDefns tMods concIns [] allRefs citations
 
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
-tableOfAbbrvsIdeaDicts =
+abbreviationsList :: [IdeaDict]
+abbreviationsList =
   -- QuantityDicts
   map nw symbolsAll ++
   -- CIs
   map nw acronyms
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
-  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

@@ -13,6 +13,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (olu)
+import Data.Drasil.Concepts.Math (mathcon')
 import Data.Drasil.Concepts.Physics (physicCon, physicCon', motion, pendulum)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Theories.Physics (newtonSLR)

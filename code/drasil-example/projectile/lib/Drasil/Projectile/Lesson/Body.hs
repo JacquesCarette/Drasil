@@ -45,23 +45,23 @@ si :: System
 si = mkSystem
   projectileMotion Notebook [spencerSmith]
   [] [] [] []
-  ([] :: [QuantityDict])
+  ([] :: [DefinedQuantityDict])
   [] [] [] [] []
-  ([] :: [QuantityDict]) ([] :: [QuantityDict]) ([] :: [ConstrConcept]) []
+  ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) []
   symbMap
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw physicscon ++ symbols) (nw projectileMotion : map nw doccon ++ 
+symbMap = cdb (map dqdWr physicscon ++ symbols) (nw projectileMotion : map nw doccon ++ 
   map nw doccon' ++ map nw physicCon ++ concepts ++ map nw mathcon) 
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] allRefs []
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbols :: [IdeaDict]) ([] :: [ConceptChunk])
+usedDB = cdb ([] :: [DefinedQuantityDict]) (map nw symbols :: [IdeaDict]) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) [] [] [] [] ([] :: [ConceptInstance])
   ([] :: [LabelledContent]) ([] :: [Reference]) []
 
-symbols :: [QuantityDict]
-symbols = [qw horiz_velo]
+symbols :: [DefinedQuantityDict]
+symbols = [dqdWr horiz_velo]
 
 projectileMotion :: CI
 projectileMotion = commonIdea "projectileMotion" (pn "Projectile Motion Lesson") "Projectile Motion" []

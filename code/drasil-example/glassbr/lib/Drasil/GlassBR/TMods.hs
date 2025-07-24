@@ -22,7 +22,7 @@ tMods = [pbIsSafe, lrIsSafe]
 
 lrIsSafe :: TheoryModel
 lrIsSafe = tm (equationalModel' lrIsSafeQD)
-   ([] :: [QuantityDict]) ([] :: [ConceptChunk])
+   ([] :: [DefinedQuantityDict]) ([] :: [ConceptChunk])
    [lrIsSafeQD] [] [] [dRef astm2009] 
    "isSafeLoad" [lrIsSafeDesc]
 
@@ -37,7 +37,7 @@ lrIsSafeDesc = tModDesc isSafeLoad
 
 pbIsSafe :: TheoryModel
 pbIsSafe = tm (equationalModel' pbIsSafeQD) 
-  ([] :: [QuantityDict]) ([] :: [ConceptChunk])
+  ([] :: [DefinedQuantityDict]) ([] :: [ConceptChunk])
   [pbIsSafeQD] [] [] [dRef astm2009]
   "isSafeProb" [pbIsSafeDesc]
 
@@ -50,5 +50,5 @@ pbIsSafeExpr = sy probFail $< sy pbTolfail
 pbIsSafeDesc :: Sentence
 pbIsSafeDesc = tModDesc isSafeProb
 
-tModDesc :: QuantityDict -> Sentence
+tModDesc :: DefinedQuantityDict -> Sentence
 tModDesc main = S "If" +:+. (ch main `sC` S "the structure is considered safe")

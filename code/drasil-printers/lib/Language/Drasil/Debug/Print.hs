@@ -293,7 +293,7 @@ mkListShowUsedUIDs PI { _ckdb = db } = sortBy (compare `on` fst)
   $ map (second stringList)
   $ Map.toList
   $ Map.fromListWith (++)
-  $ map (\x -> (fst x, ["QuantityDict"])) (Map.assocs $ symbolTable db)
+  $ map (\x -> (fst x, ["DefinedQuantityDict"])) (Map.assocs $ symbolTable db)
   ++ map (\x -> (fst x, ["IdeaDict"])) (Map.assocs $ termTable db)
   ++ map (\x -> (fst x, ["ConceptChunk"])) (Map.assocs $ conceptChunkTable db)
   ++ map (\x -> (fst x, ["UnitDefn"])) (Map.assocs $ db ^. unitTable)

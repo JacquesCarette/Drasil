@@ -154,7 +154,7 @@ conceptChunks =
 
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ map qw symbols) ideaDicts conceptChunks
+symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks
   (degree : siUnits) dataDefs iMods generalDefinitions tMods concIns labCon allRefs citations
 
 abbreviationsList :: [IdeaDict]

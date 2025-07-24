@@ -96,7 +96,7 @@ module Language.Drasil (
   -- Language.Drasil.Chunk.Concept.Core
   , ConceptChunk, ConceptInstance, sDom
   -- Language.Drasil.Chunk.Concept
-  , dcc, dccWDS, cc, cc', ccs, cw, cic
+  , dcc, dccAWDS, dccA, dccWDS, cc, cc', ccs, cw, cic
   -- Language.Drasil.Chunk.Relation
   , RelationConcept, makeRC
   -- Language.Drasil.Chunk.DifferentialModel
@@ -104,17 +104,15 @@ module Language.Drasil (
   , makeAODESolverFormat, makeAIVP, formEquations, makeASystemDE, makeASingleDE
 
   -- *** Quantities and Units
-  -- Language.Drasil.Chunk.Quantity
-  , QuantityDict, DefinesQuantity(defLhs), qw, mkQuant, mkQuant'
-  , implVar, implVar', implVarUID, implVarUID' , vc, vcSt
   -- Language.Drasil.Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', fromEqnSt''
   , mkQDefSt, mkQuantDef, mkQuantDef', ec
-  , mkFuncDef, mkFuncDef', mkFuncDefByQ
+  , mkFuncDef, mkFuncDef', mkFuncDefByQ 
   -- Language.Drasil.Chunk.Unitary
-  , Unitary(..), UnitaryChunk, unit_symb
+  , unit_symb
   -- Language.Drasil.Chunk.DefinedQuantity
-  , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdQd, dqdWr
+  , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdNoUnit', dqdQd, dqdWr
+  , DefinesQuantity(defLhs), implVar, implVar', implVarAU'
   -- Language.Drasil.Chunk.Unital
   , UnitalChunk(..), uc, uc', ucStaged, ucStaged', ucuc, ucw
   -- Language.Drasil.Chunk.UnitDefn
@@ -131,12 +129,11 @@ module Language.Drasil (
   , ConstraintReason(..), Constraint(..), ConstraintE
   , physRange, sfwrRange, physElem, sfwrElem, isPhysC, isSfwrC
   -- Language.Drasil.Chunk.Constrained
-  , ConstrainedChunk(..), ConstrConcept(..)
-  , cvc, constrained', cuc', cuc'', constrainedNRV'
-  , cnstrw, cnstrw'
+  , ConstrConcept(..)
+  , constrained', cuc', cuc'', cucNoUnit', constrainedNRV'
+  , cnstrw'
   -- Language.Drasil.Chunk.UncertainQuantity
-  , UncertainChunk(..), UncertQ, uq, uqc, uqcND, uncrtnChunk, uvc
-  , uncrtnw
+  , UncertQ, uq, uqc, uqcND
   -- Language.Drasil.Uncertainty
   , Uncertainty, uncty, HasUncertainty(..)
   , defaultUncrt, uncVal, uncPrec, exact
@@ -358,7 +355,6 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
   fromEqnSt', fromEqnSt'', mkQDefSt, mkQuantDef, mkQuantDef', ec,
   mkFuncDef, mkFuncDef', mkFuncDefByQ)
 import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)
 import Language.Drasil.Chunk.DifferentialModel(DifferentialModel(..), ODESolverFormat(..),
   InitialValueProblem(..), ($^^), ($**), ($++), makeAODESolverFormat, makeAIVP, makeASystemDE, 
@@ -366,7 +362,6 @@ import Language.Drasil.Chunk.DifferentialModel(DifferentialModel(..), ODESolverF
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), uc, uc', ucStaged, ucStaged',
   ucuc, ucw)
-import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
   , HasFields(getFields)
   , author, editor
@@ -405,3 +400,4 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
   , unitWrapper, getCu, MayHaveUnit(getUnit))
+import Language.Drasil.Chunk.Unitary (unit_symb)

@@ -147,7 +147,7 @@ si = SI {
   _configFiles  = [],
   _inputs       = inputs,
   _outputs      = outputs,
-  _constraints  = map cnstrw constrained,
+  _constraints  = map cnstrw' constrained,
   _constants    = constants,
   _systemdb     = symbMap
 }
@@ -182,14 +182,14 @@ conceptChunks =
   map cw constrained
 
 symbMap :: ChunkDB
-symbMap = cdb (qw pi_ : symbols) ideaDicts conceptChunks siUnits
+symbMap = cdb (pi_ : symbols) ideaDicts conceptChunks siUnits
   dataDefs iMods genDefns tMods concIns [] allRefs citations
 
 abbreviationsList  :: [IdeaDict]
 abbreviationsList  =
   -- CIs
   map nw acronyms ++
-  -- QuantityDicts
+  -- DefinedQuantityDicts
   map nw symbols
 
 -- | Holds all references and links used in the document.
@@ -290,9 +290,9 @@ physSystParts = map (!.)
 ----------------------------------------------------
 -- Various gathered data that should be automated --
 ----------------------------------------------------
-symbols :: [QuantityDict]
-symbols = unitalQuants ++ map qw [gravitationalAccelConst, tol] ++
-  map qw [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
+symbols :: [DefinedQuantityDict]
+symbols = unitalQuants ++ map dqdWr [gravitationalAccelConst, tol] ++
+  map dqdWr [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
   iyPos, ixVel, iyVel, position, scalarPos, projPos, projSpeed, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel,
   constAccelV]
@@ -300,14 +300,14 @@ symbols = unitalQuants ++ map qw [gravitationalAccelConst, tol] ++
 constants :: [ConstQDef]
 constants = [gravitationalAccelConst, piConst, tol]
 
-inputs :: [QuantityDict]
-inputs = map qw [launSpeed, launAngle, targPos]
+inputs :: [DefinedQuantityDict]
+inputs = map dqdWr [launSpeed, launAngle, targPos]
 
-outputs :: [QuantityDict]
-outputs = [message, qw offset, qw flightDur]
+outputs :: [DefinedQuantityDict]
+outputs = [message, dqdWr offset, dqdWr flightDur]
 
-unitalQuants :: [QuantityDict]
-unitalQuants = message : map qw constrained
+unitalQuants :: [DefinedQuantityDict]
+unitalQuants = message : map dqdWr constrained
 
 inConstraints :: [UncertQ]
 inConstraints = [launAngleUnc, launSpeedUnc, targPosUnc]

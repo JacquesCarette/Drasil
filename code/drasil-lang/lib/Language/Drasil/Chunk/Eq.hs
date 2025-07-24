@@ -18,11 +18,10 @@ import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDe
 import Language.Drasil.Symbol (HasSymbol(symbol), Symbol)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity,
-  ConceptDomain(cdom), Express(express))
-import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
+  ConceptDomain(cdom), Express(express), Concept)
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, DefinesQuantity(defLhs), dqd, dqd', dqdWr)
 import Language.Drasil.Chunk.Concept (cc')
 import Language.Drasil.Chunk.NamedIdea (ncUID, mkIdea, nw)
-import Language.Drasil.Chunk.Quantity (DefinesQuantity(defLhs), qw)
 
 import Language.Drasil.Expr.Lang (Expr)
 import qualified Language.Drasil.Expr.Lang as E (Expr(C))
@@ -51,7 +50,7 @@ qdExpr = lens (\(QD _ _ e) -> e) (\(QD qua ins _) e' -> QD qua ins e')
 instance HasUID          (QDefinition e) where uid = qdQua . uid
 instance NamedIdea       (QDefinition e) where term = qdQua . term
 instance Idea            (QDefinition e) where getA = getA . (^. qdQua)
-instance DefinesQuantity (QDefinition e) where defLhs = qdQua . to qw
+instance DefinesQuantity (QDefinition e) where defLhs = qdQua . to dqdWr
 instance HasSpace        (QDefinition e) where typ = qdQua . typ
 instance HasSymbol       (QDefinition e) where symbol = symbol . (^. qdQua)
 instance Definition      (QDefinition e) where defn = qdQua . defn
@@ -113,7 +112,7 @@ mkQDefSt u n s symb sp (Just ud) e = fromEqnSt u n s symb sp ud e
 mkQDefSt u n s symb sp Nothing   e = fromEqnSt' u n s symb sp e
 
 -- | Used to help make 'QDefinition's when 'UID', term, and 'Symbol' come from the same source.
-mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> e -> QDefinition e
+mkQuantDef :: (Quantity c, MayHaveUnit c, Concept c) => c -> e -> QDefinition e
 mkQuantDef c = mkQDefSt (c ^. uid) (c ^. term) EmptyS (symbol c) (c ^. typ) (getUnit c)
 
 -- FIXME: See #2788.

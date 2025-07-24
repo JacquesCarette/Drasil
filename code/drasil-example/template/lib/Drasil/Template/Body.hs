@@ -87,10 +87,10 @@ si :: System
 si = mkSystem
   progName Specification [authorName]
   [] [] [] []
-  ([] :: [QuantityDict])
+  ([] :: [DefinedQuantityDict])
   ([] :: [TheoryModel]) ([] :: [GenDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   []
-  ([] :: [QuantityDict]) ([] :: [QuantityDict]) ([] :: [ConstrainedChunk]) ([] :: [ConstQDef])
+  ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) ([] :: [ConstQDef])
   symbMap
 
 ideaDicts :: [IdeaDict]
@@ -104,7 +104,7 @@ conceptChunks :: [ConceptChunk]
 conceptChunks = [errMsg, algorithm, program] ++ mathcon ++ srsDomains
 
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [QuantityDict]) ideaDicts conceptChunks
+symbMap = cdb ([] :: [DefinedQuantityDict]) ideaDicts conceptChunks
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
   ([] :: [LabelledContent]) ([] :: [Reference]) citations

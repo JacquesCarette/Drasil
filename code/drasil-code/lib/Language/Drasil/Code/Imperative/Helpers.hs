@@ -2,7 +2,7 @@ module Language.Drasil.Code.Imperative.Helpers (
   liftS, lookupC, convScope
 ) where
 
-import Language.Drasil (UID, QuantityDict)
+import Language.Drasil (UID, DefinedQuantityDict)
 import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..),
   ScopeType(..))
@@ -16,8 +16,8 @@ import Control.Lens ((^.))
 liftS :: State a b -> State a [b]
 liftS = fmap (: [])
 
--- | Gets the 'QuantityDict' corresponding to a 'UID'.
-lookupC :: DrasilState -> UID -> QuantityDict
+-- | Gets the 'DefinedQuantityDict' corresponding to a 'UID'.
+lookupC :: DrasilState -> UID -> DefinedQuantityDict
 lookupC g = symbResolve (codeSpec g ^. systemdbO)
 
 -- | Converts a 'ScopeType' to a 'Scope'

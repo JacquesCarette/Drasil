@@ -8,7 +8,7 @@ import Data.Drasil.Units.Thermodynamics (heatTransferCoef)
 
 {--}
 
-symbols :: [QuantityDict]
+symbols :: [DefinedQuantityDict]
 symbols = htOutputs ++ htInputs
 
 dataDefs :: [DataDefinition]
@@ -17,21 +17,26 @@ dataDefs = [htTransCladFuelDD, htTransCladCoolDD]
 qDefs :: [SimpleQDef]
 qDefs = [htTransCladFuel, htTransCladCool]
 
-htVars :: [QuantityDict]
+htVars :: [DefinedQuantityDict]
 htVars = [cladThick, coolFilmCond, gapFilmCond, cladCond]
 
-htInputs, htOutputs :: [QuantityDict]
-htInputs = map qw htVars
-htOutputs = map qw qDefs
+htInputs, htOutputs :: [DefinedQuantityDict]
+htInputs = map dqdWr htVars
+htOutputs = map dqdWr qDefs
 
-cladThick, coolFilmCond, gapFilmCond, cladCond :: QuantityDict
-cladThick    = vc "cladThick"    (cn''' "clad thickness")
+cladThick, coolFilmCond, gapFilmCond, cladCond :: DefinedQuantityDict
+cladThick    = dqdNoUnit (dcc "cladThick"    (cn''' "clad thickness")
+  "the clad thickness")
   (sub lTau lClad) Real
-coolFilmCond = vc "coolFilmCond" (cn' "initial coolant film conductance")
+coolFilmCond = dqdNoUnit (dcc "coolFilmCond" (cn' "initial coolant film conductance")
+  "the initial coolant film conductance")
   (sub lH lCoolant) Real
-gapFilmCond  = vc "gapFilmCond"  (cn' "initial gap film conductance")
+gapFilmCond  = dqdNoUnit (dcc "gapFilmCond"  (cn' "initial gap film conductance")
+  "the initial gap film conductance")
   (sub lH lGap) Real
-cladCond     = vc "cladCond"     (cnIES "clad conductivity") (sub lK lClad) Real
+cladCond     = dqdNoUnit (dcc "cladCond"     (cnIES "clad conductivity") 
+  "the clad conductivity")
+  (sub lK lClad) Real
 
 htTransCladCoolEq, htTransCladFuelEq :: Expr
 htTransCladCool, htTransCladFuel :: SimpleQDef

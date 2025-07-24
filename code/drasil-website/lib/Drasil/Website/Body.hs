@@ -74,10 +74,10 @@ si :: FolderLocation -> System
 si fl = mkSystem
   webName Website []
   [] [] [] []
-  ([] :: [QuantityDict])
+  ([] :: [DefinedQuantityDict])
   [] [] [] []
   []
-  ([] :: [QuantityDict]) ([] :: [QuantityDict]) ([] :: [ConstrConcept]) []
+  ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) []
   (symbMap fl)
 
 -- | Puts all the sections in order. Basically the website version of the SRS declaration.
@@ -90,7 +90,7 @@ sections fl = [headerSec, introSec, gettingStartedSec quickStartWiki newWorkspac
 
 -- | Needed for references and terms to work.
 symbMap :: FolderLocation -> ChunkDB
-symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, phsChgMtrl, twoD] ++ 
+symbMap fl = cdb ([] :: [DefinedQuantityDict]) (map nw [webName, phsChgMtrl, twoD] ++ 
   map getSysName allExampleSI ++ map nw [pendulum, motion, rigidBody, blast, 
   heatTrans, sWHT, water, pidC, target, projectile, crtSlpSrf, shearForce, 
   normForce, slpSrf] ++ [nw $ fctSfty ^. defLhs] ++ [game, physics, condition, glaSlab, intrslce,

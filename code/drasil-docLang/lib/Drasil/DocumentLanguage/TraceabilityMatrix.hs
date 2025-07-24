@@ -99,4 +99,4 @@ traceViewCC dom u c = traceViewFilt (isDomUnder (dom ^. uid) . sDom . cdom) conc
       | not $ null $ getDom curr = isDomUnder filtDom (sDom $ getDom curr)
       | otherwise = False
     getDom :: UID -> [UID]
-    getDom curr = cdom $ defResolve c curr
+    getDom curr = domain $ defResolve' c curr

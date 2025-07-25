@@ -103,7 +103,7 @@ basisCDB =
 --     * 'LabelledContent's (for 'LabelledContentMap').
 -- Creates a ChunkDB with basic data already included. Should be used over
 -- cdb' in Database.Drasil, which does not include the basic data.
-cdb :: (Quantity q, MayHaveUnit q, Concept c, IsUnit u) =>
+cdb :: (Quantity q, MayHaveUnit q, Concept q, Concept c, IsUnit u) =>
     [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
     [GenDefn] -> [TheoryModel] -> [ConceptInstance] ->
     [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB

@@ -163,14 +163,14 @@ reqInputsRef :: Reference
 reqInputsRef = makeTabRef' (reqInput ^. uid)
 
 -- | Creates a table for use in the Functional Requirments section. Takes a list of tuples containing variables and sources, a label, and a caption. 
-mkValsSourceTable :: (Quantity i, MayHaveUnit i) => 
+mkValsSourceTable :: (Quantity i, MayHaveUnit i, Concept i) => 
                           [(i, Sentence)] -> String -> Sentence -> LabelledContent
 mkValsSourceTable vals labl cap = llcc (makeTabRef labl) $ 
   Table [atStart symbol_, atStart description, S "Source", atStart' unit_]
   (mkTable [ch . fst, atStart . fst, snd, toSentence . fst] $ sortBySymbolTuple vals) cap True
 
-mkQRTuple :: (HasOutput i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
+mkQRTuple :: (HasOutput i, HasShortName i, Referable i) => [i] -> [(DefinedQuantityDict, Sentence)]
 mkQRTuple = map (\c -> (c ^. output, refS c))
 
-mkQRTupleRef :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> [r] -> [(QuantityDict, Sentence)]
-mkQRTupleRef = zipWith (curry (bimap qw refS))
+mkQRTupleRef :: (Quantity i, MayHaveUnit i, Concept i, HasShortName r, Referable r) => [i] -> [r] -> [(DefinedQuantityDict, Sentence)]
+mkQRTupleRef = zipWith (curry (bimap dqdWr refS))

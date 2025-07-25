@@ -15,7 +15,7 @@ This subsection provides a list of terms that are used in the subsequent section
 - Control Variable: The Control Variable is the output of the PD controller.
 - Transfer Function: The Transfer Function of a system is the ratio of the output to the input functions in the frequency domain.
 - Damping Coefficient: Quantity that characterizes a second order system's oscillatory response.
-- Stiffness Coefficient: Quantity that characterizes a spring's stiffness.
+- Stiffness coefficient: Quantity that characterizes a spring's stiffness.
 - Simulation Time: Total execution time of the PD simulation.
 - Process Variable: The output value from the power plant.
 - Set-Point: The desired value that the control system must reach. This also knows as the reference variable.

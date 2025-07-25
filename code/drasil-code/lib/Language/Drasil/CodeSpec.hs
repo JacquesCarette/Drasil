@@ -218,12 +218,12 @@ oldcodeSpec sys@SI.SI{ SI._sys = sysIdea
 
 -- medium hacks ---
 
--- | Convert a 'Func' to an implementation-stage 'QuantityDict' representing the
+-- | Convert a 'Func' to an implementation-stage 'DefinedQuantityDict' representing the
 -- function.
-asVC :: Func -> QuantityDict
-asVC (FDef (FuncDef n _ _ _ _ _)) = implVar n (nounPhraseSP n) Real (Variable n)
-asVC (FDef (CtorDef n _ _ _ _))   = implVar n (nounPhraseSP n) Real (Variable n)
-asVC (FData (FuncData n _ _))     = implVar n (nounPhraseSP n) Real (Variable n)
+asVC :: Func -> DefinedQuantityDict
+asVC (FDef (FuncDef n d _ _ _ _)) = dqdNoUnit (dcc n (nounPhraseSP n) d) (Variable n) Real
+asVC (FDef (CtorDef n d _ _ _))   = dqdNoUnit (dcc n (nounPhraseSP n) d) (Variable n) Real
+asVC (FData (FuncData n d _))     = dqdNoUnit (dcc n (nounPhraseSP n) d) (Variable n) Real
 
 -- | Get a 'UID' of a chunk corresponding to a 'Func'.
 funcUID :: Func -> UID

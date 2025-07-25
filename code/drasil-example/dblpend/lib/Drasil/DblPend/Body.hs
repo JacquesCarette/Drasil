@@ -26,7 +26,6 @@ import Data.Drasil.Concepts.Math (cartesian, ode, mathcon', graph)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 
 import Drasil.DblPend.Figures (figMotion, sysCtxFig1)
@@ -126,9 +125,9 @@ background = foldlSent_ [phraseNP (a_ pendulum), S "consists" `S.of_` phrase mas
   S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
   S "highly sensitive to initial conditions"]
 
-symbolsAll :: [QuantityDict]
+symbolsAll :: [DefinedQuantityDict]
 symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
-  ++ map qw [listToArray $ quantvar pendDisAngle, arrayVecDepVar dblPenODEInfo]
+  ++ map dqdWr [listToArray $ quantvar pendDisAngle, arrayVecDepVar dblPenODEInfo]
 
 ideaDicts :: [IdeaDict]
 ideaDicts = 
@@ -139,7 +138,7 @@ ideaDicts =
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList = 
-  -- QuantityDict abbreviations
+  -- DefinedQuantityDict abbreviations
   map nw symbols ++
   -- Other acronyms/abbreviations
   nw progName : map nw acronyms
@@ -148,7 +147,7 @@ conceptChunks :: [ConceptChunk]
 conceptChunks = physicCon ++ physicalcon
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll)
+symbMap = cdb (map (^. output) iMods ++ symbolsAll)
   ideaDicts conceptChunks ([] :: [UnitDefn])
   dataDefs iMods genDefns tMods concIns [] allRefs citations
 

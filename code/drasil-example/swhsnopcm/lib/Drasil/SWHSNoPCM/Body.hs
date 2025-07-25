@@ -82,13 +82,13 @@ symbols :: [DefinedQuantityDict]
 symbols = map dqdWr concepts ++ map dqdWr constrained
  ++ map dqdWr [tempW, watE]
 
-symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
+symbolsAll :: [DefinedQuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
                                --FOUND LOC OF ERROR: Instance Models
-symbolsAll = map qw [gradient, pi_, uNormalVect, dqdWr surface] ++ map qw symbols ++
-  map qw symbolConcepts ++ map qw specParamValList ++ map qw [absTol, relTol] ++
+symbolsAll = [gradient, pi_, uNormalVect, dqdWr surface] ++ symbols ++
+  map dqdWr symbolConcepts ++ map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++
   scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols ++
-  map qw [listToArray $ quantvar tempW, arrayVecDepVar noPCMODEInfo]
+  map dqdWr [listToArray $ quantvar tempW, arrayVecDepVar noPCMODEInfo]
 
 concepts :: [UnitalChunk]
 concepts = map ucw [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
@@ -165,11 +165,11 @@ si = mkSystem
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but 
   -- tau does not appear in the document and thus should not be displayed.
-  ((map qw unconstrained ++ map qw symbolsAll) \\ [qw tau])
+  ((map dqdWr unconstrained ++ symbolsAll) \\ [dqdWr tau])
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   []
-  (inputs ++ [qw watE]) (map qw [tempW, watE])
-  (map cnstrw constrained ++ map cnstrw [tempW, watE]) (piConst : specParamValList)
+  (inputs ++ [dqdWr watE]) [tempW, watE]
+  (map cnstrw' constrained ++ map cnstrw' [tempW, watE]) (piConst : specParamValList)
   symbMap
 
 purp :: Sentence

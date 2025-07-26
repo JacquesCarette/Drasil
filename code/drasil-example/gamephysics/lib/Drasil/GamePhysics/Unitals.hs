@@ -4,6 +4,7 @@ import Language.Drasil
 import Language.Drasil.Display (Symbol(..), Decoration(Magnitude))
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
+import Language.Drasil.Code (codeDQDs)
 
 import Data.Drasil.SI_Units(kilogram, metre, m_2, newton, second)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
@@ -42,7 +43,7 @@ unitSymbs = map ucw [iVect, jVect, normalVect,
 
 symbolsAll, inputSymbols, outputSymbols :: [DefinedQuantityDict]
 
-symbolsAll = unitless ++ map dqdWr unitalSymbols ++ [QP.restitutionCoef]
+symbolsAll = unitless ++ map dqdWr unitalSymbols ++ [QP.restitutionCoef] ++ codeDQDs
 
 inputSymbols = map dqdWr [QP.position, QP.velocity, QP.force, QM.orientation, 
   QP.angularVelocity, QP.linearVelocity, QP.gravitationalConst, QPP.mass, 

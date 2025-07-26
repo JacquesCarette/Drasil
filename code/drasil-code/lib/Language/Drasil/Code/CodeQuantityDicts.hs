@@ -24,3 +24,7 @@ consts = dqdNoUnit (dccWDS "consts" (nounPhrase
   "structures holding the constant values")
   (S "the structure holding the constant values"))
   (label "consts") (Actor "Constants")
+
+
+codeDQDs :: [DefinedQuantityDict]
+codeDQDs = [inFileName, inParams, consts]

@@ -1,6 +1,7 @@
 module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) where
 
 import Language.Drasil
+import Language.Drasil.Code (codeDQDs)
 import Drasil.Metadata (dataDefn)
 import Drasil.SRSDocument
 import Database.Drasil.ChunkDB (cdb)
@@ -118,7 +119,7 @@ background = foldlSent_ [S "Automatic process control with a controller (P/PI/PD
               S "cruise-control, etc"]
 
 symbolsAll :: [DefinedQuantityDict]
-symbolsAll = symbols ++ map dqdWr pidConstants
+symbolsAll = symbols ++ map dqdWr pidConstants ++ codeDQDs
   ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
   ++ map dqdWr [listToArray $ quantvar opProcessVariable, arrayVecDepVar pidODEInfo]
 

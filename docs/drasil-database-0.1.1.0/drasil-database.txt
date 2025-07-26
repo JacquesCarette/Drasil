@@ -68,13 +68,19 @@ DomDefn :: [UID] -> Sentence -> DomDefn
 --   <li><a>GenDefn</a>s (for <a>GendefMap</a>),</li>
 --   <li><a>TheoryModel</a>s (for <a>TheoryModelMap</a>),</li>
 --   <li><a>ConceptInstance</a>s (for <a>ConceptInstanceMap</a>),</li>
---   <li><a>LabelledContent</a>s (for <a>LabelledContentMap</a>).</li>
+--   <li><a>LabelledContent</a>s (for <a>LabelledContentMap</a>). Creates
+--   an empty ChunkDB without basic data. cdb in MetaDatabase.Drasil should
+--   be preferred over this function as it includes the basic data needed
+--   for Drasil.</li>
 --   </ul>
-cdb :: (Quantity q, MayHaveUnit q, Concept q, Concept c, IsUnit u) => [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
+cdb' :: (Quantity q, MayHaveUnit q, Concept q, Concept c, IsUnit u) => [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
 
 -- | General smart constructor for making a <a>UMap</a> out of anything
 --   that has a <a>UID</a>.
 idMap :: HasUID a => String -> [a] -> Map UID (a, Int)
+
+-- | Smart constructor for a <a>SymbolMap</a>.
+symbolMap :: (Quantity c, MayHaveUnit c, Concept c) => [c] -> SymbolMap
 
 -- | Smart constructor for a <a>TermMap</a>.
 termMap :: Idea c => [c] -> TermMap
@@ -156,3 +162,4 @@ labelledcontentTable :: Lens' ChunkDB LabelledContentMap
 refTable :: Lens' ChunkDB ReferenceMap
 dumpChunkDB :: ChunkDB -> DumpedChunkDB
 type DumpedChunkDB = Map ChunkType [UID]
+addCdb :: ChunkDB -> ChunkDB -> ChunkDB

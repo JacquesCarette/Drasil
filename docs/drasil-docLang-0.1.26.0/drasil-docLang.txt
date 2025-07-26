@@ -1105,9 +1105,12 @@ data () => System
 --   <li><a>GenDefn</a>s (for <a>GendefMap</a>),</li>
 --   <li><a>TheoryModel</a>s (for <a>TheoryModelMap</a>),</li>
 --   <li><a>ConceptInstance</a>s (for <a>ConceptInstanceMap</a>),</li>
---   <li><a>LabelledContent</a>s (for <a>LabelledContentMap</a>).</li>
+--   <li><a>LabelledContent</a>s (for <a>LabelledContentMap</a>). Creates
+--   an empty ChunkDB without basic data. cdb in MetaDatabase.Drasil should
+--   be preferred over this function as it includes the basic data needed
+--   for Drasil.</li>
 --   </ul>
-cdb :: (Quantity q, MayHaveUnit q, Concept q, Concept c, IsUnit u) => [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
+cdb' :: (Quantity q, MayHaveUnit q, Concept q, Concept c, IsUnit u) => [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
 
 -- | Printing information contains a database, a stage, and a printing
 --   configuration.

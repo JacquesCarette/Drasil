@@ -10,12 +10,7 @@
 @version 0.1.3.0
 
 module Database.Drasil.ChunkDB
-
--- | The basis chunk database, which contains the basic idea dicts, concept
---   chunks, and units that are used in all of the case studies. This
---   database is then added to all of the new chunk databases created using
---   the cdb constructor.
-basisCDB :: ChunkDB
+cdb :: (Quantity q, MayHaveUnit q, Concept q, Concept c, IsUnit u) => [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
 
 module Language.Drasil.Dump
 type Path = String

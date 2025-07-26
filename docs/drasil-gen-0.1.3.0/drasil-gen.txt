@@ -9,6 +9,9 @@
 @package drasil-gen
 @version 0.1.3.0
 
+module Database.Drasil.ChunkDB
+cdb :: (Quantity q, MayHaveUnit q, Concept q, Concept c, IsUnit u) => [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
+
 
 -- | Defines Drasil generator functions.
 module Language.Drasil.Generate

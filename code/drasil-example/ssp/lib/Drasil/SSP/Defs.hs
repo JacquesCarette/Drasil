@@ -21,7 +21,7 @@ acronyms = [twoD, threeD, assumption, dataDefn, genDefn, goalStmt, inModel, like
   physSyst, requirement, refBy, refName, srs, thModel, typUnc, unlikelyChg]
 
 defs :: [IdeaDict]
-defs = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice,
+defs = [factor, soil, intrslce, layer, slip, slope, slice, morPrice,
   soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics, 
   stabAnalysis, ssa]
 

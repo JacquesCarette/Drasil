@@ -3,6 +3,7 @@ module Drasil.SWHSNoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI) where
 import Language.Drasil hiding (section)
 import Drasil.Metadata (inModel)
 import Drasil.SRSDocument
+import Database.Drasil.ChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Theory.Drasil (TheoryModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -13,10 +14,8 @@ import Language.Drasil.Code (quantvar)
 import Data.List ((\\))
 import Data.Drasil.People (thulasi)
 
-import Data.Drasil.Concepts.Computation (algorithm, inValue)
-import Data.Drasil.Concepts.Documentation as Doc (doccon, doccon', material_, srsDomains, sysCont)
-import Data.Drasil.Concepts.Education (educon)
-import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
+import Data.Drasil.Concepts.Documentation as Doc (material_, sysCont)
+import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.Software (softwarecon)
@@ -32,8 +31,6 @@ import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
   uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy)
-import Data.Drasil.Software.Products (prodtcon)
-import Data.Drasil.SI_Units (siUnits)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -181,21 +178,21 @@ purp = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWH
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- Actual IdeaDicts
-  [inValue, htTrans, materialProprty] ++ prodtcon ++ doccon ++ educon ++
+  [htTrans, materialProprty] ++
   -- CIs
-  map nw [srsSWHS, progName, phsChgMtrl] ++ map nw doccon' ++
+  map nw [srsSWHS, progName, phsChgMtrl] ++
   map nw physicCon' ++ map nw mathcon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  algorithm : softwarecon ++ thermocon ++ con ++ physicCon ++ mathcon ++
-  physicalcon ++ srsDomains ++
+  softwarecon ++ thermocon ++ con ++ physicCon ++
+  physicalcon ++
   -- DefinedQuantityDicts
   map cw symbols
 
 symbMap :: ChunkDB
-symbMap = cdb symbolsAll ideaDicts conceptChunks siUnits NoPCM.dataDefs
+symbMap = cdb symbolsAll ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
   NoPCM.iMods genDefs tMods concIns [] allRefs citations
 
 abbreviationsList :: [IdeaDict]

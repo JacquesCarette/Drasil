@@ -3,13 +3,11 @@ module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) wher
 import Language.Drasil
 import Drasil.Metadata (dataDefn)
 import Drasil.SRSDocument
+import Database.Drasil.ChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
-import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
-import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Software.Products (sciCompS)
+import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.ExternalLibraries.ODELibraries
        (apacheODESymbols, arrayVecDepVar, odeintSymbols, osloSymbols,
         scipyODESymbols)
@@ -17,7 +15,6 @@ import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.Quantities.Math (posInf, negInf)
 
 import Drasil.PDController.Assumptions (assumptions)
@@ -128,14 +125,14 @@ symbolsAll = symbols ++ map dqdWr pidConstants
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- Actual IdeaDicts
-  sciCompS : concepts ++ doccon ++
+  concepts ++
   -- CIs
-  nw progName : map nw mathcon' ++ map nw doccon'
+  nw progName : map nw mathcon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  physicalcon ++ mathcon ++ [linear, program, angular] ++ srsDomains ++
+  physicalcon ++ [linear, angular] ++
   -- ConstrConcepts
   map cw inpConstrained
 
@@ -143,7 +140,7 @@ symbMap :: ChunkDB
 symbMap = cdb (map dqdWr physicscon ++ symbolsAll ++ [dqdWr mass, dqdWr posInf, dqdWr negInf])
   ideaDicts
   conceptChunks
-  siUnits
+  ([] :: [UnitDefn])
   dataDefinitions
   instanceModels
   genDefns

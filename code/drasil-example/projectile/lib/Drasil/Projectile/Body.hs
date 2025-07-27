@@ -47,7 +47,7 @@ import Drasil.Projectile.Unitals
 
 import Theory.Drasil (TheoryModel)
 
-import System.Drasil (SystemKind(Specification))
+import System.Drasil (SystemKind(Specification), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -130,26 +130,13 @@ projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles"
   S "etc.")]
 
 si :: System
-si = SI {
-  _sys          = progName,
-  _kind         = Specification,
-  _authors      = [samCrawford, brooks, spencerSmith],
-  _purpose      = [purp],
-  _background   = [background],
-  _motivation   = [motivation],
-  _scope        = [scope],
-  _quants       = symbols,
-  _theoryModels = tMods,
-  _genDefns     = genDefns,
-  _instModels   = iMods,
-  _dataDefns    = dataDefs,
-  _configFiles  = [],
-  _inputs       = inputs,
-  _outputs      = outputs,
-  _constraints  = map cnstrw' constrained,
-  _constants    = constants,
-  _systemdb     = symbMap
-}
+si = mkSystem progName Specification
+  [samCrawford, brooks, spencerSmith]
+  [purp] [background] [scope] [motivation]
+  symbols tMods genDefns dataDefs iMods
+  []
+  inputs outputs (map cnstrw' constrained) constants
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "predict whether a launched", phrase projectile, S "hits its", phrase target]

@@ -38,7 +38,7 @@ module Drasil.SRSDocument (
 
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
 import Database.Drasil
-import System.Drasil
+import Drasil.System
 import Drasil.DocLang (
   -- Drasil.DocumentLanguage.Core
   AppndxSec(..), AuxConstntSec(..),

@@ -5,7 +5,7 @@ import Language.Drasil hiding (Notebook)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil
 import Database.Drasil.ChunkDB (cdb)
-import System.Drasil
+import Drasil.System
 import qualified Language.Drasil.Sentence.Combinators as S
 
 -- TODO: Add export parameters in a module

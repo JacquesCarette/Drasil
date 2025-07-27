@@ -41,7 +41,7 @@ import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
 import Drasil.GamePhysics.GenDefs (generalDefns)
 
-import System.Drasil (SystemKind(Specification), mkSystem)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize short) si

@@ -45,7 +45,7 @@ import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
 import Language.Drasil.Code (quantvar)
 import Drasil.DblPend.ODEs (dblPenODEInfo)
 
-import System.Drasil (SystemKind(Specification), mkSystem)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si

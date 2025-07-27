@@ -38,7 +38,7 @@ import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
 import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
 import Data.Drasil.Concepts.Math (equation, parameter)
 import Drasil.Metadata (inModel, thModel, dataDefn, genDefn)
-import System.Drasil (System)
+import Drasil.System (System)
 import Drasil.DocumentLanguage.Definitions (helperRefs)
 import qualified Drasil.DocLang.SRS as SRS
 

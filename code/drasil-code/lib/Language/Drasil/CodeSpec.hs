@@ -7,8 +7,8 @@ import Language.Drasil hiding (None, new)
 import Language.Drasil.Display (Symbol(Variable))
 import Database.Drasil
 import Drasil.Code.CodeExpr.Development (expr, eNamesRI, eDep)
-import qualified System.Drasil as SI
-import System.Drasil (HasSystem(..))
+import qualified Drasil.System as S
+import Drasil.System (HasSystem(..))
 
 import Theory.Drasil (DataDefinition, qdEFromDD, getEqModQdsFromIm)
 
@@ -91,22 +91,22 @@ makeClassyFor "HasOldCodeSpec" "oldCodeSpec"
 
 -- | New Code Specification. Holds system information and a reference to `OldCodeSpec`.
 data CodeSpec = CS {
-  _system' :: SI.System,
+  _system' :: S.System,
   _oldCode :: OldCodeSpec
 }
 makeLenses ''CodeSpec
 
 instance HasSystem CodeSpec where
-  system :: Lens' CodeSpec SI.System
+  system :: Lens' CodeSpec S.System
   system = system'
-  background :: Lens' CodeSpec SI.Background
-  background = system . SI.background
-  purpose :: Lens' CodeSpec SI.Purpose
-  purpose = system . SI.purpose
-  scope :: Lens' CodeSpec SI.Scope
-  scope = system . SI.scope
-  motivation :: Lens' CodeSpec SI.Motivation
-  motivation = system . SI.motivation
+  background :: Lens' CodeSpec S.Background
+  background = system . S.background
+  purpose :: Lens' CodeSpec S.Purpose
+  purpose = system . S.purpose
+  scope :: Lens' CodeSpec S.Scope
+  scope = system . S.scope
+  motivation :: Lens' CodeSpec S.Motivation
+  motivation = system . S.motivation
 
 instance HasOldCodeSpec CodeSpec where
   oldCodeSpec :: Lens' CodeSpec OldCodeSpec
@@ -168,7 +168,7 @@ mapODE (Just ode) = map odeDef $ odeInfo ode
 
 -- | Creates a 'CodeSpec' using the provided 'System', 'Choices', and 'Mod's.
 -- The 'CodeSpec' consists of the system information and a corresponding 'OldCodeSpec'.
-codeSpec :: SI.System -> Choices -> [Mod] -> CodeSpec
+codeSpec :: S.System -> Choices -> [Mod] -> CodeSpec
 codeSpec si chs ms = CS {
   _system' = si,
   _oldCode = oldcodeSpec si chs ms
@@ -177,15 +177,15 @@ codeSpec si chs ms = CS {
 -- | Generates an 'OldCodeSpec' from 'System', 'Choices', and a list of 'Mod's.
 -- This function extracts various components (e.g., inputs, outputs, constraints, etc.)
 -- from 'System' to populate the 'OldCodeSpec' structure.
-oldcodeSpec :: SI.System -> Choices -> [Mod] -> OldCodeSpec
-oldcodeSpec sys@SI.SI{ SI._sys = sysIdea
-                 , SI._authors = as
-                 , SI._configFiles = cfp
-                 , SI._inputs = ins
-                 , SI._outputs = outs
-                 , SI._constraints = cs
-                 , SI._constants = cnsts
-                 , SI._systemdb = db } chs ms =
+oldcodeSpec :: S.System -> Choices -> [Mod] -> OldCodeSpec
+oldcodeSpec sys@S.SI{ S._sys = sysIdea
+                 , S._authors = as
+                 , S._configFiles = cfp
+                 , S._inputs = ins
+                 , S._outputs = outs
+                 , S._constraints = cs
+                 , S._constants = cnsts
+                 , S._systemdb = db } chs ms =
   let ddefs = sys ^. dataDefns
       n = programName sysIdea
       inputs' = map quantvar ins

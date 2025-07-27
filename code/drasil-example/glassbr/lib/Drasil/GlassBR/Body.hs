@@ -45,7 +45,7 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
   sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints)
 
-import System.Drasil (SystemKind(Specification), mkSystem)
+import System.Drasil (SystemKind(RunnableSoftware), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -57,7 +57,7 @@ printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
 si :: System
-si = mkSystem progName Specification
+si = mkSystem progName RunnableSoftware
   [nikitha, spencerSmith] [purp] [background] [scope] []
   symbolsForSymbolTable
   tMods [] GB.dataDefs iMods

@@ -38,7 +38,7 @@ import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
 import Drasil.PDController.ODEs (pidODEInfo)
 import Language.Drasil.Code (quantvar)
 
-import System.Drasil (SystemKind(Specification), mkSystem)
+import System.Drasil (SystemKind(RunnableSoftware), mkSystem)
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
@@ -95,7 +95,7 @@ mkSRS
 
 si :: System
 si = mkSystem
-  progName Specification [naveen]
+  progName RunnableSoftware [naveen]
   [purp] [background] [scope] [motivation]
   symbolsAll
   theoreticalModels genDefns dataDefinitions instanceModels

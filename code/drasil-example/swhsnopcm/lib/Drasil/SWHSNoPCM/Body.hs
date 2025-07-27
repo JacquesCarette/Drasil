@@ -63,7 +63,7 @@ import Drasil.SWHSNoPCM.References (citations)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
   specParamValList)
 
-import System.Drasil (SystemKind(Specification), mkSystem)
+import System.Drasil (SystemKind(RunnableSoftware), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS S.forT si
@@ -160,7 +160,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 si :: System
 si = mkSystem
-  srsSWHS Specification [thulasi]
+  srsSWHS RunnableSoftware [thulasi]
   [purp] [introStartNoPCM] [scope] [motivation]
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but 

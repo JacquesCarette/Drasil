@@ -113,7 +113,7 @@ mkQDefSt u n s symb sp Nothing   e = fromEqnSt' u n s symb sp e
 
 -- | Used to help make 'QDefinition's when 'UID', term, and 'Symbol' come from the same source.
 mkQuantDef :: (Quantity c, MayHaveUnit c, Concept c) => c -> e -> QDefinition e
-mkQuantDef c = mkQDefSt (c ^. uid) (c ^. term) EmptyS (symbol c) (c ^. typ) (getUnit c)
+mkQuantDef c = mkQDefSt (c ^. uid) (c ^. term) (c ^. defn) (symbol c) (c ^. typ) (getUnit c)
 
 -- FIXME: See #2788.
 -- | Used to help make 'QDefinition's when 'UID' and 'Symbol' come from the same source, with the term separate.

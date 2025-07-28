@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class OutputFormat {
     
     /** \brief Writes the output values to output.txt
-        \param theta dependent variables (rad)
+        \param theta dependent variables: column vector of displacement of rods with its derivatives (rad)
     */
     public static void write_output(ArrayList<Double> theta) throws IOException {
         PrintWriter outputfile;

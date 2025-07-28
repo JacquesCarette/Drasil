@@ -27,7 +27,7 @@ class InputParameters {
     var w_TNT: Double = 0.0
     
     /** Initializes input object by reading inputs, calculating derived values, and checking physical constraints and software constraints on the input
-        - Parameter filename: name of the input file
+        - Parameter filename: name of the input file: the name of the input file
     */
     init(_ filename: String) throws {
         var outfile: FileHandle
@@ -72,7 +72,7 @@ class InputParameters {
     }
     
     /** Reads input from a file with the given file name
-        - Parameter filename: name of the input file
+        - Parameter filename: name of the input file: the name of the input file
     */
     private func get_input(_ filename: String) throws -> Void {
         var outfile: FileHandle

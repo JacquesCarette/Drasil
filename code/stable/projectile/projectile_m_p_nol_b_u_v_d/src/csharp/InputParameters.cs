@@ -15,7 +15,7 @@ public class InputParameters {
     public double p_target;
     
     /** \brief Initializes input object by reading inputs and checking physical constraints on the input
-        \param filename name of the input file
+        \param filename name of the input file: the name of the input file
     */
     public InputParameters(string filename) {
         this.get_input(filename);
@@ -23,7 +23,7 @@ public class InputParameters {
     }
     
     /** \brief Reads input from a file with the given file name
-        \param filename name of the input file
+        \param filename name of the input file: the name of the input file
     */
     private void get_input(string filename) {
         StreamReader infile;

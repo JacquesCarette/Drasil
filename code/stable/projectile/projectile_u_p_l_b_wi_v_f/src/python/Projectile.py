@@ -12,7 +12,7 @@ class InputParameters:
     epsilon = 2.0e-2
     
     ## \brief Initializes input object by reading inputs and checking physical constraints on the input
-    # \param filename name of the input file
+    # \param filename name of the input file: the name of the input file
     def __init__(self, filename):
         outfile = open("log.txt", "a")
         print("function InputParameters called with inputs: {", file=outfile)
@@ -25,7 +25,7 @@ class InputParameters:
         self.input_constraints()
     
     ## \brief Reads input from a file with the given file name
-    # \param filename name of the input file
+    # \param filename name of the input file: the name of the input file
     def get_input(self, filename):
         outfile = open("log.txt", "a")
         print("function get_input called with inputs: {", file=outfile)
@@ -94,7 +94,7 @@ class InputParameters:
             print(".")
 
 ## \brief Calculates flight duration: the time when the projectile lands (s)
-# \param inParams structure holding the input values
+# \param inParams structure holding the input values: the structure holding the input values
 # \return flight duration: the time when the projectile lands (s)
 def func_t_flight(inParams):
     outfile = open("log.txt", "a")
@@ -107,7 +107,7 @@ def func_t_flight(inParams):
     return 2.0 * inParams.v_launch * math.sin(inParams.theta) / inParams.g
 
 ## \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
-# \param inParams structure holding the input values
+# \param inParams structure holding the input values: the structure holding the input values
 # \return landing position: the distance from the launcher to the final position of the projectile (m)
 def func_p_land(inParams):
     outfile = open("log.txt", "a")
@@ -120,7 +120,7 @@ def func_p_land(inParams):
     return 2.0 * inParams.v_launch ** 2.0 * math.sin(inParams.theta) * math.cos(inParams.theta) / inParams.g
 
 ## \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
-# \param inParams structure holding the input values
+# \param inParams structure holding the input values: the structure holding the input values
 # \param p_land landing position: the distance from the launcher to the final position of the projectile (m)
 # \return distance between the target position and the landing position: the offset between the target position and the landing position (m)
 def func_d_offset(inParams, p_land):
@@ -136,10 +136,10 @@ def func_d_offset(inParams, p_land):
     
     return p_land - inParams.p_target
 
-## \brief Calculates output message as a string
-# \param inParams structure holding the input values
+## \brief Calculates output message as a string: the output message given as a string
+# \param inParams structure holding the input values: the structure holding the input values
 # \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
-# \return output message as a string
+# \return output message as a string: the output message given as a string
 def func_s(inParams, d_offset):
     outfile = open("log.txt", "a")
     print("function func_s called with inputs: {", file=outfile)
@@ -159,7 +159,7 @@ def func_s(inParams, d_offset):
         return "The projectile went long."
 
 ## \brief Writes the output values to output.txt
-# \param s output message as a string
+# \param s output message as a string: the output message given as a string
 # \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
 # \param t_flight flight duration: the time when the projectile lands (s)
 def write_output(s, d_offset, t_flight):

@@ -10,12 +10,12 @@ using Microsoft.Research.Oslo;
 
 public class Calculations {
     
-    /** \brief Calculates dependent variables (rad)
-        \param m_1 mass of the first object (kg)
-        \param m_2 mass of the second object (kg)
-        \param L_2 length of the second rod (m)
-        \param L_1 length of the first rod (m)
-        \return dependent variables (rad)
+    /** \brief Calculates dependent variables: column vector of displacement of rods with its derivatives (rad)
+        \param m_1 mass of the first object: the mass of the first object (kg)
+        \param m_2 mass of the second object: the mass of the second object (kg)
+        \param L_2 length of the second rod: the length of the second rod (m)
+        \param L_1 length of the first rod: the length of the first rod (m)
+        \return dependent variables: column vector of displacement of rods with its derivatives (rad)
     */
     public static List<double> func_theta(double m_1, double m_2, double L_2, double L_1) {
         List<double> theta;

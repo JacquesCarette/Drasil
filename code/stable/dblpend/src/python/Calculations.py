@@ -7,12 +7,12 @@ import math
 
 import scipy.integrate
 
-## \brief Calculates dependent variables (rad)
-# \param m_1 mass of the first object (kg)
-# \param m_2 mass of the second object (kg)
-# \param L_2 length of the second rod (m)
-# \param L_1 length of the first rod (m)
-# \return dependent variables (rad)
+## \brief Calculates dependent variables: column vector of displacement of rods with its derivatives (rad)
+# \param m_1 mass of the first object: the mass of the first object (kg)
+# \param m_2 mass of the second object: the mass of the second object (kg)
+# \param L_2 length of the second rod: the length of the second rod (m)
+# \param L_1 length of the first rod: the length of the first rod (m)
+# \return dependent variables: column vector of displacement of rods with its derivatives (rad)
 def func_theta(m_1, m_2, L_2, L_1):
     def f(t, theta):
         return [theta[1], (-9.8 * (2.0 * m_1 + m_2) * math.sin(theta[0]) - m_2 * 9.8 * math.sin(theta[0] - 2.0 * theta[2]) - 2.0 * math.sin(theta[0] - theta[2]) * m_2 * (theta[3] ** 2.0 * L_2 + theta[1] ** 2.0 * L_1 * math.cos(theta[0] - theta[2]))) / (L_1 * (2.0 * m_1 + m_2 - m_2 * math.cos(2.0 * theta[0] - 2.0 * theta[2]))), theta[3], 2.0 * math.sin(theta[0] - theta[2]) * (theta[1] ** 2.0 * L_1 * (m_1 + m_2) + 9.8 * (m_1 + m_2) * math.cos(theta[0]) + theta[3] ** 2.0 * L_2 * m_2 * math.cos(theta[0] - theta[2])) / (L_2 * (2.0 * m_1 + m_2 - m_2 * math.cos(2.0 * theta[0] - 2.0 * theta[2])))]

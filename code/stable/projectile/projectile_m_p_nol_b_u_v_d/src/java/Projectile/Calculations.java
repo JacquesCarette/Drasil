@@ -9,7 +9,7 @@ package Projectile;
 public class Calculations {
     
     /** \brief Calculates flight duration: the time when the projectile lands (s)
-        \param inParams structure holding the input values
+        \param inParams structure holding the input values: the structure holding the input values
         \param g magnitude of gravitational acceleration: the magnitude of the approximate acceleration due to gravity on Earth at sea level (m/s^2)
         \return flight duration: the time when the projectile lands (s)
     */
@@ -18,7 +18,7 @@ public class Calculations {
     }
     
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
-        \param inParams structure holding the input values
+        \param inParams structure holding the input values: the structure holding the input values
         \param g magnitude of gravitational acceleration: the magnitude of the approximate acceleration due to gravity on Earth at sea level (m/s^2)
         \return landing position: the distance from the launcher to the final position of the projectile (m)
     */
@@ -27,7 +27,7 @@ public class Calculations {
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
-        \param inParams structure holding the input values
+        \param inParams structure holding the input values: the structure holding the input values
         \param p_land landing position: the distance from the launcher to the final position of the projectile (m)
         \return distance between the target position and the landing position: the offset between the target position and the landing position (m)
     */
@@ -35,11 +35,11 @@ public class Calculations {
         return p_land - inParams.p_target;
     }
     
-    /** \brief Calculates output message as a string
-        \param inParams structure holding the input values
-        \param epsilon hit tolerance
+    /** \brief Calculates output message as a string: the output message given as a string
+        \param inParams structure holding the input values: the structure holding the input values
+        \param epsilon hit tolerance: the hit tolerance
         \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
-        \return output message as a string
+        \return output message as a string: the output message given as a string
     */
     public static String func_s(InputParameters inParams, double epsilon, double d_offset) {
         if (Math.abs(d_offset / inParams.p_target) < epsilon) {

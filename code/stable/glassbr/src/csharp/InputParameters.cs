@@ -29,7 +29,7 @@ public class InputParameters {
     public double w_TNT;
     
     /** \brief Initializes input object by reading inputs, calculating derived values, and checking physical constraints and software constraints on the input
-        \param filename name of the input file
+        \param filename name of the input file: the name of the input file
     */
     public InputParameters(string filename) {
         StreamWriter outfile;
@@ -46,7 +46,7 @@ public class InputParameters {
     }
     
     /** \brief Reads input from a file with the given file name
-        \param filename name of the input file
+        \param filename name of the input file: the name of the input file
     */
     private void get_input(string filename) {
         StreamWriter outfile;

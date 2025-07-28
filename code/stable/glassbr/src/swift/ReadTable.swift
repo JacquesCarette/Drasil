@@ -7,10 +7,10 @@
 import Foundation
 
 /** Reads glass ASTM data from a file with the given file name
-    - Parameter filename: name of the input file
-    - Parameter z_vector: list of z values
-    - Parameter x_matrix: lists of x values at different z values
-    - Parameter y_matrix: lists of y values at different z values
+    - Parameter filename: name of the input file: the name of the input file
+    - Parameter z_vector: list of z values: the list of z values
+    - Parameter x_matrix: lists of x values at different z values: the lists of x values at different z values
+    - Parameter y_matrix: lists of y values at different z values: the lists of y values at different z values
 */
 func read_table(_ filename: String, _ z_vector: inout [Double], _ x_matrix: inout [[Double]], _ y_matrix: inout [[Double]]) throws -> Void {
     var outfile: FileHandle

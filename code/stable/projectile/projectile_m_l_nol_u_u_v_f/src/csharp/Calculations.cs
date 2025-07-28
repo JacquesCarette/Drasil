@@ -37,11 +37,11 @@ public class Calculations {
         return p_land - p_target;
     }
     
-    /** \brief Calculates output message as a string
+    /** \brief Calculates output message as a string: the output message given as a string
         \param p_target target position: the distance from the launcher to the target (m)
-        \param epsilon hit tolerance
+        \param epsilon hit tolerance: the hit tolerance
         \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
-        \return output message as a string
+        \return output message as a string: the output message given as a string
     */
     public static string func_s(float p_target, float epsilon, float d_offset) {
         if (Math.Abs(d_offset / p_target) < epsilon) {

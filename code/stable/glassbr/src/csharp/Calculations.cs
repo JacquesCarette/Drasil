@@ -9,9 +9,9 @@ using System.IO;
 
 public class Calculations {
     
-    /** \brief Calculates tolerable stress distribution factor
-        \param inParams structure holding the input values
-        \return tolerable stress distribution factor
+    /** \brief Calculates tolerable stress distribution factor: the tolerable stress distribution factor
+        \param inParams structure holding the input values: the structure holding the input values
+        \return tolerable stress distribution factor: the tolerable stress distribution factor
     */
     public static double func_J_tol(InputParameters inParams) {
         StreamWriter outfile;
@@ -26,7 +26,7 @@ public class Calculations {
     }
     
     /** \brief Calculates applied load (demand): 3 second duration equivalent pressure (Pa)
-        \param inParams structure holding the input values
+        \param inParams structure holding the input values: the structure holding the input values
         \return applied load (demand): 3 second duration equivalent pressure (Pa)
     */
     public static double func_q(InputParameters inParams) {
@@ -41,10 +41,10 @@ public class Calculations {
         return Interpolation.interpY("TSD.txt", inParams.SD, inParams.w_TNT);
     }
     
-    /** \brief Calculates dimensionless load
-        \param inParams structure holding the input values
+    /** \brief Calculates dimensionless load: the dimensionless load
+        \param inParams structure holding the input values: the structure holding the input values
         \param q applied load (demand): 3 second duration equivalent pressure (Pa)
-        \return dimensionless load
+        \return dimensionless load: the dimensionless load
     */
     public static double func_q_hat(InputParameters inParams, double q) {
         StreamWriter outfile;
@@ -61,10 +61,10 @@ public class Calculations {
         return q * Math.Pow(inParams.a * inParams.b, 2.0) / (7.17e10 * Math.Pow(inParams.h, 4.0) * inParams.GTF);
     }
     
-    /** \brief Calculates tolerable load
-        \param inParams structure holding the input values
-        \param J_tol tolerable stress distribution factor
-        \return tolerable load
+    /** \brief Calculates tolerable load: the tolerable load
+        \param inParams structure holding the input values: the structure holding the input values
+        \param J_tol tolerable stress distribution factor: the tolerable stress distribution factor
+        \return tolerable load: the tolerable load
     */
     public static double func_q_hat_tol(InputParameters inParams, double J_tol) {
         StreamWriter outfile;
@@ -81,10 +81,10 @@ public class Calculations {
         return Interpolation.interpY("SDF.txt", inParams.AR, J_tol);
     }
     
-    /** \brief Calculates stress distribution factor (Function)
-        \param inParams structure holding the input values
-        \param q_hat dimensionless load
-        \return stress distribution factor (Function)
+    /** \brief Calculates stress distribution factor (Function): the stress distribution factor of the glass plate
+        \param inParams structure holding the input values: the structure holding the input values
+        \param q_hat dimensionless load: the dimensionless load
+        \return stress distribution factor (Function): the stress distribution factor of the glass plate
     */
     public static double func_J(InputParameters inParams, double q_hat) {
         StreamWriter outfile;
@@ -102,8 +102,8 @@ public class Calculations {
     }
     
     /** \brief Calculates non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
-        \param inParams structure holding the input values
-        \param q_hat_tol tolerable load
+        \param inParams structure holding the input values: the structure holding the input values
+        \param q_hat_tol tolerable load: the tolerable load
         \return non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
     */
     public static double func_NFL(InputParameters inParams, double q_hat_tol) {
@@ -121,10 +121,10 @@ public class Calculations {
         return q_hat_tol * 7.17e10 * Math.Pow(inParams.h, 4.0) / Math.Pow(inParams.a * inParams.b, 2.0);
     }
     
-    /** \brief Calculates risk of failure
-        \param inParams structure holding the input values
-        \param J stress distribution factor (Function)
-        \return risk of failure
+    /** \brief Calculates risk of failure: the risk of failure
+        \param inParams structure holding the input values: the structure holding the input values
+        \param J stress distribution factor (Function): the stress distribution factor of the glass plate
+        \return risk of failure: the risk of failure
     */
     public static double func_B(InputParameters inParams, double J) {
         StreamWriter outfile;
@@ -142,7 +142,7 @@ public class Calculations {
     }
     
     /** \brief Calculates load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
-        \param inParams structure holding the input values
+        \param inParams structure holding the input values: the structure holding the input values
         \param NFL non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
         \return load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
     */
@@ -162,7 +162,7 @@ public class Calculations {
     }
     
     /** \brief Calculates probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
-        \param B risk of failure
+        \param B risk of failure: the risk of failure
         \return probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
     */
     public static double func_P_b(double B) {
@@ -177,10 +177,10 @@ public class Calculations {
         return 1.0 - Math.Exp(-B);
     }
     
-    /** \brief Calculates 3 second load equivalent resistance safety requirement
+    /** \brief Calculates 3 second load equivalent resistance safety requirement: the 3 second load equivalent resistance safety requirement
         \param LR load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
         \param q applied load (demand): 3 second duration equivalent pressure (Pa)
-        \return 3 second load equivalent resistance safety requirement
+        \return 3 second load equivalent resistance safety requirement: the 3 second load equivalent resistance safety requirement
     */
     public static Boolean func_isSafeLR(double LR, double q) {
         StreamWriter outfile;
@@ -197,10 +197,10 @@ public class Calculations {
         return LR > q;
     }
     
-    /** \brief Calculates probability of glass breakage safety requirement
-        \param inParams structure holding the input values
+    /** \brief Calculates probability of glass breakage safety requirement: the probability of glass breakage safety requirement
+        \param inParams structure holding the input values: the structure holding the input values
         \param P_b probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
-        \return probability of glass breakage safety requirement
+        \return probability of glass breakage safety requirement: the probability of glass breakage safety requirement
     */
     public static Boolean func_isSafePb(InputParameters inParams, double P_b) {
         StreamWriter outfile;

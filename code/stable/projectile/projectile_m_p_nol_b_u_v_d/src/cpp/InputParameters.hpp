@@ -24,13 +24,13 @@ class InputParameters {
         double p_target;
         
         /** \brief Initializes input object by reading inputs and checking physical constraints on the input
-            \param filename name of the input file
+            \param filename name of the input file: the name of the input file
         */
         InputParameters(string filename);
     
     private:
         /** \brief Reads input from a file with the given file name
-            \param filename name of the input file
+            \param filename name of the input file: the name of the input file
         */
         void get_input(string filename);
         /** \brief Verifies that input values satisfy the physical constraints

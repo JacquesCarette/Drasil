@@ -37,13 +37,13 @@ class InputParameters {
         double w_TNT;
         
         /** \brief Initializes input object by reading inputs, calculating derived values, and checking physical constraints and software constraints on the input
-            \param filename name of the input file
+            \param filename name of the input file: the name of the input file
         */
         InputParameters(string filename);
     
     private:
         /** \brief Reads input from a file with the given file name
-            \param filename name of the input file
+            \param filename name of the input file: the name of the input file
         */
         void get_input(string filename);
         /** \brief Calculates values that can be immediately derived from the inputs

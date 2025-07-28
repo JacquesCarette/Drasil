@@ -17,10 +17,10 @@ public class ODE implements FirstOrderDifferentialEquations {
     private double L_2;
     
     /** \brief Constructor for ODE objects
-        \param m_1 mass of the first object (kg)
-        \param m_2 mass of the second object (kg)
-        \param L_1 length of the first rod (m)
-        \param L_2 length of the second rod (m)
+        \param m_1 mass of the first object: the mass of the first object (kg)
+        \param m_2 mass of the second object: the mass of the second object (kg)
+        \param L_1 length of the first rod: the length of the first rod (m)
+        \param L_2 length of the second rod: the length of the second rod (m)
     */
     public ODE(double m_1, double m_2, double L_1, double L_2) {
         this.m_1 = m_1;
@@ -37,9 +37,9 @@ public class ODE implements FirstOrderDifferentialEquations {
     }
     
     /** \brief function representation of an ODE system
-        \param t current independent variable value in ODE solution
-        \param theta dependent variables (rad)
-        \param dtheta change in dependent variables (rad)
+        \param t current independent variable value in ODE solution: the current independent variable value in the ODE solution
+        \param theta dependent variables: column vector of displacement of rods with its derivatives (rad)
+        \param dtheta change in dependent variables: the change in column vector of displacement of rods with its derivatives (rad)
     */
     public void computeDerivatives(double t, double[] theta, double[] dtheta) {
         dtheta[0] = theta[1];

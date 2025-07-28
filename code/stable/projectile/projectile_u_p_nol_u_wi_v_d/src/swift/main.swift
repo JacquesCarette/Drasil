@@ -37,11 +37,11 @@ func func_d_offset(_ p_target: Double, _ p_land: Double) -> Double {
     return p_land - p_target
 }
 
-/** Calculates output message as a string
+/** Calculates output message as a string: the output message given as a string
     - Parameter p_target: target position: the distance from the launcher to the target (m)
-    - Parameter epsilon: hit tolerance
+    - Parameter epsilon: hit tolerance: the hit tolerance
     - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
-    - Returns: output message as a string
+    - Returns: output message as a string: the output message given as a string
 */
 func func_s(_ p_target: Double, _ epsilon: Double, _ d_offset: Double) -> String {
     if abs(d_offset / p_target) < epsilon {
@@ -56,7 +56,7 @@ func func_s(_ p_target: Double, _ epsilon: Double, _ d_offset: Double) -> String
 }
 
 /** Reads input from a file with the given file name
-    - Parameter filename: name of the input file
+    - Parameter filename: name of the input file: the name of the input file
     - Returns: launch speed: the initial speed of the projectile when launched (m/s)
     - Returns: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
     - Returns: target position: the distance from the launcher to the target (m)
@@ -120,7 +120,7 @@ func input_constraints(_ v_launch: Double, _ theta: Double, _ p_target: Double) 
 }
 
 /** Writes the output values to output.txt
-    - Parameter s: output message as a string
+    - Parameter s: output message as a string: the output message given as a string
     - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
     - Parameter t_flight: flight duration: the time when the projectile lands (s)
 */

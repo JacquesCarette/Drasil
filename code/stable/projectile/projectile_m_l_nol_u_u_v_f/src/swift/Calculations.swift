@@ -35,11 +35,11 @@ func func_d_offset(_ p_target: Float, _ p_land: Float) -> Float {
     return p_land - p_target
 }
 
-/** Calculates output message as a string
+/** Calculates output message as a string: the output message given as a string
     - Parameter p_target: target position: the distance from the launcher to the target (m)
-    - Parameter epsilon: hit tolerance
+    - Parameter epsilon: hit tolerance: the hit tolerance
     - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
-    - Returns: output message as a string
+    - Returns: output message as a string: the output message given as a string
 */
 func func_s(_ p_target: Float, _ epsilon: Float, _ d_offset: Float) -> String {
     if abs(d_offset / p_target) < epsilon {

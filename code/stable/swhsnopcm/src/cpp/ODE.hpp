@@ -22,8 +22,8 @@ class ODE {
         ODE(double tau_W, double T_C);
         /** \brief function representation of ODE system
             \param T_W temperature of the water: the average kinetic energy of the particles within the water (degreeC)
-            \param dT_W change in temperature of the water (degreeC)
-            \param t current independent variable value in ODE solution
+            \param dT_W change in temperature of the water: the change in the average kinetic energy of the particles within the water (degreeC)
+            \param t current independent variable value in ODE solution: the current independent variable value in the ODE solution
         */
         void operator()(vector<double> T_W, vector<double> &dT_W, double t);
     

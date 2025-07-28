@@ -10,7 +10,7 @@ using System.IO;
 public class InputParameters {
     
     /** \brief Reads input from a file with the given file name
-        \param filename name of the input file
+        \param filename name of the input file: the name of the input file
         \param r_t Set-Point: The desired value that the control system must reach. This also knows as the reference variable
         \param K_d Derivative Gain: Gain constant of the derivative controller
         \param K_p Proportional Gain: Gain constant of the proportional controller

@@ -55,7 +55,7 @@ public class Projectile {
     }
     
     /** \brief Calculates flight duration: the time when the projectile lands (s)
-        \param inParams structure holding the input values
+        \param inParams structure holding the input values: the structure holding the input values
         \return flight duration: the time when the projectile lands (s)
     */
     public static double func_t_flight(InputParameters inParams) throws IOException {
@@ -71,7 +71,7 @@ public class Projectile {
     }
     
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
-        \param inParams structure holding the input values
+        \param inParams structure holding the input values: the structure holding the input values
         \return landing position: the distance from the launcher to the final position of the projectile (m)
     */
     public static double func_p_land(InputParameters inParams) throws IOException {
@@ -87,7 +87,7 @@ public class Projectile {
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
-        \param inParams structure holding the input values
+        \param inParams structure holding the input values: the structure holding the input values
         \param p_land landing position: the distance from the launcher to the final position of the projectile (m)
         \return distance between the target position and the landing position: the offset between the target position and the landing position (m)
     */
@@ -106,10 +106,10 @@ public class Projectile {
         return p_land - inParams.p_target;
     }
     
-    /** \brief Calculates output message as a string
-        \param inParams structure holding the input values
+    /** \brief Calculates output message as a string: the output message given as a string
+        \param inParams structure holding the input values: the structure holding the input values
         \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
-        \return output message as a string
+        \return output message as a string: the output message given as a string
     */
     public static String func_s(InputParameters inParams, double d_offset) throws IOException {
         PrintWriter outfile;
@@ -135,7 +135,7 @@ public class Projectile {
     }
     
     /** \brief Writes the output values to output.txt
-        \param s output message as a string
+        \param s output message as a string: the output message given as a string
         \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
         \param t_flight flight duration: the time when the projectile lands (s)
     */
@@ -174,7 +174,7 @@ class InputParameters {
     public double p_target;
     
     /** \brief Initializes input object by reading inputs and checking physical constraints on the input
-        \param filename name of the input file
+        \param filename name of the input file: the name of the input file
     */
     public InputParameters(String filename) throws FileNotFoundException, IOException {
         PrintWriter outfile;
@@ -190,7 +190,7 @@ class InputParameters {
     }
     
     /** \brief Reads input from a file with the given file name
-        \param filename name of the input file
+        \param filename name of the input file: the name of the input file
     */
     private void get_input(String filename) throws FileNotFoundException, IOException {
         PrintWriter outfile;

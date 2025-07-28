@@ -10,7 +10,7 @@ using System.IO;
 public class InputParameters {
     
     /** \brief Reads input from a file with the given file name
-        \param filename name of the input file
+        \param filename name of the input file: the name of the input file
         \param A_C heating coil surface area: area covered by the outermost layer of the coil (m^2)
         \param C_W specific heat capacity of water: the amount of energy required to raise the temperature of a given unit mass of water by a given amount (J/(kg degreeC))
         \param h_C convective heat transfer coefficient between coil and water: the convective heat transfer coefficient that models the thermal flux from the coil to the surrounding water (W/(m^2 degreeC))
@@ -21,8 +21,8 @@ public class InputParameters {
         \param t_step time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s)
         \param rho_W density of water: mass per unit volume of water (kg/m^3)
         \param D diameter of tank: the diameter of the tank (m)
-        \param A_tol absolute tolerance
-        \param R_tol relative tolerance
+        \param A_tol absolute tolerance: the absolute tolerance
+        \param R_tol relative tolerance: the relative tolerance
         \param E_W change in heat energy in the water: change in thermal energy within the water (J)
     */
     public static void get_input(string filename, out double A_C, out double C_W, out double h_C, out double T_init, out double t_final, out double L, out double T_C, out double t_step, out double rho_W, out double D, out double A_tol, out double R_tol, out double E_W) {

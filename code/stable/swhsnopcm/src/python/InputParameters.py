@@ -6,7 +6,7 @@
 import Constants
 
 ## \brief Reads input from a file with the given file name
-# \param filename name of the input file
+# \param filename name of the input file: the name of the input file
 # \return heating coil surface area: area covered by the outermost layer of the coil (m^2)
 # \return specific heat capacity of water: the amount of energy required to raise the temperature of a given unit mass of water by a given amount (J/(kg degreeC))
 # \return convective heat transfer coefficient between coil and water: the convective heat transfer coefficient that models the thermal flux from the coil to the surrounding water (W/(m^2 degreeC))
@@ -17,8 +17,8 @@ import Constants
 # \return time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s)
 # \return density of water: mass per unit volume of water (kg/m^3)
 # \return diameter of tank: the diameter of the tank (m)
-# \return absolute tolerance
-# \return relative tolerance
+# \return absolute tolerance: the absolute tolerance
+# \return relative tolerance: the relative tolerance
 # \return change in heat energy in the water: change in thermal energy within the water (J)
 def get_input(filename):
     infile = open(filename, "r")

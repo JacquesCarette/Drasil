@@ -120,9 +120,8 @@ tmSymbols :: [DefinedQuantityDict]
 tmSymbols = map dqdWr [probFail, pbTolfail]
 
 probBr, probFail, pbTolfail, stressDistFac :: ConstrConcept
-probBr = cucNoUnit' "probBr" (nounPhraseSP "probability of breakage")
-  "the probability of breakage of the glass plate"
-  (sub cP lBreak) Real
+probBr = constrained' (dqdNoUnit probBreak
+  (sub cP lBreak) Real)
   [probConstr] (dbl 0.4)
 
 stressDistFac = cucNoUnit' "stressDistFac" (nounPhraseSP "stress distribution factor (Function)")
@@ -389,7 +388,7 @@ nonFactoredL  = cc' nFL
   S "per 1000 for monolithic", short annealed, S "glass"])
 notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
   "For the given input parameters, the glass is NOT considered safe."
-probBreak     = cc' probBr
+probBreak     = dccWDS "probBr" (nounPhraseSP "probability of breakage")
   (foldlSent_ [S "the fraction of glass lites or plies that would break at the",
   S "first occurrence of a specified load and duration, typically expressed",
   S "in lites per 1000", sParen $ refS astm2016])

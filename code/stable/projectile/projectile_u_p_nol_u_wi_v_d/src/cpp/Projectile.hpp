@@ -39,16 +39,16 @@ double func_p_land(double v_launch, double theta, double g);
 */
 double func_d_offset(double p_target, double p_land);
 
-/** \brief Calculates output message as a string
+/** \brief Calculates output message as a string: the output message given as a string
     \param p_target target position: the distance from the launcher to the target (m)
-    \param epsilon hit tolerance
+    \param epsilon hit tolerance: the hit tolerance
     \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
-    \return output message as a string
+    \return output message as a string: the output message given as a string
 */
 string func_s(double p_target, double epsilon, double d_offset);
 
 /** \brief Reads input from a file with the given file name
-    \param filename name of the input file
+    \param filename name of the input file: the name of the input file
     \param v_launch launch speed: the initial speed of the projectile when launched (m/s)
     \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
     \param p_target target position: the distance from the launcher to the target (m)
@@ -63,7 +63,7 @@ void get_input(string filename, double &v_launch, double &theta, double &p_targe
 void input_constraints(double v_launch, double theta, double p_target);
 
 /** \brief Writes the output values to output.txt
-    \param s output message as a string
+    \param s output message as a string: the output message given as a string
     \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
     \param t_flight flight duration: the time when the projectile lands (s)
 */

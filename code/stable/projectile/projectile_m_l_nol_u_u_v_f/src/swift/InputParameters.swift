@@ -9,7 +9,7 @@ import Foundation
 extension String: Error {}
 
 /** Reads input from a file with the given file name
-    - Parameter filename: name of the input file
+    - Parameter filename: name of the input file: the name of the input file
     - Returns: launch speed: the initial speed of the projectile when launched (m/s)
     - Returns: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
     - Returns: target position: the distance from the launcher to the target (m)

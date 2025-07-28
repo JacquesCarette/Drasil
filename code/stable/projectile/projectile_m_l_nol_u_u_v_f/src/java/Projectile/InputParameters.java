@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class InputParameters {
     
     /** \brief Reads input from a file with the given file name
-        \param filename name of the input file
+        \param filename name of the input file: the name of the input file
         \return array containing the following values:
         \return launch speed: the initial speed of the projectile when launched (m/s)
         \return launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)

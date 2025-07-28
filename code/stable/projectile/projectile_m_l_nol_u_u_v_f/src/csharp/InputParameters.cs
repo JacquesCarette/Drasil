@@ -10,7 +10,7 @@ using System.IO;
 public class InputParameters {
     
     /** \brief Reads input from a file with the given file name
-        \param filename name of the input file
+        \param filename name of the input file: the name of the input file
         \param v_launch launch speed: the initial speed of the projectile when launched (m/s)
         \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
         \param p_target target position: the distance from the launcher to the target (m)

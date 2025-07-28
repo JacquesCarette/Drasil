@@ -8,7 +8,7 @@ import math
 ## \brief Structure for holding the input values and derived values
 class InputParameters:
     ## \brief Initializes input object by reading inputs, calculating derived values, and checking physical constraints and software constraints on the input
-    # \param filename name of the input file
+    # \param filename name of the input file: the name of the input file
     def __init__(self, filename):
         outfile = open("log.txt", "a")
         print("function InputParameters called with inputs: {", file=outfile)
@@ -22,7 +22,7 @@ class InputParameters:
         self.input_constraints()
     
     ## \brief Reads input from a file with the given file name
-    # \param filename name of the input file
+    # \param filename name of the input file: the name of the input file
     def get_input(self, filename):
         outfile = open("log.txt", "a")
         print("function get_input called with inputs: {", file=outfile)

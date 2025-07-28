@@ -1,7 +1,7 @@
 module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) where
 
 import Language.Drasil
-import Language.Drasil.Code (codeDQDs)
+import Language.Drasil.Code (codeDQDs, ODEInfo(..))
 import Drasil.Metadata (dataDefn)
 import Drasil.SRSDocument
 import qualified Drasil.DocLang.SRS as SRS (inModel)
@@ -13,7 +13,7 @@ import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Software.Products (sciCompS)
 import Data.Drasil.ExternalLibraries.ODELibraries
        (apacheODESymbols, arrayVecDepVar, odeintSymbols, osloSymbols,
-        scipyODESymbols)
+        scipyODESymbols, diffCodeChunk)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
@@ -38,9 +38,8 @@ import Drasil.PDController.Requirements (funcReqs, nonfuncReqs)
 import Drasil.PDController.SpSysDesc (goals, sysFigure, sysGoalInput, sysParts)
 import Drasil.PDController.TModel (theoreticalModels)
 import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
-  inpConstrained, pidConstants, opProcessVariable)
+  inpConstrained, pidConstants)
 import Drasil.PDController.ODEs (pidODEInfo)
-import Language.Drasil.Code (quantvar)
 
 import System.Drasil (SystemKind(Specification), mkSystem)
 
@@ -121,10 +120,14 @@ background = foldlSent_ [S "Automatic process control with a controller (P/PI/PD
               S "in a variety of applications such as thermostats, automobile",
               S "cruise-control, etc"]
 
+-- FIXME: the dependent variable of pidODEInfo (opProcessVariable) is added to symbolsAll as it is used to create new chunks with opProcessVariable's UID suffixed in ODELibraries.hs.
+-- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
 symbolsAll :: [DefinedQuantityDict]
 symbolsAll = symbols ++ map dqdWr pidConstants ++ codeDQDs
-  ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
-  ++ map dqdWr [listToArray $ quantvar opProcessVariable, arrayVecDepVar pidODEInfo]
+  ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
+  ++ map dqdWr [listToArray dp, arrayVecDepVar pidODEInfo,
+  listToArray $ diffCodeChunk dp, diffCodeChunk dp]
+  where dp = depVar pidODEInfo
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
@@ -164,7 +167,7 @@ abbreviationsList  =
   map nw acronyms ++
   -- QuantityDicts
   map nw symbolsAll
-  
+
 conceptInstances :: [ConceptInstance]
 conceptInstances = assumptions ++ goals ++ funcReqs ++ nonfuncReqs ++ likelyChgs
 

@@ -24,11 +24,11 @@ import Language.Drasil.Chunk.Unital (UnitalChunk)
 import Language.Drasil.ModelExpr.Class (ModelExprC(nthderiv, equiv))
 import Language.Drasil.Expr.Class (ExprC(..), columnVec)
 import Language.Drasil.Chunk.Constrained (ConstrConcept)
-import Language.Drasil.Chunk.Quantity (qw)
 import Language.Drasil.Literal.Class (LiteralC(exactDbl, int))
 import Data.List (find)
 import Language.Drasil.WellTyped (RequiresChecking (requiredChecks))
 import Language.Drasil.Space (Space, HasSpace (..))
+import Language.Drasil.Chunk.DefinedQuantity (dqdWr)
 
 -- | Unknown is nth order of the dependent variable 
 type Unknown = Integer
@@ -155,7 +155,7 @@ formAllUnknown unks dep ind = map (\x -> formAUnknown x dep ind) unks
 
 -- | Form a derivative for the displaying purpose
 formAUnknown :: Unknown -> ConstrConcept-> UnitalChunk -> ModelExpr
-formAUnknown unk'' dep = nthderiv (toInteger unk'') (sy (qw dep))
+formAUnknown unk'' dep = nthderiv (toInteger unk'') (sy (dqdWr dep))
 
 -- |   Create a 'DifferentialModel' by giving a independent variable, a dependent variable a canonical matrix form, and conceptChuck.
 {-

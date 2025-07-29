@@ -1,5 +1,7 @@
 module Drasil.SSP.Defs where --export all of this file
 
+import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
+
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -12,7 +14,6 @@ import Data.Drasil.Concepts.Math (surface)
 import Data.Drasil.Concepts.Physics (twoD, threeD, force, stress)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, len)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, nrmStrss,shearRes)
-import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 ----Acronyms-----
 acronyms :: [CI]
@@ -20,7 +21,7 @@ acronyms = [twoD, threeD, assumption, dataDefn, genDefn, goalStmt, inModel, like
   physSyst, requirement, refBy, refName, srs, thModel, typUnc, unlikelyChg]
 
 defs :: [IdeaDict]
-defs = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice,
+defs = [factor, soil, intrslce, layer, slip, slope, slice, morPrice,
   soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics, 
   stabAnalysis, ssa]
 

@@ -37,8 +37,8 @@ import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
   system, table_, term_, theory, typUnc, uncertainty, user, value, variable)
 import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
 import Data.Drasil.Concepts.Math (equation, parameter)
-import Data.Drasil.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
-import System.Drasil (System)
+import Drasil.Metadata (inModel, thModel, dataDefn, genDefn)
+import Drasil.System (System)
 import Drasil.DocumentLanguage.Definitions (helperRefs)
 import qualified Drasil.DocLang.SRS as SRS
 

@@ -1,7 +1,7 @@
 module Drasil.SWHS.MetaConcepts where
 
 import Language.Drasil
-import Data.Drasil.Domains (materialEng)
+import Drasil.Metadata (materialEng)
 import Drasil.SWHS.Concepts (phsChgMtrl)
 
 progName :: CI

@@ -1,20 +1,18 @@
 module Drasil.HGHC.Body (srs, si, symbMap, printSetting, fullSI) where
 
+import Drasil.System (mkSystem, SystemKind(Specification))
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.SRSDocument
+import Database.Drasil.ChunkDB (cdb)
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Drasil.HGHC.HeatTransfer (fp, dataDefs, htInputs, htOutputs, 
+import Drasil.HGHC.HeatTransfer (fp, dataDefs, htInputs, htOutputs,
     nuclearPhys, symbols)
 import Drasil.HGHC.MetaConcepts (progName)
 
-import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.People (spencerSmith)
-import Data.Drasil.Concepts.Documentation (doccon, doccon')
-import Data.Drasil.Concepts.Math (mathcon)
-import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans)  
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-  
+import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans)
+
 srs :: Document
 srs = mkDoc mkSRS S.forT si
 
@@ -25,26 +23,15 @@ printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
 si :: System
-si = SI {
-  _sys         = progName,
-  _kind        = Doc.srs,
-  _authors     = [spencerSmith],
-  _quants      = symbols,
-  _purpose     = [purp],
-  _background  = [],
-  _motivation  = [],
-  _scope       = [],
-  _instModels  = [], -- FIXME; empty _instModels
-  _datadefs    = dataDefs,
-  _configFiles = [],
-  _inputs      = htInputs,
-  _outputs     = htOutputs,
-  _constraints = [] :: [ConstrainedChunk],
-  _constants   = [],
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
-}
-  
+si = mkSystem
+  progName Specification [spencerSmith]
+  [purp] [] [] []
+  symbols
+  [] [] dataDefs [] []
+  htInputs htOutputs ([] :: [ConstrConcept]) []
+  symbMap
+
+
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
     RefSec $
@@ -64,20 +51,10 @@ purp = foldlSent [S "describe", phrase CT.heatTrans, S "coefficients related to 
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- Actual IdeaDicts
-  [fp, nuclearPhys] ++ doccon ++
+  [fp, nuclearPhys] ++
   -- CIs
-  nw progName : map nw doccon'
+  [nw progName]
 
 symbMap :: ChunkDB
-symbMap = cdb symbols ideaDicts mathcon
-  siUnits dataDefs [] [] [] [] [] [] []
-
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
-tableOfAbbrvsIdeaDicts =
-  -- QuantityDicts
-  map nw symbols
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
-           ([] :: [ConceptChunk]) ([] :: [UnitDefn])
-           [] [] [] [] [] [] ([] :: [Reference]) []
+symbMap = cdb symbols ideaDicts ([] :: [ConceptChunk])
+  ([] :: [UnitDefn]) dataDefs [] [] [] [] [] [] []

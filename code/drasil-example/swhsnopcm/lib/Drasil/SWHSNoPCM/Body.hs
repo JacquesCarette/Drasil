@@ -1,7 +1,9 @@
 module Drasil.SWHSNoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI) where
 
 import Language.Drasil hiding (section)
+import Drasil.Metadata (inModel)
 import Drasil.SRSDocument
+import Database.Drasil.ChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Theory.Drasil (TheoryModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -12,12 +14,8 @@ import Language.Drasil.Code (quantvar)
 import Data.List ((\\))
 import Data.Drasil.People (thulasi)
 
-import Data.Drasil.Concepts.Computation (algorithm, inValue)
-import Data.Drasil.Concepts.Documentation as Doc (doccon, doccon', material_, srsDomains, sysCont)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.TheoryConcepts as Doc (inModel)
-import Data.Drasil.Concepts.Education (educon)
-import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
+import Data.Drasil.Concepts.Documentation as Doc (material_, sysCont)
+import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.Software (softwarecon)
@@ -33,8 +31,6 @@ import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
   uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy)
-import Data.Drasil.Software.Products (prodtcon)
-import Data.Drasil.SI_Units (siUnits)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -67,6 +63,8 @@ import Drasil.SWHSNoPCM.References (citations)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
   specParamValList)
 
+import Drasil.System (SystemKind(Specification), mkSystem)
+
 srs :: Document
 srs = mkDoc mkSRS S.forT si
 
@@ -81,24 +79,24 @@ resourcePath = "../../../../datafiles/swhsnopcm/"
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
-symbols = pi_ : map dqdWr concepts ++ map dqdWr constrained
+symbols = map dqdWr concepts ++ map dqdWr constrained
  ++ map dqdWr [tempW, watE]
- ++ [gradient, uNormalVect] ++ [dqdWr surface]
 
-symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
+symbolsAll :: [DefinedQuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
                                --FOUND LOC OF ERROR: Instance Models
-symbolsAll = map qw symbols ++ map qw specParamValList ++
-  map qw [absTol, relTol] ++
-  scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
-  ++ map qw [listToArray $ quantvar tempW, arrayVecDepVar noPCMODEInfo]
+symbolsAll = [gradient, pi_, uNormalVect, dqdWr surface] ++ symbols ++
+  map dqdWr symbolConcepts ++ map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++
+  scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols ++
+  map dqdWr [listToArray $ quantvar tempW, arrayVecDepVar noPCMODEInfo]
 
 concepts :: [UnitalChunk]
-concepts = map ucw [density, tau, inSA, outSA,
-  htCapL, QT.htFlux, htFluxIn, htFluxOut, volHtGen,
-  htTransCoeff, mass, tankVol, QT.temp, QT.heatCapSpec,
-  deltaT, tempEnv, thFluxVect, time, htFluxC,
-  vol, wMass, wVol, tauW, QT.sensHeat]
+concepts = map ucw [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
+  htTransCoeff, tankVol, deltaT, tempEnv, thFluxVect, htFluxC, wMass, wVol, tauW]
+
+symbolConcepts :: [UnitalChunk]
+symbolConcepts = map ucw [density, QT.htFlux, QT.heatCapSpec, mass, QT.sensHeat,
+  QT.temp, time, vol]
 
 -------------------
 --INPUT INFORMATION
@@ -113,7 +111,7 @@ mkSRS = [TableOfContents,
   RefSec $ RefProg intro
   [TUnits,
   tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder, VectorUnits],
-  TAandA],
+  TAandA abbreviationsList],
   IntroSec $
     IntroProg (introStart +:+ introStartNoPCM) (introEnd (plural progName) progName)
     [ IPurpose $ purpDoc progName Verbose
@@ -161,28 +159,18 @@ stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 si :: System
-si = SI {
-  _sys         = srsSWHS,
-  _kind        = Doc.srs,
-  _authors     = [thulasi],
-  _purpose     = [purp],
-  _background  = [introStartNoPCM],
-  _motivation  = [motivation],
-  _scope       = [scope],
+si = mkSystem
+  srsSWHS Specification [thulasi]
+  [purp] [introStartNoPCM] [scope] [motivation]
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but 
   -- tau does not appear in the document and thus should not be displayed.
-  _quants      = (map qw unconstrained ++ map qw symbolsAll) \\ [qw tau],
-  _instModels  = NoPCM.iMods,
-  _datadefs    = NoPCM.dataDefs,
-  _configFiles = [],
-  _inputs      = inputs ++ [qw watE], --inputs ++ outputs?
-  _outputs     = map qw [tempW, watE],     --outputs
-  _constraints = map cnstrw constrained ++ map cnstrw [tempW, watE], --constrained
-  _constants   = piConst : specParamValList,
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
-}
+  ((map dqdWr unconstrained ++ symbolsAll) \\ [dqdWr tau])
+  tMods genDefs NoPCM.dataDefs NoPCM.iMods
+  []
+  (inputs ++ [dqdWr watE]) [tempW, watE]
+  (map cnstrw' constrained ++ map cnstrw' [tempW, watE]) (piConst : specParamValList)
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWHT)]
@@ -190,33 +178,29 @@ purp = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWH
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- Actual IdeaDicts
-  [inValue, htTrans, materialProprty] ++ prodtcon ++ doccon ++ educon ++
+  [htTrans, materialProprty] ++
   -- CIs
-  map nw [srsSWHS, progName, phsChgMtrl] ++ map nw doccon' ++
+  map nw [srsSWHS, progName, phsChgMtrl] ++
   map nw physicCon' ++ map nw mathcon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  algorithm : softwarecon ++ thermocon ++ con ++ physicCon ++ mathcon ++
-  physicalcon ++ srsDomains ++
+  softwarecon ++ thermocon ++ con ++ physicCon ++
+  physicalcon ++
   -- DefinedQuantityDicts
   map cw symbols
 
 symbMap :: ChunkDB
-symbMap = cdb symbolsAll ideaDicts conceptChunks siUnits NoPCM.dataDefs
+symbMap = cdb symbolsAll ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
   NoPCM.iMods genDefs tMods concIns [] allRefs citations
 
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
-tableOfAbbrvsIdeaDicts =
+abbreviationsList :: [IdeaDict]
+abbreviationsList =
   -- CIs
   nw progName : map nw acronyms ++
   -- DefinedQuantityDicts
   map nw symbols
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

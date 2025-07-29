@@ -47,7 +47,7 @@ data MultiDefn e = MultiDefn{
   -- | UID
   _rUid :: UID,
   -- | Underlying quantity it defines.
-  _qd :: QuantityDict,
+  _qd :: DefinedQuantityDict,
   -- | Explanation of the different ways we can define a quantity.
   _rDesc :: Sentence,
   -- | All possible ways we can define the related quantity.
@@ -78,7 +78,7 @@ instance Express e => Express (MultiDefn e) where
 
 -- | Smart constructor for MultiDefns, does nothing special at the moment. First
 -- argument is the 'String' to become a 'UID'.
-mkMultiDefn :: String -> QuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
+mkMultiDefn :: String -> DefinedQuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
 mkMultiDefn u q s des
   | length des == dupsRemovedLen = MultiDefn (mkUid u) q s des
   | otherwise                    = error $
@@ -88,8 +88,8 @@ mkMultiDefn u q s des
 
 -- Should showUID be used here?
 
--- | Smart constructor for 'MultiDefn's defining 'UID's using that of the 'QuantityDict'.
-mkMultiDefnForQuant :: QuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
+-- | Smart constructor for 'MultiDefn's defining 'UID's using that of the 'DefinedQuantityDict'.
+mkMultiDefnForQuant :: DefinedQuantityDict -> Sentence -> NE.NonEmpty (DefiningExpr e) -> MultiDefn e
 mkMultiDefnForQuant q = mkMultiDefn (showUID q) q
 
 -- | Smart constructor for 'DefiningExpr's.

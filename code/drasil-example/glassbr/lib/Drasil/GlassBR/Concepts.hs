@@ -6,7 +6,7 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, likelyChg,
   notApp, physSyst, response, requirement, refBy, refName, srs, type_, typUnc, 
   unlikelyChg)
-import Data.Drasil.TheoryConcepts (dataDefn, inModel, thModel)
+import Drasil.Metadata (dataDefn, inModel, thModel)
 
 {--}
 idglass :: IdeaDict
@@ -14,7 +14,7 @@ idglass      = mkIdea  "glass"          (cn' "Glass")                 Nothing
 
 {--}
 con :: [CI]
-con = [annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
+con = [annealed, aR, fullyT, glassTypeFac, heatS, lDurFac, iGlass, lGlass, 
   lResistance, lShareFac, stdOffDist, nFL]
 
 con' :: [IdeaDict]
@@ -24,11 +24,11 @@ con' = [beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
 {-Acronyms-}
 acronyms :: [CI]
 acronyms = [assumption, annealed, aR, dataDefn, fullyT, goalStmt, 
-  glassTypeFac, heatS, iGlass, inModel, likelyChg, loadDurFactor, 
+  glassTypeFac, heatS, iGlass, inModel, likelyChg, lDurFac, 
   lGlass, lResistance, lShareFac, notApp, nFL, physSyst, requirement, 
   refBy, refName, stdOffDist, srs, thModel, typUnc, unlikelyChg]
 
-annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
+annealed, aR, fullyT, glassTypeFac, heatS, lDurFac, iGlass, lGlass, 
   lResistance, lShareFac, stdOffDist, nFL :: CI
 
 --FIXME: Add compound nounphrases
@@ -43,7 +43,7 @@ lGlass        = commonIdeaWithDict "lGlass"        (nounPhraseSP "laminated glas
 lResistance   = commonIdeaWithDict "lResistance"   (nounPhraseSP "load resistance")         "LR"       [idglass]
 lShareFac     = commonIdeaWithDict "lShareFac"     (nounPhraseSP "load share factor")       "LSF"      [idglass]
 stdOffDist    = commonIdeaWithDict "stdOffDist"    (nounPhraseSP "stand off distance")      "SD"       [idglass]
-loadDurFactor = commonIdeaWithDict "loadDurFactor" (nounPhraseSP "load duration factor")    "LDF"      [idglass]
+lDurFac       = commonIdeaWithDict "loadDurFactor" (nounPhraseSP "load duration factor")    "LDF"      [idglass]
 nFL           = commonIdeaWithDict "nFL"           (nounPhraseSP "non-factored load")       "NFL"      [idglass]
 
 {-Terminology-}

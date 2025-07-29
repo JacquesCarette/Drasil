@@ -1,25 +1,26 @@
 module Drasil.Projectile.Body (printSetting, si, srs, fullSI) where
 
+import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
 import Language.Drasil
 import Drasil.SRSDocument
+import Database.Drasil.ChunkDB (cdb)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
 
-import Data.Drasil.Concepts.Computation (algorithm, inDatum, compcon)
-import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
-  problem, srsDomains, assumption, goalStmt, physSyst, sysCont, software, user,
+import Data.Drasil.Concepts.Computation (inDatum)
+import Data.Drasil.Concepts.Documentation (analysis, physics,
+  problem, assumption, goalStmt, physSyst, sysCont, software, user,
   requirement, refBy, refName, typUnc, example, softwareSys, system, environment, 
   product_, interface, condition, physical, datum, input_, softwareConstraint, 
   output_, endUser)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
-import Data.Drasil.Concepts.Math (cartesian, mathcon)
+import Data.Drasil.Concepts.Math (cartesian)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon',
   rectilinear, oneD, twoD, motion)
-import Data.Drasil.Concepts.Software (errMsg, program)
-import Data.Drasil.Software.Products (sciCompS)
+import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.Quantities.Math (pi_, piConst)
 import Data.Drasil.Quantities.Physics (acceleration, constAccel,
@@ -28,10 +29,8 @@ import Data.Drasil.Quantities.Physics (acceleration, constAccel,
   xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel, constAccelV)
 
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
-import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
-import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
-import Data.Drasil.Concepts.Education(calculus, educon, undergraduate, 
+import Data.Drasil.Concepts.Education(calculus, undergraduate, 
   highSchoolPhysics, highSchoolCalculus)
 
 import Drasil.Projectile.Assumptions (assumptions)
@@ -48,6 +47,8 @@ import Drasil.Projectile.Unitals
 
 import Theory.Drasil (TheoryModel)
 
+import Drasil.System (SystemKind(Specification))
+
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
@@ -63,7 +64,7 @@ mkSRS = [TableOfContents,
     RefProg intro
       [ TUnits
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits]
-      , TAandA
+      , TAandA abbreviationsList 
       ],
   IntroSec $
     IntroProg justification (phrase progName)
@@ -119,7 +120,7 @@ scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)),
 
 externalLinkRef :: Reference
 externalLinkRef = makeURI "projectileSRSLink" 
-  "https://github.com/smiths/caseStudies/tree/master/CaseStudies/projectile" 
+  "https://github.com/smiths/caseStudies/tree/master/CaseStudies/projectile"
   (shortname' $ S "projectileSRSLink")
 
 projectileExamples :: [Sentence]
@@ -130,23 +131,24 @@ projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles"
 
 si :: System
 si = SI {
-  _sys         = progName,
-  _kind        = Doc.srs,
-  _authors     = [samCrawford, brooks, spencerSmith],
-  _purpose     = [purp],
-  _background  = [background],
-  _motivation  = [motivation],
-  _scope       = [scope],
-  _quants      = symbols,
-  _instModels  = iMods,
-  _datadefs    = dataDefs,
-  _configFiles = [],
-  _inputs      = inputs,
-  _outputs     = outputs,
-  _constraints = map cnstrw constrained,
-  _constants   = constants,
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
+  _sys          = progName,
+  _kind         = Specification,
+  _authors      = [samCrawford, brooks, spencerSmith],
+  _purpose      = [purp],
+  _background   = [background],
+  _motivation   = [motivation],
+  _scope        = [scope],
+  _quants       = symbols,
+  _theoryModels = tMods,
+  _genDefns     = genDefns,
+  _instModels   = iMods,
+  _dataDefns    = dataDefs,
+  _configFiles  = [],
+  _inputs       = inputs,
+  _outputs      = outputs,
+  _constraints  = map cnstrw' constrained,
+  _constants    = constants,
+  _systemdb     = symbMap
 }
 
 purp :: Sentence
@@ -167,35 +169,31 @@ tMods = [accelerationTM, velocityTM]
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- Actual IdeaDicts
-  [sciCompS, projMotion, rectVel] ++ doccon ++ educon ++ compcon ++ unitalIdeas ++
+  [projMotion, rectVel] ++
   -- CIs
-  nw progName : map nw doccon' ++ map nw physicCon'
+  nw progName : map nw physicCon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  [mass, errMsg, program, algorithm] ++ physicCon ++ mathcon ++ defs ++ srsDomains ++
+  [mass] ++ physicCon ++ defs ++
   -- ConstrConcepts
   map cw constrained
 
 symbMap :: ChunkDB
-symbMap = cdb (qw pi_ : symbols) ideaDicts conceptChunks siUnits
+symbMap = cdb (pi_ : symbols) ideaDicts conceptChunks ([] :: [UnitDefn])
   dataDefs iMods genDefns tMods concIns [] allRefs citations
 
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
-tableOfAbbrvsIdeaDicts =
+abbreviationsList  :: [IdeaDict]
+abbreviationsList  =
   -- CIs
   map nw acronyms ++
-  -- QuantityDicts
+  -- DefinedQuantityDicts
   map nw symbols
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = [externalLinkRef]
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
-  (cw pi_ : srsDomains) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -291,9 +289,9 @@ physSystParts = map (!.)
 ----------------------------------------------------
 -- Various gathered data that should be automated --
 ----------------------------------------------------
-symbols :: [QuantityDict]
-symbols = unitalQuants ++ map qw [gravitationalAccelConst, tol] ++
-  map qw [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
+symbols :: [DefinedQuantityDict]
+symbols = unitalQuants ++ map dqdWr [gravitationalAccelConst, tol] ++
+  map dqdWr [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
   iyPos, ixVel, iyVel, position, scalarPos, projPos, projSpeed, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel,
   constAccelV]
@@ -301,17 +299,14 @@ symbols = unitalQuants ++ map qw [gravitationalAccelConst, tol] ++
 constants :: [ConstQDef]
 constants = [gravitationalAccelConst, piConst, tol]
 
-inputs :: [QuantityDict]
-inputs = map qw [launSpeed, launAngle, targPos]
+inputs :: [DefinedQuantityDict]
+inputs = map dqdWr [launSpeed, launAngle, targPos]
 
-outputs :: [QuantityDict]
-outputs = [message, qw offset, qw flightDur]
+outputs :: [DefinedQuantityDict]
+outputs = [message, dqdWr offset, dqdWr flightDur]
 
-unitalQuants :: [QuantityDict]
-unitalQuants = message : map qw constrained
-
-unitalIdeas :: [IdeaDict]
-unitalIdeas = nw message : map nw constrained
+unitalQuants :: [DefinedQuantityDict]
+unitalQuants = message : map dqdWr constrained
 
 inConstraints :: [UncertQ]
 inConstraints = [launAngleUnc, launSpeedUnc, targPosUnc]

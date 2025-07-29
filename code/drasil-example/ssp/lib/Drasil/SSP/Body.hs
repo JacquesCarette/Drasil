@@ -1,28 +1,29 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.Body (srs, si, symbMap, printSetting, fullSI) where
 
+import Prelude hiding (sin, cos, tan)
+
 import Control.Lens ((^.))
 
+import Drasil.System (SystemKind(Specification), mkSystem)
 import Language.Drasil hiding (Verb, number, organization, section, variable)
 import Drasil.SRSDocument
+import Database.Drasil.ChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
 import Theory.Drasil (output)
+import Drasil.Metadata (inModel)
 
-import Prelude hiding (sin, cos, tan)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, effect, endUser, environment, input_, interest, loss, method_,
-  physical, physics, problem, software, softwareSys, srsDomains, symbol_,
-  sysCont, system, type_, user, value, variable, doccon, doccon',
-  datumConstraint)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.TheoryConcepts as Doc (inModel)
-import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
-import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
+  physical, physics, problem, software, softwareSys, symbol_,
+  sysCont, system, type_, user, value, variable, datumConstraint)
+import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
+import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon',
   number)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
 import Data.Drasil.Concepts.Physics (cohesion, fbd, force, gravity, isotropy,
@@ -30,12 +31,10 @@ import Data.Drasil.Concepts.Physics (cohesion, fbd, force, gravity, isotropy,
 import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce, 
   shearRes, solidcon)
-import Data.Drasil.Concepts.Computation (compcon, algorithm)
-import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Theories.Physics (weightSrc, hsPressureSrc)
 
 import Data.Drasil.People (brooks, henryFrankis)
-import Data.Drasil.SI_Units (degree, siUnits)
+import Data.Drasil.SI_Units (degree)
 
 import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, unlikelyChgs)
@@ -68,30 +67,19 @@ resourcePath :: String
 resourcePath = "../../../../datafiles/ssp/"
 
 si :: System
-si = SI {
-  _sys         = progName, 
-  _kind        = Doc.srs, 
-  _authors     = [henryFrankis, brooks],
-  _purpose     = [purp],
-  _background  = [],
-  _motivation  = [],
-  _scope       = [],
-  _quants      = symbols,
-  _instModels  = iMods,
-  _datadefs    = dataDefs,
-  _configFiles = [],
-  _inputs      = map qw inputs,
-  _outputs     = map qw outputs,
-  _constraints = constrained,
-  _constants   = [],
-  _systemdb   = symbMap,
-  _usedinfodb  = usedDB
-}
+si = mkSystem
+  progName Specification [henryFrankis, brooks]
+  [purp] [] [] []
+  symbols
+  tMods generalDefinitions dataDefs iMods
+  []
+  inputs outputs constrained []
+  symbMap
   
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro
-  [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA],
+  [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA abbreviationsList],
   IntroSec $ IntroProg startIntro kSent
     [ IPurpose $ purpDoc progName Verbose
     , IScope scope
@@ -150,37 +138,31 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 ideaDicts :: [IdeaDict]
 ideaDicts = 
   -- Actual IdeaDicts
-  doccon ++ prodtcon ++ defs ++ educon ++ compcon ++
+  defs ++
   -- CIs
-  nw progName : map nw mathcon' ++ map nw doccon' ++ map nw physicCon'
+  nw progName : map nw mathcon' ++ map nw physicCon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  algorithm : defs' ++ softwarecon ++ physicCon ++ mathcon ++ 
-  solidcon ++ physicalcon ++ srsDomains ++
-  -- InstanceModels
-  map cw iMods ++
+  defs' ++ softwarecon ++ physicCon ++ 
+  solidcon ++ physicalcon ++
   -- DefinedQuantityDicts
   map cw symbols
 
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ map qw symbols) ideaDicts conceptChunks
-  (degree : siUnits) dataDefs iMods generalDefinitions tMods concIns labCon allRefs citations
+symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks
+  [degree] dataDefs iMods generalDefinitions tMods concIns labCon allRefs citations
 
-tableOfAbbrvsIdeaDicts :: [IdeaDict]
-tableOfAbbrvsIdeaDicts =
+abbreviationsList :: [IdeaDict]
+abbreviationsList =
   -- CIs
   map nw acronyms ++
   -- ConceptChunks
   nw progName :
   -- DefinedQuantityDicts
   map nw symbols
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) tableOfAbbrvsIdeaDicts
-  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] ([] :: [Reference]) []
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

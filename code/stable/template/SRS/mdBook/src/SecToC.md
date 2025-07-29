@@ -6,7 +6,6 @@ An outline of all sections included in this SRS is recorded here for easy refere
 - [Reference Material](./SecRefMat.md#Sec:RefMat)
   - [Table of Units](./SecToU.md#Sec:ToU)
   - [Table of Symbols](./SecToS.md#Sec:ToS)
-  - [Abbreviations and Acronyms](./SecTAbbAcc.md#Sec:TAbbAcc)
 - [Introduction](./SecIntro.md#Sec:Intro)
   - [Purpose of Document](./SecDocPurpose.md#Sec:DocPurpose)
   - [Scope of Requirements](./SecReqsScope.md#Sec:ReqsScope)

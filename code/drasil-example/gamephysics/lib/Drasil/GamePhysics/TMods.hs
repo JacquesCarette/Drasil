@@ -28,7 +28,7 @@ tMods = [newtonSL, newtonTL, newtonLUG, newtonSLR]
 -- T2 : Newton's third law of motion --
 
 newtonTL :: TheoryModel
-newtonTL = tmNoRefs (equationalModel' newtonTLQD) [qw force_1, qw force_2]
+newtonTL = tmNoRefs (equationalModel' newtonTLQD) [dqdWr force_1, dqdWr force_2]
   ([] :: [ConceptChunk]) [newtonTLQD] [] [] "NewtonThirdLawMot" [newtonTLNote]
 
 newtonTLQD :: ModelQDef
@@ -54,12 +54,13 @@ newtonLUGModel = equationalRealm' $ mkMultiDefnForQuant newtonForceQuant EmptyS 
 
 newtonLUG :: TheoryModel
 newtonLUG = tmNoRefs newtonLUGModel
-  [qw force, qw gravitationalConst, qw mass_1, qw mass_2,
-  qw dispNorm, qw dVect, qw distMass] ([] :: [ConceptChunk])
+  [dqdWr force, dqdWr gravitationalConst, dqdWr mass_1, dqdWr mass_2,
+  dqdWr dispNorm, dqdWr dVect, dqdWr distMass] ([] :: [ConceptChunk])
   [] [express newtonLUGModel] [] "UniversalGravLaw" newtonLUGNotes
 
-newtonForceQuant :: QuantityDict
-newtonForceQuant = mkQuant' "force" (nounPhraseSP "Newton's law of universal gravitation") Nothing Real (symbol force) Nothing
+newtonForceQuant :: DefinedQuantityDict
+newtonForceQuant = dqd' (dccA "force" (nounPhraseSP "Newton's law of universal gravitation")
+                    "the gravitational force between two masses" Nothing) (symbol force) Real Nothing
 
 -- Can't include fractions within a sentence (in the part where 'r denotes the
 -- unit displacement vector, equivalent to r/||r||' (line 184)). Changed to a
@@ -79,7 +80,7 @@ newtonLUGNotes = [foldlSent
 
 newtonSLR :: TheoryModel
 newtonSLR = tmNoRefs (equationalModelU "newtonSLR" newtonSLRQD)
-  [qw torque, qw momentOfInertia, qw angularAccel]
+  [dqdWr torque, dqdWr momentOfInertia, dqdWr angularAccel]
   ([] :: [ConceptChunk]) [newtonSLRQD] [] [] "NewtonSecLawRotMot" newtonSLRNotes
 
 newtonSLRQD :: ModelQDef

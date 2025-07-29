@@ -2,7 +2,7 @@
 module Language.Drasil.Printing.Import.Sentence where
 
 import Language.Drasil hiding (neg, sec, symbol, isIn)
-import Database.Drasil (ChunkDB, defResolve, refResolve, refTable)
+import Database.Drasil (ChunkDB, refResolve, refTable, termResolve', TermAbbr (shortForm))
 
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation
@@ -63,7 +63,7 @@ spec sm (E e)              = P.E $ modelExpr e sm
 -- | Renders the shortname of a reference/domain.
 renderShortName :: ChunkDB -> IRefProg -> ShortName -> Sentence
 renderShortName ctx (Deferred u) _ = S $ fromMaybe (error "Domain has no abbreviation.") $
-  getA $ defResolve ctx u --Need defResolve instead of refResolve since only ConceptInstance
+  shortForm $ termResolve' ctx u --Need defResolve instead of refResolve since only ConceptInstance
   -- uses this case for domains and we want the short name from there. 
   -- Used to be: S $ getRefAdd $ refResolve u (ctx ^. refTable)
 renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortName ctx b sn

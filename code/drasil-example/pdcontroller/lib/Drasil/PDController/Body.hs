@@ -38,7 +38,7 @@ import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
 import Drasil.PDController.ODEs (pidODEInfo)
 import Language.Drasil.Code (quantvar)
 
-import System.Drasil (SystemKind(RunnableSoftware), mkSystem)
+import Drasil.System (SystemKind(RunnableSoftware), mkSystem)
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"

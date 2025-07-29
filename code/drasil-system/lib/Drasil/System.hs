@@ -5,7 +5,7 @@
 -- in Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
 
-module System.Drasil.System (
+module Drasil.System (
   -- * System
   -- ** Types
   System(..), SystemKind(..),
@@ -15,7 +15,7 @@ module System.Drasil.System (
   whatsTheBigIdea, mkSystem,
   -- * Reference Database
   -- ** Types
-  Purpose, Background, Scope, Motivation,
+  Purpose, Background, Scope, Motivation
   ) where
 
 import Language.Drasil hiding (kind, Notebook)

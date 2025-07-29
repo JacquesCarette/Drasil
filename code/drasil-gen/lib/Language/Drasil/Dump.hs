@@ -2,7 +2,7 @@
 module Language.Drasil.Dump where
 
 import qualified Database.Drasil as DB
-import System.Drasil (System, systemdb)
+import Drasil.System (System, systemdb)
 
 import System.IO
 import Data.Aeson (ToJSON)

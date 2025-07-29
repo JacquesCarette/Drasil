@@ -47,7 +47,7 @@ import Drasil.Projectile.Unitals
 
 import Theory.Drasil (TheoryModel)
 
-import System.Drasil (SystemKind(RunnableSoftware))
+import Drasil.System (SystemKind(RunnableSoftware))
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si

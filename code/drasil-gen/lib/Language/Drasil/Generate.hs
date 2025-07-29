@@ -22,7 +22,7 @@ import Data.Time.Calendar (showGregorian)
 import Build.Drasil (genMake)
 import Language.Drasil
 import Drasil.DocLang (mkGraphInfo)
-import System.Drasil (System)
+import Drasil.System (System)
 import Language.Drasil.Printers (DocType(SRS, Website, Lesson), makeCSS, genHTML, 
   genTeX, Format(TeX, HTML, Jupyter, MDBook), genJupyter, genMDBook, 
   PrintingInformation, outputDot, makeBook, makeRequirements)

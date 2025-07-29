@@ -5,7 +5,7 @@ import Prelude hiding (sin, cos, tan)
 
 import Control.Lens ((^.))
 
-import System.Drasil (SystemKind(Specification), mkSystem)
+import Drasil.System (SystemKind(Specification), mkSystem)
 import Language.Drasil hiding (Verb, number, organization, section, variable)
 import Drasil.SRSDocument
 import Database.Drasil.ChunkDB (cdb)

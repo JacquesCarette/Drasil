@@ -52,7 +52,7 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
   simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM,
   tempW, thickness, watE)
 
-import System.Drasil (SystemKind(Specification), mkSystem)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 -------------------------------------------------------------------------------
 

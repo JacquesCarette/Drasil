@@ -17,7 +17,7 @@ import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
 import Drasil.Sections.Requirements (fullReqs, fullTables)
 
 import Database.Drasil
-import System.Drasil
+import Drasil.System
 import Language.Drasil hiding (sec)
 
 import Data.Drasil.Concepts.Documentation (assumpDom, funcReqDom, goalStmtDom,

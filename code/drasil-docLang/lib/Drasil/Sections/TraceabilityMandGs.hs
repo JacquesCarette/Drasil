@@ -18,7 +18,7 @@ import Data.Drasil.Concepts.Documentation (assumption, assumpDom, chgProbDom,
   unlikelyChg)
 import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
 import Database.Drasil
-import System.Drasil
+import Drasil.System
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators as NC
 import Language.Drasil.Sentence.Combinators as S

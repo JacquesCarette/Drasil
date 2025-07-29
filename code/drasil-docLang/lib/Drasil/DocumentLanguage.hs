@@ -27,7 +27,7 @@ import Database.Drasil (ChunkDB, collectUnits, refbyTable, conceptinsTable,
   idMap, conceptinsTable, traceTable, generateRefbyMap, refTable, labelledcontentTable, 
   theoryModelTable, insmodelTable, gendefTable, dataDefnTable)
 
-import System.Drasil
+import Drasil.System
 import Drasil.GetChunks (ccss, ccss', citeDB)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)

@@ -5,7 +5,7 @@
 
 module Drasil.Template.Body where
 
-import System.Drasil (SystemKind(Specification), mkSystem)
+import Drasil.System (SystemKind(Specification), mkSystem)
 import Drasil.Metadata
 import Language.Drasil
 import Drasil.SRSDocument

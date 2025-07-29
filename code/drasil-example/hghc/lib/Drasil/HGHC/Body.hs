@@ -1,6 +1,6 @@
 module Drasil.HGHC.Body (srs, si, symbMap, printSetting, fullSI) where
 
-import System.Drasil (mkSystem, SystemKind(Specification))
+import Drasil.System (mkSystem, SystemKind(Specification))
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.SRSDocument
 import Database.Drasil.ChunkDB (cdb)

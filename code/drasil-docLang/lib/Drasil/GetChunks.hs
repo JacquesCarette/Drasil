@@ -9,7 +9,7 @@ import Language.Drasil.ModelExpr.Development (meDep)
 import Database.Drasil (ChunkDB, defResolve', symbResolve,
   citationTable, DomDefn(definition))
 
-import System.Drasil (System, systemdb)
+import Drasil.System (System, systemdb)
 
 import Control.Lens ((^.))
 import Data.List (nub, sortBy)

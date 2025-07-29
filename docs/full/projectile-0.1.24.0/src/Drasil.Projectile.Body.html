@@ -47,7 +47,7 @@
 </span><span id="line-47"></span><span>
 </span><span id="line-48"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">TheoryModel</span></span><span class="hs-special">)</span><span>
 </span><span id="line-49"></span><span>
-</span><span id="line-50"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">SystemKind</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Specification</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-50"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.System</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">SystemKind</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Specification</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-51"></span><span>
 </span><span id="line-52"></span><span class="annot"><a href="Drasil.Projectile.Body.html#srs"><span class="hs-identifier hs-type">srs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Document</span></span><span>
 </span><span id="line-53"></span><span id="srs"><span class="annot"><span class="annottext">srs :: Document
@@ -985,9 +985,9 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span id="line-248"></span><span id="sysCtxResp"><span class="annot"><span class="annottext">sysCtxResp :: [Sentence]
 </span><a href="Drasil.Projectile.Body.html#sysCtxResp"><span class="hs-identifier hs-var hs-var">sysCtxResp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Sentence) -&gt; [Sentence] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679073495"><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679073495"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679073495"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679073490"><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679073490"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679073490"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Responsibilities&quot;</span></span><span class="hs-special">)</span><span> </span><span>

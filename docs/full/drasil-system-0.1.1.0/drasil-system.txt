@@ -12,7 +12,7 @@
 
 -- | Define types and functions related to creating a system information
 --   database.
-module System.Drasil.System
+module Drasil.System
 
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
@@ -53,46 +53,4 @@ type Scope = [Sentence]
 
 -- | Project Example motivation.
 type Motivation = [Sentence]
-instance System.Drasil.System.HasSystem System.Drasil.System.System
-
-module System.Drasil
-
--- | Data structure for holding all of the requisite information about a
---   system to be used in artifact generation.
-data System
-[SI] :: (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Concept e, Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
-data SystemKind
-Specification :: SystemKind
-RunnableSoftware :: SystemKind
-Notebook :: SystemKind
-Website :: SystemKind
-class HasSystem c_a8Yh
-system :: HasSystem c_a8Yh => Lens' c_a8Yh System
-authors :: HasSystem c_a8Yh => Lens' c_a8Yh People
-background :: HasSystem c_a8Yh => Lens' c_a8Yh Background
-configFiles :: HasSystem c_a8Yh => Lens' c_a8Yh [String]
-constants :: HasSystem c_a8Yh => Lens' c_a8Yh [ConstQDef]
-dataDefns :: HasSystem c_a8Yh => Lens' c_a8Yh [DataDefinition]
-genDefns :: HasSystem c_a8Yh => Lens' c_a8Yh [GenDefn]
-instModels :: HasSystem c_a8Yh => Lens' c_a8Yh [InstanceModel]
-kind :: HasSystem c_a8Yh => Lens' c_a8Yh SystemKind
-motivation :: HasSystem c_a8Yh => Lens' c_a8Yh Motivation
-purpose :: HasSystem c_a8Yh => Lens' c_a8Yh Purpose
-scope :: HasSystem c_a8Yh => Lens' c_a8Yh Scope
-systemdb :: HasSystem c_a8Yh => Lens' c_a8Yh ChunkDB
-theoryModels :: HasSystem c_a8Yh => Lens' c_a8Yh [TheoryModel]
-whatsTheBigIdea :: System -> IdeaDict
-mkSystem :: (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Concept e, Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
-
--- | Project Example purpose.
-type Purpose = [Sentence]
-
--- | Project Example background information, used in the <tt>What</tt>
---   section of README.
-type Background = [Sentence]
-
--- | Project Example scope.
-type Scope = [Sentence]
-
--- | Project Example motivation.
-type Motivation = [Sentence]
+instance Drasil.System.HasSystem Drasil.System.System

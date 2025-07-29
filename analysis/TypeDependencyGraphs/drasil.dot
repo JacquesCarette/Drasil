@@ -4445,8 +4445,6 @@ digraph alltypes {
 		Motivation -> Sentence;
 		}
 	}
-	subgraph drails {
-	}
 	subgraph clasess {
 	}
 	subgraph contraintsets {

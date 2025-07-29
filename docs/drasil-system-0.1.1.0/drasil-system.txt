@@ -9,7 +9,10 @@
 @package drasil-system
 @version 0.1.1.0
 
-module System.Drasil
+
+-- | Define types and functions related to creating a system information
+--   database.
+module Drasil.System
 
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
@@ -50,3 +53,4 @@ type Scope = [Sentence]
 
 -- | Project Example motivation.
 type Motivation = [Sentence]
+instance Drasil.System.HasSystem Drasil.System.System

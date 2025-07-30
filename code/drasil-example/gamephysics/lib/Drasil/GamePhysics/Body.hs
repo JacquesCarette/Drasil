@@ -26,6 +26,7 @@ import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon,
   physicCon', rigidBody, collision, damping)
 import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
   mathcon, mathcon', rightHand, line, point)
+import Data.Drasil.Quantities.Math (mathquants, mathunitals)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
@@ -134,7 +135,9 @@ conceptChunks =
   -- ConceptChunks
   algorithm : softwarecon ++ CP.physicCon ++ CM.mathcon ++ srsDomains ++
   -- DefinedQuantityDicts
-  map cw defSymbols
+  map cw defSymbols ++ map cw mathquants ++
+  -- UnitalChunks
+  map cw mathunitals
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks

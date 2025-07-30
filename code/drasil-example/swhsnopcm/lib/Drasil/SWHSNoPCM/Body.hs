@@ -21,7 +21,7 @@ import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.Software (softwarecon)
 import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
-  temp, thermalAnalysis, thermalConduction, thermocon)
+  temp, thermalAnalysis, thermalConduction, thermocon, boilPt, latentHeat, meltPt)
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols, osloSymbols,
   arrayVecDepVar, apacheODESymbols, odeintSymbols, diffCodeChunk)
@@ -29,7 +29,7 @@ import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols, osloSymbols,
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
 import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
-  uNormalVect)
+  uNormalVect, surArea, area)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Software.Products (prodtcon)
@@ -102,8 +102,8 @@ concepts = map ucw [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
   htTransCoeff, tankVol, deltaT, tempEnv, thFluxVect, htFluxC, wMass, wVol, tauW]
 
 symbolConcepts :: [UnitalChunk]
-symbolConcepts = map ucw [density, QT.htFlux, QT.heatCapSpec, mass, QT.sensHeat,
-  QT.temp, time, vol]
+symbolConcepts = map ucw [density, mass, time, vol,
+  QT.temp, QT.heatCapSpec, QT.htFlux, QT.sensHeat]
 
 -------------------
 --INPUT INFORMATION
@@ -194,9 +194,9 @@ conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
   algorithm : softwarecon ++ thermocon ++ con ++ physicCon ++ mathcon ++
-  physicalcon ++ srsDomains ++
+  physicalcon ++ srsDomains ++ [boilPt, latentHeat, meltPt] ++
   -- DefinedQuantityDicts
-  map cw symbols
+  map cw [surArea, area]
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks siUnits NoPCM.dataDefs

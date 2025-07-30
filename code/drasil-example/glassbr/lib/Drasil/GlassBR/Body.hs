@@ -19,6 +19,7 @@ import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics,
   educon)
 import Data.Drasil.Concepts.Math (graph, mathcon, mathcon')
+import Data.Drasil.Quantities.Math (mathquants, mathunitals)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, materialProprty)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
@@ -129,8 +130,12 @@ ideaDicts =
 conceptChunks :: [ConceptChunk]
 conceptChunks = 
   -- ConceptChunks
-  [distance, algorithm] ++ concepts ++ mathcon ++ softwarecon ++ physicalcon ++ srsDomains
+  [distance, algorithm] ++ concepts ++ mathcon ++ softwarecon ++ physicalcon ++
+  srsDomains ++
   -- UnitalChunks
+  map cw mathunitals ++
+  -- DefinedQuantityDicts
+  map cw mathquants
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList = 

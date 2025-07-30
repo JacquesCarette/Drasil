@@ -25,7 +25,9 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
 import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
   number)
+import Data.Drasil.Quantities.Math (mathquants, mathunitals)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
+import Data.Drasil.Quantities.PhysicalProperties (physicalquants)
 import Data.Drasil.Concepts.Physics (cohesion, fbd, force, gravity, isotropy,
   strain, stress, time, twoD, physicCon, physicCon')
 import Data.Drasil.Concepts.Software (program, softwarecon)
@@ -150,7 +152,9 @@ conceptChunks =
   algorithm : defs' ++ softwarecon ++ physicCon ++ mathcon ++ 
   solidcon ++ physicalcon ++ srsDomains ++
   -- DefinedQuantityDicts
-  map cw symbols
+  map cw symbols ++ map cw mathquants ++ map cw physicalquants ++
+  -- UnitalChunks
+  map cw mathunitals ++ [cw time]
 
 
 symbMap :: ChunkDB

@@ -45,32 +45,29 @@ class Typed e t => RequiresChecking c e t where
   -- | All things that need type checking.
   requiredChecks :: c -> [(e, t)]
 
-assertEq :: Eq t => t -> t -> TypeError -> Either TypeError t
+assertEq :: (Show t, Eq t) => t -> t -> (String -> String -> TypeError) -> Either TypeError ()
 assertEq lt rt te
-  | lt == rt  = pure lt
-  | otherwise = Left te
+  | lt == rt  = pure ()
+  | otherwise = Left $ te (show lt) (show rt)
 
 infix 4 ~==
-(~==) :: Eq t => t -> t -> TypeError -> Either TypeError t
+(~==) :: (Show t, Eq t) => t -> t -> (String -> String -> TypeError) -> Either TypeError ()
 (~==) = assertEq
-
-infix 0 ~?!
-(~?!) :: forall t. (TypeError -> Either TypeError t) -> TypeError -> Either TypeError t
-(~?!) = ($)
 
 -- | ``Check'' an expressions type based by an inference.
 typeCheckByInfer :: Typed e t => TypingContext t -> e -> t -> Either TypeError t
 typeCheckByInfer cxt e t = do
   et <- infer cxt e
   et ~== t 
-    ~?! "Inferred type `" ++ show et ++ "` does not match expected type `" ++ show t ++ "`"
+    $ \lt rt -> "Inferred type `" ++ lt ++ "` does not match expected type `" ++ rt ++ "`"
+  pure et
 
 {- FIXME: temporary hacks below (they're aware of the "printing" code!), pending
           replacement when TypeError is upgraded -}
 
-assertAllEq :: Typed e t => TypingContext t -> [e] -> t -> t -> TypeError -> Either TypeError t
-assertAllEq cxt es expect ret s
-  | allTsAreSp = pure ret
+assertAllEq :: Typed e t => TypingContext t -> [e] -> t -> TypeError -> Either TypeError ()
+assertAllEq cxt es expect s
+  | allTsAreSp = pure ()
   | otherwise  = Left $ temporaryIndent "  " (s ++ "\nReceived:\n" ++ dumpAllTs)
   where
     allTs = map (infer cxt) es

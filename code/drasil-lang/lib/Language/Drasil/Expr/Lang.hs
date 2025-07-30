@@ -250,7 +250,9 @@ vvvInfer ctx op l r = do
       "Vector subtraction expects both operands to be vectors of non-natural numbers. Received `" ++ sp ++ "`."
   else Right ()
 
-  lt ~== rt ~?! "Vector " ++ pretty op ++ " expects both operands to be of the same numeric type. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
+  lsp ~== rsp $ \lt' rt' -> "Vector " ++ pretty op ++ " expects both operands to be of the same numeric type. Received `" ++ lt' ++ "` and `" ++ rt' ++ "`."
+
+  pure lt
 
 instance Typed Expr Space where
   check :: TypingContext Space -> Expr -> Space -> Either TypeError Space
@@ -263,19 +265,22 @@ instance Typed Expr Space where
     et <- infer cxt e
     assertNumeric et $
       \sp -> "Associative arithmetic operation expects numeric operands, but found `" ++ sp ++ "`."
-    assertAllEq cxt exs et et
+    assertAllEq cxt exs et
         "Associative arithmetic operation expects all operands to be of the same type."
+    pure et
   infer _ (AssocA Add _) = Left "Associative addition requires at least one operand."
   infer _ (AssocA Mul _) = Left "Associative multiplication requires at least one operand."
 
-  infer cxt (AssocB _ exs) = assertAllEq cxt exs S.Boolean S.Boolean
-    $ "Associative boolean operation expects all operands to be of the same type (" ++ show S.Boolean ++ ")."
+  infer cxt (AssocB _ exs) = do
+    assertAllEq cxt exs S.Boolean $ "Associative boolean operation expects all operands to be of the same type (" ++ show S.Boolean ++ ")."
+    pure S.Boolean
 
   infer cxt (AssocC _ (e:exs)) =
     case infer cxt e of
-      Right spaceValue | spaceValue /= S.Void ->
-          assertAllEq cxt exs spaceValue spaceValue
+      Right spaceValue | spaceValue /= S.Void -> do
+          assertAllEq cxt exs spaceValue
               "Associative arithmetic operation expects all operands to be of the same expected type."
+          pure spaceValue
       Right r ->
           -- Handle the case when sp is a Left value but spaceValue is invalid
           Left ("Expected all operands in addition/multiplication to be numeric, but found " ++ show r)
@@ -405,7 +410,7 @@ instance Typed Expr Space where
   infer cxt (EqBinaryOp _ l r) = do
     lt <- infer cxt l
     rt <- infer cxt r
-    _ <- lt ~== rt ~?! "Both operands of an (in)equality (=/≠) must be of the same type. Received `" ++ show lt ++ "` & `" ++ show rt ++ "`."
+    lt ~== rt $ \lsp rsp -> "Both operands of an (in)equality (=/≠) must be of the same type. Received `" ++ lsp ++ "` & `" ++ rsp ++ "`."
     pure S.Boolean
 
   infer cxt (LABinaryOp Index l n) = do

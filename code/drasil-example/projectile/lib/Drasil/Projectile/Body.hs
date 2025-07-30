@@ -18,8 +18,8 @@ import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
 import Data.Drasil.Concepts.Math (cartesian, mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon',
-  rectilinear, oneD, twoD, motion)
+import Data.Drasil.Concepts.Physics (gravity, physicCon',
+  rectilinear, oneD, twoD, motion, distance, collision, positionVec)
 import Data.Drasil.Concepts.Software (errMsg, program)
 import Data.Drasil.Software.Products (sciCompS)
 
@@ -178,9 +178,8 @@ ideaDicts =
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  [mass, errMsg, program, algorithm] ++ physicCon ++ mathcon ++ defs ++ srsDomains ++
-  -- ConstrConcepts
-  map cw constrained
+  [mass, errMsg, program, algorithm] ++ mathcon ++ defs ++ srsDomains ++
+  [distance, motion, gravity, collision, rectilinear, positionVec]
 
 symbMap :: ChunkDB
 symbMap = cdb (pi_ : symbols) ideaDicts conceptChunks siUnits

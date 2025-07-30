@@ -157,8 +157,8 @@ assertNonNatNumVector msg vn@(Vect Natural)              = Left $ msg $ show vn
 assertNonNatNumVector _   (Vect et) | isBasicNumSpace et = Right et
 assertNonNatNumVector msg t                              = Left $ msg $ show t
 
-assertRealVector :: Space -> (String -> String) -> Either String Space
-assertRealVector (Vect Real) _   = Right (Vect Real)
+assertRealVector :: Space -> (String -> String) -> Either String ()
+assertRealVector (Vect Real) _   = Right ()
 assertRealVector t           msg = Left $ msg $ show t
 
 assertFunction :: Space -> (String -> String) -> Either String (NE.NonEmpty Primitive, Primitive)

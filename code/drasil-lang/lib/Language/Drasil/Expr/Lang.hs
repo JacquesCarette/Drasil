@@ -242,8 +242,10 @@ vvvInfer ctx op l r = do
   lt <- infer ctx l
   rt <- infer ctx r
 
-  lsp <- assertNumericVector lt $ \sp -> "Binary vector operator expects numeric vectors, but found `" ++ sp ++ "`."
-  rsp <- assertNumericVector rt $ \sp -> "Binary vector operator expects numeric vectors, but found `" ++ sp ++ "`."
+  let msg dir sp = "Vector operation" ++ pretty op ++ " expects numeric vectors, but found `" ++ sp ++ "` on the " ++ dir ++ "-hand side."
+
+  lsp <- assertNumericVector lt $ msg "left"
+  rsp <- assertNumericVector rt $ msg "right"
 
   if op == VSub then
     assertNonNatNumeric lsp $ \sp ->

@@ -124,14 +124,14 @@ ideaDicts :: [IdeaDict]
 ideaDicts =
   -- CIs
   map nw [progName, centreMass] ++ map nw CM.mathcon' ++
-  map nw CP.physicCon'
+  map nw CP.physicCon' ++
+  -- DefinedQuantityDicts
+  map nw defSymbols
   
 conceptChunks :: [ConceptChunk]
 conceptChunks = 
   -- ConceptChunks
-  softwarecon ++ CP.physicCon ++
-  -- DefinedQuantityDicts
-  map cw defSymbols
+  softwarecon ++ CP.physicCon
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks

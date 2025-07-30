@@ -49,6 +49,7 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints)
 
 import System.Drasil (SystemKind(Specification), mkSystem)
+import Data.Drasil.Quantities.PhysicalProperties (physicalquants)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -133,7 +134,7 @@ conceptChunks =
   [distance, algorithm] ++ concepts ++ mathcon ++ softwarecon ++ physicalcon ++
   srsDomains ++
   -- UnitalChunks
-  map cw mathunitals ++
+  map cw mathunitals ++ map cw physicalquants ++
   -- DefinedQuantityDicts
   map cw mathquants
 

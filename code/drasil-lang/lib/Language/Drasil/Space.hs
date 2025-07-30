@@ -14,7 +14,11 @@ module Language.Drasil.Space (
   -- * Class
   HasSpace(..),
   -- * Functions
-  getActorName, getInnerSpace, mkFunction, isBasicNumSpace
+  getActorName, getInnerSpace, mkFunction, isBasicNumSpace,
+  assertReal, assertNumeric, assertNonNatNumeric, assertEquivNumeric, assertIndexLike, assertBoolean,
+  assertSet,
+  assertVector, assertNumericVector, assertNonNatNumVector, assertRealVector,
+  assertFunction, assertNonFunction
 ) where
 
 import qualified Data.List.NonEmpty        as NE
@@ -107,3 +111,60 @@ isBasicNumSpace Array {}     = False
 isBasicNumSpace Actor {}     = False
 isBasicNumSpace Function {}  = False
 isBasicNumSpace Void         = False
+
+assertReal :: Space -> (String -> String) -> Either String ()
+assertReal Real _   = Right ()
+assertReal s    msg = Left $ msg $ show s
+
+assertNumeric :: Space -> (String -> String) -> Either String ()
+assertNumeric s msg
+  | isBasicNumSpace s = Right ()
+  | otherwise         = Left $ msg $ show s
+
+assertNonNatNumeric :: Space -> (String -> String) -> Either String ()
+assertNonNatNumeric s msg
+  | isBasicNumSpace s && s /= Natural = Right ()
+  | otherwise                         = Left $ msg $ show s
+
+assertEquivNumeric ::  Space -> Space -> (String -> String -> String) -> Either String ()
+assertEquivNumeric l r msg 
+  | isBasicNumSpace l && l == r = Right ()
+  | otherwise                   = Left $ msg (show l) (show r)
+
+assertIndexLike :: Space -> (String -> String) -> Either String ()
+assertIndexLike Integer _   = Right ()
+assertIndexLike Natural _   = Right ()
+assertIndexLike t       msg = Left $ msg $ show t
+
+assertBoolean :: Space -> (String -> String) -> Either String ()
+assertBoolean Boolean _   = Right ()
+assertBoolean sp      msg = Left $ msg $ show sp
+
+assertSet :: Space -> (String -> String) -> Either String Space
+assertSet (Set t) _   = Right t
+assertSet s       msg = Left $ msg $ show s
+
+assertVector :: Space -> (String -> String) -> Either String Space
+assertVector (Vect t) _   = Right t
+assertVector s        msg = Left $ msg $ show s
+
+assertNumericVector :: Space -> (String -> String) -> Either String Space
+assertNumericVector (Vect t) _ | isBasicNumSpace t = Right t
+assertNumericVector s msg                          = Left $ msg $ show s
+
+assertNonNatNumVector :: (String -> String) -> Space -> Either String Space
+assertNonNatNumVector msg vn@(Vect Natural)              = Left $ msg $ show vn
+assertNonNatNumVector _   (Vect et) | isBasicNumSpace et = Right et
+assertNonNatNumVector msg t                              = Left $ msg $ show t
+
+assertRealVector :: Space -> (String -> String) -> Either String ()
+assertRealVector (Vect Real) _   = Right ()
+assertRealVector t           msg = Left $ msg $ show t
+
+assertFunction :: Space -> (String -> String) -> Either String (NE.NonEmpty Primitive, Primitive)
+assertFunction (Function params out) _   = Right (params, out)
+assertFunction s                     msg = Left $ msg $ show s
+
+assertNonFunction :: Space -> (String -> String) -> Either String ()
+assertNonFunction f@Function{} msg = Left $ msg $ show f
+assertNonFunction _            _   = Right ()

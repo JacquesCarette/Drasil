@@ -139,9 +139,7 @@ ideaDicts =
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  physicalcon ++ mathcon ++ [linear, program, angular] ++ srsDomains ++
-  -- ConstrConcepts
-  map cw inpConstrained
+  physicalcon ++ mathcon ++ [linear, program, angular] ++ srsDomains
 
 symbMap :: ChunkDB
 symbMap = cdb (map dqdWr physicscon ++ symbolsAll ++ [dqdWr mass, dqdWr posInf, dqdWr negInf])

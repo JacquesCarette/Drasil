@@ -79,10 +79,6 @@ assertAllEq cxt es expect ret s
       Left _   -> False) allTs
     dumpAllTs = intercalate "\n" $ map (("- " ++) . either ("ERROR: " ++) show) allTs
 
-allOfType :: Typed e t => TypingContext t -> [e] -> t -> t -> TypeError -> Either TypeError t
-allOfType = assertAllEq
-{-# DEPRECATED allOfType "Use assertAllEq instead." #-}
-
 -- | A temporary, hacky, indentation function. It should be removed when we
 -- switch to using something else for error messages, which can be later
 -- formatted nicely.

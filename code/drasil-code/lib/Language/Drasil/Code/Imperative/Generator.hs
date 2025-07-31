@@ -17,7 +17,7 @@ import Language.Drasil.Code.Imperative.Modules (genInputMod, genInputModProc,
   genConstClass, genConstMod, checkConstClass, genInputClass,
   genInputConstraints, genInputConstraintsProc, genInputDerived,
   genInputDerivedProc, genInputFormat, genInputFormatProc, genMain, genMainProc,
-  genMainFunc, genMainFuncProc, genCalcMod, genCalcModProc, genCalcFunc,
+  genMainFunc, genMainFuncProc, genCalcMod, genCalcModProc,
   genCalcFuncProc, genOutputFormat, genOutputFormatProc, genOutputMod,
   genOutputModProc, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..),
@@ -36,7 +36,7 @@ import Language.Drasil.CodeSpec (CodeSpec(..), HasOldCodeSpec(..), getODE)
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc)
 
 import Drasil.GOOL (OOProg, VisibilityTag(..),
-  ProgData(..), initialState)
+  ProgData(..), initialState, SMethod)
 import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
@@ -150,8 +150,8 @@ genPackage unRepr = do
       db = codeSpec g ^. systemdbO
       -- prps = show $ sentenceDoc db Implementation OneLine
       --   (foldlSent $ purpose $ codeSpec g)
-      prps = show $ sentenceDoc db Implementation OneLine 
-        (foldlSent $ codeSpec g ^. purpose)  
+      prps = show $ sentenceDoc db Implementation OneLine
+        (foldlSent $ codeSpec g ^. purpose)
       bckgrnd = show $ sentenceDoc db Implementation OneLine
         (foldlSent $ codeSpec g ^. background)
       mtvtn = show $ sentenceDoc db Implementation OneLine
@@ -183,18 +183,18 @@ genProgram :: (OOProg r) => GenState (OO.GSProgram r)
 genProgram = do
   g <- get
   ms <- chooseModules $ modular g
-  let n = codeSpec g ^. pNameO 
+  let n = codeSpec g ^. pNameO
   let p = show $ sentenceDoc (codeSpec g ^. systemdbO) Implementation OneLine $ foldlSent $ codeSpec g ^. purpose
   return $ OO.prog n p ms
 
 -- | Generates either a single module or many modules, based on the users choice
 -- of modularity.
-chooseModules :: (OOProg r) => Modularity -> GenState [OO.SFile r]
+chooseModules :: OOProg r => Modularity -> GenState [OO.SFile r]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules Modular = genModules
 
 -- | Generates an entire SCS program as a single module.
-genUnmodular :: (OOProg r) => GenState (OO.SFile r)
+genUnmodular :: OOProg r => GenState (OO.SFile r)
 genUnmodular = do
   g <- get
   umDesc <- unmodularDesc
@@ -202,15 +202,24 @@ genUnmodular = do
   dvName <- genICName DerivedValuesFn
   icName <- genICName InputConstraintsFn
   let n = codeSpec g ^. pNameO
-      cls = any (`member` clsMap g) [giName, dvName, icName]
-  genModuleWithImports n umDesc (concatMap (^. imports) (elems $ extLibMap g))
-    (genMainFunc
-      : map (fmap Just) (map genCalcFunc (codeSpec g ^. execOrderO)
-        ++ concatMap genModFuncs (modules g))
-      ++ ((if cls then [] else [genInputFormat Pub, genInputDerived Pub,
-        genInputConstraints Pub]) ++ [genOutputFormat]))
-    ([genInputClass Auxiliary, genConstClass Auxiliary]
-      ++ map (fmap Just) (concatMap genModClasses $ modules g))
+      clsyInputs :: OOProg r => [GenState (Maybe (SMethod r))]
+      clsyInputs
+        | any (`member` clsMap g) [giName, dvName, icName] = []
+        | otherwise = [genInputFormat Pub, genInputDerived Pub, genInputConstraints Pub]
+
+      modFuncs :: OOProg r => [GenState (Maybe (SMethod r))]
+      modFuncs = map (fmap Just) $ concatMap genModFuncs (modules g)
+
+      components :: OOProg r => [GenState (Maybe (SMethod r))]
+      components = genMainFunc : modFuncs ++ clsyInputs ++ [genOutputFormat]
+
+      classes = [genInputClass Auxiliary, genConstClass Auxiliary] ++ map (fmap Just) (concatMap genModClasses $ modules g)
+
+  genModuleWithImports n umDesc
+    (concatMap (^. imports)
+    (elems $ extLibMap g))
+    components
+    classes
 
 -- | Generates all modules for an SCS program.
 genModules :: (OOProg r) => GenState [OO.SFile r]

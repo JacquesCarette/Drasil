@@ -256,224 +256,6 @@ class InputParameters {
     }
 }
 
-/** Calculates flight duration: the time when the projectile lands (s)
-    - Parameter inParams: structure holding the input values
-    - Returns: flight duration: the time when the projectile lands (s)
-*/
-func func_t_flight(_ inParams: inout InputParameters) throws -> Float {
-    var outfile: FileHandle
-    do {
-        outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
-        try outfile.seekToEnd()
-    } catch {
-        throw "Error opening file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("function func_t_flight called with inputs: {".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  inParams = ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("Instance of InputParameters object".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  }".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.close()
-    } catch {
-        throw "Error closing file."
-    }
-    
-    return 2.0 * inParams.v_launch * sin(inParams.theta) / inParams.g
-}
-
-/** Calculates landing position: the distance from the launcher to the final position of the projectile (m)
-    - Parameter inParams: structure holding the input values
-    - Returns: landing position: the distance from the launcher to the final position of the projectile (m)
-*/
-func func_p_land(_ inParams: inout InputParameters) throws -> Float {
-    var outfile: FileHandle
-    do {
-        outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
-        try outfile.seekToEnd()
-    } catch {
-        throw "Error opening file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("function func_p_land called with inputs: {".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  inParams = ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("Instance of InputParameters object".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  }".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.close()
-    } catch {
-        throw "Error closing file."
-    }
-    
-    return 2.0 * pow(inParams.v_launch, 2.0) * sin(inParams.theta) * cos(inParams.theta) / inParams.g
-}
-
-/** Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
-    - Parameter inParams: structure holding the input values
-    - Parameter p_land: landing position: the distance from the launcher to the final position of the projectile (m)
-    - Returns: distance between the target position and the landing position: the offset between the target position and the landing position (m)
-*/
-func func_d_offset(_ inParams: inout InputParameters, _ p_land: Float) throws -> Float {
-    var outfile: FileHandle
-    do {
-        outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
-        try outfile.seekToEnd()
-    } catch {
-        throw "Error opening file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("function func_d_offset called with inputs: {".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  inParams = ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("Instance of InputParameters object".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data(", ".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  p_land = ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data(String(p_land).utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  }".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.close()
-    } catch {
-        throw "Error closing file."
-    }
-    
-    return p_land - inParams.p_target
-}
-
-/** Calculates output message as a string
-    - Parameter inParams: structure holding the input values
-    - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
-    - Returns: output message as a string
-*/
-func func_s(_ inParams: inout InputParameters, _ d_offset: Float) throws -> String {
-    var outfile: FileHandle
-    do {
-        outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
-        try outfile.seekToEnd()
-    } catch {
-        throw "Error opening file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("function func_s called with inputs: {".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  inParams = ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("Instance of InputParameters object".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data(", ".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  d_offset = ".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data(String(d_offset).utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.write(contentsOf: Data("  }".utf8))
-        try outfile.write(contentsOf: Data("\n".utf8))
-    } catch {
-        throw "Error printing to file."
-    }
-    do {
-        try outfile.close()
-    } catch {
-        throw "Error closing file."
-    }
-    
-    if abs(d_offset / inParams.p_target) < inParams.epsilon {
-        return "The target was hit."
-    }
-    else if d_offset < 0.0 {
-        return "The projectile fell short."
-    }
-    else {
-        return "The projectile went long."
-    }
-}
-
 /** Writes the output values to output.txt
     - Parameter s: output message as a string
     - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -624,7 +406,7 @@ do {
     throw "Error closing file."
 }
 var inParams: InputParameters = try InputParameters(filename)
-var t_flight: Float = try func_t_flight(&inParams)
+var t_flight: Float = 2.0 * inParams.v_launch * sin(inParams.theta) / inParams.g
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -652,7 +434,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var p_land: Float = try func_p_land(&inParams)
+var p_land: Float = 2.0 * pow(inParams.v_launch, 2.0) * sin(inParams.theta) * cos(inParams.theta) / inParams.g
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -680,7 +462,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var d_offset: Float = try func_d_offset(&inParams, p_land)
+var d_offset: Float = p_land - inParams.p_target
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -708,7 +490,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var s: String = try func_s(&inParams, d_offset)
+var s: String = abs(d_offset / inParams.p_target) < inParams.epsilon ? "The target was hit." : d_offset < 0.0 ? "The projectile fell short." : "The projectile went long."
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()

@@ -93,71 +93,6 @@ class InputParameters:
             print(0.0, end="")
             print(".")
 
-## \brief Calculates flight duration: the time when the projectile lands (s)
-# \param inParams structure holding the input values
-# \return flight duration: the time when the projectile lands (s)
-def func_t_flight(inParams):
-    outfile = open("log.txt", "a")
-    print("function func_t_flight called with inputs: {", file=outfile)
-    print("  inParams = ", end="", file=outfile)
-    print("Instance of InputParameters object", file=outfile)
-    print("  }", file=outfile)
-    outfile.close()
-    
-    return 2.0 * inParams.v_launch * math.sin(inParams.theta) / inParams.g
-
-## \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
-# \param inParams structure holding the input values
-# \return landing position: the distance from the launcher to the final position of the projectile (m)
-def func_p_land(inParams):
-    outfile = open("log.txt", "a")
-    print("function func_p_land called with inputs: {", file=outfile)
-    print("  inParams = ", end="", file=outfile)
-    print("Instance of InputParameters object", file=outfile)
-    print("  }", file=outfile)
-    outfile.close()
-    
-    return 2.0 * inParams.v_launch ** 2.0 * math.sin(inParams.theta) * math.cos(inParams.theta) / inParams.g
-
-## \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
-# \param inParams structure holding the input values
-# \param p_land landing position: the distance from the launcher to the final position of the projectile (m)
-# \return distance between the target position and the landing position: the offset between the target position and the landing position (m)
-def func_d_offset(inParams, p_land):
-    outfile = open("log.txt", "a")
-    print("function func_d_offset called with inputs: {", file=outfile)
-    print("  inParams = ", end="", file=outfile)
-    print("Instance of InputParameters object", end="", file=outfile)
-    print(", ", file=outfile)
-    print("  p_land = ", end="", file=outfile)
-    print(p_land, file=outfile)
-    print("  }", file=outfile)
-    outfile.close()
-    
-    return p_land - inParams.p_target
-
-## \brief Calculates output message as a string
-# \param inParams structure holding the input values
-# \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
-# \return output message as a string
-def func_s(inParams, d_offset):
-    outfile = open("log.txt", "a")
-    print("function func_s called with inputs: {", file=outfile)
-    print("  inParams = ", end="", file=outfile)
-    print("Instance of InputParameters object", end="", file=outfile)
-    print(", ", file=outfile)
-    print("  d_offset = ", end="", file=outfile)
-    print(d_offset, file=outfile)
-    print("  }", file=outfile)
-    outfile.close()
-    
-    if math.fabs(d_offset / inParams.p_target) < inParams.epsilon:
-        return "The target was hit."
-    elif d_offset < 0.0:
-        return "The projectile fell short."
-    else:
-        return "The projectile went long."
-
 ## \brief Writes the output values to output.txt
 # \param s output message as a string
 # \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -192,25 +127,25 @@ print(filename, end="", file=outfile)
 print(" in module Projectile", file=outfile)
 outfile.close()
 inParams = InputParameters(filename)
-t_flight = func_t_flight(inParams)
+t_flight = 2.0 * inParams.v_launch * math.sin(inParams.theta) / inParams.g
 outfile = open("log.txt", "a")
 print("var 't_flight' assigned ", end="", file=outfile)
 print(t_flight, end="", file=outfile)
 print(" in module Projectile", file=outfile)
 outfile.close()
-p_land = func_p_land(inParams)
+p_land = 2.0 * inParams.v_launch ** 2.0 * math.sin(inParams.theta) * math.cos(inParams.theta) / inParams.g
 outfile = open("log.txt", "a")
 print("var 'p_land' assigned ", end="", file=outfile)
 print(p_land, end="", file=outfile)
 print(" in module Projectile", file=outfile)
 outfile.close()
-d_offset = func_d_offset(inParams, p_land)
+d_offset = p_land - inParams.p_target
 outfile = open("log.txt", "a")
 print("var 'd_offset' assigned ", end="", file=outfile)
 print(d_offset, end="", file=outfile)
 print(" in module Projectile", file=outfile)
 outfile.close()
-s = func_s(inParams, d_offset)
+s = "The target was hit." if math.fabs(d_offset / inParams.p_target) < inParams.epsilon else "The projectile fell short." if d_offset < 0.0 else "The projectile went long."
 outfile = open("log.txt", "a")
 print("var 's' assigned ", end="", file=outfile)
 print(s, end="", file=outfile)

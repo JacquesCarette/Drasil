@@ -117,7 +117,7 @@ baseChoices = defaultChoices {
   dataInfo = makeData Unbundled WithInputs Var,
   maps = makeMaps (matchConcepts [(piConst, [Pi])]) spaceToCodeType,
   optFeats = makeOptFeats
-    (makeDocConfig [CommentFunc, CommentClass, CommentMod] Quiet Hide)
+    (makeDocConfig [CommentFunc, CommentClass, CommentMod, CommentVarDecls] Quiet Hide)
     (makeLogConfig [] "log.txt")
     [SampleInput "../../../datafiles/projectile/sampleInput.txt", ReadME],
   srsConstraints = makeConstraints Warning Warning,

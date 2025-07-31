@@ -6,7 +6,7 @@ Constant Representation selected as Var.
 Implementation Type selected as Library.
 Software Constraint Behaviour selected as Warning.
 Physical Constraint Behaviour selected as Warning.
-Comments selected as CommentFunc CommentClass CommentMod.
+Comments selected as CommentFunc CommentClass CommentMod CommentVarDecls.
 Dox Verbosity selected as Quiet.
 Dates selected as Hide.
 Log File Name selected as log.txt.

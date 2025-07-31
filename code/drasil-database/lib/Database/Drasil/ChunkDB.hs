@@ -18,7 +18,7 @@ module Database.Drasil.ChunkDB (
   RefbyMap, TraceMap, UMap,
   -- * Functions
   -- ** Constructors
-  cdb, idMap, termMap, conceptMap, unitMap, traceMap, generateRefbyMap, -- idMap, termMap for docLang
+  cdb', idMap, symbolMap, termMap, conceptMap, unitMap, traceMap, generateRefbyMap, -- idMap, termMap for docLang
   -- ** Lookup Functions
   asOrderedList, collectUnits,
   termResolve, termResolve', defResolve, symbResolve,
@@ -242,11 +242,14 @@ makeLenses ''ChunkDB
 --     * 'TheoryModel's (for 'TheoryModelMap'),
 --     * 'ConceptInstance's (for 'ConceptInstanceMap'),
 --     * 'LabelledContent's (for 'LabelledContentMap').
-cdb :: (Quantity q, MayHaveUnit q, Concept q, Concept c, IsUnit u) =>
+-- Creates an empty ChunkDB without basic data. cdb in MetaDatabase.Drasil
+-- should be preferred over this function as it includes the basic data needed
+-- for Drasil.
+cdb' :: (Quantity q, MayHaveUnit q, Concept q, Concept c, IsUnit u) =>
     [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
     [GenDefn] -> [TheoryModel] -> [ConceptInstance] ->
     [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
-cdb s t c u d ins gd tm ci lc r cits =
+cdb' s t c u d ins gd tm ci lc r cits =
   CDB {
     -- CHUNKS
     symbolTable = symbolMap s,

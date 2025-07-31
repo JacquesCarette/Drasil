@@ -6,8 +6,6 @@ import Language.Drasil.Display (Symbol(Atop), Decoration(Delta))
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
-import Language.Drasil.Code (codeDQDs)
-
 import Data.Drasil.Concepts.Documentation (simulation)
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Quantities.Math (gradient, pi_, surArea, surface, uNormalVect)
@@ -32,7 +30,7 @@ symbols = pi_ : map dqdWr units ++ map dqdWr unitless ++ map dqdWr constrained
 symbolsAll :: [DefinedQuantityDict]
 symbolsAll = symbols ++ map dqdWr specParamValList ++
   map dqdWr [htFusionMin, htFusionMax, coilSAMax] ++
-  map dqdWr [absTol, relTol] ++ codeDQDs
+  map dqdWr [absTol, relTol]
 -- Symbols with Units --
 
 units :: [UnitalChunk]

@@ -7,6 +7,7 @@ import Drasil.Metadata (inModel)
 import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
+import Database.Drasil.ChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -14,20 +15,18 @@ import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (dong)
-import Data.Drasil.SI_Units (siUnits)
-import Data.Drasil.Concepts.Computation (inDatum, compcon, algorithm)
+import Data.Drasil.Concepts.Computation (inDatum)
 import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   environment, datum, input_, interface, output_, problem, product_,
-  physical, sysCont, software, softwareConstraint, softwareSys, srsDomains,
-  system, user, doccon, doccon', analysis)
-import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate, educon, )
-import Data.Drasil.Concepts.Math (mathcon, cartesian, ode, mathcon', graph)
+  physical, sysCont, software, softwareConstraint, softwareSys,
+  system, user, analysis)
+import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate)
+import Data.Drasil.Concepts.Math (cartesian, ode, mathcon', graph)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Quantities.PhysicalProperties (physicalquants)
-import Data.Drasil.Concepts.Software (program, errMsg)
-import Data.Drasil.Software.Products (prodtcon)
+import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 
 import Drasil.DblPend.Figures (figMotion, sysCtxFig1)
@@ -44,10 +43,10 @@ import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs)
 import Drasil.DblPend.References (citations)
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
   osloSymbols, apacheODESymbols, odeintSymbols, arrayVecDepVar, diffCodeChunk)
-import Language.Drasil.Code (codeDQDs, ODEInfo (..))
+import Language.Drasil.Code (ODEInfo (..))
 import Drasil.DblPend.ODEs (dblPenODEInfo)
 
-import System.Drasil (SystemKind(Specification), mkSystem)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -132,15 +131,15 @@ background = foldlSent_ [phraseNP (a_ pendulum), S "consists" `S.of_` phrase mas
 symbolsAll :: [DefinedQuantityDict]
 symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
   ++ map dqdWr [listToArray dp, arrayVecDepVar dblPenODEInfo, diffCodeChunk dp,
-  listToArray $ diffCodeChunk dp] ++ codeDQDs
+  listToArray $ diffCodeChunk dp]
   where dp = depVar dblPenODEInfo
 
 ideaDicts :: [IdeaDict]
 ideaDicts = 
   -- Actual IdeaDicts
-  doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
+  concepts ++
   -- CIs
-  nw progName : map nw doccon' ++ map nw mathcon' ++ map nw physicCon'
+  nw progName : map nw mathcon' ++ map nw physicCon'
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList = 
@@ -150,12 +149,15 @@ abbreviationsList =
   nw progName : map nw acronyms
 
 conceptChunks :: [ConceptChunk]
-conceptChunks = [algorithm, errMsg, program] ++ physicCon ++ mathcon ++
-  physicalcon ++ map cw physicalquants ++ srsDomains
+conceptChunks = 
+  -- ConceptChunks
+  physicCon ++ physicalcon ++
+  -- DefinedQuantityDicts
+  map cw physicalquants
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ symbolsAll)
-  ideaDicts conceptChunks siUnits
+  ideaDicts conceptChunks ([] :: [UnitDefn])
   dataDefs iMods genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.

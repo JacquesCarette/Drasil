@@ -7,8 +7,6 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Language.Drasil.Code (codeDQDs)
-
 import Drasil.SSP.Defs (fsConcept)
 
 import Data.Drasil.Constraints (gtZeroConstr)
@@ -30,7 +28,7 @@ import Data.Drasil.Quantities.Physics (acceleration, displacement, distance,
 
 symbols :: [DefinedQuantityDict]
 symbols = dqdWr coords : map dqdWr inputs ++ map dqdWr outputs
-  ++ map dqdWr units ++ map dqdWr unitless ++ codeDQDs
+  ++ map dqdWr units ++ map dqdWr unitless
 
 ---------------------------
 -- Imported UnitalChunks --

@@ -283,7 +283,7 @@ loadDF        = dqdNoUnit loadDurFac (variable "LDF") Real
 loadSF        = dqdNoUnit loadShareFac (variable "LSF") Real
 
 riskFun = dqdNoUnit (dcc "riskFun" (nounPhraseSP "risk of failure")
-  "the risk of failure") cB Real
+  "the percentage risk of the glass slab failing to resist the blast") cB Real
 
 sdfTol = dqdNoUnit (dcc "sdfTol" (nounPhraseSP "tolerable stress distribution factor")
   "the tolerable stress distribution factor") (sub (eqSymb stressDistFac) lTol) Real

@@ -121,10 +121,10 @@ public class Calculations {
         return q_hat_tol * 7.17e10 * Math.Pow(inParams.h, 4.0) / Math.Pow(inParams.a * inParams.b, 2.0);
     }
     
-    /** \brief Calculates risk of failure: the risk of failure
+    /** \brief Calculates risk of failure: the percentage risk of the glass slab failing to resist the blast
         \param inParams structure holding the input values: the structure holding the input values
         \param J stress distribution factor (Function): the stress distribution factor of the glass plate
-        \return risk of failure: the risk of failure
+        \return risk of failure: the percentage risk of the glass slab failing to resist the blast
     */
     public static double func_B(InputParameters inParams, double J) {
         StreamWriter outfile;
@@ -162,7 +162,7 @@ public class Calculations {
     }
     
     /** \brief Calculates probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
-        \param B risk of failure: the risk of failure
+        \param B risk of failure: the percentage risk of the glass slab failing to resist the blast
         \return probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
     */
     public static double func_P_b(double B) {

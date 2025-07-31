@@ -7,7 +7,7 @@ import Language.Drasil
 inFileName :: DefinedQuantityDict
 inFileName = implVar' "inFileName"
   (nounPhrase "name of the input file" "names of the input files")
-  (S "the name of the input file")
+  (S "a filepath, absolute or relative, to the file containing the program's inputs")
   String (label "filename")
 
 -- | Variable for an object of the InputParameters class.

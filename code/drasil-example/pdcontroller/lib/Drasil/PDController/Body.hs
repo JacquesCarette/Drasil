@@ -1,16 +1,14 @@
 module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) where
 
 import Language.Drasil
-import Language.Drasil.Code (codeDQDs, ODEInfo(..))
+import Language.Drasil.Code (ODEInfo(..))
 import Drasil.Metadata (dataDefn)
 import Drasil.SRSDocument
+import Database.Drasil.ChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
-import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
-import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Software.Products (sciCompS)
+import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.ExternalLibraries.ODELibraries
        (apacheODESymbols, arrayVecDepVar, odeintSymbols, osloSymbols,
         scipyODESymbols, diffCodeChunk)
@@ -18,7 +16,6 @@ import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (angular, linear) -- FIXME: should not be needed?
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.Quantities.Math (posInf, negInf)
 
 import Drasil.PDController.Assumptions (assumptions)
@@ -41,7 +38,7 @@ import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
   inpConstrained, pidConstants)
 import Drasil.PDController.ODEs (pidODEInfo)
 
-import System.Drasil (SystemKind(Specification), mkSystem)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
@@ -123,7 +120,7 @@ background = foldlSent_ [S "Automatic process control with a controller (P/PI/PD
 -- FIXME: the dependent variable of pidODEInfo (opProcessVariable) is added to symbolsAll as it is used to create new chunks with opProcessVariable's UID suffixed in ODELibraries.hs.
 -- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
 symbolsAll :: [DefinedQuantityDict]
-symbolsAll = symbols ++ map dqdWr pidConstants ++ codeDQDs
+symbolsAll = symbols ++ map dqdWr pidConstants
   ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
   ++ map dqdWr [listToArray dp, arrayVecDepVar pidODEInfo,
   listToArray $ diffCodeChunk dp, diffCodeChunk dp]
@@ -132,20 +129,20 @@ symbolsAll = symbols ++ map dqdWr pidConstants ++ codeDQDs
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- Actual IdeaDicts
-  sciCompS : concepts ++ doccon ++
+  concepts ++
   -- CIs
-  nw progName : map nw mathcon' ++ map nw doccon'
+  nw progName : map nw mathcon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  physicalcon ++ mathcon ++ [linear, program, angular] ++ srsDomains
+  physicalcon ++ [linear, angular]
 
 symbMap :: ChunkDB
 symbMap = cdb (map dqdWr physicscon ++ symbolsAll ++ [dqdWr mass, dqdWr posInf, dqdWr negInf])
   ideaDicts
   conceptChunks
-  siUnits
+  ([] :: [UnitDefn])
   dataDefinitions
   instanceModels
   genDefns

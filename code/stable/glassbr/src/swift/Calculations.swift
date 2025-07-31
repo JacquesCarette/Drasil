@@ -338,10 +338,10 @@ func func_NFL(_ inParams: inout InputParameters, _ q_hat_tol: Double) throws -> 
     return q_hat_tol * 7.17e10 * pow(inParams.h, 4.0) / pow(inParams.a * inParams.b, 2.0)
 }
 
-/** Calculates risk of failure: the risk of failure
+/** Calculates risk of failure: the percentage risk of the glass slab failing to resist the blast
     - Parameter inParams: structure holding the input values: the structure holding the input values
     - Parameter J: stress distribution factor (Function): the stress distribution factor of the glass plate
-    - Returns: risk of failure: the risk of failure
+    - Returns: risk of failure: the percentage risk of the glass slab failing to resist the blast
 */
 func func_B(_ inParams: inout InputParameters, _ J: Double) throws -> Double {
     var outfile: FileHandle
@@ -461,7 +461,7 @@ func func_LR(_ inParams: inout InputParameters, _ NFL: Double) throws -> Double 
 }
 
 /** Calculates probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
-    - Parameter B: risk of failure: the risk of failure
+    - Parameter B: risk of failure: the percentage risk of the glass slab failing to resist the blast
     - Returns: probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
 */
 func func_P_b(_ B: Double) throws -> Double {

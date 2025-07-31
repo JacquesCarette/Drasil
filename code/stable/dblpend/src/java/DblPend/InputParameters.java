@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class InputParameters {
     
     /** \brief Reads input from a file with the given file name
-        \param filename name of the input file: the name of the input file
+        \param filename name of the input file: a filepath, absolute or relative, to the file containing the program's inputs
         \return array containing the following values:
         \return length of the first rod: the length of the first rod (m)
         \return length of the second rod: the length of the second rod (m)

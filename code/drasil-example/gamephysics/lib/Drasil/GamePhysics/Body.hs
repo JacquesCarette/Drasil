@@ -3,29 +3,28 @@ module Drasil.GamePhysics.Body where
 import Language.Drasil hiding (organization, section)
 import Drasil.Metadata (dataDefn, inModel)
 import Drasil.SRSDocument
+import Database.Drasil.ChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   condition, consumer, endUser, environment, game, guide, input_, interface,
   object, physical, physicalSim, physics, problem, product_, project,
   quantity, realtime, section_, simulation, software, softwareSys,
-  srsDomains, system, systemConstraint, sysCont, task, user, doccon, doccon',
+  system, systemConstraint, sysCont, task, user,
   property, problemDescription)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
-  highSchoolPhysics, educon)
+  highSchoolPhysics)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)
 import Data.Drasil.People (alex, luthfi, olu)
-import Data.Drasil.SI_Units (siUnits)
-import Data.Drasil.Software.Products (openSource, prodtcon, videoGame)
+import Data.Drasil.Software.Products (openSource, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
 import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon,
   physicCon', rigidBody, collision, damping)
 import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
-  mathcon, mathcon', rightHand, line, point)
+  mathcon', rightHand, line, point)
 import Data.Drasil.Quantities.Math (mathquants, mathunitals)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
@@ -43,7 +42,7 @@ import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
 import Drasil.GamePhysics.GenDefs (generalDefns)
 
-import System.Drasil (SystemKind(Specification), mkSystem)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize short) si
@@ -124,16 +123,14 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
-  -- Actual IdeaDicts
-  doccon ++ educon ++ prodtcon ++
   -- CIs
-  map nw [progName, centreMass] ++ map nw doccon' ++ map nw CM.mathcon' ++
+  map nw [progName, centreMass] ++ map nw CM.mathcon' ++
   map nw CP.physicCon'
   
 conceptChunks :: [ConceptChunk]
 conceptChunks = 
   -- ConceptChunks
-  algorithm : softwarecon ++ CP.physicCon ++ CM.mathcon ++ srsDomains ++
+  softwarecon ++ CP.physicCon ++
   -- DefinedQuantityDicts
   map cw defSymbols ++ map cw mathquants ++
   -- UnitalChunks
@@ -141,7 +138,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks
-  siUnits dataDefs iMods generalDefns tMods concIns [] allRefs citations
+  ([] :: [UnitDefn]) dataDefs iMods generalDefns tMods concIns [] allRefs citations
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =

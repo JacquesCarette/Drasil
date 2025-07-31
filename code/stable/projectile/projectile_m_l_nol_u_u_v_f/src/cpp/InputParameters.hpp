@@ -16,7 +16,7 @@ using std::ifstream;
 using std::string;
 
 /** \brief Reads input from a file with the given file name
-    \param filename name of the input file: the name of the input file
+    \param filename name of the input file: a filepath, absolute or relative, to the file containing the program's inputs
     \param v_launch launch speed: the initial speed of the projectile when launched (m/s)
     \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
     \param p_target target position: the distance from the launcher to the target (m)

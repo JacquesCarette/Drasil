@@ -8,13 +8,13 @@ import math
 ## \brief Structure for holding the input values
 class InputParameters:
     ## \brief Initializes input object by reading inputs and checking physical constraints on the input
-    # \param filename name of the input file: the name of the input file
+    # \param filename name of the input file: a filepath, absolute or relative, to the file containing the program's inputs
     def __init__(self, filename):
         self.get_input(filename)
         self.input_constraints()
     
     ## \brief Reads input from a file with the given file name
-    # \param filename name of the input file: the name of the input file
+    # \param filename name of the input file: a filepath, absolute or relative, to the file containing the program's inputs
     def get_input(self, filename):
         infile = open(filename, "r")
         infile.readline()

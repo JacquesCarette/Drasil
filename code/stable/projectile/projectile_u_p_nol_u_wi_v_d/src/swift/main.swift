@@ -56,7 +56,7 @@ func func_s(_ p_target: Double, _ epsilon: Double, _ d_offset: Double) -> String
 }
 
 /** Reads input from a file with the given file name
-    - Parameter filename: name of the input file: the name of the input file
+    - Parameter filename: name of the input file: a filepath, absolute or relative, to the file containing the program's inputs
     - Returns: launch speed: the initial speed of the projectile when launched (m/s)
     - Returns: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
     - Returns: target position: the distance from the launcher to the target (m)

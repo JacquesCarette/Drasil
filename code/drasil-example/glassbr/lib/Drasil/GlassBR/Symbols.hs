@@ -1,7 +1,7 @@
 module Drasil.GlassBR.Symbols where
 
 import Language.Drasil (DefinedQuantityDict, dqdWr, cnstrw')
-import Language.Drasil.Code (Mod(Mod), asVC, codeDQDs)
+import Language.Drasil.Code (Mod(Mod), asVC)
 
 import Drasil.GlassBR.ModuleDefs (allMods, implVars)
 import Drasil.GlassBR.Unitals (specParamVals, modElas,
@@ -12,7 +12,7 @@ import Drasil.GlassBR.Unitals (specParamVals, modElas,
 import Data.List ((\\))
 
 symbolsForSymbolTable :: [DefinedQuantityDict]
-symbolsForSymbolTable = symbolsForTermTable ++ map dqdWr unitalSymbols ++ codeDQDs ++
+symbolsForSymbolTable = symbolsForTermTable ++ map dqdWr unitalSymbols ++
   unitless ++ map dqdWr [probBr, stressDistFac, cnstrw' nomThick, cnstrw' glassTypeCon] ++
   map dqdWr derivedInputDataConstraints
 

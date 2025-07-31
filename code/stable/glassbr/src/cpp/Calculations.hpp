@@ -54,10 +54,10 @@ double func_J(InputParameters &inParams, double q_hat);
 */
 double func_NFL(InputParameters &inParams, double q_hat_tol);
 
-/** \brief Calculates risk of failure: the risk of failure
+/** \brief Calculates risk of failure: the percentage risk of the glass slab failing to resist the blast
     \param inParams structure holding the input values: the structure holding the input values
     \param J stress distribution factor (Function): the stress distribution factor of the glass plate
-    \return risk of failure: the risk of failure
+    \return risk of failure: the percentage risk of the glass slab failing to resist the blast
 */
 double func_B(InputParameters &inParams, double J);
 
@@ -69,7 +69,7 @@ double func_B(InputParameters &inParams, double J);
 double func_LR(InputParameters &inParams, double NFL);
 
 /** \brief Calculates probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
-    \param B risk of failure: the risk of failure
+    \param B risk of failure: the percentage risk of the glass slab failing to resist the blast
     \return probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
 */
 double func_P_b(double B);

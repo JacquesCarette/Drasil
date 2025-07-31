@@ -25,7 +25,7 @@ import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, ca
 import Data.Drasil.Concepts.Math (cartesian, ode, mathcon', graph)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
-import Data.Drasil.Quantities.PhysicalProperties (physicalquants)
+import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 
@@ -152,8 +152,8 @@ conceptChunks :: [ConceptChunk]
 conceptChunks = 
   -- ConceptChunks
   physicCon ++ physicalcon ++
-  -- DefinedQuantityDicts
-  map cw physicalquants
+  -- UnitalChunks
+  [cw len]
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ symbolsAll)

@@ -24,7 +24,7 @@ import qualified Data.Map as Map (filter, lookup, null)
 import Data.Maybe (mapMaybe)
 import Control.Lens ((^.))
 import Control.Monad.State (get)
-import System.Drasil hiding (systemdb)
+import Drasil.System hiding (systemdb)
 
 -- | Returns a module description based on a list of descriptions of what is
 -- contained in the module.

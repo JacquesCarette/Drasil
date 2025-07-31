@@ -3,8 +3,8 @@
 module Drasil.DocumentLanguage.TraceabilityMatrix where
 
 import Language.Drasil
-import Database.Drasil hiding (cdb)
-import System.Drasil hiding (purpose)
+import Database.Drasil hiding (cdb')
+import Drasil.System hiding (purpose)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Documentation (purpose, component, dependency,

@@ -40,7 +40,7 @@ import Drasil.GOOL (OOProg, VisibilityTag(..),
 import qualified Drasil.GOOL as OO (GSProgram, SFile, ProgramSym(..), unCI)
 import Drasil.GProc (ProcProg)
 import qualified Drasil.GProc as Proc (GSProgram, SFile, ProgramSym(..), unCI)
-import System.Drasil hiding (systemdb)
+import Drasil.System hiding (systemdb)
 
 import Utils.Drasil (createDirIfMissing)
 

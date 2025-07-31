@@ -5,19 +5,15 @@
 
 module Drasil.Template.Body where
 
-import System.Drasil (SystemKind(Specification), mkSystem)
+import Drasil.System (SystemKind(Specification), mkSystem)
 import Drasil.Metadata
 import Language.Drasil
 import Drasil.SRSDocument
+import Database.Drasil.ChunkDB (cdb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
-import Data.Drasil.Concepts.Computation (inValue, algorithm)
-import Data.Drasil.Concepts.Software (errMsg, program)
-import Data.Drasil.Concepts.Math (mathcon)
 
 import qualified Drasil.DocLang.SRS as SRS
-import Data.Drasil.Software.Products
 import Data.Drasil.Citations
 import Drasil.DocumentLanguage.TraceabilityGraph
 import Drasil.DocLang (tunitNone)
@@ -95,13 +91,11 @@ si = mkSystem
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
-  -- Actual IdeaDicts
-  doccon ++ prodtcon ++ [inValue] ++
   -- CIs
-  nw progName : map nw doccon'
+  [nw progName]
 
 conceptChunks :: [ConceptChunk]
-conceptChunks = [errMsg, algorithm, program] ++ mathcon ++ srsDomains
+conceptChunks = [] :: [ConceptChunk]
 
 symbMap :: ChunkDB
 symbMap = cdb ([] :: [DefinedQuantityDict]) ideaDicts conceptChunks

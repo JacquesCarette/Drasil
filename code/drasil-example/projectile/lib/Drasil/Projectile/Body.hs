@@ -4,24 +4,24 @@ import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
 import Language.Drasil
 import Language.Drasil.Code (codeDQDs)
 import Drasil.SRSDocument
+import Database.Drasil.ChunkDB (cdb)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 import qualified Drasil.DocLang.SRS as SRS
 
-import Data.Drasil.Concepts.Computation (algorithm, inDatum, compcon)
-import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
-  problem, srsDomains, assumption, goalStmt, physSyst, sysCont, software, user,
+import Data.Drasil.Concepts.Computation (inDatum)
+import Data.Drasil.Concepts.Documentation (analysis, physics,
+  problem, assumption, goalStmt, physSyst, sysCont, software, user,
   requirement, refBy, refName, typUnc, example, softwareSys, system, environment, 
   product_, interface, condition, physical, datum, input_, softwareConstraint, 
   output_, endUser)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
-import Data.Drasil.Concepts.Math (cartesian, mathcon)
+import Data.Drasil.Concepts.Math (cartesian)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon',
   rectilinear, oneD, twoD, motion)
-import Data.Drasil.Concepts.Software (errMsg, program)
-import Data.Drasil.Software.Products (sciCompS)
+import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.Quantities.Math (pi_, piConst)
 import Data.Drasil.Quantities.Physics (acceleration, constAccel,
@@ -30,9 +30,8 @@ import Data.Drasil.Quantities.Physics (acceleration, constAccel,
   xVel, yAccel, yConstAccel, yPos, yVel, speed, scalarAccel, constAccelV)
 
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
-import Data.Drasil.SI_Units (siUnits)
 import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
-import Data.Drasil.Concepts.Education(calculus, educon, undergraduate, 
+import Data.Drasil.Concepts.Education(calculus, undergraduate, 
   highSchoolPhysics, highSchoolCalculus)
 
 import Drasil.Projectile.Assumptions (assumptions)
@@ -49,7 +48,7 @@ import Drasil.Projectile.Unitals
 
 import Theory.Drasil (TheoryModel)
 
-import System.Drasil (SystemKind(Specification))
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -132,26 +131,13 @@ projectileExamples = [S "ballistics" +:+ plural problem +:+ sParen (S "missiles"
   S "etc.")]
 
 si :: System
-si = SI {
-  _sys          = progName,
-  _kind         = Specification,
-  _authors      = [samCrawford, brooks, spencerSmith],
-  _purpose      = [purp],
-  _background   = [background],
-  _motivation   = [motivation],
-  _scope        = [scope],
-  _quants       = symbols,
-  _theoryModels = tMods,
-  _genDefns     = genDefns,
-  _instModels   = iMods,
-  _dataDefns    = dataDefs,
-  _configFiles  = [],
-  _inputs       = inputs,
-  _outputs      = outputs,
-  _constraints  = map cnstrw' constrained,
-  _constants    = constants,
-  _systemdb     = symbMap
-}
+si = mkSystem progName Specification
+  [samCrawford, brooks, spencerSmith]
+  [purp] [background] [scope] [motivation]
+  symbols tMods genDefns dataDefs iMods
+  []
+  inputs outputs (map cnstrw' constrained) constants
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "predict whether a launched", phrase projectile, S "hits its", phrase target]
@@ -171,19 +157,19 @@ tMods = [accelerationTM, velocityTM]
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- Actual IdeaDicts
-  [sciCompS, projMotion, rectVel] ++ doccon ++ educon ++ compcon ++
+  [projMotion, rectVel] ++
   -- CIs
-  nw progName : map nw doccon' ++ map nw physicCon'
+  nw progName : map nw physicCon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  [mass, errMsg, program, algorithm] ++ physicCon ++ mathcon ++ defs ++ srsDomains ++
+  [mass] ++ physicCon ++ defs ++
   -- ConstrConcepts
   map cw constrained
 
 symbMap :: ChunkDB
-symbMap = cdb (pi_ : symbols) ideaDicts conceptChunks siUnits
+symbMap = cdb (pi_ : symbols) ideaDicts conceptChunks ([] :: [UnitDefn])
   dataDefs iMods genDefns tMods concIns [] allRefs citations
 
 abbreviationsList  :: [IdeaDict]

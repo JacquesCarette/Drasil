@@ -23,7 +23,7 @@ import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   system, user, analysis)
 import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate)
 import Data.Drasil.Concepts.Math (cartesian, ode, mathcon', graph)
-import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion)
+import Data.Drasil.Concepts.Physics (gravity, physicCon', pendulum, twoD, motion, angAccel, angular, angVelo, gravitationalConst)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Concepts.Software (program)
@@ -151,7 +151,8 @@ abbreviationsList =
 conceptChunks :: [ConceptChunk]
 conceptChunks = 
   -- ConceptChunks
-  physicCon ++ physicalcon ++
+  physicalcon ++ [angAccel, angular, angVelo, pendulum, motion,
+  gravitationalConst, gravity] ++
   -- UnitalChunks
   [cw len]
 

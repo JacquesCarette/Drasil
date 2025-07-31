@@ -1,7 +1,7 @@
 module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) where
 
 import Language.Drasil
-import Language.Drasil.Code (codeDQDs, ODEInfo(..))
+import Language.Drasil.Code (ODEInfo(..))
 import Drasil.Metadata (dataDefn)
 import Drasil.SRSDocument
 import Database.Drasil.ChunkDB (cdb)
@@ -120,7 +120,7 @@ background = foldlSent_ [S "Automatic process control with a controller (P/PI/PD
 -- FIXME: the dependent variable of pidODEInfo (opProcessVariable) is added to symbolsAll as it is used to create new chunks with opProcessVariable's UID suffixed in ODELibraries.hs.
 -- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
 symbolsAll :: [DefinedQuantityDict]
-symbolsAll = symbols ++ map dqdWr pidConstants ++ codeDQDs
+symbolsAll = symbols ++ map dqdWr pidConstants
   ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
   ++ map dqdWr [listToArray dp, arrayVecDepVar pidODEInfo,
   listToArray $ diffCodeChunk dp, diffCodeChunk dp]

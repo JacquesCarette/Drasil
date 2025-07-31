@@ -9,7 +9,7 @@ import Theory.Drasil (TheoryModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Language.Drasil.Code (codeDQDs, ODEInfo (depVar))
+import Language.Drasil.Code (ODEInfo (depVar))
 
 import Data.List ((\\))
 import Data.Drasil.People (thulasi)
@@ -91,7 +91,7 @@ symbolsAll = [gradient, pi_, uNormalVect, dqdWr surface] ++ symbols ++
   map dqdWr symbolConcepts ++ map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++
   scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols ++
   map dqdWr [listToArray dp, arrayVecDepVar noPCMODEInfo, 
-  diffCodeChunk dp, listToArray $ diffCodeChunk dp] ++ codeDQDs
+  diffCodeChunk dp, listToArray $ diffCodeChunk dp]
   where dp = depVar noPCMODEInfo
 
 concepts :: [UnitalChunk]

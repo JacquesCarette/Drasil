@@ -26,8 +26,7 @@ import Data.Drasil.Concepts.Software (program, softwarecon, correctness,
 import Data.Drasil.Concepts.Thermodynamics (enerSrc, heatTrans, htFlux,
   htTransTheo, lawConsEnergy, thermalAnalysis, thermalConduction, thermalEnergy,
   thermocon)
-import Data.Drasil.Quantities.Math (surArea, surface, uNormalVect, mathquants,
-  mathunitals)
+import Data.Drasil.Quantities.Math (surArea, surface, uNormalVect, area)
 import Data.Drasil.Quantities.PhysicalProperties (vol)
 import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat)
@@ -100,12 +99,8 @@ conceptChunks =
   -- ConceptChunks
   thermocon ++ softwarecon ++ physicCon ++
   physicalcon ++ con ++
-  -- DefinedQuantityDicts
-  map cw symbols ++ map cw mathquants ++
-  -- ConstQDefs
-  map cw specParamValList ++ 
   -- UnitalChunks
-  map cw mathunitals
+  map cw [surArea, area]
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks

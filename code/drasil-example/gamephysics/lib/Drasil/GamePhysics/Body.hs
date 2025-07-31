@@ -21,11 +21,11 @@ import Data.Drasil.People (alex, luthfi, olu)
 import Data.Drasil.Software.Products (openSource, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
-import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon,
-  physicCon', rigidBody, collision, damping)
+import qualified Data.Drasil.Concepts.Physics as CP (elasticity,
+  physicCon', rigidBody, collision, damping, angular, linear, friction, joint, energy, motion, space)
 import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
   mathcon', rightHand, line, point)
-import Data.Drasil.Quantities.Math (mathquants, mathunitals)
+import Data.Drasil.Quantities.Math (normalVect, perpVect, surface)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
@@ -39,7 +39,7 @@ import Drasil.GamePhysics.References (citations, uriReferences)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, pymunk)
 import Drasil.GamePhysics.TMods (tMods)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
-  inputSymbols, outputSymbols, inputConstraints, defSymbols)
+  inputSymbols, outputSymbols, inputConstraints)
 import Drasil.GamePhysics.GenDefs (generalDefns)
 
 import Drasil.System (SystemKind(Specification), mkSystem)
@@ -130,11 +130,13 @@ ideaDicts =
 conceptChunks :: [ConceptChunk]
 conceptChunks = 
   -- ConceptChunks
-  softwarecon ++ CP.physicCon ++
+  softwarecon ++ [CP.angular, CP.linear, CP.rigidBody, CP.collision,
+  CP.damping, CP.friction, CP.joint, CP.energy, CP.motion, CP.space,
+  CP.elasticity] ++
   -- DefinedQuantityDicts
-  map cw defSymbols ++ map cw mathquants ++
+  map cw [normalVect, perpVect] ++
   -- UnitalChunks
-  map cw mathunitals
+  [cw surface]
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks

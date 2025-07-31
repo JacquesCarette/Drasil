@@ -168,7 +168,7 @@ public class InputParameters {
     public double p_target;
     
     /** \brief Initializes input object by reading inputs and checking physical constraints on the input
-        \param filename name of the input file: the name of the input file
+        \param filename name of the input file: a filepath, absolute or relative, to the file containing the program's inputs
     */
     public InputParameters(string filename) {
         StreamWriter outfile;
@@ -184,7 +184,7 @@ public class InputParameters {
     }
     
     /** \brief Reads input from a file with the given file name
-        \param filename name of the input file: the name of the input file
+        \param filename name of the input file: a filepath, absolute or relative, to the file containing the program's inputs
     */
     private void get_input(string filename) {
         StreamWriter outfile;

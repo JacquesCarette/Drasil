@@ -35,7 +35,7 @@ public class InputParameters {
     public double w_TNT;
     
     /** \brief Initializes input object by reading inputs, calculating derived values, and checking physical constraints and software constraints on the input
-        \param filename name of the input file: the name of the input file
+        \param filename name of the input file: a filepath, absolute or relative, to the file containing the program's inputs
     */
     public InputParameters(String filename) throws Exception, FileNotFoundException, IOException {
         PrintWriter outfile;
@@ -52,7 +52,7 @@ public class InputParameters {
     }
     
     /** \brief Reads input from a file with the given file name
-        \param filename name of the input file: the name of the input file
+        \param filename name of the input file: a filepath, absolute or relative, to the file containing the program's inputs
     */
     private void get_input(String filename) throws FileNotFoundException, IOException {
         PrintWriter outfile;

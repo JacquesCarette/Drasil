@@ -13,7 +13,7 @@ using std::ifstream;
 using std::string;
 
 /** \brief Reads input from a file with the given file name
-    \param filename name of the input file: the name of the input file
+    \param filename name of the input file: a filepath, absolute or relative, to the file containing the program's inputs
     \param L_1 length of the first rod: the length of the first rod (m)
     \param L_2 length of the second rod: the length of the second rod (m)
     \param m_1 mass of the first object: the mass of the first object (kg)

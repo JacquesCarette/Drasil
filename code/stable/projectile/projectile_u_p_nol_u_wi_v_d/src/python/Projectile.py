@@ -43,7 +43,7 @@ def func_s(p_target, epsilon, d_offset):
         return "The projectile went long."
 
 ## \brief Reads input from a file with the given file name
-# \param filename name of the input file: the name of the input file
+# \param filename name of the input file: a filepath, absolute or relative, to the file containing the program's inputs
 # \return launch speed: the initial speed of the projectile when launched (m/s)
 # \return launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
 # \return target position: the distance from the launcher to the target (m)

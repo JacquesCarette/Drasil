@@ -10,7 +10,7 @@ using System.IO;
 public class InputParameters {
     
     /** \brief Reads input from a file with the given file name
-        \param filename name of the input file: the name of the input file
+        \param filename name of the input file: a filepath, absolute or relative, to the file containing the program's inputs
         \param A_C heating coil surface area: area covered by the outermost layer of the coil (m^2)
         \param C_W specific heat capacity of water: the amount of energy required to raise the temperature of a given unit mass of water by a given amount (J/(kg degreeC))
         \param h_C convective heat transfer coefficient between coil and water: the convective heat transfer coefficient that models the thermal flux from the coil to the surrounding water (W/(m^2 degreeC))

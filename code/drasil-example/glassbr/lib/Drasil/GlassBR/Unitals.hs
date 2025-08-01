@@ -300,11 +300,9 @@ lFail  = label "f"
 lTol   = label "tol"
 
 concepts :: [ConceptChunk]
-concepts = [aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
-  glTyFac, lateral, load, specDeLoad, loadResis, longDurLoad, nonFactoredL,
-  glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar,
-  sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage, notSafe, bomb,
-  explosion]
+concepts = [glBreakage, lite, annealedGl, fTemperedGl, hStrengthGl, lateral,
+  specDeLoad, longDurLoad, glassWL, shortDurLoad, specA, blastResisGla, blast,
+  blastTy, glassGeo, safeMessage, notSafe, bomb, explosion]
 
 aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
   glTyFac, lateral, load, specDeLoad, loadDurFac, loadResis, longDurLoad, modE, nonFactoredL,

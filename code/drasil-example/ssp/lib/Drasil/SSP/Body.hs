@@ -26,8 +26,9 @@ import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
 import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon',
   number)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
+import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Concepts.Physics (cohesion, fbd, force, gravity, isotropy,
-  strain, stress, time, twoD, physicCon, physicCon')
+  strain, stress, time, twoD, physicCon', distance, friction, linear, velocity, position)
 import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce, 
   shearRes, solidcon)
@@ -145,10 +146,12 @@ ideaDicts =
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  defs' ++ softwarecon ++ physicCon ++ 
-  solidcon ++ physicalcon ++
+  defs' ++ softwarecon ++ solidcon ++ physicalcon ++
+  [distance, friction, linear, velocity, gravity, stress, fbd, position] ++
   -- DefinedQuantityDicts
-  map cw symbols
+  [cw len] ++
+  -- UnitalChunks
+  map cw [time, surface]
 
 
 symbMap :: ChunkDB

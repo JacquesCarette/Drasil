@@ -14,8 +14,9 @@ import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (olu)
 import Data.Drasil.Concepts.Math (mathcon')
-import Data.Drasil.Concepts.Physics (physicCon, physicCon', motion, pendulum)
+import Data.Drasil.Concepts.Physics (physicCon', motion, pendulum, angular, displacement, iPos, gravitationalConst, gravity, rigidBody, weight, shm)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
+import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Theories.Physics (newtonSLR)
 
 import Drasil.DblPend.Body (justification, externalLinkRef, charsOfReader,
@@ -117,7 +118,10 @@ ideaDicts =
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  physicCon ++ physicalcon
+  physicalcon ++ [angular, displacement, iPos, pendulum, motion,
+  gravitationalConst, gravity, rigidBody, weight, shm] ++
+  -- Unital Chunks
+  [cw len]
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =

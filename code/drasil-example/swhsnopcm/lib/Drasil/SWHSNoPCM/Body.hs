@@ -17,7 +17,7 @@ import Data.Drasil.People (thulasi)
 import Data.Drasil.Concepts.Documentation as Doc (material_, sysCont)
 import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
-import Data.Drasil.Concepts.Physics (physicCon, physicCon')
+import qualified Data.Drasil.Concepts.Physics as CP (physicCon', energy, mechEnergy, pressure)
 import Data.Drasil.Concepts.Software (softwarecon)
 import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
   temp, thermalAnalysis, thermalConduction, thermocon, boilPt, latentHeat, meltPt)
@@ -185,13 +185,13 @@ ideaDicts =
   [htTrans, materialProprty] ++
   -- CIs
   map nw [srsSWHS, progName, phsChgMtrl] ++
-  map nw physicCon' ++ map nw mathcon'
+  map nw CP.physicCon' ++ map nw mathcon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  softwarecon ++ thermocon ++ con ++ physicCon ++
-  physicalcon ++ [boilPt, latentHeat, meltPt] ++
+  softwarecon ++ thermocon ++ con ++ physicalcon ++ [boilPt, latentHeat,
+  meltPt] ++ [CP.energy, CP.mechEnergy, CP.pressure] ++
   -- DefinedQuantityDicts
   map cw [surArea, area]
 

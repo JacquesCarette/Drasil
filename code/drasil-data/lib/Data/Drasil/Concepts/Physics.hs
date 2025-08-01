@@ -25,7 +25,7 @@ physicCon = [acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVe
   iyVel, joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy,
   momentOfInertia, position, potEnergy, pressure, restitutionCoef, rectilinear,
   rigidBody, scalarAccel, scalarPos, shm, space, speed, stiffCoeff, strain, stress, tension,
-  torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
+  time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
   yAccel, yConstAccel, yDist, yPos, yVel, momentum, chgMomentum, moment, moment2D, fOfGravity,
   positionVec, pendulum, body, kinematics, frequency, period, motion, horizontalMotion, verticalMotion]
 

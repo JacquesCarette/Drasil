@@ -20,7 +20,7 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
 import Data.Drasil.Concepts.Education (calculus, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
-import Data.Drasil.Concepts.Physics (physicCon)
+import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy, pressure)
 import Data.Drasil.Concepts.Software (program, softwarecon, correctness,
   understandability, reusability, maintainability, verifiability)
 import Data.Drasil.Concepts.Thermodynamics (enerSrc, heatTrans, htFlux,
@@ -97,8 +97,8 @@ ideaDicts =
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  thermocon ++ softwarecon ++ physicCon ++
-  physicalcon ++ con ++
+  thermocon ++ softwarecon ++ physicalcon ++ con ++ [CP.energy,
+  CP.mechEnergy, CP.pressure] ++
   -- UnitalChunks
   map cw [surArea, area]
 

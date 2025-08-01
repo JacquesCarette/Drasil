@@ -10,7 +10,7 @@ using Microsoft.Research.Oslo;
 
 public class Calculations {
     
-    /** \brief Calculates dependent variables: column vector of displacement of rods with its derivatives (rad)
+    /** \brief Calculates dependent variables (rad)
         \param m_1 mass of the first object: the mass of the first object (kg)
         \param m_2 mass of the second object: the mass of the second object (kg)
         \param L_2 length of the second rod: the length of the second rod (m)

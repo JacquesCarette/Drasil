@@ -54,7 +54,7 @@ public class Projectile {
         write_output(s, d_offset, t_flight);
     }
     
-    /** \brief Calculates flight duration: the time when the projectile lands (s)
+    /** \brief Calculates flight duration (s)
         \param inParams structure holding the input values: the structure holding the input values
         \return flight duration: the time when the projectile lands (s)
     */
@@ -70,7 +70,7 @@ public class Projectile {
         return 2.0 * inParams.v_launch * Math.sin(inParams.theta) / Constants.g;
     }
     
-    /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
+    /** \brief Calculates landing position (m)
         \param inParams structure holding the input values: the structure holding the input values
         \return landing position: the distance from the launcher to the final position of the projectile (m)
     */
@@ -86,7 +86,7 @@ public class Projectile {
         return 2.0 * Math.pow(inParams.v_launch, 2.0) * Math.sin(inParams.theta) * Math.cos(inParams.theta) / Constants.g;
     }
     
-    /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
+    /** \brief Calculates distance between the target position and the landing position (m)
         \param inParams structure holding the input values: the structure holding the input values
         \param p_land landing position: the distance from the launcher to the final position of the projectile (m)
         \return distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -106,7 +106,7 @@ public class Projectile {
         return p_land - inParams.p_target;
     }
     
-    /** \brief Calculates output message as a string: the output message given as a string
+    /** \brief Calculates output message as a string
         \param inParams structure holding the input values: the structure holding the input values
         \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
         \return output message as a string: the output message given as a string

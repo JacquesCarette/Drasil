@@ -14,7 +14,7 @@ import java.io.PrintWriter;
 
 public class Calculations {
     
-    /** \brief Calculates tolerable stress distribution factor: the tolerable stress distribution factor
+    /** \brief Calculates tolerable stress distribution factor
         \param inParams structure holding the input values: the structure holding the input values
         \return tolerable stress distribution factor: the tolerable stress distribution factor
     */
@@ -30,7 +30,7 @@ public class Calculations {
         return Math.log(Math.log(1.0 / (1.0 - inParams.P_btol)) * (Math.pow(inParams.a * inParams.b, 7.0 - 1.0) / (2.86e-53 * Math.pow(7.17e10 * Math.pow(inParams.h, 2.0), 7.0) * inParams.LDF)));
     }
     
-    /** \brief Calculates applied load (demand): 3 second duration equivalent pressure (Pa)
+    /** \brief Calculates applied load (demand) (Pa)
         \param inParams structure holding the input values: the structure holding the input values
         \return applied load (demand): 3 second duration equivalent pressure (Pa)
     */
@@ -46,7 +46,7 @@ public class Calculations {
         return Interpolation.interpY("TSD.txt", inParams.SD, inParams.w_TNT);
     }
     
-    /** \brief Calculates dimensionless load: the dimensionless load
+    /** \brief Calculates dimensionless load
         \param inParams structure holding the input values: the structure holding the input values
         \param q applied load (demand): 3 second duration equivalent pressure (Pa)
         \return dimensionless load: the dimensionless load
@@ -66,7 +66,7 @@ public class Calculations {
         return q * Math.pow(inParams.a * inParams.b, 2.0) / (7.17e10 * Math.pow(inParams.h, 4.0) * inParams.GTF);
     }
     
-    /** \brief Calculates tolerable load: the tolerable load
+    /** \brief Calculates tolerable load
         \param inParams structure holding the input values: the structure holding the input values
         \param J_tol tolerable stress distribution factor: the tolerable stress distribution factor
         \return tolerable load: the tolerable load
@@ -86,7 +86,7 @@ public class Calculations {
         return Interpolation.interpY("SDF.txt", inParams.AR, J_tol);
     }
     
-    /** \brief Calculates stress distribution factor (Function): the stress distribution factor of the glass plate
+    /** \brief Calculates stress distribution factor (Function)
         \param inParams structure holding the input values: the structure holding the input values
         \param q_hat dimensionless load: the dimensionless load
         \return stress distribution factor (Function): the stress distribution factor of the glass plate
@@ -106,7 +106,7 @@ public class Calculations {
         return Interpolation.interpZ("SDF.txt", inParams.AR, q_hat);
     }
     
-    /** \brief Calculates non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
+    /** \brief Calculates non-factored load (Pa)
         \param inParams structure holding the input values: the structure holding the input values
         \param q_hat_tol tolerable load: the tolerable load
         \return non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
@@ -126,7 +126,7 @@ public class Calculations {
         return q_hat_tol * 7.17e10 * Math.pow(inParams.h, 4.0) / Math.pow(inParams.a * inParams.b, 2.0);
     }
     
-    /** \brief Calculates risk of failure: the percentage risk of the glass slab failing to resist the blast
+    /** \brief Calculates risk of failure
         \param inParams structure holding the input values: the structure holding the input values
         \param J stress distribution factor (Function): the stress distribution factor of the glass plate
         \return risk of failure: the percentage risk of the glass slab failing to resist the blast
@@ -146,7 +146,7 @@ public class Calculations {
         return 2.86e-53 / Math.pow(inParams.a * inParams.b, 7.0 - 1.0) * Math.pow(7.17e10 * Math.pow(inParams.h, 2.0), 7.0) * inParams.LDF * Math.exp(J);
     }
     
-    /** \brief Calculates load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
+    /** \brief Calculates load resistance (Pa)
         \param inParams structure holding the input values: the structure holding the input values
         \param NFL non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
         \return load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
@@ -166,7 +166,7 @@ public class Calculations {
         return NFL * inParams.GTF * 1.0;
     }
     
-    /** \brief Calculates probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
+    /** \brief Calculates probability of breakage
         \param B risk of failure: the percentage risk of the glass slab failing to resist the blast
         \return probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
     */
@@ -182,7 +182,7 @@ public class Calculations {
         return 1.0 - Math.exp(-B);
     }
     
-    /** \brief Calculates 3 second load equivalent resistance safety requirement: the 3 second load equivalent resistance safety requirement
+    /** \brief Calculates 3 second load equivalent resistance safety requirement
         \param LR load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
         \param q applied load (demand): 3 second duration equivalent pressure (Pa)
         \return 3 second load equivalent resistance safety requirement: the 3 second load equivalent resistance safety requirement
@@ -202,7 +202,7 @@ public class Calculations {
         return LR > q;
     }
     
-    /** \brief Calculates probability of glass breakage safety requirement: the probability of glass breakage safety requirement
+    /** \brief Calculates probability of glass breakage safety requirement
         \param inParams structure holding the input values: the structure holding the input values
         \param P_b probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
         \return probability of glass breakage safety requirement: the probability of glass breakage safety requirement

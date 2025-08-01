@@ -37,7 +37,7 @@ public class Projectile {
         write_output(s, d_offset, t_flight);
     }
     
-    /** \brief Calculates flight duration: the time when the projectile lands (s)
+    /** \brief Calculates flight duration (s)
         \param v_launch launch speed: the initial speed of the projectile when launched (m/s)
         \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
         \param g magnitude of gravitational acceleration: the magnitude of the approximate acceleration due to gravity on Earth at sea level (m/s^2)
@@ -47,7 +47,7 @@ public class Projectile {
         return 2.0 * v_launch * Math.sin(theta) / g;
     }
     
-    /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
+    /** \brief Calculates landing position (m)
         \param v_launch launch speed: the initial speed of the projectile when launched (m/s)
         \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
         \param g magnitude of gravitational acceleration: the magnitude of the approximate acceleration due to gravity on Earth at sea level (m/s^2)
@@ -57,7 +57,7 @@ public class Projectile {
         return 2.0 * Math.pow(v_launch, 2.0) * Math.sin(theta) * Math.cos(theta) / g;
     }
     
-    /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
+    /** \brief Calculates distance between the target position and the landing position (m)
         \param p_target target position: the distance from the launcher to the target (m)
         \param p_land landing position: the distance from the launcher to the final position of the projectile (m)
         \return distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -66,7 +66,7 @@ public class Projectile {
         return p_land - p_target;
     }
     
-    /** \brief Calculates output message as a string: the output message given as a string
+    /** \brief Calculates output message as a string
         \param p_target target position: the distance from the launcher to the target (m)
         \param epsilon hit tolerance: the hit tolerance
         \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)

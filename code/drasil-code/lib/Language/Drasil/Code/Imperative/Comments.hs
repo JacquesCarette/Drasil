@@ -1,6 +1,6 @@
 -- | Contains functions for generating code comments that describe a chunk.
 module Language.Drasil.Code.Imperative.Comments (
-  getComment
+  getComment, getCommentBrief
 ) where
 
 import Language.Drasil
@@ -44,3 +44,9 @@ getComment l = do
   d <- getDefnDoc l
   let u = getUnitsDoc l
   return $ render $ (t <> d) <+> u
+
+getCommentBrief :: (CodeIdea c) => c -> GenState String
+getCommentBrief l = do
+  t <- getTermDoc l
+  let u = getUnitsDoc l
+  return $ render $ t <+> u

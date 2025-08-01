@@ -7,7 +7,7 @@ import Database.Drasil (ChunkDB (symbolTable, termTable, conceptChunkTable, _uni
   _citationTable, _labelledcontentTable, _traceTable, _refbyTable, _refTable,
   CDB), idMap, symbolMap, termMap, conceptMap, unitMap, addCdb)
 import Language.Drasil (IdeaDict, Quantity, MayHaveUnit, Concept, IsUnit,
-  ConceptChunk, ConceptInstance, Citation, Reference, LabelledContent, nw)
+  ConceptChunk, ConceptInstance, Citation, Reference, LabelledContent, nw, DefinedQuantityDict)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Concepts.Education (educon)
@@ -18,7 +18,14 @@ import Data.Drasil.Concepts.Math (mathcon)
 import qualified Data.Map as Map (empty)
 import Data.Drasil.SI_Units (siUnits)
 import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel, GenDefn)
+import Language.Drasil.Code (codeDQDs)
 
+basisSymbols :: [DefinedQuantityDict]
+basisSymbols =
+  -- | DefinedQuantityDicts
+  --  * codeDQDs - A list of DefinedQuantityDicts that are used for general
+  --               code generation in all case studies
+  codeDQDs
 -- | The basic idea dicts that are used to construct the basis chunk database.
 -- Every chunk added here is added to every new chunk database created that uses
 --  the cdb constructor. This ensures that the information in these idea dicts
@@ -72,7 +79,7 @@ basisCDB :: ChunkDB
 basisCDB =
   CDB {
     -- CHUNKS
-    symbolTable           = Map.empty,
+    symbolTable           = symbolMap basisSymbols,
     termTable             = termMap basisIdeaDicts,
     conceptChunkTable     = conceptMap basisConceptChunks,
     _unitTable            = unitMap siUnits, -- SI units are important to all case studies since they rely on physical quantities

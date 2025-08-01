@@ -17,17 +17,17 @@ public class ODEStepHandler implements StepHandler {
     public ArrayList<Double> T_W;
     
     /** \brief initializes step handler with initial conditions
-        \param t0 initial time for ODE solving
-        \param y0 array of initial values for ODE solving
-        \param t current independent variable value in ODE solution
+        \param t0 initial time for ODE solving: the initial time for ODE solving
+        \param y0 array of initial values for ODE solving: the array of initial values for ODE solving
+        \param t current independent variable value in ODE solution: the current independent variable value in the ODE solution
     */
     public void init(double t0, double[] y0, double t) {
         T_W = new ArrayList<Double>(Arrays.asList(y0[0]));
     }
     
     /** \brief appends solution point at each ODE solution step
-        \param interpolator step interpolator for ODE solving
-        \param isLast boolean for whether the current step is the last step
+        \param interpolator step interpolator for ODE solving: the step interpolator for ODE solving
+        \param isLast boolean for whether the current step is the last step: the boolean for whether the current step is the last step
     */
     public void handleStep(StepInterpolator interpolator, boolean isLast) {
         double[] curr = interpolator.getInterpolatedState();

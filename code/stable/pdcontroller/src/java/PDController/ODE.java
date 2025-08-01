@@ -34,9 +34,9 @@ public class ODE implements FirstOrderDifferentialEquations {
     }
     
     /** \brief function representation of an ODE system
-        \param t current independent variable value in ODE solution
-        \param y_t Process Variable
-        \param dy_t change in Process Variable
+        \param t current independent variable value in ODE solution: the current independent variable value in the ODE solution
+        \param y_t Process Variable: The output value from the power plant
+        \param dy_t change in Process Variable: the change in The output value from the power plant
     */
     public void computeDerivatives(double t, double[] y_t, double[] dy_t) {
         dy_t[0] = y_t[1];

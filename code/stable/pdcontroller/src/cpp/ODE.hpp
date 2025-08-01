@@ -23,8 +23,8 @@ class ODE {
         ODE(double K_p, double K_d, double r_t);
         /** \brief function representation of ODE system
             \param y_t Process Variable: The output value from the power plant
-            \param dy_t change in Process Variable
-            \param t current independent variable value in ODE solution
+            \param dy_t change in Process Variable: the change in The output value from the power plant
+            \param t current independent variable value in ODE solution: the current independent variable value in the ODE solution
         */
         void operator()(vector<double> y_t, vector<double> &dy_t, double t);
     

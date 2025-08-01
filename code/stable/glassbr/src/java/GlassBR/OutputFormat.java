@@ -14,10 +14,10 @@ import java.io.PrintWriter;
 public class OutputFormat {
     
     /** \brief Writes the output values to output.txt
-        \param isSafePb probability of glass breakage safety requirement
-        \param isSafeLR 3 second load equivalent resistance safety requirement
+        \param isSafePb probability of glass breakage safety requirement: the probability of glass breakage safety requirement
+        \param isSafeLR 3 second load equivalent resistance safety requirement: the 3 second load equivalent resistance safety requirement
         \param P_b probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
-        \param J stress distribution factor (Function)
+        \param J stress distribution factor (Function): the stress distribution factor of the glass plate
     */
     public static void write_output(boolean isSafePb, boolean isSafeLR, double P_b, double J) throws IOException {
         PrintWriter outfile;

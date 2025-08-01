@@ -7,7 +7,7 @@
 import Foundation
 
 /** Writes the output values to output.txt
-    - Parameter s: output message as a string
+    - Parameter s: output message as a string: the output message given as a string
     - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
     - Parameter t_flight: flight duration: the time when the projectile lands (s)
 */

@@ -10,10 +10,9 @@ import Data.Drasil.Concepts.Physics (energy)
 
 -- | Collects all thermodynamics-related concepts.
 thermocon :: [ConceptChunk]
-thermocon = [boilPt, boiling, degree_', enerSrc, heat, heatCapSpec, heatTrans,
-  htFlux, htTransTheo, latentHeat, lawConsEnergy, lawConvCooling, meltPt,
-  melting, phaseChange, sensHeat, temp, thermalAnalysis, thermalConduction,
-  thermalConductor, thermalEnergy]
+thermocon = [boiling, degree_', enerSrc, heat, heatTrans, htTransTheo,
+  lawConsEnergy, lawConvCooling, melting, phaseChange, thermalAnalysis,
+  thermalConduction, thermalConductor, thermalEnergy]
 
 boilPt, boiling, degree_', enerSrc, heat, heatCapSpec, heatTrans, htFlux,
   htTransTheo, latentHeat, lawConsEnergy, lawConvCooling, meltPt, melting,
@@ -24,9 +23,9 @@ boilPt, boiling, degree_', enerSrc, heat, heatCapSpec, heatTrans, htFlux,
 --    Same for "Melting"
 boiling           = dcc "boiling"           (cn "boiling")
                       "the phase change from liquid to vapour"
-boilPt            = dcc "boilPt"           (cn' "boiling point temperature")
+boilPt            = dcc "boilPt"            (cn' "boiling point temperature")
                       "the temperature at which a substance changes from liquid to vapour"
-degree_'          = dcc "degree"            (cn' "degree")
+degree_'          = dcc "thermo_degree"     (cn' "degree")
                       "a measure of the warmth or coldness of an object or substance"
 heat              = dcc "heat"              (cn "heat")
                       ("Noun: The amount of heat energy inside a body. " ++

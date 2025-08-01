@@ -19,6 +19,7 @@ import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
   system, term_, user, value, variable, reference, definition)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics)
 import Data.Drasil.Concepts.Math (graph, mathcon')
+import Data.Drasil.Quantities.Math (mathquants, mathunitals)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, materialProprty)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
@@ -46,6 +47,7 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints)
 
 import Drasil.System (SystemKind(Specification), mkSystem)
+import Data.Drasil.Quantities.PhysicalProperties (physicalquants)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -127,7 +129,11 @@ ideaDicts =
 conceptChunks :: [ConceptChunk]
 conceptChunks = 
   -- ConceptChunks
-  distance : concepts ++ softwarecon ++ physicalcon
+  distance : concepts ++ softwarecon ++ physicalcon ++
+  -- Unital Chunks
+  map cw mathunitals ++ map cw physicalquants ++
+  -- DefinedQuantityDicts
+  map cw mathquants
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList = 

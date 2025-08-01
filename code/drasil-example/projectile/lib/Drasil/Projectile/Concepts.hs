@@ -31,7 +31,7 @@ projMotion = compoundNC projectile motion
 ---
 
 defs :: [ConceptChunk]
-defs = [launcher, projectile, target, projSpeed, projPos]
+defs = [launcher, projectile, target]
 
 launcher, projectile, target, projSpeed, projPos :: ConceptChunk
 launcher   = dcc "launcher"   (nounPhraseSP "launcher")  ("where the projectile is launched from " ++

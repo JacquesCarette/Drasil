@@ -14,7 +14,7 @@ import Drasil.Code.CodeExpr.Development
 
 import Language.Drasil (Constraint(..), RealInterval(..),
   HasUID(uid), Stage(..))
-import Language.Drasil.Code.Imperative.Comments (getComment)
+import Language.Drasil.Code.Imperative.Comments (getComment, getCommentBrief)
 import Language.Drasil.Code.Imperative.Descriptions (constClassDesc,
   constModDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, inputClassDesc,
   inputConstructorDesc, inputParametersDesc, modDesc, outputFormatDesc,
@@ -551,11 +551,12 @@ genCalcFunc cdef = do
                      block stepStmts,
                      block [returnStmt $ valueOf v]])
                  (Map.lookup nm (extLibMap g))
+  calcDesc <- getCommentBrief cdef
   desc <- getComment cdef
   publicFunc
     nm
     (convTypeOO tp)
-    ("Calculates " ++ desc)
+    ("Calculates " ++ calcDesc)
     (map pcAuto parms)
     (Just desc)
     blcks
@@ -785,11 +786,12 @@ genCalcFuncProc cdef = do
                      block stepStmts,
                      block [returnStmt $ valueOf v]])
                  (Map.lookup nm (extLibMap g))
+  calcDesc <- getCommentBrief cdef
   desc <- getComment cdef
   publicFuncProc
     nm
     (convType tp)
-    ("Calculates " ++ desc)
+    ("Calculates " ++ calcDesc)
     (map pcAuto parms)
     (Just desc)
     blcks

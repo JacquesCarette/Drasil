@@ -15,7 +15,7 @@
 
 using std::vector;
 
-/** \brief Calculates Process Variable: The output value from the power plant
+/** \brief Calculates Process Variable
     \param K_d Derivative Gain: Gain constant of the derivative controller
     \param K_p Proportional Gain: Gain constant of the proportional controller
     \param r_t Set-Point: The desired value that the control system must reach. This also knows as the reference variable

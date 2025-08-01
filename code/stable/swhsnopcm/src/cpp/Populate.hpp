@@ -20,8 +20,8 @@ class Populate {
         */
         Populate(vector<double> &T_W);
         /** \brief appends solution point for current ODE solution step
-            \param y current dependent variable value in ODE solution
-            \param t current independent variable value in ODE solution
+            \param y current dependent variable value in ODE solution: the current dependent variable value in the ODE solution
+            \param t current independent variable value in ODE solution: the current independent variable value in the ODE solution
         */
         void operator()(vector<double> &y, double t);
     

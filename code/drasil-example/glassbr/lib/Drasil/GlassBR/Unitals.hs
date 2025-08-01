@@ -120,9 +120,8 @@ tmSymbols :: [DefinedQuantityDict]
 tmSymbols = map dqdWr [probFail, pbTolfail]
 
 probBr, probFail, pbTolfail, stressDistFac :: ConstrConcept
-probBr = cucNoUnit' "probBr" (nounPhraseSP "probability of breakage")
-  "the probability of breakage of the glass plate"
-  (sub cP lBreak) Real
+probBr = constrained' (dqdNoUnit probBreak
+  (sub cP lBreak) Real)
   [probConstr] (dbl 0.4)
 
 stressDistFac = cucNoUnit' "stressDistFac" (nounPhraseSP "stress distribution factor (Function)")
@@ -284,7 +283,7 @@ loadDF        = dqdNoUnit loadDurFac (variable "LDF") Real
 loadSF        = dqdNoUnit loadShareFac (variable "LSF") Real
 
 riskFun = dqdNoUnit (dcc "riskFun" (nounPhraseSP "risk of failure")
-  "the risk of failure") cB Real
+  "the percentage risk of the glass slab failing to resist the blast") cB Real
 
 sdfTol = dqdNoUnit (dcc "sdfTol" (nounPhraseSP "tolerable stress distribution factor")
   "the tolerable stress distribution factor") (sub (eqSymb stressDistFac) lTol) Real
@@ -301,11 +300,9 @@ lFail  = label "f"
 lTol   = label "tol"
 
 concepts :: [ConceptChunk]
-concepts = [aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
-  glTyFac, lateral, load, specDeLoad, loadResis, longDurLoad, nonFactoredL,
-  glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar,
-  sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage, notSafe, bomb,
-  explosion]
+concepts = [glBreakage, lite, annealedGl, fTemperedGl, hStrengthGl, lateral,
+  specDeLoad, longDurLoad, glassWL, shortDurLoad, specA, blastResisGla, blast,
+  blastTy, glassGeo, safeMessage, notSafe, bomb, explosion]
 
 aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
   glTyFac, lateral, load, specDeLoad, loadDurFac, loadResis, longDurLoad, modE, nonFactoredL,
@@ -389,7 +386,7 @@ nonFactoredL  = cc' nFL
   S "per 1000 for monolithic", short annealed, S "glass"])
 notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
   "For the given input parameters, the glass is NOT considered safe."
-probBreak     = cc' probBr
+probBreak     = dccWDS "probBr" (nounPhraseSP "probability of breakage")
   (foldlSent_ [S "the fraction of glass lites or plies that would break at the",
   S "first occurrence of a specified load and duration, typically expressed",
   S "in lites per 1000", sParen $ refS astm2016])

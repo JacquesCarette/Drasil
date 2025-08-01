@@ -6,6 +6,7 @@ import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Drasil.PDController.Concepts
+import Control.Lens ((^.))
 
 syms, symFS, symFt, syminvLaplace, symKd, symKp,
        symYT, symYS, symYrT, symYrS, symET, symES, symPS, symDS, symHS,
@@ -189,7 +190,7 @@ dqdDampingCoeff
 -- TODO: Create a separate description for the stiffness coefficient to state
 -- that it is the "stiffness coefficient of the spring" (#4275)
 dqdStiffnessCoeff
-  = dqd ccStiffCoeff
+  = dqd (dccWDS "dqdStiffnessCoeff" (ccStiffCoeff ^. term) (ccStiffCoeff ^. defn))
       symStifnessCoeff
       Real
       second

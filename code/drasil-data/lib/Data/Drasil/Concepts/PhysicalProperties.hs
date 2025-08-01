@@ -9,8 +9,7 @@ import Data.Drasil.Concepts.Math (centre)
 
 -- | Collects all physical property-related concepts.
 physicalcon :: [ConceptChunk]
-physicalcon = [gaseous, liquid, solid, ctrOfMass, density, specWeight, mass,
-  len, dimension, vol, flexure]
+physicalcon = [gaseous, liquid, solid, ctrOfMass, dimension, flexure]
 
 -- * Physical Properties
 

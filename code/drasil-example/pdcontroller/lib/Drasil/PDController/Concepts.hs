@@ -124,7 +124,7 @@ ccDampingCoeff
       "Quantity that characterizes a second order system's oscillatory response"
 
 ccStiffCoeff
-  = dcc "stiffnessCoeff" (nounPhraseSP "Stiffness coefficient")
+  = dcc "ccStiffnessCoeff" (nounPhraseSP "Stiffness coefficient")
       "Quantity that characterizes a spring's stiffness"
 
 concepts :: [IdeaDict]

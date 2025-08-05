@@ -1,23 +1,25 @@
 \chapter{Drasil}
 \label{c:drasil}
+%
+%\ds{**Section Roadmap:
+%    -- This is where the real meat of Drasil is discussed (implementation 
+%details)
+%    -- Intro to our knowledge-capture mechanisms
+%      - Chunks/hierarchy
+%      - Break down each with examples from the case studies.
+%      - Look for 'interesting' examples (synonyms, acronyms, complexity, etc.)
+%    -- Intro to the DSL
+%      - Captured knowledge is useless without the transformations/rendering 
+%engine
+%      - DSL for each \sf{}}
 
-\ds{**Section Roadmap:
-    -- This is where the real meat of Drasil is discussed (implementation details)
-    -- Intro to our knowledge-capture mechanisms
-      - Chunks/hierarchy
-      - Break down each with examples from the case studies.
-      - Look for 'interesting' examples (synonyms, acronyms, complexity, etc.)
-    -- Intro to the DSL
-      - Captured knowledge is useless without the transformations/rendering engine
-      - DSL for each \sf{}}
-
-In this chapter we introduce the Drasil framework and some details of its 
-implementation including knowledge-capture mechanisms, the domain specific 
-languages used throughout, and how all of these pieces are brought together in 
-a human-usable way to generate \sfs{}. The name Drasil, derived from Norse 
+In this chapter, we introduce the Drasil framework and its implementation 
+details, including knowledge-capture mechanisms, the domain specific 
+languages (DSLs) used throughout, and how these components are integrated 
+in a human-usable way to generate \sfs{}. The name Drasil, derived from Norse 
 Mythology's world tree Yggdrasil whose branches spread across the 
-many realms, is representative of how our framework spreads across the many 
-domains and contexts relevant to software generation.
+many realms, reflects how our framework spans the many domains and contexts 
+relevant to software generation.
       
 \section{Drasil in a nutshell}
 
@@ -25,12 +27,12 @@ Manually writing and maintaining a full range of \sfs{} is redundant, tedious,
 and often leads to divergent \sfs{}. Drasil is a purpose-built framework 
 created to tackle these problems.
 
-Contrary to documentation generators like Doxygen, Javadoc, and Pandoc
+Unlike documentation generators like Doxygen, Javadoc, and Pandoc
 which take a code-centric view of the problem and rely on manual redundancy -- 
 i.e. natural-language explanations written as specially delimited
 comments which can then be weaved into API documentation alongside code -- 
-Drasil takes a knowledge-centric, redundancy-limiting, fully traceable, single 
-source approach to generating \sfs{}.
+Drasil takes a knowledge-centric, redundancy-limiting, fully traceable, 
+single-source approach to generating \sfs{}.
 
 However, Drasil is not, nor is it intended to be, a panacea for all the woes of 
 software development. Even the seemingly well-defined problems of unnecessary 
@@ -627,6 +629,7 @@ itself or its definition, all that's relevant is that they exist. The generator
 the above comment.}
 
 \subsection{Example: Executable Code recipe for \gb{}}
+\label{sec:gbCodeRecipe}
 
 \ds{I've gone back and forth a few times on this and can't think of a good way 
 to give the executable code recipe for \gb{}. I might need to rethink the way 
@@ -835,252 +838,175 @@ ingredients we've discussed to deliver consistent, traceable, and maintainable
 \section{Cooking it all up: Generation/Rendering}
 \label{sec:gen}
 
-Now that Drasil's mechanisms for knowledge capture and recipe specification 
-have been established, we can begin the process of transforming these 
-structured specifications into tangible \sfs{}. This section details the 
-generation and rendering process, showing how Drasil unifies the ingredients 
-discussed so far to deliver consistent, traceable, and maintainable \sfs{}. To 
-ground the discussion, we will follow a long-running example from 
-the \gb{} case study, tracing the journey from knowledge capture to 
-the generation of a Software Requirements Specification (SRS) and executable 
-code.
+The previous sections have detailed how Drasil captures domain knowledge as 
+chunks, organizes it via a robust hierarchy, and structures it into recipes 
+that specify the desired artifacts. In this section, we focus on the final 
+stages of the generation pipeline: \emph{rendering} and \emph{assembly}. These 
+stages are responsible for transforming the intermediate representations 
+(recipes and their referenced chunks) into tangible, concrete, consumable 
+\sfs{}, such as documents and executable code.
 
-\subsection{From Recipe to \SF{}: The Generation Pipeline}
+\subsection{Rendering: From Abstract Structure to Concrete Formats}
 
-At its core, Drasil treats recipes as ``little programs'' which are 
-intermediate representations that specify both the structure and content of a 
-target \sf{}. Each recipe, whether for an SRS, code, or another \sf{}, is 
-constructed by selecting and organizing relevant knowledge chunks, as described 
-in previous sections. The generation process then interprets these recipes, 
-applying rendering strategies to produce the desired output format (ex. 
-\LaTeX{}, HTML, Python, C\#, etc.).
+At its core, Drasil treats recipes as ``little programs". Rendering in Drasil 
+refers to the process by which these abstract, language-agnostic structures 
+defined in recipes are transformed into specific output formats suitable for 
+end-users and stakeholders. This stage bridges the gap between the high-level, 
+reusable knowledge representations and the diverse forms required for practical 
+use (ex., \LaTeX{}, HTML, PDF, or source code in various programming 
+languages).Drasil achieves this through a set of dedicated \emph{printers} and, 
+for code, through the use of the General Object-Oriented Language 
+(GOOL)\cite{??} library. Each printer is designed to interpret the structured 
+data produced by the recipe and knowledge projection stages and emit output in 
+the desired format, handling both content and layout\footnote{To some respect, 
+depending on the desired output format. For instance, \LaTeX handles the 
+majority of the finished \sf{}'s layout where Drasil generates the content}.
 
-\paragraph{Overview.}
-The Drasil generation pipeline proceeds through four distinct stages, each of 
-which transforms the input knowledge and recipes in a systematic way. These 
-stages are:
-\begin{enumerate}
-    \item \textbf{Recipe Construction:} The user defines a recipe by specifying 
-    the structure and selecting the relevant knowledge chunks and configuration 
-    options.
-    \item \textbf{Knowledge Projection:} The generator traverses the recipe, 
-    \emph{resolving references} to knowledge chunks and extracting or 
-    transforming their contents as required for each section and the intended 
-    audience. This may include, for example, resolving synonyms, expanding 
-    definitions, or converting abstract representations into 
-    context-appropriate forms.
-    \item \textbf{Rendering:} The projected knowledge is rendered into the 
-    target format using a set of rendering engines. These engines handle both 
-    the transformation of content (ex. mathematical expressions, tables, code) 
-    and the application of formatting conventions.
-    \item \textbf{\SF{} Assembly:} The rendered sections are assembled into the 
-    final \sf{}, with cross-references, traceability links, and auxiliary 
-    materials (such as tables of symbols or sample input files) generated as 
-    needed.
-\end{enumerate}
-
-\paragraph{A Note on Code Generation: The Role of GOOL.}
-For code generation, Drasil leverages the General Object-Oriented Language 
-(GOOL). GOOL serves as an intermediate representation for program structures, 
-supporting key object-oriented and procedural constructs in a language-agnostic 
-manner. By emitting code to GOOL, Drasil enables the same high-level recipe to 
-be rendered into multiple target languages (e.g., Python, C++, Java, C\#) with 
-minimal duplication. GOOL provides a set of combinators and data types that 
-model classes, functions, variables, and control flow, ensuring that all code 
-artifacts remain traceable to their source knowledge chunks and recipe 
-specifications.
-
-\subsubsection*{The Generation Pipeline in Practice: Call Stack and Step 
-Mapping}
-
-To provide a concrete understanding of how Drasil's generation pipeline 
-operates, we can map the main function call stack to the four conceptual steps 
-described above. This mapping clarifies which functions are responsible for 
-each stage and how they interact to produce the final artifact. Below, we 
-detail each step, the key functions involved, and provide concrete examples 
-from the codebase. We also include diagrams to illustrate the flow for both 
-document (SRS) and code generation.
-
-\subsubsection*{Recipe Construction}
-\textbf{What happens:} The user (or a case study) defines a recipe, such as an 
-SRS or CodeSpec, by selecting the structure and relevant knowledge chunks.
-
-\textbf{Code location:} This is done outside the generator, in the example/case 
-study code (e.g., \texttt{glassbr\_srs} or \texttt{glassbr\_code} in the Drasil 
-examples).
-
-\todo{add references to the figures above instead of regenerating}
-
-\fig{\codeBlock{Body}{84}{94}}{SRS Recipe Construction for 
-\gb{}}{fig:glassbrSRSRecipe}
-
-\fig{\codeBlock{Choices}{13}{27}}{Code Recipe Construction for 
-\gb{}}{fig:glassbrCodeRecipe}
-
-This step is not part of the generator call stack, but it is the entry point 
-for the next steps.
-
-\paragraph{Example: Tracing a Knowledge Chunk.}
-To make this concrete, consider the dimensionless load $\hat{q}$ in GlassBR. 
-Its definition is captured as a chunk in the knowledge base. During recipe 
-construction, the SRS and code recipes both reference this chunk, ensuring it 
-will appear in the relevant sections of each generated artifact. (See the next 
-steps for how this chunk is projected and rendered.)
-
-\subsubsection*{Knowledge Projection}
-\textbf{What happens:} The generator traverses the recipe, extracting and 
-projecting knowledge from the underlying chunks according to the needs of each 
-section and the intended audience.
-
-Knowledge projection involves more than simply copying information from the 
-knowledge base: it includes resolving references (e.g., linking to definitions, 
-units, and symbols), expanding macros or formulas, and transforming abstract 
-representations into concrete forms tailored for the target artifact. For 
-example, the $\hat{q}$ chunk may be projected differently in the SRS (as a data 
-definition with units and formula) and in the generated code (as a function or 
-variable, possibly with type information inferred from units).
-
-\textbf{Code location:}
+\subsubsection{Document Rendering: Printers and Output Engines}
+For documentation artifacts (such as SRS or Module Guide), Drasil provides 
+specialized printers for each supported format:
 \begin{itemize}
-    \item For documents: The \texttt{Document} is traversed by the rendering 
-    functions (e.g., \texttt{genTeX}, \texttt{genHTML}, \texttt{genJSON}).
-    \item For code: The \texttt{CodeSpec} is traversed by the code generator 
-    (\texttt{generator} in \texttt{Language.Drasil.Code.Imperative.Generator}).
+    \item \codeH{genTeX} in \codeH{Language.Drasil.TeX.Print} --- renders the 
+    document as \LaTeX{} source, suitable for PDF generation.
+    \item \codeH{genHTML} in \codeH{Language.Drasil.HTML.Print} --- produces 
+    HTML for web-based consumption.
+    \item \codeH{genJSON} in \codeH{Language.Drasil.JSON.Print} --- outputs a 
+    machine-readable JSON representation, supporting further processing or 
+    integration.
+	\item \ds{\codeH{gen...} Put the other ones here.}
 \end{itemize}
 
-\fig{\codeBlock{Generate}{32}{37}}{Entry point for document generation 
-(\texttt{gen})}{fig:genEntry}
-
-\fig{\codeBlock{ImperativeGenerator}{48}{55}}{generator function for code 
-generation}{fig:generatorFunc}
-
-\paragraph{Comparing Document and Code Generation.}
-While both pipelines follow similar conceptual steps, document generation 
-emphasizes human-readable formatting, cross-references, and explanatory text, 
-whereas code generation prioritizes the correct transformation of mathematical 
-definitions into executable constructs, respecting language-specific syntax and 
-idioms. In both cases, the underlying knowledge chunks serve as the single 
-source of truth.
-
-\subsubsection*{Rendering}
-\textbf{What happens:} The projected knowledge is rendered into the target 
-format (TeX, HTML, JSON, or code in various languages).
-
-\textbf{Code location:}
-\begin{itemize}
-    \item For documents:
-        \begin{itemize}
-            \item \texttt{genTeX} (in \texttt{Language.Drasil.TeX.Print})
-            \item \texttt{genHTML} (in \texttt{Language.Drasil.HTML.Print})
-            \item \texttt{genJSON} (in \texttt{Language.Drasil.JSON.Print})
-        \end{itemize}
-    \item For code:
-        \begin{itemize}
-            \item \texttt{generateCode} and \texttt{genPackage} (in 
-            \texttt{Language.Drasil.Code.Imperative.Generator})
-            \item Within code generation, GOOL is used to construct an 
-            intermediate representation---a language-independent abstract 
-            syntax tree---which is subsequently rendered to the desired target 
-            language(s). For example, a mathematical formula for $\hat{q}$ is 
-            first represented in GOOL, then rendered as a Python function, a 
-            C++ method, etc., all while preserving traceability to its source 
-            chunk.
-        \end{itemize}
-\end{itemize}
+Each printer traverses the recipe structure, visiting each section and 
+sub-section, and calls formatting routines appropriate to the target format. 
+For example, a Data Definition chunk will be rendered as a LaTeX table row, an 
+HTML table entry, or a JSON object, depending on the printer invoked.
+\paragraph{Example: SRS to \LaTeX{}}
+As a concrete illustration, consider the printing of the \gb{} SRS to 
+\LaTeX{}. The process begins with the invocation of the \codeH{genTeX} 
+function, which recursively walks the document tree produced by the recipe, 
+emitting \LaTeX{} code for sections, equations, and tables. 
+Figure~\ref{fig:genTeX} shows the entry point to this process, while 
+Figure~\ref{fig:prntDocPrime} demonstrates the function responsible for writing 
+the rendered document to disk.
 
 \fig{\codeBlock{TeXPrint}{41}{44}}{genTeX function for LaTeX 
 rendering}{fig:genTeX}
+\fig{\codeBlock{Generate}{56}{60}}{prntDoc' function for document 
+output}{fig:prntDocPrime}
+
+
+\subsubsection{Code Rendering: GOOL and Target Language Emission}
+For executable code artifacts, Drasil uses the GOOL library as an intermediate 
+layer. GOOL provides a collection of type-safe combinators and abstractions for 
+representing object-oriented and procedural constructs in a language-agnostic 
+manner. The code recipe (ex., a \codeH{CodeSpec}) is first translated into a 
+GOOL abstract syntax tree (AST), which is then emitted as source code in one or 
+more target languages.
+\paragraph{GOOL Pipeline}
+The code emission process proceeds as follows:
+\begin{enumerate}
+    \item The code recipe and its referenced chunks are traversed to construct 
+    a GOOL AST, representing classes, functions, variables, and control flow.
+    \item The GOOL backend is invoked for each specified target language, 
+    translating the AST into concrete source code (ex., Python, C++, Java, 
+    C\#).
+    \item Auxiliary files (such as README, Doxygen config, and sample input 
+    files) are generated via dedicated routines, ensuring completeness and 
+    usability.
+\end{enumerate}
+\paragraph{Example: Emitting \gb{} Code in Python}
+For \gb{}, suppose the code recipe specifies Python as a target. The 
+generation process calls \codeH{generateCode} in 
+\codeH{Language.Drasil.Code.Imperative.Generator}, which constructs the GOOL 
+AST and then emits Python code by invoking the Python backend. The resulting 
+code includes all functions, data structures, and comments specified in the 
+recipe and choices object, as well as any automatically generated traceability 
+links (ex., comments referencing requirements or data definitions). 
+Figure~\ref{fig:generateCode} shows the relevant code path.
 
 \fig{\codeBlock{ImperativeGenerator}{100}{123}}{generateCode and genPackage for 
 code rendering}{fig:generateCode}
 
-\paragraph{Example: Rendering $\hat{q}$ in Code.}
-Suppose the chunk for $\hat{q}$ encodes the equation $\hat{q} = 
-\frac{q(ab)^2}{Eh^4\text{GTF}}$. Through knowledge projection, this equation is 
-mapped to a GOOL expression representing the formula. During rendering, GOOL 
-emits a function (e.g., \texttt{def compute\_qhat(...):} in Python) with the 
-correct argument list and body. The same GOOL representation can be rendered to 
-C++, Java, or other supported languages, ensuring the generated code remains 
-consistent with the knowledge base.
-
-\subsubsection*{Artifact Assembly}
-\textbf{What happens:} The rendered sections are assembled into the final 
-artifact, with cross-references, traceability links, and auxiliary materials 
-generated as needed.
-
-\textbf{Code location:}
+\subsection{Assembly: Producing the Final \SF{} Set}
+Once rendering is complete, the generated document or code sections must be 
+assembled into coherent artifacts ready for distribution and use. Assembly 
+includes:
 \begin{itemize}
-    \item For documents:
-        \begin{itemize}
-            \item \texttt{prntDoc'} writes the rendered document to disk.
-            \item \texttt{prntMake} generates Makefiles for TeX.
-            \item \texttt{prntCSS} generates CSS for HTML.
-        \end{itemize}
-    \item For code:
-        \begin{itemize}
-            \item \texttt{createCodeFiles} writes the generated code files to 
-            disk.
-            \item Auxiliary files (README, Doxygen config, sample input) are 
-            generated by \texttt{genReadMe}, \texttt{genDoxConfig}, 
-            \texttt{genSampleInput}.
-        \end{itemize}
+    \item Writing primary artifacts to disk (ex., *.tex, *.html, *.py, *.cpp 
+    files)
+    \item Generating auxiliary files (ex. Makefiles, CSS, README, example input 
+    files)
+    \item Linking cross-references and ensuring the integrity of tables, 
+    figures, and code modules
 \end{itemize}
 
-\fig{\codeBlock{Generate}{56}{60}}{prntDoc' function for document 
-output}{fig:prntDocPrime}
+\paragraph{Example: SRS Assembly}
 
-\fig{\codeBlock{CodeGeneration}{28}{29}}{createCodeFiles for code 
+After rendering the \gb{} SRS to \LaTeX{}, the \codeH{prntDoc'} function 
+writes the source file, while \codeH{prntMake} generates a Makefile for 
+automated PDF compilation. The resulting directory contains a fully 
+cross-referenced, typeset-ready SRS and all supporting files.
+
+\paragraph{Example: Code Assembly}
+
+For code, \codeH{createCodeFiles} (Figure~\ref{fig:createCodeFiles}) is called 
+to write each generated source file and all auxiliary documentation to disk. 
+For multi-language builds, this process is repeated for each target language, 
+ensuring consistency across all output.
+
+\fig{\codeBlock{CodeGeneration}{28}{38}}{createCodeFiles for code 
 output}{fig:createCodeFiles}
 
-\paragraph{Traceability and Consistency by Construction.}
-Drasil achieves traceability not by embedding explicit metadata in its 
-generated artifacts, but by making the entire generation process fully 
-deterministic and rooted in a single source of truth. All documents and code 
-are produced by traversing recipes and knowledge chunks, ensuring that every 
-output can be traced—by construction—back to the precise definitions and 
-relationships captured in the knowledge base. Cross-references, such as those 
-in tables of symbols or data definitions, are generated automatically as part 
-of this traversal, ensuring human-readable traceability throughout the 
-artifacts.
+\ds{TODO: Add something about \codeH{render code} from the figure?}
 
-Crucially, Drasil leverages Haskell’s strong static type system to enforce 
-consistency and prevent errors. The chunk hierarchy, smart constructors, and 
-typeclass constraints ensure that only well-formed, type-correct chunks can be 
-constructed and referenced in recipes. As a result, malformed or missing chunks 
-are almost always detected at compile time, rather than at runtime or during 
-artifact generation. This “consistency by construction” philosophy means that 
-errors are typically surfaced as type errors or missing imports during 
-development, rather than as failures during the generation phase.
+\subsection{Guarantees and Extensibility}
 
-Thus, Drasil does not attempt to recover from or annotate malformed data at 
-runtime; instead, it is architected to make such situations impossible (or at 
-least extremely rare) through the design and use of Haskell’s type system. This 
-approach provides strong guarantees that all generated softifacts are 
-consistent, complete, and fully traceable to their source knowledge.
+The rendering and assembly phases are designed to be fully deterministic and 
+repeatable. Because Drasil relies on Haskell's type system and the structure of 
+recipes and chunks, all generated outputs are \emph{consistent by 
+construction}. Any 
+modification to a chunk or recipe is automatically reflected in every rendered 
+artifact on the next generation pass, eliminating the risk of out-of-date 
+documentation or code.
+Moreover, the modular design of printers and the GOOL backend makes it 
+straightforward to add new output formats or languages, further enhancing 
+Drasil's long-term utility and extensibility.
 
-\subsection{A \gb{} Example: Generating the SRS}
+\subsection{A \gb{} Example: From Chunk Definition to Final Rendering}
 
 \ds{Should I get more into the code in my example? I feel like I've shown a lot 
 of code already and this part is fairly straightforward, but I could rip some 
 code examples to add here}
 
-To illustrate this process, let us revisit the \gb{} case study. Earlier, we 
+To illustrate the rendering and assembly process, we follow a single chunk 
+through each step of generation in the GlassBR SRS. Earlier, we 
 described how the SRS recipe for \gb{} is constructed by specifying the 
 document structure and referencing the necessary knowledge chunks through the 
-system information object (see Section~\ref{sec:glassBRSRSRecipe}). Here, we 
-follow the journey of a single concept, the dimensionless load $\hat{q}$, from 
-its definition in the knowledge base to its appearance in the generated SRS.
+system information object (see Section~\ref{sec:glassBRSRSRecipe}). Now let us 
+observe the journey of the dimensionless load chunk ($\hat{q}$), from 
+its definition in the knowledge base to its appearance in the generated SRS in 
+\ds{HTML/\LaTeX} format.
 
 \paragraph{Step 1: Knowledge Capture}
-The definition of $\hat{q}$ is captured as a chunk in the knowledge base, complete with its symbolic representation, natural language description, units, and mathematical expression (see Figure~\ref{fig:gbrddq}). This chunk is referenced in multiple places: the Table of Symbols, the Data Definitions section, and within equations in the Instance Models.
+
+The definition of $\hat{q}$ is captured in the Drasil knowledge base as a 
+chunk. This chunk contains all necessary information: a unique identifier, 
+symbol, natural language description, units, and the defining mathematical 
+expression.
+
+\fig{
+\codeBlock{DataDefs}{130}{142}}{Definition of $\hat{q}$ as a chunk in the 
+GlassBR knowledge base}{fig:qhatChunkDef}
 
 \paragraph{Step 2: Recipe Specification}
-The SRS recipe for \gb{} includes a section for Data Definitions, which is 
-populated by referencing the list of data definition chunks in the system 
-information object. $\hat{q}$ is included in this list, ensuring it will appear 
-in the appropriate section of the generated document. Similarly, the Table of 
-Symbols section is populated by traversing the list of quantities and concepts, 
-again including $\hat{q}$.
+
+In this step, the previously defined $\hat{q}$ chunk is referenced and included 
+in the system information and recipe for the \gb{} SRS. Here, $\hat{q}$ is 
+added to the list of Data Definitions, which will later be used to populate the 
+relevant sections (Table of Symbols, Data Definitions, Traceability Matrix, 
+etc.) of the document. This step is about specifying what 
+knowledge is relevant and where it should appear, not about how it is rendered.
+\ds{TODO: Add a ref to the recipe fig here}
 
 \paragraph{Step 3: Generation and Rendering}
 When the generator is invoked to produce the SRS (ex. as a \LaTeX{} document), 
@@ -1091,8 +1017,27 @@ projects only the symbol, a brief description, and the units. The rendering
 engine formats these projections according to the conventions of the target 
 output (ex. as a table in \LaTeX{}).
 
+During rendering, the SRS generator traverses the recipe and, for each chunk 
+referenced, projects and formats it for the target output. 
+For the Data Definitions section, it projects the full definition of $\hat{q}$, 
+including its symbol, description, units, and defining equation. For the Table 
+of Symbols, it projects only the symbol, a brief description, and the units. 
+The rendering engine formats these projections according to the conventions of 
+the target output (as a \ds{HTML/\LaTeX} table or 
+section). \ds{TODO: Raw HTML/\LaTeX of the definition (figure)}
+
 \paragraph{Step 4: Assembly and Output}
-The rendered sections are assembled into the final SRS document. Cross-references are automatically generated, so that, for example, references to $\hat{q}$ in Instance Models or Requirements link back to its definition in the Data Definitions or Table of Symbols. Auxiliary materials, such as the Table of Units and Table of Abbreviations, are generated by traversing the relevant lists in the system information object, ensuring consistency and completeness.
+
+Finally, the rendered sections are assembled into the complete SRS artifact. 
+Cross-references are automatically generated, so that, for example, references 
+to $\hat{q}$ in Instance Models or Requirements link back to its definition in 
+the Data Definitions or Table of Symbols. Auxiliary materials, such as the 
+Table of Units and Table of Abbreviations, if required, are generated by 
+traversing the relevant lists in the system information object, ensuring 
+consistency and completeness. The completed document is output as a 
+\ds{(PDF/HTML)} with $\hat{q}$ fully integrated and accessible 
+alongside all other relevant information.
+\ds{TODO: Figure of rendered HTML/LaTeX snippets}
 
 \subsection{Multiple Renderings from a Single Source}
 
@@ -1130,21 +1075,44 @@ Section~\ref{sec:gbCodeRecipe}).
 
 \subsection{Traceability and Consistency}
 
-Because all \sfs{} are generated from a single source of truth, Drasil ensures 
-traceability and consistency across documents and code. Any change to a 
-knowledge chunk (such as correcting the definition of $\hat{q}$) is reflected 
-everywhere it appears: in the SRS, code, and any other generated \sf{}. This 
-minimizes the risk of inconsistencies and reduces the maintenance burden.
+Drasil achieves traceability not by embedding explicit metadata in its 
+generated artifacts, but by making the entire generation process fully 
+deterministic \ds{This will be important later!} and rooted in a single source 
+of truth. All documents and code 
+are produced by traversing recipes and knowledge chunks, ensuring that every 
+output can be traced (by construction) back to the precise definitions and 
+relationships captured in the knowledge base. Cross-references, such as those 
+in tables of symbols or data definitions, are generated automatically as part 
+of this traversal, ensuring human-readable traceability throughout the 
+artifacts.
+
+Crucially, Drasil leverages Haskell's strong static type system to enforce 
+consistency and prevent errors. The chunk hierarchy, smart constructors, and 
+typeclass constraints ensure that only well-formed, type-correct chunks can be 
+constructed and referenced in recipes. As a result, malformed or missing chunks 
+are almost always detected at compile time, rather than at runtime or during 
+artifact generation. This “consistency by construction” philosophy means that 
+errors are typically surfaced as type errors or missing imports during 
+development, rather than as failures during the generation phase.
+
+Thus, Drasil does not attempt to recover from or annotate malformed data at 
+runtime; instead, it is architected to make such situations impossible (or at 
+least extremely rare) through the design and use of Haskell's type system. This 
+approach provides strong guarantees that all generated \sfs{} are 
+consistent, complete, and fully traceable to their source knowledge.
 
 \subsection{Summary}
+In summary, rendering and assembly are the final, crucial steps that 
+operationalize the knowledge-centric approach and translate Drasil's abstract, 
+knowledge-centric representations into practical, high-quality \sfs{}. By 
+separating the concerns of knowledge capture, structuring, rendering, and 
+assembly, Drasil ensures that \sfs{} remain maintainable, consistent, 
+traceable, and free of unnecessary manual duplication from their high-level 
+specification down to their concrete instances. Overall this increases 
+confidence in the resulting software systems.
 
-In summary, Drasil's generation and rendering process operationalizes the 
-knowledge-centric approach by interpreting recipes as programs that select, 
-project, and render knowledge into a variety of \sfs{}. The \gb{} example 
-demonstrates how a single concept, captured once, is automatically and 
-consistently propagated throughout all relevant \sfs{}. This approach not 
-only reduces unnecessary redundancy, but also enhances traceability, 
-maintainability, and confidence in the resulting software system.
+The examples from \gb{} demonstrate the practical effectiveness of this 
+approach for both documentation and code.
 
 The next section will discuss how iteration and refinement were used in the 
 creation of Drasil, and how the framework enables rapid evolution of both 

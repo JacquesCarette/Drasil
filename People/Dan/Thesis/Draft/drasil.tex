@@ -880,7 +880,7 @@ Each printer traverses the recipe structure, visiting each section and
 sub-section, and calls formatting routines appropriate to the target format. 
 For example, a Data Definition chunk will be rendered as a LaTeX table row, an 
 HTML table entry, or a JSON object, depending on the printer invoked.
-\paragraph{Example: SRS to \LaTeX{}}
+\subsubsection{Example: SRS to \LaTeX{}}
 As a concrete illustration, consider the printing of the \gb{} SRS to 
 \LaTeX{}. The process begins with the invocation of the \codeH{genTeX} 
 function, which recursively walks the document tree produced by the recipe, 
@@ -902,7 +902,7 @@ representing object-oriented and procedural constructs in a language-agnostic
 manner. The code recipe (ex., a \codeH{CodeSpec}) is first translated into a 
 GOOL abstract syntax tree (AST), which is then emitted as source code in one or 
 more target languages.
-\paragraph{GOOL Pipeline}
+\subsubsection{GOOL Pipeline}
 The code emission process proceeds as follows:
 \begin{enumerate}
     \item The code recipe and its referenced chunks are traversed to construct 
@@ -914,7 +914,7 @@ The code emission process proceeds as follows:
     files) are generated via dedicated routines, ensuring completeness and 
     usability.
 \end{enumerate}
-\paragraph{Example: Emitting \gb{} Code in Python}
+\subsubsection{Example: Emitting \gb{} Code in Python}
 For \gb{}, suppose the code recipe specifies Python as a target. The 
 generation process calls \codeH{generateCode} in 
 \codeH{Language.Drasil.Code.Imperative.Generator}, which constructs the GOOL 
@@ -940,14 +940,14 @@ includes:
     figures, and code modules
 \end{itemize}
 
-\paragraph{Example: SRS Assembly}
+\subsubsection{Example: SRS Assembly}
 
 After rendering the \gb{} SRS to \LaTeX{}, the \codeH{prntDoc'} function 
 writes the source file, while \codeH{prntMake} generates a Makefile for 
 automated PDF compilation. The resulting directory contains a fully 
 cross-referenced, typeset-ready SRS and all supporting files.
 
-\paragraph{Example: Code Assembly}
+\subsubsection{Example: Code Assembly}
 
 For code, \codeH{createCodeFiles} (Figure~\ref{fig:createCodeFiles}) is called 
 to write each generated source file and all auxiliary documentation to disk. 
@@ -972,14 +972,14 @@ Moreover, the modular design of printers and the GOOL backend makes it
 straightforward to add new output formats or languages, further enhancing 
 Drasil's long-term utility and extensibility.
 
-\subsection{A \gb{} Example: From Chunk Definition to Final Rendering}
+\subsection{A \gb{} Example: From Chunk Definition to Final SRS Rendering}
 
 \ds{Should I get more into the code in my example? I feel like I've shown a lot 
 of code already and this part is fairly straightforward, but I could rip some 
 code examples to add here}
 
 To illustrate the rendering and assembly process, we follow a single chunk 
-through each step of generation in the GlassBR SRS. Earlier, we 
+through each step of generation in the \gb{} SRS. Earlier, we 
 described how the SRS recipe for \gb{} is constructed by specifying the 
 document structure and referencing the necessary knowledge chunks through the 
 system information object (see Section~\ref{sec:glassBRSRSRecipe}). Now let us 
@@ -987,7 +987,7 @@ observe the journey of the dimensionless load chunk ($\hat{q}$), from
 its definition in the knowledge base to its appearance in the generated SRS in 
 \ds{HTML/\LaTeX} format.
 
-\paragraph{Step 1: Knowledge Capture}
+\subsubsection{Step 1: Knowledge Capture}
 
 The definition of $\hat{q}$ is captured in the Drasil knowledge base as a 
 chunk. This chunk contains all necessary information: a unique identifier, 
@@ -996,9 +996,9 @@ expression.
 
 \fig{
 \codeBlock{DataDefs}{130}{142}}{Definition of $\hat{q}$ as a chunk in the 
-GlassBR knowledge base}{fig:qhatChunkDef}
+\gb{} knowledge base}{fig:qhatChunkDef}
 
-\paragraph{Step 2: Recipe Specification}
+\subsubsection{Step 2: Recipe Specification}
 
 In this step, the previously defined $\hat{q}$ chunk is referenced and included 
 in the system information and recipe for the \gb{} SRS. Here, $\hat{q}$ is 
@@ -1008,7 +1008,7 @@ etc.) of the document. This step is about specifying what
 knowledge is relevant and where it should appear, not about how it is rendered.
 \ds{TODO: Add a ref to the recipe fig here}
 
-\paragraph{Step 3: Generation and Rendering}
+\subsubsection{Step 3: Generation and Rendering}
 When the generator is invoked to produce the SRS (ex. as a \LaTeX{} document), 
 it traverses the recipe, visiting each section. For the Data Definitions 
 section, it projects the full definition of $\hat{q}$, including its symbol, 
@@ -1026,7 +1026,7 @@ The rendering engine formats these projections according to the conventions of
 the target output (as a \ds{HTML/\LaTeX} table or 
 section). \ds{TODO: Raw HTML/\LaTeX of the definition (figure)}
 
-\paragraph{Step 4: Assembly and Output}
+\subsubsection{Step 4: Assembly and Output}
 
 Finally, the rendered sections are assembled into the complete SRS artifact. 
 Cross-references are automatically generated, so that, for example, references 
@@ -1039,39 +1039,60 @@ consistency and completeness. The completed document is output as a
 alongside all other relevant information.
 \ds{TODO: Figure of rendered HTML/LaTeX snippets}
 
-\subsection{Multiple Renderings from a Single Source}
+\subsection{Multiple Renderings from a Single Source: From Chunk to Code}
 
-A key strength of Drasil's approach is the ability to generate multiple \sfs{} 
-from the same underlying knowledge and recipes. For example, the same knowledge 
-chunk for $\hat{q}$ can be rendered in:
-\begin{itemize}
-    \item The SRS (as a data definition, symbol in tables, and in equations)
-    \item The Module Guide (as a referenced quantity in module responsibilities)
-    \item The generated source code (as a variable or function, with its calculation derived from the defining equation)
-\end{itemize}
+As a continuation of the previous section’s example, we now follow the 
+dimensionless load $\hat{q}$ from its knowledge base definition through to its 
+realization in the generated source code. This example concretely demonstrates 
+how Drasil’s single-source-of-truth approach ensures that mathematical concepts 
+are faithfully and consistently reflected in both documentation and code 
+artifacts.
 
-This is achieved by applying different rendering strategies depending on the 
-target \sf{} and audience. For instance, when generating code, the 
-mathematical expression for $\hat{q}$ is translated into the syntax of the 
-target programming language (ex. Python or C++), while in the SRS it is 
-rendered as a \LaTeX{} equation. The generator ensures that all references 
-remain consistent, and any change to the definition of $\hat{q}$ is 
-automatically propagated to all \sfs{}.
+\subsubsection{Referencing $\hat{q}$ in the Code Recipe}
 
-\subsection{Parameterization and Flexibility}
+Recall that $\hat{q}$ was previously defined as a chunk containing its symbol, 
+natural language description, units, and mathematical formula (see 
+Figure~\ref{fig:qhatChunkDef}). In the process of generating executable code, 
+this chunk is referenced in the system information object and included in the 
+\codeH{CodeSpec} recipe for \gb{}. The recipe dictates which variables and 
+formulas are required in the target program, and provides implementation-level 
+choices such as type mapping and function structure.
+\ds{TODO: Fix the figure -- reference the existing one?}
+\fig{
+\codeBlock{CodeSpec}{40}{72}}{Reference to $\hat{q}$ in the code 
+specification}{fig:qhatCodeSpecRef}
 
-Drasil's generation process supports both explicit and implicit parameters. 
-Explicit parameters, such as the choice of output format (\LaTeX{}, HTML, 
-etc.), are provided by the user at generation time. Implicit parameters, such 
-as the inclusion of auxiliary sections (ex. Table of Symbols), are determined 
-by the recipe and the conventions of the target \sf{}. This allows for 
-flexible customization while maintaining consistency.
+\subsubsection{Rendering via GOOL}
 
-For example, in \gb{}, the same SRS recipe can be rendered as a PDF (via 
-\LaTeX{}) for formal documentation, or as HTML for web-based dissemination. 
-Similarly, the code recipe can target multiple programming languages by 
-specifying the desired languages in the \codeH{Choices} object (see 
-Section~\ref{sec:gbCodeRecipe}).
+During code generation, Drasil translates the recipe and referenced chunks into 
+a GOOL (General Object-Oriented Language) intermediate representation. The 
+$\hat{q}$ chunk, for example, is mapped to a function or variable definition 
+within the GOOL AST, preserving its formula and metadata. This intermediate 
+form enables Drasil to emit code in multiple target languages without 
+duplicating logic. As GOOL is not the subject of this thesis, we will elide the 
+remaining details for the time being \ds{however, an intermediate 
+representation can be seen in figure [ADD A FIGURE]}
+
+\subsubsection{Generated Source Code}
+
+Finally, the GOOL backend emits concrete code for $\hat{q}$ in each selected 
+language. For example, in Python, $\hat{q}$ \ds{appears as a function computing 
+its value from its dependencies, with comments referencing its origin and 
+documentation... or something}. The generated code maintains traceability 
+through naming conventions and comments drawn from the original chunk.
+
+\ds{TODO: Python figure}
+
+\subsubsection{Discussion}
+
+This example demonstrates how Drasil’s architecture ensures that any update to 
+the definition or formula of $\hat{q}$ is automatically propagated to the 
+generated code, just as it is to documentation artifacts. The use of a 
+knowledge-centric pipeline, combined with language-agnostic intermediate 
+representations, guarantees consistency and traceability throughout the 
+software system. Changes need only be made once, and are reflected everywhere 
+$\hat{q}$ appears, reducing maintenance cost and risk of error.
+
 
 \subsection{Traceability and Consistency}
 

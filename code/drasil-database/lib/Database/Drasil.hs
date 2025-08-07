@@ -6,7 +6,7 @@ module Database.Drasil (
   -- ** Constructors
 
   -- ** Lookup Functions
-  , findOrErr
+  , findOrErr, refFind, labelledcontentFind
   -- ** Lenses
 
   -- ** Debugging Tools

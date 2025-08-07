@@ -7,6 +7,8 @@ module Database.Drasil.ChunkDB
     empty,
     mkChunkDB,
     find,
+    labelledcontentFind,
+    refFind,
     findOrErr,
     findRefs,
     findRefsOrErr,
@@ -74,6 +76,16 @@ find :: Typeable a => UID -> ChunkDB -> Maybe a
 find u cdb = do
   (c', _) <- M.lookup u (chunkTable cdb)
   unChunk c'
+-- | Looks up a 'UID' in a 'UMap' table. If nothing is found, an error is thrown.
+uMapLookup :: String -> String -> UID -> UMap a -> a
+uMapLookup tys ms u t = getFM $ M.lookup u t
+  where getFM = maybe (error $ tys ++ ": " ++ show u ++ " not found in " ++ ms) fst
+
+labelledcontentFind :: UID -> ChunkDB -> LabelledContent
+labelledcontentFind u cdb = uMapLookup "LabelledContent" "labelledcontentTable" u (labelledcontentTable cdb)
+
+refFind :: UID -> ChunkDB -> Reference
+refFind u cdb = uMapLookup "Reference" "refTable" u (refTable cdb)
 
 findOrErr :: Typeable a => UID -> ChunkDB -> a
 findOrErr u = fromMaybe (error $ "Failed to find chunk " ++ show u) . find u

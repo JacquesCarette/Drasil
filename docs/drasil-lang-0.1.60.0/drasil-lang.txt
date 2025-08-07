@@ -967,7 +967,9 @@ data EqBinOp
 Eq :: EqBinOp
 NEq :: EqBinOp
 
--- | Index operator.
+-- | Index operator. <a>Index</a> represents accessing an element at a
+--   specific index, while <a>IndexOf</a> represents finding the index of a
+--   specific element.
 data LABinOp
 Index :: LABinOp
 IndexOf :: LABinOp
@@ -4523,7 +4525,7 @@ type TypingContext t = Map UID t
 type TypeError = String
 
 -- | Look for a known type of a specific <a>UID</a>.
-inferFromContext :: TypingContext t -> UID -> Either t TypeError
+inferFromContext :: TypingContext t -> UID -> Either TypeError t
 
 -- | Build a bidirectional type checker for your expression language, e,
 --   with respect to a specific type universe, t.
@@ -4531,11 +4533,11 @@ class (Eq t, Show t) => Typed e t
 
 -- | Given a typing context and an expression, infer a unique type or
 --   explain what went awry.
-infer :: Typed e t => TypingContext t -> e -> Either t TypeError
+infer :: Typed e t => TypingContext t -> e -> Either TypeError t
 
 -- | Given a typing context, an expression, and an expected type, check if
 --   the expression can satisfy the expectation.
-check :: Typed e t => TypingContext t -> e -> t -> Either t TypeError
+check :: Typed e t => TypingContext t -> e -> t -> Either TypeError t
 
 -- | For all containers, c, which contain typed expressions, e, against a
 --   specific type universe, t, expose all expressions and relations that

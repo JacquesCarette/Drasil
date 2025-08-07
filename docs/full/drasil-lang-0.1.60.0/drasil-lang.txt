@@ -647,6 +647,59 @@ mkFunction :: [Primitive] -> Primitive -> Space
 
 -- | Is this Space a basic numeric space?
 isBasicNumSpace :: Space -> Bool
+
+-- | Assert that a <a>Space</a> is <a>Space</a> or return a formatted error
+--   message.
+assertReal :: Space -> (String -> String) -> Either String ()
+
+-- | Assert that a <a>Space</a> is "numeric" or return a formatted error
+--   message.
+assertNumeric :: Space -> (String -> String) -> Either String ()
+
+-- | Assert that a numeric <a>Space</a> is not <a>Natural</a> or return a
+--   formatted error message.
+assertNonNatNumeric :: Space -> (String -> String) -> Either String ()
+
+-- | Assert that two numeric <a>Space</a>s are equivalent or return a
+--   formatted error message.
+assertEquivNumeric :: Space -> Space -> (String -> String -> String) -> Either String ()
+
+-- | Assert that a <a>Space</a> is an index-like type (Integer or Natural)
+--   or return a formatted error message.
+assertIndexLike :: Space -> (String -> String) -> Either String ()
+
+-- | Assert that a <a>Space</a> is a <a>Boolean</a> or return a formatted
+--   error message.
+assertBoolean :: Space -> (String -> String) -> Either String ()
+
+-- | Assert that a <a>Space</a> is a <a>Set</a> and return either the
+--   element type or a formatted error message.
+assertSet :: Space -> (String -> String) -> Either String Space
+
+-- | Assert that a <a>Space</a> is a <a>Vect</a> and return either the
+--   element type or a formatted error message.
+assertVector :: Space -> (String -> String) -> Either String Space
+
+-- | Assert that a <a>Space</a> is a numeric vector (i.e., a vector of a
+--   basic numeric type) and return either the numeric type or a formatted
+--   error message.
+assertNumericVector :: Space -> (String -> String) -> Either String Space
+
+-- | Assert that a <a>Space</a> is a non-<a>Natural</a> numeric vector and
+--   return either the numeric type or a formatted error message.
+assertNonNatNumVector :: (String -> String) -> Space -> Either String Space
+
+-- | Assert that a <a>Space</a> is a <a>Vect</a> of <a>Space</a>s or return
+--   a formatted error message.
+assertRealVector :: Space -> (String -> String) -> Either String ()
+
+-- | Assert that a <a>Space</a> is a <a>Function</a>, returning either the
+--   parameters and output type or a formatted error message.
+assertFunction :: Space -> (String -> String) -> Either String (NonEmpty Primitive, Primitive)
+
+-- | Assert that a <a>Space</a> is anything but a <a>Function</a> or return
+--   a formatted error message.
+assertNonFunction :: Space -> (String -> String) -> Either String ()
 instance GHC.Show.Show Language.Drasil.Space.Space
 instance GHC.Classes.Eq Language.Drasil.Space.Space
 
@@ -1248,7 +1301,7 @@ type TypeError = String
 type TypingContext t = Map UID t
 
 -- | Look for a known type of a specific <a>UID</a>.
-inferFromContext :: TypingContext t -> UID -> Either t TypeError
+inferFromContext :: TypingContext t -> UID -> Either TypeError t
 
 -- | Build a bidirectional type checker for your expression language, e,
 --   with respect to a specific type universe, t.
@@ -1256,11 +1309,11 @@ class (Eq t, Show t) => Typed e t
 
 -- | Given a typing context and an expression, infer a unique type or
 --   explain what went awry.
-infer :: Typed e t => TypingContext t -> e -> Either t TypeError
+infer :: Typed e t => TypingContext t -> e -> Either TypeError t
 
 -- | Given a typing context, an expression, and an expected type, check if
 --   the expression can satisfy the expectation.
-check :: Typed e t => TypingContext t -> e -> t -> Either t TypeError
+check :: Typed e t => TypingContext t -> e -> t -> Either TypeError t
 
 -- | For all containers, c, which contain typed expressions, e, against a
 --   specific type universe, t, expose all expressions and relations that
@@ -1269,10 +1322,13 @@ class Typed e t => RequiresChecking c e t
 
 -- | All things that need type checking.
 requiredChecks :: RequiresChecking c e t => c -> [(e, t)]
+assertEq :: (Show t, Eq t) => t -> t -> (String -> String -> TypeError) -> Either TypeError ()
+(~==) :: (Show t, Eq t) => t -> t -> (String -> String -> TypeError) -> Either TypeError ()
+infix 4 ~==
 
 -- | `<tt>Check'</tt> an expressions type based by an inference.
-typeCheckByInfer :: Typed e t => TypingContext t -> e -> t -> Either t TypeError
-allOfType :: Typed e t => TypingContext t -> [e] -> t -> t -> TypeError -> Either t TypeError
+typeCheckByInfer :: Typed e t => TypingContext t -> e -> t -> Either TypeError t
+assertAllEq :: Typed e t => TypingContext t -> [e] -> t -> TypeError -> Either TypeError ()
 
 -- | A temporary, hacky, indentation function. It should be removed when we
 --   switch to using something else for error messages, which can be later
@@ -1333,7 +1389,9 @@ data BoolBinOp
 Impl :: BoolBinOp
 Iff :: BoolBinOp
 
--- | Index operator.
+-- | Index operator. <a>Index</a> represents accessing an element at a
+--   specific index, while <a>IndexOf</a> represents finding the index of a
+--   specific element.
 data LABinOp
 Index :: LABinOp
 IndexOf :: LABinOp
@@ -1510,7 +1568,7 @@ data Expr
 [RealI] :: UID -> RealInterval Expr Expr -> Expr
 class Pretty p
 pretty :: Pretty p => p -> String
-vvvInfer :: TypingContext Space -> VVVBinOp -> Expr -> Expr -> Either Space TypeError
+vvvInfer :: TypingContext Space -> VVVBinOp -> Expr -> Expr -> Either TypeError Space
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.ArithBinOp
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.EqBinOp
 instance GHC.Classes.Eq Language.Drasil.Expr.Lang.BoolBinOp
@@ -3190,7 +3248,9 @@ data EqBinOp
 Eq :: EqBinOp
 NEq :: EqBinOp
 
--- | Index operator.
+-- | Index operator. <a>Index</a> represents accessing an element at a
+--   specific index, while <a>IndexOf</a> represents finding the index of a
+--   specific element.
 data LABinOp
 Index :: LABinOp
 IndexOf :: LABinOp
@@ -8783,7 +8843,7 @@ type TypingContext t = Map UID t
 type TypeError = String
 
 -- | Look for a known type of a specific <a>UID</a>.
-inferFromContext :: TypingContext t -> UID -> Either t TypeError
+inferFromContext :: TypingContext t -> UID -> Either TypeError t
 
 -- | Build a bidirectional type checker for your expression language, e,
 --   with respect to a specific type universe, t.
@@ -8791,11 +8851,11 @@ class (Eq t, Show t) => Typed e t
 
 -- | Given a typing context and an expression, infer a unique type or
 --   explain what went awry.
-infer :: Typed e t => TypingContext t -> e -> Either t TypeError
+infer :: Typed e t => TypingContext t -> e -> Either TypeError t
 
 -- | Given a typing context, an expression, and an expected type, check if
 --   the expression can satisfy the expectation.
-check :: Typed e t => TypingContext t -> e -> t -> Either t TypeError
+check :: Typed e t => TypingContext t -> e -> t -> Either TypeError t
 
 -- | For all containers, c, which contain typed expressions, e, against a
 --   specific type universe, t, expose all expressions and relations that

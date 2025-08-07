@@ -3,12 +3,13 @@ module Language.Drasil.Printing.Import.Helpers where
 
 import Language.Drasil (Stage(..), codeSymb, eqSymb, NounPhrase(..), Sentence(S),
   Symbol, UID, TermCapitalization(..), titleizeNP, titleizeNP',
-  atStartNP, atStartNP', NP)
-import Database.Drasil (ChunkDB, symbResolve, termResolve', longForm, shortForm)
+  atStartNP, atStartNP', NP, NamedIdea (term), Idea (getA), DefinedQuantityDict, IdeaDict)
+import Database.Drasil (ChunkDB, findOrErr, Chunk)
 
 import qualified Language.Drasil.Printing.AST as P
 
 import Data.Char (toUpper)
+import Control.Lens ((^.))
 
 -- * Expr-related
 
@@ -54,21 +55,21 @@ processExpo a
 -- | Given the stage of the symbol, looks up a character/symbol
 -- inside a chunk database that matches the given 'UID'. 
 lookupC :: Stage -> ChunkDB -> UID -> Symbol
-lookupC Equational     sm c = eqSymb   $ symbResolve sm c
-lookupC Implementation sm c = codeSymb $ symbResolve sm c
+lookupC Equational     sm c = eqSymb   (findOrErr c sm :: DefinedQuantityDict)
+lookupC Implementation sm c = codeSymb (findOrErr c sm :: DefinedQuantityDict)
 
 -- | Look up a term given a chunk database and a 'UID' associated with the term. Also specifies capitalization
 lookupT :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupT sm c tCap = resolveCapT tCap $ longForm $ termResolve' sm c
+lookupT sm c tCap = resolveCapT tCap $ (findOrErr c sm :: IdeaDict) ^. term
 
 -- | Look up the acronym/abbreviation of a term. Otherwise returns the singular form of a term. Takes a chunk database and a 'UID' associated with the term.
 lookupS :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupS sm c sCap = maybe (resolveCapT sCap $ longForm l) S $ shortForm l >>= capHelper sCap
-  where l = termResolve' sm c
+lookupS sm c sCap = maybe (resolveCapT sCap $ l ^. term) S $ getA l >>= capHelper sCap
+  where l = findOrErr c sm :: IdeaDict
 
 -- | Look up the plural form of a term given a chunk database and a 'UID' associated with the term.
 lookupP :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupP sm c pCap = resolveCapP pCap $ longForm $ termResolve' sm c
+lookupP sm c pCap = resolveCapP pCap $ (findOrErr c sm :: IdeaDict) ^. term
 
 -- | Helper to get the proper function for capitalizing a 'NP' based on its 'TermCapitalization'. Singular case.
 resolveCapT :: TermCapitalization -> (NP -> Sentence)

@@ -1,9 +1,7 @@
 module Database.Drasil.Dump where
 
 import Language.Drasil (UID, HasUID(..))
-import Database.Drasil.ChunkDB (conceptinsTable, theoryModelTable, gendefTable,
-  insmodelTable, dataDefnTable, unitTable, citationTable, UMap,
-  ChunkDB(termTable, symbolTable, conceptChunkTable))
+import Database.Drasil.ChunkDB
 
 import Data.Map.Strict (Map, insert)
 import qualified Data.Map.Strict as SM

@@ -14,7 +14,7 @@ import Drasil.Code.CodeExpr.Development
 
 import Language.Drasil (Constraint(..), RealInterval(..),
   HasUID(uid), Stage(..))
-import Language.Drasil.Code.Imperative.Comments (getComment, getCommentBrief)
+import Language.Drasil.Code.Imperative.Comments (getCommentBrief)
 import Language.Drasil.Code.Imperative.Descriptions (constClassDesc,
   constModDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, inputClassDesc,
   inputConstructorDesc, inputParametersDesc, modDesc, outputFormatDesc,
@@ -552,7 +552,7 @@ genCalcFunc cdef = do
                      block [returnStmt $ valueOf v]])
                  (Map.lookup nm (extLibMap g))
   calcDesc <- getCommentBrief cdef
-  desc <- getComment cdef
+  desc <- getCommentBrief cdef
   publicFunc
     nm
     (convTypeOO tp)
@@ -787,7 +787,7 @@ genCalcFuncProc cdef = do
                      block [returnStmt $ valueOf v]])
                  (Map.lookup nm (extLibMap g))
   calcDesc <- getCommentBrief cdef
-  desc <- getComment cdef
+  desc <- getCommentBrief cdef
   publicFuncProc
     nm
     (convType tp)

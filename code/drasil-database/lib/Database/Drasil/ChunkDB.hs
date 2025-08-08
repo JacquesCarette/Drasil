@@ -2,7 +2,7 @@
 {-# LANGUAGE TypeApplications #-}
 
 module Database.Drasil.ChunkDB
-  ( ChunkDB,
+  ( ChunkDB (refTable),
     UMap,
     empty,
     mkChunkDB,

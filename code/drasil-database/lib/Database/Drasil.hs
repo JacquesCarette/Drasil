@@ -2,7 +2,7 @@
 module Database.Drasil (
   -- * Chunk Database
   -- ** Types
-  ChunkDB, Chunk
+  ChunkDB (refTable), Chunk
   -- ** Constructors
 
   -- ** Lookup Functions

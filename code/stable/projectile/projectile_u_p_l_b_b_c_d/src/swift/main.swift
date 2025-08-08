@@ -16,7 +16,7 @@ class InputParameters {
     var p_target: Double = 0.0
     
     /** Initializes input object by reading inputs and checking physical constraints on the input
-        - Parameter filename: name of the input file: a filepath, absolute or relative, to the file containing the program's inputs
+        - Parameter filename: name of the input file
     */
     init(_ filename: String) throws {
         var outfile: FileHandle
@@ -60,7 +60,7 @@ class InputParameters {
     }
     
     /** Reads input from a file with the given file name
-        - Parameter filename: name of the input file: a filepath, absolute or relative, to the file containing the program's inputs
+        - Parameter filename: name of the input file
     */
     private func get_input(_ filename: String) throws -> Void {
         var outfile: FileHandle
@@ -263,8 +263,8 @@ class Constants {
 }
 
 /** Calculates flight duration (s)
-    - Parameter inParams: structure holding the input values: the structure holding the input values
-    - Returns: flight duration: the time when the projectile lands (s)
+    - Parameter inParams: structure holding the input values
+    - Returns: flight duration (s)
 */
 func func_t_flight(_ inParams: inout InputParameters) throws -> Double {
     var outfile: FileHandle
@@ -307,8 +307,8 @@ func func_t_flight(_ inParams: inout InputParameters) throws -> Double {
 }
 
 /** Calculates landing position (m)
-    - Parameter inParams: structure holding the input values: the structure holding the input values
-    - Returns: landing position: the distance from the launcher to the final position of the projectile (m)
+    - Parameter inParams: structure holding the input values
+    - Returns: landing position (m)
 */
 func func_p_land(_ inParams: inout InputParameters) throws -> Double {
     var outfile: FileHandle
@@ -351,9 +351,9 @@ func func_p_land(_ inParams: inout InputParameters) throws -> Double {
 }
 
 /** Calculates distance between the target position and the landing position (m)
-    - Parameter inParams: structure holding the input values: the structure holding the input values
-    - Parameter p_land: landing position: the distance from the launcher to the final position of the projectile (m)
-    - Returns: distance between the target position and the landing position: the offset between the target position and the landing position (m)
+    - Parameter inParams: structure holding the input values
+    - Parameter p_land: landing position (m)
+    - Returns: distance between the target position and the landing position (m)
 */
 func func_d_offset(_ inParams: inout InputParameters, _ p_land: Double) throws -> Double {
     var outfile: FileHandle
@@ -412,9 +412,9 @@ func func_d_offset(_ inParams: inout InputParameters, _ p_land: Double) throws -
 }
 
 /** Calculates output message as a string
-    - Parameter inParams: structure holding the input values: the structure holding the input values
-    - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
-    - Returns: output message as a string: the output message given as a string
+    - Parameter inParams: structure holding the input values
+    - Parameter d_offset: distance between the target position and the landing position (m)
+    - Returns: output message as a string
 */
 func func_s(_ inParams: inout InputParameters, _ d_offset: Double) throws -> String {
     var outfile: FileHandle
@@ -481,9 +481,9 @@ func func_s(_ inParams: inout InputParameters, _ d_offset: Double) throws -> Str
 }
 
 /** Writes the output values to output.txt
-    - Parameter s: output message as a string: the output message given as a string
-    - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
-    - Parameter t_flight: flight duration: the time when the projectile lands (s)
+    - Parameter s: output message as a string
+    - Parameter d_offset: distance between the target position and the landing position (m)
+    - Parameter t_flight: flight duration (s)
 */
 func write_output(_ s: String, _ d_offset: Double, _ t_flight: Double) throws -> Void {
     var outfile: FileHandle

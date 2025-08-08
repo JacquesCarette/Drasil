@@ -13,12 +13,12 @@ import java.util.Scanner;
 public class InputParameters {
     
     /** \brief Reads input from a file with the given file name
-        \param filename name of the input file: a filepath, absolute or relative, to the file containing the program's inputs
+        \param filename name of the input file
         \return array containing the following values:
-        \return length of the first rod: the length of the first rod (m)
-        \return length of the second rod: the length of the second rod (m)
-        \return mass of the first object: the mass of the first object (kg)
-        \return mass of the second object: the mass of the second object (kg)
+        \return length of the first rod (m)
+        \return length of the second rod (m)
+        \return mass of the first object (kg)
+        \return mass of the second object (kg)
     */
     public static Object[] get_input(String filename) throws FileNotFoundException {
         double L_1;
@@ -47,10 +47,10 @@ public class InputParameters {
     }
     
     /** \brief Verifies that input values satisfy the physical constraints
-        \param L_1 length of the first rod: the length of the first rod (m)
-        \param L_2 length of the second rod: the length of the second rod (m)
-        \param m_1 mass of the first object: the mass of the first object (kg)
-        \param m_2 mass of the second object: the mass of the second object (kg)
+        \param L_1 length of the first rod (m)
+        \param L_2 length of the second rod (m)
+        \param m_1 mass of the first object (kg)
+        \param m_2 mass of the second object (kg)
     */
     public static void input_constraints(double L_1, double L_2, double m_1, double m_2) {
         if (!(L_1 > 0.0)) {

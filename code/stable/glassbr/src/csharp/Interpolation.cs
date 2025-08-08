@@ -11,11 +11,11 @@ using System.IO;
 public class Interpolation {
     
     /** \brief Performs linear interpolation
-        \param x_1 lower x-coordinate: the lower x-coordinate
-        \param y_1 lower y-coordinate: the lower y-coordinate
-        \param x_2 upper x-coordinate: the upper x-coordiante
-        \param y_2 upper y-coordinate: the upper y-coordinate
-        \param x x-coordinate to interpolate at: the x-coordinate to interpolate at
+        \param x_1 lower x-coordinate
+        \param y_1 lower y-coordinate
+        \param x_2 upper x-coordinate
+        \param y_2 upper y-coordinate
+        \param x x-coordinate to interpolate at
         \return y value interpolated at given x value
     */
     public static double lin_interp(double x_1, double y_1, double x_2, double y_2, double x) {
@@ -43,8 +43,8 @@ public class Interpolation {
     }
     
     /** \brief Finds the array index for a value closest to the given value
-        \param arr array in which value should be found: the array in which a value should be found
-        \param v value whose index will be found: the value whose index will be found
+        \param arr array in which value should be found
+        \param v value whose index will be found
         \return index of given value in given array
     */
     public static int find(List<double> arr, double v) {
@@ -76,8 +76,8 @@ public class Interpolation {
     }
     
     /** \brief Extracts a column from a 2D matrix
-        \param mat matrix from which column will be extracted: the matrix from which columns will be extracted
-        \param j index: the index
+        \param mat matrix from which column will be extracted
+        \param j index
         \return column of the given matrix at the given index
     */
     public static List<double> extractColumn(List<List<double>> mat, int j) {
@@ -124,9 +124,9 @@ public class Interpolation {
     }
     
     /** \brief Linearly interpolates a y value at given x and z values
-        \param filename name of file with x y and z data: the name of the file with x, y, and z data
-        \param x x-coordinate to interpolate at: the x-coordinate to interpolate at
-        \param z z-coordinate to interpolate at: the z-coordinate to interpolate at
+        \param filename name of file with x y and z data
+        \param x x-coordinate to interpolate at
+        \param z z-coordinate to interpolate at
         \return y value interpolated at given x and z values
     */
     public static double interpY(string filename, double x, double z) {
@@ -252,9 +252,9 @@ public class Interpolation {
     }
     
     /** \brief Linearly interpolates a z value at given x and y values
-        \param filename name of file with x y and z data: the name of the file with x, y, and z data
-        \param x x-coordinate to interpolate at: the x-coordinate to interpolate at
-        \param y y-coordinate to interpolate at: the y-coordinate to interpolate at
+        \param filename name of file with x y and z data
+        \param x x-coordinate to interpolate at
+        \param y y-coordinate to interpolate at
         \return z value interpolated at given x and y values
     */
     public static double interpZ(string filename, double x, double y) {

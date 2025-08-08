@@ -20,13 +20,13 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, column,
 import Data.Drasil.Concepts.Education (calculus, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
-import Data.Drasil.Concepts.Physics (physicCon)
+import qualified Data.Drasil.Concepts.Physics as CP (energy, mechEnergy, pressure)
 import Data.Drasil.Concepts.Software (program, softwarecon, correctness,
   understandability, reusability, maintainability, verifiability)
 import Data.Drasil.Concepts.Thermodynamics (enerSrc, heatTrans, htFlux,
   htTransTheo, lawConsEnergy, thermalAnalysis, thermalConduction, thermalEnergy,
   thermocon)
-import Data.Drasil.Quantities.Math (surArea, surface, uNormalVect)
+import Data.Drasil.Quantities.Math (surArea, surface, uNormalVect, area)
 import Data.Drasil.Quantities.PhysicalProperties (vol)
 import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat)
@@ -97,12 +97,10 @@ ideaDicts =
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  thermocon ++ softwarecon ++ physicCon ++
-  physicalcon ++ con ++
-  -- DefinedQuantityDicts
-  map cw symbols ++
-  -- ConstQDefs
-  map cw specParamValList
+  thermocon ++ softwarecon ++ physicalcon ++ con ++ [CP.energy,
+  CP.mechEnergy, CP.pressure] ++
+  -- UnitalChunks
+  map cw [surArea, area]
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks

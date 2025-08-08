@@ -15,7 +15,7 @@ using std::string;
 using std::vector;
 
 /** \brief Writes the output values to output.txt
-    \param y_t Process Variable: The output value from the power plant
+    \param y_t Process Variable
 */
 void write_output(vector<double> &y_t);
 

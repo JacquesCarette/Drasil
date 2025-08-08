@@ -9,7 +9,7 @@ import Theory.Drasil (TheoryModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Language.Drasil.Code (quantvar)
+import Language.Drasil.Code (ODEInfo (depVar))
 
 import Data.List ((\\))
 import Data.Drasil.People (thulasi)
@@ -17,18 +17,18 @@ import Data.Drasil.People (thulasi)
 import Data.Drasil.Concepts.Documentation as Doc (material_, sysCont)
 import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
-import Data.Drasil.Concepts.Physics (physicCon, physicCon')
+import qualified Data.Drasil.Concepts.Physics as CP (physicCon', energy, mechEnergy, pressure)
 import Data.Drasil.Concepts.Software (softwarecon)
 import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
-  temp, thermalAnalysis, thermalConduction, thermocon)
+  temp, thermalAnalysis, thermalConduction, thermocon, boilPt, latentHeat, meltPt)
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols, osloSymbols,
-  arrayVecDepVar, apacheODESymbols, odeintSymbols)
+  arrayVecDepVar, apacheODESymbols, odeintSymbols, diffCodeChunk)
 
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
 import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
-  uNormalVect)
+  uNormalVect, surArea, area)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy)
 
@@ -85,18 +85,22 @@ symbols = map dqdWr concepts ++ map dqdWr constrained
 symbolsAll :: [DefinedQuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
                                --FOUND LOC OF ERROR: Instance Models
+-- FIXME: the dependent variable of noPCMODEInfo (tempW) is added to symbolsAll as it is used to create new chunks with tempW's UID suffixed in ODELibraries.hs.
+-- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
 symbolsAll = [gradient, pi_, uNormalVect, dqdWr surface] ++ symbols ++
   map dqdWr symbolConcepts ++ map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++
   scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols ++
-  map dqdWr [listToArray $ quantvar tempW, arrayVecDepVar noPCMODEInfo]
+  map dqdWr [listToArray dp, arrayVecDepVar noPCMODEInfo, 
+  diffCodeChunk dp, listToArray $ diffCodeChunk dp]
+  where dp = depVar noPCMODEInfo
 
 concepts :: [UnitalChunk]
 concepts = map ucw [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
   htTransCoeff, tankVol, deltaT, tempEnv, thFluxVect, htFluxC, wMass, wVol, tauW]
 
 symbolConcepts :: [UnitalChunk]
-symbolConcepts = map ucw [density, QT.htFlux, QT.heatCapSpec, mass, QT.sensHeat,
-  QT.temp, time, vol]
+symbolConcepts = map ucw [density, mass, time, vol,
+  QT.temp, QT.heatCapSpec, QT.htFlux, QT.sensHeat]
 
 -------------------
 --INPUT INFORMATION
@@ -181,15 +185,15 @@ ideaDicts =
   [htTrans, materialProprty] ++
   -- CIs
   map nw [srsSWHS, progName, phsChgMtrl] ++
-  map nw physicCon' ++ map nw mathcon'
+  map nw CP.physicCon' ++ map nw mathcon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  softwarecon ++ thermocon ++ con ++ physicCon ++
-  physicalcon ++
+  softwarecon ++ thermocon ++ con ++ physicalcon ++ [boilPt, latentHeat,
+  meltPt] ++ [CP.energy, CP.mechEnergy, CP.pressure] ++
   -- DefinedQuantityDicts
-  map cw symbols
+  map cw [surArea, area]
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs

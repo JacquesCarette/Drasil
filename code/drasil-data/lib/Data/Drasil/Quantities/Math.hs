@@ -11,6 +11,13 @@ import Data.Drasil.SI_Units (metre, m_2, radian)
 
 -- * May Not Have Units
 
+mathquants :: [DefinedQuantityDict]
+mathquants = [gradient, normalVect, unitVect, perpVect,
+  pi_, posInf, negInf, euclidNorm]
+
+mathunitals :: [UnitalChunk]
+mathunitals = [area, diameter, surface, surArea, orientation]
+
 gradient, normalVect, unitVect, unitVectj, euclidNorm, perpVect,
   pi_, posInf, negInf, uNormalVect :: DefinedQuantityDict
  

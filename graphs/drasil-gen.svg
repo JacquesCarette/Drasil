@@ -9,51 +9,51 @@
 <g id="graph0" class="graph" transform="scale(0.47 0.47) rotate(0) translate(4 604)">
 <title>G</title>
 <polygon fill="white" stroke="transparent" points="-4,4 -4,-604 904.72,-604 904.72,4 -4,4"/>
-<!-- u0 -->
+<!-- u4 -->
 <g id="node1" class="node">
-<title>u0</title>
+<title>u4</title>
 <ellipse fill="#bbffbb" stroke="black" cx="131.94" cy="-500" rx="131.88" ry="18"/>
 <text text-anchor="middle" x="131.94" y="-496.3" font-family="Times,serif" font-size="14.00">Database.Drasil.ChunkDB</text>
 </g>
-<!-- u4 -->
+<!-- u2 -->
 <g id="node2" class="node">
-<title>u4</title>
+<title>u2</title>
 <ellipse fill="#ffffbb" stroke="black" cx="414.94" cy="-500" rx="132.68" ry="18"/>
 <text text-anchor="middle" x="414.94" y="-496.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Generate</text>
 </g>
-<!-- u3 -->
+<!-- u1 -->
 <g id="node3" class="node">
-<title>u3</title>
+<title>u1</title>
 <ellipse fill="#ffffbb" stroke="black" cx="138.94" cy="-100" rx="117.78" ry="18"/>
 <text text-anchor="middle" x="138.94" y="-96.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Dump</text>
 </g>
-<!-- u4&#45;&gt;u3 -->
-<g id="edge3" class="edge">
-<title>u4&#45;&gt;u3</title>
+<!-- u2&#45;&gt;u1 -->
+<g id="edge2" class="edge">
+<title>u2&#45;&gt;u1</title>
 <path fill="none" stroke="black" d="M403.08,-481.9C359.55,-419.13 208.44,-201.22 156.57,-126.43"/>
 <polygon fill="black" stroke="black" points="159.33,-124.26 150.75,-118.04 153.58,-128.25 159.33,-124.26"/>
 </g>
-<!-- u2 -->
+<!-- u0 -->
 <g id="node4" class="node">
-<title>u2</title>
+<title>u0</title>
 <ellipse fill="#ffffbb" stroke="black" cx="414.94" cy="-100" rx="140.28" ry="18"/>
 <text text-anchor="middle" x="414.94" y="-96.3" font-family="Times,serif" font-size="14.00">Language.Drasil.TypeCheck</text>
 </g>
-<!-- u4&#45;&gt;u2 -->
-<g id="edge2" class="edge">
-<title>u4&#45;&gt;u2</title>
+<!-- u2&#45;&gt;u0 -->
+<g id="edge1" class="edge">
+<title>u2&#45;&gt;u0</title>
 <path fill="none" stroke="black" d="M414.94,-481.9C414.94,-419.64 414.94,-204.75 414.94,-128.28"/>
 <polygon fill="black" stroke="black" points="418.44,-128.04 414.94,-118.04 411.44,-128.04 418.44,-128.04"/>
 </g>
-<!-- u1 -->
+<!-- u3 -->
 <g id="node5" class="node">
-<title>u1</title>
+<title>u3</title>
 <ellipse fill="#bbbbff" stroke="black" cx="736.94" cy="-100" rx="163.57" ry="18"/>
 <text text-anchor="middle" x="736.94" y="-96.3" font-family="Times,serif" font-size="14.00">Language.Drasil.Output.Formats</text>
 </g>
-<!-- u4&#45;&gt;u1 -->
-<g id="edge1" class="edge">
-<title>u4&#45;&gt;u1</title>
+<!-- u2&#45;&gt;u3 -->
+<g id="edge3" class="edge">
+<title>u2&#45;&gt;u3</title>
 <path fill="none" stroke="black" d="M428.77,-481.9C479.66,-419 656.57,-200.33 716.73,-125.97"/>
 <polygon fill="black" stroke="black" points="719.59,-128.01 723.15,-118.04 714.14,-123.61 719.59,-128.01"/>
 </g>

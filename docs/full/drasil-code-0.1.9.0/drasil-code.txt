@@ -209,6 +209,7 @@ inParams :: DefinedQuantityDict
 
 -- | Variable for an object of the Constants class.
 consts :: DefinedQuantityDict
+codeDQDs :: [DefinedQuantityDict]
 
 module Language.Drasil.Code.DataDesc
 
@@ -1662,21 +1663,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 
 -- | The database of all chunks used in the problem.
 [_systemdb] :: OldCodeSpec -> ChunkDB
-class HasOldCodeSpec c_axRR
-oldCodeSpec :: HasOldCodeSpec c_axRR => Lens' c_axRR OldCodeSpec
-authorsO :: HasOldCodeSpec c_axRR => Lens' c_axRR People
-cMapO :: HasOldCodeSpec c_axRR => Lens' c_axRR ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_axRR => Lens' c_axRR [FilePath]
-constMapO :: HasOldCodeSpec c_axRR => Lens' c_axRR ConstantMap
-constantsO :: HasOldCodeSpec c_axRR => Lens' c_axRR [Const]
-derivedInputsO :: HasOldCodeSpec c_axRR => Lens' c_axRR [Derived]
-execOrderO :: HasOldCodeSpec c_axRR => Lens' c_axRR [Def]
-extInputsO :: HasOldCodeSpec c_axRR => Lens' c_axRR [Input]
-inputsO :: HasOldCodeSpec c_axRR => Lens' c_axRR [Input]
-modsO :: HasOldCodeSpec c_axRR => Lens' c_axRR [Mod]
-outputsO :: HasOldCodeSpec c_axRR => Lens' c_axRR [Output]
-pNameO :: HasOldCodeSpec c_axRR => Lens' c_axRR Name
-systemdbO :: HasOldCodeSpec c_axRR => Lens' c_axRR ChunkDB
+class HasOldCodeSpec c_axRW
+oldCodeSpec :: HasOldCodeSpec c_axRW => Lens' c_axRW OldCodeSpec
+authorsO :: HasOldCodeSpec c_axRW => Lens' c_axRW People
+cMapO :: HasOldCodeSpec c_axRW => Lens' c_axRW ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_axRW => Lens' c_axRW [FilePath]
+constMapO :: HasOldCodeSpec c_axRW => Lens' c_axRW ConstantMap
+constantsO :: HasOldCodeSpec c_axRW => Lens' c_axRW [Const]
+derivedInputsO :: HasOldCodeSpec c_axRW => Lens' c_axRW [Derived]
+execOrderO :: HasOldCodeSpec c_axRW => Lens' c_axRW [Def]
+extInputsO :: HasOldCodeSpec c_axRW => Lens' c_axRW [Input]
+inputsO :: HasOldCodeSpec c_axRW => Lens' c_axRW [Input]
+modsO :: HasOldCodeSpec c_axRW => Lens' c_axRW [Mod]
+outputsO :: HasOldCodeSpec c_axRW => Lens' c_axRW [Output]
+pNameO :: HasOldCodeSpec c_axRW => Lens' c_axRW Name
+systemdbO :: HasOldCodeSpec c_axRW => Lens' c_axRW ChunkDB
 
 -- | New Code Specification. Holds system information and a reference to
 --   <a>OldCodeSpec</a>.
@@ -2045,6 +2046,7 @@ module Language.Drasil.Code.Imperative.Comments
 -- | Generates a comment string for a chunk, including the term, definition
 --   (if applicable), and unit (if applicable).
 getComment :: CodeIdea c => c -> GenState String
+getCommentBrief :: CodeIdea c => c -> GenState String
 
 module Language.Drasil.Code.Imperative.Doxygen.Import
 
@@ -2869,21 +2871,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> [Mod] -> CodeSpec
-class HasOldCodeSpec c_axRR
-oldCodeSpec :: HasOldCodeSpec c_axRR => Lens' c_axRR OldCodeSpec
-authorsO :: HasOldCodeSpec c_axRR => Lens' c_axRR People
-cMapO :: HasOldCodeSpec c_axRR => Lens' c_axRR ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_axRR => Lens' c_axRR [FilePath]
-constMapO :: HasOldCodeSpec c_axRR => Lens' c_axRR ConstantMap
-constantsO :: HasOldCodeSpec c_axRR => Lens' c_axRR [Const]
-derivedInputsO :: HasOldCodeSpec c_axRR => Lens' c_axRR [Derived]
-execOrderO :: HasOldCodeSpec c_axRR => Lens' c_axRR [Def]
-extInputsO :: HasOldCodeSpec c_axRR => Lens' c_axRR [Input]
-inputsO :: HasOldCodeSpec c_axRR => Lens' c_axRR [Input]
-modsO :: HasOldCodeSpec c_axRR => Lens' c_axRR [Mod]
-outputsO :: HasOldCodeSpec c_axRR => Lens' c_axRR [Output]
-pNameO :: HasOldCodeSpec c_axRR => Lens' c_axRR Name
-systemdbO :: HasOldCodeSpec c_axRR => Lens' c_axRR ChunkDB
+class HasOldCodeSpec c_axRW
+oldCodeSpec :: HasOldCodeSpec c_axRW => Lens' c_axRW OldCodeSpec
+authorsO :: HasOldCodeSpec c_axRW => Lens' c_axRW People
+cMapO :: HasOldCodeSpec c_axRW => Lens' c_axRW ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_axRW => Lens' c_axRW [FilePath]
+constMapO :: HasOldCodeSpec c_axRW => Lens' c_axRW ConstantMap
+constantsO :: HasOldCodeSpec c_axRW => Lens' c_axRW [Const]
+derivedInputsO :: HasOldCodeSpec c_axRW => Lens' c_axRW [Derived]
+execOrderO :: HasOldCodeSpec c_axRW => Lens' c_axRW [Def]
+extInputsO :: HasOldCodeSpec c_axRW => Lens' c_axRW [Input]
+inputsO :: HasOldCodeSpec c_axRW => Lens' c_axRW [Input]
+modsO :: HasOldCodeSpec c_axRW => Lens' c_axRW [Mod]
+outputsO :: HasOldCodeSpec c_axRW => Lens' c_axRW [Output]
+pNameO :: HasOldCodeSpec c_axRW => Lens' c_axRW Name
+systemdbO :: HasOldCodeSpec c_axRW => Lens' c_axRW ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID
@@ -3477,6 +3479,7 @@ data NamedArgument
 
 -- | Smart constructor for <a>NamedArgument</a> .
 narg :: (Quantity q, MayHaveUnit q, Concept q) => q -> NamedArgument
+codeDQDs :: [DefinedQuantityDict]
 
 
 -- | Define and collect information about ODEs and ODE solvers from various
@@ -3514,3 +3517,7 @@ odeintPckg :: ODELibPckg
 -- | Collects variables needed for odeint's ODEs as
 --   <a>DefinedQuantityDict</a>s.
 odeintSymbols :: [DefinedQuantityDict]
+
+-- | Change in <tt>X</tt> chunk constructor (where <tt>X</tt> is a given
+--   argument).
+diffCodeChunk :: CodeVarChunk -> CodeVarChunk

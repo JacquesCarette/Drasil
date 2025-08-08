@@ -586,6 +586,8 @@ specificWeight :: UnitDefn
 -- | Assigns a symbol and possibly units (quantities) to mathematical
 --   quantities.
 module Data.Drasil.Quantities.Math
+mathquants :: [DefinedQuantityDict]
+mathunitals :: [UnitalChunk]
 gradient :: DefinedQuantityDict
 normalVect :: DefinedQuantityDict
 unitVect :: DefinedQuantityDict
@@ -621,6 +623,7 @@ densityU :: UnitDefn
 
 -- | Assigns symbols and units (quantities) to common physical properties.
 module Data.Drasil.Quantities.PhysicalProperties
+physicalquants :: [UnitalChunk]
 density :: UnitalChunk
 specWeight :: UnitalChunk
 mass :: UnitalChunk
@@ -954,6 +957,7 @@ volHtGenU :: UnitDefn
 -- | Assigns symbols and units (quantities) to thermodynamics-related
 --   concepts.
 module Data.Drasil.Quantities.Thermodynamics
+thermoquants :: [UnitalChunk]
 boilPt :: UnitalChunk
 temp :: UnitalChunk
 heatCapSpec :: UnitalChunk

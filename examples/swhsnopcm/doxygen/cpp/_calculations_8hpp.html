@@ -79,16 +79,16 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a2817160664dab6b6ce1793df2785ece9"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calculations_8hpp.html#a2817160664dab6b6ce1793df2785ece9">func_V_W</a> (double V_tank)</td></tr>
-<tr class="memdesc:a2817160664dab6b6ce1793df2785ece9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates volume of water: the amount of space occupied by a given quantity of water (m^3)  <a href="_calculations_8hpp.html#a2817160664dab6b6ce1793df2785ece9">More...</a><br /></td></tr>
+<tr class="memdesc:a2817160664dab6b6ce1793df2785ece9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates volume of water (m^3)  <a href="_calculations_8hpp.html#a2817160664dab6b6ce1793df2785ece9">More...</a><br /></td></tr>
 <tr class="separator:a2817160664dab6b6ce1793df2785ece9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7cc80d0475509aa1a5c5d29db493439"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calculations_8hpp.html#ac7cc80d0475509aa1a5c5d29db493439">func_m_W</a> (double rho_W, double V_W)</td></tr>
-<tr class="memdesc:ac7cc80d0475509aa1a5c5d29db493439"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates mass of water: the quantity of matter within the water (kg)  <a href="_calculations_8hpp.html#ac7cc80d0475509aa1a5c5d29db493439">More...</a><br /></td></tr>
+<tr class="memdesc:ac7cc80d0475509aa1a5c5d29db493439"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates mass of water (kg)  <a href="_calculations_8hpp.html#ac7cc80d0475509aa1a5c5d29db493439">More...</a><br /></td></tr>
 <tr class="separator:ac7cc80d0475509aa1a5c5d29db493439"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39ec7018a0cfe991ca97326b8f04ab6a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calculations_8hpp.html#a39ec7018a0cfe991ca97326b8f04ab6a">func_tau_W</a> (double C_W, double h_C, double A_C, double m_W)</td></tr>
-<tr class="memdesc:a39ec7018a0cfe991ca97326b8f04ab6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates <a class="el" href="class_o_d_e.html" title="Class representing an ODE system.">ODE</a> parameter for water related to decay time: derived parameter based on rate of change of temperature of water (s)  <a href="_calculations_8hpp.html#a39ec7018a0cfe991ca97326b8f04ab6a">More...</a><br /></td></tr>
+<tr class="memdesc:a39ec7018a0cfe991ca97326b8f04ab6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates <a class="el" href="class_o_d_e.html" title="Class representing an ODE system.">ODE</a> parameter for water related to decay time (s)  <a href="_calculations_8hpp.html#a39ec7018a0cfe991ca97326b8f04ab6a">More...</a><br /></td></tr>
 <tr class="separator:a39ec7018a0cfe991ca97326b8f04ab6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a34a76c60825b7b027a2b3973479bec64"><td class="memItemLeft" align="right" valign="top">vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calculations_8hpp.html#a34a76c60825b7b027a2b3973479bec64">func_T_W</a> (double T_C, double T_init, double t_final, double A_tol, double R_tol, double t_step, double tau_W)</td></tr>
-<tr class="memdesc:a34a76c60825b7b027a2b3973479bec64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates temperature of the water: the average kinetic energy of the particles within the water (degreeC)  <a href="_calculations_8hpp.html#a34a76c60825b7b027a2b3973479bec64">More...</a><br /></td></tr>
+<tr class="memdesc:a34a76c60825b7b027a2b3973479bec64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates temperature of the water (degreeC)  <a href="_calculations_8hpp.html#a34a76c60825b7b027a2b3973479bec64">More...</a><br /></td></tr>
 <tr class="separator:a34a76c60825b7b027a2b3973479bec64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -122,15 +122,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Calculates mass of water: the quantity of matter within the water (kg) </p>
+<p>Calculates mass of water (kg) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">rho_W</td><td>density of water: mass per unit volume of water (kg/m^3) </td></tr>
-    <tr><td class="paramname">V_W</td><td>volume of water: the amount of space occupied by a given quantity of water (m^3) </td></tr>
+    <tr><td class="paramname">rho_W</td><td>density of water (kg/m^3) </td></tr>
+    <tr><td class="paramname">V_W</td><td>volume of water (m^3) </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>mass of water: the quantity of matter within the water (kg) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>mass of water (kg) </dd></dl>
 
 </div>
 </div>
@@ -190,20 +190,20 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Calculates temperature of the water: the average kinetic energy of the particles within the water (degreeC) </p>
+<p>Calculates temperature of the water (degreeC) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">T_C</td><td>temperature of the heating coil: the average kinetic energy of the particles within the coil (degreeC) </td></tr>
-    <tr><td class="paramname">T_init</td><td>initial temperature: the temperature at the beginning of the simulation (degreeC) </td></tr>
-    <tr><td class="paramname">t_final</td><td>final time: the amount of time elapsed from the beginning of the simulation to its conclusion (s) </td></tr>
+    <tr><td class="paramname">T_C</td><td>temperature of the heating coil (degreeC) </td></tr>
+    <tr><td class="paramname">T_init</td><td>initial temperature (degreeC) </td></tr>
+    <tr><td class="paramname">t_final</td><td>final time (s) </td></tr>
     <tr><td class="paramname">A_tol</td><td>absolute tolerance </td></tr>
     <tr><td class="paramname">R_tol</td><td>relative tolerance </td></tr>
-    <tr><td class="paramname">t_step</td><td>time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s) </td></tr>
-    <tr><td class="paramname">tau_W</td><td><a class="el" href="class_o_d_e.html" title="Class representing an ODE system.">ODE</a> parameter for water related to decay time: derived parameter based on rate of change of temperature of water (s) </td></tr>
+    <tr><td class="paramname">t_step</td><td>time step for simulation (s) </td></tr>
+    <tr><td class="paramname">tau_W</td><td><a class="el" href="class_o_d_e.html" title="Class representing an ODE system.">ODE</a> parameter for water related to decay time (s) </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>temperature of the water: the average kinetic energy of the particles within the water (degreeC) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>temperature of the water (degreeC) </dd></dl>
 
 </div>
 </div>
@@ -245,17 +245,17 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Calculates <a class="el" href="class_o_d_e.html" title="Class representing an ODE system.">ODE</a> parameter for water related to decay time: derived parameter based on rate of change of temperature of water (s) </p>
+<p>Calculates <a class="el" href="class_o_d_e.html" title="Class representing an ODE system.">ODE</a> parameter for water related to decay time (s) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">C_W</td><td>specific heat capacity of water: the amount of energy required to raise the temperature of a given unit mass of water by a given amount (J/(kg degreeC)) </td></tr>
-    <tr><td class="paramname">h_C</td><td>convective heat transfer coefficient between coil and water: the convective heat transfer coefficient that models the thermal flux from the coil to the surrounding water (W/(m^2 degreeC)) </td></tr>
-    <tr><td class="paramname">A_C</td><td>heating coil surface area: area covered by the outermost layer of the coil (m^2) </td></tr>
-    <tr><td class="paramname">m_W</td><td>mass of water: the quantity of matter within the water (kg) </td></tr>
+    <tr><td class="paramname">C_W</td><td>specific heat capacity of water (J/(kg degreeC)) </td></tr>
+    <tr><td class="paramname">h_C</td><td>convective heat transfer coefficient between coil and water (W/(m^2 degreeC)) </td></tr>
+    <tr><td class="paramname">A_C</td><td>heating coil surface area (m^2) </td></tr>
+    <tr><td class="paramname">m_W</td><td>mass of water (kg) </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_o_d_e.html" title="Class representing an ODE system.">ODE</a> parameter for water related to decay time: derived parameter based on rate of change of temperature of water (s) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_o_d_e.html" title="Class representing an ODE system.">ODE</a> parameter for water related to decay time (s) </dd></dl>
 
 </div>
 </div>
@@ -275,14 +275,14 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Calculates volume of water: the amount of space occupied by a given quantity of water (m^3) </p>
+<p>Calculates volume of water (m^3) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">V_tank</td><td>volume of the cylindrical tank: the amount of space encompassed by a tank (m^3) </td></tr>
+    <tr><td class="paramname">V_tank</td><td>volume of the cylindrical tank (m^3) </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>volume of water: the amount of space occupied by a given quantity of water (m^3) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>volume of water (m^3) </dd></dl>
 
 </div>
 </div>

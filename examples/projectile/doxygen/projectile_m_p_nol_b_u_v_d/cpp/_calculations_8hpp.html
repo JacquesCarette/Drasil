@@ -78,13 +78,13 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a0c2e99b2a577ede3ded8120310d9ebba"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calculations_8hpp.html#a0c2e99b2a577ede3ded8120310d9ebba">func_t_flight</a> (<a class="el" href="class_input_parameters.html">InputParameters</a> &amp;inParams, double g)</td></tr>
-<tr class="memdesc:a0c2e99b2a577ede3ded8120310d9ebba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates flight duration: the time when the projectile lands (s)  <a href="_calculations_8hpp.html#a0c2e99b2a577ede3ded8120310d9ebba">More...</a><br /></td></tr>
+<tr class="memdesc:a0c2e99b2a577ede3ded8120310d9ebba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates flight duration (s)  <a href="_calculations_8hpp.html#a0c2e99b2a577ede3ded8120310d9ebba">More...</a><br /></td></tr>
 <tr class="separator:a0c2e99b2a577ede3ded8120310d9ebba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa170126772ffb8ec3a191ebf17945623"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calculations_8hpp.html#aa170126772ffb8ec3a191ebf17945623">func_p_land</a> (<a class="el" href="class_input_parameters.html">InputParameters</a> &amp;inParams, double g)</td></tr>
-<tr class="memdesc:aa170126772ffb8ec3a191ebf17945623"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates landing position: the distance from the launcher to the final position of the projectile (m)  <a href="_calculations_8hpp.html#aa170126772ffb8ec3a191ebf17945623">More...</a><br /></td></tr>
+<tr class="memdesc:aa170126772ffb8ec3a191ebf17945623"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates landing position (m)  <a href="_calculations_8hpp.html#aa170126772ffb8ec3a191ebf17945623">More...</a><br /></td></tr>
 <tr class="separator:aa170126772ffb8ec3a191ebf17945623"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8ea9e7e3e09bdcfbd2671cd88704ab2"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calculations_8hpp.html#ae8ea9e7e3e09bdcfbd2671cd88704ab2">func_d_offset</a> (<a class="el" href="class_input_parameters.html">InputParameters</a> &amp;inParams, double p_land)</td></tr>
-<tr class="memdesc:ae8ea9e7e3e09bdcfbd2671cd88704ab2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)  <a href="_calculations_8hpp.html#ae8ea9e7e3e09bdcfbd2671cd88704ab2">More...</a><br /></td></tr>
+<tr class="memdesc:ae8ea9e7e3e09bdcfbd2671cd88704ab2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates distance between the target position and the landing position (m)  <a href="_calculations_8hpp.html#ae8ea9e7e3e09bdcfbd2671cd88704ab2">More...</a><br /></td></tr>
 <tr class="separator:ae8ea9e7e3e09bdcfbd2671cd88704ab2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9217ea35bdbff830d361bf72b4b2f3c"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calculations_8hpp.html#ab9217ea35bdbff830d361bf72b4b2f3c">func_s</a> (<a class="el" href="class_input_parameters.html">InputParameters</a> &amp;inParams, double epsilon, double d_offset)</td></tr>
 <tr class="memdesc:ab9217ea35bdbff830d361bf72b4b2f3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates output message as a string.  <a href="_calculations_8hpp.html#ab9217ea35bdbff830d361bf72b4b2f3c">More...</a><br /></td></tr>
@@ -121,15 +121,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m) </p>
+<p>Calculates distance between the target position and the landing position (m) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">inParams</td><td>structure holding the input values </td></tr>
-    <tr><td class="paramname">p_land</td><td>landing position: the distance from the launcher to the final position of the projectile (m) </td></tr>
+    <tr><td class="paramname">p_land</td><td>landing position (m) </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>distance between the target position and the landing position: the offset between the target position and the landing position (m) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>distance between the target position and the landing position (m) </dd></dl>
 
 </div>
 </div>
@@ -159,15 +159,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Calculates landing position: the distance from the launcher to the final position of the projectile (m) </p>
+<p>Calculates landing position (m) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">inParams</td><td>structure holding the input values </td></tr>
-    <tr><td class="paramname">g</td><td>magnitude of gravitational acceleration: the magnitude of the approximate acceleration due to gravity on Earth at sea level (m/s^2) </td></tr>
+    <tr><td class="paramname">g</td><td>magnitude of gravitational acceleration (m/s^2) </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>landing position: the distance from the launcher to the final position of the projectile (m) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>landing position (m) </dd></dl>
 
 </div>
 </div>
@@ -208,7 +208,7 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">inParams</td><td>structure holding the input values </td></tr>
     <tr><td class="paramname">epsilon</td><td>hit tolerance </td></tr>
-    <tr><td class="paramname">d_offset</td><td>distance between the target position and the landing position: the offset between the target position and the landing position (m) </td></tr>
+    <tr><td class="paramname">d_offset</td><td>distance between the target position and the landing position (m) </td></tr>
   </table>
   </dd>
 </dl>
@@ -242,15 +242,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Calculates flight duration: the time when the projectile lands (s) </p>
+<p>Calculates flight duration (s) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">inParams</td><td>structure holding the input values </td></tr>
-    <tr><td class="paramname">g</td><td>magnitude of gravitational acceleration: the magnitude of the approximate acceleration due to gravity on Earth at sea level (m/s^2) </td></tr>
+    <tr><td class="paramname">g</td><td>magnitude of gravitational acceleration (m/s^2) </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>flight duration: the time when the projectile lands (s) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>flight duration (s) </dd></dl>
 
 </div>
 </div>

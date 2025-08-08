@@ -119,12 +119,12 @@ Static Public Member Functions</h2></td></tr>
 <p>Calculates values that can be immediately derived from the inputs. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">D</td><td>diameter of tank: the diameter of the tank (m) </td></tr>
-    <tr><td class="paramname">L</td><td>length of tank: the length of the tank (m) </td></tr>
+    <tr><td class="paramname">D</td><td>diameter of tank (m) </td></tr>
+    <tr><td class="paramname">L</td><td>length of tank (m) </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>volume of the cylindrical tank: the amount of space encompassed by a tank (m^3) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>volume of the cylindrical tank (m^3) </dd></dl>
 
 </div>
 </div>
@@ -238,19 +238,19 @@ Static Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">filename</td><td>name of the input file </td></tr>
-    <tr><td class="paramname">A_C</td><td>heating coil surface area: area covered by the outermost layer of the coil (m^2) </td></tr>
-    <tr><td class="paramname">C_W</td><td>specific heat capacity of water: the amount of energy required to raise the temperature of a given unit mass of water by a given amount (J/(kg degreeC)) </td></tr>
-    <tr><td class="paramname">h_C</td><td>convective heat transfer coefficient between coil and water: the convective heat transfer coefficient that models the thermal flux from the coil to the surrounding water (W/(m^2 degreeC)) </td></tr>
-    <tr><td class="paramname">T_init</td><td>initial temperature: the temperature at the beginning of the simulation (degreeC) </td></tr>
-    <tr><td class="paramname">t_final</td><td>final time: the amount of time elapsed from the beginning of the simulation to its conclusion (s) </td></tr>
-    <tr><td class="paramname">L</td><td>length of tank: the length of the tank (m) </td></tr>
-    <tr><td class="paramname">T_C</td><td>temperature of the heating coil: the average kinetic energy of the particles within the coil (degreeC) </td></tr>
-    <tr><td class="paramname">t_step</td><td>time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s) </td></tr>
-    <tr><td class="paramname">rho_W</td><td>density of water: mass per unit volume of water (kg/m^3) </td></tr>
-    <tr><td class="paramname">D</td><td>diameter of tank: the diameter of the tank (m) </td></tr>
+    <tr><td class="paramname">A_C</td><td>heating coil surface area (m^2) </td></tr>
+    <tr><td class="paramname">C_W</td><td>specific heat capacity of water (J/(kg degreeC)) </td></tr>
+    <tr><td class="paramname">h_C</td><td>convective heat transfer coefficient between coil and water (W/(m^2 degreeC)) </td></tr>
+    <tr><td class="paramname">T_init</td><td>initial temperature (degreeC) </td></tr>
+    <tr><td class="paramname">t_final</td><td>final time (s) </td></tr>
+    <tr><td class="paramname">L</td><td>length of tank (m) </td></tr>
+    <tr><td class="paramname">T_C</td><td>temperature of the heating coil (degreeC) </td></tr>
+    <tr><td class="paramname">t_step</td><td>time step for simulation (s) </td></tr>
+    <tr><td class="paramname">rho_W</td><td>density of water (kg/m^3) </td></tr>
+    <tr><td class="paramname">D</td><td>diameter of tank (m) </td></tr>
     <tr><td class="paramname">A_tol</td><td>absolute tolerance </td></tr>
     <tr><td class="paramname">R_tol</td><td>relative tolerance </td></tr>
-    <tr><td class="paramname">E_W</td><td>change in heat energy in the water: change in thermal energy within the water (J) </td></tr>
+    <tr><td class="paramname">E_W</td><td>change in heat energy in the water (J) </td></tr>
   </table>
   </dd>
 </dl>
@@ -348,17 +348,17 @@ Static Public Member Functions</h2></td></tr>
 <p>Verifies that input values satisfy the physical constraints and software constraints. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">A_C</td><td>heating coil surface area: area covered by the outermost layer of the coil (m^2) </td></tr>
-    <tr><td class="paramname">C_W</td><td>specific heat capacity of water: the amount of energy required to raise the temperature of a given unit mass of water by a given amount (J/(kg degreeC)) </td></tr>
-    <tr><td class="paramname">h_C</td><td>convective heat transfer coefficient between coil and water: the convective heat transfer coefficient that models the thermal flux from the coil to the surrounding water (W/(m^2 degreeC)) </td></tr>
-    <tr><td class="paramname">T_init</td><td>initial temperature: the temperature at the beginning of the simulation (degreeC) </td></tr>
-    <tr><td class="paramname">t_final</td><td>final time: the amount of time elapsed from the beginning of the simulation to its conclusion (s) </td></tr>
-    <tr><td class="paramname">L</td><td>length of tank: the length of the tank (m) </td></tr>
-    <tr><td class="paramname">T_C</td><td>temperature of the heating coil: the average kinetic energy of the particles within the coil (degreeC) </td></tr>
-    <tr><td class="paramname">t_step</td><td>time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s) </td></tr>
-    <tr><td class="paramname">rho_W</td><td>density of water: mass per unit volume of water (kg/m^3) </td></tr>
-    <tr><td class="paramname">D</td><td>diameter of tank: the diameter of the tank (m) </td></tr>
-    <tr><td class="paramname">E_W</td><td>change in heat energy in the water: change in thermal energy within the water (J) </td></tr>
+    <tr><td class="paramname">A_C</td><td>heating coil surface area (m^2) </td></tr>
+    <tr><td class="paramname">C_W</td><td>specific heat capacity of water (J/(kg degreeC)) </td></tr>
+    <tr><td class="paramname">h_C</td><td>convective heat transfer coefficient between coil and water (W/(m^2 degreeC)) </td></tr>
+    <tr><td class="paramname">T_init</td><td>initial temperature (degreeC) </td></tr>
+    <tr><td class="paramname">t_final</td><td>final time (s) </td></tr>
+    <tr><td class="paramname">L</td><td>length of tank (m) </td></tr>
+    <tr><td class="paramname">T_C</td><td>temperature of the heating coil (degreeC) </td></tr>
+    <tr><td class="paramname">t_step</td><td>time step for simulation (s) </td></tr>
+    <tr><td class="paramname">rho_W</td><td>density of water (kg/m^3) </td></tr>
+    <tr><td class="paramname">D</td><td>diameter of tank (m) </td></tr>
+    <tr><td class="paramname">E_W</td><td>change in heat energy in the water (J) </td></tr>
   </table>
   </dd>
 </dl>

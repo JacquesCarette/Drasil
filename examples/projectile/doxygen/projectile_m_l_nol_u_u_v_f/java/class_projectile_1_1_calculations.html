@@ -76,13 +76,13 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a3e1a689542d3e04af4c28a217322e233"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_projectile_1_1_calculations.html#a3e1a689542d3e04af4c28a217322e233">func_t_flight</a> (float v_launch, float theta, float g)</td></tr>
-<tr class="memdesc:a3e1a689542d3e04af4c28a217322e233"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates flight duration: the time when the projectile lands (s)  <a href="class_projectile_1_1_calculations.html#a3e1a689542d3e04af4c28a217322e233">More...</a><br /></td></tr>
+<tr class="memdesc:a3e1a689542d3e04af4c28a217322e233"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates flight duration (s)  <a href="class_projectile_1_1_calculations.html#a3e1a689542d3e04af4c28a217322e233">More...</a><br /></td></tr>
 <tr class="separator:a3e1a689542d3e04af4c28a217322e233"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c62ade58432d364e63c1133259c12ab"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_projectile_1_1_calculations.html#a3c62ade58432d364e63c1133259c12ab">func_p_land</a> (float v_launch, float theta, float g)</td></tr>
-<tr class="memdesc:a3c62ade58432d364e63c1133259c12ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates landing position: the distance from the launcher to the final position of the projectile (m)  <a href="class_projectile_1_1_calculations.html#a3c62ade58432d364e63c1133259c12ab">More...</a><br /></td></tr>
+<tr class="memdesc:a3c62ade58432d364e63c1133259c12ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates landing position (m)  <a href="class_projectile_1_1_calculations.html#a3c62ade58432d364e63c1133259c12ab">More...</a><br /></td></tr>
 <tr class="separator:a3c62ade58432d364e63c1133259c12ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9cc2439fe4abe876c4ec0a870206e5a"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_projectile_1_1_calculations.html#ad9cc2439fe4abe876c4ec0a870206e5a">func_d_offset</a> (float p_target, float p_land)</td></tr>
-<tr class="memdesc:ad9cc2439fe4abe876c4ec0a870206e5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)  <a href="class_projectile_1_1_calculations.html#ad9cc2439fe4abe876c4ec0a870206e5a">More...</a><br /></td></tr>
+<tr class="memdesc:ad9cc2439fe4abe876c4ec0a870206e5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates distance between the target position and the landing position (m)  <a href="class_projectile_1_1_calculations.html#ad9cc2439fe4abe876c4ec0a870206e5a">More...</a><br /></td></tr>
 <tr class="separator:ad9cc2439fe4abe876c4ec0a870206e5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17dcbbaba591320637d9cbea537b9657"><td class="memItemLeft" align="right" valign="top">static String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_projectile_1_1_calculations.html#a17dcbbaba591320637d9cbea537b9657">func_s</a> (float p_target, float epsilon, float d_offset)</td></tr>
 <tr class="memdesc:a17dcbbaba591320637d9cbea537b9657"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates output message as a string.  <a href="class_projectile_1_1_calculations.html#a17dcbbaba591320637d9cbea537b9657">More...</a><br /></td></tr>
@@ -123,15 +123,15 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m) </p>
+<p>Calculates distance between the target position and the landing position (m) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">p_target</td><td>target position: the distance from the launcher to the target (m) </td></tr>
-    <tr><td class="paramname">p_land</td><td>landing position: the distance from the launcher to the final position of the projectile (m) </td></tr>
+    <tr><td class="paramname">p_target</td><td>target position (m) </td></tr>
+    <tr><td class="paramname">p_land</td><td>landing position (m) </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>distance between the target position and the landing position: the offset between the target position and the landing position (m) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>distance between the target position and the landing position (m) </dd></dl>
 
 </div>
 </div>
@@ -175,16 +175,16 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Calculates landing position: the distance from the launcher to the final position of the projectile (m) </p>
+<p>Calculates landing position (m) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">v_launch</td><td>launch speed: the initial speed of the projectile when launched (m/s) </td></tr>
-    <tr><td class="paramname">theta</td><td>launch angle: the angle between the launcher and a straight line from the launcher to the target (rad) </td></tr>
-    <tr><td class="paramname">g</td><td>magnitude of gravitational acceleration: the magnitude of the approximate acceleration due to gravity on Earth at sea level (m/s^2) </td></tr>
+    <tr><td class="paramname">v_launch</td><td>launch speed (m/s) </td></tr>
+    <tr><td class="paramname">theta</td><td>launch angle (rad) </td></tr>
+    <tr><td class="paramname">g</td><td>magnitude of gravitational acceleration (m/s^2) </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>landing position: the distance from the launcher to the final position of the projectile (m) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>landing position (m) </dd></dl>
 
 </div>
 </div>
@@ -231,9 +231,9 @@ Static Public Member Functions</h2></td></tr>
 <p>Calculates output message as a string. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">p_target</td><td>target position: the distance from the launcher to the target (m) </td></tr>
+    <tr><td class="paramname">p_target</td><td>target position (m) </td></tr>
     <tr><td class="paramname">epsilon</td><td>hit tolerance </td></tr>
-    <tr><td class="paramname">d_offset</td><td>distance between the target position and the landing position: the offset between the target position and the landing position (m) </td></tr>
+    <tr><td class="paramname">d_offset</td><td>distance between the target position and the landing position (m) </td></tr>
   </table>
   </dd>
 </dl>
@@ -281,16 +281,16 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Calculates flight duration: the time when the projectile lands (s) </p>
+<p>Calculates flight duration (s) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">v_launch</td><td>launch speed: the initial speed of the projectile when launched (m/s) </td></tr>
-    <tr><td class="paramname">theta</td><td>launch angle: the angle between the launcher and a straight line from the launcher to the target (rad) </td></tr>
-    <tr><td class="paramname">g</td><td>magnitude of gravitational acceleration: the magnitude of the approximate acceleration due to gravity on Earth at sea level (m/s^2) </td></tr>
+    <tr><td class="paramname">v_launch</td><td>launch speed (m/s) </td></tr>
+    <tr><td class="paramname">theta</td><td>launch angle (rad) </td></tr>
+    <tr><td class="paramname">g</td><td>magnitude of gravitational acceleration (m/s^2) </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>flight duration: the time when the projectile lands (s) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>flight duration (s) </dd></dl>
 
 </div>
 </div>

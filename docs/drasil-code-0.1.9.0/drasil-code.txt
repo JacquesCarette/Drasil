@@ -352,21 +352,21 @@ OldCodeSpec :: Name -> People -> [Input] -> [Input] -> [Derived] -> [Output] -> 
 --   <a>Choices</a>, and <a>Mod</a>s. The <a>CodeSpec</a> consists of the
 --   system information and a corresponding <a>OldCodeSpec</a>.
 codeSpec :: System -> Choices -> [Mod] -> CodeSpec
-class HasOldCodeSpec c_axCa
-oldCodeSpec :: HasOldCodeSpec c_axCa => Lens' c_axCa OldCodeSpec
-authorsO :: HasOldCodeSpec c_axCa => Lens' c_axCa People
-cMapO :: HasOldCodeSpec c_axCa => Lens' c_axCa ConstraintCEMap
-configFilesO :: HasOldCodeSpec c_axCa => Lens' c_axCa [FilePath]
-constMapO :: HasOldCodeSpec c_axCa => Lens' c_axCa ConstantMap
-constantsO :: HasOldCodeSpec c_axCa => Lens' c_axCa [Const]
-derivedInputsO :: HasOldCodeSpec c_axCa => Lens' c_axCa [Derived]
-execOrderO :: HasOldCodeSpec c_axCa => Lens' c_axCa [Def]
-extInputsO :: HasOldCodeSpec c_axCa => Lens' c_axCa [Input]
-inputsO :: HasOldCodeSpec c_axCa => Lens' c_axCa [Input]
-modsO :: HasOldCodeSpec c_axCa => Lens' c_axCa [Mod]
-outputsO :: HasOldCodeSpec c_axCa => Lens' c_axCa [Output]
-pNameO :: HasOldCodeSpec c_axCa => Lens' c_axCa Name
-systemdbO :: HasOldCodeSpec c_axCa => Lens' c_axCa ChunkDB
+class HasOldCodeSpec c_axCf
+oldCodeSpec :: HasOldCodeSpec c_axCf => Lens' c_axCf OldCodeSpec
+authorsO :: HasOldCodeSpec c_axCf => Lens' c_axCf People
+cMapO :: HasOldCodeSpec c_axCf => Lens' c_axCf ConstraintCEMap
+configFilesO :: HasOldCodeSpec c_axCf => Lens' c_axCf [FilePath]
+constMapO :: HasOldCodeSpec c_axCf => Lens' c_axCf ConstantMap
+constantsO :: HasOldCodeSpec c_axCf => Lens' c_axCf [Const]
+derivedInputsO :: HasOldCodeSpec c_axCf => Lens' c_axCf [Derived]
+execOrderO :: HasOldCodeSpec c_axCf => Lens' c_axCf [Def]
+extInputsO :: HasOldCodeSpec c_axCf => Lens' c_axCf [Input]
+inputsO :: HasOldCodeSpec c_axCf => Lens' c_axCf [Input]
+modsO :: HasOldCodeSpec c_axCf => Lens' c_axCf [Mod]
+outputsO :: HasOldCodeSpec c_axCf => Lens' c_axCf [Output]
+pNameO :: HasOldCodeSpec c_axCf => Lens' c_axCf Name
+systemdbO :: HasOldCodeSpec c_axCf => Lens' c_axCf ChunkDB
 
 -- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID
@@ -960,6 +960,7 @@ data NamedArgument
 
 -- | Smart constructor for <a>NamedArgument</a> .
 narg :: (Quantity q, MayHaveUnit q, Concept q) => q -> NamedArgument
+codeDQDs :: [DefinedQuantityDict]
 
 
 -- | Define and collect information about ODEs and ODE solvers from various
@@ -997,3 +998,7 @@ odeintPckg :: ODELibPckg
 -- | Collects variables needed for odeint's ODEs as
 --   <a>DefinedQuantityDict</a>s.
 odeintSymbols :: [DefinedQuantityDict]
+
+-- | Change in <tt>X</tt> chunk constructor (where <tt>X</tt> is a given
+--   argument).
+diffCodeChunk :: CodeVarChunk -> CodeVarChunk

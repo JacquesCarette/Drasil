@@ -85,13 +85,13 @@ Functions</h2></td></tr>
 <tr class="memdesc:ac0f2228420376f4db7e1274f2b41667c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Controls the flow of the program.  <a href="_projectile_8cpp.html#ac0f2228420376f4db7e1274f2b41667c">More...</a><br /></td></tr>
 <tr class="separator:ac0f2228420376f4db7e1274f2b41667c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a954a80a31286b9a8d6fe3e4313395d5c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_projectile_8cpp.html#a954a80a31286b9a8d6fe3e4313395d5c">func_t_flight</a> (double v_launch, double theta, double g)</td></tr>
-<tr class="memdesc:a954a80a31286b9a8d6fe3e4313395d5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates flight duration: the time when the projectile lands (s)  <a href="_projectile_8cpp.html#a954a80a31286b9a8d6fe3e4313395d5c">More...</a><br /></td></tr>
+<tr class="memdesc:a954a80a31286b9a8d6fe3e4313395d5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates flight duration (s)  <a href="_projectile_8cpp.html#a954a80a31286b9a8d6fe3e4313395d5c">More...</a><br /></td></tr>
 <tr class="separator:a954a80a31286b9a8d6fe3e4313395d5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c625f9acd518d8c3bce979eb579920b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_projectile_8cpp.html#a0c625f9acd518d8c3bce979eb579920b">func_p_land</a> (double v_launch, double theta, double g)</td></tr>
-<tr class="memdesc:a0c625f9acd518d8c3bce979eb579920b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates landing position: the distance from the launcher to the final position of the projectile (m)  <a href="_projectile_8cpp.html#a0c625f9acd518d8c3bce979eb579920b">More...</a><br /></td></tr>
+<tr class="memdesc:a0c625f9acd518d8c3bce979eb579920b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates landing position (m)  <a href="_projectile_8cpp.html#a0c625f9acd518d8c3bce979eb579920b">More...</a><br /></td></tr>
 <tr class="separator:a0c625f9acd518d8c3bce979eb579920b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f0e8ad727a838fbf8b331a963785add"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_projectile_8cpp.html#a1f0e8ad727a838fbf8b331a963785add">func_d_offset</a> (double p_target, double p_land)</td></tr>
-<tr class="memdesc:a1f0e8ad727a838fbf8b331a963785add"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)  <a href="_projectile_8cpp.html#a1f0e8ad727a838fbf8b331a963785add">More...</a><br /></td></tr>
+<tr class="memdesc:a1f0e8ad727a838fbf8b331a963785add"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates distance between the target position and the landing position (m)  <a href="_projectile_8cpp.html#a1f0e8ad727a838fbf8b331a963785add">More...</a><br /></td></tr>
 <tr class="separator:a1f0e8ad727a838fbf8b331a963785add"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c9977bff2c7a17c8181db8e7ae96216"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_projectile_8cpp.html#a7c9977bff2c7a17c8181db8e7ae96216">func_s</a> (double p_target, double epsilon, double d_offset)</td></tr>
 <tr class="memdesc:a7c9977bff2c7a17c8181db8e7ae96216"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates output message as a string.  <a href="_projectile_8cpp.html#a7c9977bff2c7a17c8181db8e7ae96216">More...</a><br /></td></tr>
@@ -137,15 +137,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m) </p>
+<p>Calculates distance between the target position and the landing position (m) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">p_target</td><td>target position: the distance from the launcher to the target (m) </td></tr>
-    <tr><td class="paramname">p_land</td><td>landing position: the distance from the launcher to the final position of the projectile (m) </td></tr>
+    <tr><td class="paramname">p_target</td><td>target position (m) </td></tr>
+    <tr><td class="paramname">p_land</td><td>landing position (m) </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>distance between the target position and the landing position: the offset between the target position and the landing position (m) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>distance between the target position and the landing position (m) </dd></dl>
 
 </div>
 </div>
@@ -181,16 +181,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Calculates landing position: the distance from the launcher to the final position of the projectile (m) </p>
+<p>Calculates landing position (m) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">v_launch</td><td>launch speed: the initial speed of the projectile when launched (m/s) </td></tr>
-    <tr><td class="paramname">theta</td><td>launch angle: the angle between the launcher and a straight line from the launcher to the target (rad) </td></tr>
-    <tr><td class="paramname">g</td><td>magnitude of gravitational acceleration: the magnitude of the approximate acceleration due to gravity on Earth at sea level (m/s^2) </td></tr>
+    <tr><td class="paramname">v_launch</td><td>launch speed (m/s) </td></tr>
+    <tr><td class="paramname">theta</td><td>launch angle (rad) </td></tr>
+    <tr><td class="paramname">g</td><td>magnitude of gravitational acceleration (m/s^2) </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>landing position: the distance from the launcher to the final position of the projectile (m) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>landing position (m) </dd></dl>
 
 </div>
 </div>
@@ -229,9 +229,9 @@ Functions</h2></td></tr>
 <p>Calculates output message as a string. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">p_target</td><td>target position: the distance from the launcher to the target (m) </td></tr>
+    <tr><td class="paramname">p_target</td><td>target position (m) </td></tr>
     <tr><td class="paramname">epsilon</td><td>hit tolerance </td></tr>
-    <tr><td class="paramname">d_offset</td><td>distance between the target position and the landing position: the offset between the target position and the landing position (m) </td></tr>
+    <tr><td class="paramname">d_offset</td><td>distance between the target position and the landing position (m) </td></tr>
   </table>
   </dd>
 </dl>
@@ -271,16 +271,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Calculates flight duration: the time when the projectile lands (s) </p>
+<p>Calculates flight duration (s) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">v_launch</td><td>launch speed: the initial speed of the projectile when launched (m/s) </td></tr>
-    <tr><td class="paramname">theta</td><td>launch angle: the angle between the launcher and a straight line from the launcher to the target (rad) </td></tr>
-    <tr><td class="paramname">g</td><td>magnitude of gravitational acceleration: the magnitude of the approximate acceleration due to gravity on Earth at sea level (m/s^2) </td></tr>
+    <tr><td class="paramname">v_launch</td><td>launch speed (m/s) </td></tr>
+    <tr><td class="paramname">theta</td><td>launch angle (rad) </td></tr>
+    <tr><td class="paramname">g</td><td>magnitude of gravitational acceleration (m/s^2) </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>flight duration: the time when the projectile lands (s) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>flight duration (s) </dd></dl>
 
 </div>
 </div>
@@ -326,9 +326,9 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">filename</td><td>name of the input file </td></tr>
-    <tr><td class="paramname">v_launch</td><td>launch speed: the initial speed of the projectile when launched (m/s) </td></tr>
-    <tr><td class="paramname">theta</td><td>launch angle: the angle between the launcher and a straight line from the launcher to the target (rad) </td></tr>
-    <tr><td class="paramname">p_target</td><td>target position: the distance from the launcher to the target (m) </td></tr>
+    <tr><td class="paramname">v_launch</td><td>launch speed (m/s) </td></tr>
+    <tr><td class="paramname">theta</td><td>launch angle (rad) </td></tr>
+    <tr><td class="paramname">p_target</td><td>target position (m) </td></tr>
   </table>
   </dd>
 </dl>
@@ -370,9 +370,9 @@ Functions</h2></td></tr>
 <p>Verifies that input values satisfy the physical constraints. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">v_launch</td><td>launch speed: the initial speed of the projectile when launched (m/s) </td></tr>
-    <tr><td class="paramname">theta</td><td>launch angle: the angle between the launcher and a straight line from the launcher to the target (rad) </td></tr>
-    <tr><td class="paramname">p_target</td><td>target position: the distance from the launcher to the target (m) </td></tr>
+    <tr><td class="paramname">v_launch</td><td>launch speed (m/s) </td></tr>
+    <tr><td class="paramname">theta</td><td>launch angle (rad) </td></tr>
+    <tr><td class="paramname">p_target</td><td>target position (m) </td></tr>
   </table>
   </dd>
 </dl>
@@ -453,8 +453,8 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">s</td><td>output message as a string </td></tr>
-    <tr><td class="paramname">d_offset</td><td>distance between the target position and the landing position: the offset between the target position and the landing position (m) </td></tr>
-    <tr><td class="paramname">t_flight</td><td>flight duration: the time when the projectile lands (s) </td></tr>
+    <tr><td class="paramname">d_offset</td><td>distance between the target position and the landing position (m) </td></tr>
+    <tr><td class="paramname">t_flight</td><td>flight duration (s) </td></tr>
   </table>
   </dd>
 </dl>

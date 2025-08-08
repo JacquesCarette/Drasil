@@ -2,7 +2,7 @@
 module Language.Drasil.Printing.Import.Sentence where
 
 import Language.Drasil hiding (neg, sec, symbol, isIn)
-import Database.Drasil (ChunkDB, refResolve, refTable, termResolve', TermAbbr (shortForm))
+import Database.Drasil (ChunkDB, refFind)
 
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation
@@ -37,7 +37,7 @@ spec sm (Ch ShortStyle caps s)  = P.Tooltip (spec sm $ lookupT
 spec sm (Ch TermStyle caps s)   = spec sm $ lookupT (sm ^. ckdb) s caps
 spec sm (Ch PluralTerm caps s) = spec sm $ lookupP (sm ^. ckdb) s caps
 spec sm (Ref u EmptyS notes)    =
-  let reff = refResolve u (sm ^. ckdb . refTable) in
+  let reff = refFind u (sm ^. ckdb) in
   case reff of 
     (Reference _ (RP rp ra) sn) ->
       P.Ref P.Internal ra (spec sm $ renderShortName (sm ^. ckdb) rp sn)
@@ -46,7 +46,7 @@ spec sm (Ref u EmptyS notes)    =
     (Reference _ (URI ra) sn) ->
       P.Ref P.External    ra (spec sm $ renderURI sm sn)
 spec sm (Ref u dName notes) =
-  let reff = refResolve u (sm ^. ckdb . refTable) in
+  let reff = refFind u (sm ^. ckdb) in
   case reff of 
     (Reference _ (RP _ ra) _) ->
       P.Ref P.Internal ra (spec sm dName)
@@ -63,9 +63,7 @@ spec sm (E e)              = P.E $ modelExpr e sm
 -- | Renders the shortname of a reference/domain.
 renderShortName :: ChunkDB -> IRefProg -> ShortName -> Sentence
 renderShortName ctx (Deferred u) _ = S $ fromMaybe (error "Domain has no abbreviation.") $
-  shortForm $ termResolve' ctx u --Need defResolve instead of refResolve since only ConceptInstance
-  -- uses this case for domains and we want the short name from there. 
-  -- Used to be: S $ getRefAdd $ refResolve u (ctx ^. refTable)
+  findOrErr u ctx ^. term -- FIXME need either the type or to try all types
 renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortName ctx b sn
 renderShortName _ (RS s) _ = S s
 renderShortName _ Name sn = getSentSN sn

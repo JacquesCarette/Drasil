@@ -1,18 +1,10 @@
 -- | Re-export database types and functions to simplify external use.
 module Database.Drasil (
-  -- * Chunk Database
-  -- ** Types
-  ChunkDB (refTable), Chunk
-  -- ** Constructors
-
-  -- ** Lookup Functions
-  , findOrErr, refFind, labelledcontentFind
-  -- ** Lenses
-
-  -- ** Debugging Tools
-  , dumpChunkDB, DumpedChunkDB
+  module Database.Drasil.ChunkDB,
+  module Database.Drasil.Dump,
+  module Database.Drasil.TypedUIDRef
 ) where
 
 import Database.Drasil.ChunkDB
 import Database.Drasil.Dump
-import Database.Drasil.Chunk
+import Database.Drasil.TypedUIDRef

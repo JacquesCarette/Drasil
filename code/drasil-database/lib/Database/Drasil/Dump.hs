@@ -8,7 +8,7 @@ import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as SM
 
 import Control.Lens ((^.))
-import Database.Drasil.Chunk (Chunk)
+import Drasil.Database.Chunk (Chunk)
 import Data.Typeable (typeRep, Proxy (..))
 
 type ChunkType = String

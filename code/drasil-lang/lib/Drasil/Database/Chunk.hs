@@ -3,7 +3,7 @@
 {-# LANGUAGE ConstraintKinds #-}
 {-# LANGUAGE InstanceSigs #-}
 
-module Database.Drasil.Chunk
+module Drasil.Database.Chunk
   ( Chunk,
     IsChunk,
     HasChunkRefs (..),
@@ -14,7 +14,7 @@ module Database.Drasil.Chunk
 where
 
 import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, cast, typeOf, typeRep)
-import Language.Drasil (HasUID (..), UID)
+import Drasil.Database.UID (HasUID (..), UID)
 import Control.Lens
 
 -- | All chunks should expose what chunks they reference/rely on, so that we can

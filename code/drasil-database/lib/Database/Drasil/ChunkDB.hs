@@ -32,7 +32,7 @@ import qualified Data.Map.Strict as M -- NOTE: If we don't use 'Strict'ness here
 import Data.Maybe (fromMaybe, isJust, mapMaybe)
 import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, typeOf, typeRep)
 
-import Database.Drasil.Chunk (Chunk, HasChunkRefs (chunkRefs), IsChunk, mkChunk, unChunk)
+import Drasil.Database.Chunk (Chunk, HasChunkRefs (chunkRefs), IsChunk, mkChunk, unChunk)
 import Language.Drasil (HasUID (..), UID, LabelledContent, Reference)
 import Control.Lens ((^.))
 

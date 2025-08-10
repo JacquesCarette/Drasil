@@ -6,39 +6,39 @@
 
 module Projectile
 
-""" Calculates flight duration: the time when the projectile lands (s)
-    - Parameter v_launch: launch speed: the initial speed of the projectile when launched (m/s)
-    - Parameter theta: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-    - Parameter g: magnitude of gravitational acceleration: the magnitude of the approximate acceleration due to gravity on Earth at sea level (m/s^2)
-    - Returns: flight duration: the time when the projectile lands (s)
+""" Calculates flight duration (s)
+    - Parameter v_launch: launch speed (m/s)
+    - Parameter theta: launch angle (rad)
+    - Parameter g: magnitude of gravitational acceleration (m/s^2)
+    - Returns: flight duration (s)
 """
 function func_t_flight(v_launch::Float64, theta::Float64, g::Float64)
     return 2.0 * v_launch * sin(theta) / g
 end
 
-""" Calculates landing position: the distance from the launcher to the final position of the projectile (m)
-    - Parameter v_launch: launch speed: the initial speed of the projectile when launched (m/s)
-    - Parameter theta: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-    - Parameter g: magnitude of gravitational acceleration: the magnitude of the approximate acceleration due to gravity on Earth at sea level (m/s^2)
-    - Returns: landing position: the distance from the launcher to the final position of the projectile (m)
+""" Calculates landing position (m)
+    - Parameter v_launch: launch speed (m/s)
+    - Parameter theta: launch angle (rad)
+    - Parameter g: magnitude of gravitational acceleration (m/s^2)
+    - Returns: landing position (m)
 """
 function func_p_land(v_launch::Float64, theta::Float64, g::Float64)
     return 2.0 * v_launch ^ 2.0 * sin(theta) * cos(theta) / g
 end
 
-""" Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
-    - Parameter p_target: target position: the distance from the launcher to the target (m)
-    - Parameter p_land: landing position: the distance from the launcher to the final position of the projectile (m)
-    - Returns: distance between the target position and the landing position: the offset between the target position and the landing position (m)
+""" Calculates distance between the target position and the landing position (m)
+    - Parameter p_target: target position (m)
+    - Parameter p_land: landing position (m)
+    - Returns: distance between the target position and the landing position (m)
 """
 function func_d_offset(p_target::Float64, p_land::Float64)
     return p_land - p_target
 end
 
 """ Calculates output message as a string
-    - Parameter p_target: target position: the distance from the launcher to the target (m)
+    - Parameter p_target: target position (m)
     - Parameter epsilon: hit tolerance
-    - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
+    - Parameter d_offset: distance between the target position and the landing position (m)
     - Returns: output message as a string
 """
 function func_s(p_target::Float64, epsilon::Float64, d_offset::Float64)
@@ -53,9 +53,9 @@ end
 
 """ Reads input from a file with the given file name
     - Parameter filename: name of the input file
-    - Returns: launch speed: the initial speed of the projectile when launched (m/s)
-    - Returns: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-    - Returns: target position: the distance from the launcher to the target (m)
+    - Returns: launch speed (m/s)
+    - Returns: launch angle (rad)
+    - Returns: target position (m)
 """
 function get_input(filename::String)
     infile = open(filename, "r")
@@ -71,9 +71,9 @@ function get_input(filename::String)
 end
 
 """ Verifies that input values satisfy the physical constraints
-    - Parameter v_launch: launch speed: the initial speed of the projectile when launched (m/s)
-    - Parameter theta: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-    - Parameter p_target: target position: the distance from the launcher to the target (m)
+    - Parameter v_launch: launch speed (m/s)
+    - Parameter theta: launch angle (rad)
+    - Parameter p_target: target position (m)
 """
 function input_constraints(v_launch::Float64, theta::Float64, p_target::Float64)
     if !(v_launch > 0.0)
@@ -110,8 +110,8 @@ end
 
 """ Writes the output values to output.txt
     - Parameter s: output message as a string
-    - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
-    - Parameter t_flight: flight duration: the time when the projectile lands (s)
+    - Parameter d_offset: distance between the target position and the landing position (m)
+    - Parameter t_flight: flight duration (s)
 """
 function write_output(s::String, d_offset::Float64, t_flight::Float64)
     outputfile = open("output.txt", "w")

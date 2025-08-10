@@ -3,17 +3,17 @@ module Data.Drasil.Concepts.Math where
 
 import Language.Drasil hiding (number, norm, matrix)
 import Language.Drasil.ShortHands (lX, lY, lZ)
-import Data.Drasil.Domains (mathematics)
+import Drasil.Metadata (mathematics)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 -- | Collects all math-related concepts.
 mathcon :: [ConceptChunk]
-mathcon = [amplitude, angle, area, axis, calculation, cartesian, centre, change, component,
-  constraint, diameter, direction, equation, euclidN, euclidSpace, gradient, graph, laplaceTransform, law, line, matrix,
-  norm, normal, normalV, number, orient, origin, parameter, perp, perpV, pi_, negInf, posInf, positive, negative,
-  point, probability, rOfChng, rate, rightHand, shape, surArea, surface, unitV, unit_, vector, 
+mathcon = [amplitude, angle, axis, calculation, cartesian, centre, change, component,
+  constraint, direction, equation, euclidSpace, graph, laplaceTransform, law, line, matrix,
+  norm, normal, number, origin, parameter, perp, positive, negative,
+  point, probability, rOfChng, rate, rightHand, shape, unit_, vector, 
   xAxis, xCoord, xComp, xDir, yAxis, yCoord, yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle]
 
 -- | Collects all math-related common ideas (like a concept, but with no definition).

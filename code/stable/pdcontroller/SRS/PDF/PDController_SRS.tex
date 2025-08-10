@@ -85,7 +85,7 @@ ${K_{\text{d}}}$ & Derivative Gain & --
 \\
 ${K_{\text{p}}}$ & Proportional Gain & --
 \\
-$k$ & Stiffness coefficient of the spring & ${\text{s}}$
+$k$ & Stiffness coefficient & ${\text{s}}$
 \\
 $\mathit{L⁻¹[F(s)]}$ & Inverse Laplace Transform of a function & --
 \\
@@ -191,29 +191,29 @@ A system is needed to provide a model of a PD Controller that can be used for th
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
 
 \begin{itemize}
-\item{PD Control Loop: Closed-Loop control system with PD Controller, Summing Point and Power Plant.}
 \item{PD Controller: Proportional-Derivative Controller.}
+\item{PD Control Loop: Closed-Loop control system with PD Controller, Summing Point and Power Plant.}
 \item{Summing Point: Control block where the difference between the Set-Point and the Process Variable is computed.}
 \item{Power Plant: A second order system to be controlled.}
 \item{Second Order System: A system whose input-output relationship is denoted by a second-order differential equation.}
 \item{Process Error: Input to the PID controller. Process Error is the difference between the Set-Point and the Process Variable.}
+\item{Proportional control: A linear feedback control system where correction is applied to the controlled variable which is proportional to the difference between desired and measured values.}
+\item{Derivative control: Monitors the rate of change of the error signal and contributes a component of the output signal (proportional to a derivative of the error signal).}
+\item{Frequency domain: The analysis of mathematical functions in terms of frequency, instead of time.}
+\item{Time domain: The analysis of mathematical functions in terms of time.}
+\item{Control Variable: The Control Variable is the output of the PD controller.}
+\item{Transfer Function: The Transfer Function of a system is the ratio of the output to the input functions in the frequency domain.}
+\item{Damping Coefficient: Quantity that characterizes a second order system's oscillatory response.}
+\item{Stiffness coefficient: Quantity that characterizes a spring's stiffness.}
 \item{Simulation Time: Total execution time of the PD simulation.}
 \item{Process Variable: The output value from the power plant.}
 \item{Set-Point: The desired value that the control system must reach. This also knows as the reference variable.}
 \item{Proportional Gain: Gain constant of the proportional controller.}
 \item{Derivative Gain: Gain constant of the derivative controller.}
-\item{Proportional control: A linear feedback control system where correction is applied to the controlled variable which is proportional to the difference between desired and measured values.}
-\item{Derivative control: Monitors the rate of change of the error signal and contributes a component of the output signal (proportional to a derivative of the error signal).}
-\item{Frequency domain: The analysis of mathematical functions in terms of frequency, instead of time.}
-\item{Time domain: The analysis of mathematical functions in terms of time.}
 \item{Laplace transform: An integral transform that converts a function of a real variable t (often time) to a function of a complex variable s (complex frequency).}
-\item{Control Variable: The Control Variable is the output of the PD controller.}
 \item{Step Time: Simulation step time.}
 \item{Absolute Tolerance: Absolute tolerance for the integrator.}
 \item{Relative Tolerance: Relative tolerance for the integrator.}
-\item{Transfer Function: The Transfer Function of a system is the ratio of the output to the input functions in the frequency domain.}
-\item{Damping Coefficient: Quantity that characterizes a second order system's oscillatory response.}
-\item{Stiffness Coefficient: Quantity that characterizes a spring's stiffness.}
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
@@ -257,7 +257,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[Transfer Function:\phantomsection\label{pwrPlantTxFnx}]{The combined Power Plant and Sensor (\hyperref[pwrPlant]{A:Power plant}) are characterized by a Second Order mass-spring-damper System. (RefBy: \hyperref[TM:tmSOSystem]{TM:tmSOSystem}.)}
 \item[Spring Mass:\phantomsection\label{massSpring}]{The mass of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 1 kilogram. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant} and \hyperref[likeChgPP]{LC:DC Gain and Time Constant}.)}
 \item[Spring Damping Coefficient:\phantomsection\label{dampingCoeffSpring}]{The Damping Coefficient of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 1. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant} and \hyperref[likeChgPP]{LC:DC Gain and Time Constant}.)}
-\item[Spring Stiffness Coefficient:\phantomsection\label{stiffnessCoeffSpring}]{The Stiffness Coefficient of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 20. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant} and \hyperref[likeChgPP]{LC:DC Gain and Time Constant}.)}
+\item[Spring Stiffness Coefficient:\phantomsection\label{stiffnessCoeffSpring}]{The Stiffness coefficient of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 20. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant} and \hyperref[likeChgPP]{LC:DC Gain and Time Constant}.)}
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -348,7 +348,7 @@ Description & \begin{symbDescription}
               \item{$m$ is the mass (${\text{kg}}$)}
               \item{$s$ is the Complex frequency-domain parameter (Unitless)}
               \item{$c$ is the Damping coefficient of the spring (Unitless)}
-              \item{$k$ is the Stiffness coefficient of the spring (${\text{s}}$)}
+              \item{$k$ is the Stiffness coefficient (${\text{s}}$)}
               \end{symbDescription}
 \\ \midrule
 Notes & The Transfer Function (from \hyperref[pwrPlantTxFnx]{A:Transfer Function}) of a Second Order System (mass-spring-damper) is characterized by this equation.
@@ -386,7 +386,7 @@ Description & \begin{symbDescription}
               \item{$s$ is the Complex frequency-domain parameter (Unitless)}
               \end{symbDescription}
 \\ \midrule
-Notes & The Transfer Function of the Second Order System (from \hyperref[TM:tmSOSystem]{TM:tmSOSystem}) is reduced to this equation by substituting the mass (m) to 1 Kg (from \hyperref[massSpring]{A:Spring Mass}), the Damping Coefficient ($c$) to 1 (from \hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}), and the Stiffness Coefficient ($k$) to 20 (from \hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}). The equation is converted to the frequency domain by applying the Laplace transform (from \hyperref[TM:laplaceTransform]{TM:laplaceTransform}). Additionally, there are no external disturbances to the power plant (from \hyperref[externalDisturb]{A:External disturbance}).
+Notes & The Transfer Function of the Second Order System (from \hyperref[TM:tmSOSystem]{TM:tmSOSystem}) is reduced to this equation by substituting the mass (m) to 1 Kg (from \hyperref[massSpring]{A:Spring Mass}), the Damping Coefficient ($c$) to 1 (from \hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}), and the Stiffness coefficient ($k$) to 20 (from \hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}). The equation is converted to the frequency domain by applying the Laplace transform (from \hyperref[TM:laplaceTransform]{TM:laplaceTransform}). Additionally, there are no external disturbances to the power plant (from \hyperref[externalDisturb]{A:External disturbance}).
         
 \\ \midrule
 Source & \cite{pidWiki} and \cite{abbasi2015}
@@ -704,7 +704,7 @@ This section provides the non-functional requirements, the qualities that the so
 This section lists the likely changes to be made to the software.
 
 \begin{description}[font=\normalfont]
-\item[DC Gain and Time Constant:\phantomsection\label{likeChgPP}]{The mass, Damping Coefficient and the Stiffness Coefficient may be changed to be supplied by the user (from \hyperref[massSpring]{A:Spring Mass}, \hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}, and \hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}).}
+\item[DC Gain and Time Constant:\phantomsection\label{likeChgPP}]{The mass, Damping Coefficient and the Stiffness coefficient may be changed to be supplied by the user (from \hyperref[massSpring]{A:Spring Mass}, \hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}, and \hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}).}
 \end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}

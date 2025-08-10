@@ -5,19 +5,15 @@
 
 module Drasil.Template.Body where
 
+import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.Metadata
 import Language.Drasil
 import Drasil.SRSDocument
+import Database.Drasil.ChunkDB (cdb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import qualified Language.Drasil.Sentence.Combinators as S
-import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
-import Data.Drasil.Concepts.Computation (inValue, algorithm)
-import Data.Drasil.Concepts.Software (errMsg, program)
-import Data.Drasil.Concepts.Math (mathcon)
 
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import qualified Drasil.DocLang.SRS as SRS
-import Data.Drasil.Software.Products
-import Data.Drasil.TheoryConcepts
 import Data.Drasil.Citations
 import Drasil.DocumentLanguage.TraceabilityGraph
 import Drasil.DocLang (tunitNone)
@@ -84,37 +80,25 @@ mkSRS = [TableOfContents,
   Bibliography]
 
 si :: System
-si = SI {
-  _sys         = progName,
-  _kind        = Doc.srs,
-  _authors     = [authorName],
-  _background  = [],
-  _purpose     = [],
-  _motivation  = [],
-  _scope       = [],
-  _quants      = [] :: [QuantityDict],
-  _instModels  = [] :: [InstanceModel],
-  _datadefs    = [] :: [DataDefinition],
-  _configFiles = [],
-  _inputs      = [] :: [QuantityDict],
-  _outputs     = [] :: [QuantityDict],
-  _constraints = [] :: [ConstrainedChunk],
-  _constants   = [] :: [ConstQDef],
-  _systemdb   = symbMap
-}
+si = mkSystem
+  progName Specification [authorName]
+  [] [] [] []
+  ([] :: [DefinedQuantityDict])
+  ([] :: [TheoryModel]) ([] :: [GenDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
+  []
+  ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) ([] :: [ConstQDef])
+  symbMap
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
-  -- Actual IdeaDicts
-  doccon ++ prodtcon ++ [inValue] ++
   -- CIs
-  nw progName : map nw doccon'
+  [nw progName]
 
 conceptChunks :: [ConceptChunk]
-conceptChunks = [errMsg, algorithm, program] ++ mathcon ++ srsDomains
+conceptChunks = [] :: [ConceptChunk]
 
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [QuantityDict]) ideaDicts conceptChunks
+symbMap = cdb ([] :: [DefinedQuantityDict]) ideaDicts conceptChunks
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
   ([] :: [LabelledContent]) ([] :: [Reference]) citations

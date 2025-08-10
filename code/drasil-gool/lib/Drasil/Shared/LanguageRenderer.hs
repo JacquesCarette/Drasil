@@ -49,7 +49,7 @@ import Prelude hiding (break,print,last,sqrt,abs,log,exp,sin,cos,tan,asin,acos,
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
   space, brackets, parens, isEmpty, rbrace, lbrace, vcat, semi, equals, colon,
   comma)
-import Metadata.Drasil.DrasilMetaCall(watermark)
+import Drasil.Metadata (watermark)
 
 ----------------------------------------
 -- Syntax common to several renderers --

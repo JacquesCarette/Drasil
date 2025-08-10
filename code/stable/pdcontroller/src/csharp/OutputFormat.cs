@@ -11,7 +11,7 @@ using System.IO;
 public class OutputFormat {
     
     /** \brief Writes the output values to output.txt
-        \param y_t Process Variable: The output value from the power plant
+        \param y_t Process Variable
     */
     public static void write_output(List<double> y_t) {
         StreamWriter outputfile;

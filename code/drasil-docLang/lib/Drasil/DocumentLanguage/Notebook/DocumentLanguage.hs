@@ -7,7 +7,7 @@ import Drasil.DocumentLanguage.Notebook.Core (LsnDesc, LsnChapter(..),
 
 import Language.Drasil hiding (kind)
 
-import System.Drasil (System(SI), _authors, _kind, _sys)
+import Drasil.System (System(SI), _authors, _sys, whatsTheBigIdea)
 import Drasil.GetChunks (citeDB)
 
 import qualified Drasil.DocLang.Notebook as Lsn (intro, learnObj, caseProb, example, 
@@ -15,8 +15,8 @@ import qualified Drasil.DocLang.Notebook as Lsn (intro, learnObj, caseProb, exam
 
 -- | Creates a notebook from a lesson description and system information.
 mkNb :: LsnDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
-mkNb dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
-  Notebook (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) $
+mkNb dd comb si@SI {_sys = sys, _authors = authors} =
+  Notebook (whatsTheBigIdea si `comb` nw sys) (foldlList Comma List $ map (S . name) authors) $
   mkSections si l where
     l = mkLsnDesc si dd
 

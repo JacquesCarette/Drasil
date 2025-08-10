@@ -21,8 +21,7 @@ theoreticalModels = [tmLaplace, tmInvLaplace, tmSOSystem]
 tmLaplace :: TheoryModel
 tmLaplace
   = tm (othModel' laplaceRC)
-      [qw qdLaplaceTransform, qw qdFreqDomain, qw time, qw posInf,
-       qw qdFxnTDomain]
+      ([] :: [DefinedQuantityDict])
       ([] :: [ConceptChunk])
       []
       [express laplaceRel]
@@ -36,9 +35,9 @@ laplaceRC = makeRC "laplaceRC" (cn' "Laplace Transform") EmptyS laplaceRel
 
 laplaceRel :: Relation
 laplaceRel
-  = sy qdLaplaceTransform $=
-      defint (eqSymb time) (sy negInf) (sy posInf) (sy qdFxnTDomain 
-      $* DrasilLang.exp (neg (sy qdFreqDomain) $* sy time))
+  = sy dqdLaplaceTransform $=
+      defint (eqSymb time) (sy negInf) (sy posInf) (sy dqdFxnTDomain 
+      $* DrasilLang.exp (neg (sy dqdFreqDomain) $* sy time))
 
 laplaceDesc :: Sentence
 laplaceDesc
@@ -53,8 +52,7 @@ laplaceDesc
 tmInvLaplace :: TheoryModel
 tmInvLaplace
   = tm (othModel' invlaplaceRC)
-      [qw qdLaplaceTransform, qw qdFreqDomain, qw time, qw posInf,
-       qw qdFxnTDomain]
+      ([] :: [DefinedQuantityDict])
       ([] :: [ConceptChunk])
       []
       [express invLaplaceRel]
@@ -68,7 +66,7 @@ invlaplaceRC
   = makeRC "invLaplaceRC" (cn' "Inverse Laplace Transform") EmptyS invLaplaceRel
 
 invLaplaceRel :: Relation
-invLaplaceRel = sy qdFxnTDomain $= sy qdInvLaplaceTransform
+invLaplaceRel = sy dqdFxnTDomain $= sy dqdInvLaplaceTransform
 
 invLaplaceDesc :: Sentence
 invLaplaceDesc
@@ -83,7 +81,7 @@ invLaplaceDesc
 tmSOSystem :: TheoryModel
 tmSOSystem
   = tm (othModel' tmSOSystemRC)
-      [qw mass, qw qdDampingCoeff, qw qdStiffnessCoeff, qw qdFreqDomain]
+      ([] :: [DefinedQuantityDict])
       ([] :: [ConceptChunk])
       []
       [express soSystemRel]
@@ -100,9 +98,9 @@ tmSOSystemRC
 soSystemRel :: Relation
 soSystemRel
   = exactDbl 1 
-    $/ (sy mass $* square (sy qdFreqDomain) 
-    $+ (sy qdDampingCoeff $* sy qdFreqDomain)
-    $+ sy qdStiffnessCoeff)
+    $/ (sy mass $* square (sy dqdFreqDomain) 
+    $+ (sy dqdDampingCoeff $* sy dqdFreqDomain)
+    $+ sy dqdStiffnessCoeff)
 
 soSystemDesc :: Sentence
 soSystemDesc

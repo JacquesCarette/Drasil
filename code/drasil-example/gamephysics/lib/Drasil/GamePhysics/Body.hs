@@ -1,32 +1,31 @@
 module Drasil.GamePhysics.Body where
 
 import Language.Drasil hiding (organization, section)
+import Drasil.Metadata (dataDefn, inModel)
 import Drasil.SRSDocument
+import Database.Drasil.ChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   condition, consumer, endUser, environment, game, guide, input_, interface,
   object, physical, physicalSim, physics, problem, product_, project,
   quantity, realtime, section_, simulation, software, softwareSys,
-  srsDomains, system, systemConstraint, sysCont, task, user, doccon, doccon',
+  system, systemConstraint, sysCont, task, user,
   property, problemDescription)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.TheoryConcepts as Doc (dataDefn, inModel)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
-  highSchoolPhysics, educon)
+  highSchoolPhysics)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)
 import Data.Drasil.People (alex, luthfi, olu)
-import Data.Drasil.SI_Units (siUnits)
-import Data.Drasil.Software.Products (openSource, prodtcon, videoGame)
+import Data.Drasil.Software.Products (openSource, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
-import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon,
-  physicCon', rigidBody, collision, damping)
+import qualified Data.Drasil.Concepts.Physics as CP (elasticity,
+  physicCon', rigidBody, collision, damping, angular, linear, friction, joint, energy, motion, space)
 import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
-  mathcon, mathcon', rightHand, line, point)
+  mathcon', rightHand, line, point)
+import Data.Drasil.Quantities.Math (normalVect, perpVect, surface)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
@@ -40,8 +39,10 @@ import Drasil.GamePhysics.References (citations, uriReferences)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, pymunk)
 import Drasil.GamePhysics.TMods (tMods)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
-  inputSymbols, outputSymbols, inputConstraints, defSymbols)
+  inputSymbols, outputSymbols, inputConstraints)
 import Drasil.GamePhysics.GenDefs (generalDefns)
+
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize short) si
@@ -95,28 +96,16 @@ mkSRS = [TableOfContents,
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
 
 si :: System
-si = SI {
-  _sys         = progName,
-  _kind        = Doc.srs,
-  _authors     = [alex, luthfi, olu],
-  _purpose     = [purp],
-  _background  = [],
-  _motivation  = [],
-  _scope       = [],
+si = mkSystem progName Specification [alex, luthfi, olu]
+  [purp] [] [] [] ([] :: [DefinedQuantityDict])
   -- FIXME: The _quants field should be filled in with all the symbols, however
   -- #1658 is why this is empty, otherwise we end up with unused (and probably
   -- should be removed) symbols. But that's for another time. This is "fine"
   -- because _quants are only used relative to #1658.
-  _quants      = [] :: [QuantityDict], -- map qw iMods ++ map qw symbolsAll,
-  _instModels  = iMods,
-  _datadefs    = dataDefs,
-  _configFiles = [],
-  _inputs      = inputSymbols,
-  _outputs     = outputSymbols, 
-  _constraints = inputConstraints,
-  _constants   = [],
-  _systemdb   = symbMap
-}
+  tMods generalDefns dataDefs iMods
+  []
+  inputSymbols outputSymbols inputConstraints []
+  symbMap
 
 purp :: Sentence
 purp = foldlSent_ [S "simulate", short twoD, phrase CP.rigidBody,
@@ -134,24 +123,24 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 ideaDicts :: [IdeaDict]
 ideaDicts =
-  -- Actual IdeaDicts
-  doccon ++ educon ++ prodtcon ++
   -- CIs
-  map nw [progName, centreMass] ++ map nw doccon' ++ map nw CM.mathcon' ++
+  map nw [progName, centreMass] ++ map nw CM.mathcon' ++
   map nw CP.physicCon'
   
 conceptChunks :: [ConceptChunk]
 conceptChunks = 
   -- ConceptChunks
-  algorithm : softwarecon ++ CP.physicCon ++ CM.mathcon ++ srsDomains ++
-  -- InstanceModels
-  map cw iMods ++
+  softwarecon ++ [CP.angular, CP.linear, CP.rigidBody, CP.collision,
+  CP.damping, CP.friction, CP.joint, CP.energy, CP.motion, CP.space,
+  CP.elasticity] ++
   -- DefinedQuantityDicts
-  map cw defSymbols
+  map cw [normalVect, perpVect] ++
+  -- UnitalChunks
+  [cw surface]
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks
-  siUnits dataDefs iMods generalDefns tMods concIns [] allRefs citations
+  ([] :: [UnitDefn]) dataDefs iMods generalDefns tMods concIns [] allRefs citations
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =

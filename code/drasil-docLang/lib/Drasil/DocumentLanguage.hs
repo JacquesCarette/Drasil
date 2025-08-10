@@ -27,7 +27,7 @@ import Database.Drasil (ChunkDB, collectUnits, collectAbbreviations, refbyTable,
   idMap, conceptinsTable, traceTable, generateRefbyMap, refTable, labelledcontentTable, 
   theoryModelTable, insmodelTable, gendefTable, dataDefnTable)
 
-import System.Drasil
+import Drasil.System
 import Drasil.GetChunks (ccss, ccss', citeDB)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
@@ -71,8 +71,8 @@ import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 -- * Main Function
 -- | Creates a document from a document description, a title combinator function, and system information.
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> System -> Document
-mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = docauthors} =
-  Document (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) docauthors) (findToC l) $
+mkDoc dd comb si@SI {_sys = sys, _authors = docauthors} =
+  Document (whatsTheBigIdea si `comb` nw sys) (foldlList Comma List $ map (S . name) docauthors) (findToC l) $
   mkSections fullSI l where
     fullSI = fillcdbSRS dd si
     l = mkDocDesc fullSI dd
@@ -250,7 +250,7 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
       [tsIntro con,
                 LlC $ table Equational (sortBySymbol
                 $ filter (`hasStageSymbol` Equational)
-                (nub $ map qw v ++ ccss' (getDocDesc dd) (egetDocDesc dd) cdb))
+                (nub $ map dqdWr v ++ ccss' (getDocDesc dd) (egetDocDesc dd) cdb))
                 atStart] []
     mkSubRef SI {_systemdb = cdb} (TSymb' f con) =
       mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con

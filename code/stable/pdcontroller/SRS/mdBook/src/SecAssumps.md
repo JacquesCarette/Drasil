@@ -44,4 +44,4 @@ Spring Damping Coefficient: The Damping Coefficient of the spring in the mass-sp
 
 <div id="stiffnessCoeffSpring"></div>
 
-Spring Stiffness Coefficient: The Stiffness Coefficient of the spring in the mass-spring-damper system ([A:Power plant](./SecAssumps.md#pwrPlant)) is assumed to be 20. (RefBy: [GD:gdPowerPlant](./SecGDs.md#GD:gdPowerPlant) and [LC:DC Gain and Time Constant](./SecLCs.md#likeChgPP).)
+Spring Stiffness Coefficient: The Stiffness coefficient of the spring in the mass-spring-damper system ([A:Power plant](./SecAssumps.md#pwrPlant)) is assumed to be 20. (RefBy: [GD:gdPowerPlant](./SecGDs.md#GD:gdPowerPlant) and [LC:DC Gain and Time Constant](./SecLCs.md#likeChgPP).)

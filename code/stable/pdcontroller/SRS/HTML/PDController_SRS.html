@@ -209,7 +209,7 @@
                 </tr>
                 <tr>
                   <td><em>k</em></td>
-                  <td>Stiffness coefficient of the spring</td>
+                  <td>Stiffness coefficient</td>
                   <td><em>s</em></td>
                 </tr>
                 <tr>
@@ -406,10 +406,10 @@
                   This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
                 </p>
                 <ul class="list">
+                  <li>PD Controller: Proportional-Derivative Controller.</li>
                   <li>
                     PD Control Loop: Closed-Loop control system with PD Controller, Summing Point and Power Plant.
                   </li>
-                  <li>PD Controller: Proportional-Derivative Controller.</li>
                   <li>
                     Summing Point: Control block where the difference between the Set-Point and the Process Variable is computed.
                   </li>
@@ -419,6 +419,30 @@
                   </li>
                   <li>
                     Process Error: Input to the PID controller. Process Error is the difference between the Set-Point and the Process Variable.
+                  </li>
+                  <li>
+                    Proportional control: A linear feedback control system where correction is applied to the controlled variable which is proportional to the difference between desired and measured values.
+                  </li>
+                  <li>
+                    Derivative control: Monitors the rate of change of the error signal and contributes a component of the output signal (proportional to a derivative of the error signal).
+                  </li>
+                  <li>
+                    Frequency domain: The analysis of mathematical functions in terms of frequency, instead of time.
+                  </li>
+                  <li>
+                    Time domain: The analysis of mathematical functions in terms of time.
+                  </li>
+                  <li>
+                    Control Variable: The Control Variable is the output of the PD controller.
+                  </li>
+                  <li>
+                    Transfer Function: The Transfer Function of a system is the ratio of the output to the input functions in the frequency domain.
+                  </li>
+                  <li>
+                    Damping Coefficient: Quantity that characterizes a second order system's oscillatory response.
+                  </li>
+                  <li>
+                    Stiffness coefficient: Quantity that characterizes a spring's stiffness.
                   </li>
                   <li>
                     Simulation Time: Total execution time of the PD simulation.
@@ -434,35 +458,11 @@
                     Derivative Gain: Gain constant of the derivative controller.
                   </li>
                   <li>
-                    Proportional control: A linear feedback control system where correction is applied to the controlled variable which is proportional to the difference between desired and measured values.
-                  </li>
-                  <li>
-                    Derivative control: Monitors the rate of change of the error signal and contributes a component of the output signal (proportional to a derivative of the error signal).
-                  </li>
-                  <li>
-                    Frequency domain: The analysis of mathematical functions in terms of frequency, instead of time.
-                  </li>
-                  <li>
-                    Time domain: The analysis of mathematical functions in terms of time.
-                  </li>
-                  <li>
                     Laplace transform: An integral transform that converts a function of a real variable t (often time) to a function of a complex variable s (complex frequency).
-                  </li>
-                  <li>
-                    Control Variable: The Control Variable is the output of the PD controller.
                   </li>
                   <li>Step Time: Simulation step time.</li>
                   <li>Absolute Tolerance: Absolute tolerance for the integrator.</li>
                   <li>Relative Tolerance: Relative tolerance for the integrator.</li>
-                  <li>
-                    Transfer Function: The Transfer Function of a system is the ratio of the output to the input functions in the frequency domain.
-                  </li>
-                  <li>
-                    Damping Coefficient: Quantity that characterizes a second order system's oscillatory response.
-                  </li>
-                  <li>
-                    Stiffness Coefficient: Quantity that characterizes a spring's stiffness.
-                  </li>
                 </ul>
               </div>
             </div>
@@ -573,7 +573,7 @@
                   </p>
                   <p>
                     <div id="stiffnessCoeffSpring">
-                      Spring Stiffness Coefficient: The Stiffness Coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 20. (RefBy: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a> and <a href=#likeChgPP>LC:DC Gain and Time Constant</a>.)
+                      Spring Stiffness Coefficient: The Stiffness coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 20. (RefBy: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a> and <a href=#likeChgPP>LC:DC Gain and Time Constant</a>.)
                     </div>
                   </p>
                 </div>
@@ -720,9 +720,7 @@
                           <li>
                             <em>c</em> is the Damping coefficient of the spring (Unitless)
                           </li>
-                          <li>
-                            <em>k</em> is the Stiffness coefficient of the spring (<em>s</em>)
-                          </li>
+                          <li><em>k</em> is the Stiffness coefficient (<em>s</em>)</li>
                         </ul>
                       </td>
                     </tr>
@@ -788,7 +786,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The Transfer Function of the Second Order System (from <a href=#TM:tmSOSystem>TM:tmSOSystem</a>) is reduced to this equation by substituting the mass (m) to 1 Kg (from <a href=#massSpring>A:Spring Mass</a>), the Damping Coefficient (<em>c</em>) to 1 (from <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>), and the Stiffness Coefficient (<em>k</em>) to 20 (from <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>). The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>). Additionally, there are no external disturbances to the power plant (from <a href=#externalDisturb>A:External disturbance</a>).
+                          The Transfer Function of the Second Order System (from <a href=#TM:tmSOSystem>TM:tmSOSystem</a>) is reduced to this equation by substituting the mass (m) to 1 Kg (from <a href=#massSpring>A:Spring Mass</a>), the Damping Coefficient (<em>c</em>) to 1 (from <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>), and the Stiffness coefficient (<em>k</em>) to 20 (from <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>). The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM:laplaceTransform</a>). Additionally, there are no external disturbances to the power plant (from <a href=#externalDisturb>A:External disturbance</a>).
                         </p>
                       </td>
                     </tr>
@@ -1349,7 +1347,7 @@
         <div class="list">
           <p>
             <div id="likeChgPP">
-              DC Gain and Time Constant: The mass, Damping Coefficient and the Stiffness Coefficient may be changed to be supplied by the user (from <a href=#massSpring>A:Spring Mass</a>, <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>, and <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>).
+              DC Gain and Time Constant: The mass, Damping Coefficient and the Stiffness coefficient may be changed to be supplied by the user (from <a href=#massSpring>A:Spring Mass</a>, <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>, and <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>).
             </div>
           </p>
         </div>

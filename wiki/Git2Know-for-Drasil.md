@@ -56,10 +56,11 @@ Making a commit to a repository
     ```
     git status
     ```
-2. Creating a commit. This step will actually apply your changes to your local repository. Use the following function to commit your changes (after they have been staged):
+2. Creating a commit. This step will actually apply your changes to your local repository. Use the following function to commit your changes (after they have been staged) with short-form messages:
     ```bash
     git commit -m "meaningful message to communicate changes made"
     ```
+    If you'd like to write a more comprehensive, long-form commit message, running only `git commit` will open a text editor (`nano` by default) you can use. This is particularly helpful for when there are [co-contributors you need](#co-authorship) to acknowledge.
 3. Pushing commits to a remote repository. This will create or update an identical branch to the repository you initially `cloned` from. For others to see the changes you made, push them to remote repository by using:
     ```
     git push
@@ -70,6 +71,9 @@ Making a commit to a repository
     ```
 4. Pulling from the remote repository. When others make changes, `git pull` syncs your local version with any changes made to the remote repository. 
 
+### Co-Authorship
+
+Working with others, you should always acknowledge so. Commits declare who *submitted* work (e.g., [130e76](https://github.com/JacquesCarette/Drasil/commit/130e76ed4246989765cf1b7440ccadb7f226df2b.patch) shows that Jason wrote the commit). Normally, we assume that Jason wrote this code himself as well. GitHub will similarly assume this and attribute this work to Jason through the [Contributor's Statistics](https://github.com/JacquesCarette/Drasil/graphs/contributors) page. In situations where others helped you work on a commit, you should always acknowledge them somehow. Conventionally, with git, we append a new line in the format "Co-Authored-By: X <X's email>" to the end of the commit message. If multiple authors exist, we append one new line for each contributor. For example, [8deb7c](https://github.com/JacquesCarette/Drasil/commit/8deb7caf8442b90a1fa56f1926e2d44a378230a4.patch) shows all contributors, who, as of Mon, 3 Jun 2024 contributed to the wiki.
 
 ## Oops, how do I undo a commit?!? 
 One of the following commands may help if you find you made some changes to a commit that you want to revert.
@@ -80,7 +84,6 @@ One of the following commands may help if you find you made some changes to a co
 - `git reset –hard <#commitHash>` (reset commit history) 
  ### I pushed it to the remote repo! 
 - `git revert <#commitHash>` (creates inverse commit to commit #commitHash)  
-
 
 ## Pull Requests 
 This is a common process for fetching the latest data from the remote repository, making some changes, and then contributing back to the remote repository. A pull request is a method for telling the owners/maintainers of a remote repo that you wish to add your changes.

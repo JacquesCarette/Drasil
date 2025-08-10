@@ -39,9 +39,9 @@ targPos   = constrained'    (uc       C.targPos   (subStr lP "target") Real metr
 
 ---
 -- The output contains a message, as a string, so it needs to be a quantity
-message :: QuantityDict
-message = vc "outputMessage" (nounPhraseSent (S "output message as a string")) lS String
+message :: DefinedQuantityDict
+message = dqdNoUnit (dcc "outputMessage" (nounPhraseSent (S "output message as a string")) "the output message given as a string") lS String
 
 ---
 tol :: ConstQDef
-tol = mkQuantDef (vcSt "tol" (nounPhraseSP "hit tolerance") (autoStage vEpsilon) Real) (perc 2 2)
+tol = mkQuantDef (dqdNoUnit' (dcc "tol" (nounPhraseSP "hit tolerance") "the hit tolerance") (autoStage vEpsilon) Real) (perc 2 2)

@@ -27,6 +27,10 @@ instance HasUID           CodeDefinition where uid = cchunk . uid
 instance NamedIdea        CodeDefinition where term = cchunk . term
 -- | Finds the idea contained in the 'CodeChunk' used to make the 'CodeDefinition'.
 instance Idea             CodeDefinition where getA = getA . view cchunk
+-- | Finds the Definition of the 'CodeChunk' used to make the 'CodeDefinition'.
+instance Definition       CodeDefinition where defn = cchunk . defn
+-- | Finds the concept domains of the 'CodeChunk' used to make the 'CodeDefinition'
+instance ConceptDomain    CodeDefinition where cdom = cdom . view cchunk
 -- | Finds the 'Space' of the 'CodeChunk' used to make the 'CodeDefinition'.
 instance HasSpace         CodeDefinition where typ = cchunk . typ
 -- | Finds the 'Stage' dependent 'Symbol' of the 'CodeChunk' used to make the 'CodeDefinition'.
@@ -54,7 +58,7 @@ instance DefiningCodeExpr CodeDefinition where codeExpr = def
 --       It _might_ be good to create make a ``CanGenCodeDefinition''-like typeclass
 
 -- | Constructs a 'CodeDefinition' where the underlying 'CodeChunk' is for a function.
-qtoc :: (Quantity (q Expr), MayHaveUnit (q Expr), DefiningExpr q) => q Expr -> CodeDefinition
+qtoc :: (Quantity (q Expr), MayHaveUnit (q Expr), DefiningExpr q, Concept (q Expr)) => q Expr -> CodeDefinition
 qtoc q = CD (codeChunk $ quantfunc q) (expr $ q ^. defnExpr) [] Definition
 
 -- | Constructs a 'CodeDefinition' where the underlying 'CodeChunk' is for a variable.

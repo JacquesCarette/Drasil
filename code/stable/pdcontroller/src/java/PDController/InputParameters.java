@@ -15,11 +15,11 @@ public class InputParameters {
     /** \brief Reads input from a file with the given file name
         \param filename name of the input file
         \return array containing the following values:
-        \return Set-Point: The desired value that the control system must reach. This also knows as the reference variable
-        \return Derivative Gain: Gain constant of the derivative controller
-        \return Proportional Gain: Gain constant of the proportional controller
-        \return Step Time: Simulation step time (s)
-        \return Simulation Time: Total execution time of the PD simulation (s)
+        \return Set-Point
+        \return Derivative Gain
+        \return Proportional Gain
+        \return Step Time (s)
+        \return Simulation Time (s)
     */
     public static Object[] get_input(String filename) throws FileNotFoundException {
         double r_t;
@@ -52,11 +52,11 @@ public class InputParameters {
     }
     
     /** \brief Verifies that input values satisfy the physical constraints
-        \param r_t Set-Point: The desired value that the control system must reach. This also knows as the reference variable
-        \param K_d Derivative Gain: Gain constant of the derivative controller
-        \param K_p Proportional Gain: Gain constant of the proportional controller
-        \param t_step Step Time: Simulation step time (s)
-        \param t_sim Simulation Time: Total execution time of the PD simulation (s)
+        \param r_t Set-Point
+        \param K_d Derivative Gain
+        \param K_p Proportional Gain
+        \param t_step Step Time (s)
+        \param t_sim Simulation Time (s)
     */
     public static void input_constraints(double r_t, double K_d, double K_p, double t_step, double t_sim) throws Exception {
         if (!(r_t > 0.0)) {

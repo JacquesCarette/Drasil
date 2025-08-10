@@ -22,7 +22,7 @@ import Data.Drasil.Concepts.Software (errMsg)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpGL, assumptionConstants)
 import Drasil.GlassBR.Concepts (glass)
-import Drasil.GlassBR.DataDefs (aspRat, glaTyFac, hFromt, loadDF, standOffDis)
+import Drasil.GlassBR.DataDefs (aspRat, glaTyFac, hFromt, loadDFDD, standOffDis)
 import Drasil.GlassBR.IMods (iMods, pbIsSafe, lrIsSafe)
 import Drasil.GlassBR.Unitals (blast, isSafeLR, isSafePb, loadSF, notSafe,
   pbTolfail, safeMessage)
@@ -60,9 +60,9 @@ sysSetValsFollowingAssumpsTable =
     "ReqAssignments"
     (S "Required Assignments")
   where
-    r2AQs = qw loadSF : map qw (take 4 assumptionConstants)
+    r2AQs = loadSF : map dqdWr (take 4 assumptionConstants)
     r2ARs = assumpGL : replicate 4 assumpSV
-    r2DDs = [loadDF, hFromt, glaTyFac, standOffDis, aspRat]
+    r2DDs = [loadDFDD, hFromt, glaTyFac, standOffDis, aspRat]
 
 --FIXME:should constants, LDF, and LSF have some sort of field that holds
 -- the assumption(s) that're being followed? (Issue #349)

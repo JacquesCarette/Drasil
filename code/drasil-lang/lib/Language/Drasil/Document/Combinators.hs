@@ -20,7 +20,7 @@ module Language.Drasil.Document.Combinators (
 ) where
 
 import Language.Drasil.Chunk.Concept.Core ( ConceptChunk )
-import Language.Drasil.Chunk.Quantity (DefinesQuantity(defLhs))
+import Language.Drasil.Chunk.DefinedQuantity (DefinesQuantity(defLhs))
 import Language.Drasil.Chunk.UnitDefn ( UnitDefn, MayHaveUnit(..) )
 import Language.Drasil.Chunk.Unital ( UnitalChunk )
 import Language.Drasil.Classes

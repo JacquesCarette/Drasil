@@ -1,3 +1,4 @@
+{-# LANGUAGE TypeApplications #-}
 -- | Utilities to get grab certain chunks (from 'Expr', 'Sentence', etc) by
 -- 'UID' and dereference the chunk it refers to.
 module Drasil.GetChunks (ccss, ccss', combine, vars, citeDB) where
@@ -6,22 +7,24 @@ import Language.Drasil
 import Language.Drasil.Development
 import Language.Drasil.ModelExpr.Development (meDep)
 
-import Database.Drasil (ChunkDB, defResolve', symbResolve,
-  citationTable, DomDefn(definition))
+import Database.Drasil (ChunkDB, findAll, findOrErr)
+
+import Drasil.Database.SearchTools (defResolve', DomDefn(definition))
 
 import Drasil.System (System, systemdb)
 
+import Data.Typeable (Proxy (Proxy), typeRep)
+
 import Control.Lens ((^.))
 import Data.List (nub, sortBy)
-import qualified Data.Map as M
 
 -- | Gets a list of quantities ('DefinedQuantityDict') from an equation in order to print.
 vars :: ModelExpr -> ChunkDB -> [DefinedQuantityDict]
-vars e m = map (symbResolve m) $ meDep e
+vars e m = map (flip findOrErr m) $ meDep e
 
 -- | Gets a list of quantities ('DefinedQuantityDict') from a 'Sentence' in order to print.
 vars' :: Sentence -> ChunkDB -> [DefinedQuantityDict]
-vars' a m = map (symbResolve m) $ sdep a
+vars' a m = map (flip findOrErr m) $ sdep a
 
 -- | Combines the functions of 'vars' and 'concpt' to create a list of 'DefinedQuantityDict's from a 'Sentence'.
 combine :: Sentence -> ChunkDB -> [DefinedQuantityDict]
@@ -49,4 +52,4 @@ concpt' a m = map (definition . defResolve' m) $ meDep a
 
 -- | Extract bibliography entries for a system.
 citeDB :: System -> BibRef
-citeDB si = sortBy compareAuthYearTitle $ map fst $ M.elems $ si ^. (systemdb . citationTable)
+citeDB si = sortBy compareAuthYearTitle $ findAll (typeRep (Proxy @Citation)) (si ^. systemdb) :: [Citation]

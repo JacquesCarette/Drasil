@@ -31,3 +31,24 @@ termResolve f db trg
 -- | Find a chunks "term" and abbreviation, if it exists.
 termResolve' :: ChunkDB -> UID -> TermAbbr
 termResolve' = termResolve TermAbbr
+
+data DomDefn = DomDefn { domain :: [UID], definition :: Sentence }
+
+-- | Looks up a 'UID' in all tables with concepts from the 'ChunkDB'. If nothing is found, an error is thrown.
+defResolve :: ([UID] -> Sentence -> c) -> ChunkDB -> UID -> c
+defResolve f db trg
+  | (Just c) <- (find trg db :: Maybe DefinedQuantityDict) = go f c
+  | (Just c) <- (find trg db :: Maybe ConceptChunk)        = go f c
+  | (Just c) <- (find trg db :: Maybe UnitDefn)            = go f c
+--   | (Just c) <- (find trg db :: Maybe DataDefinition)      = go f c -- DataDefinition doesn't instantiate Definition!
+  | (Just c) <- (find trg db :: Maybe InstanceModel)       = go f c
+  | (Just c) <- (find trg db :: Maybe GenDefn)             = go f c
+  | (Just c) <- (find trg db :: Maybe TheoryModel)         = go f c
+  | (Just c) <- (find trg db :: Maybe ConceptInstance)     = go f c
+  | otherwise = error $ "Definition: " ++ show trg ++ " not found in ConceptMap"
+  where
+    go :: Concept c => ([UID] -> Sentence -> r) -> c -> r
+    go f c = f (cdom c) (c ^. defn)
+
+defResolve' :: ChunkDB -> UID -> DomDefn
+defResolve' = defResolve DomDefn

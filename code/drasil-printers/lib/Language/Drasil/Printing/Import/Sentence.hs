@@ -2,7 +2,8 @@
 module Language.Drasil.Printing.Import.Sentence where
 
 import Language.Drasil hiding (neg, sec, symbol, isIn)
-import Database.Drasil (ChunkDB, refFind, termResolve', TermAbbr(..))
+import Database.Drasil (ChunkDB, refFind)
+import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
 
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation

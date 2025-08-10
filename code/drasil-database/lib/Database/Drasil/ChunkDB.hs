@@ -24,9 +24,10 @@ module Database.Drasil.ChunkDB
     typesRegistered,
     numRegistered,
     refbyTable, -- FIXME: This function should be re-examined. Some functions can probably be moved here!
-    TermAbbr (..),
-    termResolve,
-    termResolve'
+    labelledcontentTable,
+    refTable,
+    traceTable,
+    refbyTable
   )
 where
 
@@ -41,7 +42,6 @@ import Language.Drasil (HasUID(..), UID, Quantity, MayHaveUnit(..), Idea (..),
   Reference, ConceptInstance, LabelledContent, Citation,
   nw, cw, unitWrapper, NP, NamedIdea(..), DefinedQuantityDict, dqdWr,
   Sentence, Definition (defn), ConceptDomain (cdom))
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import Control.Lens ((^.))
 
 type ReferredBy = [UID]
@@ -171,33 +171,6 @@ union cdb1 cdb2 = ChunkDB um trm lc ref trc refb
 
     refb :: M.Map UID [UID]
     refb = M.unionWith (++) (refbyTable cdb1) (refbyTable cdb2)
-
-
-
-data TermAbbr = TermAbbr { longForm :: NP, shortForm :: Maybe String }
-
--- | Search for _any_ chunk that is an instance of 'Idea' and process its "term"
--- and abbreviation.
-termResolve :: (NP -> Maybe String -> c) -> ChunkDB -> UID -> c
-termResolve f db trg
-  | (Just c) <- (find trg db :: Maybe IdeaDict)            = go f c
-  | (Just c) <- (find trg db :: Maybe DefinedQuantityDict) = go f c
-  | (Just c) <- (find trg db :: Maybe ConceptChunk)        = go f c
-  | (Just c) <- (find trg db :: Maybe UnitDefn)            = go f c
-  | (Just c) <- (find trg db :: Maybe DataDefinition)      = go f c
-  | (Just c) <- (find trg db :: Maybe InstanceModel)       = go f c
-  | (Just c) <- (find trg db :: Maybe GenDefn)             = go f c
-  | (Just c) <- (find trg db :: Maybe TheoryModel)         = go f c
-  | (Just c) <- (find trg db :: Maybe ConceptInstance)     = go f c
-  | otherwise = error $ "Term: " ++ show trg ++ " not found in TermMap"
-  where 
-    go :: Idea t => (NP -> Maybe String -> c) -> t -> c
-    go f ch = f (ch ^. term) (getA ch)
-
--- | Find a chunks "term" and abbreviation, if it exists.
-termResolve' :: ChunkDB -> UID -> TermAbbr
-termResolve' = termResolve TermAbbr
-
 
 -- {- FIXME: TO BE REWRITTEN, UNIMPORTANT -}
 -- refbyTable :: ChunkDB -> M.Map UID [UID]

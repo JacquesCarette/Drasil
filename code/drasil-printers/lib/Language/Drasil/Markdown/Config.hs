@@ -3,7 +3,6 @@ module Language.Drasil.Markdown.Config where
 
 import Text.PrettyPrint (Doc, text, vcat, (<+>))
 import Data.Map (empty, elems)
-import Control.Lens
 import System.FilePath (takeFileName)
 
 import Utils.Drasil (makeCSV)
@@ -43,7 +42,7 @@ mkTitle sm t = text "\"" <> pSpec empty (spec sm t) <> text "\""
 assetMat :: PrintingInformation -> [[Filepath]]
 assetMat (PI {_ckdb = cdb}) = 
   [[fp, "src/assets/" ++ takeFileName fp] 
-  | (LblC { _ctype = Figure _ fp _ _ }, _) <- elems $ cdb ^. labelledcontentTable
+  | (LblC { _ctype = Figure _ fp _ _ }, _) <- elems $ labelledcontentTable cdb
   ]
   -- FIXME: HACK: Almost nothing should ever be "gathering everything" from a
   -- ChunkDB unless it is intended to do something highly generic, such as an

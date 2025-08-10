@@ -3,6 +3,8 @@
 -- | Defines types and functions for Data Definitions.
 module Theory.Drasil.DataDefinition where
 
+import Database.Drasil (HasChunkRefs(chunkRefs))
+
 import Control.Lens
 import Language.Drasil
 import Drasil.Metadata (dataDefn)
@@ -64,6 +66,9 @@ ddPkt lpkt = lens g s
     g (DDME _ pkt) = pkt ^. lpkt
     s (DDE  qd pkt) a' = DDE  qd (pkt & lpkt .~ a')
     s (DDME qd pkt) a' = DDME qd (pkt & lpkt .~ a')
+
+instance HasChunkRefs DataDefinition where
+  chunkRefs = const [] -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds the 'UID' of a 'DataDefinition where'.
 instance HasUID             DataDefinition where uid = ddPkt pktUID

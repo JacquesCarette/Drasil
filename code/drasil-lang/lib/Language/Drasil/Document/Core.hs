@@ -4,6 +4,7 @@ module Language.Drasil.Document.Core where
 
 import Language.Drasil.Chunk.Citation (BibRef)
 
+import Drasil.Database.Chunk (HasChunkRefs(..))
 import Drasil.Database.UID (HasUID(..))
 import Drasil.Code.CodeExpr.Lang (CodeExpr)
 import Language.Drasil.ShortName (HasShortName(shortname))
@@ -100,6 +101,9 @@ makeLenses ''UnlabelledContent
 class HasContents c where
   -- | Provides a 'Lens' to the 'RawContent'.
   accessContents :: Lens' c RawContent
+
+instance HasChunkRefs LabelledContent where
+  chunkRefs = const [] -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds 'UID' of the 'LabelledContent'.
 instance HasUID        LabelledContent where uid = ref . uid

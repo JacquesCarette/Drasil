@@ -8,6 +8,8 @@ module Theory.Drasil.GenDefn (
   -- * Functions
   getEqModQdsFromGd) where
 
+import Drasil.Database.Chunk (HasChunkRefs(..))
+
 import Language.Drasil
 import Drasil.Metadata (genDefn)
 import Theory.Drasil.ModelKinds (ModelKind, getEqModQds)
@@ -25,6 +27,9 @@ data GenDefn = GD { _mk    :: ModelKind ModelExpr
                   , _notes :: [Sentence]
                   }
 makeLenses ''GenDefn
+
+instance HasChunkRefs GenDefn where
+  chunkRefs = const [] -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds the 'UID' of a 'GenDefn'.
 instance HasUID             GenDefn where uid         = mk . uid

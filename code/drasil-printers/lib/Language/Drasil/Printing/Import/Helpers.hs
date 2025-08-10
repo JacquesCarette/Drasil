@@ -4,7 +4,8 @@ module Language.Drasil.Printing.Import.Helpers where
 import Language.Drasil (Stage(..), codeSymb, eqSymb, NounPhrase(..), Sentence(S),
   Symbol, UID, TermCapitalization(..), titleizeNP, titleizeNP',
   atStartNP, atStartNP', NP, NamedIdea (term), Idea (getA), DefinedQuantityDict)
-import Database.Drasil (ChunkDB, findOrErr, termResolve', TermAbbr(..))
+import Database.Drasil (ChunkDB, findOrErr)
+import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
 import Drasil.Database.Chunk (Chunk)
 
 import qualified Language.Drasil.Printing.AST as P

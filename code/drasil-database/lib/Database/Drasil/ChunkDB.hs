@@ -27,7 +27,8 @@ module Database.Drasil.ChunkDB
     labelledcontentTable,
     refTable,
     traceTable,
-    refbyTable
+    refbyLookup,
+    traceLookup
   )
 where
 
@@ -94,6 +95,13 @@ labelledcontentFind u cdb = uMapLookup "LabelledContent" "labelledcontentTable" 
 
 refFind :: UID -> ChunkDB -> Reference
 refFind u cdb = uMapLookup "Reference" "refTable" u (refTable cdb)
+
+refbyLookup :: UID -> M.Map UID [UID] -> [UID]
+refbyLookup c = fromMaybe [] . M.lookup c
+
+-- | Trace a 'UID' to related 'UID's.
+traceLookup :: UID -> M.Map UID [UID] -> [UID]
+traceLookup c = fromMaybe [] . M.lookup c
 
 findOrErr :: Typeable a => UID -> ChunkDB -> a
 findOrErr u = fromMaybe (error $ "Failed to find chunk " ++ show u) . find u

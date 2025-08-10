@@ -1,4 +1,5 @@
 {-# LANGUAGE GADTs #-}
+{-# LANGUAGE TypeApplications #-}
 -- | Document declaration types and functions for generating Software Requirement Specifications.
 
 -- Changes to DocSection and its subections should be reflected in the 'Creating Your Project 
@@ -16,6 +17,7 @@ import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
   AppndxSec(..), OffShelfSolnsSec(..), DerivationDisplay)
 import Drasil.Sections.Requirements (fullReqs, fullTables)
 
+import Data.Typeable (typeRep, Proxy(Proxy))
 import Database.Drasil
 import Drasil.System
 import Language.Drasil hiding (sec)
@@ -23,7 +25,7 @@ import Language.Drasil hiding (sec)
 import Data.Drasil.Concepts.Documentation (assumpDom, funcReqDom, goalStmtDom,
   nonFuncReqDom, likeChgDom, unlikeChgDom)
 
-import Control.Lens((^.), Getting)
+import Control.Lens((^.))
 
 -- * Types
 
@@ -146,8 +148,5 @@ mkDocDesc sys@SI{_inputs = is, _systemdb = db} = map sec where
   scsSub (Constraints s c) = DL.Constraints s c
   scsSub (CorrSolnPpties c cs) = DL.CorrSolnPpties c cs
 
-  expandFromDB :: ([a] -> [a]) -> Getting (UMap a) ChunkDB (UMap a) -> [a]
-  expandFromDB f = f . asOrderedList . (db ^.)
-
   fromConcInsDB :: Concept c => c -> [ConceptInstance]
-  fromConcInsDB c = expandFromDB (filter (\x -> sDom (cdom x) == c ^. uid)) conceptinsTable
+  fromConcInsDB c = filter (\x -> sDom (cdom x) == c ^. uid) $ findAll (typeRep $ Proxy @ConceptInstance) $ db

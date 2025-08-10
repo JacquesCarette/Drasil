@@ -1,9 +1,12 @@
 {-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE TypeApplications #-}
 -- | Defines functions to create traceability matrices in SRS documents.
 module Drasil.DocumentLanguage.TraceabilityMatrix where
 
+import Data.Typeable (Proxy(Proxy), typeRep)
+import Drasil.Database.SearchTools
 import Language.Drasil
-import Database.Drasil hiding (cdb')
+import Database.Drasil
 import Drasil.System hiding (purpose)
 import qualified Language.Drasil.Sentence.Combinators as S
 
@@ -14,7 +17,7 @@ import Drasil.DocumentLanguage.Definitions (helpToRefField)
 
 import Data.Containers.ListUtils (nubOrd)
 
-import Control.Lens ((^.), Getting)
+import Control.Lens ((^.))
 
 import qualified Data.Map as Map
 
@@ -51,15 +54,15 @@ generateTraceTableView u desc cols rows c = llcc (makeTabRef' u) $ Table
 
 -- | Helper that finds the traceability matrix references (things being referenced).
 traceMReferees :: ([UID] -> [UID]) -> ChunkDB -> [UID]
-traceMReferees f = f . nubOrd . Map.keys . (^. refbyTable)
+traceMReferees f = f . nubOrd . Map.keys . refbyTable
 
 -- | Helper that finds the traceability matrix references (things that are referring to other things).
 traceMReferrers :: ([UID] -> [UID]) -> ChunkDB -> [UID]
-traceMReferrers f = f . nubOrd . concat . Map.elems . (^. refbyTable)
+traceMReferrers f = f . nubOrd . concat . Map.elems . refbyTable
 
 -- | Helper that finds the header of a traceability matrix.
 traceMHeader :: (ChunkDB -> [UID]) -> System -> [Sentence]
-traceMHeader f c = map (`helpToRefField` c) $ f $ _systemdb c
+traceMHeader f c = map (`helpToRefField` (c ^. systemdb)) $ f $ _systemdb c
 
 -- | Helper that finds the headers of the traceability matrix columns.
 traceMColHeader :: ([UID] -> [UID]) -> System -> [Sentence]
@@ -71,7 +74,7 @@ traceMRowHeader f = traceMHeader (traceMReferrers f)
 
 -- | Helper that makes the columns of a traceability matrix.
 traceMColumns :: ([UID] -> [UID]) -> ([UID] -> [UID]) -> ChunkDB -> [[UID]]
-traceMColumns fc fr c = map ((\u -> filter (`elem` u) $ fc u) . flip traceLookup (c ^. traceTable)) $ traceMReferrers fr c
+traceMColumns fc fr c = map ((\u -> filter (`elem` u) $ fc u) . flip traceLookup (traceTable c)) $ traceMReferrers fr c
 
 -- | Helper that makes references of the form "@reference@ shows the dependencies of @something@".
 tableShows :: (Referable a, HasShortName a) => a -> Sentence -> Sentence
@@ -79,19 +82,19 @@ tableShows r end = refS r +:+ S "shows the" +:+ plural dependency `S.ofThe` (end
 
 -- | Helper that finds the layout 'UID's of a traceability matrix.
 layoutUIDs :: [TraceViewCat] -> ChunkDB -> [UID] -> [UID]
-layoutUIDs a c e = concatMap (filter (`elem` (Map.keys $ c ^. traceTable)) . (\ x -> x e c)) a
+layoutUIDs a c e = concatMap (filter (`elem` (Map.keys $ traceTable c)) . (\ x -> x e c)) a
 
 -- | Helper that filters a traceability matrix given a predicate and a 'ChunkDB' lens field.
-traceViewFilt :: HasUID a => (a -> Bool) -> Getting (UMap a) ChunkDB (UMap a) -> TraceViewCat
-traceViewFilt f table _ = map (^. uid) . filter f . asOrderedList . (^. table)
+traceViewFilt :: HasUID a => (a -> Bool) -> (ChunkDB -> [a]) -> TraceViewCat
+traceViewFilt f table _ = map (^. uid) . filter f . table
 
 -- | Helper that is similar to 'traceViewFilt', but the filter is always 'True'.
-traceView :: HasUID a => Getting (UMap a) ChunkDB (UMap a) -> TraceViewCat
+traceView :: HasUID a => (ChunkDB -> [a]) -> TraceViewCat
 traceView = traceViewFilt (const True)
 
 -- | Turns a 'Concept' into a 'TraceViewCat' via its domain.
-traceViewCC :: Concept c => c -> TraceViewCat
-traceViewCC dom u c = traceViewFilt (isDomUnder (dom ^. uid) . sDom . cdom) conceptinsTable u c
+traceViewCC :: Concept c => c -> TraceViewCat -- FIXME: Regrettably, the manual type annotation is required here (below).
+traceViewCC dom u c = traceViewFilt (isDomUnder (dom ^. uid) . sDom . cdom) (findAll (typeRep $ Proxy @ConceptInstance) :: ChunkDB -> [ConceptInstance]) u c
   where
     isDomUnder :: UID -> UID -> Bool
     isDomUnder filtDom curr

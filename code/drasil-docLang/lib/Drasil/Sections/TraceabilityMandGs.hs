@@ -1,4 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE TypeApplications #-}
 -- | Defines functions used to create the Traceability Matrices and Graphs section.
 module Drasil.Sections.TraceabilityMandGs (
   -- * Main Functions
@@ -22,7 +23,10 @@ import Drasil.System
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators as NC
 import Language.Drasil.Sentence.Combinators as S
+import Theory.Drasil
+
 import Data.Foldable (foldl')
+import Data.Typeable (typeRep, Proxy(Proxy))
 
 -- | Makes a Traceability Table/Matrix that contains Items of Different Sections.
 generateTraceTable :: System -> LabelledContent
@@ -39,19 +43,19 @@ tvAssumps = traceViewCC assumpDom
 
 -- | Traceability viewing data definitions. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvDataDefns :: TraceViewCat
-tvDataDefns = traceView dataDefnTable
+tvDataDefns = traceView (findAll (typeRep $ Proxy @DefinedQuantityDict) :: ChunkDB -> [DefinedQuantityDict])
 
 -- | Traceability viewing general definitions. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvGenDefns :: TraceViewCat
-tvGenDefns = traceView gendefTable
+tvGenDefns = traceView (findAll (typeRep $ Proxy @GenDefn) :: ChunkDB -> [GenDefn])
 
 -- | Traceability viewing theory models. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvTheoryModels :: TraceViewCat
-tvTheoryModels = traceView theoryModelTable
+tvTheoryModels = traceView (findAll (typeRep $ Proxy @TheoryModel) :: ChunkDB -> [TheoryModel])
 
 -- | Traceability viewing instance models. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvInsModels :: TraceViewCat
-tvInsModels = traceView insmodelTable
+tvInsModels = traceView (findAll (typeRep $ Proxy @InstanceModel) :: ChunkDB -> [InstanceModel])
 
 -- | Traceability viewing goals. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvGoals :: TraceViewCat

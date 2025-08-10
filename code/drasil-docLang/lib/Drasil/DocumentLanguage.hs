@@ -23,9 +23,7 @@ import Drasil.TraceTable (generateTraceMap)
 import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
-import Database.Drasil (ChunkDB, collectUnits, refbyTable, conceptinsTable, 
-  idMap, conceptinsTable, traceTable, generateRefbyMap, refTable, labelledcontentTable, 
-  theoryModelTable, insmodelTable, gendefTable, dataDefnTable)
+import Database.Drasil
 
 import Drasil.System
 import Drasil.GetChunks (ccss, ccss', citeDB)

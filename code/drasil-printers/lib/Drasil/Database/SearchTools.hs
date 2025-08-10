@@ -3,7 +3,6 @@ module Drasil.Database.SearchTools where
 import Control.Lens ((^.))
 
 import Database.Drasil
-import Drasil.Database.Chunk (IsChunk)
 import Language.Drasil
 import Theory.Drasil
 
@@ -26,7 +25,7 @@ termResolve f db trg
   | otherwise = error $ "Term: " ++ show trg ++ " not found in TermMap"
   where 
     go :: Idea t => (NP -> Maybe String -> c) -> t -> c
-    go f ch = f (ch ^. term) (getA ch)
+    go f' ch = f' (ch ^. term) (getA ch)
 
 -- | Find a chunks "term" and abbreviation, if it exists.
 termResolve' :: ChunkDB -> UID -> TermAbbr
@@ -48,7 +47,7 @@ defResolve f db trg
   | otherwise = error $ "Definition: " ++ show trg ++ " not found in ConceptMap"
   where
     go :: Concept c => ([UID] -> Sentence -> r) -> c -> r
-    go f c = f (cdom c) (c ^. defn)
+    go f' c = f' (cdom c) (c ^. defn)
 
 defResolve' :: ChunkDB -> UID -> DomDefn
 defResolve' = defResolve DomDefn

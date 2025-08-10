@@ -2,7 +2,6 @@
 {-# LANGUAGE TypeApplications #-}
 module Language.Drasil.Debug.Print where
 
-import Drasil.Database.Chunk (IsChunk)
 import           Language.Drasil hiding (symbol)
 import qualified Language.Drasil as L (symbol)
 import           Database.Drasil

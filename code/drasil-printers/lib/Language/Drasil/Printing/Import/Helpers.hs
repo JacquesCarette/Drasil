@@ -11,7 +11,6 @@ import Drasil.Database.Chunk (Chunk)
 import qualified Language.Drasil.Printing.AST as P
 
 import Data.Char (toUpper)
-import Control.Lens ((^.))
 
 -- * Expr-related
 

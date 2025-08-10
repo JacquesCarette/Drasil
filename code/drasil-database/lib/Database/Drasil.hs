@@ -7,7 +7,7 @@ module Database.Drasil (
   -- ** Constructors
   , cdb, idMap, termMap, conceptMap, traceMap, generateRefbyMap
   -- ** Lookup Functions
-  , asOrderedList, collectUnits
+  , asOrderedList, collectUnits, collectAbbreviations
   , termResolve, termResolve', defResolve, symbResolve
   , traceLookup, refbyLookup
   , datadefnLookup, insmodelLookup, gendefLookup, theoryModelLookup

@@ -39,7 +39,7 @@ import Drasil.DblPend.IMods (iMods)
 import Drasil.DblPend.GenDefs (genDefns)
 import Drasil.DblPend.MetaConcepts (progName)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
-  inConstraints, outConstraints, acronyms, pendDisAngle, constants)
+  inConstraints, outConstraints, pendDisAngle, constants)
 import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs)
 import Drasil.DblPend.References (citations)
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
@@ -64,7 +64,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
       -- introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
-      , TAandA abbreviationsList         -- Add table of abbreviation and acronym section
+      , TAandA []         -- Add table of abbreviation and acronym section (automatically populated)
       ],
   IntroSec $
     IntroProg (justification progName) (phrase progName)
@@ -148,13 +148,6 @@ ideaDicts =
   nw progName : map nw doccon' ++ map nw mathcon' ++ map nw physicCon' ++
   -- UnitalChunks
   map nw physicscon
-
-abbreviationsList :: [IdeaDict]
-abbreviationsList = 
-  -- QuantityDict abbreviations
-  map nw symbols ++
-  -- Other acronyms/abbreviations
-  nw progName : map nw acronyms
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = [algorithm, errMsg, program] ++ physicCon ++ mathcon ++ physicalcon ++ srsDomains

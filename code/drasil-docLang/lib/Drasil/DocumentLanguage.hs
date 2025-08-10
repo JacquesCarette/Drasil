@@ -23,7 +23,7 @@ import Drasil.TraceTable (generateTraceMap)
 import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
-import Database.Drasil (ChunkDB, collectUnits, refbyTable, conceptinsTable, 
+import Database.Drasil (ChunkDB, collectUnits, collectAbbreviations, refbyTable, conceptinsTable, 
   idMap, conceptinsTable, traceTable, generateRefbyMap, refTable, labelledcontentTable, 
   theoryModelTable, insmodelTable, gendefTable, dataDefnTable)
 
@@ -193,6 +193,10 @@ fillReqs (_:xs) si = fillReqs xs si
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
 extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
 
+-- | Extracts abbreviations/acronyms found in the document description ('DocDesc') from a database ('ChunkDB').
+extractAbbreviations :: DocDesc -> ChunkDB -> [IdeaDict]
+extractAbbreviations dd cdb = map nw $ collectAbbreviations $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
+
 -- * Section Creator Functions
 
 -- | Helper for creating the different document sections.
@@ -251,9 +255,9 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
     mkSubRef SI {_systemdb = cdb} (TSymb' f con) =
       mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
 
-    mkSubRef _ (TAandA ideas) =
+    mkSubRef SI {_systemdb = cdb} (TAandA _) =
       SRS.tOfAbbAcc
-        [LlC $ tableAbbAccGen $ nub ideas]
+        [LlC $ tableAbbAccGen $ nub $ extractAbbreviations dd cdb]
         []
 
 

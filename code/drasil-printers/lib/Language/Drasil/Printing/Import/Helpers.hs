@@ -4,7 +4,7 @@ module Language.Drasil.Printing.Import.Helpers where
 import Language.Drasil (Stage(..), codeSymb, eqSymb, NounPhrase(..), Sentence(S),
   Symbol, UID, TermCapitalization(..), titleizeNP, titleizeNP',
   atStartNP, atStartNP', NP, NamedIdea (term), Idea (getA), DefinedQuantityDict)
-import Database.Drasil (ChunkDB, findOrErr)
+import Database.Drasil (ChunkDB, findOrErr, termResolve', TermAbbr(..))
 import Drasil.Database.Chunk (Chunk)
 
 import qualified Language.Drasil.Printing.AST as P
@@ -61,16 +61,18 @@ lookupC Implementation sm c = codeSymb (findOrErr c sm :: DefinedQuantityDict)
 
 -- | Look up a term given a chunk database and a 'UID' associated with the term. Also specifies capitalization
 lookupT :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupT sm c tCap = resolveCapT tCap $ findOrErr c sm ^. term -- FIXME need either the type or to try all types
+lookupT sm c tCap = resolveCapT tCap $ longForm l
+  where l = termResolve' sm c
 
 -- | Look up the acronym/abbreviation of a term. Otherwise returns the singular form of a term. Takes a chunk database and a 'UID' associated with the term.
 lookupS :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupS sm c sCap = maybe (resolveCapT sCap $ l ^. term) S $ getA l >>= capHelper sCap
-  where l = findOrErr c sm -- FIXME need either the type or to try all types
+lookupS sm c sCap = maybe (resolveCapT sCap $ longForm l) S $ shortForm l >>= capHelper sCap
+  where l = termResolve' sm c -- FIXME need either the type or to try all types
 
 -- | Look up the plural form of a term given a chunk database and a 'UID' associated with the term.
 lookupP :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupP sm c pCap = resolveCapP pCap $ findOrErr c sm ^. term -- FIXME need either the type or to try all types
+lookupP sm c pCap = resolveCapP pCap $ longForm l
+  where l = termResolve' sm c
 
 -- | Helper to get the proper function for capitalizing a 'NP' based on its 'TermCapitalization'. Singular case.
 resolveCapT :: TermCapitalization -> (NP -> Sentence)

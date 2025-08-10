@@ -24,6 +24,9 @@ module Database.Drasil.ChunkDB
     typesRegistered,
     numRegistered,
     refbyTable, -- FIXME: This function should be re-examined. Some functions can probably be moved here!
+    TermAbbr (..),
+    termResolve,
+    termResolve'
   )
 where
 
@@ -33,7 +36,12 @@ import Data.Maybe (fromMaybe, isJust, mapMaybe)
 import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, typeOf, typeRep)
 
 import Drasil.Database.Chunk (Chunk, HasChunkRefs (chunkRefs), IsChunk, mkChunk, unChunk)
-import Language.Drasil (HasUID (..), UID, LabelledContent, Reference)
+import Language.Drasil (HasUID(..), UID, Quantity, MayHaveUnit(..), Idea (..),
+  IdeaDict, Concept, ConceptChunk, IsUnit(..), UnitDefn,
+  Reference, ConceptInstance, LabelledContent, Citation,
+  nw, cw, unitWrapper, NP, NamedIdea(..), DefinedQuantityDict, dqdWr,
+  Sentence, Definition (defn), ConceptDomain (cdom))
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import Control.Lens ((^.))
 
 type ReferredBy = [UID]
@@ -166,6 +174,31 @@ union cdb1 cdb2 = ChunkDB um trm lc ref trc refb
 
 
 
+data TermAbbr = TermAbbr { longForm :: NP, shortForm :: Maybe String }
+
+-- | Search for _any_ chunk that is an instance of 'Idea' and process its "term"
+-- and abbreviation.
+termResolve :: (NP -> Maybe String -> c) -> ChunkDB -> UID -> c
+termResolve f db trg
+  | (Just c) <- (find trg db :: Maybe IdeaDict)            = go f c
+  | (Just c) <- (find trg db :: Maybe DefinedQuantityDict) = go f c
+  | (Just c) <- (find trg db :: Maybe ConceptChunk)        = go f c
+  | (Just c) <- (find trg db :: Maybe UnitDefn)            = go f c
+  | (Just c) <- (find trg db :: Maybe DataDefinition)      = go f c
+  | (Just c) <- (find trg db :: Maybe InstanceModel)       = go f c
+  | (Just c) <- (find trg db :: Maybe GenDefn)             = go f c
+  | (Just c) <- (find trg db :: Maybe TheoryModel)         = go f c
+  | (Just c) <- (find trg db :: Maybe ConceptInstance)     = go f c
+  | otherwise = error $ "Term: " ++ show trg ++ " not found in TermMap"
+  where 
+    go :: Idea t => (NP -> Maybe String -> c) -> t -> c
+    go f ch = f (ch ^. term) (getA ch)
+
+-- | Find a chunks "term" and abbreviation, if it exists.
+termResolve' :: ChunkDB -> UID -> TermAbbr
+termResolve' = termResolve TermAbbr
+
+
 -- {- FIXME: TO BE REWRITTEN, UNIMPORTANT -}
 -- refbyTable :: ChunkDB -> M.Map UID [UID]
 -- refbyTable (ChunkDB (x, _)) = M.map snd x
@@ -200,46 +233,3 @@ union cdb1 cdb2 = ChunkDB um trm lc ref trc refb
 --
 --     csbtr :: ChunksByTypeRep
 --     csbtr = M.fromList trcs
-
-
-
-{-
-consumeAllWithTyCon :: Typeable a => TyCon -> (forall b. Typeable (a b) => a b -> c) -> ChunkDB -> [c]
-consumeAllWithTyCon tc f c@(ChunkDB (_, trm)) = r -- foldr (\a b -> b ++ mapMaybe (fmap f . unChunk) (findAll a c)) [] trKeys
-  where
-    trKeys = filter ((==) tc . typeRepTyCon) (M.keys trm)
-
-    f' :: (Typeable a, Typeable b, Typeable (a b)) => Chunk -> Maybe (a b)
-    f' = unChunk1
-
-    r = foldr (\a b -> b ++ mapMaybe (fmap f . unChunk1) (findAll a c)) [] trKeys
--}
-{-
-This function is seemingly impossible (or, at least, possible but very tricky! I
-haven't figured out an elegant solution that doesn't involve _some_ sort of
-enumeration).
-
-So, here is a big question arising:
-
-Do we want type parameters to be allowed for Chunks?
-  - If we do, any sort of "bulk operation that works on the type constructor
-    level, for any type parameters" is really difficult to perform _after_ a
-    typecast because we need to be able to find a monomorphic type for the input
-    (which is the hard part) as shown above.
-
-  - If we don't, this should become much easier. However, we would lose out on
-    the Haskell-level type errors.
-
-    Is that a problem? In a sense, yes, for obvious reasons. However, in the
-    greater scheme of things, if "Drasil in Drasil" is the goal, then "Drasil"
-    as it stands is currently bootstrapped in Haskell, meaning the existing code
-    likely won't remain forever. In which case, this might not be a "bad" thing
-    at all because we'd likely have a different host language (e.g.,
-    Drasil..-lang?).
-
-    In any case, if we did remove type parameters in chunks, then we would need
-    to perform type checking at the level of Drasil (instead of leaning on the
-    Haskell static type system, we'd be using the "Drasil-compiler runtime").
-    This sounds like it would work fine, but it might be a bit tedious.
-
--}

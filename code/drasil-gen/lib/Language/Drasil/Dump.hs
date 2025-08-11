@@ -1,3 +1,4 @@
+{-# LANGUAGE TypeApplications #-}
 -- FIXME: Why is this a `Language` top-level module name?
 module Language.Drasil.Dump where
 
@@ -10,6 +11,9 @@ import Data.Aeson.Encode.Pretty (encodePretty)
 import qualified Data.ByteString.Lazy.Char8 as LB
 import qualified Data.Map.Strict as SM
 
+import Data.Typeable (Proxy(Proxy), typeRep)
+
+import Language.Drasil (IdeaDict)
 import Utils.Drasil (invert, atLeast2, createDirIfMissing)
 import Database.Drasil
 import Control.Lens ((^.))
@@ -41,7 +45,7 @@ dumpEverything0 si pinfo targetPath = do
       (sharedUIDs, nonsharedUIDs) = SM.partition atLeast2 invertedChunkDump
       traceDump = traceTable chunkDb
       refByDump = refbyTable chunkDb
-      justTerms = SM.intersection nonsharedUIDs $ termTable chunkDb
+      justTerms = map (^. uid) $ (findAll (typeRep $ Proxy @IdeaDict) chunkDb :: [IdeaDict])
 
   dumpTo chunkDump $ targetPath ++ "seeds.json"
   dumpTo invertedChunkDump $ targetPath ++ "inverted_seeds.json"

@@ -38,13 +38,15 @@ import qualified Data.Map.Strict as M -- NOTE: If we don't use 'Strict'ness here
 import Data.Maybe (fromMaybe, isJust, mapMaybe)
 import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, typeOf, typeRep)
 
-import Drasil.Database.Chunk (Chunk, HasChunkRefs (chunkRefs), IsChunk, mkChunk, unChunk)
+import Drasil.Database.Chunk (Chunk, HasChunkRefs (chunkRefs), IsChunk, mkChunk, unChunk, chunkType)
 import Language.Drasil (HasUID(..), UID, Quantity, MayHaveUnit(..), Idea (..),
   IdeaDict, Concept, ConceptChunk, IsUnit(..), UnitDefn,
   Reference, ConceptInstance, LabelledContent, Citation,
   nw, cw, unitWrapper, NP, NamedIdea(..), DefinedQuantityDict, dqdWr,
   Sentence, Definition (defn), ConceptDomain (cdom))
 import Control.Lens ((^.))
+
+import Debug.Trace (trace)
 
 type ReferredBy = [UID]
 
@@ -89,6 +91,10 @@ find :: Typeable a => UID -> ChunkDB -> Maybe a
 find u cdb = do
   (c', _) <- M.lookup u (chunkTable cdb)
   unChunk c'
+
+findTypeOf :: UID -> ChunkDB -> Maybe TypeRep
+findTypeOf u cdb = chunkType . fst <$> M.lookup u (chunkTable cdb)
+
 -- | Looks up a 'UID' in a 'UMap' table. If nothing is found, an error is thrown.
 uMapLookup :: String -> String -> UID -> UMap a -> a
 uMapLookup tys ms u t = getFM $ M.lookup u t
@@ -131,15 +137,18 @@ insert :: IsChunk a => ChunkDB -> a -> ChunkDB
 insert cdb c
   | typeOf c == typeRep (Proxy @ChunkDB) =
       error "Insertion of ChunkDBs in ChunkDBs is disallowed; please perform unions with them instead."
-  | M.member (c ^. uid) (chunkTable cdb) =
-      error $ "Attempting to register a chunk with an already registered UID; `" ++ show (c ^. uid) ++ "`"
-  | otherwise = ChunkDB finalCu ctr' (labelledcontentTable cdb) (refTable cdb) (traceTable cdb) (refbyTable cdb)
+  | (Just x) <- findTypeOf (c ^. uid) cdb =
+    if typeOf c == x
+      then trace ("Overwriting `" ++ show (c ^. uid) ++ "` :: " ++ show x) cdb'
+      else error $ "Attempting to overwrite a chunk (`" ++ show (c ^. uid) ++ "` :: `" ++ show x ++ "`) with a chunk of a different type: `" ++ show (typeOf c) ++ "`"
+  | otherwise = cdb'
   where
     c' :: Chunk
     c' = mkChunk c
 
     cu' :: ChunkByUID
     cu' = M.insert (c ^. uid) (c', []) (chunkTable cdb) -- insert our chunk, it is not currently referred by anything.
+
     insertRefExpectingExistence :: UID -> ChunkByUID -> ChunkByUID
     insertRefExpectingExistence u cbu =
       if isJust prev
@@ -153,6 +162,9 @@ insert cdb c
 
     ctr' :: ChunksByTypeRep
     ctr' = M.alter (Just . maybe [c'] (++ [c'])) (typeOf c) (chunkTypeTable cdb)
+
+    cdb' :: ChunkDB
+    cdb' = ChunkDB finalCu ctr' (labelledcontentTable cdb) (refTable cdb) (traceTable cdb) (refbyTable cdb)
 
 insertAll :: IsChunk a => ChunkDB -> [a] -> ChunkDB
 insertAll cdb l = foldr (flip insert) cdb (reverse l) -- note: the "reverse" is here to make insertions slightly more readable -- I don't want to use foldl (it seems many have complaints about it)

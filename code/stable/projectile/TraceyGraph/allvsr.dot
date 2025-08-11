@@ -36,6 +36,15 @@ digraph allvsr {
 	{instance:twoDMotion, instance:cartSyst, instance:yAxisGravity, instance:launchOrigin, instance:targetXAxis, instance:posXDirection, instance:constAccel, instance:accelXZero, instance:accelYGravity, instance:neglectDrag, instance:pointMass, instance:freeFlight, instance:neglectCurv, instance:timeStartZero, instance:gravAccelValue}
 	}
 
+	dataDefn:speed	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:vecMag"];
+	dataDefn:ixVel	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:speedIX"];
+	dataDefn:iyVel	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:speedIY"];
+
+	subgraph DD {
+	rank="same"
+	{dataDefn:speed, dataDefn:ixVel, dataDefn:iyVel}
+	}
+
 	theory:accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];
 	theory:velocityTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:velocity"];
 

@@ -1,9 +1,16 @@
 digraph allvsr {
+	instance:findMass -> dataDefn:wMass;
+	instance:findMass -> dataDefn:wVol;
+	instance:findMass -> dataDefn:tankVol;
 	instance:findMass -> theory:eBalanceOnWtrRC;
 	instance:findMass -> theory:eBalanceOnPCMRC;
 	instance:findMass -> theory:heatEInWtrIM;
 	instance:findMass -> theory:heatEInPCMRC;
 	instance:findMass -> instance:inputValues;
+	instance:outputInputDerivVals -> dataDefn:tauW;
+	instance:outputInputDerivVals -> dataDefn:eta;
+	instance:outputInputDerivVals -> dataDefn:tauSP;
+	instance:outputInputDerivVals -> dataDefn:tauLP;
 	instance:outputInputDerivVals -> instance:findMass;
 	instance:outputInputDerivVals -> instance:inputValues;
 	instance:outputInputDerivVals -> instance:findMass;
@@ -17,11 +24,18 @@ digraph allvsr {
 	instance:outputValues -> theory:eBalanceOnPCMRC;
 	instance:outputValues -> theory:heatEInWtrIM;
 	instance:outputValues -> theory:heatEInPCMRC;
+	instance:findMass -> dataDefn:wMass;
+	instance:findMass -> dataDefn:wVol;
+	instance:findMass -> dataDefn:tankVol;
 	instance:findMass -> theory:eBalanceOnWtrRC;
 	instance:findMass -> theory:eBalanceOnPCMRC;
 	instance:findMass -> theory:heatEInWtrIM;
 	instance:findMass -> theory:heatEInPCMRC;
 	instance:findMass -> instance:inputValues;
+	instance:outputInputDerivVals -> dataDefn:tauW;
+	instance:outputInputDerivVals -> dataDefn:eta;
+	instance:outputInputDerivVals -> dataDefn:tauSP;
+	instance:outputInputDerivVals -> dataDefn:tauLP;
 	instance:outputInputDerivVals -> instance:findMass;
 	instance:outputInputDerivVals -> instance:inputValues;
 	instance:outputInputDerivVals -> instance:findMass;
@@ -61,6 +75,22 @@ digraph allvsr {
 	subgraph A {
 	rank="same"
 	{instance:assumpTEO, instance:assumpHTCC, instance:assumpCWTAT, instance:assumpTPCAV, instance:assumpDWPCoV, instance:assumpSHECov, instance:assumpLCCCW, instance:assumpTHCCoT, instance:assumpTHCCoL, instance:assumpLCCWP, instance:assumpCTNOD, instance:assumpSITWP, instance:assumpPIS, instance:assumpWAL, instance:assumpPIT, instance:assumpNIHGBWP, instance:assumpVCMPN, instance:assumpNGSP, instance:assumpAPT, instance:assumpVCN}
+	}
+
+	dataDefn:wMass	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterMass"];
+	dataDefn:wVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterVolume.pcm"];
+	dataDefn:tankVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:tankVolume"];
+	dataDefn:tauW	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceDecayRate"];
+	dataDefn:eta	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceDecayTime"];
+	dataDefn:tauSP	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceSolidPCM"];
+	dataDefn:tauLP	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceLiquidPCM"];
+	dataDefn:htFusion	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:htFusion"];
+	dataDefn:meltFrac	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:meltFrac"];
+	dataDefn:aspectRatio	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:aspectRatio"];
+
+	subgraph DD {
+	rank="same"
+	{dataDefn:wMass, dataDefn:wVol, dataDefn:tankVol, dataDefn:tauW, dataDefn:eta, dataDefn:tauSP, dataDefn:tauLP, dataDefn:htFusion, dataDefn:meltFrac, dataDefn:aspectRatio}
 	}
 
 	theory:consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];

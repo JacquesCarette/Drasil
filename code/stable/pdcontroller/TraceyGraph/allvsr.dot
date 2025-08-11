@@ -22,6 +22,16 @@ digraph allvsr {
 	{instance:pwrPlant, instance:decoupled, instance:setPointConstant, instance:externalDisturb, instance:initialValue, instance:parallelEq, instance:unfilteredDerivative, instance:pwrPlantTxFnx, instance:massSpring, instance:dampingCoeffSpring, instance:stiffnessCoeffSpring}
 	}
 
+	dataDefn:dqdProcessErrorFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ddProcessError"];
+	dataDefn:dqdPropControlFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ddPropCtrl"];
+	dataDefn:dqdDerivativeControlFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ddDerivCtrl"];
+	dataDefn:dqdCtrlVarFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ddCtrlVar"];
+
+	subgraph DD {
+	rank="same"
+	{dataDefn:dqdProcessErrorFD, dataDefn:dqdPropControlFD, dataDefn:dqdDerivativeControlFD, dataDefn:dqdCtrlVarFD}
+	}
+
 	theory:laplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:laplaceTransform"];
 	theory:invLaplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:invLaplaceTransform"];
 	theory:tmSOSystemRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:tmSOSystem"];

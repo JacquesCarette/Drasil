@@ -1011,6 +1011,14 @@ The purpose of the traceability matrices is to provide easy references on what h
 {colspec={l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{} & \textbf{\hyperref[assumpTEO]{A:Thermal-Energy-Only}} & \textbf{\hyperref[assumpHTCC]{A:Heat-Transfer-Coeffs-Constant}} & \textbf{\hyperref[assumpCWTAT]{A:Constant-Water-Temp-Across-Tank}} & \textbf{\hyperref[assumpDWCoW]{A:Density-Water-Constant-over-Volume}} & \textbf{\hyperref[assumpSHECoW]{A:Specific-Heat-Energy-Constant-over-Volume}} & \textbf{\hyperref[assumpLCCCW]{A:Newton-Law-Convective-Cooling-Coil-Water}} & \textbf{\hyperref[assumpTHCCoT]{A:Temp-Heating-Coil-Constant-over-Time}} & \textbf{\hyperref[assumpTHCCoL]{A:Temp-Heating-Coil-Constant-over-Length}} & \textbf{\hyperref[assumpCTNTD]{A:Charging-Tank-No-Temp-Discharge}} & \textbf{\hyperref[assumpWAL]{A:Water-Always-Liquid}} & \textbf{\hyperref[assumpPIT]{A:Perfect-Insulation-Tank}} & \textbf{\hyperref[assumpNIHGBW]{A:No-Internal-Heat-Generation-By-Water}} & \textbf{\hyperref[assumpAPT]{A:Atmospheric-Pressure-Tank}} & \textbf{\hyperref[assumpVCN]{A:Volume-Coil-Negligible}}
 \\
+\hyperref[DD:waterMass]{DD:waterMass} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:waterVolume.nopcm]{DD:waterVolume\_nopcm} &  &  &  &  &  &  &  &  &  &  &  &  &  & X
+\\
+\hyperref[DD:tankVolume]{DD:tankVolume} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:balanceDecayRate]{DD:balanceDecayRate} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
 \hyperref[TM:consThermE]{TM:consThermE} & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[TM:sensHtE]{TM:sensHtE} &  &  &  &  &  &  &  &  &  & X &  &  &  & 
@@ -1072,64 +1080,72 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtblr}
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Items and Other Sections}]
-{colspec={l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[TM:consThermE]{TM:consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM:sensHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM:nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD:rocTempSimp}} & \textbf{\hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}} & \textbf{\hyperref[IM:heatEInWtr]{IM:heatEInWtr}}
+{colspec={l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{} & \textbf{\hyperref[DD:waterMass]{DD:waterMass}} & \textbf{\hyperref[DD:waterVolume.nopcm]{DD:waterVolume\_nopcm}} & \textbf{\hyperref[DD:tankVolume]{DD:tankVolume}} & \textbf{\hyperref[DD:balanceDecayRate]{DD:balanceDecayRate}} & \textbf{\hyperref[TM:consThermE]{TM:consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM:sensHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM:nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD:rocTempSimp}} & \textbf{\hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}} & \textbf{\hyperref[IM:heatEInWtr]{IM:heatEInWtr}}
 \\
-\hyperref[TM:consThermE]{TM:consThermE} &  &  &  &  &  &  & 
+\hyperref[DD:waterMass]{DD:waterMass} &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:sensHtE]{TM:sensHtE} &  &  &  &  &  &  & 
+\hyperref[DD:waterVolume.nopcm]{DD:waterVolume\_nopcm} &  &  & X &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:nwtnCooling]{TM:nwtnCooling} &  &  &  &  &  &  & 
+\hyperref[DD:tankVolume]{DD:tankVolume} &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:rocTempSimp]{GD:rocTempSimp} & X &  &  & X &  &  & 
+\hyperref[DD:balanceDecayRate]{DD:balanceDecayRate} &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil} &  &  & X &  &  &  & 
+\hyperref[TM:consThermE]{TM:consThermE} &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr} &  &  &  & X & X &  & 
+\hyperref[TM:sensHtE]{TM:sensHtE} &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:heatEInWtr]{IM:heatEInWtr} &  & X &  &  &  &  & 
+\hyperref[TM:nwtnCooling]{TM:nwtnCooling} &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:rocTempSimp]{GD:rocTempSimp} &  &  &  &  & X &  &  & X &  &  & 
+\\
+\hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil} &  &  &  &  &  &  & X &  &  &  & 
+\\
+\hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr} &  &  &  & X &  &  &  & X & X &  & 
+\\
+\hyperref[IM:heatEInWtr]{IM:heatEInWtr} &  &  &  &  &  & X &  &  &  &  & 
 \label{Table:TraceMatRefvsRef}
 \end{longtblr}
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
-{colspec={l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[TM:consThermE]{TM:consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM:sensHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM:nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD:rocTempSimp}} & \textbf{\hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}} & \textbf{\hyperref[IM:heatEInWtr]{IM:heatEInWtr}} & \textbf{\hyperref[findMass]{FR:Find-Mass}} & \textbf{\hyperref[checkWithPhysConsts]{FR:Check-Input-with-Physical\_Constraints}} & \textbf{\hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values}} & \textbf{\hyperref[calcValues]{FR:Calculate-Values}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correctness}} & \textbf{\hyperref[verifiable]{NFR:Verifiability}} & \textbf{\hyperref[understandable]{NFR:Understandability}} & \textbf{\hyperref[reusable]{NFR:Reusability}} & \textbf{\hyperref[maintainable]{NFR:Maintainability}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[findMass]{FR:Find-Mass}} & \textbf{\hyperref[checkWithPhysConsts]{FR:Check-Input-with-Physical\_Constraints}} & \textbf{\hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values}} & \textbf{\hyperref[calcValues]{FR:Calculate-Values}} & \textbf{\hyperref[outputValues]{FR:Output-Values}}
+{colspec={l l l l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{} & \textbf{\hyperref[DD:waterMass]{DD:waterMass}} & \textbf{\hyperref[DD:waterVolume.nopcm]{DD:waterVolume\_nopcm}} & \textbf{\hyperref[DD:tankVolume]{DD:tankVolume}} & \textbf{\hyperref[DD:balanceDecayRate]{DD:balanceDecayRate}} & \textbf{\hyperref[TM:consThermE]{TM:consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM:sensHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM:nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD:rocTempSimp}} & \textbf{\hyperref[GD:htFluxWaterFromCoil]{GD:htFluxWaterFromCoil}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}} & \textbf{\hyperref[IM:heatEInWtr]{IM:heatEInWtr}} & \textbf{\hyperref[findMass]{FR:Find-Mass}} & \textbf{\hyperref[checkWithPhysConsts]{FR:Check-Input-with-Physical\_Constraints}} & \textbf{\hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values}} & \textbf{\hyperref[calcValues]{FR:Calculate-Values}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correctness}} & \textbf{\hyperref[verifiable]{NFR:Verifiability}} & \textbf{\hyperref[understandable]{NFR:Understandability}} & \textbf{\hyperref[reusable]{NFR:Reusability}} & \textbf{\hyperref[maintainable]{NFR:Maintainability}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[findMass]{FR:Find-Mass}} & \textbf{\hyperref[checkWithPhysConsts]{FR:Check-Input-with-Physical\_Constraints}} & \textbf{\hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values}} & \textbf{\hyperref[calcValues]{FR:Calculate-Values}} & \textbf{\hyperref[outputValues]{FR:Output-Values}}
 \\
-\hyperref[waterTempGS]{GS:Predict-Water-Temperature} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[waterTempGS]{GS:Predict-Water-Temperature} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[waterEnergyGS]{GS:Predict-Water-Energy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[waterEnergyGS]{GS:Predict-Water-Energy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[findMass]{FR:Find-Mass} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & 
+\hyperref[findMass]{FR:Find-Mass} & X & X & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & 
 \\
-\hyperref[checkWithPhysConsts]{FR:Check-Input-with-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[checkWithPhysConsts]{FR:Check-Input-with-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & X & X &  &  &  & 
+\hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values} &  &  &  & X &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & X & X &  &  &  & 
 \\
-\hyperref[calcValues]{FR:Calculate-Values} &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifiable]{NFR:Verifiability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifiable]{NFR:Verifiability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[understandable]{NFR:Understandability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[understandable]{NFR:Understandability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[reusable]{NFR:Reusability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[reusable]{NFR:Reusability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[maintainable]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[maintainable]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[findMass]{FR:Find-Mass} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & 
+\hyperref[findMass]{FR:Find-Mass} & X & X & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & 
 \\
-\hyperref[checkWithPhysConsts]{FR:Check-Input-with-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[checkWithPhysConsts]{FR:Check-Input-with-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & X & X &  &  &  & 
+\hyperref[outputInputDerivVals]{FR:Output-Input-Derived-Values} &  &  &  & X &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & X & X &  &  &  & 
 \\
-\hyperref[calcValues]{FR:Calculate-Values} &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \label{Table:TraceMatAllvsR}
 \end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.

@@ -1,4 +1,24 @@
 digraph avsall {
+	dataDefn:p_CM -> instance:assumpOT;
+	dataDefn:linearDisplacement -> instance:assumpOT;
+	dataDefn:linearVelocity -> instance:assumpOT;
+	dataDefn:linearAcceleration -> instance:assumpOT;
+	dataDefn:angularDisplacement -> instance:assumpOT;
+	dataDefn:angularDisplacement -> instance:assumpOD;
+	dataDefn:angularVelocity -> instance:assumpOT;
+	dataDefn:angularVelocity -> instance:assumpOD;
+	dataDefn:angularAcceleration -> instance:assumpOT;
+	dataDefn:angularAcceleration -> instance:assumpOD;
+	dataDefn:velocityB -> instance:assumpOT;
+	dataDefn:kEnergy -> instance:assumpOT;
+	dataDefn:kEnergy -> instance:assumpOD;
+	dataDefn:kEnergy -> instance:assumpDI;
+	dataDefn:v_iAB -> instance:assumpOT;
+	dataDefn:impulseV -> instance:assumpOT;
+	dataDefn:potEnergy -> instance:assumpOT;
+	dataDefn:potEnergy -> instance:assumpOD;
+	dataDefn:potEnergy -> instance:assumpDI;
+	dataDefn:momentOfInertia -> instance:assumpOT;
 	theory:newtonSLR -> instance:assumpOD;
 	theory:impulseS -> instance:assumpOT;
 	theory:impulseS -> instance:assumpOD;
@@ -33,6 +53,27 @@ digraph avsall {
 	subgraph A {
 	rank="same"
 	{instance:assumpOT, instance:assumpOD, instance:assumpCST, instance:assumpAD, instance:assumpCT, instance:assumpDI, instance:assumpCAJI}
+	}
+
+	dataDefn:p_CM	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ctrOfMass"];
+	dataDefn:linearDisplacement	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:linDisp"];
+	dataDefn:linearVelocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:linVel"];
+	dataDefn:linearAcceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:linAcc"];
+	dataDefn:angularDisplacement	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angDisp"];
+	dataDefn:angularVelocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angVel"];
+	dataDefn:angularAcceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angAccel"];
+	dataDefn:velocityB	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:chaslesThm"];
+	dataDefn:torque	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:torque"];
+	dataDefn:kEnergy	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:kEnergy"];
+	dataDefn:restitutionCoef	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:coeffRestitution"];
+	dataDefn:v_iAB	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:reVeInColl"];
+	dataDefn:impulseV	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:impulseV"];
+	dataDefn:potEnergy	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:potEnergy"];
+	dataDefn:momentOfInertia	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:momentOfInertia"];
+
+	subgraph DD {
+	rank="same"
+	{dataDefn:p_CM, dataDefn:linearDisplacement, dataDefn:linearVelocity, dataDefn:linearAcceleration, dataDefn:angularDisplacement, dataDefn:angularVelocity, dataDefn:angularAcceleration, dataDefn:velocityB, dataDefn:torque, dataDefn:kEnergy, dataDefn:restitutionCoef, dataDefn:v_iAB, dataDefn:impulseV, dataDefn:potEnergy, dataDefn:momentOfInertia}
 	}
 
 	theory:newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];

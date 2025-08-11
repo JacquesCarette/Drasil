@@ -1,4 +1,5 @@
 digraph avsall {
+	dataDefn:wVol -> instance:assumpVCN;
 	theory:consThermECS -> instance:assumpTEO;
 	theory:sensHeat -> instance:assumpWAL;
 	theory:nwtnCoolingTM -> instance:assumpHTCC;
@@ -38,6 +39,16 @@ digraph avsall {
 	subgraph A {
 	rank="same"
 	{instance:assumpTEO, instance:assumpHTCC, instance:assumpCWTAT, instance:assumpDWCoW, instance:assumpSHECoW, instance:assumpLCCCW, instance:assumpTHCCoT, instance:assumpTHCCoL, instance:assumpCTNTD, instance:assumpWAL, instance:assumpPIT, instance:assumpNIHGBW, instance:assumpAPT, instance:assumpVCN}
+	}
+
+	dataDefn:wMass	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterMass"];
+	dataDefn:wVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterVolume.nopcm"];
+	dataDefn:tankVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:tankVolume"];
+	dataDefn:tauW	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceDecayRate"];
+
+	subgraph DD {
+	rank="same"
+	{dataDefn:wMass, dataDefn:wVol, dataDefn:tankVol, dataDefn:tauW}
 	}
 
 	theory:consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];

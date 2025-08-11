@@ -1228,6 +1228,16 @@ The purpose of the traceability matrices is to provide easy references on what h
 {colspec={l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSys]{A:cartSys}} & \textbf{\hyperref[cartSysR]{A:cartSysR}} & \textbf{\hyperref[yAxisDir]{A:yAxisDir}}
 \\
+\hyperref[DD:positionIX]{DD:positionIX} &  &  &  & 
+\\
+\hyperref[DD:positionIY]{DD:positionIY} &  &  &  & 
+\\
+\hyperref[DD:frequencyDD]{DD:frequencyDD} &  &  &  & 
+\\
+\hyperref[DD:angFrequencyDD]{DD:angFrequencyDD} &  &  &  & 
+\\
+\hyperref[DD:periodSHMDD]{DD:periodSHMDD} &  &  &  & 
+\\
 \hyperref[TM:acceleration]{TM:acceleration} &  &  &  & 
 \\
 \hyperref[TM:velocity]{TM:velocity} &  &  &  & 
@@ -1275,60 +1285,70 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtblr}
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Items and Other Sections}]
-{colspec={l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}} & \textbf{\hyperref[GD:velocityIX]{GD:velocityIX}} & \textbf{\hyperref[GD:velocityIY]{GD:velocityIY}} & \textbf{\hyperref[GD:accelerationIX]{GD:accelerationIX}} & \textbf{\hyperref[GD:accelerationIY]{GD:accelerationIY}} & \textbf{\hyperref[GD:hForceOnPendulum]{GD:hForceOnPendulum}} & \textbf{\hyperref[GD:vForceOnPendulum]{GD:vForceOnPendulum}} & \textbf{\hyperref[GD:angFrequencyGD]{GD:angFrequencyGD}} & \textbf{\hyperref[GD:periodPend]{GD:periodPend}} & \textbf{\hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}}
+{colspec={l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{} & \textbf{\hyperref[DD:positionIX]{DD:positionIX}} & \textbf{\hyperref[DD:positionIY]{DD:positionIY}} & \textbf{\hyperref[DD:frequencyDD]{DD:frequencyDD}} & \textbf{\hyperref[DD:angFrequencyDD]{DD:angFrequencyDD}} & \textbf{\hyperref[DD:periodSHMDD]{DD:periodSHMDD}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}} & \textbf{\hyperref[GD:velocityIX]{GD:velocityIX}} & \textbf{\hyperref[GD:velocityIY]{GD:velocityIY}} & \textbf{\hyperref[GD:accelerationIX]{GD:accelerationIX}} & \textbf{\hyperref[GD:accelerationIY]{GD:accelerationIY}} & \textbf{\hyperref[GD:hForceOnPendulum]{GD:hForceOnPendulum}} & \textbf{\hyperref[GD:vForceOnPendulum]{GD:vForceOnPendulum}} & \textbf{\hyperref[GD:angFrequencyGD]{GD:angFrequencyGD}} & \textbf{\hyperref[GD:periodPend]{GD:periodPend}} & \textbf{\hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}}
 \\
-\hyperref[TM:acceleration]{TM:acceleration} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:positionIX]{DD:positionIX} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:velocity]{TM:velocity} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:positionIY]{DD:positionIY} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:frequencyDD]{DD:frequencyDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:angFrequencyDD]{DD:angFrequencyDD} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:velocityIX]{GD:velocityIX} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:periodSHMDD]{DD:periodSHMDD} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:velocityIY]{GD:velocityIY} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:acceleration]{TM:acceleration} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:accelerationIX]{GD:accelerationIX} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:velocity]{TM:velocity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:accelerationIY]{GD:accelerationIY} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:hForceOnPendulum]{GD:hForceOnPendulum} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:vForceOnPendulum]{GD:vForceOnPendulum} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:velocityIX]{GD:velocityIX} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:angFrequencyGD]{GD:angFrequencyGD} &  &  &  & X &  &  &  &  &  &  &  &  & 
+\hyperref[GD:velocityIY]{GD:velocityIY} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:periodPend]{GD:periodPend} &  &  &  &  &  &  &  &  &  &  & X &  & 
+\hyperref[GD:accelerationIX]{GD:accelerationIX} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement} &  &  &  & X &  &  &  &  &  &  & X &  & 
+\hyperref[GD:accelerationIY]{GD:accelerationIY} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:hForceOnPendulum]{GD:hForceOnPendulum} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:vForceOnPendulum]{GD:vForceOnPendulum} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:angFrequencyGD]{GD:angFrequencyGD} &  &  & X &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:periodPend]{GD:periodPend} &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  & X &  & 
+\\
+\hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X &  & 
 \label{Table:TraceMatRefvsRef}
 \end{longtblr}
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
-{colspec={l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}} & \textbf{\hyperref[GD:velocityIX]{GD:velocityIX}} & \textbf{\hyperref[GD:velocityIY]{GD:velocityIY}} & \textbf{\hyperref[GD:accelerationIX]{GD:accelerationIX}} & \textbf{\hyperref[GD:accelerationIY]{GD:accelerationIY}} & \textbf{\hyperref[GD:hForceOnPendulum]{GD:hForceOnPendulum}} & \textbf{\hyperref[GD:vForceOnPendulum]{GD:vForceOnPendulum}} & \textbf{\hyperref[GD:angFrequencyGD]{GD:angFrequencyGD}} & \textbf{\hyperref[GD:periodPend]{GD:periodPend}} & \textbf{\hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}} & \textbf{\hyperref[verifyInptVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correctness}} & \textbf{\hyperref[portable]{NFR:Portability}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInptVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass}} & \textbf{\hyperref[outputValues]{FR:Output-Values}}
+{colspec={l l l l l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{} & \textbf{\hyperref[DD:positionIX]{DD:positionIX}} & \textbf{\hyperref[DD:positionIY]{DD:positionIY}} & \textbf{\hyperref[DD:frequencyDD]{DD:frequencyDD}} & \textbf{\hyperref[DD:angFrequencyDD]{DD:angFrequencyDD}} & \textbf{\hyperref[DD:periodSHMDD]{DD:periodSHMDD}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}} & \textbf{\hyperref[GD:velocityIX]{GD:velocityIX}} & \textbf{\hyperref[GD:velocityIY]{GD:velocityIY}} & \textbf{\hyperref[GD:accelerationIX]{GD:accelerationIX}} & \textbf{\hyperref[GD:accelerationIY]{GD:accelerationIY}} & \textbf{\hyperref[GD:hForceOnPendulum]{GD:hForceOnPendulum}} & \textbf{\hyperref[GD:vForceOnPendulum]{GD:vForceOnPendulum}} & \textbf{\hyperref[GD:angFrequencyGD]{GD:angFrequencyGD}} & \textbf{\hyperref[GD:periodPend]{GD:periodPend}} & \textbf{\hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}} & \textbf{\hyperref[verifyInptVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correctness}} & \textbf{\hyperref[portable]{NFR:Portability}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInptVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass}} & \textbf{\hyperref[outputValues]{FR:Output-Values}}
 \\
-\hyperref[motionMass]{GS:Motion-of-the-mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[motionMass]{GS:Motion-of-the-mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass} &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
+\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInptVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass} &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
+\hyperref[calcAngPos]{FR:Calculate-Angular-Position-Of-Mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
 \label{Table:TraceMatAllvsR}
 \end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.

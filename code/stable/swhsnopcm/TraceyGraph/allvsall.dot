@@ -1,4 +1,6 @@
 digraph allvsall {
+	dataDefn:wVol -> instance:assumpVCN;
+	dataDefn:wVol -> dataDefn:tankVol;
 	theory:consThermECS -> instance:assumpTEO;
 	theory:sensHeat -> instance:assumpWAL;
 	theory:nwtnCoolingTM -> instance:assumpHTCC;
@@ -13,13 +15,18 @@ digraph allvsall {
 	theory:eBalanceOnWtrRC -> instance:assumpWAL;
 	theory:eBalanceOnWtrRC -> instance:assumpPIT;
 	theory:eBalanceOnWtrRC -> instance:assumpNIHGBW;
+	theory:eBalanceOnWtrRC -> dataDefn:tauW;
 	theory:eBalanceOnWtrRC -> theory:rocTempSimpRC;
 	theory:eBalanceOnWtrRC -> theory:htFluxC;
 	theory:heatEInWtrIM -> instance:assumpWAL;
 	theory:heatEInWtrIM -> instance:assumpAPT;
 	theory:heatEInWtrIM -> theory:sensHeat;
+	instance:findMass -> dataDefn:wMass;
+	instance:findMass -> dataDefn:wVol;
+	instance:findMass -> dataDefn:tankVol;
 	instance:findMass -> theory:eBalanceOnWtrRC;
 	instance:findMass -> instance:inputValues;
+	instance:outputInputDerivVals -> dataDefn:tauW;
 	instance:outputInputDerivVals -> instance:findMass;
 	instance:outputInputDerivVals -> instance:inputValues;
 	instance:outputInputDerivVals -> instance:findMass;
@@ -27,8 +34,12 @@ digraph allvsall {
 	instance:calcValues -> theory:heatEInWtrIM;
 	instance:outputValues -> theory:eBalanceOnWtrRC;
 	instance:outputValues -> theory:heatEInWtrIM;
+	instance:findMass -> dataDefn:wMass;
+	instance:findMass -> dataDefn:wVol;
+	instance:findMass -> dataDefn:tankVol;
 	instance:findMass -> theory:eBalanceOnWtrRC;
 	instance:findMass -> instance:inputValues;
+	instance:outputInputDerivVals -> dataDefn:tauW;
 	instance:outputInputDerivVals -> instance:findMass;
 	instance:outputInputDerivVals -> instance:inputValues;
 	instance:outputInputDerivVals -> instance:findMass;
@@ -63,6 +74,16 @@ digraph allvsall {
 	subgraph A {
 	rank="same"
 	{instance:assumpTEO, instance:assumpHTCC, instance:assumpCWTAT, instance:assumpDWCoW, instance:assumpSHECoW, instance:assumpLCCCW, instance:assumpTHCCoT, instance:assumpTHCCoL, instance:assumpCTNTD, instance:assumpWAL, instance:assumpPIT, instance:assumpNIHGBW, instance:assumpAPT, instance:assumpVCN}
+	}
+
+	dataDefn:wMass	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterMass"];
+	dataDefn:wVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterVolume.nopcm"];
+	dataDefn:tankVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:tankVolume"];
+	dataDefn:tauW	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceDecayRate"];
+
+	subgraph DD {
+	rank="same"
+	{dataDefn:wMass, dataDefn:wVol, dataDefn:tankVol, dataDefn:tauW}
 	}
 
 	theory:consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];

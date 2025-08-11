@@ -42,6 +42,29 @@ digraph allvsr {
 	{instance:assumpSSC, instance:assumpFOS, instance:assumpSLH, instance:assumpSP, instance:assumpSLI, instance:assumpINSFL, instance:assumpPSC, instance:assumpENSL, instance:assumpSBSBISL, instance:assumpES, instance:assumpSF, instance:assumpSL, instance:assumpWIBE, instance:assumpWISE, instance:assumpNESSS, instance:assumpHFSM}
 	}
 
+	dataDefn:H_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:intersliceWtrF"];
+	dataDefn:alpha_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angleA"];
+	dataDefn:beta_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angleB"];
+	dataDefn:b_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:lengthB"];
+	dataDefn:l_bi	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:lengthLb"];
+	dataDefn:l_si	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:lengthLs"];
+	dataDefn:h_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:slcHeight"];
+	dataDefn:sigma	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:normStress"];
+	dataDefn:tau	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:tangStress"];
+	dataDefn:torque	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:torque"];
+	dataDefn:f_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ratioVariation"];
+	dataDefn:Phi	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:convertFunc1"];
+	dataDefn:Psi	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:convertFunc2"];
+	dataDefn:F_xG	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:nrmForceSumDD"];
+	dataDefn:F_xH	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:watForceSumDD"];
+	dataDefn:hR	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:sliceHghtRightDD"];
+	dataDefn:hL	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:sliceHghtLeftDD"];
+
+	subgraph DD {
+	rank="same"
+	{dataDefn:H_i, dataDefn:alpha_i, dataDefn:beta_i, dataDefn:b_i, dataDefn:l_bi, dataDefn:l_si, dataDefn:h_i, dataDefn:sigma, dataDefn:tau, dataDefn:torque, dataDefn:f_i, dataDefn:Phi, dataDefn:Psi, dataDefn:F_xG, dataDefn:F_xH, dataDefn:hR, dataDefn:hL}
+	}
+
 	theory:factOfSafetyTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:factOfSafety"];
 	theory:equilibriumCS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:equilibrium"];
 	theory:mcShrSrgth	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:mcShrStrgth"];

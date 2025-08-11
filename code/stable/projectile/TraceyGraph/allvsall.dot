@@ -6,6 +6,8 @@ digraph allvsall {
 	instance:constAccel -> instance:neglectDrag;
 	instance:constAccel -> instance:freeFlight;
 	instance:accelYGravity -> instance:yAxisGravity;
+	dataDefn:ixVel -> dataDefn:speed;
+	dataDefn:iyVel -> dataDefn:speed;
 	theory:projSpeed -> instance:pointMass;
 	theory:projSpeed -> instance:timeStartZero;
 	theory:projSpeed -> theory:accelerationTM;
@@ -30,12 +32,14 @@ digraph allvsall {
 	theory:flightduration -> instance:accelYGravity;
 	theory:flightduration -> instance:timeStartZero;
 	theory:flightduration -> instance:gravAccelValue;
+	theory:flightduration -> dataDefn:iyVel;
 	theory:flightduration -> theory:position;
 	theory:landingposition -> instance:yAxisGravity;
 	theory:landingposition -> instance:launchOrigin;
 	theory:landingposition -> instance:posXDirection;
 	theory:landingposition -> instance:accelXZero;
 	theory:landingposition -> instance:gravAccelValue;
+	theory:landingposition -> dataDefn:ixVel;
 	theory:landingposition -> theory:position;
 	theory:landingposition -> theory:flightduration;
 	theory:offset -> instance:posXDirection;
@@ -77,6 +81,15 @@ digraph allvsall {
 	subgraph A {
 	rank="same"
 	{instance:twoDMotion, instance:cartSyst, instance:yAxisGravity, instance:launchOrigin, instance:targetXAxis, instance:posXDirection, instance:constAccel, instance:accelXZero, instance:accelYGravity, instance:neglectDrag, instance:pointMass, instance:freeFlight, instance:neglectCurv, instance:timeStartZero, instance:gravAccelValue}
+	}
+
+	dataDefn:speed	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:vecMag"];
+	dataDefn:ixVel	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:speedIX"];
+	dataDefn:iyVel	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:speedIY"];
+
+	subgraph DD {
+	rank="same"
+	{dataDefn:speed, dataDefn:ixVel, dataDefn:iyVel}
 	}
 
 	theory:accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];

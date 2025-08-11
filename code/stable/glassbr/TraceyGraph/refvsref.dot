@@ -1,15 +1,42 @@
 digraph refvsref {
+	dataDefn:demandq -> dataDefn:stdOffDist;
+	dataDefn:demandq -> dataDefn:eqTNTChar;
+	theory:riskFun -> dataDefn:minThick;
+	theory:riskFun -> dataDefn:loadDurFactor;
 	theory:riskFun -> theory:stressDistFac;
+	theory:stressDistFac -> dataDefn:aR;
 	theory:stressDistFac -> theory:dimlessLoad;
+	theory:nFL -> dataDefn:minThick;
 	theory:nFL -> theory:tolLoad;
+	theory:dimlessLoad -> dataDefn:minThick;
+	theory:dimlessLoad -> dataDefn:glassTypeFac;
+	theory:dimlessLoad -> dataDefn:demandq;
+	theory:tolLoad -> dataDefn:aR;
 	theory:tolLoad -> theory:sdfTol;
+	theory:sdfTol -> dataDefn:minThick;
+	theory:sdfTol -> dataDefn:loadDurFactor;
 	theory:probBr -> theory:riskFun;
+	theory:lResistance -> dataDefn:glassTypeFac;
 	theory:lResistance -> theory:nFL;
 	theory:isSafePb -> theory:probBr;
 	theory:isSafePb -> theory:isSafeLR;
+	theory:isSafeLR -> dataDefn:demandq;
 	theory:isSafeLR -> theory:lResistance;
 	theory:isSafeLR -> theory:isSafePb;
 
+
+	dataDefn:minThick	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:minThick"];
+	dataDefn:loadDurFactor	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:loadDurFactor"];
+	dataDefn:glassTypeFac	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:gTF"];
+	dataDefn:stdOffDist	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:standOffDist"];
+	dataDefn:aR	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:aspectRatio"];
+	dataDefn:eqTNTChar	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:eqTNTW"];
+	dataDefn:demandq	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:calofDemand"];
+
+	subgraph DD {
+	rank="same"
+	{dataDefn:minThick, dataDefn:loadDurFactor, dataDefn:glassTypeFac, dataDefn:stdOffDist, dataDefn:aR, dataDefn:eqTNTChar, dataDefn:demandq}
+	}
 
 	theory:isSafeProb	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeProb"];
 	theory:isSafeLoad	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeLoad"];

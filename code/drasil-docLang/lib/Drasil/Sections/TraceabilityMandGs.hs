@@ -43,7 +43,7 @@ tvAssumps = traceViewCC assumpDom
 
 -- | Traceability viewing data definitions. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvDataDefns :: TraceViewCat
-tvDataDefns = traceView (findAll (typeRep $ Proxy @DefinedQuantityDict) :: ChunkDB -> [DefinedQuantityDict])
+tvDataDefns = traceView (findAll (typeRep $ Proxy @DataDefinition) :: ChunkDB -> [DataDefinition])
 
 -- | Traceability viewing general definitions. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvGenDefns :: TraceViewCat

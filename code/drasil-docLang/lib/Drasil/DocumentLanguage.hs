@@ -25,7 +25,7 @@ import Language.Drasil.Display (compsy)
 
 import Database.Drasil (ChunkDB, collectUnits, collectAbbreviations, refbyTable, conceptinsTable, 
   idMap, conceptinsTable, traceTable, generateRefbyMap, refTable, labelledcontentTable, 
-  theoryModelTable, insmodelTable, gendefTable, dataDefnTable)
+  theoryModelTable, insmodelTable, gendefTable, dataDefnTable, defResolve)
 
 import Drasil.System
 import Drasil.GetChunks (ccss, ccss', citeDB)
@@ -195,7 +195,25 @@ extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) 
 
 -- | Extracts abbreviations/acronyms found in the document description ('DocDesc') from a database ('ChunkDB').
 extractAbbreviations :: DocDesc -> ChunkDB -> [IdeaDict]
-extractAbbreviations dd cdb = map nw $ collectAbbreviations $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
+extractAbbreviations dd cdb = map nw $ collectAbbreviations $ getAllChunksFromDoc dd cdb
+
+-- | Gets all chunks referenced in Ch constructors throughout the document.
+getAllChunksFromDoc :: DocDesc -> ChunkDB -> [ConceptChunk]
+getAllChunksFromDoc dd cdb = map (defResolve cdb) $ nub $ concatMap getSentenceUIDs (getDocDesc dd)
+
+-- | Extracts all UIDs from Ch constructors in a list of sentences.
+getSentenceUIDs :: Sentence -> [UID]
+getSentenceUIDs (Ch _ _ uid) = [uid]
+getSentenceUIDs (SyCh uid) = [uid]
+getSentenceUIDs (Sy _) = []
+getSentenceUIDs (S _) = []
+getSentenceUIDs (P _) = [] -- Symbol, no UIDs
+getSentenceUIDs (E _) = [] -- Expressions handled separately if needed
+getSentenceUIDs (Quote s) = getSentenceUIDs s
+getSentenceUIDs (Ref uid s _) = uid : getSentenceUIDs s
+getSentenceUIDs (Percent) = []
+getSentenceUIDs (EmptyS) = []
+getSentenceUIDs ((:+:) s1 s2) = getSentenceUIDs s1 ++ getSentenceUIDs s2
 
 -- * Section Creator Functions
 

@@ -45,7 +45,7 @@ dumpEverything0 si pinfo targetPath = do
       (sharedUIDs, _) = SM.partition atLeast2 invertedChunkDump
       traceDump = traceTable chunkDb
       refByDump = refbyTable chunkDb
-      justTerms = map (^. uid) $ (findAll (typeRep $ Proxy @IdeaDict) chunkDb :: [IdeaDict])
+      justTerms = map (^. uid) (findAll (typeRep $ Proxy @IdeaDict) chunkDb :: [IdeaDict])
 
   dumpTo chunkDump $ targetPath ++ "seeds.json"
   dumpTo invertedChunkDump $ targetPath ++ "inverted_seeds.json"

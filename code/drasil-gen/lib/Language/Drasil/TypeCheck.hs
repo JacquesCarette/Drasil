@@ -20,7 +20,7 @@ typeCheckSI sys = do
         dds = sys ^. dataDefns
         chks = sys ^. systemdb
     -- build a variable context (a map of UIDs to "Space"s [types])
-    let cxt = M.fromList $ map (\x -> (x ^. uid, x ^. typ)) $ (findAll (typeRep (Proxy @DefinedQuantityDict)) chks :: [DefinedQuantityDict])
+    let cxt = M.fromList $ map (\x -> (x ^. uid, x ^. typ)) (findAll (typeRep (Proxy @DefinedQuantityDict)) chks :: [DefinedQuantityDict])
 
     -- dump out the list of variables
     putStr "Symbol Table: "

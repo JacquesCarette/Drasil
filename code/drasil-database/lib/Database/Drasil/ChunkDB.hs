@@ -54,8 +54,8 @@ type ChunksByTypeRep = M.Map TypeRep [Chunk]
 
 type UMap a = M.Map UID (a, Int)
 
-idMap :: HasUID a =>[a] -> UMap a
-idMap vals = M.fromList $ map (\orig@(v, _) -> (v ^. uid, orig)) $ zip vals [0..]
+idMap :: HasUID a => [a] -> UMap a
+idMap vals = M.fromList $ zipWith (\v i -> (v ^. uid, (v, i))) vals [0..]
 
 data ChunkDB = ChunkDB {
     chunkTable :: ChunkByUID

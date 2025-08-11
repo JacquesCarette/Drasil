@@ -195,7 +195,7 @@ mkTableCI pinfo = mkTableFromLenses
 mkTableLC :: PrintingInformation -> Doc
 mkTableLC pinfo = mkTableFromLenses
   pinfo
-  (Proxy @LabelledContent) -- FIXME: LabelledContent should be retrieved a bit more manually.
+  (Proxy @LabelledContent)
   "LabelledContent"
   [openShortName, openContentType]
 
@@ -203,7 +203,7 @@ mkTableLC pinfo = mkTableFromLenses
 mkTableRef :: PrintingInformation -> Doc
 mkTableRef pinfo = mkTableFromLenses
   pinfo
-  (Proxy @Reference) -- FIXME: Same as above, should be retrieved more manually.
+  (Proxy @Reference)
   "Reference"
   [openRef, openShortName]
 

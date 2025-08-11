@@ -151,6 +151,22 @@ insert cdb c
   | typeOf c == typeRep (Proxy @ChunkDB) =
       error "Insertion of ChunkDBs in ChunkDBs is disallowed; please perform unions with them instead."
   | (Just x) <- findTypeOf (c ^. uid) cdb =
+    -- FIXME: The issue with allowing overwriting at all is that it breaks the
+    -- "chunk refs" and "chunks by type" tables. Those need to be rebuilt.
+    -- Consider removing the case where a chunk is overwritten:
+    -- 1. if the type is the same, the chunk refs of the previous chunk are not
+    --    removed (possibly inflating it's chunk refs and how much other things
+    --    are depended on) and the table containing "all chunks of each type"
+    --    contains a duplicate entry for said type.
+    -- 2. if the type is different, the table containing "all chunks of each
+    --    type" contains a cross-type duplicate entry, which is very bad (!!!),
+    --    and, similarly, the "chunk refs"-related inflations exist as well.
+    --
+    -- As a result of the above two issues, `make debug` will contain inflated
+    -- problems in `.drasil/problematic_seeds.json`.
+    --
+    -- The solution to this is simple: do not allow overwriting chunks. Being
+    -- able to do that is non-trivial, unfortunately.
     if typeOf c == x
       then trace (warnMsg $ "WARNING! Overwriting `" ++ show (c ^. uid) ++ "` :: " ++ show x) cdb'
       else trace (errMsg $ "SUPER-MEGA-ULTRA-DELUXE-WARNING! Overwriting a chunk (`" ++ show (c ^. uid) ++ "` :: `" ++ show x ++ "`) with a chunk of a different type: `" ++ show (typeOf c) ++ "`") cdb'

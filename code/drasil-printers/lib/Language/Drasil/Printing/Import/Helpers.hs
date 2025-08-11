@@ -60,18 +60,16 @@ lookupC Implementation sm c = codeSymb (findOrErr c sm :: DefinedQuantityDict)
 
 -- | Look up a term given a chunk database and a 'UID' associated with the term. Also specifies capitalization
 lookupT :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupT sm c tCap = resolveCapT tCap $ longForm l
-  where l = termResolve' sm c
+lookupT sm c tCap = resolveCapT tCap $ longForm $ termResolve' sm c
 
 -- | Look up the acronym/abbreviation of a term. Otherwise returns the singular form of a term. Takes a chunk database and a 'UID' associated with the term.
 lookupS :: ChunkDB -> UID -> TermCapitalization -> Sentence
 lookupS sm c sCap = maybe (resolveCapT sCap $ longForm l) S $ shortForm l >>= capHelper sCap
-  where l = termResolve' sm c -- FIXME need either the type or to try all types
+  where l = termResolve' sm c
 
 -- | Look up the plural form of a term given a chunk database and a 'UID' associated with the term.
 lookupP :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupP sm c pCap = resolveCapP pCap $ longForm l
-  where l = termResolve' sm c
+lookupP sm c pCap = resolveCapP pCap $ longForm $ termResolve' sm c
 
 -- | Helper to get the proper function for capitalizing a 'NP' based on its 'TermCapitalization'. Singular case.
 resolveCapT :: TermCapitalization -> (NP -> Sentence)

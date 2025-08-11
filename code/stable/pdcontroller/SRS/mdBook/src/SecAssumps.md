@@ -4,7 +4,7 @@ This section simplifies the original problem and helps in developing the theoret
 
 <div id="pwrPlant"></div>
 
-Power plant: The Power Plant and the Sensor are coupled as a single unit. (RefBy: ,,, and.)
+Power plant: The Power Plant and the Sensor are coupled as a single unit. (RefBy: [A:Spring Stiffness Coefficient](./SecAssumps.md#stiffnessCoeffSpring), [A:Transfer Function](./SecAssumps.md#pwrPlantTxFnx), [A:Spring Mass](./SecAssumps.md#massSpring), and [A:Spring Damping Coefficient](./SecAssumps.md#dampingCoeffSpring).)
 
 <div id="decoupled"></div>
 
@@ -36,12 +36,12 @@ Transfer Function: The combined Power Plant and Sensor ([A:Power plant](./SecAss
 
 <div id="massSpring"></div>
 
-Spring Mass: The mass of the spring in the mass-spring-damper system ([A:Power plant](./SecAssumps.md#pwrPlant)) is assumed to be 1 kilogram. (RefBy: [GD:gdPowerPlant](./SecGDs.md#GD:gdPowerPlant) and.)
+Spring Mass: The mass of the spring in the mass-spring-damper system ([A:Power plant](./SecAssumps.md#pwrPlant)) is assumed to be 1 kilogram. (RefBy: [GD:gdPowerPlant](./SecGDs.md#GD:gdPowerPlant) and [LC:DC Gain and Time Constant](./SecLCs.md#likeChgPP).)
 
 <div id="dampingCoeffSpring"></div>
 
-Spring Damping Coefficient: The Damping Coefficient of the spring in the mass-spring-damper system ([A:Power plant](./SecAssumps.md#pwrPlant)) is assumed to be 1. (RefBy: [GD:gdPowerPlant](./SecGDs.md#GD:gdPowerPlant) and.)
+Spring Damping Coefficient: The Damping Coefficient of the spring in the mass-spring-damper system ([A:Power plant](./SecAssumps.md#pwrPlant)) is assumed to be 1. (RefBy: [GD:gdPowerPlant](./SecGDs.md#GD:gdPowerPlant) and [LC:DC Gain and Time Constant](./SecLCs.md#likeChgPP).)
 
 <div id="stiffnessCoeffSpring"></div>
 
-Spring Stiffness Coefficient: The Stiffness coefficient of the spring in the mass-spring-damper system ([A:Power plant](./SecAssumps.md#pwrPlant)) is assumed to be 20. (RefBy: [GD:gdPowerPlant](./SecGDs.md#GD:gdPowerPlant) and.)
+Spring Stiffness Coefficient: The Stiffness coefficient of the spring in the mass-spring-damper system ([A:Power plant](./SecAssumps.md#pwrPlant)) is assumed to be 20. (RefBy: [GD:gdPowerPlant](./SecGDs.md#GD:gdPowerPlant) and [LC:DC Gain and Time Constant](./SecLCs.md#likeChgPP).)

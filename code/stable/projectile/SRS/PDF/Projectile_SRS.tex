@@ -291,17 +291,17 @@ This section simplifies the original problem and helps in developing the theoret
 \begin{description}[font=\normalfont]
 \item[twoDMotion:\phantomsection\label{twoDMotion}]{The projectile motion is two-dimensional (2D). (RefBy: \hyperref[GD:velVec]{GD:velVec} and \hyperref[GD:posVec]{GD:posVec}.)}
 \item[cartSyst:\phantomsection\label{cartSyst}]{A Cartesian coordinate system is used (from \hyperref[neglectCurv]{A:neglectCurv}). (RefBy: \hyperref[GD:velVec]{GD:velVec} and \hyperref[GD:posVec]{GD:posVec}.)}
-\item[yAxisGravity:\phantomsection\label{yAxisGravity}]{The direction of the $y$-axis is directed opposite to gravity. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}, \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}, and.)}
+\item[yAxisGravity:\phantomsection\label{yAxisGravity}]{The direction of the $y$-axis is directed opposite to gravity. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}, \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}, and \hyperref[accelYGravity]{A:accelYGravity}.)}
 \item[launchOrigin:\phantomsection\label{launchOrigin}]{The launcher is coincident with the origin. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
 \item[targetXAxis:\phantomsection\label{targetXAxis}]{The target lies on the $x$-axis (from \hyperref[neglectCurv]{A:neglectCurv}). (RefBy: \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
 \item[posXDirection:\phantomsection\label{posXDirection}]{The positive $x$-direction is from the launcher to the target. (RefBy: \hyperref[IM:messageIM]{IM:messageIM}, \hyperref[IM:offsetIM]{IM:offsetIM}, \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}, and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
 \item[constAccel:\phantomsection\label{constAccel}]{The acceleration is constant (from \hyperref[accelXZero]{A:accelXZero}, \hyperref[accelYGravity]{A:accelYGravity}, \hyperref[neglectDrag]{A:neglectDrag}, and \hyperref[freeFlight]{A:freeFlight}). (RefBy: \hyperref[GD:velVec]{GD:velVec} and \hyperref[GD:posVec]{GD:posVec}.)}
-\item[accelXZero:\phantomsection\label{accelXZero}]{The acceleration in the $x$-direction is zero. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and.)}
-\item[accelYGravity:\phantomsection\label{accelYGravity}]{The acceleration in the $y$-direction is the acceleration due to gravity (from \hyperref[yAxisGravity]{A:yAxisGravity}). (RefBy: \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime} and.)}
-\item[neglectDrag:\phantomsection\label{neglectDrag}]{Air drag is neglected.}
+\item[accelXZero:\phantomsection\label{accelXZero}]{The acceleration in the $x$-direction is zero. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[constAccel]{A:constAccel}.)}
+\item[accelYGravity:\phantomsection\label{accelYGravity}]{The acceleration in the $y$-direction is the acceleration due to gravity (from \hyperref[yAxisGravity]{A:yAxisGravity}). (RefBy: \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime} and \hyperref[constAccel]{A:constAccel}.)}
+\item[neglectDrag:\phantomsection\label{neglectDrag}]{Air drag is neglected. (RefBy: \hyperref[constAccel]{A:constAccel}.)}
 \item[pointMass:\phantomsection\label{pointMass}]{The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: \hyperref[GD:rectVel]{GD:rectVel} and \hyperref[GD:rectPos]{GD:rectPos}.)}
-\item[freeFlight:\phantomsection\label{freeFlight}]{The flight is free; there are no collisions during the trajectory of the projectile.}
-\item[neglectCurv:\phantomsection\label{neglectCurv}]{The distance is small enough that the curvature of the celestial body can be neglected. (RefBy: and.)}
+\item[freeFlight:\phantomsection\label{freeFlight}]{The flight is free; there are no collisions during the trajectory of the projectile. (RefBy: \hyperref[constAccel]{A:constAccel}.)}
+\item[neglectCurv:\phantomsection\label{neglectCurv}]{The distance is small enough that the curvature of the celestial body can be neglected. (RefBy: \hyperref[targetXAxis]{A:targetXAxis} and \hyperref[cartSyst]{A:cartSyst}.)}
 \item[timeStartZero:\phantomsection\label{timeStartZero}]{Time starts at zero. (RefBy: \hyperref[GD:velVec]{GD:velVec}, \hyperref[GD:rectVel]{GD:rectVel}, \hyperref[GD:rectPos]{GD:rectPos}, \hyperref[GD:posVec]{GD:posVec}, and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
 \item[gravAccelValue:\phantomsection\label{gravAccelValue}]{The acceleration due to gravity is assumed to have the value provided in the section for \hyperref[Sec:AuxConstants]{Values of Auxiliary Constants}. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
 \end{description}
@@ -784,7 +784,7 @@ Notes & The constraint $0\lt{}θ\lt{}\frac{π}{2}$ is from \hyperref[posXDirecti
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist},, and
+RefBy & \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}, \hyperref[outputValues]{FR:Output-Values}, and \hyperref[calcValues]{FR:Calculate-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -866,7 +866,7 @@ Notes & The constraint $0\lt{}θ\lt{}\frac{π}{2}$ is from \hyperref[posXDirecti
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[IM:offsetIM]{IM:offsetIM} and
+RefBy & \hyperref[IM:offsetIM]{IM:offsetIM} and \hyperref[calcValues]{FR:Calculate-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -938,7 +938,7 @@ Notes & ${p_{\text{land}}}$ is from \hyperref[IM:calOfLandingDist]{IM:calOfLandi
 Source & --
          
 \\ \midrule
-RefBy & \hyperref[IM:messageIM]{IM:messageIM},, and
+RefBy & \hyperref[IM:messageIM]{IM:messageIM}, \hyperref[outputValues]{FR:Output-Values}, and \hyperref[calcValues]{FR:Calculate-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -997,7 +997,7 @@ Notes & ${d_{\text{offset}}}$ is from \hyperref[IM:offsetIM]{IM:offsetIM}.
 Source & --
          
 \\ \midrule
-RefBy & and
+RefBy & \hyperref[outputValues]{FR:Output-Values} and \hyperref[calcValues]{FR:Calculate-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -1080,43 +1080,43 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions}]
 {colspec={l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{}
+\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSyst]{A:cartSyst}} & \textbf{\hyperref[yAxisGravity]{A:yAxisGravity}} & \textbf{\hyperref[launchOrigin]{A:launchOrigin}} & \textbf{\hyperref[targetXAxis]{A:targetXAxis}} & \textbf{\hyperref[posXDirection]{A:posXDirection}} & \textbf{\hyperref[constAccel]{A:constAccel}} & \textbf{\hyperref[accelXZero]{A:accelXZero}} & \textbf{\hyperref[accelYGravity]{A:accelYGravity}} & \textbf{\hyperref[neglectDrag]{A:neglectDrag}} & \textbf{\hyperref[pointMass]{A:pointMass}} & \textbf{\hyperref[freeFlight]{A:freeFlight}} & \textbf{\hyperref[neglectCurv]{A:neglectCurv}} & \textbf{\hyperref[timeStartZero]{A:timeStartZero}} & \textbf{\hyperref[gravAccelValue]{A:gravAccelValue}}
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[twoDMotion]{A:twoDMotion} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
+\hyperref[cartSyst]{A:cartSyst} &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[yAxisGravity]{A:yAxisGravity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[launchOrigin]{A:launchOrigin} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
+\hyperref[targetXAxis]{A:targetXAxis} &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[posXDirection]{A:posXDirection} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  & X & X & X &  & X &  &  & 
+\hyperref[constAccel]{A:constAccel} &  &  &  &  &  &  &  & X & X & X &  & X &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[accelXZero]{A:accelXZero} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[accelYGravity]{A:accelYGravity} &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[neglectDrag]{A:neglectDrag} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[pointMass]{A:pointMass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[freeFlight]{A:freeFlight} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[neglectCurv]{A:neglectCurv} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[timeStartZero]{A:timeStartZero} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[gravAccelValue]{A:gravAccelValue} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \label{Table:TraceMatAvsA}
 \end{longtblr}
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Assumptions and Other Items}]
 {colspec={l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{}
+\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSyst]{A:cartSyst}} & \textbf{\hyperref[yAxisGravity]{A:yAxisGravity}} & \textbf{\hyperref[launchOrigin]{A:launchOrigin}} & \textbf{\hyperref[targetXAxis]{A:targetXAxis}} & \textbf{\hyperref[posXDirection]{A:posXDirection}} & \textbf{\hyperref[constAccel]{A:constAccel}} & \textbf{\hyperref[accelXZero]{A:accelXZero}} & \textbf{\hyperref[accelYGravity]{A:accelYGravity}} & \textbf{\hyperref[neglectDrag]{A:neglectDrag}} & \textbf{\hyperref[pointMass]{A:pointMass}} & \textbf{\hyperref[freeFlight]{A:freeFlight}} & \textbf{\hyperref[neglectCurv]{A:neglectCurv}} & \textbf{\hyperref[timeStartZero]{A:timeStartZero}} & \textbf{\hyperref[gravAccelValue]{A:gravAccelValue}}
 \\
 \hyperref[TM:acceleration]{TM:acceleration} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1138,31 +1138,31 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[IM:messageIM]{IM:messageIM} &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifiable]{NFR:Verifiability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[understandable]{NFR:Understandability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[reusable]{NFR:Reusability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[maintainable]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \label{Table:TraceMatAvsAll}
 \end{longtblr}
 \begin{longtblr}
@@ -1194,35 +1194,35 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
 {colspec={l l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[GD:rectVel]{GD:rectVel}} & \textbf{\hyperref[GD:rectPos]{GD:rectPos}} & \textbf{\hyperref[GD:velVec]{GD:velVec}} & \textbf{\hyperref[GD:posVec]{GD:posVec}} & \textbf{\hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}} & \textbf{\hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}} & \textbf{\hyperref[IM:offsetIM]{IM:offsetIM}} & \textbf{\hyperref[IM:messageIM]{IM:messageIM}} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{}
+\textbf{} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[GD:rectVel]{GD:rectVel}} & \textbf{\hyperref[GD:rectPos]{GD:rectPos}} & \textbf{\hyperref[GD:velVec]{GD:velVec}} & \textbf{\hyperref[GD:posVec]{GD:posVec}} & \textbf{\hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}} & \textbf{\hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}} & \textbf{\hyperref[IM:offsetIM]{IM:offsetIM}} & \textbf{\hyperref[IM:messageIM]{IM:messageIM}} & \textbf{\hyperref[verifyInVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcValues]{FR:Calculate-Values}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correctness}} & \textbf{\hyperref[verifiable]{NFR:Verifiability}} & \textbf{\hyperref[understandable]{NFR:Understandability}} & \textbf{\hyperref[reusable]{NFR:Reusability}} & \textbf{\hyperref[maintainable]{NFR:Maintainability}} & \textbf{\hyperref[portable]{NFR:Portability}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcValues]{FR:Calculate-Values}} & \textbf{\hyperref[outputValues]{FR:Output-Values}}
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[targetHit]{GS:targetHit} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcValues]{FR:Calculate-Values} &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & X &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  & X &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[correct]{NFR:Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifiable]{NFR:Verifiability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[understandable]{NFR:Understandability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[reusable]{NFR:Reusability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[maintainable]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcValues]{FR:Calculate-Values} &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & X &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  & X &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \label{Table:TraceMatAllvsR}
 \end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.

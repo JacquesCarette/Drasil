@@ -149,4 +149,4 @@ mkDocDesc sys@SI{_inputs = is, _systemdb = db} = map sec where
   scsSub (CorrSolnPpties c cs) = DL.CorrSolnPpties c cs
 
   fromConcInsDB :: Concept c => c -> [ConceptInstance]
-  fromConcInsDB c = filter (\x -> sDom (cdom x) == c ^. uid) $ findAll (typeRep $ Proxy @ConceptInstance) $ db
+  fromConcInsDB c = filter (\x -> sDom (cdom x) == c ^. uid) $ findAll (typeRep $ Proxy @ConceptInstance) db

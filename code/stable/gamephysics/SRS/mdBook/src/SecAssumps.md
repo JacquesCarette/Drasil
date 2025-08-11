@@ -20,12 +20,12 @@ axesDefined: The axes are defined using right-handed coordinate system. (RefBy: 
 
 <div id="assumpCT"></div>
 
-collisionType: All rigid bodies collisions are vertex-to-edge collisions. (RefBy: [GD:impulse](./SecGDs.md#GD:impulse), [IM:col2D](./SecIMs.md#IM:col2D), and.)
+collisionType: All rigid bodies collisions are vertex-to-edge collisions. (RefBy: [GD:impulse](./SecGDs.md#GD:impulse), [IM:col2D](./SecIMs.md#IM:col2D), and [LC:Expanded-Collisions](./SecLCs.md#lcEC).)
 
 <div id="assumpDI"></div>
 
-dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: [IM:col2D](./SecIMs.md#IM:col2D), [IM:transMot](./SecIMs.md#IM:transMot),, [DD:potEnergy](./SecDDs.md#DD:potEnergy), and [DD:kEnergy](./SecDDs.md#DD:kEnergy).)
+dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: [IM:col2D](./SecIMs.md#IM:col2D), [IM:transMot](./SecIMs.md#IM:transMot), [LC:Include-Dampening](./SecLCs.md#lcID), [DD:potEnergy](./SecDDs.md#DD:potEnergy), and [DD:kEnergy](./SecDDs.md#DD:kEnergy).)
 
 <div id="assumpCAJI"></div>
 
-constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. (RefBy: [IM:col2D](./SecIMs.md#IM:col2D), [IM:transMot](./SecIMs.md#IM:transMot), and.)
+constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. (RefBy: [IM:col2D](./SecIMs.md#IM:col2D), [IM:transMot](./SecIMs.md#IM:transMot), and [LC:Include-Joints-Constraints](./SecLCs.md#lcIJC).)

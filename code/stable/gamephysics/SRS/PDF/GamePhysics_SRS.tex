@@ -352,9 +352,9 @@ This section simplifies the original problem and helps in developing the theoret
 \item[objectDimension:\phantomsection\label{assumpOD}]{All objects are 2D. (RefBy: \hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}, \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:col2D]{IM:col2D}, \hyperref[IM:rotMot]{IM:rotMot}, \hyperref[IM:transMot]{IM:transMot}, \hyperref[DD:potEnergy]{DD:potEnergy}, \hyperref[DD:kEnergy]{DD:kEnergy}, \hyperref[DD:angVel]{DD:angVel}, \hyperref[DD:angDisp]{DD:angDisp}, and \hyperref[DD:angAccel]{DD:angAccel}.)}
 \item[coordinateSystemTy:\phantomsection\label{assumpCST}]{The library uses a Cartesian coordinate system.}
 \item[axesDefined:\phantomsection\label{assumpAD}]{The axes are defined using right-handed coordinate system. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:col2D]{IM:col2D}, and \hyperref[IM:rotMot]{IM:rotMot}.)}
-\item[collisionType:\phantomsection\label{assumpCT}]{All rigid bodies collisions are vertex-to-edge collisions. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:col2D]{IM:col2D}, and.)}
-\item[dampingInvolvement:\phantomsection\label{assumpDI}]{There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: \hyperref[IM:col2D]{IM:col2D}, \hyperref[IM:transMot]{IM:transMot},, \hyperref[DD:potEnergy]{DD:potEnergy}, and \hyperref[DD:kEnergy]{DD:kEnergy}.)}
-\item[constraintsAndJointsInvolvement:\phantomsection\label{assumpCAJI}]{There are no constraints and joints involved throughout the simulation. (RefBy: \hyperref[IM:col2D]{IM:col2D}, \hyperref[IM:transMot]{IM:transMot}, and.)}
+\item[collisionType:\phantomsection\label{assumpCT}]{All rigid bodies collisions are vertex-to-edge collisions. (RefBy: \hyperref[GD:impulse]{GD:impulse}, \hyperref[IM:col2D]{IM:col2D}, and \hyperref[lcEC]{LC:Expanded-Collisions}.)}
+\item[dampingInvolvement:\phantomsection\label{assumpDI}]{There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: \hyperref[IM:col2D]{IM:col2D}, \hyperref[IM:transMot]{IM:transMot}, \hyperref[lcID]{LC:Include-Dampening}, \hyperref[DD:potEnergy]{DD:potEnergy}, and \hyperref[DD:kEnergy]{DD:kEnergy}.)}
+\item[constraintsAndJointsInvolvement:\phantomsection\label{assumpCAJI}]{There are no constraints and joints involved throughout the simulation. (RefBy: \hyperref[IM:col2D]{IM:col2D}, \hyperref[IM:transMot]{IM:transMot}, and \hyperref[lcIJC]{LC:Include-Joints-Constraints}.)}
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -1574,27 +1574,27 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions}]
 {colspec={l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{}
+\textbf{} & \textbf{\hyperref[assumpOT]{A:objectTy}} & \textbf{\hyperref[assumpOD]{A:objectDimension}} & \textbf{\hyperref[assumpCST]{A:coordinateSystemTy}} & \textbf{\hyperref[assumpAD]{A:axesDefined}} & \textbf{\hyperref[assumpCT]{A:collisionType}} & \textbf{\hyperref[assumpDI]{A:dampingInvolvement}} & \textbf{\hyperref[assumpCAJI]{A:constraintsAndJointsInvolvement}}
 \\
- &  &  &  &  &  &  & 
+\hyperref[assumpOT]{A:objectTy} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[assumpOD]{A:objectDimension} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[assumpCST]{A:coordinateSystemTy} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[assumpAD]{A:axesDefined} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[assumpCT]{A:collisionType} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[assumpDI]{A:dampingInvolvement} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[assumpCAJI]{A:constraintsAndJointsInvolvement} &  &  &  &  &  &  & 
 \label{Table:TraceMatAvsA}
 \end{longtblr}
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Assumptions and Other Items}]
 {colspec={l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{}
+\textbf{} & \textbf{\hyperref[assumpOT]{A:objectTy}} & \textbf{\hyperref[assumpOD]{A:objectDimension}} & \textbf{\hyperref[assumpCST]{A:coordinateSystemTy}} & \textbf{\hyperref[assumpAD]{A:axesDefined}} & \textbf{\hyperref[assumpCT]{A:collisionType}} & \textbf{\hyperref[assumpDI]{A:dampingInvolvement}} & \textbf{\hyperref[assumpCAJI]{A:constraintsAndJointsInvolvement}}
 \\
 \hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot} &  &  &  &  &  &  & 
 \\
@@ -1614,47 +1614,47 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[IM:col2D]{IM:col2D} & X & X &  & X & X & X & X
 \\
- &  &  &  &  &  &  & 
+\hyperref[simSpace]{FR:Simulation-Space} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[inputInitialConds]{FR:Input-Initial-Conditions} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[inputSurfaceProps]{FR:Input-Surface-Properties} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[verifyPhysCons]{FR:Verify-Physical\_Constraints} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[calcTransOverTime]{FR:Calculate-Translation-Over-Time} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[calcRotOverTime]{FR:Calculate-Rotation-Over-Time} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[deterColls]{FR:Determine-Collisions} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[deterCollRespOverTime]{FR:Determine-Collision-Response-Over-Time} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[performance]{NFR:Performance} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[correctness]{NFR:Correctness} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[usability]{NFR:Usability} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[understandability]{NFR:Understandability} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[maintainability]{NFR:Maintainability} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[lcVODES]{LC:Variable-ODE-Solver} &  &  &  &  &  &  & 
 \\
- &  &  &  &  & X &  & 
+\hyperref[lcEC]{LC:Expanded-Collisions} &  &  &  &  & X &  & 
 \\
- &  &  &  &  &  & X & 
+\hyperref[lcID]{LC:Include-Dampening} &  &  &  &  &  & X & 
 \\
- &  &  &  &  &  &  & X
+\hyperref[lcIJC]{LC:Include-Joints-Constraints} &  &  &  &  &  &  & X
 \\
- &  &  &  &  &  &  & 
+\hyperref[ucSRB]{UC:Simulate-Rigid-Bodies} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[ucEI]{UC:External-Input} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[ucCCS]{UC:Cartesian-Coordinate-System} &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  & 
+\hyperref[ucORB]{UC:Objects-Rigid-Bodies} &  &  &  &  &  &  & 
 \label{Table:TraceMatAvsAll}
 \end{longtblr}
 \begin{longtblr}
@@ -1684,37 +1684,37 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
 {colspec={l l l l l l l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM:NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM:UniversalGravLaw}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}} & \textbf{\hyperref[GD:accelGravity]{GD:accelGravity}} & \textbf{\hyperref[GD:impulse]{GD:impulse}} & \textbf{\hyperref[IM:transMot]{IM:transMot}} & \textbf{\hyperref[IM:rotMot]{IM:rotMot}} & \textbf{\hyperref[IM:col2D]{IM:col2D}} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{}
+\textbf{} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM:NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM:NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM:UniversalGravLaw}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}} & \textbf{\hyperref[GD:accelGravity]{GD:accelGravity}} & \textbf{\hyperref[GD:impulse]{GD:impulse}} & \textbf{\hyperref[IM:transMot]{IM:transMot}} & \textbf{\hyperref[IM:rotMot]{IM:rotMot}} & \textbf{\hyperref[IM:col2D]{IM:col2D}} & \textbf{\hyperref[simSpace]{FR:Simulation-Space}} & \textbf{\hyperref[inputInitialConds]{FR:Input-Initial-Conditions}} & \textbf{\hyperref[inputSurfaceProps]{FR:Input-Surface-Properties}} & \textbf{\hyperref[verifyPhysCons]{FR:Verify-Physical\_Constraints}} & \textbf{\hyperref[calcTransOverTime]{FR:Calculate-Translation-Over-Time}} & \textbf{\hyperref[calcRotOverTime]{FR:Calculate-Rotation-Over-Time}} & \textbf{\hyperref[deterColls]{FR:Determine-Collisions}} & \textbf{\hyperref[deterCollRespOverTime]{FR:Determine-Collision-Response-Over-Time}} & \textbf{\hyperref[performance]{NFR:Performance}} & \textbf{\hyperref[correctness]{NFR:Correctness}} & \textbf{\hyperref[usability]{NFR:Usability}} & \textbf{\hyperref[understandability]{NFR:Understandability}} & \textbf{\hyperref[maintainability]{NFR:Maintainability}}
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[linearGS]{GS:Determine-Linear-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[angularGS]{GS:Determine-Angular-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[simSpace]{FR:Simulation-Space} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputInitialConds]{FR:Input-Initial-Conditions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputSurfaceProps]{FR:Input-Surface-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyPhysCons]{FR:Verify-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcTransOverTime]{FR:Calculate-Translation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcRotOverTime]{FR:Calculate-Rotation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[deterColls]{FR:Determine-Collisions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[deterCollRespOverTime]{FR:Determine-Collision-Response-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[performance]{NFR:Performance} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[correctness]{NFR:Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[usability]{NFR:Usability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[understandability]{NFR:Understandability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[maintainability]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \label{Table:TraceMatAllvsR}
 \end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.

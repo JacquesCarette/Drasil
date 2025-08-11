@@ -285,7 +285,7 @@ The instance models that govern PD Controller are presented in the \hyperref[Sec
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
 \begin{description}[font=\normalfont]
-\item[Power plant:\phantomsection\label{pwrPlant}]{The Power Plant and the Sensor are coupled as a single unit. (RefBy: ,,, and.)}
+\item[Power plant:\phantomsection\label{pwrPlant}]{The Power Plant and the Sensor are coupled as a single unit. (RefBy: \hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}, \hyperref[pwrPlantTxFnx]{A:Transfer Function}, \hyperref[massSpring]{A:Spring Mass}, and \hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}.)}
 \item[Decoupled equation:\phantomsection\label{decoupled}]{The decoupled form of the PD Controller equation used in this simulation. (RefBy: \hyperref[DD:ddCtrlVar]{DD:ddCtrlVar}.)}
 \item[Set-Point:\phantomsection\label{setPointConstant}]{The Set-Point is constant throughout the simulation. (RefBy: \hyperref[IM:pdEquationIM]{IM:pdEquationIM} and \hyperref[DD:ddProcessError]{DD:ddProcessError}.)}
 \item[External disturbance:\phantomsection\label{externalDisturb}]{There are no external disturbances to the Power Plant during the simulation. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant}.)}
@@ -293,9 +293,9 @@ This section simplifies the original problem and helps in developing the theoret
 \item[Parallel Equation:\phantomsection\label{parallelEq}]{The Parallel form of the equation is used for the PD Controller. (RefBy: \hyperref[DD:ddCtrlVar]{DD:ddCtrlVar}.)}
 \item[Unfiltered Derivative:\phantomsection\label{unfilteredDerivative}]{A pure derivative function is used for this simulation; there are no filters applied. (RefBy: \hyperref[DD:ddDerivCtrl]{DD:ddDerivCtrl}.)}
 \item[Transfer Function:\phantomsection\label{pwrPlantTxFnx}]{The combined Power Plant and Sensor (\hyperref[pwrPlant]{A:Power plant}) are characterized by a Second Order mass-spring-damper System. (RefBy: \hyperref[TM:tmSOSystem]{TM:tmSOSystem}.)}
-\item[Spring Mass:\phantomsection\label{massSpring}]{The mass of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 1 kilogram. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant} and.)}
-\item[Spring Damping Coefficient:\phantomsection\label{dampingCoeffSpring}]{The Damping Coefficient of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 1. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant} and.)}
-\item[Spring Stiffness Coefficient:\phantomsection\label{stiffnessCoeffSpring}]{The Stiffness coefficient of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 20. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant} and.)}
+\item[Spring Mass:\phantomsection\label{massSpring}]{The mass of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 1 kilogram. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant} and \hyperref[likeChgPP]{LC:DC Gain and Time Constant}.)}
+\item[Spring Damping Coefficient:\phantomsection\label{dampingCoeffSpring}]{The Damping Coefficient of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 1. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant} and \hyperref[likeChgPP]{LC:DC Gain and Time Constant}.)}
+\item[Spring Stiffness Coefficient:\phantomsection\label{stiffnessCoeffSpring}]{The Stiffness coefficient of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A:Power plant}) is assumed to be 20. (RefBy: \hyperref[GD:gdPowerPlant]{GD:gdPowerPlant} and \hyperref[likeChgPP]{LC:DC Gain and Time Constant}.)}
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -649,7 +649,7 @@ Description & \begin{symbDescription}
 Source & \cite{abbasi2015} and \cite{johnson2008}
          
 \\ \midrule
-RefBy & and
+RefBy & \hyperref[outputValues]{FR:Output-Values} and \hyperref[calculateValues]{FR:Calculate-Values}
         
 \\ \bottomrule
 \end{tabular}
@@ -751,35 +751,35 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions}]
 {colspec={l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{}
+\textbf{} & \textbf{\hyperref[pwrPlant]{A:Power plant}} & \textbf{\hyperref[decoupled]{A:Decoupled equation}} & \textbf{\hyperref[setPointConstant]{A:Set-Point}} & \textbf{\hyperref[externalDisturb]{A:External disturbance}} & \textbf{\hyperref[initialValue]{A:Initial Value}} & \textbf{\hyperref[parallelEq]{A:Parallel Equation}} & \textbf{\hyperref[unfilteredDerivative]{A:Unfiltered Derivative}} & \textbf{\hyperref[pwrPlantTxFnx]{A:Transfer Function}} & \textbf{\hyperref[massSpring]{A:Spring Mass}} & \textbf{\hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}} & \textbf{\hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}}
 \\
- &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[pwrPlant]{A:Power plant} &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[decoupled]{A:Decoupled equation} &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[setPointConstant]{A:Set-Point} &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[externalDisturb]{A:External disturbance} &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[initialValue]{A:Initial Value} &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[parallelEq]{A:Parallel Equation} &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[unfilteredDerivative]{A:Unfiltered Derivative} &  &  &  &  &  &  &  &  &  &  & 
 \\
- & X &  &  &  &  &  &  &  &  &  & 
+\hyperref[pwrPlantTxFnx]{A:Transfer Function} & X &  &  &  &  &  &  &  &  &  & 
 \\
- & X &  &  &  &  &  &  &  &  &  & 
+\hyperref[massSpring]{A:Spring Mass} & X &  &  &  &  &  &  &  &  &  & 
 \\
- & X &  &  &  &  &  &  &  &  &  & 
+\hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient} & X &  &  &  &  &  &  &  &  &  & 
 \\
- & X &  &  &  &  &  &  &  &  &  & 
+\hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient} & X &  &  &  &  &  &  &  &  &  & 
 \label{Table:TraceMatAvsA}
 \end{longtblr}
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Assumptions and Other Items}]
 {colspec={l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{}
+\textbf{} & \textbf{\hyperref[pwrPlant]{A:Power plant}} & \textbf{\hyperref[decoupled]{A:Decoupled equation}} & \textbf{\hyperref[setPointConstant]{A:Set-Point}} & \textbf{\hyperref[externalDisturb]{A:External disturbance}} & \textbf{\hyperref[initialValue]{A:Initial Value}} & \textbf{\hyperref[parallelEq]{A:Parallel Equation}} & \textbf{\hyperref[unfilteredDerivative]{A:Unfiltered Derivative}} & \textbf{\hyperref[pwrPlantTxFnx]{A:Transfer Function}} & \textbf{\hyperref[massSpring]{A:Spring Mass}} & \textbf{\hyperref[dampingCoeffSpring]{A:Spring Damping Coefficient}} & \textbf{\hyperref[stiffnessCoeffSpring]{A:Spring Stiffness Coefficient}}
 \\
 \hyperref[TM:laplaceTransform]{TM:laplaceTransform} &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -791,29 +791,29 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[IM:pdEquationIM]{IM:pdEquationIM} &  &  & X &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInputs]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calculateValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[security]{NFR:Security} &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[maintainability]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifiability]{NFR:Verifiability} &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInputs]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calculateValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  & X & X & X
+\hyperref[likeChgPP]{LC:DC Gain and Time Constant} &  &  &  &  &  &  &  &  & X & X & X
 \label{Table:TraceMatAvsAll}
 \end{longtblr}
 \begin{longtblr}
@@ -835,31 +835,31 @@ The purpose of the traceability matrices is to provide easy references on what h
 \begin{longtblr}
 [caption={Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}]
 {colspec={l l l l l l l l l l l l l l l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
-\textbf{} & \textbf{\hyperref[TM:laplaceTransform]{TM:laplaceTransform}} & \textbf{\hyperref[TM:invLaplaceTransform]{TM:invLaplaceTransform}} & \textbf{\hyperref[TM:tmSOSystem]{TM:tmSOSystem}} & \textbf{\hyperref[GD:gdPowerPlant]{GD:gdPowerPlant}} & \textbf{\hyperref[IM:pdEquationIM]{IM:pdEquationIM}} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{} & \textbf{}
+\textbf{} & \textbf{\hyperref[TM:laplaceTransform]{TM:laplaceTransform}} & \textbf{\hyperref[TM:invLaplaceTransform]{TM:invLaplaceTransform}} & \textbf{\hyperref[TM:tmSOSystem]{TM:tmSOSystem}} & \textbf{\hyperref[GD:gdPowerPlant]{GD:gdPowerPlant}} & \textbf{\hyperref[IM:pdEquationIM]{IM:pdEquationIM}} & \textbf{\hyperref[verifyInputs]{FR:Verify-Input-Values}} & \textbf{\hyperref[calculateValues]{FR:Calculate-Values}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[portable]{NFR:Portability}} & \textbf{\hyperref[security]{NFR:Security}} & \textbf{\hyperref[maintainability]{NFR:Maintainability}} & \textbf{\hyperref[verifiability]{NFR:Verifiability}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInputs]{FR:Verify-Input-Values}} & \textbf{\hyperref[calculateValues]{FR:Calculate-Values}} & \textbf{\hyperref[outputValues]{FR:Output-Values}}
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calculateProcessVariable]{GS:Process-Variable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInputs]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calculateValues]{FR:Calculate-Values} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[portable]{NFR:Portability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[security]{NFR:Security} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[maintainability]{NFR:Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifiability]{NFR:Verifiability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInputs]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calculateValues]{FR:Calculate-Values} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
- &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
 \label{Table:TraceMatAllvsR}
 \end{longtblr}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on each other. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models on each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements and goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.

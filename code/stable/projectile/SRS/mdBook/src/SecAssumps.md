@@ -12,7 +12,7 @@ cartSyst: A Cartesian coordinate system is used (from [A:neglectCurv](./SecAssum
 
 <div id="yAxisGravity"></div>
 
-yAxisGravity: The direction of the \\(y\\)-axis is directed opposite to gravity. (RefBy: [IM:calOfLandingDist](./SecIMs.md#IM:calOfLandingDist), [IM:calOfLandingTime](./SecIMs.md#IM:calOfLandingTime), and.)
+yAxisGravity: The direction of the \\(y\\)-axis is directed opposite to gravity. (RefBy: [IM:calOfLandingDist](./SecIMs.md#IM:calOfLandingDist), [IM:calOfLandingTime](./SecIMs.md#IM:calOfLandingTime), and [A:accelYGravity](./SecAssumps.md#accelYGravity).)
 
 <div id="launchOrigin"></div>
 
@@ -32,15 +32,15 @@ constAccel: The acceleration is constant (from [A:accelXZero](./SecAssumps.md#ac
 
 <div id="accelXZero"></div>
 
-accelXZero: The acceleration in the \\(x\\)-direction is zero. (RefBy: [IM:calOfLandingDist](./SecIMs.md#IM:calOfLandingDist) and.)
+accelXZero: The acceleration in the \\(x\\)-direction is zero. (RefBy: [IM:calOfLandingDist](./SecIMs.md#IM:calOfLandingDist) and [A:constAccel](./SecAssumps.md#constAccel).)
 
 <div id="accelYGravity"></div>
 
-accelYGravity: The acceleration in the \\(y\\)-direction is the acceleration due to gravity (from [A:yAxisGravity](./SecAssumps.md#yAxisGravity)). (RefBy: [IM:calOfLandingTime](./SecIMs.md#IM:calOfLandingTime) and.)
+accelYGravity: The acceleration in the \\(y\\)-direction is the acceleration due to gravity (from [A:yAxisGravity](./SecAssumps.md#yAxisGravity)). (RefBy: [IM:calOfLandingTime](./SecIMs.md#IM:calOfLandingTime) and [A:constAccel](./SecAssumps.md#constAccel).)
 
 <div id="neglectDrag"></div>
 
-neglectDrag: Air drag is neglected.
+neglectDrag: Air drag is neglected. (RefBy: [A:constAccel](./SecAssumps.md#constAccel).)
 
 <div id="pointMass"></div>
 
@@ -48,11 +48,11 @@ pointMass: The size and shape of the projectile are negligible, so that it can b
 
 <div id="freeFlight"></div>
 
-freeFlight: The flight is free; there are no collisions during the trajectory of the projectile.
+freeFlight: The flight is free; there are no collisions during the trajectory of the projectile. (RefBy: [A:constAccel](./SecAssumps.md#constAccel).)
 
 <div id="neglectCurv"></div>
 
-neglectCurv: The distance is small enough that the curvature of the celestial body can be neglected. (RefBy: and.)
+neglectCurv: The distance is small enough that the curvature of the celestial body can be neglected. (RefBy: [A:targetXAxis](./SecAssumps.md#targetXAxis) and [A:cartSyst](./SecAssumps.md#cartSyst).)
 
 <div id="timeStartZero"></div>
 

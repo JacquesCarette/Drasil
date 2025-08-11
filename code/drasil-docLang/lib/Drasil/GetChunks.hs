@@ -20,11 +20,11 @@ import Data.List (nub, sortBy)
 
 -- | Gets a list of quantities ('DefinedQuantityDict') from an equation in order to print.
 vars :: ModelExpr -> ChunkDB -> [DefinedQuantityDict]
-vars e m = map (flip findOrErr m) $ meDep e
+vars e m = map (`findOrErr` m) $ meDep e
 
 -- | Gets a list of quantities ('DefinedQuantityDict') from a 'Sentence' in order to print.
 vars' :: Sentence -> ChunkDB -> [DefinedQuantityDict]
-vars' a m = map (flip findOrErr m) $ sdep a
+vars' a m = map (`findOrErr` m) $ sdep a
 
 -- | Combines the functions of 'vars' and 'concpt' to create a list of 'DefinedQuantityDict's from a 'Sentence'.
 combine :: Sentence -> ChunkDB -> [DefinedQuantityDict]

@@ -205,7 +205,7 @@ unitLookup :: ChunkDB -> UID -> UnitDefn
 unitLookup db u = findOrErr u db
 
 getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
-getUnitLup m c = getUnit $ (findOrErr (c ^. uid) m :: DefinedQuantityDict)
+getUnitLup m c = getUnit (findOrErr (c ^. uid) m :: DefinedQuantityDict)
 
 -- * Section Creator Functions
 

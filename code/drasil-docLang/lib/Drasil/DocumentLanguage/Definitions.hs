@@ -118,11 +118,12 @@ helperRefs t s = foldlList Comma List $ map (`helpToRefField` (s ^. systemdb)) $
 -- the possible data sets contained in the 'System' database.
 helpToRefField :: UID -> ChunkDB -> Sentence
 helpToRefField trg db
-  | (Just c) <- (find trg db :: Maybe DataDefinition)  = refS c
-  | (Just c) <- (find trg db :: Maybe InstanceModel)   = refS c
-  | (Just c) <- (find trg db :: Maybe GenDefn)         = refS c
-  | (Just c) <- (find trg db :: Maybe TheoryModel)     = refS c
-  | (Just _) <- (find trg db :: Maybe ConceptInstance) = EmptyS
+  | (Just c) <- find trg db :: Maybe DataDefinition  = refS c
+  | (Just c) <- find trg db :: Maybe InstanceModel   = refS c
+  | (Just c) <- find trg db :: Maybe GenDefn         = refS c
+  | (Just c) <- find trg db :: Maybe TheoryModel     = refS c
+  | (Just c) <- find trg db :: Maybe ConceptInstance = refS c
+  | (Just _) <- find trg db :: Maybe Citation        = EmptyS
   | otherwise = error $ show trg ++ "Caught."
 
 -- | Helper that makes a list of 'Reference's into a 'Sentence'. Then wraps into 'Contents'.

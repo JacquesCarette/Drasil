@@ -15,6 +15,12 @@ digraph refvsref {
 	theory:accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];
 	theory:velocityTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:velocity"];
 	theory:newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
+
+	subgraph TM {
+	rank="same"
+	{theory:accelerationTM, theory:velocityTM, theory:newtonSL}
+	}
+
 	theory:v_x1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityX1"];
 	theory:v_y1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityY1"];
 	theory:v_x2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityX2"];
@@ -27,6 +33,18 @@ digraph refvsref {
 	theory:yForce1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:yForce1"];
 	theory:xForce2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:xForce2"];
 	theory:yForce2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:yForce2"];
+
+	subgraph GD {
+	rank="same"
+	{theory:v_x1, theory:v_y1, theory:v_x2, theory:v_y2, theory:a_x1, theory:a_y1, theory:a_x2, theory:a_y2, theory:xForce1, theory:yForce1, theory:xForce2, theory:yForce2}
+	}
+
 	theory:angleIM1	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngle1"];
 	theory:angleIM2	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngle2"];
+
+	subgraph IM {
+	rank="same"
+	{theory:angleIM1, theory:angleIM2}
+	}
+
 }

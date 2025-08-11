@@ -23,6 +23,12 @@ digraph allvsall {
 	theory:velocityTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:velocity"];
 	theory:newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
 	theory:newtonSLR	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawRotMot"];
+
+	subgraph TM {
+	rank="same"
+	{theory:accelerationTM, theory:velocityTM, theory:newtonSL, theory:newtonSLR}
+	}
+
 	theory:xVel	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityIX"];
 	theory:yVel	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityIY"];
 	theory:xScalAcc	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationIX"];
@@ -31,7 +37,19 @@ digraph allvsall {
 	theory:vForceOnPendulum	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:vForceOnPendulum"];
 	theory:angFrequencyGD	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:angFrequencyGD"];
 	theory:periodPendGD	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:periodPend"];
+
+	subgraph GD {
+	rank="same"
+	{theory:xVel, theory:yVel, theory:xScalAcc, theory:yScalAcc, theory:hForceOnPendulum, theory:vForceOnPendulum, theory:angFrequencyGD, theory:periodPendGD}
+	}
+
 	theory:angularDisplacementIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngularDisplacement"];
+
+	subgraph IM {
+	rank="same"
+	{theory:angularDisplacementIM}
+	}
+
 	instance:verifyInptVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInptVals"];
 	instance:calcAngPos	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcAngPos"];
 	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];

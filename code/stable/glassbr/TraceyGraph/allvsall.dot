@@ -48,6 +48,12 @@ digraph allvsall {
 
 	theory:isSafeProb	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeProb"];
 	theory:isSafeLoad	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeLoad"];
+
+	subgraph TM {
+	rank="same"
+	{theory:isSafeProb, theory:isSafeLoad}
+	}
+
 	theory:riskFun	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:riskFun"];
 	theory:stressDistFac	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:stressDistFac"];
 	theory:nFL	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nFL"];
@@ -58,6 +64,12 @@ digraph allvsall {
 	theory:lResistance	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calofCapacity"];
 	theory:isSafePb	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafePb"];
 	theory:isSafeLR	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafeLR"];
+
+	subgraph IM {
+	rank="same"
+	{theory:riskFun, theory:stressDistFac, theory:nFL, theory:dimlessLoad, theory:tolLoad, theory:sdfTol, theory:probBr, theory:lResistance, theory:isSafePb, theory:isSafeLR}
+	}
+
 	instance:sysSetValsFollowingAssumps	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:sysSetValsFollowingAssumps"];
 	instance:checkInputWithDataCons	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:checkInputWithDataCons"];
 	instance:outputValsAndKnownValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValsAndKnownValues"];

@@ -204,7 +204,7 @@ union cdb1 cdb2 = ChunkDB um' trm' lc' ref' trc' refb'
     ref' = M.unionWithKey (\conflict _ _ -> error $ "Unioned ChunkDBs contains at least one Reference UID collision; `" ++ show conflict ++ "`!") (refTable cdb1) (refTable cdb2)
 
     trc' :: M.Map UID [UID]
-    trc' = M.unionWith (++) (traceTable cdb1) (traceTable cdb2)
+    trc' = M.unionWith (\l r -> nub $ l ++ r) (traceTable cdb1) (traceTable cdb2)
 
     refb' :: M.Map UID [UID]
-    refb' = M.unionWith (++) (refbyTable cdb1) (refbyTable cdb2)
+    refb' = M.unionWith (\l r -> nub $ l ++ r) (refbyTable cdb1) (refbyTable cdb2)

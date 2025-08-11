@@ -107,10 +107,14 @@ checkUID t si
 -- | Similar to 'checkUID' but prepends domain for labelling.
 checkUIDAbbrev :: System -> UID -> String
 checkUIDAbbrev si t
+  | Just x <- find t s :: Maybe DataDefinition  = abrv x
+  | Just x <- find t s :: Maybe InstanceModel   = abrv x
+  | Just x <- find t s :: Maybe GenDefn         = abrv x
+  | Just x <- find t s :: Maybe TheoryModel     = abrv x
   | Just x <- find t s :: Maybe ConceptInstance = fromMaybe "" $ shortForm $ termResolve' s $ sDom $ cdom x
   | Map.member t (labelledcontentTable s)       = show t
   | Just _ <- find t s :: Maybe Citation        = ""
-  | otherwise                                   = fromMaybe "" $ shortForm $ termResolve' s t
+  | otherwise = error $ show t ++ "Caught."
   where s = si ^. systemdb
 
 -- | Similar to 'checkUID' but gets reference addresses for display.

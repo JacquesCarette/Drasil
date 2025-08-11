@@ -30,8 +30,26 @@ digraph avsall {
 	theory:laplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:laplaceTransform"];
 	theory:invLaplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:invLaplaceTransform"];
 	theory:tmSOSystemRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:tmSOSystem"];
+
+	subgraph TM {
+	rank="same"
+	{theory:laplaceRC, theory:invLaplaceRC, theory:tmSOSystemRC}
+	}
+
 	theory:gdPowerPlantRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:gdPowerPlant"];
+
+	subgraph GD {
+	rank="same"
+	{theory:gdPowerPlantRC}
+	}
+
 	theory:imPDRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:pdEquationIM"];
+
+	subgraph IM {
+	rank="same"
+	{theory:imPDRC}
+	}
+
 	instance:verifyInputs	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInputs"];
 	instance:calculateValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calculateValues"];
 	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];

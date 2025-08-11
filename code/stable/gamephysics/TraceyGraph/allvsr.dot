@@ -18,11 +18,29 @@ digraph allvsr {
 	theory:force1	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonThirdLawMot"];
 	theory:force	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:UniversalGravLaw"];
 	theory:newtonSLR	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawRotMot"];
+
+	subgraph TM {
+	rank="same"
+	{theory:newtonSL, theory:force1, theory:force, theory:newtonSLR}
+	}
+
 	theory:gravitationalAccel	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelGravity"];
 	theory:impulseS	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:impulse"];
+
+	subgraph GD {
+	rank="same"
+	{theory:gravitationalAccel, theory:impulseS}
+	}
+
 	theory:accj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:transMot"];
 	theory:angAccj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:rotMot"];
 	theory:col2DIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:col2D"];
+
+	subgraph IM {
+	rank="same"
+	{theory:accj, theory:angAccj, theory:col2DIM}
+	}
+
 	instance:simSpace	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:simSpace"];
 	instance:inputInitialConds	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputInitialConds"];
 	instance:inputSurfaceProps	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputSurfaceProps"];

@@ -43,10 +43,28 @@ digraph avsall {
 	theory:consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
 	theory:sensHeat	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
 	theory:nwtnCoolingTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
+
+	subgraph TM {
+	rank="same"
+	{theory:consThermECS, theory:sensHeat, theory:nwtnCoolingTM}
+	}
+
 	theory:rocTempSimpRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];
 	theory:htFluxC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:htFluxWaterFromCoil"];
+
+	subgraph GD {
+	rank="same"
+	{theory:rocTempSimpRC, theory:htFluxC}
+	}
+
 	theory:eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
 	theory:heatEInWtrIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
+
+	subgraph IM {
+	rank="same"
+	{theory:eBalanceOnWtrRC, theory:heatEInWtrIM}
+	}
+
 	instance:findMass	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:findMass"];
 	instance:checkWithPhysConsts	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:checkWithPhysConsts"];
 	instance:outputInputDerivVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputInputDerivVals"];

@@ -38,14 +38,32 @@ digraph allvsr {
 
 	theory:accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];
 	theory:velocityTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:velocity"];
+
+	subgraph TM {
+	rank="same"
+	{theory:accelerationTM, theory:velocityTM}
+	}
+
 	theory:projSpeed	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectVel"];
 	theory:projPos	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectPos"];
 	theory:velocity	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velVec"];
 	theory:position	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:posVec"];
+
+	subgraph GD {
+	rank="same"
+	{theory:projSpeed, theory:projPos, theory:velocity, theory:position}
+	}
+
 	theory:flightduration	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingTime"];
 	theory:landingposition	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingDist"];
 	theory:offset	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:offsetIM"];
 	theory:outputMessage	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:messageIM"];
+
+	subgraph IM {
+	rank="same"
+	{theory:flightduration, theory:landingposition, theory:offset, theory:outputMessage}
+	}
+
 	instance:verifyInVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInVals"];
 	instance:calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcValues"];
 	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];

@@ -6,11 +6,11 @@
 import ReadTable
 
 ## \brief Performs linear interpolation
-# \param x_1 lower x-coordinate: the lower x-coordinate
-# \param y_1 lower y-coordinate: the lower y-coordinate
-# \param x_2 upper x-coordinate: the upper x-coordiante
-# \param y_2 upper y-coordinate: the upper y-coordinate
-# \param x x-coordinate to interpolate at: the x-coordinate to interpolate at
+# \param x_1 lower x-coordinate
+# \param y_1 lower y-coordinate
+# \param x_2 upper x-coordinate
+# \param y_2 upper y-coordinate
+# \param x x-coordinate to interpolate at
 # \return y value interpolated at given x value
 def lin_interp(x_1, y_1, x_2, y_2, x):
     outfile = open("log.txt", "a")
@@ -35,8 +35,8 @@ def lin_interp(x_1, y_1, x_2, y_2, x):
     return (y_2 - y_1) / (x_2 - x_1) * (x - x_1) + y_1
 
 ## \brief Finds the array index for a value closest to the given value
-# \param arr array in which value should be found: the array in which a value should be found
-# \param v value whose index will be found: the value whose index will be found
+# \param arr array in which value should be found
+# \param v value whose index will be found
 # \return index of given value in given array
 def find(arr, v):
     outfile = open("log.txt", "a")
@@ -55,8 +55,8 @@ def find(arr, v):
     raise Exception("Bound error")
 
 ## \brief Extracts a column from a 2D matrix
-# \param mat matrix from which column will be extracted: the matrix from which columns will be extracted
-# \param j index: the index
+# \param mat matrix from which column will be extracted
+# \param j index
 # \return column of the given matrix at the given index
 def extractColumn(mat, j):
     outfile = open("log.txt", "a")
@@ -75,9 +75,9 @@ def extractColumn(mat, j):
     return col
 
 ## \brief Linearly interpolates a y value at given x and z values
-# \param filename name of file with x y and z data: the name of the file with x, y, and z data
-# \param x x-coordinate to interpolate at: the x-coordinate to interpolate at
-# \param z z-coordinate to interpolate at: the z-coordinate to interpolate at
+# \param filename name of file with x y and z data
+# \param x x-coordinate to interpolate at
+# \param z z-coordinate to interpolate at
 # \return y value interpolated at given x and z values
 def interpY(filename, x, z):
     outfile = open("log.txt", "a")
@@ -157,9 +157,9 @@ def interpY(filename, x, z):
     return lin_interp(z_vector[i], y_1, z_vector[i + 1], y_2, z)
 
 ## \brief Linearly interpolates a z value at given x and y values
-# \param filename name of file with x y and z data: the name of the file with x, y, and z data
-# \param x x-coordinate to interpolate at: the x-coordinate to interpolate at
-# \param y y-coordinate to interpolate at: the y-coordinate to interpolate at
+# \param filename name of file with x y and z data
+# \param x x-coordinate to interpolate at
+# \param y y-coordinate to interpolate at
 # \return z value interpolated at given x and y values
 def interpZ(filename, x, y):
     outfile = open("log.txt", "a")

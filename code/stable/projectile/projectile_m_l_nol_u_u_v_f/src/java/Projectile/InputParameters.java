@@ -13,11 +13,11 @@ import java.util.Scanner;
 public class InputParameters {
     
     /** \brief Reads input from a file with the given file name
-        \param filename name of the input file: a filepath, absolute or relative, to the file containing the program's inputs
+        \param filename name of the input file
         \return array containing the following values:
-        \return launch speed: the initial speed of the projectile when launched (m/s)
-        \return launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-        \return target position: the distance from the launcher to the target (m)
+        \return launch speed (m/s)
+        \return launch angle (rad)
+        \return target position (m)
     */
     public static Object[] get_input(String filename) throws FileNotFoundException {
         float v_launch;
@@ -42,9 +42,9 @@ public class InputParameters {
     }
     
     /** \brief Verifies that input values satisfy the physical constraints
-        \param v_launch launch speed: the initial speed of the projectile when launched (m/s)
-        \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-        \param p_target target position: the distance from the launcher to the target (m)
+        \param v_launch launch speed (m/s)
+        \param theta launch angle (rad)
+        \param p_target target position (m)
     */
     public static void input_constraints(float v_launch, float theta, float p_target) {
         if (!(v_launch > 0.0f)) {

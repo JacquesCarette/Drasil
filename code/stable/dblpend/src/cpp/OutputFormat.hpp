@@ -15,7 +15,7 @@ using std::string;
 using std::vector;
 
 /** \brief Writes the output values to output.txt
-    \param theta dependent variables: column vector of displacement of rods with its derivatives (rad)
+    \param theta dependent variables (rad)
 */
 void write_output(vector<double> &theta);
 

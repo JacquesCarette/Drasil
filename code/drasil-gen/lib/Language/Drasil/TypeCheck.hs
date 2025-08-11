@@ -8,7 +8,7 @@ import Data.Typeable (Proxy(Proxy), typeRep)
 
 import Language.Drasil
 import Database.Drasil
-import Data.Either (isRight, rights)
+import Data.Either (isLeft, lefts)
 import Control.Lens ((^.))
 import Data.Bifunctor (second)
 import Data.List (partition)
@@ -47,11 +47,11 @@ typeCheckSI sys = do
     let chkdd = map (second (map (uncurry (check cxt)))) chkd
 
     -- format 'ok' messages and 'type error' messages, as applicable
-    let formattedChkd :: [Either [Char] ([Char], [Either Space TypeError])]
+    let formattedChkd :: [Either (String, [Either TypeError Space]) String]
         formattedChkd = map 
-                          (\(t, tcs) -> if any isRight tcs
-                            then Right ("`" ++ show t ++ "` exposes ill-typed expressions!", filter isRight tcs)
-                            else Left $ "`" ++ show t ++ "` OK!") 
+                          (\(t, tcs) -> if any isLeft tcs
+                            then Left ("`" ++ show t ++ "` exposes ill-typed expressions!", filter isLeft tcs)
+                            else pure $ "`" ++ show t ++ "` OK!") 
                           chkdd
 
     let errConsumer s = do 
@@ -59,11 +59,11 @@ typeCheckSI sys = do
           putStrLn $ temporaryIndent "  " s
 
     mapM_ (either
-            putStrLn
             (\(tMsg, tcs) -> do
               putStrLn tMsg
-              mapM_ errConsumer (rights tcs)
+              mapM_ errConsumer (lefts tcs)
             )
+            putStrLn
       ) formattedChkd
     putStrLn "=====[ Finished type checking ]====="
 

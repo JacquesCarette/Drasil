@@ -7,11 +7,11 @@
 import Foundation
 
 /** Performs linear interpolation
-    - Parameter x_1: lower x-coordinate: the lower x-coordinate
-    - Parameter y_1: lower y-coordinate: the lower y-coordinate
-    - Parameter x_2: upper x-coordinate: the upper x-coordiante
-    - Parameter y_2: upper y-coordinate: the upper y-coordinate
-    - Parameter x: x-coordinate to interpolate at: the x-coordinate to interpolate at
+    - Parameter x_1: lower x-coordinate
+    - Parameter y_1: lower y-coordinate
+    - Parameter x_2: upper x-coordinate
+    - Parameter y_2: upper y-coordinate
+    - Parameter x: x-coordinate to interpolate at
     - Returns: y value interpolated at given x value
 */
 func lin_interp(_ x_1: Double, _ y_1: Double, _ x_2: Double, _ y_2: Double, _ x: Double) throws -> Double {
@@ -119,8 +119,8 @@ func lin_interp(_ x_1: Double, _ y_1: Double, _ x_2: Double, _ y_2: Double, _ x:
 }
 
 /** Finds the array index for a value closest to the given value
-    - Parameter arr: array in which value should be found: the array in which a value should be found
-    - Parameter v: value whose index will be found: the value whose index will be found
+    - Parameter arr: array in which value should be found
+    - Parameter v: value whose index will be found
     - Returns: index of given value in given array
 */
 func find(_ arr: inout [Double], _ v: Double) throws -> Int {
@@ -185,8 +185,8 @@ func find(_ arr: inout [Double], _ v: Double) throws -> Int {
 }
 
 /** Extracts a column from a 2D matrix
-    - Parameter mat: matrix from which column will be extracted: the matrix from which columns will be extracted
-    - Parameter j: index: the index
+    - Parameter mat: matrix from which column will be extracted
+    - Parameter j: index
     - Returns: column of the given matrix at the given index
 */
 func extractColumn(_ mat: inout [[Double]], _ j: Int) throws -> [Double] {
@@ -250,9 +250,9 @@ func extractColumn(_ mat: inout [[Double]], _ j: Int) throws -> [Double] {
 }
 
 /** Linearly interpolates a y value at given x and z values
-    - Parameter filename: name of file with x y and z data: the name of the file with x, y, and z data
-    - Parameter x: x-coordinate to interpolate at: the x-coordinate to interpolate at
-    - Parameter z: z-coordinate to interpolate at: the z-coordinate to interpolate at
+    - Parameter filename: name of file with x y and z data
+    - Parameter x: x-coordinate to interpolate at
+    - Parameter z: z-coordinate to interpolate at
     - Returns: y value interpolated at given x and z values
 */
 func interpY(_ filename: String, _ x: Double, _ z: Double) throws -> Double {
@@ -598,9 +598,9 @@ func interpY(_ filename: String, _ x: Double, _ z: Double) throws -> Double {
 }
 
 /** Linearly interpolates a z value at given x and y values
-    - Parameter filename: name of file with x y and z data: the name of the file with x, y, and z data
-    - Parameter x: x-coordinate to interpolate at: the x-coordinate to interpolate at
-    - Parameter y: y-coordinate to interpolate at: the y-coordinate to interpolate at
+    - Parameter filename: name of file with x y and z data
+    - Parameter x: x-coordinate to interpolate at
+    - Parameter y: y-coordinate to interpolate at
     - Returns: z value interpolated at given x and y values
 */
 func interpZ(_ filename: String, _ x: Double, _ y: Double) throws -> Double {

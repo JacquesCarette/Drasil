@@ -16,12 +16,12 @@ using std::vector;
 class Populate {
     public:
         /** \brief Constructor for Populate objects
-            \param theta dependent variables: column vector of displacement of rods with its derivatives (rad)
+            \param theta dependent variables (rad)
         */
         Populate(vector<double> &theta);
         /** \brief appends solution point for current ODE solution step
-            \param y current dependent variable value in ODE solution: the current dependent variable value in the ODE solution
-            \param t current independent variable value in ODE solution: the current independent variable value in the ODE solution
+            \param y current dependent variable value in ODE solution
+            \param t current independent variable value in ODE solution
         */
         void operator()(vector<double> &y, double t);
     

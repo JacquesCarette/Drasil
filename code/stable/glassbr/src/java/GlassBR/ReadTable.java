@@ -18,10 +18,10 @@ import java.util.Scanner;
 public class ReadTable {
     
     /** \brief Reads glass ASTM data from a file with the given file name
-        \param filename name of the input file: a filepath, absolute or relative, to the file containing the program's inputs
-        \param z_vector list of z values: the list of z values
-        \param x_matrix lists of x values at different z values: the lists of x values at different z values
-        \param y_matrix lists of y values at different z values: the lists of y values at different z values
+        \param filename name of the input file
+        \param z_vector list of z values
+        \param x_matrix lists of x values at different z values
+        \param y_matrix lists of y values at different z values
     */
     public static void read_table(String filename, ArrayList<Double> z_vector, ArrayList<ArrayList<Double>> x_matrix, ArrayList<ArrayList<Double>> y_matrix) throws FileNotFoundException, IOException {
         PrintWriter outfile;

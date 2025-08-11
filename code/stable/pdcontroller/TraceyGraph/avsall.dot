@@ -65,9 +65,6 @@ digraph avsall {
 	{theory:imPDRC}
 	}
 
-	instance:verifyInputs	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInputs"];
-	instance:calculateValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calculateValues"];
-	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 	instance:portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
 	instance:security	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:security"];
 	instance:maintainability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainability"];
@@ -77,9 +74,9 @@ digraph avsall {
 	instance:calculateValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calculateValues"];
 	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 
-	subgraph FR {
+	subgraph NFR {
 	rank="same"
-	{instance:verifyInputs, instance:calculateValues, instance:outputValues, instance:portable, instance:security, instance:maintainability, instance:verifiability, instance:inputValues, instance:verifyInputs, instance:calculateValues, instance:outputValues}
+	{instance:portable, instance:security, instance:maintainability, instance:verifiability, instance:inputValues, instance:verifyInputs, instance:calculateValues, instance:outputValues}
 	}
 
 	instance:likeChgPP	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:likeChgPP"];

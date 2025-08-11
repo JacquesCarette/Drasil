@@ -146,31 +146,8 @@ findRefsOrErr u = fromMaybe (error $ "Failed to find references for unknown chun
 insert' :: IsChunk a => a -> ChunkDB -> ChunkDB
 insert' = flip insert
 
-insert :: IsChunk a => ChunkDB -> a -> ChunkDB
-insert cdb c
-  | typeOf c == typeRep (Proxy @ChunkDB) =
-      error "Insertion of ChunkDBs in ChunkDBs is disallowed; please perform unions with them instead."
-  | (Just x) <- findTypeOf (c ^. uid) cdb =
-    -- FIXME: The issue with allowing overwriting at all is that it breaks the
-    -- "chunk refs" and "chunks by type" tables. Those need to be rebuilt.
-    -- Consider removing the case where a chunk is overwritten:
-    -- 1. if the type is the same, the chunk refs of the previous chunk are not
-    --    removed (possibly inflating it's chunk refs and how much other things
-    --    are depended on) and the table containing "all chunks of each type"
-    --    contains a duplicate entry for said type.
-    -- 2. if the type is different, the table containing "all chunks of each
-    --    type" contains a cross-type duplicate entry, which is very bad (!!!),
-    --    and, similarly, the "chunk refs"-related inflations exist as well.
-    --
-    -- As a result of the above two issues, `make debug` will contain inflated
-    -- problems in `.drasil/problematic_seeds.json`.
-    --
-    -- The solution to this is simple: do not allow overwriting chunks. Being
-    -- able to do that is non-trivial, unfortunately.
-    if typeOf c == x
-      then trace (warnMsg $ "WARNING! Overwriting `" ++ show (c ^. uid) ++ "` :: " ++ show x) cdb'
-      else trace (errMsg $ "SUPER-MEGA-ULTRA-DELUXE-WARNING! Overwriting a chunk (`" ++ show (c ^. uid) ++ "` :: `" ++ show x ++ "`) with a chunk of a different type: `" ++ show (typeOf c) ++ "`") cdb'
-  | otherwise = cdb'
+insert0 :: IsChunk a => ChunkDB -> a -> ChunkDB
+insert0 cdb c = cdb'
   where
     c' :: Chunk
     c' = mkChunk c
@@ -194,6 +171,23 @@ insert cdb c
 
     cdb' :: ChunkDB
     cdb' = ChunkDB finalCu ctr' (labelledcontentTable cdb) (refTable cdb) (traceTable cdb) (refbyTable cdb)
+
+insert :: IsChunk a => ChunkDB -> a -> ChunkDB
+insert cdb c
+  | typeOf c == typeRep (Proxy @ChunkDB) =
+      error "Insertion of ChunkDBs in ChunkDBs is disallowed; please perform unions with them instead."
+  | (Just x) <- findTypeOf (c ^. uid) cdb =
+      -- Overwrite: remove previous chunk from chunk refs and chunksByType tables before inserting new one.
+      let prevChunk = fst $ fromMaybe (error "Internal error: chunk missing after findTypeOf succeeded") (M.lookup (c ^. uid) (chunkTable cdb))
+          prevType  = chunkType prevChunk
+          cu' = M.delete (c ^. uid) (chunkTable cdb)
+          ctr' = M.adjust (filter (\c_ -> (c_ ^. uid) /= (c ^. uid))) prevType (chunkTypeTable cdb)
+          cdb' = cdb { chunkTable = cu', chunkTypeTable = ctr' }
+          cdb'' = insert0 cdb' c
+      in if typeOf c == x
+            then trace (warnMsg $ "WARNING! Overwriting `" ++ show (c ^. uid) ++ "` :: " ++ show x) cdb''
+            else trace (errMsg $ "SUPER-MEGA-ULTRA-DELUXE-WARNING! Overwriting a chunk (`" ++ show (c ^. uid) ++ "` :: `" ++ show x ++ "`) with a chunk of a different type: `" ++ show (typeOf c) ++ "`") cdb''
+  | otherwise = insert0 cdb c
 
 insertAll :: IsChunk a => ChunkDB -> [a] -> ChunkDB
 insertAll cdb l = foldr (flip insert) cdb (reverse l) -- note: the "reverse" is here to make insertions slightly more readable -- I don't want to use foldl (it seems many have complaints about it)

@@ -22,10 +22,6 @@ digraph allvsall {
 	instance:calcAng -> theory:angleIM2;
 	instance:outputValues -> theory:angleIM1;
 	instance:outputValues -> theory:angleIM2;
-	instance:calcAng -> theory:angleIM1;
-	instance:calcAng -> theory:angleIM2;
-	instance:outputValues -> theory:angleIM1;
-	instance:outputValues -> theory:angleIM2;
 
 
 	instance:twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
@@ -86,9 +82,6 @@ digraph allvsall {
 	{theory:angleIM1, theory:angleIM2}
 	}
 
-	instance:verifyInptVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInptVals"];
-	instance:calcAng	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcAng"];
-	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
 	instance:portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
 	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
@@ -96,9 +89,9 @@ digraph allvsall {
 	instance:calcAng	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcAng"];
 	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 
-	subgraph FR {
+	subgraph NFR {
 	rank="same"
-	{instance:verifyInptVals, instance:calcAng, instance:outputValues, instance:correct, instance:portable, instance:inputValues, instance:verifyInptVals, instance:calcAng, instance:outputValues}
+	{instance:correct, instance:portable, instance:inputValues, instance:verifyInptVals, instance:calcAng, instance:outputValues}
 	}
 
 	instance:motionMass	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:motionMass"];

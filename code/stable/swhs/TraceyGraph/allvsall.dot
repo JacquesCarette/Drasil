@@ -68,32 +68,6 @@ digraph allvsall {
 	instance:outputInputDerivVals -> dataDefn:eta;
 	instance:outputInputDerivVals -> dataDefn:tauSP;
 	instance:outputInputDerivVals -> dataDefn:tauLP;
-	instance:outputInputDerivVals -> instance:findMass;
-	instance:outputInputDerivVals -> instance:inputValues;
-	instance:outputInputDerivVals -> instance:findMass;
-	instance:calcValues -> theory:eBalanceOnWtrRC;
-	instance:calcValues -> theory:eBalanceOnPCMRC;
-	instance:calcValues -> theory:heatEInWtrIM;
-	instance:calcValues -> theory:heatEInPCMRC;
-	instance:calcPCMMeltBegin -> theory:eBalanceOnPCMRC;
-	instance:calcPCMMeltEnd -> theory:eBalanceOnPCMRC;
-	instance:outputValues -> theory:eBalanceOnWtrRC;
-	instance:outputValues -> theory:eBalanceOnPCMRC;
-	instance:outputValues -> theory:heatEInWtrIM;
-	instance:outputValues -> theory:heatEInPCMRC;
-	instance:findMass -> dataDefn:wMass;
-	instance:findMass -> dataDefn:wVol;
-	instance:findMass -> dataDefn:tankVol;
-	instance:findMass -> theory:eBalanceOnWtrRC;
-	instance:findMass -> theory:eBalanceOnPCMRC;
-	instance:findMass -> theory:heatEInWtrIM;
-	instance:findMass -> theory:heatEInPCMRC;
-	instance:findMass -> instance:inputValues;
-	instance:outputInputDerivVals -> dataDefn:tauW;
-	instance:outputInputDerivVals -> dataDefn:eta;
-	instance:outputInputDerivVals -> dataDefn:tauSP;
-	instance:outputInputDerivVals -> dataDefn:tauLP;
-	instance:outputInputDerivVals -> instance:findMass;
 	instance:outputInputDerivVals -> instance:inputValues;
 	instance:outputInputDerivVals -> instance:findMass;
 	instance:calcValues -> theory:eBalanceOnWtrRC;
@@ -193,14 +167,6 @@ digraph allvsall {
 	{theory:eBalanceOnWtrRC, theory:eBalanceOnPCMRC, theory:heatEInWtrIM, theory:heatEInPCMRC}
 	}
 
-	instance:findMass	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:findMass"];
-	instance:checkWithPhysConsts	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:checkWithPhysConsts"];
-	instance:outputInputDerivVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputInputDerivVals"];
-	instance:calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcValues"];
-	instance:verifyEnergyOutput	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyEnergyOutput"];
-	instance:calcPCMMeltBegin	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcPCMMeltBegin"];
-	instance:calcPCMMeltEnd	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcPCMMeltEnd"];
-	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
 	instance:verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiable"];
 	instance:understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandable"];
@@ -216,9 +182,9 @@ digraph allvsall {
 	instance:calcPCMMeltEnd	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcPCMMeltEnd"];
 	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 
-	subgraph FR {
+	subgraph NFR {
 	rank="same"
-	{instance:findMass, instance:checkWithPhysConsts, instance:outputInputDerivVals, instance:calcValues, instance:verifyEnergyOutput, instance:calcPCMMeltBegin, instance:calcPCMMeltEnd, instance:outputValues, instance:correct, instance:verifiable, instance:understandable, instance:reusable, instance:maintainable, instance:inputValues, instance:findMass, instance:checkWithPhysConsts, instance:outputInputDerivVals, instance:calcValues, instance:verifyEnergyOutput, instance:calcPCMMeltBegin, instance:calcPCMMeltEnd, instance:outputValues}
+	{instance:correct, instance:verifiable, instance:understandable, instance:reusable, instance:maintainable, instance:inputValues, instance:findMass, instance:checkWithPhysConsts, instance:outputInputDerivVals, instance:calcValues, instance:verifyEnergyOutput, instance:calcPCMMeltBegin, instance:calcPCMMeltEnd, instance:outputValues}
 	}
 
 	instance:waterTempGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:waterTempGS"];

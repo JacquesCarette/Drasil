@@ -53,9 +53,6 @@ digraph avsall {
 	{theory:angularDisplacementIM}
 	}
 
-	instance:verifyInptVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInptVals"];
-	instance:calcAngPos	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcAngPos"];
-	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
 	instance:portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
 	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
@@ -63,9 +60,9 @@ digraph avsall {
 	instance:calcAngPos	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcAngPos"];
 	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 
-	subgraph FR {
+	subgraph NFR {
 	rank="same"
-	{instance:verifyInptVals, instance:calcAngPos, instance:outputValues, instance:correct, instance:portable, instance:inputValues, instance:verifyInptVals, instance:calcAngPos, instance:outputValues}
+	{instance:correct, instance:portable, instance:inputValues, instance:verifyInptVals, instance:calcAngPos, instance:outputValues}
 	}
 
 }

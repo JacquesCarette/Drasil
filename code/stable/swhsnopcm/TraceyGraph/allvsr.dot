@@ -5,20 +5,6 @@ digraph allvsr {
 	instance:findMass -> theory:eBalanceOnWtrRC;
 	instance:findMass -> instance:inputValues;
 	instance:outputInputDerivVals -> dataDefn:tauW;
-	instance:outputInputDerivVals -> instance:findMass;
-	instance:outputInputDerivVals -> instance:inputValues;
-	instance:outputInputDerivVals -> instance:findMass;
-	instance:calcValues -> theory:eBalanceOnWtrRC;
-	instance:calcValues -> theory:heatEInWtrIM;
-	instance:outputValues -> theory:eBalanceOnWtrRC;
-	instance:outputValues -> theory:heatEInWtrIM;
-	instance:findMass -> dataDefn:wMass;
-	instance:findMass -> dataDefn:wVol;
-	instance:findMass -> dataDefn:tankVol;
-	instance:findMass -> theory:eBalanceOnWtrRC;
-	instance:findMass -> instance:inputValues;
-	instance:outputInputDerivVals -> dataDefn:tauW;
-	instance:outputInputDerivVals -> instance:findMass;
 	instance:outputInputDerivVals -> instance:inputValues;
 	instance:outputInputDerivVals -> instance:findMass;
 	instance:calcValues -> theory:eBalanceOnWtrRC;
@@ -82,11 +68,6 @@ digraph allvsr {
 	{theory:eBalanceOnWtrRC, theory:heatEInWtrIM}
 	}
 
-	instance:findMass	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:findMass"];
-	instance:checkWithPhysConsts	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:checkWithPhysConsts"];
-	instance:outputInputDerivVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputInputDerivVals"];
-	instance:calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcValues"];
-	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
 	instance:verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiable"];
 	instance:understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandable"];
@@ -99,9 +80,9 @@ digraph allvsr {
 	instance:calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcValues"];
 	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 
-	subgraph FR {
+	subgraph NFR {
 	rank="same"
-	{instance:findMass, instance:checkWithPhysConsts, instance:outputInputDerivVals, instance:calcValues, instance:outputValues, instance:correct, instance:verifiable, instance:understandable, instance:reusable, instance:maintainable, instance:inputValues, instance:findMass, instance:checkWithPhysConsts, instance:outputInputDerivVals, instance:calcValues, instance:outputValues}
+	{instance:correct, instance:verifiable, instance:understandable, instance:reusable, instance:maintainable, instance:inputValues, instance:findMass, instance:checkWithPhysConsts, instance:outputInputDerivVals, instance:calcValues, instance:outputValues}
 	}
 
 	instance:waterTempGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:waterTempGS"];

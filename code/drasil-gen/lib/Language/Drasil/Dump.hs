@@ -11,7 +11,7 @@ import qualified Data.ByteString.Lazy.Char8 as LB
 import qualified Data.Map.Strict as SM
 
 import Utils.Drasil (invert, atLeast2, createDirIfMissing)
-import Database.Drasil (traceTable, refbyTable, ChunkDB (termTable))
+import Database.Drasil
 import Control.Lens ((^.))
 import System.Environment (lookupEnv)
 
@@ -39,8 +39,8 @@ dumpEverything0 si pinfo targetPath = do
       chunkDump = DB.dumpChunkDB chunkDb
       invertedChunkDump = invert chunkDump
       (sharedUIDs, nonsharedUIDs) = SM.partition atLeast2 invertedChunkDump
-      traceDump = chunkDb ^. traceTable
-      refByDump = chunkDb ^. refbyTable
+      traceDump = traceTable chunkDb
+      refByDump = refbyTable chunkDb
       justTerms = SM.intersection nonsharedUIDs $ termTable chunkDb
 
   dumpTo chunkDump $ targetPath ++ "seeds.json"

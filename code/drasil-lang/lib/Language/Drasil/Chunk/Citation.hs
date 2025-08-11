@@ -22,6 +22,7 @@ import Language.Drasil.Data.Citation (HasFields(..), CitationKind(..), CiteField
   year, school, journal, institution, note, publisher)
 import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Label.Type (LblType(Citation), Referable(..), HasRefAddress(..))
+import Drasil.Database.Chunk (HasChunkRefs(..))
 import Drasil.Database.UID (UID, HasUID(..), showUID, mkUid)
 
 import Control.Lens (makeLenses, Lens')
@@ -49,6 +50,9 @@ makeLenses ''Citation
 class HasCitation c where
   -- | Provides a 'Lens' to the citations.
   getCitations :: Lens' c [Citation]
+
+instance HasChunkRefs Citation where
+  chunkRefs = const [] -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds 'UID' of the 'Citation'.
 instance HasUID       Citation where uid       = citeID

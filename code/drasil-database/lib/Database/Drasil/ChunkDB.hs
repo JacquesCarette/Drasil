@@ -48,6 +48,8 @@ import Control.Lens ((^.))
 
 import Debug.Trace (trace)
 
+import Utils.Drasil
+
 type ReferredBy = [UID]
 
 type ChunkByUID = M.Map UID (Chunk, ReferredBy)
@@ -139,8 +141,8 @@ insert cdb c
       error "Insertion of ChunkDBs in ChunkDBs is disallowed; please perform unions with them instead."
   | (Just x) <- findTypeOf (c ^. uid) cdb =
     if typeOf c == x
-      then trace ("WARNING! Overwriting `" ++ show (c ^. uid) ++ "` :: " ++ show x) cdb'
-      else trace ("SUPER-MEGA-ULTRA-DELUXE-WARNING! Overwriting a chunk (`" ++ show (c ^. uid) ++ "` :: `" ++ show x ++ "`) with a chunk of a different type: `" ++ show (typeOf c) ++ "`") cdb'
+      then trace (warnMsg $ "WARNING! Overwriting `" ++ show (c ^. uid) ++ "` :: " ++ show x) cdb'
+      else trace (errMsg $ "SUPER-MEGA-ULTRA-DELUXE-WARNING! Overwriting a chunk (`" ++ show (c ^. uid) ++ "` :: `" ++ show x ++ "`) with a chunk of a different type: `" ++ show (typeOf c) ++ "`") cdb'
   | otherwise = cdb'
   where
     c' :: Chunk

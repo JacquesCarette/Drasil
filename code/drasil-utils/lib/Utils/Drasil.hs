@@ -1,5 +1,9 @@
 -- | Gather Drasil's utility functions and re-export for easy use.
 module Utils.Drasil (
+  -- * Console
+  -- | From "Utils.Drasil.Console".
+  succMsg, errMsg, warnMsg,
+
   -- * Directory
   -- | From "Utils.Drasil.Directory".
   createDirIfMissing,
@@ -29,6 +33,7 @@ module Utils.Drasil (
   makeCSV
 ) where
 
+import Utils.Drasil.Console
 import Utils.Drasil.Directory
 import Utils.Drasil.Document
 import Utils.Drasil.English

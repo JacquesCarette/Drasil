@@ -4,6 +4,7 @@
 module Database.Drasil.ChunkDB
   ( ChunkDB (refTable),
     UMap,
+    idMap,
     empty,
     mkChunkDB,
     find,
@@ -52,6 +53,9 @@ type ChunkByUID = M.Map UID (Chunk, ReferredBy)
 type ChunksByTypeRep = M.Map TypeRep [Chunk]
 
 type UMap a = M.Map UID (a, Int)
+
+idMap :: (Eq a, Ord a, HasUID a) => [a] -> UMap a
+idMap vals = M.fromList $ map (\orig@(v, _) -> (v ^. uid, orig)) $ zip vals [0..]
 
 data ChunkDB = ChunkDB {
     chunkTable :: ChunkByUID

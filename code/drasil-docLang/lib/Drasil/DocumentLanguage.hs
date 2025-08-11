@@ -1,4 +1,5 @@
 {-# Language TupleSections #-}
+{-# LANGUAGE TypeApplications #-}
 ---------------------------------------------------------------------------
 -- | Start the process of moving away from Document as the main internal
 -- representation of information, to something more informative.
@@ -6,6 +7,14 @@
 -- all at once would break too much for too long.  So we start here
 -- instead.
 module Drasil.DocumentLanguage where
+
+import Data.Typeable (Proxy(Proxy), typeRep)
+import Control.Lens ((^.), makeLenses)
+import Data.List (sortOn)
+import Data.Maybe (fromMaybe, mapMaybe)
+import qualified Data.Map as Map
+import Utils.Drasil (invert)
+import Debug.Trace (trace)
 
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
@@ -55,6 +64,8 @@ import qualified Drasil.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
 import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs)
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
 
+import Theory.Drasil
+
 import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
   software, unlikelyChg)
 
@@ -98,9 +109,9 @@ fillSecAndLC dd si = si2
     -- extract sections and labelledcontent
     allSections = concatMap findAllSec $ mkSections si $ mkDocDesc si dd -- FIXME: `mkSections` on something particularly large that is immediately discarded is a sign that we're doing something wrong. That's in addition to `mkDocDesc`...
     allLC = concatMap findAllLC allSections
-    existingLC = map (fst.snd) $ Map.assocs $ chkdb ^. labelledcontentTable
+    existingLC = map (fst . snd) $ Map.assocs $ labelledcontentTable chkdb
     -- fill in the appropriate chunkdb fields
-    chkdb2 = set labelledcontentTable (idMap "LLCMap" $ nub $ existingLC ++ allLC) chkdb
+    chkdb2 = chkdb { labelledcontentTable = idMap $ nub $ existingLC ++ allLC }
     -- return the filled in system information
     si2 = set systemdb chkdb2 si
 
@@ -132,22 +143,22 @@ fillReferences dd si@SI{_sys = sys} = si2
     -- get refs from SRSDecl. Should include all section labels and labelled content.
     refsFromSRS = concatMap findAllRefs allSections
     -- get refs from the stuff already inside the chunk database
-    ddefs   = map fst $ Map.elems $ chkdb ^. dataDefnTable
-    gdefs   = map fst $ Map.elems $ chkdb ^. gendefTable
-    imods   = map fst $ Map.elems $ chkdb ^. insmodelTable
-    tmods   = map fst $ Map.elems $ chkdb ^. theoryModelTable
-    concIns = map fst $ Map.elems $ chkdb ^. conceptinsTable
-    lblCon  = map fst $ Map.elems $ chkdb ^. labelledcontentTable
+    ddefs   = findAll (typeRep $ Proxy @DataDefinition) chkdb
+    gdefs   = findAll (typeRep $ Proxy @GenDefn) chkdb
+    imods   = findAll (typeRep $ Proxy @InstanceModel) chkdb
+    tmods   = findAll (typeRep $ Proxy @TheoryModel) chkdb
+    concIns = findAll (typeRep $ Proxy @ConceptInstance) chkdb
+    lblCon  = map fst $ Map.elems $ labelledcontentTable chkdb
     -- search the old reference table just in case the user wants to manually add in some references
-    refs    = map fst $ Map.elems $ chkdb ^. refTable
+    refs    = map fst $ Map.elems $ refTable chkdb
     -- set new reference table in the chunk database
-    chkdb2 = set refTable (idMap "RefMap" $ nub $ refsFromSRS
+    chkdb2 = chkdb { refTable = idMap $ nub $ refsFromSRS
       ++ map (ref . makeTabRef' . getTraceConfigUID) (traceMatStandard si)
       ++ secRefs -- secRefs can be removed once #946 is complete
       ++ traceyGraphGetRefs (programName sys) ++ map ref cites
       ++ map ref ddefs ++ map ref gdefs ++ map ref imods
       ++ map ref tmods ++ map ref concIns ++ map ref lblCon
-      ++ refs) chkdb
+      ++ refs }
     -- set new chunk database into system information
     si2 = set systemdb chkdb2 si
 
@@ -172,9 +183,10 @@ fillTraceSI dd si = fillTraceMaps l $ fillReqs l si
 
 -- | Fills in the traceabiliy matrix and graphs section of the system information using the document description.
 fillTraceMaps :: DocDesc -> System -> System
-fillTraceMaps dd si@SI{_systemdb = db} = si {_systemdb =
-  set refbyTable (generateRefbyMap tdb) $ set traceTable tdb db} where
-  tdb = generateTraceMap dd
+fillTraceMaps dd si@SI{_systemdb = db} = si { _systemdb = newCDB }
+  where
+    tdb = generateTraceMap dd
+    newCDB = db { traceTable = tdb, refbyTable = invert tdb }
 
 -- | Fills in the requirements section of the system information using the document description.
 fillReqs :: DocDesc -> System -> System
@@ -182,14 +194,18 @@ fillReqs [] si = si
 fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_systemdb = db} = genReqs x
   where
     genReqs [] = si
-    genReqs (FReqsSub c _:_) = si {_systemdb = set conceptinsTable newCI db} where
-        newCI = idMap "ConcInsMap" $ nub $ c ++ map fst (sortOn snd $ map snd $ Map.toList $ db ^. conceptinsTable)
+    genReqs (FReqsSub c _:_) = si { _systemdb = insertAll db $ nub c }
     genReqs (_:xs) = genReqs xs
 fillReqs (_:xs) si = fillReqs xs si
 
 -- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
 extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
+
+-- | Gets the units of a 'Quantity' as 'UnitDefn's.
+collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
+collectUnits m = map (unitWrapper . flip unitLookup (m ^. unitTable))
+ . concatMap getUnits . mapMaybe (getUnitLup m)
 
 -- * Section Creator Functions
 
@@ -406,7 +422,7 @@ mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
 
 -- | Helper to get headers of rows and columns
 header :: ([UID] -> [UID]) -> System -> [Sentence]
-header f = TM.traceMHeader (f . Map.keys . (^. refbyTable))
+header f = TM.traceMHeader (f . Map.keys . refbyTable)
 
 -- ** Off the Shelf Solutions
 

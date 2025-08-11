@@ -143,11 +143,11 @@ fillReferences dd si@SI{_sys = sys} = si2
     -- get refs from SRSDecl. Should include all section labels and labelled content.
     refsFromSRS = concatMap findAllRefs allSections
     -- get refs from the stuff already inside the chunk database
-    ddefs   = findAll (typeRep $ Proxy @DataDefinition) chkdb
-    gdefs   = findAll (typeRep $ Proxy @GenDefn) chkdb
-    imods   = findAll (typeRep $ Proxy @InstanceModel) chkdb
-    tmods   = findAll (typeRep $ Proxy @TheoryModel) chkdb
-    concIns = findAll (typeRep $ Proxy @ConceptInstance) chkdb
+    ddefs   = findAll (typeRep $ Proxy @DataDefinition) chkdb :: [DataDefinition]
+    gdefs   = findAll (typeRep $ Proxy @GenDefn) chkdb :: [GenDefn]
+    imods   = findAll (typeRep $ Proxy @InstanceModel) chkdb :: [InstanceModel]
+    tmods   = findAll (typeRep $ Proxy @TheoryModel) chkdb :: [TheoryModel]
+    concIns = findAll (typeRep $ Proxy @ConceptInstance) chkdb :: [ConceptInstance]
     lblCon  = map fst $ Map.elems $ labelledcontentTable chkdb
     -- search the old reference table just in case the user wants to manually add in some references
     refs    = map fst $ Map.elems $ refTable chkdb
@@ -204,8 +204,13 @@ extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) 
 
 -- | Gets the units of a 'Quantity' as 'UnitDefn's.
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
-collectUnits m = map (unitWrapper . flip unitLookup (m ^. unitTable))
- . concatMap getUnits . mapMaybe (getUnitLup m)
+collectUnits db = map (unitWrapper . unitLookup db) . concatMap getUnits . mapMaybe (getUnitLup db)
+
+unitLookup :: ChunkDB -> UID -> UnitDefn
+unitLookup db u = findOrErr u db
+
+getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
+getUnitLup m c = getUnit $ (findOrErr (c ^. uid) m :: DefinedQuantityDict)
 
 -- * Section Creator Functions
 

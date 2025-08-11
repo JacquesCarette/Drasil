@@ -153,7 +153,6 @@ conceptChunks =
   -- UnitalChunks
   map cw [time, surface]
 
-
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks
   [degree] dataDefs iMods generalDefinitions tMods concIns labCon allRefs citations

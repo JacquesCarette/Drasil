@@ -14,6 +14,7 @@ module Database.Drasil.ChunkDB
     findRefs,
     findRefsOrErr,
     findAll,
+    findAllUIDs,
     insert,
     insert',
     insertAll,
@@ -26,7 +27,6 @@ module Database.Drasil.ChunkDB
     numRegistered,
     refbyTable, -- FIXME: This function should be re-examined. Some functions can probably be moved here!
     labelledcontentTable,
-    refTable,
     traceTable,
     refbyLookup,
     traceLookup
@@ -39,14 +39,10 @@ import Data.Maybe (fromMaybe, isJust, mapMaybe)
 import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, typeOf, typeRep)
 
 import Drasil.Database.Chunk (Chunk, HasChunkRefs (chunkRefs), IsChunk, mkChunk, unChunk, chunkType)
-import Language.Drasil (HasUID(..), UID, Quantity, MayHaveUnit(..), Idea (..),
-  IdeaDict, Concept, ConceptChunk, IsUnit(..), UnitDefn,
-  Reference, ConceptInstance, LabelledContent, Citation,
-  nw, cw, unitWrapper, NP, NamedIdea(..), DefinedQuantityDict, dqdWr,
-  Sentence, Definition (defn), ConceptDomain (cdom))
+import Language.Drasil
 import Control.Lens ((^.))
 
-import Debug.Trace (trace)
+import Debug.Trace (trace, traceWith)
 
 import Utils.Drasil
 
@@ -58,7 +54,7 @@ type ChunksByTypeRep = M.Map TypeRep [Chunk]
 
 type UMap a = M.Map UID (a, Int)
 
-idMap :: (Eq a, HasUID a) => [a] -> UMap a
+idMap :: HasUID a =>[a] -> UMap a
 idMap vals = M.fromList $ map (\orig@(v, _) -> (v ^. uid, orig)) $ zip vals [0..]
 
 data ChunkDB = ChunkDB {
@@ -109,7 +105,7 @@ refFind :: UID -> ChunkDB -> Reference
 refFind u cdb = uMapLookup "Reference" "refTable" u (refTable cdb)
 
 refbyLookup :: UID -> M.Map UID [UID] -> [UID]
-refbyLookup c = fromMaybe [] . M.lookup c
+refbyLookup c = traceWith (\m -> show c ++ " refBy: " ++ show m) . fromMaybe [] . M.lookup c
 
 -- | Trace a 'UID' to related 'UID's.
 traceLookup :: UID -> M.Map UID [UID] -> [UID]
@@ -122,7 +118,10 @@ findOrErr u = fromMaybe (error $ "Failed to find chunk " ++ show u) . find u
 -- required because we don't have access to the type information in the raw
 -- expressions.
 findAll :: Typeable a => TypeRep -> ChunkDB -> [a]
-findAll tr cdb = maybe [] (mapMaybe unChunk) (M.lookup tr (chunkTypeTable cdb))
+findAll tr cdb = maybe [] (mapMaybe unChunk) $ M.lookup tr (chunkTypeTable cdb)
+
+findAllUIDs :: TypeRep -> ChunkDB -> [UID]
+findAllUIDs tr cdb = maybe [] (map (^. uid)) $ M.lookup tr (chunkTypeTable cdb)
 
 findRefs :: UID -> ChunkDB -> Maybe [UID]
 findRefs u cdb = do
@@ -178,25 +177,25 @@ insertAllOrIgnore :: IsChunk a => ChunkDB -> [a] -> ChunkDB
 insertAllOrIgnore cdb = foldr (\next old -> if isRegistered (next ^. uid) cdb then old else insert old next) cdb
 
 union :: ChunkDB -> ChunkDB -> ChunkDB
-union cdb1 cdb2 = ChunkDB um trm lc ref trc refb
+union cdb1 cdb2 = ChunkDB um' trm' lc' ref' trc' refb'
   where
-    um :: ChunkByUID
-    um = M.unionWithKey (\conflict _ _ -> error $ "Unioned ChunkDBs contains at least one UID collision; `" ++ show conflict ++ "`!") (chunkTable cdb1) (chunkTable cdb2)
+    um' :: ChunkByUID
+    um' = M.unionWithKey (\conflict _ _ -> error $ "Unioned ChunkDBs contains at least one UID collision; `" ++ show conflict ++ "`!") (chunkTable cdb1) (chunkTable cdb2)
 
-    trm :: ChunksByTypeRep
-    trm = M.unionWith (++) (chunkTypeTable cdb1) (chunkTypeTable cdb2)
+    trm' :: ChunksByTypeRep
+    trm' = M.unionWith (++) (chunkTypeTable cdb1) (chunkTypeTable cdb2)
 
-    lc :: UMap LabelledContent
-    lc = M.unionWithKey (\conflict _ _ -> error $ "Unioned ChunkDBs contains at least one LabelledContent UID collision; `" ++ show conflict ++ "`!") (labelledcontentTable cdb1) (labelledcontentTable cdb2)
+    lc' :: UMap LabelledContent
+    lc' = M.unionWithKey (\conflict _ _ -> error $ "Unioned ChunkDBs contains at least one LabelledContent UID collision; `" ++ show conflict ++ "`!") (labelledcontentTable cdb1) (labelledcontentTable cdb2)
 
-    ref :: UMap Reference
-    ref = M.unionWithKey (\conflict _ _ -> error $ "Unioned ChunkDBs contains at least one Reference UID collision; `" ++ show conflict ++ "`!") (refTable cdb1) (refTable cdb2)
+    ref' :: UMap Reference
+    ref' = M.unionWithKey (\conflict _ _ -> error $ "Unioned ChunkDBs contains at least one Reference UID collision; `" ++ show conflict ++ "`!") (refTable cdb1) (refTable cdb2)
 
-    trc :: M.Map UID [UID]
-    trc = M.unionWith (++) (traceTable cdb1) (traceTable cdb2)
+    trc' :: M.Map UID [UID]
+    trc' = M.unionWith (++) (traceTable cdb1) (traceTable cdb2)
 
-    refb :: M.Map UID [UID]
-    refb = M.unionWith (++) (refbyTable cdb1) (refbyTable cdb2)
+    refb' :: M.Map UID [UID]
+    refb' = M.unionWith (++) (refbyTable cdb1) (refbyTable cdb2)
 
 -- {- FIXME: TO BE REWRITTEN, UNIMPORTANT -}
 -- refbyTable :: ChunkDB -> M.Map UID [UID]

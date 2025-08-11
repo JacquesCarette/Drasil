@@ -11,7 +11,6 @@ import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Software (errMsg, program)
 import Data.Drasil.Concepts.Math (mathcon)
 
-import qualified Data.Map as Map (empty)
 import Data.Drasil.SI_Units (siUnits)
 import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel, GenDefn)
 import Language.Drasil.Code (codeDQDs)
@@ -107,4 +106,5 @@ cdb s t c u d ins gd tm ci lc r cits =
   $ insertAll' tm
   $ insertAll' ci
   $ insertAll' cits
-  $ basisCDB { labelledcontentTable = idMap lc, refTable = idMap r }
+  $ basisCDB { labelledcontentTable = idMap lc,
+               refTable = idMap r }

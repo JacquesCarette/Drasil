@@ -5,23 +5,17 @@ module Language.Drasil.Debug.Print where
 import           Language.Drasil hiding (symbol)
 import qualified Language.Drasil as L (symbol)
 import           Database.Drasil
-import           Utils.Drasil (stringList)
 import qualified Data.Map as Map
 import           Control.Lens ((^.), view)
-import           Data.List (sort, sortBy)
 import           Data.Foldable (foldl')
 import           Data.Maybe (fromMaybe)
-import           Data.Bifunctor (second)
-import           Data.Function (on)
 import           Text.PrettyPrint.HughesPJ
 import           Language.Drasil.Plain.Print
 import           Language.Drasil.Printing.PrintingInformation
 import           Prelude hiding ((<>))
 
 import Theory.Drasil
-import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, typeOf, typeRep)
-
-import Data.Containers.ListUtils (nubOrd)
+import Data.Typeable (Proxy (Proxy), typeRep)
 
 -- * Main Function
 -- | Gathers all printing functions and creates the debugging tables from them.

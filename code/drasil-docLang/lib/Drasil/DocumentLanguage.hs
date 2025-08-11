@@ -9,12 +9,13 @@
 module Drasil.DocumentLanguage where
 
 import Data.Typeable (Proxy(Proxy), typeRep)
-import Control.Lens ((^.), makeLenses)
-import Data.List (sortOn)
-import Data.Maybe (fromMaybe, mapMaybe)
-import qualified Data.Map as Map
+import Control.Lens ((^.), set)
+import Data.Function (on)
+import Data.List (nub, sortBy)
+import Data.Maybe (maybeToList, mapMaybe)
+import qualified Data.Map as Map (elems, assocs, keys)
+
 import Utils.Drasil (invert)
-import Debug.Trace (trace)
 
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
@@ -63,18 +64,12 @@ import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (
 import qualified Drasil.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
 import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs)
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
+import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 import Theory.Drasil
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
   software, unlikelyChg)
-
-import Control.Lens ((^.), set)
-import Data.Function (on)
-import Data.List (nub, sortBy, sortOn)
-import qualified Data.Map as Map (elems, toList, assocs, keys)
-import Data.Maybe (maybeToList)
-import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 
 -- * Main Function

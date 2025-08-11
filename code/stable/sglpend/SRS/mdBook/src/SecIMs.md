@@ -19,7 +19,7 @@ This section transforms the problem defined in the [problem description](./SecPr
 |Description       |<ul><li>\\({θ\_{p}}\\) is the displacement angle of the pendulum (\\({\text{rad}}\\))</li><li>\\(t\\) is the time (\\({\text{s}}\\))</li><li>\\({θ\_{i}}\\) is the initial pendulum angle (\\({\text{rad}}\\))</li><li>\\(Ω\\) is the angular frequency (\\({\text{s}}\\))</li></ul>|
 |Notes             |<ul><li>The constraint \\({θ\_{i}}\gt{}0\\) is required. The angular frequency is defined in [GD:angFrequencyGD](./SecGDs.md#GD:angFrequencyGD).</li></ul>                                                                                                                          |
 |Source            |--                                                                                                                                                                                                                                                                                  |
-|RefBy             |[FR:Output-Values](./SecFRs.md#outputValues) and [FR:Calculate-Angular-Position-Of-Mass](./SecFRs.md#calcAngPos)                                                                                                                                                                    |
+|RefBy             |and                                                                                                                                                                                                                                                                                 |
 
 #### Detailed derivation of angular displacement: {#IM:calOfAngularDisplacementDeriv}
 

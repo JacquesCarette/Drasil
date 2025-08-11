@@ -1,5 +1,4 @@
 digraph avsall {
-	dataDefn:wVol -> instance:assumpVCN;
 	theory:consThermECS -> instance:assumpTEO;
 	theory:sensHeat -> instance:assumpWAL;
 	theory:nwtnCoolingTM -> instance:assumpHTCC;
@@ -41,42 +40,13 @@ digraph avsall {
 	{instance:assumpTEO, instance:assumpHTCC, instance:assumpCWTAT, instance:assumpDWCoW, instance:assumpSHECoW, instance:assumpLCCCW, instance:assumpTHCCoT, instance:assumpTHCCoL, instance:assumpCTNTD, instance:assumpWAL, instance:assumpPIT, instance:assumpNIHGBW, instance:assumpAPT, instance:assumpVCN}
 	}
 
-	dataDefn:wMass	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterMass"];
-	dataDefn:wVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:waterVolume.nopcm"];
-	dataDefn:tankVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:tankVolume"];
-	dataDefn:tauW	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:balanceDecayRate"];
-
-	subgraph DD {
-	rank="same"
-	{dataDefn:wMass, dataDefn:wVol, dataDefn:tankVol, dataDefn:tauW}
-	}
-
 	theory:consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
 	theory:sensHeat	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
 	theory:nwtnCoolingTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
-
-	subgraph TM {
-	rank="same"
-	{theory:consThermECS, theory:sensHeat, theory:nwtnCoolingTM}
-	}
-
 	theory:rocTempSimpRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];
 	theory:htFluxC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:htFluxWaterFromCoil"];
-
-	subgraph GD {
-	rank="same"
-	{theory:rocTempSimpRC, theory:htFluxC}
-	}
-
 	theory:eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
 	theory:heatEInWtrIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
-
-	subgraph IM {
-	rank="same"
-	{theory:eBalanceOnWtrRC, theory:heatEInWtrIM}
-	}
-
-	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
 	instance:findMass	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:findMass"];
 	instance:checkWithPhysConsts	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:checkWithPhysConsts"];
 	instance:outputInputDerivVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputInputDerivVals"];
@@ -87,10 +57,16 @@ digraph avsall {
 	instance:understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandable"];
 	instance:reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:reusable"];
 	instance:maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainable"];
+	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
+	instance:findMass	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:findMass"];
+	instance:checkWithPhysConsts	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:checkWithPhysConsts"];
+	instance:outputInputDerivVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputInputDerivVals"];
+	instance:calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcValues"];
+	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 
 	subgraph FR {
 	rank="same"
-	{instance:inputValues, instance:findMass, instance:checkWithPhysConsts, instance:outputInputDerivVals, instance:calcValues, instance:outputValues, instance:correct, instance:verifiable, instance:understandable, instance:reusable, instance:maintainable}
+	{instance:findMass, instance:checkWithPhysConsts, instance:outputInputDerivVals, instance:calcValues, instance:outputValues, instance:correct, instance:verifiable, instance:understandable, instance:reusable, instance:maintainable, instance:inputValues, instance:findMass, instance:checkWithPhysConsts, instance:outputInputDerivVals, instance:calcValues, instance:outputValues}
 	}
 
 	instance:likeChgTCVOD	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:likeChgTCVOD"];

@@ -48,44 +48,16 @@ digraph avsall {
 	{instance:twoDMotion, instance:cartSyst, instance:yAxisGravity, instance:launchOrigin, instance:targetXAxis, instance:posXDirection, instance:constAccel, instance:accelXZero, instance:accelYGravity, instance:neglectDrag, instance:pointMass, instance:freeFlight, instance:neglectCurv, instance:timeStartZero, instance:gravAccelValue}
 	}
 
-	dataDefn:speed	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:vecMag"];
-	dataDefn:ixVel	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:speedIX"];
-	dataDefn:iyVel	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:speedIY"];
-
-	subgraph DD {
-	rank="same"
-	{dataDefn:speed, dataDefn:ixVel, dataDefn:iyVel}
-	}
-
 	theory:accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];
 	theory:velocityTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:velocity"];
-
-	subgraph TM {
-	rank="same"
-	{theory:accelerationTM, theory:velocityTM}
-	}
-
 	theory:projSpeed	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectVel"];
 	theory:projPos	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectPos"];
 	theory:velocity	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velVec"];
 	theory:position	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:posVec"];
-
-	subgraph GD {
-	rank="same"
-	{theory:projSpeed, theory:projPos, theory:velocity, theory:position}
-	}
-
 	theory:flightduration	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingTime"];
 	theory:landingposition	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingDist"];
 	theory:offset	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:offsetIM"];
 	theory:outputMessage	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:messageIM"];
-
-	subgraph IM {
-	rank="same"
-	{theory:flightduration, theory:landingposition, theory:offset, theory:outputMessage}
-	}
-
-	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
 	instance:verifyInVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInVals"];
 	instance:calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcValues"];
 	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
@@ -95,10 +67,14 @@ digraph avsall {
 	instance:reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:reusable"];
 	instance:maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainable"];
 	instance:portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
+	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
+	instance:verifyInVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInVals"];
+	instance:calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcValues"];
+	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 
 	subgraph FR {
 	rank="same"
-	{instance:inputValues, instance:verifyInVals, instance:calcValues, instance:outputValues, instance:correct, instance:verifiable, instance:understandable, instance:reusable, instance:maintainable, instance:portable}
+	{instance:verifyInVals, instance:calcValues, instance:outputValues, instance:correct, instance:verifiable, instance:understandable, instance:reusable, instance:maintainable, instance:portable, instance:inputValues, instance:verifyInVals, instance:calcValues, instance:outputValues}
 	}
 
 }

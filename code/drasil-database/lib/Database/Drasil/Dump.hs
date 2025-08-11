@@ -1,4 +1,3 @@
-{-# LANGUAGE TypeApplications #-}
 module Database.Drasil.Dump where
 
 import Language.Drasil (UID, HasUID(..))

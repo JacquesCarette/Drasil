@@ -36,13 +36,13 @@ where
 import Data.List (nub, (\\))
 import qualified Data.Map.Strict as M -- NOTE: If we don't use 'Strict'ness here, it can cause funkiness! In particular, the `union` might not throw errors when it should!
 import Data.Maybe (fromMaybe, isJust, mapMaybe)
-import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, typeOf, typeRep)
+import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, typeOf, typeRep, cast)
 
 import Drasil.Database.Chunk (Chunk, HasChunkRefs (chunkRefs), IsChunk, mkChunk, unChunk, chunkType)
 import Language.Drasil
 import Control.Lens ((^.))
 
-import Debug.Trace (trace, traceWith)
+import Debug.Trace (trace)
 
 import Utils.Drasil
 
@@ -105,7 +105,7 @@ refFind :: UID -> ChunkDB -> Reference
 refFind u cdb = uMapLookup "Reference" "refTable" u (refTable cdb)
 
 refbyLookup :: UID -> M.Map UID [UID] -> [UID]
-refbyLookup c = traceWith (\m -> show c ++ " refBy: " ++ show m) . fromMaybe [] . M.lookup c
+refbyLookup c = fromMaybe [] . M.lookup c
 
 -- | Trace a 'UID' to related 'UID's.
 traceLookup :: UID -> M.Map UID [UID] -> [UID]
@@ -118,10 +118,22 @@ findOrErr u = fromMaybe (error $ "Failed to find chunk " ++ show u) . find u
 -- required because we don't have access to the type information in the raw
 -- expressions.
 findAll :: Typeable a => TypeRep -> ChunkDB -> [a]
-findAll tr cdb = maybe [] (mapMaybe unChunk) $ M.lookup tr (chunkTypeTable cdb)
+findAll tr cdb
+  | tr == typeRep (Proxy @LabelledContent) =
+      mapMaybe (cast . fst) $ M.elems $ labelledcontentTable cdb
+  | tr == typeRep (Proxy @Reference) =
+      mapMaybe (cast . fst) $ M.elems $ refTable cdb
+  | otherwise =
+      maybe [] (mapMaybe unChunk) $ M.lookup tr (chunkTypeTable cdb)
 
 findAllUIDs :: TypeRep -> ChunkDB -> [UID]
-findAllUIDs tr cdb = maybe [] (map (^. uid)) $ M.lookup tr (chunkTypeTable cdb)
+findAllUIDs tr cdb
+  | tr == typeRep (Proxy @LabelledContent) =
+      M.keys $ labelledcontentTable cdb
+  | tr == typeRep (Proxy @Reference) =
+      M.keys $ refTable cdb
+  | otherwise =
+      maybe [] (map (^. uid)) $ M.lookup tr (chunkTypeTable cdb)
 
 findRefs :: UID -> ChunkDB -> Maybe [UID]
 findRefs u cdb = do
@@ -196,38 +208,3 @@ union cdb1 cdb2 = ChunkDB um' trm' lc' ref' trc' refb'
 
     refb' :: M.Map UID [UID]
     refb' = M.unionWith (++) (refbyTable cdb1) (refbyTable cdb2)
-
--- {- FIXME: TO BE REWRITTEN, UNIMPORTANT -}
--- refbyTable :: ChunkDB -> M.Map UID [UID]
--- refbyTable (ChunkDB (x, _)) = M.map snd x
-
-
-
--- Note: The below should be a 'faster' variant of the above 'mkChunkDB', but it
--- is missing a few of the sanity checks on chunks, so it's not quite ready yet!
-
--- mkChunkDB :: [Chunk] -> ChunkDB
--- mkChunkDB cs = ChunkDB (cbu, csbtr)
---   where
---     cbu :: ChunkByUID -- TODO: build a proper reference list, post-facto
---     cbu =
---       M.fromListWithKey
---         ( \k (r1, _) (r2, _) ->
---             error $
---               "At least 2 chunks provided contain the same UID, `"
---                 ++ show k
---                 ++ "`, with types: "
---                 ++ show (chunkType r1)
---                 ++ " and "
---                 ++ show (chunkType r2)
---         )
---         $ map (\c -> (uid c, (c, []))) cs
---
---     trs :: [TypeRep]
---     trs = nub $ map chunkType cs
---
---     trcs :: [(TypeRep, [Chunk])]
---     trcs = map (\tr -> (tr, filter ((==) tr . chunkType) cs)) trs
---
---     csbtr :: ChunksByTypeRep
---     csbtr = M.fromList trcs

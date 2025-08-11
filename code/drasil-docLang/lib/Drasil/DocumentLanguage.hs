@@ -211,8 +211,8 @@ getSentenceUIDs (P _) = [] -- Symbol, no UIDs
 getSentenceUIDs (E _) = [] -- Expressions handled separately if needed
 getSentenceUIDs (Quote s) = getSentenceUIDs s
 getSentenceUIDs (Ref uid s _) = uid : getSentenceUIDs s
-getSentenceUIDs (Percent) = []
-getSentenceUIDs (EmptyS) = []
+getSentenceUIDs Percent = []
+getSentenceUIDs EmptyS = []
 getSentenceUIDs ((:+:) s1 s2) = getSentenceUIDs s1 ++ getSentenceUIDs s2
 
 -- * Section Creator Functions

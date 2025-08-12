@@ -4,16 +4,14 @@
 module Database.Drasil.ChunkDB (
   ChunkDB,
   empty, fromList,
-  find, findOrErr,
-  whatRefs, whatRefsOrErr,
-  findAll, findAll',
-  findUnused,
-  insert,
-  insertAll,
-  union,
-  registered,
+  registered, typesRegistered, size,
   isRegistered,
-  typesRegistered, numRegistered,
+  findUnused,
+  find, findOrErr,
+  findAll, findAll',
+  whatRefs, whatRefsOrErr,
+  findTypeOf,
+  insert, insertAll, union,
   -- * Temporary functions for working with non-chunk tables
   UMap, idMap,
   refTable, refFind,
@@ -22,23 +20,30 @@ module Database.Drasil.ChunkDB (
   traceTable, traceLookup
 ) where
 
-import Data.List (nub, (\\))
+import Control.Lens ((^.))
 import Data.Foldable (foldl')
-import qualified Data.Map.Strict as M -- NOTE: Using strict maps is important, else `union` might not throw errors when it should.
+import Data.List (nub, (\\))
 import Data.Maybe (fromMaybe, isJust, mapMaybe)
 import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, typeOf, typeRep, cast)
 
-import Drasil.Database.Chunk (Chunk, HasChunkRefs (chunkRefs), IsChunk, mkChunk, unChunk, chunkType)
-import Language.Drasil (HasUID(..), UID, LabelledContent, Reference)
-import Control.Lens ((^.))
-
+-- NOTE: Debug.Trace should only be used for warnings and errors, not for
+-- general logging, as it can affect program behavior in unexpected ways.
+-- However, we (ab)use it here to provide *soft* warnings when overwriting
+-- chunks in the database.
 import Debug.Trace (trace)
 
+-- NOTE: Strictness is important for (a) performance, (b) space leaks, (c)
+-- avoiding chunk dependancy cycles and (d) ensuring operation consistency with
+-- other databases.
+import qualified Data.Map.Strict as M
+
+import Drasil.Database.Chunk (Chunk, HasChunkRefs (chunkRefs), IsChunk, mkChunk, unChunk, chunkType)
+import Language.Drasil (HasUID(..), UID, LabelledContent, Reference)
 import Utils.Drasil (errMsg, warnMsg)
 
-type ReferredBy = [UID]
+type Dependant = UID
 
-type ChunkByUID = M.Map UID (Chunk, ReferredBy)
+type ChunkByUID = M.Map UID (Chunk, [Dependant])
 
 type ChunksByTypeRep = M.Map TypeRep [Chunk]
 
@@ -77,19 +82,19 @@ typesRegistered cdb =
   : typeRep (Proxy @Reference)
   : M.keys (chunkTypeTable cdb)
 
-numRegistered :: ChunkDB -> Int
-numRegistered cdb =
+size :: ChunkDB -> Int
+size cdb =
     M.size (chunkTable cdb)
   + M.size (labelledcontentTable cdb)
   + M.size (refTable cdb)
+
+findUnused :: ChunkDB -> [UID]
+findUnused = M.keys . M.filter (\(_, refs) -> null refs) . chunkTable
 
 find :: Typeable a => UID -> ChunkDB -> Maybe a
 find u cdb = do
   (c', _) <- M.lookup u (chunkTable cdb)
   unChunk c'
-
-findTypeOf :: UID -> ChunkDB -> Maybe TypeRep
-findTypeOf u cdb = chunkType . fst <$> M.lookup u (chunkTable cdb)
 
 findOrErr :: Typeable a => UID -> ChunkDB -> a
 findOrErr u = fromMaybe (error $ "Failed to find chunk " ++ show u) . find u
@@ -124,8 +129,8 @@ whatRefs u cdb = do
 whatRefsOrErr :: UID -> ChunkDB -> [UID]
 whatRefsOrErr u = fromMaybe (error $ "Failed to find references for unknown chunk " ++ show u) . find u
 
-findUnused :: ChunkDB -> [UID]
-findUnused = M.keys . M.filter (\(_, refs) -> null refs) . chunkTable
+findTypeOf :: UID -> ChunkDB -> Maybe TypeRep
+findTypeOf u cdb = chunkType . fst <$> M.lookup u (chunkTable cdb)
 
 insert0 :: IsChunk a => ChunkDB -> a -> ChunkDB
 insert0 cdb c = cdb'
@@ -173,32 +178,22 @@ insert c cdb
 insertAll :: IsChunk a => [a] -> ChunkDB -> ChunkDB
 insertAll as cdb = foldl' (flip insert) cdb as
 
--- foldl' insert
--- insertAll cdb l = foldr (flip insert) cdb (reverse l) -- note: the "reverse" is here to make insertions slightly more readable -- I don't want to use foldl (it seems many have complaints about it)
-
 union :: ChunkDB -> ChunkDB -> ChunkDB
 union cdb1 cdb2 = ChunkDB um' trm' lc' ref' trc' refb'
   where
-    um' :: ChunkByUID
-    um' = M.unionWithKey (\conflict _ _ -> error $ "Unioned ChunkDBs contains at least one UID collision; `" ++ show conflict ++ "`!") (chunkTable cdb1) (chunkTable cdb2)
-
-    trm' :: ChunksByTypeRep
-    trm' = M.unionWith (++) (chunkTypeTable cdb1) (chunkTypeTable cdb2)
-
-    lc' :: UMap LabelledContent
-    lc' = M.unionWithKey (\conflict _ _ -> error $ "Unioned ChunkDBs contains at least one LabelledContent UID collision; `" ++ show conflict ++ "`!") (labelledcontentTable cdb1) (labelledcontentTable cdb2)
-
-    ref' :: UMap Reference
-    ref' = M.unionWithKey (\conflict _ _ -> error $ "Unioned ChunkDBs contains at least one Reference UID collision; `" ++ show conflict ++ "`!") (refTable cdb1) (refTable cdb2)
-
-    trc' :: M.Map UID [UID]
-    trc' = M.unionWith (\l r -> nub $ l ++ r) (traceTable cdb1) (traceTable cdb2)
-
-    refb' :: M.Map UID [UID]
+    um'   = M.unionWithKey (\conflict _ _ -> error $ "Unioned ChunkDBs contains at least one UID collision; `" ++ show conflict ++ "`!") (chunkTable cdb1) (chunkTable cdb2)
+    trm'  = M.unionWith (++) (chunkTypeTable cdb1) (chunkTypeTable cdb2)
+    lc'   = M.unionWithKey (\conflict _ _ -> error $ "Unioned ChunkDBs contains at least one LabelledContent UID collision; `" ++ show conflict ++ "`!") (labelledcontentTable cdb1) (labelledcontentTable cdb2)
+    ref'  = M.unionWithKey (\conflict _ _ -> error $ "Unioned ChunkDBs contains at least one Reference UID collision; `" ++ show conflict ++ "`!") (refTable cdb1) (refTable cdb2)
+    trc'  = M.unionWith (\l r -> nub $ l ++ r) (traceTable cdb1) (traceTable cdb2)
     refb' = M.unionWith (\l r -> nub $ l ++ r) (refbyTable cdb1) (refbyTable cdb2)
 
 --------------------------------------------------------------------------------
+-- Temporary functions for working with non-chunk tables
 --
+-- Everything below is temporary and should be removed once the LabelledContent
+-- and Reference chunks are properly implemented and the "chunk refs" tables are
+-- built properly (i.e., using the `HasChunkRefs` typeclass).
 --------------------------------------------------------------------------------
 
 type UMap a = M.Map UID (a, Int)

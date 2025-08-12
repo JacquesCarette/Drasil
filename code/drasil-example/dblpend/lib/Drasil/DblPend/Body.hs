@@ -38,7 +38,7 @@ import Drasil.DblPend.IMods (iMods)
 import Drasil.DblPend.GenDefs (genDefns)
 import Drasil.DblPend.MetaConcepts (progName)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
-  inConstraints, outConstraints, pendDisAngle, constants)
+  inConstraints, outConstraints, constants)
 
 import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs)
 import Drasil.DblPend.References (citations)

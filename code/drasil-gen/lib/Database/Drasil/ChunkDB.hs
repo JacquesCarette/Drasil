@@ -2,8 +2,9 @@ module Database.Drasil.ChunkDB (
   cdb
 ) where
 
-import Database.Drasil
-import Language.Drasil
+import Database.Drasil (empty, idMap, insertAll, ChunkDB(refTable, labelledcontentTable))
+import Language.Drasil (IdeaDict, nw, Citation, ConceptChunk, ConceptInstance,
+  DefinedQuantityDict, UnitDefn, LabelledContent, Reference)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Concepts.Education (educon)

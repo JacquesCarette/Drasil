@@ -8,7 +8,6 @@
 -- instead.
 module Drasil.DocumentLanguage where
 
-import Data.Typeable (Proxy(Proxy), typeRep)
 import Control.Lens ((^.), set)
 import Data.Function (on)
 import Data.List (nub, sortBy)

@@ -8,12 +8,13 @@ module Drasil.Sections.TraceabilityMandGs (
   -- * Helpers
   tvAssumps, tvDataDefns, tvGenDefns, tvTheoryModels,
   tvInsModels, tvGoals, tvReqs, tvChanges
-  ) where
+) where
+
+import Data.Foldable (foldl')
 
 import Drasil.DocumentLanguage.Core (TraceConfig(TraceConfig))
 import Drasil.DocumentLanguage.TraceabilityMatrix (generateTraceTableView,
   traceMReferrers, traceView, traceViewCC, TraceViewCat)
-
 import Data.Drasil.Concepts.Documentation (assumption, assumpDom, chgProbDom,
   goalStmt, goalStmtDom, requirement, reqDom, item, section_, likelyChg,
   unlikelyChg)
@@ -24,10 +25,7 @@ import Drasil.System
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators as NC
 import Language.Drasil.Sentence.Combinators as S
-import Theory.Drasil
 
-import Data.Foldable (foldl')
-import Data.Typeable (typeRep, Proxy(Proxy))
 
 -- | Makes a Traceability Table/Matrix that contains Items of Different Sections.
 generateTraceTable :: System -> LabelledContent

@@ -3,20 +3,15 @@
 -- 'UID' and dereference the chunk it refers to.
 module Drasil.GetChunks (ccss, ccss', combine, vars, citeDB) where
 
+import Control.Lens ((^.))
+import Data.List (nub, sortBy)
+
 import Language.Drasil
 import Language.Drasil.Development
 import Language.Drasil.ModelExpr.Development (meDep)
-
-import Database.Drasil (ChunkDB, findAll, findOrErr)
-
+import Database.Drasil (ChunkDB, findOrErr)
 import Drasil.Database.SearchTools (defResolve', DomDefn(definition), findAllCitations)
-
 import Drasil.System (System, systemdb)
-
-import Data.Typeable (Proxy (Proxy), typeRep)
-
-import Control.Lens ((^.))
-import Data.List (nub, sortBy)
 
 -- | Gets a list of quantities ('DefinedQuantityDict') from an equation in order to print.
 vars :: ModelExpr -> ChunkDB -> [DefinedQuantityDict]

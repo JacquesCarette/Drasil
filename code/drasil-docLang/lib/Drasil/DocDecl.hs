@@ -16,7 +16,6 @@ import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
   AppndxSec(..), OffShelfSolnsSec(..), DerivationDisplay)
 import Drasil.Sections.Requirements (fullReqs, fullTables)
 
-import Data.Typeable (typeRep, Proxy(Proxy))
 import Database.Drasil
 import Drasil.System
 import Language.Drasil hiding (sec)

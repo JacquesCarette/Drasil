@@ -6,12 +6,10 @@ import Data.Aeson (ToJSON)
 import Data.Aeson.Encode.Pretty (encodePretty)
 import qualified Data.ByteString.Lazy.Char8 as LB
 import qualified Data.Map.Strict as SM
-import Data.Typeable (Proxy(Proxy), typeRep)
 import System.IO
 import System.Environment (lookupEnv)
 import Text.PrettyPrint
 
-import Language.Drasil (IdeaDict)
 import Language.Drasil.Printers (PrintingInformation, printAllDebugInfo)
 import Utils.Drasil (invert, atLeast2, createDirIfMissing)
 import Database.Drasil

@@ -15,7 +15,7 @@ import           Language.Drasil.Printing.PrintingInformation
 import           Prelude hiding ((<>))
 
 import Theory.Drasil
-import Data.Typeable (Proxy (Proxy), typeRep)
+import Data.Typeable (Proxy (Proxy))
 
 -- * Main Function
 -- | Gathers all printing functions and creates the debugging tables from them.
@@ -55,11 +55,11 @@ header d = text (replicate 100 '-') $$ d $$ text (replicate 100 '-')
 -- (often 'UID's, terms, shortnames, definitions, etc.).
 mkTableFromLenses
   :: IsChunk a => PrintingInformation
-  -> Proxy a
+  -> Proxy a -- Data is unused, but necessary for type constraint resolution.
   -> String
   -> [PrintingInformation -> (String, a -> Doc)]
   -> Doc
-mkTableFromLenses pin@PI { _ckdb = db } targetTy ttle hsNEs =
+mkTableFromLenses pin@PI { _ckdb = db } _ ttle hsNEs =
   text ttle <> colon
   $$ header hdr
   $$ vcat (map col chunks)

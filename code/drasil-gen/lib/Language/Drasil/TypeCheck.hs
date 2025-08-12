@@ -2,16 +2,13 @@
 {-# LANGUAGE TypeApplications #-}
 module Language.Drasil.TypeCheck where
 
-import qualified Data.Map.Strict as M
-
-import Data.Typeable (Proxy(Proxy), typeRep)
-
-import Language.Drasil
-import Database.Drasil
-import Data.Either (isLeft, lefts)
 import Control.Lens ((^.))
 import Data.Bifunctor (second)
+import Data.Either (isLeft, lefts)
 import Data.List (partition)
+import qualified Data.Map.Strict as M
+
+import Language.Drasil
 import Drasil.System (System, HasSystem (instModels, dataDefns, systemdb))
 import Drasil.Database.SearchTools (findAllDefinedQuantities)
 

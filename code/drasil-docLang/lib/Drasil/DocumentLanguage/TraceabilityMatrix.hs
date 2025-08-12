@@ -3,23 +3,18 @@
 -- | Defines functions to create traceability matrices in SRS documents.
 module Drasil.DocumentLanguage.TraceabilityMatrix where
 
-import Data.Typeable (Proxy(Proxy), typeRep)
+import Control.Lens ((^.))
+import Data.Containers.ListUtils (nubOrd)
+import qualified Data.Map as Map
+
 import Drasil.Database.SearchTools
 import Language.Drasil
 import Database.Drasil
 import Drasil.System hiding (purpose)
 import qualified Language.Drasil.Sentence.Combinators as S
-
 import Data.Drasil.Concepts.Documentation (purpose, component, dependency,
   item, reference, traceyMatrix)
-
 import Drasil.DocumentLanguage.Definitions (helpToRefField)
-
-import Data.Containers.ListUtils (nubOrd)
-
-import Control.Lens ((^.))
-
-import qualified Data.Map as Map
 
 -- * Types
 

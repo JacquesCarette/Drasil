@@ -12,7 +12,8 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum)
-import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
+import Data.Drasil.Concepts.Documentation
+  as Doc (appendix, assumption,
   characteristic, company, condition, dataConst, datum,
   environment, input_, interface, model, physical, problem, product_,
   software, softwareConstraint, softwareSys, standard, sysCont,
@@ -29,7 +30,7 @@ import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
-import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab,
+import Drasil.GlassBR.Concepts (blastRisk, glaPlane, glaSlab,
   ptOfExplsn, con', glass, iGlass, lGlass)
 import Drasil.GlassBR.DataDefs (configFp)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
@@ -69,7 +70,7 @@ si = mkSystem progName Specification
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
-  RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA abbreviationsList],
+  RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA []],
   IntroSec $
     IntroProg (startIntro software blstRskInvWGlassSlab progName)
       (short progName)
@@ -135,10 +136,7 @@ conceptChunks =
   -- DefinedQuantityDicts
   map cw mathquants
 
-abbreviationsList :: [IdeaDict]
-abbreviationsList = 
-  -- CIs
-  map nw acronyms
+
 
 symbMap :: ChunkDB
 symbMap = cdb thisSymbols ideaDicts conceptChunks ([] :: [UnitDefn]) 
@@ -227,7 +225,6 @@ scope = foldlSent_ [S "determining the safety" `S.ofA` phrase glaSlab,
 
 {--Purpose of Document--}
 -- Purpose of Document automatically generated in IPurpose
-
 
 {--Scope of Requirements--}
 

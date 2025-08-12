@@ -25,7 +25,8 @@ class HasChunkRefs a where
 -- | Constraint for anything that may be considered a valid chunk type.
 type IsChunk a = (HasUID a, HasChunkRefs a, Typeable a)
 
--- | Any _thing_ that satisfies the IsChunk constraint list.
+-- | A piece of reusable knowledge, with an internal identifier ('UID'),
+-- possibly dependant on other chunks.
 data Chunk = forall a. IsChunk a => Chunk a
 
 instance Eq Chunk where
@@ -46,6 +47,6 @@ mkChunk a
 unChunk :: Typeable a => Chunk -> Maybe a
 unChunk (Chunk c) = cast c
 
--- | Ask a 'Chunk' for its type representation.
+-- | Ask a 'Chunk' for the type of data it codifies.
 chunkType :: Chunk -> TypeRep
 chunkType (Chunk c) = typeOf c

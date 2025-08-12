@@ -1,12 +1,10 @@
 module Database.Drasil.Dump where
 
-import Language.Drasil (UID, HasUID(..))
+import Language.Drasil (UID)
 import Database.Drasil.ChunkDB
 
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as SM
-
-import Control.Lens ((^.))
 
 type ChunkType = String
 

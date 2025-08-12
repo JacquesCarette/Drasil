@@ -15,4 +15,4 @@ umapDump :: HasUID a => UMap a -> [UID]
 umapDump = map ((^. uid) . fst) . SM.elems
 
 dumpChunkDB :: ChunkDB -> DumpedChunkDB
-dumpChunkDB cdb = SM.fromList $ map (\ty -> (show ty, findAllUIDs ty cdb)) (typesRegistered cdb)
+dumpChunkDB cdb = SM.fromList $ map (\ty -> (show ty, findAll' ty cdb)) (typesRegistered cdb)

@@ -1,40 +1,29 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE TypeApplications #-}
 
-module Database.Drasil.ChunkDB
-  ( ChunkDB (refTable),
-    UMap,
-    idMap,
-    empty,
-    mkChunkDB,
-    find,
-    labelledcontentFind,
-    refFind,
-    findOrErr,
-    findRefs,
-    findRefsOrErr,
-    findAll,
-    findAllUIDs,
-    findUnused,
-    insert,
-    insert',
-    insertAll,
-    insertAll',
-    insertAllOrIgnore,
-    union,
-    registered,
-    isRegistered,
-    typesRegistered,
-    numRegistered,
-    refbyTable, -- FIXME: This function should be re-examined. Some functions can probably be moved here!
-    labelledcontentTable,
-    traceTable,
-    refbyLookup,
-    traceLookup
-  )
-where
+module Database.Drasil.ChunkDB (
+  ChunkDB,
+  empty, fromList,
+  find, findOrErr,
+  whatRefs, whatRefsOrErr,
+  findAll, findAll',
+  findUnused,
+  insert,
+  insertAll,
+  union,
+  registered,
+  isRegistered,
+  typesRegistered, numRegistered,
+  -- * Temporary functions for working with non-chunk tables
+  UMap, idMap,
+  refTable, refFind,
+  labelledcontentTable, labelledcontentFind,
+  refbyTable, refbyLookup,
+  traceTable, traceLookup
+) where
 
 import Data.List (nub, (\\))
+import Data.Foldable (foldl')
 import qualified Data.Map.Strict as M -- NOTE: Using strict maps is important, else `union` might not throw errors when it should.
 import Data.Maybe (fromMaybe, isJust, mapMaybe)
 import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, typeOf, typeRep, cast)
@@ -53,11 +42,6 @@ type ChunkByUID = M.Map UID (Chunk, ReferredBy)
 
 type ChunksByTypeRep = M.Map TypeRep [Chunk]
 
-type UMap a = M.Map UID (a, Int)
-
-idMap :: HasUID a => [a] -> UMap a
-idMap vals = M.fromList $ zipWith (\v i -> (v ^. uid, (v, i))) vals [0..]
-
 data ChunkDB = ChunkDB {
     chunkTable     :: ChunkByUID
   , chunkTypeTable :: ChunksByTypeRep
@@ -72,20 +56,32 @@ data ChunkDB = ChunkDB {
 empty :: ChunkDB
 empty = ChunkDB M.empty M.empty M.empty M.empty M.empty M.empty
 
-mkChunkDB :: IsChunk a => [a] -> ChunkDB
-mkChunkDB = insertAll empty
+fromList :: IsChunk a => [a] -> ChunkDB
+fromList = flip insertAll empty
 
 registered :: ChunkDB -> [UID]
-registered cdb = M.keys (chunkTable cdb) ++ M.keys (labelledcontentTable cdb) ++ M.keys (refTable cdb)
+registered cdb =
+     M.keys (chunkTable cdb)
+  ++ M.keys (labelledcontentTable cdb)
+  ++ M.keys (refTable cdb)
 
 isRegistered :: UID -> ChunkDB -> Bool
-isRegistered u cdb = M.member u (chunkTable cdb) || M.member u (labelledcontentTable cdb) || M.member u (refTable cdb)
+isRegistered u cdb =
+     M.member u (chunkTable cdb)
+  || M.member u (labelledcontentTable cdb)
+  || M.member u (refTable cdb)
 
 typesRegistered :: ChunkDB -> [TypeRep]
-typesRegistered cdb = M.keys (chunkTypeTable cdb) ++ [typeRep (Proxy @LabelledContent), typeRep (Proxy @Reference)]
+typesRegistered cdb =
+    typeRep (Proxy @LabelledContent)
+  : typeRep (Proxy @Reference)
+  : M.keys (chunkTypeTable cdb)
 
 numRegistered :: ChunkDB -> Int
-numRegistered cdb = M.size (chunkTable cdb) + M.size (labelledcontentTable cdb) + M.size (refTable cdb)
+numRegistered cdb =
+    M.size (chunkTable cdb)
+  + M.size (labelledcontentTable cdb)
+  + M.size (refTable cdb)
 
 find :: Typeable a => UID -> ChunkDB -> Maybe a
 find u cdb = do
@@ -94,24 +90,6 @@ find u cdb = do
 
 findTypeOf :: UID -> ChunkDB -> Maybe TypeRep
 findTypeOf u cdb = chunkType . fst <$> M.lookup u (chunkTable cdb)
-
--- | Looks up a 'UID' in a 'UMap' table. If nothing is found, an error is thrown.
-uMapLookup :: String -> String -> UID -> UMap a -> a
-uMapLookup tys ms u t = getFM $ M.lookup u t
-  where getFM = maybe (error $ tys ++ ": " ++ show u ++ " not found in " ++ ms) fst
-
-labelledcontentFind :: UID -> ChunkDB -> LabelledContent
-labelledcontentFind u cdb = uMapLookup "LabelledContent" "labelledcontentTable" u (labelledcontentTable cdb)
-
-refFind :: UID -> ChunkDB -> Reference
-refFind u cdb = uMapLookup "Reference" "refTable" u (refTable cdb)
-
-refbyLookup :: UID -> M.Map UID [UID] -> [UID]
-refbyLookup c = fromMaybe [] . M.lookup c
-
--- | Trace a 'UID' to related 'UID's.
-traceLookup :: UID -> M.Map UID [UID] -> [UID]
-traceLookup c = fromMaybe [] . M.lookup c
 
 findOrErr :: Typeable a => UID -> ChunkDB -> a
 findOrErr u = fromMaybe (error $ "Failed to find chunk " ++ show u) . find u
@@ -129,8 +107,8 @@ findAll tr cdb
   | otherwise =
       maybe [] (mapMaybe unChunk) $ M.lookup tr (chunkTypeTable cdb)
 
-findAllUIDs :: TypeRep -> ChunkDB -> [UID]
-findAllUIDs tr cdb
+findAll' :: TypeRep -> ChunkDB -> [UID]
+findAll' tr cdb
   | tr == typeRep (Proxy @LabelledContent) =
       M.keys $ labelledcontentTable cdb
   | tr == typeRep (Proxy @Reference) =
@@ -138,19 +116,16 @@ findAllUIDs tr cdb
   | otherwise =
       maybe [] (map (^. uid)) $ M.lookup tr (chunkTypeTable cdb)
 
-findRefs :: UID -> ChunkDB -> Maybe [UID]
-findRefs u cdb = do
+whatRefs :: UID -> ChunkDB -> Maybe [UID]
+whatRefs u cdb = do
   (_, refs) <- M.lookup u (chunkTable cdb)
   Just refs
 
-findRefsOrErr :: UID -> ChunkDB -> [UID]
-findRefsOrErr u = fromMaybe (error $ "Failed to find references for unknown chunk " ++ show u) . find u
+whatRefsOrErr :: UID -> ChunkDB -> [UID]
+whatRefsOrErr u = fromMaybe (error $ "Failed to find references for unknown chunk " ++ show u) . find u
 
 findUnused :: ChunkDB -> [UID]
 findUnused = M.keys . M.filter (\(_, refs) -> null refs) . chunkTable
-
-insert' :: IsChunk a => a -> ChunkDB -> ChunkDB
-insert' = flip insert
 
 insert0 :: IsChunk a => ChunkDB -> a -> ChunkDB
 insert0 cdb c = cdb'
@@ -178,8 +153,8 @@ insert0 cdb c = cdb'
     cdb' :: ChunkDB
     cdb' = cdb {chunkTable = finalCu, chunkTypeTable = ctr'}
 
-insert :: IsChunk a => ChunkDB -> a -> ChunkDB
-insert cdb c
+insert :: IsChunk a => a -> ChunkDB -> ChunkDB
+insert c cdb
   | typeOf c == typeRep (Proxy @ChunkDB) =
       error "Insertion of ChunkDBs in ChunkDBs is disallowed; please perform unions with them instead."
   | (Just x) <- findTypeOf (c ^. uid) cdb =
@@ -195,14 +170,11 @@ insert cdb c
             else trace (errMsg $ "SUPER-MEGA-ULTRA-DELUXE-WARNING! Overwriting a chunk (`" ++ show (c ^. uid) ++ "` :: `" ++ show x ++ "`) with a chunk of a different type: `" ++ show (typeOf c) ++ "`") cdb''
   | otherwise = insert0 cdb c
 
-insertAll :: IsChunk a => ChunkDB -> [a] -> ChunkDB
-insertAll cdb l = foldr (flip insert) cdb (reverse l) -- note: the "reverse" is here to make insertions slightly more readable -- I don't want to use foldl (it seems many have complaints about it)
+insertAll :: IsChunk a => [a] -> ChunkDB -> ChunkDB
+insertAll as cdb = foldl' (flip insert) cdb as
 
-insertAll' :: IsChunk a => [a] -> ChunkDB -> ChunkDB
-insertAll' = flip insertAll
-
-insertAllOrIgnore :: IsChunk a => ChunkDB -> [a] -> ChunkDB
-insertAllOrIgnore cdb = foldr (\next old -> if isRegistered (next ^. uid) cdb then old else insert old next) cdb
+-- foldl' insert
+-- insertAll cdb l = foldr (flip insert) cdb (reverse l) -- note: the "reverse" is here to make insertions slightly more readable -- I don't want to use foldl (it seems many have complaints about it)
 
 union :: ChunkDB -> ChunkDB -> ChunkDB
 union cdb1 cdb2 = ChunkDB um' trm' lc' ref' trc' refb'
@@ -224,3 +196,30 @@ union cdb1 cdb2 = ChunkDB um' trm' lc' ref' trc' refb'
 
     refb' :: M.Map UID [UID]
     refb' = M.unionWith (\l r -> nub $ l ++ r) (refbyTable cdb1) (refbyTable cdb2)
+
+--------------------------------------------------------------------------------
+--
+--------------------------------------------------------------------------------
+
+type UMap a = M.Map UID (a, Int)
+
+idMap :: HasUID a => [a] -> UMap a
+idMap vals = M.fromList $ zipWith (\v i -> (v ^. uid, (v, i))) vals [0..]
+
+-- | Looks up a 'UID' in a 'UMap' table. If nothing is found, an error is thrown.
+uMapLookup :: String -> String -> UID -> UMap a -> a
+uMapLookup tys ms u t = getFM $ M.lookup u t
+  where getFM = maybe (error $ tys ++ ": " ++ show u ++ " not found in " ++ ms) fst
+
+labelledcontentFind :: UID -> ChunkDB -> LabelledContent
+labelledcontentFind u cdb = uMapLookup "LabelledContent" "labelledcontentTable" u (labelledcontentTable cdb)
+
+refFind :: UID -> ChunkDB -> Reference
+refFind u cdb = uMapLookup "Reference" "refTable" u (refTable cdb)
+
+refbyLookup :: UID -> M.Map UID [UID] -> [UID]
+refbyLookup c = fromMaybe [] . M.lookup c
+
+-- | Trace a 'UID' to related 'UID's.
+traceLookup :: UID -> M.Map UID [UID] -> [UID]
+traceLookup c = fromMaybe [] . M.lookup c

@@ -72,10 +72,10 @@ basisConceptChunks =
 -- to all of the new chunk databases created using the cdb constructor.
 basisCDB :: ChunkDB
 basisCDB =
-    insertAll' siUnits
-  $ insertAll' basisConceptChunks
-  $ insertAll' basisSymbols
-  $ insertAll' basisIdeaDicts
+    insertAll siUnits
+  $ insertAll basisConceptChunks
+  $ insertAll basisSymbols
+  $ insertAll basisIdeaDicts
     empty
 
   -- | Smart constructor for chunk databases. Takes in the following:
@@ -96,15 +96,15 @@ cdb :: [DefinedQuantityDict] -> [IdeaDict] -> [ConceptChunk] -> [UnitDefn] ->
     [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] ->
     [ConceptInstance] -> [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
 cdb s t c u d ins gd tm ci lc r cits =
-    insertAll' s
-  $ insertAll' t
-  $ insertAll' c
-  $ insertAll' u
-  $ insertAll' d
-  $ insertAll' ins
-  $ insertAll' gd
-  $ insertAll' tm
-  $ insertAll' ci
-  $ insertAll' cits
+    insertAll s
+  $ insertAll t
+  $ insertAll c
+  $ insertAll u
+  $ insertAll d
+  $ insertAll ins
+  $ insertAll gd
+  $ insertAll tm
+  $ insertAll ci
+  $ insertAll cits
   $ basisCDB { labelledcontentTable = idMap lc,
                refTable = idMap r }

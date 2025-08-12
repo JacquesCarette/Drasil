@@ -193,7 +193,7 @@ fillReqs [] si = si
 fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_systemdb = db} = genReqs x -- This causes overwrites in the ChunkDB for all requirements.
   where
     genReqs [] = si
-    genReqs (FReqsSub c _:_) = si { _systemdb = insertAll db $ nub c }
+    genReqs (FReqsSub c _:_) = si { _systemdb = insertAll (nub c) db }
     genReqs (_:xs) = genReqs xs
 fillReqs (_:xs) si = fillReqs xs si
 

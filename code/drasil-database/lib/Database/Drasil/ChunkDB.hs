@@ -15,6 +15,7 @@ module Database.Drasil.ChunkDB
     findRefsOrErr,
     findAll,
     findAllUIDs,
+    findUnused,
     insert,
     insert',
     insertAll,
@@ -34,17 +35,17 @@ module Database.Drasil.ChunkDB
 where
 
 import Data.List (nub, (\\))
-import qualified Data.Map.Strict as M -- NOTE: If we don't use 'Strict'ness here, it can cause funkiness! In particular, the `union` might not throw errors when it should!
+import qualified Data.Map.Strict as M -- NOTE: Using strict maps is important, else `union` might not throw errors when it should.
 import Data.Maybe (fromMaybe, isJust, mapMaybe)
 import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, typeOf, typeRep, cast)
 
 import Drasil.Database.Chunk (Chunk, HasChunkRefs (chunkRefs), IsChunk, mkChunk, unChunk, chunkType)
-import Language.Drasil
+import Language.Drasil (HasUID(..), UID, LabelledContent, Reference)
 import Control.Lens ((^.))
 
 import Debug.Trace (trace)
 
-import Utils.Drasil
+import Utils.Drasil (errMsg, warnMsg)
 
 type ReferredBy = [UID]
 
@@ -58,9 +59,10 @@ idMap :: HasUID a => [a] -> UMap a
 idMap vals = M.fromList $ zipWith (\v i -> (v ^. uid, (v, i))) vals [0..]
 
 data ChunkDB = ChunkDB {
-    chunkTable :: ChunkByUID
+    chunkTable     :: ChunkByUID
   , chunkTypeTable :: ChunksByTypeRep
-  -- NOT CHUNKS
+
+  -- FIXME: All things below need to be rebuilt.
   , labelledcontentTable :: UMap LabelledContent -- TODO: LabelledContent needs to be rebuilt. See JacquesCarette/Drasil#4023.
   , refTable             :: UMap Reference -- TODO: References need to be rebuilt. See JacquesCarette/Drasil#4022.
   , traceTable           :: M.Map UID [UID]
@@ -114,9 +116,10 @@ traceLookup c = fromMaybe [] . M.lookup c
 findOrErr :: Typeable a => UID -> ChunkDB -> a
 findOrErr u = fromMaybe (error $ "Failed to find chunk " ++ show u) . find u
 
--- The TypeRep input and implicit type information is not optimal, but it is
--- required because we don't have access to the type information in the raw
--- expressions.
+-- The explicit TypeRep input and implicit type information is not optimal, but
+-- it is required because we don't have access to the type information in the
+-- raw expressions. We need both data and type information to find the
+-- appropriate chunks.
 findAll :: Typeable a => TypeRep -> ChunkDB -> [a]
 findAll tr cdb
   | tr == typeRep (Proxy @LabelledContent) =
@@ -142,6 +145,9 @@ findRefs u cdb = do
 
 findRefsOrErr :: UID -> ChunkDB -> [UID]
 findRefsOrErr u = fromMaybe (error $ "Failed to find references for unknown chunk " ++ show u) . find u
+
+findUnused :: ChunkDB -> [UID]
+findUnused = M.keys . M.filter (\(_, refs) -> null refs) . chunkTable
 
 insert' :: IsChunk a => a -> ChunkDB -> ChunkDB
 insert' = flip insert
@@ -170,7 +176,7 @@ insert0 cdb c = cdb'
     ctr' = M.alter (Just . maybe [c'] (++ [c'])) (typeOf c) (chunkTypeTable cdb)
 
     cdb' :: ChunkDB
-    cdb' = ChunkDB finalCu ctr' (labelledcontentTable cdb) (refTable cdb) (traceTable cdb) (refbyTable cdb)
+    cdb' = cdb {chunkTable = finalCu, chunkTypeTable = ctr'}
 
 insert :: IsChunk a => ChunkDB -> a -> ChunkDB
 insert cdb c

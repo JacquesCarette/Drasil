@@ -183,10 +183,14 @@ fillTraceMaps dd si@SI{_systemdb = db} = si { _systemdb = newCDB }
     tdb = generateTraceMap dd
     newCDB = db { traceTable = tdb, refbyTable = invert tdb }
 
+-- FIXME: ChunkDB-related work: `fillReqs` should not be used at all. It is a
+-- remnant of the old document-based derivation of System. See the note on the
+-- `ReqrmntSec` pattern matching line.
+ 
 -- | Fills in the requirements section of the system information using the document description.
 fillReqs :: DocDesc -> System -> System
 fillReqs [] si = si
-fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_systemdb = db} = genReqs x
+fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_systemdb = db} = genReqs x -- This causes overwrites in the ChunkDB for all requirements.
   where
     genReqs [] = si
     genReqs (FReqsSub c _:_) = si { _systemdb = insertAll db $ nub c }

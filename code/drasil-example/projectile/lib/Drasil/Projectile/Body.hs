@@ -1,6 +1,6 @@
 module Drasil.Projectile.Body (printSetting, si, srs, fullSI) where
 
-import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
+import Drasil.Metadata (inModel)
 import Language.Drasil
 import Drasil.SRSDocument
 import Database.Drasil.ChunkDB (cdb)
@@ -11,15 +11,15 @@ import qualified Drasil.DocLang.SRS as SRS
 
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (analysis, physics,
-  problem, assumption, goalStmt, physSyst, sysCont, software, user,
-  requirement, refBy, refName, typUnc, example, softwareSys, system, environment, 
+  problem, assumption, sysCont, software, user,
+  example, softwareSys, system, environment, 
   product_, interface, condition, physical, datum, input_, softwareConstraint, 
   output_, endUser)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
+import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Math (cartesian)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (gravity, physicCon',
-  rectilinear, oneD, twoD, motion, distance, collision, positionVec)
+  rectilinear, twoD, motion, distance, collision, positionVec)
 import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.Quantities.Math (pi_, piConst)

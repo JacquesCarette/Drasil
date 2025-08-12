@@ -1,4 +1,3 @@
-{-# LANGUAGE TypeApplications #-}
 -- | Utilities to get grab certain chunks (from 'Expr', 'Sentence', etc) by
 -- 'UID' and dereference the chunk it refers to.
 module Drasil.GetChunks (ccss, ccss', combine, vars, citeDB) where

@@ -1,5 +1,4 @@
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE TypeApplications #-}
 module Language.Drasil.TypeCheck where
 
 import Control.Lens ((^.))

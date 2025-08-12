@@ -41,7 +41,6 @@ makeLenses ''DefinedQuantityDict
 class DefinesQuantity d where
   defLhs :: Getter d DefinedQuantityDict
 
-
 instance HasChunkRefs DefinedQuantityDict where
   chunkRefs = const [] -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 

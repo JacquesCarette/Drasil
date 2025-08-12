@@ -1,5 +1,4 @@
 {-# LANGUAGE PostfixOperators #-}
-{-# LANGUAGE TypeApplications #-}
 -- | Defines functions to create traceability matrices in SRS documents.
 module Drasil.DocumentLanguage.TraceabilityMatrix where
 

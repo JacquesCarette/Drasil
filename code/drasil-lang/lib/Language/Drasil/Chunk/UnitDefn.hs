@@ -33,7 +33,6 @@ import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift),
 import Drasil.Database.Chunk (HasChunkRefs(..))
 import Drasil.Database.UID (UID, HasUID(..), mkUid)
 
-
 -- | For defining units.
 -- It has a 'ConceptChunk' (that defines what kind of unit it is),
 -- a unit symbol, maybe another (when it is a synonym),

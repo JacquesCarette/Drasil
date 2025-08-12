@@ -1,5 +1,4 @@
 {-# LANGUAGE PostfixOperators #-}
-{-# LANGUAGE TypeApplications #-}
 -- | Defines functions used to create the Traceability Matrices and Graphs section.
 module Drasil.Sections.TraceabilityMandGs (
   -- * Main Functions

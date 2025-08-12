@@ -1,5 +1,6 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE TypeApplications #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Database.Drasil.ChunkDB (
   ChunkDB,
@@ -99,18 +100,16 @@ find u cdb = do
 findOrErr :: Typeable a => UID -> ChunkDB -> a
 findOrErr u = fromMaybe (error $ "Failed to find chunk " ++ show u) . find u
 
--- The explicit TypeRep input and implicit type information is not optimal, but
--- it is required because we don't have access to the type information in the
--- raw expressions. We need both data and type information to find the
--- appropriate chunks.
-findAll :: Typeable a => TypeRep -> ChunkDB -> [a]
-findAll tr cdb
+findAll :: forall a. IsChunk a => ChunkDB -> [a]
+findAll cdb
   | tr == typeRep (Proxy @LabelledContent) =
       mapMaybe (cast . fst) $ M.elems $ labelledcontentTable cdb
   | tr == typeRep (Proxy @Reference) =
       mapMaybe (cast . fst) $ M.elems $ refTable cdb
   | otherwise =
       maybe [] (mapMaybe unChunk) $ M.lookup tr (chunkTypeTable cdb)
+  where
+    tr = typeRep (Proxy :: Proxy a)
 
 findAll' :: TypeRep -> ChunkDB -> [UID]
 findAll' tr cdb

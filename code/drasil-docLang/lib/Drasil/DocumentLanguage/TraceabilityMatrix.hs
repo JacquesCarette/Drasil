@@ -94,7 +94,7 @@ traceView = traceViewFilt (const True)
 
 -- | Turns a 'Concept' into a 'TraceViewCat' via its domain.
 traceViewCC :: Concept c => c -> TraceViewCat -- FIXME: Regrettably, the manual type annotation is required here (below).
-traceViewCC dom u c = traceViewFilt (isDomUnder (dom ^. uid) . sDom . cdom) (findAll (typeRep $ Proxy @ConceptInstance) :: ChunkDB -> [ConceptInstance]) u c
+traceViewCC dom u c = traceViewFilt (isDomUnder (dom ^. uid) . sDom . cdom) findAllConcInsts u c
   where
     isDomUnder :: UID -> UID -> Bool
     isDomUnder filtDom curr

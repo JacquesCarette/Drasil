@@ -1,26 +1,24 @@
-{-# LANGUAGE TypeApplications #-}
 -- FIXME: Why is this a `Language` top-level module name?
 module Language.Drasil.Dump where
 
-import qualified Database.Drasil as DB
-import Drasil.System (System, systemdb)
-
-import System.IO
+import Control.Lens ((^.))
 import Data.Aeson (ToJSON)
 import Data.Aeson.Encode.Pretty (encodePretty)
 import qualified Data.ByteString.Lazy.Char8 as LB
 import qualified Data.Map.Strict as SM
-
 import Data.Typeable (Proxy(Proxy), typeRep)
+import System.IO
+import System.Environment (lookupEnv)
+import Text.PrettyPrint
 
 import Language.Drasil (IdeaDict)
+import Language.Drasil.Printers (PrintingInformation, printAllDebugInfo)
 import Utils.Drasil (invert, atLeast2, createDirIfMissing)
 import Database.Drasil
-import Control.Lens ((^.))
-import System.Environment (lookupEnv)
+import qualified Database.Drasil as DB
+import Drasil.System (System, systemdb)
+import Drasil.Database.SearchTools (findAllIdeaDicts)
 
-import Language.Drasil.Printers (PrintingInformation, printAllDebugInfo)
-import Text.PrettyPrint
 
 type Path = String
 type TargetFile = String
@@ -45,7 +43,7 @@ dumpEverything0 si pinfo targetPath = do
       (sharedUIDs, _) = SM.partition atLeast2 invertedChunkDump
       traceDump = traceTable chunkDb
       refByDump = refbyTable chunkDb
-      justTerms = map (^. uid) (findAll (typeRep $ Proxy @IdeaDict) chunkDb :: [IdeaDict])
+      justTerms = map (^. uid) (findAllIdeaDicts chunkDb)
 
   dumpTo chunkDump $ targetPath ++ "seeds.json"
   dumpTo invertedChunkDump $ targetPath ++ "inverted_seeds.json"

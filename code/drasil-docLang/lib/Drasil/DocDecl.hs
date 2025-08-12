@@ -1,5 +1,4 @@
 {-# LANGUAGE GADTs #-}
-{-# LANGUAGE TypeApplications #-}
 -- | Document declaration types and functions for generating Software Requirement Specifications.
 
 -- Changes to DocSection and its subections should be reflected in the 'Creating Your Project 
@@ -149,4 +148,4 @@ mkDocDesc sys@SI{_inputs = is, _systemdb = db} = map sec where
   scsSub (CorrSolnPpties c cs) = DL.CorrSolnPpties c cs
 
   fromConcInsDB :: Concept c => c -> [ConceptInstance]
-  fromConcInsDB c = filter (\x -> sDom (cdom x) == c ^. uid) $ findAll (typeRep $ Proxy @ConceptInstance) db
+  fromConcInsDB c = filter (\x -> sDom (cdom x) == c ^. uid) $ findAll db

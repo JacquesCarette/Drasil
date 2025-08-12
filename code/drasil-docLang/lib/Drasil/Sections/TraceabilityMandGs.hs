@@ -19,6 +19,7 @@ import Data.Drasil.Concepts.Documentation (assumption, assumpDom, chgProbDom,
   unlikelyChg)
 import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
 import Database.Drasil
+import Drasil.Database.SearchTools
 import Drasil.System
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators as NC
@@ -43,19 +44,19 @@ tvAssumps = traceViewCC assumpDom
 
 -- | Traceability viewing data definitions. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvDataDefns :: TraceViewCat
-tvDataDefns = traceView (findAll (typeRep $ Proxy @DataDefinition) :: ChunkDB -> [DataDefinition])
+tvDataDefns = traceView findAllDataDefns
 
 -- | Traceability viewing general definitions. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvGenDefns :: TraceViewCat
-tvGenDefns = traceView (findAll (typeRep $ Proxy @GenDefn) :: ChunkDB -> [GenDefn])
+tvGenDefns = traceView findAllGenDefns
 
 -- | Traceability viewing theory models. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvTheoryModels :: TraceViewCat
-tvTheoryModels = traceView (findAll (typeRep $ Proxy @TheoryModel) :: ChunkDB -> [TheoryModel])
+tvTheoryModels = traceView findAllTheoryMods
 
 -- | Traceability viewing instance models. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvInsModels :: TraceViewCat
-tvInsModels = traceView (findAll (typeRep $ Proxy @InstanceModel) :: ChunkDB -> [InstanceModel])
+tvInsModels = traceView findAllInstMods
 
 -- | Traceability viewing goals. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvGoals :: TraceViewCat

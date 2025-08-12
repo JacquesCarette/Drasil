@@ -51,3 +51,27 @@ defResolve f db trg
 
 defResolve' :: ChunkDB -> UID -> DomDefn
 defResolve' = defResolve DomDefn
+
+findAllDataDefns :: ChunkDB -> [DataDefinition]
+findAllDataDefns = findAll
+
+findAllGenDefns :: ChunkDB -> [GenDefn]
+findAllGenDefns = findAll
+
+findAllInstMods :: ChunkDB -> [InstanceModel]
+findAllInstMods = findAll
+
+findAllTheoryMods :: ChunkDB -> [TheoryModel]
+findAllTheoryMods = findAll
+
+findAllConcInsts :: ChunkDB -> [ConceptInstance]
+findAllConcInsts = findAll
+
+findAllIdeaDicts :: ChunkDB -> [IdeaDict]
+findAllIdeaDicts = findAll
+
+findAllDefinedQuantities :: ChunkDB -> [DefinedQuantityDict]
+findAllDefinedQuantities = findAll
+
+findAllCitations :: ChunkDB -> [Citation]
+findAllCitations = findAll

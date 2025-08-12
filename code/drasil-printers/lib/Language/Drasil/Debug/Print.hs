@@ -71,7 +71,7 @@ mkTableFromLenses pin@PI { _ckdb = db } targetTy ttle hsNEs =
     hdr   = foldl' (\r l -> r $$ nest (nestNum * snd l) (text $ fst l)) (text "UID")       (zip (map fst namedLenses) ins)
     col a = foldl' (\r l -> r $$ nest (nestNum * snd l) (fst l a)     ) (text $ showUID a) (zip (map snd namedLenses) ins)
 
-    chunks = findAll (typeRep targetTy) db
+    chunks = findAll db
 
     nestNum = 30
 

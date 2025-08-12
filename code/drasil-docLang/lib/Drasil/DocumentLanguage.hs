@@ -138,11 +138,11 @@ fillReferences dd si@SI{_sys = sys} = si2
     -- get refs from SRSDecl. Should include all section labels and labelled content.
     refsFromSRS = concatMap findAllRefs allSections
     -- get refs from the stuff already inside the chunk database
-    ddefs   = findAll (typeRep $ Proxy @DataDefinition) chkdb :: [DataDefinition]
-    gdefs   = findAll (typeRep $ Proxy @GenDefn) chkdb :: [GenDefn]
-    imods   = findAll (typeRep $ Proxy @InstanceModel) chkdb :: [InstanceModel]
-    tmods   = findAll (typeRep $ Proxy @TheoryModel) chkdb :: [TheoryModel]
-    concIns = findAll (typeRep $ Proxy @ConceptInstance) chkdb :: [ConceptInstance]
+    ddefs   = findAll chkdb :: [DataDefinition]
+    gdefs   = findAll chkdb :: [GenDefn]
+    imods   = findAll chkdb :: [InstanceModel]
+    tmods   = findAll chkdb :: [TheoryModel]
+    concIns = findAll chkdb :: [ConceptInstance]
     lblCon  = map fst $ Map.elems $ labelledcontentTable chkdb
     -- search the old reference table just in case the user wants to manually add in some references
     refs    = map fst $ Map.elems $ refTable chkdb

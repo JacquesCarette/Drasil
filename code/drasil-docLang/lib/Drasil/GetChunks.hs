@@ -9,7 +9,7 @@ import Language.Drasil.ModelExpr.Development (meDep)
 
 import Database.Drasil (ChunkDB, findAll, findOrErr)
 
-import Drasil.Database.SearchTools (defResolve', DomDefn(definition))
+import Drasil.Database.SearchTools (defResolve', DomDefn(definition), findAllCitations)
 
 import Drasil.System (System, systemdb)
 
@@ -52,4 +52,4 @@ concpt' a m = map (definition . defResolve' m) $ meDep a
 
 -- | Extract bibliography entries for a system.
 citeDB :: System -> BibRef
-citeDB si = sortBy compareAuthYearTitle $ findAll (typeRep (Proxy @Citation)) (si ^. systemdb) :: [Citation]
+citeDB si = sortBy compareAuthYearTitle $ findAllCitations (si ^. systemdb)

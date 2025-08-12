@@ -3,15 +3,12 @@ module Drasil.SSP.Body (srs, si, symbMap, printSetting, fullSI) where
 
 import Prelude hiding (sin, cos, tan)
 
-import Control.Lens ((^.))
-
 import Drasil.System (SystemKind(Specification), mkSystem)
 import Language.Drasil hiding (Verb, number, organization, section, variable)
 import Drasil.SRSDocument
 import Database.Drasil.ChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
-import Theory.Drasil (output)
 import Drasil.Metadata (inModel)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -155,7 +152,7 @@ conceptChunks =
 
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks
+symbMap = cdb symbols ideaDicts conceptChunks
   [degree] dataDefs iMods generalDefinitions tMods concIns labCon allRefs citations
 
 abbreviationsList :: [IdeaDict]

@@ -9,10 +9,10 @@ import qualified Data.Map.Strict as SM
 import Control.Lens ((^.))
 
 type ChunkType = String
-type DumpedChunkDB = Map ChunkType [UID]
 
-umapDump :: HasUID a => UMap a -> [UID]
-umapDump = map ((^. uid) . fst) . SM.elems
+-- | A dumped representation of a 'ChunkDB', mapping chunk types ('String's) to
+-- lists of 'UID's.
+type DumpedChunkDB = Map ChunkType [UID]
 
 dumpChunkDB :: ChunkDB -> DumpedChunkDB
 dumpChunkDB cdb = SM.fromList $ map (\ty -> (show ty, findAll' ty cdb)) (typesRegistered cdb)

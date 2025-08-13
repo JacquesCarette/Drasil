@@ -6,9 +6,9 @@ import Control.Lens ((^.))
 import Data.Containers.ListUtils (nubOrd)
 import qualified Data.Map as Map
 
-import Drasil.Database.SearchTools
+import Drasil.Database.SearchTools (defResolve', findAllConcInsts, DomDefn(domain))
 import Language.Drasil
-import Database.Drasil
+import Database.Drasil (traceLookup, ChunkDB(traceTable, refbyTable))
 import Drasil.System hiding (purpose)
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Concepts.Documentation (purpose, component, dependency,
@@ -87,7 +87,7 @@ traceView :: HasUID a => (ChunkDB -> [a]) -> TraceViewCat
 traceView = traceViewFilt (const True)
 
 -- | Turns a 'Concept' into a 'TraceViewCat' via its domain.
-traceViewCC :: Concept c => c -> TraceViewCat -- FIXME: Regrettably, the manual type annotation is required here (below).
+traceViewCC :: Concept c => c -> TraceViewCat
 traceViewCC dom u c = traceViewFilt (isDomUnder (dom ^. uid) . sDom . cdom) findAllConcInsts u c
   where
     isDomUnder :: UID -> UID -> Bool

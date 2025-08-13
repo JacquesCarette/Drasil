@@ -65,7 +65,7 @@ data TheoryModel = TM
 makeLenses ''TheoryModel
 
 instance HasChunkRefs TheoryModel where
-  chunkRefs = const [] -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds the 'UID' of a 'TheoryModel'.
 instance HasUID             TheoryModel where uid = mk . uid

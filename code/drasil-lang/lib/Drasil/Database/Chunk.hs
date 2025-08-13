@@ -13,14 +13,16 @@ module Drasil.Database.Chunk
   )
 where
 
+import Control.Lens ((^.), to, Getter)
 import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, cast, typeOf, typeRep)
+import qualified Data.Set as S
+
 import Drasil.Database.UID (HasUID (..), UID)
-import Control.Lens
 
 -- | All chunks should expose what chunks they reference/rely on, so that we can
 -- test 'ChunkDB's to ensure all presupposed chunks are already registered.
 class HasChunkRefs a where
-  chunkRefs :: a -> [UID]
+  chunkRefs :: a -> S.Set UID
 
 -- | Constraint for anything that may be considered a valid chunk type.
 type IsChunk a = (HasUID a, HasChunkRefs a, Typeable a)

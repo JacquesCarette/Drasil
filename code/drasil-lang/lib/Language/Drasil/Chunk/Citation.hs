@@ -52,7 +52,7 @@ class HasCitation c where
   getCitations :: Lens' c [Citation]
 
 instance HasChunkRefs Citation where
-  chunkRefs = const [] -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds 'UID' of the 'Citation'.
 instance HasUID       Citation where uid       = citeID

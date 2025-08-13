@@ -42,7 +42,7 @@ class DefinesQuantity d where
   defLhs :: Getter d DefinedQuantityDict
 
 instance HasChunkRefs DefinedQuantityDict where
-  chunkRefs = const [] -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds the 'UID' of the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
 instance HasUID        DefinedQuantityDict where uid = con . uid

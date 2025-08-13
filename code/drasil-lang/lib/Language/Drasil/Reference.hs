@@ -31,7 +31,7 @@ class HasReference c where
   getReferences :: Lens' c [Reference]
 
 instance HasChunkRefs Reference where
-  chunkRefs = const [] -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Equal if 'UID's are equal.
 instance Eq            Reference where a == b = (a ^. uid) == (b ^. uid)

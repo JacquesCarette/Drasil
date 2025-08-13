@@ -184,11 +184,11 @@ insert0 cdb c = cdb'
     c' = mkChunk c
 
     -- Insert our chunk, it is not currently depended on by anything.
-    chunkTable' = M.insert (c ^. uid) (c', []) (chunkTable cdb)
+    chunkTable' = M.insert (c ^. uid) (c', mempty) (chunkTable cdb)
 
     -- Capture all dependencies of this chunk.
     chunkTable'' = foldr (insertRefExpectingExistence $ c' ^. uid) chunkTable'
-      $ nub (chunkRefs c)
+      $ chunkRefs c
 
     -- Add our chunk to its corresponding 'chunks by type' list.
     chunkTypeTable' = M.alter (Just . maybe [c'] (++ [c'])) (typeOf c) (chunkTypeTable cdb)

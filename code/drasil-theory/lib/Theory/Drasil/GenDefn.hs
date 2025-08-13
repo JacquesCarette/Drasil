@@ -29,7 +29,7 @@ data GenDefn = GD { _mk    :: ModelKind ModelExpr
 makeLenses ''GenDefn
 
 instance HasChunkRefs GenDefn where
-  chunkRefs = const [] -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds the 'UID' of a 'GenDefn'.
 instance HasUID             GenDefn where uid         = mk . uid

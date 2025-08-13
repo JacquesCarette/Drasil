@@ -57,7 +57,7 @@ data IdeaDict = IdeaDict {
 makeLenses ''IdeaDict
 
 instance HasChunkRefs IdeaDict where
-  chunkRefs = const [] -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Equal if 'UID's are equal.
 instance Eq        IdeaDict where a == b = a ^. uid == b ^. uid

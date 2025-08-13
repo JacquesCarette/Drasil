@@ -103,7 +103,7 @@ class HasContents c where
   accessContents :: Lens' c RawContent
 
 instance HasChunkRefs LabelledContent where
-  chunkRefs = const [] -- FIXME: `chunkRefs` should actually collect the referenced chunks.
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds 'UID' of the 'LabelledContent'.
 instance HasUID        LabelledContent where uid = ref . uid

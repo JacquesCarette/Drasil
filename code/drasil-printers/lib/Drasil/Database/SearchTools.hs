@@ -6,11 +6,11 @@ import Database.Drasil
 import Language.Drasil
 import Theory.Drasil
 
--- This is only neede for as long as `TypedUIDRef` is underused.
+-- This is only needed for as long as `TypedUIDRef` is underused.
 data TermAbbr = TermAbbr { longForm :: NP, shortForm :: Maybe String }
 
--- | Search for _any_ chunk that is an instance of 'Idea' and process its "term"
--- and abbreviation.
+-- | Search for a chunk that is an instance of 'Idea' and return its "term" and
+-- abbreviation, erroring out if it doesn't exist.
 termResolve :: (NP -> Maybe String -> c) -> ChunkDB -> UID -> c
 termResolve f db trg
   | (Just c) <- find trg db :: Maybe IdeaDict            = go f c
@@ -27,19 +27,19 @@ termResolve f db trg
     go :: Idea t => (NP -> Maybe String -> c) -> t -> c
     go f' c = f' (c ^. term) (getA c)
 
--- | Find a chunks "term" and abbreviation, if it exists.
+-- | Find a chunk's "term" and abbreviation, erroring out if it doesn't exist.
 termResolve' :: ChunkDB -> UID -> TermAbbr
 termResolve' = termResolve TermAbbr
 
 data DomDefn = DomDefn { domain :: [UID], definition :: Sentence }
 
--- | Looks up a 'UID' in all tables with concepts from the 'ChunkDB'. If nothing is found, an error is thrown.
+-- | Looks up a 'UID' in all tables with concepts from the 'ChunkDB'. If nothing
+-- is found, an error is thrown.
 defResolve :: ([UID] -> Sentence -> c) -> ChunkDB -> UID -> c
 defResolve f db trg
   | (Just c) <- find trg db :: Maybe DefinedQuantityDict = go f c
   | (Just c) <- find trg db :: Maybe ConceptChunk        = go f c
   | (Just c) <- find trg db :: Maybe UnitDefn            = go f c
---   | (Just c) <- (find trg db :: Maybe DataDefinition)      = go f c -- DataDefinition doesn't instantiate Definition!
   | (Just c) <- find trg db :: Maybe InstanceModel       = go f c
   | (Just c) <- find trg db :: Maybe GenDefn             = go f c
   | (Just c) <- find trg db :: Maybe TheoryModel         = go f c

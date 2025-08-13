@@ -48,7 +48,7 @@ import Utils.Drasil (errMsg, warnMsg)
 type Dependant = UID
 
 -- | Mapping of 'UID's to 'Chunk's and their dependants.
-type ChunkByUID = M.Map UID (Chunk, [Dependant]) -- FIXME: the list of dependants should be a Set.
+type ChunkByUID = M.Map UID (Chunk, [Dependant])
 
 -- | Mapping of chunk types to lists of instances of them (chunks).
 type ChunksByTypeRep = M.Map TypeRep [Chunk]

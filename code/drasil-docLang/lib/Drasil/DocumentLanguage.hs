@@ -32,6 +32,8 @@ import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
 import Database.Drasil
+import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
+  findAllInstMods, findAllTheoryMods, findAllConcInsts)
 
 import Drasil.System
 import Drasil.GetChunks (ccss, ccss', citeDB)
@@ -64,11 +66,8 @@ import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs)
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
-import Theory.Drasil
-
 import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
   software, unlikelyChg)
-
 
 -- * Main Function
 -- | Creates a document from a document description, a title combinator function, and system information.
@@ -136,11 +135,11 @@ fillReferences dd si@SI{_sys = sys} = si2
     -- get refs from SRSDecl. Should include all section labels and labelled content.
     refsFromSRS = concatMap findAllRefs allSections
     -- get refs from the stuff already inside the chunk database
-    ddefs   = findAll chkdb :: [DataDefinition]
-    gdefs   = findAll chkdb :: [GenDefn]
-    imods   = findAll chkdb :: [InstanceModel]
-    tmods   = findAll chkdb :: [TheoryModel]
-    concIns = findAll chkdb :: [ConceptInstance]
+    ddefs   = findAllDataDefns chkdb
+    gdefs   = findAllGenDefns chkdb
+    imods   = findAllInstMods chkdb
+    tmods   = findAllTheoryMods chkdb
+    concIns = findAllConcInsts chkdb
     lblCon  = map fst $ Map.elems $ labelledcontentTable chkdb
     -- search the old reference table just in case the user wants to manually add in some references
     refs    = map fst $ Map.elems $ refTable chkdb

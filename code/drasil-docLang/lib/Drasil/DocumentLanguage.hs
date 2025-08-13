@@ -31,7 +31,7 @@ import Drasil.TraceTable (generateTraceMap)
 import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
-import Database.Drasil
+import Database.Drasil (findOrErr, idMap, insertAll, ChunkDB(..))
 import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
   findAllInstMods, findAllTheoryMods, findAllConcInsts)
 
@@ -183,7 +183,7 @@ fillTraceMaps dd si@SI{_systemdb = db} = si { _systemdb = newCDB }
 -- FIXME: ChunkDB-related work: `fillReqs` should not be used at all. It is a
 -- remnant of the old document-based derivation of System. See the note on the
 -- `ReqrmntSec` pattern matching line.
- 
+
 -- | Fills in the requirements section of the system information using the document description.
 fillReqs :: DocDesc -> System -> System
 fillReqs [] si = si
@@ -196,14 +196,12 @@ fillReqs (_:xs) si = fillReqs xs si
 
 -- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
-extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
+extractUnits dd cdb = collectUnitDeps cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
 
--- | Gets the units of a 'Quantity' as 'UnitDefn's.
-collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
-collectUnits db = map (unitWrapper . unitLookup db) . concatMap getUnits . mapMaybe (getUnitLup db)
-
-unitLookup :: ChunkDB -> UID -> UnitDefn
-unitLookup db u = findOrErr u db
+-- | For a given list of 'Quantity's, collects the 'UnitDefn's dependencies of
+-- their units (i.e., what units their units are defined with).
+collectUnitDeps :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
+collectUnitDeps db = map (`findOrErr` db) . concatMap getUnits . mapMaybe (getUnitLup db)
 
 getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
 getUnitLup m c = getUnit (findOrErr (c ^. uid) m :: DefinedQuantityDict)

@@ -9,11 +9,11 @@ import Drasil.System
 import qualified Language.Drasil.Sentence.Combinators as S
 
 -- TODO: Add export parameters in a module
-import Drasil.DocLang (mkNb, LsnDecl, LsnChapter(BibSec, LearnObj, Review, CaseProb, Example), 
+import Drasil.DocLang (mkNb, LsnDecl, LsnChapter(BibSec, LearnObj, Review, CaseProb, Example),
   LearnObj(..), Review(..), CaseProb(..), Example(..))
 
-import Data.Drasil.Quantities.Physics (physicscon)
-import Data.Drasil.Concepts.Physics (physicCon)
+import qualified Data.Drasil.Quantities.Physics as Qs
+import qualified Data.Drasil.Concepts.Physics as CCs
 
 import Data.Drasil.People (spencerSmith)
 
@@ -42,7 +42,7 @@ mkNB = [
 
 si :: System
 si = mkSystem
-  projectileMotion Notebook [spencerSmith]
+  projectileMotionLesson Notebook [spencerSmith]
   [] [] [] []
   ([] :: [DefinedQuantityDict])
   [] [] [] [] []
@@ -50,9 +50,14 @@ si = mkSystem
   symbMap
 
 symbMap :: ChunkDB
-symbMap = cdb (map dqdWr physicscon ++ symbols) (nw projectileMotion :
-  map nw physicCon ++ concepts) 
-  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] allRefs []
+symbMap = cdb symbols ideaDicts conceptChunks ([] :: [UnitDefn]) [] [] [] [] [] [] allRefs []
+
+ideaDicts :: [IdeaDict]
+ideaDicts = nw projectileMotionLesson : concepts
+
+conceptChunks :: [ConceptChunk]
+conceptChunks = [CCs.motion, CCs.acceleration, CCs.velocity, CCs.force,
+  CCs.verticalMotion, CCs.gravity, CCs.position]
 
 usedDB :: ChunkDB
 usedDB = cdb' ([] :: [DefinedQuantityDict]) (map nw symbols :: [IdeaDict]) ([] :: [ConceptChunk])
@@ -60,11 +65,13 @@ usedDB = cdb' ([] :: [DefinedQuantityDict]) (map nw symbols :: [IdeaDict]) ([] :
   ([] :: [LabelledContent]) ([] :: [Reference]) []
 
 symbols :: [DefinedQuantityDict]
-symbols = [dqdWr horiz_velo]
+symbols = map dqdWr [Qs.iSpeed, Qs.ixSpeed, Qs.iySpeed, Qs.speed, Qs.constAccel,
+  Qs.gravitationalAccel, Qs.xAccel, Qs.yAccel, Qs.time, Qs.ixPos, Qs.iyPos,
+  Qs.xPos, Qs.yPos, Qs.ixVel, Qs.iyVel, Qs.xVel, Qs.yVel, Qs.scalarPos,
+  Qs.iPos, Qs.height, horiz_velo]
 
-projectileMotion :: CI
-projectileMotion = commonIdea "projectileMotion" (pn "Projectile Motion Lesson") "Projectile Motion" []
-
+projectileMotionLesson :: CI
+projectileMotionLesson = commonIdea "projMotLsn" (pn "Projectile Motion Lesson") "Projectile Motion" []
 
 allRefs :: [Reference]
-allRefs = nub (figRefs ++ eqnRefs) 
+allRefs = nub (figRefs ++ eqnRefs)

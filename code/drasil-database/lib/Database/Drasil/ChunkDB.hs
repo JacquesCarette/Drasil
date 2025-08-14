@@ -124,8 +124,8 @@ find u cdb = do
 
 -- | Find a chunk by its 'UID' in the 'ChunkDB', throwing a hard error if it is
 -- not found.
-findOrErr :: Typeable a => UID -> ChunkDB -> a
-findOrErr u = fromMaybe (error $ "Failed to find chunk " ++ show u) . find u
+findOrErr :: forall a. Typeable a => UID -> ChunkDB -> a
+findOrErr u = fromMaybe (error $ "Failed to find chunk " ++ show u ++ " (expected type: " ++ show (typeRep $ Proxy @a) ++ ")") . find u
 
 -- | Find all chunks of a specific type in the 'ChunkDB'.
 findAll :: forall a. IsChunk a => ChunkDB -> [a]

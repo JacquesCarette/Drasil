@@ -9,6 +9,7 @@ module Language.Drasil.Chunk.NamedIdea (
   nc, ncUID, nw, mkIdea, mkIdeaUID
 ) where
 
+import Drasil.Database.Chunk (HasChunkRefs(..))
 import Drasil.Database.UID (mkUid, UID, HasUID(..))
 import Control.Lens ((^.), makeLenses)
 
@@ -54,6 +55,9 @@ data IdeaDict = IdeaDict {
   mabbr :: Maybe String
 }
 makeLenses ''IdeaDict
+
+instance HasChunkRefs IdeaDict where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Equal if 'UID's are equal.
 instance Eq        IdeaDict where a == b = a ^. uid == b ^. uid

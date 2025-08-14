@@ -54,11 +54,6 @@ symbMap = cdb (map dqdWr physicscon ++ symbols) (nw projectileMotion :
   map nw physicCon ++ concepts) 
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] allRefs []
 
-usedDB :: ChunkDB
-usedDB = cdb' ([] :: [DefinedQuantityDict]) (map nw symbols :: [IdeaDict]) ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) [] [] [] [] ([] :: [ConceptInstance])
-  ([] :: [LabelledContent]) ([] :: [Reference]) []
-
 symbols :: [DefinedQuantityDict]
 symbols = [dqdWr horiz_velo]
 

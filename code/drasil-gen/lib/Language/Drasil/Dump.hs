@@ -1,22 +1,22 @@
 -- FIXME: Why is this a `Language` top-level module name?
 module Language.Drasil.Dump where
 
-import qualified Database.Drasil as DB
-import Drasil.System (System, systemdb)
-
-import System.IO
+import Control.Lens ((^.))
 import Data.Aeson (ToJSON)
 import Data.Aeson.Encode.Pretty (encodePretty)
 import qualified Data.ByteString.Lazy.Char8 as LB
 import qualified Data.Map.Strict as SM
-
-import Utils.Drasil (invert, atLeast2, createDirIfMissing)
-import Database.Drasil (traceTable, refbyTable, ChunkDB (termTable))
-import Control.Lens ((^.))
+import System.IO
 import System.Environment (lookupEnv)
+import Text.PrettyPrint
 
 import Language.Drasil.Printers (PrintingInformation, printAllDebugInfo)
-import Text.PrettyPrint
+import Utils.Drasil (invert, atLeast2, createDirIfMissing)
+import Database.Drasil
+import qualified Database.Drasil as DB
+import Drasil.System (System, systemdb)
+import Drasil.Database.SearchTools (findAllIdeaDicts)
+
 
 type Path = String
 type TargetFile = String
@@ -38,10 +38,10 @@ dumpEverything0 si pinfo targetPath = do
   let chunkDb = si ^. systemdb
       chunkDump = DB.dumpChunkDB chunkDb
       invertedChunkDump = invert chunkDump
-      (sharedUIDs, nonsharedUIDs) = SM.partition atLeast2 invertedChunkDump
-      traceDump = chunkDb ^. traceTable
-      refByDump = chunkDb ^. refbyTable
-      justTerms = SM.intersection nonsharedUIDs $ termTable chunkDb
+      (sharedUIDs, _) = SM.partition atLeast2 invertedChunkDump
+      traceDump = traceTable chunkDb
+      refByDump = refbyTable chunkDb
+      justTerms = map (^. uid) (findAllIdeaDicts chunkDb)
 
   dumpTo chunkDump $ targetPath ++ "seeds.json"
   dumpTo invertedChunkDump $ targetPath ++ "inverted_seeds.json"

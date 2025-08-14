@@ -152,7 +152,7 @@ func func_q_hat(_ inParams: inout InputParameters, _ q: Double) throws -> Double
         throw "Error closing file."
     }
     
-    return q * pow(inParams.a * inParams.b, 2.0) / (7.17e10 * pow(inParams.h, 4.0) * Double(inParams.GTF))
+    return q * pow(inParams.a * inParams.b, 2.0) / (7.17e10 * pow(inParams.h, 4.0) * inParams.GTF)
 }
 
 /** Calculates tolerable load
@@ -457,7 +457,7 @@ func func_LR(_ inParams: inout InputParameters, _ NFL: Double) throws -> Double 
         throw "Error closing file."
     }
     
-    return NFL * Double(inParams.GTF) * 1.0
+    return NFL * inParams.GTF * 1.0
 }
 
 /** Calculates probability of breakage

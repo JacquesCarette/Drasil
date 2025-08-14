@@ -126,21 +126,21 @@ class InputParameters:
         outfile.close()
         
         if self.g == "AN":
-            self.GTF = 1
+            self.GTF = 1.0
             outfile = open("log.txt", "a")
             print("var 'self.GTF' assigned ", end="", file=outfile)
             print(self.GTF, end="", file=outfile)
             print(" in module InputParameters", file=outfile)
             outfile.close()
         elif self.g == "FT":
-            self.GTF = 4
+            self.GTF = 4.0
             outfile = open("log.txt", "a")
             print("var 'self.GTF' assigned ", end="", file=outfile)
             print(self.GTF, end="", file=outfile)
             print(" in module InputParameters", file=outfile)
             outfile.close()
         elif self.g == "HS":
-            self.GTF = 2
+            self.GTF = 2.0
             outfile = open("log.txt", "a")
             print("var 'self.GTF' assigned ", end="", file=outfile)
             print(self.GTF, end="", file=outfile)

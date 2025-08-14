@@ -2,14 +2,19 @@
 
 <div id="Table:TAbbAcc"></div>
 
-|Abbreviation|Full Form           |
-|:-----------|:-------------------|
-|AR          |Aspect Ratio        |
-|GTF         |Glass Type Factor   |
-|LDF         |Load Duration Factor|
-|LR          |Load Resistance     |
-|LSF         |Load Share Factor   |
-|NFL         |Non-Factored Load   |
-|SD          |Stand Off Distance  |
+|Abbreviation|Full Form                 |
+|:-----------|:-------------------------|
+|A           |Assumption                |
+|AN          |Annealed                  |
+|FR          |Functional Requirement    |
+|FT          |Fully Tempered            |
+|GS          |Goal Statement            |
+|HS          |Heat Strengthened         |
+|LC          |Likely Change             |
+|NFR         |Non-Functional Requirement|
+|R           |Requirement               |
+|RefBy       |Referenced by             |
+|RefName     |Reference Name            |
+|UC          |Unlikely Change           |
 
 **<p align="center">Abbreviations and Acronyms</p>**

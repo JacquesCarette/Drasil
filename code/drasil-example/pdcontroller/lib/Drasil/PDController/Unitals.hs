@@ -118,7 +118,7 @@ odeAbsTolConst = mkQuantDef dqdAbsTol (dbl 1.0e-10)
 odeRelTolConst = mkQuantDef dqdRelTol (dbl 1.0e-10)
 
 opProcessVariable
-  = constrained' (dqdNoUnit processVariable symYT Real)
+  = constrained' (dqdNoUnit processVariable symYT (Vect Real))
       [gtZeroConstr]
       (exactDbl 1)
 dqdProcessVariableTD = dqdWr opProcessVariable

@@ -23,7 +23,7 @@ public class InputParameters {
     public double SD_z;
     public double h;
     public double LDF;
-    public int GTF;
+    public double GTF;
     public double SD;
     public double AR;
     public double w_TNT;
@@ -156,7 +156,7 @@ public class InputParameters {
         outfile.Close();
         
         if (this.g == "AN") {
-            this.GTF = 1;
+            this.GTF = 1.0;
             outfile = new StreamWriter("log.txt", true);
             outfile.Write("var 'this.GTF' assigned ");
             outfile.Write(this.GTF);
@@ -164,7 +164,7 @@ public class InputParameters {
             outfile.Close();
         }
         else if (this.g == "FT") {
-            this.GTF = 4;
+            this.GTF = 4.0;
             outfile = new StreamWriter("log.txt", true);
             outfile.Write("var 'this.GTF' assigned ");
             outfile.Write(this.GTF);
@@ -172,7 +172,7 @@ public class InputParameters {
             outfile.Close();
         }
         else if (this.g == "HS") {
-            this.GTF = 2;
+            this.GTF = 2.0;
             outfile = new StreamWriter("log.txt", true);
             outfile.Write("var 'this.GTF' assigned ");
             outfile.Write(this.GTF);

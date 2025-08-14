@@ -21,7 +21,7 @@ class InputParameters {
     var SD_z: Double = 0.0
     var h: Double = 0.0
     var LDF: Double = 0.0
-    var GTF: Int = 0
+    var GTF: Double = 0.0
     var SD: Double = 0.0
     var AR: Double = 0.0
     var w_TNT: Double = 0.0
@@ -488,7 +488,7 @@ class InputParameters {
         }
         
         if self.g == "AN" {
-            self.GTF = 1
+            self.GTF = 1.0
             do {
                 outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
                 try outfile.seekToEnd()
@@ -518,7 +518,7 @@ class InputParameters {
             }
         }
         else if self.g == "FT" {
-            self.GTF = 4
+            self.GTF = 4.0
             do {
                 outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
                 try outfile.seekToEnd()
@@ -548,7 +548,7 @@ class InputParameters {
             }
         }
         else if self.g == "HS" {
-            self.GTF = 2
+            self.GTF = 2.0
             do {
                 outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
                 try outfile.seekToEnd()

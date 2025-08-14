@@ -143,7 +143,7 @@ void InputParameters::derived_values() {
     outfile.close();
     
     if (this->g == "AN") {
-        this->GTF = 1;
+        this->GTF = 1.0;
         outfile.open("log.txt", std::fstream::app);
         outfile << "var 'this->GTF' assigned ";
         outfile << this->GTF;
@@ -151,7 +151,7 @@ void InputParameters::derived_values() {
         outfile.close();
     }
     else if (this->g == "FT") {
-        this->GTF = 4;
+        this->GTF = 4.0;
         outfile.open("log.txt", std::fstream::app);
         outfile << "var 'this->GTF' assigned ";
         outfile << this->GTF;
@@ -159,7 +159,7 @@ void InputParameters::derived_values() {
         outfile.close();
     }
     else if (this->g == "HS") {
-        this->GTF = 2;
+        this->GTF = 2.0;
         outfile.open("log.txt", std::fstream::app);
         outfile << "var 'this->GTF' assigned ";
         outfile << this->GTF;

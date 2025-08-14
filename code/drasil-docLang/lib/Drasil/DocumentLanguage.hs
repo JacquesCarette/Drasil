@@ -23,9 +23,9 @@ import Drasil.TraceTable (generateTraceMap)
 import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
-import Database.Drasil (ChunkDB, collectUnits, refbyTable, conceptinsTable, 
+import Database.Drasil (ChunkDB, collectUnits, collectAbbreviations, refbyTable, conceptinsTable, 
   idMap, conceptinsTable, traceTable, generateRefbyMap, refTable, labelledcontentTable, 
-  theoryModelTable, insmodelTable, gendefTable, dataDefnTable)
+  theoryModelTable, insmodelTable, gendefTable, dataDefnTable, conceptChunkTable)
 
 import Drasil.System
 import Drasil.GetChunks (ccss, ccss', citeDB)
@@ -63,8 +63,8 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
 import Control.Lens ((^.), set)
 import Data.Function (on)
 import Data.List (nub, sortBy, sortOn)
-import qualified Data.Map as Map (elems, toList, assocs, keys)
-import Data.Maybe (maybeToList)
+import qualified Data.Map as Map (elems, toList, assocs, keys, lookup)
+import Data.Maybe (maybeToList, mapMaybe)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 
@@ -193,6 +193,36 @@ fillReqs (_:xs) si = fillReqs xs si
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
 extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
 
+-- | Extracts abbreviations/acronyms found in the document description ('DocDesc') from a database ('ChunkDB').
+extractAbbreviations :: DocDesc -> ChunkDB -> [IdeaDict]
+extractAbbreviations dd cdb = map nw $ collectAbbreviations $ getAllChunksFromDB cdb ++ getAllChunksFromDoc dd cdb
+
+-- | Gets all chunks from the database that might have abbreviations.
+getAllChunksFromDB :: ChunkDB -> [ConceptChunk]
+getAllChunksFromDB cdb = map fst $ Map.elems $ conceptChunkTable cdb
+
+-- | Gets all chunks referenced in Ch constructors throughout the document.
+getAllChunksFromDoc :: DocDesc -> ChunkDB -> [ConceptChunk]
+getAllChunksFromDoc dd cdb = mapMaybe (lookupConceptChunk cdb) $ nub $ concatMap getSentenceUIDs (getDocDesc dd)
+
+-- | Helper to lookup a ConceptChunk by UID from the database.
+lookupConceptChunk :: ChunkDB -> UID -> Maybe ConceptChunk
+lookupConceptChunk cdb chunkUID = fst <$> Map.lookup chunkUID (conceptChunkTable cdb)
+
+-- | Extracts all UIDs from Ch constructors in a list of sentences.
+getSentenceUIDs :: Sentence -> [UID]
+getSentenceUIDs (Ch _ _ chunkUID) = [chunkUID]
+getSentenceUIDs (SyCh chunkUID) = [chunkUID]
+getSentenceUIDs (Sy _) = []
+getSentenceUIDs (S _) = []
+getSentenceUIDs (P _) = [] -- Symbol, no UIDs
+getSentenceUIDs (E _) = [] -- Expressions handled separately if needed
+getSentenceUIDs (Quote s) = getSentenceUIDs s
+getSentenceUIDs (Ref refUID s _) = refUID : getSentenceUIDs s
+getSentenceUIDs Percent = []
+getSentenceUIDs EmptyS = []
+getSentenceUIDs ((:+:) s1 s2) = getSentenceUIDs s1 ++ getSentenceUIDs s2
+
 -- * Section Creator Functions
 
 -- | Helper for creating the different document sections.
@@ -251,9 +281,9 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
     mkSubRef SI {_systemdb = cdb} (TSymb' f con) =
       mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
 
-    mkSubRef _ (TAandA ideas) =
+    mkSubRef SI {_systemdb = cdb} (TAandA _) =
       SRS.tOfAbbAcc
-        [LlC $ tableAbbAccGen $ nub ideas]
+        [LlC $ tableAbbAccGen $ nub $ extractAbbreviations dd cdb]
         []
 
 

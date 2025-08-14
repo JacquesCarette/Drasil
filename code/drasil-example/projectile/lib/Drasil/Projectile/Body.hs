@@ -1,6 +1,6 @@
 module Drasil.Projectile.Body (printSetting, si, srs, fullSI) where
 
-import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
+import Drasil.Metadata (inModel)
 import Language.Drasil
 import Drasil.SRSDocument
 import Database.Drasil.ChunkDB (cdb)
@@ -11,15 +11,15 @@ import qualified Drasil.DocLang.SRS as SRS
 
 import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (analysis, physics,
-  problem, assumption, goalStmt, physSyst, sysCont, software, user,
-  requirement, refBy, refName, typUnc, example, softwareSys, system, environment, 
+  problem, assumption, sysCont, software, user,
+  example, softwareSys, system, environment, 
   product_, interface, condition, physical, datum, input_, softwareConstraint, 
   output_, endUser)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
+import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Math (cartesian)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (gravity, physicCon',
-  rectilinear, oneD, twoD, motion, distance, collision, positionVec)
+  rectilinear, twoD, motion, distance, collision, positionVec)
 import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.Quantities.Math (pi_, piConst)
@@ -64,7 +64,7 @@ mkSRS = [TableOfContents,
     RefProg intro
       [ TUnits
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits]
-      , TAandA abbreviationsList 
+      , TAandA []
       ],
   IntroSec $
     IntroProg justification (phrase progName)
@@ -169,13 +169,6 @@ conceptChunks =
 symbMap :: ChunkDB
 symbMap = cdb (pi_ : symbols) ideaDicts conceptChunks ([] :: [UnitDefn])
   dataDefs iMods genDefns tMods concIns [] allRefs citations
-
-abbreviationsList  :: [IdeaDict]
-abbreviationsList  =
-  -- CIs
-  map nw acronyms ++
-  -- DefinedQuantityDicts
-  map nw symbols
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -302,8 +295,4 @@ outConstraints = [landPosUnc, offsetUnc, flightDurUnc]
 
 constrained :: [ConstrConcept]
 constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
-
-acronyms :: [CI]
-acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
-  physSyst, requirement, Doc.srs, refBy, refName, thModel, typUnc]
 

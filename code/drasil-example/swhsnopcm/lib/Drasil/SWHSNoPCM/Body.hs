@@ -13,8 +13,8 @@ import Language.Drasil.Code (ODEInfo (depVar))
 
 import Data.List ((\\))
 import Data.Drasil.People (thulasi)
-
-import Data.Drasil.Concepts.Documentation as Doc (material_, sysCont)
+import Data.Drasil.Concepts.Documentation
+  as Doc (material_, sysCont)
 import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import qualified Data.Drasil.Concepts.Physics as CP (physicCon', energy, mechEnergy, pressure)
@@ -39,7 +39,7 @@ import Drasil.SWHS.Body (charsOfReader, dataContMid, motivation,
   introStart, externalLinkRef, physSyst1, physSyst2, sysCntxtDesc,
   systContRespBullets, sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
-import Drasil.SWHS.Concepts (acronyms, coil, sWHT, tank, transient, water, con, phsChgMtrl)
+import Drasil.SWHS.Concepts (coil, sWHT, tank, transient, water, con, phsChgMtrl)
 import Drasil.SWHS.Requirements (nfRequirements)
 import Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, nwtnCooling, sensHtETemplate)
 import Drasil.SWHS.Unitals (deltaT, htFluxC, htFluxIn,
@@ -115,7 +115,7 @@ mkSRS = [TableOfContents,
   RefSec $ RefProg intro
   [TUnits,
   tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder, VectorUnits],
-  TAandA abbreviationsList],
+  TAandA []],
   IntroSec $
     IntroProg (introStart +:+ introStartNoPCM) (introEnd (plural progName) progName)
     [ IPurpose $ purpDoc progName Verbose
@@ -199,12 +199,7 @@ symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
   NoPCM.iMods genDefs tMods concIns [] allRefs citations
 
-abbreviationsList :: [IdeaDict]
-abbreviationsList =
-  -- CIs
-  nw progName : map nw acronyms ++
-  -- DefinedQuantityDicts
-  map nw symbols
+
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

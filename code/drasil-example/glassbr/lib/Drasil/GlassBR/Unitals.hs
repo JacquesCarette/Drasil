@@ -103,10 +103,10 @@ standOffDist = uq (constrained' (uc sD (variable "SD") Real metre)
     sfwrRange $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
 
 nomThick = cuc' "nomThick"
-  (nounPhraseSent $ S "nominal thickness t is in" +:+ eS (mkSet Rational (map dbl nominalThicknesses)))
+  (nounPhraseSent $ S "nominal thickness t is in" +:+ eS (mkSet Real (map dbl nominalThicknesses)))
   "the specified standard thickness of the glass plate" lT millimetre
-  {-Discrete nominalThicknesses, but not implemented-} Rational
-  [sfwrElem $ mkSet Rational (map dbl nominalThicknesses)] $ exactDbl 8 -- for testing
+  {-Discrete nominalThicknesses, but not implemented-} Real
+  [sfwrElem $ mkSet Real (map dbl nominalThicknesses)] $ exactDbl 8 -- for testing
 
 glassTypeCon = constrainedNRV' (dqdNoUnit glassTy lG String)
   [sfwrElem $ mkSet String $ map (str . abrv . snd) glassType]
@@ -262,7 +262,7 @@ gTF, loadSF, loadDF :: DefinedQuantityDict
 dimlessLoad = dqdNoUnit (dcc "dimlessLoad" (nounPhraseSP "dimensionless load") 
   "the dimensionless load") (hat lQ) Real
 
-gTF           = dqdNoUnit glTyFac (variable "GTF") Integer
+gTF           = dqdNoUnit glTyFac (variable "GTF") Real
 
 isSafePb   = dqdNoUnit (dcc "isSafePb" (nounPhraseSP "probability of glass breakage safety requirement")
   "the probability of glass breakage safety requirement") (variable "isSafePb") Boolean

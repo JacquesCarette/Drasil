@@ -40,7 +40,7 @@ import Data.Drasil.SI_Units (degree)
 import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SSP.DataDefs (dataDefs)
-import Drasil.SSP.Defs (acronyms, crtSlpSrf, defs, defs', effFandS, factor, fsConcept,
+import Drasil.SSP.Defs (crtSlpSrf, defs, defs', effFandS, factor, fsConcept,
   intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf, soil,
   soilLyr, soilMechanics, soilPrpty, ssa, stabAnalysis, waterTable)
 import Drasil.SSP.GenDefs (generalDefinitions)
@@ -80,7 +80,7 @@ si = mkSystem
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro
-  [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA abbreviationsList],
+  [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA []],
   IntroSec $ IntroProg startIntro kSent
     [ IPurpose $ purpDoc progName Verbose
     , IScope scope
@@ -157,15 +157,6 @@ conceptChunks =
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks
   [degree] dataDefs iMods generalDefinitions tMods concIns labCon allRefs citations
-
-abbreviationsList :: [IdeaDict]
-abbreviationsList =
-  -- CIs
-  map nw acronyms ++
-  -- ConceptChunks
-  nw progName :
-  -- DefinedQuantityDicts
-  map nw symbols
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

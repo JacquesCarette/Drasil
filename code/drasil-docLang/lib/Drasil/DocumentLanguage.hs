@@ -23,7 +23,7 @@ import Drasil.TraceTable (generateTraceMap)
 import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
-import Database.Drasil (ChunkDB, collectUnits, collectAbbreviations, refbyTable, conceptinsTable, 
+import Database.Drasil (ChunkDB, collectUnits, refbyTable, conceptinsTable, 
   idMap, conceptinsTable, traceTable, generateRefbyMap, refTable, labelledcontentTable, 
   theoryModelTable, insmodelTable, gendefTable, dataDefnTable, conceptChunkTable)
 
@@ -209,10 +209,16 @@ getAllChunksFromDoc dd cdb = mapMaybe (lookupConceptChunk cdb) $ nub $ concatMap
 lookupConceptChunk :: ChunkDB -> UID -> Maybe ConceptChunk
 lookupConceptChunk cdb chunkUID = fst <$> Map.lookup chunkUID (conceptChunkTable cdb)
 
+-- | Gets abbreviations/acronyms from a list of chunks that have abbreviations.
+collectAbbreviations :: Idea c => [c] -> [c]
+collectAbbreviations = mapMaybe (\c -> case getA c of
+                                        Nothing -> Nothing
+                                        Just _  -> Just c)
+
 -- | Extracts all UIDs from Ch constructors in a list of sentences.
 getSentenceUIDs :: Sentence -> [UID]
 getSentenceUIDs (Ch _ _ chunkUID) = [chunkUID]
-getSentenceUIDs (SyCh chunkUID) = [chunkUID]
+getSentenceUIDs (SyCh _) = [] -- Ignore symbol chunks
 getSentenceUIDs (Sy _) = []
 getSentenceUIDs (S _) = []
 getSentenceUIDs (P _) = [] -- Symbol, no UIDs

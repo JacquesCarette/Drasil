@@ -20,7 +20,7 @@ module Database.Drasil.ChunkDB (
   -- ** Constructors
   cdb', idMap, symbolMap, termMap, conceptMap, unitMap, traceMap, generateRefbyMap, -- idMap, termMap for docLang
   -- ** Lookup Functions
-  asOrderedList, collectUnits, collectAbbreviations,
+  asOrderedList, collectUnits,
   termResolve, termResolve', defResolve, symbResolve,
   traceLookup, refbyLookup,
   datadefnLookup, insmodelLookup, gendefLookup, theoryModelLookup,
@@ -298,13 +298,6 @@ addCdb cdb1 cdb2 =
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
 collectUnits m = map (unitWrapper . flip unitLookup (m ^. unitTable))
  . concatMap getUnits . mapMaybe (getUnitLup m)
-
--- | Gets abbreviations/acronyms from a list of chunks that have abbreviations.
-collectAbbreviations :: Idea c => [c] -> [c]
-collectAbbreviations = filter hasAbbreviation
-  where hasAbbreviation c = case getA c of
-                              Nothing -> False
-                              Just _  -> True
 
 -- | Trace a 'UID' to related 'UID's.
 traceLookup :: UID -> TraceMap -> [UID]

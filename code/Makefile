@@ -78,6 +78,7 @@ INSTALL_E_SUFFIX = _install
 DEBUG_E_SUFFIX = _debug
 MDBOOK_BUILD_E_SUFFIX = _mdbook_build
 MDBOOK_SERVER_E_SUFFIX = _mdbook_server
+JUPYTER_HTML_E_SUFFIX = _juphtml
 
 # add example names with the appropriate suffixes to create per-example targets
 GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES))
@@ -92,6 +93,7 @@ INSTALL_EXAMPLES = $(addsuffix $(INSTALL_E_SUFFIX), $(EXAMPLES))
 DEBUG_EXAMPLES = $(addsuffix $(DEBUG_E_SUFFIX), $(EXAMPLES))
 MDBOOK_BUILD_EXAMPLES = $(addsuffix $(MDBOOK_BUILD_E_SUFFIX), $(EXAMPLES))
 MDBOOK_SERVER_EXAMPLES = $(addsuffix $(MDBOOK_SERVER_E_SUFFIX), $(EXAMPLES))
+JUPYTER_HTML_EXAMPLES = $(addsuffix $(JUPYTER_HTML_E_SUFFIX), $(EXAMPLES))
 
 # Website names with appropriate suffixes.
 TEST_WEBSITE = $(addsuffix $(TEST_E_SUFFIX), $(WEBSITE_FOLDER_NAME))
@@ -287,6 +289,8 @@ packagedeps: graphmod check_dot
 # and then build the generated mdBook projects.
 mdbook_build: $(MDBOOK_BUILD_EXAMPLES) ##@Examples Build all generated mdBook projects.
 
+jupyter_html: $(JUPYTER_HTML_EXAMPLES) ##@Examples Extract HTML copies from all Jupyter SRS Notebooks.
+
 #--------------------------------------------------------------#
 #--- Targets that are used for individual packages/examples ---#
 #--------------------------------------------------------------#
@@ -294,8 +298,8 @@ mdbook_build: $(MDBOOK_BUILD_EXAMPLES) ##@Examples Build all generated mdBook pr
 # with an appended suffix (first argument of filter).
 
 # Variables needed to create individual example targets using filter.
-%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX) %$(MDBOOK_BUILD_E_SUFFIX) %$(MDBOOK_SERVER_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX) %$(MDBOOK_BUILD_E_SUFFIX) %$(MDBOOK_SERVER_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX) %$(MDBOOK_BUILD_E_SUFFIX) %$(MDBOOK_SERVER_E_SUFFIX) %$(JUPYTER_HTML_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX) %$(MDBOOK_BUILD_E_SUFFIX) %$(MDBOOK_SERVER_E_SUFFIX) %$(JUPYTER_HTML_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 %$(GEN_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX) %$(INSTALL_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
 
 # Build individual Drasil packages. Each package will have the target packageName_build.
@@ -406,6 +410,10 @@ $(filter %$(MDBOOK_BUILD_E_SUFFIX), $(MDBOOK_BUILD_EXAMPLES)): %$(MDBOOK_BUILD_E
 $(filter %$(MDBOOK_SERVER_E_SUFFIX), $(MDBOOK_SERVER_EXAMPLES)): %$(MDBOOK_SERVER_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX) %$(TRACE_GRAPH_SUFFIX)
 	- "$(SHELL)" "$(SCRIPT_FOLDER)copy_example_assets.sh" "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook"
 	mdbook serve --open "$(BUILD_FOLDER)$(EDIR)/SRS/mdBook"
+
+# Targets will have the form exampleName_juphtml.
+$(filter %$(JUPYTER_HTML_E_SUFFIX), $(JUPYTER_HTML_EXAMPLES)): %$(JUPYTER_HTML_E_SUFFIX): %$(GEN_E_SUFFIX)
+	jupyter nbconvert --to html "$(BUILD_FOLDER)$(EDIR)/SRS/Jupyter/*.ipynb"
 
 #----------------------------------------------------------------------------------#
 #--- Generate analysis of module, class, datatype, and class instance structure ---#
@@ -587,6 +595,7 @@ help:  ##@Help Show this help.
 	@echo "  X$(DCP_E_SUFFIX)  Get all generated code file paths in the example."
 	@echo "  X$(MDBOOK_BUILD_E_SUFFIX)      Build the mdBook SRS of an individual example."
 	@echo "  X$(MDBOOK_SERVER_E_SUFFIX)     Launch local server for the mdBook SRS of an individual example."
+	@echo "  X$(JUPYTER_HTML_E_SUFFIX)           Extract an HTML copy out of a Juypter Notebook."
 	@echo ""
 	@echo "Set a 'DEBUG_ENV' environment variable to 'true' if you want to check out the list of chunks in a Drasil run."
 	@echo ""
@@ -604,4 +613,4 @@ help_packages: ##@Help Lists all packages.
 		echo "  $$package"; \
 	done
 
-.PHONY: help setup_debug_vars clean clean_artifacts cleanArtifacts gool code deps hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all install examples tracegraphs doxygen shellcheck mdbook_build $(GOOLTEST) $(ALL_EXPANDED_TARGETS)
+.PHONY: help setup_debug_vars clean clean_artifacts cleanArtifacts gool code deps hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all install examples tracegraphs doxygen shellcheck mdbook_build jupyter_html $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

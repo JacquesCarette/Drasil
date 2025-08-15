@@ -95,7 +95,8 @@ individualExList ex@E{systemE = SI{_sys = sys}, codePath = srsP} =
   [Flat $ namedRef (buildDrasilExSrcRef ex) (S "Drasil Source Code"),
   Flat $ S "SRS:" +:+ namedRef (getSRSRef srsP HTML $ programName sys) (S "[HTML]") 
   +:+ namedRef (getSRSRef srsP TeX $ programName sys) (S "[PDF]")
-  +:+ namedRef (getSRSRef srsP MDBook $ programName sys) (S "[mdBook]"),
+  +:+ namedRef (getSRSRef srsP MDBook $ programName sys) (S "[mdBook]")
+  +:+ namedRef (getSRSRef srsP Jupyter $ programName sys) (S "[Jupyter (HTML)]"),
   Nested (S generatedCodeTitle) $ Bullet $ map (, Nothing) (versionList getCodeRef ex),
   Nested (S generatedCodeDocsTitle) $ Bullet $ map (, Nothing) (versionList getDoxRef noSwiftJlEx)]
     where
@@ -230,10 +231,11 @@ getSRSRef path format ex = makeURI refUID (getSRSPath path format ex) $ shortnam
 getSRSPath :: FilePath -> Format -> String -> FilePath
 getSRSPath path format ex = path ++ map toLower ex ++ "/SRS/" ++ show format ++ "/" ++ sufx format
   where
-    sufx MDBook = "book"
-    sufx HTML   = ex ++ "_SRS.html"
-    sufx TeX    = ex ++ "_SRS.pdf"
-    sufx _      = error "You can only get paths for TeX/HTML/MDBook."
+    sufx MDBook  = "book"
+    sufx HTML    = ex ++ "_SRS.html"
+    sufx TeX     = ex ++ "_SRS.pdf"
+    sufx Jupyter = ex ++ "_SRS.html"
+    sufx Plain   = error "Plain SRS display is not supported." 
 
 -- | Get the file paths for generated code and doxygen locations.
 getCodePath, getDoxPath :: FilePath -> String -> String -> FilePath
@@ -250,6 +252,7 @@ exampleRefs codePth srsDoxPth =
   map (getSRSRef srsDoxPth HTML . getAbrv) (examples codePth srsDoxPth) ++ 
   map (getSRSRef srsDoxPth TeX . getAbrv) (examples codePth srsDoxPth) ++ 
   map (getSRSRef srsDoxPth MDBook . getAbrv) (examples codePth srsDoxPth) ++ 
+  map (getSRSRef srsDoxPth Jupyter . getAbrv) (examples codePth srsDoxPth) ++ 
   map buildDrasilExSrcRef (examples codePth srsDoxPth)
 
 -- | Helpers to pull code and doxygen references from an example.

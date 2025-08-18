@@ -42,7 +42,6 @@ library:
   exposed-modules:
   - Language.Drasil.Code
   - Data.Drasil.ExternalLibraries.ODELibraries
-  # - Language.Drasil.Code.Code
   other-modules:
     - Language.Drasil.Chunk.Code
     - Language.Drasil.Chunk.CodeBase

@@ -212,4 +212,4 @@ isBasicNumSpace Array {}     = False
 isBasicNumSpace Actor {}     = False
 isBasicNumSpace Function {}  = False
 isBasicNumSpace Void         = False
-isBasicNumSpace ClifS {}     = False
+isBasicNumSpace (ClifS _ _ s) = isBasicNumSpace s

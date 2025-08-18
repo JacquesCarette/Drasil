@@ -313,12 +313,13 @@ listAccess v i = do
   v' <- v
   let i' = IC.intToIndex i
       t  = IC.listInnerType $ return $ valueType v'
+      vType = getType (valueType v')
       checkType (List _) = S.listAccessFunc t i'
       checkType (Set _) = S.listAccessFunc t i'
       checkType (Array _) = i' >>= 
                               (\ix -> funcFromData (brackets (RC.value ix)) t)
-      checkType _ = error "listAccess called on non-list-type value"
-  f <- checkType (getType (valueType v'))
+      checkType badType = error $ "listAccess called on non-list-type value: " ++ show badType
+  f <- checkType vType
   mkVal (RC.functionType f) (RC.value v' <> RC.function f)
 
 listSet :: (CommonRenderSym r) => SValue r -> SValue r -> SValue r -> SValue r

@@ -511,20 +511,20 @@ ordBfunc LEq = (?<=)
 ordBfunc GEq = (?>=)
 
 -- Maps a 'CCCBinOp' to it's corresponding GOOL binary function.
-vecVecVecBfunc :: CCCBinOp -> (SValue r -> SValue r -> SValue r)
-vecVecVecBfunc Cross = error "bfunc: Cross not implemented"
-vecVecVecBfunc CAdd = error "bfunc: Vector addition not implemented"
-vecVecVecBfunc CSub = error "bfunc: Vector subtraction not implemented"
-vecVecVecBfunc WedgeProd = error "bfunc: WedgeProd not implemented" -- TODO
-vecVecVecBfunc GeometricProd = error "bfunc: GeometricProd not implemented" -- TODO
+vecVecVecBfunc :: (SharedProg r) => CCCBinOp -> (SValue r -> SValue r -> SValue r)
+vecVecVecBfunc Cross = error "bfunc: Cross product not implemented" -- TODO: Implement cross product
+vecVecVecBfunc CAdd = (#+)  -- Vector addition using GOOL addition operator
+vecVecVecBfunc CSub = (#-)  -- Vector subtraction using GOOL subtraction operator
+vecVecVecBfunc WedgeProd = error "bfunc: WedgeProd not implemented" -- TODO: Implement wedge product
+vecVecVecBfunc GeometricProd = error "bfunc: GeometricProd not implemented" -- TODO: Implement geometric product
 
 -- Maps a 'CCNBinOp' to it's corresponding GOOL binary function.
 vecVecNumBfunc :: CCNBinOp -> (SValue r -> SValue r -> SValue r)
 vecVecNumBfunc Dot = error "convExpr DotProduct"
 
 -- Maps a 'NCCBinOp' to it's corresponding GOOL binary function.
-numVecVecBfunc :: NCCBinOp -> (SValue r -> SValue r -> SValue r)
-numVecVecBfunc Scale = error "convExpr Scaling of Vectors"
+numVecVecBfunc :: (SharedProg r) => NCCBinOp -> (SValue r -> SValue r -> SValue r)
+numVecVecBfunc Scale = (#*)  -- Scalar-vector multiplication using GOOL multiplication operator
 
 -- Maps a 'ESSBinOp' to its corresponding GOOL binary function.
 elementSetSetBfunc :: (SharedProg r) => ESSBinOp -> (SValue r -> SValue r -> SValue r)

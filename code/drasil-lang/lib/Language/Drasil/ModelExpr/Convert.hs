@@ -3,6 +3,7 @@
 module Language.Drasil.ModelExpr.Convert where
 
 import Data.Bifunctor (bimap)
+import qualified Data.Map.Ordered as OM
 
 import Language.Drasil.Space
     (RealInterval(..), DiscreteDomainDesc, DomainDesc(BoundedDD))
@@ -119,6 +120,7 @@ expr (E.ESSBinaryOp o l r)   = ESSBinaryOp (essBinOp o) (expr l) (expr r)
 expr (E.ESBBinaryOp o l r)   = ESBBinaryOp (esbBinOp o) (expr l) (expr r)
 expr (E.Operator ao dd e)    = Operator (assocArithOper ao) (domainDesc dd) (expr e)
 expr (E.RealI u ri)          = RealI u (realInterval ri)
+expr (E.Clif d bb)           = Clif d (OM.fromList $ map (\(k, v) -> (k, expr v)) $ OM.toList bb)
 
 realInterval :: RealInterval E.Expr E.Expr -> RealInterval ModelExpr ModelExpr
 realInterval (Bounded (li, l) (ri, r)) = Bounded (li, expr l) (ri, expr r)

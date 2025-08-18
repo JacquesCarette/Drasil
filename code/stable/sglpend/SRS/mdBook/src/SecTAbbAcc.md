@@ -2,16 +2,10 @@
 
 <div id="Table:TAbbAcc"></div>
 
-|Abbreviation|Full Form                 |
-|:-----------|:-------------------------|
-|A           |Assumption                |
-|FR          |Functional Requirement    |
-|GS          |Goal Statement            |
-|LC          |Likely Change             |
-|NFR         |Non-Functional Requirement|
-|R           |Requirement               |
-|RefBy       |Referenced by             |
-|RefName     |Reference Name            |
-|UC          |Unlikely Change           |
+|Abbreviation|Full Form                          |
+|:-----------|:----------------------------------|
+|2D          |Two-Dimensional                    |
+|SRS         |Software Requirements Specification|
+|SglPend     |Single Pendulum                    |
 
 **<p align="center">Abbreviations and Acronyms</p>**

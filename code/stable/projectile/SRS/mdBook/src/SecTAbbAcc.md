@@ -2,16 +2,11 @@
 
 <div id="Table:TAbbAcc"></div>
 
-|Abbreviation|Full Form                 |
-|:-----------|:-------------------------|
-|A           |Assumption                |
-|FR          |Functional Requirement    |
-|GS          |Goal Statement            |
-|LC          |Likely Change             |
-|NFR         |Non-Functional Requirement|
-|R           |Requirement               |
-|RefBy       |Referenced by             |
-|RefName     |Reference Name            |
-|UC          |Unlikely Change           |
+|Abbreviation|Full Form                          |
+|:-----------|:----------------------------------|
+|1D          |One-Dimensional                    |
+|2D          |Two-Dimensional                    |
+|Projectile  |Projectile                         |
+|SRS         |Software Requirements Specification|
 
 **<p align="center">Abbreviations and Acronyms</p>**

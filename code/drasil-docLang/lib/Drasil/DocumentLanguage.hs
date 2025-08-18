@@ -209,7 +209,7 @@ extractAbbreviations dd cdb = map resolveToIdeaDict abbreviationUIDs
     resolveToIdeaDict targetUID = termResolve makeIdeaDict cdb targetUID
       where
         makeIdeaDict :: NP -> Maybe String -> IdeaDict
-        makeIdeaDict np mabbr = mkIdea (show targetUID) np mabbr
+        makeIdeaDict = mkIdea (show targetUID)
 
 -- * Section Creator Functions
 

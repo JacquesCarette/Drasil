@@ -24,11 +24,12 @@ import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
 import Database.Drasil (ChunkDB, collectUnits, refbyTable, conceptinsTable, 
-  idMap, conceptinsTable, traceTable, generateRefbyMap, refTable, labelledcontentTable, 
-  theoryModelTable, insmodelTable, gendefTable, dataDefnTable, conceptChunkTable)
+  idMap, traceTable, generateRefbyMap, refTable, labelledcontentTable, 
+  theoryModelTable, insmodelTable, gendefTable, dataDefnTable, termResolve)
 
 import Drasil.System
 import Drasil.GetChunks (ccss, ccss', citeDB)
+import Language.Drasil.Development (shortdep)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
 import Drasil.Sections.TableOfContents (toToC, findToC)
@@ -63,8 +64,8 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
 import Control.Lens ((^.), set)
 import Data.Function (on)
 import Data.List (nub, sortBy, sortOn)
-import qualified Data.Map as Map (elems, toList, assocs, keys, lookup)
-import Data.Maybe (maybeToList, mapMaybe)
+import qualified Data.Map as Map (elems, toList, assocs, keys)
+import Data.Maybe (maybeToList)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 
@@ -194,40 +195,21 @@ extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
 extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
 
 -- | Extracts abbreviations/acronyms found in the document description ('DocDesc') from a database ('ChunkDB').
+-- This function automatically finds all chunks that are referenced with abbreviations (Ch ShortStyle) 
+-- in the document and converts them to IdeaDict entries for the Table of Abbreviations.
 extractAbbreviations :: DocDesc -> ChunkDB -> [IdeaDict]
-extractAbbreviations dd cdb = map nw $ collectAbbreviations $ getAllChunksFromDB cdb ++ getAllChunksFromDoc dd cdb
-
--- | Gets all chunks from the database that might have abbreviations.
-getAllChunksFromDB :: ChunkDB -> [ConceptChunk]
-getAllChunksFromDB cdb = map fst $ Map.elems $ conceptChunkTable cdb
-
--- | Gets all chunks referenced in Ch constructors throughout the document.
-getAllChunksFromDoc :: DocDesc -> ChunkDB -> [ConceptChunk]
-getAllChunksFromDoc dd cdb = mapMaybe (lookupConceptChunk cdb) $ nub $ concatMap getSentenceUIDs (getDocDesc dd)
-
--- | Helper to lookup a ConceptChunk by UID from the database.
-lookupConceptChunk :: ChunkDB -> UID -> Maybe ConceptChunk
-lookupConceptChunk cdb chunkUID = fst <$> Map.lookup chunkUID (conceptChunkTable cdb)
-
--- | Gets abbreviations/acronyms from a list of chunks that have abbreviations.
-collectAbbreviations :: Idea c => [c] -> [c]
-collectAbbreviations = mapMaybe (\c -> case getA c of
-                                        Nothing -> Nothing
-                                        Just _  -> Just c)
-
--- | Extracts all UIDs from Ch constructors in a list of sentences.
-getSentenceUIDs :: Sentence -> [UID]
-getSentenceUIDs (Ch _ _ chunkUID) = [chunkUID]
-getSentenceUIDs (SyCh _) = [] -- Ignore symbol chunks
-getSentenceUIDs (Sy _) = []
-getSentenceUIDs (S _) = []
-getSentenceUIDs (P _) = [] -- Symbol, no UIDs
-getSentenceUIDs (E _) = [] -- Expressions handled separately if needed
-getSentenceUIDs (Quote s) = getSentenceUIDs s
-getSentenceUIDs (Ref refUID s _) = refUID : getSentenceUIDs s
-getSentenceUIDs Percent = []
-getSentenceUIDs EmptyS = []
-getSentenceUIDs ((:+:) s1 s2) = getSentenceUIDs s1 ++ getSentenceUIDs s2
+extractAbbreviations dd cdb = map resolveToIdeaDict abbreviationUIDs
+  where
+    -- Extract all sentences from the document description
+    allSentences = getDocDesc dd
+    -- Get UIDs of chunks that are used as abbreviations (Ch ShortStyle)
+    abbreviationUIDs = concatMap shortdep allSentences
+    -- Helper function to resolve a UID to an IdeaDict using the term and abbreviation
+    resolveToIdeaDict :: UID -> IdeaDict
+    resolveToIdeaDict targetUID = termResolve makeIdeaDict cdb targetUID
+      where
+        makeIdeaDict :: NP -> Maybe String -> IdeaDict
+        makeIdeaDict np mabbr = mkIdea (show targetUID) np mabbr
 
 -- * Section Creator Functions
 

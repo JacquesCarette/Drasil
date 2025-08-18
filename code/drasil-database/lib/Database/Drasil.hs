@@ -12,7 +12,7 @@ module Database.Drasil (
   -- ** Constructors
   , cdb', idMap, symbolMap, termMap, conceptMap, unitMap, traceMap, generateRefbyMap
   -- ** Lookup Functions
-  , asOrderedList, collectUnits, collectAbbreviations
+  , asOrderedList, collectUnits
   , termResolve, termResolve', defResolve, defResolve', symbResolve
 
   , traceLookup, refbyLookup

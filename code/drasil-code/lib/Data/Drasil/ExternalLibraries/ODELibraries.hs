@@ -451,19 +451,19 @@ odeint = externalLib [
         (customClass [constructorInfo odeCtor [] [],
           methodInfoNoReturn odeOp "function representation of ODE system"
           -- | ODE parameters: generalized for vectors of symbolic dimension 'dim'.
-          -- TODO: Once ClifS is integrated, revisit this to allow symbolic multivectors as parameter types.
-          -- Likely replacement: ClifS dim Real instead of ClifS (VDim dim) Multivector Real.
-            [unnamedParam (ClifS (VDim dim) Multivector Real), unnamedParam (ClifS (VDim dim) Multivector Real), lockedParam t]
+          -- TODO: Once ClifS is integrated, revisit this to allow symbolic vectors as parameter types.
+          -- Likely replacement: ClifS dim Real instead of ClifS (VDim dim) Vector Real.
+            [unnamedParam (ClifS (VDim dim) Vector Real), unnamedParam (ClifS (VDim dim) Vector Real), lockedParam t]
             [assignArrayIndex]]),
-            -- [unnamedParam (ClifS (VDim dim) Multivector Real), unnamedParam (ClifS (VDim dim) Multivector Real), lockedParam t]
+            -- [unnamedParam (ClifS (VDim dim) Vector Real), unnamedParam (ClifS (VDim dim) Vector Real), lockedParam t]
             -- [assignArrayIndex]]),
       -- Need to declare variable holding initial value because odeint will update this variable at each step
       preDefinedArg odeintCurrVals,
       inlineArg Real, inlineArg Real, inlineArg Real,
       customObjArg []
         "Class for populating a list during an ODE solution process"
-        pop popCtor (customClass [
-          constructorInfo popCtor [unnamedParam (ClifS (VDim dim) Multivector Real)] [],
+        pop popCtor        (customClass [
+          constructorInfo popCtor [unnamedParam (ClifS (VDim dim) Vector Real)] [],
           methodInfoNoReturn popOp
             "appends solution point for current ODE solution step"
             [lockedParam y, lockedParam t] [appendCurrSol (sy y)]])]]
@@ -508,7 +508,7 @@ odeintCurrVals, rk, stepper, pop :: CodeVarChunk
 odeintCurrVals = quantvar $ implVar "currVals_odeint" (nounPhrase
   "vector holding ODE solution values for the current step"
   "vectors holding ODE solution values for the current step")
-  (ClifS (VDim dim) Multivector Real) (label "currVals")
+  (ClifS (VDim dim) Vector Real) (label "currVals")
 rk = quantvar $ implVar "rk_odeint" (nounPhrase
   "stepper for solving ODE system using Runge-Kutta-Dopri5 method"
   "steppers for solving ODE system using Runge-Kutta-Dopri5 method")
@@ -567,7 +567,7 @@ t = quantvar $ implVar "t_ode" (nounPhrase
 y = quantvar $ implVar "y_ode" (nounPhrase
   "current dependent variable value in ODE solution"
   "current dependent variable value in ODE solution")
-  (ClifS (VDim dim) Multivector Real) (label "y")
+  (ClifS (VDim dim) Vector Real) (label "y")
 
 -- | ODE object constructor.
 odeCtor :: CodeFuncChunk

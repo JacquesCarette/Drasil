@@ -11,6 +11,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
   requirement, refBy, refName, srs, typUnc)
+import Drasil.Metadata (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
 import Data.Drasil.SI_Units (metre, radian, kilogram, newton)
 import qualified Data.Drasil.Quantities.Physics as QP (position, force, velocity,

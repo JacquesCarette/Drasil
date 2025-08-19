@@ -19,12 +19,13 @@ import Data.Drasil.Concepts.Computation (inDatum, compcon, algorithm)
 import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   environment, datum, input_, interface, output_, problem, product_,
-  physical, sysCont, software, softwareConstraint, softwareSys, srsDomains,
-  system, user, doccon, doccon', analysis, goalStmt, physSyst, requirement)
-import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate, educon, )
-import Data.Drasil.Concepts.Math (mathcon, cartesian, ode, mathcon', graph)
+  physical, sysCont, software, softwareConstraint, softwareSys,
+  system, user, analysis, goalStmt, requirement, physSyst, doccon, doccon', srsDomains)
+import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate, educon)
+import Data.Drasil.Concepts.Math (cartesian, ode, mathcon, mathcon', graph)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
+import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
@@ -38,15 +39,16 @@ import Drasil.DblPend.IMods (iMods)
 import Drasil.DblPend.GenDefs (genDefns)
 import Drasil.DblPend.MetaConcepts (progName)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
-  inConstraints, outConstraints, acronyms, pendDisAngle, constants)
+  inConstraints, outConstraints, constants, acronyms)
+
 import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs)
 import Drasil.DblPend.References (citations)
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
-  osloSymbols, apacheODESymbols, odeintSymbols, arrayVecDepVar)
-import Language.Drasil.Code (quantvar)
+  osloSymbols, apacheODESymbols, odeintSymbols, arrayVecDepVar, diffCodeChunk)
+import Language.Drasil.Code (ODEInfo (..))
 import Drasil.DblPend.ODEs (dblPenODEInfo)
 
-import System.Drasil (SystemKind(Specification), mkSystem)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -64,7 +66,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
       -- introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
-      , TAandA abbreviationsList         -- Add table of abbreviation and acronym section
+      , TAandA []         -- Add table of abbreviation and acronym section (automatically populated)
       ],
   IntroSec $
     IntroProg (justification progName) (phrase progName)
@@ -108,8 +110,8 @@ si :: System
 si = mkSystem progName Specification [dong]
   [purp] [background] [scope] [motivation]
   symbolsAll
-  tMods genDefns dataDefs iMods  -- Re-enabled genDefns to show Clifford algebra content
-  []  -- assumptions as strings
+  tMods genDefns dataDefs iMods
+  []
   inputs outputs inConstraints
   constants
   symbMap
@@ -126,9 +128,13 @@ background = foldlSent_ [phraseNP (a_ pendulum), S "consists" `S.of_` phrase mas
   S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
   S "highly sensitive to initial conditions"]
 
-symbolsAll :: [QuantityDict]
+-- FIXME: the dependent variable of dblPenODEInfo (pendDisAngle) is added to symbolsAll as it is used to create new chunks with pendDisAngle's UID suffixed in ODELibraries.hs.
+-- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
+symbolsAll :: [DefinedQuantityDict]
 symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
-  ++ map qw [listToArray $ quantvar pendDisAngle, arrayVecDepVar dblPenODEInfo]
+  ++ map dqdWr [listToArray dp, arrayVecDepVar dblPenODEInfo, diffCodeChunk dp,
+  listToArray $ diffCodeChunk dp] ++ [dqdWr len]
+  where dp = depVar dblPenODEInfo
 
 ideaDicts :: [IdeaDict]
 ideaDicts = 
@@ -150,9 +156,9 @@ conceptChunks :: [ConceptChunk]
 conceptChunks = [algorithm, errMsg, program] ++ physicCon ++ mathcon ++ physicalcon ++ srsDomains
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll)
+symbMap = cdb' (map (^. output) iMods ++ map dqdWr symbolsAll)
   ideaDicts conceptChunks siUnits
-  dataDefs iMods genDefns tMods concIns [] allRefs citations  -- Re-enabled genDefns to show Clifford algebra content
+  dataDefs iMods genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -210,21 +216,21 @@ charsOfReader = [phrase undergraduate +:+ S "level 2" +:+ phrase Doc.physics,
 -- in IOrg
 
 missingAbrv :: [Sentence]
-missingAbrv = [S "The" +:+ plural goalStmt +:+ sParen (short goalStmt) +:+ S "are systematically refined into the" +:+ 
-              plural thModel +:+ sParen (short thModel) `sC` S "which in turn are refined into the" +:+ 
-              plural inModel +:+ sParen (short inModel) +:+. EmptyS +:+
-              S "This refinement process is guided by the" +:+ plural assumption +:+ sParen (short assumption) +:+ 
+missingAbrv = [S "The" +:+ plural goalStmt +:+ S "(GS)" +:+ S "are systematically refined into the" +:+ 
+              plural thModel +:+ S "(TM)" `sC` S "which in turn are refined into the" +:+ 
+              plural inModel +:+ S "(IM)" +:+. EmptyS +:+
+              S "This refinement process is guided by the" +:+ plural assumption +:+ S "(A)" +:+ 
               S "that constrain the" +:+ phrase system `sC` S "as well as the supporting" +:+ 
-              plural genDefn +:+ sParen (short genDefn) +:+ S "and" +:+ plural dataDefn +:+ sParen (short dataDefn) +:+ 
+              plural genDefn +:+ S "(GD)" +:+ S "and" +:+ plural dataDefn +:+ S "(DD)" +:+ 
               S "that provide the necessary mathematical and physical context." +:+ 
-              S "The" +:+ plural requirement +:+ sParen (short requirement) +:+ S "are traced back through the" +:+ 
-              short goalStmt `sC` short thModel `sC` S "and" +:+ short inModel +:+ S "to ensure consistency and completeness." +:+ 
-              S "Furthermore" `sC` S "the" +:+ phrase physSyst +:+ sParen (short physSyst) +:+ S "establishes the overall" +:+ 
-              S "context in which the" +:+ short goalStmt +:+ S "are formulated and the" +:+ short assumption +:+ S "are validated." +:+ 
+              S "The" +:+ plural requirement +:+ S "(R)" +:+ S "are traced back through the" +:+ 
+              S "GS" `sC` S "TM" `sC` S "and" +:+ S "IM" +:+ S "to ensure consistency and completeness." +:+ 
+              S "Furthermore" `sC` S "the" +:+ phrase physSyst +:+ S "(PS)" +:+ S "establishes the overall" +:+ 
+              S "context in which the" +:+ S "GS" +:+ S "are formulated and the" +:+ S "A" +:+ S "are validated." +:+ 
               S "Finally" `sC` S "the uncertainties (Uncerts.) are documented and linked to" +:+ 
-              S "the relevant" +:+ short inModel +:+ S "and" +:+ short dataDefn `sC` S "ensuring transparency in the modeling process."]
+              S "the relevant" +:+ S "IM" +:+ S "and" +:+ S "DD" `sC` S "ensuring transparency in the modeling process."] 
 
---------------------------------------------
+              --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
 --------------------------------------------
 -- Description of Genreal System automatically generated in GSDProg

@@ -24,6 +24,10 @@ import Drasil.SWHS.Concepts (water, phsChgMtrl)
 
 import Control.Lens ((^.))
 
+-- | Helper function to create Clifford vector spaces of a given dimension
+realVect :: Dimension -> Space
+realVect d = ClifS d Vector Real
+
 symbols :: [DefinedQuantityDict]
 symbols = pi_ : map dqdWr units ++ map dqdWr unitless ++ map dqdWr constrained
  ++ map dqdWr unitalChuncks
@@ -411,7 +415,7 @@ outputs = [tempW, tempPCM, watE, pcmE]
 tempW = cuc' "tempW"
   (nounPhraseSP "temperature of the water")
   "the average kinetic energy of the particles within the water" 
-  (sub (eqSymb temp) lWater) centigrade (ClifS (VDim vecDim) Vector Real)
+  (sub (eqSymb temp) lWater) centigrade (realVect vecDim)
   [physRange $ Bounded (Inc, sy tempInit) (Inc, sy tempC)] (exactDbl 0)
 
 -- Constraint 19

@@ -9,6 +9,10 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Drasil.PDController.Concepts
 
+-- | Helper function to create Clifford vector spaces of a given dimension
+realVect :: Dimension -> Space
+realVect d = ClifS d Vector Real
+
 syms, symFS, symFt, syminvLaplace, symKd, symKp,
        symYT, symYS, symYrT, symYrS, symET, symES, symPS, symDS, symHS,
        symCT, symCS, symTStep, symTSim, symAbsTol, symRelTol,
@@ -121,7 +125,7 @@ odeAbsTolConst = mkQuantDef dqdAbsTol (dbl 1.0e-10)
 odeRelTolConst = mkQuantDef dqdRelTol (dbl 1.0e-10)
 
 opProcessVariable
-  = constrained' (dqdNoUnit processVariable symYT (ClifS (VDim vecDim) Vector Real))
+  = constrained' (dqdNoUnit processVariable symYT (realVect vecDim))
       [gtZeroConstr]
       (exactDbl 1)
 qdProcessVariableTD = qw opProcessVariable

@@ -1,3 +1,3 @@
 # User Characteristics {#Sec:UserChars}
 
-The end user of GamePhysics should have an understanding of first year programming concepts and an understanding of high school physics.
+The end user of DblPend should have an understanding of high school physics, high school calculus and ordinary differential equations.

@@ -2,34 +2,29 @@
 
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 
-<div id="simSpace"></div>
+<div id="inputValues"></div>
 
-Simulation-Space: Create a space for all of the rigid bodies in the physical simulation to interact in.
+Input-Values: Input the values from [Tab:ReqInputs](./SecFRs.md#Table:ReqInputs).
 
-<div id="inputInitialConds"></div>
+<div id="verifyInptVals"></div>
 
-Input-Initial-Conditions: Input the initial masses, velocities, orientations, angular velocities of, and forces applied on rigid bodies.
+Verify-Input-Values: Check the entered input values to ensure that they do not exceed the [data constraints](./SecDataConstraints.md#Sec:DataConstraints). If any of the input values are out of bounds, an error message is displayed and the calculations stop.
 
-<div id="inputSurfaceProps"></div>
+<div id="calcAng"></div>
 
-Input-Surface-Properties: Input the surface properties of the bodies such as friction or elasticity.
+Calculate-Angle-Of-Rod: Calculate the following values: \\({θ\_{1}}\\) and \\({θ\_{2}}\\) (from [IM:calOfAngle1](./SecIMs.md#IM:calOfAngle1) and [IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2)).
 
-<div id="verifyPhysCons"></div>
+<div id="outputValues"></div>
 
-Verify-Physical_Constraints: Verify that the inputs satisfy the required physical constraints from the [solution characteristics specification](./SecSolCharSpec.md#Sec:SolCharSpec).
+Output-Values: Output \\({θ\_{1}}\\) and \\({θ\_{2}}\\) (from [IM:calOfAngle1](./SecIMs.md#IM:calOfAngle1) and [IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2)).
 
-<div id="calcTransOverTime"></div>
+<div id="Table:ReqInputs"></div>
 
-Calculate-Translation-Over-Time: Determine the positions and velocities over a period of time of the 2D rigid bodies acted upon by a force.
+|Symbol        |Description              |Units            |
+|:-------------|:------------------------|:----------------|
+|\\({L\_{1}}\\)|Length of the first rod  |\\({\text{m}}\\) |
+|\\({L\_{2}}\\)|Length of the second rod |\\({\text{m}}\\) |
+|\\({m\_{1}}\\)|Mass of the first object |\\({\text{kg}}\\)|
+|\\({m\_{2}}\\)|Mass of the second object|\\({\text{kg}}\\)|
 
-<div id="calcRotOverTime"></div>
-
-Calculate-Rotation-Over-Time: Determine the orientations and angular velocities over a period of time of the 2D rigid bodies.
-
-<div id="deterColls"></div>
-
-Determine-Collisions: Determine if any of the rigid bodies in the space have collided.
-
-<div id="deterCollRespOverTime"></div>
-
-Determine-Collision-Response-Over-Time: Determine the positions and velocities over a period of time of the 2D rigid bodies that have undergone a collision.
+**<p align="center">Required Inputs</p>**

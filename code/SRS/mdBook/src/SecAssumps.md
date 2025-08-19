@@ -2,30 +2,18 @@
 
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
-<div id="assumpOT"></div>
+<div id="twoDMotion"></div>
 
-objectTy: All objects are rigid bodies. (RefBy: [GD:impulse](./SecGDs.md#GD:impulse), [IM:col2D](./SecIMs.md#IM:col2D), [IM:rotMot](./SecIMs.md#IM:rotMot), [IM:transMot](./SecIMs.md#IM:transMot), [DD:chaslesThm](./SecDDs.md#DD:chaslesThm), [DD:reVeInColl](./SecDDs.md#DD:reVeInColl), [DD:potEnergy](./SecDDs.md#DD:potEnergy), [DD:ctrOfMass](./SecDDs.md#DD:ctrOfMass), [DD:momentOfInertia](./SecDDs.md#DD:momentOfInertia), [DD:linVel](./SecDDs.md#DD:linVel), [DD:linDisp](./SecDDs.md#DD:linDisp), [DD:linAcc](./SecDDs.md#DD:linAcc), [DD:kEnergy](./SecDDs.md#DD:kEnergy), [DD:impulseV](./SecDDs.md#DD:impulseV), [DD:angVel](./SecDDs.md#DD:angVel), [DD:angDisp](./SecDDs.md#DD:angDisp), and [DD:angAccel](./SecDDs.md#DD:angAccel).)
+twoDMotion: The pendulum motion is two-dimensional (2D).
 
-<div id="assumpOD"></div>
+<div id="cartSys"></div>
 
-objectDimension: All objects are 2D. (RefBy: [TM:NewtonSecLawRotMot](./SecTMs.md#TM:NewtonSecLawRotMot), [GD:impulse](./SecGDs.md#GD:impulse), [IM:col2D](./SecIMs.md#IM:col2D), [IM:rotMot](./SecIMs.md#IM:rotMot), [IM:transMot](./SecIMs.md#IM:transMot), [DD:potEnergy](./SecDDs.md#DD:potEnergy), [DD:kEnergy](./SecDDs.md#DD:kEnergy), [DD:angVel](./SecDDs.md#DD:angVel), [DD:angDisp](./SecDDs.md#DD:angDisp), and [DD:angAccel](./SecDDs.md#DD:angAccel).)
+cartSys: A Cartesian coordinate system is used.
 
-<div id="assumpCST"></div>
+<div id="cartSysR"></div>
 
-coordinateSystemTy: The library uses a Cartesian coordinate system.
+cartSysR: The Cartesian coordinate system is right-handed where positive \\(x\\)-axis and \\(y\\)-axis point right up.
 
-<div id="assumpAD"></div>
+<div id="yAxisDir"></div>
 
-axesDefined: The axes are defined using right-handed coordinate system. (RefBy: [GD:impulse](./SecGDs.md#GD:impulse), [IM:col2D](./SecIMs.md#IM:col2D), and [IM:rotMot](./SecIMs.md#IM:rotMot).)
-
-<div id="assumpCT"></div>
-
-collisionType: All rigid bodies collisions are vertex-to-edge collisions. (RefBy: [GD:impulse](./SecGDs.md#GD:impulse), [IM:col2D](./SecIMs.md#IM:col2D), and [LC:Expanded-Collisions](./SecLCs.md#lcEC).)
-
-<div id="assumpDI"></div>
-
-dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: [IM:col2D](./SecIMs.md#IM:col2D), [IM:transMot](./SecIMs.md#IM:transMot), [LC:Include-Dampening](./SecLCs.md#lcID), [DD:potEnergy](./SecDDs.md#DD:potEnergy), and [DD:kEnergy](./SecDDs.md#DD:kEnergy).)
-
-<div id="assumpCAJI"></div>
-
-constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. (RefBy: [IM:col2D](./SecIMs.md#IM:col2D), [IM:transMot](./SecIMs.md#IM:transMot), and [LC:Include-Joints-Constraints](./SecLCs.md#lcIJC).)
+yAxisDir: The direction of the \\(y\\)-axis is directed opposite to gravity.

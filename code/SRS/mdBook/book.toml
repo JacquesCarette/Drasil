@@ -2,7 +2,7 @@
 language = "en"
 multilingual = false
 src = "src"
-title = "Software Requirements Specification for GamePhysics"
+title = "Software Requirements Specification for Double Pendulum"
 [output.html]
 smart-punctuation = true
 mathjax-support = true

@@ -4,11 +4,9 @@ The [Data Constraints Table](./SecCorSolProps.md#Table:OutDataConstraints) shows
 
 <div id="Table:OutDataConstraints"></div>
 
-|Var                                  |
-|:------------------------------------|
-|\\(\boldsymbol{p}\text{(}t\text{)}\\)|
-|\\(\boldsymbol{v}\text{(}t\text{)}\\)|
-|\\(ϕ\\)                              |
-|\\(ω\\)                              |
+|Var           |Physical Constraints|
+|:-------------|:-------------------|
+|\\({θ\_{1}}\\)|\\({θ\_{1}}\gt{}0\\)|
+|\\({θ\_{2}}\\)|\\({θ\_{2}}\gt{}0\\)|
 
 **<p align="center">Output Data Constraints</p>**

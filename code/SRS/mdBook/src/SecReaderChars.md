@@ -1,3 +1,3 @@
 # Characteristics of Intended Reader {#Sec:ReaderChars}
 
-Reviewers of this documentation should have an understanding of rigid body dynamics and high school calculus. The users of GamePhysics can have a lower level of expertise, as explained in [Sec:User Characteristics](./SecUserChars.md#Sec:UserChars).
+Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, and ordinary differential equations. The users of DblPend can have a lower level of expertise, as explained in [Sec:User Characteristics](./SecUserChars.md#Sec:UserChars).

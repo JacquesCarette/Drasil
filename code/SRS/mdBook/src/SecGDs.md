@@ -4,54 +4,356 @@ This section collects the laws and equations that will be used to build the inst
 
 <div align="center">
 
-## Acceleration due to gravity {#GD:accelGravity}
+## The \\(x\\)-component of velocity of the first object {#GD:velocityX1}
 
 </div>
 
-|Refname    |GD:accelGravity                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-|:----------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|Label      |Acceleration due to gravity                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-|Units      |\\(\frac{\text{m}}{\text{s}^{2}}\\)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-|Equation   |\\[\boldsymbol{g}=-\frac{G\\,M}{\|\boldsymbol{d}\|^{2}}\\,\boldsymbol{\hat{d}}\\]                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-|Description|<ul><li>\\(\boldsymbol{g}\\) is the gravitational acceleration (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li><li>\\(G\\) is the gravitational constant (\\(\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}\\))</li><li>\\(M\\) is the mass of the larger rigid body (\\({\text{kg}}\\))</li><li>\\(\|\boldsymbol{d}\|\\) is the Euclidean norm of the distance between the center of mass of two bodies (\\({\text{m}}\\))</li><li>\\(\boldsymbol{\hat{d}}\\) is the unit vector directed from the center of the large mass to the center of the smaller mass (\\({\text{m}}\\))</li></ul>|
-|Notes      |<ul><li>If one of the masses is much larger than the other, it is convenient to define a gravitational field around the larger mass as shown above. The negative sign in the equation indicates that the force is an attractive force.</li></ul>                                                                                                                                                                                                                                                                                                                                 |
-|Source     |[Definition of Gravitational Acceleration](https://en.wikipedia.org/wiki/Gravitational_acceleration)                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-|RefBy      |[IM:transMot](./SecIMs.md#IM:transMot)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+|Refname    |GD:velocityX1                                                                                                                                                                                                                                                                                                                                                                      |
+|:----------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Label      |The \\(x\\)-component of velocity of the first object                                                                                                                                                                                                                                                                                                                              |
+|Units      |\\(\frac{\text{m}}{\text{s}}\\)                                                                                                                                                                                                                                                                                                                                                    |
+|Equation   |\\[{v\_{\text{x}1}}={w\_{1}}\\,{L\_{1}}\\,\cos\left({θ\_{1}}\right)\\]                                                                                                                                                                                                                                                                                                             |
+|Description|<ul><li>\\({v\_{\text{x}1}}\\) is the horizontal velocity of the first object (\\(\frac{\text{m}}{\text{s}}\\))</li><li>\\({w\_{1}}\\) is the angular velocity of the first object (\\(\frac{\text{rad}}{\text{s}}\\))</li><li>\\({L\_{1}}\\) is the length of the first rod (\\({\text{m}}\\))</li><li>\\({θ\_{1}}\\) is the angle of the first rod (\\({\text{rad}}\\))</li></ul>|
+|Source     |--                                                                                                                                                                                                                                                                                                                                                                                 |
+|RefBy      |                                                                                                                                                                                                                                                                                                                                                                                   |
 
-#### Detailed derivation of gravitational acceleration: {#GD:accelGravityDeriv}
+#### Detailed derivation of the \\(x\\)-component of velocity: {#GD:velocityX1Deriv}
 
-From [Newton's law of universal gravitation](./SecTMs.md#TM:UniversalGravLaw), we have:
+At a given point in time, velocity is defined in [DD:positionGDD](./SecDDs.md#DD:positionGDD)
 
-\\[\boldsymbol{F}=\frac{G\\,{m\_{1}}\\,{m\_{2}}}{{\|\boldsymbol{d}\|^{2}}}\\,\boldsymbol{\hat{d}}\\]
+\\[\boldsymbol{v}\text{(}t\text{)}=\frac{\\,d\boldsymbol{p}\text{(}t\text{)}}{\\,dt}\\]
 
-The above equation governs the gravitational attraction between two bodies. Suppose that one of the bodies is significantly more massive than the other, so that we concern ourselves with the force the massive body exerts on the lighter body. Further, suppose that the Cartesian coordinate system is chosen such that this force acts on a line which lies along one of the principal axes. Then our unit vector directed from the center of the large mass to the center of the smaller mass \\(\boldsymbol{\hat{d}}\\) for the x or y axes is:
+We also know the horizontal position that is defined in [DD:positionXDD1](./SecDDs.md#DD:positionXDD1)
 
-\\[\boldsymbol{\hat{d}}=\frac{\boldsymbol{d}}{\|\boldsymbol{d}\|}\\]
+\\[{p\_{\text{x}1}}={L\_{1}}\\,\sin\left({θ\_{1}}\right)\\]
 
-Given the above assumptions, let \\(M\\) and \\(m\\) be the mass of the massive and light body respectively. Equating \\(\boldsymbol{F}\\) above with Newton's second law for the force experienced by the light body, we get:
+Applying this,
 
-\\[{\boldsymbol{F}\_{\boldsymbol{g}}}=G\\,\frac{M\\,m}{{\|\boldsymbol{d}\|^{2}}}\\,\boldsymbol{\hat{d}}=m\\,\boldsymbol{g}\\]
+\\[{v\_{\text{x}1}}=\frac{\\,d{L\_{1}}\\,\sin\left({θ\_{1}}\right)}{\\,dt}\\]
 
-where \\(\boldsymbol{g}\\) is the gravitational acceleration. Dividing the above equation by \\(m\\),  we have:
+\\({L\_{1}}\\) is constant with respect to time, so
 
-\\[G\\,\frac{M}{{\|\boldsymbol{d}\|^{2}}}\\,\boldsymbol{\hat{d}}=\boldsymbol{g}\\]
+\\[{v\_{\text{x}1}}={L\_{1}}\\,\frac{\\,d\sin\left({θ\_{1}}\right)}{\\,dt}\\]
 
-and thus the negative sign indicates that the force is an attractive force:
+Therefore, using the chain rule,
 
-\\[\boldsymbol{g}=-G\\,\frac{M}{{\|\boldsymbol{d}\|^{2}}}\\,\boldsymbol{\hat{d}}\\]
+\\[{v\_{\text{x}1}}={w\_{1}}\\,{L\_{1}}\\,\cos\left({θ\_{1}}\right)\\]
 
 <div align="center">
 
-## Impulse for Collision {#GD:impulse}
+## The \\(y\\)-component of velocity of the first object {#GD:velocityY1}
 
 </div>
 
-|Refname    |GD:impulse                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-|:----------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|Label      |Impulse for Collision                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-|Units      |\\(\text{N}\text{s}\\)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-|Equation   |\\[j=\frac{-\left(1+{C\_{\text{R}}}\right)\\,{{\boldsymbol{v}\text{(}t\text{)}\_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\boldsymbol{n}}{\left(\frac{1}{{m\_{\text{A}}}}+\frac{1}{{m\_{\text{B}}}}\right)\\,\|\boldsymbol{n}\|^{2}+\frac{\|{\boldsymbol{u}\_{\text{A}\text{P}}}\text{\*}\boldsymbol{n}\|^{2}}{{\boldsymbol{I}\_{\text{A}}}}+\frac{\|{\boldsymbol{u}\_{\text{B}\text{P}}}\text{\*}\boldsymbol{n}\|^{2}}{{\boldsymbol{I}\_{\text{B}}}}}\\]                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-|Description|<ul><li>\\(j\\) is the impulse (scalar) (\\(\text{N}\text{s}\\))</li><li>\\({C\_{\text{R}}}\\) is the coefficient of restitution (Unitless)</li><li>\\({{\boldsymbol{v}\text{(}t\text{)}\_{\text{i}}}^{\text{A}\text{B}}}\\) is the initial relative velocity between rigid bodies of A and B (\\(\frac{\text{m}}{\text{s}}\\))</li><li>\\(\boldsymbol{n}\\) is the collision normal vector (\\({\text{m}}\\))</li><li>\\({m\_{\text{A}}}\\) is the mass of rigid body A (\\({\text{kg}}\\))</li><li>\\({m\_{\text{B}}}\\) is the mass of rigid body B (\\({\text{kg}}\\))</li><li>\\(\|\boldsymbol{n}\|\\) is the length of the normal vector (\\({\text{m}}\\))</li><li>\\(\|{\boldsymbol{u}\_{\text{A}\text{P}}}\text{\*}\boldsymbol{n}\|\\) is the length of the perpendicular vector to the contact displacement vector of rigid body A (\\({\text{m}}\\))</li><li>\\({\boldsymbol{I}\_{\text{A}}}\\) is the moment of inertia of rigid body A (\\(\text{kg}\text{m}^{2}\\))</li><li>\\(\|{\boldsymbol{u}\_{\text{B}\text{P}}}\text{\*}\boldsymbol{n}\|\\) is the length of the perpendicular vector to the contact displacement vector of rigid body B (\\({\text{m}}\\))</li><li>\\({\boldsymbol{I}\_{\text{B}}}\\) is the moment of inertia of rigid body B (\\(\text{kg}\text{m}^{2}\\))</li></ul>|
-|Notes      |<ul><li>All bodies are assumed to be rigid (from [A:objectTy](./SecAssumps.md#assumpOT)) and two-dimensional (from [A:objectDimension](./SecAssumps.md#assumpOD)).</li><li>A right-handed coordinate system is used (from [A:axesDefined](./SecAssumps.md#assumpAD)).</li><li>All collisions are vertex-to-edge (from [A:collisionType](./SecAssumps.md#assumpCT)).</li></ul>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-|Source     |[Impulse for Collision Ref](http://www.chrishecker.com/images/e/e7/Gdmphys3.pdf)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-|RefBy      |[IM:col2D](./SecIMs.md#IM:col2D)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+|Refname    |GD:velocityY1                                                                                                                                                                                                                                                                                                                                                                    |
+|:----------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Label      |The \\(y\\)-component of velocity of the first object                                                                                                                                                                                                                                                                                                                            |
+|Units      |\\(\frac{\text{m}}{\text{s}}\\)                                                                                                                                                                                                                                                                                                                                                  |
+|Equation   |\\[{v\_{\text{y}1}}={w\_{1}}\\,{L\_{1}}\\,\sin\left({θ\_{1}}\right)\\]                                                                                                                                                                                                                                                                                                           |
+|Description|<ul><li>\\({v\_{\text{y}1}}\\) is the vertical velocity of the first object (\\(\frac{\text{m}}{\text{s}}\\))</li><li>\\({w\_{1}}\\) is the angular velocity of the first object (\\(\frac{\text{rad}}{\text{s}}\\))</li><li>\\({L\_{1}}\\) is the length of the first rod (\\({\text{m}}\\))</li><li>\\({θ\_{1}}\\) is the angle of the first rod (\\({\text{rad}}\\))</li></ul>|
+|Source     |--                                                                                                                                                                                                                                                                                                                                                                               |
+|RefBy      |                                                                                                                                                                                                                                                                                                                                                                                 |
+
+#### Detailed derivation of the \\(y\\)-component of velocity: {#GD:velocityY1Deriv}
+
+At a given point in time, velocity is defined in [DD:positionGDD](./SecDDs.md#DD:positionGDD)
+
+\\[\boldsymbol{v}\text{(}t\text{)}=\frac{\\,d\boldsymbol{p}\text{(}t\text{)}}{\\,dt}\\]
+
+We also know the vertical position that is defined in [DD:positionYDD1](./SecDDs.md#DD:positionYDD1)
+
+\\[{p\_{\text{y}1}}=-{L\_{1}}\\,\cos\left({θ\_{1}}\right)\\]
+
+Applying this,
+
+\\[{v\_{\text{y}1}}=-\left(\frac{\\,d{L\_{1}}\\,\cos\left({θ\_{1}}\right)}{\\,dt}\right)\\]
+
+\\({L\_{1}}\\) is constant with respect to time, so
+
+\\[{v\_{\text{y}1}}=-{L\_{1}}\\,\frac{\\,d\cos\left({θ\_{1}}\right)}{\\,dt}\\]
+
+Therefore, using the chain rule,
+
+\\[{v\_{\text{y}1}}={w\_{1}}\\,{L\_{1}}\\,\sin\left({θ\_{1}}\right)\\]
+
+<div align="center">
+
+## The \\(x\\)-component of velocity of the second object {#GD:velocityX2}
+
+</div>
+
+|Refname    |GD:velocityX2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+|:----------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Label      |The \\(x\\)-component of velocity of the second object                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+|Units      |\\(\frac{\text{m}}{\text{s}}\\)                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+|Equation   |\\[{v\_{\text{x}2}}={v\_{\text{x}1}}+{w\_{2}}\\,{L\_{2}}\\,\cos\left({θ\_{2}}\right)\\]                                                                                                                                                                                                                                                                                                                                                                                                                |
+|Description|<ul><li>\\({v\_{\text{x}2}}\\) is the horizontal velocity of the second object (\\(\frac{\text{m}}{\text{s}}\\))</li><li>\\({v\_{\text{x}1}}\\) is the horizontal velocity of the first object (\\(\frac{\text{m}}{\text{s}}\\))</li><li>\\({w\_{2}}\\) is the angular velocity of the second object (\\(\frac{\text{rad}}{\text{s}}\\))</li><li>\\({L\_{2}}\\) is the length of the second rod (\\({\text{m}}\\))</li><li>\\({θ\_{2}}\\) is the angle of the second rod (\\({\text{rad}}\\))</li></ul>|
+|Source     |--                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|RefBy      |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+
+#### Detailed derivation of the \\(x\\)-component of velocity: {#GD:velocityX2Deriv}
+
+At a given point in time, velocity is defined in [DD:positionGDD](./SecDDs.md#DD:positionGDD)
+
+\\[\boldsymbol{v}\text{(}t\text{)}=\frac{\\,d\boldsymbol{p}\text{(}t\text{)}}{\\,dt}\\]
+
+We also know the horizontal position that is defined in [DD:positionXDD2](./SecDDs.md#DD:positionXDD2)
+
+\\[{p\_{\text{x}2}}={p\_{\text{x}1}}+{L\_{2}}\\,\sin\left({θ\_{2}}\right)\\]
+
+Applying this,
+
+\\[{v\_{\text{x}2}}=\frac{\\,d{p\_{\text{x}1}}+{L\_{2}}\\,\sin\left({θ\_{2}}\right)}{\\,dt}\\]
+
+\\({L\_{1}}\\) is constant with respect to time, so
+
+\\[{v\_{\text{x}2}}={v\_{\text{x}1}}+{w\_{2}}\\,{L\_{2}}\\,\cos\left({θ\_{2}}\right)\\]
+
+<div align="center">
+
+## The \\(y\\)-component of velocity of the second object {#GD:velocityY2}
+
+</div>
+
+|Refname    |GD:velocityY2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+|:----------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Label      |The \\(y\\)-component of velocity of the second object                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+|Units      |\\(\frac{\text{m}}{\text{s}}\\)                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+|Equation   |\\[{v\_{\text{y}2}}={v\_{\text{y}1}}+{w\_{2}}\\,{L\_{2}}\\,\sin\left({θ\_{2}}\right)\\]                                                                                                                                                                                                                                                                                                                                                                                                            |
+|Description|<ul><li>\\({v\_{\text{y}2}}\\) is the vertical velocity of the second object (\\(\frac{\text{m}}{\text{s}}\\))</li><li>\\({v\_{\text{y}1}}\\) is the vertical velocity of the first object (\\(\frac{\text{m}}{\text{s}}\\))</li><li>\\({w\_{2}}\\) is the angular velocity of the second object (\\(\frac{\text{rad}}{\text{s}}\\))</li><li>\\({L\_{2}}\\) is the length of the second rod (\\({\text{m}}\\))</li><li>\\({θ\_{2}}\\) is the angle of the second rod (\\({\text{rad}}\\))</li></ul>|
+|Source     |--                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+|RefBy      |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+
+#### Detailed derivation of the \\(y\\)-component of velocity: {#GD:velocityY2Deriv}
+
+At a given point in time, velocity is defined in [DD:positionGDD](./SecDDs.md#DD:positionGDD)
+
+\\[\boldsymbol{v}\text{(}t\text{)}=\frac{\\,d\boldsymbol{p}\text{(}t\text{)}}{\\,dt}\\]
+
+We also know the vertical position that is defined in [DD:positionYDD2](./SecDDs.md#DD:positionYDD2)
+
+\\[{p\_{\text{y}2}}={p\_{\text{y}1}}-{L\_{2}}\\,\cos\left({θ\_{2}}\right)\\]
+
+Applying this,
+
+\\[{v\_{\text{y}2}}=-\left(\frac{\\,d{p\_{\text{y}1}}-{L\_{2}}\\,\cos\left({θ\_{2}}\right)}{\\,dt}\right)\\]
+
+Therefore, using the chain rule,
+
+\\[{v\_{\text{y}2}}={v\_{\text{y}1}}+{w\_{2}}\\,{L\_{2}}\\,\sin\left({θ\_{2}}\right)\\]
+
+<div align="center">
+
+## The \\(x\\)-component of acceleration of the first object {#GD:accelerationX1}
+
+</div>
+
+|Refname    |GD:accelerationX1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+|:----------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Label      |The \\(x\\)-component of acceleration of the first object                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+|Units      |\\(\frac{\text{m}}{\text{s}^{2}}\\)                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+|Equation   |\\[{a\_{\text{x}1}}=-{w\_{1}}^{2}\\,{L\_{1}}\\,\sin\left({θ\_{1}}\right)+{α\_{1}}\\,{L\_{1}}\\,\cos\left({θ\_{1}}\right)\\]                                                                                                                                                                                                                                                                                                                                                                               |
+|Description|<ul><li>\\({a\_{\text{x}1}}\\) is the horizontal acceleration of the first object (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li><li>\\({w\_{1}}\\) is the angular velocity of the first object (\\(\frac{\text{rad}}{\text{s}}\\))</li><li>\\({L\_{1}}\\) is the length of the first rod (\\({\text{m}}\\))</li><li>\\({θ\_{1}}\\) is the angle of the first rod (\\({\text{rad}}\\))</li><li>\\({α\_{1}}\\) is the angular acceleration of the first object (\\(\frac{\text{rad}}{\text{s}^{2}}\\))</li></ul>|
+|Source     |--                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+|RefBy      |[IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2)                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+
+#### Detailed derivation of the \\(x\\)-component of acceleration: {#GD:accelerationX1Deriv}
+
+Our acceleration is:
+
+\\[\boldsymbol{a}\text{(}t\text{)}=\frac{\\,d\boldsymbol{v}\text{(}t\text{)}}{\\,dt}\\]
+
+Earlier, we found the horizontal velocity to be
+
+\\[{v\_{\text{x}1}}={w\_{1}}\\,{L\_{1}}\\,\cos\left({θ\_{1}}\right)\\]
+
+Applying this to our equation for acceleration
+
+\\[{a\_{\text{x}1}}=\frac{\\,d{w\_{1}}\\,{L\_{1}}\\,\cos\left({θ\_{1}}\right)}{\\,dt}\\]
+
+By the product and chain rules, we find
+
+\\[{a\_{\text{x}1}}=\frac{\\,d{w\_{1}}}{\\,dt}\\,{L\_{1}}\\,\cos\left({θ\_{1}}\right)-{w\_{1}}\\,{L\_{1}}\\,\sin\left({θ\_{1}}\right)\\,\frac{\\,d{θ\_{1}}}{\\,dt}\\]
+
+Simplifying,
+
+\\[{a\_{\text{x}1}}=-{w\_{1}}^{2}\\,{L\_{1}}\\,\sin\left({θ\_{1}}\right)+{α\_{1}}\\,{L\_{1}}\\,\cos\left({θ\_{1}}\right)\\]
+
+<div align="center">
+
+## The \\(y\\)-component of acceleration of the first object {#GD:accelerationY1}
+
+</div>
+
+|Refname    |GD:accelerationY1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+|:----------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Label      |The \\(y\\)-component of acceleration of the first object                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+|Units      |\\(\frac{\text{m}}{\text{s}^{2}}\\)                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|Equation   |\\[{a\_{\text{y}1}}={w\_{1}}^{2}\\,{L\_{1}}\\,\cos\left({θ\_{1}}\right)+{α\_{1}}\\,{L\_{1}}\\,\sin\left({θ\_{1}}\right)\\]                                                                                                                                                                                                                                                                                                                                                                              |
+|Description|<ul><li>\\({a\_{\text{y}1}}\\) is the vertical acceleration of the first object (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li><li>\\({w\_{1}}\\) is the angular velocity of the first object (\\(\frac{\text{rad}}{\text{s}}\\))</li><li>\\({L\_{1}}\\) is the length of the first rod (\\({\text{m}}\\))</li><li>\\({θ\_{1}}\\) is the angle of the first rod (\\({\text{rad}}\\))</li><li>\\({α\_{1}}\\) is the angular acceleration of the first object (\\(\frac{\text{rad}}{\text{s}^{2}}\\))</li></ul>|
+|Source     |--                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+|RefBy      |[IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2)                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+
+#### Detailed derivation of the \\(y\\)-component of acceleration: {#GD:accelerationY1Deriv}
+
+Our acceleration is:
+
+\\[\boldsymbol{a}\text{(}t\text{)}=\frac{\\,d\boldsymbol{v}\text{(}t\text{)}}{\\,dt}\\]
+
+Earlier, we found the vertical velocity to be
+
+\\[{v\_{\text{y}1}}={w\_{1}}\\,{L\_{1}}\\,\sin\left({θ\_{1}}\right)\\]
+
+Applying this to our equation for acceleration
+
+\\[{a\_{\text{y}1}}=\frac{\\,d{w\_{1}}\\,{L\_{1}}\\,\sin\left({θ\_{1}}\right)}{\\,dt}\\]
+
+By the product and chain rules, we find
+
+\\[{a\_{\text{y}1}}=\frac{\\,d{w\_{1}}}{\\,dt}\\,{L\_{1}}\\,\sin\left({θ\_{1}}\right)+{w\_{1}}\\,{L\_{1}}\\,\cos\left({θ\_{1}}\right)\\,\frac{\\,d{θ\_{1}}}{\\,dt}\\]
+
+Simplifying,
+
+\\[{a\_{\text{y}1}}={w\_{1}}^{2}\\,{L\_{1}}\\,\cos\left({θ\_{1}}\right)+{α\_{1}}\\,{L\_{1}}\\,\sin\left({θ\_{1}}\right)\\]
+
+<div align="center">
+
+## The \\(x\\)-component of acceleration of the second object {#GD:accelerationX2}
+
+</div>
+
+|Refname    |GD:accelerationX2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+|:----------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Label      |The \\(x\\)-component of acceleration of the second object                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+|Units      |\\(\frac{\text{m}}{\text{s}^{2}}\\)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+|Equation   |\\[{a\_{\text{x}2}}={a\_{\text{x}1}}-{w\_{2}}^{2}\\,{L\_{2}}\\,\sin\left({θ\_{2}}\right)+{α\_{2}}\\,{L\_{2}}\\,\cos\left({θ\_{2}}\right)\\]                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+|Description|<ul><li>\\({a\_{\text{x}2}}\\) is the horizontal acceleration of the second object (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li><li>\\({a\_{\text{x}1}}\\) is the horizontal acceleration of the first object (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li><li>\\({w\_{2}}\\) is the angular velocity of the second object (\\(\frac{\text{rad}}{\text{s}}\\))</li><li>\\({L\_{2}}\\) is the length of the second rod (\\({\text{m}}\\))</li><li>\\({θ\_{2}}\\) is the angle of the second rod (\\({\text{rad}}\\))</li><li>\\({α\_{2}}\\) is the angular acceleration of the second object (\\(\frac{\text{rad}}{\text{s}^{2}}\\))</li></ul>|
+|Source     |--                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|RefBy      |[IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+
+#### Detailed derivation of the \\(x\\)-component of acceleration: {#GD:accelerationX2Deriv}
+
+Our acceleration is:
+
+\\[\boldsymbol{a}\text{(}t\text{)}=\frac{\\,d\boldsymbol{v}\text{(}t\text{)}}{\\,dt}\\]
+
+Earlier, we found the horizontal velocity to be
+
+\\[{v\_{\text{x}2}}={v\_{\text{x}1}}+{w\_{2}}\\,{L\_{2}}\\,\cos\left({θ\_{2}}\right)\\]
+
+Applying this to our equation for acceleration
+
+\\[{a\_{\text{x}2}}=\frac{\\,d{v\_{\text{x}1}}+{w\_{2}}\\,{L\_{2}}\\,\cos\left({θ\_{2}}\right)}{\\,dt}\\]
+
+By the product and chain rules, we find
+
+\\[{a\_{\text{x}2}}={a\_{\text{x}1}}-{w\_{2}}^{2}\\,{L\_{2}}\\,\sin\left({θ\_{2}}\right)+{α\_{2}}\\,{L\_{2}}\\,\cos\left({θ\_{2}}\right)\\]
+
+<div align="center">
+
+## The \\(y\\)-component of acceleration of the second object {#GD:accelerationY2}
+
+</div>
+
+|Refname    |GD:accelerationY2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|:----------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Label      |The \\(y\\)-component of acceleration of the second object                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+|Units      |\\(\frac{\text{m}}{\text{s}^{2}}\\)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+|Equation   |\\[{a\_{\text{y}2}}={a\_{\text{y}1}}+{w\_{2}}^{2}\\,{L\_{2}}\\,\cos\left({θ\_{2}}\right)+{α\_{2}}\\,{L\_{2}}\\,\sin\left({θ\_{2}}\right)\\]                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+|Description|<ul><li>\\({a\_{\text{y}2}}\\) is the vertical acceleration of the second object (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li><li>\\({a\_{\text{y}1}}\\) is the vertical acceleration of the first object (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li><li>\\({w\_{2}}\\) is the angular velocity of the second object (\\(\frac{\text{rad}}{\text{s}}\\))</li><li>\\({L\_{2}}\\) is the length of the second rod (\\({\text{m}}\\))</li><li>\\({θ\_{2}}\\) is the angle of the second rod (\\({\text{rad}}\\))</li><li>\\({α\_{2}}\\) is the angular acceleration of the second object (\\(\frac{\text{rad}}{\text{s}^{2}}\\))</li></ul>|
+|Source     |--                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+|RefBy      |[IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+
+#### Detailed derivation of the \\(y\\)-component of acceleration: {#GD:accelerationY2Deriv}
+
+Our acceleration is:
+
+\\[\boldsymbol{a}\text{(}t\text{)}=\frac{\\,d\boldsymbol{v}\text{(}t\text{)}}{\\,dt}\\]
+
+Earlier, we found the horizontal velocity to be
+
+\\[{v\_{\text{y}2}}={v\_{\text{y}1}}+{w\_{2}}\\,{L\_{2}}\\,\sin\left({θ\_{2}}\right)\\]
+
+Applying this to our equation for acceleration
+
+\\[{a\_{\text{y}2}}=\frac{\\,d{v\_{\text{y}1}}+{w\_{2}}\\,{L\_{2}}\\,\sin\left({θ\_{2}}\right)}{\\,dt}\\]
+
+By the product and chain rules, we find
+
+\\[{a\_{\text{y}2}}={a\_{\text{y}1}}+{w\_{2}}^{2}\\,{L\_{2}}\\,\cos\left({θ\_{2}}\right)+{α\_{2}}\\,{L\_{2}}\\,\sin\left({θ\_{2}}\right)\\]
+
+<div align="center">
+
+## Horizontal force on the first object {#GD:xForce1}
+
+</div>
+
+|Refname    |GD:xForce1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+|:----------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Label      |Horizontal force on the first object                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+|Units      |\\({\text{N}}\\)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+|Equation   |\\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}=-{\boldsymbol{T}\_{1}}\\,\sin\left({θ\_{1}}\right)+{\boldsymbol{T}\_{2}}\\,\sin\left({θ\_{2}}\right)\\]                                                                                                                                                                                                                                                                                                                                                                                                             |
+|Description|<ul><li>\\(\boldsymbol{F}\\) is the force (\\({\text{N}}\\))</li><li>\\(m\\) is the mass (\\({\text{kg}}\\))</li><li>\\(\boldsymbol{a}\text{(}t\text{)}\\) is the acceleration (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li><li>\\({\boldsymbol{T}\_{1}}\\) is the tension of the first object (\\({\text{N}}\\))</li><li>\\({θ\_{1}}\\) is the angle of the first rod (\\({\text{rad}}\\))</li><li>\\({\boldsymbol{T}\_{2}}\\) is the tension of the second object (\\({\text{N}}\\))</li><li>\\({θ\_{2}}\\) is the angle of the second rod (\\({\text{rad}}\\))</li></ul>|
+|Source     |--                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+|RefBy      |[IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+
+#### Detailed derivation of force on the first object: {#GD:xForce1Deriv}
+
+\\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}=-{\boldsymbol{T}\_{1}}\\,\sin\left({θ\_{1}}\right)+{\boldsymbol{T}\_{2}}\\,\sin\left({θ\_{2}}\right)\\]
+
+<div align="center">
+
+## Vertical force on the first object {#GD:yForce1}
+
+</div>
+
+|Refname    |GD:yForce1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+|:----------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Label      |Vertical force on the first object                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+|Units      |\\({\text{N}}\\)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+|Equation   |\\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}={\boldsymbol{T}\_{1}}\\,\cos\left({θ\_{1}}\right)-{\boldsymbol{T}\_{2}}\\,\cos\left({θ\_{2}}\right)-{m\_{1}}\\,\boldsymbol{g}\\]                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+|Description|<ul><li>\\(\boldsymbol{F}\\) is the force (\\({\text{N}}\\))</li><li>\\(m\\) is the mass (\\({\text{kg}}\\))</li><li>\\(\boldsymbol{a}\text{(}t\text{)}\\) is the acceleration (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li><li>\\({\boldsymbol{T}\_{1}}\\) is the tension of the first object (\\({\text{N}}\\))</li><li>\\({θ\_{1}}\\) is the angle of the first rod (\\({\text{rad}}\\))</li><li>\\({\boldsymbol{T}\_{2}}\\) is the tension of the second object (\\({\text{N}}\\))</li><li>\\({θ\_{2}}\\) is the angle of the second rod (\\({\text{rad}}\\))</li><li>\\({m\_{1}}\\) is the mass of the first object (\\({\text{kg}}\\))</li><li>\\(\boldsymbol{g}\\) is the gravitational acceleration (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li></ul>|
+|Source     |--                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+|RefBy      |[IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+
+#### Detailed derivation of force on the first object: {#GD:yForce1Deriv}
+
+\\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}={\boldsymbol{T}\_{1}}\\,\cos\left({θ\_{1}}\right)-{\boldsymbol{T}\_{2}}\\,\cos\left({θ\_{2}}\right)-{m\_{1}}\\,\boldsymbol{g}\\]
+
+<div align="center">
+
+## Horizontal force on the second object {#GD:xForce2}
+
+</div>
+
+|Refname    |GD:xForce2                                                                                                                                                                                                                                                                                                                                                                                          |
+|:----------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Label      |Horizontal force on the second object                                                                                                                                                                                                                                                                                                                                                               |
+|Units      |\\({\text{N}}\\)                                                                                                                                                                                                                                                                                                                                                                                    |
+|Equation   |\\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}=-{\boldsymbol{T}\_{2}}\\,\sin\left({θ\_{2}}\right)\\]                                                                                                                                                                                                                                                                                           |
+|Description|<ul><li>\\(\boldsymbol{F}\\) is the force (\\({\text{N}}\\))</li><li>\\(m\\) is the mass (\\({\text{kg}}\\))</li><li>\\(\boldsymbol{a}\text{(}t\text{)}\\) is the acceleration (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li><li>\\({\boldsymbol{T}\_{2}}\\) is the tension of the second object (\\({\text{N}}\\))</li><li>\\({θ\_{2}}\\) is the angle of the second rod (\\({\text{rad}}\\))</li></ul>|
+|Source     |--                                                                                                                                                                                                                                                                                                                                                                                                  |
+|RefBy      |[IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2)                                                                                                                                                                                                                                                                                                                                                        |
+
+#### Detailed derivation of force on the second object: {#GD:xForce2Deriv}
+
+\\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}=-{\boldsymbol{T}\_{2}}\\,\sin\left({θ\_{2}}\right)\\]
+
+<div align="center">
+
+## Vertical force on the second object {#GD:yForce2}
+
+</div>
+
+|Refname    |GD:yForce2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+|:----------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Label      |Vertical force on the second object                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|Units      |\\({\text{N}}\\)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|Equation   |\\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}={\boldsymbol{T}\_{2}}\\,\cos\left({θ\_{2}}\right)-{m\_{2}}\\,\boldsymbol{g}\\]                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+|Description|<ul><li>\\(\boldsymbol{F}\\) is the force (\\({\text{N}}\\))</li><li>\\(m\\) is the mass (\\({\text{kg}}\\))</li><li>\\(\boldsymbol{a}\text{(}t\text{)}\\) is the acceleration (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li><li>\\({\boldsymbol{T}\_{2}}\\) is the tension of the second object (\\({\text{N}}\\))</li><li>\\({θ\_{2}}\\) is the angle of the second rod (\\({\text{rad}}\\))</li><li>\\({m\_{2}}\\) is the mass of the second object (\\({\text{kg}}\\))</li><li>\\(\boldsymbol{g}\\) is the gravitational acceleration (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li></ul>|
+|Source     |--                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+|RefBy      |[IM:calOfAngle2](./SecIMs.md#IM:calOfAngle2)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+
+#### Detailed derivation of force on the second object: {#GD:yForce2Deriv}
+
+\\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}={\boldsymbol{T}\_{2}}\\,\cos\left({θ\_{2}}\right)-{m\_{2}}\\,\boldsymbol{g}\\]

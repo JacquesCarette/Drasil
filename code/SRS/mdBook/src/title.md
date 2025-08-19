@@ -1,3 +1,3 @@
-# Software Requirements Specification for GamePhysics {#}
+# Software Requirements Specification for Double Pendulum {#}
 
-Alex Halliwushka, Luthfi Mawarid, and Olu Owojaiye
+Dong Chen

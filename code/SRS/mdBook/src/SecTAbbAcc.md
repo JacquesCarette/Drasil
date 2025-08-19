@@ -5,8 +5,7 @@
 |Abbreviation|Full Form                          |
 |:-----------|:----------------------------------|
 |2D          |Two-Dimensional                    |
-|3D          |Three-Dimensional                  |
-|GamePhysics |GamePhysics                        |
+|DblPend     |Double Pendulum                    |
 |ODE         |Ordinary Differential Equation     |
 |SRS         |Software Requirements Specification|
 

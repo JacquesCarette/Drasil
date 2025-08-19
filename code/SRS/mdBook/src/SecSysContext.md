@@ -1,10 +1,10 @@
 # System Context {#Sec:SysContext}
 
-[Fig:sysCtxDiag](./SecSysContext.md#Figure:sysCtxDiag) shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (GamePhysics). Arrows are used to show the data flow between the system and its environment.
+[Fig:sysCtxDiag](./SecSysContext.md#Figure:sysCtxDiag) shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (DblPend). Arrows are used to show the data flow between the system and its environment.
 
 <div id="Figure:sysCtxDiag" align="center" >
 
-![System Context](./assets/sysctx.png)
+![System Context](./assets/SystemContextFigure.png)
 
 **Figure: System Context**
 
@@ -13,10 +13,11 @@
 The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:
 
 - User Responsibilities
-  - Provide initial conditions of the physical state of the simulation, rigid bodies present, and forces applied to them.
-  - Ensure application programming interface use complies with the user guide.
-  - Ensure required [software assumptions](./SecAssumps.md#Sec:Assumps) are appropriate for any particular problem the software addresses.
-- GamePhysics Responsibilities
-  - Determine if the inputs and simulation state satisfy the required [physical and system constraints](./SecDataConstraints.md#Sec:DataConstraints).
-  - Calculate the new state of all rigid bodies within the simulation at each simulation step.
-  - Provide updated physical state of all rigid bodies at the end of a simulation step.
+  - Provide initial conditions of the physical state of the motion and the input data related to the Double Pendulum, ensuring no errors in the data entry.
+  - Ensure that consistent units are used for input variables.
+  - Ensure required [software assumptions](./SecAssumps.md#Sec:Assumps) are appropriate for any particular problem input to the software.
+- DblPend Responsibilities
+  - Detect data type mismatch, such as a string of characters input instead of a floating point number.
+  - Determine if the inputs satisfy the required physical and software constraints.
+  - Calculate the required outputs.
+  - Generate the required graphs.

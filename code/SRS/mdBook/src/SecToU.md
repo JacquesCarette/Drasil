@@ -6,7 +6,6 @@ The unit system used throughout is SI (Système International d'Unités). In add
 
 |Symbol            |Description|SI Name |
 |:-----------------|:----------|:-------|
-|\\({\text{J}}\\)  |energy     |joule   |
 |\\({\text{kg}}\\) |mass       |kilogram|
 |\\({\text{m}}\\)  |length     |metre   |
 |\\({\text{N}}\\)  |force      |newton  |

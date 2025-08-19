@@ -3,7 +3,7 @@ module Drasil.DblPend.Body where
 
 import Control.Lens ((^.))
 
-import Drasil.Metadata (inModel)
+import Drasil.Metadata (inModel, thModel, dataDefn, genDefn)
 import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
@@ -20,7 +20,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   environment, datum, input_, interface, output_, problem, product_,
   physical, sysCont, software, softwareConstraint, softwareSys, srsDomains,
-  system, user, doccon, doccon', analysis)
+  system, user, doccon, doccon', analysis, goalStmt, physSyst, requirement)
 import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate, educon, )
 import Data.Drasil.Concepts.Math (mathcon, cartesian, ode, mathcon', graph)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion)
@@ -71,7 +71,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [IPurpose $ purpDoc progName Verbose,
        IScope scope,
        IChar [] charsOfReader [],
-       IOrgSec inModel (SRS.inModel [] []) EmptyS],
+       IOrgSec inModel (SRS.inModel [] []) (foldlSent missingAbrv)],
   GSDSec $ 
     GSDProg [
       SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
@@ -108,8 +108,8 @@ si :: System
 si = mkSystem progName Specification [dong]
   [purp] [background] [scope] [motivation]
   symbolsAll
-  tMods genDefns dataDefs iMods
-  []
+  tMods genDefns dataDefs iMods  -- Re-enabled genDefns to show Clifford algebra content
+  []  -- assumptions as strings
   inputs outputs inConstraints
   constants
   symbMap
@@ -141,6 +141,8 @@ abbreviationsList :: [IdeaDict]
 abbreviationsList = 
   -- QuantityDict abbreviations
   map nw symbols ++
+  -- Document structure abbreviations
+  map nw [goalStmt, thModel, inModel, assumption, genDefn, dataDefn, requirement, physSyst] ++
   -- Other acronyms/abbreviations
   nw progName : map nw acronyms
 
@@ -150,7 +152,7 @@ conceptChunks = [algorithm, errMsg, program] ++ physicCon ++ mathcon ++ physical
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll)
   ideaDicts conceptChunks siUnits
-  dataDefs iMods genDefns tMods concIns [] allRefs citations
+  dataDefs iMods genDefns tMods concIns [] allRefs citations  -- Re-enabled genDefns to show Clifford algebra content
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -206,6 +208,21 @@ charsOfReader = [phrase undergraduate +:+ S "level 2" +:+ phrase Doc.physics,
 -------------------------------------
 -- Starting intro sentence of Organization of Documents automatically generated
 -- in IOrg
+
+missingAbrv :: [Sentence]
+missingAbrv = [S "The" +:+ plural goalStmt +:+ sParen (short goalStmt) +:+ S "are systematically refined into the" +:+ 
+              plural thModel +:+ sParen (short thModel) `sC` S "which in turn are refined into the" +:+ 
+              plural inModel +:+ sParen (short inModel) +:+. EmptyS +:+
+              S "This refinement process is guided by the" +:+ plural assumption +:+ sParen (short assumption) +:+ 
+              S "that constrain the" +:+ phrase system `sC` S "as well as the supporting" +:+ 
+              plural genDefn +:+ sParen (short genDefn) +:+ S "and" +:+ plural dataDefn +:+ sParen (short dataDefn) +:+ 
+              S "that provide the necessary mathematical and physical context." +:+ 
+              S "The" +:+ plural requirement +:+ sParen (short requirement) +:+ S "are traced back through the" +:+ 
+              short goalStmt `sC` short thModel `sC` S "and" +:+ short inModel +:+ S "to ensure consistency and completeness." +:+ 
+              S "Furthermore" `sC` S "the" +:+ phrase physSyst +:+ sParen (short physSyst) +:+ S "establishes the overall" +:+ 
+              S "context in which the" +:+ short goalStmt +:+ S "are formulated and the" +:+ short assumption +:+ S "are validated." +:+ 
+              S "Finally" `sC` S "the uncertainties (Uncerts.) are documented and linked to" +:+ 
+              S "the relevant" +:+ short inModel +:+ S "and" +:+ short dataDefn `sC` S "ensuring transparency in the modeling process."]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --

@@ -14,7 +14,7 @@ import Data.Drasil.Concepts.Math (ode)
 import Drasil.DblPend.Derivations (angularAccelDerivEqns)
 import Drasil.DblPend.Expressions (angularAccelExpr_1, angularAccelExpr_2)
 import Drasil.DblPend.GenDefs (mvAccelGD_1, mvAccelGD_2, 
-  mvForceGD_1, mvForceGD_2)
+  mvForceGD_1, mvForceGD_2)  -- Re-enabled to show Clifford algebra content
 import Drasil.DblPend.Unitals (angularAccel_1, angularAccel_2, angularVel_1,
   angularVel_2, lenRod_1, lenRod_2, massObj_1, massObj_2, pendDisAngle_1,
   pendDisAngle_2, mvForce_1, mvForce_2)
@@ -39,19 +39,19 @@ angleDerivSents = [angleDerivSent1, EmptyS, angleDerivSent2, EmptyS, angleDerivS
 
 angleDerivSent1, angleDerivSent2, angleDerivSent3,
   angleDerivSent4, angleDerivSent5, angleDerivSent6 :: Sentence
-angleDerivSent1 = foldlSentCol [S "By solving equations" +:+ refS mvForceGD_2 `S.and_` refS mvForceGD_2 
-                    `S.for` eS forceDerivExpr1 `S.and_` eS forceDerivExpr2 `S.and_` S "then substituting into equation" +:+ 
-                    refS mvForceGD_1 `S.and_` refS mvForceGD_1 +:+ S ", we can get equations 1 and 2"]
+angleDerivSent1 = foldlSentCol [S "By solving multivector force equations" +:+ refS mvForceGD_1 `S.and_` refS mvForceGD_2 
+                    `S.for` eS forceDerivExpr1 `S.and_` eS forceDerivExpr2 `S.and_` S "then substituting into the Clifford algebra force equations" 
+                    +:+ S ", we can get equations 1 and 2"]
 angleDerivSent2 = foldlSentCol [S "Multiply the equation 1 by" +:+ 
                     eS cosAngleExpr1 `S.and_` S "the equation 2 by" +:+ eS sinAngleExpr1 `S.and_`
                     S "rearrange to get"]
 angleDerivSent3 = S "This leads to the equation 3"
-angleDerivSent4 = foldlSentCol[S "Next, multiply equation" +:+ refS mvForceGD_2 +:+ S "by" +:+ 
-                    eS cosAngleExpr2 `S.and_` S "equation" +:+ refS mvForceGD_2 +:+ S "by" +:+ 
+angleDerivSent4 = foldlSentCol[S "Next, multiply multivector force equation" +:+ refS mvForceGD_2 +:+ S "by" +:+ 
+                    eS cosAngleExpr2 `S.and_` S "the Clifford force equation by" +:+ 
                     eS sinAngleExpr2 `S.and_` S "rearrange to get"]
 angleDerivSent5 = S "which leads to equation 4"
-angleDerivSent6 = foldlSentCol[S "By giving equations" +:+ refS mvAccelGD_1 `S.and_` refS mvAccelGD_2 `S.and_` 
-                    refS mvAccelGD_1 `S.and_` refS mvAccelGD_2 +:+ 
+angleDerivSent6 = foldlSentCol[S "By giving multivector acceleration equations" +:+ refS mvAccelGD_1 `S.and_` refS mvAccelGD_2 `S.and_` 
+                    S "plus Clifford algebra equations" +:+ 
                     S "plus additional two equations, 3 and 4, we can get" +:+ refS angleIM_1 `S.and_`
                     refS angleIM_2 +:+ S "via a computer algebra program"]
 

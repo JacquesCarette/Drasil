@@ -6,6 +6,7 @@ import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Language.Drasil.Space (ClifKind(Vector))
+import qualified Language.Drasil.Space as S
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.Constraints (gtZeroConstr)
@@ -33,13 +34,21 @@ acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
   physSyst, requirement, refBy, refName, srs, thModel, typUnc]
 
 inputs :: [QuantityDict]
-inputs = map qw [lenRod_1, lenRod_2, massObj_1, massObj_2] 
+inputs = map qw [lenRod_1, lenRod_2, massObj_1, massObj_2, pendDisAngle_1, pendDisAngle_2] 
 
 outputs :: [QuantityDict]
-outputs = [qw pendDisAngle]
+outputs = [qw xPos_1, qw mvVel_1, qw mvAccel_1]  -- Including Clifford algebra quantities to show in SRS
 
 constants :: [ConstQDef]
 constants = [gravitationalAccelConst]
+
+-- Clifford algebra helper functions
+vecDim :: S.Dimension
+vecDim = S.Fixed 2
+
+-- | Helper function to create Clifford vector spaces of a given dimension
+realVect :: S.Dimension -> Space
+realVect d = S.ClifS d S.Vector Real
 
 unitalChunks :: [UnitalChunk]
 unitalChunks = [ 
@@ -80,6 +89,7 @@ xPos_2 = uc' "p_x2" (horizontalPos `ofThe` secondObject)
         (sub lP (Concat [labelx, label2])) Real metre
 
 -- Vector position of mass 1
+posVec_1 :: Expr
 posVec_1 = (l1 $* sin t1) `cScale` e1_basis `cAdd` (l1 $* cos t1) `cScale` e2_basis
 
 yPos_1 = uc' "p_y1" (verticalPos `ofThe` firstObject)
@@ -91,6 +101,7 @@ yPos_2 = uc' "p_y2" (verticalPos `ofThe` secondObject)
         (sub lP (Concat [labely, label2])) Real metre
 
 -- Vector position of mass 2
+posVec_2 :: Expr
 posVec_2 = posVec_1 `cAdd` ((l2 $* sin t2) `cScale` e1_basis `cAdd` (l2 $* cos t2) `cScale` e2_basis)
 
 xVel_1 = uc' "v_x1" (horizontalVel `ofThe` firstObject)
@@ -104,12 +115,12 @@ xVel_2 = uc' "v_x2" (horizontalVel `ofThe` secondObject)
 -- Clifford velocity representation for first object
 mvVel_1 = uc' "v_mv1" (QP.velocity `ofThe` firstObject)
         (phraseNP (QP.velocity `the_ofThe` firstObject))
-        (sub lV label1) Real velU
+        (sub lV label1) (realVect vecDim) velU
 
 -- Clifford velocity representation for second object
 mvVel_2 = uc' "v_mv2" (QP.velocity `ofThe` secondObject)
         (phraseNP (QP.velocity `the_ofThe` secondObject))
-        (sub lV label2) Real velU
+        (sub lV label2) (realVect vecDim) velU
 
 yVel_1 = uc' "v_y1" (verticalVel `ofThe` firstObject)
         (phraseNP (QP.velocity `the_ofThe` firstObject) `S.inThe` phrase CM.yDir)
@@ -132,7 +143,7 @@ xAccel_2 = uc' "a_x2" (horizontalAccel `ofThe` secondObject)
 -- Clifford acceleration representation for first object
 mvAccel_1 = uc' "a_mv1" (QP.acceleration `ofThe` firstObject)
         (phraseNP (QP.acceleration `the_ofThe` firstObject))
-        (sub lA label1) Real accelU
+        (sub lA label1) (realVect vecDim) accelU
 
 yAccel_1 = uc' "a_y1" (verticalAccel `ofThe` firstObject)
         (phraseNP (QP.acceleration `the_ofThe` firstObject) `S.inThe` phrase CM.yDir)
@@ -145,7 +156,7 @@ yAccel_2 = uc' "a_y2" (verticalAccel `ofThe` secondObject)
 -- Clifford acceleration representation for second object
 mvAccel_2 = uc' "a_mv2" (QP.acceleration `ofThe` secondObject)
         (phraseNP (QP.acceleration `the_ofThe` secondObject))
-        (sub lA label2) Real accelU
+        (sub lA label2) (realVect vecDim) accelU
 
 angularVel_1 = uc' "omega_1" (QP.angularVelocity `ofThe` firstObject)
         (phraseNP (QP.angularVelocity `the_ofThe` firstObject))
@@ -173,12 +184,12 @@ angularAccel_2 = uc' "alpha_2" (QP.angularAccel `ofThe` secondObject)
 -- Clifford force representation for first object
 mvForce_1 = uc' "F_mv1" (QP.force `ofThe` firstObject)
         (phraseNP (QP.force `the_ofThe` firstObject))
-        (sub lF label1) Real newton
+        (sub lF label1) (realVect vecDim) newton
 
 -- Clifford force representation for second object  
 mvForce_2 = uc' "F_mv2" (QP.force `ofThe` secondObject)
         (phraseNP (QP.force `the_ofThe` secondObject))
-        (sub lF label2) Real newton
+        (sub lF label2) (realVect vecDim) newton
 
 pendDisAngle_1 = uc' "theta_1" (angle `ofThe` firstRod)
         (phraseNP (angle `the_ofThe` firstRod))

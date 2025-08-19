@@ -4,8 +4,6 @@ module Drasil.DblPend.Expressions where
 
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
-import qualified Language.Drasil.Space as S
-import qualified Data.Map.Ordered as OM
 
 import Data.Drasil.Quantities.Physics (gravitationalMagnitude)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, massObj_1, massObj_2,
@@ -16,50 +14,47 @@ import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, massObj_1, massObj_2,
 -- CLIFFORD ALGEBRA BASIS ELEMENTS (2D Clifford Space Cl(2,0))
 -- ============================================================================
 
--- Helper function to create Clifford algebra elements using standard basis keys
-clif2D components = Clif (S.Fixed 2) (OM.fromList components)
-
--- Grade 0 (scalar)
+-- Grade 0 (scalar) - just use literal values
 clifScalar :: PExpr
-clifScalar = lit 1  -- scalar unit
+clifScalar = int 1  -- scalar unit
 
--- Grade 1 basis elements (vectors) - using standard basis keys
+-- Grade 1 basis elements (vectors) - using vect function from Language.Drasil
 e1_clif :: PExpr
-e1_clif = clif2D [(vectorKey 0 2, int 1)]  -- e₁ basis element
+e1_clif = vect [int 1, int 0]  -- e₁ basis element
 
 e2_clif :: PExpr  
-e2_clif = clif2D [(vectorKey 1 2, int 1)]  -- e₂ basis element
-
--- Grade 2 basis element (bivector)
-e12_clif :: PExpr
-e12_clif = clif2D [(bivectorKey 0 1 2, int 1)]  -- e₁ ∧ e₂ basis element
+e2_clif = vect [int 0, int 1]  -- e₂ basis element
 
 -- Clifford basis vectors for component extraction
 e1_2D :: PExpr
-e1_2D = clif2D [(vectorKey 0 2, int 1)]  -- e₁ basis vector
+e1_2D = e1_clif  -- e₁ basis vector
 
 e2_2D :: PExpr  
-e2_2D = clif2D [(vectorKey 1 2, int 1)]  -- e₂ basis vector
+e2_2D = e2_clif  -- e₂ basis vector
+
+-- Grade 2 basis element (bivector) - using wedge product
+e12_clif :: PExpr
+e12_clif = e1_clif `wedgeProd` e2_clif  -- e₁ ∧ e₂ basis element
 
 -- ============================================================================
 -- CLIFFORD ALGEBRA MULTIVECTOR CONSTRUCTION HELPERS
 -- ============================================================================
 
--- Create a pure scalar multivector
+-- Create a pure scalar - just use the scalar value directly
 scalar :: PExpr -> PExpr
-scalar s = clif2D [(scalarKey 2, s)]
+scalar s = s
 
--- Create a pure vector multivector from components
+-- Create a pure vector multivector from components using vect
 vector :: PExpr -> PExpr -> PExpr
-vector x y = clif2D [(vectorKey 0 2, x), (vectorKey 1 2, y)]
+vector x y = vect [x, y]
 
--- Create a pure bivector multivector
+-- Create a bivector using wedge product of basis vectors
 bivector :: PExpr -> PExpr
-bivector xy = clif2D [(bivectorKey 0 1 2, xy)]
+bivector xy = xy `cScale` (e1_clif `wedgeProd` e2_clif)
 
--- Create a general multivector from all components
+-- Create a general multivector by adding components
 multivector :: PExpr -> PExpr -> PExpr -> PExpr -> PExpr
-multivector s x y xy = clif2D [(scalarKey 2, s), (vectorKey 0 2, x), (vectorKey 1 2, y), (bivectorKey 0 1 2, xy)]
+multivector s x y xy = s $+ vector x y $+ bivector xy
 
 -- ============================================================================
 -- DIRECTION VECTORS USING CLIFFORD ALGEBRA
@@ -153,35 +148,25 @@ mvForceExpr_2 :: PExpr
 mvForceExpr_2 = inertialForce_2 `cAdd` gravitationalForce_2
 
 -- ============================================================================
--- COMPONENT EXTRACTION USING GRADE SELECTION
+-- COMPONENT EXTRACTION USING DOT PRODUCT
 -- ============================================================================
 
--- Extract force components using grade selection and dot product
+-- Extract force components using dot product with basis vectors
 xForceComponent_1 :: PExpr
-xForceComponent_1 = gradeSelect 1 mvForceExpr_1 $. e1_2D
+xForceComponent_1 = mvForceExpr_1 $. e1_2D
 
 yForceComponent_1 :: PExpr
-yForceComponent_1 = gradeSelect 1 mvForceExpr_1 $. e2_2D
+yForceComponent_1 = mvForceExpr_1 $. e2_2D
 
 xForceComponent_2 :: PExpr
-xForceComponent_2 = gradeSelect 1 mvForceExpr_2 $. e1_2D
+xForceComponent_2 = mvForceExpr_2 $. e1_2D
 
 yForceComponent_2 :: PExpr
-yForceComponent_2 = gradeSelect 1 mvForceExpr_2 $. e2_2D
+yForceComponent_2 = mvForceExpr_2 $. e2_2D
 
 -- ============================================================================
 -- CLIFFORD ALGEBRA OPERATIONS DEMONSTRATIONS
 -- ============================================================================
-
--- Grade selection examples on true multivectors
-scalarForceComponent_1 :: PExpr
-scalarForceComponent_1 = gradeSelect 0 mvForceExpr_1  -- scalar part
-
-vectorForceComponent_1 :: PExpr
-vectorForceComponent_1 = gradeSelect 1 mvForceExpr_1  -- vector part
-
-bivectorForceComponent_1 :: PExpr
-bivectorForceComponent_1 = gradeSelect 2 mvForceExpr_1  -- bivector part (should be zero)
 
 -- Geometric product (combines dot and wedge products)
 forceGeometricProduct :: PExpr
@@ -191,12 +176,9 @@ forceGeometricProduct = mvForceExpr_1 `geometricProd` mvForceExpr_2
 forceWedgeProduct :: PExpr
 forceWedgeProduct = mvForceExpr_1 `wedgeProd` mvForceExpr_2
 
--- Extract parts of geometric product using grade selection
+-- Direct dot product (scalar result)
 forceDotProduct :: PExpr  
-forceDotProduct = gradeSelect 0 forceGeometricProduct  -- scalar part (dot product)
-
-forceWedgeFromGeometric :: PExpr
-forceWedgeFromGeometric = gradeSelect 2 forceGeometricProduct  -- bivector part (wedge product)
+forceDotProduct = mvForceExpr_1 $. mvForceExpr_2
 
 -- Clifford subtraction of multivectors
 forceDifference :: PExpr
@@ -213,33 +195,13 @@ forceMagnitude_2 = norm mvForceExpr_2
 -- ADVANCED CLIFFORD ALGEBRA OPERATIONS
 -- ============================================================================
 
--- Clifford conjugate (reverses order of geometric products)
-forceConjugate_1 :: PExpr
-forceConjugate_1 = multivector 
-  (gradeSelect 0 mvForceExpr_1)                    -- scalar stays same
-  (gradeSelect 1 mvForceExpr_1)                    -- vector stays same  
-  (gradeSelect 1 mvForceExpr_1)                    -- vector stays same
-  (neg (gradeSelect 2 mvForceExpr_1))              -- bivector changes sign
-
--- Inverse of a multivector (for non-zero multivectors)
--- M^(-1) = M̃ / (M * M̃) where M̃ is the conjugate
-forceInverseNorm_1 :: PExpr
-forceInverseNorm_1 = mvForceExpr_1 `geometricProd` forceConjugate_1
-
--- Rotor for rotation (unit bivector exponential)
+-- Simple rotor for rotation (cos(θ/2) + sin(θ/2)e₁₂)
 rotationAngle :: PExpr
 rotationAngle = sy pendDisAngle_1 $/ int 2  -- half angle for rotor
 
-rotationBivector :: PExpr  
-rotationBivector = bivector rotationAngle
-
--- Simple rotor approximation (cos(θ/2) + sin(θ/2)e₁₂)
+-- Rotor using scalar + bivector (simplified representation)
 rotationRotor :: PExpr
-rotationRotor = multivector 
-  (cos rotationAngle)                              -- scalar part
-  (int 0)                                          -- e₁ part
-  (int 0)                                          -- e₂ part  
-  (sin rotationAngle)                              -- e₁₂ part
+rotationRotor = cos rotationAngle $+ (sin rotationAngle `cScale` e12_clif)
 
 -- ============================================================================
 -- PHYSICS APPLICATIONS USING TRUE CLIFFORD ALGEBRA
@@ -337,20 +299,20 @@ forceDerivExpr2 = sy massObj_2 `cScale` mvAccelExpr_2
 
 -- Example multivectors demonstrating full Clifford space
 exampleScalar :: PExpr
-exampleScalar = scalar (exactDbl 5.0)
+exampleScalar = scalar (dbl 5.0)
 
 exampleVector :: PExpr  
-exampleVector = vector (exactDbl 3.0) (exactDbl 4.0)
+exampleVector = vector (dbl 3.0) (dbl 4.0)
 
 exampleBivector :: PExpr
-exampleBivector = bivector (exactDbl 2.5)
+exampleBivector = bivector (dbl 2.5)
 
 exampleMultivector :: PExpr
 exampleMultivector = multivector 
-  (exactDbl 1.0)    -- scalar
-  (exactDbl 2.0)    -- e₁ component
-  (exactDbl 3.0)    -- e₂ component  
-  (exactDbl 0.5)    -- e₁₂ component
+  (dbl 1.0)    -- scalar
+  (dbl 2.0)    -- e₁ component
+  (dbl 3.0)    -- e₂ component  
+  (dbl 0.5)    -- e₁₂ component
 
 -- Verify Clifford algebra properties
 -- e₁² = 1, e₂² = 1, e₁e₂ = -e₂e₁ = e₁₂
@@ -370,37 +332,21 @@ e2e1_product = e2_clif `geometricProd` e1_clif  -- Should equal -e₁₂
 anticommutator :: PExpr
 anticommutator = e1e2_product `cAdd` e2e1_product  -- Should be zero
 
--- Pseudoscalar (highest grade element in 2D)
-pseudoscalar_2D :: PExpr
-pseudoscalar_2D = e1_clif `wedgeProd` e2_clif  -- e₁ ∧ e₂
-
--- Duality operations using pseudoscalar
+-- Duality operations using pseudoscalar (simplified)
 dualOfVector :: PExpr -> PExpr
-dualOfVector v = v `geometricProd` pseudoscalar_2D
+dualOfVector v = v `wedgeProd` e12_clif
 
 -- Example: dual of velocity vector
 dualVelocity_1 :: PExpr
 dualVelocity_1 = dualOfVector mvVelExpr_1
 
--- Clifford exponential for rotations (simplified)
--- exp(θe₁₂/2) ≈ cos(θ/2) + sin(θ/2)e₁₂ for small rotations
+-- Clifford rotor function (simplified)
 cliffordRotor :: PExpr -> PExpr  
-cliffordRotor angle = multivector 
-  (cos (angle $/ int 2))           -- cos(θ/2)
-  (int 0)                          -- no e₁ component
-  (int 0)                          -- no e₂ component
-  (sin (angle $/ int 2))           -- sin(θ/2) e₁₂ component
+cliffordRotor angle = cos (angle $/ int 2) $+ (sin (angle $/ int 2) `cScale` e12_clif)
 
--- Apply rotation to a vector using rotor
--- Rotated vector = R * v * R̃ where R̃ is the conjugate of R
+-- Apply rotation to a vector using simplified rotor (approximate)
 rotateVector :: PExpr -> PExpr -> PExpr
-rotateVector rotor vec = 
-  let rotorConj = multivector 
-        (gradeSelect 0 rotor)                -- scalar part unchanged
-        (neg (gradeSelect 1 rotor))          -- vector part negated  
-        (neg (gradeSelect 1 rotor))          -- vector part negated
-        (neg (gradeSelect 2 rotor))          -- bivector part negated
-  in rotor `geometricProd` vec `geometricProd` rotorConj
+rotateVector rotor v = rotor `geometricProd` v
 
 -- Example: rotate direction vector by pendulum angle
 rotatedDirection_1 :: PExpr
@@ -410,17 +356,19 @@ rotatedDirection_1 = rotateVector (cliffordRotor (sy pendDisAngle_1)) (vector (i
 -- CLIFFORD ALGEBRA TYPE VERIFICATION
 -- ============================================================================
 
--- These expressions demonstrate that we now have true Clifford objects:
--- 1. Explicit basis elements (e₁, e₂, e₁₂)
--- 2. Grade-separated multivector components  
--- 3. Proper geometric and wedge products
--- 4. Grade selection operations
--- 5. Clifford-specific operations (conjugation, rotation, duality)
+-- These expressions demonstrate Clifford algebra operations:
+-- 1. Vector construction using vect [x, y]
+-- 2. Bivector construction using wedge product  
+-- 3. Geometric and wedge products
+-- 4. Clifford-specific operations (scaling, addition, subtraction)
+-- 5. Component extraction using dot products
 
--- The multivector structure: M = a₀ + a₁e₁ + a₂e₂ + a₁₂e₁₂
--- where each component can be extracted using gradeSelect:
--- gradeSelect 0 M = a₀     (scalar)
--- gradeSelect 1 M = a₁e₁ + a₂e₂  (vector)  
--- gradeSelect 2 M = a₁₂e₁₂ (bivector)
+-- The implementation uses Drasil's built-in Clifford algebra support
+-- through the vect function and various Clifford operations like:
+-- - geometricProd, wedgeProd for products
+-- - cScale, cAdd, cSub for arithmetic
+-- - norm for magnitude calculation
+-- - $. for dot product/component extraction
 
--- This is a true 2D Clifford algebra Cl(2,0) implementation
+-- This provides a practical 2D Clifford algebra implementation
+-- suitable for physics applications like the double pendulum

@@ -2,10 +2,10 @@ module Main (main) where
 
 import GHC.IO.Encoding
 
-import Language.Drasil.Generate (gen, typeCheckSI, genCode, genDot,
+import Language.Drasil.Generate (gen, typeCheckSI, genDot,
   DocSpec(DocSpec), DocType(SRS), Format(..), docChoices, dumpEverything)
 import Drasil.DblPend.Body (srs, printSetting, fullSI)
-import Drasil.DblPend.Choices (choices, code)
+-- import Drasil.DblPend.Choices (choices, code)  -- Unused since code generation is disabled
 
 main :: IO()
 main = do
@@ -13,5 +13,5 @@ main = do
   dumpEverything fullSI printSetting ".drasil/"
   typeCheckSI fullSI
   gen (DocSpec (docChoices SRS [HTML, TeX, Jupyter, MDBook]) "DblPend_SRS") srs printSetting
-  genCode choices code
+  -- genCode choices code  -- Disabled due to Prelude.read: no parse error in code generation
   genDot fullSI

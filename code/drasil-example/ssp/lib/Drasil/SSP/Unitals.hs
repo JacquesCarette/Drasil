@@ -1,10 +1,8 @@
 module Drasil.SSP.Unitals where --export all of it
 
 import Language.Drasil
-import Language.Drasil.Display (Symbol(..))
-import Language.Drasil.Space (ClifKind(..), Space(..), Dimension(..))
-import qualified Language.Drasil.Space as S
-import Language.Drasil.ShortHands
+import Language.Drasil.ShortHands (cB, cC, cF, cG, cH, cK, cL, cN, cP, cQ, cR, cS, cT, cU, cV, cW, cX, cUpsilon, cPhi, cPsi,
+  lAlpha, lB, lBeta, lF, lGamma, lH, lI, lLambda, lN, lOmega, lR, lS, lSigma, lTau, lU, lV, lW, lX, lY, lZ, vPhi)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -25,7 +23,7 @@ import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight,
   vol)
 import Data.Drasil.Quantities.Physics (acceleration, displacement, distance,
   force, gravitationalAccel, height, moment2D, pressure, subX, subY, subZ, 
-  supMax, supMin, torque, weight, positionVec, vecDim)
+  supMax, supMin, torque, weight, positionVec, vecDim, realVect)
 
 -- | Helper function to create Clifford vector spaces of a given dimension
 realVect :: Dimension -> Space
@@ -255,7 +253,7 @@ zcoord = uc' "z" (nounPhraseSent $ phrase zCoord)
 critCoords = uc' "(xcs,ycs)" (cn "critical slip surface coordinates")
   (S "the set" `S.of_` pluralNP (xCoord `and_PP` yCoord) +:+
    S "that describe the vertices" `S.ofThe` S "critical slip surface")
-  (Concat [sub (vec lX) lCSlip, label ",", sub (vec lY) lCSlip]) Real metre
+  (sub (vec lX) lCSlip <> label "," <> sub (vec lY) lCSlip) Real metre
 
 mobilizedShear = uc' "mobilizedShear" (cn' "mobilized shear force")
   (S "the shear force" `S.inThe` S "direction" `S.of_` S "potential motion") cS Real newton
@@ -449,7 +447,7 @@ momntArm = uc' "r" (cn' "length of the moment arm")
 
 unitless :: [DefinedQuantityDict]
 unitless = [earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction, 
-  mobShrC, shrResC, index, pi_, varblV, fsMin]
+  mobShrC, shrResC, index, pi_, varblV, unitVectj]
 
 earthqkLoadFctr, normToShear, scalFunc, numbSlices,
   minFunction, mobShrC, shrResC, index, varblV :: DefinedQuantityDict

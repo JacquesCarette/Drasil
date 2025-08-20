@@ -94,7 +94,7 @@ getInnerType (C.Set innerT) = innerT
 getInnerType (C.Func _ retType) = retType  -- If it's a function, get its return type
 -- Add debug information to understand what's happening
 getInnerType t@(C.Object _) = error $ "Attempt to extract inner type from Object type: " ++ show t
-getInnerType t@(C.Void) = error $ "Attempt to extract inner type from Void type: " ++ show t
+getInnerType t@C.Void = error $ "Attempt to extract inner type from Void type: " ++ show t
 getInnerType t = error $ "DEBUG: Attempt to extract inner type from unexpected type: " ++ show t
 
 getNestDegree :: Integer -> C.CodeType -> Integer

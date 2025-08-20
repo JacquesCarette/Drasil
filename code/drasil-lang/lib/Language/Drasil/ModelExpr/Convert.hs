@@ -2,7 +2,7 @@
 -- | Defines functions to convert from the base expression language to 'ModelExpr's.
 module Language.Drasil.ModelExpr.Convert where
 
-import Data.Bifunctor (bimap)
+import Data.Bifunctor (bimap, second)
 import qualified Data.Map.Ordered as OM
 
 import Language.Drasil.Space
@@ -120,7 +120,7 @@ expr (E.ESSBinaryOp o l r)   = ESSBinaryOp (essBinOp o) (expr l) (expr r)
 expr (E.ESBBinaryOp o l r)   = ESBBinaryOp (esbBinOp o) (expr l) (expr r)
 expr (E.Operator ao dd e)    = Operator (assocArithOper ao) (domainDesc dd) (expr e)
 expr (E.RealI u ri)          = RealI u (realInterval ri)
-expr (E.Clif d bb)           = Clif d (OM.fromList $ map (\(k, v) -> (k, expr v)) $ OM.toList bb)
+expr (E.Clif d bb)           = Clif d (OM.fromList $ map (second expr) $ OM.toList bb)
 
 realInterval :: RealInterval E.Expr E.Expr -> RealInterval ModelExpr ModelExpr
 realInterval (Bounded (li, l) (ri, r)) = Bounded (li, expr l) (ri, expr r)

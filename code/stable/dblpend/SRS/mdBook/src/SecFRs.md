@@ -20,11 +20,13 @@ Output-Values: Output \\({θ\_{1}}\\) and \\({θ\_{2}}\\) (from [IM:calOfAngle1]
 
 <div id="Table:ReqInputs"></div>
 
-|Symbol        |Description              |Units            |
-|:-------------|:------------------------|:----------------|
-|\\({L\_{1}}\\)|Length of the first rod  |\\({\text{m}}\\) |
-|\\({L\_{2}}\\)|Length of the second rod |\\({\text{m}}\\) |
-|\\({m\_{1}}\\)|Mass of the first object |\\({\text{kg}}\\)|
-|\\({m\_{2}}\\)|Mass of the second object|\\({\text{kg}}\\)|
+|Symbol        |Description              |Units             |
+|:-------------|:------------------------|:-----------------|
+|\\({L\_{1}}\\)|Length of the first rod  |\\({\text{m}}\\)  |
+|\\({L\_{2}}\\)|Length of the second rod |\\({\text{m}}\\)  |
+|\\({m\_{1}}\\)|Mass of the first object |\\({\text{kg}}\\) |
+|\\({m\_{2}}\\)|Mass of the second object|\\({\text{kg}}\\) |
+|\\({θ\_{1}}\\)|Angle of the first rod   |\\({\text{rad}}\\)|
+|\\({θ\_{2}}\\)|Angle of the second rod  |\\({\text{rad}}\\)|
 
 **<p align="center">Required Inputs</p>**

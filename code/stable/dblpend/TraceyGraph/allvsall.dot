@@ -1,21 +1,9 @@
 digraph allvsall {
-	theory:v_x1 -> dataDefn:velocity;
-	theory:v_x1 -> dataDefn:p_x1;
-	theory:v_y1 -> dataDefn:velocity;
-	theory:v_y1 -> dataDefn:p_y1;
-	theory:v_x2 -> dataDefn:velocity;
-	theory:v_x2 -> dataDefn:p_x2;
-	theory:v_y2 -> dataDefn:velocity;
-	theory:v_y2 -> dataDefn:p_y2;
 	theory:angleIM1 -> theory:angleIM2;
-	theory:angleIM2 -> theory:a_x1;
-	theory:angleIM2 -> theory:a_y1;
-	theory:angleIM2 -> theory:a_x2;
-	theory:angleIM2 -> theory:a_y2;
-	theory:angleIM2 -> theory:xForce1;
-	theory:angleIM2 -> theory:yForce1;
-	theory:angleIM2 -> theory:xForce2;
-	theory:angleIM2 -> theory:yForce2;
+	theory:angleIM2 -> theory:a_mv1;
+	theory:angleIM2 -> theory:a_mv2;
+	theory:angleIM2 -> theory:F_mv1;
+	theory:angleIM2 -> theory:F_mv2;
 	theory:angleIM2 -> theory:angleIM1;
 	theory:angleIM2 -> theory:angleIM2;
 	instance:calcAng -> theory:angleIM1;
@@ -34,17 +22,17 @@ digraph allvsall {
 	{instance:twoDMotion, instance:cartSys, instance:cartSysR, instance:yAxisDir}
 	}
 
-	dataDefn:velocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionGDD"];
+	dataDefn:velocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:velocityGDD"];
 	dataDefn:p_x1	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionXDD1"];
 	dataDefn:p_y1	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionYDD1"];
 	dataDefn:p_x2	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionXDD2"];
 	dataDefn:p_y2	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionYDD2"];
 	dataDefn:acceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:accelerationGDD"];
-	dataDefn:force	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:forceGDD"];
+	dataDefn:F_mv1	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:forceGDD"];
 
 	subgraph DD {
 	rank="same"
-	{dataDefn:velocity, dataDefn:p_x1, dataDefn:p_y1, dataDefn:p_x2, dataDefn:p_y2, dataDefn:acceleration, dataDefn:force}
+	{dataDefn:velocity, dataDefn:p_x1, dataDefn:p_y1, dataDefn:p_x2, dataDefn:p_y2, dataDefn:acceleration, dataDefn:F_mv1}
 	}
 
 	theory:accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];
@@ -56,22 +44,16 @@ digraph allvsall {
 	{theory:accelerationTM, theory:velocityTM, theory:newtonSL}
 	}
 
-	theory:v_x1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityX1"];
-	theory:v_y1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityY1"];
-	theory:v_x2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityX2"];
-	theory:v_y2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityY2"];
-	theory:a_x1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationX1"];
-	theory:a_y1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationY1"];
-	theory:a_x2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationX2"];
-	theory:a_y2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationY2"];
-	theory:xForce1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:xForce1"];
-	theory:yForce1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:yForce1"];
-	theory:xForce2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:xForce2"];
-	theory:yForce2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:yForce2"];
+	theory:v_mv1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:multivectorVelocity1"];
+	theory:v_mv2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:multivectorVelocity2"];
+	theory:a_mv1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:multivectorAcceleration1"];
+	theory:a_mv2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:multivectorAcceleration2"];
+	theory:F_mv1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:multivectorForce1"];
+	theory:F_mv2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:multivectorForce2"];
 
 	subgraph GD {
 	rank="same"
-	{theory:v_x1, theory:v_y1, theory:v_x2, theory:v_y2, theory:a_x1, theory:a_y1, theory:a_x2, theory:a_y2, theory:xForce1, theory:yForce1, theory:xForce2, theory:yForce2}
+	{theory:v_mv1, theory:v_mv2, theory:a_mv1, theory:a_mv2, theory:F_mv1, theory:F_mv2}
 	}
 
 	theory:angleIM1	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngle1"];

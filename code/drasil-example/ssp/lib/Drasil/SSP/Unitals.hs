@@ -2,7 +2,8 @@ module Drasil.SSP.Unitals where --export all of it
 
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
-import Language.Drasil.Space (ClifKind(..))
+import Language.Drasil.Space (ClifKind(..), Space(..), Dimension(..))
+import qualified Language.Drasil.Space as S
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP

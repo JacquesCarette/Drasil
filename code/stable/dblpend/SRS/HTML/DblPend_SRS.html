@@ -168,6 +168,16 @@
                   <th>Units</th>
                 </tr>
                 <tr>
+                  <td><em>a<sub>1</sub></em></td>
+                  <td>Acceleration of the first object</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>a<sub>2</sub></em></td>
+                  <td>Acceleration of the second object</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
+                </tr>
+                <tr>
                   <td><em>a<sub>x1</sub></em></td>
                   <td>Horizontal acceleration of the first object</td>
                   <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
@@ -195,6 +205,16 @@
                 <tr>
                   <td><em><b>F</b></em></td>
                   <td>Force</td>
+                  <td><em>N</em></td>
+                </tr>
+                <tr>
+                  <td><em>f<sub>1</sub></em></td>
+                  <td>Force of the first object</td>
+                  <td><em>N</em></td>
+                </tr>
+                <tr>
+                  <td><em>f<sub>2</sub></em></td>
+                  <td>Force of the second object</td>
                   <td><em>N</em></td>
                 </tr>
                 <tr>
@@ -268,24 +288,34 @@
                   <td><em>N</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>T</b><sub>1</sub></em></td>
-                  <td>Tension of the first object</td>
-                  <td><em>N</em></td>
-                </tr>
-                <tr>
-                  <td><em><b>T</b><sub>2</sub></em></td>
-                  <td>Tension of the second object</td>
-                  <td><em>N</em></td>
-                </tr>
-                <tr>
                   <td><em>t</em></td>
                   <td>Time</td>
                   <td><em>s</em></td>
                 </tr>
                 <tr>
+                  <td><em>t<sub>1</sub></em></td>
+                  <td>Tension of the first rod</td>
+                  <td><em>N</em></td>
+                </tr>
+                <tr>
+                  <td><em>t<sub>2</sub></em></td>
+                  <td>Tension of the second rod</td>
+                  <td><em>N</em></td>
+                </tr>
+                <tr>
                   <td><em>theta</em></td>
                   <td>Dependent variables</td>
                   <td><em>rad</em></td>
+                </tr>
+                <tr>
+                  <td><em>v<sub>1</sub></em></td>
+                  <td>Velocity of the first object</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>v<sub>2</sub></em></td>
+                  <td>Velocity of the second object</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
                   <td><em>v<sub>x1</sub></em></td>
@@ -313,16 +343,6 @@
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
-                  <td><em>w<sub>1</sub></em></td>
-                  <td>Angular velocity of the first object</td>
-                  <td><em>\(\frac{\text{rad}}{\text{s}}\)</em></td>
-                </tr>
-                <tr>
-                  <td><em>w<sub>2</sub></em></td>
-                  <td>Angular velocity of the second object</td>
-                  <td><em>\(\frac{\text{rad}}{\text{s}}\)</em></td>
-                </tr>
-                <tr>
                   <td><em>α<sub>1</sub></em></td>
                   <td>Angular acceleration of the first object</td>
                   <td><em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em></td>
@@ -346,6 +366,16 @@
                   <td><em>π</em></td>
                   <td>Ratio of circumference to diameter for any circle</td>
                   <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>Ω<sub>1</sub></em></td>
+                  <td>Angular velocity of the first object</td>
+                  <td><em>\(\frac{\text{rad}}{\text{s}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>Ω<sub>2</sub></em></td>
+                  <td>Angular velocity of the second object</td>
+                  <td><em>\(\frac{\text{rad}}{\text{s}}\)</em></td>
                 </tr>
               </table>
               <p class="caption">Table of Symbols</p>
@@ -448,7 +478,7 @@
           <div class="subsection">
             <h2>Scope of Requirements</h2>
             <p class="paragraph">
-              The scope of the requirements includes the analysis of a two-dimensional (<span title="two-dimensional">2D</span>) pendulum motion problem with various initial conditions.
+              The scope of the requirements includes the analysis of a two-dimensional (<span title="two-dimensional">2D</span>) pendulum motion problem with various initial conditions using Clifford algebra for geometric representation of physical quantities.
             </p>
           </div>
         </div>
@@ -456,7 +486,7 @@
           <div class="subsection">
             <h2>Characteristics of Intended Reader</h2>
             <p class="paragraph">
-              Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, and ordinary differential equations. The users of <span title="Double Pendulum">DblPend</span> can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
+              Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, ordinary differential equations, and basic understanding of Clifford algebra and multivector. The users of <span title="Double Pendulum">DblPend</span> can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
             </p>
           </div>
         </div>
@@ -467,7 +497,7 @@
               The organization of this document follows the template for an <span title="software requirements specification">SRS</span> for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a>, <a href=#smithLai2005>smithLai2005</a>, <a href=#smithEtAl2007>smithEtAl2007</a>, and <a href=#smithKoothoor2016>smithKoothoor2016</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
             </p>
             <p class="paragraph">
-              The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>.
+              The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>. This document demonstrates a novel approach to modeling the double pendulum using Clifford algebra. The traditional vector-based approach is enhanced by representing physical quantities as multivector in a unified geometric framework. Section 4.2.3 presents general definitions that showcase how velocity, acceleration, and force are naturally expressed using Clifford algebra operations such as the geometric product and basis vector representations..
             </p>
           </div>
         </div>
@@ -549,7 +579,7 @@
           <div class="subsection">
             <h2>Problem Description</h2>
             <p class="paragraph">
-              A system is needed to predict the motion of a double pendulum.
+              A system is needed to predict the motion of a double pendulum using Clifford algebra formulation.
             </p>
             <div id="Sec:TermDefs">
               <div class="subsubsection">
@@ -563,6 +593,24 @@
                   </li>
                   <li>
                     Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a set of numerical coordinates, which are the signed distances to the point from two fixed perpendicular oriented lines, measured in the same unit of length (from <a href=#cartesianWiki>cartesianWiki</a>).
+                  </li>
+                  <li>
+                    Multivector: A generalization of scalars, vectors, and higher-grade elements in Clifford algebra that can represent rotations and reflections.
+                  </li>
+                  <li>
+                    Clifford algebra: A unification of real numbers, complex numbers, quaternions, and several other hypercomplex number systems into a single mathematical framework.
+                  </li>
+                  <li>
+                    Geometric product: The fundamental operation in Clifford algebra that combines the dot product and wedge product of vectors.
+                  </li>
+                  <li>
+                    Basis vector: Fundamental unit vectors (e₁, e₂) that span the 2D Clifford space and satisfy the relations e₁² = e₂² = 1.
+                  </li>
+                  <li>
+                    Clifford space: The geometric algebra space Cl(2,0) where multivectors exist, characterized by basis vectors e₁, e₂ with signature (+,+).
+                  </li>
+                  <li>
+                    Bivector: A grade-2 multivector element e₁∧e₂ representing oriented area and rotations in the plane.
                   </li>
                 </ul>
               </div>
@@ -585,6 +633,12 @@
                   </p>
                   <p>
                     <span title="physical system description">PS</span>4: The second object.
+                  </p>
+                  <p>
+                    <span title="physical system description">PS</span>5: Each object's motion is described using multivector in 2D Clifford algebra space Cl(2,0).
+                  </p>
+                  <p>
+                    <span title="physical system description">PS</span>6: Physical quantities (velocity, acceleration, force) are unified as geometric entities with basis vectors e₁ and e₂.
                   </p>
                 </div>
                 <div id="Figure:dblpend">
@@ -790,18 +844,19 @@
                 <p class="paragraph">
                   This section collects the laws and equations that will be used to build the instance models.
                 </p>
-                <div id="GD:velocityX1">
+                <p class="paragraph">
+                  This section presents the novel Clifford algebra formulation for the double pendulum system. Traditional vector methods are enhanced by representing physical quantities as multivector in the 2D Clifford space Cl(2,0) with basis vectors e₁ and e₂. The geometric product naturally combines dot and wedge products, providing a unified framework for rotations and translations. Each multivector can represent scalar, vector, and bivector components simultaneously, offering geometric insights into the pendulum's complex dynamics. The following general definitions demonstrate how velocity, acceleration, and force are elegantly expressed using this geometric algebra approach, maintaining the underlying physics while providing enhanced mathematical structure..
+                </p>
+                <div id="GD:multivectorVelocity1">
                   <table class="gdefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>GD:velocityX1</b></td>
+                      <td><b>GD:multivectorVelocity1</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
                       <td>
-                        <p class="paragraph">
-                          The <em>x</em>-component of velocity of the first object
-                        </p>
+                        <p class="paragraph">Multivector velocity of the first object</p>
                       </td>
                     </tr>
                     <tr>
@@ -813,7 +868,10 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{v_{\text{x}1}}={w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)\]
+                        \[{v_{1}}={Ω_{1}}\,{L_{1}} \begin{bmatrix}
+                                                   \cos\left({θ_{1}}\right)\\
+                                                   \sin\left({θ_{1}}\right)
+                                                   \end{bmatrix}\]
                       </td>
                     </tr>
                     <tr>
@@ -821,10 +879,10 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>v<sub>x1</sub></em> is the horizontal velocity of the first object (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em>v<sub>1</sub></em> is the velocity of the first object (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li>
-                            <em>w<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>Ω<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>L<sub>1</sub></em> is the length of the first rod (<em>m</em>)
@@ -845,41 +903,49 @@
                     </tr>
                   </table>
                 </div>
-                <div id="GD:velocityX1Deriv">
+                <div id="GD:multivectorVelocity1Deriv">
                   <div class="subsubsubsection">
-                    <h4>
-                      Detailed derivation of the <em>x</em>-component of velocity:
-                    </h4>
+                    <h4>Detailed derivation of velocity of the first object:</h4>
                     <p class="paragraph">
-                      At a given point in time, velocity is defined in <a href=#DD:positionGDD>DD:positionGDD</a>
+                      The multivector velocity in Clifford algebra represents both magnitude and direction as a unified geometric entity.
                     </p>
-                    \[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}\]
+                    \[{v_{1}}={Ω_{1}}\,{L_{1}} \begin{bmatrix}
+                                               \cos\left({θ_{1}}\right)\\
+                                               \sin\left({θ_{1}}\right)
+                                               \end{bmatrix}\]
                     <p class="paragraph">
-                      We also know the horizontal position that is defined in <a href=#DD:positionXDD1>DD:positionXDD1</a>
+                      Using the 2D Clifford space Cl(2,0), the velocity is expressed as a vector multivector with components in the e₁ and e₂ basis directions.
                     </p>
-                    \[{p_{\text{x}1}}={L_{1}}\,\sin\left({θ_{1}}\right)\]
-                    <p class="paragraph">Applying this,</p>
-                    \[{v_{\text{x}1}}=\frac{\,d{L_{1}}\,\sin\left({θ_{1}}\right)}{\,dt}\]
                     <p class="paragraph">
-                      <em>L<sub>1</sub></em> is constant with respect to time, so
+                      where the velocity multivector combines angular velocity and rod length in Clifford space
                     </p>
-                    \[{v_{\text{x}1}}={L_{1}}\,\frac{\,d\sin\left({θ_{1}}\right)}{\,dt}\]
-                    <p class="paragraph">Therefore, using the chain rule,</p>
-                    \[{v_{\text{x}1}}={w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)\]
+                    <p class="paragraph">
+                      This approach provides a natural geometric representation that preserves rotational relationships.
+                    </p>
+                    <p class="paragraph">
+                      Direction vector = cos(θ₁)e₁ + sin(θ₁)e₂ using basis vectors e₁, e₂
+                    </p>
+                    <p class="paragraph">
+                      The angular velocity ω₁ and rod length L₁ combine with the direction vector to form the complete velocity multivector.
+                    </p>
+                    <p class="paragraph">
+                      The geometric product preserves both magnitude and geometric orientation
+                    </p>
+                    <p class="paragraph">
+                      Unlike traditional component-wise vector addition, this geometric product maintains the intrinsic geometric structure.
+                    </p>
                   </div>
                 </div>
-                <div id="GD:velocityY1">
+                <div id="GD:multivectorVelocity2">
                   <table class="gdefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>GD:velocityY1</b></td>
+                      <td><b>GD:multivectorVelocity2</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
                       <td>
-                        <p class="paragraph">
-                          The <em>y</em>-component of velocity of the first object
-                        </p>
+                        <p class="paragraph">Multivector velocity of the second object</p>
                       </td>
                     </tr>
                     <tr>
@@ -891,7 +957,13 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{v_{\text{y}1}}={w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)\]
+                        \[{v_{2}}={Ω_{1}}\,{L_{1}} \begin{bmatrix}
+                                                   \cos\left({θ_{1}}\right)\\
+                                                   \sin\left({θ_{1}}\right)
+                                                   \end{bmatrix}+{Ω_{2}}\,{L_{2}} \begin{bmatrix}
+                                                                                  \cos\left({θ_{2}}\right)\\
+                                                                                  \sin\left({θ_{2}}\right)
+                                                                                  \end{bmatrix}\]
                       </td>
                     </tr>
                     <tr>
@@ -899,10 +971,10 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>v<sub>y1</sub></em> is the vertical velocity of the first object (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em>v<sub>2</sub></em> is the velocity of the second object (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li>
-                            <em>w<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>Ω<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>L<sub>1</sub></em> is the length of the first rod (<em>m</em>)
@@ -910,80 +982,8 @@
                           <li>
                             <em>θ<sub>1</sub></em> is the angle of the first rod (<em>rad</em>)
                           </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph">--</p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="GD:velocityY1Deriv">
-                  <div class="subsubsubsection">
-                    <h4>
-                      Detailed derivation of the <em>y</em>-component of velocity:
-                    </h4>
-                    <p class="paragraph">
-                      At a given point in time, velocity is defined in <a href=#DD:positionGDD>DD:positionGDD</a>
-                    </p>
-                    \[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}\]
-                    <p class="paragraph">
-                      We also know the vertical position that is defined in <a href=#DD:positionYDD1>DD:positionYDD1</a>
-                    </p>
-                    \[{p_{\text{y}1}}=-{L_{1}}\,\cos\left({θ_{1}}\right)\]
-                    <p class="paragraph">Applying this,</p>
-                    \[{v_{\text{y}1}}=-\left(\frac{\,d{L_{1}}\,\cos\left({θ_{1}}\right)}{\,dt}\right)\]
-                    <p class="paragraph">
-                      <em>L<sub>1</sub></em> is constant with respect to time, so
-                    </p>
-                    \[{v_{\text{y}1}}=-{L_{1}}\,\frac{\,d\cos\left({θ_{1}}\right)}{\,dt}\]
-                    <p class="paragraph">Therefore, using the chain rule,</p>
-                    \[{v_{\text{y}1}}={w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)\]
-                  </div>
-                </div>
-                <div id="GD:velocityX2">
-                  <table class="gdefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>GD:velocityX2</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td>
-                        <p class="paragraph">
-                          The <em>x</em>-component of velocity of the second object
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td>
-                        <p class="paragraph"><em>\(\frac{\text{m}}{\text{s}}\)</em></p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>v<sub>x2</sub></em> is the horizontal velocity of the second object (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
-                          </li>
-                          <li>
-                            <em>v<sub>x1</sub></em> is the horizontal velocity of the first object (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
-                          </li>
-                          <li>
-                            <em>w<sub>2</sub></em> is the angular velocity of the second object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>Ω<sub>2</sub></em> is the angular velocity of the second object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>L<sub>2</sub></em> is the length of the second rod (<em>m</em>)
@@ -1004,115 +1004,41 @@
                     </tr>
                   </table>
                 </div>
-                <div id="GD:velocityX2Deriv">
+                <div id="GD:multivectorVelocity2Deriv">
                   <div class="subsubsubsection">
-                    <h4>
-                      Detailed derivation of the <em>x</em>-component of velocity:
-                    </h4>
+                    <h4>Detailed derivation of velocity of the second object:</h4>
                     <p class="paragraph">
-                      At a given point in time, velocity is defined in <a href=#DD:positionGDD>DD:positionGDD</a>
+                      The multivector velocity for the second object combines the velocity from the first pendulum with its own rotational motion.
                     </p>
-                    \[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}\]
+                    \[{v_{2}}={Ω_{1}}\,{L_{1}} \begin{bmatrix}
+                                               \cos\left({θ_{1}}\right)\\
+                                               \sin\left({θ_{1}}\right)
+                                               \end{bmatrix}+{Ω_{2}}\,{L_{2}} \begin{bmatrix}
+                                                                              \cos\left({θ_{2}}\right)\\
+                                                                              \sin\left({θ_{2}}\right)
+                                                                              \end{bmatrix}\]
                     <p class="paragraph">
-                      We also know the horizontal position that is defined in <a href=#DD:positionXDD2>DD:positionXDD2</a>
+                      In Clifford algebra, this vector addition preserves the geometric relationships between the two connected pendulums.
                     </p>
-                    \[{p_{\text{x}2}}={p_{\text{x}1}}+{L_{2}}\,\sin\left({θ_{2}}\right)\]
-                    <p class="paragraph">Applying this,</p>
-                    \[{v_{\text{x}2}}=\frac{\,d{p_{\text{x}1}}+{L_{2}}\,\sin\left({θ_{2}}\right)}{\,dt}\]
                     <p class="paragraph">
-                      <em>L<sub>1</sub></em> is constant with respect to time, so
+                      This represents the geometric sum of the first pendulum's velocity and the second pendulum's relative velocity
                     </p>
-                    \[{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)\]
+                    <p class="paragraph">
+                      The total velocity is expressed as the sum of two vector multivectors in the same geometric space.
+                    </p>
                   </div>
                 </div>
-                <div id="GD:velocityY2">
+                <div id="GD:multivectorAcceleration1">
                   <table class="gdefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>GD:velocityY2</b></td>
+                      <td><b>GD:multivectorAcceleration1</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
                       <td>
                         <p class="paragraph">
-                          The <em>y</em>-component of velocity of the second object
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td>
-                        <p class="paragraph"><em>\(\frac{\text{m}}{\text{s}}\)</em></p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li>
-                            <em>v<sub>y2</sub></em> is the vertical velocity of the second object (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
-                          </li>
-                          <li>
-                            <em>v<sub>y1</sub></em> is the vertical velocity of the first object (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
-                          </li>
-                          <li>
-                            <em>w<sub>2</sub></em> is the angular velocity of the second object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
-                          </li>
-                          <li>
-                            <em>L<sub>2</sub></em> is the length of the second rod (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>θ<sub>2</sub></em> is the angle of the second rod (<em>rad</em>)
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph">--</p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="GD:velocityY2Deriv">
-                  <div class="subsubsubsection">
-                    <h4>
-                      Detailed derivation of the <em>y</em>-component of velocity:
-                    </h4>
-                    <p class="paragraph">
-                      At a given point in time, velocity is defined in <a href=#DD:positionGDD>DD:positionGDD</a>
-                    </p>
-                    \[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{p}\text{(}t\text{)}}{\,dt}\]
-                    <p class="paragraph">
-                      We also know the vertical position that is defined in <a href=#DD:positionYDD2>DD:positionYDD2</a>
-                    </p>
-                    \[{p_{\text{y}2}}={p_{\text{y}1}}-{L_{2}}\,\cos\left({θ_{2}}\right)\]
-                    <p class="paragraph">Applying this,</p>
-                    \[{v_{\text{y}2}}=-\left(\frac{\,d{p_{\text{y}1}}-{L_{2}}\,\cos\left({θ_{2}}\right)}{\,dt}\right)\]
-                    <p class="paragraph">Therefore, using the chain rule,</p>
-                    \[{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)\]
-                  </div>
-                </div>
-                <div id="GD:accelerationX1">
-                  <table class="gdefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>GD:accelerationX1</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td>
-                        <p class="paragraph">
-                          The <em>x</em>-component of acceleration of the first object
+                          Multivector acceleration of the first object
                         </p>
                       </td>
                     </tr>
@@ -1125,7 +1051,13 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{a_{\text{x}1}}=-{w_{1}}^{2}\,{L_{1}}\,\sin\left({θ_{1}}\right)+{α_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)\]
+                        \[{a_{1}}=-{Ω_{1}}^{2}\,{L_{1}} \begin{bmatrix}
+                                                        \cos\left({θ_{1}}\right)\\
+                                                        \sin\left({θ_{1}}\right)
+                                                        \end{bmatrix}+{α_{1}}\,{L_{1}} \begin{bmatrix}
+                                                                                       -\sin\left({θ_{1}}\right)\\
+                                                                                       \cos\left({θ_{1}}\right)
+                                                                                       \end{bmatrix}\]
                       </td>
                     </tr>
                     <tr>
@@ -1133,10 +1065,10 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>a<sub>x1</sub></em> is the horizontal acceleration of the first object (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em>a<sub>1</sub></em> is the acceleration of the first object (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li>
-                            <em>w<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>Ω<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>L<sub>1</sub></em> is the length of the first rod (<em>m</em>)
@@ -1162,38 +1094,56 @@
                     </tr>
                   </table>
                 </div>
-                <div id="GD:accelerationX1Deriv">
+                <div id="GD:multivectorAcceleration1Deriv">
                   <div class="subsubsubsection">
-                    <h4>
-                      Detailed derivation of the <em>x</em>-component of acceleration:
-                    </h4>
-                    <p class="paragraph">Our acceleration is:</p>
-                    \[\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}\]
+                    <h4>Detailed derivation of acceleration of the first object:</h4>
                     <p class="paragraph">
-                      Earlier, we found the horizontal velocity to be
+                      The multivector acceleration in Clifford algebra combines centripetal and tangential acceleration components.
                     </p>
-                    \[{v_{\text{x}1}}={w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)\]
+                    \[{a_{1}}=-{Ω_{1}}^{2}\,{L_{1}} \begin{bmatrix}
+                                                    \cos\left({θ_{1}}\right)\\
+                                                    \sin\left({θ_{1}}\right)
+                                                    \end{bmatrix}+{α_{1}}\,{L_{1}} \begin{bmatrix}
+                                                                                   -\sin\left({θ_{1}}\right)\\
+                                                                                   \cos\left({θ_{1}}\right)
+                                                                                   \end{bmatrix}\]
                     <p class="paragraph">
-                      Applying this to our equation for acceleration
+                      The centripetal acceleration points radially inward, while tangential acceleration is perpendicular to the rod.
                     </p>
-                    \[{a_{\text{x}1}}=\frac{\,d{w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)}{\,dt}\]
-                    <p class="paragraph">By the product and chain rules, we find</p>
-                    \[{a_{\text{x}1}}=\frac{\,d{w_{1}}}{\,dt}\,{L_{1}}\,\cos\left({θ_{1}}\right)-{w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)\,\frac{\,d{θ_{1}}}{\,dt}\]
-                    <p class="paragraph">Simplifying,</p>
-                    \[{a_{\text{x}1}}=-{w_{1}}^{2}\,{L_{1}}\,\sin\left({θ_{1}}\right)+{α_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)\]
+                    <p class="paragraph">
+                      where the acceleration combines centripetal and tangential components in Clifford space
+                    </p>
+                    <p class="paragraph">
+                      Both components are naturally expressed as vector multivectors and added using Clifford geometric operations.
+                    </p>
+                    <p class="paragraph">
+                      = centripetal_multivector + tangential_multivector
+                    </p>
+                    <p class="paragraph">
+                      Centripetal component: -ω₁²L₁ × direction_vector (radial inward)
+                    </p>
+                    <p class="paragraph">
+                      Both terms maintain their geometric significance through the Clifford algebra representation
+                    </p>
+                    <p class="paragraph">
+                      Tangential component: α₁L₁ × perpendicular_direction_vector (tangential)
+                    </p>
+                    <p class="paragraph">
+                      The geometric sum preserves the underlying geometric relationships without component-wise decomposition.
+                    </p>
                   </div>
                 </div>
-                <div id="GD:accelerationY1">
+                <div id="GD:multivectorAcceleration2">
                   <table class="gdefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>GD:accelerationY1</b></td>
+                      <td><b>GD:multivectorAcceleration2</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
                       <td>
                         <p class="paragraph">
-                          The <em>y</em>-component of acceleration of the first object
+                          Multivector acceleration of the second object
                         </p>
                       </td>
                     </tr>
@@ -1206,7 +1156,19 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{a_{\text{y}1}}={w_{1}}^{2}\,{L_{1}}\,\cos\left({θ_{1}}\right)+{α_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)\]
+                        \[{a_{2}}=-{Ω_{1}}^{2}\,{L_{1}} \begin{bmatrix}
+                                                        \cos\left({θ_{1}}\right)\\
+                                                        \sin\left({θ_{1}}\right)
+                                                        \end{bmatrix}+{α_{1}}\,{L_{1}} \begin{bmatrix}
+                                                                                       -\sin\left({θ_{1}}\right)\\
+                                                                                       \cos\left({θ_{1}}\right)
+                                                                                       \end{bmatrix}+-{Ω_{2}}^{2}\,{L_{2}} \begin{bmatrix}
+                                                                                                                           \cos\left({θ_{2}}\right)\\
+                                                                                                                           \sin\left({θ_{2}}\right)
+                                                                                                                           \end{bmatrix}+{α_{2}}\,{L_{2}} \begin{bmatrix}
+                                                                                                                                                          -\sin\left({θ_{2}}\right)\\
+                                                                                                                                                          \cos\left({θ_{2}}\right)
+                                                                                                                                                          \end{bmatrix}\]
                       </td>
                     </tr>
                     <tr>
@@ -1214,10 +1176,10 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>a<sub>y1</sub></em> is the vertical acceleration of the first object (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em>a<sub>2</sub></em> is the acceleration of the second object (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li>
-                            <em>w<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>Ω<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>L<sub>1</sub></em> is the length of the first rod (<em>m</em>)
@@ -1228,80 +1190,8 @@
                           <li>
                             <em>α<sub>1</sub></em> is the angular acceleration of the first object (<em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em>)
                           </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph">--</p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph"><a href=#IM:calOfAngle2>IM:calOfAngle2</a></p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="GD:accelerationY1Deriv">
-                  <div class="subsubsubsection">
-                    <h4>
-                      Detailed derivation of the <em>y</em>-component of acceleration:
-                    </h4>
-                    <p class="paragraph">Our acceleration is:</p>
-                    \[\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}\]
-                    <p class="paragraph">
-                      Earlier, we found the vertical velocity to be
-                    </p>
-                    \[{v_{\text{y}1}}={w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)\]
-                    <p class="paragraph">
-                      Applying this to our equation for acceleration
-                    </p>
-                    \[{a_{\text{y}1}}=\frac{\,d{w_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)}{\,dt}\]
-                    <p class="paragraph">By the product and chain rules, we find</p>
-                    \[{a_{\text{y}1}}=\frac{\,d{w_{1}}}{\,dt}\,{L_{1}}\,\sin\left({θ_{1}}\right)+{w_{1}}\,{L_{1}}\,\cos\left({θ_{1}}\right)\,\frac{\,d{θ_{1}}}{\,dt}\]
-                    <p class="paragraph">Simplifying,</p>
-                    \[{a_{\text{y}1}}={w_{1}}^{2}\,{L_{1}}\,\cos\left({θ_{1}}\right)+{α_{1}}\,{L_{1}}\,\sin\left({θ_{1}}\right)\]
-                  </div>
-                </div>
-                <div id="GD:accelerationX2">
-                  <table class="gdefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>GD:accelerationX2</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td>
-                        <p class="paragraph">
-                          The <em>x</em>-component of acceleration of the second object
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td>
-                        <p class="paragraph"><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[{a_{\text{x}2}}={a_{\text{x}1}}-{w_{2}}^{2}\,{L_{2}}\,\sin\left({θ_{2}}\right)+{α_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>a<sub>x2</sub></em> is the horizontal acceleration of the second object (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
-                          </li>
-                          <li>
-                            <em>a<sub>x1</sub></em> is the horizontal acceleration of the first object (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
-                          </li>
-                          <li>
-                            <em>w<sub>2</sub></em> is the angular velocity of the second object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>Ω<sub>2</sub></em> is the angular velocity of the second object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>L<sub>2</sub></em> is the length of the second rod (<em>m</em>)
@@ -1327,117 +1217,46 @@
                     </tr>
                   </table>
                 </div>
-                <div id="GD:accelerationX2Deriv">
+                <div id="GD:multivectorAcceleration2Deriv">
                   <div class="subsubsubsection">
-                    <h4>
-                      Detailed derivation of the <em>x</em>-component of acceleration:
-                    </h4>
-                    <p class="paragraph">Our acceleration is:</p>
-                    \[\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}\]
+                    <h4>Detailed derivation of acceleration of the second object:</h4>
                     <p class="paragraph">
-                      Earlier, we found the horizontal velocity to be
+                      The second object's acceleration is the geometric sum of the first object's acceleration and its own relative acceleration.
                     </p>
-                    \[{v_{\text{x}2}}={v_{\text{x}1}}+{w_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)\]
+                    \[{a_{2}}=-{Ω_{1}}^{2}\,{L_{1}} \begin{bmatrix}
+                                                    \cos\left({θ_{1}}\right)\\
+                                                    \sin\left({θ_{1}}\right)
+                                                    \end{bmatrix}+{α_{1}}\,{L_{1}} \begin{bmatrix}
+                                                                                   -\sin\left({θ_{1}}\right)\\
+                                                                                   \cos\left({θ_{1}}\right)
+                                                                                   \end{bmatrix}+-{Ω_{2}}^{2}\,{L_{2}} \begin{bmatrix}
+                                                                                                                       \cos\left({θ_{2}}\right)\\
+                                                                                                                       \sin\left({θ_{2}}\right)
+                                                                                                                       \end{bmatrix}+{α_{2}}\,{L_{2}} \begin{bmatrix}
+                                                                                                                                                      -\sin\left({θ_{2}}\right)\\
+                                                                                                                                                      \cos\left({θ_{2}}\right)
+                                                                                                                                                      \end{bmatrix}\]
                     <p class="paragraph">
-                      Applying this to our equation for acceleration
+                      This captures the coupling between the two pendulums through their mechanical connection.
                     </p>
-                    \[{a_{\text{x}2}}=\frac{\,d{v_{\text{x}1}}+{w_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)}{\,dt}\]
-                    <p class="paragraph">By the product and chain rules, we find</p>
-                    \[{a_{\text{x}2}}={a_{\text{x}1}}-{w_{2}}^{2}\,{L_{2}}\,\sin\left({θ_{2}}\right)+{α_{2}}\,{L_{2}}\,\cos\left({θ_{2}}\right)\]
+                    <p class="paragraph">
+                      This represents the total acceleration as a vector sum in Clifford geometric space
+                    </p>
+                    <p class="paragraph">
+                      The Clifford algebra representation preserves the geometric relationships in this coupled system.
+                    </p>
                   </div>
                 </div>
-                <div id="GD:accelerationY2">
+                <div id="GD:multivectorForce1">
                   <table class="gdefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>GD:accelerationY2</b></td>
+                      <td><b>GD:multivectorForce1</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
                       <td>
-                        <p class="paragraph">
-                          The <em>y</em>-component of acceleration of the second object
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td>
-                        <p class="paragraph"><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[{a_{\text{y}2}}={a_{\text{y}1}}+{w_{2}}^{2}\,{L_{2}}\,\cos\left({θ_{2}}\right)+{α_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li>
-                            <em>a<sub>y2</sub></em> is the vertical acceleration of the second object (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
-                          </li>
-                          <li>
-                            <em>a<sub>y1</sub></em> is the vertical acceleration of the first object (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
-                          </li>
-                          <li>
-                            <em>w<sub>2</sub></em> is the angular velocity of the second object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
-                          </li>
-                          <li>
-                            <em>L<sub>2</sub></em> is the length of the second rod (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>θ<sub>2</sub></em> is the angle of the second rod (<em>rad</em>)
-                          </li>
-                          <li>
-                            <em>α<sub>2</sub></em> is the angular acceleration of the second object (<em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em>)
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph">--</p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph"><a href=#IM:calOfAngle2>IM:calOfAngle2</a></p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="GD:accelerationY2Deriv">
-                  <div class="subsubsubsection">
-                    <h4>
-                      Detailed derivation of the <em>y</em>-component of acceleration:
-                    </h4>
-                    <p class="paragraph">Our acceleration is:</p>
-                    \[\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\text{(}t\text{)}}{\,dt}\]
-                    <p class="paragraph">
-                      Earlier, we found the horizontal velocity to be
-                    </p>
-                    \[{v_{\text{y}2}}={v_{\text{y}1}}+{w_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)\]
-                    <p class="paragraph">
-                      Applying this to our equation for acceleration
-                    </p>
-                    \[{a_{\text{y}2}}=\frac{\,d{v_{\text{y}1}}+{w_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)}{\,dt}\]
-                    <p class="paragraph">By the product and chain rules, we find</p>
-                    \[{a_{\text{y}2}}={a_{\text{y}1}}+{w_{2}}^{2}\,{L_{2}}\,\cos\left({θ_{2}}\right)+{α_{2}}\,{L_{2}}\,\sin\left({θ_{2}}\right)\]
-                  </div>
-                </div>
-                <div id="GD:xForce1">
-                  <table class="gdefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>GD:xForce1</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td>
-                        <p class="paragraph">Horizontal force on the first object</p>
+                        <p class="paragraph">Multivector force on the first object</p>
                       </td>
                     </tr>
                     <tr>
@@ -1447,99 +1266,42 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)+{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\]
+                        \[{f_{1}}={m_{1}} -{Ω_{1}}^{2}\,{L_{1}} \begin{bmatrix}
+                                                                \cos\left({θ_{1}}\right)\\
+                                                                \sin\left({θ_{1}}\right)
+                                                                \end{bmatrix}+{α_{1}}\,{L_{1}} \begin{bmatrix}
+                                                                                               -\sin\left({θ_{1}}\right)\\
+                                                                                               \cos\left({θ_{1}}\right)
+                                                                                               \end{bmatrix}+\begin{bmatrix}
+                                                                                                             0\\
+                                                                                                             -{m_{1}}\,g
+                                                                                                             \end{bmatrix}\]
                       </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em><b>F</b></em> is the force (<em>N</em>)</li>
-                          <li><em>m</em> is the mass (<em>kg</em>)</li>
                           <li>
-                            <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
-                          </li>
-                          <li>
-                            <em><b>T</b><sub>1</sub></em> is the tension of the first object (<em>N</em>)
-                          </li>
-                          <li>
-                            <em>θ<sub>1</sub></em> is the angle of the first rod (<em>rad</em>)
-                          </li>
-                          <li>
-                            <em><b>T</b><sub>2</sub></em> is the tension of the second object (<em>N</em>)
-                          </li>
-                          <li>
-                            <em>θ<sub>2</sub></em> is the angle of the second rod (<em>rad</em>)
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph">--</p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph"><a href=#IM:calOfAngle2>IM:calOfAngle2</a></p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="GD:xForce1Deriv">
-                  <div class="subsubsubsection">
-                    <h4>Detailed derivation of force on the first object:</h4>
-                    \[\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)+{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\]
-                  </div>
-                </div>
-                <div id="GD:yForce1">
-                  <table class="gdefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>GD:yForce1</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td>
-                        <p class="paragraph">Vertical force on the first object</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph"><em>N</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{1}}\,\symbf{g}\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li><em><b>F</b></em> is the force (<em>N</em>)</li>
-                          <li><em>m</em> is the mass (<em>kg</em>)</li>
-                          <li>
-                            <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
-                          </li>
-                          <li>
-                            <em><b>T</b><sub>1</sub></em> is the tension of the first object (<em>N</em>)
-                          </li>
-                          <li>
-                            <em>θ<sub>1</sub></em> is the angle of the first rod (<em>rad</em>)
-                          </li>
-                          <li>
-                            <em><b>T</b><sub>2</sub></em> is the tension of the second object (<em>N</em>)
-                          </li>
-                          <li>
-                            <em>θ<sub>2</sub></em> is the angle of the second rod (<em>rad</em>)
+                            <em>f<sub>1</sub></em> is the force of the first object (<em>N</em>)
                           </li>
                           <li>
                             <em>m<sub>1</sub></em> is the mass of the first object (<em>kg</em>)
                           </li>
                           <li>
-                            <em><b>g</b></em> is the gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em>Ω<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                          </li>
+                          <li>
+                            <em>L<sub>1</sub></em> is the length of the first rod (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>θ<sub>1</sub></em> is the angle of the first rod (<em>rad</em>)
+                          </li>
+                          <li>
+                            <em>α<sub>1</sub></em> is the angular acceleration of the first object (<em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em>)
+                          </li>
+                          <li>
+                            <em>g</em> is the magnitude of gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                         </ul>
                       </td>
@@ -1556,22 +1318,43 @@
                     </tr>
                   </table>
                 </div>
-                <div id="GD:yForce1Deriv">
+                <div id="GD:multivectorForce1Deriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of force on the first object:</h4>
-                    \[\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{1}}\,\symbf{g}\]
+                    <p class="paragraph">
+                      The multivector force in Clifford algebra combines inertial and gravitational forces as vector multivectors.
+                    </p>
+                    \[{f_{1}}={m_{1}} -{Ω_{1}}^{2}\,{L_{1}} \begin{bmatrix}
+                                                            \cos\left({θ_{1}}\right)\\
+                                                            \sin\left({θ_{1}}\right)
+                                                            \end{bmatrix}+{α_{1}}\,{L_{1}} \begin{bmatrix}
+                                                                                           -\sin\left({θ_{1}}\right)\\
+                                                                                           \cos\left({θ_{1}}\right)
+                                                                                           \end{bmatrix}+\begin{bmatrix}
+                                                                                                         0\\
+                                                                                                         -{m_{1}}\,g
+                                                                                                         \end{bmatrix}\]
+                    <p class="paragraph">
+                      The inertial force is proportional to the multivector acceleration, preserving Newton's second law in geometric form.
+                    </p>
+                    <p class="paragraph">
+                      where force equals mass times acceleration plus gravitational force in vector form
+                    </p>
+                    <p class="paragraph">
+                      Gravitational force acts vertically downward and is naturally represented as a vector multivector.
+                    </p>
                   </div>
                 </div>
-                <div id="GD:xForce2">
+                <div id="GD:multivectorForce2">
                   <table class="gdefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>GD:xForce2</b></td>
+                      <td><b>GD:multivectorForce2</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
                       <td>
-                        <p class="paragraph">Horizontal force on the second object</p>
+                        <p class="paragraph">Multivector force on the second object</p>
                       </td>
                     </tr>
                     <tr>
@@ -1581,87 +1364,60 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\]
+                        \[{f_{2}}={m_{2}} -{Ω_{1}}^{2}\,{L_{1}} \begin{bmatrix}
+                                                                \cos\left({θ_{1}}\right)\\
+                                                                \sin\left({θ_{1}}\right)
+                                                                \end{bmatrix}+{α_{1}}\,{L_{1}} \begin{bmatrix}
+                                                                                               -\sin\left({θ_{1}}\right)\\
+                                                                                               \cos\left({θ_{1}}\right)
+                                                                                               \end{bmatrix}+-{Ω_{2}}^{2}\,{L_{2}} \begin{bmatrix}
+                                                                                                                                   \cos\left({θ_{2}}\right)\\
+                                                                                                                                   \sin\left({θ_{2}}\right)
+                                                                                                                                   \end{bmatrix}+{α_{2}}\,{L_{2}} \begin{bmatrix}
+                                                                                                                                                                  -\sin\left({θ_{2}}\right)\\
+                                                                                                                                                                  \cos\left({θ_{2}}\right)
+                                                                                                                                                                  \end{bmatrix}+\begin{bmatrix}
+                                                                                                                                                                                0\\
+                                                                                                                                                                                -{m_{2}}\,g
+                                                                                                                                                                                \end{bmatrix}\]
                       </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em><b>F</b></em> is the force (<em>N</em>)</li>
-                          <li><em>m</em> is the mass (<em>kg</em>)</li>
                           <li>
-                            <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
-                          </li>
-                          <li>
-                            <em><b>T</b><sub>2</sub></em> is the tension of the second object (<em>N</em>)
-                          </li>
-                          <li>
-                            <em>θ<sub>2</sub></em> is the angle of the second rod (<em>rad</em>)
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph">--</p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph"><a href=#IM:calOfAngle2>IM:calOfAngle2</a></p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="GD:xForce2Deriv">
-                  <div class="subsubsubsection">
-                    <h4>Detailed derivation of force on the second object:</h4>
-                    \[\symbf{F}=m \symbf{a}\text{(}t\text{)}=-{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\]
-                  </div>
-                </div>
-                <div id="GD:yForce2">
-                  <table class="gdefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>GD:yForce2</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td>
-                        <p class="paragraph">Vertical force on the second object</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph"><em>N</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{2}}\,\symbf{g}\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li><em><b>F</b></em> is the force (<em>N</em>)</li>
-                          <li><em>m</em> is the mass (<em>kg</em>)</li>
-                          <li>
-                            <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
-                          </li>
-                          <li>
-                            <em><b>T</b><sub>2</sub></em> is the tension of the second object (<em>N</em>)
-                          </li>
-                          <li>
-                            <em>θ<sub>2</sub></em> is the angle of the second rod (<em>rad</em>)
+                            <em>f<sub>2</sub></em> is the force of the second object (<em>N</em>)
                           </li>
                           <li>
                             <em>m<sub>2</sub></em> is the mass of the second object (<em>kg</em>)
                           </li>
                           <li>
-                            <em><b>g</b></em> is the gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em>Ω<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                          </li>
+                          <li>
+                            <em>L<sub>1</sub></em> is the length of the first rod (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>θ<sub>1</sub></em> is the angle of the first rod (<em>rad</em>)
+                          </li>
+                          <li>
+                            <em>α<sub>1</sub></em> is the angular acceleration of the first object (<em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em>)
+                          </li>
+                          <li>
+                            <em>Ω<sub>2</sub></em> is the angular velocity of the second object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                          </li>
+                          <li>
+                            <em>L<sub>2</sub></em> is the length of the second rod (<em>m</em>)
+                          </li>
+                          <li>
+                            <em>θ<sub>2</sub></em> is the angle of the second rod (<em>rad</em>)
+                          </li>
+                          <li>
+                            <em>α<sub>2</sub></em> is the angular acceleration of the second object (<em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em>)
+                          </li>
+                          <li>
+                            <em>g</em> is the magnitude of gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                         </ul>
                       </td>
@@ -1678,10 +1434,52 @@
                     </tr>
                   </table>
                 </div>
-                <div id="GD:yForce2Deriv">
+                <div id="GD:multivectorForce2Deriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of force on the second object:</h4>
-                    \[\symbf{F}=m \symbf{a}\text{(}t\text{)}={\symbf{T}_{2}}\,\cos\left({θ_{2}}\right)-{m_{2}}\,\symbf{g}\]
+                    <p class="paragraph">
+                      The force on the second object combines its inertial response with gravitational effects.
+                    </p>
+                    \[{f_{2}}={m_{2}} -{Ω_{1}}^{2}\,{L_{1}} \begin{bmatrix}
+                                                            \cos\left({θ_{1}}\right)\\
+                                                            \sin\left({θ_{1}}\right)
+                                                            \end{bmatrix}+{α_{1}}\,{L_{1}} \begin{bmatrix}
+                                                                                           -\sin\left({θ_{1}}\right)\\
+                                                                                           \cos\left({θ_{1}}\right)
+                                                                                           \end{bmatrix}+-{Ω_{2}}^{2}\,{L_{2}} \begin{bmatrix}
+                                                                                                                               \cos\left({θ_{2}}\right)\\
+                                                                                                                               \sin\left({θ_{2}}\right)
+                                                                                                                               \end{bmatrix}+{α_{2}}\,{L_{2}} \begin{bmatrix}
+                                                                                                                                                              -\sin\left({θ_{2}}\right)\\
+                                                                                                                                                              \cos\left({θ_{2}}\right)
+                                                                                                                                                              \end{bmatrix}+\begin{bmatrix}
+                                                                                                                                                                            0\\
+                                                                                                                                                                            -{m_{2}}\,g
+                                                                                                                                                                            \end{bmatrix}\]
+                    <p class="paragraph">
+                      The Clifford algebra representation maintains the geometric consistency between force and acceleration.
+                    </p>
+                    <p class="paragraph">
+                      This represents the total force as a vector sum in Clifford geometric space
+                    </p>
+                    <p class="paragraph">
+                      This approach naturally handles the coupling forces between the connected pendulum objects.
+                    </p>
+                    <p class="paragraph">
+                      = mass × acceleration_multivector + gravitational_force_multivector
+                    </p>
+                    <p class="paragraph">
+                      Key GA operations demonstrated: geometric product (combines magnitude and direction),
+                    </p>
+                    <p class="paragraph">
+                      Demonstrating how Newton's second law extends naturally to geometric algebra
+                    </p>
+                    <p class="paragraph">
+                      vector addition in Clifford space (preserves geometric relationships),
+                    </p>
+                    <p class="paragraph">
+                      scalar multiplication with multivectors (maintains geometric structure).
+                    </p>
                   </div>
                 </div>
               </div>
@@ -1692,11 +1490,11 @@
                 <p class="paragraph">
                   This section collects and defines all the data needed to build the instance models.
                 </p>
-                <div id="DD:positionGDD">
+                <div id="DD:velocityGDD">
                   <table class="ddefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>DD:positionGDD</b></td>
+                      <td><b>DD:velocityGDD</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
@@ -1736,11 +1534,7 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td>
-                        <p class="paragraph">
-                          <a href=#GD:velocityY2>GD:velocityY2</a>, <a href=#GD:velocityY1>GD:velocityY1</a>, <a href=#GD:velocityX2>GD:velocityX2</a>, and <a href=#GD:velocityX1>GD:velocityX1</a>
-                        </p>
-                      </td>
+                      <td><p class="paragraph"></p></td>
                     </tr>
                   </table>
                 </div>
@@ -1801,9 +1595,7 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td>
-                        <p class="paragraph"><a href=#GD:velocityX1>GD:velocityX1</a></p>
-                      </td>
+                      <td><p class="paragraph"></p></td>
                     </tr>
                   </table>
                 </div>
@@ -1864,9 +1656,7 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td>
-                        <p class="paragraph"><a href=#GD:velocityY1>GD:velocityY1</a></p>
-                      </td>
+                      <td><p class="paragraph"></p></td>
                     </tr>
                   </table>
                 </div>
@@ -1932,9 +1722,7 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td>
-                        <p class="paragraph"><a href=#GD:velocityX2>GD:velocityX2</a></p>
-                      </td>
+                      <td><p class="paragraph"></p></td>
                     </tr>
                   </table>
                 </div>
@@ -2000,9 +1788,7 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td>
-                        <p class="paragraph"><a href=#GD:velocityY2>GD:velocityY2</a></p>
-                      </td>
+                      <td><p class="paragraph"></p></td>
                     </tr>
                   </table>
                 </div>
@@ -2064,11 +1850,11 @@
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td><p class="paragraph">Force</p></td>
+                      <td><p class="paragraph">Force of the first object</p></td>
                     </tr>
                     <tr>
                       <th>Symbol</th>
-                      <td><p class="paragraph"><em><b>F</b></em></p></td>
+                      <td><p class="paragraph"><em>f<sub>1</sub></em></p></td>
                     </tr>
                     <tr>
                       <th>Units</th>
@@ -2076,16 +1862,17 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\symbf{F}=m \symbf{a}\text{(}t\text{)}\]</td>
+                      <td>\[{f_{1}}={f_{1}}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em><b>F</b></em> is the force (<em>N</em>)</li>
-                          <li><em>m</em> is the mass (<em>kg</em>)</li>
                           <li>
-                            <em><b>a</b>(t)</em> is the acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em>f<sub>1</sub></em> is the force of the first object (<em>N</em>)
+                          </li>
+                          <li>
+                            <em>f<sub>1</sub></em> is the force of the first object (<em>N</em>)
                           </li>
                         </ul>
                       </td>
@@ -2146,7 +1933,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{α_{1}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{-g\,\left(2\,{m_{1}}+{m_{2}}\right)\,\sin\left({θ_{1}}\right)-{m_{2}}\,g\,\sin\left({θ_{1}}-2\,{θ_{2}}\right)-2\,\sin\left({θ_{1}}-{θ_{2}}\right)\,{m_{2}}\,\left({w_{2}}^{2}\,{L_{2}}+{w_{1}}^{2}\,{L_{1}}\,\cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{1}}\,\left(2\,{m_{1}}+{m_{2}}-{m_{2}}\,\cos\left(2\,{θ_{1}}-2\,{θ_{2}}\right)\right)}\]
+                        \[{α_{1}}\left({θ_{1}},{θ_{2}},{Ω_{1}},{Ω_{2}}\right)=\frac{-g\,\left(2\,{m_{1}}+{m_{2}}\right)\,\sin\left({θ_{1}}\right)-{m_{2}}\,g\,\sin\left({θ_{1}}-2\,{θ_{2}}\right)-2\,\sin\left({θ_{1}}-{θ_{2}}\right)\,{m_{2}}\,\left({Ω_{2}}^{2}\,{L_{2}}+{Ω_{1}}^{2}\,{L_{1}}\,\cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{1}}\,\left(2\,{m_{1}}+{m_{2}}-{m_{2}}\,\cos\left(2\,{θ_{1}}-2\,{θ_{2}}\right)\right)}\]
                       </td>
                     </tr>
                     <tr>
@@ -2163,10 +1950,10 @@
                             <em>θ<sub>2</sub></em> is the angle of the second rod (<em>rad</em>)
                           </li>
                           <li>
-                            <em>w<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>Ω<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
-                            <em>w<sub>2</sub></em> is the angular velocity of the second object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>Ω<sub>2</sub></em> is the angular velocity of the second object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>g</em> is the magnitude of gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
@@ -2248,7 +2035,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{α_{2}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{2\,\sin\left({θ_{1}}-{θ_{2}}\right)\,\left({w_{1}}^{2}\,{L_{1}}\,\left({m_{1}}+{m_{2}}\right)+g\,\left({m_{1}}+{m_{2}}\right)\,\cos\left({θ_{1}}\right)+{w_{2}}^{2}\,{L_{2}}\,{m_{2}}\,\cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{2}}\,\left(2\,{m_{1}}+{m_{2}}-{m_{2}}\,\cos\left(2\,{θ_{1}}-2\,{θ_{2}}\right)\right)}\]
+                        \[{α_{2}}\left({θ_{1}},{θ_{2}},{Ω_{1}},{Ω_{2}}\right)=\frac{2\,\sin\left({θ_{1}}-{θ_{2}}\right)\,\left({Ω_{1}}^{2}\,{L_{1}}\,\left({m_{1}}+{m_{2}}\right)+g\,\left({m_{1}}+{m_{2}}\right)\,\cos\left({θ_{1}}\right)+{Ω_{2}}^{2}\,{L_{2}}\,{m_{2}}\,\cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{2}}\,\left(2\,{m_{1}}+{m_{2}}-{m_{2}}\,\cos\left(2\,{θ_{1}}-2\,{θ_{2}}\right)\right)}\]
                       </td>
                     </tr>
                     <tr>
@@ -2265,10 +2052,10 @@
                             <em>θ<sub>2</sub></em> is the angle of the second rod (<em>rad</em>)
                           </li>
                           <li>
-                            <em>w<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>Ω<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
-                            <em>w<sub>2</sub></em> is the angular velocity of the second object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>Ω<sub>2</sub></em> is the angular velocity of the second object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>L<sub>1</sub></em> is the length of the first rod (<em>m</em>)
@@ -2314,29 +2101,29 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of angle of the second rod:</h4>
                     <p class="paragraph">
-                      By solving equations <a href=#GD:xForce2>GD:xForce2</a> and <a href=#GD:yForce2>GD:yForce2</a> for <em><b>T</b><sub>2</sub>&#8239;sin(θ<sub>2</sub>)</em> and <em><b>T</b><sub>2</sub>&#8239;cos(θ<sub>2</sub>)</em> and then substituting into equation <a href=#GD:xForce1>GD:xForce1</a> and <a href=#GD:yForce1>GD:yForce1</a> , we can get equations 1 and 2:
+                      By solving multivector force equations <a href=#GD:multivectorForce1>GD:multivectorForce1</a> and <a href=#GD:multivectorForce2>GD:multivectorForce2</a> for <em>f<sub>1</sub></em> and <em>f<sub>2</sub></em> and then substituting into the Clifford algebra force equations , we can get equations 1 and 2:
                     </p>
-                    \[{m_{1}}\,{a_{\text{x}1}}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)-{m_{2}}\,{a_{\text{x}2}}\]
+                    \[{m_{1}}\,{a_{\text{x}1}}=-{t_{1}}\,\sin\left({θ_{1}}\right)-{m_{2}}\,{a_{\text{x}2}}\]
                     <p class="paragraph"></p>
-                    \[{m_{1}}\,{a_{\text{y}1}}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{m_{2}}\,{a_{\text{y}2}}-{m_{2}}\,g-{m_{1}}\,g\]
+                    \[{m_{1}}\,{a_{\text{y}1}}={t_{1}}\,\cos\left({θ_{1}}\right)-{m_{2}}\,{a_{\text{y}2}}-{m_{2}}\,g-{m_{1}}\,g\]
                     <p class="paragraph">
                       Multiply the equation 1 by <em>cos(θ<sub>1</sub>)</em> and the equation 2 by <em>sin(θ<sub>1</sub>)</em> and rearrange to get:
                     </p>
-                    \[{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)\,\cos\left({θ_{1}}\right)=-\cos\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{x}1}}+{m_{2}}\,{a_{\text{x}2}}\right)\]
+                    \[{t_{1}}\,\sin\left({θ_{1}}\right)\,\cos\left({θ_{1}}\right)=-\cos\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{x}1}}+{m_{2}}\,{a_{\text{x}2}}\right)\]
                     <p class="paragraph"></p>
-                    \[{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)\,\cos\left({θ_{1}}\right)=\sin\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{y}1}}+{m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g+{m_{1}}\,g\right)\]
+                    \[{t_{1}}\,\sin\left({θ_{1}}\right)\,\cos\left({θ_{1}}\right)=\sin\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{y}1}}+{m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g+{m_{1}}\,g\right)\]
                     <p class="paragraph">This leads to the equation 3</p>
                     \[\sin\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{y}1}}+{m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g+{m_{1}}\,g\right)=-\cos\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{x}1}}+{m_{2}}\,{a_{\text{x}2}}\right)\]
                     <p class="paragraph">
-                      Next, multiply equation <a href=#GD:xForce2>GD:xForce2</a> by <em>cos(θ<sub>2</sub>)</em> and equation <a href=#GD:yForce2>GD:yForce2</a> by <em>sin(θ<sub>2</sub>)</em> and rearrange to get:
+                      Next, multiply multivector force equation <a href=#GD:multivectorForce2>GD:multivectorForce2</a> by <em>cos(θ<sub>2</sub>)</em> and the Clifford force equation by <em>sin(θ<sub>2</sub>)</em> and rearrange to get:
                     </p>
-                    \[{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\,\cos\left({θ_{2}}\right)=-\cos\left({θ_{2}}\right)\,{m_{2}}\,{a_{\text{x}2}}\]
+                    \[{t_{2}}\,\sin\left({θ_{2}}\right)\,\cos\left({θ_{2}}\right)=-\cos\left({θ_{2}}\right)\,{m_{2}}\,{a_{\text{x}2}}\]
                     <p class="paragraph"></p>
-                    \[{\symbf{T}_{1}}\,\sin\left({θ_{2}}\right)\,\cos\left({θ_{2}}\right)=\sin\left({θ_{2}}\right)\,\left({m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g\right)\]
+                    \[{t_{2}}\,\sin\left({θ_{2}}\right)\,\cos\left({θ_{2}}\right)=\sin\left({θ_{2}}\right)\,\left({m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g\right)\]
                     <p class="paragraph">which leads to equation 4</p>
                     \[\sin\left({θ_{2}}\right)\,\left({m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g\right)=-\cos\left({θ_{2}}\right)\,{m_{2}}\,{a_{\text{x}2}}\]
                     <p class="paragraph">
-                      By giving equations <a href=#GD:accelerationX1>GD:accelerationX1</a> and <a href=#GD:accelerationX2>GD:accelerationX2</a> and <a href=#GD:accelerationY1>GD:accelerationY1</a> and <a href=#GD:accelerationY2>GD:accelerationY2</a> plus additional two equations, 3 and 4, we can get <a href=#IM:calOfAngle1>IM:calOfAngle1</a> and <a href=#IM:calOfAngle2>IM:calOfAngle2</a> via a computer algebra program:
+                      By giving multivector acceleration equations <a href=#GD:multivectorAcceleration1>GD:multivectorAcceleration1</a> and <a href=#GD:multivectorAcceleration2>GD:multivectorAcceleration2</a> and plus Clifford algebra equations plus additional two equations, 3 and 4, we can get <a href=#IM:calOfAngle1>IM:calOfAngle1</a> and <a href=#IM:calOfAngle2>IM:calOfAngle2</a> via a computer algebra program:
                     </p>
                   </div>
                 </div>
@@ -2475,6 +2262,16 @@
                   <td>Mass of the second object</td>
                   <td><em>kg</em></td>
                 </tr>
+                <tr>
+                  <td><em>θ<sub>1</sub></em></td>
+                  <td>Angle of the first rod</td>
+                  <td><em>rad</em></td>
+                </tr>
+                <tr>
+                  <td><em>θ<sub>2</sub></em></td>
+                  <td>Angle of the second rod</td>
+                  <td><em>rad</em></td>
+                </tr>
               </table>
               <p class="caption">Required Inputs</p>
             </div>
@@ -2560,7 +2357,7 @@
               <th><a href=#yAxisDir>A:yAxisDir</a></th>
             </tr>
             <tr>
-              <td><a href=#DD:positionGDD>DD:positionGDD</a></td>
+              <td><a href=#DD:velocityGDD>DD:velocityGDD</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2630,84 +2427,50 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#GD:velocityX1>GD:velocityX1</a></td>
+              <td>
+                <a href=#GD:multivectorVelocity1>GD:multivectorVelocity1</a>
+              </td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
             </tr>
             <tr>
-              <td><a href=#GD:velocityY1>GD:velocityY1</a></td>
+              <td>
+                <a href=#GD:multivectorVelocity2>GD:multivectorVelocity2</a>
+              </td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
             </tr>
             <tr>
-              <td><a href=#GD:velocityX2>GD:velocityX2</a></td>
+              <td>
+                <a href=#GD:multivectorAcceleration1>GD:multivectorAcceleration1</a>
+              </td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
             </tr>
             <tr>
-              <td><a href=#GD:velocityY2>GD:velocityY2</a></td>
+              <td>
+                <a href=#GD:multivectorAcceleration2>GD:multivectorAcceleration2</a>
+              </td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
             </tr>
             <tr>
-              <td><a href=#GD:accelerationX1>GD:accelerationX1</a></td>
+              <td><a href=#GD:multivectorForce1>GD:multivectorForce1</a></td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
             </tr>
             <tr>
-              <td><a href=#GD:accelerationY1>GD:accelerationY1</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#GD:accelerationX2>GD:accelerationX2</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#GD:accelerationY2>GD:accelerationY2</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#GD:xForce1>GD:xForce1</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#GD:yForce1>GD:yForce1</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#GD:xForce2>GD:xForce2</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#GD:yForce2>GD:yForce2</a></td>
+              <td><a href=#GD:multivectorForce2>GD:multivectorForce2</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2778,7 +2541,7 @@
           <table class="table">
             <tr>
               <th></th>
-              <th><a href=#DD:positionGDD>DD:positionGDD</a></th>
+              <th><a href=#DD:velocityGDD>DD:velocityGDD</a></th>
               <th><a href=#DD:positionXDD1>DD:positionXDD1</a></th>
               <th><a href=#DD:positionYDD1>DD:positionYDD1</a></th>
               <th><a href=#DD:positionXDD2>DD:positionXDD2</a></th>
@@ -2788,29 +2551,25 @@
               <th><a href=#TM:acceleration>TM:acceleration</a></th>
               <th><a href=#TM:velocity>TM:velocity</a></th>
               <th><a href=#TM:NewtonSecLawMot>TM:NewtonSecLawMot</a></th>
-              <th><a href=#GD:velocityX1>GD:velocityX1</a></th>
-              <th><a href=#GD:velocityY1>GD:velocityY1</a></th>
-              <th><a href=#GD:velocityX2>GD:velocityX2</a></th>
-              <th><a href=#GD:velocityY2>GD:velocityY2</a></th>
-              <th><a href=#GD:accelerationX1>GD:accelerationX1</a></th>
-              <th><a href=#GD:accelerationY1>GD:accelerationY1</a></th>
-              <th><a href=#GD:accelerationX2>GD:accelerationX2</a></th>
-              <th><a href=#GD:accelerationY2>GD:accelerationY2</a></th>
-              <th><a href=#GD:xForce1>GD:xForce1</a></th>
-              <th><a href=#GD:yForce1>GD:yForce1</a></th>
-              <th><a href=#GD:xForce2>GD:xForce2</a></th>
-              <th><a href=#GD:yForce2>GD:yForce2</a></th>
+              <th>
+                <a href=#GD:multivectorVelocity1>GD:multivectorVelocity1</a>
+              </th>
+              <th>
+                <a href=#GD:multivectorVelocity2>GD:multivectorVelocity2</a>
+              </th>
+              <th>
+                <a href=#GD:multivectorAcceleration1>GD:multivectorAcceleration1</a>
+              </th>
+              <th>
+                <a href=#GD:multivectorAcceleration2>GD:multivectorAcceleration2</a>
+              </th>
+              <th><a href=#GD:multivectorForce1>GD:multivectorForce1</a></th>
+              <th><a href=#GD:multivectorForce2>GD:multivectorForce2</a></th>
               <th><a href=#IM:calOfAngle1>IM:calOfAngle1</a></th>
               <th><a href=#IM:calOfAngle2>IM:calOfAngle2</a></th>
             </tr>
             <tr>
-              <td><a href=#DD:positionGDD>DD:positionGDD</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td><a href=#DD:velocityGDD>DD:velocityGDD</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2850,21 +2609,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:positionYDD1>DD:positionYDD1</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2904,21 +2651,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:positionYDD2>DD:positionYDD2</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2958,21 +2693,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:forceGDD>DD:forceGDD</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3012,21 +2735,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:velocity>TM:velocity</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3066,21 +2777,11 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
-              <td><a href=#GD:velocityX1>GD:velocityX1</a></td>
-              <td>X</td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>
+                <a href=#GD:multivectorVelocity1>GD:multivectorVelocity1</a>
+              </td>
               <td></td>
               <td></td>
               <td></td>
@@ -3101,40 +2802,9 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#GD:velocityY1>GD:velocityY1</a></td>
-              <td>X</td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#GD:velocityX2>GD:velocityX2</a></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
+              <td>
+                <a href=#GD:multivectorVelocity2>GD:multivectorVelocity2</a>
+              </td>
               <td></td>
               <td></td>
               <td></td>
@@ -3155,13 +2825,9 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#GD:velocityY2>GD:velocityY2</a></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
+              <td>
+                <a href=#GD:multivectorAcceleration1>GD:multivectorAcceleration1</a>
+              </td>
               <td></td>
               <td></td>
               <td></td>
@@ -3182,40 +2848,9 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#GD:accelerationX1>GD:accelerationX1</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#GD:accelerationY1>GD:accelerationY1</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>
+                <a href=#GD:multivectorAcceleration2>GD:multivectorAcceleration2</a>
+              </td>
               <td></td>
               <td></td>
               <td></td>
@@ -3236,40 +2871,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#GD:accelerationX2>GD:accelerationX2</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#GD:accelerationY2>GD:accelerationY2</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td><a href=#GD:multivectorForce1>GD:multivectorForce1</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3290,94 +2892,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#GD:xForce1>GD:xForce1</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#GD:yForce1>GD:yForce1</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#GD:xForce2>GD:xForce2</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#GD:yForce2>GD:yForce2</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td><a href=#GD:multivectorForce2>GD:multivectorForce2</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3416,12 +2931,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
             </tr>
             <tr>
@@ -3438,12 +2947,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
               <td>X</td>
               <td>X</td>
               <td>X</td>
@@ -3460,7 +2963,7 @@
           <table class="table">
             <tr>
               <th></th>
-              <th><a href=#DD:positionGDD>DD:positionGDD</a></th>
+              <th><a href=#DD:velocityGDD>DD:velocityGDD</a></th>
               <th><a href=#DD:positionXDD1>DD:positionXDD1</a></th>
               <th><a href=#DD:positionYDD1>DD:positionYDD1</a></th>
               <th><a href=#DD:positionXDD2>DD:positionXDD2</a></th>
@@ -3470,18 +2973,20 @@
               <th><a href=#TM:acceleration>TM:acceleration</a></th>
               <th><a href=#TM:velocity>TM:velocity</a></th>
               <th><a href=#TM:NewtonSecLawMot>TM:NewtonSecLawMot</a></th>
-              <th><a href=#GD:velocityX1>GD:velocityX1</a></th>
-              <th><a href=#GD:velocityY1>GD:velocityY1</a></th>
-              <th><a href=#GD:velocityX2>GD:velocityX2</a></th>
-              <th><a href=#GD:velocityY2>GD:velocityY2</a></th>
-              <th><a href=#GD:accelerationX1>GD:accelerationX1</a></th>
-              <th><a href=#GD:accelerationY1>GD:accelerationY1</a></th>
-              <th><a href=#GD:accelerationX2>GD:accelerationX2</a></th>
-              <th><a href=#GD:accelerationY2>GD:accelerationY2</a></th>
-              <th><a href=#GD:xForce1>GD:xForce1</a></th>
-              <th><a href=#GD:yForce1>GD:yForce1</a></th>
-              <th><a href=#GD:xForce2>GD:xForce2</a></th>
-              <th><a href=#GD:yForce2>GD:yForce2</a></th>
+              <th>
+                <a href=#GD:multivectorVelocity1>GD:multivectorVelocity1</a>
+              </th>
+              <th>
+                <a href=#GD:multivectorVelocity2>GD:multivectorVelocity2</a>
+              </th>
+              <th>
+                <a href=#GD:multivectorAcceleration1>GD:multivectorAcceleration1</a>
+              </th>
+              <th>
+                <a href=#GD:multivectorAcceleration2>GD:multivectorAcceleration2</a>
+              </th>
+              <th><a href=#GD:multivectorForce1>GD:multivectorForce1</a></th>
+              <th><a href=#GD:multivectorForce2>GD:multivectorForce2</a></th>
               <th><a href=#IM:calOfAngle1>IM:calOfAngle1</a></th>
               <th><a href=#IM:calOfAngle2>IM:calOfAngle2</a></th>
               <th><a href=#inputValues>FR:Input-Values</a></th>
@@ -3493,12 +2998,6 @@
             </tr>
             <tr>
               <td><a href=#motionMass>GS:motionMass</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3550,21 +3049,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#verifyInptVals>FR:Verify-Input-Values</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3608,12 +3095,6 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
               <td>X</td>
               <td></td>
@@ -3625,12 +3106,6 @@
             </tr>
             <tr>
               <td><a href=#outputValues>FR:Output-Values</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3682,21 +3157,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#portable>NFR:Portability</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>

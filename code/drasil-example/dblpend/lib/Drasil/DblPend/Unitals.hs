@@ -166,14 +166,6 @@ angularVel_2 = uc' "omega_2" (QP.angularVelocity `ofThe` secondObject)
         (phraseNP (QP.angularVelocity `the_ofThe` secondObject))
         (sub cOmega label2) Real angVelU
 
--- angularAccel_1 = uc' "alpha_x1" (QP.angularAccel `ofThe` firstObject)
---         (phraseNP (QP.angularAccel `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)
---         (sub lAlpha label1) Real angAccelU
-
--- angularAccel_2 = uc' "alpha_y1" (QP.angularAccel `ofThe` secondObject)
---         (phraseNP (QP.angularAccel `the_ofThe` secondObject) `S.inThe` phrase CM.yDir)
---         (sub lAlpha label2) Real angAccelU
-
 angularAccel_1 = uc' "alpha_1" (QP.angularAccel `ofThe` firstObject)
         (phraseNP (QP.angularAccel `the_ofThe` firstRod))
         (sub lAlpha label1) Real angAccelU

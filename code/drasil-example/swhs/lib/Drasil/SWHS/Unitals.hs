@@ -3,7 +3,8 @@ module Drasil.SWHS.Unitals where -- all of this file is exported
 import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 import Language.Drasil.Display (Symbol(Atop), Decoration(Delta))
-import Language.Drasil.Space (ClifKind(..))
+import Language.Drasil.Space (ClifKind(..), Space(..), Dimension(..))
+import qualified Language.Drasil.Space as S
 import Language.Drasil.ShortHands
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
@@ -24,9 +25,16 @@ import Drasil.SWHS.Concepts (water, phsChgMtrl)
 
 import Control.Lens ((^.))
 
+<<<<<<< HEAD
 -- | Helper function to create Clifford vector spaces of a given dimension
 realVect :: Dimension -> Space
 realVect d = ClifS d Vector Real
+=======
+-- Clifford algebra helper function
+-- | Helper function to create Clifford vector spaces of a given dimension
+realVect :: Dimension -> Space
+realVect d = S.ClifS d S.Vector Real
+>>>>>>> 5e5c28534a (eliminated constructor use and displayed new GA implementation in the SRS for dblpend)
 
 symbols :: [DefinedQuantityDict]
 symbols = pi_ : map dqdWr units ++ map dqdWr unitless ++ map dqdWr constrained

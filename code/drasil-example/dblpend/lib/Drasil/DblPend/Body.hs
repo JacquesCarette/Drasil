@@ -31,7 +31,9 @@ import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 
 import Drasil.DblPend.Figures (figMotion, sysCtxFig1)
 import Drasil.DblPend.Assumptions (assumpDouble)
-import Drasil.DblPend.Concepts (rod, concepts, pendMotion, firstRod, secondRod, firstObject, secondObject)
+import Drasil.DblPend.Concepts (rod, concepts, pendMotion, firstRod, secondRod, firstObject, secondObject,
+  multivector, cliffordAlgebra, geometricProduct, multivectorDef, cliffordAlgebraDef, geometricProductDef, 
+  basisVectorDef, cliffordSpace, bivectorDef)
 import Drasil.DblPend.Goals (goals, goalsInputs)
 import Drasil.DblPend.DataDefs (dataDefs)
 import Drasil.DblPend.IMods (iMods)
@@ -71,7 +73,15 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [IPurpose $ purpDoc progName Verbose,
        IScope scope,
        IChar [] charsOfReader [],
-       IOrgSec inModel (SRS.inModel [] []) (foldlSent missingAbrv)],
+       IOrgSec inModel (SRS.inModel [] []) (foldlSent [
+         S "This document demonstrates a novel approach to modeling the double pendulum using",
+         phrase cliffordAlgebra +:+. EmptyS,
+         S "The traditional vector-based approach is enhanced by representing physical quantities as",
+         plural multivector `S.in_` S "a unified geometric framework" +:+. EmptyS,
+         S "Section 4.2.3 presents", plural genDefn, S "that showcase how velocity, acceleration, and force",
+         S "are naturally expressed using", phrase cliffordAlgebra, S "operations such as the",
+         phrase geometricProduct `S.and_` S "basis vector representations"
+       ])],
   GSDSec $ 
     GSDProg [
       SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
@@ -87,7 +97,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       , SSDSolChSpec $ SCSProg --This creates the solution characteristics section with a preamble
         [ Assumptions
         , TMs [] (Label : stdFields)
-        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
+        , GDs [gaApproachSent] ([Label, Units] ++ stdFields) ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
         , Constraints EmptyS inConstraints
@@ -115,16 +125,21 @@ si = mkSystem progName Specification [dong]
   symbMap
 
 purp :: Sentence
-purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum]
+purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum,
+  S "using", phrase cliffordAlgebra, S "formulation"]
 
 motivation :: Sentence
 motivation = foldlSent_ [S "To simulate", phraseNP (motion `the_ofThe` pendulum),
-  S "and exhibit its chaotic characteristics"]
+  S "and exhibit its chaotic characteristics using", phrase cliffordAlgebra,
+  S "for geometric representation"]
 
 background :: Sentence
 background = foldlSent_ [phraseNP (a_ pendulum), S "consists" `S.of_` phrase mass, 
   S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
-  S "highly sensitive to initial conditions"]
+  S "highly sensitive to initial conditions" +:+. EmptyS,
+  S "This analysis uses", phrase cliffordAlgebra, S "to represent",
+  S "velocities, accelerations, and forces as", plural multivector,
+  S "providing a unified geometric framework"]
 
 symbolsAll :: [QuantityDict]
 symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
@@ -193,7 +208,8 @@ externalLinkRef = makeURI "DblPendSRSLink"
 scope :: Sentence
 scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)), 
   sParen (short twoD), phrase pendMotion, phrase problem,
-                   S "with various initial conditions"]
+  S "with various initial conditions using", phrase cliffordAlgebra,
+  S "for geometric representation of physical quantities"]
 
 ----------------------------------------------
 -- 2.3 : Characteristics of Intended Reader --
@@ -201,28 +217,14 @@ scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)),
 charsOfReader :: [Sentence]
 charsOfReader = [phrase undergraduate +:+ S "level 2" +:+ phrase Doc.physics,
                  phrase undergraduate +:+ S "level 1" +:+ phrase calculus,
-                 plural ode]
+                 plural ode,
+                 S "basic understanding of" +:+ phrase cliffordAlgebra +:+ S "and" +:+ plural multivector]
 
 -------------------------------------
 -- 2.4 : Organization of Documents --
 -------------------------------------
 -- Starting intro sentence of Organization of Documents automatically generated
 -- in IOrg
-
-missingAbrv :: [Sentence]
-missingAbrv = [S "The" +:+ plural goalStmt +:+ sParen (short goalStmt) +:+ S "are systematically refined into the" +:+ 
-              plural thModel +:+ sParen (short thModel) `sC` S "which in turn are refined into the" +:+ 
-              plural inModel +:+ sParen (short inModel) +:+. EmptyS +:+
-              S "This refinement process is guided by the" +:+ plural assumption +:+ sParen (short assumption) +:+ 
-              S "that constrain the" +:+ phrase system `sC` S "as well as the supporting" +:+ 
-              plural genDefn +:+ sParen (short genDefn) +:+ S "and" +:+ plural dataDefn +:+ sParen (short dataDefn) +:+ 
-              S "that provide the necessary mathematical and physical context." +:+ 
-              S "The" +:+ plural requirement +:+ sParen (short requirement) +:+ S "are traced back through the" +:+ 
-              short goalStmt `sC` short thModel `sC` S "and" +:+ short inModel +:+ S "to ensure consistency and completeness." +:+ 
-              S "Furthermore" `sC` S "the" +:+ phrase physSyst +:+ sParen (short physSyst) +:+ S "establishes the overall" +:+ 
-              S "context in which the" +:+ short goalStmt +:+ S "are formulated and the" +:+ short assumption +:+ S "are validated." +:+ 
-              S "Finally" `sC` S "the uncertainties (Uncerts.) are documented and linked to" +:+ 
-              S "the relevant" +:+ short inModel +:+ S "and" +:+ short dataDefn `sC` S "ensuring transparency in the modeling process."]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
@@ -303,7 +305,8 @@ userCharacteristicsIntro prog = foldlSP
 -- 4.1.1 Terminology and Definitions --
 ---------------------------------
 terms :: [ConceptChunk]
-terms = [gravity, cartesian]
+terms = [gravity, cartesian, multivectorDef, cliffordAlgebraDef, geometricProductDef, basisVectorDef,
+         cliffordSpace, bivectorDef]
 
 -----------------------------------
 -- 4.1.2 Physical System Description --
@@ -313,7 +316,9 @@ physSystParts = map (!.)
   [atStartNP (the firstRod) +:+ sParen (S "with" +:+ getTandS lenRod_1),
    atStartNP (the secondRod) +:+ sParen (S "with" +:+ getTandS lenRod_2),
    atStartNP (the firstObject),
-   atStartNP (the secondObject)]
+   atStartNP (the secondObject),
+   S "Each object's motion is described using" +:+ plural multivector +:+ S "in 2D" +:+ phrase cliffordAlgebra +:+ S "space Cl(2,0)",
+   S "Physical quantities (velocity, acceleration, force) are unified as geometric entities with basis vectors e₁ and e₂"]
 
 -----------------------------
 -- 4.1.3 : Goal Statements --
@@ -335,10 +340,23 @@ physSystParts = map (!.)
 tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM, newtonSL]
 
----------------------------------
+------------------------------
 -- 4.2.3 : General Definitions --
----------------------------------
+------------------------------
 -- General Definitions defined in GDs
+
+gaApproachSent :: Sentence
+gaApproachSent = foldlSent [
+  S "This section presents the novel", phrase cliffordAlgebra, S "formulation for the double pendulum system.",
+  S "Traditional vector methods are enhanced by representing physical quantities as", plural multivector,
+  S "in the 2D Clifford space Cl(2,0) with basis vectors e₁ and e₂" +:+. EmptyS,
+  S "The", phrase geometricProduct, S "naturally combines dot and wedge products, providing",
+  S "a unified framework for rotations and translations.", S "Each", phrase multivector,
+  S "can represent scalar, vector, and bivector components simultaneously, offering",
+  S "geometric insights into the pendulum's complex dynamics" +:+. EmptyS,
+  S "The following", plural genDefn, S "demonstrate how velocity, acceleration, and force",
+  S "are elegantly expressed using this geometric algebra approach, maintaining",
+  S "the underlying physics while providing enhanced mathematical structure."]
 
 ------------------------------
 -- 4.2.4 : Data Definitions --

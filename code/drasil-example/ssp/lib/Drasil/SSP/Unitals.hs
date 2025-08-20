@@ -18,17 +18,12 @@ import Data.Drasil.Concepts.Math (cartesian, xCoord, xDir, yCoord, yDir,
   zCoord, zDir)
 import Data.Drasil.Concepts.Physics (gravity)
 
-import Data.Drasil.Quantities.Math (area, pi_)
+import Data.Drasil.Quantities.Math (area, pi_, unitVectj)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight, 
   vol)
 import Data.Drasil.Quantities.Physics (acceleration, displacement, distance,
   force, gravitationalAccel, height, moment2D, pressure, subX, subY, subZ, 
   supMax, supMin, torque, weight, positionVec, vecDim, realVect)
-
--- | Helper function to create Clifford vector spaces of a given dimension
-realVect :: Dimension -> Space
-realVect d = ClifS d Vector Real
-
 
 symbols :: [DefinedQuantityDict]
 symbols = dqdWr coords : map dqdWr inputs ++ map dqdWr outputs

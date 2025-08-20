@@ -10,16 +10,9 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Drasil.PDController.Concepts
 
-<<<<<<< HEAD
 -- | Helper function to create Clifford vector spaces of a given dimension
 realVect :: Dimension -> Space
 realVect d = ClifS d Vector Real
-=======
--- Clifford algebra helper function
--- | Helper function to create Clifford vector spaces of a given dimension
-realVect :: Dimension -> Space
-realVect d = S.ClifS d S.Vector Real
->>>>>>> 5e5c28534a (eliminated constructor use and displayed new GA implementation in the SRS for dblpend)
 
 syms, symFS, symFt, syminvLaplace, symKd, symKp,
        symYT, symYS, symYrT, symYrS, symET, symES, symPS, symDS, symHS,

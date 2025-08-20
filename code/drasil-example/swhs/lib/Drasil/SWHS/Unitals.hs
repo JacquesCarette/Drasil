@@ -25,16 +25,9 @@ import Drasil.SWHS.Concepts (water, phsChgMtrl)
 
 import Control.Lens ((^.))
 
-<<<<<<< HEAD
 -- | Helper function to create Clifford vector spaces of a given dimension
 realVect :: Dimension -> Space
 realVect d = ClifS d Vector Real
-=======
--- Clifford algebra helper function
--- | Helper function to create Clifford vector spaces of a given dimension
-realVect :: Dimension -> Space
-realVect d = S.ClifS d S.Vector Real
->>>>>>> 5e5c28534a (eliminated constructor use and displayed new GA implementation in the SRS for dblpend)
 
 symbols :: [DefinedQuantityDict]
 symbols = pi_ : map dqdWr units ++ map dqdWr unitless ++ map dqdWr constrained

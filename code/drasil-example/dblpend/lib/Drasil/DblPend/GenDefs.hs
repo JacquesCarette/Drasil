@@ -154,4 +154,3 @@ mvForceDerivEqns_2 = [eS $ sy mvForce_2 $= E.mvForceExpr_2,
                       S "This represents the total force as a vector sum in Clifford geometric space",
                       S "= mass × acceleration_multivector + gravitational_force_multivector",
                       S "Demonstrating how Newton's second law extends naturally to geometric algebra"]
-

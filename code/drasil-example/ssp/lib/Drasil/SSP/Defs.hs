@@ -21,12 +21,12 @@ acronyms = [twoD, threeD, assumption, dataDefn, genDefn, goalStmt, inModel, like
   physSyst, requirement, refBy, refName, srs, thModel, typUnc, unlikelyChg]
 
 defs :: [IdeaDict]
-defs = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice,
+defs = [factor, soil, intrslce, layer, slip, slope, slice, morPrice,
   soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics, 
   stabAnalysis, ssa]
 
 defs' :: [ConceptChunk]
-defs' = [slpSrf, crtSlpSrf, plnStrn, fsConcept, waterTable]
+defs' = [slpSrf, crtSlpSrf, plnStrn, waterTable]
 
 ----Other Common Phrases----
 soil, layer, material, intrslce, slip, slope, slice, stability,

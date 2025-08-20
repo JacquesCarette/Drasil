@@ -8,12 +8,17 @@ module Language.Drasil.Expr.Lang where
 import Drasil.Database.UID (UID)
 
 import Language.Drasil.Literal.Class (LiteralC (..))
-import Language.Drasil.Literal.Lang  (Literal (..))
-import Language.Drasil.Space         (DiscreteDomainDesc, RealInterval, Space)
+import Language.Drasil.Literal.Lang (Literal (..))
+import Language.Drasil.Space (DiscreteDomainDesc, RealInterval, Space,
+  assertVector, assertNumericVector, assertNumeric, assertFunction,
+  assertNonNatNumVector, assertRealVector, assertEquivNumeric, assertNonNatNumeric,
+  assertIndexLike, assertSet, assertReal, assertBoolean)
 import qualified Language.Drasil.Space as S
 import Language.Drasil.WellTyped
-import Data.Either (lefts, fromLeft)
+
+import Data.Either (fromRight, rights)
 import qualified Data.Foldable as NE
+import Data.List (nub)
 
 import Numeric.Natural (Natural)
 import Data.Map.Ordered (OrderedMap)
@@ -43,7 +48,8 @@ data EqBinOp = Eq | NEq
 data BoolBinOp = Impl | Iff
   deriving Eq
 
--- | Index operator.
+-- | Index operator. `Index` represents accessing an element at a specific
+-- index, while `IndexOf` represents finding the index of a specific element.
 data LABinOp = Index | IndexOf
   deriving Eq
 
@@ -342,11 +348,15 @@ cccInfer ctx op l r = case (infer ctx l, infer ctx r) of
     (Right le, _       ) -> Right le
 
 
+  lsp ~== rsp $ \lt' rt' -> "Vector " ++ pretty op ++ " expects both operands to be of the same numeric type. Received `" ++ lt' ++ "` and `" ++ rt' ++ "`."
+
+  pure lt
+
 instance Typed Expr Space where
-  check :: TypingContext Space -> Expr -> Space -> Either Space TypeError
+  check :: TypingContext Space -> Expr -> Space -> Either TypeError Space
   check = typeCheckByInfer
 
-  infer :: TypingContext Space -> Expr -> Either Space TypeError
+  infer :: TypingContext Space -> Expr -> Either TypeError Space
   infer cxt (Lit lit) = infer cxt lit
 
   infer cxt (AssocA _ (e:exs)) =
@@ -358,14 +368,15 @@ instance Typed Expr Space where
       Left l ->
           -- Handle the case when sp is a Left value but spaceValue is invalid
           Right ("Expected all operands in addition/multiplication to be numeric, but found " ++ show l)
-      Right r ->
-          -- If sp is a Right value containing a TypeError
-          Right r
-  infer _ (AssocA Add _) = Right "Associative addition requires at least one operand."
-  infer _ (AssocA Mul _) = Right "Associative multiplication requires at least one operand."
 
-  infer cxt (AssocB _ exs) = allOfType cxt exs S.Boolean S.Boolean
-    $ "Associative boolean operation expects all operands to be of the same type (" ++ show S.Boolean ++ ")."
+      Right r ->
+          -- Handle the case when sp is a Left value but spaceValue is invalid
+          Left ("Expected all operands in addition/multiplication to be numeric, but found " ++ show r)
+      Left l ->
+          -- If sp is a Right value containing a TypeError
+          Left l
+
+  infer _ (AssocC SUnion _) = Left "Associative addition requires at least one operand."
 
   infer cxt (AssocC _ (e:exs)) =
     case infer cxt e of
@@ -381,30 +392,39 @@ instance Typed Expr Space where
           Right r
   infer _ (AssocC SUnion _) = Right "Associative addition requires at least one operand."
 
+
   infer cxt (C uid) = inferFromContext cxt uid
 
   infer cxt (Variable _ n) = infer cxt n
 
-  infer cxt (FCall uid exs) = case (inferFromContext cxt uid, map (infer cxt) exs) of
-    (Left (S.Function params out), exst) -> if NE.toList params == lefts exst
-      then Left out
-      else Right $ "Function `" ++ show uid ++ "` expects parameters of types: " ++ show params ++ ", but received: " ++ show (lefts exst) ++ "."
-    (Left s, _) -> Right $ "Function application on non-function `" ++ show uid ++ "` (" ++ show s ++ ")."
-    (Right x, _) -> Right x
+  infer cxt (FCall uid exs) = do
+    ft <- inferFromContext cxt uid
+    (params, out) <- assertFunction ft $ \t -> "Function application on non-function `" ++ show uid ++ "` (" ++ t ++ ")."
+    let exst = map (infer cxt) exs
+    if NE.toList params == rights exst
+      then pure out
+      else Left $ "Function `" ++ show uid ++ "` expects parameters of types: " ++ show params ++ ", but received: " ++ show (rights exst) ++ "."
 
-  infer cxt (Case _ ers)
-    | null ers = Right "Case contains no expressions, no type to infer."
-    | all (\(ne, _) -> infer cxt ne == eT) (tail ers) = eT
-    | otherwise = Right "Expressions in case statement contain different types."
-      where
-        (fe, _) = head ers
-        eT = infer cxt fe
+  infer   _ (Case _ []) = Left "Case contains no expressions, no type to infer."
+  infer cxt (Case _ ers) = do
+    let inferPair (e, r) = (,) <$> infer cxt e <*> infer cxt r
+    ers' <- traverse inferPair ers -- fail and return immediately on first Left
+    let (ets, rts) = unzip ers'
+        rt = nub rts
+        et = nub ets
+
+    if rt /= [S.Boolean] then
+      Left $ "Case contains expressions of different types: " ++ show rt
+    else if length et /= 1 then
+      Left $ "Case contains expressions of different types: " ++ show et
+    else
+      pure $ head et
 
   infer cxt (Matrix exss)
-    | null exss = Right "Matrix has no rows."
-    | null $ head exss = Right "Matrix has no columns."
-    | allRowsHaveSameColumnsAndSpace = Left $ S.Matrix rows columns t
-    | otherwise = Right "Not all rows have the same number of columns or the same value types."
+    | null exss = Left "Matrix has no rows."
+    | null $ head exss = Left "Matrix has no columns."
+    | allRowsHaveSameColumnsAndSpace = Right $ S.Matrix rows columns t
+    | otherwise = Left "Not all rows have the same number of columns or the same value types."
     where
         rows = length exss
         columns = if rows > 0 then length $ head exss else 0
@@ -586,15 +606,16 @@ instance Typed Expr Space where
         "Real interval expects variable to be of type Real, but received `" ++ show uid ++ "` of type `" ++ show uidSp ++ "`."
       (_          , Right x  ) -> Right x
       (Right x    , _        ) -> Right x
+
     where
-      riTy :: RealInterval Expr Expr -> Either Space TypeError
-      riTy (S.Bounded (_, lx) (_, rx)) = case (infer cxt lx, infer cxt rx) of
-        (Left lt, Left rt) -> if lt == rt
-          then Left lt
-          else Right $
-            "Bounded real interval contains mismatched types for bottom and top. Received `" ++ show lt ++ "` to `" ++ show rt ++ "`."
-        (_      , Right x) -> Right x
-        (Right x, _      ) -> Right x
+      riTy :: RealInterval Expr Expr -> Either TypeError Space
+      riTy (S.Bounded (_, lx) (_, rx)) = do
+        lt <- infer cxt lx
+        rt <- infer cxt rx
+        let msg dir sp = "Bounded real interval " ++ dir ++ " is not a real number, found: " ++ sp ++ "."
+        assertReal lt (msg "lower bound")
+        assertReal rt (msg "upper bound")
+        pure S.Real
       riTy (S.UpTo (_, x)) = infer cxt x
       riTy (S.UpFrom (_, x)) = infer cxt x
 
@@ -631,3 +652,4 @@ eitherLists = eitherLists' (Left [])
     eitherLists' _ (Right r : _) = Right r
     eitherLists' _ (Left _ : _) = error "eitherLists impl. non-exhaustive pattern: _ [Left, ...]"
     eitherLists' ls [] = ls
+

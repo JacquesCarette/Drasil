@@ -4,7 +4,7 @@
 module Drasil.Website.Example where
 
 import Language.Drasil hiding (E)
-import System.Drasil (System(..))
+import Drasil.System (System(..))
 import Language.Drasil.Code (Choices(..), Lang(..))
 import Data.Char (toLower)
 import Language.Drasil.Printers (Format(..))

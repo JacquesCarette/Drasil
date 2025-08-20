@@ -26,8 +26,8 @@ import Data.Drasil.Units.Physics (velU, accelU, angVelU, angAccelU)
 import Data.Drasil.Quantities.Physics (gravitationalAccelConst)
 
 
-symbols:: [QuantityDict]
-symbols = map qw unitalChunks ++ map qw unitless ++ [qw pendDisAngle] ++ map qw constants
+symbols:: [DefinedQuantityDict]
+symbols = map dqdWr unitalChunks ++ unitless ++ [dqdWr pendDisAngle] ++ map dqdWr constants
 
 acronyms :: [CI]
 acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
@@ -38,6 +38,7 @@ inputs = map qw [lenRod_1, lenRod_2, massObj_1, massObj_2, pendDisAngle_1, pendD
 
 outputs :: [QuantityDict]
 outputs = [qw xPos_1, qw mvVel_1, qw mvAccel_1]  -- Including Clifford algebra quantities to show in SRS
+
 
 constants :: [ConstQDef]
 constants = [gravitationalAccelConst]

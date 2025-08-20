@@ -1,6 +1,6 @@
 module Drasil.GlassBR.Symbols where
 
-import Language.Drasil (QuantityDict, qw, cnstrw)
+import Language.Drasil (DefinedQuantityDict, dqdWr, cnstrw')
 import Language.Drasil.Code (Mod(Mod), asVC)
 
 import Drasil.GlassBR.ModuleDefs (allMods, implVars)
@@ -11,21 +11,21 @@ import Drasil.GlassBR.Unitals (specParamVals, modElas,
 
 import Data.List ((\\))
 
-symbolsForSymbolTable :: [QuantityDict]
-symbolsForSymbolTable = symbolsForTermTable ++ map qw unitalSymbols ++
-  unitless ++ map qw [probBr, stressDistFac, cnstrw nomThick, cnstrw glassTypeCon] ++
-  map qw derivedInputDataConstraints
+symbolsForSymbolTable :: [DefinedQuantityDict]
+symbolsForSymbolTable = symbolsForTermTable ++ map dqdWr unitalSymbols ++
+  unitless ++ map dqdWr [probBr, stressDistFac, cnstrw' nomThick, cnstrw' glassTypeCon] ++
+  map dqdWr derivedInputDataConstraints
 
-symbolsForTermTable :: [QuantityDict]
-symbolsForTermTable = map qw inputsWUnitsUncrtn ++ map qw inputsWUncrtn ++
-  map qw sdVector ++ tmSymbols ++ map qw specParamVals ++ 
-  [qw modElas] ++ interps
+symbolsForTermTable :: [DefinedQuantityDict]
+symbolsForTermTable = map dqdWr inputsWUnitsUncrtn ++ map dqdWr inputsWUncrtn ++
+  map dqdWr sdVector ++ tmSymbols ++ map dqdWr specParamVals ++ 
+  [dqdWr modElas] ++ interps
 
   -- include all module functions as symbols
-thisSymbols :: [QuantityDict]
+thisSymbols :: [DefinedQuantityDict]
 thisSymbols = (map asVC (concatMap (\(Mod _ _ _ _ l) -> l) allMods)
-  \\ symbolsForSymbolTable) ++ map qw implVars ++ symbolsForSymbolTable
+  \\ symbolsForSymbolTable) ++ implVars ++ symbolsForSymbolTable
   
-thisTerms :: [QuantityDict]
+thisTerms :: [DefinedQuantityDict]
 thisTerms = (map asVC (concatMap (\(Mod _ _ _ _ l) -> l) allMods)
-  \\ symbolsForTermTable) ++ map qw implVars ++ symbolsForTermTable
+  \\ symbolsForTermTable) ++ implVars ++ symbolsForTermTable

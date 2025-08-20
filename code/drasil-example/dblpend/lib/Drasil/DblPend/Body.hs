@@ -7,6 +7,7 @@ import Drasil.Metadata (inModel, thModel, dataDefn, genDefn)
 import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
+import Database.Drasil.ChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -14,8 +15,7 @@ import qualified Language.Drasil.NounPhrase.Combinators as NP
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (dong)
-import Data.Drasil.SI_Units (siUnits)
-import Data.Drasil.Concepts.Computation (inDatum, compcon, algorithm)
+import Data.Drasil.Concepts.Computation (inDatum)
 import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   environment, datum, input_, interface, output_, problem, product_,
@@ -24,9 +24,10 @@ import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
 import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate, educon, )
 import Data.Drasil.Concepts.Math (mathcon, cartesian, ode, mathcon', graph)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion)
+
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
-import Data.Drasil.Concepts.Software (program, errMsg)
-import Data.Drasil.Software.Products (prodtcon)
+import Data.Drasil.Quantities.PhysicalProperties (len)
+import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 
 import Drasil.DblPend.Figures (figMotion, sysCtxFig1)
@@ -40,15 +41,15 @@ import Drasil.DblPend.IMods (iMods)
 import Drasil.DblPend.GenDefs (genDefns)
 import Drasil.DblPend.MetaConcepts (progName)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
-  inConstraints, outConstraints, acronyms, pendDisAngle, constants)
+  inConstraints, outConstraints, acronyms, constants)
 import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs)
 import Drasil.DblPend.References (citations)
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
-  osloSymbols, apacheODESymbols, odeintSymbols, arrayVecDepVar)
-import Language.Drasil.Code (quantvar)
+  osloSymbols, apacheODESymbols, odeintSymbols, arrayVecDepVar, diffCodeChunk)
+import Language.Drasil.Code (ODEInfo (..))
 import Drasil.DblPend.ODEs (dblPenODEInfo)
 
-import System.Drasil (SystemKind(Specification), mkSystem)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -141,20 +142,24 @@ background = foldlSent_ [phraseNP (a_ pendulum), S "consists" `S.of_` phrase mas
   S "velocities, accelerations, and forces as", plural multivector,
   S "providing a unified geometric framework"]
 
-symbolsAll :: [QuantityDict]
+-- FIXME: the dependent variable of dblPenODEInfo (pendDisAngle) is added to symbolsAll as it is used to create new chunks with pendDisAngle's UID suffixed in ODELibraries.hs.
+-- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
+symbolsAll :: [DefinedQuantityDict]
 symbolsAll = symbols ++ scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols 
-  ++ map qw [listToArray $ quantvar pendDisAngle, arrayVecDepVar dblPenODEInfo]
+  ++ map dqdWr [listToArray dp, arrayVecDepVar dblPenODEInfo, diffCodeChunk dp,
+  listToArray $ diffCodeChunk dp]
+  where dp = depVar dblPenODEInfo
 
 ideaDicts :: [IdeaDict]
 ideaDicts = 
   -- Actual IdeaDicts
-  doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
+  concepts ++
   -- CIs
-  nw progName : map nw doccon' ++ map nw mathcon' ++ map nw physicCon'
+  nw progName : map nw mathcon' ++ map nw physicCon'
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList = 
-  -- QuantityDict abbreviations
+  -- DefinedQuantityDict abbreviations
   map nw symbols ++
   -- Document structure abbreviations
   map nw [goalStmt, thModel, inModel, assumption, genDefn, dataDefn, requirement, physSyst] ++
@@ -162,12 +167,18 @@ abbreviationsList =
   nw progName : map nw acronyms
 
 conceptChunks :: [ConceptChunk]
-conceptChunks = [algorithm, errMsg, program] ++ physicCon ++ mathcon ++ physicalcon ++ srsDomains
+conceptChunks = 
+  -- ConceptChunks
+  physicalcon ++ [angAccel, angular, angVelo, pendulum, motion,
+  gravitationalConst, gravity] ++
+  -- UnitalChunks
+  [cw len]
 
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll)
   ideaDicts conceptChunks siUnits
   dataDefs iMods genDefns tMods concIns [] allRefs citations  -- Re-enabled genDefns to show Clifford algebra content
+
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

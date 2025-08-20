@@ -54,9 +54,9 @@ public class Projectile {
         write_output(s, d_offset, t_flight);
     }
     
-    /** \brief Calculates flight duration: the time when the projectile lands (s)
+    /** \brief Calculates flight duration (s)
         \param inParams structure holding the input values
-        \return flight duration: the time when the projectile lands (s)
+        \return flight duration (s)
     */
     public static double func_t_flight(InputParameters inParams) throws IOException {
         PrintWriter outfile;
@@ -70,9 +70,9 @@ public class Projectile {
         return 2.0 * inParams.v_launch * Math.sin(inParams.theta) / Constants.g;
     }
     
-    /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
+    /** \brief Calculates landing position (m)
         \param inParams structure holding the input values
-        \return landing position: the distance from the launcher to the final position of the projectile (m)
+        \return landing position (m)
     */
     public static double func_p_land(InputParameters inParams) throws IOException {
         PrintWriter outfile;
@@ -86,10 +86,10 @@ public class Projectile {
         return 2.0 * Math.pow(inParams.v_launch, 2.0) * Math.sin(inParams.theta) * Math.cos(inParams.theta) / Constants.g;
     }
     
-    /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
+    /** \brief Calculates distance between the target position and the landing position (m)
         \param inParams structure holding the input values
-        \param p_land landing position: the distance from the launcher to the final position of the projectile (m)
-        \return distance between the target position and the landing position: the offset between the target position and the landing position (m)
+        \param p_land landing position (m)
+        \return distance between the target position and the landing position (m)
     */
     public static double func_d_offset(InputParameters inParams, double p_land) throws IOException {
         PrintWriter outfile;
@@ -108,7 +108,7 @@ public class Projectile {
     
     /** \brief Calculates output message as a string
         \param inParams structure holding the input values
-        \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
+        \param d_offset distance between the target position and the landing position (m)
         \return output message as a string
     */
     public static String func_s(InputParameters inParams, double d_offset) throws IOException {
@@ -136,8 +136,8 @@ public class Projectile {
     
     /** \brief Writes the output values to output.txt
         \param s output message as a string
-        \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
-        \param t_flight flight duration: the time when the projectile lands (s)
+        \param d_offset distance between the target position and the landing position (m)
+        \param t_flight flight duration (s)
     */
     public static void write_output(String s, double d_offset, double t_flight) throws IOException {
         PrintWriter outfile;

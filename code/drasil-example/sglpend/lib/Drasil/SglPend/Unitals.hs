@@ -18,14 +18,14 @@ import Drasil.DblPend.Concepts (rod)
 import Drasil.DblPend.Unitals (lRod)
 
 
-symbols:: [QuantityDict]
-symbols = map qw unitalChunks ++ map qw unitless
+symbols:: [DefinedQuantityDict]
+symbols = map dqdWr unitalChunks ++ unitless
 
-inputs :: [QuantityDict]
-inputs = map qw [lenRod, QPP.mass, QP.angularAccel, pendDisplacementAngle, initialPendAngle]
+inputs :: [DefinedQuantityDict]
+inputs = map dqdWr [lenRod, QPP.mass, QP.angularAccel, pendDisplacementAngle, initialPendAngle]
 
-outputs :: [QuantityDict]
-outputs = [qw pendDisplacementAngle]
+outputs :: [DefinedQuantityDict]
+outputs = [dqdWr pendDisplacementAngle]
 
 units :: [UnitalChunk]
 units = map ucw unitalChunks

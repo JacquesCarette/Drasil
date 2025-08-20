@@ -63,7 +63,7 @@ angleIM_1 = imNoRefs angleMK_1
    qwC massObj_2 $ UpFrom (Exc, exactDbl 0),
    qwUC pendDisAngle_1,
    qwUC pendDisAngle_2]
-  (qw pendDisAngle_1) []
+  (dqdWr pendDisAngle_1) []
   Nothing "calOfAngle1" [foldlSent [ch pendDisAngle_1 `S.is`
       S "calculated by solving the", short ode, S "here together with the initial",
       plural condition `S.and_` refS angleIM_2]]
@@ -84,7 +84,7 @@ angleIM_2 = imNoRefs angleMK_2
    qwC massObj_2 $ UpFrom (Exc, exactDbl 0),
    qwUC pendDisAngle_1,
    qwUC pendDisAngle_2]
-  (qw pendDisAngle_2) []
+  (dqdWr pendDisAngle_2) []
   (Just angleDeriv_2) "calOfAngle2" [foldlSent [ch pendDisAngle_2 `S.is`
       S "calculated by solving the", short ode, S "here together with the initial",
       plural condition `S.and_` refS angleIM_1]]

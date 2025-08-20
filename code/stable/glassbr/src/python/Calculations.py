@@ -20,9 +20,9 @@ def func_J_tol(inParams):
     
     return math.log(math.log(1.0 / (1.0 - inParams.P_btol)) * ((inParams.a * inParams.b) ** (7.0 - 1.0) / (2.86e-53 * (7.17e10 * inParams.h ** 2.0) ** 7.0 * inParams.LDF)))
 
-## \brief Calculates applied load (demand): 3 second duration equivalent pressure (Pa)
+## \brief Calculates applied load (demand) (Pa)
 # \param inParams structure holding the input values
-# \return applied load (demand): 3 second duration equivalent pressure (Pa)
+# \return applied load (demand) (Pa)
 def func_q(inParams):
     outfile = open("log.txt", "a")
     print("function func_q called with inputs: {", file=outfile)
@@ -35,7 +35,7 @@ def func_q(inParams):
 
 ## \brief Calculates dimensionless load
 # \param inParams structure holding the input values
-# \param q applied load (demand): 3 second duration equivalent pressure (Pa)
+# \param q applied load (demand) (Pa)
 # \return dimensionless load
 def func_q_hat(inParams, q):
     outfile = open("log.txt", "a")
@@ -84,10 +84,10 @@ def func_J(inParams, q_hat):
     
     return Interpolation.interpZ("SDF.txt", inParams.AR, q_hat)
 
-## \brief Calculates non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
+## \brief Calculates non-factored load (Pa)
 # \param inParams structure holding the input values
 # \param q_hat_tol tolerable load
-# \return non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
+# \return non-factored load (Pa)
 def func_NFL(inParams, q_hat_tol):
     outfile = open("log.txt", "a")
     print("function func_NFL called with inputs: {", file=outfile)
@@ -118,10 +118,10 @@ def func_B(inParams, J):
     
     return 2.86e-53 / (inParams.a * inParams.b) ** (7.0 - 1.0) * (7.17e10 * inParams.h ** 2.0) ** 7.0 * inParams.LDF * math.exp(J)
 
-## \brief Calculates load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
+## \brief Calculates load resistance (Pa)
 # \param inParams structure holding the input values
-# \param NFL non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
-# \return load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
+# \param NFL non-factored load (Pa)
+# \return load resistance (Pa)
 def func_LR(inParams, NFL):
     outfile = open("log.txt", "a")
     print("function func_LR called with inputs: {", file=outfile)
@@ -135,9 +135,9 @@ def func_LR(inParams, NFL):
     
     return NFL * inParams.GTF * 1.0
 
-## \brief Calculates probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
+## \brief Calculates probability of breakage
 # \param B risk of failure
-# \return probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
+# \return probability of breakage
 def func_P_b(B):
     outfile = open("log.txt", "a")
     print("function func_P_b called with inputs: {", file=outfile)
@@ -149,8 +149,8 @@ def func_P_b(B):
     return 1.0 - math.exp(-B)
 
 ## \brief Calculates 3 second load equivalent resistance safety requirement
-# \param LR load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
-# \param q applied load (demand): 3 second duration equivalent pressure (Pa)
+# \param LR load resistance (Pa)
+# \param q applied load (demand) (Pa)
 # \return 3 second load equivalent resistance safety requirement
 def func_isSafeLR(LR, q):
     outfile = open("log.txt", "a")
@@ -167,7 +167,7 @@ def func_isSafeLR(LR, q):
 
 ## \brief Calculates probability of glass breakage safety requirement
 # \param inParams structure holding the input values
-# \param P_b probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
+# \param P_b probability of breakage
 # \return probability of glass breakage safety requirement
 def func_isSafePb(inParams, P_b):
     outfile = open("log.txt", "a")

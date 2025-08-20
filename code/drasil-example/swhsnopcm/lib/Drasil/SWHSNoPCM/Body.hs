@@ -3,37 +3,34 @@ module Drasil.SWHSNoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI) where
 import Language.Drasil hiding (section)
 import Drasil.Metadata (inModel)
 import Drasil.SRSDocument
+import Database.Drasil.ChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Theory.Drasil (TheoryModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Language.Drasil.Code (quantvar)
+import Language.Drasil.Code (ODEInfo (depVar))
 
 import Data.List ((\\))
 import Data.Drasil.People (thulasi)
 
-import Data.Drasil.Concepts.Computation (algorithm, inValue)
-import Data.Drasil.Concepts.Documentation as Doc (doccon, doccon', material_, srsDomains, sysCont)
-import Data.Drasil.Concepts.Education (educon)
-import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
+import Data.Drasil.Concepts.Documentation as Doc (material_, sysCont)
+import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
-import Data.Drasil.Concepts.Physics (physicCon, physicCon')
+import qualified Data.Drasil.Concepts.Physics as CP (physicCon', energy, mechEnergy, pressure)
 import Data.Drasil.Concepts.Software (softwarecon)
 import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
-  temp, thermalAnalysis, thermalConduction, thermocon)
+  temp, thermalAnalysis, thermalConduction, thermocon, boilPt, latentHeat, meltPt)
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols, osloSymbols,
-  arrayVecDepVar, apacheODESymbols, odeintSymbols)
+  arrayVecDepVar, apacheODESymbols, odeintSymbols, diffCodeChunk)
 
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
 import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
-  uNormalVect)
+  uNormalVect, surArea, area)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy)
-import Data.Drasil.Software.Products (prodtcon)
-import Data.Drasil.SI_Units (siUnits)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -66,7 +63,7 @@ import Drasil.SWHSNoPCM.References (citations)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
   specParamValList)
 
-import System.Drasil (SystemKind(Specification), mkSystem)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS S.forT si
@@ -85,21 +82,25 @@ symbols :: [DefinedQuantityDict]
 symbols = map dqdWr concepts ++ map dqdWr constrained
  ++ map dqdWr [tempW, watE]
 
-symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
+symbolsAll :: [DefinedQuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
                                --FOUND LOC OF ERROR: Instance Models
-symbolsAll = map qw [gradient, pi_, uNormalVect, dqdWr surface] ++ map qw symbols ++
-  map qw symbolConcepts ++ map qw specParamValList ++ map qw [absTol, relTol] ++
+-- FIXME: the dependent variable of noPCMODEInfo (tempW) is added to symbolsAll as it is used to create new chunks with tempW's UID suffixed in ODELibraries.hs.
+-- The correct way to fix this is to add the chunks when they are created in the original functions. See #4298 and #4301
+symbolsAll = [gradient, pi_, uNormalVect, dqdWr surface] ++ symbols ++
+  map dqdWr symbolConcepts ++ map dqdWr specParamValList ++ map dqdWr [absTol, relTol] ++
   scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols ++
-  map qw [listToArray $ quantvar tempW, arrayVecDepVar noPCMODEInfo]
+  map dqdWr [listToArray dp, arrayVecDepVar noPCMODEInfo, 
+  diffCodeChunk dp, listToArray $ diffCodeChunk dp]
+  where dp = depVar noPCMODEInfo
 
 concepts :: [UnitalChunk]
 concepts = map ucw [tau, inSA, outSA, htCapL, htFluxIn, htFluxOut, volHtGen,
   htTransCoeff, tankVol, deltaT, tempEnv, thFluxVect, htFluxC, wMass, wVol, tauW]
 
 symbolConcepts :: [UnitalChunk]
-symbolConcepts = map ucw [density, QT.htFlux, QT.heatCapSpec, mass, QT.sensHeat,
-  QT.temp, time, vol]
+symbolConcepts = map ucw [density, mass, time, vol,
+  QT.temp, QT.heatCapSpec, QT.htFlux, QT.sensHeat]
 
 -------------------
 --INPUT INFORMATION
@@ -168,11 +169,11 @@ si = mkSystem
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but 
   -- tau does not appear in the document and thus should not be displayed.
-  ((map qw unconstrained ++ map qw symbolsAll) \\ [qw tau])
+  ((map dqdWr unconstrained ++ symbolsAll) \\ [dqdWr tau])
   tMods genDefs NoPCM.dataDefs NoPCM.iMods
   []
-  (inputs ++ [qw watE]) (map qw [tempW, watE])
-  (map cnstrw constrained ++ map cnstrw [tempW, watE]) (piConst : specParamValList)
+  (inputs ++ [dqdWr watE]) [tempW, watE]
+  (map cnstrw' constrained ++ map cnstrw' [tempW, watE]) (piConst : specParamValList)
   symbMap
 
 purp :: Sentence
@@ -181,21 +182,21 @@ purp = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWH
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- Actual IdeaDicts
-  [inValue, htTrans, materialProprty] ++ prodtcon ++ doccon ++ educon ++
+  [htTrans, materialProprty] ++
   -- CIs
-  map nw [srsSWHS, progName, phsChgMtrl] ++ map nw doccon' ++
-  map nw physicCon' ++ map nw mathcon'
+  map nw [srsSWHS, progName, phsChgMtrl] ++
+  map nw CP.physicCon' ++ map nw mathcon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  algorithm : softwarecon ++ thermocon ++ con ++ physicCon ++ mathcon ++
-  physicalcon ++ srsDomains ++
+  softwarecon ++ thermocon ++ con ++ physicalcon ++ [boilPt, latentHeat,
+  meltPt] ++ [CP.energy, CP.mechEnergy, CP.pressure] ++
   -- DefinedQuantityDicts
-  map cw symbols
+  map cw [surArea, area]
 
 symbMap :: ChunkDB
-symbMap = cdb symbolsAll ideaDicts conceptChunks siUnits NoPCM.dataDefs
+symbMap = cdb symbolsAll ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
   NoPCM.iMods genDefs tMods concIns [] allRefs citations
 
 abbreviationsList :: [IdeaDict]

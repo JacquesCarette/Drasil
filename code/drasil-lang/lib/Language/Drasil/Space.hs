@@ -19,6 +19,7 @@ module Language.Drasil.Space (
   bivector2DS, bivector3DS, bivectorS, bivectorNDS,
   multivector2DS, multivector3DS, multivectorS, multivectorNDS,
   ClifKind(..)
+
 ) where
 
 import qualified Data.List.NonEmpty        as NE

@@ -16,7 +16,7 @@ using std::vector;
 class Populate {
     public:
         /** \brief Constructor for Populate objects
-            \param T_W temperature of the water: the average kinetic energy of the particles within the water (degreeC)
+            \param T_W temperature of the water (degreeC)
         */
         Populate(vector<double> &T_W);
         /** \brief appends solution point for current ODE solution step

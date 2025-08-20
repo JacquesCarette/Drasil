@@ -17,9 +17,9 @@ import Drasil.Metadata (inModel)
 import Control.Lens ((^.), makeLenses, _1, _2) 
 import Theory.Drasil.ModelKinds (ModelKind, getEqModQds)
 
-type Input = (QuantityDict, Maybe (RealInterval Expr Expr))
+type Input = (DefinedQuantityDict, Maybe (RealInterval Expr Expr))
 type Inputs = [Input]
-type Output = QuantityDict
+type Output = DefinedQuantityDict
 type OutputConstraints = [RealInterval Expr Expr]
 
 -- | An instance model is a ModelKind that may have specific inputs, outputs,
@@ -109,12 +109,12 @@ imNoDerivNoRefs mkind i o oc sn =
   IM mkind i (o, oc) [] Nothing (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | For building a quantity with no constraint.
-qwUC :: (Quantity q, MayHaveUnit q) => q -> Input 
-qwUC x = (qw x, Nothing)
+qwUC :: (Quantity q, MayHaveUnit q, Concept q) => q -> Input 
+qwUC x = (dqdWr x, Nothing)
 
 -- | For building a quantity with a constraint.
-qwC :: (Quantity q, MayHaveUnit q) => q -> RealInterval Expr Expr -> Input 
-qwC x y = (qw x, Just y)
+qwC :: (Quantity q, MayHaveUnit q, Concept q) => q -> RealInterval Expr Expr -> Input 
+qwC x y = (dqdWr x, Just y)
 
 -- | Grab all related 'QDefinition's from a list of instance models.
 getEqModQdsFromIm :: [InstanceModel] -> [SimpleQDef]

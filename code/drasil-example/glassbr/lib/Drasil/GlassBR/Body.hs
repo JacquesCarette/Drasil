@@ -5,28 +5,27 @@ import Control.Lens ((^.))
 import Language.Drasil hiding (organization, section, variable)
 import Drasil.Metadata as M (dataDefn, inModel, thModel)
 import Drasil.SRSDocument
+import Database.Drasil.ChunkDB (cdb)
 import Drasil.DocLang (auxSpecSent, termDefnF')
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S
 
-import Data.Drasil.Concepts.Computation (computerApp, inDatum, compcon, algorithm)
+import Data.Drasil.Concepts.Computation (computerApp, inDatum)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
-  characteristic, company, condition, dataConst, datum, doccon, doccon',
+  characteristic, company, condition, dataConst, datum,
   environment, input_, interface, model, physical, problem, product_,
-  software, softwareConstraint, softwareSys, srsDomains, standard, sysCont,
+  software, softwareConstraint, softwareSys, standard, sysCont,
   system, term_, user, value, variable, reference, definition)
-import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics,
-  educon)
-import Data.Drasil.Concepts.Math (graph, mathcon, mathcon')
+import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics)
+import Data.Drasil.Concepts.Math (graph, mathcon')
+import Data.Drasil.Quantities.Math (mathquants, mathunitals)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, materialProprty)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability, softwarecon)
-import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
-import Data.Drasil.SI_Units (siUnits)
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
@@ -47,7 +46,8 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
   sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints)
 
-import System.Drasil (SystemKind(Specification), mkSystem)
+import Drasil.System (SystemKind(Specification), mkSystem)
+import Data.Drasil.Quantities.PhysicalProperties (physicalquants)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -122,15 +122,18 @@ background = foldlSent_ [phrase explosion, S "in downtown areas are dangerous fr
 ideaDicts :: [IdeaDict]
 ideaDicts =
   -- IdeaDicts
-  [sciCompS, lateralLoad, materialProprty] ++ con' ++ doccon ++ educon ++ compcon ++
+  [lateralLoad, materialProprty] ++ con' ++
   -- CIs
-  map nw [progName, iGlass, lGlass] ++ map nw doccon' ++ map nw mathcon'
+  map nw [progName, iGlass, lGlass] ++ map nw mathcon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = 
   -- ConceptChunks
-  [distance, algorithm] ++ concepts ++ mathcon ++ softwarecon ++ physicalcon ++ srsDomains
-  -- UnitalChunks
+  distance : concepts ++ softwarecon ++ physicalcon ++
+  -- Unital Chunks
+  map cw mathunitals ++ map cw physicalquants ++
+  -- DefinedQuantityDicts
+  map cw mathquants
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList = 
@@ -138,7 +141,7 @@ abbreviationsList =
   map nw acronyms
 
 symbMap :: ChunkDB
-symbMap = cdb thisSymbols ideaDicts conceptChunks siUnits 
+symbMap = cdb thisSymbols ideaDicts conceptChunks ([] :: [UnitDefn]) 
   GB.dataDefs iMods [] tMods concIns labCon allRefs citations
 
 -- | Holds all references and links used in the document.

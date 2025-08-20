@@ -10,9 +10,9 @@ extension String: Error {}
 
 /** Reads input from a file with the given file name
     - Parameter filename: name of the input file
-    - Returns: launch speed: the initial speed of the projectile when launched (m/s)
-    - Returns: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-    - Returns: target position: the distance from the launcher to the target (m)
+    - Returns: launch speed (m/s)
+    - Returns: launch angle (rad)
+    - Returns: target position (m)
 */
 func get_input(_ filename: String) throws -> (Float, Float, Float) {
     var v_launch: Float
@@ -35,9 +35,9 @@ func get_input(_ filename: String) throws -> (Float, Float, Float) {
 }
 
 /** Verifies that input values satisfy the physical constraints
-    - Parameter v_launch: launch speed: the initial speed of the projectile when launched (m/s)
-    - Parameter theta: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
-    - Parameter p_target: target position: the distance from the launcher to the target (m)
+    - Parameter v_launch: launch speed (m/s)
+    - Parameter theta: launch angle (rad)
+    - Parameter p_target: target position (m)
 */
 func input_constraints(_ v_launch: Float, _ theta: Float, _ p_target: Float) -> Void {
     if !(v_launch > 0.0) {

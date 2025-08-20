@@ -5,7 +5,7 @@
 -- in Drasil' tutorial found on the wiki:
 -- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
 
-module System.Drasil.System (
+module Drasil.System (
   -- * System
   -- ** Types
   System(..), SystemKind(..),
@@ -15,7 +15,7 @@ module System.Drasil.System (
   whatsTheBigIdea, mkSystem,
   -- * Reference Database
   -- ** Types
-  Purpose, Background, Scope, Motivation,
+  Purpose, Background, Scope, Motivation
   ) where
 
 import Language.Drasil hiding (kind, Notebook)
@@ -59,9 +59,9 @@ data System where
 -- I'm thinking for getting concepts that are also quantities, we could
 -- use a lookup of some sort from their internal (Drasil) ids.
  SI :: (CommonIdea a, Idea a,
-  Quantity e, Eq e, MayHaveUnit e,
-  Quantity h, MayHaveUnit h,
-  Quantity i, MayHaveUnit i,
+  Quantity e, Eq e, MayHaveUnit e, Concept e,
+  Quantity h, MayHaveUnit h, Concept h,
+  Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) => 
   { _sys          :: a
   , _kind         :: SystemKind
@@ -86,9 +86,9 @@ data System where
 makeClassy ''System
 
 mkSystem :: (CommonIdea a, Idea a,
-  Quantity e, Eq e, MayHaveUnit e,
-  Quantity h, MayHaveUnit h,
-  Quantity i, MayHaveUnit i,
+  Quantity e, Eq e, MayHaveUnit e, Concept e,
+  Quantity h, MayHaveUnit h, Concept h,
+  Quantity i, MayHaveUnit i, Concept i,
   HasUID j, Constrained j) =>
   a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation ->
     [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] ->

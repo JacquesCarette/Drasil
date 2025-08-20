@@ -4,15 +4,14 @@ import Data.List (nub)
 import Language.Drasil hiding (Notebook)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil
-import System.Drasil
+import Database.Drasil.ChunkDB (cdb)
+import Drasil.System
 import qualified Language.Drasil.Sentence.Combinators as S
 
 -- TODO: Add export parameters in a module
 import Drasil.DocLang (mkNb, LsnDecl, LsnChapter(BibSec, LearnObj, Review, CaseProb, Example), 
   LearnObj(..), Review(..), CaseProb(..), Example(..))
 
-import Data.Drasil.Concepts.Documentation (doccon, doccon')
-import Data.Drasil.Concepts.Math (mathcon)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.Physics (physicCon)
 
@@ -45,23 +44,23 @@ si :: System
 si = mkSystem
   projectileMotion Notebook [spencerSmith]
   [] [] [] []
-  ([] :: [QuantityDict])
+  ([] :: [DefinedQuantityDict])
   [] [] [] [] []
-  ([] :: [QuantityDict]) ([] :: [QuantityDict]) ([] :: [ConstrConcept]) []
+  ([] :: [DefinedQuantityDict]) ([] :: [DefinedQuantityDict]) ([] :: [ConstrConcept]) []
   symbMap
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw physicscon ++ symbols) (nw projectileMotion : map nw doccon ++ 
-  map nw doccon' ++ map nw physicCon ++ concepts ++ map nw mathcon) 
+symbMap = cdb (map dqdWr physicscon ++ symbols) (nw projectileMotion :
+  map nw physicCon ++ concepts) 
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] allRefs []
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbols :: [IdeaDict]) ([] :: [ConceptChunk])
+usedDB = cdb' ([] :: [DefinedQuantityDict]) (map nw symbols :: [IdeaDict]) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) [] [] [] [] ([] :: [ConceptInstance])
   ([] :: [LabelledContent]) ([] :: [Reference]) []
 
-symbols :: [QuantityDict]
-symbols = [qw horiz_velo]
+symbols :: [DefinedQuantityDict]
+symbols = [dqdWr horiz_velo]
 
 projectileMotion :: CI
 projectileMotion = commonIdea "projectileMotion" (pn "Projectile Motion Lesson") "Projectile Motion" []

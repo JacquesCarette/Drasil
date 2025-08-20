@@ -7,6 +7,7 @@ module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 import Drasil.Code.CodeExpr (CodeExpr, LiteralC(int))
 import Language.Drasil (QuantityDict, Space(..), implVar, nounPhraseSP, vect3DS,
   label, sub, HasSymbol(..), HasUID, Symbol, ExprC(..))
+
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod, 
@@ -20,7 +21,7 @@ allMods :: [Mod]
 allMods = [readTableMod, interpMod]
 
 -- It's a bit odd that this has to be explicitly built here...
-implVars :: [QuantityDict]
+implVars :: [DefinedQuantityDict]
 implVars = [v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
   i, j, k, z, zvect3DSor, yMatrix, xMatrix, y, arr, filename,
   y_2, y_1, x_2, x_1, x]
@@ -44,15 +45,20 @@ one, two :: Symbol
 one = Integ 1
 two = Integ 2
 
-var :: String -> String -> Symbol -> Space -> QuantityDict
-var nam np symb sp = implVar nam (nounPhraseSP np) sp symb
+var :: String -> String -> String -> Symbol -> Space -> DefinedQuantityDict
+var nam np desc sym sp = implVar nam (nounPhraseSP np) desc sp sym
 
-y_2, y_1, x_2, x_1, x :: QuantityDict
-y_1  = var "y1" "lower y-coordinate"             (sub lY one) Real
-y_2  = var "y2" "upper y-coordinate"             (sub lY two) Real
-x_1  = var "x1" "lower x-coordinate"             (sub lX one) Real
-x_2  = var "x2" "upper x-coordinate"             (sub lX two) Real
-x    = var "x"  "x-coordinate to interpolate at" lX           Real -- = params.wtnt from mainFun.py
+y_2, y_1, x_2, x_1, x :: DefinedQuantityDict
+y_1  = var "y1" "lower y-coordinate"
+  "the lower y-coordinate" (sub lY one) Real
+y_2  = var "y2" "upper y-coordinate"
+  "the upper y-coordinate" (sub lY two) Real
+x_1  = var "x1" "lower x-coordinate"
+  "the lower x-coordinate" (sub lX one) Real
+x_2  = var "x2" "upper x-coordinate"
+  "the upper x-coordiante" (sub lX two) Real
+x    = var "x"  "x-coordinate to interpolate at"
+  "the x-coordinate to interpolate at" lX Real -- = params.wtnt from mainFun.py
 
 v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
   i, j, k, z, zvect3DSor, yMatrix, xMatrix, y, arr, filename :: QuantityDict
@@ -113,7 +119,7 @@ aLook a i_ j_ = idx (idx (sy a) (sy i_)) (sy j_)
 getCol :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> CodeExpr -> CodeExpr
 getCol a_ i_ p = apply (asVC extractColumnCT) [sy a_, sy i_ $+ p]
 
-call :: Func -> [QuantityDict] -> FuncStmt
+call :: Func -> [DefinedQuantityDict] -> FuncStmt
 call f l = FVal $ apply (asVC f) $ map sy l
 
 find :: (HasUID zv, HasUID z, HasSymbol zv, HasSymbol z) => zv -> z -> CodeExpr

@@ -7,20 +7,16 @@ import Drasil.Metadata (inModel)
 import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
+import Database.Drasil.ChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators (the)
 import qualified Language.Drasil.Sentence.Combinators as S
 
 import Data.Drasil.People (olu)
-import Data.Drasil.SI_Units (siUnits)
-import Data.Drasil.Concepts.Computation (compcon, algorithm)
-import Data.Drasil.Concepts.Documentation (srsDomains, doccon, doccon')
-import Data.Drasil.Concepts.Education (educon)
-import Data.Drasil.Concepts.Math (mathcon, mathcon')
-import Data.Drasil.Concepts.Physics (physicCon, physicCon', motion, pendulum)
+import Data.Drasil.Concepts.Math (mathcon')
+import Data.Drasil.Concepts.Physics (physicCon', motion, pendulum, angular, displacement, iPos, gravitationalConst, gravity, rigidBody, weight, shm)
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
-import Data.Drasil.Concepts.Software (program, errMsg)
-import Data.Drasil.Software.Products (prodtcon)
+import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Theories.Physics (newtonSLR)
 
 import Drasil.DblPend.Body (justification, externalLinkRef, charsOfReader,
@@ -42,7 +38,7 @@ import Drasil.SglPend.GenDefs (genDefns)
 import Drasil.SglPend.Unitals (inputs, outputs, inConstraints, outConstraints, symbols)
 import Drasil.SglPend.Requirements (funcReqs)
 
-import System.Drasil (SystemKind(Specification), mkSystem)
+import Drasil.System (SystemKind(Specification), mkSystem)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -115,14 +111,17 @@ purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "single", phrase pen
 ideaDicts :: [IdeaDict]
 ideaDicts = 
   -- Actual IdeaDicts
-  doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
+  concepts ++
   -- CIs
-  nw progName : map nw doccon' ++ map nw mathcon' ++ map nw physicCon'
+  nw progName : map nw mathcon' ++ map nw physicCon'
 
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks
-  [errMsg, program, algorithm] ++ physicCon ++ physicalcon ++ mathcon ++ srsDomains
+  physicalcon ++ [angular, displacement, iPos, pendulum, motion,
+  gravitationalConst, gravity, rigidBody, weight, shm] ++
+  -- Unital Chunks
+  [cw len]
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =
@@ -132,8 +131,8 @@ abbreviationsList =
   map nw symbols
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ map qw symbols) ideaDicts conceptChunks
-  siUnits dataDefs iMods genDefns tMods concIns [] allRefs citations
+symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks
+  ([] :: [UnitDefn]) dataDefs iMods genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

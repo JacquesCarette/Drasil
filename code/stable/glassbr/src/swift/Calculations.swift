@@ -50,9 +50,9 @@ func func_J_tol(_ inParams: inout InputParameters) throws -> Double {
     return log(log(1.0 / (1.0 - inParams.P_btol)) * (pow(inParams.a * inParams.b, 7.0 - 1.0) / (2.86e-53 * pow(7.17e10 * pow(inParams.h, 2.0), 7.0) * inParams.LDF)))
 }
 
-/** Calculates applied load (demand): 3 second duration equivalent pressure (Pa)
+/** Calculates applied load (demand) (Pa)
     - Parameter inParams: structure holding the input values
-    - Returns: applied load (demand): 3 second duration equivalent pressure (Pa)
+    - Returns: applied load (demand) (Pa)
 */
 func func_q(_ inParams: inout InputParameters) throws -> Double {
     var outfile: FileHandle
@@ -96,7 +96,7 @@ func func_q(_ inParams: inout InputParameters) throws -> Double {
 
 /** Calculates dimensionless load
     - Parameter inParams: structure holding the input values
-    - Parameter q: applied load (demand): 3 second duration equivalent pressure (Pa)
+    - Parameter q: applied load (demand) (Pa)
     - Returns: dimensionless load
 */
 func func_q_hat(_ inParams: inout InputParameters, _ q: Double) throws -> Double {
@@ -277,10 +277,10 @@ func func_J(_ inParams: inout InputParameters, _ q_hat: Double) throws -> Double
     return try interpZ("SDF.txt", inParams.AR, q_hat)
 }
 
-/** Calculates non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
+/** Calculates non-factored load (Pa)
     - Parameter inParams: structure holding the input values
     - Parameter q_hat_tol: tolerable load
-    - Returns: non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
+    - Returns: non-factored load (Pa)
 */
 func func_NFL(_ inParams: inout InputParameters, _ q_hat_tol: Double) throws -> Double {
     var outfile: FileHandle
@@ -399,10 +399,10 @@ func func_B(_ inParams: inout InputParameters, _ J: Double) throws -> Double {
     return 2.86e-53 / pow(inParams.a * inParams.b, 7.0 - 1.0) * pow(7.17e10 * pow(inParams.h, 2.0), 7.0) * inParams.LDF * exp(J)
 }
 
-/** Calculates load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
+/** Calculates load resistance (Pa)
     - Parameter inParams: structure holding the input values
-    - Parameter NFL: non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
-    - Returns: load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
+    - Parameter NFL: non-factored load (Pa)
+    - Returns: load resistance (Pa)
 */
 func func_LR(_ inParams: inout InputParameters, _ NFL: Double) throws -> Double {
     var outfile: FileHandle
@@ -460,9 +460,9 @@ func func_LR(_ inParams: inout InputParameters, _ NFL: Double) throws -> Double 
     return NFL * Double(inParams.GTF) * 1.0
 }
 
-/** Calculates probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
+/** Calculates probability of breakage
     - Parameter B: risk of failure
-    - Returns: probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
+    - Returns: probability of breakage
 */
 func func_P_b(_ B: Double) throws -> Double {
     var outfile: FileHandle
@@ -505,8 +505,8 @@ func func_P_b(_ B: Double) throws -> Double {
 }
 
 /** Calculates 3 second load equivalent resistance safety requirement
-    - Parameter LR: load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
-    - Parameter q: applied load (demand): 3 second duration equivalent pressure (Pa)
+    - Parameter LR: load resistance (Pa)
+    - Parameter q: applied load (demand) (Pa)
     - Returns: 3 second load equivalent resistance safety requirement
 */
 func func_isSafeLR(_ LR: Double, _ q: Double) throws -> Bool {
@@ -567,7 +567,7 @@ func func_isSafeLR(_ LR: Double, _ q: Double) throws -> Bool {
 
 /** Calculates probability of glass breakage safety requirement
     - Parameter inParams: structure holding the input values
-    - Parameter P_b: probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
+    - Parameter P_b: probability of breakage
     - Returns: probability of glass breakage safety requirement
 */
 func func_isSafePb(_ inParams: inout InputParameters, _ P_b: Double) throws -> Bool {

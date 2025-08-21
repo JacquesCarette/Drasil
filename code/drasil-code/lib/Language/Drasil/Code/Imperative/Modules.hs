@@ -30,7 +30,7 @@ import Language.Drasil.Code.Imperative.Import (codeType, convExpr, convExprProc,
   convStmt, convStmtProc, genConstructor, mkVal, mkValProc, mkVar, mkVarProc,
   privateInOutMethod, privateMethod, privateFuncProc, publicFunc,
   publicFuncProc, publicInOutFunc, publicInOutFuncProc, privateInOutFuncProc,
-  readData, readDataProc, renderC)
+  readData, renderC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, varLogFile)
 import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
   getDerivedIns, getDerivedOuts, getInConstructorParams, getInputFormatIns,
@@ -832,7 +832,7 @@ genInputFormatProc :: (SharedProg r) => VisibilityTag ->
 genInputFormatProc s = do
   g <- get
   modify (\st -> st {currentScope = Local})
-  dd <- genDataDesc
+  _ <- genDataDesc
   giName <- genICName GetInput
   let getFunc Pub = publicInOutFuncProc
       getFunc Priv = privateInOutFuncProc

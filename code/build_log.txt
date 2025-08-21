@@ -1,0 +1,306 @@
+drasil-code   > configure (lib + exe)
+drasil-docLang> configure (lib)
+drasil-docLang> Configuring drasil-docLang-0.1.26.0...
+drasil-code   > Configuring drasil-code-0.1.9.0...
+drasil-docLang> build (lib) with ghc-9.6.6
+drasil-code   > build (lib + exe) with ghc-9.6.6
+drasil-docLang> Preprocessing library for drasil-docLang-0.1.26.0..
+drasil-docLang> Building library for drasil-docLang-0.1.26.0..
+drasil-code   > Preprocessing library for drasil-code-0.1.9.0..
+drasil-code   > Building library for drasil-code-0.1.9.0..
+drasil-docLang> [19 of 30] Compiling Drasil.Sections.Stakeholders [Optimisation flags changed]
+drasil-code   > [25 of 52] Compiling Language.Drasil.CodeSpec [Optimisation flags changed]
+drasil-docLang> [20 of 30] Compiling Drasil.Sections.TableOfAbbAndAcronyms [Optimisation flags changed]
+drasil-docLang> [21 of 30] Compiling Drasil.Sections.TableOfContents [Optimisation flags changed]
+drasil-docLang> [22 of 30] Compiling Drasil.Sections.TableOfSymbols [Optimisation flags changed]
+drasil-docLang> [23 of 30] Compiling Drasil.Sections.TableOfUnits [Optimisation flags changed]
+drasil-docLang> [24 of 30] Compiling Drasil.Sections.TraceabilityMandGs [Optimisation flags changed]
+drasil-docLang> [25 of 30] Compiling Drasil.DocumentLanguage.TraceabilityGraph [Optimisation flags changed]
+drasil-code   > [26 of 52] Compiling Language.Drasil.Code.Imperative.ReadMe.Import [Optimisation flags changed]
+drasil-code   > [27 of 52] Compiling Language.Drasil.Code.Imperative.WriteReadMe [Optimisation flags changed]
+drasil-docLang> [26 of 30] Compiling Drasil.DocLang.References [Optimisation flags changed]
+drasil-code   > [28 of 52] Compiling Language.Drasil.Code.Imperative.GenODE [Optimisation flags changed]
+drasil-docLang> [27 of 30] Compiling Drasil.TraceTable [Optimisation flags changed]
+drasil-code   > [29 of 52] Compiling Language.Drasil.Code.Imperative.GOOL.ClassInterface [Optimisation flags changed]
+drasil-code   > [30 of 52] Compiling Language.Drasil.Code.Imperative.DrasilState [Optimisation flags changed]
+drasil-docLang> [28 of 30] Compiling Drasil.DocumentLanguage [Optimisation flags changed]
+drasil-code   > [31 of 52] Compiling Language.Drasil.Code.Imperative.SpaceMatch [Optimisation flags changed]
+drasil-code   > [32 of 52] Compiling Language.Drasil.Code.Imperative.Parameters [Optimisation flags changed]
+drasil-docLang> [29 of 30] Compiling Drasil.DocLang [Optimisation flags changed]
+drasil-code   > [33 of 52] Compiling Language.Drasil.Code.Imperative.Logging [Optimisation flags changed]
+drasil-docLang> [30 of 30] Compiling Drasil.SRSDocument [Optimisation flags changed]
+drasil-code   > [34 of 52] Compiling Language.Drasil.Code.Imperative.Helpers [Optimisation flags changed]
+drasil-code   > [35 of 52] Compiling Language.Drasil.Code.Imperative.GenerateGOOL [Optimisation flags changed]
+drasil-docLang> copy/register
+drasil-docLang> Installing library in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/lib/aarch64-osx-ghc-9.6.6/drasil-docLang-0.1.26.0-KElLMFXmZhcJjODoVxxtFe
+drasil-code   > [36 of 52] Compiling Language.Drasil.Code.Imperative.Comments [Optimisation flags changed]
+drasil-docLang> Registering library for drasil-docLang-0.1.26.0..
+drasil-code   > [37 of 52] Compiling Language.Drasil.Code.Imperative.Doxygen.Import [Optimisation flags changed]
+drasil-code   > [38 of 52] Compiling Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic [Optimisation flags changed]
+drasil-code   > [39 of 52] Compiling Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer [Optimisation flags changed]
+drasil-code   > [40 of 52] Compiling Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer [Optimisation flags changed]
+drasil-code   > [41 of 52] Compiling Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JuliaRenderer [Optimisation flags changed]
+drasil-code   > [42 of 52] Compiling Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer [Optimisation flags changed]
+drasil-code   > [43 of 52] Compiling Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer [Optimisation flags changed]
+drasil-code   > [44 of 52] Compiling Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer [Optimisation flags changed]
+drasil-code   > [45 of 52] Compiling Language.Drasil.Code.Imperative.Descriptions [Optimisation flags changed]
+drasil-code   > [46 of 52] Compiling Language.Drasil.Code.Imperative.ConceptMatch [Optimisation flags changed]
+drasil-code   > [47 of 52] Compiling Language.Drasil.Code.Imperative.Import [Optimisation flags changed]
+drasil-code   > 
+drasil-code   > /Users/sarrasoussia/Drasil/code/drasil-code/lib/Language/Drasil/Code/Imperative/Import.hs:19:1: warning: [-Wunused-imports]
+drasil-code   >     The qualified import of ‘Language.Drasil.Space’ is redundant
+drasil-code   >       except perhaps to import instances from ‘Language.Drasil.Space’
+drasil-code   >     To import instances alone, use: import Language.Drasil.Space()
+drasil-code   >    |
+drasil-code   > 19 | import qualified Language.Drasil.Space as S (Dimension(..))
+drasil-code   >    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+drasil-code   > 
+drasil-code   > /Users/sarrasoussia/Drasil/code/drasil-code/lib/Language/Drasil/Code/Imperative/Import.hs:20:1: warning: [-Wunused-imports]
+drasil-code   >     The qualified import of ‘Data.Map.Ordered’ is redundant
+drasil-code   >       except perhaps to import instances from ‘Data.Map.Ordered’
+drasil-code   >     To import instances alone, use: import Data.Map.Ordered()
+drasil-code   >    |
+drasil-code   > 20 | import qualified Data.Map.Ordered as OM
+drasil-code   >    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+drasil-code   > 
+drasil-code   > /Users/sarrasoussia/Drasil/code/drasil-code/lib/Language/Drasil/Code/Imperative/Import.hs:21:1: warning: [-Wunused-imports]
+drasil-code   >     The import of ‘Numeric.Natural’ is redundant
+drasil-code   >       except perhaps to import instances from ‘Numeric.Natural’
+drasil-code   >     To import instances alone, use: import Numeric.Natural()
+drasil-code   >    |
+drasil-code   > 21 | import Numeric.Natural (Natural)
+drasil-code   >    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+drasil-code   > 
+drasil-code   > /Users/sarrasoussia/Drasil/code/drasil-code/lib/Language/Drasil/Code/Imperative/Import.hs:81:1: warning: [GHC-62161] [-Wincomplete-patterns]
+drasil-code   >     Pattern match(es) are non-exhaustive
+drasil-code   >     In an equation for ‘unopCN’:
+drasil-code   >         Patterns of type ‘UFuncCN’ not matched:
+drasil-code   >             Norm
+drasil-code   >             Grade
+drasil-code   >    |
+drasil-code   > 81 | unopCN Dim = listSize
+drasil-code   >    | ^^^^^^^^^^^^^^^^^^^^^
+drasil-code   > 
+drasil-code   > /Users/sarrasoussia/Drasil/code/drasil-code/lib/Language/Drasil/Code/Imperative/Import.hs:321:1: warning: [GHC-62161] [-Wincomplete-patterns]
+drasil-code   >     Pattern match(es) are non-exhaustive
+drasil-code   >     In an equation for ‘convExpr’:
+drasil-code   >         Patterns of type ‘CodeExpr’ not matched:
+drasil-code   >             NatCCBinaryOp _ _ _
+drasil-code   >             Clif _ _
+drasil-code   >     |
+drasil-code   > 321 | convExpr (Lit (Dbl d)) = do
+drasil-code   >     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+drasil-code   > [48 of 52] Compiling Language.Drasil.Code.Imperative.FunctionCalls [Optimisation flags changed]
+drasil-code   > [49 of 52] Compiling Language.Drasil.Code.Imperative.Modules [Optimisation flags changed]
+drasil-code   > 
+drasil-code   > /Users/sarrasoussia/Drasil/code/drasil-code/lib/Language/Drasil/Code/Imperative/Modules.hs:33:13: warning: [-Wunused-imports]
+drasil-code   >     The import of ‘readDataProc’
+drasil-code   >     from module ‘Language.Drasil.Code.Imperative.Import’ is redundant
+drasil-code   >    |
+drasil-code   > 33 |   readData, readDataProc, renderC)
+drasil-code   >    |             ^^^^^^^^^^^^
+drasil-code   > 
+drasil-code   > /Users/sarrasoussia/Drasil/code/drasil-code/lib/Language/Drasil/Code/Imperative/Modules.hs:835:3: warning: [-Wunused-matches]
+drasil-code   >     Defined but not used: ‘dd’
+drasil-code   >     |
+drasil-code   > 835 |   dd <- genDataDesc
+drasil-code   >     |   ^^
+drasil-code   > [50 of 52] Compiling Language.Drasil.Code.Imperative.Generator [Optimisation flags changed]
+drasil-code   > [51 of 52] Compiling Language.Drasil.Code [Optimisation flags changed]
+drasil-code   > [52 of 52] Compiling Data.Drasil.ExternalLibraries.ODELibraries [Optimisation flags changed]
+drasil-code   > 
+drasil-code   > /Users/sarrasoussia/Drasil/code/drasil-code/lib/Data/Drasil/ExternalLibraries/ODELibraries.hs:12:1: warning: [-Wunused-imports]
+drasil-code   >     The import of ‘Language.Drasil’ is redundant
+drasil-code   >       except perhaps to import instances from ‘Language.Drasil’
+drasil-code   >     To import instances alone, use: import Language.Drasil()
+drasil-code   >    |
+drasil-code   > 12 | import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
+drasil-code   >    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+drasil-code   > 
+drasil-code   > /Users/sarrasoussia/Drasil/code/drasil-code/lib/Data/Drasil/ExternalLibraries/ODELibraries.hs:17:45: warning: [-Wunused-imports]
+drasil-code   >     The import of ‘Dimension’
+drasil-code   >     from module ‘Language.Drasil.Space’ is redundant
+drasil-code   >    |
+drasil-code   > 17 | import Language.Drasil.Space (ClifKind(..), Dimension(..))
+drasil-code   >    |                                             ^^^^^^^^^^^^^
+drasil-code   > 
+drasil-code   > /Users/sarrasoussia/Drasil/code/drasil-code/lib/Data/Drasil/ExternalLibraries/ODELibraries.hs:21:1: warning: [-Wunused-imports]
+drasil-code   >     The import of ‘CodeFuncChunk, CodeVarChunk, listToArray’
+drasil-code   >     from module ‘Language.Drasil.Code’ is redundant
+drasil-code   >    |
+drasil-code   > 21 | import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
+drasil-code   >    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+drasil-code   > 
+drasil-code   > /Users/sarrasoussia/Drasil/code/drasil-code/lib/Data/Drasil/ExternalLibraries/ODELibraries.hs:44:1: warning: [-Wunused-imports]
+drasil-code   >     The import of ‘Drasil.Code.CodeExpr’ is redundant
+drasil-code   >       except perhaps to import instances from ‘Drasil.Code.CodeExpr’
+drasil-code   >     To import instances alone, use: import Drasil.Code.CodeExpr()
+drasil-code   >    |
+drasil-code   > 44 | import Drasil.Code.CodeExpr hiding (dim)
+drasil-code   >    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+drasil-code   > 
+drasil-code   > /Users/sarrasoussia/Drasil/code/drasil-code/lib/Data/Drasil/ExternalLibraries/ODELibraries.hs:658:19: warning: [GHC-63397] [-Wname-shadowing]
+drasil-code   >     This binding for ‘cc’ shadows the existing binding
+drasil-code   >       imported from ‘Language.Drasil’ at lib/Data/Drasil/ExternalLibraries/ODELibraries.hs:16:1-35
+drasil-code   >       (and originally defined in ‘drasil-lang-0.1.60.0:Language.Drasil.Chunk.Concept’)
+drasil-code   >     |
+drasil-code   > 658 |     replaceDepVar cc@(CE.C c) | c == depVar info ^. uid = CE.C $ depVar info +++ ("_" ++ sufx)
+drasil-code   >     |                   ^^
+drasil-code   > Preprocessing executable 'codegenTest' for drasil-code-0.1.9.0..
+drasil-code   > Building executable 'codegenTest' for drasil-code-0.1.9.0..
+drasil-code   > [9 of 9] Linking .stack-work/dist/aarch64-osx/ghc-9.6.6/build/codegenTest/codegenTest [Library changed]
+drasil-code   > copy/register
+drasil-code   > Installing library in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/lib/aarch64-osx-ghc-9.6.6/drasil-code-0.1.9.0-A2bOAuuWK19L3Et31IBJxy
+drasil-code   > Installing executable codegenTest in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/bin
+drasil-code   > Registering library for drasil-code-0.1.9.0..
+drasil-gen    > configure (lib)
+drasil-gen    > Configuring drasil-gen-0.1.3.0...
+drasil-gen    > build (lib) with ghc-9.6.6
+drasil-gen    > Preprocessing library for drasil-gen-0.1.3.0..
+drasil-gen    > Building library for drasil-gen-0.1.3.0..
+drasil-gen    > copy/register
+drasil-gen    > Installing library in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/lib/aarch64-osx-ghc-9.6.6/drasil-gen-0.1.3.0-4NgmPTWzH6yL1vm4yO6QDB
+drasil-gen    > Registering library for drasil-gen-0.1.3.0..
+dblpend       > configure (lib + exe)
+gamephysics   > configure (lib + exe)
+glassbr       > configure (lib + exe)
+hghc          > configure (lib + exe)
+pdcontroller  > configure (lib + exe)
+projectile    > configure (lib + exe)
+ssp           > configure (lib + exe)
+swhs          > configure (lib + exe)
+template      > configure (lib + exe)
+dblpend       > Configuring dblpend-0.1.24.0...
+gamephysics   > Configuring gamephysics-0.1.24.0...
+glassbr       > Configuring glassbr-0.1.24.0...
+hghc          > Configuring hghc-0.1.24.0...
+pdcontroller  > Configuring pdcontroller-0.1.24.0...
+ssp           > Configuring ssp-0.1.24.0...
+projectile    > Configuring projectile-0.1.24.0...
+swhs          > Configuring swhs-0.1.24.0...
+template      > Configuring template-0.1.24.0...
+template      > build (lib + exe) with ghc-9.6.6
+hghc          > build (lib + exe) with ghc-9.6.6
+gamephysics   > build (lib + exe) with ghc-9.6.6
+glassbr       > build (lib + exe) with ghc-9.6.6
+template      > Preprocessing library for template-0.1.24.0..
+template      > Building library for template-0.1.24.0..
+pdcontroller  > build (lib + exe) with ghc-9.6.6
+swhs          > build (lib + exe) with ghc-9.6.6
+hghc          > Preprocessing library for hghc-0.1.24.0..
+hghc          > Building library for hghc-0.1.24.0..
+projectile    > build (lib + exe) with ghc-9.6.6
+gamephysics   > Preprocessing library for gamephysics-0.1.24.0..
+gamephysics   > Building library for gamephysics-0.1.24.0..
+glassbr       > Preprocessing library for glassbr-0.1.24.0..
+glassbr       > Building library for glassbr-0.1.24.0..
+pdcontroller  > Preprocessing library for pdcontroller-0.1.24.0..
+pdcontroller  > Building library for pdcontroller-0.1.24.0..
+dblpend       > build (lib + exe) with ghc-9.6.6
+ssp           > build (lib + exe) with ghc-9.6.6
+swhs          > Preprocessing library for swhs-0.1.24.0..
+swhs          > Building library for swhs-0.1.24.0..
+projectile    > Preprocessing library for projectile-0.1.24.0..
+projectile    > Building library for projectile-0.1.24.0..
+dblpend       > Preprocessing library for dblpend-0.1.24.0..
+dblpend       > Building library for dblpend-0.1.24.0..
+ssp           > Preprocessing library for ssp-0.1.24.0..
+ssp           > Building library for ssp-0.1.24.0..
+template      > Preprocessing executable 'template' for template-0.1.24.0..
+template      > Building executable 'template' for template-0.1.24.0..
+hghc          > Preprocessing executable 'hghc' for hghc-0.1.24.0..
+hghc          > Building executable 'hghc' for hghc-0.1.24.0..
+pdcontroller  > Preprocessing executable 'pdcontroller' for pdcontroller-0.1.24.0..
+pdcontroller  > Building executable 'pdcontroller' for pdcontroller-0.1.24.0..
+glassbr       > Preprocessing executable 'glassbr' for glassbr-0.1.24.0..
+glassbr       > Building executable 'glassbr' for glassbr-0.1.24.0..
+template      > [2 of 2] Linking .stack-work/dist/aarch64-osx/ghc-9.6.6/build/template/template [Library changed]
+gamephysics   > Preprocessing executable 'gamephysics' for gamephysics-0.1.24.0..
+gamephysics   > Building executable 'gamephysics' for gamephysics-0.1.24.0..
+hghc          > [2 of 2] Linking .stack-work/dist/aarch64-osx/ghc-9.6.6/build/hghc/hghc [Library changed]
+projectile    > Preprocessing executable 'projectile' for projectile-0.1.24.0..
+projectile    > Building executable 'projectile' for projectile-0.1.24.0..
+swhs          > Preprocessing executable 'swhs' for swhs-0.1.24.0..
+swhs          > Building executable 'swhs' for swhs-0.1.24.0..
+dblpend       > Preprocessing executable 'dblpend' for dblpend-0.1.24.0..
+dblpend       > Building executable 'dblpend' for dblpend-0.1.24.0..
+pdcontroller  > [2 of 2] Linking .stack-work/dist/aarch64-osx/ghc-9.6.6/build/pdcontroller/pdcontroller [Library changed]
+ssp           > Preprocessing executable 'ssp' for ssp-0.1.24.0..
+ssp           > Building executable 'ssp' for ssp-0.1.24.0..
+glassbr       > [2 of 2] Linking .stack-work/dist/aarch64-osx/ghc-9.6.6/build/glassbr/glassbr [Library changed]
+gamephysics   > [2 of 2] Linking .stack-work/dist/aarch64-osx/ghc-9.6.6/build/gamephysics/gamephysics [Library changed]
+projectile    > [2 of 2] Linking .stack-work/dist/aarch64-osx/ghc-9.6.6/build/projectile/projectile [Library changed]
+dblpend       > [2 of 2] Linking .stack-work/dist/aarch64-osx/ghc-9.6.6/build/dblpend/dblpend [Library changed]
+swhs          > [2 of 2] Linking .stack-work/dist/aarch64-osx/ghc-9.6.6/build/swhs/swhs [Library changed]
+ssp           > [2 of 2] Linking .stack-work/dist/aarch64-osx/ghc-9.6.6/build/ssp/ssp [Library changed]
+hghc          > copy/register
+hghc          > Installing library in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/lib/aarch64-osx-ghc-9.6.6/hghc-0.1.24.0-D478RyKvi4P79WKashQAh4
+hghc          > Installing executable hghc in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/bin
+hghc          > Registering library for hghc-0.1.24.0..
+template      > copy/register
+template      > Installing library in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/lib/aarch64-osx-ghc-9.6.6/template-0.1.24.0-5tkto5pP4qIDkgibw6smPA
+template      > Installing executable template in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/bin
+template      > Registering library for template-0.1.24.0..
+pdcontroller  > copy/register
+pdcontroller  > Installing library in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/lib/aarch64-osx-ghc-9.6.6/pdcontroller-0.1.24.0-B0CKBwu5Oju8Ej4TYGfP2H
+pdcontroller  > Installing executable pdcontroller in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/bin
+pdcontroller  > Registering library for pdcontroller-0.1.24.0..
+projectile    > copy/register
+projectile    > Installing library in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/lib/aarch64-osx-ghc-9.6.6/projectile-0.1.24.0-5VHESDhIwITKlcnnJbnoG2
+projectile    > Installing executable projectile in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/bin
+projectile    > Registering library for projectile-0.1.24.0..
+gamephysics   > copy/register
+gamephysics   > Installing library in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/lib/aarch64-osx-ghc-9.6.6/gamephysics-0.1.24.0-6GM6SuLEjqULHcB2cQzpyi
+gamephysics   > Installing executable gamephysics in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/bin
+gamephysics   > Registering library for gamephysics-0.1.24.0..
+dblpend       > copy/register
+dblpend       > Installing library in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/lib/aarch64-osx-ghc-9.6.6/dblpend-0.1.24.0-7eFRXWnVri8AJckqR0LedC
+dblpend       > Installing executable dblpend in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/bin
+dblpend       > Registering library for dblpend-0.1.24.0..
+glassbr       > copy/register
+sglpend       > configure (lib + exe)
+sglpend       > Configuring sglpend-0.1.24.0...
+glassbr       > Installing library in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/lib/aarch64-osx-ghc-9.6.6/glassbr-0.1.24.0-25KwV6Lbcp9EAqyqFHhevi
+glassbr       > Installing executable glassbr in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/bin
+glassbr       > Registering library for glassbr-0.1.24.0..
+ssp           > copy/register
+ssp           > Installing library in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/lib/aarch64-osx-ghc-9.6.6/ssp-0.1.24.0-I42omwsmixuFybtO4MP85u
+ssp           > Installing executable ssp in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/bin
+ssp           > Registering library for ssp-0.1.24.0..
+swhs          > copy/register
+swhs          > Installing library in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/lib/aarch64-osx-ghc-9.6.6/swhs-0.1.24.0-8I1V20dkAI0B4VI0v8c9Zo
+swhs          > Installing executable swhs in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/bin
+sglpend       > build (lib + exe) with ghc-9.6.6
+sglpend       > Preprocessing library for sglpend-0.1.24.0..
+sglpend       > Building library for sglpend-0.1.24.0..
+swhs          > Registering library for swhs-0.1.24.0..
+swhsnopcm     > configure (lib + exe)
+swhsnopcm     > Configuring swhsnopcm-0.1.24.0...
+sglpend       > Preprocessing executable 'sglpend' for sglpend-0.1.24.0..
+sglpend       > Building executable 'sglpend' for sglpend-0.1.24.0..
+sglpend       > [2 of 2] Linking .stack-work/dist/aarch64-osx/ghc-9.6.6/build/sglpend/sglpend [Library changed]
+swhsnopcm     > build (lib + exe) with ghc-9.6.6
+swhsnopcm     > Preprocessing library for swhsnopcm-0.1.24.0..
+swhsnopcm     > Building library for swhsnopcm-0.1.24.0..
+sglpend       > copy/register
+sglpend       > Installing library in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/lib/aarch64-osx-ghc-9.6.6/sglpend-0.1.24.0-ETVmCy9QNaCCAmyWhzWQ6N
+sglpend       > Installing executable sglpend in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/bin
+sglpend       > Registering library for sglpend-0.1.24.0..
+swhsnopcm     > Preprocessing executable 'swhsnopcm' for swhsnopcm-0.1.24.0..
+swhsnopcm     > Building executable 'swhsnopcm' for swhsnopcm-0.1.24.0..
+swhsnopcm     > [2 of 2] Linking .stack-work/dist/aarch64-osx/ghc-9.6.6/build/swhsnopcm/swhsnopcm [Library changed]
+swhsnopcm     > copy/register
+swhsnopcm     > Installing library in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/lib/aarch64-osx-ghc-9.6.6/swhsnopcm-0.1.24.0-EYaUG8RTj2HHEcCSJ8b0Xt
+swhsnopcm     > Installing executable swhsnopcm in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/bin
+swhsnopcm     > Registering library for swhsnopcm-0.1.24.0..
+drasil-website> build (lib + exe) with ghc-9.6.6
+drasil-website> Preprocessing library for drasil-website-0.1.0.0..
+drasil-website> Building library for drasil-website-0.1.0.0..
+drasil-website> Preprocessing executable 'website' for drasil-website-0.1.0.0..
+drasil-website> Building executable 'website' for drasil-website-0.1.0.0..
+drasil-website> [2 of 2] Linking .stack-work/dist/aarch64-osx/ghc-9.6.6/build/website/website [Library changed]
+drasil-website> copy/register
+drasil-website> Installing library in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/lib/aarch64-osx-ghc-9.6.6/drasil-website-0.1.0.0-6TFjT5Yiv3a2fLYXnGnXPy
+drasil-website> Installing executable website in /Users/sarrasoussia/Drasil/code/.stack-work/install/aarch64-osx/7b19b94f7d9007b5a0e93d3cd7c4ba163a09292ef2fca4f014e31d1de19c62e5/9.6.6/bin
+drasil-website> Registering library for drasil-website-0.1.0.0..
+Completed 15 action(s).

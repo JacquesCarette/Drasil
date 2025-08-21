@@ -6,11 +6,9 @@ module Language.Drasil.Printing.Import.CodeExpr (codeExpr) where
 import Drasil.Code.CodeExpr.Development
 
 import Language.Drasil (DomainDesc(..), Inclusive(..),
-  RTopology(..), RealInterval(..), UID, LiteralC (int), BasisBlades)
+  RTopology(..), RealInterval(..), UID, LiteralC (int))
 import qualified Language.Drasil.Display as S (Symbol(..))
 import Language.Drasil.Literal.Development
-import Language.Drasil.Space (Dimension(..))
-import Numeric.Natural (Natural)
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb, stg)
 
@@ -168,11 +166,11 @@ codeExpr (CCCBinaryOp CSub a b)      sm = mkBOp sm P.CSub a b
 codeExpr (CCCBinaryOp WedgeProd a b) sm = mkBOp sm P.WedgeProd a b
 codeExpr (CCCBinaryOp GeometricProd a b) sm = mkBOp sm P.GeometricProd a b
 codeExpr (NCCBinaryOp Scale a b)     sm = mkBOp sm P.Scale a b
+codeExpr (NatCCBinaryOp _ _ _)     _  = error "NatCCBinaryOp printing not yet implemented"
 -- TODO: Re-enable Clifford algebra printing after fixing type issues
 -- codeExpr (NatCCBinaryOp GradeSelect n e) sm = gradeSelectCodeExpr sm n e
 codeExpr (UnaryOpCN Grade u)         sm = mkCall sm P.Grade u
--- TODO: Re-enable Clifford algebra printing after fixing type issues  
--- codeExpr (Clif dim blades)           sm = clifCodeExpr sm dim blades
+codeExpr (Clif _ _)                   _  = error "Clif printing not yet implemented"
 codeExpr (ESSBinaryOp SAdd a b)      sm = mkBOp sm P.SAdd a b
 codeExpr (ESSBinaryOp SRemove a b)   sm = mkBOp sm P.SRemove a b
 codeExpr (ESBBinaryOp SContains a b) sm = mkBOp sm P.SContains a b

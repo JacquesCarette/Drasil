@@ -14,7 +14,7 @@ import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
   compoundPhrase, nounPhrase, nounPhraseSP, label,
   sub, Idea(getA), NamedIdea(term), Stage(..), (+++))
 import Language.Drasil hiding (dim)
-import Language.Drasil.Space (ClifKind(..), Dimension(..))
+import Language.Drasil.Space (ClifKind(..))
 
 import Language.Drasil.Display (Symbol(Label, Concat))
 
@@ -36,12 +36,11 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   appendCurrSolFill, populateSolListFill, assignArrayIndexFill,
   assignSolFromObjFill, initSolListFromArrayFill, initSolListWithValFill,
   solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill',
-  CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, listToArray,
+  CodeVarChunk, CodeFuncChunk, quantvar, quantfunc,
   ODEInfo(..), ODEOptions(..), ODEMethod(..), ODELibPckg, mkODELib,
   mkODELibNoPath, pubStateVar, privStateVar,
   NamedArgument, narg)
 
-import Drasil.Code.CodeExpr hiding (dim)
 import qualified Drasil.Code.CodeExpr.Development as CE
 
 import Control.Lens ((^.), _1, _2, over)

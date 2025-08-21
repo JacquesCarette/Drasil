@@ -15,7 +15,6 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb, 
 
 import Control.Lens ((^.))
 import Data.List (intersperse)
-import qualified Data.Map as Map
 import qualified Data.Map.Ordered as OMap
 
 import Language.Drasil.Printing.Import.Literal (literal)

@@ -10,10 +10,6 @@ import Language.Drasil.Expr.Development (ArithBinOp(..), AssocArithOper(..),
   LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncCN(..), UFuncCC(..),
   CCNBinOp(..), CCCBinOp(..), NCCBinOp(..), ESSBinOp(..), ESBBinOp(..), AssocConcatOper(..), eprec, precA, precB, precC)
 import Language.Drasil.Literal.Development (Literal(..))
-import Language.Drasil.Space (Dimension(..))
-import Language.Drasil (BasisBlades)
-import qualified Data.Map.Ordered as OM
-import Numeric.Natural (Natural)
 
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb, stg)
@@ -168,14 +164,14 @@ expr (CCCBinaryOp WedgeProd a b) sm = mkBOp sm P.WedgeProd a b
 expr (CCCBinaryOp GeometricProd a b) sm = mkBOp sm P.GeometricProd a b
 expr (CCNBinaryOp Dot a b)    sm = mkBOp sm P.Dot a b
 expr (NCCBinaryOp Scale a b)  sm = mkBOp sm P.Scale a b
--- TODO: Re-enable Clifford algebra printing after fixing type issues
--- expr (NatCCBinaryOp GradeSelect n e) sm = gradeSelectExpr sm n e
+expr (NatCCBinaryOp _ _ _)     _  = error "NatCCBinaryOp printing not yet implemented"
 expr (ESSBinaryOp SAdd a b)   sm = mkBOp sm P.SAdd a b
 expr (ESSBinaryOp SRemove a b)    sm = mkBOp sm P.SRemove a b
 expr (ESBBinaryOp SContains a b)  sm = mkBOp sm P.SContains a b
 expr (Operator o d e)         sm = eop sm o d e
 expr (RealI c ri)             sm = renderRealInt sm (lookupC (sm ^. stg)
   (sm ^. ckdb) c) ri
+expr (Clif _ _)                _  = error "Clif printing not yet implemented"
 -- TODO: Re-enable Clifford algebra printing after fixing type issues
 -- expr (Clif dim blades)        sm = clifExpr sm dim blades
 

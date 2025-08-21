@@ -16,9 +16,6 @@ import Drasil.Code.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
   CCNBinOp(..), CCCBinOp(..), NCCBinOp(..), ESSBinOp(..), ESBBinOp(..))
 import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
   Space (Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..))
-import qualified Language.Drasil.Space as S (Dimension(..))
-import qualified Data.Map.Ordered as OM
-import Numeric.Natural (Natural)
 import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Imperative.Comments (getCommentBrief)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
@@ -79,9 +76,8 @@ import Control.Lens ((^.))
 -- | Similar to 'unop', but for vectors.
 unopCN :: (SharedProg r) => UFuncCN -> (SValue r -> SValue r)
 unopCN Dim = listSize
--- TODO: Re-enable after proper library integration
--- unopVN Norm = \mv -> funcApp (func "norm" double) double [mv]
--- unopVN Grade = \mv -> funcApp (func "grade" int) int [mv]
+unopCN Norm = error "Norm operation not yet implemented"
+unopCN Grade = error "Grade operation not yet implemented"
 
 -- TODO: Clifford algebra unary operations for UFuncCC will be re-implemented
 -- | Similar to 'unop', but for vectors.
@@ -403,6 +399,8 @@ convExpr Operator{} = error "convExpr: Operator"
 convExpr (RealI c ri)  = do
   g <- get
   convExpr $ renderRealInt (lookupC g c) ri
+convExpr (NatCCBinaryOp _ _ _) = error "NatCCBinaryOp not yet implemented"
+convExpr (Clif _ _) = error "Clif not yet implemented"
 -- TODO: Re-enable Clifford algebra code generation after fixing type issues
 -- convExpr (NatCCBinaryOp GradeSelect n e) = do
 --   -- Grade selection: extract grade n from multivector e

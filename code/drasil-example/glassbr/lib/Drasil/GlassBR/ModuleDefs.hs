@@ -5,7 +5,7 @@
 module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 
 import Drasil.Code.CodeExpr (CodeExpr, LiteralC(int))
-import Language.Drasil (QuantityDict, Space(..), implVar, nounPhraseSP, vect3DS,
+import Language.Drasil (DefinedQuantityDict, Space(..), implVar, nounPhraseSP, vect3DS,
   label, sub, HasSymbol(..), HasUID, Symbol, ExprC(..))
 
 import Language.Drasil.Display (Symbol(..))
@@ -61,35 +61,35 @@ x    = var "x"  "x-coordinate to interpolate at"
   "the x-coordinate to interpolate at" lX Real -- = params.wtnt from mainFun.py
 
 v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
-  i, j, k, z, zvect3DSor, yMatrix, xMatrix, y, arr, filename :: QuantityDict
-i = var "i" "index" lI           Natural
-j = var "j" "index" lJ           Natural
-k = var "k" "index" (sub lK two) Natural     
-v = var "v" "value whose index will be found" lV Real
-y = var "y" "y-coordinate to interpolate at"  lY Real
-z = var "z" "z-coordinate to interpolate at"  lZ Real
+  i, j, k, z, zvect3DSor, yMatrix, xMatrix, y, arr, filename :: DefinedQuantityDict
+i = var "i" "index" "the index" lI Natural
+j = var "j" "index" "the index" lJ Natural
+k = var "k" "index" "the index" (sub lK two) Natural     
+v = var "v" "value whose index will be found" "the value whose index will be found" lV Real
+y = var "y" "y-coordinate to interpolate at" "the y-coordinate to interpolate at" lY Real
+z = var "z" "z-coordinate to interpolate at" "the z-coordinate to interpolate at" lZ Real
 
-zvect3DSor = var "zvect3DSor" "list of z values" 
+zvect3DSor = var "zvect3DSor" "list of z values" "the list of z values"
   (sub lZ (label "vect3DSor")) (vect3DS Real)               
-yMatrix = var "yMatrix" "lists of y values at different z values" 
+yMatrix = var "yMatrix" "lists of y values at different z values" "the lists of y values at different z values"
   (sub lY (label "matrix")) (vect3DS $ vect3DS Real)        
-xMatrix = var "xMatrix" "lists of x values at different z values" 
+xMatrix = var "xMatrix" "lists of x values at different z values" "the lists of x values at different z values"
   (sub lX (label "matrix")) (vect3DS $ vect3DS Real)        
-arr     = var "arr"     "array in which value should be found" 
+arr     = var "arr"     "array in which value should be found" "the array in which value should be found"
   (label "arr")             (vect3DS Real)  --FIXME: temporary variable for findCT?
-x_z_1   = var "x_z_1"   "list of x values at a specific z value"    
+x_z_1   = var "x_z_1"   "list of x values at a specific z value" "the list of x values at a specific z value"
   (sub lX (sub lZ one))      (vect3DS Real)
-y_z_1   = var "y_z_1"   "list of y values at a specific z value"    
+y_z_1   = var "y_z_1"   "list of y values at a specific z value" "the list of y values at a specific z value"
   (sub lY (sub lZ one))      (vect3DS Real)   
-x_z_2   = var "x_z_2"   "list of x values at a specific z value"    
+x_z_2   = var "x_z_2"   "list of x values at a specific z value" "the list of x values at a specific z value"
   (sub lX (sub lZ two))      (vect3DS Real)
-y_z_2   = var "y_z_2"   "list of y values at a specific z value"   
+y_z_2   = var "y_z_2"   "list of y values at a specific z value" "the list of y values at a specific z value"
   (sub lY (sub lZ two))      (vect3DS Real)
-mat     = var "mat"     "matrix from which column will be extracted"     
+mat     = var "mat"     "matrix from which column will be extracted" "the matrix from which column will be extracted"
   (label "mat")             (vect3DS $ vect3DS Real)
-col     = var "col"     "extracted column"    
+col     = var "col"     "extracted column" "the extracted column"
   (label "col")             (vect3DS Real)               
-filename = var "filename" "name of file with x y and z data" 
+filename = var "filename" "name of file with x y and z data" "the name of file with x y and z data"
   (label "filename")        String
 
 ------------------------------------------------------------------------------------------

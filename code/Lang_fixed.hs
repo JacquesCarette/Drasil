@@ -363,7 +363,7 @@ cccInfer ctx op l r = (case (infer ctx l, infer ctx r) of
           else Right lt
         else Left $ "Clif " ++ pretty op ++ " expects both operands to be clifs of non-natural numbers. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
       else Left $ "Clif " ++ pretty op ++ " expects both Clifs to be of the same dimension and kind. Received `" ++ show lD ++ ", " ++ show lKind ++ "` and `" ++ show rD ++ ", " ++ show rKind ++ "`."
-    (Right lsp, Right rsp) -> Left $ "Vector operation " ++ pretty op ++ " expects clif operands. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
+    (Left lsp, Left rsp) -> Left $ "Vector operation " ++ pretty op ++ " expects clif operands. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
     (Left re, _       ) -> Left re
     (_       , Left re) -> Left re)
 
@@ -380,7 +380,7 @@ instance Typed Expr Space where
           -- If the inferred type of e is a valid Space, call allOfType with spaceValue
           allOfType cxt exs spaceValue spaceValue
               "Associative arithmetic operation expects all operands to be of the same expected type."
-      Right l ->
+      Left l ->
           -- Handle the case when sp is a Right value but spaceValue is invalid
           Left ("Expected all operands in addition/multiplication to be numeric, but found " ++ show l)
       Left r ->
@@ -401,7 +401,7 @@ instance Typed Expr Space where
           -- If the inferred type of e is a valid Space, call allOfType with spaceValue
           allOfType cxt exs spaceValue spaceValue
               "Associative arithmetic operation expects all operands to be of the same expected type."
-      Right l ->
+      Left l ->
           -- Handle the case when sp is a Right value but spaceValue is invalid
           Left ("Expected all operands in addition/multiplication to be numeric, but found " ++ show l)
       Left r ->
@@ -454,7 +454,7 @@ instance Typed Expr Space where
   infer _ (Set s _) = Right s
 
   infer cxt (UnaryOp uf ex) = case infer cxt ex of
-    Right sp -> case uf of
+    Left sp -> case uf of
       Abs -> if S.isBasicNumSpace sp && sp /= S.Natural
         then Right sp
         else Left $ "Numeric 'absolute' value operator only applies to, non-natural, numeric types. Received `" ++ show sp ++ "`."
@@ -476,126 +476,126 @@ instance Typed Expr Space where
     Right c@(S.ClifS _ _ sp) -> if S.isBasicNumSpace sp && sp /= S.Natural
       then Right c
       else Left $ "Clif negation only applies to, non-natural, numbered clifs. Received `" ++ show sp ++ "`."
-    Right sp -> Left $ "Clif negation should only be applied to numeric clifs. Received `" ++ show sp ++ "`."
+    Left sp -> Left $ "Clif negation should only be applied to numeric clifs. Received `" ++ show sp ++ "`."
     x -> x
 
   -- TODO: support generalized clif norm
   infer cxt (UnaryOpCN Norm e) = case infer cxt e of
     Right (S.ClifS _ _ S.Real) -> Right S.Real
-    Right sp -> Left $ "Vector norm only applies to vectors (or clifs) of real numbers. Received `" ++ show sp ++ "`."
+    Left sp -> Left $ "Vector norm only applies to vectors (or clifs) of real numbers. Received `" ++ show sp ++ "`."
     x -> x
 
   infer cxt (UnaryOpCN Dim e) = case infer cxt e of
     Right (S.ClifS {}) -> Right S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
-    Right sp -> Left $ "Vector 'dim' only applies to vectors. Received `" ++ show sp ++ "`."
+    Left sp -> Left $ "Vector 'dim' only applies to vectors. Received `" ++ show sp ++ "`."
     x -> x
   
   infer cxt (UnaryOpCN Grade e) = case infer cxt e of
     Right (S.ClifS {}) -> Right S.Integer -- FIXME: I feel like Integer would be more usable, but S.Natural is the 'real' expectation here
-    Right sp -> Left $ "Vector 'grade' only applies to vectors. Received `" ++ show sp ++ "`."
+    Left sp -> Left $ "Vector 'grade' only applies to vectors. Received `" ++ show sp ++ "`."
     x -> x
 
   infer cxt (ArithBinaryOp Frac l r) = case (infer cxt l, infer cxt r) of
-    (Right lt, Right rt) -> if S.isBasicNumSpace lt && lt == rt
-      then Right lt
+    (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt
+      then Left lt
       else Left $ "Fractions/divisions should only be applied to the same numeric typed operands. Received `" ++ show lt ++ "` / `" ++ show rt ++ "`."
-    (_, Left e) -> Left e
-    (Left e, _      ) -> Left e
+    (_      , Right e) -> Right e
+    (Right e, _      ) -> Right e
 
   infer cxt (ArithBinaryOp Pow l r) = case (infer cxt l, infer cxt r) of
-    (Right lt, Right rt) -> if S.isBasicNumSpace lt && (lt == rt || (lt == S.Real && rt == S.Integer))
-      then Right lt
+    (Left lt, Left rt) -> if S.isBasicNumSpace lt && (lt == rt || (lt == S.Real && rt == S.Integer))
+      then Left lt
       else Left $
         "Powers should only be applied to the same numeric type in both operands, or real base with integer exponent. Received `" ++ show lt ++ "` ^ `" ++ show rt ++ "`."
-    (_, Left x) -> Left x
-    (Left x, _      ) -> Left x
+    (_      , Right x) -> Right x
+    (Right x, _      ) -> Right x
 
   infer cxt (ArithBinaryOp Subt l r) = case (infer cxt l, infer cxt r) of
-    (Right lt, Right rt) -> if S.isBasicNumSpace lt && lt == rt
-      then Right lt
+    (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt
+      then Left lt
       else Left $ "Both operands of a subtraction must be the same numeric type. Received `" ++ show lt ++ "` - `" ++ show rt ++ "`."
-    (_, Left re) -> Left re
-    (Left le, _) -> Left le
+    (_, Right re) -> Right re
+    (Right le, _) -> Right le
 
   infer cxt (BoolBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
-    (Right S.Boolean, Right S.Boolean) -> Right S.Boolean
-    (Right lt, Right rt) -> Left $ "Boolean expression contains non-boolean operand. Received `" ++ show lt ++ "` & `" ++ show rt ++ "`."
-    (_, Left er) -> Left er
-    (Left el, _     ) -> Left el
+    (Left S.Boolean, Left S.Boolean) -> Right S.Boolean
+    (Left lt, Left rt) -> Left $ "Boolean expression contains non-boolean operand. Received `" ++ show lt ++ "` & `" ++ show rt ++ "`."
+    (_     , Right er) -> Right er
+    (Right el, _     ) -> Right el
 
   infer cxt (EqBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
-    (Right lt, Right rt) -> if lt == rt
+    (Left lt, Left rt) -> if lt == rt
       then Right S.Boolean
       else Left $ "Both operands of an (in)equality (=/≠) must be of the same type. Received `" ++ show lt ++ "` & `" ++ show rt ++ "`."
-    (_, Left re) -> Left re
-    (Left le, _) -> Left le
+    (_, Right re) -> Right re
+    (Right le, _) -> Right le
 
   infer cxt (LABinaryOp Index l n) = case (infer cxt l, infer cxt n) of
-    (Right (S.ClifS _ _ lt), Right nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
-      then Right lt
+    (Left (S.ClifS _ _ lt), Left nt) -> if nt == S.Integer || nt == S.Natural -- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
+      then Left lt
       else Left $ "List accessor not of type Integer nor Natural, but of type `" ++ show nt ++ "`"
-    (Right lt         , Right _)  -> Left $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
-    (_, Left e) -> Left e
-    (Left e         , _      ) -> Left e
+    (Left lt         , Left _)  -> Left $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
+    (_               , Right e) -> Right e
+    (Right e         , _      ) -> Right e
   infer cxt (LABinaryOp IndexOf l n) = case (infer cxt l, infer cxt n) of
-    (Right (S.Set lt), Right nt) -> if S.isBasicNumSpace lt && nt == lt-- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
-      then Right lt
+    (Left (S.Set lt), Left nt) -> if S.isBasicNumSpace lt && nt == lt-- I guess we should only want it to be natural numbers, but integers or naturals is fine for now
+      then Left lt
       else Left $ "List accessor not of type Integer nor Natural, but of type `" ++ show nt ++ "`"
-    (Right lt         , Right _)  -> Left $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
-    (_, Left e) -> Left e
-    (Left e         , _      ) -> Left e
+    (Left lt         , Left _)  -> Left $ "List accessor expects a list/vector, but received `" ++ show lt ++ "`."
+    (_               , Right e) -> Right e
+    (Right e         , _      ) -> Right e
   infer cxt (OrdBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
-    (Right lt, Right rt) -> if S.isBasicNumSpace lt && lt == rt
+    (Left lt, Left rt) -> if S.isBasicNumSpace lt && lt == rt
       then Right S.Boolean
       else Left $ "Both operands of a numeric comparison must be the same numeric type, got: " ++ show lt ++ ", " ++ show rt ++ "."
-    (_, Left re) -> Left re
-    (Left le, _) -> Left le
+    (_, Right re) -> Right re
+    (Right le, _) -> Right le
 
   infer cxt (NCCBinaryOp Scale l r) = case (infer cxt l, infer cxt r) of
-    (Right lt, Right (S.ClifS _ _ rsp)) -> if S.isBasicNumSpace lt && lt == rsp
-      then Right rsp
+    (Left lt, Left (S.ClifS _ _ rsp)) -> if S.isBasicNumSpace lt && lt == rsp
+      then Left rsp
       else if lt /= rsp then
-        Left $ "Vector scaling expects a scaling by the same kind as the vector's but found scaling by`" ++ show lt ++ "` over vectors of type `" ++ show rsp ++ "`."
+        Right $ "Vector scaling expects a scaling by the same kind as the vector's but found scaling by`" ++ show lt ++ "` over vectors of type `" ++ show rsp ++ "`."
       else
-        Left $ "Vector scaling expects a numeric scaling, but found `" ++ show lt ++ "`."
-    (Right _, Right rsp) -> Left $ "Vector scaling expects vector as second operand. Received `" ++ show rsp ++ "`."
-    (_, Left rx) -> Left rx
-    (Left lx, _) -> Left lx
+        Right $ "Vector scaling expects a numeric scaling, but found `" ++ show lt ++ "`."
+    (Left _, Left rsp) -> Left $ "Vector scaling expects vector as second operand. Received `" ++ show rsp ++ "`."
+    (_, Right rx) -> Right rx
+    (Right lx, _) -> Right lx
 
   -- If you select grade N of a Clif, you get a Clif of grade N
   infer cxt (NatCCBinaryOp GradeSelect n c) = case infer cxt c of
-    Right (S.ClifS _ k sp) -> Right $ S.ClifS (S.Fixed n) k sp
-    Right rsp -> Left $ "Grade selection expects clif as second operand. Received `" ++ show rsp ++ "`."
-    Left x -> Left x
+    Left (S.ClifS _ k sp) -> Left $ S.ClifS (S.Fixed n) k sp
+    Left rsp -> Left $ "Grade selection expects clif as second operand. Received `" ++ show rsp ++ "`."
+    Left x -> Right x
   
   infer cxt (CCCBinaryOp o l r) = cccInfer cxt o l r
 
   infer cxt (CCNBinaryOp Dot l r) = case (infer cxt l, infer cxt r) of
-    (Right lt@(S.ClifS lD lKind lsp), Right rt@(S.ClifS rD rKind rsp)) ->
+    (Left lt@(S.ClifS lD lKind lsp), Left rt@(S.ClifS rD rKind rsp)) ->
       if lD == rD && lKind == rKind then
         if lsp == rsp && S.isBasicNumSpace lsp
-        then Right lsp
+        then Left lsp
         else Left $ "Vector dot product expects same numeric vector types, but found `" ++ show lt ++ "` · `" ++ show rt ++ "`."
       else Left $ "Clif dot product expects both Clifs to be of the same dimension and kind. Received `" ++ show lD ++ ", " ++ show lKind ++ "` and `" ++ show rD ++ ", " ++ show rKind ++ "`."
-    (Right lsp, Right rsp) -> Left $ "Vector dot product expects vector operands. Received `" ++ show lsp ++ "` · `" ++ show rsp ++ "`."
-    (_, Left rx) -> Left rx
-    (Left lx, _) -> Left lx
+    (Left lsp, Left rsp) -> Left $ "Vector dot product expects vector operands. Received `" ++ show lsp ++ "` · `" ++ show rsp ++ "`."
+    (_, Right rx) -> Right rx
+    (Right lx, _) -> Right lx
 
   infer cxt (ESSBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
-    (Right lt, Right rt@(S.Set rsp)) -> if S.isBasicNumSpace lt && lt == rsp
-      then Right lt
+    (Left lt, Left rt@(S.Set rsp)) -> if S.isBasicNumSpace lt && lt == rsp
+      then Left lt
       else Left $ "Set Add/Sub should only be applied to Set of same space. Received `" ++ show lt ++ "` / `" ++ show rt ++ "`."
-    (_, Left e) -> Left e
-    (Left e, _      ) -> Left e
-    (Right lt, Right rsp) -> Left $ "Set union expects set operands. Received `" ++ show lt ++ "` · `" ++ show rsp ++ "`."
+    (_      , Right e) -> Right e
+    (Right e, _      ) -> Right e
+    (Left lt, Left rsp) -> Left $ "Set union expects set operands. Received `" ++ show lt ++ "` · `" ++ show rsp ++ "`."
 
   infer cxt (ESBBinaryOp _ l r) = case (infer cxt l, infer cxt r) of
-    (Right lt, Right rt@(S.Set rsp)) -> if S.isBasicNumSpace lt && lt == rsp
-      then Right lt
+    (Left lt, Left rt@(S.Set rsp)) -> if S.isBasicNumSpace lt && lt == rsp
+      then Left lt
       else Left $ "Set contains should only be applied to Set of same space. Received `" ++ show lt ++ "` / `" ++ show rt ++ "`."
-    (_, Left e) -> Left e
-    (Left e, _      ) -> Left e
-    (Right lt, Right rsp) -> Left $ "Set union expects set operands. Received `" ++ show lt ++ "` · `" ++ show rsp ++ "`."
+    (_      , Right e) -> Right e
+    (Right e, _      ) -> Right e
+    (Left lt, Left rsp) -> Left $ "Set union expects set operands. Received `" ++ show lt ++ "` · `" ++ show rsp ++ "`."
 
   infer cxt (Operator _ (S.BoundedDD _ _ bot top) body) =
     let expTy = S.Integer in
@@ -639,7 +639,7 @@ instance Typed Expr Space where
   -- 2. Have a dimension of at least the grade (a 0-dimensional vector makes no sense)
   infer ctx (Clif d es) =
     -- A clif with no explicit compile/"specification"-time expressions in the components
-    if OM.null es then Right $ S.ClifS d S.Vector S.Real
+    if OM.null es then Left $ S.ClifS d S.Vector S.Real
     else
       case eitherLists (infer ctx <$> OM.elems es) of
         Left _ ->
@@ -654,9 +654,9 @@ instance Typed Expr Space where
           in
           -- `Clif`s must store a basic number space, not things like other clifs
           if isValidDim then
-            Right $ S.ClifS d S.Vector S.Real
+            Left $ S.ClifS d S.Vector S.Real
           else Left $ "The number of components in a clif of dimension " ++ show d ++ " must be 2 ^ " ++ show d
-        Right x -> Right x
+        Left x -> Right x
 
 
 eitherLists :: [Either a b] -> Either [a] b

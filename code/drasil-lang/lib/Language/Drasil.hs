@@ -367,6 +367,7 @@ import Language.Drasil.Chunk.DifferentialModel(DifferentialModel(..), ODESolverF
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), uc, uc', ucStaged, ucStaged',
   ucuc, ucw)
+import Language.Drasil.Chunk.Unitary (unit_symb)
 import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)
   , HasFields(getFields)
   , author, editor

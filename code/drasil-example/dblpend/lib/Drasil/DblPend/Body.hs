@@ -8,6 +8,7 @@ import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
 import Database.Drasil.ChunkDB (cdb)
+import Data.Drasil.SI_Units (siUnits)
 import qualified Drasil.DocLang.SRS as SRS
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -23,7 +24,7 @@ import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   system, user, doccon, doccon', analysis, goalStmt, physSyst, requirement)
 import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate, educon, )
 import Data.Drasil.Concepts.Math (mathcon, cartesian, ode, mathcon', graph)
-import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion)
+import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion, angAccel, angular, angVelo, gravitationalConst)
 
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Quantities.PhysicalProperties (len)
@@ -98,7 +99,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       , SSDSolChSpec $ SCSProg --This creates the solution characteristics section with a preamble
         [ Assumptions
         , TMs [] (Label : stdFields)
-        , GDs [gaApproachSent] ([Label, Units] ++ stdFields) ShowDerivation
+        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
         , Constraints EmptyS inConstraints
@@ -175,7 +176,7 @@ conceptChunks =
   [cw len]
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ map qw symbolsAll)
+symbMap = cdb (map (^. output) iMods ++ map dqdWr symbolsAll)
   ideaDicts conceptChunks siUnits
   dataDefs iMods genDefns tMods concIns [] allRefs citations  -- Re-enabled genDefns to show Clifford algebra content
 
@@ -355,19 +356,6 @@ tMods = [accelerationTM, velocityTM, newtonSL]
 -- 4.2.3 : General Definitions --
 ------------------------------
 -- General Definitions defined in GDs
-
-gaApproachSent :: Sentence
-gaApproachSent = foldlSent [
-  S "This section presents the novel", phrase cliffordAlgebra, S "formulation for the double pendulum system.",
-  S "Traditional vector methods are enhanced by representing physical quantities as", plural multivector,
-  S "in the 2D Clifford space Cl(2,0) with basis vectors e₁ and e₂" +:+. EmptyS,
-  S "The", phrase geometricProduct, S "naturally combines dot and wedge products, providing",
-  S "a unified framework for rotations and translations.", S "Each", phrase multivector,
-  S "can represent scalar, vector, and bivector components simultaneously, offering",
-  S "geometric insights into the pendulum's complex dynamics" +:+. EmptyS,
-  S "The following", plural genDefn, S "demonstrate how velocity, acceleration, and force",
-  S "are elegantly expressed using this geometric algebra approach, maintaining",
-  S "the underlying physics while providing enhanced mathematical structure."]
 
 ------------------------------
 -- 4.2.4 : Data Definitions --

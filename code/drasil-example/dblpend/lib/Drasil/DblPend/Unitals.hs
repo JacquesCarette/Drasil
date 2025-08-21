@@ -33,11 +33,11 @@ acronyms :: [CI]
 acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
   physSyst, requirement, refBy, refName, srs, thModel, typUnc]
 
-inputs :: [QuantityDict]
-inputs = map qw [lenRod_1, lenRod_2, massObj_1, massObj_2, pendDisAngle_1, pendDisAngle_2] 
+inputs :: [DefinedQuantityDict]
+inputs = map dqdWr [lenRod_1, lenRod_2, massObj_1, massObj_2, pendDisAngle_1, pendDisAngle_2] 
 
-outputs :: [QuantityDict]
-outputs = [qw xPos_1, qw mvVel_1, qw mvAccel_1]  -- Including Clifford algebra quantities to show in SRS
+outputs :: [DefinedQuantityDict]
+outputs = [dqdWr xPos_1, dqdWr mvVel_1, dqdWr mvAccel_1]  -- Including Clifford algebra quantities to show in SRS
 
 
 constants :: [ConstQDef]

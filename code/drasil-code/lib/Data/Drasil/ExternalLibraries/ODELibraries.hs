@@ -10,8 +10,8 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
   odeintPckg, odeintSymbols, diffCodeChunk
 ) where
 import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
-  QuantityDict, HasSpace(typ), implVar,
-  implVarUID, implVarUID', qw, compoundPhrase, nounPhrase, nounPhraseSP, label,
+  DefinedQuantityDict, HasSpace(typ), implVar,
+  compoundPhrase, nounPhrase, nounPhraseSP, label,
   sub, Idea(getA), NamedIdea(term), Stage(..), (+++))
 import Language.Drasil hiding (dim)
 import Language.Drasil.Space (ClifKind(..), Dimension(..))
@@ -552,6 +552,7 @@ odeintCurrVals, rk, stepper, pop :: CodeVarChunk
 odeintCurrVals = quantvar $ implVar "currVals_odeint" (nounPhrase
   "vector holding ODE solution values for the current step"
   "vectors holding ODE solution values for the current step")
+  "the vector holding ODE solution values for the current step"
   (ClifS (VDim dim) Vector Real) (label "currVals")
 
 rk = quantvar $ implVar "rk_odeint" (nounPhrase
@@ -622,6 +623,7 @@ t = quantvar $ implVar "t_ode" (nounPhrase
 y = quantvar $ implVar "y_ode" (nounPhrase
   "current dependent variable value in ODE solution"
   "current dependent variable value in ODE solution")
+  "the current dependent variable value in the ODE solution"
   (ClifS (VDim dim) Vector Real) (label "y")
 
 -- | ODE object constructor.

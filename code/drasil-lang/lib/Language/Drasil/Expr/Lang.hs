@@ -13,7 +13,7 @@ import Language.Drasil.Space (DiscreteDomainDesc, RealInterval, Space)
 import qualified Language.Drasil.Space as S
 import Language.Drasil.WellTyped
 
-import Data.Either (fromRight, rights, fromLeft)
+import Data.Either (fromRight, rights)
 import qualified Data.Foldable as NE
 import Data.List (nub)
 
@@ -393,9 +393,9 @@ instance Typed Expr Space where
   infer cxt (AssocB _ exs) = allOfType cxt exs S.Boolean S.Boolean
     "Associative boolean operation expects all operands to be of the same type (Boolean)."
 
-  infer _ (AssocC SUnion _) = Left "Associative addition requires at least one operand."
+  infer _ (AssocC SUnion []) = Left "Associative addition requires at least one operand."
 
-  infer cxt (AssocC _ (e:exs)) =
+  infer cxt (AssocC SUnion (e:exs)) =
     case infer cxt e of
       Right spaceValue | spaceValue /= S.Void ->
           -- If the inferred type of e is a valid Space, call allOfType with spaceValue

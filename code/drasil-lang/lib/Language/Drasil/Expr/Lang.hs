@@ -354,7 +354,7 @@ instance LiteralC Expr where
 -- TODO: refactor these if expressions so they're more readable (the else is too far from the if)
 -- helper function for typechecking to help reduce duplication
 cccInfer :: TypingContext Space -> CCCBinOp -> Expr -> Expr -> Either TypeError Space
-cccInfer ctx op l r = (case (infer ctx l, infer ctx r) of
+cccInfer ctx op l r = case (infer ctx l, infer ctx r) of
     (Right lt@(S.ClifS lD lKind lsp), Right (S.ClifS rD rKind rsp)) ->
       if lD == rD && lKind == rKind then -- The dimension and kind must match
         if lsp == rsp && S.isBasicNumSpace lsp then
@@ -365,7 +365,7 @@ cccInfer ctx op l r = (case (infer ctx l, infer ctx r) of
       else Left $ "Clif " ++ pretty op ++ " expects both Clifs to be of the same dimension and kind. Received `" ++ show lD ++ ", " ++ show lKind ++ "` and `" ++ show rD ++ ", " ++ show rKind ++ "`."
     (Right lsp, Right rsp) -> Left $ "Vector operation " ++ pretty op ++ " expects clif operands. Received `" ++ show lsp ++ "` and `" ++ show rsp ++ "`."
     (Left re, _       ) -> Left re
-    (_       , Left re) -> Left re)
+    (_       , Left re) -> Left re
 
 instance Typed Expr Space where
   check :: TypingContext Space -> Expr -> Space -> Either TypeError Space

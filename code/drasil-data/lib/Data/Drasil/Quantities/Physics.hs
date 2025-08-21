@@ -12,7 +12,7 @@ import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
   ixPos, ixVel, iyPos, iyVel, kEnergy, linAccel, linDisp, linVelo, momentOfInertia, position, 
   potEnergy, pressure, restitutionCoef, scalarAccel, scalarPos, speed, time, torque,
   velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist, 
-  yPos, yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angFreq, period, 
+  yPos, yVel, momentum, moment, fOfGravity, positionVec, tension, angFreq, period, 
   frequency, chgMomentum)
 
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second, hertz)

@@ -13,9 +13,7 @@ import qualified Language.Drasil.Literal.Development as LL
 import Drasil.Code.CodeExpr.Lang
 
 import Data.Bifunctor (Bifunctor(bimap), second)
-import Numeric.Natural (Natural)
 import qualified Data.Map.Ordered as OM
-import qualified Data.Map as M
 
 class CanGenCode e where
     toCodeExpr :: e -> CodeExpr

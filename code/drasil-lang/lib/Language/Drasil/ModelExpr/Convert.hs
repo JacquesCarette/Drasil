@@ -47,6 +47,7 @@ uFuncCC E.NegC = NegC
 uFuncCN :: E.UFuncCN -> UFuncCN
 uFuncCN E.Norm = Norm
 uFuncCN E.Dim  = Dim
+uFuncCN E.Grade = Grade
 
 arithBinOp :: E.ArithBinOp -> ArithBinOp
 arithBinOp E.Frac = Frac
@@ -75,6 +76,8 @@ cccBinOp :: E.CCCBinOp -> CCCBinOp
 cccBinOp E.Cross = Cross
 cccBinOp E.CAdd = CAdd
 cccBinOp E.CSub = CSub
+cccBinOp E.WedgeProd = WedgeProd
+cccBinOp E.GeometricProd = GeometricProd
 
 ccnBinOp :: E.CCNBinOp -> CCNBinOp
 ccnBinOp E.Dot = Dot

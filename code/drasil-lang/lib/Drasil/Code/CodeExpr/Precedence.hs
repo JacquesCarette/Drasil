@@ -1,6 +1,6 @@
 module Drasil.Code.CodeExpr.Precedence (precA, precB, eprec) where
 
-import Drasil.Code.CodeExpr.Lang (CodeExpr(..), UFuncCC(..), UFuncCN(..), UFuncB(..),
+import Drasil.Code.CodeExpr.Lang (CodeExpr(..), UFuncB(..), NatCCBinOp,
     UFunc(..), AssocBoolOper(..), AssocArithOper(..), CCNBinOp, NCCBinOp,
     CCCBinOp, OrdBinOp, LABinOp, BoolBinOp, EqBinOp, ArithBinOp(..), AssocConcatOper(..), ESSBinOp, ESBBinOp)
 
@@ -49,6 +49,10 @@ prec2ESS _ = 190
 -- | prec2ESS - precedence for Element->Set->Set-related binary operations.
 prec2ESB :: ESBBinOp -> Int
 prec2ESB _ = 190
+
+-- | prec2NatCC - precedence for Natural-ClifS-ClifS binary operators.
+prec2NatCC :: NatCCBinOp -> Int
+prec2NatCC _ = 190
 
 -- | precA - precedence for arithmetic-related Binary-Associative (Commutative) operators.
 precA :: AssocArithOper -> Int
@@ -112,3 +116,5 @@ eprec (NCCBinaryOp bo _ _)   = prec2NCC bo
 eprec (ESSBinaryOp bo _ _)   = prec2ESS bo
 eprec (ESBBinaryOp bo _ _)   = prec2ESB bo
 eprec RealI{}                = 170
+eprec (NatCCBinaryOp bo _ _) = prec2NatCC bo
+eprec (Clif _ _)             = 220         -- Same as Matrix/Set precedence

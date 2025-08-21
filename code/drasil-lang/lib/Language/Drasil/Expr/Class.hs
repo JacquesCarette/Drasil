@@ -6,8 +6,7 @@ module Language.Drasil.Expr.Class (
   oneHalf, oneThird,
   apply1, apply2,
   m2x2, vec2D, dgnl2x2, rowVec, columnVec, mkSet,
-  vScale, vAdd, vSub,
-  geometricProd, wedgeProd, gradeSelect 
+  vScale, vAdd, vSub
 
 ) where
 

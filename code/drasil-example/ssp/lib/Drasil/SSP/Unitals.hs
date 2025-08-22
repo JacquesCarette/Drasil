@@ -1,7 +1,7 @@
 module Drasil.SSP.Unitals where --export all of it
 
 import Language.Drasil
-import Language.Drasil.ShortHands (cB, cC, cF, cG, cH, cK, cL, cN, cP, cQ, cR, cS, cT, cU, cV, cW, cX, cUpsilon, cPhi, cPsi,
+import Language.Drasil.ShortHands (cC, cF, cG, cH, cK, cL, cN, cP, cQ, cR, cS, cT, cU, cV, cW, cX, cUpsilon, cPhi, cPsi,
   lAlpha, lB, lBeta, lF, lGamma, lH, lI, lLambda, lN, lOmega, lR, lS, lSigma, lTau, lU, lV, lW, lX, lY, lZ, vPhi)
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.NounPhrase.Combinators as NP

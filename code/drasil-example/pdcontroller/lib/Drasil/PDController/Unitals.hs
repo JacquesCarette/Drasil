@@ -4,8 +4,7 @@ import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (second)
 import Data.Drasil.Quantities.Physics (vecDim)
 import Language.Drasil
-import Language.Drasil.Space (ClifKind(..), Space(..), Dimension(..))
-import qualified Language.Drasil.Space as S
+import Language.Drasil.Space (ClifKind(..))
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Drasil.PDController.Concepts

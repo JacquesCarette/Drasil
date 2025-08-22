@@ -1,9 +1,8 @@
 module Drasil.DblPend.ODEs (dblPenODEOpts, dblPenODEInfo) where
 
-import Language.Drasil (ExprC(..), LiteralC(int, exactDbl, dbl), square, Expr)
+import Language.Drasil (ExprC(..), LiteralC(exactDbl, dbl))
 import Language.Drasil.Code (odeInfo, odeOptions, quantvar, ODEInfo,
   ODEMethod(RK45), ODEOptions)
-import Drasil.Code.CodeExpr (CodeExpr, expr)
 
 import Data.Drasil.Quantities.Physics (time)
 
@@ -29,14 +28,3 @@ dblPenODEInfo = odeInfo
     sy angularAccel_2     -- d(omega2)/dt = angular acceleration 2
   ]
   dblPenODEOpts
-    where t1  = idx (sy pendDisAngle) (int 0) :: Expr -- t1 is theta 1
-          o1  = idx (sy pendDisAngle) (int 1) :: Expr -- o1 is omega 1
-          t2  = idx (sy pendDisAngle) (int 2) :: Expr -- t2 is theta 2
-          o2  = idx (sy pendDisAngle) (int 3) :: Expr -- o2 is omega 2
-          g   = dbl 9.8 :: Expr -- should be sy gravitationalAccelConst but there is a bug
-                        -- https://github.com/JacquesCarette/Drasil/issues/2998
-          m1  = sy massObj_1 :: Expr
-          m2  = sy massObj_2 :: Expr
-          two = exactDbl 2 :: Expr
-          l1  = sy lenRod_1 :: Expr
-          l2  = sy lenRod_2 :: Expr

@@ -20,11 +20,11 @@ import Data.Drasil.Concepts.Computation (inDatum)
 import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   environment, datum, input_, interface, output_, problem, product_,
-  physical, sysCont, software, softwareConstraint, softwareSys, srsDomains,
-  system, user, doccon, doccon', analysis, goalStmt, physSyst, requirement)
-import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate, educon, )
-import Data.Drasil.Concepts.Math (mathcon, cartesian, ode, mathcon', graph)
-import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion, angAccel, angular, angVelo, gravitationalConst)
+  physical, sysCont, software, softwareConstraint, softwareSys,
+  system, user, analysis, goalStmt, physSyst, requirement)
+import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate)
+import Data.Drasil.Concepts.Math (cartesian, ode, mathcon', graph)
+import Data.Drasil.Concepts.Physics (gravity, physicCon', pendulum, twoD, motion, angAccel, angular, angVelo, gravitationalConst)
 
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Quantities.PhysicalProperties (len)

@@ -9,10 +9,6 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
   -- * Odeint (C++)
   odeintPckg, odeintSymbols, diffCodeChunk
 ) where
-import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
-  DefinedQuantityDict, HasSpace(typ), implVar,
-  compoundPhrase, nounPhrase, nounPhraseSP, label,
-  sub, Idea(getA), NamedIdea(term), Stage(..), (+++))
 import Language.Drasil hiding (dim)
 import Language.Drasil.Space (ClifKind(..))
 
@@ -36,7 +32,7 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   appendCurrSolFill, populateSolListFill, assignArrayIndexFill,
   assignSolFromObjFill, initSolListFromArrayFill, initSolListWithValFill,
   solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill',
-  CodeVarChunk, CodeFuncChunk, quantvar, quantfunc,
+  quantvar, quantfunc,
   ODEInfo(..), ODEOptions(..), ODEMethod(..), ODELibPckg, mkODELib,
   mkODELibNoPath, pubStateVar, privStateVar,
   NamedArgument, narg)
@@ -654,8 +650,8 @@ diffCodeChunk c = quantvar $ implVarAU' (show $ c +++ "d" )
 modifiedODESyst :: String -> ODEInfo -> [CodeExpr]
 modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
   where
-    replaceDepVar cc@(CE.C c) | c == depVar info ^. uid = CE.C $ depVar info +++ ("_" ++ sufx)
-                           | otherwise               = cc
+    replaceDepVar cExpr@(CE.C c) | c == depVar info ^. uid = CE.C $ depVar info +++ ("_" ++ sufx)
+                                | otherwise               = cExpr
     replaceDepVar (CE.AssocA a es)           = CE.AssocA a (map replaceDepVar es)
     replaceDepVar (CE.AssocB b es)           = CE.AssocB b (map replaceDepVar es)
     replaceDepVar (CE.FCall u es nes)        = CE.FCall u (map replaceDepVar es)

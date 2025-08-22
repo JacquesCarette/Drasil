@@ -14,6 +14,7 @@ module Database.Drasil (
   -- ** Lookup Functions
   , asOrderedList, collectUnits
   , termResolve, termResolve', defResolve, defResolve', symbResolve
+
   , traceLookup, refbyLookup
   , datadefnLookup, insmodelLookup, gendefLookup, theoryModelLookup
   , conceptinsLookup, refResolve

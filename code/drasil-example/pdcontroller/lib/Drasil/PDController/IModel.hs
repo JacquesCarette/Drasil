@@ -42,9 +42,9 @@ imPDRC
       "imPDRC"
       (nounPhraseSP "Computation of the Process Variable as a function of time")
       EmptyS
-      where lhs = [exactDbl 1 $+ sy dqdDerivGain $** (opProcessVariable $^^ 1)]
-                  $++ (exactDbl 1 $** (opProcessVariable $^^ 2))
-                  $++ (exactDbl 20 $+ sy dqdPropGain $** (opProcessVariable $^^ 0))
+      where lhs = [exactDbl 1 $+ sy dqdDerivGain $** (opProcessVariable $^^ 1),
+                   exactDbl 1 $** (opProcessVariable $^^ 2),
+                   exactDbl 20 $+ sy dqdPropGain $** (opProcessVariable $^^ 0)]
             rhs = sy dqdSetPointTD $* sy dqdPropGain
       -- Matrix form: 
       -- coeffs = [[exactDbl 1, exactDbl 1 $+ sy dqdDerivGain, exactDbl 20 $+ sy dqdPropGain]]

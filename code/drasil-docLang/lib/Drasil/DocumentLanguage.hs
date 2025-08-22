@@ -24,11 +24,12 @@ import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
 import Database.Drasil (ChunkDB, collectUnits, refbyTable, conceptinsTable, 
-  idMap, conceptinsTable, traceTable, generateRefbyMap, refTable, labelledcontentTable, 
-  theoryModelTable, insmodelTable, gendefTable, dataDefnTable)
+  idMap, traceTable, generateRefbyMap, refTable, labelledcontentTable, 
+  theoryModelTable, insmodelTable, gendefTable, dataDefnTable, termResolve)
 
 import Drasil.System
 import Drasil.GetChunks (ccss, ccss', citeDB)
+import Language.Drasil.Development (shortdep)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
 import Drasil.Sections.TableOfContents (toToC, findToC)
@@ -193,6 +194,23 @@ fillReqs (_:xs) si = fillReqs xs si
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
 extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
 
+-- | Extracts abbreviations/acronyms found in the document description ('DocDesc') from a database ('ChunkDB').
+-- This function automatically finds all chunks that are referenced with abbreviations (Ch ShortStyle) 
+-- in the document and converts them to IdeaDict entries for the Table of Abbreviations.
+extractAbbreviations :: DocDesc -> ChunkDB -> [IdeaDict]
+extractAbbreviations dd cdb = map resolveToIdeaDict abbreviationUIDs
+  where
+    -- Extract all sentences from the document description
+    allSentences = getDocDesc dd
+    -- Get UIDs of chunks that are used as abbreviations (Ch ShortStyle)
+    abbreviationUIDs = concatMap shortdep allSentences
+    -- Helper function to resolve a UID to an IdeaDict using the term and abbreviation
+    resolveToIdeaDict :: UID -> IdeaDict
+    resolveToIdeaDict targetUID = termResolve makeIdeaDict cdb targetUID
+      where
+        makeIdeaDict :: NP -> Maybe String -> IdeaDict
+        makeIdeaDict = mkIdea (show targetUID)
+
 -- * Section Creator Functions
 
 -- | Helper for creating the different document sections.
@@ -251,9 +269,9 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
     mkSubRef SI {_systemdb = cdb} (TSymb' f con) =
       mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
 
-    mkSubRef _ (TAandA ideas) =
+    mkSubRef SI {_systemdb = cdb} (TAandA _) =
       SRS.tOfAbbAcc
-        [LlC $ tableAbbAccGen $ nub ideas]
+        [LlC $ tableAbbAccGen $ nub $ extractAbbreviations dd cdb]
         []
 
 

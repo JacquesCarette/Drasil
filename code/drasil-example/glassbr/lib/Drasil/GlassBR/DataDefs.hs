@@ -57,7 +57,7 @@ glaTyFacEq :: Expr
 glaTyFacEq = incompleteCase (zipWith glaTyFacHelper glassTypeFactors $ map (abrv . snd) glassType)
 
 glaTyFacHelper :: Integer -> String -> (Expr, Relation)
-glaTyFacHelper result condition = (int result, sy glassTypeCon $= str condition)
+glaTyFacHelper result condition = (exactDbl (fromIntegral result), sy glassTypeCon $= str condition)
 
 glaTyFacQD :: SimpleQDef
 glaTyFacQD = mkQuantDef gTF glaTyFacEq

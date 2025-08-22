@@ -166,7 +166,7 @@ codeExpr (CCCBinaryOp CSub a b)      sm = mkBOp sm P.CSub a b
 codeExpr (CCCBinaryOp WedgeProd a b) sm = mkBOp sm P.WedgeProd a b
 codeExpr (CCCBinaryOp GeometricProd a b) sm = mkBOp sm P.GeometricProd a b
 codeExpr (NCCBinaryOp Scale a b)     sm = mkBOp sm P.Scale a b
-codeExpr (NatCCBinaryOp _ _ _)     _  = error "NatCCBinaryOp printing not yet implemented"
+codeExpr (NatCCBinaryOp {})       _  = error "NatCCBinaryOp printing not yet implemented"
 -- TODO: Re-enable Clifford algebra printing after fixing type issues
 -- codeExpr (NatCCBinaryOp GradeSelect n e) sm = gradeSelectCodeExpr sm n e
 codeExpr (UnaryOpCN Grade u)         sm = mkCall sm P.Grade u

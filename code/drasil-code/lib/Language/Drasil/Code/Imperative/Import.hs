@@ -399,7 +399,7 @@ convExpr Operator{} = error "convExpr: Operator"
 convExpr (RealI c ri)  = do
   g <- get
   convExpr $ renderRealInt (lookupC g c) ri
-convExpr (NatCCBinaryOp _ _ _) = error "NatCCBinaryOp not yet implemented"
+convExpr (NatCCBinaryOp {}) = error "NatCCBinaryOp not yet implemented"
 convExpr (Clif _ _) = error "Clif not yet implemented"
 -- TODO: Re-enable Clifford algebra code generation after fixing type issues
 -- convExpr (NatCCBinaryOp GradeSelect n e) = do

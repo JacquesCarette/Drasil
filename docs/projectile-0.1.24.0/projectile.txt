@@ -189,9 +189,11 @@ printSetting :: PrintingInformation
 mkNB :: LsnDecl
 si :: System
 symbMap :: ChunkDB
+ideaDicts :: [IdeaDict]
+conceptChunks :: [ConceptChunk]
 usedDB :: ChunkDB
 symbols :: [DefinedQuantityDict]
-projectileMotion :: CI
+projectileMotionLesson :: CI
 allRefs :: [Reference]
 
 module Drasil.Projectile.Lesson.Main

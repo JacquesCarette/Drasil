@@ -23,6 +23,7 @@ Lesson :: DocType
 -- | Possible formats for printer output.
 data Format
 TeX :: Format
+Plain :: Format
 HTML :: Format
 Jupyter :: Format
 MDBook :: Format

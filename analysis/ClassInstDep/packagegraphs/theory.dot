@@ -1,9 +1,7 @@
 digraph theory{
 ConstraintSet	[shape=oval, color=turquoise4, label="ConstraintSet"];
-ScopeType	[shape=oval, color=turquoise4, label="ScopeType"];
 DDPkt	[shape=oval, color=turquoise4, label="DDPkt"];
 DataDefinition	[shape=oval, color=turquoise4, label="DataDefinition"];
-Scope	[shape=oval, color=turquoise4, label="Scope"];
 GenDefn	[shape=oval, color=turquoise4, label="GenDefn"];
 InstanceModel	[shape=oval, color=turquoise4, label="InstanceModel"];
 ModelKinds	[shape=oval, color=turquoise4, label="ModelKinds"];

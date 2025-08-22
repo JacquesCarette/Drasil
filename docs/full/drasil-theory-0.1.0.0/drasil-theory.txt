@@ -52,56 +52,21 @@ instance Language.Drasil.WellTyped.RequiresChecking (Theory.Drasil.ConstraintSet
 -- | Defines types and functions for Data Definitions.
 module Theory.Drasil.DataDefinition
 
--- | A scope is an indirect reference to a <a>UID</a>.
-newtype Scope
-Scp :: UID -> Scope
-[_spec] :: Scope -> UID
-
--- | Determines the scope of data.
-data ScopeType
-
--- | Only visible within a limited scope.
-Local :: Scope -> ScopeType
-
--- | Visible everywhere.
-Global :: ScopeType
-data DDPkt
-DDPkt :: UID -> ScopeType -> [DecRef] -> Maybe Derivation -> ShortName -> String -> [Sentence] -> DDPkt
-[_pktUID] :: DDPkt -> UID
-[_pktST] :: DDPkt -> ScopeType
-[_pktDR] :: DDPkt -> [DecRef]
-[_pktMD] :: DDPkt -> Maybe Derivation
-[_pktSN] :: DDPkt -> ShortName
-[_pktS] :: DDPkt -> String
-[_pktSS] :: DDPkt -> [Sentence]
-pktUID :: Lens' DDPkt UID
-pktST :: Lens' DDPkt ScopeType
-pktSS :: Lens' DDPkt [Sentence]
-pktSN :: Lens' DDPkt ShortName
-pktS :: Lens' DDPkt String
-pktMD :: Lens' DDPkt (Maybe Derivation)
-pktDR :: Lens' DDPkt [DecRef]
-
 -- | A data definition is a <a>QDefinition</a> that may have additional
 --   notes: the scope, any references (as <a>DecRef</a>s), maybe a
 --   derivation, a label (<a>ShortName</a>), a reference address, and other
 --   notes (<a>Sentence</a>s).
 data DataDefinition
-[DDE] :: SimpleQDef -> DDPkt -> DataDefinition
-[DDME] :: ModelQDef -> DDPkt -> DataDefinition
 ddQD :: Lens' SimpleQDef a -> Lens' ModelQDef a -> Lens' DataDefinition a
-ddQDGetter :: (Profunctor p, Contravariant f) => Getter SimpleQDef a -> Getter ModelQDef a -> Optic' p f DataDefinition a
-ddPkt :: Lens' DDPkt a -> Lens' DataDefinition a
-ddUid :: HasUID c => c -> UID
 
 -- | Smart constructor for data definitions.
 ddE :: SimpleQDef -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
 
--- | Smart constructor for data definitions with no references.
-ddENoRefs :: SimpleQDef -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
-
 -- | Smart constructor for data definitions.
 ddME :: ModelQDef -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
+
+-- | Smart constructor for data definitions with no references.
+ddENoRefs :: SimpleQDef -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
 
 -- | Smart constructor for data definitions with no references.
 ddMENoRefs :: ModelQDef -> Maybe Derivation -> String -> [Sentence] -> DataDefinition

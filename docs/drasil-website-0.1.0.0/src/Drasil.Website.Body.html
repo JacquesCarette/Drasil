@@ -34,19 +34,19 @@
 </span><span id="line-34"></span><span class="annot"><span class="hs-comment">-- | Printing info to get document to generate. Takes in the 'FolderLocation'.</span></span><span>
 </span><span id="line-35"></span><span class="annot"><a href="Drasil.Website.Body.html#printSetting"><span class="hs-identifier hs-type">printSetting</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.Website.Body.html#FolderLocation"><span class="hs-identifier hs-type">FolderLocation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PrintingInformation</span></span><span>
 </span><span id="line-36"></span><span id="printSetting"><span class="annot"><span class="annottext">printSetting :: FolderLocation -&gt; PrintingInformation
-</span><a href="Drasil.Website.Body.html#printSetting"><span class="hs-identifier hs-var hs-var">printSetting</span></a></span></span><span> </span><span id="local-6989586621679090675"><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090675"><span class="hs-identifier hs-var">fl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Stage -&gt; PrintingConfiguration -&gt; PrintingInformation
+</span><a href="Drasil.Website.Body.html#printSetting"><span class="hs-identifier hs-var hs-var">printSetting</span></a></span></span><span> </span><span id="local-6989586621679090656"><span class="annot"><span class="annottext">FolderLocation
+</span><a href="#local-6989586621679090656"><span class="hs-identifier hs-var">fl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; Stage -&gt; PrintingConfiguration -&gt; PrintingInformation
 </span><span class="hs-identifier hs-var">PI</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; ChunkDB
 </span><a href="Drasil.Website.Body.html#symbMap"><span class="hs-identifier hs-var">symbMap</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090675"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Stage
+</span><a href="#local-6989586621679090656"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Stage
 </span><span class="hs-identifier hs-var">Equational</span></span><span> </span><span class="annot"><span class="annottext">PrintingConfiguration
 </span><span class="hs-identifier hs-var">defaultConfiguration</span></span><span>
 </span><span id="line-37"></span><span>
 </span><span id="line-38"></span><span class="annot"><span class="hs-comment">-- | Instead of being an 'SRSDecl', this takes the folder locations and generates the document from there.</span></span><span>
 </span><span id="line-39"></span><span class="annot"><a href="Drasil.Website.Body.html#mkWebsite"><span class="hs-identifier hs-type">mkWebsite</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.Website.Body.html#FolderLocation"><span class="hs-identifier hs-type">FolderLocation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Document</span></span><span>
 </span><span id="line-40"></span><span id="mkWebsite"><span class="annot"><span class="annottext">mkWebsite :: FolderLocation -&gt; Document
-</span><a href="Drasil.Website.Body.html#mkWebsite"><span class="hs-identifier hs-var hs-var">mkWebsite</span></a></span></span><span> </span><span id="local-6989586621679090680"><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090680"><span class="hs-identifier hs-var">fl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><a href="Drasil.Website.Body.html#mkWebsite"><span class="hs-identifier hs-var hs-var">mkWebsite</span></a></span></span><span> </span><span id="local-6989586621679090661"><span class="annot"><span class="annottext">FolderLocation
+</span><a href="#local-6989586621679090661"><span class="hs-identifier hs-var">fl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-41"></span><span>    </span><span class="hs-comment">--Document  -- Title  --  author  (hack for now to show up in proper spot) -- no table of contents -- [Section]</span><span>
 </span><span id="line-42"></span><span>    </span><span class="annot"><span class="annottext">Title -&gt; Title -&gt; ShowTableOfContents -&gt; [Section] -&gt; Document
 </span><span class="hs-identifier hs-var">Document</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Title
@@ -63,7 +63,7 @@ r -&gt; Title -&gt; Title
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FolderLocation -&gt; [Section]
 </span><a href="Drasil.Website.Body.html#sections"><span class="hs-identifier hs-var">sections</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090680"><span class="hs-identifier hs-var">fl</span></a></span><span>
+</span><a href="#local-6989586621679090661"><span class="hs-identifier hs-var">fl</span></a></span><span>
 </span><span id="line-43"></span><span>
 </span><span id="line-44"></span><span class="annot"><span class="hs-comment">-- | Folder locations based on environment variables (using 'getEnv' in &quot;Drasil.Website.Main&quot;).</span></span><span>
 </span><span id="line-45"></span><span class="hs-keyword">data</span><span> </span><span id="FolderLocation"><span class="annot"><a href="Drasil.Website.Body.html#FolderLocation"><span class="hs-identifier hs-var">FolderLocation</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Folder"><span class="annot"><a href="Drasil.Website.Body.html#Folder"><span class="hs-identifier hs-var">Folder</span></a></span></span><span> </span><span class="hs-special">{</span><span>
@@ -108,8 +108,8 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-73"></span><span class="annot"><span class="hs-comment">-- | System information.</span></span><span>
 </span><span id="line-74"></span><span class="annot"><a href="Drasil.Website.Body.html#si"><span class="hs-identifier hs-type">si</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.Website.Body.html#FolderLocation"><span class="hs-identifier hs-type">FolderLocation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span>
 </span><span id="line-75"></span><span id="si"><span class="annot"><span class="annottext">si :: FolderLocation -&gt; System
-</span><a href="Drasil.Website.Body.html#si"><span class="hs-identifier hs-var hs-var">si</span></a></span></span><span> </span><span id="local-6989586621679090702"><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090702"><span class="hs-identifier hs-var">fl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI
+</span><a href="Drasil.Website.Body.html#si"><span class="hs-identifier hs-var hs-var">si</span></a></span></span><span> </span><span id="local-6989586621679090683"><span class="annot"><span class="annottext">FolderLocation
+</span><a href="#local-6989586621679090683"><span class="hs-identifier hs-var">fl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI
 -&gt; SystemKind
 -&gt; People
 -&gt; Purpose
@@ -162,13 +162,13 @@ a
 </span><span id="line-81"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstrConcept</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-82"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; ChunkDB
 </span><a href="Drasil.Website.Body.html#symbMap"><span class="hs-identifier hs-var">symbMap</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090702"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679090683"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-83"></span><span>
 </span><span id="line-84"></span><span class="annot"><span class="hs-comment">-- | Puts all the sections in order. Basically the website version of the SRS declaration.</span></span><span>
 </span><span id="line-85"></span><span class="annot"><a href="Drasil.Website.Body.html#sections"><span class="hs-identifier hs-type">sections</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.Website.Body.html#FolderLocation"><span class="hs-identifier hs-type">FolderLocation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span class="hs-special">]</span><span>
 </span><span id="line-86"></span><span id="sections"><span class="annot"><span class="annottext">sections :: FolderLocation -&gt; [Section]
-</span><a href="Drasil.Website.Body.html#sections"><span class="hs-identifier hs-var hs-var">sections</span></a></span></span><span> </span><span id="local-6989586621679090706"><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090706"><span class="hs-identifier hs-var">fl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Section
+</span><a href="Drasil.Website.Body.html#sections"><span class="hs-identifier hs-var hs-var">sections</span></a></span></span><span> </span><span id="local-6989586621679090687"><span class="annot"><span class="annottext">FolderLocation
+</span><a href="#local-6989586621679090687"><span class="hs-identifier hs-var">fl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Section
 </span><a href="Drasil.Website.Body.html#headerSec"><span class="hs-identifier hs-var">headerSec</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Section
 </span><a href="Drasil.Website.Introduction.html#introSec"><span class="hs-identifier hs-var">introSec</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
 -&gt; Reference
@@ -214,7 +214,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FolderLocation -&gt; String
 </span><a href="Drasil.Website.Body.html#docsRt"><span class="hs-identifier hs-var">docsRt</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090706"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Section -&gt; Reference
+</span><a href="#local-6989586621679090687"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Section -&gt; Reference
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Reference
@@ -223,18 +223,18 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; String -&gt; [String] -&gt; Section
 </span><a href="Drasil.Website.Analysis.html#analysisSec"><span class="hs-identifier hs-var">analysisSec</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
 </span><a href="Drasil.Website.Body.html#analysisRt"><span class="hs-identifier hs-var">analysisRt</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090706"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span>
+</span><a href="#local-6989586621679090687"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-88"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
 </span><a href="Drasil.Website.Body.html#typeGraphFolder"><span class="hs-identifier hs-var">typeGraphFolder</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090706"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
+</span><a href="#local-6989586621679090687"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
 </span><a href="Drasil.Website.Body.html#classInstFolder"><span class="hs-identifier hs-var">classInstFolder</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090706"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
+</span><a href="#local-6989586621679090687"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
 </span><a href="Drasil.Website.Body.html#graphRt"><span class="hs-identifier hs-var">graphRt</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090706"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([String] -&gt; Section) -&gt; [String] -&gt; Section
+</span><a href="#local-6989586621679090687"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([String] -&gt; Section) -&gt; [String] -&gt; Section
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FolderLocation -&gt; [String]
 </span><a href="Drasil.Website.Body.html#packages"><span class="hs-identifier hs-var">packages</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090706"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679090687"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.Website.Body.html#gitHubRef"><span class="hs-identifier hs-var">gitHubRef</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.Website.Body.html#wikiRef"><span class="hs-identifier hs-var">wikiRef</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.Website.Body.html#infoEncodingWiki"><span class="hs-identifier hs-var">infoEncodingWiki</span></a></span><span> </span><span class="annot"><span class="annottext">Reference
@@ -248,35 +248,35 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="Drasil.Website.Body.html#wellUnderstoodPaper"><span class="hs-identifier hs-var">wellUnderstoodPaper</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Section
 </span><a href="Drasil.Website.Example.html#exampleSec"><span class="hs-identifier hs-var">exampleSec</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
 </span><a href="Drasil.Website.Body.html#repoRt"><span class="hs-identifier hs-var">repoRt</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090706"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
+</span><a href="#local-6989586621679090687"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
 </span><a href="Drasil.Website.Body.html#exRt"><span class="hs-identifier hs-var">exRt</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090706"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Section
+</span><a href="#local-6989586621679090687"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Section
 </span><a href="Drasil.Website.CaseStudy.html#caseStudySec"><span class="hs-identifier hs-var">caseStudySec</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Section
 </span><a href="Drasil.Website.Documentation.html#docsSec"><span class="hs-identifier hs-var">docsSec</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
 </span><a href="Drasil.Website.Body.html#docsRt"><span class="hs-identifier hs-var">docsRt</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090706"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679090687"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-90"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; String -&gt; [String] -&gt; Section
 </span><a href="Drasil.Website.Analysis.html#analysisSec"><span class="hs-identifier hs-var">analysisSec</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
 </span><a href="Drasil.Website.Body.html#analysisRt"><span class="hs-identifier hs-var">analysisRt</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090706"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
+</span><a href="#local-6989586621679090687"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
 </span><a href="Drasil.Website.Body.html#typeGraphFolder"><span class="hs-identifier hs-var">typeGraphFolder</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090706"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
+</span><a href="#local-6989586621679090687"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
 </span><a href="Drasil.Website.Body.html#classInstFolder"><span class="hs-identifier hs-var">classInstFolder</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090706"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
+</span><a href="#local-6989586621679090687"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
 </span><a href="Drasil.Website.Body.html#graphRt"><span class="hs-identifier hs-var">graphRt</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090706"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([String] -&gt; Section) -&gt; [String] -&gt; Section
+</span><a href="#local-6989586621679090687"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([String] -&gt; Section) -&gt; [String] -&gt; Section
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FolderLocation -&gt; [String]
 </span><a href="Drasil.Website.Body.html#packages"><span class="hs-identifier hs-var">packages</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090706"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FolderLocation -&gt; Section
+</span><a href="#local-6989586621679090687"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FolderLocation -&gt; Section
 </span><a href="Drasil.Website.Body.html#footer"><span class="hs-identifier hs-var">footer</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090706"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679090687"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-91"></span><span>
 </span><span id="line-92"></span><span class="annot"><span class="hs-comment">-- | Needed for references and terms to work.</span></span><span>
 </span><span id="line-93"></span><span class="annot"><a href="Drasil.Website.Body.html#symbMap"><span class="hs-identifier hs-type">symbMap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.Website.Body.html#FolderLocation"><span class="hs-identifier hs-type">FolderLocation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span>
 </span><span id="line-94"></span><span id="symbMap"><span class="annot"><span class="annottext">symbMap :: FolderLocation -&gt; ChunkDB
-</span><a href="Drasil.Website.Body.html#symbMap"><span class="hs-identifier hs-var hs-var">symbMap</span></a></span></span><span> </span><span id="local-6989586621679090725"><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090725"><span class="hs-identifier hs-var">fl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
+</span><a href="Drasil.Website.Body.html#symbMap"><span class="hs-identifier hs-var hs-var">symbMap</span></a></span></span><span> </span><span id="local-6989586621679090706"><span class="annot"><span class="annottext">FolderLocation
+</span><a href="#local-6989586621679090706"><span class="hs-identifier hs-var">fl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 -&gt; [IdeaDict]
 -&gt; [ConceptChunk]
 -&gt; [UnitDefn]
@@ -369,23 +369,23 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">factor</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span>
 </span><span id="line-99"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; [Reference]
 </span><a href="Drasil.Website.Body.html#allRefs"><span class="hs-identifier hs-var">allRefs</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090725"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679090706"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-100"></span><span>
 </span><span id="line-101"></span><span class="annot"><span class="hs-comment">-- | Helper to get the system name as an 'IdeaDict' from 'System'.</span></span><span>
 </span><span id="line-102"></span><span class="annot"><a href="Drasil.Website.Body.html#getSysName"><span class="hs-identifier hs-type">getSysName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">System</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span>
 </span><span id="line-103"></span><span id="getSysName"><span class="annot"><span class="annottext">getSysName :: System -&gt; IdeaDict
 </span><a href="Drasil.Website.Body.html#getSysName"><span class="hs-identifier hs-var hs-var">getSysName</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">SI</span></span><span class="hs-special">{</span><span class="annot"><span class="annottext">_sys :: ()
-</span><span class="hs-identifier hs-var">_sys</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679090747"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679090747"><span class="hs-identifier hs-var">nm</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; IdeaDict
+</span><span class="hs-identifier hs-var">_sys</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679090728"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679090728"><span class="hs-identifier hs-var">nm</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; IdeaDict
 forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679090747"><span class="hs-identifier hs-var">nm</span></a></span><span> </span><span>
+</span><a href="#local-6989586621679090728"><span class="hs-identifier hs-var">nm</span></a></span><span> </span><span>
 </span><span id="line-104"></span><span>
 </span><span id="line-105"></span><span class="annot"><span class="hs-comment">-- | Holds all references and links used in the website.</span></span><span>
 </span><span id="line-106"></span><span class="annot"><a href="Drasil.Website.Body.html#allRefs"><span class="hs-identifier hs-type">allRefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.Website.Body.html#FolderLocation"><span class="hs-identifier hs-type">FolderLocation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span>
 </span><span id="line-107"></span><span id="allRefs"><span class="annot"><span class="annottext">allRefs :: FolderLocation -&gt; [Reference]
-</span><a href="Drasil.Website.Body.html#allRefs"><span class="hs-identifier hs-var hs-var">allRefs</span></a></span></span><span> </span><span id="local-6989586621679090748"><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090748"><span class="hs-identifier hs-var">fl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.Website.Body.html#allRefs"><span class="hs-identifier hs-var hs-var">allRefs</span></a></span></span><span> </span><span id="local-6989586621679090729"><span class="annot"><span class="annottext">FolderLocation
+</span><a href="#local-6989586621679090729"><span class="hs-identifier hs-var">fl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.Website.Body.html#gitHubRef"><span class="hs-identifier hs-var">gitHubRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.Website.Body.html#wikiRef"><span class="hs-identifier hs-var">wikiRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.Website.Body.html#infoEncodingWiki"><span class="hs-identifier hs-var">infoEncodingWiki</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference
@@ -409,29 +409,29 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; [Reference]
 </span><a href="Drasil.Website.Example.html#exampleRefs"><span class="hs-identifier hs-var">exampleRefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
 </span><a href="Drasil.Website.Body.html#repoRt"><span class="hs-identifier hs-var">repoRt</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090748"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
+</span><a href="#local-6989586621679090729"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
 </span><a href="Drasil.Website.Body.html#exRt"><span class="hs-identifier hs-var">exRt</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090748"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679090729"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-111"></span><span>  </span><span class="annot"><span class="annottext">[Reference] -&gt; [Reference] -&gt; [Reference]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; [Reference]
 </span><a href="Drasil.Website.Documentation.html#docRefs"><span class="hs-identifier hs-var">docRefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
 </span><a href="Drasil.Website.Body.html#docsRt"><span class="hs-identifier hs-var">docsRt</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090748"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span>
+</span><a href="#local-6989586621679090729"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-112"></span><span>  </span><span class="annot"><span class="annottext">[Reference] -&gt; [Reference] -&gt; [Reference]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String -&gt; String -&gt; [String] -&gt; [Reference]
 </span><a href="Drasil.Website.Analysis.html#analysisRefs"><span class="hs-identifier hs-var">analysisRefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
 </span><a href="Drasil.Website.Body.html#analysisRt"><span class="hs-identifier hs-var">analysisRt</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090748"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
+</span><a href="#local-6989586621679090729"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
 </span><a href="Drasil.Website.Body.html#typeGraphFolder"><span class="hs-identifier hs-var">typeGraphFolder</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090748"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
+</span><a href="#local-6989586621679090729"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
 </span><a href="Drasil.Website.Body.html#classInstFolder"><span class="hs-identifier hs-var">classInstFolder</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090748"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
+</span><a href="#local-6989586621679090729"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; String
 </span><a href="Drasil.Website.Body.html#graphRt"><span class="hs-identifier hs-var">graphRt</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090748"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; [String]
+</span><a href="#local-6989586621679090729"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; [String]
 </span><a href="Drasil.Website.Body.html#packages"><span class="hs-identifier hs-var">packages</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090748"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679090729"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-113"></span><span>  </span><span class="annot"><span class="annottext">[Reference] -&gt; [Reference] -&gt; [Reference]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(Section -&gt; [Reference]) -&gt; [Section] -&gt; [Reference]
@@ -439,7 +439,7 @@ forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
 </span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="annot"><span class="annottext">Section -&gt; [Reference]
 </span><span class="hs-identifier hs-var">findAllRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FolderLocation -&gt; [Section]
 </span><a href="Drasil.Website.Body.html#sections"><span class="hs-identifier hs-var">sections</span></a></span><span> </span><span class="annot"><span class="annottext">FolderLocation
-</span><a href="#local-6989586621679090748"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679090729"><span class="hs-identifier hs-var">fl</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-114"></span><span>
 </span><span id="line-115"></span><span class="annot"><span class="hs-comment">-- | Used for system name and kind inside of 'si'.</span></span><span>
 </span><span id="line-116"></span><span class="annot"><a href="Drasil.Website.Body.html#webName"><span class="hs-identifier hs-type">webName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span>

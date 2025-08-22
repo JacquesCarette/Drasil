@@ -4458,16 +4458,11 @@ digraph alltypes {
 		subgraph ddpkt{
 		DDPkt	[shape=oval, color=cyan3, label="DDPkt"];
 		DDPkt -> UID;
-		DDPkt -> ScopeType;
 		DDPkt -> DecRef;
 		DDPkt -> MaybeDerivation;
 		DDPkt -> ShortName;
 		DDPkt -> String;
 		DDPkt -> Sentence;
-		}
-		subgraph scopetype{
-		ScopeType	[shape=oval, color=darkviolet, label="ScopeType"];
-		ScopeType -> Scope;
 		}
 		subgraph datadefinition{
 		DataDefinition	[shape=oval, color=darkviolet, label="DataDefinition"];
@@ -4477,10 +4472,6 @@ digraph alltypes {
 		DataDefinition -> ModelQDef;
 		DataDefinition -> Lens_;
 		DataDefinition -> a;
-		}
-		subgraph scope{
-		Scope	[shape=oval, color=darkgreen, label="Scope"];
-		Scope -> UID;
 		}
 	}
 	subgraph gendefn {

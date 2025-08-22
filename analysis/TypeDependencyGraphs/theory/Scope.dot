@@ -1,4 +1,0 @@
-digraph scope{
-Scope	[shape=oval, color=darkgreen, label="Scope"];
-Scope -> UID;
-}

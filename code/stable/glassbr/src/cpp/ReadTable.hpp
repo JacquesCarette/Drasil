@@ -17,10 +17,10 @@ using std::vector;
 
 /** \brief Reads glass ASTM data from a file with the given file name
     \param filename name of the input file
-    \param z_vector list of z values
+    \param z_vect3DSor list of z values
     \param x_matrix lists of x values at different z values
     \param y_matrix lists of y values at different z values
 */
-void read_table(string filename, vector<double> &z_vector, vector<vector<double>> &x_matrix, vector<vector<double>> &y_matrix);
+void read_table(string filename, vector<double> &z_vect3DSor, vector<vector<double>> &x_matrix, vector<vector<double>> &y_matrix);
 
 #endif

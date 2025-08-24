@@ -9,8 +9,7 @@ import Data.Drasil.Concepts.Physics (pendulum, motion, position, velocity, force
 concepts :: [IdeaDict]
 concepts = map nw [rod, horizontal, vertical,
   pendMotion, horizontalPos, verticalPos, horizontalVel,horizontalAccel, verticalAccel,
-  verticalVel, horizontalForce, verticalForce, firstRod, secondRod, firstObject, secondObject,
-  multivector, cliffordAlgebra, geometricProduct, basisVector] 
+  verticalVel, horizontalForce, verticalForce, firstRod, secondRod, firstObject, secondObject] 
   ++ map nw defs
 
 rod, horizontal, vertical :: IdeaDict
@@ -19,8 +18,7 @@ horizontal = nc "horizontal" (cn "horizontal")
 vertical = nc "vertical" (cn "vertical") 
 
 pendMotion, horizontalPos, verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce,
-  horizontalAccel, verticalAccel, firstRod, secondRod, firstObject, secondObject,
-  multivector, cliffordAlgebra, geometricProduct, basisVector:: IdeaDict
+  horizontalAccel, verticalAccel, firstRod, secondRod, firstObject, secondObject:: IdeaDict
 pendMotion      = compoundNC pendulum motion
 horizontalPos   = compoundNC horizontal position
 verticalPos     = compoundNC vertical position
@@ -34,10 +32,6 @@ firstRod        = compoundNC first rod
 secondRod       = compoundNC second_ rod
 firstObject     = compoundNC first object
 secondObject    = compoundNC second_ object
-multivector     = nc "multivector" (cn' "multivector")
-cliffordAlgebra = nc "cliffordAlgebra" (cn' "Clifford algebra")
-geometricProduct = nc "geometricProduct" (cn' "geometric product")
-basisVector     = nc "basisVector" (cn' "basis vector")
 
 defs :: [ConceptChunk]
 defs = [arcLen, multivectorDef, cliffordAlgebraDef, geometricProductDef, basisVectorDef, cliffordSpace, bivectorDef]
@@ -50,7 +44,7 @@ multivectorDef = dcc "multivector" (nounPhraseSP "multivector")
   "a generalization of scalars, vectors, and higher-grade elements in Clifford algebra that can represent rotations and reflections"
 
 cliffordAlgebraDef :: ConceptChunk
-cliffordAlgebraDef = dcc "Clifford algebra" (nounPhraseSP "Clifford algebra")
+cliffordAlgebraDef = dcc "cliffordAlgebra" (nounPhraseSP "Clifford algebra")
   "a unification of real numbers, complex numbers, quaternions, and several other hypercomplex number systems into a single mathematical framework"
 
 geometricProductDef :: ConceptChunk

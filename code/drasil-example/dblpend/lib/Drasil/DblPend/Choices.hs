@@ -4,13 +4,9 @@ import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
   AuxFile(..), Visibility(..), defaultChoices, makeArchit, makeData,
-  makeConstraints, makeODE, makeDocConfig, makeLogConfig, makeOptFeats,
-  ExtLib(..))
+  makeConstraints, makeDocConfig, makeLogConfig, makeOptFeats)
 
-import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg,
-  apacheODEPckg, odeintPckg)
 import Drasil.DblPend.Body (fullSI)
-import Drasil.DblPend.ODEs (dblPenODEInfo)
 
 code :: CodeSpec
 code = codeSpec fullSI choices []

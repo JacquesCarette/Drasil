@@ -34,7 +34,7 @@ import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 import Drasil.DblPend.Figures (figMotion, sysCtxFig1)
 import Drasil.DblPend.Assumptions (assumpDouble)
 import Drasil.DblPend.Concepts (rod, concepts, pendMotion, firstRod, secondRod, firstObject, secondObject,
-  multivector, cliffordAlgebra, geometricProduct, multivectorDef, cliffordAlgebraDef, geometricProductDef, 
+  multivectorDef, cliffordAlgebraDef, geometricProductDef, 
   basisVectorDef, cliffordSpace, bivectorDef)
 import Drasil.DblPend.Goals (goals, goalsInputs)
 import Drasil.DblPend.DataDefs (dataDefs)
@@ -77,12 +77,12 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
        IChar [] charsOfReader [],
        IOrgSec inModel (SRS.inModel [] []) (foldlSent [
          S "This document demonstrates a novel approach to modeling the double pendulum using",
-         phrase cliffordAlgebra +:+. EmptyS,
+         phrase cliffordAlgebraDef +:+. EmptyS,
          S "The traditional vector-based approach is enhanced by representing physical quantities as",
-         plural multivector `S.in_` S "a unified geometric framework" +:+. EmptyS,
+         plural multivectorDef `S.in_` S "a unified geometric framework" +:+. EmptyS,
          S "Section 4.2.3 presents", plural genDefn, S "that showcase how velocity, acceleration, and force",
-         S "are naturally expressed using", phrase cliffordAlgebra, S "operations such as the",
-         phrase geometricProduct `S.and_` S "basis vector representations"
+         S "are naturally expressed using", phrase cliffordAlgebraDef, S "operations such as the",
+         phrase geometricProductDef `S.and_` S "basis vector representations"
        ])],
   GSDSec $ 
     GSDProg [
@@ -128,19 +128,19 @@ si = mkSystem progName Specification [dong]
 
 purp :: Sentence
 purp = foldlSent_ [S "predict the", phrase motion `S.ofA` S "double", phrase pendulum,
-  S "using", phrase cliffordAlgebra, S "formulation"]
+  S "using", phrase cliffordAlgebraDef, S "formulation"]
 
 motivation :: Sentence
 motivation = foldlSent_ [S "To simulate", phraseNP (motion `the_ofThe` pendulum),
-  S "and exhibit its chaotic characteristics using", phrase cliffordAlgebra,
+  S "and exhibit its chaotic characteristics using", phrase cliffordAlgebraDef,
   S "for geometric representation"]
 
 background :: Sentence
 background = foldlSent_ [phraseNP (a_ pendulum), S "consists" `S.of_` phrase mass, 
   S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
   S "highly sensitive to initial conditions" +:+. EmptyS,
-  S "This analysis uses", phrase cliffordAlgebra, S "to represent",
-  S "velocities, accelerations, and forces as", plural multivector,
+  S "This analysis uses", phrase cliffordAlgebraDef, S "to represent",
+  S "velocities, accelerations, and forces as", plural multivectorDef,
   S "providing a unified geometric framework"]
 
 -- FIXME: the dependent variable of dblPenODEInfo (pendDisAngle) is added to symbolsAll as it is used to create new chunks with pendDisAngle's UID suffixed in ODELibraries.hs.
@@ -171,7 +171,7 @@ conceptChunks :: [ConceptChunk]
 conceptChunks = 
   -- ConceptChunks
   physicalcon ++ [angAccel, angular, angVelo, pendulum, motion,
-  gravitationalConst, gravity] ++
+  gravitationalConst, gravity] ++ terms ++
   -- UnitalChunks
   [cw len]
 
@@ -220,7 +220,7 @@ externalLinkRef = makeURI "DblPendSRSLink"
 scope :: Sentence
 scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)), 
   sParen (short twoD), phrase pendMotion, phrase problem,
-  S "with various initial conditions using", phrase cliffordAlgebra,
+  S "with various initial conditions using", phrase cliffordAlgebraDef,
   S "for geometric representation of physical quantities"]
 
 ----------------------------------------------
@@ -230,7 +230,7 @@ charsOfReader :: [Sentence]
 charsOfReader = [phrase undergraduate +:+ S "level 2" +:+ phrase Doc.physics,
                  phrase undergraduate +:+ S "level 1" +:+ phrase calculus,
                  plural ode,
-                 S "basic understanding of" +:+ phrase cliffordAlgebra +:+ S "and" +:+ plural multivector]
+                 S "basic understanding of" +:+ phrase cliffordAlgebraDef +:+ S "and" +:+ plural multivectorDef]
 
 -------------------------------------
 -- 2.4 : Organization of Documents --
@@ -329,7 +329,7 @@ physSystParts = map (!.)
    atStartNP (the secondRod) +:+ sParen (S "with" +:+ getTandS lenRod_2),
    atStartNP (the firstObject),
    atStartNP (the secondObject),
-   S "Each object's motion is described using" +:+ plural multivector +:+ S "in 2D" +:+ phrase cliffordAlgebra +:+ S "space Cl(2,0)",
+   S "Each object's motion is described using" +:+ plural multivectorDef +:+ S "in 2D" +:+ phrase cliffordAlgebraDef +:+ S "space Cl(2,0)",
    S "Physical quantities (velocity, acceleration, force) are unified as geometric entities with basis vectors e₁ and e₂"]
 
 -----------------------------

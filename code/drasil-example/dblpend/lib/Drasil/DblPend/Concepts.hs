@@ -40,25 +40,25 @@ arcLen :: ConceptChunk
 arcLen = dcc "arc length" (nounPhraseSP "arc length") "the distance between two points on a curve"
 
 multivectorDef :: ConceptChunk
-multivectorDef = dcc "multivector" (nounPhraseSP "multivector") 
+multivectorDef = dcc "dblpend_multivector" (nounPhraseSP "multivector") 
   "a generalization of scalars, vectors, and higher-grade elements in Clifford algebra that can represent rotations and reflections"
 
 cliffordAlgebraDef :: ConceptChunk
-cliffordAlgebraDef = dcc "cliffordAlgebra" (nounPhraseSP "Clifford algebra")
+cliffordAlgebraDef = dcc "dblpend_cliffordAlgebra" (nounPhraseSP "Clifford algebra")
   "a unification of real numbers, complex numbers, quaternions, and several other hypercomplex number systems into a single mathematical framework"
 
 geometricProductDef :: ConceptChunk
-geometricProductDef = dcc "geometric product" (nounPhraseSP "geometric product")
+geometricProductDef = dcc "dblpend_geometric_product" (nounPhraseSP "geometric product")
   "the fundamental operation in Clifford algebra that combines the dot product and wedge product of vectors"
 
 basisVectorDef :: ConceptChunk
-basisVectorDef = dcc "basis vector" (nounPhraseSP "basis vector")
+basisVectorDef = dcc "dblpend_basis_vector" (nounPhraseSP "basis vector")
   "fundamental unit vectors (e₁, e₂) that span the 2D Clifford space and satisfy the relations e₁² = e₂² = 1"
 
 cliffordSpace :: ConceptChunk  
-cliffordSpace = dcc "Clifford space" (nounPhraseSP "Clifford space")
+cliffordSpace = dcc "dblpend_Clifford_space" (nounPhraseSP "Clifford space")
   "the geometric algebra space Cl(2,0) where multivectors exist, characterized by basis vectors e₁, e₂ with signature (+,+)"
 
 bivectorDef :: ConceptChunk
-bivectorDef = dcc "bivector" (nounPhraseSP "bivector")
+bivectorDef = dcc "dblpend_bivector" (nounPhraseSP "bivector")
   "a grade-2 multivector element e₁∧e₂ representing oriented area and rotations in the plane"

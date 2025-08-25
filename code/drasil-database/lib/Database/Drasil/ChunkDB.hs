@@ -13,7 +13,7 @@ module Database.Drasil.ChunkDB (
   findAll, findAll',
   dependants, dependantsOrErr,
   findTypeOf,
-  insert, insertAll, union,
+  insert, insertAll,
   -- * Temporary functions for working with non-chunk tables
   UMap, idMap,
   refTable, refFind,
@@ -24,7 +24,6 @@ module Database.Drasil.ChunkDB (
 
 import Control.Lens ((^.))
 import Data.Foldable (foldl')
-import Data.List (nub)
 import Data.Maybe (fromMaybe, mapMaybe)
 import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, typeOf, typeRep, cast)
 
@@ -221,17 +220,6 @@ insert c cdb
 -- | Insert a list of chunks into a 'ChunkDB'.
 insertAll :: IsChunk a => [a] -> ChunkDB -> ChunkDB
 insertAll as cdb = foldl' (flip insert) cdb as
-
--- | Union two 'ChunkDB's together, throwing an error for any 'UID' collisions.
-union :: ChunkDB -> ChunkDB -> ChunkDB
-union cdb1 cdb2 = ChunkDB um' trm' lc' ref' trc' refb'
-  where
-    um'   = M.unionWithKey (\conflict _ _ -> error $ "Unioned ChunkDBs contains at least one UID collision; `" ++ show conflict ++ "`!") (chunkTable cdb1) (chunkTable cdb2)
-    trm'  = M.unionWith (++) (chunkTypeTable cdb1) (chunkTypeTable cdb2)
-    lc'   = M.unionWithKey (\conflict _ _ -> error $ "Unioned ChunkDBs contains at least one LabelledContent UID collision; `" ++ show conflict ++ "`!") (labelledcontentTable cdb1) (labelledcontentTable cdb2)
-    ref'  = M.unionWithKey (\conflict _ _ -> error $ "Unioned ChunkDBs contains at least one Reference UID collision; `" ++ show conflict ++ "`!") (refTable cdb1) (refTable cdb2)
-    trc'  = M.unionWith (\l r -> nub $ l ++ r) (traceTable cdb1) (traceTable cdb2)
-    refb' = M.unionWith (\l r -> nub $ l ++ r) (refbyTable cdb1) (refbyTable cdb2)
 
 --------------------------------------------------------------------------------
 -- Temporary functions for working with non-chunk tables

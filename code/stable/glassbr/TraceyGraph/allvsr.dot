@@ -1,0 +1,84 @@
+digraph allvsr {
+	instance:outputValsAndKnownValues -> instance:inputValues;
+	instance:outputValsAndKnownValues -> instance:sysSetValsFollowingAssumps;
+	instance:checkGlassSafety -> theory:isSafePb;
+	instance:checkGlassSafety -> theory:isSafeLR;
+
+
+	instance:assumpGT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpGT"];
+	instance:assumpGC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpGC"];
+	instance:assumpES	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpES"];
+	instance:assumpSV	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSV"];
+	instance:assumpGL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpGL"];
+	instance:assumpBC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpBC"];
+	instance:assumpRT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpRT"];
+	instance:assumpLDFC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpLDFC"];
+
+	subgraph A {
+	rank="same"
+	{instance:assumpGT, instance:assumpGC, instance:assumpES, instance:assumpSV, instance:assumpGL, instance:assumpBC, instance:assumpRT, instance:assumpLDFC}
+	}
+
+	dataDefn:minThick	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:minThick"];
+	dataDefn:loadDurFactor	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:loadDurFactor"];
+	dataDefn:glassTypeFac	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:gTF"];
+	dataDefn:stdOffDist	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:standOffDist"];
+	dataDefn:aR	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:aspectRatio"];
+	dataDefn:eqTNTChar	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:eqTNTW"];
+	dataDefn:demandq	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:calofDemand"];
+
+	subgraph DD {
+	rank="same"
+	{dataDefn:minThick, dataDefn:loadDurFactor, dataDefn:glassTypeFac, dataDefn:stdOffDist, dataDefn:aR, dataDefn:eqTNTChar, dataDefn:demandq}
+	}
+
+	theory:isSafeProb	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeProb"];
+	theory:isSafeLoad	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:isSafeLoad"];
+
+	subgraph TM {
+	rank="same"
+	{theory:isSafeProb, theory:isSafeLoad}
+	}
+
+	theory:riskFun	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:riskFun"];
+	theory:stressDistFac	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:stressDistFac"];
+	theory:nFL	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:nFL"];
+	theory:dimlessLoad	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:dimlessLoad"];
+	theory:tolLoad	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:tolLoad"];
+	theory:sdfTol	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:sdfTol"];
+	theory:probBr	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:probOfBreak"];
+	theory:lResistance	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calofCapacity"];
+	theory:isSafePb	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafePb"];
+	theory:isSafeLR	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:isSafeLR"];
+
+	subgraph IM {
+	rank="same"
+	{theory:riskFun, theory:stressDistFac, theory:nFL, theory:dimlessLoad, theory:tolLoad, theory:sdfTol, theory:probBr, theory:lResistance, theory:isSafePb, theory:isSafeLR}
+	}
+
+	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
+	instance:sysSetValsFollowingAssumps	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:sysSetValsFollowingAssumps"];
+	instance:checkInputWithDataCons	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:checkInputWithDataCons"];
+	instance:outputValsAndKnownValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValsAndKnownValues"];
+	instance:checkGlassSafety	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:checkGlassSafety"];
+	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
+	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
+	instance:verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiable"];
+	instance:understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandable"];
+	instance:reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:reusable"];
+	instance:maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainable"];
+	instance:portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
+
+	subgraph FR {
+	rank="same"
+	{instance:inputValues, instance:sysSetValsFollowingAssumps, instance:checkInputWithDataCons, instance:outputValsAndKnownValues, instance:checkGlassSafety, instance:outputValues, instance:correct, instance:verifiable, instance:understandable, instance:reusable, instance:maintainable, instance:portable}
+	}
+
+	instance:willBreakGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:willBreakGS"];
+
+	subgraph GS {
+	rank="same"
+	{instance:willBreakGS}
+	}
+
+}

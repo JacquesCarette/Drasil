@@ -1,0 +1,20 @@
+Languages selected as Python Cpp CSharp Java Swift.
+Modularity selected as Modular.
+Input Structure selected as Bundled.
+Constant Structure selected as Store Unbundled.
+Constant Representation selected as Var.
+Implementation Type selected as Program.
+Software Constraint Behaviour selected as Warning.
+Physical Constraint Behaviour selected as Warning.
+Comments selected as CommentFunc CommentClass CommentMod.
+Dox Verbosity selected as Quiet.
+Dates selected as Hide.
+Log File Name selected as log.txt.
+Logging selected as None.
+Auxiliary Files selected as SampleInput ../../../datafiles/projectile/sampleInput.txt ReadME.
+Code Concept pi selected as Pi.
+Successfully matched String with String.
+Successfully matched Actor "Constants" with Object "Constants".
+Successfully matched Real with Double.
+Successfully matched Rational with Double.
+Successfully matched Actor "InputParameters" with Object "InputParameters".

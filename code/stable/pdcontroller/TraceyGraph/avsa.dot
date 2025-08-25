@@ -1,0 +1,25 @@
+digraph avsa {
+	instance:pwrPlantTxFnx -> instance:pwrPlant;
+	instance:massSpring -> instance:pwrPlant;
+	instance:dampingCoeffSpring -> instance:pwrPlant;
+	instance:stiffnessCoeffSpring -> instance:pwrPlant;
+
+
+	instance:pwrPlant	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:pwrPlant"];
+	instance:decoupled	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:decoupled"];
+	instance:setPointConstant	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:setPointConstant"];
+	instance:externalDisturb	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:externalDisturb"];
+	instance:initialValue	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:initialValue"];
+	instance:parallelEq	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:parallelEq"];
+	instance:unfilteredDerivative	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:unfilteredDerivative"];
+	instance:pwrPlantTxFnx	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:pwrPlantTxFnx"];
+	instance:massSpring	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:massSpring"];
+	instance:dampingCoeffSpring	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:dampingCoeffSpring"];
+	instance:stiffnessCoeffSpring	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:stiffnessCoeffSpring"];
+
+	subgraph A {
+	rank="same"
+	{instance:pwrPlant, instance:decoupled, instance:setPointConstant, instance:externalDisturb, instance:initialValue, instance:parallelEq, instance:unfilteredDerivative, instance:pwrPlantTxFnx, instance:massSpring, instance:dampingCoeffSpring, instance:stiffnessCoeffSpring}
+	}
+
+}

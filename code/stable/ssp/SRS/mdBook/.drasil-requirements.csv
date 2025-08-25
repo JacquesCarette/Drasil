@@ -1,0 +1,10 @@
+Original,Copy
+../../../../datafiles/ssp/ForceDiagram.png,src/assets/ForceDiagram.png
+../../../../datafiles/ssp/IndexConvention.png,src/assets/IndexConvention.png
+../../../../datafiles/ssp/PhysSyst.png,src/assets/PhysSyst.png
+../../../../traceygraphs/ssp/allvsall.svg,src/assets/allvsall.svg
+../../../../traceygraphs/ssp/allvsr.svg,src/assets/allvsr.svg
+../../../../traceygraphs/ssp/avsa.svg,src/assets/avsa.svg
+../../../../traceygraphs/ssp/avsall.svg,src/assets/avsall.svg
+../../../../traceygraphs/ssp/refvsref.svg,src/assets/refvsref.svg
+../../../../datafiles/ssp/SystemContextFigure.png,src/assets/SystemContextFigure.png

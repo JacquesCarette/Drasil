@@ -1,0 +1,158 @@
+\documentclass[12pt]{article}
+\usepackage{fontspec}
+\usepackage{fullpage}
+\usepackage{hyperref}
+\hypersetup{bookmarks=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{unicode-math}
+\usepackage{tabularray}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{adjustbox}
+\usepackage{enumitem}
+\setmathfont{Latin Modern Math}
+\newcommand{\gt}{\ensuremath >}
+\newcommand{\lt}{\ensuremath <}
+\newlist{symbDescription}{description}{1}
+\setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
+\newcommand{\resizeExpression}[1]{
+  \adjustbox{max width=\linewidth}{$#1$}
+}
+\title{Software Requirements Specification for HGHC}
+\author{W. Spencer Smith}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{Reference Material}
+\label{Sec:RefMat}
+This section records information for easy reference.
+
+\subsection{Table of Units}
+\label{Sec:ToU}
+The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the \hyperref[Table:ToU]{Table of Units} lists the symbol, a description, and the SI name.
+
+\begin{longtblr}
+[caption={Table of Units}]
+{colspec={l l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{Symbol} & \textbf{Description} & \textbf{SI Name}
+\\
+${{}^{\circ}\text{C}}$ & temperature & centigrade
+\\
+${\text{m}}$ & length & metre
+\\
+${\text{W}}$ & power & watt
+\label{Table:ToU}
+\end{longtblr}
+\subsection{Table of Symbols}
+\label{Sec:ToS}
+The symbols used in this document are summarized in the \hyperref[Table:ToS]{Table of Symbols} along with their units. The choice of symbols was made to be consistent with the nuclear physics literature and with that used in the FP manual.
+
+\begin{longtblr}
+[caption={Table of Symbols}]
+{colspec={l X[l] l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
+\textbf{Symbol} & \textbf{Description} & \textbf{Units}
+\\
+${h_{\text{b}}}$ & Initial coolant film conductance & --
+\\
+${h_{\text{c}}}$ & Convective heat transfer coefficient between clad and coolant & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+\\
+${h_{\text{g}}}$ & Effective heat transfer coefficient between clad and fuel surface & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+\\
+${h_{\text{p}}}$ & Initial gap film conductance & --
+\\
+${k_{\text{c}}}$ & Clad conductivity & --
+\\
+${τ_{\text{c}}}$ & Clad thickness & --
+\label{Table:ToS}
+\end{longtblr}
+\section{Specific System Description}
+\label{Sec:SpecSystDesc}
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
+
+\subsection{Solution Characteristics Specification}
+\label{Sec:SolCharSpec}
+The instance models that govern HGHC are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+
+\subsubsection{Theoretical Models}
+\label{Sec:TMs}
+There are no theoretical models.
+
+\subsubsection{General Definitions}
+\label{Sec:GDs}
+There are no general definitions.
+
+\subsubsection{Data Definitions}
+\label{Sec:DDs}
+This section collects and defines all the data needed to build the instance models.
+
+\medskip
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:htTransCladFuel}
+\phantomsection 
+\label{DD:htTransCladFuel}
+\\ \midrule
+Label & Effective heat transfer coefficient between clad and fuel surface
+        
+\\ \midrule
+Symbol & ${h_{\text{g}}}$
+         
+\\ \midrule
+Units & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+        
+\\ \midrule
+Equation & \begin{displaymath}
+           \resizeExpression{{h_{\text{g}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{p}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{p}}}}}
+           \end{displaymath}
+\\ \midrule
+Description & \begin{symbDescription}
+              \item{${h_{\text{g}}}$ is the effective heat transfer coefficient between clad and fuel surface ($\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$)}
+              \item{${k_{\text{c}}}$ is the clad conductivity (Unitless)}
+              \item{${h_{\text{p}}}$ is the initial gap film conductance (Unitless)}
+              \item{${τ_{\text{c}}}$ is the clad thickness (Unitless)}
+              \end{symbDescription}
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\medskip
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:htTransCladCool}
+\phantomsection 
+\label{DD:htTransCladCool}
+\\ \midrule
+Label & Convective heat transfer coefficient between clad and coolant
+        
+\\ \midrule
+Symbol & ${h_{\text{c}}}$
+         
+\\ \midrule
+Units & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+        
+\\ \midrule
+Equation & \begin{displaymath}
+           \resizeExpression{{h_{\text{c}}}=\frac{2\,{k_{\text{c}}}\,{h_{\text{b}}}}{2\,{k_{\text{c}}}+{τ_{\text{c}}}\,{h_{\text{b}}}}}
+           \end{displaymath}
+\\ \midrule
+Description & \begin{symbDescription}
+              \item{${h_{\text{c}}}$ is the convective heat transfer coefficient between clad and coolant ($\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$)}
+              \item{${k_{\text{c}}}$ is the clad conductivity (Unitless)}
+              \item{${h_{\text{b}}}$ is the initial coolant film conductance (Unitless)}
+              \item{${τ_{\text{c}}}$ is the clad thickness (Unitless)}
+              \end{symbDescription}
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\subsubsection{Instance Models}
+\label{Sec:IMs}
+There are no instance models.
+
+\end{document}

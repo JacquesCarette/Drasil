@@ -3,7 +3,7 @@ module Drasil.Projectile.Lesson.Body where
 import Data.List (nub)
 import Language.Drasil hiding (Notebook)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Database.Drasil (cdb', ChunkDB)
+import Database.Drasil (ChunkDB)
 import Database.Drasil.ChunkDB (cdb)
 import Drasil.System (System, mkSystem, SystemKind(Notebook))
 import qualified Language.Drasil.Sentence.Combinators as S
@@ -61,11 +61,6 @@ ideaDicts = nw projectileMotionLesson : concepts
 conceptChunks :: [ConceptChunk]
 conceptChunks = [CCs.motion, CCs.acceleration, CCs.velocity, CCs.force,
   CCs.verticalMotion, CCs.gravity, CCs.position]
-
-usedDB :: ChunkDB
-usedDB = cdb' ([] :: [DefinedQuantityDict]) (map nw symbols :: [IdeaDict]) ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) [] [] [] [] ([] :: [ConceptInstance])
-  ([] :: [LabelledContent]) ([] :: [Reference]) []
 
 symbols :: [DefinedQuantityDict]
 symbols = map dqdWr [Qs.iSpeed, Qs.ixSpeed, Qs.iySpeed, Qs.speed, Qs.constAccel,

@@ -1,23 +1,21 @@
 {-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE TypeApplications #-}
 module Language.Drasil.Debug.Print where
 
 import           Language.Drasil hiding (symbol)
 import qualified Language.Drasil as L (symbol)
 import           Database.Drasil
-import           Utils.Drasil (stringList)
 import qualified Data.Map as Map
 import           Control.Lens ((^.), view)
-import           Data.List (sort, sortBy)
 import           Data.Foldable (foldl')
 import           Data.Maybe (fromMaybe)
-import           Data.Bifunctor (second)
-import           Data.Function (on)
 import           Text.PrettyPrint.HughesPJ
 import           Language.Drasil.Plain.Print
 import           Language.Drasil.Printing.PrintingInformation
 import           Prelude hiding ((<>))
 
-import Data.Containers.ListUtils (nubOrd)
+import Theory.Drasil
+import Data.Typeable (Proxy (Proxy))
 
 -- * Main Function
 -- | Gathers all printing functions and creates the debugging tables from them.
@@ -26,7 +24,6 @@ printAllDebugInfo pinfo = map
   (cdbSection . ($ pinfo))
   [ mkTableReferencedChunks
   , mkTableDepChunks
-  , mkTableDepReffedChunks
   , mkTableSymb
   , mkTableOfTerms
   , mkTableConcepts
@@ -37,8 +34,7 @@ printAllDebugInfo pinfo = map
   , mkTableIMod
   , mkTableCI
   , mkTableLC
-  , mkTableRef
-  , renderUsedUIDs . mkListShowUsedUIDs]
+  , mkTableRef]
 
 -- * Helpers
 -- ** Separators
@@ -58,12 +54,12 @@ header d = text (replicate 100 '-') $$ d $$ text (replicate 100 '-')
 -- data from the printing information field into the required display formats
 -- (often 'UID's, terms, shortnames, definitions, etc.).
 mkTableFromLenses
-  :: HasUID a => PrintingInformation
-  -> (ChunkDB -> UMap a)
+  :: IsChunk a => PrintingInformation
+  -> Proxy a -- Data is unused, but necessary for type constraint resolution.
   -> String
   -> [PrintingInformation -> (String, a -> Doc)]
   -> Doc
-mkTableFromLenses pin@PI { _ckdb = db } tableLens ttle hsNEs =
+mkTableFromLenses pin@PI { _ckdb = db } _ ttle hsNEs =
   text ttle <> colon
   $$ header hdr
   $$ vcat (map col chunks)
@@ -75,7 +71,7 @@ mkTableFromLenses pin@PI { _ckdb = db } tableLens ttle hsNEs =
     hdr   = foldl' (\r l -> r $$ nest (nestNum * snd l) (text $ fst l)) (text "UID")       (zip (map fst namedLenses) ins)
     col a = foldl' (\r l -> r $$ nest (nestNum * snd l) (fst l a)     ) (text $ showUID a) (zip (map snd namedLenses) ins)
 
-    chunks = map (fst . snd) (Map.assocs $ tableLens db)
+    chunks = findAll db
 
     nestNum = 30
 
@@ -125,7 +121,7 @@ openRef _ = ("Reference Address", text . getAdd . getRefAdd)
 mkTableSymb :: PrintingInformation -> Doc
 mkTableSymb pinfo = mkTableFromLenses
   pinfo
-  symbolTable
+  (Proxy @DefinedQuantityDict)
   "Symbol Chunks"
   [openTerm, openSymbol]
 
@@ -133,7 +129,7 @@ mkTableSymb pinfo = mkTableFromLenses
 mkTableOfTerms :: PrintingInformation -> Doc
 mkTableOfTerms pinfo = mkTableFromLenses
   pinfo
-  termTable
+  (Proxy @IdeaDict)
   "Term Chunks"
   [openTerm, openAbbreviation]
 
@@ -141,7 +137,7 @@ mkTableOfTerms pinfo = mkTableFromLenses
 mkTableConcepts :: PrintingInformation -> Doc
 mkTableConcepts pinfo = mkTableFromLenses
   pinfo
-  conceptChunkTable
+  (Proxy @ConceptChunk)
   "Concepts"
   [openTerm] -- FIXME: `openDefinition` ommited because some ConceptChunks
              -- contain references to non-existent `Reference`s (which are only
@@ -151,7 +147,7 @@ mkTableConcepts pinfo = mkTableFromLenses
 mkTableUnitDefn :: PrintingInformation -> Doc
 mkTableUnitDefn pinfo = mkTableFromLenses
   pinfo
-  (view unitTable)
+  (Proxy @UnitDefn)
   "Unit Definitions"
   [openTerm, openUnitSymbol]
 
@@ -159,7 +155,7 @@ mkTableUnitDefn pinfo = mkTableFromLenses
 mkTableDataDef :: PrintingInformation -> Doc
 mkTableDataDef pinfo = mkTableFromLenses
   pinfo
-  (view dataDefnTable)
+  (Proxy @DataDefinition)
   "Data Definitions"
   [openTerm, openDefSymbol]
 
@@ -167,7 +163,7 @@ mkTableDataDef pinfo = mkTableFromLenses
 mkTableGenDef :: PrintingInformation -> Doc
 mkTableGenDef pinfo = mkTableFromLenses
   pinfo
-  (view gendefTable)
+  (Proxy @GenDefn)
   "General Definitions"
   [openTerm, openDefinition]
 
@@ -175,7 +171,7 @@ mkTableGenDef pinfo = mkTableFromLenses
 mkTableTMod :: PrintingInformation -> Doc
 mkTableTMod pinfo = mkTableFromLenses
   pinfo
-  (view theoryModelTable)
+  (Proxy @TheoryModel)
   "Theory Models"
   [openTerm, openDefinition]
 
@@ -183,7 +179,7 @@ mkTableTMod pinfo = mkTableFromLenses
 mkTableIMod :: PrintingInformation -> Doc
 mkTableIMod pinfo = mkTableFromLenses
   pinfo
-  (view insmodelTable)
+  (Proxy @InstanceModel)
   "Instance Models"
   [openTerm, openDefinition]
 
@@ -191,7 +187,7 @@ mkTableIMod pinfo = mkTableFromLenses
 mkTableCI :: PrintingInformation -> Doc
 mkTableCI pinfo = mkTableFromLenses
   pinfo
-  (view conceptinsTable)
+  (Proxy @ConceptInstance)
   "ConceptInstance"
   [openTerm, openShortName]
 
@@ -199,7 +195,7 @@ mkTableCI pinfo = mkTableFromLenses
 mkTableLC :: PrintingInformation -> Doc
 mkTableLC pinfo = mkTableFromLenses
   pinfo
-  (view labelledcontentTable)
+  (Proxy @LabelledContent)
   "LabelledContent"
   [openShortName, openContentType]
 
@@ -207,7 +203,7 @@ mkTableLC pinfo = mkTableFromLenses
 mkTableRef :: PrintingInformation -> Doc
 mkTableRef pinfo = mkTableFromLenses
   pinfo
-  (view refTable)
+  (Proxy @Reference)
   "Reference"
   [openRef, openShortName]
 
@@ -223,7 +219,7 @@ mkTableDepChunks PI { _ckdb = db } = text
     testIndepLayout (x, ys) = text (show x) $$ nest nestNum (text $ show ys)
 
     traceMapUIDs :: [(UID, [UID])]
-    traceMapUIDs = Map.assocs $ db ^. traceTable
+    traceMapUIDs = Map.assocs $ traceTable db
 
     nestNum = 30
 
@@ -239,38 +235,7 @@ mkTableReferencedChunks PI { _ckdb = db } =
     testIsolateLayout (x, ys) = text (show x) $$ nest nestNum (text $ show ys)
 
     refbyUIDs :: [(UID, [UID])]
-    refbyUIDs = Map.assocs $ db ^. refbyTable
-
-    nestNum = 30
-
--- | Chunks that use and are used by other chunks.
-mkTableDepReffedChunks :: PrintingInformation -> Doc
-mkTableDepReffedChunks PI { _ckdb = db } = text
-  "Dependent and Referenced Chunks (chunks dependent on middle UIDs and used in the chunks on the right)"
-  <> colon
-  $$ header
-    (text "UID"
-     $$ nest nestNum (text "Dependent Chunk")
-     $$ nest (nestNum * 3) (text "Used-in Chunk"))
-  $$ vcat (map traceRefLayout $ Map.assocs combinedMaps)
-  where
-    traceRefLayout :: (UID, ([UID], [UID])) -> Doc
-    traceRefLayout x = text (show $ fst x)
-      $$ nest nestNum (text $ show $ fst $ snd x)
-      $$ nest (nestNum * 3) (text $ show $ snd $ snd x)
-
-    combinedMaps =
-      Map.unionWith (\x y -> (fst x, snd y)) traceMapUIDs refByUIDs
-
-    traceMapUIDs = Map.fromList
-      $ map (\(x, y) -> (x, (y, [])))
-      $ Map.assocs
-      $ db ^. traceTable
-
-    refByUIDs = Map.fromList
-      $ map (\(x, y) -> (x, ([], y)))
-      $ Map.assocs
-      $ db ^. refbyTable
+    refbyUIDs = Map.assocs $ refbyTable db
 
     nestNum = 30
 
@@ -282,50 +247,3 @@ renderUsedUIDs chs = header (text "UIDs" $$ nest 40 (text "Associated Chunks"))
   $$ vcat (map renderUsedUID chs)
   where
     renderUsedUID (u, chks) = text (show u) $$ nest 40 (text chks)
-
--- | For the last section of the log output. Shows which chunk UID is being used at which stage.
--- Note that chunks used at a "higher stage" (like 'Concept's and 'QuantityDict's) will still be built off of the
--- more basic types (like 'IdeaDict's), they are just not explicitly used in that manner.
--- Also, some chunks may have been "downgraded" when put into the database (for example, mapping a
--- 'QuantityDict' wrapper onto things like Constrained and Unital chunks happens often).
-mkListShowUsedUIDs :: PrintingInformation -> [(UID, String)]
-mkListShowUsedUIDs PI { _ckdb = db } = sortBy (compare `on` fst)
-  $ map (second stringList)
-  $ Map.toList
-  $ Map.fromListWith (++)
-  $ map (\x -> (fst x, ["DefinedQuantityDict"])) (Map.assocs $ symbolTable db)
-  ++ map (\x -> (fst x, ["IdeaDict"])) (Map.assocs $ termTable db)
-  ++ map (\x -> (fst x, ["ConceptChunk"])) (Map.assocs $ conceptChunkTable db)
-  ++ map (\x -> (fst x, ["UnitDefn"])) (Map.assocs $ db ^. unitTable)
-  ++ map (\x -> (fst x, ["DataDefinition"])) (Map.assocs $ db ^. dataDefnTable)
-  ++ map (\x -> (fst x, ["InstanceModel"])) (Map.assocs $ db ^. insmodelTable)
-  ++ map
-    (\x -> (fst x, ["GeneralDefinition"]))
-    (Map.assocs $ db ^. gendefTable)
-  ++ map (\x -> (fst x, ["TheoryModel"])) (Map.assocs $ db ^. theoryModelTable)
-  ++ map
-    (\x -> (fst x, ["ConceptInstance"]))
-    (Map.assocs $ db ^. conceptinsTable)
-  ++ map
-    (\x -> (fst x, ["LabelledContent"]))
-    (Map.assocs $ db ^. labelledcontentTable)
-  ++ map (\x -> (fst x, ["Reference"])) (Map.assocs $ db ^. refTable)
-
--- Currently Unused
--- | Get all 'UID's from a database ('ChunkDB').
-mkListAll :: ChunkDB -> [UID]
-mkListAll db = nubOrd
-  $ sort
-  $ map fst (Map.assocs $ symbolTable db)
-  ++ map fst (Map.assocs $ termTable db)
-  ++ map fst (Map.assocs $ conceptChunkTable db)
-  ++ map fst (Map.assocs $ db ^. unitTable)
-  ++ map fst (Map.assocs $ db ^. traceTable)
-  ++ map fst (Map.assocs $ db ^. refbyTable)
-  ++ map fst (Map.assocs $ db ^. dataDefnTable)
-  ++ map fst (Map.assocs $ db ^. insmodelTable)
-  ++ map fst (Map.assocs $ db ^. gendefTable)
-  ++ map fst (Map.assocs $ db ^. theoryModelTable)
-  ++ map fst (Map.assocs $ db ^. conceptinsTable)
-  ++ map fst (Map.assocs $ db ^. labelledcontentTable)
-  ++ map fst (Map.assocs $ db ^. refTable)

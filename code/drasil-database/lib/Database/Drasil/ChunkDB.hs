@@ -215,7 +215,7 @@ insert c cdb
           cdb'' = insert0 cdb' c
       in if typeOf c == x
             then trace ("WARNING! Overwriting `" ++ show (c ^. uid) ++ "` :: " ++ show x) cdb''
-            else trace ("SUPER-MEGA-ULTRA-DELUXE-WARNING! Overwriting a chunk (`" ++ show (c ^. uid) ++ "` :: `" ++ show x ++ "`) with a chunk of a different type: `" ++ show (typeOf c) ++ "`") cdb''
+            else error $ "ERROR! Overwriting a chunk (`" ++ show (c ^. uid) ++ "` :: `" ++ show x ++ "`) with a chunk of a different type: `" ++ show (typeOf c) ++ "`"
   | otherwise = insert0 cdb c
 
 -- | Insert a list of chunks into a 'ChunkDB'.

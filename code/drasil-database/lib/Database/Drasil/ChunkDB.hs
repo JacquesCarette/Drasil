@@ -42,7 +42,6 @@ import qualified Data.Map.Strict as M
 import Drasil.Database.Chunk (Chunk, HasChunkRefs(chunkRefs), IsChunk,
   mkChunk, unChunk, chunkType)
 import Language.Drasil (HasUID(..), UID, LabelledContent, Reference)
-import Utils.Drasil (errMsg, warnMsg)
 
 -- | A chunk that depends on another.
 type Dependant = UID
@@ -215,8 +214,8 @@ insert c cdb
           cdb' = cdb { chunkTable = cu', chunkTypeTable = ctr' }
           cdb'' = insert0 cdb' c
       in if typeOf c == x
-            then trace (warnMsg $ "WARNING! Overwriting `" ++ show (c ^. uid) ++ "` :: " ++ show x) cdb''
-            else trace (errMsg $ "SUPER-MEGA-ULTRA-DELUXE-WARNING! Overwriting a chunk (`" ++ show (c ^. uid) ++ "` :: `" ++ show x ++ "`) with a chunk of a different type: `" ++ show (typeOf c) ++ "`") cdb''
+            then trace ("WARNING! Overwriting `" ++ show (c ^. uid) ++ "` :: " ++ show x) cdb''
+            else trace ("SUPER-MEGA-ULTRA-DELUXE-WARNING! Overwriting a chunk (`" ++ show (c ^. uid) ++ "` :: `" ++ show x ++ "`) with a chunk of a different type: `" ++ show (typeOf c) ++ "`") cdb''
   | otherwise = insert0 cdb c
 
 -- | Insert a list of chunks into a 'ChunkDB'.

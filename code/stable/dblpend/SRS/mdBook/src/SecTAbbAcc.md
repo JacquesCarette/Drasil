@@ -5,8 +5,17 @@
 |Abbreviation|Full Form                          |
 |:-----------|:----------------------------------|
 |2D          |Two-Dimensional                    |
+|A           |Assumption                         |
+|DD          |Data Definition                    |
 |DblPend     |Double Pendulum                    |
+|GD          |General Definition                 |
+|GS          |Goal Statement                     |
+|IM          |Instance Model                     |
 |ODE         |Ordinary Differential Equation     |
+|PS          |Physical System Description        |
+|R           |Requirement                        |
 |SRS         |Software Requirements Specification|
+|TM          |Theoretical Model                  |
+|Uncert.     |Typical Uncertainty                |
 
 **<p align="center">Abbreviations and Acronyms</p>**

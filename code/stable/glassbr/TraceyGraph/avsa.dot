@@ -1,0 +1,19 @@
+digraph avsa {
+	instance:assumpLDFC -> instance:assumpSV;
+
+
+	instance:assumpGT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpGT"];
+	instance:assumpGC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpGC"];
+	instance:assumpES	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpES"];
+	instance:assumpSV	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSV"];
+	instance:assumpGL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpGL"];
+	instance:assumpBC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpBC"];
+	instance:assumpRT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpRT"];
+	instance:assumpLDFC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpLDFC"];
+
+	subgraph A {
+	rank="same"
+	{instance:assumpGT, instance:assumpGC, instance:assumpES, instance:assumpSV, instance:assumpGL, instance:assumpBC, instance:assumpRT, instance:assumpLDFC}
+	}
+
+}

@@ -1,0 +1,104 @@
+digraph allvsall {
+	theory:v_x1 -> dataDefn:velocity;
+	theory:v_x1 -> dataDefn:p_x1;
+	theory:v_y1 -> dataDefn:velocity;
+	theory:v_y1 -> dataDefn:p_y1;
+	theory:v_x2 -> dataDefn:velocity;
+	theory:v_x2 -> dataDefn:p_x2;
+	theory:v_y2 -> dataDefn:velocity;
+	theory:v_y2 -> dataDefn:p_y2;
+	theory:angleIM1 -> theory:angleIM2;
+	theory:angleIM2 -> theory:a_x1;
+	theory:angleIM2 -> theory:a_y1;
+	theory:angleIM2 -> theory:a_x2;
+	theory:angleIM2 -> theory:a_y2;
+	theory:angleIM2 -> theory:xForce1;
+	theory:angleIM2 -> theory:yForce1;
+	theory:angleIM2 -> theory:xForce2;
+	theory:angleIM2 -> theory:yForce2;
+	theory:angleIM2 -> theory:angleIM1;
+	theory:angleIM2 -> theory:angleIM2;
+	instance:calcAng -> theory:angleIM1;
+	instance:calcAng -> theory:angleIM2;
+	instance:outputValues -> theory:angleIM1;
+	instance:outputValues -> theory:angleIM2;
+
+
+	instance:twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:twoDMotion"];
+	instance:cartSys	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSys"];
+	instance:cartSysR	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:cartSysR"];
+	instance:yAxisDir	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:yAxisDir"];
+
+	subgraph A {
+	rank="same"
+	{instance:twoDMotion, instance:cartSys, instance:cartSysR, instance:yAxisDir}
+	}
+
+	dataDefn:velocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionGDD"];
+	dataDefn:p_x1	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionXDD1"];
+	dataDefn:p_y1	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionYDD1"];
+	dataDefn:p_x2	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionXDD2"];
+	dataDefn:p_y2	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionYDD2"];
+	dataDefn:acceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:accelerationGDD"];
+	dataDefn:force	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:forceGDD"];
+
+	subgraph DD {
+	rank="same"
+	{dataDefn:velocity, dataDefn:p_x1, dataDefn:p_y1, dataDefn:p_x2, dataDefn:p_y2, dataDefn:acceleration, dataDefn:force}
+	}
+
+	theory:accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];
+	theory:velocityTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:velocity"];
+	theory:newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
+
+	subgraph TM {
+	rank="same"
+	{theory:accelerationTM, theory:velocityTM, theory:newtonSL}
+	}
+
+	theory:v_x1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityX1"];
+	theory:v_y1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityY1"];
+	theory:v_x2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityX2"];
+	theory:v_y2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velocityY2"];
+	theory:a_x1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationX1"];
+	theory:a_y1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationY1"];
+	theory:a_x2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationX2"];
+	theory:a_y2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelerationY2"];
+	theory:xForce1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:xForce1"];
+	theory:yForce1	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:yForce1"];
+	theory:xForce2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:xForce2"];
+	theory:yForce2	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:yForce2"];
+
+	subgraph GD {
+	rank="same"
+	{theory:v_x1, theory:v_y1, theory:v_x2, theory:v_y2, theory:a_x1, theory:a_y1, theory:a_x2, theory:a_y2, theory:xForce1, theory:yForce1, theory:xForce2, theory:yForce2}
+	}
+
+	theory:angleIM1	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngle1"];
+	theory:angleIM2	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngle2"];
+
+	subgraph IM {
+	rank="same"
+	{theory:angleIM1, theory:angleIM2}
+	}
+
+	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
+	instance:verifyInptVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInptVals"];
+	instance:calcAng	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcAng"];
+	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
+	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
+	instance:portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
+
+	subgraph FR {
+	rank="same"
+	{instance:inputValues, instance:verifyInptVals, instance:calcAng, instance:outputValues, instance:correct, instance:portable}
+	}
+
+	instance:motionMass	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:motionMass"];
+
+	subgraph GS {
+	rank="same"
+	{instance:motionMass}
+	}
+
+}

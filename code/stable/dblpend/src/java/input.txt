@@ -1,0 +1,8 @@
+# length of the first rod (m)
+2.0
+# length of the second rod (m)
+1.0
+# mass of the first object (kg)
+0.5
+# mass of the second object (kg)
+2.0

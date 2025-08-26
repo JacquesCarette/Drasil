@@ -1,0 +1,211 @@
+\documentclass[12pt]{article}
+\usepackage{fontspec}
+\usepackage{fullpage}
+\usepackage{hyperref}
+\hypersetup{bookmarks=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{unicode-math}
+\usepackage{filecontents}
+\usepackage[backend=bibtex]{biblatex}
+\usepackage{url}
+\setmathfont{Latin Modern Math}
+\newcommand{\gt}{\ensuremath >}
+\newcommand{\lt}{\ensuremath <}
+\bibliography{bibfile}
+\title{Software Requirements Specification for ProgName}
+\author{Author Name}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{Reference Material}
+\label{Sec:RefMat}
+This section records information for easy reference.
+
+\subsection{Table of Units}
+\label{Sec:ToU}
+There are no units.
+
+
+\subsection{Table of Symbols}
+\label{Sec:ToS}
+There are no symbols.
+
+
+\section{Introduction}
+\label{Sec:Intro}
+There is no problem introduction.
+
+The following section provides an overview of the Software Requirements Specification (SRS) for ProgName. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+
+\subsection{Purpose of Document}
+\label{Sec:DocPurpose}
+The primary purpose of this document is to record the requirements of ProgName. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of ProgName. With the exception of \hyperref[Sec:SysConstraints]{system constraints}, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
+
+\subsection{Scope of Requirements}
+\label{Sec:ReqsScope}
+There are no requirements.
+
+\subsection{Characteristics of Intended Reader}
+\label{Sec:ReaderChars}
+Reviewers of this documentation do not need any prerequisite knowledge.
+
+\subsection{Organization of Document}
+\label{Sec:DocOrg}
+The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013}, \cite{smithLai2005}, \cite{smithEtAl2007}, and \cite{smithKoothoor2016}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the \hyperref[Sec:IMs]{instance models} and trace back to find any additional information they require.
+
+The \hyperref[Sec:GoalStmt]{goal statements} are refined to the theoretical models and the \hyperref[Sec:TMs]{theoretical models} to the \hyperref[Sec:IMs]{instance models}.
+
+\section{General System Description}
+\label{Sec:GenSysDesc}
+This section provides general information about the system. It identifies the interfaces between the system and its environment, describes the user characteristics, and lists the system constraints.
+
+\subsection{System Context}
+\label{Sec:SysContext}
+There are no system contexts.
+
+\subsection{User Characteristics}
+\label{Sec:UserChars}
+There are no user characteristics.
+
+\subsection{System Constraints}
+\label{Sec:SysConstraints}
+There are no system constraints.
+
+\section{Specific System Description}
+\label{Sec:SpecSystDesc}
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
+
+\subsection{Problem Description}
+\label{Sec:ProbDesc}
+There is no problem description.
+
+\subsubsection{Terminology and Definitions}
+\label{Sec:TermDefs}
+There are no terms or definitions.
+
+\subsubsection{Physical System Description}
+\label{Sec:PhysSyst}
+There are no physical system descriptions.
+
+\subsubsection{Goal Statements}
+\label{Sec:GoalStmt}
+There are no goal statements.
+
+\subsection{Solution Characteristics Specification}
+\label{Sec:SolCharSpec}
+The instance models that govern ProgName are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+
+\subsubsection{Assumptions}
+\label{Sec:Assumps}
+There are no assumptions.
+
+\subsubsection{Theoretical Models}
+\label{Sec:TMs}
+There are no theoretical models.
+
+\subsubsection{General Definitions}
+\label{Sec:GDs}
+There are no general definitions.
+
+\subsubsection{Data Definitions}
+\label{Sec:DDs}
+There are no data definitions.
+
+\subsubsection{Instance Models}
+\label{Sec:IMs}
+There are no instance models.
+
+\subsubsection{Data Constraints}
+\label{Sec:DataConstraints}
+There are no data constraints.
+
+\subsubsection{Properties of a Correct Solution}
+\label{Sec:CorSolProps}
+There are no properties of a correct solution.
+
+\section{Requirements}
+\label{Sec:Requirements}
+This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
+
+\subsection{Functional Requirements}
+\label{Sec:FRs}
+There are no functional requirements.
+
+\subsection{Non-Functional Requirements}
+\label{Sec:NFRs}
+There are no non-functional requirements.
+
+\section{Likely Changes}
+\label{Sec:LCs}
+There are no likely changes.
+
+\section{Unlikely Changes}
+\label{Sec:UCs}
+There are no unlikely changes.
+
+\section{Traceability Matrices and Graphs}
+\label{Sec:TraceMatrices}
+There are no traceability matrices or traceability graphs.
+
+\section{Values of Auxiliary Constants}
+\label{Sec:AuxConstants}
+There are no auxiliary constants.
+
+\section{References}
+\label{Sec:References}
+\begin{filecontents*}{bibfile.bib}
+@mastersthesis{koothoor2013,
+author={Koothoor, Nirmitha},
+title={A Document Driven Approach to Certifying Scientific Computing Software},
+school={McMaster University},
+year={2013},
+address={Hamilton, ON, Canada}}
+@article{parnasClements1986,
+author={Parnas, David L. and Clements, P. C.},
+title={A rational design process: How and why to fake it},
+journal={IEEE Transactions on Software Engineering},
+year={1986},
+month=feb,
+volume={12},
+number={2},
+pages={251--257},
+address={Washington, USA}}
+@article{smithKoothoor2016,
+author={Smith, W. Spencer and Koothoor, Nirmitha},
+title={A Document-Driven Method for Certifying Scientific Computing Software for Use in Nuclear Safety Analysis},
+journal={Nuclear Engineering and Technology},
+year={2016},
+month=apr,
+volume={48},
+number={2},
+pages={404--418},
+howpublished={\url{http://www.sciencedirect.com/science/article/pii/S1738573315002582}}}
+@inproceedings{smithLai2005,
+author={Smith, W. Spencer and Lai, Lei},
+title={A new requirements template for scientific computing},
+booktitle={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
+year={2005},
+editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
+address={Paris, France},
+pages={107--121},
+note={In conjunction with 13th IEEE International Requirements Engineering Conference,}}
+@article{smithEtAl2007,
+author={Smith, W. Spencer and Lai, Lei and Khedri, Ridha},
+title={Requirements Analysis for Engineering Computation: A Systematic Approach for Improving Software Reliability},
+journal={Reliable Computing, Special Issue on Reliable Engineering Computation},
+year={2007},
+month=feb,
+volume={13},
+number={1},
+pages={83--107},
+howpublished={\url{https://doi.org/10.1007/s11155-006-9020-7}}}
+\end{filecontents*}
+\nocite{*}
+\bibstyle{ieeetr}
+\printbibliography[heading=none]
+\end{document}

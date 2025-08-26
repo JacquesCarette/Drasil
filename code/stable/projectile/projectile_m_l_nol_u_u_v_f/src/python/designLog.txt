@@ -1,0 +1,18 @@
+Languages selected as Python Cpp CSharp Java Swift Julia.
+Modularity selected as Modular.
+Input Structure selected as Unbundled.
+Constant Structure selected as Store Unbundled.
+Constant Representation selected as Var.
+Implementation Type selected as Library.
+Software Constraint Behaviour selected as Warning.
+Physical Constraint Behaviour selected as Warning.
+Comments selected as CommentFunc CommentClass CommentMod.
+Dox Verbosity selected as Quiet.
+Dates selected as Hide.
+Log File Name selected as log.txt.
+Logging selected as None.
+Auxiliary Files selected as SampleInput ../../../datafiles/projectile/sampleInput.txt ReadME.
+Code Concept pi selected as Pi.
+Language Python does not support code type Float, chosen as the match for the Real space. Trying next choice.
+Successfully matched Real with Double.
+Successfully matched String with String.

@@ -1,0 +1,26 @@
+# heating coil surface area (m^2)
+0.12
+# specific heat capacity of water (J/(kg degreeC))
+4186.0
+# convective heat transfer coefficient between coil and water (W/(m^2 degreeC))
+1000.0
+# initial temperature (degreeC)
+40.0
+# final time (s)
+50000.0
+# length of tank (m)
+1.5
+# temperature of the heating coil (degreeC)
+50.0
+# time step for simulation (s)
+10.0
+# density of water (kg/m^3)
+1000.0
+# diameter of tank (m)
+0.412
+# absolute tolerance
+1.0e-10
+# relative tolerance
+1.0e-10
+# change in heat energy in the water (J)
+0.0

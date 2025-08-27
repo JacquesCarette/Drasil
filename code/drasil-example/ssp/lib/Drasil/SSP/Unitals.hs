@@ -23,7 +23,14 @@ import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight,
   vol)
 import Data.Drasil.Quantities.Physics (acceleration, displacement, distance,
   force, gravitationalAccel, height, moment2D, pressure, subX, subY, subZ, 
-  supMax, supMin, torque, weight, positionVec, vecDim, realVect)
+  supMax, supMin, torque, weight, positionVec)
+
+vecDim :: Dimension
+vecDim = Fixed 2
+
+-- | Helper function to create Clifford vector spaces of a given dimension
+realVect :: Dimension -> Space
+realVect _ = vect2DS Real
 
 symbols :: [DefinedQuantityDict]
 symbols = dqdWr coords : map dqdWr inputs ++ map dqdWr outputs
@@ -176,13 +183,13 @@ constF = dqd' (dcc "const_f" (nounPhraseSP "decision on f")
 
 {-Output Variables-} --FIXME: See if there should be typical values
 fs, coords :: ConstrConcept
-fs = constrained' (dqd' fsConcept (const $ sub cF lSafety) Real Nothing)
+fs = constrained' (dqdNoUnit' fsConcept (const $ sub cF lSafety) Real)
   [gtZeroConstr] (exactDbl 1)
 
 fsMin :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
-fsMin = dqd' (dcc "fsMin" (cn "minimum factor of safety") 
+fsMin = dqdNoUnit (dcc "fsMin" (cn "minimum factor of safety") 
   "the minimum factor of safety associated with the critical slip surface")
-  (const $ supMin (eqSymb fs)) Real Nothing 
+  (supMin (eqSymb fs)) Real 
 -- Once things are converted to the new style of instance models, this will
 -- be removed/fixed.
 

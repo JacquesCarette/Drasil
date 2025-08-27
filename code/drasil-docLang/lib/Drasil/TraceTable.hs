@@ -6,8 +6,9 @@ import Drasil.DocumentLanguage.Core
 
 import Language.Drasil
 import Language.Drasil.Development (lnames')
-import Database.Drasil (TraceMap, traceMap)
 import Theory.Drasil (Theory(..))
+
+import qualified Data.Map.Strict as M
 
 import Control.Lens ((^.))
 import Data.Functor.Constant (Constant(Constant))
@@ -44,5 +45,5 @@ dependencyPlate = preorderFold $ purePlate {
   notes = (^. getNotes)
 
 -- | Creates a traceability map from document sections.
-generateTraceMap :: [DocSection] -> TraceMap
-generateTraceMap = traceMap . concatMap (foldFor docSec dependencyPlate)
+generateTraceMap :: [DocSection] -> M.Map UID [UID]
+generateTraceMap = M.fromList . concatMap (foldFor docSec dependencyPlate)

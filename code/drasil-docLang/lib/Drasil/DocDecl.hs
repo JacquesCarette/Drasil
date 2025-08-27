@@ -23,7 +23,7 @@ import Language.Drasil hiding (sec)
 import Data.Drasil.Concepts.Documentation (assumpDom, funcReqDom, goalStmtDom,
   nonFuncReqDom, likeChgDom, unlikeChgDom)
 
-import Control.Lens((^.), Getting)
+import Control.Lens((^.))
 
 -- * Types
 
@@ -146,8 +146,5 @@ mkDocDesc sys@SI{_inputs = is, _systemdb = db} = map sec where
   scsSub (Constraints s c) = DL.Constraints s c
   scsSub (CorrSolnPpties c cs) = DL.CorrSolnPpties c cs
 
-  expandFromDB :: ([a] -> [a]) -> Getting (UMap a) ChunkDB (UMap a) -> [a]
-  expandFromDB f = f . asOrderedList . (db ^.)
-
   fromConcInsDB :: Concept c => c -> [ConceptInstance]
-  fromConcInsDB c = expandFromDB (filter (\x -> sDom (cdom x) == c ^. uid)) conceptinsTable
+  fromConcInsDB c = filter (\x -> sDom (cdom x) == c ^. uid) $ findAll db

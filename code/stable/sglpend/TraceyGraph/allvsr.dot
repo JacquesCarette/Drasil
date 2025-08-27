@@ -55,16 +55,16 @@ digraph allvsr {
 	{theory:angularDisplacementIM}
 	}
 
+	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
+	instance:portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
 	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
 	instance:verifyInptVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInptVals"];
 	instance:calcAngPos	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcAngPos"];
 	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
-	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
-	instance:portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
 
-	subgraph FR {
+	subgraph NFR {
 	rank="same"
-	{instance:inputValues, instance:verifyInptVals, instance:calcAngPos, instance:outputValues, instance:correct, instance:portable}
+	{instance:correct, instance:portable, instance:inputValues, instance:verifyInptVals, instance:calcAngPos, instance:outputValues}
 	}
 
 	instance:motionMass	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:motionMass"];

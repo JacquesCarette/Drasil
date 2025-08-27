@@ -5,7 +5,7 @@ module Drasil.Sections.Introduction (orgSec, introductionSection,
 
 import Language.Drasil
 import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
-  charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
+  charOfIR, orgOfDoc, sysCon)
 import Drasil.DocumentLanguage.Definitions(Verbosity(..))
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S

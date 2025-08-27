@@ -6,6 +6,7 @@ module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, sentencePlate) where
 import Control.Lens((^.))
 import Drasil.DocumentLanguage.Core
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
+import qualified Drasil.Sections.Introduction as Intro
 import Language.Drasil hiding (Manual, Verb)
 import Theory.Drasil
 import Data.List(transpose)
@@ -107,7 +108,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (IPurpose s) -> s
       (IScope s) -> [s]
       (IChar s1 s2 s3) -> concat [s1, s2, s3]
-      (IOrgSec _ _ s1) -> [s1],
+      (IOrgSec b s t) -> getSec (Intro.orgSec b s t),
     stkSub = Constant . f <$> \case
       (Client _ s) -> [s]
       (Cstmr _) -> [],

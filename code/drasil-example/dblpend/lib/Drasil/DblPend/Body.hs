@@ -73,7 +73,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [IPurpose $ purpDoc progName Verbose,
        IScope scope,
        IChar [] charsOfReader [],
-       IOrgSec inModel (SRS.inModel [] []) (foldlSent missingAbrv)],
+       IOrgSec inModel (SRS.inModel [] []) EmptyS],
   GSDSec $ 
     GSDProg [
       SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
@@ -141,9 +141,8 @@ ideaDicts =
   -- Actual IdeaDicts
   doccon ++ concepts ++ compcon ++ educon ++ prodtcon ++
   -- CIs
-  nw progName : map nw doccon' ++ map nw mathcon' ++ map nw physicCon' ++
-  -- Document structure abbreviations
-  map nw [goalStmt, thModel, inModel, assumption, genDefn, dataDefn, requirement, physSyst, typUnc]
+  nw progName : map nw doccon' ++ map nw mathcon' ++ map nw physicCon'
+  -- Document structure abbreviations should now be automatically extracted from the comprehensive paragraph
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList = 
@@ -217,24 +216,9 @@ charsOfReader = [phrase undergraduate +:+ S "level 2" +:+ phrase Doc.physics,
 -- Starting intro sentence of Organization of Documents automatically generated
 -- in IOrg
 
-missingAbrv :: [Sentence]
-missingAbrv = [S "The" +:+ plural goalStmt +:+ sParen (short goalStmt) +:+ S "are systematically refined into the" +:+ 
-              plural thModel +:+ sParen (short thModel) `sC` S "which in turn are refined into the" +:+ 
-              plural inModel +:+ sParen (short inModel) +:+. EmptyS +:+
-              S "This refinement process is guided by the" +:+ plural assumption +:+ sParen (short assumption) +:+ 
-              S "that constrain the" +:+ phrase system `sC` S "as well as the supporting" +:+ 
-              plural genDefn +:+ sParen (short genDefn) +:+ S "and" +:+ plural dataDefn +:+ sParen (short dataDefn) +:+ 
-              S "that provide the necessary mathematical and physical context." +:+ 
-              S "The" +:+ plural requirement +:+ sParen (short requirement) +:+ S "are traced back through the" +:+ 
-              short goalStmt `sC` short thModel `sC` S "and" +:+ short inModel +:+ S "to ensure consistency and completeness." +:+ 
-              S "Furthermore" `sC` S "the" +:+ phrase physSyst +:+ sParen (short physSyst) +:+ S "establishes the overall" +:+ 
-              S "context in which the" +:+ short goalStmt +:+ S "are formulated and the" +:+ short assumption +:+ S "are validated." +:+ 
-              S "Finally" `sC` S "the" +:+ phrase typUnc +:+ sParen (short typUnc) +:+ S "are documented and linked to" +:+ 
-              S "the relevant" +:+ short inModel +:+ S "and" +:+ short dataDefn `sC` S "ensuring transparency in the modeling process."] 
-
-              --------------------------------------------
--- Section 3: GENERAL SYSTEM DESCRIPTION --
---------------------------------------------
+-------------------------------
+-- 2.1 : Purpose of Document --
+-------------------------------
 -- Description of Genreal System automatically generated in GSDProg
 
 --------------------------

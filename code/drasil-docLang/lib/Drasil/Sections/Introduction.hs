@@ -17,8 +17,8 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, characteristic,
   environment, goal, goalStmt, implementation, intReader, model,
   organization, purpose, requirement, scope, section_, softwareDoc,
   softwareVAV, srs, theory, user, vavPlan, problem, problemIntro,
-  information, systemConstraint, template)
-import Drasil.Metadata (inModel, thModel)
+  information, systemConstraint, template, physSyst, typUnc, system)
+import Drasil.Metadata (inModel, thModel, dataDefn, genDefn)
 import Data.Drasil.Citations (parnasClements1986, smithEtAl2007,
   smithKoothoor2016, smithLai2005, koothoor2013)
 import Data.Drasil.Software.Products
@@ -166,8 +166,7 @@ orgIntro bottom bottomSec trailingSentence = [foldlSP [
   S "For readers that would like a more bottom up approach" `sC`
   S "they can start reading the", namedRef bottomSec (plural bottom)`S.and_`
   S "trace back to find any additional information they require"],
-  folder [refineChain (zip [goalStmt, thModel, inModel]
-         [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]), trailingSentence]]
+  folder [refinementParagraph, trailingSentence]]
   where
     folder = case trailingSentence of
       EmptyS -> foldlSP_
@@ -179,3 +178,26 @@ orgOfDocIntro = foldlSent
   S "follows the", phrase template, S "for an", short Doc.srs, S "for", 
   phrase sciCompS, S "proposed by", foldlList Comma List $ 
     map refS [koothoor2013, smithLai2005, smithEtAl2007 , smithKoothoor2016]]
+
+-- | Comprehensive paragraph explaining the document structure refinement process.
+-- This paragraph describes how Goal Statements are refined through Theoretical Models,
+-- Instance Models, and supported by various document elements including Assumptions,
+-- General Definitions, Data Definitions, Requirements, Physical System Description,
+-- and Uncertainties. This function generates sentences that use 'short' references
+-- to ensure all abbreviations are properly collected for the abbreviations table.
+refinementParagraph :: Sentence
+refinementParagraph = foldlSent [
+  S "The" +:+ plural goalStmt +:+ sParen (short goalStmt) +:+ S "are systematically refined into the" +:+ 
+  plural thModel +:+ sParen (short thModel) `sC` S "which in turn are refined into the" +:+ 
+  plural inModel +:+ sParen (short inModel) +:+. EmptyS +:+
+  S "This refinement process is guided by the" +:+ plural assumption +:+ sParen (short assumption) +:+ 
+  S "that constrain the" +:+ phrase system `sC` S "as well as the supporting" +:+ 
+  plural genDefn +:+ sParen (short genDefn) +:+ S "and" +:+ plural dataDefn +:+ sParen (short dataDefn) +:+ 
+  S "that provide the necessary mathematical and physical context." +:+ 
+  S "The" +:+ plural requirement +:+ sParen (short requirement) +:+ S "are traced back through the" +:+ 
+  short goalStmt `sC` short thModel `sC` S "and" +:+ short inModel +:+ S "to ensure consistency and completeness." +:+ 
+  S "Furthermore" `sC` S "the" +:+ phrase physSyst +:+ sParen (short physSyst) +:+ S "establishes the overall" +:+ 
+  S "context in which the" +:+ short goalStmt +:+ S "are formulated and the" +:+ short assumption +:+ S "are validated." +:+ 
+  S "Finally" `sC` S "the" +:+ phrase typUnc +:+ sParen (short typUnc) +:+ S "are documented and linked to" +:+ 
+  S "the relevant" +:+ short inModel +:+ S "and" +:+ short dataDefn `sC` S "ensuring transparency in the modeling process."
+  ]

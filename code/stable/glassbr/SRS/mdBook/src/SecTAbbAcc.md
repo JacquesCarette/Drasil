@@ -4,18 +4,27 @@
 
 |Abbreviation|Full Form                          |
 |:-----------|:----------------------------------|
+|A           |Assumption                         |
 |AN          |Annealed                           |
 |AR          |Aspect Ratio                       |
+|DD          |Data Definition                    |
 |FT          |Fully Tempered                     |
+|GD          |General Definition                 |
+|GS          |Goal Statement                     |
 |GTF         |Glass Type Factor                  |
 |GlassBR     |GlassBR                            |
 |HS          |Heat Strengthened                  |
 |IG          |Insulating Glass                   |
+|IM          |Instance Model                     |
 |LG          |Laminated Glass                    |
 |LR          |Load Resistance                    |
 |LSF         |Load Share Factor                  |
 |NFL         |Non-Factored Load                  |
+|PS          |Physical System Description        |
+|R           |Requirement                        |
 |SD          |Stand Off Distance                 |
 |SRS         |Software Requirements Specification|
+|TM          |Theoretical Model                  |
+|Uncert.     |Typical Uncertainty                |
 
 **<p align="center">Abbreviations and Acronyms</p>**

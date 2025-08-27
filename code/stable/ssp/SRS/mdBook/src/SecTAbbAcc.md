@@ -5,7 +5,16 @@
 |Abbreviation|Full Form                          |
 |:-----------|:----------------------------------|
 |2D          |Two-Dimensional                    |
+|A           |Assumption                         |
+|DD          |Data Definition                    |
+|GD          |General Definition                 |
+|GS          |Goal Statement                     |
+|IM          |Instance Model                     |
+|PS          |Physical System Description        |
+|R           |Requirement                        |
 |SRS         |Software Requirements Specification|
 |SSP         |Slope Stability analysis Program   |
+|TM          |Theoretical Model                  |
+|Uncert.     |Typical Uncertainty                |
 
 **<p align="center">Abbreviations and Acronyms</p>**

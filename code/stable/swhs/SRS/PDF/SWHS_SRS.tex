@@ -259,15 +259,33 @@ $∇$ & Gradient & --
 {colspec={l l}, rowhead=1, hline{1,Z}=\heavyrulewidth, hline{2}=\lightrulewidth}
 \textbf{Abbreviation} & \textbf{Full Form}
 \\
+A & Assumption
+\\
+DD & Data Definition
+\\
+GD & General Definition
+\\
+GS & Goal Statement
+\\
+IM & Instance Model
+\\
 ODE & Ordinary Differential Equation
 \\
 PCM & Phase Change Material
+\\
+PS & Physical System Description
+\\
+R & Requirement
 \\
 RHS & Right-Hand Side
 \\
 SRS & Software Requirements Specification
 \\
 SWHS & Solar Water Heating System
+\\
+TM & Theoretical Model
+\\
+Uncert. & Typical Uncertainty
 \label{Table:TAbbAcc}
 \end{longtblr}
 \section{Introduction}
@@ -294,7 +312,7 @@ Reviewers of this documentation should have an understanding of heat transfer th
 \label{Sec:DocOrg}
 The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013}, \cite{smithLai2005}, \cite{smithEtAl2007}, and \cite{smithKoothoor2016}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the \hyperref[Sec:IMs]{instance models} and trace back to find any additional information they require.
 
-The \hyperref[Sec:GoalStmt]{goal statements} are refined to the theoretical models and the \hyperref[Sec:TMs]{theoretical models} to the \hyperref[Sec:IMs]{instance models}. The instance models to be solved are referred to as \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{IM:heatEInWtr}, and \hyperref[IM:heatEInPCM]{IM:heatEInPCM}. The instance models provide the ordinary differential equations (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
+The goal statements (GS) are systematically refined into the theoretical models (TM), which in turn are refined into the instance models (IM). This refinement process is guided by the assumptions (A) that constrain the system, as well as the supporting general definitions (GD) and data definitions (DD) that provide the necessary mathematical and physical context. The requirements (R) are traced back through the GS, TM, and IM to ensure consistency and completeness. Furthermore, the physical system description (PS) establishes the overall context in which the GS are formulated and the A are validated. Finally, the typical uncertainty (Uncert.) are documented and linked to the relevant IM and DD, ensuring transparency in the modeling process.. The instance models to be solved are referred to as \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{IM:heatEInWtr}, and \hyperref[IM:heatEInPCM]{IM:heatEInPCM}. The instance models provide the ordinary differential equations (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
 
 \section{General System Description}
 \label{Sec:GenSysDesc}

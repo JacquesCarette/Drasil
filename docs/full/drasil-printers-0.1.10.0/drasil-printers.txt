@@ -9,6 +9,38 @@
 @package drasil-printers
 @version 0.1.10.0
 
+module Drasil.Database.SearchTools
+data TermAbbr
+TermAbbr :: NP -> Maybe String -> TermAbbr
+[longForm] :: TermAbbr -> NP
+[shortForm] :: TermAbbr -> Maybe String
+
+-- | Search for a chunk that is an instance of <a>Idea</a> and return its
+--   "term" and abbreviation, erroring out if it doesn't exist.
+termResolve :: (NP -> Maybe String -> c) -> ChunkDB -> UID -> c
+
+-- | Find a chunk's "term" and abbreviation, erroring out if it doesn't
+--   exist.
+termResolve' :: ChunkDB -> UID -> TermAbbr
+data DomDefn
+DomDefn :: [UID] -> Sentence -> DomDefn
+[domain] :: DomDefn -> [UID]
+[definition] :: DomDefn -> Sentence
+
+-- | Looks up a <a>UID</a> in all tables with concepts from the
+--   <a>ChunkDB</a>. If nothing is found, an error is thrown.
+defResolve :: ([UID] -> Sentence -> c) -> ChunkDB -> UID -> c
+defResolve' :: ChunkDB -> UID -> DomDefn
+findAllDataDefns :: ChunkDB -> [DataDefinition]
+findAllGenDefns :: ChunkDB -> [GenDefn]
+findAllInstMods :: ChunkDB -> [InstanceModel]
+findAllTheoryMods :: ChunkDB -> [TheoryModel]
+findAllConcInsts :: ChunkDB -> [ConceptInstance]
+findAllIdeaDicts :: ChunkDB -> [IdeaDict]
+findAllDefinedQuantities :: ChunkDB -> [DefinedQuantityDict]
+findAllCitations :: ChunkDB -> [Citation]
+findAllLabelledContent :: ChunkDB -> [LabelledContent]
+
 
 -- | Global configuration for output. This should be deprecated in the
 --   future as Recipes evolve.
@@ -1430,7 +1462,7 @@ header :: Doc -> Doc
 --   functions that sort the data from the printing information field into
 --   the required display formats (often <a>UID</a>s, terms, shortnames,
 --   definitions, etc.).
-mkTableFromLenses :: HasUID a => PrintingInformation -> (ChunkDB -> UMap a) -> String -> [PrintingInformation -> (String, a -> Doc)] -> Doc
+mkTableFromLenses :: IsChunk a => PrintingInformation -> Proxy a -> String -> [PrintingInformation -> (String, a -> Doc)] -> Doc
 openTerm :: NamedIdea a => PrintingInformation -> (String, a -> Doc)
 openSymbol :: HasSymbol a => PrintingInformation -> (String, a -> Doc)
 openDefSymbol :: DefinesQuantity s => PrintingInformation -> (String, s -> Doc)
@@ -1484,25 +1516,9 @@ mkTableDepChunks :: PrintingInformation -> Doc
 --   build on top of the ones listed here.
 mkTableReferencedChunks :: PrintingInformation -> Doc
 
--- | Chunks that use and are used by other chunks.
-mkTableDepReffedChunks :: PrintingInformation -> Doc
-
 -- | Creates a table of all UIDs and their "highest" recorded level of
---   information. See <a>mkListShowUsedUIDs</a> for more details.
+--   information. See <tt>mkListShowUsedUIDs</tt> for more details.
 renderUsedUIDs :: [(UID, String)] -> Doc
-
--- | For the last section of the log output. Shows which chunk UID is being
---   used at which stage. Note that chunks used at a "higher stage" (like
---   <a>Concept</a>s and <tt>QuantityDict</tt>s) will still be built off of
---   the more basic types (like <a>IdeaDict</a>s), they are just not
---   explicitly used in that manner. Also, some chunks may have been
---   "downgraded" when put into the database (for example, mapping a
---   <tt>QuantityDict</tt> wrapper onto things like Constrained and Unital
---   chunks happens often).
-mkListShowUsedUIDs :: PrintingInformation -> [(UID, String)]
-
--- | Get all <a>UID</a>s from a database (<a>ChunkDB</a>).
-mkListAll :: ChunkDB -> [UID]
 
 
 -- | Printing Monad. Starts with a specific data type (reader monad) and

@@ -1025,92 +1025,29 @@ digraph alltypes {
 	subgraph si_units {
 	}
 	subgraph cunkdbh {
-		subgraph termabbr{
-		TermAbbr	[shape=oval, color=cyan3, label="TermAbbr"];
-		TermAbbr -> NP;
-		TermAbbr -> MaybeString;
-		}
-		subgraph domdefn{
-		DomDefn	[shape=oval, color=cyan3, label="DomDefn"];
-		DomDefn -> UID;
-		DomDefn -> Sentence;
-		}
 		subgraph chunkdb{
 		ChunkDB	[shape=oval, color=cyan3, label="ChunkDB"];
-		ChunkDB -> SymbolMap;
-		ChunkDB -> TermMap;
-		ChunkDB -> ConceptMap;
-		ChunkDB -> UnitMap;
-		ChunkDB -> DatadefnMap;
-		ChunkDB -> InsModelMap;
-		ChunkDB -> GendefMap;
-		ChunkDB -> TheoryModelMap;
-		ChunkDB -> ConceptInstanceMap;
-		ChunkDB -> CitationMap;
-		ChunkDB -> LabelledContentMap;
-		ChunkDB -> ReferenceMap;
-		ChunkDB -> TraceMap;
-		ChunkDB -> RefbyMap;
+		ChunkDB -> ChunkByUID;
+		ChunkDB -> ChunksByTypeRep;
+		ChunkDB -> UMapLabelledContent;
+		ChunkDB -> UMapReference;
+		ChunkDB -> MapUIDUID;
+		}
+		subgraph dependant{
+		Dependant	[shape=oval, color=red2, label="Dependant"];
+		Dependant -> UID;
+		}
+		subgraph chunkbyuid{
+		ChunkByUID	[shape=oval, color=red2, label="ChunkByUID"];
+		ChunkByUID -> MapUIDChunkDependant;
+		}
+		subgraph chunksbytyperep{
+		ChunksByTypeRep	[shape=oval, color=red2, label="ChunksByTypeRep"];
+		ChunksByTypeRep -> MapTypeRepChunk;
 		}
 		subgraph umapa{
 		UMapa	[shape=oval, color=red2, label="UMapa"];
 		UMapa -> MapUIDaInt;
-		}
-		subgraph symbolmap{
-		SymbolMap	[shape=oval, color=red2, label="SymbolMap"];
-		SymbolMap -> UMapDefinedQuantityDict;
-		}
-		subgraph conceptmap{
-		ConceptMap	[shape=oval, color=red2, label="ConceptMap"];
-		ConceptMap -> UMapConceptChunk;
-		}
-		subgraph unitmap{
-		UnitMap	[shape=oval, color=red2, label="UnitMap"];
-		UnitMap -> UMapUnitDefn;
-		}
-		subgraph termmap{
-		TermMap	[shape=oval, color=red2, label="TermMap"];
-		TermMap -> UMapIdeaDict;
-		}
-		subgraph tracemap{
-		TraceMap	[shape=oval, color=red2, label="TraceMap"];
-		TraceMap -> MapUIDUID;
-		}
-		subgraph refbymap{
-		RefbyMap	[shape=oval, color=red2, label="RefbyMap"];
-		RefbyMap -> MapUIDUID;
-		}
-		subgraph datadefnmap{
-		DatadefnMap	[shape=oval, color=red2, label="DatadefnMap"];
-		DatadefnMap -> UMapDataDefinition;
-		}
-		subgraph insmodelmap{
-		InsModelMap	[shape=oval, color=red2, label="InsModelMap"];
-		InsModelMap -> UMapInstanceModel;
-		}
-		subgraph gendefmap{
-		GendefMap	[shape=oval, color=red2, label="GendefMap"];
-		GendefMap -> UMapGenDefn;
-		}
-		subgraph theorymodelmap{
-		TheoryModelMap	[shape=oval, color=red2, label="TheoryModelMap"];
-		TheoryModelMap -> UMapTheoryModel;
-		}
-		subgraph conceptinstancemap{
-		ConceptInstanceMap	[shape=oval, color=red2, label="ConceptInstanceMap"];
-		ConceptInstanceMap -> UMapConceptInstance;
-		}
-		subgraph labelledcontentmap{
-		LabelledContentMap	[shape=oval, color=red2, label="LabelledContentMap"];
-		LabelledContentMap -> UMapLabelledContent;
-		}
-		subgraph referencemap{
-		ReferenceMap	[shape=oval, color=red2, label="ReferenceMap"];
-		ReferenceMap -> UMapReference;
-		}
-		subgraph citationmap{
-		CitationMap	[shape=oval, color=red2, label="CitationMap"];
-		CitationMap -> UMapCitation;
 		}
 	}
 	subgraph dump {
@@ -1122,6 +1059,8 @@ digraph alltypes {
 		DumpedChunkDB	[shape=oval, color=red2, label="DumpedChunkDB"];
 		DumpedChunkDB -> MapChunkTypeUID;
 		}
+	}
+	subgraph typeduidref {
 	}
 	subgraph drails {
 	}
@@ -3291,6 +3230,24 @@ digraph alltypes {
 		CodeFuncChunk -> CodeChunk;
 		}
 	}
+	subgraph cunkh {
+		subgraph chunk{
+		Chunk	[shape=oval, color=darkviolet, label="Chunk"];
+		Chunk -> IsChunk;
+		Chunk -> a;
+		Chunk -> Chunk;
+		}
+		subgraph ischunka{
+		IsChunka	[shape=oval, color=red2, label="IsChunka"];
+		IsChunka -> HasUIDaHasChunkRefsaTypeablea;
+		}
+	}
+	subgraph typeduidref {
+		subgraph typeduidreftyp{
+		TypedUIDReftyp	[shape=oval, color=darkgreen, label="TypedUIDReftyp"];
+		TypedUIDReftyp -> UID;
+		}
+	}
 	subgraph uid {
 		subgraph uid{
 		UID	[shape=oval, color=cyan3, label="UID"];
@@ -4101,6 +4058,18 @@ digraph alltypes {
 	subgraph teoryconcepths {
 	}
 	subgraph metadata {
+	}
+	subgraph searctoolhs {
+		subgraph termabbr{
+		TermAbbr	[shape=oval, color=cyan3, label="TermAbbr"];
+		TermAbbr -> NP;
+		TermAbbr -> MaybeString;
+		}
+		subgraph domdefn{
+		DomDefn	[shape=oval, color=cyan3, label="DomDefn"];
+		DomDefn -> UID;
+		DomDefn -> Sentence;
+		}
 	}
 	subgraph print {
 		subgraph nodefamily{

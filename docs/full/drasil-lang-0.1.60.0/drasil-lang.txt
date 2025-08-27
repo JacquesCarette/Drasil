@@ -49,6 +49,43 @@ instance GHC.Generics.Generic Drasil.Database.UID.UID
 instance GHC.Classes.Ord Drasil.Database.UID.UID
 instance GHC.Classes.Eq Drasil.Database.UID.UID
 
+module Drasil.Database.Chunk
+
+-- | A piece of reusable knowledge, with an internal identifier
+--   (<a>UID</a>), possibly dependant on other chunks.
+data Chunk
+
+-- | Constraint for anything that may be considered a valid chunk type.
+type IsChunk a = (HasUID a, HasChunkRefs a, Typeable a)
+
+-- | All chunks should expose what chunks they reference/rely on, so that
+--   we can test <tt>ChunkDB</tt>s to ensure all presupposed chunks are
+--   already registered.
+class HasChunkRefs a
+chunkRefs :: HasChunkRefs a => a -> Set UID
+
+-- | Create a <a>Chunk</a>, ensuring that <a>Chunk</a>s are never placed
+--   within <a>Chunk</a>s.
+mkChunk :: IsChunk a => a -> Chunk
+
+-- | <a>Open</a> chunks, casting them to a specific type.
+unChunk :: Typeable a => Chunk -> Maybe a
+
+-- | Ask a <a>Chunk</a> for the type of data it codifies.
+chunkType :: Chunk -> TypeRep
+instance GHC.Classes.Eq Drasil.Database.Chunk.Chunk
+instance Drasil.Database.UID.HasUID Drasil.Database.Chunk.Chunk
+
+module Drasil.Database.TypedUIDRef
+
+-- | <a>UID</a> references that contain information about the type of data
+--   the <a>UID</a> refers to, useful for type-safe dereferencing.
+newtype TypedUIDRef typ
+TypedUIDRef :: UID -> TypedUIDRef typ
+
+-- | Create a <a>TypedUIDRef</a> to a chunk.
+mkRef :: IsChunk t => t -> TypedUIDRef t
+
 
 -- | Custom type for dates, in this case Month. This should, in time, be
 --   switched out in favour of a proper package designed to handle all the
@@ -2480,6 +2517,7 @@ complexRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> RefInfo -> Sen
 --   display as the given <a>Sentence</a> along with the given
 --   <a>RefInfo</a>.
 namedComplexRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Sentence -> RefInfo -> Sentence
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Reference.Reference
 instance GHC.Classes.Eq Language.Drasil.Reference.Reference
 instance Drasil.Database.UID.HasUID Language.Drasil.Reference.Reference
 instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Reference.Reference
@@ -2592,6 +2630,7 @@ mkIdea :: String -> NP -> Maybe String -> IdeaDict
 -- | Same as <a>mkIdea</a> but takes a <a>UID</a> rather than a
 --   <a>String</a>.
 mkIdeaUID :: UID -> NP -> Maybe String -> IdeaDict
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.NamedIdea.IdeaDict
 instance GHC.Classes.Eq Language.Drasil.Chunk.NamedIdea.IdeaDict
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.NamedIdea.IdeaDict
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.NamedIdea.IdeaDict
@@ -3014,6 +3053,7 @@ cTechReport :: People -> String -> String -> Int -> [CiteField] -> String -> Cit
 -- | Unpublished citation requires author, title, and note. Optional fields
 --   can be month and year. Implicitly uses the EntryID as the chunk id.
 cUnpublished :: People -> String -> String -> [CiteField] -> String -> Citation
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.Citation.Citation
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Citation.Citation
 instance Language.Drasil.ShortName.HasShortName Language.Drasil.Chunk.Citation.Citation
 instance Language.Drasil.Data.Citation.HasFields Language.Drasil.Chunk.Citation.Citation
@@ -4016,6 +4056,7 @@ ConInst :: UID -> ConceptChunk -> String -> ShortName -> ConceptInstance
 -- | Check if something has one domain. Throws an error if there is more
 --   than one.
 sDom :: [UID] -> UID
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance GHC.Classes.Eq Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Concept.Core.ConceptInstance
@@ -4025,6 +4066,7 @@ instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Concept.Cor
 instance Language.Drasil.ShortName.HasShortName Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance Language.Drasil.Label.Type.Referable Language.Drasil.Chunk.Concept.Core.ConceptInstance
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.Concept.Core.ConceptChunk
 instance GHC.Classes.Eq Language.Drasil.Chunk.Concept.Core.ConceptChunk
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.Concept.Core.ConceptChunk
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.Concept.Core.ConceptChunk
@@ -4207,6 +4249,7 @@ getCu :: UnitEquation -> [UID]
 --   them.
 compUnitDefn :: UnitDefn -> UnitDefn -> Ordering
 instance Language.Drasil.Classes.HasUnitSymbol Language.Drasil.Chunk.UnitDefn.UnitEquation
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.UnitDefn.UnitDefn
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.UnitDefn.UnitDefn
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.UnitDefn.UnitDefn
 instance Language.Drasil.Chunk.NamedIdea.Idea Language.Drasil.Chunk.UnitDefn.UnitDefn
@@ -4782,6 +4825,7 @@ implVarAU :: String -> NP -> String -> Maybe String -> Space -> Symbol -> Maybe 
 -- | Similar to <a>implVarAU</a> but takes a Sentence for the description
 --   rather than a String.
 implVarAU' :: String -> NP -> Sentence -> Maybe String -> Space -> Symbol -> Maybe UnitDefn -> DefinedQuantityDict
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
 instance Drasil.Database.UID.HasUID Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
 instance GHC.Classes.Eq Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
@@ -5064,6 +5108,7 @@ prependLabel :: RawContent -> IRefProg
 instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.LabelledContent
 instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.UnlabelledContent
 instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.Contents
+instance Drasil.Database.Chunk.HasChunkRefs Language.Drasil.Document.Core.LabelledContent
 instance Drasil.Database.UID.HasUID Language.Drasil.Document.Core.LabelledContent
 instance GHC.Classes.Eq Language.Drasil.Document.Core.LabelledContent
 instance Language.Drasil.Label.Type.HasRefAddress Language.Drasil.Document.Core.LabelledContent

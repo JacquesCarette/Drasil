@@ -1,4 +1,0 @@
-digraph theorymodelmap{
-TheoryModelMap	[shape=oval, color=red2, label="TheoryModelMap"];
-TheoryModelMap -> UMapTheoryModel;
-}

@@ -5,183 +5,183 @@
  -->
 <!-- Title: avsall Pages: 1 -->
 <svg width="356pt" height="116pt"
- viewBox="0.00 0.00 355.97 116.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ viewBox="0.00 0.00 356.27 116.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 112)">
 <title>avsall</title>
-<polygon fill="white" stroke="transparent" points="-4,4 -4,-112 351.97,-112 351.97,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-112 352.27,-112 352.27,4 -4,4"/>
 <!-- theory -->
 <g id="node1" class="node">
 <title>theory</title>
-<polygon fill="#fff68f" stroke="black" points="229.97,-108 107.97,-108 107.97,-72 229.97,-72 229.97,-108"/>
-<text text-anchor="middle" x="168.97" y="-86.3" font-family="Times,serif" font-size="14.00">IM:messageIM</text>
+<polygon fill="#fff68f" stroke="black" points="230.27,-108 108.27,-108 108.27,-72 230.27,-72 230.27,-108"/>
+<text text-anchor="middle" x="169.27" y="-86.3" font-family="Times,serif" font-size="14.00">IM:messageIM</text>
 </g>
 <!-- instance -->
 <g id="node2" class="node">
 <title>instance</title>
-<polygon fill="ivory" stroke="black" points="225.47,-36 112.47,-36 112.47,0 225.47,0 225.47,-36"/>
-<text text-anchor="middle" x="168.97" y="-14.3" font-family="Times,serif" font-size="14.00">NFR:portable</text>
+<polygon fill="ivory" stroke="black" points="236.77,-36 101.77,-36 101.77,0 236.77,0 236.77,-36"/>
+<text text-anchor="middle" x="169.27" y="-14.3" font-family="Times,serif" font-size="14.00">FR:outputValues</text>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge1" class="edge">
 <title>theory:projSpeed&#45;&gt;instance:pointMass</title>
-<path fill="none" stroke="black" d="M107.9,-87.02C-33.78,-77.03 -35.65,-32.3 102.28,-21.4"/>
-<polygon fill="black" stroke="black" points="102.73,-24.88 112.45,-20.68 102.23,-17.9 102.73,-24.88"/>
+<path fill="none" stroke="black" d="M108.21,-87.02C-29.5,-77.31 -35.13,-34.79 91.31,-22.4"/>
+<polygon fill="black" stroke="black" points="91.81,-25.87 101.46,-21.49 91.19,-18.9 91.81,-25.87"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge2" class="edge">
 <title>theory:projSpeed&#45;&gt;instance:timeStartZero</title>
-<path fill="none" stroke="black" d="M107.53,-86.59C-15.79,-75.98 -17.53,-33.4 102.31,-21.88"/>
-<polygon fill="black" stroke="black" points="102.65,-25.37 112.31,-21.02 102.05,-18.39 102.65,-25.37"/>
+<path fill="none" stroke="black" d="M107.84,-86.59C-11.59,-76.31 -16.99,-36.06 91.63,-23.07"/>
+<polygon fill="black" stroke="black" points="92.21,-26.52 101.77,-21.97 91.45,-19.57 92.21,-26.52"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge3" class="edge">
 <title>theory:projPos&#45;&gt;instance:pointMass</title>
-<path fill="none" stroke="black" d="M107.78,-86.08C2.34,-74.9 0.4,-34.82 101.96,-22.58"/>
-<polygon fill="black" stroke="black" points="102.55,-26.03 112.11,-21.48 101.8,-19.08 102.55,-26.03"/>
+<path fill="none" stroke="black" d="M108.09,-86.08C6.5,-75.31 0.98,-37.71 91.55,-24.03"/>
+<polygon fill="black" stroke="black" points="92.09,-27.49 101.52,-22.67 91.14,-20.55 92.09,-27.49"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge4" class="edge">
 <title>theory:projPos&#45;&gt;instance:timeStartZero</title>
-<path fill="none" stroke="black" d="M107.69,-85.34C20.22,-73.5 18.43,-36.31 102.32,-23.44"/>
-<polygon fill="black" stroke="black" points="102.97,-26.88 112.41,-22.06 102.02,-19.95 102.97,-26.88"/>
+<path fill="none" stroke="black" d="M108,-85.34C24.64,-74.05 19.09,-39.75 91.37,-25.41"/>
+<polygon fill="black" stroke="black" points="92.33,-28.79 101.57,-23.6 91.11,-21.9 92.33,-28.79"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge5" class="edge">
 <title>theory:velocity&#45;&gt;instance:twoDMotion</title>
-<path fill="none" stroke="black" d="M107.84,-84.3C38.26,-71.9 36.39,-38.32 102.23,-24.78"/>
-<polygon fill="black" stroke="black" points="103.22,-28.16 112.43,-22.93 101.97,-21.27 103.22,-28.16"/>
+<path fill="none" stroke="black" d="M108.15,-84.3C42.5,-72.6 37.13,-42.04 92.03,-27.26"/>
+<polygon fill="black" stroke="black" points="92.84,-30.66 101.76,-24.94 91.22,-23.85 92.84,-30.66"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge6" class="edge">
 <title>theory:velocity&#45;&gt;instance:cartSyst</title>
-<path fill="none" stroke="black" d="M107.76,-82.66C56.25,-69.83 54.43,-40.79 102.31,-26.81"/>
-<polygon fill="black" stroke="black" points="103.36,-30.15 112.19,-24.3 101.64,-23.37 103.36,-30.15"/>
+<path fill="none" stroke="black" d="M108.07,-82.66C60.68,-70.86 55.35,-45.33 92.07,-30.44"/>
+<polygon fill="black" stroke="black" points="93.43,-33.67 101.72,-27.07 91.12,-27.06 93.43,-33.67"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge7" class="edge">
 <title>theory:velocity&#45;&gt;instance:constAccel</title>
-<path fill="none" stroke="black" d="M107.84,-79.99C74.12,-67.23 72.43,-43.92 102.78,-30.11"/>
-<polygon fill="black" stroke="black" points="104.12,-33.34 112.19,-26.48 101.6,-26.81 104.12,-33.34"/>
+<path fill="none" stroke="black" d="M108.14,-79.99C78.85,-68.91 73.73,-49.86 92.79,-35.99"/>
+<polygon fill="black" stroke="black" points="94.82,-38.86 101.66,-30.77 91.27,-32.83 94.82,-38.86"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge8" class="edge">
 <title>theory:velocity&#45;&gt;instance:timeStartZero</title>
-<path fill="none" stroke="black" d="M107.93,-74.83C91.83,-63.74 90.44,-48.27 103.76,-36.42"/>
-<polygon fill="black" stroke="black" points="105.89,-39.2 112.07,-30.6 101.87,-33.47 105.89,-39.2"/>
+<path fill="none" stroke="black" d="M108.24,-74.83C95.3,-65.92 91.86,-54.17 97.93,-43.75"/>
+<polygon fill="black" stroke="black" points="100.61,-46 104.42,-36.11 95.28,-41.47 100.61,-46"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge9" class="edge">
 <title>theory:position&#45;&gt;instance:twoDMotion</title>
-<path fill="none" stroke="black" d="M115.72,-71.7C108.09,-63.47 106.28,-53.48 110.28,-44.42"/>
-<polygon fill="black" stroke="black" points="113.21,-46.35 115.91,-36.1 107.41,-42.43 113.21,-46.35"/>
+<path fill="none" stroke="black" d="M116.03,-71.7C108.4,-63.47 106.59,-53.48 110.59,-44.42"/>
+<polygon fill="black" stroke="black" points="113.51,-46.35 116.22,-36.1 107.72,-42.43 113.51,-46.35"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge10" class="edge">
 <title>theory:position&#45;&gt;instance:cartSyst</title>
-<path fill="none" stroke="black" d="M127.56,-71.7C121.8,-63.73 120.3,-54.1 123.05,-45.26"/>
-<polygon fill="black" stroke="black" points="126.29,-46.61 127.7,-36.1 120.05,-43.44 126.29,-46.61"/>
+<path fill="none" stroke="black" d="M127.86,-71.7C122.11,-63.73 120.61,-54.1 123.36,-45.26"/>
+<polygon fill="black" stroke="black" points="126.6,-46.61 128.01,-36.1 120.36,-43.44 126.6,-46.61"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge11" class="edge">
 <title>theory:position&#45;&gt;instance:constAccel</title>
-<path fill="none" stroke="black" d="M139.39,-71.7C135.32,-63.81 134.23,-54.3 136.11,-45.55"/>
-<polygon fill="black" stroke="black" points="139.41,-46.7 139.49,-36.1 132.82,-44.34 139.41,-46.7"/>
+<path fill="none" stroke="black" d="M139.7,-71.7C135.63,-63.81 134.54,-54.3 136.41,-45.55"/>
+<polygon fill="black" stroke="black" points="139.72,-46.7 139.8,-36.1 133.13,-44.34 139.72,-46.7"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge12" class="edge">
 <title>theory:position&#45;&gt;instance:timeStartZero</title>
-<path fill="none" stroke="black" d="M151.22,-71.7C148.83,-63.98 148.15,-54.71 149.18,-46.11"/>
-<polygon fill="black" stroke="black" points="152.65,-46.61 151.28,-36.1 145.8,-45.17 152.65,-46.61"/>
+<path fill="none" stroke="black" d="M151.53,-71.7C149.14,-63.98 148.46,-54.71 149.49,-46.11"/>
+<polygon fill="black" stroke="black" points="152.96,-46.61 151.59,-36.1 146.11,-45.17 152.96,-46.61"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge13" class="edge">
 <title>theory:flightduration&#45;&gt;instance:yAxisGravity</title>
-<path fill="none" stroke="black" d="M163.05,-71.7C162.25,-63.98 162.03,-54.71 162.37,-46.11"/>
-<polygon fill="black" stroke="black" points="165.86,-46.32 163.07,-36.1 158.88,-45.84 165.86,-46.32"/>
+<path fill="none" stroke="black" d="M163.36,-71.7C162.56,-63.98 162.34,-54.71 162.68,-46.11"/>
+<polygon fill="black" stroke="black" points="166.17,-46.32 163.38,-36.1 159.19,-45.84 166.17,-46.32"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge14" class="edge">
 <title>theory:flightduration&#45;&gt;instance:launchOrigin</title>
-<path fill="none" stroke="black" d="M174.88,-71.7C175.68,-63.98 175.9,-54.71 175.56,-46.11"/>
-<polygon fill="black" stroke="black" points="179.05,-45.84 174.86,-36.1 172.07,-46.32 179.05,-45.84"/>
+<path fill="none" stroke="black" d="M175.19,-71.7C175.99,-63.98 176.21,-54.71 175.87,-46.11"/>
+<polygon fill="black" stroke="black" points="179.36,-45.84 175.17,-36.1 172.38,-46.32 179.36,-45.84"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge15" class="edge">
 <title>theory:flightduration&#45;&gt;instance:targetXAxis</title>
-<path fill="none" stroke="black" d="M186.71,-71.7C189.1,-63.98 189.78,-54.71 188.75,-46.11"/>
-<polygon fill="black" stroke="black" points="192.13,-45.17 186.65,-36.1 185.28,-46.61 192.13,-45.17"/>
+<path fill="none" stroke="black" d="M187.02,-71.7C189.41,-63.98 190.09,-54.71 189.06,-46.11"/>
+<polygon fill="black" stroke="black" points="192.44,-45.17 186.96,-36.1 185.59,-46.61 192.44,-45.17"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge16" class="edge">
 <title>theory:flightduration&#45;&gt;instance:posXDirection</title>
-<path fill="none" stroke="black" d="M198.54,-71.7C202.61,-63.81 203.7,-54.3 201.82,-45.55"/>
-<polygon fill="black" stroke="black" points="205.11,-44.34 198.44,-36.1 198.52,-46.7 205.11,-44.34"/>
+<path fill="none" stroke="black" d="M198.85,-71.7C202.92,-63.81 204.01,-54.3 202.13,-45.55"/>
+<polygon fill="black" stroke="black" points="205.42,-44.34 198.75,-36.1 198.83,-46.7 205.42,-44.34"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge17" class="edge">
 <title>theory:flightduration&#45;&gt;instance:accelYGravity</title>
-<path fill="none" stroke="black" d="M210.38,-71.7C216.13,-63.73 217.63,-54.1 214.88,-45.26"/>
-<polygon fill="black" stroke="black" points="217.88,-43.44 210.23,-36.1 211.64,-46.61 217.88,-43.44"/>
+<path fill="none" stroke="black" d="M210.68,-71.7C216.44,-63.73 217.94,-54.1 215.19,-45.26"/>
+<polygon fill="black" stroke="black" points="218.19,-43.44 210.54,-36.1 211.95,-46.61 218.19,-43.44"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge18" class="edge">
 <title>theory:flightduration&#45;&gt;instance:timeStartZero</title>
-<path fill="none" stroke="black" d="M222.21,-71.7C229.84,-63.47 231.65,-53.48 227.65,-44.42"/>
-<polygon fill="black" stroke="black" points="230.52,-42.43 222.02,-36.1 224.72,-46.35 230.52,-42.43"/>
+<path fill="none" stroke="black" d="M222.52,-71.7C230.15,-63.47 231.96,-53.48 227.95,-44.42"/>
+<polygon fill="black" stroke="black" points="230.83,-42.43 222.33,-36.1 225.03,-46.35 230.83,-42.43"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge19" class="edge">
 <title>theory:flightduration&#45;&gt;instance:gravAccelValue</title>
-<path fill="none" stroke="black" d="M230,-74.83C246.1,-63.74 247.49,-48.27 234.17,-36.42"/>
-<polygon fill="black" stroke="black" points="236.06,-33.47 225.86,-30.6 232.04,-39.2 236.06,-33.47"/>
+<path fill="none" stroke="black" d="M230.31,-74.83C243.25,-65.92 246.69,-54.17 240.62,-43.75"/>
+<polygon fill="black" stroke="black" points="243.27,-41.47 234.13,-36.11 237.94,-46 243.27,-41.47"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge20" class="edge">
 <title>theory:landingposition&#45;&gt;instance:yAxisGravity</title>
-<path fill="none" stroke="black" d="M230.1,-79.99C263.82,-67.23 265.5,-43.92 235.15,-30.11"/>
-<polygon fill="black" stroke="black" points="236.33,-26.81 225.74,-26.48 233.81,-33.34 236.33,-26.81"/>
+<path fill="none" stroke="black" d="M230.4,-79.99C259.7,-68.91 264.81,-49.86 245.76,-35.99"/>
+<polygon fill="black" stroke="black" points="247.28,-32.83 236.89,-30.77 243.73,-38.86 247.28,-32.83"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge21" class="edge">
 <title>theory:landingposition&#45;&gt;instance:launchOrigin</title>
-<path fill="none" stroke="black" d="M230.17,-82.66C281.68,-69.83 283.5,-40.79 235.62,-26.81"/>
-<polygon fill="black" stroke="black" points="236.29,-23.37 225.74,-24.3 234.57,-30.15 236.29,-23.37"/>
+<path fill="none" stroke="black" d="M230.48,-82.66C277.86,-70.86 283.2,-45.33 246.47,-30.44"/>
+<polygon fill="black" stroke="black" points="247.43,-27.06 236.83,-27.07 245.12,-33.67 247.43,-27.06"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge22" class="edge">
 <title>theory:landingposition&#45;&gt;instance:posXDirection</title>
-<path fill="none" stroke="black" d="M230.09,-84.3C299.67,-71.9 301.54,-38.32 235.7,-24.78"/>
-<polygon fill="black" stroke="black" points="235.96,-21.27 225.5,-22.93 234.71,-28.16 235.96,-21.27"/>
+<path fill="none" stroke="black" d="M230.4,-84.3C296.05,-72.6 301.42,-42.04 246.52,-27.26"/>
+<polygon fill="black" stroke="black" points="247.33,-23.85 236.79,-24.94 245.71,-30.66 247.33,-23.85"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge23" class="edge">
 <title>theory:landingposition&#45;&gt;instance:accelXZero</title>
-<path fill="none" stroke="black" d="M230.24,-85.34C317.71,-73.5 319.5,-36.31 235.61,-23.44"/>
-<polygon fill="black" stroke="black" points="235.91,-19.95 225.52,-22.06 234.96,-26.88 235.91,-19.95"/>
+<path fill="none" stroke="black" d="M230.55,-85.34C313.91,-74.05 319.45,-39.75 247.18,-25.41"/>
+<polygon fill="black" stroke="black" points="247.43,-21.9 236.98,-23.6 246.21,-28.79 247.43,-21.9"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge24" class="edge">
 <title>theory:landingposition&#45;&gt;instance:gravAccelValue</title>
-<path fill="none" stroke="black" d="M230.15,-86.08C335.59,-74.9 337.53,-34.82 235.97,-22.58"/>
-<polygon fill="black" stroke="black" points="236.13,-19.08 225.82,-21.48 235.38,-26.03 236.13,-19.08"/>
+<path fill="none" stroke="black" d="M230.46,-86.08C332.05,-75.31 337.56,-37.71 247,-24.03"/>
+<polygon fill="black" stroke="black" points="247.41,-20.55 237.02,-22.67 246.46,-27.49 247.41,-20.55"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge25" class="edge">
 <title>theory:offset&#45;&gt;instance:posXDirection</title>
-<path fill="none" stroke="black" d="M230.4,-86.59C353.72,-75.98 355.46,-33.4 235.62,-21.88"/>
-<polygon fill="black" stroke="black" points="235.88,-18.39 225.62,-21.02 235.28,-25.37 235.88,-18.39"/>
+<path fill="none" stroke="black" d="M230.71,-86.59C350.13,-76.31 355.54,-36.06 246.92,-23.07"/>
+<polygon fill="black" stroke="black" points="247.1,-19.57 236.78,-21.97 246.34,-26.52 247.1,-19.57"/>
 </g>
 <!-- theory&#45;&gt;instance -->
 <g id="edge26" class="edge">
 <title>theory:outputMessage&#45;&gt;instance:posXDirection</title>
-<path fill="none" stroke="black" d="M230.03,-87.02C371.71,-77.03 373.58,-32.3 235.65,-21.4"/>
-<polygon fill="black" stroke="black" points="235.7,-17.9 225.48,-20.68 235.2,-24.88 235.7,-17.9"/>
+<path fill="none" stroke="black" d="M230.34,-87.02C368.04,-77.31 373.68,-34.79 247.24,-22.4"/>
+<polygon fill="black" stroke="black" points="247.36,-18.9 237.09,-21.49 246.74,-25.87 247.36,-18.9"/>
 </g>
 <!-- dataDefn -->
 <g id="node3" class="node">
 <title>dataDefn</title>
-<polygon fill="#bbffff" stroke="black" points="347.97,-108 247.97,-108 247.97,-72 347.97,-72 347.97,-108"/>
-<text text-anchor="middle" x="297.97" y="-86.3" font-family="Times,serif" font-size="14.00">DD:speedIY</text>
+<polygon fill="#bbffff" stroke="black" points="348.27,-108 248.27,-108 248.27,-72 348.27,-72 348.27,-108"/>
+<text text-anchor="middle" x="298.27" y="-86.3" font-family="Times,serif" font-size="14.00">DD:speedIY</text>
 </g>
 </g>
 </svg>

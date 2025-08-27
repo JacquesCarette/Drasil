@@ -1,4 +1,0 @@
-digraph datadefnmap{
-DatadefnMap	[shape=oval, color=red2, label="DatadefnMap"];
-DatadefnMap -> UMapDataDefinition;
-}

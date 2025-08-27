@@ -191,7 +191,6 @@ si :: System
 symbMap :: ChunkDB
 ideaDicts :: [IdeaDict]
 conceptChunks :: [ConceptChunk]
-usedDB :: ChunkDB
 symbols :: [DefinedQuantityDict]
 projectileMotionLesson :: CI
 allRefs :: [Reference]

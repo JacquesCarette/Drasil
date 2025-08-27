@@ -1,0 +1,6 @@
+digraph chunk{
+Chunk	[shape=oval, color=darkviolet, label="Chunk"];
+Chunk -> IsChunk;
+Chunk -> a;
+Chunk -> Chunk;
+}

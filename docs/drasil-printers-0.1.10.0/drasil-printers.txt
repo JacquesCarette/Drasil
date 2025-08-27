@@ -9,6 +9,38 @@
 @package drasil-printers
 @version 0.1.10.0
 
+module Drasil.Database.SearchTools
+data TermAbbr
+TermAbbr :: NP -> Maybe String -> TermAbbr
+[longForm] :: TermAbbr -> NP
+[shortForm] :: TermAbbr -> Maybe String
+
+-- | Search for a chunk that is an instance of <a>Idea</a> and return its
+--   "term" and abbreviation, erroring out if it doesn't exist.
+termResolve :: (NP -> Maybe String -> c) -> ChunkDB -> UID -> c
+
+-- | Find a chunk's "term" and abbreviation, erroring out if it doesn't
+--   exist.
+termResolve' :: ChunkDB -> UID -> TermAbbr
+data DomDefn
+DomDefn :: [UID] -> Sentence -> DomDefn
+[domain] :: DomDefn -> [UID]
+[definition] :: DomDefn -> Sentence
+
+-- | Looks up a <a>UID</a> in all tables with concepts from the
+--   <a>ChunkDB</a>. If nothing is found, an error is thrown.
+defResolve :: ([UID] -> Sentence -> c) -> ChunkDB -> UID -> c
+defResolve' :: ChunkDB -> UID -> DomDefn
+findAllDataDefns :: ChunkDB -> [DataDefinition]
+findAllGenDefns :: ChunkDB -> [GenDefn]
+findAllInstMods :: ChunkDB -> [InstanceModel]
+findAllTheoryMods :: ChunkDB -> [TheoryModel]
+findAllConcInsts :: ChunkDB -> [ConceptInstance]
+findAllIdeaDicts :: ChunkDB -> [IdeaDict]
+findAllDefinedQuantities :: ChunkDB -> [DefinedQuantityDict]
+findAllCitations :: ChunkDB -> [Citation]
+findAllLabelledContent :: ChunkDB -> [LabelledContent]
+
 module Language.Drasil.Printers
 
 -- | Document types include Software Requirements Specification and

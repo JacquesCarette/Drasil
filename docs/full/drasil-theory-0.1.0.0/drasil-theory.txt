@@ -74,6 +74,7 @@ ddMENoRefs :: ModelQDef -> Maybe Derivation -> String -> [Sentence] -> DataDefin
 -- | Extracts the 'QDefinition e' from a <a>DataDefinition</a>.
 qdFromDD :: DataDefinition -> Either SimpleQDef ModelQDef
 qdEFromDD :: DataDefinition -> Maybe SimpleQDef
+instance Drasil.Database.Chunk.HasChunkRefs Theory.Drasil.DataDefinition.DataDefinition
 instance Drasil.Database.UID.HasUID Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Chunk.NamedIdea.Idea Theory.Drasil.DataDefinition.DataDefinition
@@ -299,6 +300,7 @@ qwUC :: (Quantity q, MayHaveUnit q, Concept q) => q -> Input
 
 -- | For building a quantity with a constraint.
 qwC :: (Quantity q, MayHaveUnit q, Concept q) => q -> RealInterval Expr Expr -> Input
+instance Drasil.Database.Chunk.HasChunkRefs Theory.Drasil.InstanceModel.InstanceModel
 instance Drasil.Database.UID.HasUID Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Chunk.NamedIdea.Idea Theory.Drasil.InstanceModel.InstanceModel
@@ -335,6 +337,7 @@ gdNoRefs :: IsUnit u => ModelKind ModelExpr -> Maybe u -> Maybe Derivation -> St
 -- | Grab all related <tt>QDefinitions</tt> from a list of general
 --   definitions.
 getEqModQdsFromGd :: [GenDefn] -> [ModelQDef]
+instance Drasil.Database.Chunk.HasChunkRefs Theory.Drasil.GenDefn.GenDefn
 instance Drasil.Database.UID.HasUID Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Chunk.NamedIdea.Idea Theory.Drasil.GenDefn.GenDefn
@@ -394,6 +397,7 @@ tm :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr -
 -- | Constructor for theory models. Uses the shortname of the reference
 --   address.
 tmNoRefs :: (Quantity q, MayHaveUnit q, Concept q, Concept c) => ModelKind ModelExpr -> [q] -> [c] -> [ModelQDef] -> [ModelExpr] -> [ModelQDef] -> String -> [Sentence] -> TheoryModel
+instance Drasil.Database.Chunk.HasChunkRefs Theory.Drasil.Theory.TheoryModel
 instance Drasil.Database.UID.HasUID Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Chunk.NamedIdea.NamedIdea Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Chunk.NamedIdea.Idea Theory.Drasil.Theory.TheoryModel

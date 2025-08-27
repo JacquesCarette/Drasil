@@ -3,7 +3,7 @@
 </span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">nub</span></span><span class="hs-special">)</span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Notebook</span></span><span class="hs-special">)</span><span>
 </span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Printers</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">PrintingInformation</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">defaultConfiguration</span></span><span class="hs-special">)</span><span>
-</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Database.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">cdb'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ChunkDB</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Database.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">ChunkDB</span></span><span class="hs-special">)</span><span>
 </span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Database.Drasil.ChunkDB</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">cdb</span></span><span class="hs-special">)</span><span>
 </span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.System</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">System</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">mkSystem</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">SystemKind</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Notebook</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
@@ -153,21 +153,6 @@ a
 -&gt; [Reference]
 -&gt; [Citation]
 -&gt; ChunkDB
-forall q c u.
-(Quantity q, MayHaveUnit q, Concept q, Concept c, IsUnit u) =&gt;
-[q]
--&gt; [IdeaDict]
--&gt; [c]
--&gt; [u]
--&gt; [DataDefinition]
--&gt; [InstanceModel]
--&gt; [GenDefn]
--&gt; [TheoryModel]
--&gt; [ConceptInstance]
--&gt; [LabelledContent]
--&gt; [Reference]
--&gt; [Citation]
--&gt; ChunkDB
 </span><span class="hs-identifier hs-var">cdb</span></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
 </span><a href="Drasil.Projectile.Lesson.Body.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span> </span><span class="annot"><span class="annottext">[IdeaDict]
 </span><a href="Drasil.Projectile.Lesson.Body.html#ideaDicts"><span class="hs-identifier hs-var">ideaDicts</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
@@ -196,48 +181,8 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">CCs.gravity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">CCs.position</span></span><span class="hs-special">]</span><span>
 </span><span id="line-64"></span><span>
-</span><span id="line-65"></span><span class="annot"><a href="Drasil.Projectile.Lesson.Body.html#usedDB"><span class="hs-identifier hs-type">usedDB</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span>
-</span><span id="line-66"></span><span id="usedDB"><span class="annot"><span class="annottext">usedDB :: ChunkDB
-</span><a href="Drasil.Projectile.Lesson.Body.html#usedDB"><span class="hs-identifier hs-var hs-var">usedDB</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
--&gt; [IdeaDict]
--&gt; [ConceptChunk]
--&gt; [UnitDefn]
--&gt; [DataDefinition]
--&gt; [InstanceModel]
--&gt; [GenDefn]
--&gt; [TheoryModel]
--&gt; [ConceptInstance]
--&gt; [LabelledContent]
--&gt; [Reference]
--&gt; [Citation]
--&gt; ChunkDB
-forall q c u.
-(Quantity q, MayHaveUnit q, Concept q, Concept c, IsUnit u) =&gt;
-[q]
--&gt; [IdeaDict]
--&gt; [c]
--&gt; [u]
--&gt; [DataDefinition]
--&gt; [InstanceModel]
--&gt; [GenDefn]
--&gt; [TheoryModel]
--&gt; [ConceptInstance]
--&gt; [LabelledContent]
--&gt; [Reference]
--&gt; [Citation]
--&gt; ChunkDB
-</span><span class="hs-identifier hs-var">cdb'</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(DefinedQuantityDict -&gt; IdeaDict)
--&gt; [DefinedQuantityDict] -&gt; [IdeaDict]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; IdeaDict
-forall c. Idea c =&gt; c -&gt; IdeaDict
-</span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[DefinedQuantityDict]
-</span><a href="Drasil.Projectile.Lesson.Body.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-67"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-68"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-69"></span><span>
-</span><span id="line-70"></span><span class="annot"><a href="Drasil.Projectile.Lesson.Body.html#symbols"><span class="hs-identifier hs-type">symbols</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span>
-</span><span id="line-71"></span><span id="symbols"><span class="annot"><span class="annottext">symbols :: [DefinedQuantityDict]
+</span><span id="line-65"></span><span class="annot"><a href="Drasil.Projectile.Lesson.Body.html#symbols"><span class="hs-identifier hs-type">symbols</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-66"></span><span id="symbols"><span class="annot"><span class="annottext">symbols :: [DefinedQuantityDict]
 </span><a href="Drasil.Projectile.Lesson.Body.html#symbols"><span class="hs-identifier hs-var hs-var">symbols</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; DefinedQuantityDict)
 -&gt; [UnitalChunk] -&gt; [DefinedQuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
@@ -251,14 +196,14 @@ c -&gt; DefinedQuantityDict
 </span><span class="hs-identifier hs-var">Qs.iySpeed</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">Qs.speed</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">Qs.constAccel</span></span><span class="hs-special">,</span><span>
-</span><span id="line-72"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span id="line-67"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">Qs.gravitationalAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">Qs.xAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">Qs.yAccel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">Qs.time</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">Qs.ixPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">Qs.iyPos</span></span><span class="hs-special">,</span><span>
-</span><span id="line-73"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span id="line-68"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">Qs.xPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">Qs.yPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">Qs.ixVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -266,22 +211,22 @@ c -&gt; DefinedQuantityDict
 </span><span class="hs-identifier hs-var">Qs.xVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">Qs.yVel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">Qs.scalarPos</span></span><span class="hs-special">,</span><span>
-</span><span id="line-74"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span id="line-69"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">Qs.iPos</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">Qs.height</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.Projectile.Lesson.Example.html#horiz_velo"><span class="hs-identifier hs-var">horiz_velo</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-75"></span><span>
-</span><span id="line-76"></span><span class="annot"><a href="Drasil.Projectile.Lesson.Body.html#projectileMotionLesson"><span class="hs-identifier hs-type">projectileMotionLesson</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span>
-</span><span id="line-77"></span><span id="projectileMotionLesson"><span class="annot"><span class="annottext">projectileMotionLesson :: CI
+</span><span id="line-70"></span><span>
+</span><span id="line-71"></span><span class="annot"><a href="Drasil.Projectile.Lesson.Body.html#projectileMotionLesson"><span class="hs-identifier hs-type">projectileMotionLesson</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span>
+</span><span id="line-72"></span><span id="projectileMotionLesson"><span class="annot"><span class="annottext">projectileMotionLesson :: CI
 </span><a href="Drasil.Projectile.Lesson.Body.html#projectileMotionLesson"><span class="hs-identifier hs-var hs-var">projectileMotionLesson</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [UID] -&gt; CI
 </span><span class="hs-identifier hs-var">commonIdea</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;projMotLsn&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
 </span><span class="hs-identifier hs-var">pn</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Projectile Motion Lesson&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Projectile Motion&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-78"></span><span>
-</span><span id="line-79"></span><span class="annot"><a href="Drasil.Projectile.Lesson.Body.html#allRefs"><span class="hs-identifier hs-type">allRefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span>
-</span><span id="line-80"></span><span id="allRefs"><span class="annot"><span class="annottext">allRefs :: [Reference]
+</span><span id="line-73"></span><span>
+</span><span id="line-74"></span><span class="annot"><a href="Drasil.Projectile.Lesson.Body.html#allRefs"><span class="hs-identifier hs-type">allRefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span>
+</span><span id="line-75"></span><span id="allRefs"><span class="annot"><span class="annottext">allRefs :: [Reference]
 </span><a href="Drasil.Projectile.Lesson.Body.html#allRefs"><span class="hs-identifier hs-var hs-var">allRefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Reference] -&gt; [Reference]
 forall a. Eq a =&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">nub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Reference]
@@ -289,4 +234,4 @@ forall a. Eq a =&gt; [a] -&gt; [a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[Reference]
 </span><a href="Drasil.Projectile.Expressions.html#eqnRefs"><span class="hs-identifier hs-var">eqnRefs</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-81"></span></pre></body></html>
+</span><span id="line-76"></span></pre></body></html>

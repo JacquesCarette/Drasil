@@ -1,4 +1,0 @@
-digraph termmap{
-TermMap	[shape=oval, color=red2, label="TermMap"];
-TermMap -> UMapIdeaDict;
-}

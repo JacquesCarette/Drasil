@@ -442,21 +442,6 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 -&gt; [Reference]
 -&gt; [Citation]
 -&gt; ChunkDB
-forall q c u.
-(Quantity q, MayHaveUnit q, Concept q, Concept c, IsUnit u) =&gt;
-[q]
--&gt; [IdeaDict]
--&gt; [c]
--&gt; [u]
--&gt; [DataDefinition]
--&gt; [InstanceModel]
--&gt; [GenDefn]
--&gt; [TheoryModel]
--&gt; [ConceptInstance]
--&gt; [LabelledContent]
--&gt; [Reference]
--&gt; [Citation]
--&gt; ChunkDB
 </span><span class="hs-identifier hs-var">cdb</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(InstanceModel -&gt; DefinedQuantityDict)
 -&gt; [InstanceModel] -&gt; [DefinedQuantityDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]

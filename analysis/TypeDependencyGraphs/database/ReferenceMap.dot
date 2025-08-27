@@ -1,4 +1,0 @@
-digraph referencemap{
-ReferenceMap	[shape=oval, color=red2, label="ReferenceMap"];
-ReferenceMap -> UMapReference;
-}

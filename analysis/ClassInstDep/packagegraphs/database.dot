@@ -1,5 +1,3 @@
 digraph database{
-TermAbbr	[shape=oval, color=turquoise4, label="TermAbbr"];
-DomDefn	[shape=oval, color=turquoise4, label="DomDefn"];
 ChunkDB	[shape=oval, color=turquoise4, label="ChunkDB"];
 }

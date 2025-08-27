@@ -1,4 +1,0 @@
-digraph insmodelmap{
-InsModelMap	[shape=oval, color=red2, label="InsModelMap"];
-InsModelMap -> UMapInstanceModel;
-}

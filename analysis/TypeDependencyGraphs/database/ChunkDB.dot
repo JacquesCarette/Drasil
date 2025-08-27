@@ -1,17 +1,8 @@
 digraph chunkdb{
 ChunkDB	[shape=oval, color=cyan3, label="ChunkDB"];
-ChunkDB -> SymbolMap;
-ChunkDB -> TermMap;
-ChunkDB -> ConceptMap;
-ChunkDB -> UnitMap;
-ChunkDB -> DatadefnMap;
-ChunkDB -> InsModelMap;
-ChunkDB -> GendefMap;
-ChunkDB -> TheoryModelMap;
-ChunkDB -> ConceptInstanceMap;
-ChunkDB -> CitationMap;
-ChunkDB -> LabelledContentMap;
-ChunkDB -> ReferenceMap;
-ChunkDB -> TraceMap;
-ChunkDB -> RefbyMap;
+ChunkDB -> ChunkByUID;
+ChunkDB -> ChunksByTypeRep;
+ChunkDB -> UMapLabelledContent;
+ChunkDB -> UMapReference;
+ChunkDB -> MapUIDUID;
 }

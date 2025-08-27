@@ -1,0 +1,4 @@
+digraph typeduidreftyp{
+TypedUIDReftyp	[shape=oval, color=darkgreen, label="TypedUIDReftyp"];
+TypedUIDReftyp -> UID;
+}

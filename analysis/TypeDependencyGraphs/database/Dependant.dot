@@ -1,0 +1,4 @@
+digraph dependant{
+Dependant	[shape=oval, color=red2, label="Dependant"];
+Dependant -> UID;
+}

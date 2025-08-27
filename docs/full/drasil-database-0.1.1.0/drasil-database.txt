@@ -9,316 +9,118 @@
 @package drasil-database
 @version 0.1.1.0
 
-
--- | Defines types and functions to create a chunk database within Drasil.
 module Database.Drasil.ChunkDB
 
--- | Our chunk databases. Must contain all maps needed in an example. In
---   turn, these maps must contain every chunk definition or concept used
---   in its respective example, else an error is thrown.
+-- | Drasil's knowledge database.
 data ChunkDB
-CDB :: SymbolMap -> TermMap -> ConceptMap -> UnitMap -> DatadefnMap -> InsModelMap -> GendefMap -> TheoryModelMap -> ConceptInstanceMap -> CitationMap -> LabelledContentMap -> ReferenceMap -> TraceMap -> RefbyMap -> ChunkDB
-[symbolTable] :: ChunkDB -> SymbolMap
-[termTable] :: ChunkDB -> TermMap
-[conceptChunkTable] :: ChunkDB -> ConceptMap
-[_unitTable] :: ChunkDB -> UnitMap
-[_dataDefnTable] :: ChunkDB -> DatadefnMap
-[_insmodelTable] :: ChunkDB -> InsModelMap
-[_gendefTable] :: ChunkDB -> GendefMap
-[_theoryModelTable] :: ChunkDB -> TheoryModelMap
-[_conceptinsTable] :: ChunkDB -> ConceptInstanceMap
-[_citationTable] :: ChunkDB -> CitationMap
-[_labelledcontentTable] :: ChunkDB -> LabelledContentMap
-[_refTable] :: ChunkDB -> ReferenceMap
-[_traceTable] :: ChunkDB -> TraceMap
-[_refbyTable] :: ChunkDB -> RefbyMap
-data TermAbbr
-TermAbbr :: NP -> Maybe String -> TermAbbr
-[longForm] :: TermAbbr -> NP
-[shortForm] :: TermAbbr -> Maybe String
-data DomDefn
-DomDefn :: [UID] -> Sentence -> DomDefn
-[domain] :: DomDefn -> [UID]
-[definition] :: DomDefn -> Sentence
 
--- | A reference map, used to hold a <a>UID</a> and where it is referenced
---   (<a>UID</a>s).
-type RefbyMap = Map UID [UID]
+-- | An empty <a>ChunkDB</a>.
+empty :: ChunkDB
 
--- | A traceability map, used to hold the relation between one <a>UID</a>
---   and a list of other <a>UID</a>s.
-type TraceMap = Map UID [UID]
+-- | Create a <a>ChunkDB</a> from a list of chunks. This will insert all
+--   chunks into the database from the list, from left to right.
+fromList :: IsChunk a => [a] -> ChunkDB
 
--- | The misnomers below (for the following Map types) are not actually a
---   bad thing. We want to ensure data can't be added to a map if it's not
---   coming from a chunk, and there's no point confusing what the map is
---   for. One is for symbols + their units, and the others are for what
---   they state.
+-- | Query the <a>ChunkDB</a> for all registered chunks (by their
+--   <a>UID</a>s).
+registered :: ChunkDB -> [UID]
+
+-- | Enumerate all types registered in the <a>ChunkDB</a>.
+typesRegistered :: ChunkDB -> [TypeRep]
+
+-- | Get the number of chunks registered in the <a>ChunkDB</a>.
+size :: ChunkDB -> Int
+
+-- | Check if a <a>UID</a> is registered in the <a>ChunkDB</a>.
+isRegistered :: UID -> ChunkDB -> Bool
+
+-- | Filter the <a>ChunkDB</a> for chunks that are not needed by any other
+--   chunks. These are the only chunks that can safely be removed from the
+--   database, though we do not include this functionality.
+findUnused :: ChunkDB -> [UID]
+
+-- | Find a chunk by its <a>UID</a> in the <a>ChunkDB</a>.
+find :: Typeable a => UID -> ChunkDB -> Maybe a
+
+-- | Find a chunk by its <a>UID</a> in the <a>ChunkDB</a>, throwing a hard
+--   error if it is not found.
+findOrErr :: forall a. Typeable a => UID -> ChunkDB -> a
+
+-- | Find all chunks of a specific type in the <a>ChunkDB</a>.
+findAll :: forall a. IsChunk a => ChunkDB -> [a]
+
+-- | Find all chunks of a specific type in the <a>ChunkDB</a>, returning
+--   their <a>UID</a>s rather than the chunks themselves.
+findAll' :: TypeRep -> ChunkDB -> [UID]
+
+-- | Find all chunks that depend on a specific one.
+dependants :: UID -> ChunkDB -> Maybe [UID]
+
+-- | Find all chunks that depend on a specific one, throwing a hard error
+--   if the dependency chunk is not found.
+dependantsOrErr :: UID -> ChunkDB -> [UID]
+
+-- | Find the type of a chunk by its <a>UID</a>.
+findTypeOf :: UID -> ChunkDB -> Maybe TypeRep
+
+-- | Insert a chunk into the <a>ChunkDB</a> if it is sensibly to do so
+--   (i.e., does not depend on itself and is not a <a>ChunkDB</a>). We
+--   temporarily allow chunks to overwrite other ones, but we warn when
+--   this happens.
+insert :: IsChunk a => a -> ChunkDB -> ChunkDB
+
+-- | Insert a list of chunks into a <a>ChunkDB</a>.
+insertAll :: IsChunk a => [a] -> ChunkDB -> ChunkDB
+
+-- | An ordered map based on <a>Strict</a> for looking up chunks by their
+--   <a>UID</a>s.
 type UMap a = Map UID (a, Int)
 
--- | Smart constructor for chunk databases. Takes in the following:
---   
---   <ul>
---   <li>[<a>Quantity</a>] (for <a>SymbolMap</a>),</li>
---   <li><a>NamedIdea</a>s (for <a>TermMap</a>),</li>
---   <li><a>Concept</a>s (for <a>ConceptMap</a>),</li>
---   <li>Units (something that <a>IsUnit</a> for <a>UnitMap</a>),</li>
---   <li><a>DataDefinition</a>s (for <a>DatadefnMap</a>),</li>
---   <li><a>InstanceModel</a>s (for <a>InsModelMap</a>),</li>
---   <li><a>GenDefn</a>s (for <a>GendefMap</a>),</li>
---   <li><a>TheoryModel</a>s (for <a>TheoryModelMap</a>),</li>
---   <li><a>ConceptInstance</a>s (for <a>ConceptInstanceMap</a>),</li>
---   <li><a>LabelledContent</a>s (for <a>LabelledContentMap</a>). Creates
---   an empty ChunkDB without basic data. cdb in MetaDatabase.Drasil should
---   be preferred over this function as it includes the basic data needed
---   for Drasil.</li>
---   </ul>
-cdb' :: (Quantity q, MayHaveUnit q, Concept q, Concept c, IsUnit u) => [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
+-- | Create a <a>UMap</a> from a list of chunks. Assumes that the leftmost
+--   chunk in the list has index 0, increasing by 1 each step to the right.
+idMap :: HasUID a => [a] -> UMap a
+refTable :: ChunkDB -> UMap Reference
 
--- | General smart constructor for making a <a>UMap</a> out of anything
---   that has a <a>UID</a>.
-idMap :: HasUID a => String -> [a] -> Map UID (a, Int)
+-- | Find a <a>Reference</a> by its <a>UID</a>, throwing an error if it is
+--   not found.
+refFind :: UID -> ChunkDB -> Reference
+labelledcontentTable :: ChunkDB -> UMap LabelledContent
 
--- | Smart constructor for a <a>SymbolMap</a>.
-symbolMap :: (Quantity c, MayHaveUnit c, Concept c) => [c] -> SymbolMap
+-- | Find a <a>LabelledContent</a> by its <a>UID</a>, throwing an error if
+--   it is not found.
+labelledcontentFind :: UID -> ChunkDB -> LabelledContent
+refbyTable :: ChunkDB -> Map UID [UID]
 
--- | Smart constructor for a <a>TermMap</a>.
-termMap :: Idea c => [c] -> TermMap
+-- | Find what chunks reference a given <a>UID</a>.
+refbyLookup :: UID -> Map UID [UID] -> [UID]
+traceTable :: ChunkDB -> Map UID [UID]
 
--- | Smart constructor for a <a>ConceptMap</a>.
-conceptMap :: Concept c => [c] -> ConceptMap
-
--- | Smart constructor for a <a>UnitMap</a>.
-unitMap :: IsUnit u => [u] -> UnitMap
-
--- | Smart constructor for a <a>TraceMap</a> given a traceability matrix.
-traceMap :: [(UID, [UID])] -> TraceMap
-
--- | Translates a traceability map into a reference map.
-generateRefbyMap :: TraceMap -> RefbyMap
-
--- | Gets an ordered list of <tt>a</tt> from any <tt>a</tt> that is of type
---   <a>UMap</a>.
-asOrderedList :: UMap a -> [a]
-
--- | Gets the units of a <a>Quantity</a> as <a>UnitDefn</a>s.
-collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
-
--- | Search for _any_ chunk that is an instance of <a>Idea</a> and process
---   its "term" and abbreviation.
-termResolve :: (NP -> Maybe String -> c) -> ChunkDB -> UID -> c
-
--- | Find a chunks "term" and abbreviation, if it exists.
-termResolve' :: ChunkDB -> UID -> TermAbbr
-
--- | Looks up a <a>UID</a> in all tables with concepts from the
---   <a>ChunkDB</a>. If nothing is found, an error is thrown.
-defResolve :: ([UID] -> Sentence -> c) -> ChunkDB -> UID -> c
-
--- | Looks up a <a>UID</a> in the symbol table from the <a>ChunkDB</a>. If
---   nothing is found, an error is thrown.
-symbResolve :: ChunkDB -> UID -> DefinedQuantityDict
-
--- | Trace a <a>UID</a> to related <a>UID</a>s.
-traceLookup :: UID -> TraceMap -> [UID]
-
--- | Trace a <a>UID</a> to referenced <a>UID</a>s.
-refbyLookup :: UID -> RefbyMap -> [UID]
-
--- | Looks up a <a>UID</a> in the datadefinition table. If nothing is
---   found, an error is thrown.
-datadefnLookup :: UID -> DatadefnMap -> DataDefinition
-
--- | Looks up a <a>UID</a> in the instance model table. If nothing is
---   found, an error is thrown.
-insmodelLookup :: UID -> InsModelMap -> InstanceModel
-
--- | Looks up a <a>UID</a> in the general definition table. If nothing is
---   found, an error is thrown.
-gendefLookup :: UID -> GendefMap -> GenDefn
-
--- | Looks up a <a>UID</a> in the theory model table. If nothing is found,
---   an error is thrown.
-theoryModelLookup :: UID -> TheoryModelMap -> TheoryModel
-
--- | Looks up a <a>UID</a> in the concept instance table. If nothing is
---   found, an error is thrown.
-conceptinsLookup :: UID -> ConceptInstanceMap -> ConceptInstance
-
--- | Looks up a <a>UID</a> in the reference table from the <a>ChunkDB</a>.
---   If nothing is found, an error is thrown.
-refResolve :: UID -> ReferenceMap -> Reference
-unitTable :: Lens' ChunkDB UnitMap
-traceTable :: Lens' ChunkDB TraceMap
-refbyTable :: Lens' ChunkDB RefbyMap
-citationTable :: Lens' ChunkDB CitationMap
-dataDefnTable :: Lens' ChunkDB DatadefnMap
-insmodelTable :: Lens' ChunkDB InsModelMap
-gendefTable :: Lens' ChunkDB GendefMap
-theoryModelTable :: Lens' ChunkDB TheoryModelMap
-conceptinsTable :: Lens' ChunkDB ConceptInstanceMap
-labelledcontentTable :: Lens' ChunkDB LabelledContentMap
-refTable :: Lens' ChunkDB ReferenceMap
-addCdb :: ChunkDB -> ChunkDB -> ChunkDB
-defResolve' :: ChunkDB -> UID -> DomDefn
+-- | Query a chunk for to what chunks it refers to.
+traceLookup :: UID -> Map UID [UID] -> [UID]
 
 module Database.Drasil.Dump
 type ChunkType = String
+
+-- | A dumped representation of a <a>ChunkDB</a>, mapping chunk types
+--   (<a>String</a>s) to lists of <a>UID</a>s.
 type DumpedChunkDB = Map ChunkType [UID]
-umapDump :: HasUID a => UMap a -> [UID]
 dumpChunkDB :: ChunkDB -> DumpedChunkDB
+
+module Database.Drasil.TypedUIDRef
+
+-- | <a>UID</a> references that contain information about the type of data
+--   the <a>UID</a> refers to, useful for type-safe dereferencing.
+data () => TypedUIDRef typ
+
+-- | Create a <a>TypedUIDRef</a> to a chunk.
+mkRef :: IsChunk t => t -> TypedUIDRef t
+
+-- | Find a chunk by its typed UID reference.
+typedFind :: IsChunk t => TypedUIDRef t -> ChunkDB -> Maybe t
+
+-- | Find a chunk by its typed UID reference, erroring if not found.
+typedFindOrErr :: IsChunk t => TypedUIDRef t -> ChunkDB -> t
 
 
 -- | Re-export database types and functions to simplify external use.
 module Database.Drasil
-
--- | Our chunk databases. Must contain all maps needed in an example. In
---   turn, these maps must contain every chunk definition or concept used
---   in its respective example, else an error is thrown.
-data ChunkDB
-CDB :: SymbolMap -> TermMap -> ConceptMap -> UnitMap -> DatadefnMap -> InsModelMap -> GendefMap -> TheoryModelMap -> ConceptInstanceMap -> CitationMap -> LabelledContentMap -> ReferenceMap -> TraceMap -> RefbyMap -> ChunkDB
-[symbolTable] :: ChunkDB -> SymbolMap
-[termTable] :: ChunkDB -> TermMap
-[conceptChunkTable] :: ChunkDB -> ConceptMap
-[_unitTable] :: ChunkDB -> UnitMap
-[_dataDefnTable] :: ChunkDB -> DatadefnMap
-[_insmodelTable] :: ChunkDB -> InsModelMap
-[_gendefTable] :: ChunkDB -> GendefMap
-[_theoryModelTable] :: ChunkDB -> TheoryModelMap
-[_conceptinsTable] :: ChunkDB -> ConceptInstanceMap
-[_citationTable] :: ChunkDB -> CitationMap
-[_labelledcontentTable] :: ChunkDB -> LabelledContentMap
-[_refTable] :: ChunkDB -> ReferenceMap
-[_traceTable] :: ChunkDB -> TraceMap
-[_refbyTable] :: ChunkDB -> RefbyMap
-
--- | A reference map, used to hold a <a>UID</a> and where it is referenced
---   (<a>UID</a>s).
-type RefbyMap = Map UID [UID]
-
--- | A traceability map, used to hold the relation between one <a>UID</a>
---   and a list of other <a>UID</a>s.
-type TraceMap = Map UID [UID]
-
--- | The misnomers below (for the following Map types) are not actually a
---   bad thing. We want to ensure data can't be added to a map if it's not
---   coming from a chunk, and there's no point confusing what the map is
---   for. One is for symbols + their units, and the others are for what
---   they state.
-type UMap a = Map UID (a, Int)
-data TermAbbr
-TermAbbr :: NP -> Maybe String -> TermAbbr
-[longForm] :: TermAbbr -> NP
-[shortForm] :: TermAbbr -> Maybe String
-data DomDefn
-DomDefn :: [UID] -> Sentence -> DomDefn
-[domain] :: DomDefn -> [UID]
-[definition] :: DomDefn -> Sentence
-
--- | Smart constructor for chunk databases. Takes in the following:
---   
---   <ul>
---   <li>[<a>Quantity</a>] (for <a>SymbolMap</a>),</li>
---   <li><a>NamedIdea</a>s (for <a>TermMap</a>),</li>
---   <li><a>Concept</a>s (for <a>ConceptMap</a>),</li>
---   <li>Units (something that <a>IsUnit</a> for <a>UnitMap</a>),</li>
---   <li><a>DataDefinition</a>s (for <a>DatadefnMap</a>),</li>
---   <li><a>InstanceModel</a>s (for <a>InsModelMap</a>),</li>
---   <li><a>GenDefn</a>s (for <a>GendefMap</a>),</li>
---   <li><a>TheoryModel</a>s (for <a>TheoryModelMap</a>),</li>
---   <li><a>ConceptInstance</a>s (for <a>ConceptInstanceMap</a>),</li>
---   <li><a>LabelledContent</a>s (for <a>LabelledContentMap</a>). Creates
---   an empty ChunkDB without basic data. cdb in MetaDatabase.Drasil should
---   be preferred over this function as it includes the basic data needed
---   for Drasil.</li>
---   </ul>
-cdb' :: (Quantity q, MayHaveUnit q, Concept q, Concept c, IsUnit u) => [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
-
--- | General smart constructor for making a <a>UMap</a> out of anything
---   that has a <a>UID</a>.
-idMap :: HasUID a => String -> [a] -> Map UID (a, Int)
-
--- | Smart constructor for a <a>SymbolMap</a>.
-symbolMap :: (Quantity c, MayHaveUnit c, Concept c) => [c] -> SymbolMap
-
--- | Smart constructor for a <a>TermMap</a>.
-termMap :: Idea c => [c] -> TermMap
-
--- | Smart constructor for a <a>ConceptMap</a>.
-conceptMap :: Concept c => [c] -> ConceptMap
-
--- | Smart constructor for a <a>UnitMap</a>.
-unitMap :: IsUnit u => [u] -> UnitMap
-
--- | Smart constructor for a <a>TraceMap</a> given a traceability matrix.
-traceMap :: [(UID, [UID])] -> TraceMap
-
--- | Translates a traceability map into a reference map.
-generateRefbyMap :: TraceMap -> RefbyMap
-
--- | Gets an ordered list of <tt>a</tt> from any <tt>a</tt> that is of type
---   <a>UMap</a>.
-asOrderedList :: UMap a -> [a]
-
--- | Gets the units of a <a>Quantity</a> as <a>UnitDefn</a>s.
-collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
-
--- | Search for _any_ chunk that is an instance of <a>Idea</a> and process
---   its "term" and abbreviation.
-termResolve :: (NP -> Maybe String -> c) -> ChunkDB -> UID -> c
-
--- | Find a chunks "term" and abbreviation, if it exists.
-termResolve' :: ChunkDB -> UID -> TermAbbr
-
--- | Looks up a <a>UID</a> in all tables with concepts from the
---   <a>ChunkDB</a>. If nothing is found, an error is thrown.
-defResolve :: ([UID] -> Sentence -> c) -> ChunkDB -> UID -> c
-defResolve' :: ChunkDB -> UID -> DomDefn
-
--- | Looks up a <a>UID</a> in the symbol table from the <a>ChunkDB</a>. If
---   nothing is found, an error is thrown.
-symbResolve :: ChunkDB -> UID -> DefinedQuantityDict
-
--- | Trace a <a>UID</a> to related <a>UID</a>s.
-traceLookup :: UID -> TraceMap -> [UID]
-
--- | Trace a <a>UID</a> to referenced <a>UID</a>s.
-refbyLookup :: UID -> RefbyMap -> [UID]
-
--- | Looks up a <a>UID</a> in the datadefinition table. If nothing is
---   found, an error is thrown.
-datadefnLookup :: UID -> DatadefnMap -> DataDefinition
-
--- | Looks up a <a>UID</a> in the instance model table. If nothing is
---   found, an error is thrown.
-insmodelLookup :: UID -> InsModelMap -> InstanceModel
-
--- | Looks up a <a>UID</a> in the general definition table. If nothing is
---   found, an error is thrown.
-gendefLookup :: UID -> GendefMap -> GenDefn
-
--- | Looks up a <a>UID</a> in the theory model table. If nothing is found,
---   an error is thrown.
-theoryModelLookup :: UID -> TheoryModelMap -> TheoryModel
-
--- | Looks up a <a>UID</a> in the concept instance table. If nothing is
---   found, an error is thrown.
-conceptinsLookup :: UID -> ConceptInstanceMap -> ConceptInstance
-
--- | Looks up a <a>UID</a> in the reference table from the <a>ChunkDB</a>.
---   If nothing is found, an error is thrown.
-refResolve :: UID -> ReferenceMap -> Reference
-unitTable :: Lens' ChunkDB UnitMap
-traceTable :: Lens' ChunkDB TraceMap
-refbyTable :: Lens' ChunkDB RefbyMap
-citationTable :: Lens' ChunkDB CitationMap
-dataDefnTable :: Lens' ChunkDB DatadefnMap
-insmodelTable :: Lens' ChunkDB InsModelMap
-gendefTable :: Lens' ChunkDB GendefMap
-theoryModelTable :: Lens' ChunkDB TheoryModelMap
-conceptinsTable :: Lens' ChunkDB ConceptInstanceMap
-labelledcontentTable :: Lens' ChunkDB LabelledContentMap
-refTable :: Lens' ChunkDB ReferenceMap
-dumpChunkDB :: ChunkDB -> DumpedChunkDB
-type DumpedChunkDB = Map ChunkType [UID]
-addCdb :: ChunkDB -> ChunkDB -> ChunkDB

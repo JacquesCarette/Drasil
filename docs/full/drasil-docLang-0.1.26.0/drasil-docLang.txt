@@ -635,7 +635,7 @@ helperRefs :: HasUID t => t -> System -> Sentence
 -- | Creates a reference as a <a>Sentence</a> by finding if the <a>UID</a>
 --   is in one of the possible data sets contained in the <a>System</a>
 --   database.
-helpToRefField :: UID -> System -> Sentence
+helpToRefField :: UID -> ChunkDB -> Sentence
 instance GHC.Show.Show Drasil.DocumentLanguage.Definitions.Field
 
 
@@ -685,11 +685,11 @@ layoutUIDs :: [TraceViewCat] -> ChunkDB -> [UID] -> [UID]
 
 -- | Helper that filters a traceability matrix given a predicate and a
 --   <a>ChunkDB</a> lens field.
-traceViewFilt :: HasUID a => (a -> Bool) -> Getting (UMap a) ChunkDB (UMap a) -> TraceViewCat
+traceViewFilt :: HasUID a => (a -> Bool) -> (ChunkDB -> [a]) -> TraceViewCat
 
 -- | Helper that is similar to <a>traceViewFilt</a>, but the filter is
 --   always <a>True</a>.
-traceView :: HasUID a => Getting (UMap a) ChunkDB (UMap a) -> TraceViewCat
+traceView :: HasUID a => (ChunkDB -> [a]) -> TraceViewCat
 
 -- | Turns a <a>Concept</a> into a <a>TraceViewCat</a> via its domain.
 traceViewCC :: Concept c => c -> TraceViewCat
@@ -1705,7 +1705,7 @@ module Drasil.TraceTable
 dependencyPlate :: DLPlate (Constant [(UID, [UID])])
 
 -- | Creates a traceability map from document sections.
-generateTraceMap :: [DocSection] -> TraceMap
+generateTraceMap :: [DocSection] -> Map UID [UID]
 
 
 -- | Start the process of moving away from Document as the main internal
@@ -1754,6 +1754,12 @@ fillReqs :: DocDesc -> System -> System
 --   document description (<a>DocDesc</a>) from a database
 --   (<a>ChunkDB</a>).
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
+
+-- | For a given list of <a>Quantity</a>s, collects the <a>UnitDefn</a>s
+--   dependencies of their units (i.e., what units their units are defined
+--   with).
+collectUnitDeps :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
+getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
 
 -- | Helper for creating the different document sections.
 mkSections :: System -> DocDesc -> [Section]
@@ -2218,7 +2224,7 @@ traceMatStandard :: System -> [TraceConfig]
 traceMatOtherReq :: System -> TraceConfig
 
 -- | Creates a traceability map from document sections.
-generateTraceMap :: [DocSection] -> TraceMap
+generateTraceMap :: [DocSection] -> Map UID [UID]
 
 -- | Helper that gets a table of constants from a <a>QDefinition</a>.
 tableOfConstants :: [ConstQDef] -> LabelledContent
@@ -2337,34 +2343,13 @@ secRefs :: [Reference]
 --   example.
 module Drasil.SRSDocument
 
--- | Our chunk databases. Must contain all maps needed in an example. In
---   turn, these maps must contain every chunk definition or concept used
---   in its respective example, else an error is thrown.
+-- | Drasil's knowledge database.
 data () => ChunkDB
 
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data () => System
 [SI] :: forall a e h i j. (CommonIdea a, Idea a, Quantity e, Eq e, MayHaveUnit e, Concept e, Quantity h, MayHaveUnit h, Concept h, Quantity i, MayHaveUnit i, Concept i, HasUID j, Constrained j) => a -> SystemKind -> People -> Purpose -> Background -> Scope -> Motivation -> [e] -> [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> [String] -> [h] -> [i] -> [j] -> [ConstQDef] -> ChunkDB -> System
-
--- | Smart constructor for chunk databases. Takes in the following:
---   
---   <ul>
---   <li>[<a>Quantity</a>] (for <a>SymbolMap</a>),</li>
---   <li><a>NamedIdea</a>s (for <a>TermMap</a>),</li>
---   <li><a>Concept</a>s (for <a>ConceptMap</a>),</li>
---   <li>Units (something that <a>IsUnit</a> for <a>UnitMap</a>),</li>
---   <li><a>DataDefinition</a>s (for <a>DatadefnMap</a>),</li>
---   <li><a>InstanceModel</a>s (for <a>InsModelMap</a>),</li>
---   <li><a>GenDefn</a>s (for <a>GendefMap</a>),</li>
---   <li><a>TheoryModel</a>s (for <a>TheoryModelMap</a>),</li>
---   <li><a>ConceptInstance</a>s (for <a>ConceptInstanceMap</a>),</li>
---   <li><a>LabelledContent</a>s (for <a>LabelledContentMap</a>). Creates
---   an empty ChunkDB without basic data. cdb in MetaDatabase.Drasil should
---   be preferred over this function as it includes the basic data needed
---   for Drasil.</li>
---   </ul>
-cdb' :: (Quantity q, MayHaveUnit q, Concept q, Concept c, IsUnit u) => [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
 
 -- | Printing information contains a database, a stage, and a printing
 --   configuration.

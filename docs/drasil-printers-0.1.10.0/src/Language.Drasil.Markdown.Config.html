@@ -2,151 +2,120 @@
 </span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Language.Drasil.Markdown.Config</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-3"></span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.PrettyPrint</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Doc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">text</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">vcat</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-operator">(&lt;+&gt;)</span></span><span class="hs-special">)</span><span>
-</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">empty</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">elems</span></span><span class="hs-special">)</span><span>
-</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span>
-</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.FilePath</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">takeFileName</span></span><span class="hs-special">)</span><span>
-</span><span id="line-8"></span><span>
-</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">makeCSV</span></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.FilePath</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">takeFileName</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Database.SearchTools.html"><span class="hs-identifier">Drasil.Database.SearchTools</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Database.SearchTools.html#findAllLabelledContent"><span class="hs-identifier">findAllLabelledContent</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Document</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Document</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">LabelledContent</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">LblC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_ctype</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-9"></span><span>  </span><span class="annot"><span class="hs-identifier">RawContent</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Figure</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Sentence</span></span><span class="hs-special">)</span><span>
 </span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Markdown.Print.html"><span class="hs-identifier">Language.Drasil.Markdown.Print</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Markdown.Print.html#pSpec"><span class="hs-identifier">pSpec</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.PrintingInformation.html"><span class="hs-identifier">Language.Drasil.Printing.PrintingInformation</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Printing.PrintingInformation.html#PrintingInformation"><span class="hs-identifier">PrintingInformation</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Database.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">labelledcontentTable</span></span><span class="hs-special">)</span><span>
-</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html"><span class="hs-identifier">Language.Drasil.Printing.Import.Sentence</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier">spec</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.LayoutObj.html"><span class="hs-identifier">Language.Drasil.Printing.LayoutObj</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Printing.LayoutObj.html#Filepath"><span class="hs-identifier">Filepath</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html"><span class="hs-identifier">Language.Drasil.Printing.Import.Sentence</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier">spec</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.LayoutObj.html"><span class="hs-identifier">Language.Drasil.Printing.LayoutObj</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Printing.LayoutObj.html#Filepath"><span class="hs-identifier">Filepath</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">makeCSV</span></span><span class="hs-special">)</span><span>
 </span><span id="line-15"></span><span>
-</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Expr</span></span><span class="hs-special">)</span><span>
-</span><span id="line-17"></span><span>
-</span><span id="line-18"></span><span class="annot"><span class="hs-comment">-- | Prints the .toml config file for mdBook.</span></span><span>
-</span><span id="line-19"></span><span class="annot"><a href="Language.Drasil.Markdown.Config.html#makeBook"><span class="hs-identifier hs-type">makeBook</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Document</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.PrintingInformation.html#PrintingInformation"><span class="hs-identifier hs-type">PrintingInformation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>  </span><span>
-</span><span id="line-20"></span><span id="makeBook"><span class="annot"><span class="annottext">makeBook :: Document -&gt; PrintingInformation -&gt; Doc
-</span><a href="Language.Drasil.Markdown.Config.html#makeBook"><span class="hs-identifier hs-var hs-var">makeBook</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Document</span></span><span> </span><span id="local-6989586621679128583"><span class="annot"><span class="annottext">Title
-</span><a href="#local-6989586621679128583"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="annot"><span class="annottext">Title
+</span><span id="line-16"></span><span class="annot"><span class="hs-comment">-- | Prints the .toml config file for mdBook.</span></span><span>
+</span><span id="line-17"></span><span class="annot"><a href="Language.Drasil.Markdown.Config.html#makeBook"><span class="hs-identifier hs-type">makeBook</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Document</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.PrintingInformation.html#PrintingInformation"><span class="hs-identifier hs-type">PrintingInformation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>  </span><span>
+</span><span id="line-18"></span><span id="makeBook"><span class="annot"><span class="annottext">makeBook :: Document -&gt; PrintingInformation -&gt; Doc
+</span><a href="Language.Drasil.Markdown.Config.html#makeBook"><span class="hs-identifier hs-var hs-var">makeBook</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Document</span></span><span> </span><span id="local-6989586621679106248"><span class="annot"><span class="annottext">Title
+</span><a href="#local-6989586621679106248"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="annot"><span class="annottext">Title
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">ShowTableOfContents
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[Section]
-</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679128584"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679128584"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679106249"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679106249"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
 </span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="hs-special">[</span><span>
-</span><span id="line-21"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
-</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-19"></span><span>  </span><span class="annot"><span class="annottext">[Char] -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;[book]&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-22"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
-</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-20"></span><span>  </span><span class="annot"><span class="annottext">[Char] -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;language = \&quot;en\&quot;&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-23"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
-</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-21"></span><span>  </span><span class="annot"><span class="annottext">[Char] -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;multilingual = false&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-24"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
-</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-22"></span><span>  </span><span class="annot"><span class="annottext">[Char] -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;src = \&quot;src\&quot;&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-25"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
-</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-23"></span><span>  </span><span class="annot"><span class="annottext">[Char] -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;title =&quot;</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;+&gt;</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Title -&gt; Doc
 </span><a href="Language.Drasil.Markdown.Config.html#mkTitle"><span class="hs-identifier hs-var">mkTitle</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679128584"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Title
-</span><a href="#local-6989586621679128583"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-26"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
-</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679106249"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Title
+</span><a href="#local-6989586621679106248"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-24"></span><span>  </span><span class="annot"><span class="annottext">[Char] -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;[output.html]&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-27"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
-</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-25"></span><span>  </span><span class="annot"><span class="annottext">[Char] -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;smart-punctuation = true&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Doc
-</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span id="line-26"></span><span>  </span><span class="annot"><span class="annottext">[Char] -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;mathjax-support = true&quot;</span></span><span>
-</span><span id="line-29"></span><span>  </span><span class="hs-special">]</span><span>
-</span><span id="line-30"></span><span class="annot"><a href="Language.Drasil.Markdown.Config.html#makeBook"><span class="hs-identifier hs-var">makeBook</span></a></span><span> </span><span class="annot"><span class="annottext">Document
+</span><span id="line-27"></span><span>  </span><span class="hs-special">]</span><span>
+</span><span id="line-28"></span><span class="annot"><a href="Language.Drasil.Markdown.Config.html#makeBook"><span class="hs-identifier hs-var">makeBook</span></a></span><span> </span><span class="annot"><span class="annottext">Document
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
-forall a. HasCallStack =&gt; String -&gt; a
-</span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Doc
+forall a. HasCallStack =&gt; [Char] -&gt; a
+</span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;Type not supported: Notebook.&quot;</span></span><span>
-</span><span id="line-31"></span><span>
-</span><span id="line-32"></span><span class="hs-comment">-- | Prints the .csv file mapping the original filepaths of assets to the</span><span>
-</span><span id="line-33"></span><span class="hs-comment">-- location mdBook uses.</span><span>
-</span><span id="line-34"></span><span class="annot"><a href="Language.Drasil.Markdown.Config.html#makeRequirements"><span class="hs-identifier hs-type">makeRequirements</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.PrintingInformation.html#PrintingInformation"><span class="hs-identifier hs-type">PrintingInformation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
-</span><span id="line-35"></span><span id="makeRequirements"><span class="annot"><span class="annottext">makeRequirements :: PrintingInformation -&gt; Doc
-</span><a href="Language.Drasil.Markdown.Config.html#makeRequirements"><span class="hs-identifier hs-var hs-var">makeRequirements</span></a></span></span><span> </span><span id="local-6989586621679128588"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679128588"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[[String]] -&gt; Doc
-</span><span class="hs-identifier hs-var">makeCSV</span></span><span> </span><span class="annot"><span class="annottext">([[String]] -&gt; Doc) -&gt; [[String]] -&gt; Doc
+</span><span id="line-29"></span><span>
+</span><span id="line-30"></span><span class="hs-comment">-- | Prints the .csv file mapping the original filepaths of assets to the</span><span>
+</span><span id="line-31"></span><span class="hs-comment">-- location mdBook uses.</span><span>
+</span><span id="line-32"></span><span class="annot"><a href="Language.Drasil.Markdown.Config.html#makeRequirements"><span class="hs-identifier hs-type">makeRequirements</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.PrintingInformation.html#PrintingInformation"><span class="hs-identifier hs-type">PrintingInformation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
+</span><span id="line-33"></span><span id="makeRequirements"><span class="annot"><span class="annottext">makeRequirements :: PrintingInformation -&gt; Doc
+</span><a href="Language.Drasil.Markdown.Config.html#makeRequirements"><span class="hs-identifier hs-var hs-var">makeRequirements</span></a></span></span><span> </span><span id="local-6989586621679106253"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679106253"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[[[Char]]] -&gt; Doc
+</span><span class="hs-identifier hs-var">makeCSV</span></span><span> </span><span class="annot"><span class="annottext">([[[Char]]] -&gt; Doc) -&gt; [[[Char]]] -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Original&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;Copy&quot;</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [[String]] -&gt; [[String]]
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Char]
+</span><span class="hs-string">&quot;Original&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><span class="hs-string">&quot;Copy&quot;</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[[Char]] -&gt; [[[Char]]] -&gt; [[[Char]]]
 forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; [[String]]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; [[[Char]]]
 </span><a href="Language.Drasil.Markdown.Config.html#assetMat"><span class="hs-identifier hs-var">assetMat</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679128588"><span class="hs-identifier hs-var">sm</span></a></span><span>
-</span><span id="line-36"></span><span>
-</span><span id="line-37"></span><span class="annot"><span class="hs-comment">-- | Render a title 'Sentence'.</span></span><span>
-</span><span id="line-38"></span><span class="annot"><a href="Language.Drasil.Markdown.Config.html#mkTitle"><span class="hs-identifier hs-type">mkTitle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.PrintingInformation.html#PrintingInformation"><span class="hs-identifier hs-type">PrintingInformation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
-</span><span id="line-39"></span><span id="mkTitle"><span class="annot"><span class="annottext">mkTitle :: PrintingInformation -&gt; Title -&gt; Doc
-</span><a href="Language.Drasil.Markdown.Config.html#mkTitle"><span class="hs-identifier hs-var hs-var">mkTitle</span></a></span></span><span> </span><span id="local-6989586621679128591"><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679128591"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span id="local-6989586621679128592"><span class="annot"><span class="annottext">Title
-</span><a href="#local-6989586621679128592"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
-</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679106253"><span class="hs-identifier hs-var">sm</span></a></span><span>
+</span><span id="line-34"></span><span>
+</span><span id="line-35"></span><span class="annot"><span class="hs-comment">-- | Render a title 'Sentence'.</span></span><span>
+</span><span id="line-36"></span><span class="annot"><a href="Language.Drasil.Markdown.Config.html#mkTitle"><span class="hs-identifier hs-type">mkTitle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.PrintingInformation.html#PrintingInformation"><span class="hs-identifier hs-type">PrintingInformation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
+</span><span id="line-37"></span><span id="mkTitle"><span class="annot"><span class="annottext">mkTitle :: PrintingInformation -&gt; Title -&gt; Doc
+</span><a href="Language.Drasil.Markdown.Config.html#mkTitle"><span class="hs-identifier hs-var hs-var">mkTitle</span></a></span></span><span> </span><span id="local-6989586621679106255"><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679106255"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span id="local-6989586621679106256"><span class="annot"><span class="annottext">Title
+</span><a href="#local-6989586621679106256"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;\&quot;&quot;</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">RefMap -&gt; Spec -&gt; Doc
 </span><a href="Language.Drasil.Markdown.Print.html#pSpec"><span class="hs-identifier hs-var">pSpec</span></a></span><span> </span><span class="annot"><span class="annottext">RefMap
-forall k a. Map k a
-</span><span class="hs-identifier hs-var">empty</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Title -&gt; Spec
+forall a. Monoid a =&gt; a
+</span><span class="hs-identifier hs-var">mempty</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PrintingInformation -&gt; Title -&gt; Spec
 </span><a href="Language.Drasil.Printing.Import.Sentence.html#spec"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679128591"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Title
-</span><a href="#local-6989586621679128592"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
+</span><a href="#local-6989586621679106255"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Title
+</span><a href="#local-6989586621679106256"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
-</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Doc
-</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Doc
+</span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;\&quot;&quot;</span></span><span>
-</span><span id="line-40"></span><span>
-</span><span id="line-41"></span><span class="hs-comment">-- | Map the original filepaths of assets to the location mdBook generator</span><span>
-</span><span id="line-42"></span><span class="hs-comment">-- needs.</span><span>
-</span><span id="line-43"></span><span class="annot"><a href="Language.Drasil.Markdown.Config.html#assetMat"><span class="hs-identifier hs-type">assetMat</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.PrintingInformation.html#PrintingInformation"><span class="hs-identifier hs-type">PrintingInformation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Printing.LayoutObj.html#Filepath"><span class="hs-identifier hs-type">Filepath</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
-</span><span id="line-44"></span><span id="assetMat"><span class="annot"><span class="annottext">assetMat :: PrintingInformation -&gt; [[String]]
+</span><span id="line-38"></span><span>
+</span><span id="line-39"></span><span class="hs-comment">-- | Map the original filepaths of assets to the location mdBook generator</span><span>
+</span><span id="line-40"></span><span class="hs-comment">-- needs.</span><span>
+</span><span id="line-41"></span><span class="annot"><a href="Language.Drasil.Markdown.Config.html#assetMat"><span class="hs-identifier hs-type">assetMat</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Printing.PrintingInformation.html#PrintingInformation"><span class="hs-identifier hs-type">PrintingInformation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Printing.LayoutObj.html#Filepath"><span class="hs-identifier hs-type">Filepath</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
+</span><span id="line-42"></span><span id="assetMat"><span class="annot"><span class="annottext">assetMat :: PrintingInformation -&gt; [[[Char]]]
 </span><a href="Language.Drasil.Markdown.Config.html#assetMat"><span class="hs-identifier hs-var hs-var">assetMat</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Printing.PrintingInformation.html#PI"><span class="hs-identifier hs-type">PI</span></a></span><span> </span><span class="hs-special">{</span><span class="annot"><span class="annottext">_ckdb :: PrintingInformation -&gt; ChunkDB
-</span><a href="Language.Drasil.Printing.PrintingInformation.html#_ckdb"><span class="hs-identifier hs-var">_ckdb</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679128595"><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128595"><span class="hs-identifier hs-var">cdb</span></a></span></span><span class="hs-special">}</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span>
-</span><span id="line-45"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128596"><span class="hs-identifier hs-var">fp</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;src/assets/&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="Language.Drasil.Printing.PrintingInformation.html#_ckdb"><span class="hs-identifier hs-var">_ckdb</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679106259"><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679106259"><span class="hs-identifier hs-var">cdb</span></a></span></span><span class="hs-special">}</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-43"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679106260"><span class="hs-identifier hs-var">fp</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><span class="hs-string">&quot;src/assets/&quot;</span></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; [Char]
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String
-</span><span class="hs-identifier hs-var">takeFileName</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128596"><span class="hs-identifier hs-var">fp</span></a></span><span class="hs-special">]</span><span> </span><span>
-</span><span id="line-46"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">LblC</span></span><span> </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_ctype :: LabelledContent -&gt; RawContent
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char]
+</span><span class="hs-identifier hs-var">takeFileName</span></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679106260"><span class="hs-identifier hs-var">fp</span></a></span><span class="hs-special">]</span><span> </span><span>
+</span><span id="line-44"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LblC</span></span><span> </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_ctype :: LabelledContent -&gt; RawContent
 </span><span class="hs-identifier hs-var">_ctype</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Figure</span></span><span> </span><span class="annot"><span class="annottext">Title
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679128596"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128596"><span class="hs-identifier hs-var">fp</span></a></span></span><span> </span><span class="annot"><span class="annottext">MaxWidthPercent
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679106260"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679106260"><span class="hs-identifier hs-var">fp</span></a></span></span><span> </span><span class="annot"><span class="annottext">MaxWidthPercent
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">HasCaption
-</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">}</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
-</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Map UID (LabelledContent, Int) -&gt; [(LabelledContent, Int)]
-forall k a. Map k a -&gt; [a]
-</span><span class="hs-identifier hs-var">elems</span></span><span> </span><span class="annot"><span class="annottext">(Map UID (LabelledContent, Int) -&gt; [(LabelledContent, Int)])
--&gt; Map UID (LabelledContent, Int) -&gt; [(LabelledContent, Int)]
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679128595"><span class="hs-identifier hs-var">cdb</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
--&gt; Getting
-     (Map UID (LabelledContent, Int))
-     ChunkDB
-     (Map UID (LabelledContent, Int))
--&gt; Map UID (LabelledContent, Int)
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting
-  (Map UID (LabelledContent, Int))
-  ChunkDB
-  (Map UID (LabelledContent, Int))
-Lens' ChunkDB (Map UID (LabelledContent, Int))
-</span><span class="hs-identifier hs-var">labelledcontentTable</span></span><span>
-</span><span id="line-47"></span><span>  </span><span class="hs-special">]</span><span>
-</span><span id="line-48"></span><span>  </span><span class="hs-comment">-- FIXME: HACK: Almost nothing should ever be &quot;gathering everything&quot; from a</span><span>
-</span><span id="line-49"></span><span>  </span><span class="hs-comment">-- ChunkDB unless it is intended to do something highly generic, such as an</span><span>
-</span><span id="line-50"></span><span>  </span><span class="hs-comment">-- analysis, like walking along a UID-tree to build the &quot;trace graphs.&quot; We</span><span>
-</span><span id="line-51"></span><span>  </span><span class="hs-comment">-- should not be using this as part of the renderer, however, to search for</span><span>
-</span><span id="line-52"></span><span>  </span><span class="hs-comment">-- all $x$ for rendering. The ChunkDB is allowed to have more knowledge in it</span><span>
-</span><span id="line-53"></span><span>  </span><span class="hs-comment">-- than we strictly need for a specific use of Drasil. To get the point</span><span>
-</span><span id="line-54"></span><span>  </span><span class="hs-comment">-- across, we should be able to merge ALL of our individual ChunkDBs in</span><span>
-</span><span id="line-55"></span><span>  </span><span class="hs-comment">-- Drasil, feed the same ChunkDBs into the SmithEtAl generator along with the</span><span>
-</span><span id="line-56"></span><span>  </span><span class="hs-comment">-- /specific/ problem descriptions and generate the exact same artifacts. The</span><span>
-</span><span id="line-57"></span><span>  </span><span class="hs-comment">-- fact that there would be knowledge/chunks in the ChunkDB that the generator</span><span>
-</span><span id="line-58"></span><span>  </span><span class="hs-comment">-- would never access should have no impact.</span><span>
-</span><span id="line-59"></span></pre></body></html>
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">}</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; [LabelledContent]
+</span><a href="Drasil.Database.SearchTools.html#findAllLabelledContent"><span class="hs-identifier hs-var">findAllLabelledContent</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679106259"><span class="hs-identifier hs-var">cdb</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-45"></span></pre></body></html>

@@ -449,7 +449,7 @@ momntArm = uc' "r" (cn' "length of the moment arm")
 
 unitless :: [DefinedQuantityDict]
 unitless = [earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction, 
-  mobShrC, shrResC, index, pi_, varblV, unitVectj]
+  mobShrC, shrResC, index, pi_, varblV, unitVectj, fsMin]
 
 earthqkLoadFctr, normToShear, scalFunc, numbSlices,
   minFunction, mobShrC, shrResC, index, varblV :: DefinedQuantityDict

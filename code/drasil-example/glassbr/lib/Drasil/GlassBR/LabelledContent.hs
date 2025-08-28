@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Figures where
+module Drasil.GlassBR.LabelledContent where
 
 import Control.Lens((^.))
 
@@ -16,7 +16,12 @@ import Drasil.GlassBR.Unitals (aspectRatio, charWeight, demand, demandq,
 resourcePath :: String
 resourcePath = "../../../../datafiles/glassbr/"
 
-sysCtxFig, physSystFig, traceItemSecsFig, traceReqsItemsFig, traceAssumpsOthersFig, demandVsSDFig, dimlessloadVsARFig :: LabelledContent
+figures :: [LabelledContent]
+figures = [sysCtxFig, physSystFig, traceItemSecsFig, traceReqsItemsFig,
+  traceAssumpsOthersFig, demandVsSDFig, dimlessloadVsARFig]
+
+sysCtxFig, physSystFig, traceItemSecsFig, traceReqsItemsFig,
+  traceAssumpsOthersFig, demandVsSDFig, dimlessloadVsARFig :: LabelledContent
 
 sysCtxFig = llcc (makeFigRef "sysCtxDiag") $ 
   fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png")

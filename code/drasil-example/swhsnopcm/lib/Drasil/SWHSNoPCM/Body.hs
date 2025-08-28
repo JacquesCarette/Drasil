@@ -14,7 +14,7 @@ import Language.Drasil.Code (ODEInfo (depVar))
 import Data.List ((\\))
 import Data.Drasil.People (thulasi)
 
-import Data.Drasil.Concepts.Documentation as Doc (material_, sysCont)
+import Data.Drasil.Concepts.Documentation as Doc (material_)
 import Data.Drasil.Concepts.Math (mathcon', ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import qualified Data.Drasil.Concepts.Physics as CP (physicCon', energy, mechEnergy, pressure)
@@ -55,6 +55,7 @@ import Drasil.SWHSNoPCM.Definitions (srsSWHS, htTrans)
 import Drasil.SWHSNoPCM.GenDefs (genDefs)
 import Drasil.SWHSNoPCM.Goals (goals)
 import Drasil.SWHSNoPCM.IMods (eBalanceOnWtr, instModIntro)
+import Drasil.SWHSNoPCM.LabelledContent (labelledContent, figTank, sysCntxtFig)
 import Drasil.SWHSNoPCM.MetaConcepts (progName)
 import qualified Drasil.SWHSNoPCM.IMods as NoPCM (iMods)
 import Drasil.SWHSNoPCM.ODEs
@@ -73,9 +74,6 @@ fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
-
-resourcePath :: String
-resourcePath = "../../../../datafiles/swhsnopcm/"
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
@@ -197,7 +195,7 @@ conceptChunks =
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
-  NoPCM.iMods genDefs tMods concIns [] allRefs citations
+  NoPCM.iMods genDefs tMods concIns labelledContent allRefs citations
 
 abbreviationsList :: [IdeaDict]
 abbreviationsList =
@@ -267,11 +265,6 @@ orgDocEnd = foldlSent_ [atStartNP (the inModel),
 --Section 3.1 : SYSTEM CONTEXT
 ------------------------------
 
-sysCntxtFig :: LabelledContent
-sysCntxtFig = llcc (makeFigRef "SysCon")
-  $ fig (titleize sysCont)
-  $ resourcePath ++ "SystemContextFigure.png"
-
 ------------------------------------
 --Section 3.2 : USER CHARACTERISTICS
 ------------------------------------
@@ -298,11 +291,6 @@ sysCntxtFig = llcc (makeFigRef "SysCon")
 
 terms :: [ConceptChunk]
 terms = [htFlux, heatCapSpec, thermalConduction, transient]
-
-figTank :: LabelledContent
-figTank = llcc (makeFigRef "Tank") $ fig (atStart sWHT `sC` S "with" +:+ phrase htFlux +:+
-  S "from" +:+ phrase coil `S.of_` ch htFluxC)
-  $ resourcePath ++ "TankWaterOnly.png"
 
 physSystParts :: [Sentence]
 physSystParts = map foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFluxC]

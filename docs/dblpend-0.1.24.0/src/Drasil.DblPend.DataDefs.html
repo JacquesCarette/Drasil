@@ -6,7 +6,7 @@
 </span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
 </span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
 </span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">DataDefinition</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ddENoRefs</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ddMENoRefs</span></span><span class="hs-special">)</span><span>
-</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.DblPend.Figures.html"><span class="hs-identifier">Drasil.DblPend.Figures</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DblPend.Figures.html#figMotion"><span class="hs-identifier">figMotion</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.DblPend.LabelledContent.html"><span class="hs-identifier">Drasil.DblPend.LabelledContent</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DblPend.LabelledContent.html#figMotion"><span class="hs-identifier">figMotion</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.DblPend.Unitals.html"><span class="hs-identifier">Drasil.DblPend.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DblPend.Unitals.html#pendDisAngle_1"><span class="hs-identifier">pendDisAngle_1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPend.Unitals.html#pendDisAngle_2"><span class="hs-identifier">pendDisAngle_2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPend.Unitals.html#lenRod_1"><span class="hs-identifier">lenRod_1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPend.Unitals.html#lenRod_2"><span class="hs-identifier">lenRod_2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPend.Unitals.html#xPos_1"><span class="hs-identifier">xPos_1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPend.Unitals.html#yPos_1"><span class="hs-identifier">yPos_1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPend.Unitals.html#xPos_2"><span class="hs-identifier">xPos_2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPend.Unitals.html#yPos_2"><span class="hs-identifier">yPos_2</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.DblPend.Concepts.html"><span class="hs-identifier">Drasil.DblPend.Concepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DblPend.Concepts.html#horizontalPos"><span class="hs-identifier">horizontalPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DblPend.Concepts.html#verticalPos"><span class="hs-identifier">verticalPos</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">velocity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">position</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">acceleration</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">force</span></span><span class="hs-special">)</span><span>
@@ -114,7 +114,7 @@ forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent
-</span><a href="Drasil.DblPend.Figures.html#figMotion"><span class="hs-identifier hs-var">figMotion</span></a></span><span>
+</span><a href="Drasil.DblPend.LabelledContent.html#figMotion"><span class="hs-identifier hs-var">figMotion</span></a></span><span>
 </span><span id="line-44"></span><span>
 </span><span id="line-45"></span><span class="annot"><a href="Drasil.DblPend.DataDefs.html#positionXRef_1"><span class="hs-identifier hs-type">positionXRef_1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-46"></span><span id="positionXRef_1"><span class="annot"><span class="annottext">positionXRef_1 :: Sentence
@@ -185,7 +185,7 @@ forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent
-</span><a href="Drasil.DblPend.Figures.html#figMotion"><span class="hs-identifier hs-var">figMotion</span></a></span><span>
+</span><a href="Drasil.DblPend.LabelledContent.html#figMotion"><span class="hs-identifier hs-var">figMotion</span></a></span><span>
 </span><span id="line-62"></span><span>
 </span><span id="line-63"></span><span class="annot"><a href="Drasil.DblPend.DataDefs.html#positionYRef_1"><span class="hs-identifier hs-type">positionYRef_1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-64"></span><span id="positionYRef_1"><span class="annot"><span class="annottext">positionYRef_1 :: Sentence
@@ -267,7 +267,7 @@ forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent
-</span><a href="Drasil.DblPend.Figures.html#figMotion"><span class="hs-identifier hs-var">figMotion</span></a></span><span>
+</span><a href="Drasil.DblPend.LabelledContent.html#figMotion"><span class="hs-identifier hs-var">figMotion</span></a></span><span>
 </span><span id="line-80"></span><span>
 </span><span id="line-81"></span><span class="annot"><a href="Drasil.DblPend.DataDefs.html#positionXRef_2"><span class="hs-identifier hs-type">positionXRef_2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-82"></span><span id="positionXRef_2"><span class="annot"><span class="annottext">positionXRef_2 :: Sentence
@@ -351,7 +351,7 @@ forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent
-</span><a href="Drasil.DblPend.Figures.html#figMotion"><span class="hs-identifier hs-var">figMotion</span></a></span><span>
+</span><a href="Drasil.DblPend.LabelledContent.html#figMotion"><span class="hs-identifier hs-var">figMotion</span></a></span><span>
 </span><span id="line-98"></span><span>
 </span><span id="line-99"></span><span class="annot"><a href="Drasil.DblPend.DataDefs.html#positionYRef_2"><span class="hs-identifier hs-type">positionYRef_2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-100"></span><span id="positionYRef_2"><span class="annot"><span class="annottext">positionYRef_2 :: Sentence

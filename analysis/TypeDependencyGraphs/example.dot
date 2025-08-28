@@ -15,13 +15,13 @@ digraph alltypes {
 	}
 	subgraph expresionss {
 	}
-	subgraph figures {
-	}
 	subgraph gendefs {
 	}
 	subgraph goals {
 	}
 	subgraph imods {
+	}
+	subgraph labelledcontent {
 	}
 	subgraph metaconcepts {
 	}
@@ -63,6 +63,8 @@ digraph alltypes {
 	}
 	subgraph imods {
 	}
+	subgraph labelledcontent {
+	}
 	subgraph metaconcepts {
 	}
 	subgraph references {
@@ -87,11 +89,11 @@ digraph alltypes {
 	}
 	subgraph datadefs {
 	}
-	subgraph figures {
-	}
 	subgraph goals {
 	}
 	subgraph imods {
+	}
+	subgraph labelledcontent {
 	}
 	subgraph metaconcepts {
 	}
@@ -149,6 +151,8 @@ digraph alltypes {
 	}
 	subgraph introsection {
 	}
+	subgraph labelledcontent {
+	}
 	subgraph metaconcepts {
 	}
 	subgraph odes {
@@ -193,13 +197,13 @@ digraph alltypes {
 	}
 	subgraph expresionss {
 	}
-	subgraph figures {
-	}
 	subgraph gendefs {
 	}
 	subgraph goals {
 	}
 	subgraph imods {
+	}
+	subgraph labelledcontent {
 	}
 	subgraph metaconcepts {
 	}
@@ -221,13 +225,13 @@ digraph alltypes {
 	}
 	subgraph expresionss {
 	}
-	subgraph figures {
-	}
 	subgraph gendefs {
 	}
 	subgraph goals {
 	}
 	subgraph imods {
+	}
+	subgraph labelledcontent {
 	}
 	subgraph metaconcepts {
 	}
@@ -291,6 +295,8 @@ digraph alltypes {
 	}
 	subgraph imods {
 	}
+	subgraph labelledcontent {
+	}
 	subgraph metaconcepts {
 	}
 	subgraph references {
@@ -328,6 +334,8 @@ digraph alltypes {
 	subgraph goals {
 	}
 	subgraph imods {
+	}
+	subgraph labelledcontent {
 	}
 	subgraph metaconcepts {
 	}

@@ -42,6 +42,10 @@ module Drasil.GamePhysics.Changes
 likelyChgs :: [ConceptInstance]
 unlikelyChgs :: [ConceptInstance]
 
+module Drasil.GamePhysics.LabelledContent
+labelledContent :: [LabelledContent]
+sysCtxFig1 :: LabelledContent
+
 module Drasil.GamePhysics.MetaConcepts
 progName :: CI
 
@@ -217,7 +221,6 @@ module Drasil.GamePhysics.Body
 srs :: Document
 fullSI :: System
 printSetting :: PrintingInformation
-resourcePath :: String
 mkSRS :: SRSDecl
 si :: System
 purp :: Sentence
@@ -234,7 +237,6 @@ para1_introduction_intro :: Sentence
 externalLinkRef :: Reference
 scope :: Sentence
 sysCtxIntro :: Contents
-sysCtxFig1 :: LabelledContent
 sysCtxDesc :: Contents
 sysCtxUsrResp :: [Sentence]
 sysCtxSysResp :: [Sentence]

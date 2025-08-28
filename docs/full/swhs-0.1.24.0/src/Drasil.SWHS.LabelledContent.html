@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.SWHS.LabelledContent</span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-2"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.LabelledContent.html#labelledContent"><span class="hs-identifier">labelledContent</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.LabelledContent.html#sysCntxtFig"><span class="hs-identifier">sysCntxtFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.LabelledContent.html#figTank"><span class="hs-identifier">figTank</span></a></span><span>
+</span><span id="line-3"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-4"></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">organization</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">section</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">variable</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Sentence.Combinators</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
+</span><span id="line-7"></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Doc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">sysCont</span></span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.Concepts.html"><span class="hs-identifier">Drasil.SWHS.Concepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.Concepts.html#sWHT"><span class="hs-identifier">sWHT</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html"><span class="hs-identifier">Drasil.SWHS.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htFluxC"><span class="hs-identifier">htFluxC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#htFluxP"><span class="hs-identifier">htFluxP</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span>
+</span><span id="line-13"></span><span class="annot"><a href="Drasil.SWHS.LabelledContent.html#resourcePath"><span class="hs-identifier hs-type">resourcePath</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-14"></span><span id="resourcePath"><span class="annot"><span class="annottext">resourcePath :: String
+</span><a href="Drasil.SWHS.LabelledContent.html#resourcePath"><span class="hs-identifier hs-var hs-var">resourcePath</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;../../../../datafiles/swhs/&quot;</span></span><span>
+</span><span id="line-15"></span><span>
+</span><span id="line-16"></span><span class="annot"><a href="Drasil.SWHS.LabelledContent.html#labelledContent"><span class="hs-identifier hs-type">labelledContent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span class="hs-special">]</span><span>
+</span><span id="line-17"></span><span id="labelledContent"><span class="annot"><span class="annottext">labelledContent :: [LabelledContent]
+</span><a href="Drasil.SWHS.LabelledContent.html#labelledContent"><span class="hs-identifier hs-var hs-var">labelledContent</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">LabelledContent
+</span><a href="Drasil.SWHS.LabelledContent.html#sysCntxtFig"><span class="hs-identifier hs-var">sysCntxtFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">LabelledContent
+</span><a href="Drasil.SWHS.LabelledContent.html#figTank"><span class="hs-identifier hs-var">figTank</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span class="annot"><a href="Drasil.SWHS.LabelledContent.html#sysCntxtFig"><span class="hs-identifier hs-type">sysCntxtFig</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span>
+</span><span id="line-20"></span><span id="sysCntxtFig"><span class="annot"><span class="annottext">sysCntxtFig :: LabelledContent
+</span><a href="Drasil.SWHS.LabelledContent.html#sysCntxtFig"><span class="hs-identifier hs-var hs-var">sysCntxtFig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
+</span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
+</span><span class="hs-identifier hs-var">makeFigRef</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;SysCon&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-21"></span><span>  </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; String -&gt; RawContent
+</span><span class="hs-identifier hs-var">fig</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
+</span><span class="hs-identifier hs-var">sysCont</span></span><span class="hs-special">)</span><span>
+</span><span id="line-22"></span><span>  </span><span class="annot"><span class="annottext">(String -&gt; RawContent) -&gt; String -&gt; RawContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.SWHS.LabelledContent.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;SystemContextFigure.png&quot;</span></span><span>
+</span><span id="line-23"></span><span>
+</span><span id="line-24"></span><span class="annot"><a href="Drasil.SWHS.LabelledContent.html#figTank"><span class="hs-identifier hs-type">figTank</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span>
+</span><span id="line-25"></span><span id="figTank"><span class="annot"><span class="annottext">figTank :: LabelledContent
+</span><a href="Drasil.SWHS.LabelledContent.html#figTank"><span class="hs-identifier hs-var hs-var">figTank</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
+</span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
+</span><span class="hs-identifier hs-var">makeFigRef</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Tank&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; String -&gt; RawContent
+</span><span class="hs-identifier hs-var">fig</span></span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-26"></span><span>  </span><span class="annot"><span class="annottext">[Lbl] -&gt; Lbl
+</span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">atStart</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#sWHT"><span class="hs-identifier hs-var">sWHT</span></a></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;with&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SWHS.Unitals.html#htFluxC"><span class="hs-identifier hs-var">htFluxC</span></a></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">`S.of_`</span></span><span>
+</span><span id="line-27"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Lbl
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Lbl
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SWHS.Unitals.html#htFluxC"><span class="hs-identifier hs-var">htFluxC</span></a></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SWHS.Unitals.html#htFluxP"><span class="hs-identifier hs-var">htFluxP</span></a></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Lbl
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Lbl
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.SWHS.Unitals.html#htFluxP"><span class="hs-identifier hs-var">htFluxP</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">(String -&gt; RawContent) -&gt; String -&gt; RawContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.SWHS.LabelledContent.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Tank.png&quot;</span></span><span>
+</span><span id="line-29"></span></pre></body></html>

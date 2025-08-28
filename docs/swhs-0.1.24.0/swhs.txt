@@ -155,6 +155,11 @@ lTol :: Symbol
 lVapour :: Symbol
 lWater :: Symbol
 
+module Drasil.SWHS.LabelledContent
+labelledContent :: [LabelledContent]
+sysCntxtFig :: LabelledContent
+figTank :: LabelledContent
+
 module Drasil.SWHS.Goals
 goals :: [ConceptInstance]
 waterTempGS :: ConceptInstance
@@ -321,7 +326,6 @@ module Drasil.SWHS.Body
 srs :: Document
 fullSI :: System
 printSetting :: PrintingInformation
-resourcePath :: String
 si :: System
 purp :: Sentence
 motivation :: Sentence
@@ -348,7 +352,6 @@ charReaderHTT :: Sentence
 charReaderDE :: Sentence
 orgDocEnd :: Sentence
 sysCntxtDesc :: CI -> Contents
-sysCntxtFig :: LabelledContent
 sysCntxtRespIntro :: CI -> Contents
 systContRespBullets :: CI -> Contents
 userResp :: [Sentence]
@@ -358,7 +361,6 @@ terms :: [ConceptChunk]
 physSystParts :: [Sentence]
 physSyst1 :: ConceptChunk -> ConceptChunk -> [Sentence]
 physSyst2 :: ConceptChunk -> ConceptChunk -> UnitalChunk -> [Sentence]
-figTank :: LabelledContent
 goalInputs :: [Sentence]
 dataConTail :: Sentence
 dataContMid :: Sentence

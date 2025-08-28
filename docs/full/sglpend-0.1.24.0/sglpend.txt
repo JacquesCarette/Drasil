@@ -12,13 +12,14 @@
 module Drasil.SglPend.Assumptions
 assumpSingle :: [ConceptInstance]
 
-module Drasil.SglPend.Figures
-figMotion :: LabelledContent
-sysCtxFig1 :: LabelledContent
-
 module Drasil.SglPend.Goals
 goals :: [ConceptInstance]
 goalsInputs :: [Sentence]
+
+module Drasil.SglPend.LabelledContent
+labelledContent :: [LabelledContent]
+figMotion :: LabelledContent
+sysCtxFig1 :: LabelledContent
 
 module Drasil.SglPend.MetaConcepts
 progName :: CI

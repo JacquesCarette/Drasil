@@ -194,12 +194,9 @@ symbolsForTermTable :: [DefinedQuantityDict]
 thisSymbols :: [DefinedQuantityDict]
 thisTerms :: [DefinedQuantityDict]
 
-module Drasil.GlassBR.Goals
-goals :: [ConceptInstance]
-willBreakGS :: ConceptInstance
-
-module Drasil.GlassBR.Figures
+module Drasil.GlassBR.LabelledContent
 resourcePath :: String
+figures :: [LabelledContent]
 sysCtxFig :: LabelledContent
 physSystFig :: LabelledContent
 traceItemSecsFig :: LabelledContent
@@ -207,6 +204,10 @@ traceReqsItemsFig :: LabelledContent
 traceAssumpsOthersFig :: LabelledContent
 demandVsSDFig :: LabelledContent
 dimlessloadVsARFig :: LabelledContent
+
+module Drasil.GlassBR.Goals
+goals :: [ConceptInstance]
+willBreakGS :: ConceptInstance
 
 module Drasil.GlassBR.Assumptions
 assumpGT :: ConceptInstance

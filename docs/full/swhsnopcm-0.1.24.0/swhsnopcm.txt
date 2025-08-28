@@ -58,6 +58,11 @@ module Drasil.SWHSNoPCM.Changes
 likelyChgs :: [ConceptInstance]
 unlikelyChgs :: [ConceptInstance]
 
+module Drasil.SWHSNoPCM.LabelledContent
+labelledContent :: [LabelledContent]
+figTank :: LabelledContent
+sysCntxtFig :: LabelledContent
+
 module Drasil.SWHSNoPCM.MetaConcepts
 progName :: CI
 

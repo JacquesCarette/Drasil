@@ -49,12 +49,13 @@ timeStartZero :: ConceptInstance
 twoDMotion :: ConceptInstance
 yAxisGravity :: ConceptInstance
 
-module Drasil.Projectile.Figures
-figLaunch :: LabelledContent
-sysCtxFig1 :: LabelledContent
-
 module Drasil.Projectile.Goals
 goals :: [ConceptInstance]
+
+module Drasil.Projectile.LabelledContent
+labelledContent :: [LabelledContent]
+figLaunch :: LabelledContent
+sysCtxFig1 :: LabelledContent
 
 module Drasil.Projectile.Lesson.Example
 exampleContent :: [Contents]

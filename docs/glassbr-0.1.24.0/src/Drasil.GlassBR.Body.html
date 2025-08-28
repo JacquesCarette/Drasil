@@ -33,7 +33,7 @@
 </span><span id="line-33"></span><span>  </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#ptOfExplsn"><span class="hs-identifier">ptOfExplsn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#con%27"><span class="hs-identifier">con'</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#glass"><span class="hs-identifier">glass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#iGlass"><span class="hs-identifier">iGlass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#lGlass"><span class="hs-identifier">lGlass</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-34"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html"><span class="hs-identifier">Drasil.GlassBR.DataDefs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#configFp"><span class="hs-identifier">configFp</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-35"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html"><span class="hs-identifier">Drasil.GlassBR.DataDefs</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">GB</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GlassBR.DataDefs.html#dataDefs"><span class="hs-identifier">dataDefs</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-36"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Figures.html"><span class="hs-identifier">Drasil.GlassBR.Figures</span></a></span><span>
+</span><span id="line-36"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GlassBR.LabelledContent.html"><span class="hs-identifier">Drasil.GlassBR.LabelledContent</span></a></span><span>
 </span><span id="line-37"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Goals.html"><span class="hs-identifier">Drasil.GlassBR.Goals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GlassBR.Goals.html#goals"><span class="hs-identifier">goals</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-38"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GlassBR.IMods.html"><span class="hs-identifier">Drasil.GlassBR.IMods</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GlassBR.IMods.html#iMods"><span class="hs-identifier">iMods</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.IMods.html#instModIntro"><span class="hs-identifier">instModIntro</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-39"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GlassBR.MetaConcepts.html"><span class="hs-identifier">Drasil.GlassBR.MetaConcepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GlassBR.MetaConcepts.html#progName"><span class="hs-identifier">progName</span></a></span><span class="hs-special">)</span><span>
@@ -239,7 +239,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">SysCntxt</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Contents
 </span><a href="Drasil.GlassBR.Body.html#sysCtxIntro"><span class="hs-identifier hs-var">sysCtxIntro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">LabelledContent -&gt; Contents
 </span><span class="hs-identifier hs-var">LlC</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent
-</span><a href="Drasil.GlassBR.Figures.html#sysCtxFig"><span class="hs-identifier hs-var">sysCtxFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Contents
+</span><a href="Drasil.GlassBR.LabelledContent.html#sysCtxFig"><span class="hs-identifier hs-var">sysCtxFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Contents
 </span><a href="Drasil.GlassBR.Body.html#sysCtxDesc"><span class="hs-identifier hs-var">sysCtxDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Contents
 </span><a href="Drasil.GlassBR.Body.html#sysCtxList"><span class="hs-identifier hs-var">sysCtxList</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-86"></span><span>    </span><span class="annot"><span class="annottext">[Contents] -&gt; GSDSub
@@ -266,7 +266,7 @@ a -&gt; Purpose -&gt; LabelledContent -&gt; [Contents] -&gt; PDSub
 </span><span class="hs-identifier hs-var">PhySysDesc</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.GlassBR.MetaConcepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="annot"><span class="annottext">Purpose
 </span><a href="Drasil.GlassBR.Body.html#physSystParts"><span class="hs-identifier hs-var">physSystParts</span></a></span><span> </span><span class="annot"><span class="annottext">LabelledContent
-</span><a href="Drasil.GlassBR.Figures.html#physSystFig"><span class="hs-identifier hs-var">physSystFig</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><a href="Drasil.GlassBR.LabelledContent.html#physSystFig"><span class="hs-identifier hs-var">physSystFig</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-91"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Purpose -&gt; PDSub
 </span><span class="hs-identifier hs-var">Goals</span></span><span> </span><span class="annot"><span class="annottext">Purpose
 </span><a href="Drasil.GlassBR.Body.html#goalInputs"><span class="hs-identifier hs-var">goalInputs</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
@@ -366,9 +366,9 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">AppndxProg</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Contents
 </span><a href="Drasil.GlassBR.Body.html#appdxIntro"><span class="hs-identifier hs-var">appdxIntro</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">LabelledContent -&gt; Contents
 </span><span class="hs-identifier hs-var">LlC</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent
-</span><a href="Drasil.GlassBR.Figures.html#demandVsSDFig"><span class="hs-identifier hs-var">demandVsSDFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">LabelledContent -&gt; Contents
+</span><a href="Drasil.GlassBR.LabelledContent.html#demandVsSDFig"><span class="hs-identifier hs-var">demandVsSDFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">LabelledContent -&gt; Contents
 </span><span class="hs-identifier hs-var">LlC</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent
-</span><a href="Drasil.GlassBR.Figures.html#dimlessloadVsARFig"><span class="hs-identifier hs-var">dimlessloadVsARFig</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
+</span><a href="Drasil.GlassBR.LabelledContent.html#dimlessloadVsARFig"><span class="hs-identifier hs-var">dimlessloadVsARFig</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
 </span><span id="line-112"></span><span>
 </span><span id="line-113"></span><span class="annot"><a href="Drasil.GlassBR.Body.html#purp"><span class="hs-identifier hs-type">purp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-114"></span><span id="purp"><span class="annot"><span class="annottext">purp :: Sentence
@@ -556,9 +556,8 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><a href="Drasil.GlassBR.Body.html#labCon"><span class="hs-identifier hs-var hs-var">labCon</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[LabelledContent]
 </span><a href="Drasil.GlassBR.Requirements.html#funcReqsTables"><span class="hs-identifier hs-var">funcReqsTables</span></a></span><span> </span><span class="annot"><span class="annottext">[LabelledContent] -&gt; [LabelledContent] -&gt; [LabelledContent]
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">LabelledContent
-</span><a href="Drasil.GlassBR.Figures.html#demandVsSDFig"><span class="hs-identifier hs-var">demandVsSDFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">LabelledContent
-</span><a href="Drasil.GlassBR.Figures.html#dimlessloadVsARFig"><span class="hs-identifier hs-var">dimlessloadVsARFig</span></a></span><span class="hs-special">]</span><span>
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[LabelledContent]
+</span><a href="Drasil.GlassBR.LabelledContent.html#figures"><span class="hs-identifier hs-var">figures</span></a></span><span>
 </span><span id="line-156"></span><span>
 </span><span id="line-157"></span><span class="annot"><a href="Drasil.GlassBR.Body.html#stdFields"><span class="hs-identifier hs-type">stdFields</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Fields</span></span><span>
 </span><span id="line-158"></span><span id="stdFields"><span class="annot"><span class="annottext">stdFields :: Fields
@@ -732,12 +731,12 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span id="line-195"></span><span>
 </span><span id="line-196"></span><span class="hs-comment">{--INTRODUCTION--}</span><span>
 </span><span id="line-197"></span><span>
-</span><span id="line-198"></span><span id="local-6989586621679085363"><span class="annot"><a href="Drasil.GlassBR.Body.html#startIntro"><span class="hs-identifier hs-type">startIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679085363"><span class="hs-identifier hs-type">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679085363"><span class="hs-identifier hs-type">n</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span><span>
+</span><span id="line-198"></span><span id="local-6989586621679085374"><span class="annot"><a href="Drasil.GlassBR.Body.html#startIntro"><span class="hs-identifier hs-type">startIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679085374"><span class="hs-identifier hs-type">n</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679085374"><span class="hs-identifier hs-type">n</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span></span><span>
 </span><span id="line-199"></span><span id="startIntro"><span class="annot"><span class="annottext">startIntro :: forall n. NamedIdea n =&gt; n -&gt; Sentence -&gt; CI -&gt; Sentence
-</span><a href="Drasil.GlassBR.Body.html#startIntro"><span class="hs-identifier hs-var hs-var">startIntro</span></a></span></span><span> </span><span id="local-6989586621679085906"><span class="annot"><span class="annottext">n
-</span><a href="#local-6989586621679085906"><span class="hs-identifier hs-var">prgm</span></a></span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679085907"><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679085907"><span class="hs-identifier hs-var">sysName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Purpose -&gt; Sentence
+</span><a href="Drasil.GlassBR.Body.html#startIntro"><span class="hs-identifier hs-var hs-var">startIntro</span></a></span></span><span> </span><span id="local-6989586621679085918"><span class="annot"><span class="annottext">n
+</span><a href="#local-6989586621679085918"><span class="hs-identifier hs-var">prgm</span></a></span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679085919"><span class="annot"><span class="annottext">CI
+</span><a href="#local-6989586621679085919"><span class="hs-identifier hs-var">sysName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Purpose -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-200"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
@@ -763,7 +762,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">n -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">n
-</span><a href="#local-6989586621679085906"><span class="hs-identifier hs-var">prgm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679085918"><span class="hs-identifier hs-var">prgm</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;needed to&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -794,7 +793,7 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-string">&quot;The document describes the program called&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. Idea c =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="#local-6989586621679085907"><span class="hs-identifier hs-var">sysName</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679085919"><span class="hs-identifier hs-var">sysName</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-207"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;, which is based&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -967,7 +966,7 @@ forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent
-</span><a href="Drasil.GlassBR.Figures.html#sysCtxFig"><span class="hs-identifier hs-var">sysCtxFig</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="Drasil.GlassBR.LabelledContent.html#sysCtxFig"><span class="hs-identifier hs-var">sysCtxFig</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;shows the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -1403,13 +1402,13 @@ forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent
-</span><a href="Drasil.GlassBR.Figures.html#demandVsSDFig"><span class="hs-identifier hs-var">demandVsSDFig</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="Drasil.GlassBR.LabelledContent.html#demandVsSDFig"><span class="hs-identifier hs-var">demandVsSDFig</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent
-</span><a href="Drasil.GlassBR.Figures.html#dimlessloadVsARFig"><span class="hs-identifier hs-var">dimlessloadVsARFig</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a href="Drasil.GlassBR.LabelledContent.html#dimlessloadVsARFig"><span class="hs-identifier hs-var">dimlessloadVsARFig</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-363"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;used for interpolating&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; Sentence

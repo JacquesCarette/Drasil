@@ -38,13 +38,14 @@ yAxisDir :: ConceptInstance
 assumpBasic :: [ConceptInstance]
 assumpDouble :: [ConceptInstance]
 
-module Drasil.DblPend.Figures
-figMotion :: LabelledContent
-sysCtxFig1 :: LabelledContent
-
 module Drasil.DblPend.Goals
 goals :: [ConceptInstance]
 goalsInputs :: [Sentence]
+
+module Drasil.DblPend.LabelledContent
+labelledContent :: [LabelledContent]
+figMotion :: LabelledContent
+sysCtxFig1 :: LabelledContent
 
 module Drasil.DblPend.MetaConcepts
 progName :: CI

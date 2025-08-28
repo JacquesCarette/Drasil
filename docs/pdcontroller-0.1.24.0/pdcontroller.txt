@@ -75,16 +75,6 @@ likelyChgs :: [ConceptInstance]
 likeChgPP :: ConceptInstance
 likeChgPPDesc :: Sentence
 
-module Drasil.PDController.GenSysDesc
-gsdSysContextFig :: LabelledContent
-gsdSysContextP1 :: Contents
-gsdSysContextP2 :: Contents
-gsdTitle :: [Sentence]
-gsdUsrResp :: [Sentence]
-gsdSysResp :: [Sentence]
-gsdSysContextList :: Contents
-gsduserCharacteristics :: Contents
-
 module Drasil.PDController.IntroSection
 introPara :: Sentence
 introPurposeOfDoc :: Sentence
@@ -93,6 +83,20 @@ externalLinkRef :: Reference
 scope :: Sentence
 introUserChar1 :: [Sentence]
 introUserChar2 :: [Sentence]
+
+module Drasil.PDController.LabelledContent
+labelledContent :: [LabelledContent]
+gsdSysContextFig :: LabelledContent
+sysFigure :: LabelledContent
+
+module Drasil.PDController.GenSysDesc
+gsdSysContextP1 :: Contents
+gsdSysContextP2 :: Contents
+gsdTitle :: [Sentence]
+gsdUsrResp :: [Sentence]
+gsdSysResp :: [Sentence]
+gsdSysContextList :: Contents
+gsduserCharacteristics :: Contents
 
 module Drasil.PDController.MetaConcepts
 progName :: CI
@@ -106,7 +110,6 @@ pidCtrlEditor2 :: Person
 
 module Drasil.PDController.SpSysDesc
 sysParts :: [Sentence]
-sysFigure :: LabelledContent
 sysGoalInput :: [Sentence]
 goals :: [ConceptInstance]
 sysProcessVariable :: ConceptInstance

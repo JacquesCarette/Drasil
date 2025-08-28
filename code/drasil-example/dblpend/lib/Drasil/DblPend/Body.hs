@@ -229,9 +229,8 @@ scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)),
 charsOfReader :: [Sentence]
 charsOfReader = [phrase undergraduate +:+ S "level 2" +:+ phrase Doc.physics,
                  phrase undergraduate +:+ S "level 1" +:+ phrase calculus,
-                 plural ode,
-                 S "basic understanding of" +:+ phrase cliffordAlgebraDef +:+ S "and" +:+ plural multivectorDef]
-
+                 plural ode]
+                 
 -------------------------------------
 -- 2.4 : Organization of Documents --
 -------------------------------------

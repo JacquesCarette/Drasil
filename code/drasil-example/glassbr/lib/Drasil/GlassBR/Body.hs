@@ -33,7 +33,7 @@ import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab,
   ptOfExplsn, con', glass, iGlass, lGlass)
 import Drasil.GlassBR.DataDefs (configFp)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
-import Drasil.GlassBR.Figures
+import Drasil.GlassBR.LabelledContent
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (iMods, instModIntro)
 import Drasil.GlassBR.MetaConcepts (progName)
@@ -152,7 +152,7 @@ concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
 
 labCon :: [LabelledContent]
-labCon = funcReqsTables ++ [demandVsSDFig, dimlessloadVsARFig]
+labCon = funcReqsTables ++ figures
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

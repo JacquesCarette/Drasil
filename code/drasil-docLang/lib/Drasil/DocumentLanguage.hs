@@ -31,7 +31,7 @@ import Drasil.TraceTable (generateTraceMap)
 import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
-import Database.Drasil (findOrErr, idMap, insertAll, ChunkDB(..))
+import Database.Drasil (findOrErr, idMap, ChunkDB(..))
 import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
   findAllInstMods, findAllTheoryMods, findAllConcInsts)
 
@@ -169,7 +169,7 @@ findAllRefs (Section _ cs r) = r: concatMap findRefSecCons cs
 
 -- | Helper for filling in the traceability matrix and graph information into the system.
 fillTraceSI :: SRSDecl -> System -> System
-fillTraceSI dd si = fillTraceMaps l $ fillReqs l si
+fillTraceSI dd si = fillTraceMaps l si
   where
     l = mkDocDesc si dd
 
@@ -179,20 +179,6 @@ fillTraceMaps dd si@SI{_systemdb = db} = si { _systemdb = newCDB }
   where
     tdb = generateTraceMap dd
     newCDB = db { traceTable = tdb, refbyTable = invert tdb }
-
--- FIXME: ChunkDB-related work: `fillReqs` should not be used at all. It is a
--- remnant of the old document-based derivation of System. See the note on the
--- `ReqrmntSec` pattern matching line.
-
--- | Fills in the requirements section of the system information using the document description.
-fillReqs :: DocDesc -> System -> System
-fillReqs [] si = si
-fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_systemdb = db} = genReqs x -- This causes overwrites in the ChunkDB for all requirements.
-  where
-    genReqs [] = si
-    genReqs (FReqsSub c _:_) = si { _systemdb = insertAll (nub c) db }
-    genReqs (_:xs) = genReqs xs
-fillReqs (_:xs) si = fillReqs xs si
 
 -- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]

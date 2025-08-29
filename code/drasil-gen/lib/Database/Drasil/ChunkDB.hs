@@ -2,17 +2,18 @@ module Database.Drasil.ChunkDB (
   cdb
 ) where
 
-import Database.Drasil (empty, idMap, insertAll, ChunkDB(refTable, labelledcontentTable))
+import Database.Drasil (empty, idMap, insert, insertAll,
+  ChunkDB(refTable, labelledcontentTable))
 import Language.Drasil (IdeaDict, nw, Citation, ConceptChunk, ConceptInstance,
-  DefinedQuantityDict, UnitDefn, LabelledContent, Reference)
+  DefinedQuantityDict, UnitDefn, LabelledContent, Reference, Sentence(EmptyS))
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Software (errMsg, program)
 import Data.Drasil.Concepts.Math (mathcon)
-
 import Data.Drasil.SI_Units (siUnits)
+import Drasil.DocLang (inReq)
 import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel, GenDefn)
 import Language.Drasil.Code (codeDQDs)
 
@@ -107,5 +108,8 @@ cdb s t c u d ins gd tm ci lc r cits =
   $ insertAll tm
   $ insertAll ci
   $ insertAll cits
+  $ insert (inReq EmptyS) 
+    -- FIXME: ^ `inReq` is only necessary for ICO problems, which we will assume
+    -- all are for now.
   $ basisCDB { labelledcontentTable = idMap lc,
                refTable = idMap r }

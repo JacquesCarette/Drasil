@@ -2,6 +2,10 @@
 
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 
+<div id="inputValues"></div>
+
+Input-Values: 
+
 <div id="simSpace"></div>
 
 Simulation-Space: Create a space for all of the rigid bodies in the physical simulation to interact in.

@@ -116,6 +116,7 @@ digraph allvsall {
 	{theory:accj, theory:angAccj, theory:col2DIM}
 	}
 
+	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
 	instance:simSpace	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:simSpace"];
 	instance:inputInitialConds	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputInitialConds"];
 	instance:inputSurfaceProps	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputSurfaceProps"];
@@ -132,7 +133,7 @@ digraph allvsall {
 
 	subgraph FR {
 	rank="same"
-	{instance:simSpace, instance:inputInitialConds, instance:inputSurfaceProps, instance:verifyPhysCons, instance:calcTransOverTime, instance:calcRotOverTime, instance:deterColls, instance:deterCollRespOverTime, instance:performance, instance:correctness, instance:usability, instance:understandability, instance:maintainability}
+	{instance:inputValues, instance:simSpace, instance:inputInitialConds, instance:inputSurfaceProps, instance:verifyPhysCons, instance:calcTransOverTime, instance:calcRotOverTime, instance:deterColls, instance:deterCollRespOverTime, instance:performance, instance:correctness, instance:usability, instance:understandability, instance:maintainability}
 	}
 
 	instance:linearGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:linearGS"];

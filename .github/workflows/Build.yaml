@@ -29,7 +29,7 @@ jobs:
     name: "Build & Deploy"
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
 
       - name: "Update apt package list"
         run: |
@@ -65,7 +65,7 @@ jobs:
           stack-version: 'latest'
 
       - name: "Cache dependencies"
-        uses: actions/cache@v4.2.4
+        uses: actions/cache@v4.2.3
         with:
           path: |
             ~/.stack
@@ -125,12 +125,6 @@ jobs:
 
       - name: "Build mdBook Examples"
         run: make mdbook_build
-        if: ${{ steps.changes.outputs.md == 'true' || fromJSON(env.is_deployment) }}
-
-      - name: "Extract HTML copies of Jupyter Notebooks"
-        run: |
-          sudo apt-get install -y --fix-missing jupyter
-          make jupyter_html
         if: ${{ steps.changes.outputs.md == 'true' || fromJSON(env.is_deployment) }}
 
       - name: "Build website generator"

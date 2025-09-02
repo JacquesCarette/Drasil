@@ -19,6 +19,7 @@ dependencies:
 - containers
 - lens
 - drasil-lang
+- drasil-theory
 - drasil-utils
 
 ghc-options:

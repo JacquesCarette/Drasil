@@ -36,7 +36,6 @@ ghc-options:
 library:
   source-dirs: lib
   exposed-modules:
-  - Drasil.Database.SearchTools
   - Language.Drasil.Printers
   when:
   - condition: false

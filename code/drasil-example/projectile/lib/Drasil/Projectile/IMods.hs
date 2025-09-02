@@ -23,8 +23,8 @@ import Drasil.Projectile.Concepts (projectile, target)
 import Drasil.Projectile.DataDefs (speedIX, speedIY)
 import qualified Drasil.Projectile.Derivations as D
 import qualified Drasil.Projectile.Expressions as E
+import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.GenDefs (posVecGD)
-import Drasil.Projectile.LabelledContent (figLaunch)
 import Drasil.Projectile.Unitals (flightDur, landPos, launAngle, launSpeed,
   message, offset, targPos, tol)
 

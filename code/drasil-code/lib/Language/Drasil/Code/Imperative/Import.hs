@@ -16,6 +16,7 @@ import Drasil.Code.CodeExpr.Development (CodeExpr(..), ArithBinOp(..),
   VVNBinOp(..), VVVBinOp(..), NVVBinOp(..), ESSBinOp(..), ESBBinOp(..))
 import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
   Space (Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..))
+import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Imperative.Comments (getCommentBrief)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, fAppProc,
@@ -322,7 +323,8 @@ convExpr (New c x ns) = convCall c x ns (\m _ -> ctorCall m)
   (\m _ -> libNewObjMixedArgs m)
 convExpr (Message a m x ns) = do
   g <- get
-  let objCd = quantvar (lookupC g a)
+  let info = codeSpec g ^. systemdbO
+      objCd = quantvar (symbResolve info a)
   o <- mkVal objCd
   convCall m x ns
     (\_ n t ps nas -> return (objMethodCallMixedArgs t o n ps nas))
@@ -388,13 +390,14 @@ convCall :: (OOProg r) => UID -> [CodeExpr] -> [(UID, CodeExpr)] ->
   -> NamedArgs r -> SValue r) -> GenState (SValue r)
 convCall c x ns f libf = do
   g <- get
-  let mem = eMap g
+  let info = codeSpec g ^. systemdbO
+      mem = eMap g
       lem = libEMap g
-      funcCd = quantfunc (lookupC g c)
+      funcCd = quantfunc (symbResolve info c)
       funcNm = codeName funcCd
   funcTp <- codeType funcCd
   args <- mapM convExpr x
-  nms <- mapM (mkVar . quantvar . lookupC g . fst) ns
+  nms <- mapM (mkVar . quantvar . symbResolve info . fst) ns
   nargs <- mapM (convExpr . snd) ns
   maybe (maybe (error $ "Call to non-existent function " ++ funcNm)
       (\m -> return $ libf m funcNm (convTypeOO funcTp) args (zip nms nargs))
@@ -1088,13 +1091,14 @@ convCallProc :: (SharedProg r) => UID -> [CodeExpr] -> [(UID, CodeExpr)] ->
   -> NamedArgs r -> SValue r) -> GenState (SValue r)
 convCallProc c x ns f libf = do
   g <- get
-  let mem = eMap g
+  let info = codeSpec g ^. systemdbO
+      mem = eMap g
       lem = libEMap g
-      funcCd = quantfunc (lookupC g c)
+      funcCd = quantfunc (symbResolve info c)
       funcNm = codeName funcCd
   funcTp <- codeType funcCd
   args <- mapM convExprProc x
-  nms <- mapM (mkVarProc . quantvar . lookupC g . fst) ns
+  nms <- mapM (mkVarProc . quantvar . symbResolve info . fst) ns
   nargs <- mapM (convExprProc . snd) ns
   maybe (maybe (error $ "Call to non-existent function " ++ funcNm)
       (\m -> return $ libf m funcNm (convType funcTp) args (zip nms nargs))

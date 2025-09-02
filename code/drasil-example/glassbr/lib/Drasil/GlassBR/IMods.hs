@@ -14,7 +14,7 @@ import Data.Drasil.SI_Units
 
 import Drasil.GlassBR.DataDefs (aGrtrThanB, arRef, calofDemand, glaTyFac,
   gtfRef, hRef, loadDFDD, stdVals)
-import Drasil.GlassBR.LabelledContent (dimlessloadVsARFig)
+import Drasil.GlassBR.Figures (dimlessloadVsARFig)
 import Drasil.GlassBR.Goals (willBreakGS)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals

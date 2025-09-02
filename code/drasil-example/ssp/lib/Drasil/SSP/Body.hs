@@ -3,12 +3,15 @@ module Drasil.SSP.Body (srs, si, symbMap, printSetting, fullSI) where
 
 import Prelude hiding (sin, cos, tan)
 
+import Control.Lens ((^.))
+
 import Drasil.System (SystemKind(Specification), mkSystem)
 import Language.Drasil hiding (Verb, number, organization, section, variable)
 import Drasil.SRSDocument
 import Database.Drasil.ChunkDB (cdb)
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
+import Theory.Drasil (output)
 import Drasil.Metadata (inModel)
 
 import Language.Drasil.Chunk.Concept.NamedCombinators
@@ -128,7 +131,7 @@ concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs
 
 labCon :: [LabelledContent]
-labCon = [figPhysSyst, figIndexConv, figForceActing, sysCtxFig1] ++ funcReqTables
+labCon = [figPhysSyst, figIndexConv, figForceActing] ++ funcReqTables
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -150,8 +153,9 @@ conceptChunks =
   -- UnitalChunks
   map cw [time, surface]
 
+
 symbMap :: ChunkDB
-symbMap = cdb symbols ideaDicts conceptChunks
+symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks
   [degree] dataDefs iMods generalDefinitions tMods concIns labCon allRefs citations
 
 -- | Holds all references and links used in the document.

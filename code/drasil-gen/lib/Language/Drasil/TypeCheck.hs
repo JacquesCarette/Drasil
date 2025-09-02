@@ -1,15 +1,15 @@
 {-# LANGUAGE FlexibleContexts #-}
 module Language.Drasil.TypeCheck where
 
-import Control.Lens ((^.))
-import Data.Bifunctor (second)
-import Data.Either (isLeft, lefts)
-import Data.List (partition)
 import qualified Data.Map.Strict as M
 
 import Language.Drasil
+import Database.Drasil (symbolTable)
+import Data.Either (isLeft, lefts)
+import Control.Lens ((^.))
+import Data.Bifunctor (second)
+import Data.List (partition)
 import Drasil.System (System, HasSystem (instModels, dataDefns, systemdb))
-import Drasil.Database.SearchTools (findAllDefinedQuantities)
 
 typeCheckSI :: System -> IO ()
 typeCheckSI sys = do
@@ -17,7 +17,7 @@ typeCheckSI sys = do
         dds = sys ^. dataDefns
         chks = sys ^. systemdb
     -- build a variable context (a map of UIDs to "Space"s [types])
-    let cxt = M.fromList $ map (\x -> (x ^. uid, x ^. typ)) $ findAllDefinedQuantities chks
+    let cxt = M.map (\(dict, _) -> dict ^. typ) (symbolTable chks)
 
     -- dump out the list of variables
     putStr "Symbol Table: "

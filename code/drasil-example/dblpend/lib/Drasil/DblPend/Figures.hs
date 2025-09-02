@@ -1,14 +1,9 @@
-module Drasil.DblPend.LabelledContent (
-  labelledContent, figMotion, sysCtxFig1
-) where
+module Drasil.DblPend.Figures (figMotion, sysCtxFig1) where
 
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Data.Drasil.Concepts.Documentation (physicalSystem, sysCont)
-
-labelledContent :: [LabelledContent]
-labelledContent = [figMotion, sysCtxFig1]
 
 resourcePath :: String
 resourcePath = "../../../../datafiles/dblpend/"

@@ -1,6 +1,6 @@
 module Drasil.PDController.SpSysDesc where
 
-import Data.Drasil.Concepts.Documentation (goalStmtDom)
+import Data.Drasil.Concepts.Documentation (goalStmtDom, physicalSystem)
 
 import Drasil.PDController.Concepts
 import Language.Drasil
@@ -13,6 +13,13 @@ sysParts :: [Sentence]
 sysParts
   = map ((!.) . atStartNP . the)
       [summingPt, pidC, powerPlant]
+
+sysFigure :: LabelledContent
+sysFigure
+  = llcc (makeFigRef "pidSysDiagram") $
+      figWithWidth (atStartNP $ the physicalSystem)
+        "../../../../datafiles/pdcontroller/Fig_PDController.png"
+        70
 
 sysGoalInput :: [Sentence]
 sysGoalInput

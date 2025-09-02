@@ -5,9 +5,8 @@ module Language.Drasil.Chunk.Concept.Core(
   -- * Concept-related Datatypes
   ConceptChunk(ConDict)
   , ConceptInstance(ConInst)
-  , sDom
-) where
-
+  , sDom)
+  where
 import Language.Drasil.ShortName (HasShortName(..), ShortName)
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom))
@@ -15,7 +14,6 @@ import Language.Drasil.Chunk.NamedIdea (IdeaDict)
 import Language.Drasil.Label.Type ((+::+), defer, name, raw,
   LblType(..), Referable(..), HasRefAddress(..))
 import Language.Drasil.Sentence (Sentence)
-import Drasil.Database.Chunk (HasChunkRefs(..))
 import Drasil.Database.UID (UID, HasUID(..))
 
 import Control.Lens (makeLenses, (^.), view)
@@ -35,10 +33,6 @@ data ConceptChunk = ConDict { _idea :: IdeaDict -- ^ Contains the idea of the co
                             , cdom' :: [UID] -- ^ Domain of the concept.
                             }
 makeLenses ''ConceptChunk
-
-
-instance HasChunkRefs ConceptChunk where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Equal if 'UID's are equal.
 instance Eq            ConceptChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
@@ -65,9 +59,6 @@ data ConceptInstance = ConInst { _ciuid :: UID
                                , ra :: String
                                , shnm :: ShortName}
 makeLenses ''ConceptInstance
-
-instance HasChunkRefs ConceptInstance where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Equal if 'UID's are equal.
 instance Eq            ConceptInstance where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)

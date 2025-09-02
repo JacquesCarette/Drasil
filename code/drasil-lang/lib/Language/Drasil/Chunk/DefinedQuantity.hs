@@ -18,7 +18,6 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space, HasSpace(..))
 import Language.Drasil.Stages (Stage (Implementation, Equational))
-import Drasil.Database.Chunk (HasChunkRefs(..))
 import Drasil.Database.UID (HasUID(uid))
 
 import Control.Lens ((^.), makeLenses, view, Getter)
@@ -40,9 +39,6 @@ makeLenses ''DefinedQuantityDict
 
 class DefinesQuantity d where
   defLhs :: Getter d DefinedQuantityDict
-
-instance HasChunkRefs DefinedQuantityDict where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds the 'UID' of the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
 instance HasUID        DefinedQuantityDict where uid = con . uid

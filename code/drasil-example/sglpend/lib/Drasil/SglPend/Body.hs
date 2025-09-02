@@ -29,10 +29,10 @@ import Drasil.DblPend.Requirements (nonFuncReqs)
 import Drasil.DblPend.References (citations)
 
 import Drasil.SglPend.Assumptions (assumpSingle)
+import Drasil.SglPend.Figures (figMotion, sysCtxFig1)
 import Drasil.SglPend.Goals (goals, goalsInputs)
 import Drasil.SglPend.DataDefs (dataDefs)
 import Drasil.SglPend.IMods (iMods)
-import Drasil.SglPend.LabelledContent (figMotion, sysCtxFig1, labelledContent)
 import Drasil.SglPend.MetaConcepts (progName)
 import Drasil.SglPend.GenDefs (genDefns)
 import Drasil.SglPend.Unitals (inputs, outputs, inConstraints, outConstraints, symbols)
@@ -126,8 +126,8 @@ conceptChunks =
 
 
 symbMap :: ChunkDB
-symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks []
-  dataDefs iMods genDefns tMods concIns labelledContent allRefs citations
+symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks
+  ([] :: [UnitDefn]) dataDefs iMods genDefns tMods concIns [] allRefs citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

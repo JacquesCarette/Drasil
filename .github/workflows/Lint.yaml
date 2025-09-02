@@ -16,7 +16,7 @@ jobs:
     name: "Linter"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
 
       # Prepare more specific paths filters
       - uses: dorny/paths-filter@v3.0.2

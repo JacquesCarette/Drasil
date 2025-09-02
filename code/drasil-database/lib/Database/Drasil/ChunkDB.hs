@@ -1,261 +1,312 @@
-{-# LANGUAGE GADTs #-}
-{-# LANGUAGE TypeApplications #-}
-{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TemplateHaskell #-}
+-- | Defines types and functions to create a chunk database within Drasil.
 
+-- Changes to ChunkDB should be reflected in the 'Creating Your Project 
+-- in Drasil' tutorial found on the wiki:
+-- https://github.com/JacquesCarette/Drasil/wiki/Creating-Your-Project-in-Drasil
 module Database.Drasil.ChunkDB (
-  -- * Core database types and functions.
-  ChunkDB,
-  empty, fromList,
-  registered, typesRegistered, size,
-  isRegistered,
-  findUnused,
-  find, findOrErr,
-  findAll, findAll',
-  dependants, dependantsOrErr,
-  findTypeOf,
-  insert, insertAll,
-  -- * Temporary functions for working with non-chunk tables
-  UMap, idMap,
-  refTable, refFind,
-  labelledcontentTable, labelledcontentFind,
-  refbyTable, refbyLookup,
-  traceTable, traceLookup
+  -- * Types
+  -- ** 'ChunkDB'
+  -- | Main database type
+  ChunkDB(symbolTable, termTable, conceptChunkTable, _unitTable, _dataDefnTable,
+    _insmodelTable, _gendefTable, _theoryModelTable, _conceptinsTable,
+    _citationTable, _labelledcontentTable, _traceTable, _refbyTable, _refTable,
+    CDB),
+  TermAbbr(..), DomDefn(..),
+  -- ** Maps
+  -- | Exported for external use.
+  RefbyMap, TraceMap, UMap,
+  -- * Functions
+  -- ** Constructors
+  cdb', idMap, symbolMap, termMap, conceptMap, unitMap, traceMap, generateRefbyMap, -- idMap, termMap for docLang
+  -- ** Lookup Functions
+  asOrderedList, collectUnits,
+  termResolve, termResolve', defResolve, symbResolve,
+  traceLookup, refbyLookup,
+  datadefnLookup, insmodelLookup, gendefLookup, theoryModelLookup,
+  conceptinsLookup, refResolve,
+  -- ** Lenses
+  unitTable, traceTable, refbyTable, citationTable,
+  dataDefnTable, insmodelTable, gendefTable, theoryModelTable,
+  conceptinsTable, labelledcontentTable, refTable,
+  -- **  Helpers
+  addCdb, defResolve'
 ) where
 
-import Control.Lens ((^.))
-import Data.Foldable (foldl')
-import Data.Maybe (fromMaybe, mapMaybe)
-import Data.Typeable (Proxy (Proxy), TypeRep, Typeable, typeOf, typeRep, cast)
+import Language.Drasil (HasUID(..), UID, Quantity, MayHaveUnit(..), Idea (..),
+  IdeaDict, Concept, ConceptChunk, IsUnit(..), UnitDefn,
+  Reference, ConceptInstance, LabelledContent, Citation,
+  nw, cw, unitWrapper, NP, NamedIdea(..), DefinedQuantityDict, dqdWr,
+  Sentence, Definition (defn), ConceptDomain (cdom))
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
--- NOTE: Debug.Trace should only be used for warnings and errors, not for
--- general logging, as it can affect program behavior in unexpected ways.
--- However, we (ab)use it here to provide *soft* warnings when overwriting
--- chunks in the database.
+import Control.Lens ((^.), makeLenses)
+import Data.List (sortOn)
+import Data.Maybe (fromMaybe, mapMaybe)
+import qualified Data.Map as Map
+import Utils.Drasil (invert)
 import Debug.Trace (trace)
 
--- NOTE: Strictness is important for (a) performance, (b) space leaks, (c)
--- avoiding chunk dependancy cycles and (d) ensuring operation consistency with
--- other databases.
-import qualified Data.Map.Strict as M
+-- | The misnomers below (for the following Map types) are not actually a bad thing. We want to ensure data can't
+-- be added to a map if it's not coming from a chunk, and there's no point confusing
+-- what the map is for. One is for symbols + their units, and the others are for
+-- what they state.
+type UMap a = Map.Map UID (a, Int)
 
-import Drasil.Database.Chunk (Chunk, HasChunkRefs(chunkRefs), IsChunk,
-  mkChunk, unChunk, chunkType)
-import Language.Drasil (HasUID(..), UID, LabelledContent, Reference)
+-- | A bit of a misnomer as it's really a map of all quantities, for retrieving
+-- symbols and their units.
+type SymbolMap  = UMap DefinedQuantityDict
 
--- | A chunk that depends on another.
-type Dependant = UID
+-- | A map of all concepts, normally used for retrieving definitions.
+type ConceptMap = UMap ConceptChunk
 
--- | Mapping of 'UID's to 'Chunk's and their dependants.
-type ChunkByUID = M.Map UID (Chunk, [Dependant])
+-- | A map of all the units used. Should be restricted to base units/synonyms.
+type UnitMap = UMap UnitDefn
 
--- | Mapping of chunk types to lists of instances of them (chunks).
-type ChunksByTypeRep = M.Map TypeRep [Chunk]
+-- | Again a bit of a misnomer as it's really a map of all 'NamedIdea's.
+-- Until these are built through automated means, there will
+-- likely be some 'manual' duplication of terms as this map will contain all
+-- quantities, concepts, etc.
+type TermMap = UMap IdeaDict
+-- | A traceability map, used to hold the relation between one 'UID' and a list of other 'UID's.
+type TraceMap = Map.Map UID [UID]
+-- | A reference map, used to hold a 'UID' and where it is referenced ('UID's).
+type RefbyMap = Map.Map UID [UID]
+-- | Data definitions map. Contains all data definitions ('DataDefinition').
+type DatadefnMap = UMap DataDefinition
+-- | Instance model map. Contains all instance models ('InstanceModel').
+type InsModelMap = UMap InstanceModel
+-- | General definitions map. Contains all general definitions ('GenDefn').
+type GendefMap = UMap GenDefn
+-- | Theory model map. Contains all theoretical models ('TheoryModel').
+type TheoryModelMap = UMap TheoryModel
+-- | Concept instance map. May hold similar information to a 'ConceptMap', but may also be referred to.
+type ConceptInstanceMap = UMap ConceptInstance
+-- | A map of all 'LabelledContent's.
+type LabelledContentMap = UMap LabelledContent
+-- | A map of all 'Reference's.
+type ReferenceMap = UMap Reference
+-- | Citation map.
+type CitationMap = UMap Citation
 
--- | Drasil's knowledge database.
-data ChunkDB = ChunkDB {
-    chunkTable     :: ChunkByUID
-  , chunkTypeTable :: ChunksByTypeRep
-
-  -- FIXME: All things below need to be rebuilt!!
-
-  -- FIXME: All code in this file contains hacks specifically for the old
-  -- LabelledContent and Reference chunks. Once rebuilt, these chunks should not
-  -- have a unique 'UID' and should be registered in the 'ChunkDB' like any
-  -- other chunk.
-
-  -- TODO: LabelledContent needs to be rebuilt. See JacquesCarette/Drasil#4023.
-  , labelledcontentTable :: UMap LabelledContent
-  -- TODO: References need to be rebuilt. See JacquesCarette/Drasil#4022.
-  , refTable             :: UMap Reference
-  , traceTable           :: M.Map UID [UID]
-  , refbyTable           :: M.Map UID [UID]
-}
-
--- | An empty 'ChunkDB'.
-empty :: ChunkDB
-empty = ChunkDB M.empty M.empty M.empty M.empty M.empty M.empty
-
--- | Create a 'ChunkDB' from a list of chunks. This will insert all chunks into
--- the database from the list, from left to right.
-fromList :: IsChunk a => [a] -> ChunkDB
-fromList = flip insertAll empty
-
--- | Query the 'ChunkDB' for all registered chunks (by their 'UID's).
-registered :: ChunkDB -> [UID]
-registered cdb =
-     M.keys (chunkTable cdb)
-  ++ M.keys (labelledcontentTable cdb)
-  ++ M.keys (refTable cdb)
-
--- | Check if a 'UID' is registered in the 'ChunkDB'.
-isRegistered :: UID -> ChunkDB -> Bool
-isRegistered u cdb =
-     M.member u (chunkTable cdb)
-  || M.member u (labelledcontentTable cdb)
-  || M.member u (refTable cdb)
-
--- | Enumerate all types registered in the 'ChunkDB'.
-typesRegistered :: ChunkDB -> [TypeRep]
-typesRegistered cdb =
-    typeRep (Proxy @LabelledContent)
-  : typeRep (Proxy @Reference)
-  : M.keys (chunkTypeTable cdb)
-
--- | Get the number of chunks registered in the 'ChunkDB'.
-size :: ChunkDB -> Int
-size cdb =
-    M.size (chunkTable cdb)
-  + M.size (labelledcontentTable cdb)
-  + M.size (refTable cdb)
-
--- | Filter the 'ChunkDB' for chunks that are not needed by any other chunks.
--- These are the only chunks that can safely be removed from the database,
--- though we do not include this functionality.
-findUnused :: ChunkDB -> [UID]
-findUnused = M.keys . M.filter (\(_, refs) -> null refs) . chunkTable
-
--- | Find a chunk by its 'UID' in the 'ChunkDB'.
-find :: Typeable a => UID -> ChunkDB -> Maybe a
-find u cdb = do
-  (c', _) <- M.lookup u (chunkTable cdb)
-  unChunk c'
-
--- | Find a chunk by its 'UID' in the 'ChunkDB', throwing a hard error if it is
--- not found.
-findOrErr :: forall a. Typeable a => UID -> ChunkDB -> a
-findOrErr u = fromMaybe (error $ "Failed to find chunk " ++ show u ++ " (expected type: " ++ show (typeRep $ Proxy @a) ++ ")") . find u
-
--- | Find all chunks of a specific type in the 'ChunkDB'.
-findAll :: forall a. IsChunk a => ChunkDB -> [a]
-findAll cdb
-  | tr == typeRep (Proxy @LabelledContent) =
-      mapMaybe (cast . fst) $ M.elems $ labelledcontentTable cdb
-  | tr == typeRep (Proxy @Reference) =
-      mapMaybe (cast . fst) $ M.elems $ refTable cdb
-  | otherwise =
-      maybe [] (mapMaybe unChunk) $ M.lookup tr (chunkTypeTable cdb)
+-- | General chunk database map constructor. Creates a 'UMap' from a function
+-- that converts something with 'UID's into another type and a list of something
+-- with 'UID's.
+cdbMap :: HasUID a => String -> (a -> b) -> [a] -> Map.Map UID (b, Int)
+cdbMap mn f rawChunks = Map.fromListWithKey preferNew kvs
   where
-    tr = typeRep (Proxy :: Proxy a)
+    kvs = zipWith (\i c -> (c ^. uid, (f c, i))) [1..] rawChunks
+    preferNew key new _ = trace ("'" ++ show key ++ "' is inserted twice in '" ++ mn ++ "'!") new
 
--- | Find all chunks of a specific type in the 'ChunkDB', returning their 'UID's
--- rather than the chunks themselves.
-findAll' :: TypeRep -> ChunkDB -> [UID]
-findAll' tr cdb
-  | tr == typeRep (Proxy @LabelledContent) =
-      M.keys $ labelledcontentTable cdb
-  | tr == typeRep (Proxy @Reference) =
-      M.keys $ refTable cdb
-  | otherwise =
-      maybe [] (map (^. uid)) $ M.lookup tr (chunkTypeTable cdb)
+-- | Smart constructor for a 'SymbolMap'.
+symbolMap :: (Quantity c, MayHaveUnit c, Concept c) => [c] -> SymbolMap
+symbolMap = cdbMap "SymbolMap" dqdWr
 
--- | Find all chunks that depend on a specific one.
-dependants :: UID -> ChunkDB -> Maybe [UID]
-dependants u cdb = do
-  (_, refs) <- M.lookup u (chunkTable cdb)
-  Just refs
+-- | Smart constructor for a 'TermMap'.
+termMap :: (Idea c) => [c] -> TermMap
+termMap = cdbMap "TermMap" nw
 
--- | Find all chunks that depend on a specific one, throwing a hard error if the
--- dependency chunk is not found.
-dependantsOrErr :: UID -> ChunkDB -> [UID]
-dependantsOrErr u = fromMaybe (error $ "Failed to find references for unknown chunk " ++ show u) . find u
+-- | Smart constructor for a 'ConceptMap'.
+conceptMap :: (Concept c) => [c] -> ConceptMap
+conceptMap = cdbMap "ConceptMap" cw
 
--- | Find the type of a chunk by its 'UID'.
-findTypeOf :: UID -> ChunkDB -> Maybe TypeRep
-findTypeOf u cdb = chunkType . fst <$> M.lookup u (chunkTable cdb)
+-- | Smart constructor for a 'UnitMap'.
+unitMap :: (IsUnit u) => [u] -> UnitMap
+unitMap = cdbMap "UnitMap" unitWrapper
 
--- | Internal function for inserting a dependancy of a chunk into the
--- dependancy's respective dependants list.
-insertRefExpectingExistence :: UID -> UID -> ChunkByUID -> ChunkByUID
-insertRefExpectingExistence depdnt depdncy cbu =
-  case M.insertLookupWithKey (\_ _ (c, depdnts) -> (c, depdnt : depdnts)) depdncy (undefined, []) cbu of
-    (Just _, cbu') -> cbu' -- If the chunk is already registered, we just updated its dependants, and everything is fine.
-    (Nothing, _) -> -- But if no data was found, then we have a problem: the chunk we are inserting depends on a chunk that does not exist.
-      error $ "Chunk dependancy is missing for `" ++ show depdnt ++ "`. Missing: `" ++ show depdncy ++ "`."
+-- | General smart constructor for making a 'UMap' out of anything that has a 'UID'. 
+idMap :: HasUID a => String -> [a] -> Map.Map UID (a, Int)
+idMap mn = cdbMap mn id
 
--- | Internal function to insert a chunk into the 'ChunkDB'. This function
--- assumes that the chunk is not already registered in the database, and quietly
--- break table synchronicity if it is.
-insert0 :: IsChunk a => ChunkDB -> a -> ChunkDB
-insert0 cdb c = cdb'
-  where
-    -- Box our chunk.
-    c' = mkChunk c
+-- | Smart constructor for a 'TraceMap' given a traceability matrix.
+traceMap :: [(UID, [UID])] -> TraceMap
+traceMap = Map.fromList
 
-    -- Insert our chunk, it is not currently depended on by anything.
-    chunkTable' = M.insert (c ^. uid) (c', mempty) (chunkTable cdb)
-
-    -- Capture all dependencies of this chunk.
-    chunkTable'' = foldr (insertRefExpectingExistence $ c' ^. uid) chunkTable'
-      $ chunkRefs c
-
-    -- Add our chunk to its corresponding 'chunks by type' list.
-    chunkTypeTable' = M.alter (Just . maybe [c'] (++ [c'])) (typeOf c) (chunkTypeTable cdb)
-
-    -- Finally, build the updated database.
-    cdb' = cdb { chunkTable = chunkTable'', chunkTypeTable = chunkTypeTable' }
-
--- | Insert a chunk into the 'ChunkDB' if it is sensibly to do so (i.e., does
--- not depend on itself and is not a 'ChunkDB'). We temporarily allow chunks to
--- overwrite other ones, but we warn when this happens.
-insert :: IsChunk a => a -> ChunkDB -> ChunkDB
-insert c cdb
-  | c ^. uid `elem` chunkRefs c =
-      error $ "Chunk `" ++ show (c ^. uid) ++ "` cannot reference itself as a dependancy."
-  | typeOf c == typeRep (Proxy @ChunkDB) =
-      error "Insertion of ChunkDBs in ChunkDBs is disallowed; please perform unions with them instead."
-  | (Just x) <- findTypeOf (c ^. uid) cdb =
-      -- Overwrite: remove previous chunk from chunk refs and chunksByType
-      -- tables before inserting new one.
-      let prevChunk = fst $ fromMaybe (error "Internal error: chunk missing after findTypeOf succeeded") (M.lookup (c ^. uid) (chunkTable cdb))
-          prevType  = chunkType prevChunk
-          cu' = M.delete (c ^. uid) (chunkTable cdb)
-          ctr' = M.adjust (filter (\c_ -> (c_ ^. uid) /= (c ^. uid))) prevType (chunkTypeTable cdb)
-          cdb' = cdb { chunkTable = cu', chunkTypeTable = ctr' }
-          cdb'' = insert0 cdb' c
-      in if typeOf c == x
-            then trace ("WARNING! Overwriting `" ++ show (c ^. uid) ++ "` :: " ++ show x) cdb''
-            else error $ "ERROR! Overwriting a chunk (`" ++ show (c ^. uid) ++ "` :: `" ++ show x ++ "`) with a chunk of a different type: `" ++ show (typeOf c) ++ "`"
-  | otherwise = insert0 cdb c
-
--- | Insert a list of chunks into a 'ChunkDB'.
-insertAll :: IsChunk a => [a] -> ChunkDB -> ChunkDB
-insertAll as cdb = foldl' (flip insert) cdb as
-
---------------------------------------------------------------------------------
--- Temporary functions for working with non-chunk tables
---
--- Everything below is temporary and should be removed once the LabelledContent
--- and Reference chunks are properly implemented and the "chunk refs" tables are
--- built properly (i.e., using the `HasChunkRefs` typeclass).
---------------------------------------------------------------------------------
-
--- | An ordered map based on 'Data.Map.Strict' for looking up chunks by their
--- 'UID's.
-type UMap a = M.Map UID (a, Int)
-
--- | Create a 'UMap' from a list of chunks. Assumes that the leftmost chunk in
--- the list has index 0, increasing by 1 each step to the right.
-idMap :: HasUID a => [a] -> UMap a
-idMap vals = M.fromList $ zipWith (\v i -> (v ^. uid, (v, i))) vals [0..]
+-- | Gets a unit if it exists, or Nothing.        
+getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
+getUnitLup m c = getUnit $ symbResolve m (c ^. uid)
 
 -- | Looks up a 'UID' in a 'UMap' table. If nothing is found, an error is thrown.
 uMapLookup :: String -> String -> UID -> UMap a -> a
-uMapLookup tys ms u t = getFM $ M.lookup u t
+uMapLookup tys ms u t = getFM $ Map.lookup u t
   where getFM = maybe (error $ tys ++ ": " ++ show u ++ " not found in " ++ ms) fst
 
--- | Find a 'LabelledContent' by its 'UID', throwing an error if it is not
--- found.
-labelledcontentFind :: UID -> ChunkDB -> LabelledContent
-labelledcontentFind u cdb = uMapLookup "LabelledContent" "labelledcontentTable" u (labelledcontentTable cdb)
+-- | Looks up a 'UID' in the symbol table from the 'ChunkDB'. If nothing is found, an error is thrown.
+symbResolve :: ChunkDB -> UID -> DefinedQuantityDict
+symbResolve m x = uMapLookup "Symbol" "SymbolMap" x $ symbolTable m
 
--- | Find a 'Reference' by its 'UID', throwing an error if it is not found.
-refFind :: UID -> ChunkDB -> Reference
-refFind u cdb = uMapLookup "Reference" "refTable" u (refTable cdb)
+data TermAbbr = TermAbbr { longForm :: NP, shortForm :: Maybe String }
 
--- | Find what chunks reference a given 'UID'.
-refbyLookup :: UID -> M.Map UID [UID] -> [UID]
-refbyLookup c = fromMaybe [] . M.lookup c
+-- | Search for _any_ chunk that is an instance of 'Idea' and process its "term"
+-- and abbreviation.
+termResolve :: (NP -> Maybe String -> c) -> ChunkDB -> UID -> c
+termResolve f db trg
+  | (Just (c, _)) <- Map.lookup trg (termTable db)         = go c
+  | (Just (c, _)) <- Map.lookup trg (symbolTable db)       = go c
+  | (Just (c, _)) <- Map.lookup trg (conceptChunkTable db) = go c
+  | (Just (c, _)) <- Map.lookup trg (_unitTable db)        = go c
+  | (Just (c, _)) <- Map.lookup trg (_dataDefnTable db)    = go c
+  | (Just (c, _)) <- Map.lookup trg (_insmodelTable db)    = go c
+  | (Just (c, _)) <- Map.lookup trg (_gendefTable db)      = go c
+  | (Just (c, _)) <- Map.lookup trg (_theoryModelTable db) = go c
+  | (Just (c, _)) <- Map.lookup trg (_conceptinsTable db)  = go c
+  | otherwise = error $ "Term: " ++ show trg ++ " not found in TermMap"
+  where go c = f (c ^. term) (getA c)
 
--- | Query a chunk for to what chunks it refers to.
-traceLookup :: UID -> M.Map UID [UID] -> [UID]
-traceLookup = refbyLookup -- Same implementation, just different name for code clarity.
+-- | Find a chunks "term" and abbreviation, if it exists.
+termResolve' :: ChunkDB -> UID -> TermAbbr
+termResolve' = termResolve TermAbbr
+
+-- | Looks up a 'UID' in the reference table from the 'ChunkDB'. If nothing is found, an error is thrown.
+refResolve :: UID -> ReferenceMap -> Reference
+refResolve = uMapLookup "Reference" "ReferenceMap"
+
+-- | Looks up a 'UID' in the unit table. If nothing is found, an error is thrown.
+unitLookup :: UID -> UnitMap -> UnitDefn
+unitLookup = uMapLookup "Unit" "UnitMap"
+
+data DomDefn = DomDefn { domain :: [UID], definition :: Sentence}
+
+-- | Looks up a 'UID' in all tables with concepts from the 'ChunkDB'. If nothing is found, an error is thrown.
+defResolve :: ([UID] -> Sentence -> c) -> ChunkDB -> UID -> c
+defResolve f db x
+  | (Just (c, _)) <- Map.lookup x (symbolTable db)       = go c
+  | (Just (c, _)) <- Map.lookup x (conceptChunkTable db) = go c
+  | (Just (c, _)) <- Map.lookup x (_unitTable db)        = go c
+  | (Just (c, _)) <- Map.lookup x (_insmodelTable db)    = go c
+  | (Just (c, _)) <- Map.lookup x (_gendefTable db)      = go c
+  | (Just (c, _)) <- Map.lookup x (_theoryModelTable db) = go c
+  | (Just (c, _)) <- Map.lookup x (_conceptinsTable db)  = go c
+  | otherwise = error $ "Definition: " ++ show x ++ " not found in ConceptMap"
+  where go c = f (cdom c) (c ^. defn)
+
+defResolve' :: ChunkDB -> UID -> DomDefn
+defResolve' = defResolve DomDefn
+
+-- | Looks up a 'UID' in the datadefinition table. If nothing is found, an error is thrown.
+datadefnLookup :: UID -> DatadefnMap -> DataDefinition
+datadefnLookup = uMapLookup "DataDefinition" "DatadefnMap"
+
+-- | Looks up a 'UID' in the instance model table. If nothing is found, an error is thrown.
+insmodelLookup :: UID -> InsModelMap -> InstanceModel
+insmodelLookup = uMapLookup "InstanceModel" "InsModelMap"
+
+-- | Looks up a 'UID' in the general definition table. If nothing is found, an error is thrown.
+gendefLookup :: UID -> GendefMap -> GenDefn
+gendefLookup = uMapLookup "GenDefn" "GenDefnMap"
+
+-- | Looks up a 'UID' in the theory model table. If nothing is found, an error is thrown.
+theoryModelLookup :: UID -> TheoryModelMap -> TheoryModel
+theoryModelLookup = uMapLookup "TheoryModel" "TheoryModelMap"
+
+-- | Looks up a 'UID' in the concept instance table. If nothing is found, an error is thrown.
+conceptinsLookup :: UID -> ConceptInstanceMap -> ConceptInstance
+conceptinsLookup = uMapLookup "ConceptInstance" "ConceptInstanceMap"
+
+-- | Gets an ordered list of @a@ from any @a@ that is of type 'UMap'.
+asOrderedList :: UMap a -> [a]
+asOrderedList = map fst . sortOn snd . map snd . Map.toList
+
+-- | Our chunk databases. \Must contain all maps needed in an example.\
+-- In turn, these maps must contain every chunk definition or concept 
+-- used in its respective example, else an error is thrown.
+data ChunkDB = CDB {
+  -- CHUNKS
+    symbolTable           :: SymbolMap
+  , termTable             :: TermMap
+  , conceptChunkTable     :: ConceptMap
+  , _unitTable            :: UnitMap
+  , _dataDefnTable        :: DatadefnMap
+  , _insmodelTable        :: InsModelMap
+  , _gendefTable          :: GendefMap
+  , _theoryModelTable     :: TheoryModelMap
+  , _conceptinsTable      :: ConceptInstanceMap
+  , _citationTable        :: CitationMap
+  -- NOT CHUNKS
+  , _labelledcontentTable :: LabelledContentMap -- TODO: LabelledContent needs to be rebuilt. See JacquesCarette/Drasil#4023.
+  , _refTable             :: ReferenceMap -- TODO: References need to be rebuilt. See JacquesCarette/Drasil#4022.
+  , _traceTable           :: TraceMap
+  , _refbyTable           :: RefbyMap
+  }
+makeLenses ''ChunkDB
+
+-- | Smart constructor for chunk databases. Takes in the following:
+--
+--     * ['Quantity'] (for 'SymbolMap'), 
+--     * 'NamedIdea's (for 'TermMap'),
+--     * 'Concept's (for 'ConceptMap'),
+--     * Units (something that 'IsUnit' for 'UnitMap'),
+--     * 'DataDefinition's (for 'DatadefnMap'),
+--     * 'InstanceModel's (for 'InsModelMap'),
+--     * 'GenDefn's (for 'GendefMap'),
+--     * 'TheoryModel's (for 'TheoryModelMap'),
+--     * 'ConceptInstance's (for 'ConceptInstanceMap'),
+--     * 'LabelledContent's (for 'LabelledContentMap').
+-- Creates an empty ChunkDB without basic data. cdb in MetaDatabase.Drasil
+-- should be preferred over this function as it includes the basic data needed
+-- for Drasil.
+cdb' :: (Quantity q, MayHaveUnit q, Concept q, Concept c, IsUnit u) =>
+    [q] -> [IdeaDict] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
+    [GenDefn] -> [TheoryModel] -> [ConceptInstance] ->
+    [LabelledContent] -> [Reference] -> [Citation] -> ChunkDB
+cdb' s t c u d ins gd tm ci lc r cits =
+  CDB {
+    -- CHUNKS
+    symbolTable = symbolMap s,
+    termTable = termMap t,
+    conceptChunkTable = conceptMap c,
+    _unitTable = unitMap u,
+    _dataDefnTable = idMap "DataDefnMap" d,
+    _insmodelTable = idMap "InsModelMap" ins,
+    _gendefTable = idMap "GenDefnmap" gd,
+    _theoryModelTable = idMap "TheoryModelMap" tm,
+    _conceptinsTable = idMap "ConcInsMap" ci,
+    _citationTable = idMap "CiteMap" cits,
+    -- NOT CHUNKS
+    _labelledcontentTable = idMap "LLCMap" lc,
+    _traceTable = Map.empty,
+    _refbyTable = Map.empty,
+    _refTable = idMap "RefMap" r
+  }
+
+
+addCdb :: ChunkDB -> ChunkDB -> ChunkDB
+addCdb cdb1 cdb2 =
+  CDB {
+    -- CHUNKS
+    symbolTable           = concatCdbMap "SymbolMap" (symbolTable cdb1) (symbolTable cdb2),
+    termTable             = concatCdbMap "TermMap" (termTable cdb1) (termTable cdb2),
+    conceptChunkTable     = concatCdbMap "ConceptMap" (conceptChunkTable cdb1) (conceptChunkTable cdb2),
+    _unitTable            = concatCdbMap "UnitMap" (_unitTable cdb1) (_unitTable cdb2),
+    _dataDefnTable        = concatCdbMap "" (_dataDefnTable cdb1) (_dataDefnTable cdb2),
+    _insmodelTable        = concatCdbMap "" (_insmodelTable cdb1) (_insmodelTable cdb2),
+    _gendefTable          = concatCdbMap "" (_gendefTable cdb1) (_gendefTable cdb2),
+    _theoryModelTable     = concatCdbMap "" (_theoryModelTable cdb1) (_theoryModelTable cdb2),
+    _conceptinsTable      = concatCdbMap "" (_conceptinsTable cdb1) (_conceptinsTable cdb2),
+    _citationTable        = concatCdbMap "" (_citationTable cdb1) (_citationTable cdb2),
+    -- NOT CHUNKS
+    _labelledcontentTable = concatCdbMap "" (_labelledcontentTable cdb1) (_labelledcontentTable cdb2),
+    _traceTable           = concatCdbMap "" (_traceTable cdb1) (_traceTable cdb2),
+    _refbyTable           = concatCdbMap "" (_refbyTable cdb1) (_refbyTable cdb2),
+    _refTable             = concatCdbMap "" (_refTable cdb1) (_refTable cdb2)
+  }
+  where
+    concatCdbMap mn = Map.unionWithKey (preferNew mn) 
+    preferNew mn key new _ = trace ("'" ++ show key ++ "' is inserted twice in '" ++ mn ++ "' while adding to basis!") new
+
+-- | Gets the units of a 'Quantity' as 'UnitDefn's.
+collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
+collectUnits m = map (unitWrapper . flip unitLookup (m ^. unitTable))
+ . concatMap getUnits . mapMaybe (getUnitLup m)
+
+-- | Trace a 'UID' to related 'UID's.
+traceLookup :: UID -> TraceMap -> [UID]
+traceLookup c = fromMaybe [] . Map.lookup c
+
+-- | Translates a traceability map into a reference map.
+generateRefbyMap :: TraceMap -> RefbyMap
+generateRefbyMap = invert
+
+-- | Trace a 'UID' to referenced 'UID's.
+refbyLookup :: UID -> RefbyMap -> [UID]
+refbyLookup c = fromMaybe [] . Map.lookup c

@@ -10,8 +10,6 @@ module Theory.Drasil.Theory (
 
 import Control.Lens (Lens', view, makeLenses)
 
-import Drasil.Database.Chunk (HasChunkRefs(..))
-
 import Language.Drasil
 import Drasil.Metadata (thModel)
 
@@ -63,9 +61,6 @@ data TheoryModel = TM
   , _notes :: [Sentence]
   }
 makeLenses ''TheoryModel
-
-instance HasChunkRefs TheoryModel where
-  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds the 'UID' of a 'TheoryModel'.
 instance HasUID             TheoryModel where uid = mk . uid

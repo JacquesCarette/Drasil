@@ -3,8 +3,8 @@ module Language.Drasil.Code.Imperative.Comments (
   getComment, getCommentBrief
 ) where
 
-import Drasil.Database.SearchTools (DomDefn (definition), defResolve')
 import Language.Drasil
+import Database.Drasil (DomDefn (definition), defResolve')
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.CodeSpec (HasOldCodeSpec(..))
 import Language.Drasil.Printers (SingleLine(OneLine), sentenceDoc, unitDoc)

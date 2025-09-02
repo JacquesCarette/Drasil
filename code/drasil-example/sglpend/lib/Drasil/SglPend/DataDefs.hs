@@ -6,9 +6,9 @@ import Language.Drasil
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Drasil.SI_Units (second)
 import Theory.Drasil (DataDefinition, ddENoRefs)
+import Drasil.SglPend.Figures (figMotion)
 import qualified Data.Drasil.Quantities.Physics as QP (ixPos, iyPos,
       frequency, period, angularFrequency)
-import Drasil.SglPend.LabelledContent (figMotion)
 import Drasil.SglPend.Unitals (lenRod, initialPendAngle)
 --import Data.Drasil.Concepts.Physics (pendulum)
 import qualified Data.Drasil.Quantities.Math as QM (pi_)

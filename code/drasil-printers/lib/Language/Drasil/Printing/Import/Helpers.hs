@@ -3,8 +3,9 @@ module Language.Drasil.Printing.Import.Helpers where
 
 import Language.Drasil (Stage(..), codeSymb, eqSymb, NounPhrase(..), Sentence(S),
   Symbol, UID, TermCapitalization(..), titleizeNP, titleizeNP',
-  atStartNP, atStartNP', NP)
-import Database.Drasil (ChunkDB, symbResolve, termResolve', longForm, shortForm)
+  atStartNP, atStartNP', NP, DefinedQuantityDict)
+import Database.Drasil (ChunkDB, findOrErr)
+import Drasil.Database.SearchTools (termResolve', TermAbbr(..))
 
 import qualified Language.Drasil.Printing.AST as P
 
@@ -54,8 +55,8 @@ processExpo a
 -- | Given the stage of the symbol, looks up a character/symbol
 -- inside a chunk database that matches the given 'UID'. 
 lookupC :: Stage -> ChunkDB -> UID -> Symbol
-lookupC Equational     sm c = eqSymb   $ symbResolve sm c
-lookupC Implementation sm c = codeSymb $ symbResolve sm c
+lookupC Equational     sm c = eqSymb   (findOrErr c sm :: DefinedQuantityDict)
+lookupC Implementation sm c = codeSymb (findOrErr c sm :: DefinedQuantityDict)
 
 -- | Look up a term given a chunk database and a 'UID' associated with the term. Also specifies capitalization
 lookupT :: ChunkDB -> UID -> TermCapitalization -> Sentence

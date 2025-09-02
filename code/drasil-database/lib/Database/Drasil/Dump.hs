@@ -1,31 +1,16 @@
 module Database.Drasil.Dump where
 
-import Language.Drasil (UID, HasUID(..))
-import Database.Drasil.ChunkDB (conceptinsTable, theoryModelTable, gendefTable,
-  insmodelTable, dataDefnTable, unitTable, citationTable, UMap,
-  ChunkDB(termTable, symbolTable, conceptChunkTable))
+import Language.Drasil (UID)
+import Database.Drasil.ChunkDB
 
-import Data.Map.Strict (Map, insert)
+import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as SM
 
-import Control.Lens ((^.))
-
 type ChunkType = String
+
+-- | A dumped representation of a 'ChunkDB', mapping chunk types ('String's) to
+-- lists of 'UID's.
 type DumpedChunkDB = Map ChunkType [UID]
 
-umapDump :: HasUID a => UMap a -> [UID]
-umapDump = map ((^. uid) . fst) . SM.elems
-
 dumpChunkDB :: ChunkDB -> DumpedChunkDB
-dumpChunkDB cdb = 
-      insert "symbols" (umapDump $ symbolTable cdb)
-    $ insert "terms" (umapDump $ termTable cdb)
-    $ insert "concepts" (umapDump $ conceptChunkTable cdb)
-    $ insert "units" (umapDump $ cdb ^. unitTable)
-    $ insert "dataDefinitions" (umapDump $ cdb ^. dataDefnTable)
-    $ insert "instanceModels" (umapDump $ cdb ^. insmodelTable)
-    $ insert "generalDefinitions" (umapDump $ cdb ^. gendefTable)
-    $ insert "theoryModels" (umapDump $ cdb ^. theoryModelTable)
-    $ insert "conceptInstances" (umapDump $ cdb ^. conceptinsTable)
-    $ insert "citations" (umapDump $ cdb ^. citationTable)
-      mempty
+dumpChunkDB cdb = SM.fromList $ map (\ty -> (show ty, findAll' ty cdb)) (typesRegistered cdb)

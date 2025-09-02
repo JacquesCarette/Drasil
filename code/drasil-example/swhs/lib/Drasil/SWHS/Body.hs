@@ -43,6 +43,7 @@ import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater)
 import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
+import Drasil.SWHS.LabelledContent (labelledContent, figTank, sysCntxtFig)
 import Drasil.SWHS.MetaConcepts (progName, progName')
 import Drasil.SWHS.References (citations, uriReferences)
 import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements,
@@ -65,9 +66,6 @@ fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
-
-resourcePath :: String
-resourcePath = "../../../../datafiles/swhs/"
 
 si :: System
 si = mkSystem
@@ -104,8 +102,8 @@ conceptChunks =
   map cw [surArea, area]
 
 symbMap :: ChunkDB
-symbMap = cdb symbolsAll ideaDicts conceptChunks
-  ([] :: [UnitDefn]) SWHS.dataDefs insModel genDefs tMods concIns [] allRefs citations
+symbMap = cdb symbolsAll ideaDicts conceptChunks [] SWHS.dataDefs insModel
+  genDefs tMods concIns labelledContent allRefs citations
 
 
 
@@ -295,11 +293,6 @@ sysCntxtDesc pro = foldlSP [refS sysCntxtFig, S "shows the" +:+.
   sParen (short pro), S "Arrows" `S.are` S "used to show the", plural datum,
   S "flow between the", phraseNP (system `andIts` environment)]
 
-sysCntxtFig :: LabelledContent
-sysCntxtFig = llcc (makeFigRef "SysCon")
-  $ fig (titleize sysCont)
-  $ resourcePath ++ "SystemContextFigure.png"
-
 sysCntxtRespIntro :: CI -> Contents
 sysCntxtRespIntro pro = foldlSPCol [short pro +:+. S "is mostly self-contained",
   S "The only external interaction" `S.is` S "through the", phrase user +:+.
@@ -382,12 +375,6 @@ physSyst2 co ta hfc = [atStart co, S "at bottom of" +:+. phrase ta,
 
 -- Structure of list would be same between examples but content is completely
 -- different
-
-figTank :: LabelledContent
-figTank = llcc (makeFigRef "Tank") $ fig (
-  foldlSent_ [atStart sWHT `sC` S "with", phrase htFluxC `S.of_`
-  ch htFluxC `S.and_` phrase htFluxP `S.of_` ch htFluxP])
-  $ resourcePath ++ "Tank.png"
 
 -----------------------------
 -- 4.1.3 : Goal Statements --

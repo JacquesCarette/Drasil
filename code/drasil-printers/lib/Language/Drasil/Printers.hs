@@ -1,7 +1,7 @@
 module Language.Drasil.Printers (
   -- * Formats
   DocType(SRS, Website, Lesson), 
-  Format(TeX, HTML, Jupyter, MDBook)
+  Format(..)
   -- * DOT
   -- ** Types
   , GraphInfo(..), NodeFamily(..)
@@ -36,11 +36,10 @@ module Language.Drasil.Printers (
   , HasPrintingOptions (..)
   , Notation(..)
   , defaultConfiguration
-  )
-  where
+) where
 
 import Language.Drasil.Format (DocType(SRS, Website, Lesson), 
-  Format(TeX, HTML,  Jupyter, MDBook))
+  Format(..))
 import Language.Drasil.HTML.CSS (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.JSON.Print (genJupyter)

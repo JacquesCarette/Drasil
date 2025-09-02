@@ -13,7 +13,7 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpLDFC)
 import Drasil.GlassBR.Concepts (annealed, fullyT, glass, heatS)
-import Drasil.GlassBR.Figures (demandVsSDFig)
+import Drasil.GlassBR.LabelledContent (demandVsSDFig)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals
 

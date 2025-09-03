@@ -420,7 +420,7 @@ $(filter %$(JUPYTER_HTML_E_SUFFIX), $(JUPYTER_HTML_EXAMPLES)): %$(JUPYTER_HTML_E
 #----------------------------------------------------------------------------------#
 
 graphs: $(GRAPH_PACKAGES) packagedeps ##@Analysis Generate all module dependency graphs.
-	- echo "Graphs generated in local '$(GRAPH_FOLDER)' folder."
+	@echo "Graphs generated in local '$(GRAPH_FOLDER)' folder."
 	
 # Generate individual package module dependency graphs.
 $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod check_dot

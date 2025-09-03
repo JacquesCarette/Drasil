@@ -117,7 +117,9 @@ ALL_EXPANDED_TARGETS = $(foreach P, $(PACKAGE_GEN_TARGET), $($(P)_PACKAGES)) $(f
 DIFF = diff --strip-trailing-cr -r -X ../.gitignore --exclude='*.prof' --exclude='.drasil' # Excludes are to ignore the data the 'debug'-related targets generate.
 DIFF_PREFIX ?=
 
-# Run diff and capture both stdout and stderr into a log file.
+# Run diff and capture both stdout and stderr into a log file. Redirecting
+# stderr to stdout to populate logs when issues with performing the diff occurs
+# (e.g., when `stable/` does not exist).
 # $1: stable path, $2: build path, $3: log path
 DO_DIFF = $(DIFF_PREFIX)$(DIFF) "$1" "$2" > "$3" 2>&1
 
@@ -249,9 +251,9 @@ examples: $(GEN_EXAMPLES) ##@Examples Run all examples (no traceability graphs).
 # First build all the Drasil packages, then run all examples and generate graphs for them.
 tracegraphs: $(TRACE_GRAPH_EXAMPLES) ##@Examples Run examples with traceability graphs.
 
-# First build all the Drasil packages, run all examples (no traceability
-# graphs), and then test the generated contents with those in the stable folder.
-# Defer 'diff' exit codes to the log checking script.
+# Build all the Drasil packages (via 'code' dep.), run all examples, and then
+# test generated artifacts with stable/. Defer 'diff' exit codes to the log
+# checking script.
 test: code ##@Examples Test examples en masse against stable, only failing at the end if there were diffs.
 	@echo "Running tests (ignoring diff exit codes)..."
 	@$(MAKE) DIFF_PREFIX=- $(TEST_EXAMPLES)

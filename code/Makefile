@@ -317,7 +317,7 @@ $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
 
 # Compiles GOOL examples to concrete code (Java, C++, etc.)
 $(GOOLTEST)$(GEN_E_SUFFIX):
-	- rm -rf "$(BUILD_FOLDER)$(GOOLTEST_DIR)"
+	rm -rf "./$(BUILD_FOLDER)$(GOOLTEST_DIR)"
 	stack build $(stackArgs) "drasil-code:exe:$(GOOLTEST_EXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(GOOLTEST_DIR)"
 	cd "$(BUILD_FOLDER)$(GOOLTEST_DIR)" && $(STACK_EXEC) -- "$(GOOLTEST_EXE)"
@@ -366,29 +366,29 @@ $(filter %$(TEST_E_SUFFIX), $(TEST_WEBSITE)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREF
 # Individual example build cleans. Removes a specific example from the build folder.
 # Targets will have the form exampleName_build_clean.
 $(filter %$(BC_E_SUFFIX), $(BC_EXAMPLES)): %$(BC_E_SUFFIX):
-	- rm -rf "$(BUILD_FOLDER)$(EDIR)"
+	rm -rf "./$(BUILD_FOLDER)$(EDIR)"
 
 # The website build cleans. 
 # Target will have the form Website_build_clean
 $(filter %$(BC_E_SUFFIX), $(BC_WEBSITE)): %$(BC_E_SUFFIX):
-	- rm -rf "$(WEBSITE_FOLDER)"
+	rm -rf "./$(WEBSITE_FOLDER)"
 
 # Individual example stabilization. First builds all Drasil packages,
 # runs all examples, and then copies contents from the build folder into stable.
 # Targets will have the form exampleName_stabilize.
 $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_EXAMPLES)): %$(STABILIZE_E_SUFFIX): %$(BC_E_SUFFIX) %$(GEN_E_SUFFIX)
-	- rm -rf "$(STABLE_FOLDER)$*/"
+	rm -rf "./$(STABLE_FOLDER)$*/"
 	- cp -r "$(BUILD_FOLDER)$(EDIR)" "$(STABLE_FOLDER)$*/"
 
 $(GOOLTEST)$(STABILIZE_E_SUFFIX): $(GOOLTEST)$(GEN_E_SUFFIX)
-	- rm -rf "$(STABLE_FOLDER)$(GOOLTEST_DIR)/"
+	rm -rf "$(STABLE_FOLDER)$(GOOLTEST_DIR)/"
 	- cp -r "$(BUILD_FOLDER)$(GOOLTEST_DIR)/" "$(STABLE_FOLDER)$(GOOLTEST_DIR)"
 
 # The website stabilization. First builds the website, and then copies the
 # contents from the website folder into stable-website.
 # Target will have the form Website_stabilize.
 $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_WEBSITE)): %$(STABILIZE_E_SUFFIX): %$(BC_E_SUFFIX) website
-	- rm -rf "$(STABLE_WEBSITE_FOLDER)"
+	rm -rf "./$(STABLE_WEBSITE_FOLDER)"
 	- cp -r "$(WEBSITE_FOLDER)" "$(STABLE_WEBSITE_FOLDER)"
 
 # Generate individual example pdfs. Needs Graphviz to work.
@@ -432,7 +432,7 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod ch
 # We also add example to these variables so that we can still
 # make the graphs for that folder (although it's technically not a package itself).
 analysis: graphmod ##@Analysis Generate a table and some graphs to analyze Drasil's class, datatype, and instance structures.
-	- rm -rf "$(ANALYSIS_FOLDER)"
+	rm -rf "./$(ANALYSIS_FOLDER)"
 	@mkdir -p "$(ANALYSIS_FOLDER)"
 	cd $(SCRIPT_FOLDER) && stack ClassInstDepGen.hs
 	cd $(SCRIPT_FOLDER) && stack TypeDepGen.hs

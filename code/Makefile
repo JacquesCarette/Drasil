@@ -378,10 +378,12 @@ $(filter %$(BC_E_SUFFIX), $(BC_WEBSITE)): %$(BC_E_SUFFIX):
 # Targets will have the form exampleName_stabilize.
 $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_EXAMPLES)): %$(STABILIZE_E_SUFFIX): %$(BC_E_SUFFIX) %$(GEN_E_SUFFIX)
 	- rm -rf "$(STABLE_FOLDER)$*/"
+	@mkdir -p "$(STABLE_FOLDER)"
 	- cp -r "$(BUILD_FOLDER)$(EDIR)" "$(STABLE_FOLDER)$*/"
 
 $(GOOLTEST)$(STABILIZE_E_SUFFIX): $(GOOLTEST)$(GEN_E_SUFFIX)
 	- rm -rf "$(STABLE_FOLDER)$(GOOLTEST_DIR)/"
+	@mkdir -p "$(STABLE_FOLDER)"
 	- cp -r "$(BUILD_FOLDER)$(GOOLTEST_DIR)/" "$(STABLE_FOLDER)$(GOOLTEST_DIR)"
 
 # The website stabilization. First builds the website, and then copies the
@@ -389,6 +391,7 @@ $(GOOLTEST)$(STABILIZE_E_SUFFIX): $(GOOLTEST)$(GEN_E_SUFFIX)
 # Target will have the form Website_stabilize.
 $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_WEBSITE)): %$(STABILIZE_E_SUFFIX): %$(BC_E_SUFFIX) website
 	- rm -rf "$(STABLE_WEBSITE_FOLDER)"
+	@mkdir -p "$(STABLE_WEBSITE_FOLDER)"
 	- cp -r "$(WEBSITE_FOLDER)" "$(STABLE_WEBSITE_FOLDER)"
 
 # Generate individual example pdfs. Needs Graphviz to work.

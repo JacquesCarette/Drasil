@@ -197,19 +197,33 @@ extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) 
 -- | Extracts abbreviations/acronyms found in the document description ('DocDesc') from a database ('ChunkDB').
 -- This function automatically finds all chunks that are referenced with abbreviations (Ch ShortStyle) 
 -- in the document and converts them to IdeaDict entries for the Table of Abbreviations.
-extractAbbreviations :: DocDesc -> ChunkDB -> [IdeaDict]
-extractAbbreviations dd cdb = map resolveToIdeaDict abbreviationUIDs
-  where
-    -- Extract all sentences from the document description
-    allSentences = getDocDesc dd
-    -- Get UIDs of chunks that are used as abbreviations (Ch ShortStyle)
-    abbreviationUIDs = concatMap shortdep allSentences
-    -- Helper function to resolve a UID to an IdeaDict using the term and abbreviation
-    resolveToIdeaDict :: UID -> IdeaDict
-    resolveToIdeaDict targetUID = termResolve makeIdeaDict cdb targetUID
-      where
-        makeIdeaDict :: NP -> Maybe String -> IdeaDict
-        makeIdeaDict = mkIdea (show targetUID)
+-- extractAbbreviations :: DocDesc -> ChunkDB -> [IdeaDict]
+-- extractAbbreviations dd cdb = map resolveToIdeaDict abbreviationUIDs
+--   where
+--     -- Extract all sentences from the document description
+--     allSentences = getDocDesc dd
+--     -- Get UIDs of chunks that are used as abbreviations (Ch ShortStyle)
+--     abbreviationUIDs = concatMap shortdep allSentences
+--     -- Helper function to resolve a UID to an IdeaDict using the term and abbreviation
+--     resolveToIdeaDict :: UID -> IdeaDict
+--     resolveToIdeaDict targetUID = termResolve makeIdeaDict cdb targetUID
+--       where
+--         makeIdeaDict :: NP -> Maybe String -> IdeaDict
+--         makeIdeaDict = mkIdea (show targetUID)
+
+collectDocumentAbbreviations :: DocDesc -> ChunkDB -> [IdeaDict]
+collectDocumentAbbreviations dd cdb =
+  map nw $ getChunksWithAbbreviations $ getAllChunksFromDoc dd cdb
+
+getAllChunksFromDoc :: DocDesc -> ChunkDB -> [TermAbbr]
+getAllChunksFromDoc dd cdb =
+  map (termResolve' cdb) $ nub $ concatMap getSentenceUIDs (getDocDesc dd)
+
+getChunksWithAbbreviations :: [TermAbbr] -> [TermAbbr]
+getChunksWithAbbreviations = filter hasAbbreviation
+  where hasAbbreviation c = case shortForm c of
+                              Nothing -> False
+                              Just _  -> True
 
 -- * Section Creator Functions
 

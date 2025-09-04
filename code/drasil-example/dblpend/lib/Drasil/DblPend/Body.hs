@@ -66,7 +66,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
       -- introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
-      , TAandA []         -- Add table of abbreviation and acronym section (automatically populated)
+      , TAandA (collectDocumentAbbreviations srsBody chunkDB)         -- Add table of abbreviation and acronym section (automatically populated)
       ],
   IntroSec $
     IntroProg (justification progName) (phrase progName)
@@ -144,14 +144,14 @@ ideaDicts =
   nw progName : map nw doccon' ++ map nw mathcon' ++ map nw physicCon'
   -- Document structure abbreviations should now be automatically extracted from the comprehensive paragraph
 
-abbreviationsList :: [IdeaDict]
-abbreviationsList = 
-  -- QuantityDict abbreviations
-  map nw symbols ++
-  -- Document structure abbreviations
-  map nw [goalStmt, thModel, inModel, assumption, genDefn, dataDefn, requirement, physSyst, typUnc] ++
-  -- Other acronyms/abbreviations
-  nw progName : map nw acronyms
+-- abbreviationsList :: [IdeaDict]
+-- abbreviationsList = 
+--   -- QuantityDict abbreviations
+--   map nw symbols ++
+--   -- Document structure abbreviations
+--   map nw [goalStmt, thModel, inModel, assumption, genDefn, dataDefn, requirement, physSyst, typUnc] ++
+--   -- Other acronyms/abbreviations
+--   nw progName : map nw acronyms
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = [algorithm, errMsg, program] ++ physicCon ++ mathcon ++ physicalcon ++ srsDomains

@@ -3,7 +3,7 @@ module Drasil.DblPend.Body where
 
 import Control.Lens ((^.))
 
-import Drasil.Metadata (inModel, thModel, dataDefn, genDefn)
+import Drasil.Metadata (inModel)
 import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
@@ -20,7 +20,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   environment, datum, input_, interface, output_, problem, product_,
   physical, sysCont, software, softwareConstraint, softwareSys,
-  system, user, analysis, goalStmt, requirement, physSyst, typUnc, doccon, doccon', srsDomains)
+  system, user, analysis, doccon, doccon', srsDomains)
 import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate, educon)
 import Data.Drasil.Concepts.Math (cartesian, ode, mathcon, mathcon', graph)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion)
@@ -39,7 +39,7 @@ import Drasil.DblPend.IMods (iMods)
 import Drasil.DblPend.GenDefs (genDefns)
 import Drasil.DblPend.MetaConcepts (progName)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
-  inConstraints, outConstraints, constants, acronyms)
+  inConstraints, outConstraints, constants)
 
 import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs)
 import Drasil.DblPend.References (citations)
@@ -51,7 +51,7 @@ import Drasil.DblPend.ODEs (dblPenODEInfo)
 import Drasil.System (SystemKind(Specification), mkSystem)
 
 import Drasil.DocumentLanguage(collectDocumentAbbreviations)
-import Drasil.DocDecl (SRSDecl, mkDocDesc)
+import Drasil.DocDecl (mkDocDesc)
 
 
 srs :: Document

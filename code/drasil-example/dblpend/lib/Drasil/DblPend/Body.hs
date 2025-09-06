@@ -50,6 +50,10 @@ import Drasil.DblPend.ODEs (dblPenODEInfo)
 
 import Drasil.System (SystemKind(Specification), mkSystem)
 
+import Drasil.DocumentLanguage(collectDocumentAbbreviations)
+import Drasil.DocDecl (SRSDecl, mkDocDesc)
+
+
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
@@ -59,6 +63,7 @@ fullSI = fillcdbSRS mkSRS si
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
+
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents, -- This creates the Table of Contents
   RefSec $      --This creates the Reference section of the SRS
@@ -66,7 +71,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
       -- introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
-      , TAandA (collectDocumentAbbreviations srsBody chunkDB)         -- Add table of abbreviation and acronym section (automatically populated)
+      , TAandA (collectDocumentAbbreviations (mkDocDesc si mkSRS) symbMap)         -- Add table of abbreviation and acronym section (automatically populated)
       ],
   IntroSec $
     IntroProg (justification progName) (phrase progName)

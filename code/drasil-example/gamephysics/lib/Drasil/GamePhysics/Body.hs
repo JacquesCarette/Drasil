@@ -33,6 +33,7 @@ import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GamePhysics.Concepts (threeD, twoD, centreMass)
 import Drasil.GamePhysics.DataDefs (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
+import Drasil.GamePhysics.LabelledContent (labelledContent, sysCtxFig1)
 import Drasil.GamePhysics.IMods (iMods, instModIntro)
 import Drasil.GamePhysics.MetaConcepts (progName)
 import Drasil.GamePhysics.References (citations, uriReferences)
@@ -52,9 +53,6 @@ fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
-
-resourcePath :: String
-resourcePath = "../../../../datafiles/gamephysics/"
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -139,8 +137,8 @@ conceptChunks =
   [cw surface]
 
 symbMap :: ChunkDB
-symbMap = cdb symbolsAll ideaDicts conceptChunks
-  ([] :: [UnitDefn]) dataDefs iMods generalDefns tMods concIns [] allRefs citations
+symbMap = cdb symbolsAll ideaDicts conceptChunks [] dataDefs iMods generalDefns
+  tMods concIns labelledContent allRefs citations
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
@@ -217,10 +215,6 @@ sysCtxIntro = foldlSP
    phrase softwareSys, S "itself", sParen (short progName) +:+. EmptyS,
    S "Arrows are used to show the data flow between the", phraseNP (system
    `andIts` environment)]
-
-sysCtxFig1 :: LabelledContent
-sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont) 
-  (resourcePath ++ "sysctx.png")
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_

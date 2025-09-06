@@ -66,20 +66,20 @@ digraph allvsr {
 	{theory:flightduration, theory:landingposition, theory:offset, theory:outputMessage}
 	}
 
-	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
-	instance:verifyInVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInVals"];
-	instance:calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcValues"];
-	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 	instance:correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:correct"];
 	instance:verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiable"];
 	instance:understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:understandable"];
 	instance:reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:reusable"];
 	instance:maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainable"];
 	instance:portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
+	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
+	instance:verifyInVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInVals"];
+	instance:calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calcValues"];
+	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 
-	subgraph FR {
+	subgraph NFR {
 	rank="same"
-	{instance:inputValues, instance:verifyInVals, instance:calcValues, instance:outputValues, instance:correct, instance:verifiable, instance:understandable, instance:reusable, instance:maintainable, instance:portable}
+	{instance:correct, instance:verifiable, instance:understandable, instance:reusable, instance:maintainable, instance:portable, instance:inputValues, instance:verifyInVals, instance:calcValues, instance:outputValues}
 	}
 
 	instance:targetHit	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:targetHit"];

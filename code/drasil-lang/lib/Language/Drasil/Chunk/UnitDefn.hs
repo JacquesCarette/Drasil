@@ -30,6 +30,7 @@ import Language.Drasil.NounPhrase (cn,cn',NP)
 import Language.Drasil.Symbol (Symbol(Label))
 import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift), 
   compUSymb, fromUDefn, getUSymb, getDefn, UnitSymbol(BaseSI, DerivedSI, Defined))
+import Drasil.Database.Chunk (HasChunkRefs(..))
 import Drasil.Database.UID (UID, HasUID(..), mkUid)
 
 -- | For defining units.
@@ -43,6 +44,9 @@ data UnitDefn = UD { _vc :: ConceptChunk
                    , _cas :: UnitSymbol
                    , _cu :: [UID] }
 makeLenses ''UnitDefn
+
+instance HasChunkRefs UnitDefn where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds 'UID' of the 'ConceptChunk' used to make the 'UnitDefn'.
 instance HasUID        UnitDefn where uid = vc . uid

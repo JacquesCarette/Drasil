@@ -3,7 +3,7 @@ module Drasil.Sections.TableOfAbbAndAcronyms
   (tableAbbAccGen, tableAbbAccRef) where
 
 import Language.Drasil
-import Database.Drasil(TermAbbr, longForm, shortForm)
+import Drasil.Database.SearchTools (TermAbbr(longForm, shortForm))
 import Data.Drasil.Concepts.Documentation (abbreviation, fullForm, abbAcc)
 
 import Control.Lens ((^.))

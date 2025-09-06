@@ -8,7 +8,7 @@ import Theory.Drasil (DataDefinition, ddENoRefs)
 
 import Data.Drasil.Quantities.Physics (iSpeed, ixVel, iyVel, speed)
 
-import Drasil.Projectile.Figures (figLaunch)
+import Drasil.Projectile.LabelledContent (figLaunch)
 import Drasil.Projectile.Unitals (launAngle)
 
 dataDefs :: [DataDefinition]

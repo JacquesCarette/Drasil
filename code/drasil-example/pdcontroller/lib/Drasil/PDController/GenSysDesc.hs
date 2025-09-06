@@ -1,17 +1,13 @@
 module Drasil.PDController.GenSysDesc where
 
-import Data.Drasil.Concepts.Documentation
-       (environment, software, softwareSys, sysCont, system, user)
-
-import Drasil.PDController.Concepts
 import Language.Drasil
 import Language.Drasil.Chunk.Concept.NamedCombinators
 
-gsdSysContextFig :: LabelledContent
-gsdSysContextFig
-  = llcc (makeFigRef "systemContextDiag") $
-      fig (titleize sysCont)
-        "../../../../datafiles/pdcontroller/Fig_SystemContext.png"
+import Data.Drasil.Concepts.Documentation
+       (environment, software, softwareSys, sysCont, system, user)
+
+import Drasil.PDController.LabelledContent (gsdSysContextFig)
+import Drasil.PDController.Concepts
 
 gsdSysContextP1, gsdSysContextP2 :: Contents
 gsdSysContextP1

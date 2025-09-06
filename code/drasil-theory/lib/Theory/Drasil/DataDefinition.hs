@@ -1,7 +1,12 @@
-{-# LANGUAGE RankNTypes, NoMonomorphismRestriction, GADTs, TemplateHaskell #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE RankNTypes, NoMonomorphismRestriction, GADTs, TemplateHaskell, MultiParamTypeClasses #-}
 -- | Defines types and functions for Data Definitions.
-module Theory.Drasil.DataDefinition where
+module Theory.Drasil.DataDefinition (
+  DataDefinition,
+  ddQD, ddE, ddME, ddENoRefs, ddMENoRefs,
+  qdFromDD, qdEFromDD
+) where
+
+import Database.Drasil (HasChunkRefs(chunkRefs))
 
 import Control.Lens
 import Language.Drasil
@@ -10,17 +15,8 @@ import Theory.Drasil.Classes (HasOutput(..))
 
 -- * Types
 
--- | A scope is an indirect reference to a 'UID'.
-newtype Scope = Scp { _spec :: UID }
-
--- | Determines the scope of data.
-data ScopeType =
-    Local Scope -- ^ Only visible within a limited scope.
-  | Global      -- ^ Visible everywhere.
-
 data DDPkt = DDPkt {
   _pktUID :: UID,
-  _pktST  :: ScopeType,
   _pktDR  :: [DecRef],
   _pktMD  :: Maybe Derivation,
   _pktSN  :: ShortName,
@@ -64,6 +60,9 @@ ddPkt lpkt = lens g s
     g (DDME _ pkt) = pkt ^. lpkt
     s (DDE  qd pkt) a' = DDE  qd (pkt & lpkt .~ a')
     s (DDME qd pkt) a' = DDME qd (pkt & lpkt .~ a')
+
+instance HasChunkRefs DataDefinition where
+  chunkRefs = const mempty -- FIXME: `chunkRefs` should actually collect the referenced chunks.
 
 -- | Finds the 'UID' of a 'DataDefinition where'.
 instance HasUID             DataDefinition where uid = ddPkt pktUID
@@ -115,20 +114,20 @@ ddUid = nsUid "dataDefn" . (^. uid)
 -- | Smart constructor for data definitions.
 ddE :: SimpleQDef -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
 ddE q []   _   _  = error $ "Source field of " ++ showUID q ++ " is empty"
-ddE q refs der sn = DDE q . DDPkt (ddUid q) Global refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
+ddE q refs der sn = DDE q . DDPkt (ddUid q) refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Smart constructor for data definitions with no references.
 ddENoRefs :: SimpleQDef -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
-ddENoRefs q der sn = DDE q . DDPkt (ddUid q) Global [] der (shortname' $ S sn) (prependAbrv dataDefn sn)
+ddENoRefs q der sn = DDE q . DDPkt (ddUid q) [] der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Smart constructor for data definitions.
 ddME :: ModelQDef -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
 ddME q []   _   _  = error $ "Source field of " ++ showUID q ++ " is empty"
-ddME q refs der sn = DDME q . DDPkt (ddUid q) Global refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
+ddME q refs der sn = DDME q . DDPkt (ddUid q) refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Smart constructor for data definitions with no references.
 ddMENoRefs :: ModelQDef -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
-ddMENoRefs q der sn = DDME q . DDPkt (ddUid q) Global [] der (shortname' $ S sn) (prependAbrv dataDefn sn)
+ddMENoRefs q der sn = DDME q . DDPkt (ddUid q) [] der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Extracts the 'QDefinition e' from a 'DataDefinition'.
 qdFromDD :: DataDefinition -> Either SimpleQDef ModelQDef

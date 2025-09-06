@@ -93,6 +93,7 @@ copy_examples() {
       mkdir -p "$target_srs_dir/PDF"
       mkdir -p "$target_srs_dir/HTML"
       mkdir -p "$target_srs_dir/mdBook"
+      mkdir -p "$target_srs_dir/Jupyter"
       if [ -d "$example/SRS/PDF" ]; then
         cp "$example/SRS/PDF/"*.pdf "$target_srs_dir/PDF"
       fi
@@ -101,6 +102,9 @@ copy_examples() {
       fi
       if [ -d "$example/SRS/mdBook" ]; then
         cp -r "$example/SRS/mdBook/book/" "$target_srs_dir/mdBook"
+      fi
+      if [ -d "$example/SRS/Jupyter" ]; then
+        cp -r "$example/SRS/Jupyter/"*.html "$target_srs_dir/Jupyter"
       fi
       if [ -d "$example/src" ]; then
         mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST"

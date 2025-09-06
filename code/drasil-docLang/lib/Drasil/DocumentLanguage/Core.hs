@@ -9,7 +9,7 @@ import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
 
-import Database.Drasil(TermAbbr)
+import Drasil.Database.SearchTools (TermAbbr)
 
 -- | Type synonym for clarity.
 type System = Sentence

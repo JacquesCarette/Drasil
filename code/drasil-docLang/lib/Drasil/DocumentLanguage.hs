@@ -63,11 +63,11 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
 
 import Control.Lens ((^.), set)
 import Data.Function (on)
-import Data.List (nub, sortBy, sortOn)
+import Data.List (nub, sortBy, sortOn, nubBy)
 import qualified Data.Map as Map (elems, toList, assocs, keys)
 import Data.Maybe (maybeToList)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
-import Data.List (nubBy)
+
 
 
 

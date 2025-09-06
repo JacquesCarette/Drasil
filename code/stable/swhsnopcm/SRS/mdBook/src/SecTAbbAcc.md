@@ -4,17 +4,17 @@
 
 |Abbreviation|Full Form                                               |
 |:-----------|:-------------------------------------------------------|
-|A           |Assumption                                              |
-|DD          |Data Definition                                         |
-|GD          |General Definition                                      |
-|GS          |Goal Statement                                          |
-|IM          |Instance Model                                          |
-|ODE         |Ordinary Differential Equation                          |
-|PS          |Physical System Description                             |
-|R           |Requirement                                             |
-|SRS         |Software Requirements Specification                     |
-|SWHSNoPCM   |Solar Water Heating System With No Phase Change Material|
-|TM          |Theoretical Model                                       |
-|Uncert.     |Typical Uncertainty                                     |
+|A           |assumption                                              |
+|DD          |data definition                                         |
+|GD          |general definition                                      |
+|GS          |goal statement                                          |
+|IM          |instance model                                          |
+|ODE         |ordinary differential equation                          |
+|PS          |physical system description                             |
+|R           |requirement                                             |
+|SRS         |software requirements specification                     |
+|SWHSNoPCM   |solar water heating system with no phase change material|
+|TM          |theoretical model                                       |
+|Uncert.     |typical uncertainty                                     |
 
 **<p align="center">Abbreviations and Acronyms</p>**

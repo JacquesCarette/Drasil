@@ -4,16 +4,16 @@
 
 |Abbreviation|Full Form                          |
 |:-----------|:----------------------------------|
-|A           |Assumption                         |
-|DD          |Data Definition                    |
-|GD          |General Definition                 |
-|GS          |Goal Statement                     |
-|IM          |Instance Model                     |
-|ODE         |Ordinary Differential Equation     |
-|PS          |Physical System Description        |
-|R           |Requirement                        |
-|SRS         |Software Requirements Specification|
-|TM          |Theoretical Model                  |
-|Uncert.     |Typical Uncertainty                |
+|A           |assumption                         |
+|DD          |data definition                    |
+|GD          |general definition                 |
+|GS          |goal statement                     |
+|IM          |instance model                     |
+|ODE         |ordinary differential equation     |
+|PS          |physical system description        |
+|R           |requirement                        |
+|SRS         |software requirements specification|
+|TM          |theoretical model                  |
+|Uncert.     |typical uncertainty                |
 
 **<p align="center">Abbreviations and Acronyms</p>**

@@ -4,18 +4,18 @@
 
 |Abbreviation|Full Form                          |
 |:-----------|:----------------------------------|
-|1D          |One-Dimensional                    |
-|2D          |Two-Dimensional                    |
-|A           |Assumption                         |
-|DD          |Data Definition                    |
-|GD          |General Definition                 |
-|GS          |Goal Statement                     |
-|IM          |Instance Model                     |
-|PS          |Physical System Description        |
+|1D          |one-dimensional                    |
+|2D          |two-dimensional                    |
+|A           |assumption                         |
+|DD          |data definition                    |
+|GD          |general definition                 |
+|GS          |goal statement                     |
+|IM          |instance model                     |
+|PS          |physical system description        |
 |Projectile  |Projectile                         |
-|R           |Requirement                        |
-|SRS         |Software Requirements Specification|
-|TM          |Theoretical Model                  |
-|Uncert.     |Typical Uncertainty                |
+|R           |requirement                        |
+|SRS         |software requirements specification|
+|TM          |theoretical model                  |
+|Uncert.     |typical uncertainty                |
 
 **<p align="center">Abbreviations and Acronyms</p>**

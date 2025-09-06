@@ -4,19 +4,19 @@
 
 |Abbreviation|Full Form                          |
 |:-----------|:----------------------------------|
-|2D          |Two-Dimensional                    |
-|3D          |Three-Dimensional                  |
-|A           |Assumption                         |
-|DD          |Data Definition                    |
-|GD          |General Definition                 |
-|GS          |Goal Statement                     |
+|2D          |two-dimensional                    |
+|3D          |three-dimensional                  |
+|A           |assumption                         |
+|DD          |data definition                    |
+|GD          |general definition                 |
+|GS          |goal statement                     |
 |GamePhysics |GamePhysics                        |
-|IM          |Instance Model                     |
-|ODE         |Ordinary Differential Equation     |
-|PS          |Physical System Description        |
-|R           |Requirement                        |
-|SRS         |Software Requirements Specification|
-|TM          |Theoretical Model                  |
-|Uncert.     |Typical Uncertainty                |
+|IM          |instance model                     |
+|ODE         |ordinary differential equation     |
+|PS          |physical system description        |
+|R           |requirement                        |
+|SRS         |software requirements specification|
+|TM          |theoretical model                  |
+|Uncert.     |typical uncertainty                |
 
 **<p align="center">Abbreviations and Acronyms</p>**

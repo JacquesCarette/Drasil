@@ -4,19 +4,19 @@
 
 |Abbreviation|Full Form                          |
 |:-----------|:----------------------------------|
-|A           |Assumption                         |
-|DD          |Data Definition                    |
-|GD          |General Definition                 |
-|GS          |Goal Statement                     |
-|IM          |Instance Model                     |
-|ODE         |Ordinary Differential Equation     |
-|PCM         |Phase Change Material              |
-|PS          |Physical System Description        |
-|R           |Requirement                        |
-|RHS         |Right-Hand Side                    |
-|SRS         |Software Requirements Specification|
-|SWHS        |Solar Water Heating System         |
-|TM          |Theoretical Model                  |
-|Uncert.     |Typical Uncertainty                |
+|A           |assumption                         |
+|DD          |data definition                    |
+|GD          |general definition                 |
+|GS          |goal statement                     |
+|IM          |instance model                     |
+|ODE         |ordinary differential equation     |
+|PCM         |phase change material              |
+|PS          |physical system description        |
+|R           |requirement                        |
+|RHS         |right-hand side                    |
+|SRS         |software requirements specification|
+|SWHS        |solar water heating system         |
+|TM          |theoretical model                  |
+|Uncert.     |typical uncertainty                |
 
 **<p align="center">Abbreviations and Acronyms</p>**

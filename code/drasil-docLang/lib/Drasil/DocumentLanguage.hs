@@ -23,9 +23,9 @@ import Drasil.TraceTable (generateTraceMap)
 import Language.Drasil hiding (kind)
 import Language.Drasil.Display (compsy)
 
-import Database.Drasil (ChunkDB, collectUnits, refbyTable, conceptinsTable, 
+import Database.Drasil (shortForm, termResolve', TermAbbr, ChunkDB, collectUnits, refbyTable, conceptinsTable, 
   idMap, traceTable, generateRefbyMap, refTable, labelledcontentTable, 
-  theoryModelTable, insmodelTable, gendefTable, dataDefnTable, termResolve)
+  theoryModelTable, insmodelTable, gendefTable, dataDefnTable)
 
 import Drasil.System
 import Drasil.GetChunks (ccss, ccss', citeDB)
@@ -67,6 +67,8 @@ import Data.List (nub, sortBy, sortOn)
 import qualified Data.Map as Map (elems, toList, assocs, keys)
 import Data.Maybe (maybeToList)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
+import Data.List (nubBy)
+
 
 
 -- * Main Function
@@ -211,19 +213,19 @@ extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) 
 --         makeIdeaDict :: NP -> Maybe String -> IdeaDict
 --         makeIdeaDict = mkIdea (show targetUID)
 
-collectDocumentAbbreviations :: DocDesc -> ChunkDB -> [IdeaDict]
-collectDocumentAbbreviations dd cdb =
-  map nw $ getChunksWithAbbreviations $ getAllChunksFromDoc dd cdb
-
 getAllChunksFromDoc :: DocDesc -> ChunkDB -> [TermAbbr]
 getAllChunksFromDoc dd cdb =
-  map (termResolve' cdb) $ nub $ concatMap getSentenceUIDs (getDocDesc dd)
+  map (termResolve' cdb) $ nub $ concatMap shortdep (getDocDesc dd)
 
 getChunksWithAbbreviations :: [TermAbbr] -> [TermAbbr]
 getChunksWithAbbreviations = filter hasAbbreviation
   where hasAbbreviation c = case shortForm c of
                               Nothing -> False
                               Just _  -> True
+
+collectDocumentAbbreviations :: DocDesc -> ChunkDB -> [TermAbbr]
+collectDocumentAbbreviations dd cdb =
+  getChunksWithAbbreviations $ getAllChunksFromDoc dd cdb                              
 
 -- * Section Creator Functions
 
@@ -285,7 +287,7 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
 
     mkSubRef SI {_systemdb = cdb} (TAandA _) =
       SRS.tOfAbbAcc
-        [LlC $ tableAbbAccGen $ nub $ extractAbbreviations dd cdb]
+       [LlC $ tableAbbAccGen $ nubBy (\a b -> shortForm a == shortForm b) (collectDocumentAbbreviations dd cdb)]
         []
 
 

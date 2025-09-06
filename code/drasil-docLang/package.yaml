@@ -42,6 +42,8 @@ library:
   - Drasil.DocumentLanguage.Units
   - Drasil.DocumentLanguage.TraceabilityGraph
   - Drasil.SRSDocument
+  - Drasil.DocumentLanguage
+  - Drasil.DocDecl 
   when:
   - condition: false
     other-modules: Paths_drasil_docLang

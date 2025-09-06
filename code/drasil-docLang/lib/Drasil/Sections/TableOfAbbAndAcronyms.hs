@@ -25,8 +25,8 @@ tableAbbAccGen [] = llcc tableAbbAccRef $ Paragraph $ emptySectSentPlu [abbAcc]
 tableAbbAccGen ls = let chunks = sortBy (compare `on` fst) $ select ls in
   llcc tableAbbAccRef $ Table
   (map titleize [abbreviation, fullForm]) (mkTable
-    [\(a,_) -> maybe (S "") S (shortForm a),
-     \(_,b) -> S (show (longForm b))]
+    [\(a,_) -> S a,
+     \(_,b) -> phraseNP (longForm b)]
   chunks)
   (titleize' abbAcc) True
 

@@ -46,6 +46,7 @@ library:
   - Language.Drasil.NounPhrase.Combinators
   - Language.Drasil.Sentence.Combinators
   - Language.Drasil.ShortHands
+  - Language.Drasil.Sentence.Extract 
   when:
   - condition: false
     other-modules: Paths_drasil_lang

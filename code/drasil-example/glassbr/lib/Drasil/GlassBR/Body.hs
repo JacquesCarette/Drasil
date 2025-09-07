@@ -48,6 +48,8 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
 
 import Drasil.System (SystemKind(Specification), mkSystem)
 import Data.Drasil.Quantities.PhysicalProperties (physicalquants)
+import Drasil.DocumentLanguage (collectDocumentAbbreviations)
+import Drasil.DocDecl (mkDocDesc)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -69,7 +71,7 @@ si = mkSystem progName Specification
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
-  RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA abbreviationsList],
+  RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA (collectDocumentAbbreviations (mkDocDesc si mkSRS) symbMap)],
   IntroSec $
     IntroProg (startIntro software blstRskInvWGlassSlab progName)
       (short progName)

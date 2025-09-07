@@ -6,6 +6,7 @@ import Drasil.DocumentLanguage.Definitions (Fields)
 import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat)
 import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
+import Drasil.Database.SearchTools(TermAbbr)
 
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
@@ -53,7 +54,7 @@ data RefTab where
   -- | Allows Lens functions in addition to an introduction for a table of symbols.
   TSymb' :: LFunc -> [TSIntro] -> RefTab
   -- | Default.
-  TAandA :: [IdeaDict] -> RefTab
+  TAandA :: [TermAbbr] -> RefTab
   -- add more here
 
 -- | For creating a table of symbols introduction

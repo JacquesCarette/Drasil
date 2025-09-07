@@ -39,6 +39,8 @@ import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
 import Drasil.PDController.ODEs (pidODEInfo)
 
 import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.DocumentLanguage (collectDocumentAbbreviations)
+import Drasil.DocDecl (mkDocDesc)
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
@@ -55,7 +57,7 @@ printSetting = piSys fullSI Equational defaultConfiguration
 mkSRS :: SRSDecl
 mkSRS
   = [TableOfContents,
-    RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA abbreviationsList],
+    RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA (collectDocumentAbbreviations (mkDocDesc si mkSRS) symbMap)],
      IntroSec $
        IntroProg introPara (phrase progName)
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,

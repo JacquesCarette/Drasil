@@ -54,6 +54,8 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
   tempW, thickness, watE)
 
 import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.DocumentLanguage (collectDocumentAbbreviations)
+import Drasil.DocDecl (mkDocDesc)
 
 -------------------------------------------------------------------------------
 
@@ -120,7 +122,7 @@ mkSRS = [TableOfContents,
   RefSec $ RefProg intro [
     TUnits,
     tsymb'' tSymbIntro $ TermExcept [uNormalVect],
-    TAandA abbreviationsList],
+    TAandA (collectDocumentAbbreviations (mkDocDesc si mkSRS) symbMap)],
   IntroSec $
     IntroProg (introStart +:+ introStartSWHS) (introEnd (plural progName') progName)
     [IPurpose $ purpDoc progName Verbose,

@@ -48,6 +48,8 @@ import Drasil.Projectile.Unitals
 import Theory.Drasil (TheoryModel)
 
 import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.DocumentLanguage (collectDocumentAbbreviations)
+import Drasil.DocDecl (mkDocDesc)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -64,7 +66,7 @@ mkSRS = [TableOfContents,
     RefProg intro
       [ TUnits
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits]
-      , TAandA abbreviationsList 
+      , TAandA (collectDocumentAbbreviations (mkDocDesc si mkSRS) symbMap) 
       ],
   IntroSec $
     IntroProg justification (phrase progName)
@@ -169,13 +171,6 @@ conceptChunks =
 symbMap :: ChunkDB
 symbMap = cdb (pi_ : symbols) ideaDicts conceptChunks ([] :: [UnitDefn])
   dataDefs iMods genDefns tMods concIns labelledContent allRefs citations
-
-abbreviationsList  :: [IdeaDict]
-abbreviationsList  =
-  -- CIs
-  map nw acronyms ++
-  -- DefinedQuantityDicts
-  map nw symbols
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

@@ -9,7 +9,7 @@ module Drasil.DocumentLanguage where
 
 import Control.Lens ((^.), set)
 import Data.Function (on)
-import Data.List (nub, sortBy)
+import Data.List (nub, sortBy, nubBy)
 import Data.Maybe (maybeToList, mapMaybe)
 import qualified Data.Map as Map (elems, assocs, keys)
 
@@ -68,6 +68,10 @@ import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
   software, unlikelyChg)
+import Drasil.Database.SearchTools(TermAbbr, shortForm, termResolve')
+import Language.Drasil.Sentence.Extract (shortdep)
+
+
 
 -- * Main Function
 -- | Creates a document from a document description, a title combinator function, and system information.
@@ -264,12 +268,25 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
     mkSubRef SI {_systemdb = cdb} (TSymb' f con) =
       mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
 
-    mkSubRef _ (TAandA ideas) =
+    mkSubRef SI {_systemdb = cdb} (TAandA _) = 
       SRS.tOfAbbAcc
-        [LlC $ tableAbbAccGen $ nub ideas]
+         [LlC $ tableAbbAccGen $ nubBy (\a b -> shortForm a == shortForm b) (collectDocumentAbbreviations dd cdb)]
         []
 
+-- | Extracts abbreviations/acronyms found in the document        
+getAllChunksFromDoc :: DocDesc -> ChunkDB -> [TermAbbr]
+getAllChunksFromDoc dd cdb =
+  map (termResolve' cdb) $ nub $ concatMap shortdep (getDocDesc dd)
 
+getChunksWithAbbreviations :: [TermAbbr] -> [TermAbbr]
+getChunksWithAbbreviations = filter hasAbbreviation
+  where hasAbbreviation c = case shortForm c of
+                              Nothing -> False
+                              Just _  -> True
+
+collectDocumentAbbreviations :: DocDesc -> ChunkDB -> [TermAbbr]
+collectDocumentAbbreviations dd cdb =
+  getChunksWithAbbreviations $ getAllChunksFromDoc dd cdb  
 
 -- | Helper for creating the table of symbols.
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>

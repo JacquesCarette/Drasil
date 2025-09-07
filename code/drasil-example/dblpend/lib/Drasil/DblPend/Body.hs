@@ -38,7 +38,7 @@ import Drasil.DblPend.GenDefs (genDefns)
 import Drasil.DblPend.LabelledContent (figMotion, sysCtxFig1, labelledContent)
 import Drasil.DblPend.MetaConcepts (progName)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
-  inConstraints, outConstraints, acronyms, constants)
+  inConstraints, outConstraints, constants)
 import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs)
 import Drasil.DblPend.References (citations)
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
@@ -47,6 +47,8 @@ import Language.Drasil.Code (ODEInfo (..))
 import Drasil.DblPend.ODEs (dblPenODEInfo)
 
 import Drasil.System (SystemKind(Specification), mkSystem)
+import Drasil.DocumentLanguage (collectDocumentAbbreviations)
+import Drasil.DocDecl (mkDocDesc)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -64,7 +66,7 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
       -- introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
-      , TAandA abbreviationsList         -- Add table of abbreviation and acronym section
+      , TAandA (collectDocumentAbbreviations (mkDocDesc si mkSRS) symbMap)          -- Add table of abbreviation and acronym section
       ],
   IntroSec $
     IntroProg (justification progName) (phrase progName)
@@ -140,13 +142,6 @@ ideaDicts =
   concepts ++
   -- CIs
   nw progName : map nw mathcon' ++ map nw physicCon'
-
-abbreviationsList :: [IdeaDict]
-abbreviationsList = 
-  -- DefinedQuantityDict abbreviations
-  map nw symbols ++
-  -- Other acronyms/abbreviations
-  nw progName : map nw acronyms
 
 conceptChunks :: [ConceptChunk]
 conceptChunks = 

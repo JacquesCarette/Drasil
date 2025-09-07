@@ -51,6 +51,18 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
   sD, termsWithAccDefn, termsWithDefsOnly, concepts, dataConstraints)
 
+import Drasil.DocumentLanguage (collectDocumentAbbreviations)
+import Drasil.DocDecl (mkDocDesc)
+
+srs :: Document
+srs = mkDoc mkSRS (S.forGen titleize phrase) si
+
+fullSI :: System
+fullSI = fillcdbSRS mkSRS si
+
+printSetting :: PrintingInformation
+printSetting = piSys fullSI Equational defaultConfiguration
+
 si :: System
 si = mkSystem progName Specification
   [nikitha, spencerSmith] [purp] [background] [scope] []
@@ -63,7 +75,7 @@ si = mkSystem progName Specification
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
-  RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA abbreviationsList],
+  RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA (collectDocumentAbbreviations (mkDocDesc si mkSRS) symbMap)],
   IntroSec $
     IntroProg (startIntro software blstRskInvWGlassSlab progName)
       (short progName)

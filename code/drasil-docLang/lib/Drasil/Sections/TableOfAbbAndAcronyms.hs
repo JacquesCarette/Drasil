@@ -8,26 +8,27 @@ import Data.List (sortBy)
 
 import Data.Drasil.Concepts.Documentation (abbreviation, fullForm, abbAcc)
 import Drasil.Database (HasUID(..))
+import Drasil.Database.SearchTools(TermAbbr, longForm, shortForm)
 import Language.Drasil
 import Utils.Drasil (mkTable)
 
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 -- | Helper function that gets the acronym out of an 'Idea'.
-select :: (Idea s) => [s] -> [(String, s)]
+select :: [TermAbbr] -> [(String, TermAbbr)]
 select [] = []
-select (x:xs) = case getA x of
+select (x:xs) = case shortForm x of
   Nothing -> select xs
   Just y  -> (y, x) : select xs
 
 -- | The actual table creation function.
-tableAbbAccGen :: (Idea s) => [s] -> LabelledContent
+tableAbbAccGen :: [TermAbbr] -> LabelledContent
 tableAbbAccGen [] = llcc tableAbbAccRef $ Paragraph $ emptySectSentPlu [abbAcc]
 tableAbbAccGen ls = let chunks = sortBy (compare `on` fst) $ select ls in
   llcc tableAbbAccRef $ Table
   (map titleize [abbreviation, fullForm]) (mkTable
-  [\(a,_) -> S a,
-   \(_,b) -> titleize b]
+    [\(a,_) -> S a,
+     \(_,b) -> phraseNP (longForm b)]
   chunks)
   (titleize' abbAcc) True
 

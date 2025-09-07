@@ -48,6 +48,17 @@ import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs, funcReqsTables)
 import Drasil.Projectile.Unitals
 
 import Theory.Drasil (TheoryModel)
+import Drasil.DocumentLanguage (collectDocumentAbbreviations)
+import Drasil.DocDecl (mkDocDesc)
+
+srs :: Document
+srs = mkDoc mkSRS (S.forGen titleize phrase) si
+
+fullSI :: System
+fullSI = fillcdbSRS mkSRS si
+
+printSetting :: PrintingInformation
+printSetting = piSys fullSI Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -55,7 +66,7 @@ mkSRS = [TableOfContents,
     RefProg intro
       [ TUnits
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits]
-      , TAandA abbreviationsList
+      , TAandA (collectDocumentAbbreviations (mkDocDesc si mkSRS) symbMap)
       ],
   IntroSec $
     IntroProg justification (phrase progName)
@@ -161,13 +172,6 @@ symbMap :: ChunkDB
 symbMap = cdb (pi_ : symbols) ideaDicts conceptChunks ([] :: [UnitDefn])
   dataDefs iMods genDefns tMods concIns citations
   (labelledContent ++ funcReqsTables)
-
-abbreviationsList  :: [IdeaDict]
-abbreviationsList  =
-  -- CIs
-  map nw acronyms ++
-  -- DefinedQuantityDicts
-  map nw symbols
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

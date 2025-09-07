@@ -40,12 +40,23 @@ import Drasil.DblPend.GenDefs (genDefns)
 import Drasil.DblPend.LabelledContent (figMotion, sysCtxFig1, labelledContent)
 import Drasil.DblPend.MetaConcepts (progName)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
-  inConstraints, outConstraints, acronyms, constants)
-import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs, funcReqsTables)
+  inConstraints, outConstraints, constants)
+import Drasil.DblPend.Requirements (funcReqs, nonFuncReqs)
 import Drasil.DblPend.References (citations)
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols,
   osloSymbols, apacheODESymbols, odeintSymbols, odeInfoChunks)
 import Drasil.DblPend.ODEs (dblPenODEInfo)
+import Drasil.DocumentLanguage (collectDocumentAbbreviations)
+import Drasil.DocDecl (mkDocDesc)
+
+srs :: Document
+srs = mkDoc mkSRS (S.forGen titleize phrase) si
+
+fullSI :: System
+fullSI = fillcdbSRS mkSRS si
+
+printSetting :: PrintingInformation
+printSetting = piSys fullSI Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents, -- This creates the Table of Contents
@@ -53,8 +64,8 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
     RefProg intro      -- This add the introduction blob to the reference section
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
-      -- introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols
-      , TAandA abbreviationsList         -- Add table of abbreviation and acronym section
+      -- introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
+      , TAandA (collectDocumentAbbreviations (mkDocDesc si mkSRS) symbMap)          -- Add table of abbreviation and acronym section
       ],
   IntroSec $
     IntroProg (justification progName) (phrase progName)
@@ -129,6 +140,7 @@ ideaDicts =
   -- CIs
   nw progName : map nw mathcon' ++ map nw physicCon'
 
+<<<<<<< HEAD
 abbreviationsList :: [IdeaDict]
 abbreviationsList =
   -- DefinedQuantityDict abbreviations
@@ -136,6 +148,8 @@ abbreviationsList =
   -- Other acronyms/abbreviations
   nw progName : map nw acronyms
 
+=======
+>>>>>>> 952a528d3e (clean auto abbrv extraction code)
 conceptChunks :: [ConceptChunk]
 conceptChunks =
   -- ConceptChunks

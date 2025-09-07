@@ -54,6 +54,20 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, consTol, constrained,
   simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM,
   tempW, thickness, watE)
 
+import Drasil.DocumentLanguage (collectDocumentAbbreviations)
+import Drasil.DocDecl (mkDocDesc)
+
+-------------------------------------------------------------------------------
+
+srs :: Document
+srs = mkDoc mkSRS S.forT si
+
+fullSI :: System
+fullSI = fillcdbSRS mkSRS si
+
+printSetting :: PrintingInformation
+printSetting = piSys fullSI Equational defaultConfiguration
+
 si :: System
 si = mkSystem
   progName' Specification [thulasi, brooks, spencerSmith]
@@ -108,7 +122,7 @@ mkSRS = [TableOfContents,
   RefSec $ RefProg intro [
     TUnits,
     tsymb'' tSymbIntro $ TermExcept [uNormalVect],
-    TAandA abbreviationsList],
+    TAandA (collectDocumentAbbreviations (mkDocDesc si mkSRS) symbMap)],
   IntroSec $
     IntroProg (introStart +:+ introStartSWHS) (introEnd (plural progName') progName)
     [IPurpose $ purpDoc progName Verbose,

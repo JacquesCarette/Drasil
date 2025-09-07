@@ -64,7 +64,19 @@ import Drasil.SWHSNoPCM.ODEs
 import Drasil.SWHSNoPCM.Requirements (funcReqs, funcReqsTables)
 import Drasil.SWHSNoPCM.References (citations)
 import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
-  specParamValList, outputs)
+  specParamValList)
+
+import Drasil.DocumentLanguage (collectDocumentAbbreviations)
+import Drasil.DocDecl (mkDocDesc)
+
+srs :: Document
+srs = mkDoc mkSRS S.forT si
+
+fullSI :: System
+fullSI = fillcdbSRS mkSRS si
+
+printSetting :: PrintingInformation
+printSetting = piSys fullSI Equational defaultConfiguration
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
@@ -101,7 +113,7 @@ mkSRS = [TableOfContents,
   RefSec $ RefProg intro
   [TUnits,
   tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder, VectorUnits],
-  TAandA abbreviationsList],
+  TAandA (collectDocumentAbbreviations (mkDocDesc si mkSRS) symbMap)],
   IntroSec $
     IntroProg (introStart +:+ introStartNoPCM) (introEnd (plural progName) progName)
     [ IPurpose $ purpDoc progName Verbose
@@ -185,13 +197,6 @@ symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks ([] :: [UnitDefn]) NoPCM.dataDefs
   NoPCM.iMods genDefs tMods concIns citations
   (labelledContent ++ funcReqsTables)
-
-abbreviationsList :: [IdeaDict]
-abbreviationsList =
-  -- CIs
-  nw progName : map nw acronyms ++
-  -- DefinedQuantityDicts
-  map nw symbols
 
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]

@@ -38,7 +38,18 @@ import Drasil.SglPend.LabelledContent (figMotion, sysCtxFig1, labelledContent)
 import Drasil.SglPend.MetaConcepts (progName)
 import Drasil.SglPend.GenDefs (genDefns)
 import Drasil.SglPend.Unitals (inputs, outputs, inConstraints, outConstraints, symbols)
-import Drasil.SglPend.Requirements (funcReqs, funcReqsTables)
+import Drasil.SglPend.Requirements (funcReqs)
+import Drasil.DocumentLanguage (collectDocumentAbbreviations)
+import Drasil.DocDecl (mkDocDesc)
+
+srs :: Document
+srs = mkDoc mkSRS (S.forGen titleize phrase) si
+
+fullSI :: System
+fullSI = fillcdbSRS mkSRS si
+
+printSetting :: PrintingInformation
+printSetting = piSys fullSI Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents, -- This creates the Table of Contents
@@ -46,8 +57,8 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
     RefProg intro      -- This add the introduction blob to the reference section
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
-      --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols
-      , TAandA abbreviationsList         -- Add table of abbreviation and acronym section
+      --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
+      , TAandA (collectDocumentAbbreviations (mkDocDesc si mkSRS) symbMap)         -- Add table of abbreviation and acronym section
       ],
   IntroSec $
     IntroProg (justification progName) (phrase progName)

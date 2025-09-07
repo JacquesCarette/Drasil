@@ -25,7 +25,6 @@ import Drasil.DblPend.Body (justification, externalLinkRef, charsOfReader,
 import qualified Drasil.DblPend.Body as DPD (tMods)
 import Drasil.DblPend.Concepts (concepts, rod)
 import Drasil.DblPend.Requirements (nonFuncReqs)
-import Drasil.DblPend.Unitals (acronyms)
 import Drasil.DblPend.References (citations)
 
 import Drasil.SglPend.Assumptions (assumpSingle)

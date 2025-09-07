@@ -297,8 +297,3 @@ outConstraints = [landPosUnc, offsetUnc, flightDurUnc]
 
 constrained :: [ConstrConcept]
 constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
-
-acronyms :: [CI]
-acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
-  physSyst, requirement, Doc.srs, refBy, refName, thModel, typUnc]
-

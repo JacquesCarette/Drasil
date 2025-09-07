@@ -4,19 +4,9 @@
 
 |Abbreviation|Full Form                          |
 |:-----------|:----------------------------------|
-|1D          |One-Dimensional                    |
-|2D          |Two-Dimensional                    |
-|A           |Assumption                         |
-|DD          |Data Definition                    |
-|GD          |General Definition                 |
-|GS          |Goal Statement                     |
-|IM          |Instance Model                     |
-|PS          |Physical System Description        |
-|R           |Requirement                        |
-|RefBy       |Referenced by                      |
-|Refname     |Reference Name                     |
-|SRS         |Software Requirements Specification|
-|TM          |Theoretical Model                  |
-|Uncert.     |Typical Uncertainty                |
+|1D          |one-dimensional                    |
+|2D          |two-dimensional                    |
+|Projectile  |Projectile                         |
+|SRS         |software requirements specification|
 
 **<p align="center">Abbreviations and Acronyms</p>**

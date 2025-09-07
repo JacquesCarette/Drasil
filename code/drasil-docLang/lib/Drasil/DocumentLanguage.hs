@@ -34,7 +34,8 @@ import Language.Drasil.Display (compsy)
 
 import Drasil.Database (findOrErr, ChunkDB, insertAll, UID, HasUID(..))
 import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
-  findAllInstMods, findAllTheoryMods, findAllConcInsts, findAllLabelledContent)
+  findAllInstMods, findAllTheoryMods, findAllConcInsts, findAllLabelledContent,
+  TermAbbr, shortForm, termResolve')
 
 import Drasil.System (System(SI), whatsTheBigIdea, _sys, _systemdb, _quants,
   _authors, refTable, refbyTable, traceTable, systemdb, sysName)
@@ -71,7 +72,6 @@ import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
   software, unlikelyChg)
 import qualified Data.Map.Strict as M
-import Drasil.Database.SearchTools(TermAbbr, shortForm, termResolve')
 import Language.Drasil.Sentence.Extract (shortdep)
 
 -- * Main Function

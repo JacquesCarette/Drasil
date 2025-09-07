@@ -4,19 +4,9 @@
 
 |Abbreviation|Full Form                          |
 |:-----------|:----------------------------------|
-|2D          |Two-Dimensional                    |
-|A           |Assumption                         |
-|DD          |Data Definition                    |
+|2D          |two-dimensional                    |
 |DblPend     |Double Pendulum                    |
-|GD          |General Definition                 |
-|GS          |Goal Statement                     |
-|IM          |Instance Model                     |
-|PS          |Physical System Description        |
-|R           |Requirement                        |
-|RefBy       |Referenced by                      |
-|Refname     |Reference Name                     |
-|SRS         |Software Requirements Specification|
-|TM          |Theoretical Model                  |
-|Uncert.     |Typical Uncertainty                |
+|ODE         |ordinary differential equation     |
+|SRS         |software requirements specification|
 
 **<p align="center">Abbreviations and Acronyms</p>**

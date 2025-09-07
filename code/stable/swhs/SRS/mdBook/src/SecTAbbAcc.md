@@ -4,23 +4,10 @@
 
 |Abbreviation|Full Form                          |
 |:-----------|:----------------------------------|
-|A           |Assumption                         |
-|DD          |Data Definition                    |
-|GD          |General Definition                 |
-|GS          |Goal Statement                     |
-|IM          |Instance Model                     |
-|LC          |Likely Change                      |
-|ODE         |Ordinary Differential Equation     |
-|PCM         |Phase Change Material              |
-|PS          |Physical System Description        |
-|R           |Requirement                        |
-|RHS         |Right-Hand Side                    |
-|RefBy       |Referenced by                      |
-|Refname     |Reference Name                     |
-|SRS         |Software Requirements Specification|
-|SWHS        |Solar Water Heating System         |
-|TM          |Theoretical Model                  |
-|UC          |Unlikely Change                    |
-|Uncert.     |Typical Uncertainty                |
+|ODE         |ordinary differential equation     |
+|PCM         |phase change material              |
+|RHS         |right-hand side                    |
+|SRS         |software requirements specification|
+|SWHS        |solar water heating system         |
 
 **<p align="center">Abbreviations and Acronyms</p>**

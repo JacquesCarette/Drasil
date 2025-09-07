@@ -4,21 +4,8 @@
 
 |Abbreviation|Full Form                                               |
 |:-----------|:-------------------------------------------------------|
-|A           |Assumption                                              |
-|DD          |Data Definition                                         |
-|GD          |General Definition                                      |
-|GS          |Goal Statement                                          |
-|IM          |Instance Model                                          |
-|LC          |Likely Change                                           |
-|ODE         |Ordinary Differential Equation                          |
-|PS          |Physical System Description                             |
-|R           |Requirement                                             |
-|RefBy       |Referenced by                                           |
-|Refname     |Reference Name                                          |
-|SRS         |Software Requirements Specification                     |
-|SWHSNoPCM   |Solar Water Heating System With No Phase Change Material|
-|TM          |Theoretical Model                                       |
-|UC          |Unlikely Change                                         |
-|Uncert.     |Typical Uncertainty                                     |
+|ODE         |ordinary differential equation                          |
+|SRS         |software requirements specification                     |
+|SWHSNoPCM   |solar water heating system with no phase change material|
 
 **<p align="center">Abbreviations and Acronyms</p>**

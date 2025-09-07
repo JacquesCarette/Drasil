@@ -33,7 +33,7 @@ import Language.Drasil.Display (compsy)
 
 import Database.Drasil (findOrErr, idMap, insertAll, ChunkDB(..))
 import Drasil.Database.SearchTools (findAllDataDefns, findAllGenDefns,
-  findAllInstMods, findAllTheoryMods, findAllConcInsts)
+  findAllInstMods, findAllTheoryMods, findAllConcInsts, TermAbbr, shortForm, termResolve')
 
 import Drasil.System
 import Drasil.GetChunks (ccss, ccss', citeDB)
@@ -68,7 +68,6 @@ import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
   software, unlikelyChg)
-import Drasil.Database.SearchTools(TermAbbr, shortForm, termResolve')
 import Language.Drasil.Sentence.Extract (shortdep)
 
 

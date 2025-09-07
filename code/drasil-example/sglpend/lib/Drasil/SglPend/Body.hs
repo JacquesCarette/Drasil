@@ -125,13 +125,6 @@ conceptChunks =
   -- Unital Chunks
   [cw len]
 
-abbreviationsList :: [IdeaDict]
-abbreviationsList =
-  -- CIs
-  nw progName : map nw acronyms ++
-  -- QuantityDicts
-  map nw symbols
-
 symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ symbols) ideaDicts conceptChunks []
   dataDefs iMods genDefns tMods concIns labelledContent allRefs citations

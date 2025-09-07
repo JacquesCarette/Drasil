@@ -106,13 +106,6 @@ symbMap :: ChunkDB
 symbMap = cdb symbolsAll ideaDicts conceptChunks [] SWHS.dataDefs insModel
   genDefs tMods concIns labelledContent allRefs citations
 
-abbreviationsList :: [IdeaDict]
-abbreviationsList =
-  -- CIs
-  nw progName : map nw acronymsFull ++
-  -- DefinedQuantityDicts
-  map nw symbols
-
 -- | Holds all references and links used in the document.
 allRefs :: [Reference]
 allRefs = externalLinkRef : uriReferences

@@ -30,7 +30,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
 import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
-import Drasil.GamePhysics.Concepts (acronyms, threeD, twoD, centreMass)
+import Drasil.GamePhysics.Concepts (threeD, twoD, centreMass)
 import Drasil.GamePhysics.DataDefs (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.LabelledContent (labelledContent, sysCtxFig1)

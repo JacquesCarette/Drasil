@@ -35,7 +35,7 @@ import Data.Drasil.People (brooks, spencerSmith, thulasi)
 
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
-import Drasil.SWHS.Concepts (acronymsFull, coil, con, phaseChangeMaterial,
+import Drasil.SWHS.Concepts (coil, con, phaseChangeMaterial,
   phsChgMtrl, sWHT, tank, tankPCM, transient, water)
 import qualified Drasil.SWHS.DataDefs as SWHS (dataDefs)
 import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater)

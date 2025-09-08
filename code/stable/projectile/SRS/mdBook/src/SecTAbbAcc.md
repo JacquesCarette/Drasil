@@ -4,9 +4,9 @@
 
 |Abbreviation|Full Form                          |
 |:-----------|:----------------------------------|
-|1D          |one-dimensional                    |
-|2D          |two-dimensional                    |
+|1D          |One-Dimensional                    |
+|2D          |Two-Dimensional                    |
 |Projectile  |Projectile                         |
-|SRS         |software requirements specification|
+|SRS         |Software Requirements Specification|
 
 **<p align="center">Abbreviations and Acronyms</p>**

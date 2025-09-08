@@ -4,10 +4,10 @@
 
 |Abbreviation|Full Form                          |
 |:-----------|:----------------------------------|
-|2D          |two-dimensional                    |
-|3D          |three-dimensional                  |
+|2D          |Two-Dimensional                    |
+|3D          |Three-Dimensional                  |
 |GamePhysics |GamePhysics                        |
-|ODE         |ordinary differential equation     |
-|SRS         |software requirements specification|
+|ODE         |Ordinary Differential Equation     |
+|SRS         |Software Requirements Specification|
 
 **<p align="center">Abbreviations and Acronyms</p>**

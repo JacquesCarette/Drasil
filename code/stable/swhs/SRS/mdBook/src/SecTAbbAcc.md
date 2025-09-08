@@ -4,10 +4,10 @@
 
 |Abbreviation|Full Form                          |
 |:-----------|:----------------------------------|
-|ODE         |ordinary differential equation     |
-|PCM         |phase change material              |
-|RHS         |right-hand side                    |
-|SRS         |software requirements specification|
-|SWHS        |solar water heating system         |
+|ODE         |Ordinary Differential Equation     |
+|PCM         |Phase Change Material              |
+|RHS         |Right-Hand Side                    |
+|SRS         |Software Requirements Specification|
+|SWHS        |Solar Water Heating System         |
 
 **<p align="center">Abbreviations and Acronyms</p>**

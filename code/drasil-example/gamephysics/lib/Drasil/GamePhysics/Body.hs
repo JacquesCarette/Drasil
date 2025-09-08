@@ -44,8 +44,6 @@ import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
 import Drasil.GamePhysics.GenDefs (generalDefns)
 
 import Drasil.System (SystemKind(Specification), mkSystem)
-import Drasil.DocumentLanguage (collectDocumentAbbreviations)
-import Drasil.DocDecl (mkDocDesc)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize short) si
@@ -58,7 +56,7 @@ printSetting = piSys fullSI Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
-  RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA (collectDocumentAbbreviations (mkDocDesc si mkSRS) symbMap)],
+  RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA ],
   IntroSec $ IntroProg para1_introduction_intro (short progName)
   [IPurpose $ purpDoc progName Verbose,
    IScope scope,

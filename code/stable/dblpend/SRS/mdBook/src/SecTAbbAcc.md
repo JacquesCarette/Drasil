@@ -4,9 +4,17 @@
 
 |Abbreviation|Full Form                          |
 |:-----------|:----------------------------------|
-|2D          |two-dimensional                    |
+|2D          |Two-Dimensional                    |
+|A           |Assumption                         |
+|DD          |Data Definition                    |
 |DblPend     |Double Pendulum                    |
-|ODE         |ordinary differential equation     |
-|SRS         |software requirements specification|
+|GD          |General Definition                 |
+|GS          |Goal Statement                     |
+|IM          |Instance Model                     |
+|ODE         |Ordinary Differential Equation     |
+|PS          |Physical System Description        |
+|R           |Requirement                        |
+|SRS         |Software Requirements Specification|
+|TM          |Theoretical Model                  |
 
 **<p align="center">Abbreviations and Acronyms</p>**

@@ -4,8 +4,8 @@
 
 |Abbreviation|Full Form                          |
 |:-----------|:----------------------------------|
-|2D          |two-dimensional                    |
-|SRS         |software requirements specification|
+|2D          |Two-Dimensional                    |
+|SRS         |Software Requirements Specification|
 |SSP         |Slope Stability analysis Program   |
 
 **<p align="center">Abbreviations and Acronyms</p>**

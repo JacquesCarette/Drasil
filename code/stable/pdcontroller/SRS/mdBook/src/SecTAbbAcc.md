@@ -4,6 +4,6 @@
 
 |Abbreviation|Full Form                     |
 |:-----------|:-----------------------------|
-|ODE         |ordinary differential equation|
+|ODE         |Ordinary Differential Equation|
 
 **<p align="center">Abbreviations and Acronyms</p>**

@@ -49,9 +49,6 @@ import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs)
 import Drasil.SSP.TMods (tMods)
 import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
   inputs, inputsWUncrtn, outputs, symbols)
-import Drasil.DocumentLanguage (collectDocumentAbbreviations)
-import Drasil.DocDecl (mkDocDesc)
-
 
 --Document Setup--
 
@@ -80,7 +77,7 @@ si = mkSystem
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro
-  [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA (collectDocumentAbbreviations (mkDocDesc si mkSRS) symbMap)],
+  [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA ],
   IntroSec $ IntroProg startIntro kSent
     [ IPurpose $ purpDoc progName Verbose
     , IScope scope

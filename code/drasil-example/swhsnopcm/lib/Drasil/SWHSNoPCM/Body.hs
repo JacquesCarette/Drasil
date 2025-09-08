@@ -65,8 +65,6 @@ import Drasil.SWHSNoPCM.Unitals (inputs, constrained, unconstrained,
   specParamValList)
 
 import Drasil.System (SystemKind(Specification), mkSystem)
-import Drasil.DocumentLanguage (collectDocumentAbbreviations)
-import Drasil.DocDecl (mkDocDesc)
 
 srs :: Document
 srs = mkDoc mkSRS S.forT si
@@ -115,7 +113,7 @@ mkSRS = [TableOfContents,
   RefSec $ RefProg intro
   [TUnits,
   tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder, VectorUnits],
-  TAandA (collectDocumentAbbreviations (mkDocDesc si mkSRS) symbMap)],
+  TAandA ],
   IntroSec $
     IntroProg (introStart +:+ introStartNoPCM) (introEnd (plural progName) progName)
     [ IPurpose $ purpDoc progName Verbose

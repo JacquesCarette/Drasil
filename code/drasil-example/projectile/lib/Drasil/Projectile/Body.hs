@@ -48,8 +48,6 @@ import Drasil.Projectile.Unitals
 import Theory.Drasil (TheoryModel)
 
 import Drasil.System (SystemKind(Specification), mkSystem)
-import Drasil.DocumentLanguage (collectDocumentAbbreviations)
-import Drasil.DocDecl (mkDocDesc)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -66,7 +64,7 @@ mkSRS = [TableOfContents,
     RefProg intro
       [ TUnits
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits]
-      , TAandA (collectDocumentAbbreviations (mkDocDesc si mkSRS) symbMap) 
+      , TAandA  
       ],
   IntroSec $
     IntroProg justification (phrase progName)

@@ -4,8 +4,8 @@
 
 |Abbreviation|Full Form                                               |
 |:-----------|:-------------------------------------------------------|
-|ODE         |ordinary differential equation                          |
-|SRS         |software requirements specification                     |
-|SWHSNoPCM   |solar water heating system with no phase change material|
+|ODE         |Ordinary Differential Equation                          |
+|SRS         |Software Requirements Specification                     |
+|SWHSNoPCM   |Solar Water Heating System With No Phase Change Material|
 
 **<p align="center">Abbreviations and Acronyms</p>**

@@ -4,18 +4,18 @@
 
 |Abbreviation|Full Form                          |
 |:-----------|:----------------------------------|
-|AN          |annealed                           |
-|AR          |aspect ratio                       |
-|FT          |fully tempered                     |
-|GTF         |glass type factor                  |
+|AN          |Annealed                           |
+|AR          |Aspect Ratio                       |
+|FT          |Fully Tempered                     |
+|GTF         |Glass Type Factor                  |
 |GlassBR     |GlassBR                            |
-|HS          |heat strengthened                  |
-|IG          |insulating glass                   |
-|LG          |laminated glass                    |
-|LR          |load resistance                    |
-|LSF         |load share factor                  |
-|NFL         |non-factored load                  |
-|SD          |stand off distance                 |
-|SRS         |software requirements specification|
+|HS          |Heat Strengthened                  |
+|IG          |Insulating Glass                   |
+|LG          |Laminated Glass                    |
+|LR          |Load Resistance                    |
+|LSF         |Load Share Factor                  |
+|NFL         |Non-Factored Load                  |
+|SD          |Stand Off Distance                 |
+|SRS         |Software Requirements Specification|
 
 **<p align="center">Abbreviations and Acronyms</p>**

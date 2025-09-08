@@ -6,7 +6,6 @@ import Drasil.DocumentLanguage.Definitions (Fields)
 import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat)
 import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
-import Drasil.Database.SearchTools(TermAbbr)
 
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))

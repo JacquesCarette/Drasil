@@ -1,7 +1,7 @@
 -- | Defines Drasil generator functions.
-module Language.Drasil.Generate (
+module Drasil.Generator.Generate (
   -- * Debugging
-  dumpTo, dumpEverything,
+  dumpEverything,
   -- * Type checking
   typeCheckSI,
   -- * Generator Functions
@@ -10,7 +10,8 @@ module Language.Drasil.Generate (
   DocType(..), DocSpec(DocSpec), DocChoices(DC),
   Format(TeX, HTML, Jupyter, MDBook),
   -- * Constructor
-  docChoices) where
+  docChoices
+) where
 
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
@@ -29,10 +30,10 @@ import Language.Drasil.Printers (DocType(SRS, Website, Lesson), makeCSS, genHTML
 import Language.Drasil.Code (generator, generateCode, generateCodeProc,
   Choices(..), CodeSpec(..), HasOldCodeSpec(..), Lang(..), 
   getSampleData, readWithDataDesc, sampleInputDD, unPP, unJP, unCSP, unCPPP, unSP, unJLP)
-import Language.Drasil.Output.Formats(Filename, DocSpec(DocSpec), DocChoices(DC))
 
-import Language.Drasil.TypeCheck
-import Language.Drasil.Dump
+import Drasil.Generator.Formats(Filename, DocSpec(DocSpec), DocChoices(DC))
+import Drasil.Generator.TypeCheck
+import Drasil.Generator.ChunkDump
 
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC)
 import Drasil.GProc (unJLC)

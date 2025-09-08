@@ -10,7 +10,7 @@ import Language.Drasil.Code (Choices(..), Comments(..),
   Architecture(..), makeData, DataInfo(..), Maps(..), makeMaps, spaceToCodeType,
   makeConstraints, makeDocConfig, makeLogConfig, LogConfig(..), OptionalFeatures(..), 
   makeOptFeats)
-import Language.Drasil.Generate (genCode)
+import Drasil.Generator (genCode)
 import Drasil.GOOL (CodeType(..))
 import Data.Drasil.Quantities.Math (piConst)
 import Drasil.Projectile.Body (fullSI)

@@ -1,4 +1,4 @@
-module Database.Drasil.ChunkDB (
+module Drasil.Generator.BaseChunkDB (
   cdb
 ) where
 

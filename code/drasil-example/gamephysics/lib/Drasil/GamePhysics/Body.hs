@@ -3,7 +3,7 @@ module Drasil.GamePhysics.Body where
 import Language.Drasil hiding (organization, section)
 import Drasil.Metadata (dataDefn, inModel)
 import Drasil.SRSDocument
-import Database.Drasil.ChunkDB (cdb)
+import Drasil.Generator (cdb)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Chunk.Concept.NamedCombinators
 import qualified Language.Drasil.Sentence.Combinators as S

@@ -1,5 +1,6 @@
--- FIXME: Why is this a `Language` top-level module name?
-module Language.Drasil.Dump where
+module Drasil.Generator.ChunkDump (
+  dumpEverything
+) where
 
 import Control.Lens ((^.))
 import Data.Aeson (ToJSON)

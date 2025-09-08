@@ -267,9 +267,9 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
     mkSubRef SI {_systemdb = cdb} (TSymb' f con) =
       mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
 
-    mkSubRef SI {_systemdb = cdb} (TAandA _) = 
+    mkSubRef SI {_systemdb = cdb} TAandA =
       SRS.tOfAbbAcc
-         [LlC $ tableAbbAccGen $ nubBy (\a b -> shortForm a == shortForm b) (collectDocumentAbbreviations dd cdb)]
+        [LlC $ tableAbbAccGen $ nubBy (\a b -> shortForm a == shortForm b) (collectDocumentAbbreviations dd cdb)]
         []
 
 -- | Extracts abbreviations/acronyms found in the document        

@@ -68,7 +68,8 @@ import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
   software, unlikelyChg)
-import Language.Drasil.Sentence.Extract (shortdep)
+
+import Language.Drasil.Development(shortdep)
 
 
 

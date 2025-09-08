@@ -26,7 +26,7 @@ tableAbbAccGen ls = let chunks = sortBy (compare `on` fst) $ select ls in
   llcc tableAbbAccRef $ Table
   (map titleize [abbreviation, fullForm]) (mkTable
     [\(a,_) -> S a,
-     \(_,b) -> phraseNP (longForm b)]
+     \(_,b) -> titleizeNP (longForm b)]
   chunks)
   (titleize' abbAcc) True
 

@@ -1,9 +1,5 @@
 -- | Defines Drasil generator functions.
 module Drasil.Generator.Generate (
-  -- * Debugging
-  dumpEverything,
-  -- * Type checking
-  typeCheckSI,
   -- * Generator Functions
   gen, genDot, genCode,
   -- * Types (Printing Options)
@@ -31,9 +27,7 @@ import Language.Drasil.Code (generator, generateCode, generateCodeProc,
   Choices(..), CodeSpec(..), HasOldCodeSpec(..), Lang(..), 
   getSampleData, readWithDataDesc, sampleInputDD, unPP, unJP, unCSP, unCPPP, unSP, unJLP)
 
-import Drasil.Generator.Formats(Filename, DocSpec(DocSpec), DocChoices(DC))
-import Drasil.Generator.TypeCheck
-import Drasil.Generator.ChunkDump
+import Drasil.Generator.Formats (Filename, DocSpec(DocSpec), DocChoices(DC))
 
 import Drasil.GOOL (unJC, unPC, unCSC, unCPPC, unSC)
 import Drasil.GProc (unJLC)

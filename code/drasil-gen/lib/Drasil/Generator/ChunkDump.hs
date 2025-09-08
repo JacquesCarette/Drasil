@@ -1,4 +1,5 @@
 module Drasil.Generator.ChunkDump (
+  -- * Tools for dumping a chunk database to disk for debugging
   dumpEverything
 ) where
 

@@ -1,5 +1,6 @@
 {-# LANGUAGE FlexibleContexts #-}
 module Drasil.Generator.TypeCheck (
+  -- * Type check a Drasil 'System'
   typeCheckSI
 ) where
 

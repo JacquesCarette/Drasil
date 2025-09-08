@@ -1,4 +1,5 @@
 module Drasil.Generator.BaseChunkDB (
+  -- * Base ChunkDB for all case studies
   cdb
 ) where
 

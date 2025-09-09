@@ -57,52 +57,52 @@ fullSI = fillcdbSRS mkSRS si
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
-
-
-mkSRS :: SRSDecl
-mkSRS = [ TableOfContents
-        , RefSec $ RefProg intro
-            [ TUnits
-            , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits]
-            , TAandA
-            ]
-        , IntroSec $ IntroProg (justification progName) (phrase progName)
-            [ IPurpose $ purpDoc progName Verbose
-            , IScope scope
-            , IChar [] charsOfReader []
-            , IOrgSec inModel (SRS.inModel [] []) (foldlSent missingAbrv)
-            ]
-        , GSDSec $ GSDProg [
-              SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
-              UsrChars [userCharacteristicsIntro progName], 
-              SystCons [] []
-            ]
-        , SSDSec $ SSDProg [
-            SSDProblem $ PDProg purp []
-                [ TermsAndDefs Nothing terms
-                , PhySysDesc progName physSystParts figMotion []
-                , Goals goalsInputs
-                ]
-            , SSDSolChSpec $ SCSProg [
-                Assumptions
-              , TMs [] (Label : stdFields)
-              , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-              , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-              , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
-              , Constraints EmptyS inConstraints
-              , CorrSolnPpties outConstraints []
-              ]
-            ]
-        , ReqrmntSec $ ReqsProg [
-            FReqsSub EmptyS []
-          , NonFReqsSub
-          ]
-        , TraceabilitySec $ TraceabilityProg $ traceMatStandard si
-        , AuxConstntSec $ AuxConsProg progName []
-        , Bibliography
+mkSRS = [TableOfContents, -- This creates the Table of Contents
+  RefSec $      --This creates the Reference section of the SRS
+    RefProg intro      -- This add the introduction blob to the reference section
+      [ TUnits         -- Adds table of unit section with a table frame
+      , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
+      -- introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
+      , TAandA        -- Add table of abbreviation and acronym section
+      ],
+  IntroSec $
+    IntroProg (justification progName) (phrase progName)
+      [IPurpose $ purpDoc progName Verbose,
+       IScope scope,
+       IChar [] charsOfReader [],
+       IOrgSec inModel (SRS.inModel [] []) EmptyS],
+  GSDSec $ 
+    GSDProg [
+      SysCntxt [sysCtxIntro progName, LlC sysCtxFig1, sysCtxDesc, sysCtxList progName],
+      UsrChars [userCharacteristicsIntro progName], 
+      SystCons [] []],                            
+  SSDSec $ 
+    SSDProg
+      [ SSDProblem $ PDProg purp []                -- This adds a is used to define the problem your system will solve
+        [ TermsAndDefs Nothing terms               -- This is used to define the terms to be defined in terminology sub section
+      , PhySysDesc progName physSystParts figMotion [] -- This defines the Physicalsystem sub-section, define the parts
+                                                          -- of the system using physSysParts, figMotion is a function in figures for the image
+      , Goals goalsInputs] -- This adds a goals section and goals input is defined for the preample of the goal.
+      , SSDSolChSpec $ SCSProg --This creates the solution characteristics section with a preamble
+        [ Assumptions
+        , TMs [] (Label : stdFields)
+        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
+        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+        , Constraints EmptyS inConstraints
+        , CorrSolnPpties outConstraints []
         ]
+      ],
+  ReqrmntSec $ ReqsProg
+    [ FReqsSub EmptyS []
+    , NonFReqsSub
+    ],
+  TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
+  AuxConstntSec $
+     AuxConsProg progName [], -- Adds Auxilliary constraint section
+  Bibliography                -- Adds reference section
+  ]
         
-
 si :: System
 si = mkSystem progName Specification [dong]
   [purp] [background] [scope] [motivation]

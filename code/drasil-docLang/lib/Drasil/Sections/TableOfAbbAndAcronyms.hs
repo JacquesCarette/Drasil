@@ -3,7 +3,7 @@ module Drasil.Sections.TableOfAbbAndAcronyms
   (tableAbbAccGen, tableAbbAccRef) where
 
 import Language.Drasil
-import Drasil.Database.SearchTools(TermAbbr, longForm, shortForm)
+import Drasil.Database.SearchTools(TermAbbr, longForm, select)
 import Data.Drasil.Concepts.Documentation (abbreviation, fullForm, abbAcc)
 
 import Control.Lens ((^.))
@@ -12,12 +12,6 @@ import Data.Function (on)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 import Utils.Drasil (mkTable)
 
--- | Helper function that gets the acronym out of an 'Idea'.
-select :: [TermAbbr] -> [(String, TermAbbr)]
-select [] = []
-select (x:xs) = case shortForm x of
-  Nothing -> select xs
-  Just y  -> (y, x) : select xs
 
 -- | The actual table creation function.
 tableAbbAccGen :: [TermAbbr] -> LabelledContent

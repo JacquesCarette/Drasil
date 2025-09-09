@@ -1,7 +1,7 @@
 module Main (main) where
 
 import GHC.IO.Encoding
-import Language.Drasil.Generate (gen, typeCheckSI, genCode, genDot,
+import Drasil.Generator (gen, typeCheckSI, genCode, genDot,
   DocSpec(DocSpec), DocType(SRS), Format(..), docChoices, dumpEverything)
 import Drasil.SWHSNoPCM.Body (srs, printSetting, fullSI)
 import Drasil.SWHSNoPCM.Choices (choices, code)

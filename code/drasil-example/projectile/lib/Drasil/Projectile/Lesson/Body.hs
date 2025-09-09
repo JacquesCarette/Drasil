@@ -4,7 +4,7 @@ import Data.List (nub)
 import Language.Drasil hiding (Notebook)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB)
-import Database.Drasil.ChunkDB (cdb)
+import Drasil.Generator (cdb)
 import Drasil.System (System, mkSystem, SystemKind(Notebook))
 import qualified Language.Drasil.Sentence.Combinators as S
 

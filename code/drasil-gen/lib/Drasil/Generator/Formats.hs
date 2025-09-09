@@ -1,5 +1,5 @@
 -- | Defines output formats for the different documents we can generate.
-module Language.Drasil.Output.Formats where
+module Drasil.Generator.Formats where
 
 import Data.Char (toLower)
 import Build.Drasil ((+:+), Command, makeS, mkCheckedCommand, mkCommand, mkFreeVar,

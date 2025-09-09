@@ -57,6 +57,7 @@ fullSI = fillcdbSRS mkSRS si
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
+mkSRS :: SRSDecl
 mkSRS = [TableOfContents, -- This creates the Table of Contents
   RefSec $      --This creates the Reference section of the SRS
     RefProg intro      -- This add the introduction blob to the reference section

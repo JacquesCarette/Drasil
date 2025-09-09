@@ -84,18 +84,18 @@ digraph allvsall {
 	{theory:imPDRC}
 	}
 
-	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
-	instance:verifyInputs	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInputs"];
-	instance:calculateValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calculateValues"];
-	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 	instance:portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portable"];
 	instance:security	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:security"];
 	instance:maintainability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainability"];
 	instance:verifiability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiability"];
+	instance:inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
+	instance:verifyInputs	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInputs"];
+	instance:calculateValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calculateValues"];
+	instance:outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
 
-	subgraph FR {
+	subgraph NFR {
 	rank="same"
-	{instance:inputValues, instance:verifyInputs, instance:calculateValues, instance:outputValues, instance:portable, instance:security, instance:maintainability, instance:verifiability}
+	{instance:portable, instance:security, instance:maintainability, instance:verifiability, instance:inputValues, instance:verifyInputs, instance:calculateValues, instance:outputValues}
 	}
 
 	instance:calculateProcessVariable	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:calculateProcessVariable"];

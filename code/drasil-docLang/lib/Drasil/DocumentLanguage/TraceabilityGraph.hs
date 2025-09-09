@@ -3,7 +3,8 @@
 module Drasil.DocumentLanguage.TraceabilityGraph where
 
 import Language.Drasil
-import Database.Drasil hiding (cdb')
+import Database.Drasil
+import Drasil.Database.SearchTools (termResolve', shortForm)
 import Drasil.System hiding (purpose)
 import Control.Lens ((^.))
 import qualified Data.Map as Map
@@ -20,6 +21,7 @@ import Data.Drasil.Concepts.Documentation (traceyGraph, component, dependency, r
 import qualified Language.Drasil.Sentence.Combinators as S
 import Data.Char (toLower)
 import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
+import Theory.Drasil
 
 -- * Main Functions
 
@@ -97,41 +99,36 @@ makeTGraph rowName rows cols = zip rowName [zipFTable' x cols | x <- rows]
 -- sets contained in the 'System' database.
 checkUID :: UID -> System -> UID
 checkUID t si
-  | Map.member t (s ^. dataDefnTable)        = t
-  | Map.member t (s ^. insmodelTable)        = t
-  | Map.member t (s ^. gendefTable)          = t
-  | Map.member t (s ^. theoryModelTable)     = t
-  | Map.member t (s ^. conceptinsTable)      = t
-  | Map.member t (s ^. labelledcontentTable) = t
-  | Map.member t (s ^. citationTable)        = t
+  | isRegistered t s = t
+  | Map.member t (labelledcontentTable s) = t
   | otherwise = error $ show t ++ "Caught."
-  where s = _systemdb si
+  where s = si ^. systemdb
 
 -- | Similar to 'checkUID' but prepends domain for labelling.
 checkUIDAbbrev :: System -> UID -> String
 checkUIDAbbrev si t
-  | Just (x, _) <- Map.lookup t (s ^. dataDefnTable)        = abrv x
-  | Just (x, _) <- Map.lookup t (s ^. insmodelTable)        = abrv x
-  | Just (x, _) <- Map.lookup t (s ^. gendefTable)          = abrv x
-  | Just (x, _) <- Map.lookup t (s ^. theoryModelTable)     = abrv x
-  | Just (x, _) <- Map.lookup t (s ^. conceptinsTable)      = fromMaybe "" $ shortForm $ termResolve' s $ sDom $ cdom x
-  | Map.member t (s ^. labelledcontentTable)                = show t
-  | Map.member t (s ^. citationTable)                       = ""
+  | Just x <- find t s :: Maybe DataDefinition  = abrv x
+  | Just x <- find t s :: Maybe InstanceModel   = abrv x
+  | Just x <- find t s :: Maybe GenDefn         = abrv x
+  | Just x <- find t s :: Maybe TheoryModel     = abrv x
+  | Just x <- find t s :: Maybe ConceptInstance = fromMaybe "" $ shortForm $ termResolve' s $ sDom $ cdom x
+  | Map.member t (labelledcontentTable s)       = show t
+  | Just _ <- find t s :: Maybe Citation        = ""
   | otherwise = error $ show t ++ "Caught."
-  where s = _systemdb si
+  where s = si ^. systemdb
 
 -- | Similar to 'checkUID' but gets reference addresses for display.
 checkUIDRefAdd :: System -> UID -> String
 checkUIDRefAdd si t
-  | Just (x, _) <- Map.lookup t (s ^. dataDefnTable)        = getAdd $ getRefAdd x
-  | Just (x, _) <- Map.lookup t (s ^. insmodelTable)        = getAdd $ getRefAdd x
-  | Just (x, _) <- Map.lookup t (s ^. gendefTable)          = getAdd $ getRefAdd x
-  | Just (x, _) <- Map.lookup t (s ^. theoryModelTable)     = getAdd $ getRefAdd x
-  | Just (x, _) <- Map.lookup t (s ^. conceptinsTable)      = fromMaybe "" (shortForm $ termResolve' s $ sDom $ cdom x) ++ ":" ++ getAdd (getRefAdd x)
-  | Map.member t (s ^. labelledcontentTable)                = show t
-  | Map.member t (s ^. citationTable)                       = ""
-  | otherwise = error $ show t ++ "Caught."
-  where s = _systemdb si
+  | Just x <- find t s :: Maybe DataDefinition  = getAdd $ getRefAdd x
+  | Just x <- find t s :: Maybe InstanceModel   = getAdd $ getRefAdd x
+  | Just x <- find t s :: Maybe GenDefn         = getAdd $ getRefAdd x
+  | Just x <- find t s :: Maybe TheoryModel     = getAdd $ getRefAdd x
+  | Just x <- find t s :: Maybe ConceptInstance = fromMaybe "" (shortForm $ termResolve' s $ sDom $ cdom x) ++ ":" ++ getAdd (getRefAdd x)
+  | Map.member t (labelledcontentTable s)       = show t
+  | Just _ <- find t s :: Maybe Citation        = ""
+  | otherwise                                   = error $ show t ++ "Caught."
+  where s = si ^. systemdb
 
 -- | Helper that finds the header of a traceability matrix.
 -- However, here we use this to get a list of 'UID's for a traceability graph instead.

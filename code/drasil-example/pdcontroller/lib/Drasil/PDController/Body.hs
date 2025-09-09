@@ -23,16 +23,16 @@ import Drasil.PDController.Changes (likelyChgs)
 import Drasil.PDController.Concepts (acronyms, pidC, concepts, defs)
 import Drasil.PDController.DataDefs (dataDefinitions)
 import Drasil.PDController.GenDefs (genDefns)
+import Drasil.PDController.LabelledContent (labelledContent, gsdSysContextFig, sysFigure)
 import Drasil.PDController.MetaConcepts (progName)
 import Drasil.PDController.GenSysDesc
-       (gsdSysContextFig, gsdSysContextList, gsdSysContextP1, gsdSysContextP2,
-        gsduserCharacteristics)
+       (gsdSysContextList, gsdSysContextP1, gsdSysContextP2, gsduserCharacteristics)
 import Drasil.PDController.IModel (instanceModels, imPD)
 import Drasil.PDController.IntroSection (introPara, introPurposeOfDoc, externalLinkRef,
        introUserChar1, introUserChar2, introscopeOfReq, scope)
 import Drasil.PDController.References (citations)
 import Drasil.PDController.Requirements (funcReqs, nonfuncReqs)
-import Drasil.PDController.SpSysDesc (goals, sysFigure, sysGoalInput, sysParts)
+import Drasil.PDController.SpSysDesc (goals, sysGoalInput, sysParts)
 import Drasil.PDController.TModel (theoreticalModels)
 import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
   inpConstrained, pidConstants)
@@ -148,7 +148,7 @@ symbMap = cdb (map dqdWr physicscon ++ symbolsAll ++ [dqdWr mass, dqdWr posInf, 
   genDefns
   theoreticalModels
   conceptInstances
-  ([] :: [LabelledContent])
+  labelledContent
   allRefs
   citations
 

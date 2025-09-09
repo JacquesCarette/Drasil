@@ -31,7 +31,6 @@ import Data.Drasil.Quantities.PhysicalProperties (len)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 
-import Drasil.DblPend.Figures (figMotion, sysCtxFig1)
 import Drasil.DblPend.Assumptions (assumpDouble)
 import Drasil.DblPend.Concepts (rod, concepts, pendMotion, firstRod, secondRod, firstObject, secondObject,
   multivectorDef, cliffordAlgebraDef, geometricProductDef, 
@@ -40,6 +39,7 @@ import Drasil.DblPend.Goals (goals, goalsInputs)
 import Drasil.DblPend.DataDefs (dataDefs)
 import Drasil.DblPend.IMods (iMods)
 import Drasil.DblPend.GenDefs (genDefns)
+import Drasil.DblPend.LabelledContent (figMotion, sysCtxFig1)
 import Drasil.DblPend.MetaConcepts (progName)
 import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms, constants)
@@ -179,6 +179,9 @@ symbMap :: ChunkDB
 symbMap = cdb (map (^. output) iMods ++ map dqdWr symbolsAll)
   ideaDicts conceptChunks siUnits
   dataDefs iMods genDefns tMods concIns [] allRefs citations  -- Re-enabled genDefns to show Clifford algebra content
+
+-- symbMap = cdb (map (^. output) iMods ++ symbolsAll) ideaDicts conceptChunks []
+--   dataDefs iMods genDefns tMods concIns labelledContent allRefs citations
 
 
 -- | Holds all references and links used in the document.

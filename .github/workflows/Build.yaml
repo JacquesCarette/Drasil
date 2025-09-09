@@ -127,6 +127,12 @@ jobs:
         run: make mdbook_build
         if: ${{ steps.changes.outputs.md == 'true' || fromJSON(env.is_deployment) }}
 
+      - name: "Extract HTML copies of Jupyter Notebooks"
+        run: |
+          sudo apt-get install -y --fix-missing jupyter
+          make jupyter_html
+        if: ${{ steps.changes.outputs.md == 'true' || fromJSON(env.is_deployment) }}
+
       - name: "Build website generator"
         run: make website
 

@@ -71,13 +71,8 @@ import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
   software, unlikelyChg)
-<<<<<<< HEAD
 import qualified Data.Map.Strict as M
 import Language.Drasil.Sentence.Extract (shortdep)
-=======
-
-import Language.Drasil.Development(shortdep)
->>>>>>> c0726762f7 (removed unecessary modules exposure)
 
 -- * Main Function
 

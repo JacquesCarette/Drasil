@@ -115,6 +115,14 @@ ALL_EXPANDED_TARGETS = $(foreach P, $(PACKAGE_GEN_TARGET), $($(P)_PACKAGES)) $(f
 
 # make variables/configuration
 DIFF = diff --strip-trailing-cr -r -X ../.gitignore --exclude='*.prof' --exclude='.drasil' # Excludes are to ignore the data the 'debug'-related targets generate.
+DIFF_PREFIX ?=
+
+# Run diff and capture both stdout and stderr into a log file. Redirecting
+# stderr to stdout to populate logs when issues with performing the diff occurs
+# (e.g., when `stable/` does not exist).
+# $1: stable path, $2: build path, $3: log path
+DO_DIFF = $(DIFF_PREFIX)$(DIFF) "$1" "$2" > "$3" 2>&1
+
 LOG_SUFFIX = _log.log
 MIN_STACK_VER = 2.3.1  # Match stack.yaml see PR #2142 for more info.
 CACHED_MSV_FILE = .drasil-min-stack-ver
@@ -243,12 +251,15 @@ examples: $(GEN_EXAMPLES) ##@Examples Run all examples (no traceability graphs).
 # First build all the Drasil packages, then run all examples and generate graphs for them.
 tracegraphs: $(TRACE_GRAPH_EXAMPLES) ##@Examples Run examples with traceability graphs.
 
-# First build all the Drasil packages, run all examples (no traceability graphs),
-# and then test the generated contents with those in the stable folder.
-test: $(TEST_EXAMPLES) ##@Examples Run all examples and compare against the stable folder examples.
-	@echo ----------------------------
-	@echo Make complete, checking logs
-	@echo ----------------------------
+# Build all the Drasil packages (via 'code' dep.), run all examples, and then
+# test generated artifacts with stable/. Defer 'diff' exit codes to the log
+# checking script.
+test: code ##@Examples Test examples en masse against stable, only failing at the end if there were diffs.
+	@echo "Running tests (ignoring diff exit codes)..."
+	@$(MAKE) DIFF_PREFIX=- $(TEST_EXAMPLES)
+	@echo ---------------------------------------
+	@echo Tests complete, checking logs
+	@echo ---------------------------------------
 	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)log_check.sh"
 
 # First builds the website and then tests the generated contenst with those in
@@ -325,7 +336,7 @@ $(GOOLTEST)$(GEN_E_SUFFIX):
 
 $(GOOLTEST)$(TEST_E_SUFFIX): $(GOOLTEST)$(GEN_E_SUFFIX) $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME)
 	@mkdir -p "$(LOG_FOLDER)"
-	- $(DIFF) "$(STABLE_FOLDER)$(GOOLTEST_DIR)/" "$(BUILD_FOLDER)$(GOOLTEST_DIR)/" > "$(LOG_FOLDER)$(GOOLTEST_DIR)$(LOG_SUFFIX)"
+	$(call DO_DIFF,$(STABLE_FOLDER)$(GOOLTEST_DIR)/,$(BUILD_FOLDER)$(GOOLTEST_DIR)/,$(LOG_FOLDER)$(GOOLTEST_DIR)$(LOG_SUFFIX))
 	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)log_check.sh"
 
 # Install individual Drasil examples
@@ -354,14 +365,14 @@ $(filter %$(TRACE_GRAPH_SUFFIX), $(TRACE_GRAPH_EXAMPLES)): %$(TRACE_GRAPH_SUFFIX
 # to those in the stable folder. Targets will have the form exampleName_diff.
 $(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX)
 	@mkdir -p "$(LOG_FOLDER)"
-	- $(DIFF) "$(STABLE_FOLDER)$*/" "$(BUILD_FOLDER)$(EDIR)/" > "$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX)"
+	$(call DO_DIFF,$(STABLE_FOLDER)$*/,$(BUILD_FOLDER)$(EDIR)/,$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX))
 
 # Website diff tests. First builds the website and then compares the generated
 # contents in the Website folder to those in the stable-website folder. 
 # Target will have the form Website_diff.
 $(filter %$(TEST_E_SUFFIX), $(TEST_WEBSITE)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) website
 	@mkdir -p "$(LOG_FOLDER)"
-	- $(DIFF) "$(STABLE_WEBSITE_FOLDER)" "$(WEBSITE_FOLDER)" > "$(LOG_FOLDER)$(WEBSITE_FOLDER_NAME)$(LOG_SUFFIX)"
+	$(call DO_DIFF,$(STABLE_WEBSITE_FOLDER),$(WEBSITE_FOLDER),$(LOG_FOLDER)$(WEBSITE_FOLDER_NAME)$(LOG_SUFFIX))
 
 # Individual example build cleans. Removes a specific example from the build folder.
 # Targets will have the form exampleName_build_clean.

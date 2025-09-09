@@ -8,18 +8,10 @@ import Data.List (sortBy)
 
 import Data.Drasil.Concepts.Documentation (abbreviation, fullForm, abbAcc)
 import Drasil.Database (HasUID(..))
-import Drasil.Database.SearchTools(TermAbbr, longForm, shortForm)
+import Drasil.Database.SearchTools(TermAbbr, longForm, shortForm, select)
+import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 import Language.Drasil
 import Utils.Drasil (mkTable)
-
-import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
-
--- | Helper function that gets the acronym out of an 'Idea'.
-select :: [TermAbbr] -> [(String, TermAbbr)]
-select [] = []
-select (x:xs) = case shortForm x of
-  Nothing -> select xs
-  Just y  -> (y, x) : select xs
 
 -- | The actual table creation function.
 tableAbbAccGen :: [TermAbbr] -> LabelledContent

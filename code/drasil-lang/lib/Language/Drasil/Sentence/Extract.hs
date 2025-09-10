@@ -24,12 +24,12 @@ getUIDs (Quote a)           = getUIDs a
 getUIDs (E a)               = meNames a
 getUIDs EmptyS              = []
 
--- | Generic traverse of all positions that could lead to /symbolic/ and /abbreviated/ 'UID's from 'Sentence's
--- but doesn't go into expressions.
+-- | Generic traverse of all positions that could lead to /symbolic/ and
+-- /abbreviated/ 'UID's from 'Sentence's but doesn't go into expressions.
 getUIDshort :: Sentence -> [UID]
-getUIDshort (Ch ShortStyle _ a) = [a]
-getUIDshort (Ch TermStyle _ _)  = []
-getUIDshort (Ch PluralTerm _ _) = []
+getUIDshort (Ch ShortStyle _ x) = [x]
+getUIDshort (Ch TermStyle _ x)  = [x]
+getUIDshort (Ch PluralTerm _ x) = [x]
 getUIDshort SyCh {}             = []
 getUIDshort Sy {}               = []
 getUIDshort S {}                = []

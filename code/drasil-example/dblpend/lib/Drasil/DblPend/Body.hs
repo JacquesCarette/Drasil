@@ -3,7 +3,7 @@ module Drasil.DblPend.Body where
 
 import Control.Lens ((^.))
 
-import Drasil.Metadata (inModel, thModel, dataDefn, genDefn)
+import Drasil.Metadata (inModel)
 import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel, output)
 import Drasil.SRSDocument
@@ -20,7 +20,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (physics, variable)
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser,
   environment, datum, input_, interface, output_, problem, product_,
   physical, sysCont, software, softwareConstraint, softwareSys,
-  system, user, analysis, goalStmt, physSyst, requirement)
+  system, user, analysis)
 import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate)
 import Data.Drasil.Concepts.Math (cartesian, ode, mathcon', graph)
 import Data.Drasil.Concepts.Physics (gravity, physicCon', pendulum, twoD, motion, angAccel, angular, angVelo, gravitationalConst)
@@ -208,22 +208,7 @@ charsOfReader = [phrase undergraduate +:+ S "level 2" +:+ phrase Doc.physics,
 -- Starting intro sentence of Organization of Documents automatically generated
 -- in IOrg
 
-missingAbrv :: [Sentence]
-missingAbrv = [S "The" +:+ plural goalStmt +:+ sParen (short goalStmt) +:+ S "are systematically refined into the" +:+ 
-              plural thModel +:+ sParen (short thModel) `sC` S "which in turn are refined into the" +:+ 
-              plural inModel +:+ sParen (short inModel) +:+. EmptyS +:+
-              S "This refinement process is guided by the" +:+ plural assumption +:+ sParen (short assumption) +:+ 
-              S "that constrain the" +:+ phrase system `sC` S "as well as the supporting" +:+ 
-              plural genDefn +:+ sParen (short genDefn) +:+ S "and" +:+ plural dataDefn +:+ sParen (short dataDefn) +:+ 
-              S "that provide the necessary mathematical and physical context." +:+ 
-              S "The" +:+ plural requirement +:+ sParen (short requirement) +:+ S "are traced back through the" +:+ 
-              short goalStmt `sC` short thModel `sC` S "and" +:+ short inModel +:+ S "to ensure consistency and completeness." +:+ 
-              S "Furthermore" `sC` S "the" +:+ phrase physSyst +:+ sParen (short physSyst) +:+ S "establishes the overall" +:+ 
-              S "context in which the" +:+ short goalStmt +:+ S "are formulated and the" +:+ short assumption +:+ S "are validated." +:+ 
-              S "Finally" `sC` S "the uncertainties (Uncerts.) are documented and linked to" +:+ 
-              S "the relevant" +:+ short inModel +:+ S "and" +:+ short dataDefn `sC` S "ensuring transparency in the modeling process."]
-
-              --------------------------------------------
+--------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
 --------------------------------------------
 -- Description of Genreal System automatically generated in GSDProg

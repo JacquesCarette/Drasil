@@ -163,18 +163,19 @@ getCon' = getCon . (^. accessContents)
 
 -- | Extracts 'Sentence's from raw content.
 getCon :: RawContent -> [Sentence]
-getCon (Table s1 s2 t _)   = t : s1 ++ concat s2
-getCon (Paragraph s)       = [s]
-getCon EqnBlock{}          = []
-getCon CodeBlock{}         = []
-getCon (DerivBlock h d)    = h : concatMap getCon d
-getCon (Enumeration lst)   = getLT lst
-getCon (Figure l _ _ _)    = [l]
-getCon (Bib bref)          = getBib bref
+getCon (Table s1 s2 t _)        = isVar (s1, transpose s2) ++ [t]
+getCon (Paragraph s)            = [s]
+getCon EqnBlock{}               = []
+getCon CodeBlock{}              = []
+getCon (DerivBlock h d)         = h : concatMap getCon d
+getCon (Enumeration lst)        = getLT lst
+getCon (Figure l _ _ _)         = [l]
+getCon (Bib bref)               = getBib bref
+>>>>>>> 4af33a2816 (dig deeper when looking for abbreviations)
 getCon (Graph [(s1, s2)] _ _ l) = [s1, s2, l]
-getCon Graph{}             = []
-getCon (Defini _ [])       = []
-getCon (Defini dt (hd:fs)) = concatMap getCon' (snd hd) ++ getCon (Defini dt fs)
+getCon Graph{}                  = []
+getCon (Defini _ [])            = []
+getCon (Defini dt (hd:fs))      = concatMap getCon' (snd hd) ++ getCon (Defini dt fs)
 
 -- | Get the bibliography from something that has a field.
 getBib :: (HasFields c) => [c] -> [Sentence]

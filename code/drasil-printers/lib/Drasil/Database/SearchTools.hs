@@ -78,10 +78,3 @@ findAllCitations = findAll
 
 findAllLabelledContent :: ChunkDB -> [LabelledContent]
 findAllLabelledContent = findAll
-
--- | Helper function that gets the acronym out of an 'Idea'.
-select :: [TermAbbr] -> [(String, TermAbbr)]
-select [] = []
-select (x:xs) = case shortForm x of
-  Nothing -> select xs
-  Just y  -> (y, x) : select xs

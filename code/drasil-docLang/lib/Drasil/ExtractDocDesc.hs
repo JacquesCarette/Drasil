@@ -102,20 +102,20 @@ egetCon _ = []
 sentencePlate :: Monoid a => ([Sentence] -> a) -> DLPlate (Constant a)
 sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatMap getSec) $
   preorderFold $ purePlate {
-    introSec = Constant . f <$> \(IntroProg s1 s2 _) -> [s1, s2],
+    introSec = Constant . f <$> \(IntroProg s1 s2 s3) -> [s1, s2] ++ concatMap getIntroSub s3,
     introSub = Constant . f <$> \case
       (IPurpose s) -> s
       (IScope s) -> [s]
       (IChar s1 s2 s3) -> concat [s1, s2, s3]
-      (IOrgSec _ _ s1) -> [s1],
+      (IOrgSec _ s1 s2) -> s2 : getSec s1,
     stkSub = Constant . f <$> \case
       (Client _ s) -> [s]
       (Cstmr _) -> [],
-    pdSec = Constant . f <$> \(PDProg s _ _) -> [s],
+    pdSec = Constant . f <$> \(PDProg s secs pds) -> s : concatMap getSec secs ++ concatMap getPDSub pds,
     pdSub = Constant . f <$> \case
       (TermsAndDefs Nothing cs) -> def cs
       (TermsAndDefs (Just s) cs) -> s : def cs
-      (PhySysDesc _ s _ _) -> s
+      (PhySysDesc _ s lc cs) -> s ++ getLC lc ++ getC cs
       (Goals s c) -> s ++ def c,
     scsSub = Constant . f <$> \case
       (Assumptions c) -> def c
@@ -126,10 +126,10 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (GDs s _ d _) -> def d ++ s ++ der d ++ notes d
       (IMs s _ d _) -> s ++ der d ++ notes d
       (Constraints s _) -> [s]
-      (CorrSolnPpties _ _) -> [],
+      (CorrSolnPpties _ cs) -> getC cs,
     reqSub = Constant . f <$> \case
-      (FReqsSub' c _) -> def c
-      (FReqsSub c _) -> def c
+      (FReqsSub' c lcs) -> def c ++ concatMap getLC lcs
+      (FReqsSub c lcs) -> def c ++ concatMap getLC lcs
       (NonFReqsSub c) -> def c,
     lcsSec = Constant . f <$> \(LCsProg c) -> def c,
     ucsSec = Constant . f <$> \(UCsProg c) -> def c,
@@ -139,13 +139,33 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
   } where
     def :: Definition a => [a] -> [Sentence]
     def = map (^. defn)
+
+    getIntroSub :: IntroSub -> [Sentence]
+    getIntroSub (IPurpose ss) = ss
+    getIntroSub (IScope s) = [s]
+    getIntroSub (IChar s1 s2 s3) = s1 ++ s2 ++ s3
+    getIntroSub (IOrgSec _ s1 s2) = s2 : getSec s1
+
     der :: MayHaveDerivation a => [a] -> [Sentence]
     der = concatMap (getDerivSent . (^. derivations))
+
     getDerivSent :: Maybe Derivation -> [Sentence]
     getDerivSent Nothing = []
     getDerivSent (Just (Derivation h s)) = h : s
+
     notes :: HasAdditionalNotes a => [a] -> [Sentence]
     notes = concatMap (^. getNotes)
+
+    getPDSub :: PDSub -> [Sentence]
+    getPDSub (TermsAndDefs ms c) = def c ++ maybe [] pure ms
+    getPDSub (PhySysDesc _ s lc cs) = s ++ getLC lc ++ getC cs
+    getPDSub (Goals s c) = s ++ def c
+
+    getC :: [Contents] -> [Sentence]
+    getC = concatMap getCon'
+
+    getLC :: LabelledContent -> [Sentence]
+    getLC = getCon . (^. accessContents)
 
 -- | Extracts 'Sentence's from a document description.
 getDocDesc :: DocDesc -> [Sentence]
@@ -174,7 +194,7 @@ getCon (DerivBlock h d)    = h : concatMap getCon d
 getCon (Enumeration lst)   = getLT lst
 getCon (Figure l _ _ _)    = [l]
 getCon (Bib bref)          = getBib bref
-getCon (Graph sss _ _ l)   = let (ls, rs) = unzip sss 
+getCon (Graph sss _ _ l)   = let (ls, rs) = unzip sss
                              in l : ls ++ rs
 getCon (Defini _ [])       = []
 getCon (Defini dt (hd:fs)) = concatMap getCon' (snd hd) ++ getCon (Defini dt fs)

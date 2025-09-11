@@ -12,6 +12,20 @@ concepts = map nw [rod, horizontal, vertical,
   verticalVel, horizontalForce, verticalForce, firstRod, secondRod, firstObject, secondObject] 
   ++ map nw defs
 
+-- IdeaDict copies for GA terms (same UIDs as ConceptChunks) for external consumers (e.g., sglpend)
+gaIdeaDicts :: [IdeaDict]
+gaIdeaDicts = [ nc "dblpend_multivector" (cn "multivector")
+              , nc "dblpend_cliffordAlgebra" (cn "Clifford algebra")
+              , nc "dblpend_geometric_product" (cn "geometric product")
+              , nc "dblpend_basis_vector" (cn "basis vector")
+              , nc "dblpend_Clifford_space" (cn "Clifford space")
+              , nc "dblpend_bivector" (cn "bivector")
+              ]
+
+-- Full concepts for examples that need GA terms as IdeaDicts
+conceptsWithGA :: [IdeaDict]
+conceptsWithGA = concepts ++ gaIdeaDicts
+
 rod, horizontal, vertical :: IdeaDict
 rod = nc "rod" (cn' "rod")
 horizontal = nc "horizontal" (cn "horizontal") 
@@ -34,7 +48,7 @@ firstObject     = compoundNC first object
 secondObject    = compoundNC second_ object
 
 defs :: [ConceptChunk]
-defs = [arcLen, multivectorDef, cliffordAlgebraDef, geometricProductDef, basisVectorDef, cliffordSpace, bivectorDef]
+defs = [arcLen]
 
 arcLen :: ConceptChunk
 arcLen = dcc "arc length" (nounPhraseSP "arc length") "the distance between two points on a curve"

@@ -169,7 +169,11 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
 
 -- | Extracts 'Sentence's from a document description.
 getDocDesc :: DocDesc -> [Sentence]
-getDocDesc = fmGetDocDesc (sentencePlate id)
+getDocDesc = fmGetDocDesc (sentencePlate id) 
+-- ^ FIXME: We want all Sentences from a document (not necessarily a document
+-- description), so we use this function. But 'sentencePlate' does not include
+-- all 'Sentence's! Some only appear when rendering (at least, after
+-- `mkSections` is used on a `DocDesc` to create `[Section]`).
 
 -- | Extracts 'Sentence's from a 'Section'.
 getSec :: Section -> [Sentence]

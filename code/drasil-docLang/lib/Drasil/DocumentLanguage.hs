@@ -10,8 +10,8 @@ module Drasil.DocumentLanguage (mkDoc, findAllRefs) where
 import Control.Lens ((^.), set)
 import Data.Function (on)
 import Data.List (nub, sortBy, nubBy)
-import Data.Maybe (maybeToList, mapMaybe)
-import qualified Data.Map as Map (keys)
+import Data.Maybe (maybeToList, mapMaybe, isJust)
+import qualified Data.Map as Map (elems, assocs, keys)
 
 import Utils.Drasil (invert)
 
@@ -72,7 +72,7 @@ import Drasil.Sections.ReferenceMaterial (emptySectSentPlu)
 import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
   software, unlikelyChg)
 import qualified Data.Map.Strict as M
-import Language.Drasil.Sentence.Extract (shortdep)
+import Language.Drasil.Development (shortdep)
 
 -- * Main Function
 
@@ -250,10 +250,7 @@ getAllChunksFromDoc dd cdb =
   map (termResolve' cdb) $ nub $ concatMap shortdep (getDocDesc dd)
 
 getChunksWithAbbreviations :: [TermAbbr] -> [TermAbbr]
-getChunksWithAbbreviations = filter hasAbbreviation
-  where hasAbbreviation c = case shortForm c of
-                              Nothing -> False
-                              Just _  -> True
+getChunksWithAbbreviations = filter (isJust . shortForm)
 
 collectDocumentAbbreviations :: DocDesc -> ChunkDB -> [TermAbbr]
 collectDocumentAbbreviations dd cdb =

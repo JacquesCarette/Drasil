@@ -34,7 +34,7 @@ import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
   physical, physicalConstraint, physicalSystem, physSyst, problem,
   problemDescription, propOfCorSol, purpose, quantity, requirement, scope,
   section_, softwareConstraint, solutionCharacteristic, specification, symbol_,
-  system, table_, term_, theory, typUnc, uncertainty, user, value, variable)
+  system, table_, term_, theory, typUnc, uncertainty, user, value, variable, refBy)
 import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
 import Data.Drasil.Concepts.Math (equation, parameter)
 import Drasil.Metadata (inModel, thModel, dataDefn, genDefn)
@@ -303,7 +303,7 @@ helperCI :: ConceptInstance -> System -> ConceptInstance
 helperCI a c = over defn (\x -> foldlSent_ [x, refby $ helperRefs a c]) a
   where
     refby EmptyS = EmptyS
-    refby sent   = sParen $ S "RefBy:" +:+. sent
+    refby sent   = sParen $ short refBy :+: S ":" +:+. sent
 
 -- | Section stubs for implicit referencing of different models and definitions.
 tmStub, ddStub, gdStub, imStub, pdStub :: Section

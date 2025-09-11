@@ -53,7 +53,8 @@ doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body,
 -- | Collects all documentation-related common ideas (like a concept, but with no definition).
 doccon' :: [CI]
 doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
-  likelyChg, learnObj, mg, mis, notApp, physSyst, requirement, srs, thModel, typUnc, unlikelyChg, notebook]
+  likelyChg, learnObj, mg, mis, notApp, physSyst, requirement, srs, thModel, typUnc,
+  unlikelyChg, notebook, refBy, refName]
 
 assumption, desSpec, goalStmt, dataConst, likelyChg, learnObj, unlikelyChg, physSyst, requirement, 
   mg, mis, notApp, srs, typUnc, sec, notebook, refBy, refName :: CI

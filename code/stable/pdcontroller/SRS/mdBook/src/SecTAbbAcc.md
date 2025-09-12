@@ -2,18 +2,8 @@
 
 <div id="Table:TAbbAcc"></div>
 
-|Abbreviation |Full Form                     |
-|:------------|:-----------------------------|
-|A            |Assumption                    |
-|DD           |Data Definition               |
-|GD           |General Definition            |
-|GS           |Goal Statement                |
-|IM           |Instance Model                |
-|LC           |Likely Change                 |
-|ODE          |Ordinary Differential Equation|
-|PD Controller|PD Controller                 |
-|R            |Requirement                   |
-|TM           |Theoretical Model             |
-|UC           |Unlikely Change               |
+|Abbreviation|Full Form                     |
+|:-----------|:-----------------------------|
+|ODE         |Ordinary Differential Equation|
 
 **<p align="center">Abbreviations and Acronyms</p>**

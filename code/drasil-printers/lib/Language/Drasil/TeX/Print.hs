@@ -124,6 +124,7 @@ pExpr (Font Bold e)  = commandD "symbf" (pExpr e)
 pExpr (Font Emph e)  = pExpr e -- Emph is ignored here because we're in Math mode
 pExpr (Spc Thin)     = pure . text $ "\\,"
 pExpr (Sqrt e)       = commandD "sqrt" (pExpr e)
+pExpr (Clif _ _)      = error "TeX printer cannot render Clifford algebra expressions"
 
 -- | Prints operators.
 pOps :: Ops -> D
@@ -151,8 +152,8 @@ pOps Dim      = command "mathsf" "dim"
 pOps Exp      = pure $ text "e"
 pOps Neg      = pure hyph
 pOps Cross    = texSym "times"
-pOps VAdd     = pure pls
-pOps VSub     = pure hyph -- unfortunately, hyphen and - are the same
+pOps CAdd     = pure pls
+pOps CSub     = pure hyph -- unfortunately, hyphen and - are the same
 pOps Dot      = commandD "cdot" empty
 pOps Scale    = pure $ text " "
 pOps Eq       = pure assign
@@ -181,6 +182,9 @@ pOps LArrow   = commandD "leftarrow"  empty
 pOps RArrow   = commandD "rightarrow" empty
 pOps ForAll   = commandD "ForAll"     empty
 pOps Partial  = commandD "partial"    empty
+pOps WedgeProd = commandD "wedge"     empty
+pOps GeometricProd = pure $ text "\\,"  
+pOps Grade    = command "mathsf" "grade"
 
 -- | Prints fencing notation ("(),{},|,||").
 fence :: OpenClose -> Fence -> D

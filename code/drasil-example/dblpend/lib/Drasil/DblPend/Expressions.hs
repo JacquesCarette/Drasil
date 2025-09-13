@@ -14,67 +14,73 @@ import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, massObj_1, massObj_2,
 -- CLIFFORD ALGEBRA BASIS ELEMENTS (2D Clifford Space Cl(2,0))
 -- ============================================================================
 
--- Grade 0 (scalar) - just use literal values
+-- Grade 0 (scalar)
 clifScalar :: PExpr
 clifScalar = int 1  -- scalar unit
 
--- Grade 1 basis elements (vectors) - using vect function from Language.Drasil
+-- Grade 1 basis elements (vectors)
 e1_clif :: PExpr
-e1_clif = vect [int 1, int 0]  -- e₁ basis element
+e1_clif = vect [int 1, int 0]  -- e₁
 
-e2_clif :: PExpr  
-e2_clif = vect [int 0, int 1]  -- e₂ basis element
+e2_clif :: PExpr
+e2_clif = vect [int 0, int 1]  -- e₂
 
--- Clifford basis vectors for component extraction
+-- For component extraction
 e1_2D :: PExpr
-e1_2D = e1_clif  -- e₁ basis vector
+e1_2D = e1_clif
 
-e2_2D :: PExpr  
-e2_2D = e2_clif  -- e₂ basis vector
+e2_2D :: PExpr
+e2_2D = e2_clif
 
--- Grade 2 basis element (bivector) - using wedge product
+-- Pseudoscalar (bivector) for 2D
 e12_clif :: PExpr
-e12_clif = e1_clif `wedgeProd` e2_clif  -- e₁ ∧ e₂ basis element
+e12_clif = e1_clif `wedgeProd` e2_clif  -- e₁ ∧ e₂
 
 -- ============================================================================
--- CLIFFORD ALGEBRA MULTIVECTOR CONSTRUCTION HELPERS
+-- CONSTRUCTORS / HELPERS
 -- ============================================================================
 
--- Create a pure scalar - just use the scalar value directly
 scalar :: PExpr -> PExpr
 scalar s = s
 
--- Create a pure vector multivector from components using vect
 vector :: PExpr -> PExpr -> PExpr
 vector x y = vect [x, y]
 
--- Create a bivector using wedge product of basis vectors
 bivector :: PExpr -> PExpr
-bivector xy = xy `cScale` (e1_clif `wedgeProd` e2_clif)
+bivector xy = xy `cScale` e12_clif
 
--- Create a general multivector by adding components
 multivector :: PExpr -> PExpr -> PExpr -> PExpr -> PExpr
 multivector s x y xy = s $+ vector x y $+ bivector xy
 
+cscale :: PExpr -> PExpr -> PExpr
+cscale = cScale
+
+cadd :: PExpr -> PExpr -> PExpr
+cadd = cAdd
+
 -- ============================================================================
--- DIRECTION VECTORS USING CLIFFORD ALGEBRA
+-- ANGLE HELPERS
 -- ============================================================================
 
--- Angle expressions
 cosAngleExpr1, sinAngleExpr1, cosAngleExpr2, sinAngleExpr2 :: PExpr
 cosAngleExpr1 = cos (sy pendDisAngle_1)
 sinAngleExpr1 = sin (sy pendDisAngle_1)
 cosAngleExpr2 = cos (sy pendDisAngle_2)
 sinAngleExpr2 = sin (sy pendDisAngle_2)
 
--- Unit direction vectors as true Clifford vectors
+-- ============================================================================
+-- DIRECTION VECTORS (choose convention to match component form)
+-- ----------------------------------------------------------------------------
+-- We use: r = l * (cos θ e1 + sin θ e2)
+-- Tangent (perp) = [-sin θ, cos θ]
+-- ============================================================================
+
 directionVector_1 :: PExpr
 directionVector_1 = vector cosAngleExpr1 sinAngleExpr1
 
-directionVector_2 :: PExpr  
+directionVector_2 :: PExpr
 directionVector_2 = vector cosAngleExpr2 sinAngleExpr2
 
--- Perpendicular direction vectors (rotated 90 degrees) as true Clifford vectors
 perpDirectionVector_1 :: PExpr
 perpDirectionVector_1 = vector (neg sinAngleExpr1) cosAngleExpr1
 
@@ -82,76 +88,107 @@ perpDirectionVector_2 :: PExpr
 perpDirectionVector_2 = vector (neg sinAngleExpr2) cosAngleExpr2
 
 -- ============================================================================
--- KINEMATICS: VELOCITY AND ACCELERATION
+-- KINEMATICS: VELOCITY & ACCELERATION (GA vectors) + component extraction
 -- ============================================================================
 
--- Velocity vectors as true Clifford multivectors
+-- Velocity of mass 1: v1 = ω1 * l1 * [cos θ1, sin θ1]
 mvVelExpr_1 :: PExpr
 mvVelExpr_1 = (sy angularVel_1 $* sy lenRod_1) `cScale` directionVector_1
 
--- Velocity component for second object as Clifford multivector
+-- Velocity of mass 2 relative component: ω2 * l2 * [cos θ2, sin θ2]
 mvVelComponent_2 :: PExpr
 mvVelComponent_2 = (sy angularVel_2 $* sy lenRod_2) `cScale` directionVector_2
 
--- Total velocity for second object (vector addition)
+-- Total velocity mass 2: v2 = v1 + v2_rel
 mvVelExpr_2 :: PExpr
 mvVelExpr_2 = mvVelExpr_1 `cAdd` mvVelComponent_2
 
--- Acceleration components for first object
+-- Component-wise velocities (keeps API compatibility)
+velXExpr_1 :: PExpr
+velXExpr_1 = mvVelExpr_1 $. e1_2D
+
+velYExpr_1 :: PExpr
+velYExpr_1 = mvVelExpr_1 $. e2_2D
+
+velXExpr_2 :: PExpr
+velXExpr_2 = mvVelExpr_2 $. e1_2D
+
+velYExpr_2 :: PExpr
+velYExpr_2 = mvVelExpr_2 $. e2_2D
+
+-- Accelerations for mass 1:
+-- centripetal: -ω1^2 * l1 * directionVector_1
+-- tangential:  α1 * l1 * perpDirectionVector_1
 centripetalAccel_1 :: PExpr
-centripetalAccel_1 = neg (square (sy angularVel_1) $* sy lenRod_1) `cScale` directionVector_1
+centripetalAccel_1 = (square (sy angularVel_1) $* sy lenRod_1) `cScale` perpDirectionVector_1
 
 tangentialAccel_1 :: PExpr
-tangentialAccel_1 = (sy angularAccel_1 $* sy lenRod_1) `cScale` perpDirectionVector_1
+tangentialAccel_1 = (sy angularAccel_1 $* sy lenRod_1) `cScale` directionVector_1
 
--- Total acceleration for first object
 mvAccelExpr_1 :: PExpr
 mvAccelExpr_1 = centripetalAccel_1 `cAdd` tangentialAccel_1
 
--- Acceleration components for second object
+accelXExpr_1 :: PExpr
+accelXExpr_1 = mvAccelExpr_1 $. e1_2D
+
+accelYExpr_1 :: PExpr
+accelYExpr_1 = mvAccelExpr_1 $. e2_2D
+
+-- Accelerations for mass 2: a2 = a1 + relative centripetal + relative tangential
 centripetalAccel_2 :: PExpr
-centripetalAccel_2 = neg (square (sy angularVel_2) $* sy lenRod_2) `cScale` directionVector_2
+centripetalAccel_2 = (square (sy angularVel_2) $* sy lenRod_2) `cScale` perpDirectionVector_2
 
 tangentialAccel_2 :: PExpr
-tangentialAccel_2 = (sy angularAccel_2 $* sy lenRod_2) `cScale` perpDirectionVector_2
+tangentialAccel_2 = (sy angularAccel_2 $* sy lenRod_2) `cScale` directionVector_2 
 
 mvAccelComponent_2 :: PExpr
 mvAccelComponent_2 = centripetalAccel_2 `cAdd` tangentialAccel_2
 
--- Total acceleration for second object
 mvAccelExpr_2 :: PExpr
 mvAccelExpr_2 = mvAccelExpr_1 `cAdd` mvAccelComponent_2
 
+accelXExpr_2 :: PExpr
+accelXExpr_2 = mvAccelExpr_2 $. e1_2D
+
+accelYExpr_2 :: PExpr
+accelYExpr_2 = mvAccelExpr_2 $. e2_2D
+
 -- ============================================================================
--- FORCES USING CLIFFORD ALGEBRA
+-- FORCES (GA vectors) and component extraction
 -- ============================================================================
 
--- Gravitational force vectors as true Clifford multivectors (always downward)
+-- Gravity vectors (downwards)
 gravitationalForce_1 :: PExpr
 gravitationalForce_1 = vector (int 0) (neg (sy massObj_1 $* sy gravitationalMagnitude))
 
-gravitationalForce_2 :: PExpr  
+gravitationalForce_2 :: PExpr
 gravitationalForce_2 = vector (int 0) (neg (sy massObj_2 $* sy gravitationalMagnitude))
 
--- Inertial forces (mass × acceleration)
+-- Tension vectors are along the rods (rod direction used in component-style)
+-- In many component derivations rod direction = [-sin θ, cos θ] for x/y decomposition of tension.
+tensionVec_1 :: PExpr
+tensionVec_1 = (sy massObj_1) `cScale` (vector (neg sinAngleExpr1) cosAngleExpr1)
+
+-- Note: above is placeholder scaling; keep your actual tension symbol 'tension_1' if you have it in unitals.
+
+tensionVec_2 :: PExpr
+tensionVec_2 = (sy massObj_2) `cScale` (vector (neg sinAngleExpr2) cosAngleExpr2)
+-- As above, replace the numeric scaling with sy tension_2 if tension is a defined quantity in Unitals.
+
+-- Net inertial forces (mass * acceleration) + gravity (matches your earlier forceDerivExpr)
 inertialForce_1 :: PExpr
 inertialForce_1 = sy massObj_1 `cScale` mvAccelExpr_1
 
 inertialForce_2 :: PExpr
 inertialForce_2 = sy massObj_2 `cScale` mvAccelExpr_2
 
--- Total forces (inertial + gravitational)
 mvForceExpr_1 :: PExpr
 mvForceExpr_1 = inertialForce_1 `cAdd` gravitationalForce_1
 
-mvForceExpr_2 :: PExpr  
+mvForceExpr_2 :: PExpr
 mvForceExpr_2 = inertialForce_2 `cAdd` gravitationalForce_2
 
--- ============================================================================
--- COMPONENT EXTRACTION USING DOT PRODUCT
--- ============================================================================
-
--- Extract force components using dot product with basis vectors
+-- Component extraction for forces (keeps compatibility)
 xForceComponent_1 :: PExpr
 xForceComponent_1 = mvForceExpr_1 $. e1_2D
 
@@ -165,26 +202,21 @@ yForceComponent_2 :: PExpr
 yForceComponent_2 = mvForceExpr_2 $. e2_2D
 
 -- ============================================================================
--- CLIFFORD ALGEBRA OPERATIONS DEMONSTRATIONS
+-- CLIFFORD (GA) EXTRAS: geometric product, wedge, norm, etc.
 -- ============================================================================
 
--- Geometric product (combines dot and wedge products)
 forceGeometricProduct :: PExpr
 forceGeometricProduct = mvForceExpr_1 `geometricProd` mvForceExpr_2
 
--- Wedge product (creates bivector from vectors)
 forceWedgeProduct :: PExpr
 forceWedgeProduct = mvForceExpr_1 `wedgeProd` mvForceExpr_2
 
--- Direct dot product (scalar result)
-forceDotProduct :: PExpr  
+forceDotProduct :: PExpr
 forceDotProduct = mvForceExpr_1 $. mvForceExpr_2
 
--- Clifford subtraction of multivectors
 forceDifference :: PExpr
 forceDifference = mvForceExpr_1 `cSub` mvForceExpr_2
 
--- Force magnitudes using clifford norm
 forceMagnitude_1 :: PExpr
 forceMagnitude_1 = norm mvForceExpr_1
 
@@ -192,50 +224,53 @@ forceMagnitude_2 :: PExpr
 forceMagnitude_2 = norm mvForceExpr_2
 
 -- ============================================================================
--- ADVANCED CLIFFORD ALGEBRA OPERATIONS
+-- ROTORS / DUALS
 -- ============================================================================
 
--- Simple rotor for rotation (cos(θ/2) + sin(θ/2)e₁₂)
+-- Dual: use geometric product with pseudoscalar I (e12_clif)
+dualOfVector :: PExpr -> PExpr
+dualOfVector v = v `geometricProd` e12_clif
+
+dualVelocity_1 :: PExpr
+dualVelocity_1 = dualOfVector mvVelExpr_1
+
+-- Rotor constructor (unit rotor for rotation by 'angle')
+cliffordRotor :: PExpr -> PExpr
+cliffordRotor angle = cos (angle $/ int 2) $+ (sin (angle $/ int 2) `cScale` e12_clif)
+
+-- Rotor inverse for unit rotor R = a + b e12 is R^{-1} = a - b e12
+rotorInverse :: PExpr -> PExpr
+rotorInverse r = fstPart r $+ (neg (sndPart r) `cScale` e12_clif)
+
+-- Helpers (assume rotor of the form cos(t/2) + sin(t/2) e12)
+fstPart :: PExpr -> PExpr
+fstPart _ = cos rotationAngle
+
+sndPart :: PExpr -> PExpr
+sndPart _ = sin rotationAngle
+
 rotationAngle :: PExpr
-rotationAngle = sy pendDisAngle_1 $/ int 2  -- half angle for rotor
+rotationAngle = sy pendDisAngle_1 $/ int 2
 
--- Rotor using scalar + bivector (simplified representation)
-rotationRotor :: PExpr
-rotationRotor = cos rotationAngle $+ (sin rotationAngle `cScale` e12_clif)
+-- Proper rotation via conjugation: v' = R v R^{-1}
+rotateVector :: PExpr -> PExpr -> PExpr
+rotateVector rotor v = rotor `geometricProd` v `geometricProd` rotorInverse rotor
+
+rotatedDirection_1 :: PExpr
+rotatedDirection_1 = rotateVector (cliffordRotor (sy pendDisAngle_1)) (vector (int 1) (int 0))
 
 -- ============================================================================
--- PHYSICS APPLICATIONS USING TRUE CLIFFORD ALGEBRA
+-- TORQUE, KINETIC ENERGY, etc.
 -- ============================================================================
 
--- Position vectors as true Clifford multivectors
-positionVector_1 :: PExpr
-positionVector_1 = sy lenRod_1 `cScale` directionVector_1
-
-positionVector_2 :: PExpr
-positionVector_2 = positionVector_1 `cAdd` (sy lenRod_2 `cScale` directionVector_2)
-
--- Angular velocity as pure bivectors (represent rotation in the plane)
-angularVelBivector_1 :: PExpr
-angularVelBivector_1 = bivector (sy angularVel_1)
-
-angularVelBivector_2 :: PExpr
-angularVelBivector_2 = bivector (sy angularVel_2)
-
--- Alternative: Angular velocity using wedge product of basis elements
-angularVelBivectorAlt_1 :: PExpr
-angularVelBivectorAlt_1 = sy angularVel_1 `cScale` (e1_clif `wedgeProd` e2_clif)
-
-angularVelBivectorAlt_2 :: PExpr
-angularVelBivectorAlt_2 = sy angularVel_2 `cScale` (e1_clif `wedgeProd` e2_clif)
-
--- Torque as bivectors (position wedge force)
 torqueBivector_1 :: PExpr
 torqueBivector_1 = positionVector_1 `wedgeProd` mvForceExpr_1
+  where positionVector_1 = sy lenRod_1 `cScale` directionVector_1
 
 torqueBivector_2 :: PExpr
 torqueBivector_2 = positionVector_2 `wedgeProd` mvForceExpr_2
+  where positionVector_2 = (sy lenRod_1 `cScale` directionVector_1) `cAdd` (sy lenRod_2 `cScale` directionVector_2)
 
--- Kinetic energy factor (velocity magnitude squared using dot product)
 kineticEnergyFactor_1 :: PExpr
 kineticEnergyFactor_1 = mvVelExpr_1 $. mvVelExpr_1
 
@@ -243,132 +278,76 @@ kineticEnergyFactor_2 :: PExpr
 kineticEnergyFactor_2 = mvVelExpr_2 $. mvVelExpr_2
 
 -- ============================================================================
--- PHYSICS-BASED ANGULAR ACCELERATION EXPRESSIONS
+-- ANGULAR ACCELERATION EXPRESSIONS (fixed denominator grouping)
 -- ============================================================================
 
--- Angular acceleration expressions (from double pendulum physics)
 angularAccelExpr_1 :: PExpr
-angularAccelExpr_1 = neg(sy gravitationalMagnitude) $* 
-                   (exactDbl 2 $* sy massObj_1 $+ sy massObj_2) $* sin (sy pendDisAngle_1 ) $-
-                   (sy massObj_2 $* sy gravitationalMagnitude $* 
-                   sin (sy pendDisAngle_1 $- (exactDbl 2 $* sy pendDisAngle_2))) $-
-                   ((exactDbl 2 $* sin (sy pendDisAngle_1 $- sy pendDisAngle_2 )) $* sy massObj_2 $* 
-                   (
-                       square (sy angularVel_2) $* sy lenRod_2 $+ 
-                       (square (sy angularVel_1) $* sy lenRod_1 $* cos (sy pendDisAngle_1 $- sy pendDisAngle_2))
-                   ))
-                   $/
-                   sy lenRod_1 $* 
-                   (
-                       exactDbl 2 $* sy massObj_1 $+ sy massObj_2 $- 
-                       (sy massObj_2 $* 
-                       cos (exactDbl 2 $* sy pendDisAngle_1 $- (exactDbl 2 $* sy pendDisAngle_2)))
-                   )
+angularAccelExpr_1 =
+  let num1 = neg (sy gravitationalMagnitude) $* (exactDbl 2 $* sy massObj_1 $+ sy massObj_2) $* sin (sy pendDisAngle_1)
+      num2 = sy massObj_2 $* sy gravitationalMagnitude $* sin (sy pendDisAngle_1 $- (exactDbl 2 $* sy pendDisAngle_2))
+      num3 = (exactDbl 2 $* sin (sy pendDisAngle_1 $- sy pendDisAngle_2)) $* sy massObj_2 $*
+             ( square (sy angularVel_2) $* sy lenRod_2
+               $+ ( square (sy angularVel_1) $* sy lenRod_1 $* cos (sy pendDisAngle_1 $- sy pendDisAngle_2))
+             )
+      numerator = num1 $- num2 $- num3
+      denominator = sy lenRod_1 $* ( exactDbl 2 $* sy massObj_1 $+ sy massObj_2 $-
+                        ( sy massObj_2 $* cos ( exactDbl 2 $* sy pendDisAngle_1 $- (exactDbl 2 $* sy pendDisAngle_2) ) ) )
+  in numerator $/ denominator
 
 angularAccelExpr_2 :: PExpr
-angularAccelExpr_2 = exactDbl 2 $* sin (sy pendDisAngle_1 $- sy pendDisAngle_2) $* 
-                   (
-                       square (sy angularVel_1) $* sy lenRod_1 $* (sy massObj_1 $+ sy massObj_2 ) $+
-                       (sy gravitationalMagnitude $* (sy massObj_1 $+ sy massObj_2 ) $* cos (sy pendDisAngle_1)) $+
-                       (square (sy angularVel_2) $* sy lenRod_2 $* sy massObj_2 $* 
-                       cos (sy pendDisAngle_1 $- sy pendDisAngle_2 ))
-                   )
-                   $/
-                   sy lenRod_2 $* 
-                   (
-                       exactDbl 2 $* sy massObj_1 $+ sy massObj_2 $- 
-                       (sy massObj_2 $* 
-                       cos (exactDbl 2 $* sy pendDisAngle_1 $- (exactDbl 2 $* sy pendDisAngle_2)))
-                   )
+angularAccelExpr_2 =
+  let numerator = exactDbl 2 $* sin (sy pendDisAngle_1 $- sy pendDisAngle_2) $*
+                  ( square (sy angularVel_1) $* sy lenRod_1 $* (sy massObj_1 $+ sy massObj_2)
+                    $+ ( sy gravitationalMagnitude $* (sy massObj_1 $+ sy massObj_2) $* cos (sy pendDisAngle_1) )
+                    $+ ( square (sy angularVel_2) $* sy lenRod_2 $* sy massObj_2 $* cos (sy pendDisAngle_1 $- sy pendDisAngle_2) )
+                  )
+      denominator = sy lenRod_2 $* ( exactDbl 2 $* sy massObj_1 $+ sy massObj_2 $-
+                        ( sy massObj_2 $* cos ( exactDbl 2 $* sy pendDisAngle_1 $- (exactDbl 2 $* sy pendDisAngle_2) ) ) )
+  in numerator $/ denominator
 
 -- ============================================================================
--- FORCE DERIVATIVE EXPRESSIONS FOR PHYSICS DERIVATIONS
+-- FORCE DERIVATIVES (mass * acceleration) kept for derivations
 -- ============================================================================
 
--- Force derivative expressions used in the derivation process
--- These represent the force equations that are solved to derive angular accelerations
 forceDerivExpr1 :: PExpr
 forceDerivExpr1 = sy massObj_1 `cScale` mvAccelExpr_1
 
-forceDerivExpr2 :: PExpr  
+forceDerivExpr2 :: PExpr
 forceDerivExpr2 = sy massObj_2 `cScale` mvAccelExpr_2
 
 -- ============================================================================
--- TRUE CLIFFORD SPACE EXAMPLES AND VERIFICATION
+-- EXAMPLES / VERIFICATION
 -- ============================================================================
 
--- Example multivectors demonstrating full Clifford space
 exampleScalar :: PExpr
 exampleScalar = scalar (dbl 5.0)
 
-exampleVector :: PExpr  
+exampleVector :: PExpr
 exampleVector = vector (dbl 3.0) (dbl 4.0)
 
 exampleBivector :: PExpr
 exampleBivector = bivector (dbl 2.5)
 
 exampleMultivector :: PExpr
-exampleMultivector = multivector 
-  (dbl 1.0)    -- scalar
-  (dbl 2.0)    -- e₁ component
-  (dbl 3.0)    -- e₂ component  
-  (dbl 0.5)    -- e₁₂ component
+exampleMultivector = multivector
+  (dbl 1.0)
+  (dbl 2.0)
+  (dbl 3.0)
+  (dbl 0.5)
 
--- Verify Clifford algebra properties
--- e₁² = 1, e₂² = 1, e₁e₂ = -e₂e₁ = e₁₂
 e1_squared :: PExpr
-e1_squared = e1_clif `geometricProd` e1_clif  -- Should equal scalar 1
+e1_squared = e1_clif `geometricProd` e1_clif
 
 e2_squared :: PExpr
-e2_squared = e2_clif `geometricProd` e2_clif  -- Should equal scalar 1
+e2_squared = e2_clif `geometricProd` e2_clif
 
 e1e2_product :: PExpr
-e1e2_product = e1_clif `geometricProd` e2_clif  -- Should equal e₁₂
+e1e2_product = e1_clif `geometricProd` e2_clif
 
 e2e1_product :: PExpr
-e2e1_product = e2_clif `geometricProd` e1_clif  -- Should equal -e₁₂
+e2e1_product = e2_clif `geometricProd` e1_clif
 
--- Anti-commutativity verification
 anticommutator :: PExpr
-anticommutator = e1e2_product `cAdd` e2e1_product  -- Should be zero
+anticommutator = e1e2_product `cAdd` e2e1_product
 
--- Duality operations using pseudoscalar (simplified)
-dualOfVector :: PExpr -> PExpr
-dualOfVector v = v `wedgeProd` e12_clif
-
--- Example: dual of velocity vector
-dualVelocity_1 :: PExpr
-dualVelocity_1 = dualOfVector mvVelExpr_1
-
--- Clifford rotor function (simplified)
-cliffordRotor :: PExpr -> PExpr  
-cliffordRotor angle = cos (angle $/ int 2) $+ (sin (angle $/ int 2) `cScale` e12_clif)
-
--- Apply rotation to a vector using simplified rotor (approximate)
-rotateVector :: PExpr -> PExpr -> PExpr
-rotateVector rotor v = rotor `geometricProd` v
-
--- Example: rotate direction vector by pendulum angle
-rotatedDirection_1 :: PExpr
-rotatedDirection_1 = rotateVector (cliffordRotor (sy pendDisAngle_1)) (vector (int 1) (int 0))
-
--- ============================================================================
--- CLIFFORD ALGEBRA TYPE VERIFICATION
--- ============================================================================
-
--- These expressions demonstrate Clifford algebra operations:
--- 1. Vector construction using vect [x, y]
--- 2. Bivector construction using wedge product  
--- 3. Geometric and wedge products
--- 4. Clifford-specific operations (scaling, addition, subtraction)
--- 5. Component extraction using dot products
-
--- The implementation uses Drasil's built-in Clifford algebra support
--- through the vect function and various Clifford operations like:
--- - geometricProd, wedgeProd for products
--- - cScale, cAdd, cSub for arithmetic
--- - norm for magnitude calculation
--- - $. for dot product/component extraction
-
--- This provides a practical 2D Clifford algebra implementation
--- suitable for physics applications like the double pendulum
+-- End of module

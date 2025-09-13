@@ -136,10 +136,10 @@ accelYExpr_1 = mvAccelExpr_1 $. e2_2D
 
 -- Accelerations for mass 2: a2 = a1 + relative centripetal + relative tangential
 centripetalAccel_2 :: PExpr
-centripetalAccel_2 = (square (sy angularVel_2) $* sy lenRod_2) `cScale` perpDirectionVector_2
+centripetalAccel_2 = (square (sy angularVel_2) $* sy lenRod_2) `cScale` perpDirectionVector_2 
 
 tangentialAccel_2 :: PExpr
-tangentialAccel_2 = (sy angularAccel_2 $* sy lenRod_2) `cScale` directionVector_2 
+tangentialAccel_2 = (sy angularAccel_2 $* sy lenRod_2) `cScale` directionVector_2
 
 mvAccelComponent_2 :: PExpr
 mvAccelComponent_2 = centripetalAccel_2 `cAdd` tangentialAccel_2

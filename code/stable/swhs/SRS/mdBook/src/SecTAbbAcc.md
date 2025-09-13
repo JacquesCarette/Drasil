@@ -2,12 +2,8 @@
 
 <div id="Table:TAbbAcc"></div>
 
-|Abbreviation|Full Form                          |
-|:-----------|:----------------------------------|
-|ODE         |Ordinary Differential Equation     |
-|PCM         |Phase Change Material              |
-|RHS         |Right-Hand Side                    |
-|SRS         |Software Requirements Specification|
-|SWHS        |Solar Water Heating System         |
+|Abbreviation|Full Form          |
+|:-----------|:------------------|
+|Uncert.     |Typical Uncertainty|
 
 **<p align="center">Abbreviations and Acronyms</p>**

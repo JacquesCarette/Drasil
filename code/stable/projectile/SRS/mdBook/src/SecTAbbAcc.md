@@ -2,11 +2,8 @@
 
 <div id="Table:TAbbAcc"></div>
 
-|Abbreviation|Full Form                          |
-|:-----------|:----------------------------------|
-|1D          |One-Dimensional                    |
-|2D          |Two-Dimensional                    |
-|Projectile  |Projectile                         |
-|SRS         |Software Requirements Specification|
+|Abbreviation|Full Form          |
+|:-----------|:------------------|
+|Uncert.     |Typical Uncertainty|
 
 **<p align="center">Abbreviations and Acronyms</p>**

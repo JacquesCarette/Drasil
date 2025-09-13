@@ -1,4 +1,5 @@
-{-# Language TupleSections #-}
+{-# Language TupleSections, LambdaCase #-}
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 ---------------------------------------------------------------------------
 -- | Start the process of moving away from Document as the main internal
 -- representation of information, to something more informative.
@@ -13,7 +14,8 @@ import Data.List (nub, sortBy, nubBy)
 import Data.Maybe (maybeToList, mapMaybe, isJust)
 import qualified Data.Map as Map (elems, assocs, keys)
 
-import Utils.Drasil (invert)
+import Utils.Drasil (invert, splitAtAll, mergeAll)
+import Debug.Trace (trace)
 
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
@@ -25,7 +27,7 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   TSIntro(..), UCsSec(..), getTraceConfigUID)
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
-import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
+import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, getSec)
 import Drasil.TraceTable (generateTraceMap)
 
 import Language.Drasil hiding (kind)
@@ -212,11 +214,18 @@ getUnitLup m c = getUnit (findOrErr (c ^. uid) m :: DefinedQuantityDict)
 
 -- | Helper for creating the different document sections.
 mkSections :: System -> DocDesc -> [Section]
-mkSections si dd = map doit dd
+mkSections si dd =
+  let
+    (splitByTAandA, refSecPlans) = splitAtAll (\case {RefSec _ -> True; _ -> False}) dd
+    splitSecs = map (map doit) splitByTAandA
+    earlyRenderedSecs = concat splitSecs
+    refSecs = map (\case {RefSec rs -> mkRefSec si dd rs earlyRenderedSecs; _ -> error "A non-RefSec got captured in the RefSecs list!"}) refSecPlans
+  in
+    trace ("split: " ++ show (length splitSecs) ++ ", earlyRenderedSecs: " ++ show (length earlyRenderedSecs) ++ ", refSecs: " ++ show (length refSecs)) $ mergeAll splitSecs refSecs
   where
     doit :: DocSection -> Section
     doit TableOfContents      = mkToC dd
-    doit (RefSec rs)          = mkRefSec si dd rs
+    doit (RefSec _)           = error "RefSecs should have been filtered out!" -- mkRefSec si dd rs
     doit (IntroSec is)        = mkIntroSec si is
     doit (StkhldrSec sts)     = mkStkhldrSec sts
     doit (SSDSec ss)          = mkSSDSec si ss
@@ -242,8 +251,8 @@ mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothi
 
 -- | Helper for creating the reference section and subsections.
 -- Includes Table of Symbols, Units and Abbreviations and Acronyms.
-mkRefSec :: System -> DocDesc -> RefSec -> Section
-mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
+mkRefSec :: System -> DocDesc -> RefSec -> [Section] -> Section
+mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (map (mkSubRef si) l)
   where
     mkSubRef :: System -> RefTab -> Section
     mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI tOfUnitSIName
@@ -268,20 +277,20 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
 
     mkSubRef SI {_systemdb = cdb} TAandA =
       SRS.tOfAbbAcc
-        [LlC $ tableAbbAccGen $ nubBy (\a b -> shortForm a == shortForm b) (collectDocumentAbbreviations dd cdb)]
+        [LlC $ tableAbbAccGen $ nubBy (\a b -> shortForm a == shortForm b) (collectDocumentAbbreviations renderedSecs cdb)]
         []
 
 -- | Extracts abbreviations/acronyms found in the document        
-getAllChunksFromDoc :: DocDesc -> ChunkDB -> [TermAbbr]
-getAllChunksFromDoc dd cdb =
-  map (termResolve' cdb) $ nub $ concatMap shortdep (getDocDesc dd)
+getAllChunksFromDoc :: [Section] -> ChunkDB -> [TermAbbr]
+getAllChunksFromDoc renderedSecs cdb =
+  map (termResolve' cdb) $ nub $ concatMap shortdep (concatMap getSec renderedSecs)
 
 getChunksWithAbbreviations :: [TermAbbr] -> [TermAbbr]
 getChunksWithAbbreviations = filter (isJust . shortForm)
 
-collectDocumentAbbreviations :: DocDesc -> ChunkDB -> [TermAbbr]
-collectDocumentAbbreviations dd cdb =
-  getChunksWithAbbreviations $ getAllChunksFromDoc dd cdb  
+collectDocumentAbbreviations :: [Section] -> ChunkDB -> [TermAbbr]
+collectDocumentAbbreviations renderedSecs cdb =
+  getChunksWithAbbreviations $ getAllChunksFromDoc renderedSecs cdb
 
 -- | Helper for creating the table of symbols.
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
@@ -420,11 +429,11 @@ introChgs xs _ = foldlSP [S "This", phrase Doc.section_, S "lists the",
 
 -- | Helper for making the Traceability Matrices and Graphs section.
 mkTraceabilitySec :: TraceabilitySec -> System -> Section
-mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
+mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF tracea
   (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) fProgs)
-  (map LlC trace) (programName sys) []
+  (map LlC tracea) (programName sys) []
   where
-    trace = map (\(TraceConfig u _ desc cols rows) ->
+    tracea = map (\(TraceConfig u _ desc cols rows) ->
       TM.generateTraceTableView u desc cols rows si) fProgs
     fProgs = filter (\(TraceConfig _ _ _ cols rows) ->
       not $ null (header (TM.layoutUIDs rows sidb) si)

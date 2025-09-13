@@ -287,70 +287,6 @@
                   <th>Full Form</th>
                 </tr>
                 <tr>
-                  <td>A</td>
-                  <td>Assumption</td>
-                </tr>
-                <tr>
-                  <td>D</td>
-                  <td>derivative</td>
-                </tr>
-                <tr>
-                  <td>DD</td>
-                  <td>Data Definition</td>
-                </tr>
-                <tr>
-                  <td>GD</td>
-                  <td>General Definition</td>
-                </tr>
-                <tr>
-                  <td>GS</td>
-                  <td>Goal Statement</td>
-                </tr>
-                <tr>
-                  <td>I</td>
-                  <td>integral</td>
-                </tr>
-                <tr>
-                  <td>IM</td>
-                  <td>Instance Model</td>
-                </tr>
-                <tr>
-                  <td>P</td>
-                  <td>proportional</td>
-                </tr>
-                <tr>
-                  <td>PD</td>
-                  <td>proportional derivative</td>
-                </tr>
-                <tr>
-                  <td>PID</td>
-                  <td>proportional integral derivative</td>
-                </tr>
-                <tr>
-                  <td>PS</td>
-                  <td>Physical System Description</td>
-                </tr>
-                <tr>
-                  <td>R</td>
-                  <td>Requirement</td>
-                </tr>
-                <tr>
-                  <td>RefBy</td>
-                  <td>Referenced by</td>
-                </tr>
-                <tr>
-                  <td>Refname</td>
-                  <td>Reference Name</td>
-                </tr>
-                <tr>
-                  <td>SRS</td>
-                  <td>Software Requirements Specification</td>
-                </tr>
-                <tr>
-                  <td>TM</td>
-                  <td>Theoretical Model</td>
-                </tr>
-                <tr>
                   <td>Uncert.</td>
                   <td>Typical Uncertainty</td>
                 </tr>
@@ -402,6 +338,9 @@
             </p>
             <p class="paragraph">
               The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>. The instance model referred as <a href=#IM:pdEquationIM>IM:pdEquationIM</a> provides an Ordinary Differential Equation (<span title="ordinary differential equation">ODE</span>) that models the PD Controller.
+            </p>
+            <p class="paragraph">
+              The goal statements (<span title="goal statement">GS</span>) are systematically refined into the theoretical models (<span title="theoretical model">TM</span>), which in turn are refined into the instance models (<span title="instance model">IM</span>). This refinement process is guided by the assumptions (<span title="assumption">A</span>) that constrain the system, as well as the supporting general definitions (<span title="general definition">GD</span>) and data definitions (<span title="data definition">DD</span>) that provide the necessary mathematical and physical context. The requirements (<span title="requirement">R</span>) are traced back through the <span title="goal statement">GS</span>, <span title="theoretical model">TM</span>, and <span title="instance model">IM</span> to ensure consistency and completeness. Furthermore, the physical system description (<span title="physical system description">PS</span>) establishes the overall context in which the <span title="goal statement">GS</span> are formulated and the <span title="assumption">A</span> are validated. Finally, the uncertainties (Uncerts.) are documented and linked to the relevant <span title="instance model">IM</span> and <span title="data definition">DD</span>, ensuring transparency in the modeling process..
             </p>
           </div>
         </div>
@@ -599,57 +538,57 @@
                 <div class="list">
                   <p>
                     <div id="pwrPlant">
-                      Power plant: The Power Plant and the Sensor are coupled as a single unit. (RefBy: <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>, <a href=#pwrPlantTxFnx>A:Transfer Function</a>, <a href=#massSpring>A:Spring Mass</a>, and <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>.)
+                      Power plant: The Power Plant and the Sensor are coupled as a single unit. (<span title="referenced by">RefBy</span>: <a href=#stiffnessCoeffSpring>A:Spring Stiffness Coefficient</a>, <a href=#pwrPlantTxFnx>A:Transfer Function</a>, <a href=#massSpring>A:Spring Mass</a>, and <a href=#dampingCoeffSpring>A:Spring Damping Coefficient</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="decoupled">
-                      Decoupled equation: The decoupled form of the PD Controller equation used in this simulation. (RefBy: <a href=#DD:ddCtrlVar>DD:ddCtrlVar</a>.)
+                      Decoupled equation: The decoupled form of the PD Controller equation used in this simulation. (<span title="referenced by">RefBy</span>: <a href=#DD:ddCtrlVar>DD:ddCtrlVar</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="setPointConstant">
-                      Set-Point: The Set-Point is constant throughout the simulation. (RefBy: <a href=#IM:pdEquationIM>IM:pdEquationIM</a> and <a href=#DD:ddProcessError>DD:ddProcessError</a>.)
+                      Set-Point: The Set-Point is constant throughout the simulation. (<span title="referenced by">RefBy</span>: <a href=#IM:pdEquationIM>IM:pdEquationIM</a> and <a href=#DD:ddProcessError>DD:ddProcessError</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="externalDisturb">
-                      External disturbance: There are no external disturbances to the Power Plant during the simulation. (RefBy: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>.)
+                      External disturbance: There are no external disturbances to the Power Plant during the simulation. (<span title="referenced by">RefBy</span>: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="initialValue">
-                      Initial Value: The initial value of the Process Variable is assumed to be zero. (RefBy: <a href=#DD:ddProcessError>DD:ddProcessError</a>.)
+                      Initial Value: The initial value of the Process Variable is assumed to be zero. (<span title="referenced by">RefBy</span>: <a href=#DD:ddProcessError>DD:ddProcessError</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="parallelEq">
-                      Parallel Equation: The Parallel form of the equation is used for the PD Controller. (RefBy: <a href=#DD:ddCtrlVar>DD:ddCtrlVar</a>.)
+                      Parallel Equation: The Parallel form of the equation is used for the PD Controller. (<span title="referenced by">RefBy</span>: <a href=#DD:ddCtrlVar>DD:ddCtrlVar</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="unfilteredDerivative">
-                      Unfiltered Derivative: A pure derivative function is used for this simulation; there are no filters applied. (RefBy: <a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a>.)
+                      Unfiltered Derivative: A pure derivative function is used for this simulation; there are no filters applied. (<span title="referenced by">RefBy</span>: <a href=#DD:ddDerivCtrl>DD:ddDerivCtrl</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="pwrPlantTxFnx">
-                      Transfer Function: The combined Power Plant and Sensor (<a href=#pwrPlant>A:Power plant</a>) are characterized by a Second Order mass-spring-damper System. (RefBy: <a href=#TM:tmSOSystem>TM:tmSOSystem</a>.)
+                      Transfer Function: The combined Power Plant and Sensor (<a href=#pwrPlant>A:Power plant</a>) are characterized by a Second Order mass-spring-damper System. (<span title="referenced by">RefBy</span>: <a href=#TM:tmSOSystem>TM:tmSOSystem</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="massSpring">
-                      Spring Mass: The mass of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 1 kilogram. (RefBy: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a> and <a href=#likeChgPP>LC:DC Gain and Time Constant</a>.)
+                      Spring Mass: The mass of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 1 kilogram. (<span title="referenced by">RefBy</span>: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a> and <a href=#likeChgPP>LC:DC Gain and Time Constant</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="dampingCoeffSpring">
-                      Spring Damping Coefficient: The Damping Coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 1. (RefBy: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a> and <a href=#likeChgPP>LC:DC Gain and Time Constant</a>.)
+                      Spring Damping Coefficient: The Damping Coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 1. (<span title="referenced by">RefBy</span>: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a> and <a href=#likeChgPP>LC:DC Gain and Time Constant</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="stiffnessCoeffSpring">
-                      Spring Stiffness Coefficient: The Stiffness coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 20. (RefBy: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a> and <a href=#likeChgPP>LC:DC Gain and Time Constant</a>.)
+                      Spring Stiffness Coefficient: The Stiffness coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A:Power plant</a>) is assumed to be 20. (<span title="referenced by">RefBy</span>: <a href=#GD:gdPowerPlant>GD:gdPowerPlant</a> and <a href=#likeChgPP>LC:DC Gain and Time Constant</a>.)
                     </div>
                   </p>
                 </div>

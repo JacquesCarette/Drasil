@@ -470,66 +470,6 @@
                   <th>Full Form</th>
                 </tr>
                 <tr>
-                  <td>A</td>
-                  <td>Assumption</td>
-                </tr>
-                <tr>
-                  <td>DD</td>
-                  <td>Data Definition</td>
-                </tr>
-                <tr>
-                  <td>GD</td>
-                  <td>General Definition</td>
-                </tr>
-                <tr>
-                  <td>GS</td>
-                  <td>Goal Statement</td>
-                </tr>
-                <tr>
-                  <td>IM</td>
-                  <td>Instance Model</td>
-                </tr>
-                <tr>
-                  <td>LC</td>
-                  <td>Likely Change</td>
-                </tr>
-                <tr>
-                  <td>ODE</td>
-                  <td>Ordinary Differential Equation</td>
-                </tr>
-                <tr>
-                  <td>PS</td>
-                  <td>Physical System Description</td>
-                </tr>
-                <tr>
-                  <td>R</td>
-                  <td>Requirement</td>
-                </tr>
-                <tr>
-                  <td>RefBy</td>
-                  <td>Referenced by</td>
-                </tr>
-                <tr>
-                  <td>Refname</td>
-                  <td>Reference Name</td>
-                </tr>
-                <tr>
-                  <td>SRS</td>
-                  <td>Software Requirements Specification</td>
-                </tr>
-                <tr>
-                  <td>SWHSNoPCM</td>
-                  <td>Solar Water Heating System With No Phase Change Material</td>
-                </tr>
-                <tr>
-                  <td>TM</td>
-                  <td>Theoretical Model</td>
-                </tr>
-                <tr>
-                  <td>UC</td>
-                  <td>Unlikely Change</td>
-                </tr>
-                <tr>
                   <td>Uncert.</td>
                   <td>Typical Uncertainty</td>
                 </tr>
@@ -584,6 +524,9 @@
             </p>
             <p class="paragraph">
               The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>. The instance model to be solved is referred to as <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>. The instance model provides the Ordinary Differential Equation (<span title="ordinary differential equation">ODE</span>) that models the solar water heating system with no phase change material. <span title="solar water heating system with no phase change material">SWHSNoPCM</span> solves this <span title="ordinary differential equation">ODE</span>.
+            </p>
+            <p class="paragraph">
+              The goal statements (<span title="goal statement">GS</span>) are systematically refined into the theoretical models (<span title="theoretical model">TM</span>), which in turn are refined into the instance models (<span title="instance model">IM</span>). This refinement process is guided by the assumptions (<span title="assumption">A</span>) that constrain the system, as well as the supporting general definitions (<span title="general definition">GD</span>) and data definitions (<span title="data definition">DD</span>) that provide the necessary mathematical and physical context. The requirements (<span title="requirement">R</span>) are traced back through the <span title="goal statement">GS</span>, <span title="theoretical model">TM</span>, and <span title="instance model">IM</span> to ensure consistency and completeness. Furthermore, the physical system description (<span title="physical system description">PS</span>) establishes the overall context in which the <span title="goal statement">GS</span> are formulated and the <span title="assumption">A</span> are validated. Finally, the uncertainties (Uncerts.) are documented and linked to the relevant <span title="instance model">IM</span> and <span title="data definition">DD</span>, ensuring transparency in the modeling process..
             </p>
           </div>
         </div>
@@ -746,72 +689,72 @@
                 <div class="list">
                   <p>
                     <div id="assumpTEO">
-                      Thermal-Energy-Only: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible. (RefBy: <a href=#TM:consThermE>TM:consThermE</a>.)
+                      Thermal-Energy-Only: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible. (<span title="referenced by">RefBy</span>: <a href=#TM:consThermE>TM:consThermE</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpHTCC">
-                      Heat-Transfer-Coeffs-Constant: All heat transfer coefficients are constant over time. (RefBy: <a href=#TM:nwtnCooling>TM:nwtnCooling</a>.)
+                      Heat-Transfer-Coeffs-Constant: All heat transfer coefficients are constant over time. (<span title="referenced by">RefBy</span>: <a href=#TM:nwtnCooling>TM:nwtnCooling</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpCWTAT">
-                      Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. (RefBy: <a href=#GD:rocTempSimp>GD:rocTempSimp</a>.)
+                      Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. (<span title="referenced by">RefBy</span>: <a href=#GD:rocTempSimp>GD:rocTempSimp</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpDWCoW">
-                      Density-Water-Constant-over-Volume: The density of water has no spatial variation; that is, it is constant over their entire volume. (RefBy: <a href=#GD:rocTempSimp>GD:rocTempSimp</a>.)
+                      Density-Water-Constant-over-Volume: The density of water has no spatial variation; that is, it is constant over their entire volume. (<span title="referenced by">RefBy</span>: <a href=#GD:rocTempSimp>GD:rocTempSimp</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpSHECoW">
-                      Specific-Heat-Energy-Constant-over-Volume: The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume. (RefBy: <a href=#GD:rocTempSimp>GD:rocTempSimp</a>.)
+                      Specific-Heat-Energy-Constant-over-Volume: The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume. (<span title="referenced by">RefBy</span>: <a href=#GD:rocTempSimp>GD:rocTempSimp</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpLCCCW">
-                      Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water. (RefBy: <a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a>.)
+                      Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water. (<span title="referenced by">RefBy</span>: <a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpTHCCoT">
-                      Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time. (RefBy: <a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a> and <a href=#likeChgTCVOD>LC:Temperature-Coil-Variable-Over-Day</a>.)
+                      Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time. (<span title="referenced by">RefBy</span>: <a href=#GD:htFluxWaterFromCoil>GD:htFluxWaterFromCoil</a> and <a href=#likeChgTCVOD>LC:Temperature-Coil-Variable-Over-Day</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpTHCCoL">
-                      Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length. (RefBy: <a href=#likeChgTCVOL>LC:Temperature-Coil-Variable-Over-Length</a>.)
+                      Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length. (<span title="referenced by">RefBy</span>: <a href=#likeChgTCVOL>LC:Temperature-Coil-Variable-Over-Length</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpCTNTD">
-                      Charging-Tank-No-Temp-Discharge: The model only accounts for charging the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil. (RefBy: <a href=#likeChgDT>LC:Discharging-Tank</a>.)
+                      Charging-Tank-No-Temp-Discharge: The model only accounts for charging the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil. (<span title="referenced by">RefBy</span>: <a href=#likeChgDT>LC:Discharging-Tank</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpWAL">
-                      Water-Always-Liquid: The operating temperature range of the system is such that the material (water in this case) is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. (RefBy: <a href=#TM:sensHtE>TM:sensHtE</a>, <a href=#IM:heatEInWtr>IM:heatEInWtr</a>, <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>, and <a href=#unlikeChgWFS>UC:Water-Fixed-States</a>.)
+                      Water-Always-Liquid: The operating temperature range of the system is such that the material (water in this case) is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. (<span title="referenced by">RefBy</span>: <a href=#TM:sensHtE>TM:sensHtE</a>, <a href=#IM:heatEInWtr>IM:heatEInWtr</a>, <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a>, and <a href=#unlikeChgWFS>UC:Water-Fixed-States</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpPIT">
-                      Perfect-Insulation-Tank: The tank is perfectly insulated so that there is no heat loss from the tank. (RefBy: <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a> and <a href=#likeChgTLH>LC:Tank-Lose-Heat</a>.)
+                      Perfect-Insulation-Tank: The tank is perfectly insulated so that there is no heat loss from the tank. (<span title="referenced by">RefBy</span>: <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a> and <a href=#likeChgTLH>LC:Tank-Lose-Heat</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpNIHGBW">
-                      No-Internal-Heat-Generation-By-Water: No internal heat is generated by the water; therefore, the volumetric heat generation per unit volume is zero. (RefBy: <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a> and <a href=#unlikeChgNIHG>UC:No-Internal-Heat-Generation</a>.)
+                      No-Internal-Heat-Generation-By-Water: No internal heat is generated by the water; therefore, the volumetric heat generation per unit volume is zero. (<span title="referenced by">RefBy</span>: <a href=#IM:eBalanceOnWtr>IM:eBalanceOnWtr</a> and <a href=#unlikeChgNIHG>UC:No-Internal-Heat-Generation</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpAPT">
-                      Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature of water are 0<em>&deg;C</em> and 100<em>&deg;C</em>, respectively. (RefBy: <a href=#IM:heatEInWtr>IM:heatEInWtr</a>.)
+                      Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature of water are 0<em>&deg;C</em> and 100<em>&deg;C</em>, respectively. (<span title="referenced by">RefBy</span>: <a href=#IM:heatEInWtr>IM:heatEInWtr</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpVCN">
-                      Volume-Coil-Negligible: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible. (RefBy: <a href=#DD:waterVolume.nopcm>DD:waterVolume_nopcm</a>.)
+                      Volume-Coil-Negligible: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible. (<span title="referenced by">RefBy</span>: <a href=#DD:waterVolume.nopcm>DD:waterVolume_nopcm</a>.)
                     </div>
                   </p>
                 </div>

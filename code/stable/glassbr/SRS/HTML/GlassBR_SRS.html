@@ -438,104 +438,28 @@
                   <th>Full Form</th>
                 </tr>
                 <tr>
-                  <td>A</td>
-                  <td>Assumption</td>
-                </tr>
-                <tr>
-                  <td>AN</td>
-                  <td>Annealed</td>
-                </tr>
-                <tr>
                   <td>AR</td>
                   <td>Aspect Ratio</td>
-                </tr>
-                <tr>
-                  <td>DD</td>
-                  <td>Data Definition</td>
-                </tr>
-                <tr>
-                  <td>FT</td>
-                  <td>Fully Tempered</td>
-                </tr>
-                <tr>
-                  <td>GS</td>
-                  <td>Goal Statement</td>
                 </tr>
                 <tr>
                   <td>GTF</td>
                   <td>Glass Type Factor</td>
                 </tr>
                 <tr>
-                  <td>HS</td>
-                  <td>Heat Strengthened</td>
-                </tr>
-                <tr>
-                  <td>IG</td>
-                  <td>Insulating Glass</td>
-                </tr>
-                <tr>
-                  <td>IM</td>
-                  <td>Instance Model</td>
-                </tr>
-                <tr>
-                  <td>LC</td>
-                  <td>Likely Change</td>
-                </tr>
-                <tr>
                   <td>LDF</td>
                   <td>Load Duration Factor</td>
-                </tr>
-                <tr>
-                  <td>LG</td>
-                  <td>Laminated Glass</td>
                 </tr>
                 <tr>
                   <td>LR</td>
                   <td>Load Resistance</td>
                 </tr>
                 <tr>
-                  <td>LSF</td>
-                  <td>Load Share Factor</td>
-                </tr>
-                <tr>
-                  <td>N/A</td>
-                  <td>Not Applicable</td>
-                </tr>
-                <tr>
                   <td>NFL</td>
                   <td>Non-Factored Load</td>
                 </tr>
                 <tr>
-                  <td>PS</td>
-                  <td>Physical System Description</td>
-                </tr>
-                <tr>
-                  <td>R</td>
-                  <td>Requirement</td>
-                </tr>
-                <tr>
-                  <td>RefBy</td>
-                  <td>Referenced by</td>
-                </tr>
-                <tr>
-                  <td>Refname</td>
-                  <td>Reference Name</td>
-                </tr>
-                <tr>
                   <td>SD</td>
                   <td>Stand Off Distance</td>
-                </tr>
-                <tr>
-                  <td>SRS</td>
-                  <td>Software Requirements Specification</td>
-                </tr>
-                <tr>
-                  <td>TM</td>
-                  <td>Theoretical Model</td>
-                </tr>
-                <tr>
-                  <td>UC</td>
-                  <td>Unlikely Change</td>
                 </tr>
                 <tr>
                   <td>Uncert.</td>
@@ -592,6 +516,9 @@
             </p>
             <p class="paragraph">
               The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>. The data definitions are used to support the definitions of the different models.
+            </p>
+            <p class="paragraph">
+              The goal statements (<span title="goal statement">GS</span>) are systematically refined into the theoretical models (<span title="theoretical model">TM</span>), which in turn are refined into the instance models (<span title="instance model">IM</span>). This refinement process is guided by the assumptions (<span title="assumption">A</span>) that constrain the system, as well as the supporting general definitions (<span title="general definition">GD</span>) and data definitions (<span title="data definition">DD</span>) that provide the necessary mathematical and physical context. The requirements (<span title="requirement">R</span>) are traced back through the <span title="goal statement">GS</span>, <span title="theoretical model">TM</span>, and <span title="instance model">IM</span> to ensure consistency and completeness. Furthermore, the physical system description (<span title="physical system description">PS</span>) establishes the overall context in which the <span title="goal statement">GS</span> are formulated and the <span title="assumption">A</span> are validated. Finally, the uncertainties (Uncerts.) are documented and linked to the relevant <span title="instance model">IM</span> and <span title="data definition">DD</span>, ensuring transparency in the modeling process..
             </p>
           </div>
         </div>
@@ -841,37 +768,37 @@
                   </p>
                   <p>
                     <div id="assumpGC">
-                      glassCondition: Following <a href=#astm2009>astm2009</a> (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. (RefBy: <a href=#accAlteredGlass>UC:Accommodate-Altered-Glass</a>.)
+                      glassCondition: Following <a href=#astm2009>astm2009</a> (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. (<span title="referenced by">RefBy</span>: <a href=#accAlteredGlass>UC:Accommodate-Altered-Glass</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpES">
-                      explainScenario: This system only considers the external explosion scenario for its calculations. (RefBy: <a href=#calcInternalBlastRisk>LC:Calculate-Internal-Blast-Risk</a>.)
+                      explainScenario: This system only considers the external explosion scenario for its calculations. (<span title="referenced by">RefBy</span>: <a href=#calcInternalBlastRisk>LC:Calculate-Internal-Blast-Risk</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpSV">
-                      standardValues: The values provided in <a href=#Sec:AuxConstants>Sec:Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. (RefBy: <a href=#IM:sdfTol>IM:sdfTol</a>, <a href=#IM:nFL>IM:nFL</a>, <a href=#IM:dimlessLoad>IM:dimlessLoad</a>, <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a>, <a href=#assumpLDFC>A:ldfConstant</a>, and <a href=#DD:loadDurFactor>DD:loadDurFactor</a>.)
+                      standardValues: The values provided in <a href=#Sec:AuxConstants>Sec:Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. (<span title="referenced by">RefBy</span>: <a href=#IM:sdfTol>IM:sdfTol</a>, <a href=#IM:nFL>IM:nFL</a>, <a href=#IM:dimlessLoad>IM:dimlessLoad</a>, <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a>, <a href=#assumpLDFC>A:ldfConstant</a>, and <a href=#DD:loadDurFactor>DD:loadDurFactor</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpGL">
-                      glassLite: Glass under consideration is assumed to be a single lite; hence, the value of <span title="load share factor">LSF</span> is equal to 1 for all calculations in <span title="GlassBR">GlassBR</span>. (RefBy: <a href=#accMoreThanSingleLite>LC:Accomodate-More-than-Single-Lite</a>.)
+                      glassLite: Glass under consideration is assumed to be a single lite; hence, the value of <span title="load share factor">LSF</span> is equal to 1 for all calculations in <span title="GlassBR">GlassBR</span>. (<span title="referenced by">RefBy</span>: <a href=#accMoreThanSingleLite>LC:Accomodate-More-than-Single-Lite</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpBC">
-                      boundaryConditions: Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. (RefBy: <a href=#accMoreBoundaryConditions>LC:Accomodate-More-Boundary-Conditions</a>.)
+                      boundaryConditions: Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. (<span title="referenced by">RefBy</span>: <a href=#accMoreBoundaryConditions>LC:Accomodate-More-Boundary-Conditions</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpRT">
-                      responseType: The response type considered in <span title="GlassBR">GlassBR</span> is flexural. (RefBy: <a href=#considerMoreThanFlexGlass>LC:Consider-More-than-Flexure-Glass</a>.)
+                      responseType: The response type considered in <span title="GlassBR">GlassBR</span> is flexural. (<span title="referenced by">RefBy</span>: <a href=#considerMoreThanFlexGlass>LC:Consider-More-than-Flexure-Glass</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpLDFC">
-                      ldfConstant: With reference to <a href=#assumpSV>A:standardValues</a>, the value of load duration factor (<em>LDF</em>) is a constant in <span title="GlassBR">GlassBR</span>. (RefBy: <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a> and <a href=#DD:loadDurFactor>DD:loadDurFactor</a>.)
+                      ldfConstant: With reference to <a href=#assumpSV>A:standardValues</a>, the value of load duration factor (<em>LDF</em>) is a constant in <span title="GlassBR">GlassBR</span>. (<span title="referenced by">RefBy</span>: <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a> and <a href=#DD:loadDurFactor>DD:loadDurFactor</a>.)
                     </div>
                   </p>
                 </div>

@@ -29,7 +29,7 @@ import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
-import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab,
+import Drasil.GlassBR.Concepts (blastRisk, glaPlane, glaSlab,
   ptOfExplsn, con', glass, iGlass, lGlass)
 import Drasil.GlassBR.DataDefs (configFp)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
@@ -69,7 +69,7 @@ si = mkSystem progName Specification
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
-  RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA abbreviationsList],
+  RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA ],
   IntroSec $
     IntroProg (startIntro software blstRskInvWGlassSlab progName)
       (short progName)
@@ -134,11 +134,6 @@ conceptChunks =
   map cw mathunitals ++ map cw physicalquants ++
   -- DefinedQuantityDicts
   map cw mathquants
-
-abbreviationsList :: [IdeaDict]
-abbreviationsList = 
-  -- CIs
-  map nw acronyms
 
 symbMap :: ChunkDB
 symbMap = cdb thisSymbols ideaDicts conceptChunks ([] :: [UnitDefn]) 

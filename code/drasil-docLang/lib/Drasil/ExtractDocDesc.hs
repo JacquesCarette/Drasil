@@ -1,7 +1,12 @@
 {-# LANGUAGE LambdaCase, Rank2Types #-}
+{-# OPTIONS_GHC -Wno-unused-top-binds #-}
 -- | Defines functions to extract certain kinds of information from a document.
 -- Mainly used to pull the 'UID's of chunks out of 'Sentence's and 'Expr's.
-module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, sentencePlate) where
+module Drasil.ExtractDocDesc (
+  getDocDesc, egetDocDesc,
+  sentencePlate,
+  getSec
+) where
 
 import Control.Lens((^.))
 import Drasil.DocumentLanguage.Core
@@ -189,6 +194,7 @@ getCon' = getCon . (^. accessContents)
 -- | Extracts 'Sentence's from raw content.
 getCon :: RawContent -> [Sentence]
 <<<<<<< HEAD
+<<<<<<< HEAD
 getCon (Table s1 s2 t _)        = isVar (s1, transpose s2) ++ [t]
 getCon (Paragraph s)            = [s]
 getCon EqnBlock{}               = []
@@ -204,6 +210,9 @@ getCon (Defini _ [])            = []
 getCon (Defini dt (hd:fs))      = concatMap getCon' (snd hd) ++ getCon (Defini dt fs)
 =======
 getCon (Table s1 s2 t _)   = isVar (s1, transpose s2) ++ [t]
+=======
+getCon (Table s1 s2 t _)   = t : s1 ++ concat s2 -- isVar (s1, transpose s2) ++ [t]
+>>>>>>> cecbd9d999 (Move to 2 layer document section rendering)
 getCon (Paragraph s)       = [s]
 getCon EqnBlock{}          = []
 getCon CodeBlock{}         = []
@@ -213,9 +222,24 @@ getCon (Figure l _ _ _)    = [l]
 getCon (Bib bref)          = getBib bref
 getCon (Graph sss _ _ l)   = let (ls, rs) = unzip sss
                              in l : ls ++ rs
+<<<<<<< HEAD
 getCon (Defini _ [])       = []
 getCon (Defini dt (hd:fs)) = concatMap getCon' (snd hd) ++ getCon (Defini dt fs)
 >>>>>>> 0ec56d8903 (dig even deeper when looking for abbreviations)
+=======
+getCon (Defini _ ics)      = concatMap (concatMap getCon' . snd) ics
+
+-- | This function is used in collecting 'Sentence's from a table. Since only
+-- the table's first Column titled "Var" should be collected, this function is
+-- used to filter out only the first column of 'Sentence's.
+--
+-- FIXME: Avoid pattern matching on S "Var".
+isVar :: ([Sentence], [[Sentence]]) -> [Sentence]
+isVar (S "Var" : _, hd1 : _) = hd1
+isVar (_ : tl, _ : tl1) = isVar (tl, tl1)
+isVar ([], _) = []
+isVar (_, []) = []
+>>>>>>> cecbd9d999 (Move to 2 layer document section rendering)
 
 -- | Get the bibliography from something that has a field.
 getBib :: (HasFields c) => [c] -> [Sentence]
@@ -247,10 +271,10 @@ getField Year{} = EmptyS
 
 -- | Translates different types of lists into a 'Sentence' form.
 getLT :: ListType -> [Sentence]
-getLT (Bullet it) = concatMap (getIL . fst) it
-getLT (Numeric it) = concatMap (getIL . fst) it
-getLT (Simple lp) = concatMap getLP lp
-getLT (Desc lp) = concatMap getLP lp
+getLT (Bullet it)      = concatMap (getIL . fst) it
+getLT (Numeric it)     = concatMap (getIL . fst) it
+getLT (Simple lp)      = concatMap getLP lp
+getLT (Desc lp)        = concatMap getLP lp
 getLT (Definitions lp) = concatMap getLP lp
 
 -- | Translates a 'ListTuple' into 'Sentence's.

@@ -2,11 +2,8 @@
 
 <div id="Table:TAbbAcc"></div>
 
-|Abbreviation|Full Form                          |
-|:-----------|:----------------------------------|
-|2D          |Two-Dimensional                    |
-|DblPend     |Double Pendulum                    |
-|ODE         |Ordinary Differential Equation     |
-|SRS         |Software Requirements Specification|
+|Abbreviation|Full Form          |
+|:-----------|:------------------|
+|Uncert.     |Typical Uncertainty|
 
 **<p align="center">Abbreviations and Acronyms</p>**

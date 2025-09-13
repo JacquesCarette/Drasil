@@ -2,8 +2,8 @@
 
 <div id="Table:TAbbAcc"></div>
 
-|Abbreviation|Full Form                     |
-|:-----------|:-----------------------------|
-|ODE         |Ordinary Differential Equation|
+|Abbreviation|Full Form          |
+|:-----------|:------------------|
+|Uncert.     |Typical Uncertainty|
 
 **<p align="center">Abbreviations and Acronyms</p>**

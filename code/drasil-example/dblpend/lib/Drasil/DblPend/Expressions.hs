@@ -100,7 +100,7 @@ inertialForce_2 = sy massObj_2 `cScale` mvAccelExpr_2
 -- This represents the force balance: Tension + Gravity = Net Force
 -- So: Net Force = Tension + Gravity
 mvForceExpr_1 :: PExpr
-mvForceExpr_1 = tensionVec_1 `cAdd` (neg tensionVec_2) `cAdd` gravitationalForce_1 
+mvForceExpr_1 = tensionVec_1 `cAdd` neg tensionVec_2 `cAdd` gravitationalForce_1 
 
 mvForceExpr_2 :: PExpr
 mvForceExpr_2 = tensionVec_2 `cAdd` gravitationalForce_2

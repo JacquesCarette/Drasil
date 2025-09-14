@@ -10,38 +10,28 @@ import Drasil.DblPend.Unitals (lenRod_1, lenRod_2, massObj_1, massObj_2,
   angularAccel_1, angularAccel_2, angularVel_1, angularVel_2,
   pendDisAngle_1, pendDisAngle_2)
 
--- ============================================================================
--- ANGLE HELPERS
--- ============================================================================
-
+-- Angle helpers
 cosAngleExpr1, sinAngleExpr1, cosAngleExpr2, sinAngleExpr2 :: PExpr
 cosAngleExpr1 = cos (sy pendDisAngle_1)
 sinAngleExpr1 = sin (sy pendDisAngle_1)
 cosAngleExpr2 = cos (sy pendDisAngle_2)
 sinAngleExpr2 = sin (sy pendDisAngle_2)
 
--- ============================================================================
--- DIRECTION VECTORS 
--- ----------------------------------------------------------------------------
-
+-- Direction vectors
 vector :: PExpr -> PExpr -> PExpr
 vector x y = vect [x, y]
 
 directionVector_1 :: PExpr
 directionVector_1 = vector cosAngleExpr1 sinAngleExpr1
 
-directionVector_2 :: PExpr
-directionVector_2 = vector cosAngleExpr2 sinAngleExpr2
-
 perpDirectionVector_1 :: PExpr
 perpDirectionVector_1 = vector (neg sinAngleExpr1) cosAngleExpr1
 
+directionVector_2 :: PExpr
+directionVector_2 = vector cosAngleExpr2 sinAngleExpr2
+
 perpDirectionVector_2 :: PExpr
 perpDirectionVector_2 = vector (neg sinAngleExpr2) cosAngleExpr2
-
--- ============================================================================
--- VELOCITY & ACCELERATION (GA vectors) 
--- ============================================================================
 
 -- Velocity of mass 1: v1 = ω1 * l1 * [cos θ1, sin θ1]
 mvVelExpr_1 :: PExpr
@@ -55,7 +45,7 @@ mvVelComponent_2 = (sy angularVel_2 $* sy lenRod_2) `cScale` directionVector_2
 mvVelExpr_2 :: PExpr
 mvVelExpr_2 = mvVelExpr_1 `cAdd` mvVelComponent_2
 
--- Accelerations for mass 1:
+-- Accelerations for mass 1
 centripetalAccel_1 :: PExpr
 centripetalAccel_1 = (square (sy angularVel_1) $* sy lenRod_1) `cScale` perpDirectionVector_1
 
@@ -78,10 +68,7 @@ mvAccelComponent_2 = centripetalAccel_2 `cAdd` tangentialAccel_2
 mvAccelExpr_2 :: PExpr
 mvAccelExpr_2 = mvAccelExpr_1 `cAdd` mvAccelComponent_2
 
--- ============================================================================
--- FORCES 
--- ============================================================================
-
+-- Forces
 gravitationalForce_1 :: PExpr
 gravitationalForce_1 = vector (int 0) (neg (sy massObj_1 $* sy gravitationalMagnitude))
 
@@ -106,10 +93,7 @@ mvForceExpr_1 = inertialForce_1 `cAdd` gravitationalForce_1
 mvForceExpr_2 :: PExpr
 mvForceExpr_2 = inertialForce_2 `cAdd` gravitationalForce_2
 
--- ============================================================================
--- FORCE DERIVATIVES  
--- ============================================================================
-
+-- Force derivatives 
 forceDerivExpr1 :: PExpr
 forceDerivExpr1 = sy massObj_1 `cScale` mvAccelExpr_1
 

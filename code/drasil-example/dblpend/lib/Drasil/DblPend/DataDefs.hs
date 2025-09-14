@@ -8,7 +8,7 @@ import qualified Language.Drasil.Sentence.Combinators as S
 import Theory.Drasil (DataDefinition, ddENoRefs, ddMENoRefs)
 
 import Drasil.DblPend.LabelledContent (figMotion)
-import Drasil.DblPend.Unitals (pendDisAngle_1, pendDisAngle_2, lenRod_1, lenRod_2, xPos_1, yPos_1, xPos_2, yPos_2, mvForce_1)
+import Drasil.DblPend.Unitals (pendDisAngle_1, pendDisAngle_2, lenRod_1, lenRod_2, xPos_1, yPos_1, xPos_2, yPos_2)
 
 import Drasil.DblPend.Concepts (horizontalPos, verticalPos)
 import Data.Drasil.Quantities.Physics (velocity, position, time, acceleration, force)
@@ -116,20 +116,13 @@ accelGEqn = deriv (sy velocity) time
 ---------------------------
 -- Force in General--
 ---------------------------
--- forceGDD :: DataDefinition
--- forceGDD = ddENoRefs forceGQD Nothing "forceGDD" []
-
--- forceGQD :: SimpleQDef
--- forceGQD = mkQuantDef mvForce_1 forceGEqn  -- Use specific Clifford force quantity
-
--- forceGEqn :: PExpr
--- forceGEqn = sy mvForce_1  -- Simplified to avoid type issues for now
-
 forceGDD :: DataDefinition
 forceGDD = ddENoRefs forceGQD Nothing "forceGDD" []
 
 forceGQD :: SimpleQDef
 forceGQD = mkQuantDef force forceGEqn
+-- forceGQD = mkQuantDef mvForce_1 forceGEqn  -- Use specific Clifford force quantity
 
 forceGEqn :: PExpr
 forceGEqn = vScale (sy mass) (sy acceleration)
+-- forceGEqn = sy mvForce_1  -- Simplified to avoid type issues for now

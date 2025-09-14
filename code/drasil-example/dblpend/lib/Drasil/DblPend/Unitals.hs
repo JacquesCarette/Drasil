@@ -268,4 +268,3 @@ tension_1 = uc' "T_1" (QP.tension `ofThe` firstRod)
 tension_2 = uc' "T_2" (QP.tension `ofThe` secondRod)
         (phraseNP (QP.tension `the_ofThe` secondRod))
         (sub lT label2) Real newton
-

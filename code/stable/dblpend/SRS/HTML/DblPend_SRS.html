@@ -288,19 +288,19 @@
                   <td><em>N</em></td>
                 </tr>
                 <tr>
-                  <td><em>t</em></td>
-                  <td>Time</td>
-                  <td><em>s</em></td>
-                </tr>
-                <tr>
-                  <td><em>t<sub>1</sub></em></td>
+                  <td><em><b>T</b><sub>1</sub></em></td>
                   <td>Tension of the first rod</td>
                   <td><em>N</em></td>
                 </tr>
                 <tr>
-                  <td><em>t<sub>2</sub></em></td>
+                  <td><em><b>T</b><sub>2</sub></em></td>
                   <td>Tension of the second rod</td>
                   <td><em>N</em></td>
+                </tr>
+                <tr>
+                  <td><em>t</em></td>
+                  <td>Time</td>
+                  <td><em>s</em></td>
                 </tr>
                 <tr>
                   <td><em>theta</em></td>
@@ -343,6 +343,16 @@
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
+                  <td><em>w<sub>1</sub></em></td>
+                  <td>Angular velocity of the first object</td>
+                  <td><em>\(\frac{\text{rad}}{\text{s}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>w<sub>2</sub></em></td>
+                  <td>Angular velocity of the second object</td>
+                  <td><em>\(\frac{\text{rad}}{\text{s}}\)</em></td>
+                </tr>
+                <tr>
                   <td><em>α<sub>1</sub></em></td>
                   <td>Angular acceleration of the first object</td>
                   <td><em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em></td>
@@ -366,16 +376,6 @@
                   <td><em>π</em></td>
                   <td>Ratio of circumference to diameter for any circle</td>
                   <td>--</td>
-                </tr>
-                <tr>
-                  <td><em>Ω<sub>1</sub></em></td>
-                  <td>Angular velocity of the first object</td>
-                  <td><em>\(\frac{\text{rad}}{\text{s}}\)</em></td>
-                </tr>
-                <tr>
-                  <td><em>Ω<sub>2</sub></em></td>
-                  <td>Angular velocity of the second object</td>
-                  <td><em>\(\frac{\text{rad}}{\text{s}}\)</em></td>
                 </tr>
               </table>
               <p class="caption">Table of Symbols</p>
@@ -865,7 +865,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{v_{1}}={Ω_{1}}\,{L_{1}} \begin{bmatrix}
+                        \[{v_{1}}={w_{1}}\,{L_{1}} \begin{bmatrix}
                                                    \cos\left({θ_{1}}\right)\\
                                                    \sin\left({θ_{1}}\right)
                                                    \end{bmatrix}\]
@@ -879,7 +879,7 @@
                             <em>v<sub>1</sub></em> is the velocity of the first object (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li>
-                            <em>Ω<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>w<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>L<sub>1</sub></em> is the length of the first rod (<em>m</em>)
@@ -906,7 +906,7 @@
                     <p class="paragraph">
                       The multivector velocity in Clifford algebra represents both magnitude and direction as a unified geometric entity.
                     </p>
-                    \[{v_{1}}={Ω_{1}}\,{L_{1}} \begin{bmatrix}
+                    \[{v_{1}}={w_{1}}\,{L_{1}} \begin{bmatrix}
                                                \cos\left({θ_{1}}\right)\\
                                                \sin\left({θ_{1}}\right)
                                                \end{bmatrix}\]
@@ -954,10 +954,10 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{v_{2}}={Ω_{1}}\,{L_{1}} \begin{bmatrix}
+                        \[{v_{2}}={w_{1}}\,{L_{1}} \begin{bmatrix}
                                                    \cos\left({θ_{1}}\right)\\
                                                    \sin\left({θ_{1}}\right)
-                                                   \end{bmatrix}+{Ω_{2}}\,{L_{2}} \begin{bmatrix}
+                                                   \end{bmatrix}+{w_{2}}\,{L_{2}} \begin{bmatrix}
                                                                                   \cos\left({θ_{2}}\right)\\
                                                                                   \sin\left({θ_{2}}\right)
                                                                                   \end{bmatrix}\]
@@ -971,7 +971,7 @@
                             <em>v<sub>2</sub></em> is the velocity of the second object (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li>
-                            <em>Ω<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>w<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>L<sub>1</sub></em> is the length of the first rod (<em>m</em>)
@@ -980,7 +980,7 @@
                             <em>θ<sub>1</sub></em> is the angle of the first rod (<em>rad</em>)
                           </li>
                           <li>
-                            <em>Ω<sub>2</sub></em> is the angular velocity of the second object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>w<sub>2</sub></em> is the angular velocity of the second object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>L<sub>2</sub></em> is the length of the second rod (<em>m</em>)
@@ -1007,10 +1007,10 @@
                     <p class="paragraph">
                       The multivector velocity for the second object combines the velocity from the first pendulum with its own rotational motion.
                     </p>
-                    \[{v_{2}}={Ω_{1}}\,{L_{1}} \begin{bmatrix}
+                    \[{v_{2}}={w_{1}}\,{L_{1}} \begin{bmatrix}
                                                \cos\left({θ_{1}}\right)\\
                                                \sin\left({θ_{1}}\right)
-                                               \end{bmatrix}+{Ω_{2}}\,{L_{2}} \begin{bmatrix}
+                                               \end{bmatrix}+{w_{2}}\,{L_{2}} \begin{bmatrix}
                                                                               \cos\left({θ_{2}}\right)\\
                                                                               \sin\left({θ_{2}}\right)
                                                                               \end{bmatrix}\]
@@ -1048,7 +1048,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{a_{1}}={Ω_{1}}^{2}\,{L_{1}} \begin{bmatrix}
+                        \[{a_{1}}={w_{1}}^{2}\,{L_{1}} \begin{bmatrix}
                                                        -\sin\left({θ_{1}}\right)\\
                                                        \cos\left({θ_{1}}\right)
                                                        \end{bmatrix}+{α_{1}}\,{L_{1}} \begin{bmatrix}
@@ -1065,7 +1065,7 @@
                             <em>a<sub>1</sub></em> is the acceleration of the first object (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li>
-                            <em>Ω<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>w<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>L<sub>1</sub></em> is the length of the first rod (<em>m</em>)
@@ -1097,7 +1097,7 @@
                     <p class="paragraph">
                       The multivector acceleration in Clifford algebra combines centripetal and tangential acceleration components.
                     </p>
-                    \[{a_{1}}={Ω_{1}}^{2}\,{L_{1}} \begin{bmatrix}
+                    \[{a_{1}}={w_{1}}^{2}\,{L_{1}} \begin{bmatrix}
                                                    -\sin\left({θ_{1}}\right)\\
                                                    \cos\left({θ_{1}}\right)
                                                    \end{bmatrix}+{α_{1}}\,{L_{1}} \begin{bmatrix}
@@ -1153,13 +1153,13 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{a_{2}}={Ω_{1}}^{2}\,{L_{1}} \begin{bmatrix}
+                        \[{a_{2}}={w_{1}}^{2}\,{L_{1}} \begin{bmatrix}
                                                        -\sin\left({θ_{1}}\right)\\
                                                        \cos\left({θ_{1}}\right)
                                                        \end{bmatrix}+{α_{1}}\,{L_{1}} \begin{bmatrix}
                                                                                       \cos\left({θ_{1}}\right)\\
                                                                                       \sin\left({θ_{1}}\right)
-                                                                                      \end{bmatrix}+{Ω_{2}}^{2}\,{L_{2}} \begin{bmatrix}
+                                                                                      \end{bmatrix}+{w_{2}}^{2}\,{L_{2}} \begin{bmatrix}
                                                                                                                          -\sin\left({θ_{2}}\right)\\
                                                                                                                          \cos\left({θ_{2}}\right)
                                                                                                                          \end{bmatrix}+{α_{2}}\,{L_{2}} \begin{bmatrix}
@@ -1176,7 +1176,7 @@
                             <em>a<sub>2</sub></em> is the acceleration of the second object (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li>
-                            <em>Ω<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>w<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>L<sub>1</sub></em> is the length of the first rod (<em>m</em>)
@@ -1188,7 +1188,7 @@
                             <em>α<sub>1</sub></em> is the angular acceleration of the first object (<em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li>
-                            <em>Ω<sub>2</sub></em> is the angular velocity of the second object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>w<sub>2</sub></em> is the angular velocity of the second object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>L<sub>2</sub></em> is the length of the second rod (<em>m</em>)
@@ -1220,13 +1220,13 @@
                     <p class="paragraph">
                       The second object's acceleration is the geometric sum of the first object's acceleration and its own relative acceleration.
                     </p>
-                    \[{a_{2}}={Ω_{1}}^{2}\,{L_{1}} \begin{bmatrix}
+                    \[{a_{2}}={w_{1}}^{2}\,{L_{1}} \begin{bmatrix}
                                                    -\sin\left({θ_{1}}\right)\\
                                                    \cos\left({θ_{1}}\right)
                                                    \end{bmatrix}+{α_{1}}\,{L_{1}} \begin{bmatrix}
                                                                                   \cos\left({θ_{1}}\right)\\
                                                                                   \sin\left({θ_{1}}\right)
-                                                                                  \end{bmatrix}+{Ω_{2}}^{2}\,{L_{2}} \begin{bmatrix}
+                                                                                  \end{bmatrix}+{w_{2}}^{2}\,{L_{2}} \begin{bmatrix}
                                                                                                                      -\sin\left({θ_{2}}\right)\\
                                                                                                                      \cos\left({θ_{2}}\right)
                                                                                                                      \end{bmatrix}+{α_{2}}\,{L_{2}} \begin{bmatrix}
@@ -1263,13 +1263,13 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{f_{1}}={m_{1}} {Ω_{1}}^{2}\,{L_{1}} \begin{bmatrix}
-                                                               -\sin\left({θ_{1}}\right)\\
-                                                               \cos\left({θ_{1}}\right)
-                                                               \end{bmatrix}+{α_{1}}\,{L_{1}} \begin{bmatrix}
-                                                                                              \cos\left({θ_{1}}\right)\\
-                                                                                              \sin\left({θ_{1}}\right)
-                                                                                              \end{bmatrix}+\begin{bmatrix}
+                        \[{f_{1}}={\symbf{T}_{1}} \begin{bmatrix}
+                                                  -\sin\left({θ_{1}}\right)\\
+                                                  \cos\left({θ_{1}}\right)
+                                                  \end{bmatrix}+-\left({\symbf{T}_{2}} \begin{bmatrix}
+                                                                                       -\sin\left({θ_{2}}\right)\\
+                                                                                       \cos\left({θ_{2}}\right)
+                                                                                       \end{bmatrix}\right)+\begin{bmatrix}
                                                                                                             0\\
                                                                                                             -{m_{1}}\,g
                                                                                                             \end{bmatrix}\]
@@ -1283,19 +1283,19 @@
                             <em>f<sub>1</sub></em> is the force of the first object (<em>N</em>)
                           </li>
                           <li>
-                            <em>m<sub>1</sub></em> is the mass of the first object (<em>kg</em>)
-                          </li>
-                          <li>
-                            <em>Ω<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
-                          </li>
-                          <li>
-                            <em>L<sub>1</sub></em> is the length of the first rod (<em>m</em>)
+                            <em><b>T</b><sub>1</sub></em> is the tension of the first rod (<em>N</em>)
                           </li>
                           <li>
                             <em>θ<sub>1</sub></em> is the angle of the first rod (<em>rad</em>)
                           </li>
                           <li>
-                            <em>α<sub>1</sub></em> is the angular acceleration of the first object (<em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em>)
+                            <em><b>T</b><sub>2</sub></em> is the tension of the second rod (<em>N</em>)
+                          </li>
+                          <li>
+                            <em>θ<sub>2</sub></em> is the angle of the second rod (<em>rad</em>)
+                          </li>
+                          <li>
+                            <em>m<sub>1</sub></em> is the mass of the first object (<em>kg</em>)
                           </li>
                           <li>
                             <em>g</em> is the magnitude of gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
@@ -1321,13 +1321,13 @@
                     <p class="paragraph">
                       The multivector force in Clifford algebra combines inertial and gravitational forces as vector multivectors.
                     </p>
-                    \[{f_{1}}={m_{1}} {Ω_{1}}^{2}\,{L_{1}} \begin{bmatrix}
-                                                           -\sin\left({θ_{1}}\right)\\
-                                                           \cos\left({θ_{1}}\right)
-                                                           \end{bmatrix}+{α_{1}}\,{L_{1}} \begin{bmatrix}
-                                                                                          \cos\left({θ_{1}}\right)\\
-                                                                                          \sin\left({θ_{1}}\right)
-                                                                                          \end{bmatrix}+\begin{bmatrix}
+                    \[{f_{1}}={\symbf{T}_{1}} \begin{bmatrix}
+                                              -\sin\left({θ_{1}}\right)\\
+                                              \cos\left({θ_{1}}\right)
+                                              \end{bmatrix}+-\left({\symbf{T}_{2}} \begin{bmatrix}
+                                                                                   -\sin\left({θ_{2}}\right)\\
+                                                                                   \cos\left({θ_{2}}\right)
+                                                                                   \end{bmatrix}\right)+\begin{bmatrix}
                                                                                                         0\\
                                                                                                         -{m_{1}}\,g
                                                                                                         \end{bmatrix}\]
@@ -1361,22 +1361,13 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{f_{2}}={m_{2}} {Ω_{1}}^{2}\,{L_{1}} \begin{bmatrix}
-                                                               -\sin\left({θ_{1}}\right)\\
-                                                               \cos\left({θ_{1}}\right)
-                                                               \end{bmatrix}+{α_{1}}\,{L_{1}} \begin{bmatrix}
-                                                                                              \cos\left({θ_{1}}\right)\\
-                                                                                              \sin\left({θ_{1}}\right)
-                                                                                              \end{bmatrix}+{Ω_{2}}^{2}\,{L_{2}} \begin{bmatrix}
-                                                                                                                                 -\sin\left({θ_{2}}\right)\\
-                                                                                                                                 \cos\left({θ_{2}}\right)
-                                                                                                                                 \end{bmatrix}+{α_{2}}\,{L_{2}} \begin{bmatrix}
-                                                                                                                                                                \cos\left({θ_{2}}\right)\\
-                                                                                                                                                                \sin\left({θ_{2}}\right)
-                                                                                                                                                                \end{bmatrix}+\begin{bmatrix}
-                                                                                                                                                                              0\\
-                                                                                                                                                                              -{m_{2}}\,g
-                                                                                                                                                                              \end{bmatrix}\]
+                        \[{f_{2}}={\symbf{T}_{2}} \begin{bmatrix}
+                                                  -\sin\left({θ_{2}}\right)\\
+                                                  \cos\left({θ_{2}}\right)
+                                                  \end{bmatrix}+\begin{bmatrix}
+                                                                0\\
+                                                                -{m_{2}}\,g
+                                                                \end{bmatrix}\]
                       </td>
                     </tr>
                     <tr>
@@ -1387,31 +1378,13 @@
                             <em>f<sub>2</sub></em> is the force of the second object (<em>N</em>)
                           </li>
                           <li>
-                            <em>m<sub>2</sub></em> is the mass of the second object (<em>kg</em>)
-                          </li>
-                          <li>
-                            <em>Ω<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
-                          </li>
-                          <li>
-                            <em>L<sub>1</sub></em> is the length of the first rod (<em>m</em>)
-                          </li>
-                          <li>
-                            <em>θ<sub>1</sub></em> is the angle of the first rod (<em>rad</em>)
-                          </li>
-                          <li>
-                            <em>α<sub>1</sub></em> is the angular acceleration of the first object (<em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em>)
-                          </li>
-                          <li>
-                            <em>Ω<sub>2</sub></em> is the angular velocity of the second object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
-                          </li>
-                          <li>
-                            <em>L<sub>2</sub></em> is the length of the second rod (<em>m</em>)
+                            <em><b>T</b><sub>2</sub></em> is the tension of the second rod (<em>N</em>)
                           </li>
                           <li>
                             <em>θ<sub>2</sub></em> is the angle of the second rod (<em>rad</em>)
                           </li>
                           <li>
-                            <em>α<sub>2</sub></em> is the angular acceleration of the second object (<em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em>)
+                            <em>m<sub>2</sub></em> is the mass of the second object (<em>kg</em>)
                           </li>
                           <li>
                             <em>g</em> is the magnitude of gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
@@ -1437,22 +1410,13 @@
                     <p class="paragraph">
                       The force on the second object combines its inertial response with gravitational effects.
                     </p>
-                    \[{f_{2}}={m_{2}} {Ω_{1}}^{2}\,{L_{1}} \begin{bmatrix}
-                                                           -\sin\left({θ_{1}}\right)\\
-                                                           \cos\left({θ_{1}}\right)
-                                                           \end{bmatrix}+{α_{1}}\,{L_{1}} \begin{bmatrix}
-                                                                                          \cos\left({θ_{1}}\right)\\
-                                                                                          \sin\left({θ_{1}}\right)
-                                                                                          \end{bmatrix}+{Ω_{2}}^{2}\,{L_{2}} \begin{bmatrix}
-                                                                                                                             -\sin\left({θ_{2}}\right)\\
-                                                                                                                             \cos\left({θ_{2}}\right)
-                                                                                                                             \end{bmatrix}+{α_{2}}\,{L_{2}} \begin{bmatrix}
-                                                                                                                                                            \cos\left({θ_{2}}\right)\\
-                                                                                                                                                            \sin\left({θ_{2}}\right)
-                                                                                                                                                            \end{bmatrix}+\begin{bmatrix}
-                                                                                                                                                                          0\\
-                                                                                                                                                                          -{m_{2}}\,g
-                                                                                                                                                                          \end{bmatrix}\]
+                    \[{f_{2}}={\symbf{T}_{2}} \begin{bmatrix}
+                                              -\sin\left({θ_{2}}\right)\\
+                                              \cos\left({θ_{2}}\right)
+                                              \end{bmatrix}+\begin{bmatrix}
+                                                            0\\
+                                                            -{m_{2}}\,g
+                                                            \end{bmatrix}\]
                     <p class="paragraph">
                       The Clifford algebra representation maintains the geometric consistency between force and acceleration.
                     </p>
@@ -1929,7 +1893,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{α_{1}}\left({θ_{1}},{θ_{2}},{Ω_{1}},{Ω_{2}}\right)=\frac{-g\,\left(2\,{m_{1}}+{m_{2}}\right)\,\sin\left({θ_{1}}\right)-{m_{2}}\,g\,\sin\left({θ_{1}}-2\,{θ_{2}}\right)-2\,\sin\left({θ_{1}}-{θ_{2}}\right)\,{m_{2}}\,\left({Ω_{2}}^{2}\,{L_{2}}+{Ω_{1}}^{2}\,{L_{1}}\,\cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{1}}\,\left(2\,{m_{1}}+{m_{2}}-{m_{2}}\,\cos\left(2\,{θ_{1}}-2\,{θ_{2}}\right)\right)}\]
+                        \[{α_{1}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{-g\,\left(2\,{m_{1}}+{m_{2}}\right)\,\sin\left({θ_{1}}\right)-{m_{2}}\,g\,\sin\left({θ_{1}}-2\,{θ_{2}}\right)-2\,\sin\left({θ_{1}}-{θ_{2}}\right)\,{m_{2}}\,\left({w_{2}}^{2}\,{L_{2}}+{w_{1}}^{2}\,{L_{1}}\,\cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{1}}\,\left(2\,{m_{1}}+{m_{2}}-{m_{2}}\,\cos\left(2\,{θ_{1}}-2\,{θ_{2}}\right)\right)}\]
                       </td>
                     </tr>
                     <tr>
@@ -1946,10 +1910,10 @@
                             <em>θ<sub>2</sub></em> is the angle of the second rod (<em>rad</em>)
                           </li>
                           <li>
-                            <em>Ω<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>w<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
-                            <em>Ω<sub>2</sub></em> is the angular velocity of the second object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>w<sub>2</sub></em> is the angular velocity of the second object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>g</em> is the magnitude of gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
@@ -2031,7 +1995,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{α_{2}}\left({θ_{1}},{θ_{2}},{Ω_{1}},{Ω_{2}}\right)=\frac{2\,\sin\left({θ_{1}}-{θ_{2}}\right)\,\left({Ω_{1}}^{2}\,{L_{1}}\,\left({m_{1}}+{m_{2}}\right)+g\,\left({m_{1}}+{m_{2}}\right)\,\cos\left({θ_{1}}\right)+{Ω_{2}}^{2}\,{L_{2}}\,{m_{2}}\,\cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{2}}\,\left(2\,{m_{1}}+{m_{2}}-{m_{2}}\,\cos\left(2\,{θ_{1}}-2\,{θ_{2}}\right)\right)}\]
+                        \[{α_{2}}\left({θ_{1}},{θ_{2}},{w_{1}},{w_{2}}\right)=\frac{2\,\sin\left({θ_{1}}-{θ_{2}}\right)\,\left({w_{1}}^{2}\,{L_{1}}\,\left({m_{1}}+{m_{2}}\right)+g\,\left({m_{1}}+{m_{2}}\right)\,\cos\left({θ_{1}}\right)+{w_{2}}^{2}\,{L_{2}}\,{m_{2}}\,\cos\left({θ_{1}}-{θ_{2}}\right)\right)}{{L_{2}}\,\left(2\,{m_{1}}+{m_{2}}-{m_{2}}\,\cos\left(2\,{θ_{1}}-2\,{θ_{2}}\right)\right)}\]
                       </td>
                     </tr>
                     <tr>
@@ -2048,10 +2012,10 @@
                             <em>θ<sub>2</sub></em> is the angle of the second rod (<em>rad</em>)
                           </li>
                           <li>
-                            <em>Ω<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>w<sub>1</sub></em> is the angular velocity of the first object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
-                            <em>Ω<sub>2</sub></em> is the angular velocity of the second object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>w<sub>2</sub></em> is the angular velocity of the second object (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>L<sub>1</sub></em> is the length of the first rod (<em>m</em>)
@@ -2099,25 +2063,25 @@
                     <p class="paragraph">
                       By solving multivector force equations <a href=#GD:multivectorForce1>GD:multivectorForce1</a> and <a href=#GD:multivectorForce2>GD:multivectorForce2</a> for <em>f<sub>1</sub></em> and <em>f<sub>2</sub></em> and then substituting into the Clifford algebra force equations , we can get equations 1 and 2:
                     </p>
-                    \[{m_{1}}\,{a_{\text{x}1}}=-{t_{1}}\,\sin\left({θ_{1}}\right)-{m_{2}}\,{a_{\text{x}2}}\]
+                    \[{m_{1}}\,{a_{1}}=-{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)-{m_{2}}\,{a_{2}}\]
                     <p class="paragraph"></p>
-                    \[{m_{1}}\,{a_{\text{y}1}}={t_{1}}\,\cos\left({θ_{1}}\right)-{m_{2}}\,{a_{\text{y}2}}-{m_{2}}\,g-{m_{1}}\,g\]
+                    \[{m_{1}}\,{a_{1}}={\symbf{T}_{1}}\,\cos\left({θ_{1}}\right)-{m_{2}}\,{a_{2}}-{m_{2}}\,g-{m_{1}}\,g\]
                     <p class="paragraph">
                       Multiply the equation 1 by <em>cos(θ<sub>1</sub>)</em> and the equation 2 by <em>sin(θ<sub>1</sub>)</em> and rearrange to get:
                     </p>
-                    \[{t_{1}}\,\sin\left({θ_{1}}\right)\,\cos\left({θ_{1}}\right)=-\cos\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{x}1}}+{m_{2}}\,{a_{\text{x}2}}\right)\]
+                    \[{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)\,\cos\left({θ_{1}}\right)=-\cos\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{1}}+{m_{2}}\,{a_{2}}\right)\]
                     <p class="paragraph"></p>
-                    \[{t_{1}}\,\sin\left({θ_{1}}\right)\,\cos\left({θ_{1}}\right)=\sin\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{y}1}}+{m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g+{m_{1}}\,g\right)\]
+                    \[{\symbf{T}_{1}}\,\sin\left({θ_{1}}\right)\,\cos\left({θ_{1}}\right)=\sin\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{1}}+{m_{2}}\,{a_{2}}+{m_{2}}\,g+{m_{1}}\,g\right)\]
                     <p class="paragraph">This leads to the equation 3</p>
-                    \[\sin\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{y}1}}+{m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g+{m_{1}}\,g\right)=-\cos\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{\text{x}1}}+{m_{2}}\,{a_{\text{x}2}}\right)\]
+                    \[\sin\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{1}}+{m_{2}}\,{a_{2}}+{m_{2}}\,g+{m_{1}}\,g\right)=-\cos\left({θ_{1}}\right)\,\left({m_{1}}\,{a_{1}}+{m_{2}}\,{a_{2}}\right)\]
                     <p class="paragraph">
                       Next, multiply multivector force equation <a href=#GD:multivectorForce2>GD:multivectorForce2</a> by <em>cos(θ<sub>2</sub>)</em> and the Clifford force equation by <em>sin(θ<sub>2</sub>)</em> and rearrange to get:
                     </p>
-                    \[{t_{2}}\,\sin\left({θ_{2}}\right)\,\cos\left({θ_{2}}\right)=-\cos\left({θ_{2}}\right)\,{m_{2}}\,{a_{\text{x}2}}\]
+                    \[{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\,\cos\left({θ_{2}}\right)=-\cos\left({θ_{2}}\right)\,{m_{2}}\,{a_{2}}\]
                     <p class="paragraph"></p>
-                    \[{t_{2}}\,\sin\left({θ_{2}}\right)\,\cos\left({θ_{2}}\right)=\sin\left({θ_{2}}\right)\,\left({m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g\right)\]
+                    \[{\symbf{T}_{2}}\,\sin\left({θ_{2}}\right)\,\cos\left({θ_{2}}\right)=\sin\left({θ_{2}}\right)\,\left({m_{2}}\,{a_{2}}+{m_{2}}\,g\right)\]
                     <p class="paragraph">which leads to equation 4</p>
-                    \[\sin\left({θ_{2}}\right)\,\left({m_{2}}\,{a_{\text{y}2}}+{m_{2}}\,g\right)=-\cos\left({θ_{2}}\right)\,{m_{2}}\,{a_{\text{x}2}}\]
+                    \[\sin\left({θ_{2}}\right)\,\left({m_{2}}\,{a_{2}}+{m_{2}}\,g\right)=-\cos\left({θ_{2}}\right)\,{m_{2}}\,{a_{2}}\]
                     <p class="paragraph">
                       By giving multivector acceleration equations <a href=#GD:multivectorAcceleration1>GD:multivectorAcceleration1</a> and <a href=#GD:multivectorAcceleration2>GD:multivectorAcceleration2</a> and plus Clifford algebra equations plus additional two equations, 3 and 4, we can get <a href=#IM:calOfAngle1>IM:calOfAngle1</a> and <a href=#IM:calOfAngle2>IM:calOfAngle2</a> via a computer algebra program:
                     </p>

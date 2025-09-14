@@ -58,15 +58,6 @@ end
     - Returns: target position (m)
 """
 function get_input(filename::String)
-    infile = open(filename, "r")
-    readline(infile)
-    v_launch = parse(Float64, readline(infile))
-    readline(infile)
-    theta = parse(Float64, readline(infile))
-    readline(infile)
-    p_target = parse(Float64, readline(infile))
-    close(infile)
-    
     return v_launch, theta, p_target
 end
 

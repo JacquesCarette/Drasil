@@ -2,6 +2,7 @@
 module Language.Drasil.Expr.Extract where
 
 import Data.Containers.ListUtils (nubOrd)
+import qualified Data.Map.Ordered as OM
 
 import Language.Drasil.Expr.Lang (Expr(..))
 import Language.Drasil.Space (RealInterval(..))
@@ -19,16 +20,18 @@ eNames (Case _ ls)           = concatMap (eNames . fst) ls ++
                                concatMap (eNames . snd) ls
 eNames (UnaryOp _ u)         = eNames u
 eNames (UnaryOpB _ u)        = eNames u
-eNames (UnaryOpVV _ u)       = eNames u
-eNames (UnaryOpVN _ u)       = eNames u
+eNames (UnaryOpCC _ u)       = eNames u
+eNames (UnaryOpCN _ u)       = eNames u
 eNames (ArithBinaryOp _ a b) = eNames a ++ eNames b
 eNames (BoolBinaryOp _ a b)  = eNames a ++ eNames b
 eNames (EqBinaryOp _ a b)    = eNames a ++ eNames b
 eNames (LABinaryOp _ a b)    = eNames a ++ eNames b
 eNames (OrdBinaryOp _ a b)   = eNames a ++ eNames b
-eNames (VVVBinaryOp _ a b)   = eNames a ++ eNames b
-eNames (VVNBinaryOp _ a b)   = eNames a ++ eNames b
-eNames (NVVBinaryOp _ a b)   = eNames a ++ eNames b
+eNames (CCCBinaryOp _ a b)   = eNames a ++ eNames b
+eNames (CCNBinaryOp _ a b)   = eNames a ++ eNames b
+eNames (NCCBinaryOp _ a b)   = eNames a ++ eNames b
+eNames (NatCCBinaryOp _ _ b) = eNames b  -- Natural is not an Expr, so only extract from b
+eNames (Clif _ b)            = concatMap eNames (OM.elems b)  -- Extract from BasisBlades values
 eNames (ESSBinaryOp _ _ s)   = eNames s
 eNames (ESBBinaryOp _ _ s)   = eNames s
 eNames (Operator _ _ e)      = eNames e
@@ -57,16 +60,18 @@ eNames' (Case _ ls)           = concatMap (eNames' . fst) ls ++
                                 concatMap (eNames' . snd) ls
 eNames' (UnaryOp _ u)         = eNames' u
 eNames' (UnaryOpB _ u)        = eNames' u
-eNames' (UnaryOpVV _ u)       = eNames' u
-eNames' (UnaryOpVN _ u)       = eNames' u
+eNames' (UnaryOpCC _ u)       = eNames' u
+eNames' (UnaryOpCN _ u)       = eNames' u
 eNames' (ArithBinaryOp _ a b) = eNames' a ++ eNames' b
 eNames' (BoolBinaryOp _ a b)  = eNames' a ++ eNames' b
 eNames' (EqBinaryOp _ a b)    = eNames' a ++ eNames' b
 eNames' (LABinaryOp _ a b)    = eNames' a ++ eNames' b
 eNames' (OrdBinaryOp _ a b)   = eNames' a ++ eNames' b
-eNames' (VVVBinaryOp _ a b)   = eNames' a ++ eNames' b
-eNames' (VVNBinaryOp _ a b)   = eNames' a ++ eNames' b
-eNames' (NVVBinaryOp _ a b)   = eNames' a ++ eNames' b
+eNames' (CCCBinaryOp _ a b)   = eNames' a ++ eNames' b
+eNames' (CCNBinaryOp _ a b)   = eNames' a ++ eNames' b
+eNames' (NCCBinaryOp _ a b)   = eNames' a ++ eNames' b
+eNames' (NatCCBinaryOp _ _ b) = eNames' b  -- Natural is not an Expr, so only extract from b
+eNames' (Clif _ b)            = concatMap eNames' (OM.elems b)  -- Extract from BasisBlades values
 eNames' (ESSBinaryOp _ _ s)   = eNames' s
 eNames' (ESBBinaryOp _ _ s)   = eNames' s
 eNames' (Operator _ _ e)      = eNames' e

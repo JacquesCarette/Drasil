@@ -3,6 +3,7 @@ module Data.Drasil.Quantities.Physics where
 
 import Language.Drasil
 import Language.Drasil.Display
+import qualified Language.Drasil.Space as S
 import Language.Drasil.ShortHands
 import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
   angDisp, angVelo, chgInVelocity, constAccel, constAccelV, displacement,
@@ -11,7 +12,7 @@ import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
   ixPos, ixVel, iyPos, iyVel, kEnergy, linAccel, linDisp, linVelo, momentOfInertia, position, 
   potEnergy, pressure, restitutionCoef, scalarAccel, scalarPos, speed, time, torque,
   velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist, 
-  yPos, yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angFreq, period, 
+  yPos, yVel, momentum, moment, fOfGravity, positionVec, tension, angFreq, period, 
   frequency, chgMomentum)
 
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second, hertz)
@@ -45,48 +46,56 @@ acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   yVel, momentum, moment, moment2D, fOfGravity, positionVec, tension, angularFrequency, 
   period, frequency, chgMomentum :: UnitalChunk
 
-acceleration           = uc CP.acceleration           (Concat [vec lA, label "(", lT, label ")"]) (Vect Real) accelU
-angularAccel           = uc CP.angAccel               lAlpha                                      Real        angAccelU
-angularDisplacement    = uc CP.angDisp                lTheta                                      Real        radian
-angularFrequency       = uc CP.angFreq                cOmega                                      Real        second
-angularVelocity        = uc CP.angVelo                lOmega                                      Real        angVelU
-chgInVelocity          = uc CP.chgInVelocity          (Atop Delta $ vec lV)                       Real        velU
-constAccel             = uc CP.constAccel             (sup lA lC)                                 Real        accelU
-displacement           = uc CP.displacement           (vec lU)                                    Real        metre
-distance               = uc CP.distance               lD                                          Real        metre
-energy                 = uc CP.energy                 cE                                          Real        joule
-force                  = uc CP.force                  (vec cF)                                    Real        newton
-frequency              = uc CP.frequency              lF                                          Real        hertz
-gravitationalAccel     = uc CP.gravitationalAccel     (vec lG)                                    Real        accelU
-gravitationalConst     = uc CP.gravitationalConst     cG                                          Real        gravConstU
-gravitationalMagnitude = uc CP.gravitationalMagnitude lG                                          Real        accelU
-height                 = uc CP.height                 lH                                          Real        metre
-impulseS               = uc CP.impulseS               lJ                                          Real        impulseU
-impulseV               = uc CP.impulseV               (vec cJ)                                    Real        impulseU
-kEnergy                = uc CP.kEnergy                (Concat [cK, cE])                           Real        joule
-linearAccel            = uc CP.linAccel               (Concat [lA, label "(", lT, label ")"])     Real        accelU
-linearDisplacement     = uc CP.linDisp                (Concat [lU, label "(", lT, label ")"])     Real        metre
-linearVelocity         = uc CP.linVelo                (Concat [lV, label "(", lT, label ")"])     Real        velU
-momentOfInertia        = uc CP.momentOfInertia        (vec cI)                                    Real        momtInertU
-chgMomentum            = uc CP.chgMomentum            (Concat [cDelta,vec cP])                    Real        impulseU
-momentum               = uc CP.momentum               (vec cP)                                    Real        impulseU
-moment                 = uc CP.moment                 (vec cM)                                    Real        torqueU
-moment2D               = uc CP.moment2D               cM                                          Real        torqueU
+vecDim :: S.Dimension
+vecDim = S.Fixed 2
+
+-- | Helper function to create Clifford vector spaces of a given dimension
+realVect :: S.Dimension -> Space
+realVect d = S.ClifS d S.Vector Real
+
+acceleration           = uc CP.acceleration           (Concat [vec lA, label "(", lT, label ")"])(realVect vecDim)                                    accelU
+angularAccel           = uc CP.angAccel               lAlpha                                      Real                                                angAccelU
+angularDisplacement    = uc CP.angDisp                lTheta                                      Real                                                radian
+angularFrequency       = uc CP.angFreq                cOmega                                      Real                                                second
+angularVelocity        = uc CP.angVelo                lOmega                                      Real                                                angVelU
+chgInVelocity          = uc CP.chgInVelocity          (Atop Delta $ vec lV)                       Real                                                velU
+constAccel             = uc CP.constAccel             (sup lA lC)                                 Real                                                accelU
+displacement           = uc CP.displacement           (vec lU)                                   (realVect vecDim)                                    metre
+distance               = uc CP.distance               lD                                          Real                                                metre
+energy                 = uc CP.energy                 cE                                          Real                                                joule
+force                  = uc CP.force                  (vec cF)                                   (realVect vecDim)                                    newton
+frequency              = uc CP.frequency              lF                                          Real                                                hertz
+gravitationalAccel     = uc CP.gravitationalAccel     (vec lG)                                   (realVect vecDim)                                    accelU
+gravitationalConst     = uc CP.gravitationalConst     cG                                          Real                                                gravConstU
+gravitationalMagnitude = uc CP.gravitationalMagnitude lG                                          Real                                                accelU
+height                 = uc CP.height                 lH                                          Real                                                metre
+impulseS               = uc CP.impulseS               lJ                                          Real                                                impulseU
+impulseV               = uc CP.impulseV               (vec cJ)                                   (realVect vecDim)                                    impulseU
+kEnergy                = uc CP.kEnergy                (Concat [cK, cE])                           Real                                                joule
+linearAccel            = uc CP.linAccel               (Concat [lA, label "(", lT, label ")"])     Real                                                accelU
+linearDisplacement     = uc CP.linDisp                (Concat [lU, label "(", lT, label ")"])     Real                                                metre
+linearVelocity         = uc CP.linVelo                (Concat [lV, label "(", lT, label ")"])     Real                                                velU
+momentOfInertia        = uc CP.momentOfInertia        (vec cI)                                   (realVect vecDim)                                    momtInertU
+chgMomentum            = uc CP.chgMomentum            (Concat [cDelta,vec cP])                    Real                                                impulseU
+momentum               = uc CP.momentum               (vec cP)                                   (realVect vecDim)                                    impulseU
+moment                 = uc CP.moment                 (vec cM)                                   (realVect vecDim)                                    torqueU      -- general vector torque in 2D/3D
+moment2D               = uc CP.moment                 cM                                          Real                                                torqueU      -- scalar moment in 2D
+
 -- FIXME: moment2D should eventually be a specialization of moment, not separately defined
-period                 = uc CP.period                 cT                                          Real        second
-position               = uc CP.position               (Concat [vec lP, label "(", lT, label ")"]) Real        metre
-positionVec            = uc CP.positionVec            (vec lR)                                    Real        metre
-potEnergy              = uc CP.potEnergy              (Concat [cP, cE])                           Real        joule
-pressure               = uc CP.pressure               lP                                          Real        pascal
-speed                  = uc CP.speed                  lV                                          Real        velU
-scalarAccel            = uc CP.scalarAccel            lA                                          Real        accelU
-scalarPos              = uc CP.scalarPos              lP                                          Real        metre
-tension                = uc CP.tension                (vec cT)                                    Real        newton
-time                   = uc CP.time                   lT                                          Real        second
-torque                 = uc CP.torque                 (vec lTau)                                  Real        torqueU
-velocity               = uc CP.velocity               (Concat [vec lV, label "(", lT, label ")"]) Real        velU
-weight                 = uc CP.weight                 cW                                          Real        newton
-fOfGravity             = uc CP.fOfGravity             (sub (vec cF) (vec lG))                     Real        newton
+period                 = uc CP.period                 cT                                          Real                                                second
+position               = uc CP.position               (Concat [vec lP, label "(", lT, label ")"]) Real                                                metre
+positionVec            = uc CP.positionVec            (vec lR)                                   (realVect vecDim)                                    metre
+potEnergy              = uc CP.potEnergy              (Concat [cP, cE])                           Real                                                joule
+pressure               = uc CP.pressure               lP                                          Real                                                pascal
+speed                  = uc CP.speed                  lV                                          Real                                                velU
+scalarAccel            = uc CP.scalarAccel            lA                                          Real                                                accelU
+scalarPos              = uc CP.scalarPos              lP                                          Real                                                metre
+tension                = uc CP.tension                (vec cT)                                   (realVect vecDim)                                    newton
+time                   = uc CP.time                   lT                                          Real                                                second
+torque                 = uc CP.torque                 (vec lTau)                                  Real                                                torqueU
+velocity               = uc CP.velocity               (Concat [vec lV, label "(", lT, label ")"])(realVect vecDim)                                    velU
+weight                 = uc CP.weight                 cW                                          Real                                                newton
+fOfGravity             = uc CP.fOfGravity             (sub (vec cF) (vec lG))                     Real                                                newton
 
 -- Variants of distance, speed, and scalar acceleration
 -- FIXME: Add variants of vector forms?

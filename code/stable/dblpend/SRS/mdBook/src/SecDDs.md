@@ -4,11 +4,11 @@ This section collects and defines all the data needed to build the instance mode
 
 <div align="center">
 
-## Velocity {#DD:positionGDD}
+## Velocity {#DD:velocityGDD}
 
 </div>
 
-|Refname    |DD:positionGDD                                                                                                                                                                                                                           |
+|Refname    |DD:velocityGDD                                                                                                                                                                                                                           |
 |:----------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |Label      |Velocity                                                                                                                                                                                                                                 |
 |Symbol     |\\(\boldsymbol{v}\text{(}t\text{)}\\)                                                                                                                                                                                                    |
@@ -16,7 +16,7 @@ This section collects and defines all the data needed to build the instance mode
 |Equation   |\\[\boldsymbol{v}\text{(}t\text{)}=\frac{\\,d\boldsymbol{p}\text{(}t\text{)}}{\\,dt}\\]                                                                                                                                                  |
 |Description|<ul><li>\\(\boldsymbol{v}\text{(}t\text{)}\\) is the velocity (\\(\frac{\text{m}}{\text{s}}\\))</li><li>\\(t\\) is the time (\\({\text{s}}\\))</li><li>\\(\boldsymbol{p}\text{(}t\text{)}\\) is the position (\\({\text{m}}\\))</li></ul>|
 |Source     |--                                                                                                                                                                                                                                       |
-|RefBy      |[GD:velocityY2](./SecGDs.md#GD:velocityY2), [GD:velocityY1](./SecGDs.md#GD:velocityY1), [GD:velocityX2](./SecGDs.md#GD:velocityX2), and [GD:velocityX1](./SecGDs.md#GD:velocityX1)                                                       |
+|RefBy      |                                                                                                                                                                                                                                         |
 
 <div align="center">
 
@@ -33,7 +33,7 @@ This section collects and defines all the data needed to build the instance mode
 |Description|<ul><li>\\({p\_{\text{x}1}}\\) is the horizontal position of the first object (\\({\text{m}}\\))</li><li>\\({L\_{1}}\\) is the length of the first rod (\\({\text{m}}\\))</li><li>\\({θ\_{1}}\\) is the angle of the first rod (\\({\text{rad}}\\))</li></ul>|
 |Notes      |<ul><li>\\({p\_{\text{x}1}}\\) is the horizontal position</li><li>\\({p\_{\text{x}1}}\\) is shown in [Fig:dblpend](./SecPhysSyst.md#Figure:dblpend).</li></ul>                                                                                               |
 |Source     |--                                                                                                                                                                                                                                                           |
-|RefBy      |[GD:velocityX1](./SecGDs.md#GD:velocityX1)                                                                                                                                                                                                                   |
+|RefBy      |                                                                                                                                                                                                                                                             |
 
 <div align="center">
 
@@ -50,7 +50,7 @@ This section collects and defines all the data needed to build the instance mode
 |Description|<ul><li>\\({p\_{\text{y}1}}\\) is the vertical position of the first object (\\({\text{m}}\\))</li><li>\\({L\_{1}}\\) is the length of the first rod (\\({\text{m}}\\))</li><li>\\({θ\_{1}}\\) is the angle of the first rod (\\({\text{rad}}\\))</li></ul>|
 |Notes      |<ul><li>\\({p\_{\text{y}1}}\\) is the vertical position</li><li>\\({p\_{\text{y}1}}\\) is shown in [Fig:dblpend](./SecPhysSyst.md#Figure:dblpend).</li></ul>                                                                                               |
 |Source     |--                                                                                                                                                                                                                                                         |
-|RefBy      |[GD:velocityY1](./SecGDs.md#GD:velocityY1)                                                                                                                                                                                                                 |
+|RefBy      |                                                                                                                                                                                                                                                           |
 
 <div align="center">
 
@@ -67,7 +67,7 @@ This section collects and defines all the data needed to build the instance mode
 |Description|<ul><li>\\({p\_{\text{x}2}}\\) is the horizontal position of the second object (\\({\text{m}}\\))</li><li>\\({p\_{\text{x}1}}\\) is the horizontal position of the first object (\\({\text{m}}\\))</li><li>\\({L\_{2}}\\) is the length of the second rod (\\({\text{m}}\\))</li><li>\\({θ\_{2}}\\) is the angle of the second rod (\\({\text{rad}}\\))</li></ul>|
 |Notes      |<ul><li>\\({p\_{\text{x}2}}\\) is the horizontal position</li><li>\\({p\_{\text{x}2}}\\) is shown in [Fig:dblpend](./SecPhysSyst.md#Figure:dblpend).</li></ul>                                                                                                                                                                                                   |
 |Source     |--                                                                                                                                                                                                                                                                                                                                                               |
-|RefBy      |[GD:velocityX2](./SecGDs.md#GD:velocityX2)                                                                                                                                                                                                                                                                                                                       |
+|RefBy      |                                                                                                                                                                                                                                                                                                                                                                 |
 
 <div align="center">
 
@@ -84,7 +84,7 @@ This section collects and defines all the data needed to build the instance mode
 |Description|<ul><li>\\({p\_{\text{y}2}}\\) is the vertical position of the second object (\\({\text{m}}\\))</li><li>\\({p\_{\text{y}1}}\\) is the vertical position of the first object (\\({\text{m}}\\))</li><li>\\({L\_{2}}\\) is the length of the second rod (\\({\text{m}}\\))</li><li>\\({θ\_{2}}\\) is the angle of the second rod (\\({\text{rad}}\\))</li></ul>|
 |Notes      |<ul><li>\\({p\_{\text{y}2}}\\) is the vertical position</li><li>\\({p\_{\text{y}2}}\\) is shown in [Fig:dblpend](./SecPhysSyst.md#Figure:dblpend).</li></ul>                                                                                                                                                                                                 |
 |Source     |--                                                                                                                                                                                                                                                                                                                                                           |
-|RefBy      |[GD:velocityY2](./SecGDs.md#GD:velocityY2)                                                                                                                                                                                                                                                                                                                   |
+|RefBy      |                                                                                                                                                                                                                                                                                                                                                             |
 
 <div align="center">
 

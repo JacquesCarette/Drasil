@@ -104,16 +104,16 @@ This section collects and defines all the data needed to build the instance mode
 
 <div align="center">
 
-## Force of the first object {#DD:forceGDD}
+## Force {#DD:forceGDD}
 
 </div>
 
-|Refname    |DD:forceGDD                                                                                                                                                    |
-|:----------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|Label      |Force of the first object                                                                                                                                      |
-|Symbol     |\\({f\_{1}}\\)                                                                                                                                                 |
-|Units      |\\({\text{N}}\\)                                                                                                                                               |
-|Equation   |\\[{f\_{1}}={f\_{1}}\\]                                                                                                                                        |
-|Description|<ul><li>\\({f\_{1}}\\) is the force of the first object (\\({\text{N}}\\))</li><li>\\({f\_{1}}\\) is the force of the first object (\\({\text{N}}\\))</li></ul>|
-|Source     |--                                                                                                                                                             |
-|RefBy      |                                                                                                                                                               |
+|Refname    |DD:forceGDD                                                                                                                                                                                                                   |
+|:----------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Label      |Force                                                                                                                                                                                                                         |
+|Symbol     |\\(\boldsymbol{F}\\)                                                                                                                                                                                                          |
+|Units      |\\({\text{N}}\\)                                                                                                                                                                                                              |
+|Equation   |\\[\boldsymbol{F}=m \boldsymbol{a}\text{(}t\text{)}\\]                                                                                                                                                                        |
+|Description|<ul><li>\\(\boldsymbol{F}\\) is the force (\\({\text{N}}\\))</li><li>\\(m\\) is the mass (\\({\text{kg}}\\))</li><li>\\(\boldsymbol{a}\text{(}t\text{)}\\) is the acceleration (\\(\frac{\text{m}}{\text{s}^{2}}\\))</li></ul>|
+|Source     |--                                                                                                                                                                                                                            |
+|RefBy      |                                                                                                                                                                                                                              |

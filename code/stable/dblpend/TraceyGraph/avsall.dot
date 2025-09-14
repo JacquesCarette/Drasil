@@ -17,11 +17,11 @@ digraph avsall {
 	dataDefn:p_x2	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionXDD2"];
 	dataDefn:p_y2	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:positionYDD2"];
 	dataDefn:acceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:accelerationGDD"];
-	dataDefn:F_mv1	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:forceGDD"];
+	dataDefn:force	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:forceGDD"];
 
 	subgraph DD {
 	rank="same"
-	{dataDefn:velocity, dataDefn:p_x1, dataDefn:p_y1, dataDefn:p_x2, dataDefn:p_y2, dataDefn:acceleration, dataDefn:F_mv1}
+	{dataDefn:velocity, dataDefn:p_x1, dataDefn:p_y1, dataDefn:p_x2, dataDefn:p_y2, dataDefn:acceleration, dataDefn:force}
 	}
 
 	theory:accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];

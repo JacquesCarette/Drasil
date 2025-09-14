@@ -35,9 +35,10 @@ acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
 
 inputs :: [DefinedQuantityDict]
 inputs = map dqdWr [lenRod_1, lenRod_2, massObj_1, massObj_2, pendDisAngle_1, pendDisAngle_2] 
-
+-- pendDisAngle_1, pendDisAngle_2
 outputs :: [DefinedQuantityDict]
 outputs = [dqdWr xPos_1, dqdWr mvVel_1, dqdWr mvAccel_1]  -- Including Clifford algebra quantities to show in SRS
+-- outputs = [dqdWr pendDisAngle]
 
 
 constants :: [ConstQDef]
@@ -90,8 +91,10 @@ xPos_2 = uc' "p_x2" (horizontalPos `ofThe` secondObject)
         (sub lP (Concat [labelx, label2])) Real metre
 
 -- Vector position of mass 1
-posVec_1 :: Expr
-posVec_1 = (l1 $* sin t1) `cScale` e1_basis `cAdd` (l1 $* cos t1) `cScale` e2_basis
+posVec_1 :: UnitalChunk
+posVec_1 = uc' "p_1" (QP.position `ofThe` firstObject)
+        (phraseNP (QP.position `the_ofThe` firstObject))
+        (vec lP `sub` label1) (realVect vecDim) metre
 
 yPos_1 = uc' "p_y1" (verticalPos `ofThe` firstObject)
         (phraseNP (QP.position `the_ofThe` firstObject) `S.inThe` phrase CM.yDir)
@@ -102,8 +105,11 @@ yPos_2 = uc' "p_y2" (verticalPos `ofThe` secondObject)
         (sub lP (Concat [labely, label2])) Real metre
 
 -- Vector position of mass 2
-posVec_2 :: Expr
-posVec_2 = posVec_1 `cAdd` ((l2 $* sin t2) `cScale` e1_basis `cAdd` (l2 $* cos t2) `cScale` e2_basis)
+posVec_2 :: UnitalChunk
+posVec_2 = uc' "p_2" (QP.position `ofThe` secondObject)
+        (phraseNP (QP.position `the_ofThe` secondObject))
+        (vec lP `sub` label2) (realVect vecDim) metre
+
 
 xVel_1 = uc' "v_x1" (horizontalVel `ofThe` firstObject)
         (phraseNP (QP.velocity `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)
@@ -159,13 +165,13 @@ mvAccel_2 = uc' "a_mv2" (QP.acceleration `ofThe` secondObject)
         (phraseNP (QP.acceleration `the_ofThe` secondObject))
         (sub lA label2) (realVect vecDim) accelU
 
-angularVel_1 = uc' "omega_1" (QP.angularVelocity `ofThe` firstObject)
+angularVel_1 = uc' "w_1" (QP.angularVelocity `ofThe` firstObject)
         (phraseNP (QP.angularVelocity `the_ofThe` firstObject))
-        (sub cOmega label1) Real angVelU
+        (sub lW label1) Real angVelU
 
-angularVel_2 = uc' "omega_2" (QP.angularVelocity `ofThe` secondObject)
+angularVel_2 = uc' "w_2" (QP.angularVelocity `ofThe` secondObject)
         (phraseNP (QP.angularVelocity `the_ofThe` secondObject))
-        (sub cOmega label2) Real angVelU
+        (sub lW label2) Real angVelU
 
 angularAccel_1 = uc' "alpha_1" (QP.angularAccel `ofThe` firstObject)
         (phraseNP (QP.angularAccel `the_ofThe` firstRod))
@@ -229,42 +235,11 @@ pendDisAngle = cuc' "pendDisAngle"
   lTheta' radian (ClifS (VDim "2") Vector Real)
   [physRange $ UpFrom (Inc, exactDbl 0)] (exactDbl 0)
 
--- Missing variable definitions
-l1, l2 :: Expr
-l1 = sy lenRod_1
-l2 = sy lenRod_2
-
-t1, t2 :: Expr  
-t1 = sy pendDisAngle_1
-t2 = sy pendDisAngle_2
-
-o1, o2 :: Expr
-o1 = sy angularVel_1
-o2 = sy angularVel_2
-
-t1dd, t2dd :: Expr
-t1dd = sy angularAccel_1
-t2dd = sy angularAccel_2
-
--- Initial condition variables for ODEs
-initial_theta1, initial_omega1, initial_theta2, initial_omega2 :: Expr
-initial_theta1 = dbl 1.3463968515384828 -- 3*pi/7
-initial_omega1 = exactDbl 0
-initial_theta2 = dbl 2.356194490192345  -- 3*pi/4
-initial_omega2 = exactDbl 0
-
--- Basis vectors for 2D Clifford algebra
-e1_basis :: PExpr  
-e1_basis = vect [int 1, int 0]  -- Standard basis vector e₁
-
-e2_basis :: PExpr
-e2_basis = vect [int 0, int 1]  -- Standard basis vector e₂
-
 -- Scalar tension forces for traditional derivations (constraint forces)
 tension_1 = uc' "T_1" (QP.tension `ofThe` firstRod)
         (phraseNP (QP.tension `the_ofThe` firstRod))
-        (sub lT label1) Real newton
+        (sub (vec cT) label1) Real newton
 
 tension_2 = uc' "T_2" (QP.tension `ofThe` secondRod)
         (phraseNP (QP.tension `the_ofThe` secondRod))
-        (sub lT label2) Real newton
+        (sub (vec cT) label2) Real newton

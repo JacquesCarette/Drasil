@@ -15,7 +15,6 @@ import Data.Maybe (maybeToList, mapMaybe, isJust)
 import qualified Data.Map as Map (elems, assocs, keys)
 
 import Utils.Drasil (invert, splitAtAll, mergeAll)
-import Debug.Trace (trace)
 
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
@@ -72,6 +71,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
   software, unlikelyChg)
 
 import Language.Drasil.Development (shortdep)
+import Debug.Trace (trace)
 
 -- * Main Function
 -- | Creates a document from a document description, a title combinator function, and system information.
@@ -216,12 +216,21 @@ getUnitLup m c = getUnit (findOrErr (c ^. uid) m :: DefinedQuantityDict)
 mkSections :: System -> DocDesc -> [Section]
 mkSections si dd =
   let
+    splitByTAandA :: [[DocSection]]
+    refSecPlans :: [DocSection]
     (splitByTAandA, refSecPlans) = splitAtAll (\case {RefSec _ -> True; _ -> False}) dd
+
+    splitSecs :: [[Section]]
     splitSecs = map (map doit) splitByTAandA
-    earlyRenderedSecs = concat splitSecs
-    refSecs = map (\case {RefSec rs -> mkRefSec si dd rs earlyRenderedSecs; _ -> error "A non-RefSec got captured in the RefSecs list!"}) refSecPlans
+
+    refSecs :: [Section]
+    refSecs = map
+      (\case {
+          RefSec rs -> mkRefSec si dd rs $ concat splitSecs;
+          _         -> error "A non-RefSec got captured in the RefSecs list!"})
+      refSecPlans
   in
-    trace ("split: " ++ show (length splitSecs) ++ ", earlyRenderedSecs: " ++ show (length earlyRenderedSecs) ++ ", refSecs: " ++ show (length refSecs)) $ mergeAll splitSecs refSecs
+    mergeAll splitSecs refSecs
   where
     doit :: DocSection -> Section
     doit TableOfContents      = mkToC dd
@@ -285,12 +294,11 @@ getAllChunksFromDoc :: [Section] -> ChunkDB -> [TermAbbr]
 getAllChunksFromDoc renderedSecs cdb =
   map (termResolve' cdb) $ nub $ concatMap shortdep (concatMap getSec renderedSecs)
 
-getChunksWithAbbreviations :: [TermAbbr] -> [TermAbbr]
-getChunksWithAbbreviations = filter (isJust . shortForm)
-
 collectDocumentAbbreviations :: [Section] -> ChunkDB -> [TermAbbr]
 collectDocumentAbbreviations renderedSecs cdb =
-  getChunksWithAbbreviations $ getAllChunksFromDoc renderedSecs cdb
+  let found = getAllChunksFromDoc renderedSecs cdb
+      foundAbbrs = filter (isJust . shortForm) found
+  in trace ("found: " ++ show (length found) ++ ", foundAbbrs: " ++ show (length foundAbbrs)) foundAbbrs
 
 -- | Helper for creating the table of symbols.
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>

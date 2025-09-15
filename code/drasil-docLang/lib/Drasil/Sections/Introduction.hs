@@ -14,10 +14,10 @@ import Drasil.Sections.ReferenceMaterial(emptySectSentPlu, emptySectSentSing)
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation (assumption, document, environment,
   model, system, user, characteristic, decision, definition, desSpec, design,
-  designDoc, documentation, goal, goalStmt, implementation, information, 
+  designDoc, documentation, goal, goalStmt, implementation, information,
   intReader, physSyst, problem, problemIntro, purpose, organization, requirement, scope,
   section_, softwareDoc, softwareVAV, srs, systemConstraint, template, theory,
-  vavPlan)
+  vavPlan, typUnc)
 import Data.Drasil.Citations (parnasClements1986, smithEtAl2007,
   smithKoothoor2016, smithLai2005, koothoor2013)
 import Data.Drasil.Software.Products (sciCompS)
@@ -195,7 +195,7 @@ flowDiscussion extraSentence = [
       short goalStmt `sC` short thModel `sC` S "and" +:+ short inModel +:+ S "to ensure consistency and completeness." +:+ 
       S "Furthermore" `sC` S "the" +:+ phrase physSyst +:+ sParen (short physSyst) +:+ S "establishes the overall" +:+ 
       S "context in which the" +:+ short goalStmt +:+ S "are formulated and the" +:+ short assumption +:+ S "are validated." +:+ 
-      S "Finally" `sC` S "the uncertainties (Uncerts.) are documented and linked to" +:+ 
+      S "Finally" `sC` S "the" +:+ phrase typUnc +:+ sParen (short typUnc) +:+ S "are documented and linked to" +:+ 
       S "the relevant" +:+ short inModel +:+ S "and" +:+ short dataDefn `sC` S "ensuring transparency in the modeling process."
     ]
   ]

@@ -5,6 +5,7 @@ import Control.Lens ((^.))
 import Database.Drasil
 import Language.Drasil
 import Theory.Drasil
+import Debug.Trace (trace)
 
 -- This is only needed for as long as `TypedUIDRef` is underused.
 data TermAbbr = TermAbbr { longForm :: NP, shortForm :: Maybe String }
@@ -13,15 +14,15 @@ data TermAbbr = TermAbbr { longForm :: NP, shortForm :: Maybe String }
 -- abbreviation, erroring out if it doesn't exist.
 termResolve :: (NP -> Maybe String -> c) -> ChunkDB -> UID -> c
 termResolve f db trg
-  | (Just c) <- find trg db :: Maybe IdeaDict            = go f c
-  | (Just c) <- find trg db :: Maybe DefinedQuantityDict = go f c
-  | (Just c) <- find trg db :: Maybe ConceptChunk        = go f c
-  | (Just c) <- find trg db :: Maybe UnitDefn            = go f c
-  | (Just c) <- find trg db :: Maybe DataDefinition      = go f c
-  | (Just c) <- find trg db :: Maybe InstanceModel       = go f c
-  | (Just c) <- find trg db :: Maybe GenDefn             = go f c
-  | (Just c) <- find trg db :: Maybe TheoryModel         = go f c
-  | (Just c) <- find trg db :: Maybe ConceptInstance     = go f c
+  | (Just c) <- find trg db :: Maybe IdeaDict            = go f c -- trace (show trg ++ " TermAbbr :: IdeaDict") $ go f c
+  | (Just c) <- find trg db :: Maybe DefinedQuantityDict = go f c -- trace (show trg ++ " TermAbbr :: DQD" ) $ go f c
+  | (Just c) <- find trg db :: Maybe ConceptChunk        = go f c -- trace (show trg ++ " TermAbbr :: CC") $ go f c
+  | (Just c) <- find trg db :: Maybe UnitDefn            = go f c -- trace (show trg ++ " TermAbbr :: UD") $ go f c
+  | (Just c) <- find trg db :: Maybe DataDefinition      = go f c -- trace (show trg ++ " TermAbbr :: DD") $ go f c
+  | (Just c) <- find trg db :: Maybe InstanceModel       = go f c -- trace (show trg ++ " TermAbbr :: IM") $ go f c
+  | (Just c) <- find trg db :: Maybe GenDefn             = go f c -- trace (show trg ++ " TermAbbr :: GD") $ go f c
+  | (Just c) <- find trg db :: Maybe TheoryModel         = go f c -- trace (show trg ++ " TermAbbr :: TM") $ go f c
+  | (Just c) <- find trg db :: Maybe ConceptInstance     = go f c -- trace (show trg ++ " TermAbbr :: CI") $ go f c
   | otherwise = error $ "Term: " ++ show trg ++ " not found in TermMap"
   where
     go :: Idea t => (NP -> Maybe String -> c) -> t -> c

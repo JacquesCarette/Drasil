@@ -292,7 +292,7 @@ mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (map (mkSubRef si) l)
 -- | Extracts abbreviations/acronyms found in the document        
 getAllChunksFromDoc :: [Section] -> ChunkDB -> [TermAbbr]
 getAllChunksFromDoc renderedSecs cdb =
-  map (termResolve' cdb) $ nub $ concatMap shortdep (concatMap getSec renderedSecs)
+  map (termResolve' cdb) $ (\xs -> trace ("SIGNAL!!!!!! " ++ show (mkUid "srs" `elem` xs) ++ " / " ++ show (length xs) ++ " / " ++ show xs) xs) $ nub $ concatMap shortdep ((\x -> trace ("sentences scanning: " ++ show (length x)) x) $ concatMap getSec renderedSecs)
 
 collectDocumentAbbreviations :: [Section] -> ChunkDB -> [TermAbbr]
 collectDocumentAbbreviations renderedSecs cdb =

@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE TemplateHaskell, TypeFamilies, TupleSections #-}
 
 -- | The logic to render Python code is contained in this module
 module Drasil.GOOL.LanguageRenderer.PythonRenderer (
@@ -6,9 +6,9 @@ module Drasil.GOOL.LanguageRenderer.PythonRenderer (
   PythonCode(..), pyName, pyVersion
 ) where
 
-import Utils.Drasil (blank, indent)
+import Utils.Drasil (blank, indent, nubSort)
 
-import Drasil.Shared.CodeType (CodeType(..))
+import Drasil.Shared.CodeType (CodeType(..), ClassName)
 import Drasil.Shared.InterfaceCommon (SharedProg, Label, Library, VSType,
   VSFunction, SVariable, SValue, MSStatement, MixedCtorCall, BodySym(..),
   BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VisibilitySym(..),
@@ -85,25 +85,229 @@ import Drasil.Shared.AST (Terminator(..), FileType(..), FileData(..), fileD,
 import Drasil.Shared.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList,
   on2StateWrapped)
-import Drasil.Shared.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, revFiles,
-  addLangImportVS, getLangImports, addLibImportVS, getLibImports, addModuleImport,
-  addModuleImportVS, getModuleImports, setFileType, getClassName, setCurrMain,
-  getClassMap, getMainDoc, genLoopIndex, varNameAvailable)
+-- import Drasil.Shared.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, revFiles,
+  -- addLangImportVS, getLangImports, addLibImportVS, getLibImports, addModuleImport,
+  -- addModuleImportVS, getModuleImports, setFileType, getClassName, setCurrMain,
+  -- getClassMap, getMainDoc, genLoopIndex, varNameAvailable)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, isNothing)
+import Data.Tuple (swap)
 import Control.Lens.Zoom (zoom)
 import Control.Monad (join)
-import Control.Monad.State (modify)
+import Control.Monad.State (State, modify, gets)
 import Data.List (intercalate, sort)
-import Data.Char (toUpper, isUpper, isLower)
-import qualified Data.Map as Map (lookup)
+import Data.Char (toUpper, isUpper, isLower, isDigit)
+import qualified Data.Map as Map (Map, lookup, empty)
+import Text.Read (readMaybe)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, colon, brackets, isEmpty, quotes, comma, braces)
 import Drasil.Shared.LanguageRenderer.LanguagePolymorphic (OptionalSpace(..))
 
 import qualified Drasil.Shared.LanguageRenderer.Common as CS
+import Control.Lens ((^.), Lens')
+import qualified Control.Lens as L (makeLenses, lens, set, over, at, _2, both)
+-- import Drasil.Shared.State (GOOLState)
 
+
+-- State Stuff!?
+data GOOLState = GS {
+  _headers :: [FilePath], -- Used by Drasil for doxygen config gen
+  _sources :: [FilePath], -- Used by Drasil for doxygen config and Makefile gen
+                              -- mod file path (needed in Makefile generation)
+  _classMap :: Map.Map String ClassName -- Used to determine whether an import is 
+}
+L.makeLenses ''GOOLState
+
+data FileState = FS {
+  _goolState :: GOOLState,
+  _currModName :: String, -- Used by fileDoc to insert the module name in the 
+                          -- file path, and by CodeInfo/Java when building
+                          -- method exception map and call map
+  _currFileType :: FileType, -- Used when populating headers and sources in GOOLState
+  _currMain :: Bool, -- Used to set mainMod in GOOLState, 
+                     -- and in C++ to put documentation for the main 
+                     -- module in the source file instead of header
+  _currClasses :: [ClassName], -- Used to update classMap
+  _langImports :: [String],
+  _libImports :: [String],
+  _moduleImports :: [String],
+  
+  -- Only used for Python and Swift
+  _mainDoc :: Doc  -- To print Python/Swift's "main" last
+}
+L.makeLenses ''FileState
+
+data ClassState = CS {
+  _fileState :: FileState,
+  _currClassName :: ClassName -- So class name is accessible when generating 
+                              -- constructor or self 
+}
+L.makeLenses ''ClassState
+
+data MethodState = MS {
+  _classState :: ClassState,
+  _varNames :: Map.Map String Int  -- Used to generate fresh variable names
+}
+L.makeLenses ''MethodState
+
+newtype ValueState = VS {
+  _methodState :: MethodState
+}
+L.makeLenses ''ValueState
+
+type FS = State FileState
+type MS = State MethodState
+type VS = State ValueState
+
+-------------------------------
+---- Lenses between States ----
+-------------------------------
+
+-- GS - FS --
+
+lensGStoFS :: Lens' GOOLState FileState
+lensGStoFS = L.lens (\gs -> L.set goolState gs initialFS) (const (^. goolState))
+
+-- FS - MS --
+
+lensMStoFS :: Lens' MethodState FileState 
+lensMStoFS = classState . fileState
+
+-- FS - VS --
+
+lensVStoFS :: Lens' ValueState FileState
+lensVStoFS = methodState . lensMStoFS
+
+-- CS - VS --
+
+lensCStoVS :: Lens' ClassState ValueState
+lensCStoVS = L.lens (\cs -> L.set (methodState . classState) cs initialVS) 
+  (const (^. (methodState . classState)))
+
+-- MS - VS --
+
+lensMStoVS :: Lens' MethodState ValueState
+lensMStoVS = L.lens (\ms -> L.set methodState ms initialVS) (const (^. methodState))
+
+lensVStoMS :: Lens' ValueState MethodState
+lensVStoMS = methodState
+
+-------------------------------
+------- Initial States -------
+-------------------------------
+
+initialState :: GOOLState
+initialState = GS {
+  _headers = [],
+  _sources = [],
+  _classMap = Map.empty
+}
+
+initialFS :: FileState
+initialFS = FS {
+  _goolState = initialState,
+  _currModName = "",
+  _currFileType = Combined,
+  _currMain = False,
+  _currClasses = [],
+  _langImports = [],
+  _libImports = [],
+  _moduleImports = [],
+  
+  _mainDoc = empty
+}
+
+initialCS :: ClassState
+initialCS = CS {
+  _fileState = initialFS,
+  _currClassName = ""
+}
+
+initialMS :: MethodState
+initialMS = MS {
+  _classState = initialCS,
+  _varNames = Map.empty
+}
+
+initialVS :: ValueState
+initialVS = VS {
+  _methodState = initialMS
+}
+
+-------------------------------
+------- State Patterns -------
+-------------------------------
+
+revFiles :: GOOLState -> GOOLState
+revFiles = L.over headers reverse . L.over sources reverse
+
+addLangImport :: String -> MethodState -> MethodState
+addLangImport i = L.over (lensMStoFS . langImports) (\is -> nubSort $ i:is)
+  
+addLangImportVS :: String -> ValueState -> ValueState
+addLangImportVS i = L.over methodState (addLangImport i)
+
+getLangImports :: FS [String]
+getLangImports = gets (^. langImports)
+
+addLibImportVS :: String -> ValueState -> ValueState
+addLibImportVS i = L.over (lensVStoFS . libImports) (\is -> nubSort $ i:is)
+
+getLibImports :: FS [String]
+getLibImports = gets (^. libImports)
+
+addModuleImport :: String -> MethodState -> MethodState
+addModuleImport i = L.over (lensMStoFS . moduleImports) (\is -> nubSort $ i:is)
+
+addModuleImportVS :: String -> ValueState -> ValueState
+addModuleImportVS i = L.over methodState (addModuleImport i)
+
+getModuleImports :: FS [String]
+getModuleImports = gets (^. moduleImports)
+
+getMainDoc :: FS Doc
+getMainDoc = gets (^. mainDoc)
+
+setFileType :: FileType -> FileState -> FileState
+setFileType = L.set currFileType
+
+getClassName :: MS ClassName
+getClassName = gets (^. (classState . currClassName))
+
+setCurrMain :: MethodState -> MethodState
+setCurrMain = L.over (lensMStoFS . currMain) (\b -> if b then 
+  error "Multiple main functions defined" else not b)
+
+getClassMap :: VS (Map.Map String String)
+getClassMap = gets (^. (lensVStoFS . goolState . classMap))
+
+genVarName :: [String] -> String -> MS String
+genVarName candidates backup = do
+  used <- gets (^. varNames)
+  let
+    isAvailable (n,c) = maybe True (maybe (const False) (>=) c) $ Map.lookup n used
+    choice = foldr const (splitVarName backup) $ filter isAvailable $ map splitVarName candidates
+  bumpVarName choice
+
+genLoopIndex :: MS String
+genLoopIndex = genVarName ["i", "j", "k"] "i"
+
+varNameAvailable :: String -> MS Bool
+varNameAvailable n = do
+  used <- gets (^. varNames)
+  return $ isNothing $ Map.lookup n used
+
+-- Split the longest numerical (0-9) suffix from the rest of the string
+splitVarName :: String -> (String, Maybe Int)
+splitVarName = L.over L._2 readMaybe . L.over L.both reverse . swap . span isDigit . reverse
+
+bumpVarName :: (String, Maybe Int) -> MS String
+bumpVarName (n,c) = do
+  count <- gets (^. (varNames . L.at n))
+  let suffix = maybe count (flip fmap count . max) c
+  modify $ L.set (varNames . L.at n) $ Just $ maybe 0 (+1) suffix
+  return $ maybe n ((n ++) . show) count
 
 pyExt :: String
 pyExt = "py"

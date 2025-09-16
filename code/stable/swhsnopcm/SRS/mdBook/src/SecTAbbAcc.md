@@ -9,6 +9,7 @@
 |GD          |General Definition                                      |
 |GS          |Goal Statement                                          |
 |IM          |Instance Model                                          |
+|LC          |Likely Change                                           |
 |ODE         |Ordinary Differential Equation                          |
 |PS          |Physical System Description                             |
 |R           |Requirement                                             |
@@ -16,6 +17,7 @@
 |SRS         |Software Requirements Specification                     |
 |SWHSNoPCM   |Solar Water Heating System With No Phase Change Material|
 |TM          |Theoretical Model                                       |
+|UC          |Unlikely Change                                         |
 |Uncert.     |Typical Uncertainty                                     |
 
 **<p align="center">Abbreviations and Acronyms</p>**

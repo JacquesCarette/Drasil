@@ -425,10 +425,10 @@ mkUCsSec :: UCsSec -> Section
 mkUCsSec (UCsProg c) = SRS.unlikeChg (introChgs Doc.unlikelyChg  c : mkEnumSimpleD c) []
 
 -- | Intro paragraph for likely and unlikely changes
-introChgs :: NamedIdea n => n -> [ConceptInstance] -> Contents
+introChgs :: Idea n => n -> [ConceptInstance] -> Contents
 introChgs xs [] = mkParagraph $ emptySectSentPlu [xs]
 introChgs xs _ = foldlSP [S "This", phrase Doc.section_, S "lists the",
-  plural xs, S "to be made to the", phrase Doc.software]
+  introduceAbbPlrl xs, S "to be made to the", phrase Doc.software]
 
 -- ** Traceability
 

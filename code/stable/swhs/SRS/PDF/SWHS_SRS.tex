@@ -269,6 +269,8 @@ GS & Goal Statement
 \\
 IM & Instance Model
 \\
+LC & Likely Change
+\\
 ODE & Ordinary Differential Equation
 \\
 PCM & Phase Change Material
@@ -286,6 +288,8 @@ SRS & Software Requirements Specification
 SWHS & Solar Water Heating System
 \\
 TM & Theoretical Model
+\\
+UC & Unlikely Change
 \\
 Uncert. & Typical Uncertainty
 \label{Table:TAbbAcc}
@@ -1592,7 +1596,7 @@ This section provides the non-functional requirements, the qualities that the so
 \end{description}
 \section{Likely Changes}
 \label{Sec:LCs}
-This section lists the likely changes to be made to the software.
+This section lists the Likely Changes (LC) to be made to the software.
 
 \begin{description}[font=\normalfont]
 \item[Uniform-Temperature-PCM:\phantomsection\label{likeChgUTP}]{\hyperref[assumpTPCAV]{A:Temp-PCM-Constant-Across-Volume} - PCM is actually a poor thermal conductor, so the assumption of uniform temperature of the phase change material is not likely.}
@@ -1604,7 +1608,7 @@ This section lists the likely changes to be made to the software.
 \end{description}
 \section{Unlikely Changes}
 \label{Sec:UCs}
-This section lists the unlikely changes to be made to the software.
+This section lists the Unlikely Changes (UC) to be made to the software.
 
 \begin{description}[font=\normalfont]
 \item[Water-PCM-Fixed-States:\phantomsection\label{unlikeChgWPFS}]{\hyperref[assumpWAL]{A:Water-Always-Liquid}, \hyperref[assumpNGSP]{A:No-Gaseous-State-PCM} - It is unlikely for the change of water from liquid to a solid or the state change of the phase change material from a liquid to a gas to be considered.}

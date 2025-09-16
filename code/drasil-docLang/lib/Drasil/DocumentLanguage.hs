@@ -71,7 +71,6 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
   software, unlikelyChg)
 
 import Language.Drasil.Development (shortdep)
-import Debug.Trace (trace)
 
 -- * Main Function
 -- | Creates a document from a document description, a title combinator function, and system information.
@@ -292,13 +291,11 @@ mkRefSec si dd (RefProg c l) renderedSecs = SRS.refMat [c] (map (mkSubRef si) l)
 -- | Extracts abbreviations/acronyms found in the document        
 getAllChunksFromDoc :: [Section] -> ChunkDB -> [TermAbbr]
 getAllChunksFromDoc renderedSecs cdb =
-  map (termResolve' cdb) $ (\xs -> trace ("SIGNAL!!!!!! " ++ show (mkUid "srs" `elem` xs) ++ " / " ++ show (length xs) ++ " / " ++ show xs) xs) $ nub $ concatMap shortdep ((\x -> trace ("sentences scanning: " ++ show (length x)) x) $ concatMap getSec renderedSecs)
+  map (termResolve' cdb) $ nub $ concatMap shortdep $ concatMap getSec renderedSecs
 
 collectDocumentAbbreviations :: [Section] -> ChunkDB -> [TermAbbr]
 collectDocumentAbbreviations renderedSecs cdb =
-  let found = getAllChunksFromDoc renderedSecs cdb
-      foundAbbrs = filter (isJust . shortForm) found
-  in trace ("found: " ++ show (length found) ++ ", foundAbbrs: " ++ show (length foundAbbrs)) foundAbbrs
+  filter (isJust . shortForm) $ getAllChunksFromDoc renderedSecs cdb
 
 -- | Helper for creating the table of symbols.
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
@@ -437,11 +434,11 @@ introChgs xs _ = foldlSP [S "This", phrase Doc.section_, S "lists the",
 
 -- | Helper for making the Traceability Matrices and Graphs section.
 mkTraceabilitySec :: TraceabilitySec -> System -> Section
-mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF tracea
+mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
   (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) fProgs)
-  (map LlC tracea) (programName sys) []
+  (map LlC trace) (programName sys) []
   where
-    tracea = map (\(TraceConfig u _ desc cols rows) ->
+    trace = map (\(TraceConfig u _ desc cols rows) ->
       TM.generateTraceTableView u desc cols rows si) fProgs
     fProgs = filter (\(TraceConfig _ _ _ cols rows) ->
       not $ null (header (TM.layoutUIDs rows sidb) si)

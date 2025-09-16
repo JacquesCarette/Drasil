@@ -52,15 +52,11 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span id="line-20"></span><span id="offsetNC"><span class="annot"><span class="annottext">offsetNC :: IdeaDict
 </span><a href="Drasil.Projectile.Concepts.html#offsetNC"><span class="hs-identifier hs-var hs-var">offsetNC</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;offset&quot;</span></span><span>   </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
-</span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; NP) -&gt; Sentence -&gt; NP
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><span class="hs-string">&quot;distance between the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-forall n. NounPhrase n =&gt; n -&gt; Sentence
-</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict
+</span><span class="hs-string">&quot;offset&quot;</span></span><span>   </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
+forall a b. (NounPhrase a, NounPhrase b) =&gt; a -&gt; b -&gt; NP
+</span><span class="hs-identifier hs-var">compoundPhrase</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;distance between the&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="Drasil.Projectile.Concepts.html#targetPosNC"><span class="hs-identifier hs-var">targetPosNC</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; IdeaDict -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`andThe`</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict

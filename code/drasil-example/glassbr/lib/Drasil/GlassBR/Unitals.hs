@@ -7,7 +7,6 @@ import Language.Drasil.Chunk.Concept.NamedCombinators
 
 import Prelude hiding (log)
 
-import Data.Drasil.Concepts.Math (xComp, yComp, zComp)
 import Data.Drasil.Constraints (gtZeroConstr, probConstr)
 import Data.Drasil.Quantities.Physics (subMax, subMin, subX, subY, subZ)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
@@ -103,7 +102,8 @@ standOffDist = uq (constrained' (uc sD (variable "SD") Real metre)
     sfwrRange $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
 
 nomThick = cuc' "nomThick"
-  (nounPhraseSent $ S "nominal thickness t is in" +:+ eS (mkSet Rational (map dbl nominalThicknesses)))
+  (cn "nominal thickness")
+  -- (nounPhraseSent $ S "nominal thickness t is in" +:+ eS (mkSet Rational (map dbl nominalThicknesses)))
   "the specified standard thickness of the glass plate" lT millimetre
   {-Discrete nominalThicknesses, but not implemented-} Rational
   [sfwrElem $ mkSet Rational (map dbl nominalThicknesses)] $ exactDbl 8 -- for testing
@@ -236,13 +236,19 @@ loadDur     = uc' "loadDur"    (nounPhraseSP "duration of load")
   (S "the amount of time that a load is applied to the glass plate")
   (sub lT lDur) Real second
 
-sdx         = uc' "sdx" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase xComp))
+sdx         = uc' "sdx" 
+  (cn "stand off distance (x-component)")
+  -- (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase xComp))
   (S "the x-component of the stand off distance") (subX (eqSymb standOffDist)) Real metre
 
-sdy         = uc' "sdy" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase yComp))
+sdy         = uc' "sdy" 
+  (cn "stand off distance (y-component)")
+  -- (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase yComp))
   (S "the y-component of the stand off distance") (subY (eqSymb standOffDist)) Real metre
 
-sdz         = uc' "sdz" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase zComp))
+sdz         = uc' "sdz" 
+  (cn "stand off distance (z-component)")
+  -- (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase zComp))
   (S "the x-component of the stand off distance") (subZ (eqSymb standOffDist)) Real metre
 
 {-Quantities-}

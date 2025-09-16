@@ -1,37 +1,28 @@
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE TypeFamilyDependencies #-}
 
 module Drasil.GProc.InterfaceProc (
-  -- Types
-  GSProgram, SFile, FSModule,
   -- Typeclasses
   ProcProg, ProgramSym(..), FileSym(..), ModuleSym(..)
   ) where
 
-import Drasil.Shared.InterfaceCommon (Label, SMethod, SharedProg,
+import Drasil.Shared.InterfaceCommon (Label, MethodSym(Method), SharedProg,
   MethodSym)
-import Drasil.Shared.State (GS, FS)
 
 class (SharedProg r, ProgramSym r
   ) => ProcProg r
 
-type GSProgram a = GS (a (Program a))
-
 class (FileSym r) => ProgramSym r where
-  type Program r
-  prog :: Label -> Label -> [SFile r] -> GSProgram r
-
-type SFile a = FS (a (File a))
+  type Program r = t | t -> r
+  prog :: Label -> Label -> [File r] -> Program r
 
 class (ModuleSym r) => FileSym r where 
-  type File r
-  fileDoc :: FSModule r -> SFile r
+  type File r = t | t -> r
+  fileDoc :: Module r -> File r
 
   -- Module description, list of author names, date as a String, file to comment
-  docMod :: String -> [String] -> String -> SFile r -> SFile r
-
-type FSModule a = FS (a (Module a))
+  docMod :: String -> [String] -> String -> File r -> File r
 
 class (MethodSym r) => ModuleSym r where
-  type Module r
+  type Module r = t | t -> r
   -- Module name, import names, module functions
-  buildModule :: Label -> [Label] -> [SMethod r] -> FSModule r
+  buildModule :: Label -> [Label] -> [Method r] -> Module r
